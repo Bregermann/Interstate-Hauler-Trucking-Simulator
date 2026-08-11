@@ -1,0 +1,104 @@
+using UnityEngine;
+
+namespace LWS.InterstateHauler
+{
+    [DefaultExecutionOrder(-1000)]
+    [DisallowMultipleComponent]
+    public sealed class LwsApplicationBootstrap : MonoBehaviour
+    {
+        public const string BootstrapScenePath = "Assets/LWS/InterstateHauler/Bootstrap/Bootstrap.unity";
+
+        private static LwsApplicationBootstrap _instance;
+
+        [SerializeField] private bool dontDestroyOnLoad = true;
+        [SerializeField] private bool initializeOnAwake = true;
+
+        private LwsServiceRegistry _registry;
+        private bool _shutdownComplete;
+
+        public static LwsApplicationBootstrap Instance => _instance;
+        public LwsServiceRegistry Registry => _registry;
+        public bool IsReady => _registry != null && _registry.AreAllReady();
+        public bool WasDuplicateRejected { get; private set; }
+
+        private void Awake()
+        {
+            if (_instance != null && _instance != this)
+            {
+                WasDuplicateRejected = true;
+                Debug.LogWarning("Duplicate LWS application bootstrap rejected.");
+                Destroy(gameObject);
+                return;
+            }
+
+            _instance = this;
+            if (dontDestroyOnLoad)
+            {
+                DontDestroyOnLoad(gameObject);
+            }
+
+            if (initializeOnAwake)
+            {
+                Initialize();
+            }
+        }
+
+        public LwsServiceResult Initialize()
+        {
+            if (_registry != null && _registry.AreAllReady())
+            {
+                return LwsServiceResult.Success("LWS bootstrap is already initialized.");
+            }
+
+            _registry = CreateDefaultRegistry();
+            LwsServiceResult result = _registry.InitializeAll();
+            if (!result.Succeeded)
+            {
+                Debug.LogError($"LWS bootstrap failed: {result.Message}");
+            }
+
+            return result;
+        }
+
+        public LwsServiceResult Shutdown()
+        {
+            if (_shutdownComplete || _registry == null)
+            {
+                return LwsServiceResult.Success("LWS bootstrap already shut down.");
+            }
+
+            _shutdownComplete = true;
+            return _registry.ShutdownAll();
+        }
+
+        private void OnDestroy()
+        {
+            if (_instance == this)
+            {
+                Shutdown();
+                _instance = null;
+            }
+        }
+
+        public static LwsServiceRegistry CreateDefaultRegistry()
+        {
+            var registry = new LwsServiceRegistry();
+
+            registry.Register<ILwsSaveService>(new LwsSaveService());
+            registry.Register<ILwsVehicleInputService>(new LwsVehicleInputService());
+            registry.Register<ILwsWeatherCoordinator>(new LwsWeatherCoordinator());
+            registry.Register<ILwsWorldStreamingService>(new LwsWorldStreamingService());
+            registry.Register<ILwsNavigationService>(new LwsNavigationService(), typeof(ILwsWorldStreamingService));
+            registry.Register<ILwsTrafficService>(new LwsTrafficService(), typeof(ILwsNavigationService));
+            registry.Register<ILwsWorldGenerationCoordinator>(new LwsWorldGenerationCoordinator(), typeof(ILwsNavigationService));
+            registry.Register<ILwsVehicleRuntimeService>(new LwsVehicleRuntimeService(), typeof(ILwsVehicleInputService));
+
+            return registry;
+        }
+
+        public static void ResetForTests()
+        {
+            _instance = null;
+        }
+    }
+}
