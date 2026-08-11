@@ -1,0 +1,127 @@
+﻿// Spline Spawner © Staggart Creations (http://staggart.xyz)
+// COPYRIGHT PROTECTED UNDER THE UNITY ASSET STORE EULA (https://unity.com/legal/as-terms)
+//
+// ⚠️ WARNING: UNAUTHORIZED USE OR DISTRIBUTION IS STRICTLY PROHIBITED
+// • Copying, referencing, or reverse-engineering this source code for the creation of new Asset Store or derivative products,
+//   or any other publicly distributed content is strictly forbidden and will result in legal action.
+// • Studying this file for the purpose of reproducing its functionality in your own assets or tools is not permitted.
+// • If you are viewing this file as a reference, please close it immediately to avoid unintentional design influence or potential EULA violations.
+// • Uploading this file or any derivative of it to a public GitHub or similar repository will trigger an automated DMCA takedown request.
+// • Studying to understand for personal, educational or integration purposes is allowed, studying to reproduce is not.
+
+#pragma kernel CalculateLayerWeights
+
+//Rasterized spline SDF
+Texture2DArray<float4> _SplatData;
+uint2 _SplatDataResolution;
+
+float3 _BoundsCenter;
+float3 _BoundsSize;
+
+uint _LayerCount;
+StructuredBuffer<float4> _LayerSettings;
+//X: Layer ID
+//Y: Min weight
+//Z: Falloff
+//W: Include Only (false=exclude)
+
+//Input, world-space positions to sample at
+StructuredBuffer<float3> _SamplePositions;
+uint _SamplePositionCount;
+
+//Output, spawn weights at every position
+RWStructuredBuffer<int> _SpawnPointCullStates;
+
+//Returns the splatmap index for a given terrain layer
+uint GetSplatmapID(uint layerID)
+{
+	return layerID / 4;
+}
+
+int GetSplatmapChannel(int layerID)
+{
+	return (uint)layerID % 4;
+}
+
+//Normalized texture coordinates of the position, relative to the bounds the splatmap data was captured in
+float2 GetUV(float3 worldPosition)
+{
+	float3 boundsMin = _BoundsCenter - (_BoundsSize * 0.5f);
+
+	return (worldPosition.xz - boundsMin.xz) / _BoundsSize.xz;
+}
+
+float Random(float2 uv)
+{
+	return frac(sin(dot(uv, float2(12.9898f, 78.233f))) * 43758.5453123f);
+}
+
+[numthreads(64,1,1)]
+void CalculateLayerWeights (uint id : SV_DispatchThreadID)
+{
+	//Early out when no more positions are left to process
+	//Important for the Metal API, as it avoids accessing unbound array elements!
+	if (id > _SamplePositionCount) return;
+
+	float3 samplePosition = _SamplePositions[id];
+	float2 uv = GetUV(samplePosition);
+
+	int2 texCoord = int2(uv * _SplatDataResolution.xy);
+	
+	//Starting value is to include
+	_SpawnPointCullStates[id] = 1;
+
+	for (uint i = 0; i < _LayerCount; i++)
+	{
+		int layerID = _LayerSettings[i].x;
+		float minWeight = _LayerSettings[i].y;
+		float falloff = _LayerSettings[i].z;
+		uint include = _LayerSettings[i].w;
+		
+		int passValue = include ? 0 : 1;
+		int failValue = include ? 1 : 0;
+		
+		bool passes = passValue;
+
+		//Disabled
+		if (layerID < 0)
+		{
+			_SpawnPointCullStates[id] = 1;
+			continue;
+		}
+		
+		//The splatmap RGBA texture index (0-3)
+		uint splatmapID = GetSplatmapID(layerID);
+
+		//Normalized weight value of the terrain layer specified
+		half4 splatmap = _SplatData.Load(int4(texCoord, splatmapID, 0));
+		
+		//Out of bounds, no terrain at position
+		//Render target will have been cleared to white, so a pixel with this value represents the void
+		if (all(splatmap) >= 0.99h)
+		{
+			_SpawnPointCullStates[id] = 0;
+			continue;
+		}
+		
+		//The color channel index
+		uint splatmapChannel = GetSplatmapChannel(layerID);
+		half layerWeight = saturate(splatmap[splatmapChannel]);
+
+		float r = Random(samplePosition.xz) * 0.5 + 0.5;
+		
+		if (layerWeight > minWeight)
+		{
+			passes = true;
+		}
+
+		float gradient = layerWeight - minWeight;
+		float removalChance = saturate((gradient / falloff));
+		
+		passes = passes && (r < removalChance);
+		
+		_SpawnPointCullStates[id] = passes ? passValue : failValue;
+
+		if (passes) break;
+	}
+}
