@@ -1,0 +1,237 @@
+// Copyright (c) Pixel Crushers. All rights reserved.
+
+#if USE_OPENAI
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEditor;
+
+namespace PixelCrushers.DialogueSystem.OpenAIAddon
+{
+
+    /// <summary>
+    /// Panel to translate all languages for a specific dialogue entry.
+    /// </summary>
+    public class TranslateDialogueEntryPanel : TextGenerationPanel
+    {
+
+        private class TranslationRequest
+        {
+            public Field localizedField;
+            public string prompt;
+            public string description;
+            public float progress;
+
+            public TranslationRequest(Field localizedField, string prompt, string description, float progress)
+            {
+                this.localizedField = localizedField;
+                this.prompt = prompt;
+                this.description = description;
+                this.progress = progress;
+            }
+        }
+
+        private List<string> languages = new List<string>();
+        private List<string> languageNames = new List<string>();
+        private List<bool> translate = new List<bool>();
+        private Queue<TranslationRequest> translationRequestQueue = new Queue<TranslationRequest>();
+        private bool retranslateAll = false;
+        private bool cancel = false;
+        private float timeNextRequestAllowed;
+        private Field currentField;
+        private string currentLanguageName;
+
+        private static GUIContent HeadingLabel = new GUIContent("Translate Dialogue Entry");
+        private static GUIContent RetranslateAllLabel = new GUIContent("Retranslate All", "Translate all fields, including nonblank fields. Untick to only translate blank fields.");
+
+        public TranslateDialogueEntryPanel(string apiKey, DialogueDatabase database, DialogueEntry entry)
+            : base(apiKey, database, null, entry, null)
+        {
+            SetModelByName(Model.DefaultTextModelName);
+        }
+
+        public void SetLanguages(List<string> languages)
+        {
+            this.languages = languages;
+            languageNames = new List<string>();
+            translate = new List<bool>();
+            for (int i = 0; i < languages.Count; i++)
+            {
+                languageNames.Add(AITextUtility.DetermineLanguage(languages[i]));
+                translate.Add(true);
+            }
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+            DrawHeading(HeadingLabel, "This will translate the localization fields in this dialogue entry.");
+
+            DrawModelSettings();
+
+            EditorGUILayout.Space();
+            retranslateAll = EditorGUILayout.Toggle(RetranslateAllLabel, retranslateAll);
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Languages:", EditorStyles.boldLabel);
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Select All")) TickAllLanguages(true);
+            if (GUILayout.Button("Deselect All")) TickAllLanguages(false);
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            for (int i = 0; i < languageNames.Count; i++)
+            {
+                EditorGUILayout.BeginHorizontal();
+                translate[i] = EditorGUILayout.ToggleLeft(languages[i], translate[i]);
+                languageNames[i] = EditorGUILayout.TextField(languageNames[i]);
+                EditorGUILayout.EndHorizontal();
+            }
+
+            EditorGUILayout.Space();
+            EditorGUILayout.BeginHorizontal();
+            EditorGUI.BeginDisabledGroup(languages.Count == 0 || database == null);
+            if (IsAwaitingReply)
+            {
+                if (GUILayout.Button("Stop"))
+                {
+                    CancelTranslation();
+                }
+            }
+            else
+            {
+                if (GUILayout.Button("Translate"))
+                {
+                    if (EditorUtility.DisplayDialog("Translate Dialogue Entry",
+                        "This operation may take a long time to complete. Proceed?", "OK", "Cancel"))
+                    {
+                        TranslateEntry();
+                    }
+                }
+            }
+            EditorGUI.EndDisabledGroup();
+            if (GUILayout.Button("Cancel"))
+            {
+                CancelTranslation();
+                DialogueSystemOpenAIWindow.Instance.Close();
+                GUIUtility.ExitGUI();
+            }
+            EditorGUILayout.EndHorizontal();
+            DrawStatus();
+        }
+
+        private void TickAllLanguages(bool value)
+        {
+            for (int i = 0; i < languageNames.Count; i++)
+            {
+                translate[i] = value;
+            }
+        }
+
+        private void TranslateEntry()
+        {
+            cancel = false;
+            timeNextRequestAllowed = 0;
+            IsAwaitingReply = false;
+
+            for (int i = 0; i < languageNames.Count; i++)
+            {
+                if (cancel) return;
+                if (translate[i])
+                {
+                    TranslateToLanguage(languages[i], languageNames[i]);
+                }
+            }
+        }
+
+        private void TranslateToLanguage(string languageCode, string languageName)
+        {
+            TranslateField(entry.fields, "Dialogue Text", languageCode, languageName, "entry", 0);
+            TranslateField(entry.fields, "Menu Text", languageCode, languageName, "entry", 0.5f);
+        }
+
+        private void TranslateField(List<Field> fields, string fieldTitle, string languageCode, string languageName,
+            string description, float progress)
+        {
+            if (cancel) return;
+
+            var field = Field.Lookup(fields, fieldTitle);
+            if (field == null || string.IsNullOrEmpty(field.value)) return;
+            currentLanguageName = languageName;
+            var prompt = $"Translate this text to {currentLanguageName}: \"{AITextUtility.DoubleQuotesToSingle(field.value)}\". Return only the translated text.";
+            var localizedFieldTitle = (field.title == "Dialogue Text") ? languageCode : $"{field.title} {languageCode}";
+            var localizedField = Field.Lookup(fields, localizedFieldTitle);
+            if (localizedField == null)
+            {
+                localizedField = new Field(localizedFieldTitle, "", FieldType.Localization);
+                fields.Add(localizedField);
+            }
+            else if (!(retranslateAll || string.IsNullOrEmpty(localizedField.value)))
+            {
+                return;
+            }
+            if (IsAwaitingReply)
+            {
+                translationRequestQueue.Enqueue(new TranslationRequest(localizedField, prompt, description, progress));
+            }
+            else
+            {
+                TranslateFieldFromPrompt(localizedField, prompt, description, progress);
+            }
+        }
+
+        private async void TranslateFieldFromPrompt(Field localizedField, string prompt, string description, float progress)
+        {
+            if (cancel) return;
+
+            var percent = Mathf.RoundToInt(progress * 100);
+            ProgressText = $"[{percent}%] Translating {description} to {localizedField.title}. Please wait...";
+            Repaint();
+
+            if (Time.realtimeSinceStartup < timeNextRequestAllowed)
+            {
+                int timeToWait = Mathf.RoundToInt((timeNextRequestAllowed - Time.realtimeSinceStartup) * 1000);
+                await Task.Delay(timeToWait);
+                Debug.Log("Delaying " + timeToWait);
+                timeNextRequestAllowed = Time.realtimeSinceStartup + 1;
+            }
+
+            IsAwaitingReply = true;
+
+            currentField = localizedField;
+
+            SubmitPrompt(prompt, AssistantPrompt, "Contacting OpenAI", progress, LogDebug, false);
+        }
+
+        protected override void SetResultText(string text)
+        {
+            base.SetResultText(text);
+            if (currentField != null)
+            {
+                currentField.value = AITextUtility.GetTranslationText(text, currentLanguageName);
+            }
+            if (!cancel)
+            {
+                if (translationRequestQueue.Count > 0)
+                {
+                    var request = translationRequestQueue.Dequeue();
+                    TranslateFieldFromPrompt(request.localizedField, request.prompt, request.description, request.progress);
+                }
+                else
+                {
+                    Debug.Log("Translate Dialogue Entry operation completed.");
+                }
+            }
+        }
+
+        private void CancelTranslation()
+        {
+            Debug.Log("Cancelling Translate Dialogue Entry operation.");
+            cancel = true;
+            translationRequestQueue.Clear();
+        }
+
+    }
+}
+
+#endif
