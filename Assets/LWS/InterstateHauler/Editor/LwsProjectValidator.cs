@@ -70,6 +70,17 @@ namespace LWS.InterstateHauler.Editor
         private const string TruckControlMatrixPath = "Documentation/InterstateHauler/007_Truck_Control_Matrix.md";
         private const string NwhControlApiMatrixPath = "Documentation/InterstateHauler/007_NWH_Control_API_Matrix.md";
         private const string Prompt008HandoffPath = "Documentation/InterstateHauler/007_Prompt008_Handoff.md";
+        private const string DashboardDefinitionPath = "Assets/LWS/InterstateHauler/Vehicles/Dashboard/Data/IH_DashboardDefinition_NwhSemi.asset";
+        private const string DashboardControllerPath = "Assets/LWS/InterstateHauler/Vehicles/Dashboard/LwsTruckDashboardController.cs";
+        private const string DashboardTypesPath = "Assets/LWS/InterstateHauler/Vehicles/Dashboard/LwsTruckDashboardTypes.cs";
+        private const string MirrorControllerPath = "Assets/LWS/InterstateHauler/Vehicles/Mirrors/LwsTruckMirrorController.cs";
+        private const string CabAnchorRegistryPath = "Assets/LWS/InterstateHauler/Vehicles/Cab/Accessories/LwsCabAccessoryAnchorRegistry.cs";
+        private const string CabAnchorPath = "Assets/LWS/InterstateHauler/Vehicles/Cab/Accessories/LwsCabAccessoryAnchor.cs";
+        private const string DashboardDocsPath = "Documentation/InterstateHauler/008_Dashboard_and_Mirrors.md";
+        private const string DashboardBindingMatrixPath = "Documentation/InterstateHauler/008_Dashboard_Binding_Matrix.md";
+        private const string MirrorQualityMatrixPath = "Documentation/InterstateHauler/008_Mirror_Quality_Matrix.md";
+        private const string CabAnchorMatrixPath = "Documentation/InterstateHauler/008_Cab_Anchor_Matrix.md";
+        private const string Prompt009HandoffPath = "Documentation/InterstateHauler/008_Prompt009_Handoff.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -135,6 +146,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateWheelInputFoundation(report);
             Validate18SpeedTransmissionFoundation(report);
             ValidateTruckControlFoundation(report);
+            ValidateDashboardMirrorCabFoundation(report);
             return report;
         }
 
@@ -1128,6 +1140,210 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 007 documentation and Prompt 008 handoff exist."
                     : "Missing Prompt 007 documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateDashboardMirrorCabFoundation(LwsProjectValidationReport report)
+        {
+            ValidateDashboardRuntimeFiles(report);
+            ValidateDashboardDefinition(report);
+            ValidateDashboardRuntimeBoundary(report);
+            ValidateDashboardSpawnerSetup(report);
+            ValidateSourceCabInventory(report);
+            ValidateMirrorFoundation(report);
+            ValidateCabAccessoryAnchors(report);
+            ValidatePrompt008Documentation(report);
+        }
+
+        private static void ValidateDashboardRuntimeFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                DashboardDefinitionPath,
+                DashboardControllerPath,
+                DashboardTypesPath,
+                MirrorControllerPath,
+                CabAnchorRegistryPath,
+                CabAnchorPath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Dashboard/Mirror/Cab Runtime Files",
+                missing.Count == 0
+                    ? "Prompt 008 dashboard, mirror, and cab accessory runtime files exist."
+                    : "Missing Prompt 008 files: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateDashboardDefinition(LwsProjectValidationReport report)
+        {
+            LwsTruckDashboardDefinition definition = AssetDatabase.LoadAssetAtPath<LwsTruckDashboardDefinition>(DashboardDefinitionPath);
+            if (definition == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "Dashboard Definition", $"{DashboardDefinitionPath} was not found or did not import.");
+                return;
+            }
+
+            bool valid = definition.Validate(out string message);
+            report.Add(valid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "Dashboard Definition", message);
+
+            LwsTruckDefinition truckDefinition = AssetDatabase.LoadAssetAtPath<LwsTruckDefinition>(TruckDefinitionPath);
+            bool assigned = truckDefinition != null && truckDefinition.DashboardDefinition == definition;
+            report.Add(
+                assigned ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Definition Dashboard Reference",
+                assigned
+                    ? "Starter NWH semi truck definition references the Prompt 008 dashboard definition."
+                    : "Starter NWH semi truck definition does not reference the Prompt 008 dashboard definition.");
+        }
+
+        private static void ValidateDashboardRuntimeBoundary(LwsProjectValidationReport report)
+        {
+            string dashboardText = File.Exists(DashboardControllerPath) ? File.ReadAllText(DashboardControllerPath) : string.Empty;
+            string dashboardTypesText = File.Exists(DashboardTypesPath) ? File.ReadAllText(DashboardTypesPath) : string.Empty;
+            string mirrorText = File.Exists(MirrorControllerPath) ? File.ReadAllText(MirrorControllerPath) : string.Empty;
+            string cabText = Directory.Exists("Assets/LWS/InterstateHauler/Vehicles/Cab")
+                ? string.Join("\n", Directory.GetFiles("Assets/LWS/InterstateHauler/Vehicles/Cab", "*.cs", SearchOption.AllDirectories).Select(File.ReadAllText))
+                : string.Empty;
+            string combinedText = dashboardText + "\n" + dashboardTypesText + "\n" + mirrorText + "\n" + cabText;
+
+            bool avoidsHardwareApis = !combinedText.Contains("DirectInput") &&
+                                      !combinedText.Contains("DIManager") &&
+                                      !combinedText.Contains("Logitech") &&
+                                      !combinedText.Contains("HID") &&
+                                      !combinedText.Contains("UnityEngine.InputSystem");
+            bool consumesSemanticState = dashboardText.Contains("LwsTruckControlState") &&
+                                         dashboardText.Contains("LwsTransmissionDisplayState") &&
+                                         dashboardText.Contains("LwsNwhVehicleAdapter");
+            bool doesNotReadNwhInputProvider = !dashboardText.Contains("VehicleInputProvider") &&
+                                               !dashboardText.Contains("NwhVehicleInputProvider");
+
+            report.Add(
+                avoidsHardwareApis && consumesSemanticState && doesNotReadNwhInputProvider ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Dashboard State Boundary",
+                avoidsHardwareApis && consumesSemanticState && doesNotReadNwhInputProvider
+                    ? "Dashboard/mirror/cab scripts avoid hardware APIs and bind to LWS semantic state plus telemetry."
+                    : "Dashboard/mirror/cab scripts appear to cross the Prompt 008 state boundary.");
+        }
+
+        private static void ValidateDashboardSpawnerSetup(LwsProjectValidationReport report)
+        {
+            string spawnerText = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                : string.Empty;
+            string bootstrapText = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                : string.Empty;
+            string playerTruckText = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruck.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruck.cs")
+                : string.Empty;
+
+            bool spawnerInstalls = spawnerText.Contains("LwsTruckDashboardController") &&
+                                   spawnerText.Contains("LwsTruckMirrorController") &&
+                                   spawnerText.Contains("LwsCabAccessoryAnchorRegistry") &&
+                                   spawnerText.Contains("LwsTruckDashboardDebugPanel");
+            bool serviceRegistered = bootstrapText.Contains("ILwsTruckDashboardService") &&
+                                     bootstrapText.Contains("LwsTruckDashboardService");
+            bool playerTruckExposes = playerTruckText.Contains("DashboardController") &&
+                                      playerTruckText.Contains("MirrorController") &&
+                                      playerTruckText.Contains("CabAccessoryAnchorRegistry");
+
+            report.Add(
+                spawnerInstalls && serviceRegistered && playerTruckExposes ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Dashboard Runtime Wiring",
+                spawnerInstalls && serviceRegistered && playerTruckExposes
+                    ? "The validation spawner installs dashboard/mirror/cab components, bootstrap registers the dashboard service, and LwsPlayerTruck exposes the cab systems."
+                    : "Dashboard/mirror/cab runtime wiring is incomplete.");
+        }
+
+        private static void ValidateSourceCabInventory(LwsProjectValidationReport report)
+        {
+            string truckText = File.Exists(SelectedNwhTruckPath) ? File.ReadAllText(SelectedNwhTruckPath) : string.Empty;
+            string[] requiredNames =
+            {
+                "m_Name: SpeedGaugeAnalog",
+                "m_Name: RPMGaugeAnalog",
+                "m_Name: GearGaugeDigital",
+                "m_Name: Left Blinker",
+                "m_Name: Right Blinker",
+                "m_Name: High Beam",
+                "m_Name: steering wheel",
+                "m_Name: RenderTextureMirrorCameraL",
+                "m_Name: RenderTextureMirrorCameraR"
+            };
+            var missing = requiredNames.Where(name => !truckText.Contains(name)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "NWH Cab Inventory",
+                missing.Count == 0
+                    ? "Selected NWH semi exposes the expected dashboard gauges, indicators, steering wheel, and mirror cameras."
+                    : "Selected NWH semi is missing expected cab objects: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateMirrorFoundation(LwsProjectValidationReport report)
+        {
+            LwsTruckDashboardDefinition definition = AssetDatabase.LoadAssetAtPath<LwsTruckDashboardDefinition>(DashboardDefinitionPath);
+            bool presetsValid = definition != null && definition.Validate(out _);
+            string mirrorText = File.Exists(MirrorControllerPath) ? File.ReadAllText(MirrorControllerPath) : string.Empty;
+            bool renderingConnected = mirrorText.Contains("ILwsRenderingService") &&
+                                      mirrorText.Contains("mirrorResolutionPixels") &&
+                                      mirrorText.Contains("mirrorUpdateIntervalFrames");
+            bool offSupported = mirrorText.Contains("LwsMirrorQuality.Off") && mirrorText.Contains("gameObject.SetActive(enabled)");
+            bool runtimeTexture = mirrorText.Contains("new RenderTexture") && mirrorText.Contains("HideFlags.DontSave");
+
+            report.Add(
+                presetsValid && renderingConnected && offSupported && runtimeTexture ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Mirror Quality Foundation",
+                presetsValid && renderingConnected && offSupported && runtimeTexture
+                    ? "Mirror quality presets connect to Prompt 003 rendering settings, support OFF, and use runtime RenderTextures."
+                    : "Mirror quality foundation is incomplete.");
+        }
+
+        private static void ValidateCabAccessoryAnchors(LwsProjectValidationReport report)
+        {
+            string registryText = File.Exists(CabAnchorRegistryPath) ? File.ReadAllText(CabAnchorRegistryPath) : string.Empty;
+            string anchorText = File.Exists(CabAnchorPath) ? File.ReadAllText(CabAnchorPath) : string.Empty;
+            string[] requiredIds =
+            {
+                "IH_CabAnchor_Dashboard01",
+                "IH_CabAnchor_Dashboard02",
+                "IH_CabAnchor_Hanging01",
+                "IH_CabAnchor_PassengerSeat",
+                "IH_CabAnchor_Sleeper",
+                "IH_CabAnchor_Memento01"
+            };
+            var missingIds = requiredIds.Where(id => !registryText.Contains(id)).ToList();
+            bool physicsSafe = anchorText.Contains("GetComponent<Rigidbody>()") &&
+                               anchorText.Contains("Collider[]") &&
+                               anchorText.Contains("colliders[i].enabled = false");
+            bool hulaPlaceholder = registryText.Contains("IH_DevHulaGirl_Placeholder") &&
+                                   registryText.Contains("LwsCabAccessoryBobble");
+
+            report.Add(
+                missingIds.Count == 0 && physicsSafe && hulaPlaceholder ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Cab Life Anchors",
+                missingIds.Count == 0 && physicsSafe && hulaPlaceholder
+                    ? "Required cab accessory anchor IDs exist, accessory attachments are presentation-only, and the hula placeholder hook exists."
+                    : "Cab accessory anchor foundation is incomplete.");
+        }
+
+        private static void ValidatePrompt008Documentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                DashboardDocsPath,
+                DashboardBindingMatrixPath,
+                MirrorQualityMatrixPath,
+                CabAnchorMatrixPath,
+                Prompt009HandoffPath
+            };
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 008 Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 008 documentation and Prompt 009 handoff exist."
+                    : "Missing Prompt 008 documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

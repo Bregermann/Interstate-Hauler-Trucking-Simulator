@@ -14,6 +14,9 @@ namespace LWS.InterstateHauler
         [SerializeField] private LwsNwhTrailerCouplingAdapter couplingAdapter;
         [SerializeField] private Lws18SpeedTransmissionController transmissionController;
         [SerializeField] private LwsTruckControlController truckControlController;
+        [SerializeField] private LwsTruckDashboardController dashboardController;
+        [SerializeField] private LwsTruckMirrorController mirrorController;
+        [SerializeField] private LwsCabAccessoryAnchorRegistry cabAccessoryAnchorRegistry;
         [SerializeField] private bool registerWithBootstrap = true;
 
         private ILwsPlayerVehicleService _playerVehicleService;
@@ -27,6 +30,9 @@ namespace LWS.InterstateHauler
         public LwsNwhTrailerCouplingAdapter CouplingAdapter => couplingAdapter;
         public Lws18SpeedTransmissionController TransmissionController => transmissionController;
         public LwsTruckControlController TruckControlController => truckControlController;
+        public LwsTruckDashboardController DashboardController => dashboardController;
+        public LwsTruckMirrorController MirrorController => mirrorController;
+        public LwsCabAccessoryAnchorRegistry CabAccessoryAnchorRegistry => cabAccessoryAnchorRegistry;
         public bool IsReady => nwhAdapter != null && nwhAdapter.VehicleController != null;
         public LwsVehicleTelemetry LastTelemetry { get; private set; }
 
@@ -140,6 +146,21 @@ namespace LWS.InterstateHauler
             if (truckControlController == null)
             {
                 truckControlController = GetComponent<LwsTruckControlController>();
+            }
+
+            if (dashboardController == null)
+            {
+                dashboardController = GetComponent<LwsTruckDashboardController>();
+            }
+
+            if (mirrorController == null)
+            {
+                mirrorController = GetComponent<LwsTruckMirrorController>();
+            }
+
+            if (cabAccessoryAnchorRegistry == null)
+            {
+                cabAccessoryAnchorRegistry = GetComponent<LwsCabAccessoryAnchorRegistry>();
             }
         }
 

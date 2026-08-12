@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a0fd88b80bf49e29b3b033074c60242, type: 3}
+  m_Name: IH_DashboardDefinition_NwhSemi
+  m_EditorClassIdentifier:
+  truckDefinitionId: ih.truck.nwh.euro.semi.starter
+  speedUnit: 0
+  speedometer:
+    minimumValue: 0
+    maximumValue: 100
+    startAngle: 574
+    endAngle: 330
+    smoothing: 0.35
+  tachometer:
+    minimumValue: 0
+    maximumValue: 3000
+    startAngle: 574
+    endAngle: 330
+    smoothing: 0.3
+  dashboardBrightness: 0.8
+  defaultMirrorQuality: 3
+  mirrorQualityPresets:
+  - quality: 0
+    enabled: 0
+    resolutionPixels: 0
+    updateIntervalFrames: 0
+    shadows: 0
+    postProcessing: 0
+    nearClip: 0.05
+    farClip: 0
+    fieldOfView: 55
+    notes: Mirror rendering disabled for extreme fallback and performance comparison.
+  - quality: 1
+    enabled: 1
+    resolutionPixels: 768
+    updateIntervalFrames: 3
+    shadows: 0
+    postProcessing: 0
+    nearClip: 0.05
+    farClip: 120
+    fieldOfView: 58
+    notes: Low/Steam Deck starting point, tuned for usefulness over prettiness.
+  - quality: 2
+    enabled: 1
+    resolutionPixels: 1024
+    updateIntervalFrames: 2
+    shadows: 0
+    postProcessing: 0
+    nearClip: 0.05
+    farClip: 160
+    fieldOfView: 56
+    notes: Balanced validation quality.
+  - quality: 3
+    enabled: 1
+    resolutionPixels: 1536
+    updateIntervalFrames: 1
+    shadows: 0
+    postProcessing: 0
+    nearClip: 0.05
+    farClip: 220
+    fieldOfView: 55
+    notes: Main PC default.
+  - quality: 4
+    enabled: 1
+    resolutionPixels: 2048
+    updateIntervalFrames: 1
+    shadows: 1
+    postProcessing: 0
+    nearClip: 0.05
+    farClip: 260
+    fieldOfView: 55
+    notes: High-end PC ceiling; avoids absurd full-screen mirror textures.
+  capabilities:
+    analogSpeedometer: 1
+    analogTachometer: 1
+    digitalGearDisplay: 1
+    parkingBrakeLamp: 1
+    highBeamLamp: 1
+    turnSignalLamps: 1
+    engineBrakeDisplay: 0
+    retarderDisplay: 0
+    differentialLockLamp: 1
+    cruiseLamp: 1
+    trailerStateIndicator: 1
+    steeringWheelAnimation: 1
+    leftMirror: 1
+    rightMirror: 1
+    dashboardAccessoryAnchors: 1
+    hangingAccessoryAnchors: 1
+    passengerSeatAnchor: 1
+    sleeperAnchor: 1
+    mementoAnchors: 1
+  notes: Prompt 008 dashboard/mirror/cab-life baseline for the NWH Euro semi. Existing NWH gauges are driven from LWS semantic state; missing production lamps use an LWS auxiliary physical status panel until final dashboard art exists.
