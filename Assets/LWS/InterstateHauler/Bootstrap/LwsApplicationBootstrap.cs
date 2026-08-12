@@ -92,6 +92,7 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsNavigationService>(new LwsNavigationService(), typeof(ILwsWorldStreamingService));
             registry.Register<ILwsTrafficService>(new LwsTrafficService(), typeof(ILwsNavigationService));
             registry.Register<ILwsWorldGenerationCoordinator>(new LwsWorldGenerationCoordinator(), typeof(ILwsNavigationService));
+            registry.Register<ILwsPlayerVehicleService>(new LwsPlayerVehicleService(), typeof(ILwsVehicleInputService));
             registry.Register<ILwsVehicleRuntimeService>(new LwsVehicleRuntimeService(), typeof(ILwsVehicleInputService));
 
             return registry;

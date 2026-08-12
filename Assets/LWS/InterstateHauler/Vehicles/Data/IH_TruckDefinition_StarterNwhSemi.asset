@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9c4ab74e2c4d57bb276fc670c19914, type: 3}
+  m_Name: IH_TruckDefinition_StarterNwhSemi
+  m_EditorClassIdentifier: 
+  stableId: ih.truck.nwh.euro.semi.starter
+  displayName: NWH Euro Semi Validation Tractor
+  category: tractor
+  manufacturerFamily: validation-nwh-gr3d
+  playerPrefab: {fileID: 100100001, guid: 4382f9912191416795da77ffba3a3e60, type: 3}
+  sourceVendorPrefab: {fileID: 5883506326239853832, guid: 0d6a0c181517e6f4d89ad9ebc70b6b95, type: 3}
+  validationTrailerPrefab: {fileID: 100100011, guid: 79fc3e840f60421f95741824a25a41e8, type: 3}
+  notes: Prompt 004 baseline tractor. LWS runtime adapters are added by the validation spawner; NWH owns physics, drivetrain, wheels, suspension, and trailer coupling.

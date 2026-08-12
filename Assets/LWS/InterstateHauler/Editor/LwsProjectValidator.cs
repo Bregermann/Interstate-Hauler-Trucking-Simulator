@@ -51,6 +51,12 @@ namespace LWS.InterstateHauler.Editor
         private const string LwsRenderingSettingsPath = "Assets/LWS/InterstateHauler/Rendering/Data/IH_RenderingSettings.asset";
         private const string LwsDefaultVolumeProfilePath = "Assets/LWS/InterstateHauler/Rendering/Volume/IH_DefaultVolumeProfile.asset";
         private const string RenderValidationScenePath = "Assets/LWS/InterstateHauler/Rendering/Validation/RenderValidation.unity";
+        private const string PlayerTruckPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_PlayerTruck_NWH.prefab";
+        private const string TestTrailerPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_TestTrailer_DryVan.prefab";
+        private const string TruckDefinitionPath = "Assets/LWS/InterstateHauler/Vehicles/Data/IH_TruckDefinition_StarterNwhSemi.asset";
+        private const string TruckValidationScenePath = "Assets/LWS/InterstateHauler/Vehicles/Validation/TruckValidation.unity";
+        private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
+        private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
 
         private static readonly string[] VendorRoots =
         {
@@ -104,6 +110,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateRoadGraphData(report);
             ValidateProjectOwnership(report);
             ValidateRenderingFoundation(report);
+            ValidateVehicleBaseline(report);
             return report;
         }
 
@@ -498,6 +505,136 @@ namespace LWS.InterstateHauler.Editor
                 validationVfxExists
                     ? "River Modeler includes a URP VFX Graph asset for water surface splashes."
                     : "No River Modeler URP VFX Graph asset was found.");
+        }
+
+        private static void ValidateVehicleBaseline(LwsProjectValidationReport report)
+        {
+            report.Add(
+                File.Exists(PlayerTruckPrefabPath) ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Player Truck Prefab",
+                File.Exists(PlayerTruckPrefabPath)
+                    ? $"{PlayerTruckPrefabPath} exists."
+                    : $"{PlayerTruckPrefabPath} is missing.");
+
+            report.Add(
+                File.Exists(TestTrailerPrefabPath) ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Test Trailer Prefab",
+                File.Exists(TestTrailerPrefabPath)
+                    ? $"{TestTrailerPrefabPath} exists."
+                    : $"{TestTrailerPrefabPath} is missing.");
+
+            report.Add(
+                File.Exists(TruckValidationScenePath) ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Validation Scene",
+                File.Exists(TruckValidationScenePath)
+                    ? $"{TruckValidationScenePath} exists and is intentionally not a production scene."
+                    : $"{TruckValidationScenePath} is missing.");
+
+            ValidateTruckDefinition(report);
+            ValidateSelectedNwhPrefabs(report);
+            ValidateTruckValidationSceneText(report);
+            ValidateUtsPlayerVehicleSeparation(report);
+        }
+
+        private static void ValidateTruckDefinition(LwsProjectValidationReport report)
+        {
+            LwsTruckDefinition definition = AssetDatabase.LoadAssetAtPath<LwsTruckDefinition>(TruckDefinitionPath);
+            if (definition == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "Truck Definition", $"{TruckDefinitionPath} was not found or did not import.");
+                return;
+            }
+
+            bool valid = definition.Validate(out string message);
+            report.Add(valid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "Truck Definition", message);
+
+            bool idsValid = LwsTruckDefinition.ValidateUniqueIds(new[] { definition }, out string idsMessage);
+            report.Add(idsValid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "Truck Definition IDs", idsMessage);
+
+            report.Add(
+                definition.ValidationTrailerPrefab != null ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Definition Trailer",
+                definition.ValidationTrailerPrefab != null
+                    ? "Validation trailer prefab is assigned."
+                    : "Validation trailer prefab is missing.");
+        }
+
+        private static void ValidateSelectedNwhPrefabs(LwsProjectValidationReport report)
+        {
+            GameObject selectedTruck = AssetDatabase.LoadAssetAtPath<GameObject>(SelectedNwhTruckPath);
+            GameObject selectedTrailer = AssetDatabase.LoadAssetAtPath<GameObject>(SelectedNwhTrailerPath);
+            report.Add(
+                selectedTruck != null ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Selected NWH Tractor",
+                selectedTruck != null ? SelectedNwhTruckPath : $"{SelectedNwhTruckPath} could not be loaded.");
+            report.Add(
+                selectedTrailer != null ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Selected NWH Trailer",
+                selectedTrailer != null ? SelectedNwhTrailerPath : $"{SelectedNwhTrailerPath} could not be loaded.");
+
+            string truckText = File.Exists(SelectedNwhTruckPath) ? File.ReadAllText(SelectedNwhTruckPath) : string.Empty;
+            string trailerText = File.Exists(SelectedNwhTrailerPath) ? File.ReadAllText(SelectedNwhTrailerPath) : string.Empty;
+            bool truckHasVehicleController = truckText.Contains("guid: fef33320c8b07754cbbcaa651106e4f3");
+            bool truckHasHitch = truckText.Contains("guid: 75433d1dc80d018488a61160e924cce2");
+            bool trailerHasModule = trailerText.Contains("guid: 3e5c0ce4bb7d92d49b1bac374cd2dd2c");
+
+            report.Add(
+                truckHasVehicleController ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "NWH Components",
+                truckHasVehicleController ? "Selected tractor includes NWH VehicleController." : "Selected tractor is missing NWH VehicleController.");
+            report.Add(
+                truckHasHitch && trailerHasModule ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Trailer Coupling Components",
+                truckHasHitch && trailerHasModule
+                    ? "Selected tractor has NWH TrailerHitch and selected trailer has NWH TrailerModule."
+                    : "Selected NWH coupling components are incomplete.");
+        }
+
+        private static void ValidateTruckValidationSceneText(LwsProjectValidationReport report)
+        {
+            if (!File.Exists(TruckValidationScenePath))
+            {
+                return;
+            }
+
+            string sceneText = File.ReadAllText(TruckValidationScenePath);
+            bool hasSpawner = sceneText.Contains("LwsPlayerTruckSpawner") || sceneText.Contains("guid: a7d55a3f708f41dab0fb1dbfa279c0a1");
+            bool hasMarker = sceneText.Contains("LwsTruckValidationSceneMarker") || sceneText.Contains("guid: 5f9ed500fc0f4459a3b4319a95d9ba7e");
+            bool hasNwhInput = sceneText.Contains("guid: 0fe154161bba5034094381e28d5e1da4");
+            bool hasGround = sceneText.Contains("m_Name: Validation Driving Pad");
+
+            report.Add(
+                hasSpawner && hasMarker && hasNwhInput && hasGround ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Validation Setup",
+                hasSpawner && hasMarker && hasNwhInput && hasGround
+                    ? "Truck validation scene contains the LWS spawner, marker, temporary NWH input provider, and driving pad."
+                    : "Truck validation scene is missing one or more required validation objects.");
+        }
+
+        private static void ValidateUtsPlayerVehicleSeparation(LwsProjectValidationReport report)
+        {
+            string[] lwsVehicleFiles = Directory.Exists("Assets/LWS/InterstateHauler/Vehicles")
+                ? Directory.GetFiles("Assets/LWS/InterstateHauler/Vehicles", "*.*", SearchOption.AllDirectories)
+                : Array.Empty<string>();
+
+            var offendingFiles = new List<string>();
+            foreach (string file in lwsVehicleFiles.Where(path => path.EndsWith(".cs", StringComparison.Ordinal) ||
+                                                                  path.EndsWith(".prefab", StringComparison.Ordinal) ||
+                                                                  path.EndsWith(".unity", StringComparison.Ordinal)))
+            {
+                string text = File.ReadAllText(file);
+                if (text.IndexOf("CarMove", StringComparison.Ordinal) >= 0 || text.IndexOf("AddTrailer", StringComparison.Ordinal) >= 0)
+                {
+                    offendingFiles.Add(file.Replace('\\', '/'));
+                }
+            }
+
+            report.Add(
+                offendingFiles.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "UTS Player Vehicle Separation",
+                offendingFiles.Count == 0
+                    ? "No UTS player-driving or UTS trailer-driving markers were found in LWS vehicle assets."
+                    : "UTS player-driving markers found in LWS vehicle assets: " + string.Join(", ", offendingFiles));
         }
 
         private static int CountOccurrences(string text, string needle)
