@@ -13,6 +13,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private LwsNwhVehicleAdapter nwhAdapter;
         [SerializeField] private LwsNwhTrailerCouplingAdapter couplingAdapter;
         [SerializeField] private Lws18SpeedTransmissionController transmissionController;
+        [SerializeField] private LwsTruckControlController truckControlController;
         [SerializeField] private bool registerWithBootstrap = true;
 
         private ILwsPlayerVehicleService _playerVehicleService;
@@ -25,6 +26,7 @@ namespace LWS.InterstateHauler
         public LwsNwhVehicleAdapter NwhAdapter => nwhAdapter;
         public LwsNwhTrailerCouplingAdapter CouplingAdapter => couplingAdapter;
         public Lws18SpeedTransmissionController TransmissionController => transmissionController;
+        public LwsTruckControlController TruckControlController => truckControlController;
         public bool IsReady => nwhAdapter != null && nwhAdapter.VehicleController != null;
         public LwsVehicleTelemetry LastTelemetry { get; private set; }
 
@@ -133,6 +135,11 @@ namespace LWS.InterstateHauler
             if (transmissionController == null)
             {
                 transmissionController = GetComponent<Lws18SpeedTransmissionController>();
+            }
+
+            if (truckControlController == null)
+            {
+                truckControlController = GetComponent<LwsTruckControlController>();
             }
         }
 

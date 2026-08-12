@@ -19,4 +19,26 @@ MonoBehaviour:
   playerPrefab: {fileID: 100100001, guid: 4382f9912191416795da77ffba3a3e60, type: 3}
   sourceVendorPrefab: {fileID: 5883506326239853832, guid: 0d6a0c181517e6f4d89ad9ebc70b6b95, type: 3}
   validationTrailerPrefab: {fileID: 100100011, guid: 79fc3e840f60421f95741824a25a41e8, type: 3}
+  controlCapabilities:
+    supportsIgnition: 1
+    supportsEngineStartStop: 1
+    supportsParkingBrake: 1
+    supportsHeadlights: 1
+    supportsHighBeams: 1
+    supportsTurnSignals: 1
+    supportsHazards: 1
+    supportsWipers: 0
+    supportsHorn: 1
+    supportsSeparateAirHorn: 0
+    supportsEngineBrake: 0
+    engineBrakeLevels: 0
+    supportsRetarder: 0
+    retarderLevels: 0
+    supportsDifferentialLock: 1
+    supportsCruiseControl: 1
+    supportsIndependentTrailerBrake: 0
+    supportsTrailerAttachDetach: 1
+    supportsCameraCycle: 1
+    supportsLookReset: 1
+    supportsFlipOffDriver: 1
   notes: Prompt 004 baseline tractor. LWS runtime adapters are added by the validation spawner; NWH owns physics, drivetrain, wheels, suspension, and trailer coupling.

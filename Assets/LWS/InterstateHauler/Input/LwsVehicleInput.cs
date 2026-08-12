@@ -70,20 +70,40 @@ namespace LWS.InterstateHauler
     [Serializable]
     public struct LwsVehicleCommandFrame
     {
+        public LwsMomentaryIntent ignitionToggle;
         public LwsMomentaryIntent ignition;
+        public LwsMomentaryIntent engineStart;
+        public LwsMomentaryIntent engineStop;
+        public LwsMomentaryIntent parkingBrakeToggle;
         public LwsMomentaryIntent horn;
+        public LwsMomentaryIntent airHorn;
         public LwsMomentaryIntent lowBeamLights;
         public LwsMomentaryIntent highBeamLights;
         public LwsMomentaryIntent hazardLights;
         public LwsMomentaryIntent leftIndicator;
         public LwsMomentaryIntent rightIndicator;
         public LwsMomentaryIntent wipers;
+        public LwsMomentaryIntent wiperIncrease;
+        public LwsMomentaryIntent wiperDecrease;
         public LwsMomentaryIntent cruiseControl;
+        public LwsMomentaryIntent cruiseSet;
+        public LwsMomentaryIntent cruiseResume;
+        public LwsMomentaryIntent cruiseCancel;
+        public LwsMomentaryIntent cruiseIncrease;
+        public LwsMomentaryIntent cruiseDecrease;
         public LwsMomentaryIntent engineBrake;
+        public LwsMomentaryIntent engineBrakeIncrease;
+        public LwsMomentaryIntent engineBrakeDecrease;
         public LwsMomentaryIntent retarder;
+        public LwsMomentaryIntent retarderIncrease;
+        public LwsMomentaryIntent retarderDecrease;
         public LwsMomentaryIntent differentialLock;
         public LwsMomentaryIntent trailerAttachDetach;
+        public LwsMomentaryIntent trailerBrake;
         public LwsMomentaryIntent cameraCycle;
+        public LwsMomentaryIntent lookReset;
+        public LwsMomentaryIntent flipOffDriver;
+        public LwsMomentaryIntent interact;
         public LwsMomentaryIntent menuSubmit;
         public LwsMomentaryIntent menuCancel;
         public LwsMomentaryIntent pause;

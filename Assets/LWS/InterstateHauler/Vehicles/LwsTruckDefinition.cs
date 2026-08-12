@@ -14,6 +14,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private GameObject sourceVendorPrefab;
         [SerializeField] private GameObject validationTrailerPrefab;
+        [SerializeField] private LwsTruckControlCapabilities controlCapabilities = LwsTruckControlCapabilities.NwhSemiDevelopmentDefault();
         [SerializeField] private string notes;
 
         public string StableId => stableId;
@@ -23,6 +24,7 @@ namespace LWS.InterstateHauler
         public GameObject PlayerPrefab => playerPrefab;
         public GameObject SourceVendorPrefab => sourceVendorPrefab;
         public GameObject ValidationTrailerPrefab => validationTrailerPrefab;
+        public LwsTruckControlCapabilities ControlCapabilities => controlCapabilities;
         public string Notes => notes;
 
         public void ConfigureForTests(string newStableId, GameObject newPlayerPrefab)
@@ -42,6 +44,12 @@ namespace LWS.InterstateHauler
             if (playerPrefab == null)
             {
                 message = $"{stableId} has no player prefab assigned.";
+                return false;
+            }
+
+            if (!controlCapabilities.Validate(out message))
+            {
+                message = $"{stableId} has invalid control capabilities: {message}";
                 return false;
             }
 

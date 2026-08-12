@@ -35,8 +35,25 @@ namespace LWS.InterstateHauler
         public LwsWheelControlBinding trailerAttachDetachBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.TrailerAttachDetach, LwsWheelControlKind.Button);
         public LwsWheelControlBinding parkingBrakeBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.ParkingBrake, LwsWheelControlKind.Button);
         public LwsWheelControlBinding ignitionBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.Ignition, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding engineStartBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.EngineStart, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding engineStopBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.EngineStop, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding headlightsBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.Headlights, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding highBeamsBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.HighBeams, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding leftSignalBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.LeftSignal, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding rightSignalBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.RightSignal, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding hazardsBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.Hazards, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding wipersBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.Wipers, LwsWheelControlKind.Button);
         public LwsWheelControlBinding hornBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.Horn, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding airHornBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.AirHorn, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding engineBrakeBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.EngineBrake, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding retarderIncreaseBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.RetarderIncrease, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding retarderDecreaseBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.RetarderDecrease, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding differentialLockBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.DifferentialLock, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding trailerBrakeBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.TrailerBrake, LwsWheelControlKind.Button);
         public LwsWheelControlBinding cameraCycleBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.CameraCycle, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding lookResetBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.LookReset, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding flipOffDriverBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.FlipOffDriver, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding interactBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.Interact, LwsWheelControlKind.Button);
         public LwsWheelControlBinding menuSubmitBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.MenuSubmit, LwsWheelControlKind.Button);
         public LwsWheelControlBinding menuCancelBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.MenuCancel, LwsWheelControlKind.Button);
         public LwsWheelControlBinding pauseBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.Pause, LwsWheelControlKind.Button);
@@ -48,7 +65,9 @@ namespace LWS.InterstateHauler
 
         public static LwsWheelCalibrationProfile CreateDefaultLogitechG29()
         {
-            return new LwsWheelCalibrationProfile();
+            var profile = new LwsWheelCalibrationProfile();
+            profile.NormalizeBindingLogicalControls();
+            return profile;
         }
 
         public bool ValidateRanges(out string message)
@@ -112,8 +131,25 @@ namespace LWS.InterstateHauler
                 case LwsWheelLogicalControl.TrailerAttachDetach: return trailerAttachDetachBinding;
                 case LwsWheelLogicalControl.ParkingBrake: return parkingBrakeBinding;
                 case LwsWheelLogicalControl.Ignition: return ignitionBinding;
+                case LwsWheelLogicalControl.EngineStart: return engineStartBinding;
+                case LwsWheelLogicalControl.EngineStop: return engineStopBinding;
+                case LwsWheelLogicalControl.Headlights: return headlightsBinding;
+                case LwsWheelLogicalControl.HighBeams: return highBeamsBinding;
+                case LwsWheelLogicalControl.LeftSignal: return leftSignalBinding;
+                case LwsWheelLogicalControl.RightSignal: return rightSignalBinding;
+                case LwsWheelLogicalControl.Hazards: return hazardsBinding;
+                case LwsWheelLogicalControl.Wipers: return wipersBinding;
                 case LwsWheelLogicalControl.Horn: return hornBinding;
+                case LwsWheelLogicalControl.AirHorn: return airHornBinding;
+                case LwsWheelLogicalControl.EngineBrake: return engineBrakeBinding;
+                case LwsWheelLogicalControl.RetarderIncrease: return retarderIncreaseBinding;
+                case LwsWheelLogicalControl.RetarderDecrease: return retarderDecreaseBinding;
+                case LwsWheelLogicalControl.DifferentialLock: return differentialLockBinding;
+                case LwsWheelLogicalControl.TrailerBrake: return trailerBrakeBinding;
                 case LwsWheelLogicalControl.CameraCycle: return cameraCycleBinding;
+                case LwsWheelLogicalControl.LookReset: return lookResetBinding;
+                case LwsWheelLogicalControl.FlipOffDriver: return flipOffDriverBinding;
+                case LwsWheelLogicalControl.Interact: return interactBinding;
                 case LwsWheelLogicalControl.MenuSubmit: return menuSubmitBinding;
                 case LwsWheelLogicalControl.MenuCancel: return menuCancelBinding;
                 case LwsWheelLogicalControl.Pause: return pauseBinding;
@@ -145,8 +181,25 @@ namespace LWS.InterstateHauler
                 case LwsWheelLogicalControl.TrailerAttachDetach: trailerAttachDetachBinding = binding; break;
                 case LwsWheelLogicalControl.ParkingBrake: parkingBrakeBinding = binding; break;
                 case LwsWheelLogicalControl.Ignition: ignitionBinding = binding; break;
+                case LwsWheelLogicalControl.EngineStart: engineStartBinding = binding; break;
+                case LwsWheelLogicalControl.EngineStop: engineStopBinding = binding; break;
+                case LwsWheelLogicalControl.Headlights: headlightsBinding = binding; break;
+                case LwsWheelLogicalControl.HighBeams: highBeamsBinding = binding; break;
+                case LwsWheelLogicalControl.LeftSignal: leftSignalBinding = binding; break;
+                case LwsWheelLogicalControl.RightSignal: rightSignalBinding = binding; break;
+                case LwsWheelLogicalControl.Hazards: hazardsBinding = binding; break;
+                case LwsWheelLogicalControl.Wipers: wipersBinding = binding; break;
                 case LwsWheelLogicalControl.Horn: hornBinding = binding; break;
+                case LwsWheelLogicalControl.AirHorn: airHornBinding = binding; break;
+                case LwsWheelLogicalControl.EngineBrake: engineBrakeBinding = binding; break;
+                case LwsWheelLogicalControl.RetarderIncrease: retarderIncreaseBinding = binding; break;
+                case LwsWheelLogicalControl.RetarderDecrease: retarderDecreaseBinding = binding; break;
+                case LwsWheelLogicalControl.DifferentialLock: differentialLockBinding = binding; break;
+                case LwsWheelLogicalControl.TrailerBrake: trailerBrakeBinding = binding; break;
                 case LwsWheelLogicalControl.CameraCycle: cameraCycleBinding = binding; break;
+                case LwsWheelLogicalControl.LookReset: lookResetBinding = binding; break;
+                case LwsWheelLogicalControl.FlipOffDriver: flipOffDriverBinding = binding; break;
+                case LwsWheelLogicalControl.Interact: interactBinding = binding; break;
                 case LwsWheelLogicalControl.MenuSubmit: menuSubmitBinding = binding; break;
                 case LwsWheelLogicalControl.MenuCancel: menuCancelBinding = binding; break;
                 case LwsWheelLogicalControl.Pause: pauseBinding = binding; break;
@@ -164,9 +217,71 @@ namespace LWS.InterstateHauler
 
         public static LwsWheelCalibrationProfile FromJson(string json)
         {
-            return string.IsNullOrWhiteSpace(json)
+            LwsWheelCalibrationProfile profile = string.IsNullOrWhiteSpace(json)
                 ? CreateDefaultLogitechG29()
                 : JsonUtility.FromJson<LwsWheelCalibrationProfile>(json);
+            profile?.NormalizeBindingLogicalControls();
+            return profile;
+        }
+
+        public void NormalizeBindingLogicalControls()
+        {
+            NormalizeBinding(ref steeringBinding, LwsWheelLogicalControl.Steering, LwsWheelControlKind.Axis);
+            NormalizeBinding(ref throttleBinding, LwsWheelLogicalControl.Throttle, LwsWheelControlKind.Axis);
+            NormalizeBinding(ref brakeBinding, LwsWheelLogicalControl.Brake, LwsWheelControlKind.Axis);
+            NormalizeBinding(ref clutchBinding, LwsWheelLogicalControl.Clutch, LwsWheelControlKind.Axis);
+            NormalizeBinding(ref gate1Binding, LwsWheelLogicalControl.ShifterGate1, LwsWheelControlKind.Button);
+            NormalizeBinding(ref gate2Binding, LwsWheelLogicalControl.ShifterGate2, LwsWheelControlKind.Button);
+            NormalizeBinding(ref gate3Binding, LwsWheelLogicalControl.ShifterGate3, LwsWheelControlKind.Button);
+            NormalizeBinding(ref gate4Binding, LwsWheelLogicalControl.ShifterGate4, LwsWheelControlKind.Button);
+            NormalizeBinding(ref gate5Binding, LwsWheelLogicalControl.ShifterGate5, LwsWheelControlKind.Button);
+            NormalizeBinding(ref gate6Binding, LwsWheelLogicalControl.ShifterGate6, LwsWheelControlKind.Button);
+            NormalizeBinding(ref reverseBinding, LwsWheelLogicalControl.ShifterReverse, LwsWheelControlKind.Button);
+            NormalizeBinding(ref rangeBinding, LwsWheelLogicalControl.RangeToggle, LwsWheelControlKind.Button);
+            NormalizeBinding(ref splitterBinding, LwsWheelLogicalControl.SplitterToggle, LwsWheelControlKind.Button);
+            NormalizeBinding(ref trailerAttachDetachBinding, LwsWheelLogicalControl.TrailerAttachDetach, LwsWheelControlKind.Button);
+            NormalizeBinding(ref parkingBrakeBinding, LwsWheelLogicalControl.ParkingBrake, LwsWheelControlKind.Button);
+            NormalizeBinding(ref ignitionBinding, LwsWheelLogicalControl.Ignition, LwsWheelControlKind.Button);
+            NormalizeBinding(ref engineStartBinding, LwsWheelLogicalControl.EngineStart, LwsWheelControlKind.Button);
+            NormalizeBinding(ref engineStopBinding, LwsWheelLogicalControl.EngineStop, LwsWheelControlKind.Button);
+            NormalizeBinding(ref headlightsBinding, LwsWheelLogicalControl.Headlights, LwsWheelControlKind.Button);
+            NormalizeBinding(ref highBeamsBinding, LwsWheelLogicalControl.HighBeams, LwsWheelControlKind.Button);
+            NormalizeBinding(ref leftSignalBinding, LwsWheelLogicalControl.LeftSignal, LwsWheelControlKind.Button);
+            NormalizeBinding(ref rightSignalBinding, LwsWheelLogicalControl.RightSignal, LwsWheelControlKind.Button);
+            NormalizeBinding(ref hazardsBinding, LwsWheelLogicalControl.Hazards, LwsWheelControlKind.Button);
+            NormalizeBinding(ref wipersBinding, LwsWheelLogicalControl.Wipers, LwsWheelControlKind.Button);
+            NormalizeBinding(ref hornBinding, LwsWheelLogicalControl.Horn, LwsWheelControlKind.Button);
+            NormalizeBinding(ref airHornBinding, LwsWheelLogicalControl.AirHorn, LwsWheelControlKind.Button);
+            NormalizeBinding(ref engineBrakeBinding, LwsWheelLogicalControl.EngineBrake, LwsWheelControlKind.Button);
+            NormalizeBinding(ref retarderIncreaseBinding, LwsWheelLogicalControl.RetarderIncrease, LwsWheelControlKind.Button);
+            NormalizeBinding(ref retarderDecreaseBinding, LwsWheelLogicalControl.RetarderDecrease, LwsWheelControlKind.Button);
+            NormalizeBinding(ref differentialLockBinding, LwsWheelLogicalControl.DifferentialLock, LwsWheelControlKind.Button);
+            NormalizeBinding(ref trailerBrakeBinding, LwsWheelLogicalControl.TrailerBrake, LwsWheelControlKind.Button);
+            NormalizeBinding(ref cameraCycleBinding, LwsWheelLogicalControl.CameraCycle, LwsWheelControlKind.Button);
+            NormalizeBinding(ref lookResetBinding, LwsWheelLogicalControl.LookReset, LwsWheelControlKind.Button);
+            NormalizeBinding(ref flipOffDriverBinding, LwsWheelLogicalControl.FlipOffDriver, LwsWheelControlKind.Button);
+            NormalizeBinding(ref interactBinding, LwsWheelLogicalControl.Interact, LwsWheelControlKind.Button);
+            NormalizeBinding(ref menuSubmitBinding, LwsWheelLogicalControl.MenuSubmit, LwsWheelControlKind.Button);
+            NormalizeBinding(ref menuCancelBinding, LwsWheelLogicalControl.MenuCancel, LwsWheelControlKind.Button);
+            NormalizeBinding(ref pauseBinding, LwsWheelLogicalControl.Pause, LwsWheelControlKind.Button);
+            NormalizeBinding(ref dpadUpBinding, LwsWheelLogicalControl.DPadUp, LwsWheelControlKind.Button);
+            NormalizeBinding(ref dpadDownBinding, LwsWheelLogicalControl.DPadDown, LwsWheelControlKind.Button);
+            NormalizeBinding(ref dpadLeftBinding, LwsWheelLogicalControl.DPadLeft, LwsWheelControlKind.Button);
+            NormalizeBinding(ref dpadRightBinding, LwsWheelLogicalControl.DPadRight, LwsWheelControlKind.Button);
+        }
+
+        private static void NormalizeBinding(ref LwsWheelControlBinding binding, LwsWheelLogicalControl logicalControl, LwsWheelControlKind defaultKind)
+        {
+            binding.logicalControl = logicalControl;
+            if (binding.controlKind == LwsWheelControlKind.Unknown)
+            {
+                binding.controlKind = defaultKind;
+            }
+
+            if (binding.controlKind != LwsWheelControlKind.Axis && binding.pressThreshold <= 0f)
+            {
+                binding.pressThreshold = 0.5f;
+            }
         }
     }
 
@@ -437,6 +552,7 @@ namespace LWS.InterstateHauler
         public void SetProfile(LwsWheelCalibrationProfile profile)
         {
             CurrentProfile = profile ?? LwsWheelCalibrationProfile.CreateDefaultLogitechG29();
+            CurrentProfile.NormalizeBindingLogicalControls();
         }
     }
 }

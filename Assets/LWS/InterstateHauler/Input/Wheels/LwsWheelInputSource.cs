@@ -156,6 +156,7 @@ namespace LWS.InterstateHauler
         public void SetCalibrationProfile(LwsWheelCalibrationProfile profile)
         {
             _calibrationProfile = profile ?? LwsWheelCalibrationProfile.CreateDefaultLogitechG29();
+            _calibrationProfile.NormalizeBindingLogicalControls();
             _calibrationService?.SetProfile(_calibrationProfile);
             _forceFeedbackService?.ApplySettings(_calibrationProfile.forceFeedback);
         }
@@ -315,12 +316,32 @@ namespace LWS.InterstateHauler
                 return default;
             }
 
+            LwsMomentaryIntent ignition = ReadButtonIntent(_calibrationProfile.ignitionBinding);
             return new LwsVehicleCommandFrame
             {
-                ignition = ReadButtonIntent(_calibrationProfile.ignitionBinding),
+                ignitionToggle = ignition,
+                ignition = ignition,
+                engineStart = ReadButtonIntent(_calibrationProfile.engineStartBinding),
+                engineStop = ReadButtonIntent(_calibrationProfile.engineStopBinding),
+                parkingBrakeToggle = ReadButtonIntent(_calibrationProfile.parkingBrakeBinding),
+                lowBeamLights = ReadButtonIntent(_calibrationProfile.headlightsBinding),
+                highBeamLights = ReadButtonIntent(_calibrationProfile.highBeamsBinding),
+                leftIndicator = ReadButtonIntent(_calibrationProfile.leftSignalBinding),
+                rightIndicator = ReadButtonIntent(_calibrationProfile.rightSignalBinding),
+                hazardLights = ReadButtonIntent(_calibrationProfile.hazardsBinding),
+                wipers = ReadButtonIntent(_calibrationProfile.wipersBinding),
                 horn = ReadButtonIntent(_calibrationProfile.hornBinding),
+                airHorn = ReadButtonIntent(_calibrationProfile.airHornBinding),
+                engineBrake = ReadButtonIntent(_calibrationProfile.engineBrakeBinding),
+                retarderIncrease = ReadButtonIntent(_calibrationProfile.retarderIncreaseBinding),
+                retarderDecrease = ReadButtonIntent(_calibrationProfile.retarderDecreaseBinding),
+                differentialLock = ReadButtonIntent(_calibrationProfile.differentialLockBinding),
                 trailerAttachDetach = ReadButtonIntent(_calibrationProfile.trailerAttachDetachBinding),
+                trailerBrake = ReadButtonIntent(_calibrationProfile.trailerBrakeBinding),
                 cameraCycle = ReadButtonIntent(_calibrationProfile.cameraCycleBinding),
+                lookReset = ReadButtonIntent(_calibrationProfile.lookResetBinding),
+                flipOffDriver = ReadButtonIntent(_calibrationProfile.flipOffDriverBinding),
+                interact = ReadButtonIntent(_calibrationProfile.interactBinding),
                 menuSubmit = ReadButtonIntent(_calibrationProfile.menuSubmitBinding),
                 menuCancel = ReadButtonIntent(_calibrationProfile.menuCancelBinding),
                 pause = ReadButtonIntent(_calibrationProfile.pauseBinding),

@@ -7,9 +7,11 @@ namespace LWS.InterstateHauler
     public sealed class LwsNwhVehicleInputProvider : VehicleInputProviderBase
     {
         [SerializeField] private MonoBehaviour inputSourceBehaviour;
+        [SerializeField] private LwsTruckControlController truckControlController;
         [SerializeField] private bool validationGearMappingEnabled;
 
         private ILwsVehicleInputSource _inputSource;
+        private bool _truckControlLookupAttempted;
 
         public void SetInputSource(ILwsVehicleInputSource inputSource)
         {
@@ -19,6 +21,12 @@ namespace LWS.InterstateHauler
         public void SetValidationGearMappingEnabled(bool enabled)
         {
             validationGearMappingEnabled = enabled;
+        }
+
+        public void SetTruckControlController(LwsTruckControlController controller)
+        {
+            truckControlController = controller;
+            _truckControlLookupAttempted = controller != null;
         }
 
         public override void Awake()
@@ -33,6 +41,12 @@ namespace LWS.InterstateHauler
             {
                 _inputSource = inputSourceBehaviour as ILwsVehicleInputSource;
             }
+
+            if (truckControlController == null && !_truckControlLookupAttempted)
+            {
+                truckControlController = FindFirstObjectByType<LwsTruckControlController>();
+                _truckControlLookupAttempted = true;
+            }
         }
 
         public override float Steering()
@@ -44,18 +58,25 @@ namespace LWS.InterstateHauler
         public override float Throttle()
         {
             ResolveSource();
-            return _inputSource?.ReadContinuousInput().throttle ?? 0f;
+            float input = _inputSource?.ReadContinuousInput().throttle ?? 0f;
+            return truckControlController != null ? Mathf.Max(input, truckControlController.CurrentState.cruiseThrottleOutput) : input;
         }
 
         public override float Brakes()
         {
             ResolveSource();
-            return _inputSource?.ReadContinuousInput().brake ?? 0f;
+            float input = _inputSource?.ReadContinuousInput().brake ?? 0f;
+            return truckControlController != null ? Mathf.Max(input, truckControlController.CurrentState.cruiseBrakeOutput) : input;
         }
 
         public override float Handbrake()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return truckControlController.CurrentState.parkingBrakeOn ? 1f : 0f;
+            }
+
             return _inputSource?.ReadContinuousInput().parkingBrake ?? 0f;
         }
 
@@ -68,54 +89,100 @@ namespace LWS.InterstateHauler
         public override bool EngineStartStop()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return false;
+            }
+
             return IsPressed(_inputSource?.ReadCommandFrame().ignition ?? LwsMomentaryIntent.None);
         }
 
         public override bool Horn()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                LwsTruckControlState state = truckControlController.CurrentState;
+                return state.hornActive || state.airHornActive;
+            }
+
             return IsActive(_inputSource?.ReadCommandFrame().horn ?? LwsMomentaryIntent.None);
         }
 
         public override bool LowBeamLights()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.LowBeamLights);
+            }
+
             return IsPressed(_inputSource?.ReadCommandFrame().lowBeamLights ?? LwsMomentaryIntent.None);
         }
 
         public override bool HighBeamLights()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.HighBeamLights);
+            }
+
             return IsPressed(_inputSource?.ReadCommandFrame().highBeamLights ?? LwsMomentaryIntent.None);
         }
 
         public override bool HazardLights()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.HazardLights);
+            }
+
             return IsPressed(_inputSource?.ReadCommandFrame().hazardLights ?? LwsMomentaryIntent.None);
         }
 
         public override bool LeftBlinker()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.LeftBlinker);
+            }
+
             return IsPressed(_inputSource?.ReadCommandFrame().leftIndicator ?? LwsMomentaryIntent.None);
         }
 
         public override bool RightBlinker()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.RightBlinker);
+            }
+
             return IsPressed(_inputSource?.ReadCommandFrame().rightIndicator ?? LwsMomentaryIntent.None);
         }
 
         public override bool CruiseControl()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return false;
+            }
+
             return IsPressed(_inputSource?.ReadCommandFrame().cruiseControl ?? LwsMomentaryIntent.None);
         }
 
         public override bool TrailerAttachDetach()
         {
             ResolveSource();
+            if (truckControlController != null)
+            {
+                return false;
+            }
+
             return IsPressed(_inputSource?.ReadCommandFrame().trailerAttachDetach ?? LwsMomentaryIntent.None);
         }
 

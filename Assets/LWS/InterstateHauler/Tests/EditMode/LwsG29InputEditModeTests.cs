@@ -82,6 +82,23 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void CalibrationProfileNormalizesExpandedTruckControlBindings()
+        {
+            LwsWheelCalibrationProfile profile = LwsWheelCalibrationProfile.CreateDefaultLogitechG29();
+            profile.hornBinding.logicalControl = LwsWheelLogicalControl.EngineStart;
+            profile.cameraCycleBinding.logicalControl = LwsWheelLogicalControl.EngineStop;
+            profile.flipOffDriverBinding.controlPath = "/TestWheel/button34";
+
+            string json = profile.ToJson();
+            LwsWheelCalibrationProfile copy = LwsWheelCalibrationProfile.FromJson(json);
+
+            Assert.AreEqual(LwsWheelLogicalControl.Horn, copy.hornBinding.logicalControl);
+            Assert.AreEqual(LwsWheelLogicalControl.CameraCycle, copy.cameraCycleBinding.logicalControl);
+            Assert.AreEqual(LwsWheelLogicalControl.FlipOffDriver, copy.flipOffDriverBinding.logicalControl);
+            Assert.AreEqual("/TestWheel/button34", copy.flipOffDriverBinding.controlPath);
+        }
+
+        [Test]
         public void VehicleInputServiceRejectsDuplicateWheelOwners()
         {
             var service = new LwsVehicleInputService();

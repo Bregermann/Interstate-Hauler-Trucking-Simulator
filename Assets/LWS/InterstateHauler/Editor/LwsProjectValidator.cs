@@ -60,6 +60,16 @@ namespace LWS.InterstateHauler.Editor
         private const string TransmissionControllerPath = "Assets/LWS/InterstateHauler/Vehicles/Transmission/Lws18SpeedTransmissionController.cs";
         private const string TransmissionNwhAdapterPath = "Assets/LWS/InterstateHauler/Vehicles/Transmission/NWH/LwsNwh18SpeedTransmissionAdapter.cs";
         private const string NwhVehicleInputProviderPath = "Assets/LWS/InterstateHauler/Vehicles/NWH/LwsNwhVehicleInputProvider.cs";
+        private const string TruckControlControllerPath = "Assets/LWS/InterstateHauler/Vehicles/Controls/LwsTruckControlController.cs";
+        private const string TruckControlServicePath = "Assets/LWS/InterstateHauler/Vehicles/Controls/LwsTruckControlService.cs";
+        private const string TruckControlTypesPath = "Assets/LWS/InterstateHauler/Vehicles/Controls/LwsTruckControlTypes.cs";
+        private const string NwhTruckControlAdapterPath = "Assets/LWS/InterstateHauler/Vehicles/Controls/NWH/LwsNwhTruckControlAdapter.cs";
+        private const string PlayerGestureControllerPath = "Assets/LWS/InterstateHauler/Vehicles/Controls/Gestures/LwsPlayerGestureController.cs";
+        private const string KeyboardGamepadTruckInputPath = "Assets/LWS/InterstateHauler/Input/LwsKeyboardGamepadTruckInputSource.cs";
+        private const string TruckControlDocsPath = "Documentation/InterstateHauler/007_Complete_Truck_Controls.md";
+        private const string TruckControlMatrixPath = "Documentation/InterstateHauler/007_Truck_Control_Matrix.md";
+        private const string NwhControlApiMatrixPath = "Documentation/InterstateHauler/007_NWH_Control_API_Matrix.md";
+        private const string Prompt008HandoffPath = "Documentation/InterstateHauler/007_Prompt008_Handoff.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -124,6 +134,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateVehicleBaseline(report);
             ValidateWheelInputFoundation(report);
             Validate18SpeedTransmissionFoundation(report);
+            ValidateTruckControlFoundation(report);
             return report;
         }
 
@@ -560,6 +571,11 @@ namespace LWS.InterstateHauler.Editor
 
             bool valid = definition.Validate(out string message);
             report.Add(valid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "Truck Definition", message);
+            bool controlsValid = definition.ControlCapabilities.Validate(out string controlsMessage);
+            report.Add(
+                controlsValid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Control Capabilities",
+                controlsMessage);
 
             bool idsValid = LwsTruckDefinition.ValidateUniqueIds(new[] { definition }, out string idsMessage);
             report.Add(idsValid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "Truck Definition IDs", idsMessage);
@@ -957,6 +973,161 @@ namespace LWS.InterstateHauler.Editor
                 defaultMappingDisabled && providerSuppressesDirectShift
                     ? "The temporary Prompt 005 gate-to-NWH mapping is disabled by default so Truck18Speed owns shifting."
                     : "The temporary Prompt 005 validation mapping may still be able to double-drive NWH gears.");
+        }
+
+        private static void ValidateTruckControlFoundation(LwsProjectValidationReport report)
+        {
+            ValidateTruckControlFiles(report);
+            ValidateTruckControlSpawnerSetup(report);
+            ValidateTruckControlRuntimeBoundary(report);
+            ValidateTruckControlInputBindings(report);
+            ValidateTruckControlDocumentation(report);
+        }
+
+        private static void ValidateTruckControlFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                TruckControlControllerPath,
+                TruckControlServicePath,
+                TruckControlTypesPath,
+                NwhTruckControlAdapterPath,
+                PlayerGestureControllerPath,
+                KeyboardGamepadTruckInputPath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Control Runtime Files",
+                missing.Count == 0
+                    ? "Prompt 007 truck-control controller, service, NWH adapter, keyboard/controller source, and gesture controller exist."
+                    : "Missing Prompt 007 files: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateTruckControlSpawnerSetup(LwsProjectValidationReport report)
+        {
+            string spawnerText = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                : string.Empty;
+            string bootstrapText = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                : string.Empty;
+            string playerTruckText = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruck.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruck.cs")
+                : string.Empty;
+
+            bool spawnerInstallsControls = spawnerText.Contains("LwsTruckControlController") &&
+                                           spawnerText.Contains("LwsNwhTruckControlAdapter") &&
+                                           spawnerText.Contains("LwsPlayerGestureController") &&
+                                           spawnerText.Contains("LwsTruckControlDebugPanel");
+            bool serviceRegistered = bootstrapText.Contains("ILwsTruckControlService") &&
+                                     bootstrapText.Contains("LwsTruckControlService");
+            bool playerTruckExposesControls = playerTruckText.Contains("TruckControlController");
+
+            report.Add(
+                spawnerInstallsControls && serviceRegistered && playerTruckExposesControls ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Control Runtime Wiring",
+                spawnerInstallsControls && serviceRegistered && playerTruckExposesControls
+                    ? "The validation spawner installs truck controls, the bootstrap registers the truck-control service, and LwsPlayerTruck exposes the controller."
+                    : "Truck-control runtime wiring is incomplete.");
+        }
+
+        private static void ValidateTruckControlRuntimeBoundary(LwsProjectValidationReport report)
+        {
+            string controlsText = Directory.Exists("Assets/LWS/InterstateHauler/Vehicles/Controls")
+                ? string.Join("\n", Directory.GetFiles("Assets/LWS/InterstateHauler/Vehicles/Controls", "*.cs", SearchOption.AllDirectories).Select(File.ReadAllText))
+                : string.Empty;
+            string inputProviderText = File.Exists(NwhVehicleInputProviderPath) ? File.ReadAllText(NwhVehicleInputProviderPath) : string.Empty;
+
+            bool avoidsHardwareApis = !controlsText.Contains("DirectInput") &&
+                                      !controlsText.Contains("DIManager") &&
+                                      !controlsText.Contains("Logitech") &&
+                                      !controlsText.Contains("HID");
+            bool avoidsTransmissionBypass = !controlsText.Contains("ShiftInto(") &&
+                                            !controlsText.Contains("powertrain.transmission");
+            bool nwhProviderConsumesControlState = inputProviderText.Contains("SetTruckControlController") &&
+                                                   inputProviderText.Contains("ConsumeNativePulse") &&
+                                                   inputProviderText.Contains("cruiseThrottleOutput") &&
+                                                   inputProviderText.Contains("parkingBrakeOn");
+
+            report.Add(
+                avoidsHardwareApis ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Control Hardware Boundary",
+                avoidsHardwareApis
+                    ? "Truck-control gameplay scripts avoid DirectInput, DIManager, Logitech, and HID APIs."
+                    : "Truck-control gameplay scripts reference hardware-specific APIs.");
+            report.Add(
+                avoidsTransmissionBypass ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Truck Control Transmission Boundary",
+                avoidsTransmissionBypass
+                    ? "Prompt 007 controls do not call NWH ShiftInto or bypass the 18-speed controller."
+                    : "Prompt 007 controls appear to bypass the Prompt 006 transmission authority.");
+            report.Add(
+                nwhProviderConsumesControlState ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "NWH Control Bridge",
+                nwhProviderConsumesControlState
+                    ? "The LWS NWH input provider consumes truck-control state and one-shot native pulses."
+                    : "The LWS NWH input provider does not expose the required truck-control bridge.");
+        }
+
+        private static void ValidateTruckControlInputBindings(LwsProjectValidationReport report)
+        {
+            string commandText = File.Exists("Assets/LWS/InterstateHauler/Input/LwsVehicleInput.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Input/LwsVehicleInput.cs")
+                : string.Empty;
+            string keyboardText = File.Exists(KeyboardGamepadTruckInputPath) ? File.ReadAllText(KeyboardGamepadTruckInputPath) : string.Empty;
+            string wheelTypesText = File.Exists("Assets/LWS/InterstateHauler/Input/Wheels/LwsWheelInputTypes.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Input/Wheels/LwsWheelInputTypes.cs")
+                : string.Empty;
+            string runtimeAsmdefText = File.Exists("Assets/LWS/InterstateHauler/LWS.InterstateHauler.Runtime.asmdef")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/LWS.InterstateHauler.Runtime.asmdef")
+                : string.Empty;
+
+            string[] requiredCommands =
+            {
+                "ignitionToggle",
+                "engineStart",
+                "engineStop",
+                "parkingBrakeToggle",
+                "airHorn",
+                "trailerBrake",
+                "lookReset",
+                "flipOffDriver"
+            };
+            bool commandFrameComplete = requiredCommands.All(commandText.Contains);
+            bool keyboardHasDefaults = keyboardText.Contains("keyboard.fKey") &&
+                                       keyboardText.Contains("kb.parkingBrake") &&
+                                       keyboardText.Contains("kb.airHorn");
+            bool wheelHasTruckBindings = wheelTypesText.Contains("FlipOffDriver") &&
+                                         wheelTypesText.Contains("AirHorn") &&
+                                         wheelTypesText.Contains("DifferentialLock");
+            bool runtimeReferencesInputSystem = runtimeAsmdefText.Contains("75469ad4d38634e559750d17036d5f7c");
+
+            report.Add(
+                commandFrameComplete && keyboardHasDefaults && wheelHasTruckBindings && runtimeReferencesInputSystem ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Semantic Truck Input Bindings",
+                commandFrameComplete && keyboardHasDefaults && wheelHasTruckBindings && runtimeReferencesInputSystem
+                    ? "Semantic truck commands include keyboard/controller defaults, wheel logical bindings, and the LWS runtime asmdef references Unity Input System."
+                    : "Semantic truck command bindings are incomplete.");
+        }
+
+        private static void ValidateTruckControlDocumentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                TruckControlDocsPath,
+                TruckControlMatrixPath,
+                NwhControlApiMatrixPath,
+                Prompt008HandoffPath
+            };
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 007 Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 007 documentation and Prompt 008 handoff exist."
+                    : "Missing Prompt 007 documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

@@ -118,6 +118,24 @@ namespace LWS.InterstateHauler
                 coupling = truckInstance.AddComponent<LwsNwhTrailerCouplingAdapter>();
             }
 
+            LwsNwhTruckControlAdapter truckControlAdapter = truckInstance.GetComponent<LwsNwhTruckControlAdapter>();
+            if (truckControlAdapter == null)
+            {
+                truckControlAdapter = truckInstance.AddComponent<LwsNwhTruckControlAdapter>();
+            }
+
+            LwsPlayerGestureController gestureController = truckInstance.GetComponent<LwsPlayerGestureController>();
+            if (gestureController == null)
+            {
+                gestureController = truckInstance.AddComponent<LwsPlayerGestureController>();
+            }
+
+            LwsTruckControlController truckControls = truckInstance.GetComponent<LwsTruckControlController>();
+            if (truckControls == null)
+            {
+                truckControls = truckInstance.AddComponent<LwsTruckControlController>();
+            }
+
             SpawnedTruck = truckInstance.GetComponent<LwsPlayerTruck>();
             if (SpawnedTruck == null)
             {
@@ -134,6 +152,11 @@ namespace LWS.InterstateHauler
             if (addDebugPanel && truckInstance.GetComponent<Lws18SpeedTransmissionDebugPanel>() == null)
             {
                 truckInstance.AddComponent<Lws18SpeedTransmissionDebugPanel>();
+            }
+
+            if (addDebugPanel && truckInstance.GetComponent<LwsTruckControlDebugPanel>() == null)
+            {
+                truckInstance.AddComponent<LwsTruckControlDebugPanel>();
             }
         }
 
