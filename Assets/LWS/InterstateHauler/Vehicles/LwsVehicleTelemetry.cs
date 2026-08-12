@@ -73,6 +73,7 @@ namespace LWS.InterstateHauler
         public bool engineRunning;
         public int nwhGear;
         public string nwhGearName;
+        public LwsTransmissionState transmissionState;
         public LwsTrailerAttachmentState trailerAttachment;
     }
 

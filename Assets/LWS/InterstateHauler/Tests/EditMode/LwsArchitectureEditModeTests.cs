@@ -90,23 +90,30 @@ namespace LWS.InterstateHauler.Tests.EditMode
             {
                 state = new LwsTransmissionState
                 {
-                    mode = LwsTransmissionMode.RangeSplitter,
-                    logicalGear = 7,
+                    mode = LwsTransmissionMode.Truck18Speed,
+                    logicalGear = Lws18SpeedGearId.Gear3High,
+                    logicalRatioIndex = 8,
+                    displayLabel = "3H",
                     physicalGate = LwsTruckShifterGate.Gate4,
-                    range = LwsTruckRange.High,
-                    splitter = LwsTruckSplitter.Low,
+                    requestedRange = LwsTruckRange.Low,
+                    engagedRange = LwsTruckRange.Low,
+                    requestedSplitter = LwsTruckSplitter.High,
+                    engagedSplitter = LwsTruckSplitter.High,
                     clutchInput = 0.25f,
                     neutral = false,
                     reverse = false,
-                    engineStalled = false
+                    engineStalled = false,
+                    nwhGear = 8
                 }
             };
 
             string json = JsonUtility.ToJson(wrapper);
             TransmissionStateWrapper copy = JsonUtility.FromJson<TransmissionStateWrapper>(json);
 
-            Assert.AreEqual(7, copy.state.logicalGear);
-            Assert.AreEqual(LwsTruckRange.High, copy.state.range);
+            Assert.AreEqual(Lws18SpeedGearId.Gear3High, copy.state.logicalGear);
+            Assert.AreEqual(8, copy.state.logicalRatioIndex);
+            Assert.AreEqual(LwsTruckRange.Low, copy.state.engagedRange);
+            Assert.AreEqual(LwsTruckSplitter.High, copy.state.engagedSplitter);
         }
 
         [Test]

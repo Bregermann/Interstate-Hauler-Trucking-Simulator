@@ -1,0 +1,198 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 751e97679edf4c47b13d96c3e8f4fbc3, type: 3}
+  m_Name: IH_18SpeedTransmission_G29_EatonDevelopment
+  m_EditorClassIdentifier:
+  stableId: ih.transmission.eaton18.g29-development
+  displayName: Eaton-Style 18-Speed G29 Development
+  defaultAssistMode: 0
+  lowCrawlerGate: 4
+  mainPosition1Gate: 5
+  mainPosition2Gate: 6
+  mainPosition3Gate: 7
+  mainPosition4Gate: 8
+  reverseGate: 1
+  unusedForwardGates:
+  - 3
+  reverseNwhGearIndex: -1
+  reverseGearRatio: -12.85
+  nwhFinalDriveRatio: 4
+  configureNwhRuntimeGears: 1
+  clutchDepressedThreshold: 0.75
+  floatShiftRpmTolerance: 150
+  assistedRpmTolerance: 700
+  severeOverspeedMultiplier: 1.08
+  catastrophicOverspeedMultiplier: 1.25
+  reverseSpeedLimitMetersPerSecond: 0.75
+  forwardMappings:
+  - gearId: 2
+    physicalGate: 4
+    range: 0
+    splitter: 0
+    logicalRatioIndex: 1
+    nwhGearIndex: 1
+    gearRatio: 14.4
+    displayLabel: LO-L
+    valid: 1
+  - gearId: 3
+    physicalGate: 4
+    range: 0
+    splitter: 1
+    logicalRatioIndex: 2
+    nwhGearIndex: 2
+    gearRatio: 12.29
+    displayLabel: LO-H
+    valid: 1
+  - gearId: 4
+    physicalGate: 5
+    range: 0
+    splitter: 0
+    logicalRatioIndex: 3
+    nwhGearIndex: 3
+    gearRatio: 8.56
+    displayLabel: 1L
+    valid: 1
+  - gearId: 5
+    physicalGate: 5
+    range: 0
+    splitter: 1
+    logicalRatioIndex: 4
+    nwhGearIndex: 4
+    gearRatio: 7.3
+    displayLabel: 1H
+    valid: 1
+  - gearId: 6
+    physicalGate: 6
+    range: 0
+    splitter: 0
+    logicalRatioIndex: 5
+    nwhGearIndex: 5
+    gearRatio: 6.05
+    displayLabel: 2L
+    valid: 1
+  - gearId: 7
+    physicalGate: 6
+    range: 0
+    splitter: 1
+    logicalRatioIndex: 6
+    nwhGearIndex: 6
+    gearRatio: 5.16
+    displayLabel: 2H
+    valid: 1
+  - gearId: 8
+    physicalGate: 7
+    range: 0
+    splitter: 0
+    logicalRatioIndex: 7
+    nwhGearIndex: 7
+    gearRatio: 4.38
+    displayLabel: 3L
+    valid: 1
+  - gearId: 9
+    physicalGate: 7
+    range: 0
+    splitter: 1
+    logicalRatioIndex: 8
+    nwhGearIndex: 8
+    gearRatio: 3.74
+    displayLabel: 3H
+    valid: 1
+  - gearId: 10
+    physicalGate: 8
+    range: 0
+    splitter: 0
+    logicalRatioIndex: 9
+    nwhGearIndex: 9
+    gearRatio: 3.2
+    displayLabel: 4L
+    valid: 1
+  - gearId: 11
+    physicalGate: 8
+    range: 0
+    splitter: 1
+    logicalRatioIndex: 10
+    nwhGearIndex: 10
+    gearRatio: 2.73
+    displayLabel: 4H
+    valid: 1
+  - gearId: 12
+    physicalGate: 5
+    range: 1
+    splitter: 0
+    logicalRatioIndex: 11
+    nwhGearIndex: 11
+    gearRatio: 2.29
+    displayLabel: 5L
+    valid: 1
+  - gearId: 13
+    physicalGate: 5
+    range: 1
+    splitter: 1
+    logicalRatioIndex: 12
+    nwhGearIndex: 12
+    gearRatio: 1.95
+    displayLabel: 5H
+    valid: 1
+  - gearId: 14
+    physicalGate: 6
+    range: 1
+    splitter: 0
+    logicalRatioIndex: 13
+    nwhGearIndex: 13
+    gearRatio: 1.62
+    displayLabel: 6L
+    valid: 1
+  - gearId: 15
+    physicalGate: 6
+    range: 1
+    splitter: 1
+    logicalRatioIndex: 14
+    nwhGearIndex: 14
+    gearRatio: 1.38
+    displayLabel: 6H
+    valid: 1
+  - gearId: 16
+    physicalGate: 7
+    range: 1
+    splitter: 0
+    logicalRatioIndex: 15
+    nwhGearIndex: 15
+    gearRatio: 1.17
+    displayLabel: 7L
+    valid: 1
+  - gearId: 17
+    physicalGate: 7
+    range: 1
+    splitter: 1
+    logicalRatioIndex: 16
+    nwhGearIndex: 16
+    gearRatio: 1
+    displayLabel: 7H
+    valid: 1
+  - gearId: 18
+    physicalGate: 8
+    range: 1
+    splitter: 0
+    logicalRatioIndex: 17
+    nwhGearIndex: 17
+    gearRatio: 0.86
+    displayLabel: 8L
+    valid: 1
+  - gearId: 19
+    physicalGate: 8
+    range: 1
+    splitter: 1
+    logicalRatioIndex: 18
+    nwhGearIndex: 18
+    gearRatio: 0.73
+    displayLabel: 8H
+    valid: 1

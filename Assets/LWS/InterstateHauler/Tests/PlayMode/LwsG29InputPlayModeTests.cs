@@ -42,6 +42,8 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.AreEqual(0.75f, provider.Throttle(), 0.0001f);
             Assert.AreEqual(0.1f, provider.Brakes(), 0.0001f);
             Assert.AreEqual(0.5f, provider.Clutch(), 0.0001f);
+            Assert.AreEqual(-999, provider.ShiftInto());
+            provider.SetValidationGearMappingEnabled(true);
             Assert.AreEqual(2, provider.ShiftInto());
             Object.Destroy(go);
         }

@@ -8,6 +8,7 @@ namespace LWS.InterstateHauler
     public sealed class LwsPlayerTruckSpawner : MonoBehaviour
     {
         [SerializeField] private LwsTruckDefinition truckDefinition;
+        [SerializeField] private Lws18SpeedTransmissionDefinition transmissionDefinition;
         [SerializeField] private GameObject fallbackPlayerTruckPrefab;
         [SerializeField] private GameObject trailerPrefab;
         [SerializeField] private string spawnedVehicleId = "player.truck.starter";
@@ -96,10 +97,20 @@ namespace LWS.InterstateHauler
                 adapter = truckInstance.AddComponent<LwsNwhVehicleAdapter>();
             }
 
-            if (truckInstance.GetComponent<LwsNwhTransmissionAdapter>() == null)
+            LwsNwh18SpeedTransmissionAdapter nwhTransmission = truckInstance.GetComponent<LwsNwh18SpeedTransmissionAdapter>();
+            if (nwhTransmission == null)
             {
-                truckInstance.AddComponent<LwsNwhTransmissionAdapter>();
+                nwhTransmission = truckInstance.AddComponent<LwsNwh18SpeedTransmissionAdapter>();
             }
+
+            Lws18SpeedTransmissionController transmission = truckInstance.GetComponent<Lws18SpeedTransmissionController>();
+            if (transmission == null)
+            {
+                transmission = truckInstance.AddComponent<Lws18SpeedTransmissionController>();
+            }
+
+            transmission.SetDefinition(transmissionDefinition);
+            transmission.SetMode(LwsTransmissionMode.Truck18Speed);
 
             LwsNwhTrailerCouplingAdapter coupling = truckInstance.GetComponent<LwsNwhTrailerCouplingAdapter>();
             if (coupling == null)
@@ -118,6 +129,11 @@ namespace LWS.InterstateHauler
             if (addDebugPanel && truckInstance.GetComponent<LwsPlayerTruckDebugPanel>() == null)
             {
                 truckInstance.AddComponent<LwsPlayerTruckDebugPanel>();
+            }
+
+            if (addDebugPanel && truckInstance.GetComponent<Lws18SpeedTransmissionDebugPanel>() == null)
+            {
+                truckInstance.AddComponent<Lws18SpeedTransmissionDebugPanel>();
             }
         }
 

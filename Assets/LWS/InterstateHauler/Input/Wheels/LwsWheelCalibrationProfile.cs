@@ -14,7 +14,7 @@ namespace LWS.InterstateHauler
         public string selectedDevicePath;
         public string selectedDeviceLayout;
         public string selectedDeviceDisplayName;
-        public bool validationGearMappingEnabled = true;
+        public bool validationGearMappingEnabled = false;
         public LwsWheelAxisCalibration steering = LwsWheelAxisCalibration.SteeringDefault();
         public LwsWheelPedalCalibration throttle = LwsWheelPedalCalibration.Default();
         public LwsWheelPedalCalibration brake = LwsWheelPedalCalibration.Default();
@@ -259,7 +259,20 @@ namespace LWS.InterstateHauler
 
         public static LwsTruckGearIntent ToValidationGearIntent(LwsHPatternShifterState state, bool validationMappingEnabled)
         {
-            int nwhGear = validationMappingEnabled ? ValidationNwhGearForGate(state.activeGate) : -999;
+            if (!validationMappingEnabled)
+            {
+                return new LwsTruckGearIntent
+                {
+                    physicalGate = state.activeGate,
+                    range = state.range,
+                    splitter = state.splitter,
+                    requestedLogicalGear = 0,
+                    neutralRequested = state.neutral || state.activeGate == LwsTruckShifterGate.Neutral,
+                    reverseRequested = state.reverse || state.activeGate == LwsTruckShifterGate.Reverse
+                };
+            }
+
+            int nwhGear = ValidationNwhGearForGate(state.activeGate);
             return new LwsTruckGearIntent
             {
                 physicalGate = state.activeGate,

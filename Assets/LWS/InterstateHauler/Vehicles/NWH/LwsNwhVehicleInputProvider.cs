@@ -7,12 +7,18 @@ namespace LWS.InterstateHauler
     public sealed class LwsNwhVehicleInputProvider : VehicleInputProviderBase
     {
         [SerializeField] private MonoBehaviour inputSourceBehaviour;
+        [SerializeField] private bool validationGearMappingEnabled;
 
         private ILwsVehicleInputSource _inputSource;
 
         public void SetInputSource(ILwsVehicleInputSource inputSource)
         {
             _inputSource = inputSource;
+        }
+
+        public void SetValidationGearMappingEnabled(bool enabled)
+        {
+            validationGearMappingEnabled = enabled;
         }
 
         public override void Awake()
@@ -116,7 +122,7 @@ namespace LWS.InterstateHauler
         public override int ShiftInto()
         {
             ResolveSource();
-            if (_inputSource == null)
+            if (_inputSource == null || !validationGearMappingEnabled)
             {
                 return -999;
             }
@@ -132,8 +138,7 @@ namespace LWS.InterstateHauler
                 return -1;
             }
 
-            // NWH stock H-shifter supports gears 1-8. Future LWS range/splitter logic
-            // maps trucking gears onto NWH commands outside this provider.
+            // Validation-only path retained for tests; Truck18Speed owns production shifting.
             return intent.requestedLogicalGear >= 1 && intent.requestedLogicalGear <= 8
                 ? intent.requestedLogicalGear
                 : -999;

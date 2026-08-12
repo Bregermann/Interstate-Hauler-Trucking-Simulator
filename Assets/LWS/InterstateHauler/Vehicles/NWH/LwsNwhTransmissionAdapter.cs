@@ -8,7 +8,7 @@ namespace LWS.InterstateHauler
     public sealed class LwsNwhTransmissionAdapter : MonoBehaviour, ILwsTruckTransmission
     {
         [SerializeField] private VehicleController vehicleController;
-        [SerializeField] private LwsTransmissionMode lwsMode = LwsTransmissionMode.RangeSplitter;
+        [SerializeField] private LwsTransmissionMode lwsMode = LwsTransmissionMode.SimpleHPattern;
 
         private LwsTransmissionState _lastState;
 
@@ -30,8 +30,10 @@ namespace LWS.InterstateHauler
         public void ApplyGearIntent(LwsTruckGearIntent gearIntent)
         {
             _lastState.physicalGate = gearIntent.physicalGate;
-            _lastState.range = gearIntent.range;
-            _lastState.splitter = gearIntent.splitter;
+            _lastState.requestedRange = gearIntent.range;
+            _lastState.engagedRange = gearIntent.range;
+            _lastState.requestedSplitter = gearIntent.splitter;
+            _lastState.engagedSplitter = gearIntent.splitter;
 
             if (vehicleController == null)
             {
@@ -69,7 +71,11 @@ namespace LWS.InterstateHauler
             ClutchComponent clutch = vehicleController.powertrain.clutch;
 
             _lastState.mode = lwsMode;
-            _lastState.logicalGear = transmission.Gear;
+            _lastState.nwhGear = transmission.Gear;
+            _lastState.logicalGear = transmission.Gear == 0
+                ? Lws18SpeedGearId.Neutral
+                : transmission.Gear < 0 ? Lws18SpeedGearId.Reverse1 : _lastState.logicalGear;
+            _lastState.displayLabel = transmission.GearName;
             _lastState.clutchInput = clutch.clutchInput;
             _lastState.neutral = transmission.Gear == 0;
             _lastState.reverse = transmission.Gear < 0;
@@ -85,7 +91,7 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            vehicleController.powertrain.transmission.ShiftInto(state.logicalGear, true);
+            vehicleController.powertrain.transmission.ShiftInto(state.nwhGear, true);
         }
     }
 }

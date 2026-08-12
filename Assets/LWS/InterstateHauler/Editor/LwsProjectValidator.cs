@@ -55,6 +55,11 @@ namespace LWS.InterstateHauler.Editor
         private const string TestTrailerPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_TestTrailer_DryVan.prefab";
         private const string TruckDefinitionPath = "Assets/LWS/InterstateHauler/Vehicles/Data/IH_TruckDefinition_StarterNwhSemi.asset";
         private const string TruckValidationScenePath = "Assets/LWS/InterstateHauler/Vehicles/Validation/TruckValidation.unity";
+        private const string TransmissionDefinitionPath = "Assets/LWS/InterstateHauler/Vehicles/Transmission/Data/IH_18SpeedTransmission_G29_EatonDevelopment.asset";
+        private const string TransmissionDefinitionGuid = "8f6ab81b8b1c4561bbfa66fb83e64b22";
+        private const string TransmissionControllerPath = "Assets/LWS/InterstateHauler/Vehicles/Transmission/Lws18SpeedTransmissionController.cs";
+        private const string TransmissionNwhAdapterPath = "Assets/LWS/InterstateHauler/Vehicles/Transmission/NWH/LwsNwh18SpeedTransmissionAdapter.cs";
+        private const string NwhVehicleInputProviderPath = "Assets/LWS/InterstateHauler/Vehicles/NWH/LwsNwhVehicleInputProvider.cs";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -118,6 +123,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateRenderingFoundation(report);
             ValidateVehicleBaseline(report);
             ValidateWheelInputFoundation(report);
+            Validate18SpeedTransmissionFoundation(report);
             return report;
         }
 
@@ -833,6 +839,124 @@ namespace LWS.InterstateHauler.Editor
                 hasStockNwhVehicleProvider && hasWheelBootstrap
                     ? "Stock NWH vehicle input remains available for fallback and is disabled by LWS while wheel ownership is active."
                     : "Wheel/fallback ownership could not be fully confirmed from TruckValidation scene text.");
+        }
+
+        private static void Validate18SpeedTransmissionFoundation(LwsProjectValidationReport report)
+        {
+            Validate18SpeedDefinition(report);
+            ValidateTruckValidationTransmissionSetup(report);
+            ValidateTransmissionRuntimeBoundary(report);
+            ValidatePrompt005ValidationMappingDisabled(report);
+        }
+
+        private static void Validate18SpeedDefinition(LwsProjectValidationReport report)
+        {
+            Lws18SpeedTransmissionDefinition definition = AssetDatabase.LoadAssetAtPath<Lws18SpeedTransmissionDefinition>(TransmissionDefinitionPath);
+            if (definition == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "18-Speed Definition", $"{TransmissionDefinitionPath} was not found or did not import.");
+                return;
+            }
+
+            bool valid = definition.ValidateDefinition(out string message);
+            report.Add(valid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "18-Speed Definition", message);
+
+            bool allRatiosPositive = definition.ForwardRatios.Count == 18 && definition.ForwardRatios.All(ratio => ratio > 0f);
+            report.Add(
+                allRatiosPositive ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "18-Speed Ratios",
+                allRatiosPositive
+                    ? "18 unique positive forward ratios are available for the runtime NWH gear list."
+                    : "The 18-speed definition does not expose 18 positive forward ratios.");
+
+            bool reverseValid = definition.ResolveReverse().nwhGearIndex == -1 && definition.ResolveReverse().reverse;
+            report.Add(
+                reverseValid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "18-Speed Reverse",
+                reverseValid
+                    ? "Reverse resolves to a semantic LWS reverse state and NWH reverse gear index -1."
+                    : "Reverse mapping is not valid.");
+        }
+
+        private static void ValidateTruckValidationTransmissionSetup(LwsProjectValidationReport report)
+        {
+            if (!File.Exists(TruckValidationScenePath))
+            {
+                return;
+            }
+
+            string sceneText = File.ReadAllText(TruckValidationScenePath);
+            bool sceneReferencesDefinition = sceneText.Contains(TransmissionDefinitionGuid);
+            bool spawnerAddsController = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs") &&
+                                         File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs").Contains("Lws18SpeedTransmissionController");
+            bool spawnerAddsAdapter = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs") &&
+                                      File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs").Contains("LwsNwh18SpeedTransmissionAdapter");
+
+            report.Add(
+                sceneReferencesDefinition && spawnerAddsController && spawnerAddsAdapter ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "TruckValidation 18-Speed Setup",
+                sceneReferencesDefinition && spawnerAddsController && spawnerAddsAdapter
+                    ? "TruckValidation references the 18-speed definition and the LWS spawner installs the controller/NWH adapter at runtime."
+                    : "TruckValidation or the LWS spawner is missing the 18-speed controller/adapter/definition wiring.");
+        }
+
+        private static void ValidateTransmissionRuntimeBoundary(LwsProjectValidationReport report)
+        {
+            string controllerText = File.Exists(TransmissionControllerPath) ? File.ReadAllText(TransmissionControllerPath) : string.Empty;
+            string adapterText = File.Exists(TransmissionNwhAdapterPath) ? File.ReadAllText(TransmissionNwhAdapterPath) : string.Empty;
+
+            bool controllerConsumesLwsInput = controllerText.Contains("ILwsVehicleInputService") &&
+                                             controllerText.Contains("ILwsVehicleInputSource") &&
+                                             controllerText.Contains("ReadGearIntent()");
+            bool controllerAvoidsPrompt005Hardware = !controllerText.Contains("DirectInput") &&
+                                                     !controllerText.Contains("DIManager") &&
+                                                     !controllerText.Contains("Logitech") &&
+                                                     !controllerText.Contains("HID");
+            bool adapterUsesNwhShiftInto = adapterText.Contains("transmission.ShiftInto") &&
+                                           adapterText.Contains("transmission.gears") &&
+                                           adapterText.Contains("TransmissionShiftType.Manual");
+            bool saveParticipant = controllerText.Contains("ILwsSaveParticipant") &&
+                                   controllerText.Contains("vehicle.transmission.player") &&
+                                   controllerText.Contains("requiresShifterSynchronization");
+
+            report.Add(
+                controllerConsumesLwsInput && controllerAvoidsPrompt005Hardware ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "18-Speed Input Boundary",
+                controllerConsumesLwsInput && controllerAvoidsPrompt005Hardware
+                    ? "The 18-speed controller consumes LWS gear intent only and does not reference DirectInput, DIManager, Logitech, or HID classes."
+                    : "The 18-speed controller input boundary is invalid.");
+
+            report.Add(
+                adapterUsesNwhShiftInto ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "18-Speed NWH Boundary",
+                adapterUsesNwhShiftInto
+                    ? "The NWH adapter configures the runtime gear list and shifts through TransmissionComponent.ShiftInto."
+                    : "The NWH adapter does not expose the required runtime gear/ShiftInto boundary.");
+
+            report.Add(
+                saveParticipant ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "18-Speed Save Shape",
+                saveParticipant
+                    ? "The 18-speed controller owns a compact save participant with shifter synchronization on restore."
+                    : "The 18-speed save participant shape is incomplete.");
+        }
+
+        private static void ValidatePrompt005ValidationMappingDisabled(LwsProjectValidationReport report)
+        {
+            LwsWheelCalibrationAsset calibration = AssetDatabase.LoadAssetAtPath<LwsWheelCalibrationAsset>(DefaultG29CalibrationPath);
+            bool defaultMappingDisabled = calibration != null &&
+                                          calibration.Profile != null &&
+                                          !calibration.Profile.validationGearMappingEnabled;
+            string providerText = File.Exists(NwhVehicleInputProviderPath) ? File.ReadAllText(NwhVehicleInputProviderPath) : string.Empty;
+            bool providerSuppressesDirectShift = providerText.Contains("validationGearMappingEnabled") &&
+                                                 providerText.Contains("return -999");
+
+            report.Add(
+                defaultMappingDisabled && providerSuppressesDirectShift ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 005 Validation Mapping",
+                defaultMappingDisabled && providerSuppressesDirectShift
+                    ? "The temporary Prompt 005 gate-to-NWH mapping is disabled by default so Truck18Speed owns shifting."
+                    : "The temporary Prompt 005 validation mapping may still be able to double-drive NWH gears.");
         }
 
         private static string FindUnityDirectInputNwhSamplePath()
