@@ -1,0 +1,209 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c06ed9d506c461fbe6f85614f33ad19, type: 3}
+  m_Name: IH_DefaultG29Calibration
+  m_EditorClassIdentifier:
+  profile:
+    schemaVersion: 1
+    profileId: directinput.logitech.g29.global
+    hardwareProfileId: directinput.logitech.g29.driving-force
+    displayName: Unity-DirectInput Logitech G29 Global Calibration Template
+    selectedDevicePath:
+    selectedDeviceLayout:
+    selectedDeviceDisplayName:
+    validationGearMappingEnabled: 1
+    steering:
+      center: 0
+      minimum: -1
+      maximum: 1
+      deadzone: 0.02
+      saturation: 0
+      inverted: 0
+      sensitivity: 1
+      steeringRotationDegrees: 900
+    throttle:
+      releasedValue: 0
+      pressedValue: 1
+      deadzone: 0.02
+      saturation: 0
+      inverted: 0
+    brake:
+      releasedValue: 0
+      pressedValue: 1
+      deadzone: 0.02
+      saturation: 0
+      inverted: 0
+    clutch:
+      releasedValue: 0
+      pressedValue: 1
+      deadzone: 0.02
+      saturation: 0
+      inverted: 0
+    steeringBinding:
+      logicalControl: 1
+      controlKind: 1
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    throttleBinding:
+      logicalControl: 2
+      controlKind: 1
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    brakeBinding:
+      logicalControl: 3
+      controlKind: 1
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    clutchBinding:
+      logicalControl: 4
+      controlKind: 1
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    gate1Binding:
+      logicalControl: 5
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    gate2Binding:
+      logicalControl: 6
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    gate3Binding:
+      logicalControl: 7
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    gate4Binding:
+      logicalControl: 8
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    gate5Binding:
+      logicalControl: 9
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    gate6Binding:
+      logicalControl: 10
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    reverseBinding:
+      logicalControl: 11
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    rangeBinding:
+      logicalControl: 12
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    splitterBinding:
+      logicalControl: 13
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    trailerAttachDetachBinding:
+      logicalControl: 14
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    parkingBrakeBinding:
+      logicalControl: 15
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    ignitionBinding:
+      logicalControl: 16
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    hornBinding:
+      logicalControl: 17
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    cameraCycleBinding:
+      logicalControl: 18
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    menuSubmitBinding:
+      logicalControl: 19
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    menuCancelBinding:
+      logicalControl: 20
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    pauseBinding:
+      logicalControl: 21
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    dpadUpBinding:
+      logicalControl: 22
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    dpadDownBinding:
+      logicalControl: 23
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    dpadLeftBinding:
+      logicalControl: 24
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    dpadRightBinding:
+      logicalControl: 25
+      controlKind: 2
+      controlPath:
+      displayName:
+      pressThreshold: 0.5
+    forceFeedback:
+      enabled: 0
+      masterStrength: 0.5
+      alignmentStrength: 0.5
+      dampingStrength: 0.25
+      roadStrength: 0.25
+      impactStrength: 0.25
+      directInputBackendRequired: 1
+      preferredDeviceSearchTerm: g29

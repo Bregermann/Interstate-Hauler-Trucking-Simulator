@@ -57,6 +57,12 @@ namespace LWS.InterstateHauler.Editor
         private const string TruckValidationScenePath = "Assets/LWS/InterstateHauler/Vehicles/Validation/TruckValidation.unity";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
+        private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
+        private const string DefaultG29CalibrationPath = "Assets/LWS/InterstateHauler/Input/Data/IH_DefaultG29Calibration.asset";
+        private const string UnityDirectInputPackageName = "com.directinput.unity";
+        private const string UnityDirectInputPackageUrl = "https://github.com/imDanoush/Unity-DirectInput.git";
+        private const string UnityDirectInputNwhSamplePackageName = "NWHVehiclePhysics2FFB.unitypackage";
+        private const string CancelledNwhSteeringWheelInputImportedProviderPath = "Assets/NWH/Vehicle Physics 2/_OptionalPackages/Input/SteeringWheelInput/SteeringWheelInputProvider.cs";
 
         private static readonly string[] VendorRoots =
         {
@@ -111,6 +117,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateProjectOwnership(report);
             ValidateRenderingFoundation(report);
             ValidateVehicleBaseline(report);
+            ValidateWheelInputFoundation(report);
             return report;
         }
 
@@ -635,6 +642,216 @@ namespace LWS.InterstateHauler.Editor
                 offendingFiles.Count == 0
                     ? "No UTS player-driving or UTS trailer-driving markers were found in LWS vehicle assets."
                     : "UTS player-driving markers found in LWS vehicle assets: " + string.Join(", ", offendingFiles));
+        }
+
+        private static void ValidateWheelInputFoundation(LwsProjectValidationReport report)
+        {
+            ValidateG29Profile(report);
+            ValidateG29Calibration(report);
+            ValidateDirectInputWheelIntegration(report);
+            ValidateTruckValidationWheelSetup(report);
+        }
+
+        private static void ValidateG29Profile(LwsProjectValidationReport report)
+        {
+            LwsWheelDeviceProfile profile = AssetDatabase.LoadAssetAtPath<LwsWheelDeviceProfile>(LogitechG29ProfilePath);
+            if (profile == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "G29 Profile", $"{LogitechG29ProfilePath} was not found or did not import.");
+                return;
+            }
+
+            bool valid = profile.Validate(out string message);
+            report.Add(valid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "G29 Profile", message);
+            report.Add(
+                profile.CompatibilityStatus == LwsWheelCompatibilityStatus.SupportedPhysicallyVerified
+                    ? LwsValidationSeverity.Info
+                    : LwsValidationSeverity.Warning,
+                "G29 Physical Verification",
+                $"Current G29 compatibility status is {profile.CompatibilityStatus}.");
+        }
+
+        private static void ValidateG29Calibration(LwsProjectValidationReport report)
+        {
+            LwsWheelCalibrationAsset calibration = AssetDatabase.LoadAssetAtPath<LwsWheelCalibrationAsset>(DefaultG29CalibrationPath);
+            if (calibration == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "G29 Calibration", $"{DefaultG29CalibrationPath} was not found or did not import.");
+                return;
+            }
+
+            bool valid = calibration.Validate(out string message);
+            report.Add(valid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "G29 Calibration", message);
+
+            LwsWheelCalibrationProfile profile = calibration.Profile;
+            report.Add(
+                profile != null && profile.HasRequiredDrivingBindings() ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "G29 Binding Completeness",
+                profile != null && profile.HasRequiredDrivingBindings()
+                    ? "Default G29 calibration has steering, pedals, shifter, range, and splitter bindings."
+                    : "Default G29 calibration is intentionally unbound until hardware calibration records Unity control paths.");
+
+            ValidateDuplicateWheelBindings(report, profile);
+        }
+
+        private static void ValidateDuplicateWheelBindings(LwsProjectValidationReport report, LwsWheelCalibrationProfile profile)
+        {
+            if (profile == null)
+            {
+                return;
+            }
+
+            var paths = new Dictionary<string, LwsWheelLogicalControl>(StringComparer.Ordinal);
+            var duplicates = new List<string>();
+            LwsWheelLogicalControl[] controls =
+            {
+                LwsWheelLogicalControl.Steering,
+                LwsWheelLogicalControl.Throttle,
+                LwsWheelLogicalControl.Brake,
+                LwsWheelLogicalControl.Clutch,
+                LwsWheelLogicalControl.ShifterGate1,
+                LwsWheelLogicalControl.ShifterGate2,
+                LwsWheelLogicalControl.ShifterGate3,
+                LwsWheelLogicalControl.ShifterGate4,
+                LwsWheelLogicalControl.ShifterGate5,
+                LwsWheelLogicalControl.ShifterGate6,
+                LwsWheelLogicalControl.ShifterReverse,
+                LwsWheelLogicalControl.RangeToggle,
+                LwsWheelLogicalControl.SplitterToggle
+            };
+
+            foreach (LwsWheelLogicalControl control in controls)
+            {
+                LwsWheelControlBinding binding = profile.GetBinding(control);
+                if (!binding.IsBound)
+                {
+                    continue;
+                }
+
+                if (paths.TryGetValue(binding.controlPath, out LwsWheelLogicalControl existing))
+                {
+                    duplicates.Add($"{existing}/{control}: {binding.controlPath}");
+                }
+                else
+                {
+                    paths.Add(binding.controlPath, control);
+                }
+            }
+
+            report.Add(
+                duplicates.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "G29 Duplicate Bindings",
+                duplicates.Count == 0
+                    ? "No duplicate wheel binding paths were found in the default calibration asset."
+                    : "Duplicate wheel bindings found: " + string.Join(", ", duplicates));
+        }
+
+        private static void ValidateDirectInputWheelIntegration(LwsProjectValidationReport report)
+        {
+            string manifest = File.Exists("Packages/manifest.json") ? File.ReadAllText("Packages/manifest.json") : string.Empty;
+            string lockFile = File.Exists("Packages/packages-lock.json") ? File.ReadAllText("Packages/packages-lock.json") : string.Empty;
+            bool packageDeclared = manifest.Contains($"\"{UnityDirectInputPackageName}\"") && manifest.Contains(UnityDirectInputPackageUrl);
+            bool packageLocked = lockFile.Contains($"\"{UnityDirectInputPackageName}\"") && lockFile.Contains("\"hash\":");
+            bool backendAvailable = LwsDirectInputBackendDiscovery.IsUnityDirectInputAvailable();
+            bool sampleAvailable = FindUnityDirectInputNwhSamplePath() != null;
+            bool cancelledNwhImportPresent = File.Exists(CancelledNwhSteeringWheelInputImportedProviderPath);
+            bool logitechSdkPresent = Directory.Exists("Assets/LogitechSDK") ||
+                                      Directory.GetFiles("Assets", "*LogitechSteeringWheel*.cs", SearchOption.AllDirectories).Length > 0;
+
+            report.Add(
+                packageDeclared ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Unity-DirectInput Package",
+                packageDeclared
+                    ? $"{UnityDirectInputPackageName} is declared through {UnityDirectInputPackageUrl}."
+                    : $"{UnityDirectInputPackageName} is not declared in Packages/manifest.json.");
+
+            report.Add(
+                packageLocked ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Unity-DirectInput Lock",
+                packageLocked
+                    ? $"{UnityDirectInputPackageName} is present in packages-lock.json."
+                    : $"{UnityDirectInputPackageName} has not yet been resolved into packages-lock.json.");
+
+            report.Add(
+                backendAvailable ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "DirectInput Backend",
+                backendAvailable
+                    ? "Unity-DirectInput DIManager type is loaded."
+                    : "Unity-DirectInput DIManager type is not loaded; restart/open the normal Editor after package resolution.");
+
+            report.Add(
+                sampleAvailable ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "DirectInput NWH v13 Sample",
+                sampleAvailable
+                    ? $"{UnityDirectInputNwhSamplePackageName} is available in the package cache for reference."
+                    : $"{UnityDirectInputNwhSamplePackageName} was not found in the package cache.");
+
+            report.Add(
+                cancelledNwhImportPresent ? LwsValidationSeverity.Warning : LwsValidationSeverity.Info,
+                "Cancelled NWH SteeringWheelInput Import",
+                cancelledNwhImportPresent
+                    ? "Cancelled NWH SteeringWheelInput provider source is present under Assets/NWH; do not use it for Prompt 005."
+                    : "Cancelled NWH SteeringWheelInput provider source is not imported.");
+
+            report.Add(
+                logitechSdkPresent ? LwsValidationSeverity.Warning : LwsValidationSeverity.Info,
+                "Logitech SDK",
+                logitechSdkPresent
+                    ? "Logitech SDK source appears present but is no longer the selected Prompt 005 backend."
+                    : "Logitech SDK source is not required; Unity-DirectInput is the selected Windows backend.");
+        }
+
+        private static void ValidateTruckValidationWheelSetup(LwsProjectValidationReport report)
+        {
+            if (!File.Exists(TruckValidationScenePath))
+            {
+                return;
+            }
+
+            string sceneText = File.ReadAllText(TruckValidationScenePath);
+            bool hasWheelSource = sceneText.Contains("guid: 0bc1603391544e9e9c71838698b99863");
+            bool hasNwhBridge = sceneText.Contains("guid: aaf4c90435784e48b5c883f7477f3dfa");
+            bool hasWheelBootstrap = sceneText.Contains("guid: d48253881e1b46158e2f4bec4932089c");
+            bool hasCalibrationPanel = sceneText.Contains("guid: 97dea31e674549a89ea371c2ee7bae60");
+            bool hasDebugPanel = sceneText.Contains("guid: 28075828471f47f9b09e54cc890234fd");
+            bool hasDiscoveryPanel = sceneText.Contains("guid: 24b53896cf0f4b9fb9daffa32bbef6b5");
+            bool hasFfbCoordinator = sceneText.Contains("guid: 1f05df0c93cf43d18a9420ac969bb4a7");
+            bool hasStockNwhVehicleProvider = sceneText.Contains("guid: 0fe154161bba5034094381e28d5e1da4");
+
+            report.Add(
+                hasWheelSource && hasNwhBridge && hasWheelBootstrap && hasCalibrationPanel && hasDebugPanel && hasDiscoveryPanel && hasFfbCoordinator
+                    ? LwsValidationSeverity.Info
+                    : LwsValidationSeverity.Error,
+                "G29 TruckValidation Setup",
+                hasWheelSource && hasNwhBridge && hasWheelBootstrap && hasCalibrationPanel && hasDebugPanel && hasDiscoveryPanel && hasFfbCoordinator
+                    ? "TruckValidation contains the LWS DirectInput wheel source, NWH bridge, ownership bootstrap, calibration panel, debug panel, discovery panel, and FFB coordinator."
+                    : "TruckValidation is missing one or more LWS DirectInput/G29 validation components.");
+
+            report.Add(
+                hasStockNwhVehicleProvider && hasWheelBootstrap ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "NWH Input Double Feed",
+                hasStockNwhVehicleProvider && hasWheelBootstrap
+                    ? "Stock NWH vehicle input remains available for fallback and is disabled by LWS while wheel ownership is active."
+                    : "Wheel/fallback ownership could not be fully confirmed from TruckValidation scene text.");
+        }
+
+        private static string FindUnityDirectInputNwhSamplePath()
+        {
+            if (!Directory.Exists("Library/PackageCache"))
+            {
+                return null;
+            }
+
+            foreach (string packageDirectory in Directory.GetDirectories("Library/PackageCache", "com.directinput.unity@*", SearchOption.TopDirectoryOnly))
+            {
+                string samplePath = Path.Combine(packageDirectory, "Samples~", "nwhvp", UnityDirectInputNwhSamplePackageName);
+                if (File.Exists(samplePath))
+                {
+                    return samplePath;
+                }
+            }
+
+            return null;
         }
 
         private static int CountOccurrences(string text, string needle)
