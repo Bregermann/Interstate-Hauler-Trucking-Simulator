@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f6921aa8ba7408ea96b4cd7f7278bf2, type: 3}
+  m_Name: IH_RenderingSettings
+  m_EditorClassIdentifier: 
+  defaultTier: 1
+  steamDeckTier: 4
+  qualityProfiles:
+  - tier: 0
+    unityQualityLevelName: Ultra
+    renderPipelineAsset: {fileID: 11400000, guid: 4ffeef7f5f2142f48df9662a61614013, type: 2}
+    mirrorQuality: 4
+    weatherQuality: 3
+    vegetationQuality: 3
+    shadowQuality: 3
+    renderScale: 1
+    targetFrameRate: -1
+    mirrorResolutionPixels: 2048
+    mirrorUpdateIntervalFrames: 1
+    vegetationDistanceMultiplier: 1.35
+    notes: High-end PC visual ceiling. Expensive presentation is allowed, gameplay density is not reduced.
+  - tier: 1
+    unityQualityLevelName: High
+    renderPipelineAsset: {fileID: 11400000, guid: f691a74564664e3aab8656da78a5d6ca, type: 2}
+    mirrorQuality: 3
+    weatherQuality: 2
+    vegetationQuality: 2
+    shadowQuality: 2
+    renderScale: 1
+    targetFrameRate: 60
+    mirrorResolutionPixels: 1536
+    mirrorUpdateIntervalFrames: 1
+    vegetationDistanceMultiplier: 1
+    notes: Recommended desktop PC target and screenshot baseline until profiling says otherwise.
+  - tier: 2
+    unityQualityLevelName: Medium
+    renderPipelineAsset: {fileID: 11400000, guid: 6151e86a76b846fdacf3db4103f182de, type: 2}
+    mirrorQuality: 2
+    weatherQuality: 1
+    vegetationQuality: 1
+    shadowQuality: 1
+    renderScale: 0.9
+    targetFrameRate: 60
+    mirrorResolutionPixels: 1024
+    mirrorUpdateIntervalFrames: 2
+    vegetationDistanceMultiplier: 0.75
+    notes: Main scalability tier. Reduces visuals before gameplay systems.
+  - tier: 3
+    unityQualityLevelName: Low
+    renderPipelineAsset: {fileID: 11400000, guid: bfea987e94e740108b388c0acebd3b2f, type: 2}
+    mirrorQuality: 1
+    weatherQuality: 0
+    vegetationQuality: 0
+    shadowQuality: 0
+    renderScale: 0.8
+    targetFrameRate: 30
+    mirrorResolutionPixels: 768
+    mirrorUpdateIntervalFrames: 3
+    vegetationDistanceMultiplier: 0.5
+    notes: Lower-end fallback. Mirrors stay functional; traffic and road correctness remain gameplay priorities.
+  - tier: 4
+    unityQualityLevelName: Steam Deck
+    renderPipelineAsset: {fileID: 11400000, guid: d1696bbf29f7486c801874716677d497, type: 2}
+    mirrorQuality: 1
+    weatherQuality: 0
+    vegetationQuality: 0
+    shadowQuality: 0
+    renderScale: 0.85
+    targetFrameRate: 30
+    mirrorResolutionPixels: 768
+    mirrorUpdateIntervalFrames: 3
+    vegetationDistanceMultiplier: 0.55
+    notes: Provisional 1280x800 handheld profile. 30 FPS target intent only; not performance-proven.
+  platformDefaults:
+  - platformClass: 0
+    defaultTier: 1
+    notes: Windows and Steam desktop default to High while preserving player quality choice.
+  - platformClass: 1
+    defaultTier: 4
+    notes: Steam Deck defaults to the dedicated handheld profile.
+  - platformClass: 2
+    defaultTier: 3
+    notes: Future Switch work starts from Low-style visual assumptions, no SDK settings configured.
+  - platformClass: 3
+    defaultTier: 1
+    notes: Future Xbox Series target, no SDK settings configured.
+  - platformClass: 4
+    defaultTier: 1
+    notes: Future PlayStation 5 target, no SDK settings configured.

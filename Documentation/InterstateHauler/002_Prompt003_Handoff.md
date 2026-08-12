@@ -4,6 +4,10 @@ Expected Prompt 003: URP / Quality / Platform Foundation
 
 ## Current State
 
+- 2026-08-11 user verification update: Prompt 002 was manually verified by the user in the normal Unity Editor and the readiness gate is treated as PASSED.
+- The earlier batchmode compiler result is recorded as a false-negative/incompatible validation path for this project state.
+- Vendor packages are reported by the user to compile and function correctly in the normal Unity Editor.
+- Batchmode validation should not be used as a hard blocker until the Editor-versus-batchmode discrepancy is separately investigated.
 - Bootstrap scene exists: `Assets/LWS/InterstateHauler/Bootstrap/Bootstrap.unity`
 - Bootstrap is build scene index 0.
 - URP package is installed: 17.4.0.
@@ -40,4 +44,4 @@ Expected Prompt 003: URP / Quality / Platform Foundation
 - Do not import optional NWH steering-wheel packages.
 - Do not implement routing, traffic, economy, jobs, cargo, or 18-speed shifting.
 
-Prompt 003 readiness: NOT READY until Prompt 002 Unity compile, EditMode tests, PlayMode tests, and `Interstate Hauler/Validate Project` can run after the open Unity Editor releases the project lock. The architecture handoff content above is prepared for Prompt 003 once that verification completes.
+Prompt 003 readiness: READY by user manual verification in the normal Unity Editor. Batchmode compile output is not authoritative for Prompt 003 until investigated separately.

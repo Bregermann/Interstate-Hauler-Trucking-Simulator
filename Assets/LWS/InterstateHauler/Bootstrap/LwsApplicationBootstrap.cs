@@ -87,6 +87,7 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsSaveService>(new LwsSaveService());
             registry.Register<ILwsVehicleInputService>(new LwsVehicleInputService());
             registry.Register<ILwsWeatherCoordinator>(new LwsWeatherCoordinator());
+            registry.Register<ILwsRenderingService>(new LwsRenderingService());
             registry.Register<ILwsWorldStreamingService>(new LwsWorldStreamingService());
             registry.Register<ILwsNavigationService>(new LwsNavigationService(), typeof(ILwsWorldStreamingService));
             registry.Register<ILwsTrafficService>(new LwsTrafficService(), typeof(ILwsNavigationService));

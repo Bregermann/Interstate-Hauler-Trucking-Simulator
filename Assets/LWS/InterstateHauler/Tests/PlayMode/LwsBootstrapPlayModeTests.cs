@@ -65,6 +65,19 @@ namespace LWS.InterstateHauler.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator RenderingCoordinatorInitializes()
+        {
+            var go = new GameObject("rendering-lws-bootstrap");
+            LwsApplicationBootstrap bootstrap = go.AddComponent<LwsApplicationBootstrap>();
+
+            yield return null;
+
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsRenderingService renderingService));
+            Assert.AreEqual(LwsServiceState.Ready, FindRenderingRegistrationState(bootstrap.Registry));
+            Assert.AreEqual(LwsRenderQualityTier.High, renderingService.ActiveTier);
+        }
+
+        [UnityTest]
         public IEnumerator ShutdownDoesNotThrow()
         {
             var go = new GameObject("shutdown-lws-bootstrap");
@@ -73,6 +86,19 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             yield return null;
 
             Assert.DoesNotThrow(() => bootstrap.Shutdown());
+        }
+
+        private static LwsServiceState FindRenderingRegistrationState(LwsServiceRegistry registry)
+        {
+            foreach (LwsServiceRegistration registration in registry.Registrations)
+            {
+                if (registration.Service is ILwsRenderingService)
+                {
+                    return registration.State;
+                }
+            }
+
+            return LwsServiceState.Failed;
         }
     }
 }
