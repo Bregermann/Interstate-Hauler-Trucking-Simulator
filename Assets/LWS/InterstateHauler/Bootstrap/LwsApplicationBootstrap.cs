@@ -85,6 +85,7 @@ namespace LWS.InterstateHauler
             var registry = new LwsServiceRegistry();
 
             registry.Register<ILwsSaveService>(new LwsSaveService());
+            registry.Register<ILwsPlayerSettingsService>(new LwsPlayerSettingsService());
             registry.Register<ILwsVehicleInputService>(new LwsVehicleInputService());
             registry.Register<ILwsWheelCalibrationService>(new LwsWheelCalibrationService());
             registry.Register<ILwsForceFeedbackService>(new LwsForceFeedbackService(), typeof(ILwsWheelCalibrationService));
@@ -92,7 +93,8 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsRenderingService>(new LwsRenderingService());
             registry.Register<ILwsWorldStreamingService>(new LwsWorldStreamingService());
             registry.Register<ILwsRoadGraphService>(new LwsRoadGraphService(), typeof(ILwsWorldStreamingService));
-            registry.Register<ILwsNavigationService>(new LwsNavigationService(), typeof(ILwsRoadGraphService));
+            registry.Register<ILwsGpsVoiceGuidanceService>(new LwsGpsVoiceGuidanceService(), typeof(ILwsPlayerSettingsService));
+            registry.Register<ILwsNavigationService>(new LwsNavigationService(), typeof(ILwsRoadGraphService), typeof(ILwsGpsVoiceGuidanceService));
             registry.Register<ILwsTrafficService>(new LwsTrafficService(), typeof(ILwsNavigationService));
             registry.Register<ILwsWorldGenerationCoordinator>(new LwsWorldGenerationCoordinator(), typeof(ILwsNavigationService));
             registry.Register<ILwsPlayerVehicleService>(new LwsPlayerVehicleService(), typeof(ILwsVehicleInputService));

@@ -109,6 +109,22 @@ namespace LWS.InterstateHauler.Editor
         private const string TrafficVehicleMatrixPath = "Documentation/InterstateHauler/010_Traffic_Vehicle_Matrix.md";
         private const string TrafficPerformanceMatrixPath = "Documentation/InterstateHauler/010_Performance_Matrix.md";
         private const string Prompt011HandoffPath = "Documentation/InterstateHauler/010_Prompt011_Handoff.md";
+        private const string NavigationServicePath = "Assets/LWS/InterstateHauler/Navigation/LwsNavigation.cs";
+        private const string NavigationTypesPath = "Assets/LWS/InterstateHauler/Navigation/LwsNavigationTypes.cs";
+        private const string RoutePlannerPath = "Assets/LWS/InterstateHauler/Navigation/LwsRoutePlanner.cs";
+        private const string CabGpsControllerPath = "Assets/LWS/InterstateHauler/Navigation/LwsCabGpsController.cs";
+        private const string GpsMapGraphicPath = "Assets/LWS/InterstateHauler/Navigation/LwsGpsMapGraphic.cs";
+        private const string GpsVoiceGuidancePath = "Assets/LWS/InterstateHauler/Navigation/LwsGpsVoiceGuidance.cs";
+        private const string GpsDebugPanelPath = "Assets/LWS/InterstateHauler/Navigation/LwsNavigationDebugPanel.cs";
+        private const string GpsSettingsPanelPath = "Assets/LWS/InterstateHauler/Navigation/LwsGpsSettingsPanel.cs";
+        private const string PlayerSettingsPath = "Assets/LWS/InterstateHauler/Core/LwsPlayerSettings.cs";
+        private const string DefaultGpsVoicePackPath = "Assets/LWS/InterstateHauler/Navigation/Data/IH_GpsVoicePack_Default.asset";
+        private const string Prompt011DocsPath = "Documentation/InterstateHauler/011_GPS_Routing_and_Voice_Guidance.md";
+        private const string CompassApiMatrixPath = "Documentation/InterstateHauler/011_Compass_API_Matrix.md";
+        private const string RouteManeuverMatrixPath = "Documentation/InterstateHauler/011_Route_Maneuver_Matrix.md";
+        private const string GpsVoiceMatrixPath = "Documentation/InterstateHauler/011_GPS_Voice_Matrix.md";
+        private const string GpsTestMatrixPath = "Documentation/InterstateHauler/011_GPS_Test_Matrix.md";
+        private const string Prompt012HandoffPath = "Documentation/InterstateHauler/011_Prompt012_Handoff.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -189,6 +205,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateDashboardMirrorCabFoundation(report);
             ValidateEasyRoadsInterstateCorridorFoundation(report);
             ValidateUtsHighwayTrafficFoundation(report);
+            ValidateGpsRoutingVoiceFoundation(report);
             return report;
         }
 
@@ -1812,6 +1829,185 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 010 UTS highway integration documentation, matrices, performance matrix, and Prompt 011 handoff exist."
                     : "Missing Prompt 010 documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateGpsRoutingVoiceFoundation(LwsProjectValidationReport report)
+        {
+            ValidateGpsRuntimeFiles(report);
+            ValidateGpsRouteAuthority(report);
+            ValidateGpsVoicePack(report);
+            ValidateGpsSceneWiring(report);
+            ValidateGpsSettingsAndPresentation(report);
+            ValidatePrompt011Documentation(report);
+        }
+
+        private static void ValidateGpsRuntimeFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                NavigationServicePath,
+                NavigationTypesPath,
+                RoutePlannerPath,
+                CabGpsControllerPath,
+                GpsMapGraphicPath,
+                GpsVoiceGuidancePath,
+                GpsDebugPanelPath,
+                GpsSettingsPanelPath,
+                PlayerSettingsPath,
+                DefaultGpsVoicePackPath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 011 GPS Runtime Files",
+                missing.Count == 0
+                    ? "Prompt 011 navigation service, route planner, cab GPS, voice guidance, settings panel, player settings, and default voice-pack asset exist."
+                    : "Missing Prompt 011 GPS files: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateGpsRouteAuthority(LwsProjectValidationReport report)
+        {
+            string routePlannerText = File.Exists(RoutePlannerPath) ? File.ReadAllText(RoutePlannerPath) : string.Empty;
+            string navigationText = File.Exists(NavigationServicePath) ? File.ReadAllText(NavigationServicePath) : string.Empty;
+            string roadGraphText = File.Exists("Assets/LWS/InterstateHauler/Roads/LwsRoadGraph.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Roads/LwsRoadGraph.cs")
+                : string.Empty;
+
+            bool plannerUsesGraphAlgorithm = routePlannerText.Contains("TryFindPath") &&
+                                             routePlannerText.Contains("EnumerateOutgoingSegments") &&
+                                             routePlannerText.Contains("costs") &&
+                                             routePlannerText.Contains("previous");
+            bool maneuversCentralized = routePlannerText.Contains("ClassifyManeuver") &&
+                                        routePlannerText.Contains("LwsNavigationManeuverType") &&
+                                        routePlannerText.Contains("LwsRoadClass.Ramp");
+            bool routeStateExists = navigationText.Contains("UpdateVehiclePose") &&
+                                    navigationText.Contains("HandleOffRoute") &&
+                                    navigationText.Contains("RecalculateRoute") &&
+                                    navigationText.Contains("LwsNavigationRuntimeState");
+            bool compassPresenterOnly = navigationText.Contains("LwsCompassRoutePresenter") &&
+                                        navigationText.Contains("SetRoute") &&
+                                        !routePlannerText.Contains("Compass") &&
+                                        !routePlannerText.Contains("UTS") &&
+                                        !routePlannerText.Contains("CarAI") &&
+                                        !routePlannerText.Contains("EasyRoads");
+            bool routeRequestShape = roadGraphText.Contains("useOriginWorldPosition") &&
+                                     roadGraphText.Contains("useDestinationWorldPosition") &&
+                                     roadGraphText.Contains("List<LwsRouteStep>");
+
+            report.Add(
+                plannerUsesGraphAlgorithm && maneuversCentralized && routeStateExists && compassPresenterOnly && routeRequestShape
+                    ? LwsValidationSeverity.Info
+                    : LwsValidationSeverity.Error,
+                "GPS Route Authority",
+                plannerUsesGraphAlgorithm && maneuversCentralized && routeStateExists && compassPresenterOnly && routeRequestShape
+                    ? "LWS owns route solving/progress/maneuvers/off-route handling; Compass is present only as an optional route presenter."
+                    : "Prompt 011 route authority, maneuver generation, route state, or middleware boundary is incomplete.");
+        }
+
+        private static void ValidateGpsVoicePack(LwsProjectValidationReport report)
+        {
+            LwsGpsVoicePack voicePack = AssetDatabase.LoadAssetAtPath<LwsGpsVoicePack>(DefaultGpsVoicePackPath);
+            if (voicePack == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "GPS Voice Pack", $"{DefaultGpsVoicePackPath} is missing or did not import.");
+                return;
+            }
+
+            bool valid = voicePack.ValidateSlots(out string message);
+            bool distanceSlotsPresent = voicePack.DistanceSlots != null &&
+                                        voicePack.DistanceSlots.Count == Enum.GetValues(typeof(LwsGpsDistanceVoicePrompt)).Length;
+
+            report.Add(
+                valid && distanceSlotsPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "GPS Voice Pack",
+                valid && distanceSlotsPresent
+                    ? $"{voicePack.DisplayName} exposes one assignable AudioClip slot for all {LwsNavigationManeuverCatalog.All.Count} maneuver instructions plus distance/context slots. Empty clips are allowed."
+                    : $"{message}; DistanceSlots={voicePack.DistanceSlots?.Count ?? 0}.");
+        }
+
+        private static void ValidateGpsSceneWiring(LwsProjectValidationReport report)
+        {
+            string sceneText = File.Exists(InterstateCorridorScenePath) ? File.ReadAllText(InterstateCorridorScenePath) : string.Empty;
+            string builderText = File.Exists(InterstateCorridorBuilderPath) ? File.ReadAllText(InterstateCorridorBuilderPath) : string.Empty;
+            string truckSpawnerText = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                : string.Empty;
+            string bootstrapText = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                : string.Empty;
+
+            bool sceneEnabled = sceneText.Contains("createNavigationValidation: 1");
+            bool builderCreatesPanels = builderText.Contains("createNavigationValidation") &&
+                                        builderText.Contains("LwsNavigationDebugPanel") &&
+                                        builderText.Contains("LwsGpsSettingsPanel");
+            bool truckGpsController = truckSpawnerText.Contains("LwsCabGpsController");
+            bool servicesRegistered = bootstrapText.Contains("ILwsPlayerSettingsService") &&
+                                      bootstrapText.Contains("ILwsGpsVoiceGuidanceService") &&
+                                      bootstrapText.Contains("ILwsNavigationService") &&
+                                      bootstrapText.Contains("typeof(ILwsGpsVoiceGuidanceService)");
+
+            report.Add(
+                sceneEnabled && builderCreatesPanels && truckGpsController && servicesRegistered
+                    ? LwsValidationSeverity.Info
+                    : LwsValidationSeverity.Error,
+                "GPS Validation Scene Wiring",
+                sceneEnabled && builderCreatesPanels && truckGpsController && servicesRegistered
+                    ? "InterstateCorridorValidation enables navigation validation, creates GPS/settings debug panels, registers navigation services, and attaches the cab GPS controller to the player truck."
+                    : "Prompt 011 GPS validation scene, service registration, or player-truck GPS wiring is incomplete.");
+        }
+
+        private static void ValidateGpsSettingsAndPresentation(LwsProjectValidationReport report)
+        {
+            string settingsText = File.Exists(PlayerSettingsPath) ? File.ReadAllText(PlayerSettingsPath) : string.Empty;
+            string voiceText = File.Exists(GpsVoiceGuidancePath) ? File.ReadAllText(GpsVoiceGuidancePath) : string.Empty;
+            string cabText = File.Exists(CabGpsControllerPath) ? File.ReadAllText(CabGpsControllerPath) : string.Empty;
+            string mapText = File.Exists(GpsMapGraphicPath) ? File.ReadAllText(GpsMapGraphicPath) : string.Empty;
+
+            bool settingDefaultOn = settingsText.Contains("GpsVoiceGuidanceEnabled { get; private set; } = true") &&
+                                    settingsText.Contains("PlayerPrefs.GetInt(GpsVoiceGuidanceKey, 1)") &&
+                                    settingsText.Contains("SetGpsVoiceGuidanceEnabled");
+            bool voiceSuppression = voiceText.Contains("GpsVoiceGuidanceEnabled") &&
+                                    voiceText.Contains("Stop()") &&
+                                    voiceText.Contains("!_settingsService.GpsVoiceGuidanceEnabled");
+            bool physicalDisplay = cabText.Contains("IH Physical Cab GPS Screen") &&
+                                   cabText.Contains("RenderMode.WorldSpace") &&
+                                   cabText.Contains("LwsGpsMapGraphic") &&
+                                   cabText.Contains("AudioSource");
+            bool routeGraphic = mapText.Contains("SetRoute") &&
+                                mapText.Contains("VertexHelper") &&
+                                mapText.Contains("AddLine") &&
+                                mapText.Contains("AddPlayerMarker");
+
+            report.Add(
+                settingDefaultOn && voiceSuppression && physicalDisplay && routeGraphic
+                    ? LwsValidationSeverity.Info
+                    : LwsValidationSeverity.Error,
+                "GPS Settings and Physical Presentation",
+                settingDefaultOn && voiceSuppression && physicalDisplay && routeGraphic
+                    ? "GPS Voice Guidance defaults ON, can be toggled through player settings, suppresses clips without clearing the route, and renders on a world-space physical cab GPS display."
+                    : "GPS voice setting, suppression behavior, or physical route display is incomplete.");
+        }
+
+        private static void ValidatePrompt011Documentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                Prompt011DocsPath,
+                CompassApiMatrixPath,
+                RouteManeuverMatrixPath,
+                GpsVoiceMatrixPath,
+                GpsTestMatrixPath,
+                Prompt012HandoffPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 011 Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 011 GPS routing, Compass API matrix, maneuver matrix, voice matrix, test matrix, and Prompt 012 handoff exist."
+                    : "Missing Prompt 011 documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

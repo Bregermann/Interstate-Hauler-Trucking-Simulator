@@ -32,6 +32,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool createLaneDebugLines = true;
         [SerializeField] private bool showDebugPanel = true;
         [SerializeField] private bool createUtsTrafficValidation = true;
+        [SerializeField] private bool createNavigationValidation = true;
         [SerializeField] private LwsUtsTrafficProfile validationTrafficProfile;
         [SerializeField] private GameObject[] validationTrafficPrefabs;
 
@@ -97,6 +98,11 @@ namespace LWS.InterstateHauler
                 BuildUtsTrafficValidation();
             }
 
+            if (createNavigationValidation)
+            {
+                BuildNavigationValidation();
+            }
+
             Debug.Log($"Interstate corridor generated. EasyRoads: {LastEasyRoadsBuildSucceeded}. {LastBuildMessage}", this);
         }
 
@@ -140,6 +146,24 @@ namespace LWS.InterstateHauler
 
             traffic.ConfigureValidationProfile(validationTrafficProfile, validationTrafficPrefabs);
             traffic.InitializeFromGraph(roadGraphProvider, LastGraph);
+        }
+
+        private void BuildNavigationValidation()
+        {
+            if (roadGraphProvider == null)
+            {
+                return;
+            }
+
+            if (roadGraphProvider.GetComponent<LwsNavigationDebugPanel>() == null)
+            {
+                roadGraphProvider.gameObject.AddComponent<LwsNavigationDebugPanel>();
+            }
+
+            if (roadGraphProvider.GetComponent<LwsGpsSettingsPanel>() == null)
+            {
+                roadGraphProvider.gameObject.AddComponent<LwsGpsSettingsPanel>();
+            }
         }
 
         private bool TryBuildEasyRoadsCorridor(Transform parent, out string message)

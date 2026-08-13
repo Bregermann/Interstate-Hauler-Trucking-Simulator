@@ -20,7 +20,7 @@ Traffic runtime:
 - `ILwsTrafficService`
 - `Assets/LWS/InterstateHauler/Traffic/Data/IH_TrafficProfile_InterstateValidation.asset`
 
-Prompt 010A fixed the runtime hookup after normal Editor validation showed no traffic root or visible NPCs. The corridor builder now owns the lifecycle:
+Prompt 010A-E fixed the runtime hookup after normal Editor validation showed no traffic root or visible NPCs. The corridor builder now owns the lifecycle:
 
 `LwsInterstateCorridorRuntimeBuilder`
 ->
@@ -37,6 +37,23 @@ NPC traffic identity:
 - every spawned UTS NPC is configured as `LwsVehicleRole.AiVehicle`
 - future systems should consume LWS identity/registry, not UTS concrete scripts
 
+Normal Unity Editor manual validation:
+
+- PASS confirmed by the user for traffic spawning and NPC traffic driving.
+- Highway traffic is visibly functioning.
+- The Prompt 009A main-thread performance regression remains fixed.
+- `InterstateCorridorValidation` is now a valid live driving/traffic test environment.
+
+Prompt 010A-E repair notes:
+
+- runtime traffic hookup
+- runtime traffic profile
+- traffic graph initialization/handoff
+- broken traffic prefab serialization
+- incorrect nested wheel-object references
+- persistent top-level UTS traffic prefab references
+- correct UTS prefab support detection
+
 Do not use UTS for:
 
 - player truck
@@ -52,11 +69,8 @@ Prompt 011 should:
 - optionally query traffic through `ILwsTrafficService`
 - keep routing independent of EasyRoads and UTS concrete classes
 
-Manual checks still required before full pass:
+Still-unverified separate regression checks:
 
-- drive `InterstateCorridorValidation` in normal Unity Editor
-- confirm traffic spawns and follows NB/SB/ramp lanes
-- confirm `IH UTS Highway Traffic Runtime` appears with `Lanes` and `Vehicles`
-- confirm the traffic status panel reports Initialized, UTS Available, Graph Available, and Spawnable Prefabs greater than zero
-- confirm the `SPAWN TEST TRAFFIC NOW` button can spawn a visible NPC when safety rules allow it
+- confirm traffic does not spawn inside the player/trailer
 - confirm G29, 18-speed transmission, dashboard, mirrors, and truck controls still work
+- confirm no repeating LWS Console errors occur during extended driving

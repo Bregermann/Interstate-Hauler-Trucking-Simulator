@@ -173,13 +173,32 @@ Expected generated lane IDs:
 
 The development-only traffic panel now shows initialization, UTS availability, graph availability, generated lanes, prefab count, active vehicles, density, last spawn result, and last error. It also includes `SPAWN TEST TRAFFIC NOW` and `FILL TRAFFIC TO MAX` buttons. Panel state is cached at no more than four refreshes per second and does not search the scene from `OnGUI`.
 
-## Manual Validation Required
+## Prompt 010A-E Fix History
 
-Codex cannot physically drive the normal Unity Editor scene in this environment. The following remain normal-Editor manual checks:
+Prompt 010 did not work first try in the normal Unity Editor. The completed Prompt 010A-E repair sequence established the actual live traffic baseline:
 
-- Interstate corridor loads with player truck and traffic.
-- UTS vehicles spawn on lane centers.
-- UTS vehicles travel in the correct direction.
+- Runtime traffic hookup: the corridor builder now owns runtime creation of `LwsUtsHighwayTrafficController` and the visible `IH UTS Highway Traffic Runtime` hierarchy.
+- Runtime traffic profile: `IH_TrafficProfile_InterstateValidation.asset` carries the selected UTS validation prefabs through a project-owned ScriptableObject.
+- Traffic graph initialization/handoff: `LwsInterstateCorridorRuntimeBuilder` now builds the road graph, assigns it to the provider/service, then hands it to traffic initialization with a bounded retry for timing.
+- Broken traffic prefab serialization: the profile was repaired so prefab references survive Unity serialization/reload.
+- Incorrect nested wheel-object references: invalid nested prefab-instance/wheel child references were removed from the traffic profile path.
+- Persistent top-level UTS traffic prefab references: profile entries now point to persistent prefab assets, not nested objects or transient instances.
+- Correct UTS prefab support detection: `LwsUtsTrafficApi` accepts the actual supported UTS prefab shape instead of rejecting valid vehicles due to overly narrow component checks.
+
+## Normal Unity Editor Manual Validation: PASS
+
+Confirmed by the user after Prompt 010A-E:
+
+- Traffic spawned.
+- NPC traffic drove successfully.
+- Highway traffic was visibly functioning.
+- The Prompt 009A main-thread performance regression remained fixed.
+- `InterstateCorridorValidation` is now a valid live driving/traffic test environment.
+
+## Still Unverified Separately
+
+The user did not report the following as part of the Prompt 010 traffic PASS, so they remain separate regression checks for later prompts:
+
 - Traffic does not spawn inside the player/trailer.
 - Player truck remains controlled by NWH and Prompt 005/006/007 systems.
 - G29 driving and 18-speed shifting still work.

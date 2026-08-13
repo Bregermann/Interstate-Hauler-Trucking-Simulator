@@ -274,6 +274,11 @@ namespace LWS.InterstateHauler
         public string requestId;
         public string originNodeId;
         public string destinationNodeId;
+        public string destinationId;
+        public bool useOriginWorldPosition;
+        public Vector3 originWorldPosition;
+        public bool useDestinationWorldPosition;
+        public Vector3 destinationWorldPosition;
         public bool truckRouteRequired = true;
     }
 
@@ -284,7 +289,11 @@ namespace LWS.InterstateHauler
         public bool succeeded;
         public string message;
         public float distanceMeters;
+        public string originNodeId;
+        public string destinationNodeId;
+        public string destinationId;
         public List<string> edgeIds = new List<string>();
         public List<Vector3> waypoints = new List<Vector3>();
+        public List<LwsRouteStep> steps = new List<LwsRouteStep>();
     }
 }

@@ -158,6 +158,12 @@ namespace LWS.InterstateHauler
                 mirrors.Configure(truckDefinition.DashboardDefinition);
             }
 
+            LwsCabGpsController cabGps = truckInstance.GetComponent<LwsCabGpsController>();
+            if (cabGps == null)
+            {
+                truckInstance.AddComponent<LwsCabGpsController>();
+            }
+
             LwsCabAccessoryAnchorRegistry anchors = truckInstance.GetComponent<LwsCabAccessoryAnchorRegistry>();
             if (anchors == null)
             {
