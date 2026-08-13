@@ -14,6 +14,8 @@ namespace LWS.InterstateHauler
         [SerializeField, Range(0f, 1f)] private float roadEffect = 0.15f;
 
         private ILwsForceFeedbackService _forceFeedbackService;
+        private bool _inactiveFfbDisabled;
+        private string _inactiveFfbReason = string.Empty;
 
         private void Reset()
         {
@@ -44,16 +46,18 @@ namespace LWS.InterstateHauler
             ResolveServices();
             if (!applyForces || _forceFeedbackService == null || wheelInputSource == null || !wheelInputSource.HasConnectedDevice)
             {
-                _forceFeedbackService?.DisableNow("DirectInput FFB coordinator inactive or wheel unavailable.");
+                DisableForceFeedbackOnce("DirectInput FFB coordinator inactive or wheel unavailable.");
                 return;
             }
 
             if (vehicleAdapter == null || !vehicleAdapter.IsReady)
             {
-                _forceFeedbackService.DisableNow("DirectInput FFB coordinator has no ready NWH vehicle adapter.");
+                DisableForceFeedbackOnce("DirectInput FFB coordinator has no ready NWH vehicle adapter.");
                 return;
             }
 
+            _inactiveFfbDisabled = false;
+            _inactiveFfbReason = string.Empty;
             LwsVehicleTelemetry telemetry = vehicleAdapter.ReadTelemetry();
             float speed01 = Mathf.Clamp01(Mathf.Abs(telemetry.signedSpeedMetersPerSecond) / Mathf.Max(1f, fullRoadSpeedMetersPerSecond));
             float alignment = -telemetry.steeringInput * speed01;
@@ -83,6 +87,23 @@ namespace LWS.InterstateHauler
             }
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _forceFeedbackService);
+        }
+
+        private void DisableForceFeedbackOnce(string reason)
+        {
+            if (_forceFeedbackService == null)
+            {
+                return;
+            }
+
+            if (_inactiveFfbDisabled && _inactiveFfbReason == reason)
+            {
+                return;
+            }
+
+            _forceFeedbackService.DisableNow(reason);
+            _inactiveFfbDisabled = true;
+            _inactiveFfbReason = reason;
         }
     }
 }

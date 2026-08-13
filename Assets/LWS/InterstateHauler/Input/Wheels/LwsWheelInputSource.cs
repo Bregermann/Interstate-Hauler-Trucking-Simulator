@@ -17,6 +17,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool toggleRangeOnPress = true;
         [SerializeField] private bool toggleSplitterOnPress = true;
         [SerializeField] private bool useSimulatedInputForTests;
+        [SerializeField, Min(0.25f)] private float disconnectedDeviceScanIntervalSeconds = 2f;
         [SerializeField] private LwsWheelInputFrame simulatedFrame;
 
         private readonly Dictionary<LwsWheelLogicalControl, bool> _previousButtonStates = new Dictionary<LwsWheelLogicalControl, bool>();
@@ -28,6 +29,7 @@ namespace LWS.InterstateHauler
         private LwsTruckRange _rangeState;
         private LwsTruckSplitter _splitterState;
         private bool _disconnectNoticeLogged;
+        private float _nextDisconnectedDeviceScanTime;
 
         public string SourceId => "lws.input.wheel.directinput";
         public LwsWheelDeviceProfile DeviceProfile => deviceProfile;
@@ -82,14 +84,15 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            if (_selectedDevice == null)
+            if (_selectedDevice == null && Time.unscaledTime >= _nextDisconnectedDeviceScanTime)
             {
+                _nextDisconnectedDeviceScanTime = Time.unscaledTime + Mathf.Max(0.25f, disconnectedDeviceScanIntervalSeconds);
                 SelectPreferredDevice();
             }
 
             if (_selectedDevice == null || !_selectedDevice.added)
             {
-                if (neutralizeOnDisconnect)
+                if (neutralizeOnDisconnect && _lastFrame.connectionState != LwsWheelConnectionState.Disconnected)
                 {
                     NeutralizeForDisconnect("Wheel disconnected or unavailable.");
                 }
@@ -99,7 +102,6 @@ namespace LWS.InterstateHauler
 
             _disconnectNoticeLogged = false;
             _lastFrame = ReadHardwareFrame();
-            _forceFeedbackService?.ApplySettings(_calibrationProfile.forceFeedback);
             FrameUpdated?.Invoke(_lastFrame);
         }
 
@@ -139,6 +141,7 @@ namespace LWS.InterstateHauler
             if (_selectedDevice == null)
             {
                 _lastFrame = CreateNeutralFrame(LwsWheelConnectionState.Disconnected);
+                _nextDisconnectedDeviceScanTime = Time.unscaledTime + Mathf.Max(0.25f, disconnectedDeviceScanIntervalSeconds);
                 return false;
             }
 
@@ -150,6 +153,7 @@ namespace LWS.InterstateHauler
             }
 
             _lastFrame = ReadHardwareFrame();
+            _forceFeedbackService?.ApplySettings(_calibrationProfile.forceFeedback);
             return true;
         }
 
@@ -159,6 +163,7 @@ namespace LWS.InterstateHauler
             _calibrationProfile.NormalizeBindingLogicalControls();
             _calibrationService?.SetProfile(_calibrationProfile);
             _forceFeedbackService?.ApplySettings(_calibrationProfile.forceFeedback);
+            _nextDisconnectedDeviceScanTime = 0f;
         }
 
         public LwsServiceResult SaveCalibration()
@@ -394,6 +399,7 @@ namespace LWS.InterstateHauler
             if (_selectedDevice == null &&
                 (change == InputDeviceChange.Added || change == InputDeviceChange.Reconnected))
             {
+                _nextDisconnectedDeviceScanTime = 0f;
                 SelectPreferredDevice();
             }
         }

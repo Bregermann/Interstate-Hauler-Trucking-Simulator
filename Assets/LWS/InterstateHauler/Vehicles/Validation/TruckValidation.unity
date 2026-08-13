@@ -38,12 +38,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 410087040}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 12
+  serializedVersion: 13
+  m_BakeOnSceneLoad: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -63,6 +63,7 @@ LightmapSettings:
     m_CompAOExponentDirect: 0
     m_ExtractAmbientOcclusion: 0
     m_Padding: 2
+    m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
     m_ReflectionCompression: 2
@@ -212,8 +213,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
@@ -238,14 +239,14 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
-    quality: 3
-    frameInfluence: 0.1
-    jitterScale: 1
-    mipBias: 0
-    varianceClampScale: 0.9
-    contrastAdaptiveSharpening: 0
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,14 +273,14 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   m_Enabled: 1
-  serializedVersion: 11
+  serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 2
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
-  m_CookieSize: 10
+  m_CookieSize2D: {x: 10, y: 10}
   m_Shadows:
     m_Type: 2
     m_Resolution: -1
@@ -324,8 +325,11 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0
-  m_ShadowRadius: 0
+  m_ShapeRadius: 0
   m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!4 &410087041
 Transform:
   m_ObjectHideFlags: 0
@@ -351,19 +355,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  m_Version: 3
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_RenderingLayers: 1
   m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_ShadowRenderingLayers: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,8 +401,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_IsGlobal: 1
   priority: 0
   blendDistance: 0
@@ -455,8 +465,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0bcd3a841dce4fc4bf9a83b48ac2dc21, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
   initializeOnAwake: 1
 --- !u!1 &920000000
@@ -502,8 +512,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0fe154161bba5034094381e28d5e1da4, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   mouseInput: 0
 --- !u!114 &920000003
 MonoBehaviour:
@@ -515,8 +525,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9c48880c19d04dabb53da07d15024184, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   requireCameraRotationModifier: 1
   requireCameraPanningModifier: 1
 --- !u!1 &930000000
@@ -578,10 +588,15 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 6719245597448002910, guid: aa7bddc2051ec944bbb96e6eb130d603, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -599,9 +614,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!64 &930000004
 MeshCollider:
@@ -729,11 +746,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a7d55a3f708f41dab0fb1dbfa279c0a1, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   truckDefinition: {fileID: 11400000, guid: cee9c401c1154ff1b626cb6e3ec06e16, type: 2}
-  transmissionDefinition: {fileID: 11400000, guid: 8f6ab81b8b1c4561bbfa66fb83e64b22, type: 2}
-  fallbackPlayerTruckPrefab: {fileID: 100100001, guid: 4382f9912191416795da77ffba3a3e60, type: 3}
+  transmissionDefinition: {fileID: 11400000, guid: 8f6ab81b8b1c4561bbfa66fb83e64b22,
+    type: 2}
+  fallbackPlayerTruckPrefab: {fileID: 100100001, guid: 4382f9912191416795da77ffba3a3e60,
+    type: 3}
   trailerPrefab: {fileID: 100100011, guid: 79fc3e840f60421f95741824a25a41e8, type: 3}
   spawnedVehicleId: player.truck.starter
   spawnedTrailerId: validation.trailer.dryvan
@@ -784,12 +803,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f9ed500fc0f4459a3b4319a95d9ba7e, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  selectedTruckDefinition: {fileID: 11400000, guid: cee9c401c1154ff1b626cb6e3ec06e16, type: 2}
-  selectedTrailerPrefab: {fileID: 100100011, guid: 79fc3e840f60421f95741824a25a41e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedTruckDefinition: {fileID: 11400000, guid: cee9c401c1154ff1b626cb6e3ec06e16,
+    type: 2}
+  selectedTrailerPrefab: {fileID: 100100011, guid: 79fc3e840f60421f95741824a25a41e8,
+    type: 3}
   nwhVersion: 13.6
-  validationNotes: Prompt 004 controlled NWH semi validation scene. Uses NWH physics/input and project-owned LWS adapters.
+  validationNotes: Prompt 004 controlled NWH semi validation scene. Uses NWH physics/input
+    and project-owned LWS adapters.
 --- !u!1 &970000000
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,16 +860,95 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0bc1603391544e9e9c71838698b99863, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   deviceProfile: {fileID: 11400000, guid: 50cf5c70ca8742b9aa3c7447813965c3, type: 2}
-  calibrationTemplate: {fileID: 11400000, guid: e0365dcb501b4a1a966bb60ff338f3a0, type: 2}
+  calibrationTemplate: {fileID: 11400000, guid: e0365dcb501b4a1a966bb60ff338f3a0,
+    type: 2}
   preferWheelAtStart: 1
   useGlobalCalibrationService: 1
   neutralizeOnDisconnect: 1
   toggleRangeOnPress: 1
   toggleSplitterOnPress: 1
   useSimulatedInputForTests: 0
+  simulatedFrame:
+    connectionState: 0
+    deviceDisplayName: 
+    devicePath: 
+    analog:
+      rawSteering: 0
+      rawThrottle: 0
+      rawBrake: 0
+      rawClutch: 0
+      steering: 0
+      throttle: 0
+      brake: 0
+      clutch: 0
+      parkingBrake: 0
+    shifter:
+      activeGate: 0
+      neutral: 0
+      reverse: 0
+      range: 0
+      splitter: 0
+      rangePressed: 0
+      splitterPressed: 0
+    commands:
+      ignitionToggle: 0
+      ignition: 0
+      engineStart: 0
+      engineStop: 0
+      parkingBrakeToggle: 0
+      horn: 0
+      airHorn: 0
+      lowBeamLights: 0
+      highBeamLights: 0
+      hazardLights: 0
+      leftIndicator: 0
+      rightIndicator: 0
+      wipers: 0
+      wiperIncrease: 0
+      wiperDecrease: 0
+      cruiseControl: 0
+      cruiseSet: 0
+      cruiseResume: 0
+      cruiseCancel: 0
+      cruiseIncrease: 0
+      cruiseDecrease: 0
+      engineBrake: 0
+      engineBrakeIncrease: 0
+      engineBrakeDecrease: 0
+      retarder: 0
+      retarderIncrease: 0
+      retarderDecrease: 0
+      differentialLock: 0
+      trailerAttachDetach: 0
+      trailerBrake: 0
+      cameraCycle: 0
+      lookReset: 0
+      flipOffDriver: 0
+      interact: 0
+      menuSubmit: 0
+      menuCancel: 0
+      pause: 0
+      navigateUp: 0
+      navigateDown: 0
+      navigateLeft: 0
+      navigateRight: 0
+    forceFeedback:
+      available: 0
+      enabled: 0
+      deviceConnected: 0
+      backendId: 
+      statusMessage: 
+      deviceDisplayName: 
+      deviceGuid: 
+      supportedEffects: 
+      masterStrength: 0
+      alignmentForce: 0
+      dampingForce: 0
+      roadForce: 0
+      impactForce: 0
 --- !u!114 &970000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,9 +959,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aaf4c90435784e48b5c883f7477f3dfa, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   inputSourceBehaviour: {fileID: 970000002}
+  truckControlController: {fileID: 0}
+  validationGearMappingEnabled: 0
 --- !u!114 &970000004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -871,8 +974,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d48253881e1b46158e2f4bec4932089c, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   wheelInputSource: {fileID: 970000002}
   nwhVehicleInputProvider: {fileID: 970000003}
   preferWheelWhenDetected: 1
@@ -888,8 +991,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97dea31e674549a89ea371c2ee7bae60, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   wheelInputSource: {fileID: 970000002}
   visible: 1
   stepIndex: 0
@@ -903,8 +1006,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 28075828471f47f9b09e54cc890234fd, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   wheelInputSource: {fileID: 970000002}
   wheelBootstrap: {fileID: 970000004}
   visible: 1
@@ -918,8 +1021,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 24b53896cf0f4b9fb9daffa32bbef6b5, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   visible: 1
   maxControlsPerDevice: 6
 --- !u!114 &970000008
@@ -932,8 +1035,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f05df0c93cf43d18a9420ac969bb4a7, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   vehicleAdapter: {fileID: 0}
   wheelInputSource: {fileID: 970000002}
   applyForces: 1

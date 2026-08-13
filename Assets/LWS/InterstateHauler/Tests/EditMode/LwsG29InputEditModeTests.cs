@@ -168,6 +168,25 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void WheelProfileMatchingUsesSummaryDeviceFields()
+        {
+            LwsWheelDeviceProfile profile = ScriptableObject.CreateInstance<LwsWheelDeviceProfile>();
+            var descriptor = new LwsWheelDeviceDescriptor
+            {
+                displayName = "Logitech G29 Driving Force Racing Wheel",
+                manufacturer = "Logitech",
+                product = "G29 Driving Force",
+                layout = "HID"
+            };
+
+            Assert.IsTrue(profile.Matches(descriptor));
+            Assert.AreEqual(0, descriptor.axes.Count);
+            Assert.AreEqual(0, descriptor.buttons.Count);
+            Assert.AreEqual(0, descriptor.dpads.Count);
+            UnityEngine.Object.DestroyImmediate(profile);
+        }
+
+        [Test]
         public void PluginVerifiedCompatibilityStatusIsDistinctFromPhysicalVerification()
         {
             Assert.AreNotEqual(

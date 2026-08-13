@@ -44,7 +44,7 @@ namespace LWS.InterstateHauler
                     continue;
                 }
 
-                if (profile == null || profile.Matches(CreateDescriptor(device)))
+                if (profile == null || profile.Matches(CreateSummaryDescriptor(device)))
                 {
                     return device;
                 }
@@ -106,6 +106,27 @@ namespace LWS.InterstateHauler
                 }
             }
 
+            return descriptor;
+        }
+
+        public static LwsWheelDeviceDescriptor CreateSummaryDescriptor(InputDevice device)
+        {
+            var descriptor = new LwsWheelDeviceDescriptor();
+            if (device == null)
+            {
+                return descriptor;
+            }
+
+            descriptor.displayName = device.displayName ?? string.Empty;
+            descriptor.manufacturer = device.description.manufacturer ?? string.Empty;
+            descriptor.product = device.description.product ?? string.Empty;
+            descriptor.deviceClass = device.description.deviceClass ?? string.Empty;
+            descriptor.layout = device.layout;
+            descriptor.path = device.path;
+            descriptor.interfaceName = device.description.interfaceName ?? string.Empty;
+            descriptor.capabilities = device.description.capabilities ?? string.Empty;
+            descriptor.directInputGuid = device.description.serial ?? string.Empty;
+            descriptor.directInputForceFeedbackCapable = descriptor.capabilities.Contains("\"FFBCapable\":true");
             return descriptor;
         }
 
