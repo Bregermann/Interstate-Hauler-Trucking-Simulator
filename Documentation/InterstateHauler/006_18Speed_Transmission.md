@@ -133,6 +133,14 @@ The configured NWH forward gear indexes are `1` through `18`. Reverse uses NWH g
 
 Prompt 006 defaults to assisted mode so the truck remains testable before Prompt 007 controls and Prompt 008 cab feedback mature.
 
+## Development Automatic Transmission Toggle
+
+The validation debug panel added by `LwsPlayerTruckSpawner` exposes a development-only `ENABLE TEST AUTOMATIC` button under `UNITY_EDITOR || DEVELOPMENT_BUILD`. The button calls `Lws18SpeedTransmissionController.TrySetDevelopmentAutomaticTestMode(...)`, which switches the existing `LwsTransmissionMode` between `Automatic` and `Truck18Speed`.
+
+Automatic test mode stays inside `Lws18SpeedTransmissionController`; the UI does not call NWH directly. While active, the controller ignores physical H-pattern gate/range/splitter gear-selection authority, chooses validation forward gears from the active 18-speed definition, and still applies accepted shifts through `LwsNwh18SpeedTransmissionAdapter.TryShiftInto(...)`.
+
+Switching modes requires the truck to be stopped, forces Neutral through the controller, and returning to `Truck18Speed` marks shifter synchronization as required so the current physical shifter position is not reinterpreted dangerously. This is temporary validation tooling for WASD driving in `TruckValidation.unity` and `InterstateCorridorValidation.unity`; it does not persist to career save data and is not the final player-facing automatic transmission option.
+
 ## Abuse And Damage Hooks
 
 Prompt 006 emits project-owned abuse events but does not implement final damage.

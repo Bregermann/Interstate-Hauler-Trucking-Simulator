@@ -15,6 +15,14 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool configureNwhOnStart = true;
         [SerializeField] private bool registerSaveParticipant = true;
         [SerializeField] private bool logRejectedShifts;
+        [SerializeField] private int automaticStartingForwardGear = 3;
+        [SerializeField] private int automaticMaximumForwardGear = 18;
+        [SerializeField] private float automaticUpshiftRpm = 1850f;
+        [SerializeField] private float automaticDownshiftRpm = 1050f;
+        [SerializeField] private float automaticShiftCooldownSeconds = 0.65f;
+        [SerializeField] private float automaticStoppedNeutralSpeedMetersPerSecond = 0.35f;
+        [SerializeField, Range(0f, 1f)] private float automaticThrottleThreshold = 0.05f;
+        [SerializeField, Range(0f, 1f)] private float automaticBrakeThreshold = 0.1f;
 
         private ILwsVehicleInputService _inputService;
         private ILwsVehicleInputSource _fallbackInputSource;
@@ -29,6 +37,10 @@ namespace LWS.InterstateHauler
         private float _lastClutchInput;
         private LwsTruckShifterGate _lastPhysicalGate = LwsTruckShifterGate.Neutral;
         private Lws18SpeedTransmissionDefinition _transientDefinition;
+        private int _automaticTargetNwhGear;
+        private string _automaticTargetLabel = "N";
+        private float _nextAutomaticShiftTime;
+        private string _lastModeSwitchMessage = string.Empty;
 
         public event Action<LwsTransmissionAbuseEvent> AbuseDetected;
 
@@ -36,6 +48,10 @@ namespace LWS.InterstateHauler
         public LwsTransmissionDisplayState DisplayState => _displayState;
         public LwsTransmissionAbuseEvent LastAbuseEvent => _lastAbuseEvent;
         public Lws18SpeedTransmissionDefinition Definition => ActiveDefinition;
+        public bool DevelopmentAutomaticModeActive => mode == LwsTransmissionMode.Automatic;
+        public int AutomaticTargetNwhGear => _automaticTargetNwhGear;
+        public string AutomaticTargetLabel => string.IsNullOrWhiteSpace(_automaticTargetLabel) ? "N" : _automaticTargetLabel;
+        public string LastModeSwitchMessage => _lastModeSwitchMessage;
         public string ParticipantId => "vehicle.transmission.player";
         public int PayloadVersion => 1;
 
@@ -111,6 +127,14 @@ namespace LWS.InterstateHauler
             ResolveServices();
             ConfigureNwhIfNeeded();
 
+            ILwsVehicleInputSource source = ResolveInputSource();
+            if (mode == LwsTransmissionMode.Automatic)
+            {
+                LwsVehicleContinuousInput automaticInput = source != null ? source.ReadContinuousInput() : default;
+                ProcessAutomaticTransmission(ActiveDefinition, automaticInput);
+                return;
+            }
+
             if (mode != LwsTransmissionMode.Truck18Speed)
             {
                 _state.shiftState = LwsTransmissionShiftState.Idle;
@@ -119,7 +143,6 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            ILwsVehicleInputSource source = ResolveInputSource();
             if (source == null)
             {
                 PreserveCurrentGearForMissingInput();
@@ -146,6 +169,47 @@ namespace LWS.InterstateHauler
         {
             mode = transmissionMode;
             _state.mode = transmissionMode;
+        }
+
+        public bool TrySetDevelopmentAutomaticTestMode(bool enabled, out string message)
+        {
+            ResolveLocalReferences();
+            ConfigureNwhIfNeeded();
+
+            LwsNwhTransmissionRuntimeState nwhState = ReadNwhState();
+            if (nwhState.available && Mathf.Abs(nwhState.signedSpeedMetersPerSecond) > 1.5f)
+            {
+                message = "Stop the truck before switching transmission test modes.";
+                _lastModeSwitchMessage = message;
+                return false;
+            }
+
+            SetNeutralTransmissionState();
+            EngageNeutral(ActiveDefinition);
+
+            if (enabled)
+            {
+                mode = LwsTransmissionMode.Automatic;
+                _state.mode = LwsTransmissionMode.Automatic;
+                _state.requiresShifterSynchronization = false;
+                _automaticTargetNwhGear = 0;
+                _automaticTargetLabel = "N";
+                _nextAutomaticShiftTime = Time.time + 0.25f;
+                message = "Development automatic transmission test mode enabled.";
+            }
+            else
+            {
+                mode = LwsTransmissionMode.Truck18Speed;
+                _state.mode = LwsTransmissionMode.Truck18Speed;
+                _state.requiresShifterSynchronization = true;
+                _automaticTargetNwhGear = 0;
+                _automaticTargetLabel = "N";
+                message = "Returned to 18-speed manual mode; shifter synchronization is required.";
+            }
+
+            _lastModeSwitchMessage = message;
+            _displayState = BuildDisplayState(ReadNwhState());
+            return true;
         }
 
         public void SetAssistMode(LwsManualShiftAssistMode manualAssistMode)
@@ -338,6 +402,156 @@ namespace LWS.InterstateHauler
 
             TryEngageForwardGear(activeDefinition, target, clutchInput);
             _lastPhysicalGate = _state.physicalGate;
+        }
+
+        private void ProcessAutomaticTransmission(Lws18SpeedTransmissionDefinition activeDefinition, LwsVehicleContinuousInput continuousInput)
+        {
+            LwsNwhTransmissionRuntimeState nwhState = ReadNwhState();
+            _state.mode = LwsTransmissionMode.Automatic;
+            _state.physicalGate = LwsTruckShifterGate.Neutral;
+            _state.requestedRange = LwsTruckRange.Low;
+            _state.engagedRange = LwsTruckRange.Low;
+            _state.requestedSplitter = LwsTruckSplitter.Low;
+            _state.engagedSplitter = LwsTruckSplitter.Low;
+            _lastClutchInput = 1f;
+            _state.clutchInput = _lastClutchInput;
+
+            int targetNwhGear = ChooseAutomaticTargetGear(activeDefinition, nwhState, continuousInput);
+            _automaticTargetNwhGear = targetNwhGear;
+            _automaticTargetLabel = GetAutomaticTargetLabel(activeDefinition, targetNwhGear);
+
+            if (targetNwhGear == 0)
+            {
+                EngageNeutral(activeDefinition);
+                return;
+            }
+
+            int currentNwhGear = nwhState.available ? nwhState.nwhGear : _state.nwhGear;
+            if (targetNwhGear == currentNwhGear && targetNwhGear == _lastCommandedNwhGear)
+            {
+                _state.shiftState = LwsTransmissionShiftState.Engaged;
+                _state.lastRejectionReason = LwsShiftRejectionReason.None;
+                _displayState = BuildDisplayState(nwhState);
+                return;
+            }
+
+            if (Time.time < _nextAutomaticShiftTime)
+            {
+                _state.shiftState = LwsTransmissionShiftState.Preselected;
+                _state.lastRejectionReason = LwsShiftRejectionReason.None;
+                _displayState = BuildDisplayState(nwhState);
+                return;
+            }
+
+            if (!activeDefinition.TryGetMappingForNwhGear(targetNwhGear, out Lws18SpeedRatioMapping mapping))
+            {
+                Reject(LwsShiftRejectionReason.GearUnavailable, LwsTransmissionShiftState.Rejected);
+                return;
+            }
+
+            Lws18SpeedResolvedGear target = ResolveMapping(mapping);
+            float predictedRpm = PredictTargetRpm(nwhState, target);
+            float rpmError = Mathf.Abs(predictedRpm - nwhState.engineRpm);
+            ApplyAcceptedGear(target, predictedRpm, rpmError);
+            _nextAutomaticShiftTime = Time.time + Mathf.Max(0.1f, automaticShiftCooldownSeconds);
+        }
+
+        private int ChooseAutomaticTargetGear(
+            Lws18SpeedTransmissionDefinition activeDefinition,
+            LwsNwhTransmissionRuntimeState nwhState,
+            LwsVehicleContinuousInput continuousInput)
+        {
+            int minimumForwardGear = Mathf.Clamp(automaticStartingForwardGear, 1, 18);
+            int maximumForwardGear = Mathf.Clamp(Mathf.Max(automaticMaximumForwardGear, minimumForwardGear), minimumForwardGear, 18);
+            int currentNwhGear = nwhState.available ? nwhState.nwhGear : _state.nwhGear;
+            float speed = nwhState.available ? Mathf.Abs(nwhState.signedSpeedMetersPerSecond) : 0f;
+            bool throttleRequested = continuousInput.throttle > automaticThrottleThreshold;
+            bool brakeRequested = continuousInput.brake > automaticBrakeThreshold;
+
+            if (!throttleRequested && speed <= automaticStoppedNeutralSpeedMetersPerSecond)
+            {
+                return 0;
+            }
+
+            if (brakeRequested && !throttleRequested && speed <= automaticStoppedNeutralSpeedMetersPerSecond)
+            {
+                return 0;
+            }
+
+            if (currentNwhGear <= 0)
+            {
+                return throttleRequested ? minimumForwardGear : 0;
+            }
+
+            if (speed <= automaticStoppedNeutralSpeedMetersPerSecond)
+            {
+                return throttleRequested ? minimumForwardGear : 0;
+            }
+
+            if (!nwhState.available || Time.time < _nextAutomaticShiftTime)
+            {
+                return Mathf.Clamp(currentNwhGear, minimumForwardGear, maximumForwardGear);
+            }
+
+            if (nwhState.engineRpm > automaticUpshiftRpm && currentNwhGear < maximumForwardGear)
+            {
+                return currentNwhGear + 1;
+            }
+
+            if (nwhState.engineRpm > 0f && nwhState.engineRpm < automaticDownshiftRpm && currentNwhGear > minimumForwardGear)
+            {
+                return currentNwhGear - 1;
+            }
+
+            return Mathf.Clamp(currentNwhGear, minimumForwardGear, maximumForwardGear);
+        }
+
+        private string GetAutomaticTargetLabel(Lws18SpeedTransmissionDefinition activeDefinition, int targetNwhGear)
+        {
+            if (targetNwhGear == 0)
+            {
+                return "N";
+            }
+
+            return activeDefinition.TryGetMappingForNwhGear(targetNwhGear, out Lws18SpeedRatioMapping mapping)
+                ? mapping.displayLabel
+                : targetNwhGear.ToString();
+        }
+
+        private static Lws18SpeedResolvedGear ResolveMapping(Lws18SpeedRatioMapping mapping)
+        {
+            return new Lws18SpeedResolvedGear
+            {
+                valid = mapping.valid,
+                gearId = mapping.gearId,
+                physicalGate = mapping.physicalGate,
+                range = mapping.range,
+                splitter = mapping.splitter,
+                logicalRatioIndex = mapping.logicalRatioIndex,
+                nwhGearIndex = mapping.nwhGearIndex,
+                gearRatio = mapping.gearRatio,
+                displayLabel = mapping.displayLabel
+            };
+        }
+
+        private void SetNeutralTransmissionState()
+        {
+            _state.physicalGate = LwsTruckShifterGate.Neutral;
+            _state.requestedRange = LwsTruckRange.Low;
+            _state.engagedRange = LwsTruckRange.Low;
+            _state.requestedSplitter = LwsTruckSplitter.Low;
+            _state.engagedSplitter = LwsTruckSplitter.Low;
+            _state.logicalGear = Lws18SpeedGearId.Neutral;
+            _state.logicalRatioIndex = 0;
+            _state.displayLabel = "N";
+            _state.neutral = true;
+            _state.reverse = false;
+            _state.nwhGear = 0;
+            _state.gearRatio = 0f;
+            _state.predictedRpm = 0f;
+            _state.rpmError = 0f;
+            _state.lastRejectionReason = LwsShiftRejectionReason.None;
+            _state.shiftState = LwsTransmissionShiftState.Idle;
         }
 
         private void EngageNeutral(Lws18SpeedTransmissionDefinition activeDefinition)
@@ -683,6 +897,8 @@ namespace LWS.InterstateHauler
                 engineRpm = nwhState.engineRpm,
                 predictedTargetRpm = _state.predictedRpm,
                 rpmError = _state.rpmError,
+                automaticTargetNwhGear = _automaticTargetNwhGear,
+                automaticTargetLabel = AutomaticTargetLabel,
                 shiftState = _state.shiftState,
                 lastRejectionReason = _state.lastRejectionReason,
                 lastAbuseSeverity = _state.lastAbuseSeverity,

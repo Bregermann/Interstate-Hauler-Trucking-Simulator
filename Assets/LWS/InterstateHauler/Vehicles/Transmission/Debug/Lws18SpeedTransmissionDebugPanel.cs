@@ -31,9 +31,27 @@ namespace LWS.InterstateHauler
             }
 
             LwsTransmissionDisplayState state = transmission.DisplayState;
-            GUILayout.BeginArea(new Rect(position.x, position.y, 380f, 360f), GUI.skin.box);
+            GUILayout.BeginArea(new Rect(position.x, position.y, 380f, 450f), GUI.skin.box);
             GUILayout.Label("Interstate Hauler 18-Speed");
-            GUILayout.Label($"Mode: {state.mode}");
+            GUILayout.Label($"Transmission Mode: {state.mode}");
+            GUILayout.Label(transmission.DevelopmentAutomaticModeActive ? "TEST AUTOMATIC: ON" : "TEST AUTOMATIC: OFF");
+            string buttonLabel = transmission.DevelopmentAutomaticModeActive
+                ? "RETURN TO 18-SPEED MANUAL"
+                : "ENABLE TEST AUTOMATIC";
+            if (GUILayout.Button(buttonLabel, GUILayout.Height(32f)))
+            {
+                bool enableAutomatic = !transmission.DevelopmentAutomaticModeActive;
+                if (!transmission.TrySetDevelopmentAutomaticTestMode(enableAutomatic, out string message))
+                {
+                    Debug.LogWarning(message, this);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(transmission.LastModeSwitchMessage))
+            {
+                GUILayout.Label(transmission.LastModeSwitchMessage);
+            }
+
             GUILayout.Label($"Physical Gate: {state.physicalGate}");
             GUILayout.Label($"Requested Range: {state.requestedRange}");
             GUILayout.Label($"Engaged Range: {state.engagedRange}");
@@ -42,6 +60,7 @@ namespace LWS.InterstateHauler
             GUILayout.Label($"Logical Gear: {state.displayLabel}");
             GUILayout.Label($"Logical Ratio: {state.logicalRatioIndex}/18");
             GUILayout.Label($"NWH Gear: {state.nwhGear}");
+            GUILayout.Label($"Automatic Target Gear: {state.automaticTargetLabel} ({state.automaticTargetNwhGear})");
             GUILayout.Label($"Gear Ratio: {state.gearRatio:0.00}");
             GUILayout.Label($"Clutch: {state.clutch:0.00}");
             GUILayout.Label($"Engine RPM: {state.engineRpm:0}");

@@ -163,6 +163,8 @@ namespace LWS.InterstateHauler
         public float engineRpm;
         public float predictedTargetRpm;
         public float rpmError;
+        public int automaticTargetNwhGear;
+        public string automaticTargetLabel;
         public LwsTransmissionShiftState shiftState;
         public LwsShiftRejectionReason lastRejectionReason;
         public LwsTransmissionAbuseSeverity lastAbuseSeverity;
