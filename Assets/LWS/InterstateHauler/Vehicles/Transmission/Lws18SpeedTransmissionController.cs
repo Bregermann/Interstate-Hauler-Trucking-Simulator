@@ -260,7 +260,12 @@ namespace LWS.InterstateHauler
 
         public LwsSaveOperationResult ValidateParticipant()
         {
-            return ActiveDefinition != null && ActiveDefinition.ValidateDefinition(out string message)
+            if (ActiveDefinition == null)
+            {
+                return LwsSaveOperationResult.Failure("18-speed transmission definition is not available.");
+            }
+
+            return ActiveDefinition.ValidateDefinition(out string message)
                 ? LwsSaveOperationResult.Success(message)
                 : LwsSaveOperationResult.Failure(message);
         }
@@ -500,7 +505,8 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            if (nwhAdapter != null && nwhAdapter.TryShiftInto(target.nwhGearIndex, true, out string message))
+            string message = "NWH transmission adapter is not available.";
+            if (nwhAdapter != null && nwhAdapter.TryShiftInto(target.nwhGearIndex, true, out message))
             {
                 _lastCommandedNwhGear = target.nwhGearIndex;
                 _state.logicalGear = target.gearId;
