@@ -14,25 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trafficEnabled: 1
   spawnPolicy:
-    densityTier: 1
-    maxActiveVehicles: 8
+    densityTier: 3
+    maxActiveVehicles: 20
     spawnIntervalSeconds: 4
     minimumPlayerSpawnDistanceMeters: 140
     maximumPlayerSpawnDistanceMeters: 650
     despawnDistanceMeters: 850
     despawnNearLaneEndMeters: 90
     targetCruiseSpeedScale: 0.72
-    maximumTrafficSpeedMetersPerSecond: 22
+    maximumTrafficSpeedMetersPerSecond: 45
     includeRampTraffic: 1
-    includeTurnaroundTraffic: 0
+    includeTurnaroundTraffic: 1
     autoResolveEditorPrefabs: 0
     showDebugPanel: 1
   trafficPrefabs:
-  - {fileID: 1855189923742636, guid: 5ce78366dc1ed824a994a8d1a7a78083, type: 3}
-  - {fileID: 1983278189608628, guid: fdaddefb946541040919f10b7f228b93, type: 3}
-  - {fileID: 1927929801092994, guid: 057a446f4179dae4da89c9729b05232d, type: 3}
-  - {fileID: 1895866970774332, guid: 20d9a3a0670ae3b4f9b2a419ba69728e, type: 3}
-  - {fileID: 1987023104284818, guid: 3be0ac44e8b5d6e4cb12031d2a499676, type: 3}
-  - {fileID: 1997173257037592, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
-  - {fileID: 1992924290756174, guid: e2302543cb5f6ea49846f98993d95f01, type: 3}
-  - {fileID: 1998801397143718, guid: 9bc427a93d2d86c4f907181a7ec7bc49, type: 3}
+  - {fileID: 1760368921295162, guid: 5ce78366dc1ed824a994a8d1a7a78083, type: 3}
+  - {fileID: 1926977639420306, guid: fdaddefb946541040919f10b7f228b93, type: 3}
+  - {fileID: 1612664689400312, guid: 057a446f4179dae4da89c9729b05232d, type: 3}
+  - {fileID: 1884339632749210, guid: 20d9a3a0670ae3b4f9b2a419ba69728e, type: 3}
+  - {fileID: 1919964766702672, guid: 3be0ac44e8b5d6e4cb12031d2a499676, type: 3}
+  - {fileID: 1159880368498422, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
+  - {fileID: 1225235605962860, guid: e2302543cb5f6ea49846f98993d95f01, type: 3}
+  - {fileID: 1513538600333656, guid: 9bc427a93d2d86c4f907181a7ec7bc49, type: 3}

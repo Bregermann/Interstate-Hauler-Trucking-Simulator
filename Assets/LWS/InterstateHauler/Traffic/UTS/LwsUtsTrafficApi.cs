@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace LWS.InterstateHauler
 {
-    internal sealed class LwsUtsTrafficApi
+    public sealed class LwsUtsTrafficApi
     {
         private readonly Type _walkPathType;
         private readonly Type _carWalkPathType;
@@ -60,13 +60,52 @@ namespace LWS.InterstateHauler
 
         public bool PrefabLooksLikeUtsVehicle(GameObject prefab)
         {
-            if (prefab == null || !IsAvailable)
+            return TryDescribePrefabSupport(prefab, out _);
+        }
+
+        public bool TryDescribePrefabSupport(GameObject prefab, out string message)
+        {
+            if (prefab == null)
             {
+                message = "Prefab rejected: reference is null.";
                 return false;
             }
 
-            return prefab.GetComponentInChildren(_carMoveType, true) != null &&
-                   prefab.GetComponentInChildren(_carWheelsType, true) != null;
+            if (!IsAvailable)
+            {
+                message = $"{prefab.name} rejected: {AvailabilitySummary}";
+                return false;
+            }
+
+            Component wheels = FindComponent(prefab, _carWheelsType);
+            if (wheels == null)
+            {
+                message = $"{prefab.name} rejected: CarWheels was not found on the prefab root or children.";
+                return false;
+            }
+
+            Rigidbody body = wheels.GetComponent<Rigidbody>();
+            if (body == null)
+            {
+                message = $"{prefab.name} rejected: Rigidbody was not found on the CarWheels GameObject.";
+                return false;
+            }
+
+            Array wheelColliders = GetMember(wheels, "WheelColliders") as Array;
+            if (wheelColliders == null || wheelColliders.Length == 0)
+            {
+                message = $"{prefab.name} rejected: CarWheels has no wheel collider references.";
+                return false;
+            }
+
+            bool hasPreauthoredCarMove = FindComponent(prefab, _carMoveType) != null;
+            bool hasPreauthoredMovePath = FindComponent(prefab, _movePathType) != null;
+            bool hasPreauthoredCarAi = FindComponent(prefab, _carAiControllerType) != null;
+            message = $"{prefab.name} accepted: CarWheels and Rigidbody are present on {wheels.gameObject.name}; " +
+                      $"CarMove={(hasPreauthoredCarMove ? "preauthored" : "added at spawn")}, " +
+                      $"MovePath={(hasPreauthoredMovePath ? "preauthored" : "added at spawn")}, " +
+                      $"CarAIController={(hasPreauthoredCarAi ? "preauthored" : "added at spawn")}.";
+            return true;
         }
 
         public bool PrefabUsesUtsTrailer(GameObject prefab)
@@ -150,17 +189,24 @@ namespace LWS.InterstateHauler
                 return null;
             }
 
-            if (!PrefabLooksLikeUtsVehicle(prefab))
+            if (!TryDescribePrefabSupport(prefab, out string supportMessage))
             {
-                message = $"{prefab.name} does not contain UTS CarMove and CarWheels components.";
+                message = supportMessage;
                 return null;
             }
 
             pointIndex = Mathf.Clamp(pointIndex, 1, lane.centerline.Length - 2);
             GameObject instance = UnityEngine.Object.Instantiate(prefab, lane.centerline[pointIndex], Quaternion.identity, parent);
             instance.name = $"IH UTS Traffic {prefab.name}";
-            Component movePath = instance.GetComponent(_movePathType) ?? instance.AddComponent(_movePathType);
-            Component carAi = instance.GetComponent(_carAiControllerType) ?? instance.AddComponent(_carAiControllerType);
+            Component wheels = FindComponent(instance, _carWheelsType);
+            GameObject controlledObject = wheels != null ? wheels.gameObject : instance;
+            Component movePath = controlledObject.GetComponent(_movePathType) ?? controlledObject.AddComponent(_movePathType);
+            if (controlledObject.GetComponent(_carMoveType) == null)
+            {
+                controlledObject.AddComponent(_carMoveType);
+            }
+
+            Component carAi = controlledObject.GetComponent(_carAiControllerType) ?? controlledObject.AddComponent(_carAiControllerType);
 
             SetMember(movePath, "walkPath", path);
             SetMember(movePath, "_walkPointThreshold", 4f);
@@ -273,6 +319,16 @@ namespace LWS.InterstateHauler
         private static string FormatAvailability(Type type)
         {
             return type != null ? "FOUND" : "MISSING";
+        }
+
+        private static Component FindComponent(GameObject owner, Type componentType)
+        {
+            if (owner == null || componentType == null)
+            {
+                return null;
+            }
+
+            return owner.GetComponent(componentType) ?? owner.GetComponentInChildren(componentType, true);
         }
 
         private static object GetMember(object target, string memberName)

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -1679,9 +1678,9 @@ namespace LWS.InterstateHauler.Editor
             bool prefabsValid = profile.TryGetTrafficPrefabsCopy(out GameObject[] prefabs, out string prefabMessage);
             bool expectedCount = prefabsValid && prefabs.Length == InterstateTrafficPrefabPaths.Length;
             bool expectedPaths = expectedCount;
-            bool requiredComponents = expectedCount;
-            Type carMoveType = ResolveTypeByName("CarMove");
-            Type carWheelsType = ResolveTypeByName("CarWheels");
+            bool supportedByUtsAdapter = expectedCount;
+            var supportMessages = new List<string>();
+            var utsApi = new LwsUtsTrafficApi();
 
             if (expectedCount)
             {
@@ -1689,19 +1688,20 @@ namespace LWS.InterstateHauler.Editor
                 {
                     string assetPath = AssetDatabase.GetAssetPath(prefabs[i]);
                     expectedPaths &= string.Equals(assetPath, InterstateTrafficPrefabPaths[i], StringComparison.Ordinal);
-                    requiredComponents &= HasComponentInChildren(prefabs[i], carMoveType) &&
-                                          HasComponentInChildren(prefabs[i], carWheelsType);
+                    bool supported = utsApi.TryDescribePrefabSupport(prefabs[i], out string supportMessage);
+                    supportedByUtsAdapter &= supported;
+                    supportMessages.Add(supportMessage);
                 }
             }
 
             report.Add(
-                profileValid && prefabsValid && expectedCount && expectedPaths && requiredComponents
+                profileValid && prefabsValid && expectedCount && expectedPaths && supportedByUtsAdapter
                     ? LwsValidationSeverity.Info
                     : LwsValidationSeverity.Error,
                 "UTS Traffic Validation Profile",
-                profileValid && prefabsValid && expectedCount && expectedPaths && requiredComponents
-                    ? "Interstate validation traffic profile resolves all 8 selected UTS vehicle prefab references with required CarMove and CarWheels components."
-                    : $"Interstate validation traffic profile is invalid. Profile={profileMessage}; Prefabs={prefabMessage}; Count={prefabs?.Length ?? 0}/{InterstateTrafficPrefabPaths.Length}; ExpectedPaths={expectedPaths}; RequiredComponents={requiredComponents}.");
+                profileValid && prefabsValid && expectedCount && expectedPaths && supportedByUtsAdapter
+                    ? "Interstate validation traffic profile resolves all 8 selected UTS vehicle prefab references and the UTS adapter supports each prefab."
+                    : $"Interstate validation traffic profile is invalid. Profile={profileMessage}; Prefabs={prefabMessage}; Count={prefabs?.Length ?? 0}/{InterstateTrafficPrefabPaths.Length}; ExpectedPaths={expectedPaths}; Supported={supportedByUtsAdapter}; Details={string.Join(" | ", supportMessages)}.");
         }
 
         private static void ValidateUtsTrafficRoadGraphIntegration(LwsProjectValidationReport report)
@@ -1846,32 +1846,5 @@ namespace LWS.InterstateHauler.Editor
             return count;
         }
 
-        private static Type ResolveTypeByName(string typeName)
-        {
-            Type type = Type.GetType(typeName) ?? Type.GetType($"{typeName}, Assembly-CSharp");
-            if (type != null)
-            {
-                return type;
-            }
-
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            for (int i = 0; i < assemblies.Length; i++)
-            {
-                type = assemblies[i].GetType(typeName);
-                if (type != null)
-                {
-                    return type;
-                }
-            }
-
-            return null;
-        }
-
-        private static bool HasComponentInChildren(GameObject prefab, Type componentType)
-        {
-            return prefab != null &&
-                   componentType != null &&
-                   prefab.GetComponentInChildren(componentType, true) != null;
-        }
     }
 }

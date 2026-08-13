@@ -53,6 +53,7 @@ namespace LWS.InterstateHauler
         private bool _initialized;
         private bool _graphAvailable;
         private bool _diagnosticsLogged;
+        private bool _prefabSupportLogged;
         private bool _failureLogged;
         private bool _configurationFailedPermanently;
         private string _lastMessage = "Not initialized.";
@@ -230,10 +231,14 @@ namespace LWS.InterstateHauler
             }
 
             ResolveEditorPrefabsIfNeeded();
-            trafficPrefabs = FilterSupportedTrafficPrefabs(trafficPrefabs);
+            trafficPrefabs = FilterSupportedTrafficPrefabs(trafficPrefabs, out string prefabSupportReport);
+            LogPrefabSupportReportOnce(prefabSupportReport);
             if (trafficPrefabs == null || trafficPrefabs.Length == 0)
             {
-                return FailInitialization("UTS traffic initialization failed: zero supported traffic prefab references configured.", scheduleRetry);
+                return FailInitialization(
+                    "UTS traffic initialization failed: zero supported traffic prefab references configured.\n" + prefabSupportReport,
+                    false,
+                    true);
             }
 
             LwsRoadGraph sourceGraph = graph ?? (roadGraphProvider != null ? roadGraphProvider.Graph : null);
@@ -597,10 +602,12 @@ namespace LWS.InterstateHauler
             }
         }
 
-        private GameObject[] FilterSupportedTrafficPrefabs(GameObject[] prefabs)
+        private GameObject[] FilterSupportedTrafficPrefabs(GameObject[] prefabs, out string supportReport)
         {
+            var supportLines = new List<string>();
             if (prefabs == null)
             {
+                supportReport = "UTS traffic prefab support: no prefab array is configured.";
                 return new GameObject[0];
             }
 
@@ -608,15 +615,29 @@ namespace LWS.InterstateHauler
             for (int i = 0; i < prefabs.Length; i++)
             {
                 GameObject prefab = prefabs[i];
-                if (prefab == null || !_utsApi.PrefabLooksLikeUtsVehicle(prefab))
+                if (!_utsApi.TryDescribePrefabSupport(prefab, out string message))
                 {
+                    supportLines.Add($"Slot {i}: {message}");
                     continue;
                 }
 
+                supportLines.Add($"Slot {i}: {message}");
                 supported.Add(prefab);
             }
 
+            supportReport = "UTS traffic prefab support:\n" + string.Join("\n", supportLines);
             return supported.ToArray();
+        }
+
+        private void LogPrefabSupportReportOnce(string supportReport)
+        {
+            if (_prefabSupportLogged || string.IsNullOrWhiteSpace(supportReport))
+            {
+                return;
+            }
+
+            _prefabSupportLogged = true;
+            Debug.Log(supportReport, this);
         }
 
         private LwsTrafficVehicleKind ClassifyPrefab(GameObject prefab)

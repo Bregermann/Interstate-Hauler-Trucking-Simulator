@@ -19,33 +19,39 @@ namespace LWS.InterstateHauler.Editor
             "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/City_bus.prefab"
         };
 
-        [MenuItem("Interstate Hauler/Traffic/Rebuild Interstate Validation Traffic Profile")]
-        public static void RebuildInterstateValidationTrafficProfile()
+        [MenuItem("Interstate Hauler/Traffic/Repair Interstate Validation Traffic Profile")]
+        public static void RepairInterstateValidationTrafficProfile()
         {
             LwsUtsTrafficProfile profile = AssetDatabase.LoadAssetAtPath<LwsUtsTrafficProfile>(ProfilePath);
+            bool created = false;
             if (profile == null)
             {
                 profile = ScriptableObject.CreateInstance<LwsUtsTrafficProfile>();
                 AssetDatabase.CreateAsset(profile, ProfilePath);
+                created = true;
             }
 
             var serialized = new SerializedObject(profile);
             serialized.FindProperty("trafficEnabled").boolValue = true;
 
-            SerializedProperty policy = serialized.FindProperty("spawnPolicy");
-            policy.FindPropertyRelative("densityTier").enumValueIndex = (int)LwsTrafficDensityTier.Sparse;
-            policy.FindPropertyRelative("maxActiveVehicles").intValue = 8;
-            policy.FindPropertyRelative("spawnIntervalSeconds").floatValue = 4f;
-            policy.FindPropertyRelative("minimumPlayerSpawnDistanceMeters").floatValue = 140f;
-            policy.FindPropertyRelative("maximumPlayerSpawnDistanceMeters").floatValue = 650f;
-            policy.FindPropertyRelative("despawnDistanceMeters").floatValue = 850f;
-            policy.FindPropertyRelative("despawnNearLaneEndMeters").floatValue = 90f;
-            policy.FindPropertyRelative("targetCruiseSpeedScale").floatValue = 0.72f;
-            policy.FindPropertyRelative("maximumTrafficSpeedMetersPerSecond").floatValue = 22f;
-            policy.FindPropertyRelative("includeRampTraffic").boolValue = true;
-            policy.FindPropertyRelative("includeTurnaroundTraffic").boolValue = false;
-            policy.FindPropertyRelative("autoResolveEditorPrefabs").boolValue = false;
-            policy.FindPropertyRelative("showDebugPanel").boolValue = true;
+            if (created)
+            {
+                SerializedProperty policy = serialized.FindProperty("spawnPolicy");
+                policy.FindPropertyRelative("densityTier").enumValueIndex = (int)LwsTrafficDensityTier.Sparse;
+                policy.FindPropertyRelative("maxActiveVehicles").intValue = 8;
+                policy.FindPropertyRelative("spawnIntervalSeconds").floatValue = 4f;
+                policy.FindPropertyRelative("minimumPlayerSpawnDistanceMeters").floatValue = 140f;
+                policy.FindPropertyRelative("maximumPlayerSpawnDistanceMeters").floatValue = 650f;
+                policy.FindPropertyRelative("despawnDistanceMeters").floatValue = 850f;
+                policy.FindPropertyRelative("despawnNearLaneEndMeters").floatValue = 90f;
+                policy.FindPropertyRelative("targetCruiseSpeedScale").floatValue = 0.72f;
+                policy.FindPropertyRelative("maximumTrafficSpeedMetersPerSecond").floatValue = 22f;
+                policy.FindPropertyRelative("includeRampTraffic").boolValue = true;
+                policy.FindPropertyRelative("includeTurnaroundTraffic").boolValue = false;
+                policy.FindPropertyRelative("showDebugPanel").boolValue = true;
+            }
+
+            serialized.FindProperty("spawnPolicy").FindPropertyRelative("autoResolveEditorPrefabs").boolValue = false;
 
             SerializedProperty prefabs = serialized.FindProperty("trafficPrefabs");
             prefabs.arraySize = TrafficPrefabPaths.Length;
