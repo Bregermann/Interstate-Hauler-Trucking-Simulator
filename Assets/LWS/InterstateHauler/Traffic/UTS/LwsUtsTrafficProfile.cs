@@ -11,22 +11,52 @@ namespace LWS.InterstateHauler
 
         public bool TrafficEnabled => trafficEnabled;
         public LwsTrafficSpawnPolicy SpawnPolicy => spawnPolicy;
-        public int PrefabCount => CountPrefabs(trafficPrefabs);
+        public int PrefabCount => TryGetTrafficPrefabsCopy(out GameObject[] prefabs, out _) ? prefabs.Length : 0;
+        public int PrefabSlotCount => trafficPrefabs != null ? trafficPrefabs.Length : 0;
 
         public GameObject[] GetTrafficPrefabsCopy()
         {
+            return TryGetTrafficPrefabsCopy(out GameObject[] prefabs, out _) ? prefabs : new GameObject[0];
+        }
+
+        public bool TryGetTrafficPrefabsCopy(out GameObject[] prefabs, out string message)
+        {
             if (trafficPrefabs == null || trafficPrefabs.Length == 0)
             {
-                return new GameObject[0];
+                prefabs = new GameObject[0];
+                message = $"{name} has no UTS validation traffic prefab references.";
+                return false;
             }
 
-            var copy = new GameObject[trafficPrefabs.Length];
+            var validPrefabs = new System.Collections.Generic.List<GameObject>(trafficPrefabs.Length);
             for (int i = 0; i < trafficPrefabs.Length; i++)
             {
-                copy[i] = trafficPrefabs[i];
+                GameObject prefab;
+                try
+                {
+                    prefab = trafficPrefabs[i];
+                    if (prefab == null)
+                    {
+                        prefabs = new GameObject[0];
+                        message = $"Traffic profile invalid: traffic prefab slot {i} is missing.";
+                        return false;
+                    }
+
+                    _ = prefab.name;
+                }
+                catch (MissingReferenceException)
+                {
+                    prefabs = new GameObject[0];
+                    message = $"Traffic profile invalid: traffic prefab slot {i} references a missing or destroyed prefab.";
+                    return false;
+                }
+
+                validPrefabs.Add(prefab);
             }
 
-            return copy;
+            prefabs = validPrefabs.ToArray();
+            message = $"{name} has {prefabs.Length} valid UTS validation traffic prefab references.";
+            return true;
         }
 
         public LwsTrafficSpawnPolicy CreateSpawnPolicyCopy()
@@ -75,33 +105,13 @@ namespace LWS.InterstateHauler
                 return false;
             }
 
-            if (CountPrefabs(trafficPrefabs) == 0)
+            if (!TryGetTrafficPrefabsCopy(out _, out message))
             {
-                message = $"{name} has no UTS validation traffic prefab references.";
                 return false;
             }
 
             message = $"{name} is valid.";
             return true;
-        }
-
-        private static int CountPrefabs(GameObject[] prefabs)
-        {
-            int count = 0;
-            if (prefabs == null)
-            {
-                return count;
-            }
-
-            for (int i = 0; i < prefabs.Length; i++)
-            {
-                if (prefabs[i] != null)
-                {
-                    count++;
-                }
-            }
-
-            return count;
         }
     }
 }

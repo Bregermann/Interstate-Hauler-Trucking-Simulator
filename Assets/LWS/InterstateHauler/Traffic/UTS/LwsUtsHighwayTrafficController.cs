@@ -54,6 +54,7 @@ namespace LWS.InterstateHauler
         private bool _graphAvailable;
         private bool _diagnosticsLogged;
         private bool _failureLogged;
+        private bool _configurationFailedPermanently;
         private string _lastMessage = "Not initialized.";
         private string _lastSpawnResult = "No spawn attempted.";
         private string _lastError = string.Empty;
@@ -124,7 +125,6 @@ namespace LWS.InterstateHauler
         public void ConfigureValidationProfile(LwsUtsTrafficProfile profile, GameObject[] fallbackPrefabs)
         {
             validationTrafficProfile = profile;
-            ApplyConfiguredProfile();
             SetTrafficPrefabsForValidation(fallbackPrefabs);
         }
 
@@ -207,7 +207,10 @@ namespace LWS.InterstateHauler
             EnsureTrafficRoot();
             EnsureDebugPanel();
             LogUtsDiagnosticsOnce();
-            ApplyConfiguredProfile();
+            if (!TryApplyConfiguredProfile(out string profileMessage))
+            {
+                return FailInitialization(profileMessage, false, true);
+            }
 
             _initializationAttempts++;
 
@@ -285,7 +288,7 @@ namespace LWS.InterstateHauler
 
         private void TryRetryInitialization()
         {
-            if (!buildOnStart || _initialized || _initializationAttempts >= Mathf.Max(1, initializationRetryFrames))
+            if (!buildOnStart || _initialized || _configurationFailedPermanently || _initializationAttempts >= Mathf.Max(1, initializationRetryFrames))
             {
                 return;
             }
@@ -299,8 +302,13 @@ namespace LWS.InterstateHauler
             TryInitializeFromGraph(roadGraphProvider, roadGraphProvider != null ? roadGraphProvider.Graph : null, true);
         }
 
-        private bool FailInitialization(string message, bool scheduleRetry)
+        private bool FailInitialization(string message, bool scheduleRetry, bool permanent = false)
         {
+            if (permanent)
+            {
+                _configurationFailedPermanently = true;
+            }
+
             _lastError = string.IsNullOrWhiteSpace(message)
                 ? "UTS traffic initialization failed for an unknown reason."
                 : message;
@@ -459,15 +467,27 @@ namespace LWS.InterstateHauler
             _playerTransform = playerTruck != null ? playerTruck.transform : null;
         }
 
-        private void ApplyConfiguredProfile()
+        private bool TryApplyConfiguredProfile(out string message)
         {
             if (validationTrafficProfile == null)
             {
-                return;
+                message = "No UTS validation traffic profile is assigned.";
+                return true;
+            }
+
+            if (!validationTrafficProfile.ValidateProfile(out message))
+            {
+                return false;
+            }
+
+            if (!validationTrafficProfile.TryGetTrafficPrefabsCopy(out GameObject[] prefabs, out message))
+            {
+                return false;
             }
 
             spawnPolicy = validationTrafficProfile.CreateSpawnPolicyCopy();
-            trafficPrefabs = validationTrafficProfile.GetTrafficPrefabsCopy();
+            trafficPrefabs = prefabs;
+            return true;
         }
 
         private void EnsureTrafficRoot()
@@ -689,9 +709,16 @@ namespace LWS.InterstateHauler
 
             for (int i = 0; i < prefabs.Length; i++)
             {
-                if (prefabs[i] != null)
+                try
                 {
-                    count++;
+                    if (prefabs[i] != null)
+                    {
+                        count++;
+                    }
+                }
+                catch (MissingReferenceException)
+                {
+                    return count;
                 }
             }
 

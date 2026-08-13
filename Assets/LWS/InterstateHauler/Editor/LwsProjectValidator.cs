@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -117,6 +118,18 @@ namespace LWS.InterstateHauler.Editor
         private const string UnityDirectInputPackageUrl = "https://github.com/imDanoush/Unity-DirectInput.git";
         private const string UnityDirectInputNwhSamplePackageName = "NWHVehiclePhysics2FFB.unitypackage";
         private const string CancelledNwhSteeringWheelInputImportedProviderPath = "Assets/NWH/Vehicle Physics 2/_OptionalPackages/Input/SteeringWheelInput/SteeringWheelInputProvider.cs";
+
+        private static readonly string[] InterstateTrafficPrefabPaths =
+        {
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Car_1.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Car_3.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Car_5.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Jeep.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Taxi.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Truck_1.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Truck_2.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/City_bus.prefab"
+        };
 
         private static readonly string[] VendorRoots =
         {
@@ -1655,36 +1668,40 @@ namespace LWS.InterstateHauler.Editor
 
         private static void ValidateUtsTrafficValidationProfile(LwsProjectValidationReport report)
         {
-            if (!File.Exists(InterstateTrafficProfilePath))
+            LwsUtsTrafficProfile profile = AssetDatabase.LoadAssetAtPath<LwsUtsTrafficProfile>(InterstateTrafficProfilePath);
+            if (profile == null)
             {
-                report.Add(LwsValidationSeverity.Error, "UTS Traffic Validation Profile", $"{InterstateTrafficProfilePath} is missing.");
+                report.Add(LwsValidationSeverity.Error, "UTS Traffic Validation Profile", $"{InterstateTrafficProfilePath} is missing or did not import.");
                 return;
             }
 
-            string profileText = File.ReadAllText(InterstateTrafficProfilePath);
-            bool enabled = profileText.Contains("trafficEnabled: 1");
-            bool sparse = profileText.Contains("densityTier: 1");
-            bool capped = profileText.Contains("maxActiveVehicles: 8");
-            bool interval = profileText.Contains("spawnIntervalSeconds: 4");
-            bool noAssetDatabaseFallback = profileText.Contains("autoResolveEditorPrefabs: 0");
-            bool hasValidationPrefabs =
-                profileText.Contains("5ce78366dc1ed824a994a8d1a7a78083") &&
-                profileText.Contains("fdaddefb946541040919f10b7f228b93") &&
-                profileText.Contains("057a446f4179dae4da89c9729b05232d") &&
-                profileText.Contains("20d9a3a0670ae3b4f9b2a419ba69728e") &&
-                profileText.Contains("3be0ac44e8b5d6e4cb12031d2a499676") &&
-                profileText.Contains("149b71e9849c0444da1a36376caf8156") &&
-                profileText.Contains("e2302543cb5f6ea49846f98993d95f01") &&
-                profileText.Contains("9bc427a93d2d86c4f907181a7ec7bc49");
+            bool profileValid = profile.ValidateProfile(out string profileMessage);
+            bool prefabsValid = profile.TryGetTrafficPrefabsCopy(out GameObject[] prefabs, out string prefabMessage);
+            bool expectedCount = prefabsValid && prefabs.Length == InterstateTrafficPrefabPaths.Length;
+            bool expectedPaths = expectedCount;
+            bool requiredComponents = expectedCount;
+            Type carMoveType = ResolveTypeByName("CarMove");
+            Type carWheelsType = ResolveTypeByName("CarWheels");
+
+            if (expectedCount)
+            {
+                for (int i = 0; i < prefabs.Length; i++)
+                {
+                    string assetPath = AssetDatabase.GetAssetPath(prefabs[i]);
+                    expectedPaths &= string.Equals(assetPath, InterstateTrafficPrefabPaths[i], StringComparison.Ordinal);
+                    requiredComponents &= HasComponentInChildren(prefabs[i], carMoveType) &&
+                                          HasComponentInChildren(prefabs[i], carWheelsType);
+                }
+            }
 
             report.Add(
-                enabled && sparse && capped && interval && noAssetDatabaseFallback && hasValidationPrefabs
+                profileValid && prefabsValid && expectedCount && expectedPaths && requiredComponents
                     ? LwsValidationSeverity.Info
                     : LwsValidationSeverity.Error,
                 "UTS Traffic Validation Profile",
-                enabled && sparse && capped && interval && noAssetDatabaseFallback && hasValidationPrefabs
-                    ? "Interstate validation traffic profile is enabled, capped at 8 sparse vehicles, and serializes the selected UTS prefab references."
-                    : "Interstate validation traffic profile is missing enabled/sparse/cap/interval/prefab configuration.");
+                profileValid && prefabsValid && expectedCount && expectedPaths && requiredComponents
+                    ? "Interstate validation traffic profile resolves all 8 selected UTS vehicle prefab references with required CarMove and CarWheels components."
+                    : $"Interstate validation traffic profile is invalid. Profile={profileMessage}; Prefabs={prefabMessage}; Count={prefabs?.Length ?? 0}/{InterstateTrafficPrefabPaths.Length}; ExpectedPaths={expectedPaths}; RequiredComponents={requiredComponents}.");
         }
 
         private static void ValidateUtsTrafficRoadGraphIntegration(LwsProjectValidationReport report)
@@ -1827,6 +1844,34 @@ namespace LWS.InterstateHauler.Editor
             }
 
             return count;
+        }
+
+        private static Type ResolveTypeByName(string typeName)
+        {
+            Type type = Type.GetType(typeName) ?? Type.GetType($"{typeName}, Assembly-CSharp");
+            if (type != null)
+            {
+                return type;
+            }
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for (int i = 0; i < assemblies.Length; i++)
+            {
+                type = assemblies[i].GetType(typeName);
+                if (type != null)
+                {
+                    return type;
+                }
+            }
+
+            return null;
+        }
+
+        private static bool HasComponentInChildren(GameObject prefab, Type componentType)
+        {
+            return prefab != null &&
+                   componentType != null &&
+                   prefab.GetComponentInChildren(componentType, true) != null;
         }
     }
 }

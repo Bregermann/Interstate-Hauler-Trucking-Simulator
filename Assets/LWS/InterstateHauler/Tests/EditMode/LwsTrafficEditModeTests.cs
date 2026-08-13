@@ -1,11 +1,51 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 
 namespace LWS.InterstateHauler.Tests.EditMode
 {
     public sealed class LwsTrafficEditModeTests
     {
+        private const string InterstateTrafficProfilePath = "Assets/LWS/InterstateHauler/Traffic/Data/IH_TrafficProfile_InterstateValidation.asset";
+
+        private static readonly string[] InterstateTrafficPrefabPaths =
+        {
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Car_1.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Car_3.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Car_5.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Jeep.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Taxi.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Truck_1.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Truck_2.prefab",
+            "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/City_bus.prefab"
+        };
+
+        [Test]
+        public void InterstateValidationTrafficProfileResolvesSelectedUtsPrefabs()
+        {
+            LwsUtsTrafficProfile profile = AssetDatabase.LoadAssetAtPath<LwsUtsTrafficProfile>(InterstateTrafficProfilePath);
+
+            Assert.IsNotNull(profile, $"{InterstateTrafficProfilePath} did not load as a LwsUtsTrafficProfile.");
+            Assert.IsTrue(profile.TryGetTrafficPrefabsCopy(out GameObject[] prefabs, out string message), message);
+            Assert.AreEqual(InterstateTrafficPrefabPaths.Length, prefabs.Length);
+
+            Type carMoveType = ResolveTypeByName("CarMove");
+            Type carWheelsType = ResolveTypeByName("CarWheels");
+            Assert.IsNotNull(carMoveType, "UTS CarMove type was not available.");
+            Assert.IsNotNull(carWheelsType, "UTS CarWheels type was not available.");
+
+            for (int i = 0; i < prefabs.Length; i++)
+            {
+                Assert.IsNotNull(prefabs[i], $"UTS validation traffic prefab slot {i} is null.");
+                Assert.AreEqual(InterstateTrafficPrefabPaths[i], AssetDatabase.GetAssetPath(prefabs[i]));
+                Assert.IsNotNull(prefabs[i].GetComponentInChildren(carMoveType, true), $"{prefabs[i].name} is missing UTS CarMove.");
+                Assert.IsNotNull(prefabs[i].GetComponentInChildren(carWheelsType, true), $"{prefabs[i].name} is missing UTS CarWheels.");
+            }
+        }
+
         [Test]
         public void TrafficLaneBuilderCreatesHighwayAndRampLanes()
         {
@@ -63,8 +103,8 @@ namespace LWS.InterstateHauler.Tests.EditMode
 
             Assert.IsTrue(firstResult.Succeeded, firstResult.Message);
             Assert.IsFalse(duplicateResult.Succeeded);
-            Object.DestroyImmediate(first.gameObject);
-            Object.DestroyImmediate(second.gameObject);
+            UnityEngine.Object.DestroyImmediate(first.gameObject);
+            UnityEngine.Object.DestroyImmediate(second.gameObject);
         }
 
         [Test]
@@ -141,6 +181,27 @@ namespace LWS.InterstateHauler.Tests.EditMode
                 laneWidthMeters = edge.laneWidthMeters,
                 speedLimitMph = edge.speedLimitMph
             };
+        }
+
+        private static Type ResolveTypeByName(string typeName)
+        {
+            Type type = Type.GetType(typeName) ?? Type.GetType($"{typeName}, Assembly-CSharp");
+            if (type != null)
+            {
+                return type;
+            }
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for (int i = 0; i < assemblies.Length; i++)
+            {
+                type = assemblies[i].GetType(typeName);
+                if (type != null)
+                {
+                    return type;
+                }
+            }
+
+            return null;
         }
     }
 }
