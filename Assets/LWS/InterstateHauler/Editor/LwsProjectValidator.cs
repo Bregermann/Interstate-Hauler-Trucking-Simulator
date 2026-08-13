@@ -81,6 +81,34 @@ namespace LWS.InterstateHauler.Editor
         private const string MirrorQualityMatrixPath = "Documentation/InterstateHauler/008_Mirror_Quality_Matrix.md";
         private const string CabAnchorMatrixPath = "Documentation/InterstateHauler/008_Cab_Anchor_Matrix.md";
         private const string Prompt009HandoffPath = "Documentation/InterstateHauler/008_Prompt009_Handoff.md";
+        private const string InterstateCorridorScenePath = "Assets/LWS/InterstateHauler/Roads/Validation/InterstateCorridorValidation.unity";
+        private const string EasyRoadsExportBoundaryPath = "Assets/LWS/InterstateHauler/Roads/EasyRoads/LwsEasyRoadsExportBoundary.cs";
+        private const string RoadGraphRuntimePath = "Assets/LWS/InterstateHauler/Roads/LwsRoadGraphRuntime.cs";
+        private const string RoadGraphProviderPath = "Assets/LWS/InterstateHauler/Roads/LwsRoadGraphProvider.cs";
+        private const string RoadSurfacePath = "Assets/LWS/InterstateHauler/Roads/LwsRoadSurface.cs";
+        private const string RoadDebugPanelPath = "Assets/LWS/InterstateHauler/Roads/LwsRoadGraphDebugPanel.cs";
+        private const string InterstateCorridorBuilderPath = "Assets/LWS/InterstateHauler/Roads/Validation/LwsInterstateCorridorRuntimeBuilder.cs";
+        private const string InterstateCorridorMarkerPath = "Assets/LWS/InterstateHauler/Roads/Validation/LwsInterstateCorridorSceneMarker.cs";
+        private const string Prompt009DocsPath = "Documentation/InterstateHauler/009_EasyRoads_Interstate_Corridor.md";
+        private const string RoadGraphMatrixPath = "Documentation/InterstateHauler/009_Road_Graph_Matrix.md";
+        private const string EasyRoadsApiMatrixPath = "Documentation/InterstateHauler/009_EasyRoads_API_Matrix.md";
+        private const string CorridorTestMatrixPath = "Documentation/InterstateHauler/009_Corridor_Test_Matrix.md";
+        private const string Prompt010HandoffPath = "Documentation/InterstateHauler/009_Prompt010_Handoff.md";
+        private const string TrafficServicePath = "Assets/LWS/InterstateHauler/Traffic/LwsTraffic.cs";
+        private const string TrafficLaneTypesPath = "Assets/LWS/InterstateHauler/Traffic/LwsTrafficLaneTypes.cs";
+        private const string TrafficLaneBuilderPath = "Assets/LWS/InterstateHauler/Traffic/LwsTrafficLaneBuilder.cs";
+        private const string TrafficIdentityPath = "Assets/LWS/InterstateHauler/Traffic/LwsTrafficIdentity.cs";
+        private const string UtsTrafficApiPath = "Assets/LWS/InterstateHauler/Traffic/UTS/LwsUtsTrafficApi.cs";
+        private const string UtsTrafficControllerPath = "Assets/LWS/InterstateHauler/Traffic/UTS/LwsUtsHighwayTrafficController.cs";
+        private const string UtsTrafficDebugPanelPath = "Assets/LWS/InterstateHauler/Traffic/UTS/LwsUtsTrafficDebugPanel.cs";
+        private const string UtsTrafficProfileScriptPath = "Assets/LWS/InterstateHauler/Traffic/UTS/LwsUtsTrafficProfile.cs";
+        private const string InterstateTrafficProfilePath = "Assets/LWS/InterstateHauler/Traffic/Data/IH_TrafficProfile_InterstateValidation.asset";
+        private const string Prompt010DocsPath = "Documentation/InterstateHauler/010_UTS_Highway_Integration.md";
+        private const string UtsApiMatrixPath = "Documentation/InterstateHauler/010_UTS_API_Matrix.md";
+        private const string TrafficLaneMatrixPath = "Documentation/InterstateHauler/010_Traffic_Lane_Matrix.md";
+        private const string TrafficVehicleMatrixPath = "Documentation/InterstateHauler/010_Traffic_Vehicle_Matrix.md";
+        private const string TrafficPerformanceMatrixPath = "Documentation/InterstateHauler/010_Performance_Matrix.md";
+        private const string Prompt011HandoffPath = "Documentation/InterstateHauler/010_Prompt011_Handoff.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -147,6 +175,8 @@ namespace LWS.InterstateHauler.Editor
             Validate18SpeedTransmissionFoundation(report);
             ValidateTruckControlFoundation(report);
             ValidateDashboardMirrorCabFoundation(report);
+            ValidateEasyRoadsInterstateCorridorFoundation(report);
+            ValidateUtsHighwayTrafficFoundation(report);
             return report;
         }
 
@@ -1344,6 +1374,427 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 008 documentation and Prompt 009 handoff exist."
                     : "Missing Prompt 008 documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateEasyRoadsInterstateCorridorFoundation(LwsProjectValidationReport report)
+        {
+            ValidateInterstateCorridorRuntimeFiles(report);
+            ValidateInterstateCorridorSceneText(report);
+            ValidateInterstateCorridorRoadGraphShape(report);
+            ValidateEasyRoadsCorridorApiUsage(report);
+            ValidatePrompt009Documentation(report);
+        }
+
+        private static void ValidateInterstateCorridorRuntimeFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                InterstateCorridorScenePath,
+                EasyRoadsExportBoundaryPath,
+                RoadGraphRuntimePath,
+                RoadGraphProviderPath,
+                RoadSurfacePath,
+                RoadDebugPanelPath,
+                InterstateCorridorBuilderPath,
+                InterstateCorridorMarkerPath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 009 Road Runtime Files",
+                missing.Count == 0
+                    ? "Prompt 009 corridor scene, EasyRoads export boundary, road graph service, surface identity, debug panel, marker, and builder files exist."
+                    : "Missing Prompt 009 road files: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateInterstateCorridorSceneText(LwsProjectValidationReport report)
+        {
+            if (!File.Exists(InterstateCorridorScenePath))
+            {
+                report.Add(LwsValidationSeverity.Error, "Interstate Corridor Scene", $"{InterstateCorridorScenePath} is missing.");
+                return;
+            }
+
+            string sceneText = File.ReadAllText(InterstateCorridorScenePath);
+            bool hasCorridorMarker = sceneText.Contains("guid: bc52c81362c14b3b9e07a0fda6aae962");
+            bool hasCorridorBuilder = sceneText.Contains("guid: f5b998d4943c4fbda8781c0efa7f0099");
+            bool hasTruckSpawner = sceneText.Contains("guid: a7d55a3f708f41dab0fb1dbfa279c0a1");
+            bool hasTruckDefinition = sceneText.Contains("guid: cee9c401c1154ff1b626cb6e3ec06e16");
+            bool hasTruckPrefab = sceneText.Contains("guid: 4382f9912191416795da77ffba3a3e60");
+            bool hasTrailerPrefab = sceneText.Contains("guid: 79fc3e840f60421f95741824a25a41e8");
+            bool hasBootstrap = sceneText.Contains("guid: 0bcd3a841dce4fc4bf9a83b48ac2dc21");
+            bool hasWheelValidation = sceneText.Contains("LWS G29 Wheel Input") || sceneText.Contains("guid: 6d40428a50d4459eb00a73b0d0091ff4");
+            bool hasNoTraffic = !sceneText.Contains("UTS_FullPack") &&
+                                !sceneText.Contains("CarMove") &&
+                                !sceneText.Contains("AddTrailer") &&
+                                !sceneText.Contains("CompassNavigatorPro");
+
+            report.Add(
+                hasCorridorMarker && hasCorridorBuilder && hasTruckSpawner && hasTruckDefinition && hasTruckPrefab && hasTrailerPrefab && hasBootstrap
+                    ? LwsValidationSeverity.Info
+                    : LwsValidationSeverity.Error,
+                "Interstate Corridor Scene",
+                hasCorridorMarker && hasCorridorBuilder && hasTruckSpawner && hasTruckDefinition && hasTruckPrefab && hasTrailerPrefab && hasBootstrap
+                    ? "InterstateCorridorValidation contains the corridor marker/builder, existing LWS truck spawner, starter truck definition, player truck prefab, dry-van trailer, and bootstrap."
+                    : "InterstateCorridorValidation is missing corridor, truck, trailer, or bootstrap wiring.");
+
+            report.Add(
+                hasWheelValidation ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Interstate Corridor Input Regression Hooks",
+                hasWheelValidation
+                    ? "The corridor scene retains the Prompt 005 wheel/input validation object from TruckValidation."
+                    : "The corridor scene does not visibly retain the Prompt 005 wheel/input validation object.");
+
+            report.Add(
+                hasNoTraffic ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 009 Authority Boundary",
+                hasNoTraffic
+                    ? "No UTS traffic, UTS player-driving, UTS trailer-driving, or Compass GPS authority markers were found in the corridor scene."
+                    : "Prompt 009 corridor scene appears to include traffic/GPS authority too early.");
+        }
+
+        private static void ValidateInterstateCorridorRoadGraphShape(LwsProjectValidationReport report)
+        {
+            string builderText = File.Exists(InterstateCorridorBuilderPath) ? File.ReadAllText(InterstateCorridorBuilderPath) : string.Empty;
+            string roadGraphText = File.Exists("Assets/LWS/InterstateHauler/Roads/LwsRoadGraph.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Roads/LwsRoadGraph.cs")
+                : string.Empty;
+            string runtimeText = File.Exists(RoadGraphRuntimePath) ? File.ReadAllText(RoadGraphRuntimePath) : string.Empty;
+
+            string[] stableIds =
+            {
+                "IH_TEST_I000_NB_MAIN",
+                "IH_TEST_I000_SB_MAIN",
+                "IH_TEST_I000_NB_ENTRY_RAMP",
+                "IH_TEST_I000_TURNAROUND_CROSSOVER"
+            };
+            bool idsPresent = stableIds.All(id => builderText.Contains(id));
+            bool metadataPresent = builderText.Contains("LwsRoadClass.Interstate") &&
+                                   builderText.Contains("LwsRoadClass.Ramp") &&
+                                   builderText.Contains("LwsRoadDirection.Northbound") &&
+                                   builderText.Contains("LwsRoadDirection.Southbound") &&
+                                   builderText.Contains("LwsRoadSurfaceType.AsphaltInterstate") &&
+                                   builderText.Contains("65f") &&
+                                   builderText.Contains("laneWidthMeters") &&
+                                   builderText.Contains("laneCenterOffsetsMeters");
+            bool graphSupportsPrompt009 = roadGraphText.Contains("LwsRoadDirection") &&
+                                          roadGraphText.Contains("LwsRoadSurfaceType") &&
+                                          roadGraphText.Contains("laneCenterOffsetsMeters") &&
+                                          roadGraphText.Contains("Duplicate road ID");
+            bool lookupExists = runtimeText.Contains("ILwsRoadGraphService") &&
+                                runtimeText.Contains("TryFindNearestRoad") &&
+                                runtimeText.Contains("LwsRoadLookupResult");
+
+            report.Add(
+                idsPresent && metadataPresent && graphSupportsPrompt009 && lookupExists ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Interstate Corridor Road Graph",
+                idsPresent && metadataPresent && graphSupportsPrompt009 && lookupExists
+                    ? "Corridor graph declares stable segment IDs, Interstate/ramp classes, directionality, dry asphalt surface identity, 65 MPH metadata, lane metadata, and nearest-road lookup."
+                    : "Prompt 009 road graph metadata or lookup support is incomplete.");
+        }
+
+        private static void ValidateEasyRoadsCorridorApiUsage(LwsProjectValidationReport report)
+        {
+            string easyRoadsRuntime = File.Exists("Assets/EasyRoads3D/Scripts/runtimeScript.cs")
+                ? File.ReadAllText("Assets/EasyRoads3D/Scripts/runtimeScript.cs")
+                : string.Empty;
+            string builderText = File.Exists(InterstateCorridorBuilderPath) ? File.ReadAllText(InterstateCorridorBuilderPath) : string.Empty;
+            string exportText = File.Exists(EasyRoadsExportBoundaryPath) ? File.ReadAllText(EasyRoadsExportBoundaryPath) : string.Empty;
+
+            bool easyRoadsPresent = Directory.Exists("Assets/EasyRoads3D") &&
+                                    easyRoadsRuntime.Contains("namespace EasyRoads3Dv3") &&
+                                    easyRoadsRuntime.Contains("ERRoadNetwork") &&
+                                    easyRoadsRuntime.Contains("CreateRoad");
+            bool versionKnown = Directory.Exists("Assets/EasyRoads3D") &&
+                                (File.Exists("Assets/EasyRoads3D/Release - Install Notes.txt") ||
+                                 File.Exists("Assets/EasyRoads3D/readme.txt"));
+            bool builderUsesPublicBoundary = builderText.Contains("ERRoadNetwork") &&
+                                             builderText.Contains("ERRoadType") &&
+                                             builderText.Contains("CreateRoad") &&
+                                             builderText.Contains("BuildRoadNetwork") &&
+                                             builderText.Contains("SetTerrainDeformation") &&
+                                             builderText.Contains("RestoreRoadNetwork") &&
+                                             builderText.Contains("BuildRoadNetwork\", false, false, false");
+            bool exportBoundaryExtended = exportText.Contains("GetRoads") &&
+                                          exportText.Contains("GetMarkerPositions") &&
+                                          exportText.Contains("GetSplinePointsCenter") &&
+                                          exportText.Contains("LwsRoadGraph") &&
+                                          exportText.Contains("LwsRoadSample");
+            bool noDirectGameplayDependency = !builderText.Contains("using EasyRoads3Dv3") &&
+                                              !exportText.Contains("using EasyRoads3Dv3");
+
+            report.Add(
+                easyRoadsPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "EasyRoads Package",
+                easyRoadsPresent
+                    ? "EasyRoads runtimeScript.cs exposes EasyRoads3Dv3 ERRoadNetwork/CreateRoad APIs for the Prompt 009 boundary."
+                    : "EasyRoads package or expected runtime API could not be confirmed.");
+
+            report.Add(
+                versionKnown ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "EasyRoads Version Evidence",
+                versionKnown
+                    ? "EasyRoads documentation/release notes are present; Prompt 009 documentation records v3.2.4f5 from the installed package audit."
+                    : "EasyRoads version documentation was not found in the expected package root.");
+
+            report.Add(
+                builderUsesPublicBoundary && exportBoundaryExtended && noDirectGameplayDependency ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "EasyRoads Export Boundary",
+                builderUsesPublicBoundary && exportBoundaryExtended && noDirectGameplayDependency
+                    ? "LWS uses reflected EasyRoads public APIs for validation generation/export and keeps gameplay independent of EasyRoads concrete classes."
+                    : "EasyRoads generation/export boundary is incomplete or too tightly coupled.");
+        }
+
+        private static void ValidatePrompt009Documentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                Prompt009DocsPath,
+                RoadGraphMatrixPath,
+                EasyRoadsApiMatrixPath,
+                CorridorTestMatrixPath,
+                Prompt010HandoffPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 009 Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 009 corridor documentation, road graph matrix, EasyRoads API matrix, test matrix, and Prompt 010 handoff exist."
+                    : "Missing Prompt 009 documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateUtsHighwayTrafficFoundation(LwsProjectValidationReport report)
+        {
+            ValidateUtsTrafficRuntimeFiles(report);
+            ValidateUtsPackageApi(report);
+            ValidateUtsTrafficValidationProfile(report);
+            ValidateUtsTrafficRoadGraphIntegration(report);
+            ValidateUtsTrafficAuthorityBoundary(report);
+            ValidateUtsTrafficPerformanceGuards(report);
+            ValidatePrompt010Documentation(report);
+        }
+
+        private static void ValidateUtsTrafficRuntimeFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                TrafficServicePath,
+                TrafficLaneTypesPath,
+                TrafficLaneBuilderPath,
+                TrafficIdentityPath,
+                UtsTrafficApiPath,
+                UtsTrafficControllerPath,
+                UtsTrafficDebugPanelPath,
+                UtsTrafficProfileScriptPath,
+                InterstateTrafficProfilePath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 010 UTS Runtime Files",
+                missing.Count == 0
+                    ? "Prompt 010 traffic service, lane builder, identity, UTS adapter, controller, profile, profile asset, and debug panel files exist."
+                    : "Missing Prompt 010 traffic runtime files: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateUtsPackageApi(LwsProjectValidationReport report)
+        {
+            string carMove = File.Exists("Assets/UTS_FullPack/Scripts/Car/CarMove.cs")
+                ? File.ReadAllText("Assets/UTS_FullPack/Scripts/Car/CarMove.cs")
+                : string.Empty;
+            string carAi = File.Exists("Assets/UTS_FullPack/Scripts/Car/CarAIController.cs")
+                ? File.ReadAllText("Assets/UTS_FullPack/Scripts/Car/CarAIController.cs")
+                : string.Empty;
+            string carPath = File.Exists("Assets/UTS_FullPack/Scripts/Paths/CarWalkPath.cs")
+                ? File.ReadAllText("Assets/UTS_FullPack/Scripts/Paths/CarWalkPath.cs")
+                : string.Empty;
+            string movePath = File.Exists("Assets/UTS_FullPack/Scripts/Paths/MovePath.cs")
+                ? File.ReadAllText("Assets/UTS_FullPack/Scripts/Paths/MovePath.cs")
+                : string.Empty;
+            string walkPath = File.Exists("Assets/UTS_FullPack/Scripts/Paths/WalkPath.cs")
+                ? File.ReadAllText("Assets/UTS_FullPack/Scripts/Paths/WalkPath.cs")
+                : string.Empty;
+            string carWheels = File.Exists("Assets/UTS_FullPack/Scripts/Car/CarWheels.cs")
+                ? File.ReadAllText("Assets/UTS_FullPack/Scripts/Car/CarWheels.cs")
+                : string.Empty;
+            string utsAdapter = File.Exists(UtsTrafficApiPath) ? File.ReadAllText(UtsTrafficApiPath) : string.Empty;
+
+            bool packageApiPresent = carMove.Contains("public void Move(") &&
+                                     carAi.Contains("public class CarAIController") &&
+                                     carPath.Contains("public class CarWalkPath") &&
+                                     carPath.Contains("SpawnOnePeople") &&
+                                     movePath.Contains("InitStartPosition") &&
+                                     walkPath.Contains("public class WalkPath") &&
+                                     carWheels.Contains("public class CarWheels");
+            bool reflectedBoundary = utsAdapter.Contains("ResolveType(\"CarWalkPath\")") &&
+                                     utsAdapter.Contains("ResolveType(\"MovePath\")") &&
+                                     utsAdapter.Contains("ResolveType(\"CarAIController\")") &&
+                                     utsAdapter.Contains("ResolveType(\"CarMove\")") &&
+                                     utsAdapter.Contains("ResolveType(\"CarWheels\")") &&
+                                     utsAdapter.Contains("TypeAvailabilityReport") &&
+                                     !utsAdapter.Contains("using UTS");
+
+            report.Add(
+                packageApiPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "UTS Package API",
+                packageApiPresent
+                    ? "Installed UTS exposes CarWalkPath, MovePath, CarAIController, and CarMove APIs used by the Prompt 010 boundary."
+                    : "Expected UTS traffic scripts or methods were not found.");
+
+            report.Add(
+                reflectedBoundary ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "UTS Adapter Boundary",
+                reflectedBoundary
+                    ? "LWS traffic uses reflected UTS public class/member names so no UTS asmdef/vendor-source edits are required."
+                    : "UTS adapter boundary is missing expected reflected type usage.");
+        }
+
+        private static void ValidateUtsTrafficValidationProfile(LwsProjectValidationReport report)
+        {
+            if (!File.Exists(InterstateTrafficProfilePath))
+            {
+                report.Add(LwsValidationSeverity.Error, "UTS Traffic Validation Profile", $"{InterstateTrafficProfilePath} is missing.");
+                return;
+            }
+
+            string profileText = File.ReadAllText(InterstateTrafficProfilePath);
+            bool enabled = profileText.Contains("trafficEnabled: 1");
+            bool sparse = profileText.Contains("densityTier: 1");
+            bool capped = profileText.Contains("maxActiveVehicles: 8");
+            bool interval = profileText.Contains("spawnIntervalSeconds: 4");
+            bool noAssetDatabaseFallback = profileText.Contains("autoResolveEditorPrefabs: 0");
+            bool hasValidationPrefabs =
+                profileText.Contains("5ce78366dc1ed824a994a8d1a7a78083") &&
+                profileText.Contains("fdaddefb946541040919f10b7f228b93") &&
+                profileText.Contains("057a446f4179dae4da89c9729b05232d") &&
+                profileText.Contains("20d9a3a0670ae3b4f9b2a419ba69728e") &&
+                profileText.Contains("3be0ac44e8b5d6e4cb12031d2a499676") &&
+                profileText.Contains("149b71e9849c0444da1a36376caf8156") &&
+                profileText.Contains("e2302543cb5f6ea49846f98993d95f01") &&
+                profileText.Contains("9bc427a93d2d86c4f907181a7ec7bc49");
+
+            report.Add(
+                enabled && sparse && capped && interval && noAssetDatabaseFallback && hasValidationPrefabs
+                    ? LwsValidationSeverity.Info
+                    : LwsValidationSeverity.Error,
+                "UTS Traffic Validation Profile",
+                enabled && sparse && capped && interval && noAssetDatabaseFallback && hasValidationPrefabs
+                    ? "Interstate validation traffic profile is enabled, capped at 8 sparse vehicles, and serializes the selected UTS prefab references."
+                    : "Interstate validation traffic profile is missing enabled/sparse/cap/interval/prefab configuration.");
+        }
+
+        private static void ValidateUtsTrafficRoadGraphIntegration(LwsProjectValidationReport report)
+        {
+            string builderText = File.Exists(TrafficLaneBuilderPath) ? File.ReadAllText(TrafficLaneBuilderPath) : string.Empty;
+            string corridorBuilderText = File.Exists(InterstateCorridorBuilderPath) ? File.ReadAllText(InterstateCorridorBuilderPath) : string.Empty;
+            string sceneText = File.Exists(InterstateCorridorScenePath) ? File.ReadAllText(InterstateCorridorScenePath) : string.Empty;
+
+            bool laneMetadataUsed = builderText.Contains("LwsRoadGraph") &&
+                                    builderText.Contains("laneCenterOffsetsMeters") &&
+                                    builderText.Contains("LwsRoadClass.Interstate") &&
+                                    builderText.Contains("LwsRoadClass.Ramp") &&
+                                    builderText.Contains("MilesPerHourToMetersPerSecond");
+            bool corridorWired = corridorBuilderText.Contains("createUtsTrafficValidation") &&
+                                 corridorBuilderText.Contains("validationTrafficProfile") &&
+                                 corridorBuilderText.Contains("ConfigureValidationProfile") &&
+                                 corridorBuilderText.Contains("LwsUtsHighwayTrafficController") &&
+                                 corridorBuilderText.Contains("InitializeFromGraph(roadGraphProvider, LastGraph)");
+            bool sceneWired = sceneText.Contains("createUtsTrafficValidation: 1") &&
+                              sceneText.Contains("validationTrafficProfile: {fileID: 11400000, guid: 9d8357e4f21e4f8baef1ddad600bdb27, type: 2}");
+            bool expectedLaneIds = builderText.Contains("_TRAFFIC_L") &&
+                                   builderText.Contains("LwsRoadClass.Interstate") &&
+                                   builderText.Contains("includeRampTraffic");
+
+            report.Add(
+                laneMetadataUsed && corridorWired && sceneWired && expectedLaneIds ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "UTS Road Graph Integration",
+                laneMetadataUsed && corridorWired && sceneWired && expectedLaneIds
+                    ? "UTS traffic lanes are derived from LWS road graph/lane metadata, the corridor builder initializes the validation traffic controller, and the scene assigns the traffic profile."
+                    : "UTS traffic is not fully wired to the LWS road graph/corridor builder.");
+        }
+
+        private static void ValidateUtsTrafficAuthorityBoundary(LwsProjectValidationReport report)
+        {
+            string playerTruck = File.Exists(PlayerTruckPrefabPath) ? File.ReadAllText(PlayerTruckPrefabPath) : string.Empty;
+            string playerTrailer = File.Exists(TestTrailerPrefabPath) ? File.ReadAllText(TestTrailerPrefabPath) : string.Empty;
+            string trafficIdentity = File.Exists(TrafficIdentityPath) ? File.ReadAllText(TrafficIdentityPath) : string.Empty;
+            string controllerText = File.Exists(UtsTrafficControllerPath) ? File.ReadAllText(UtsTrafficControllerPath) : string.Empty;
+
+            bool playerClean = !playerTruck.Contains("CarMove") &&
+                               !playerTruck.Contains("CarAIController") &&
+                               !playerTruck.Contains("AddTrailer") &&
+                               !playerTrailer.Contains("CarMove") &&
+                               !playerTrailer.Contains("CarAIController") &&
+                               !playerTrailer.Contains("AddTrailer");
+            bool trafficIdentityRegistersAiVehicle = trafficIdentity.Contains("LwsVehicleRole.AiVehicle") &&
+                                                     trafficIdentity.Contains("LwsVehicleIdentity");
+            bool controllerAvoidsPlayerAuthority = controllerText.Contains("PrefabLooksLikeUtsVehicle") &&
+                                                   !controllerText.Contains("IH_PlayerTruck_NWH") &&
+                                                   !controllerText.Contains("IH_TestTrailer_DryVan");
+
+            report.Add(
+                playerClean ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "UTS Player Authority Boundary",
+                playerClean
+                    ? "Player tractor and LWS test trailer prefabs do not contain obvious UTS player-driving or trailer-driving scripts."
+                    : "Player tractor or trailer prefab appears to contain UTS driving/trailer scripts.");
+
+            report.Add(
+                trafficIdentityRegistersAiVehicle && controllerAvoidsPlayerAuthority ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "UTS Traffic Identity Boundary",
+                trafficIdentityRegistersAiVehicle && controllerAvoidsPlayerAuthority
+                    ? "Spawned UTS NPCs are registered as LWS AI vehicles and the controller does not target the NWH player truck/trailer."
+                    : "Traffic identity or player-authority isolation is incomplete.");
+        }
+
+        private static void ValidateUtsTrafficPerformanceGuards(LwsProjectValidationReport report)
+        {
+            string controllerText = File.Exists(UtsTrafficControllerPath) ? File.ReadAllText(UtsTrafficControllerPath) : string.Empty;
+            string debugText = File.Exists(UtsTrafficDebugPanelPath) ? File.ReadAllText(UtsTrafficDebugPanelPath) : string.Empty;
+
+            bool spawnCapped = controllerText.Contains("maxActiveVehicles") &&
+                               controllerText.Contains("spawnIntervalSeconds") &&
+                               controllerText.Contains("_nextSpawnTime");
+            bool playerLookupThrottled = controllerText.Contains("_nextPlayerResolveTime") &&
+                                         controllerText.Contains("+ 2f") &&
+                                         controllerText.Contains("FindFirstObjectByType<LwsPlayerTruck>()");
+            bool debugCached = debugText.Contains("refreshIntervalSeconds") &&
+                               debugText.Contains("_cachedStats") &&
+                               !debugText.Contains("FindObjectsByType");
+            bool noBroadSearches = !controllerText.Contains("FindObjectsByType") &&
+                                   !controllerText.Contains("Resources.FindObjectsOfTypeAll");
+
+            report.Add(
+                spawnCapped && playerLookupThrottled && debugCached && noBroadSearches ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "UTS Traffic Performance Guards",
+                spawnCapped && playerLookupThrottled && debugCached && noBroadSearches
+                    ? "Traffic spawn count/intervals are capped, player lookup is throttled, and the debug panel uses cached values."
+                    : "Traffic runtime/debug code may contain unsafe hot-path searches or uncapped spawn behavior.");
+        }
+
+        private static void ValidatePrompt010Documentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                Prompt010DocsPath,
+                UtsApiMatrixPath,
+                TrafficLaneMatrixPath,
+                TrafficVehicleMatrixPath,
+                TrafficPerformanceMatrixPath,
+                Prompt011HandoffPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 010 Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 010 UTS highway integration documentation, matrices, performance matrix, and Prompt 011 handoff exist."
+                    : "Missing Prompt 010 documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

@@ -140,11 +140,18 @@ namespace LWS.InterstateHauler.Tests.EditMode
                     new LwsRoadEdge
                     {
                         edgeId = "edge-a-b",
+                        roadId = "test-road",
+                        segmentId = "test-road-main",
                         fromNodeId = "node-a",
                         toNodeId = "node-b",
                         roadClass = LwsRoadClass.Interstate,
+                        direction = LwsRoadDirection.Bidirectional,
+                        surfaceType = LwsRoadSurfaceType.AsphaltInterstate,
                         distanceMeters = 100f,
-                        speedLimitMph = 65f
+                        speedLimitMph = 65f,
+                        laneCount = 2,
+                        laneWidthMeters = 3.7f,
+                        laneCenterOffsetsMeters = new List<float> { -1.85f, 1.85f }
                     }
                 }
             };

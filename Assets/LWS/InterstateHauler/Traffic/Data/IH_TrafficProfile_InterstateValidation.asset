@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8e3e1b0df39498b9cc05576b848bb63, type: 3}
+  m_Name: IH_TrafficProfile_InterstateValidation
+  m_EditorClassIdentifier: 
+  trafficEnabled: 1
+  spawnPolicy:
+    densityTier: 1
+    maxActiveVehicles: 8
+    spawnIntervalSeconds: 4
+    minimumPlayerSpawnDistanceMeters: 140
+    maximumPlayerSpawnDistanceMeters: 650
+    despawnDistanceMeters: 850
+    despawnNearLaneEndMeters: 90
+    targetCruiseSpeedScale: 0.72
+    maximumTrafficSpeedMetersPerSecond: 22
+    includeRampTraffic: 1
+    includeTurnaroundTraffic: 0
+    autoResolveEditorPrefabs: 0
+    showDebugPanel: 1
+  trafficPrefabs:
+  - {fileID: 100100000, guid: 5ce78366dc1ed824a994a8d1a7a78083, type: 3}
+  - {fileID: 100100000, guid: fdaddefb946541040919f10b7f228b93, type: 3}
+  - {fileID: 100100000, guid: 057a446f4179dae4da89c9729b05232d, type: 3}
+  - {fileID: 100100000, guid: 20d9a3a0670ae3b4f9b2a419ba69728e, type: 3}
+  - {fileID: 100100000, guid: 3be0ac44e8b5d6e4cb12031d2a499676, type: 3}
+  - {fileID: 100100000, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
+  - {fileID: 100100000, guid: e2302543cb5f6ea49846f98993d95f01, type: 3}
+  - {fileID: 100100000, guid: 9bc427a93d2d86c4f907181a7ec7bc49, type: 3}

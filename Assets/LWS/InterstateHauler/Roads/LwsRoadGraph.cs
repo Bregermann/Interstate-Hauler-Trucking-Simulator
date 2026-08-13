@@ -16,6 +16,28 @@ namespace LWS.InterstateHauler
         DepotAccess
     }
 
+    public enum LwsRoadDirection
+    {
+        Unknown,
+        Northbound,
+        Southbound,
+        Eastbound,
+        Westbound,
+        Bidirectional
+    }
+
+    public enum LwsRoadSurfaceType
+    {
+        Unknown,
+        AsphaltInterstate,
+        WetAsphalt,
+        Snow,
+        Ice,
+        Dirt,
+        Gravel,
+        DamagedPavement
+    }
+
     [Serializable]
     public sealed class LwsRoadRestriction
     {
@@ -37,23 +59,40 @@ namespace LWS.InterstateHauler
     [Serializable]
     public sealed class LwsRoadSample
     {
+        public string roadId;
+        public string segmentId;
         public float distanceFromStartMeters;
         public Vector3 position;
         public Vector3 forward;
+        public Vector3 up = Vector3.up;
+        public LwsRoadDirection direction;
+        public float roadWidthMeters;
+        public float laneWidthMeters;
+        public int laneCount;
         public float speedLimitMph;
     }
 
     [Serializable]
     public sealed class LwsRoadEdge
     {
+        public string roadId;
+        public string segmentId;
         public string edgeId;
         public string fromNodeId;
         public string toNodeId;
         public LwsRoadClass roadClass;
+        public LwsRoadDirection direction;
+        public LwsRoadSurfaceType surfaceType;
         public bool oneWay;
         public float distanceMeters;
         public float travelCost;
         public float speedLimitMph;
+        public int laneCount;
+        public float laneWidthMeters;
+        public float leftShoulderWidthMeters;
+        public float rightShoulderWidthMeters;
+        public float medianWidthMeters;
+        public List<float> laneCenterOffsetsMeters = new List<float>();
         public string stateOrRegionId;
         public string sceneChunkId;
         public List<LwsRoadRestriction> restrictions = new List<LwsRoadRestriction>();
@@ -73,6 +112,13 @@ namespace LWS.InterstateHauler
             var errors = new List<string>();
             var nodeIds = new HashSet<string>(StringComparer.Ordinal);
             var edgeIds = new HashSet<string>(StringComparer.Ordinal);
+            var roadIds = new HashSet<string>(StringComparer.Ordinal);
+            var segmentIds = new HashSet<string>(StringComparer.Ordinal);
+
+            if (string.IsNullOrWhiteSpace(graphId))
+            {
+                errors.Add("Road graph has an empty graph ID.");
+            }
 
             foreach (LwsRoadNode node in nodes)
             {
@@ -101,6 +147,48 @@ namespace LWS.InterstateHauler
                     errors.Add($"Duplicate road edge ID: {edge.edgeId}");
                 }
 
+                bool requiresHighwayMetadata = edge.roadClass != LwsRoadClass.Unknown;
+                if (requiresHighwayMetadata)
+                {
+                    if (string.IsNullOrWhiteSpace(edge.roadId))
+                    {
+                        errors.Add($"Road edge {edge.edgeId} has an empty road ID.");
+                    }
+                    else if (!roadIds.Add(edge.roadId))
+                    {
+                        errors.Add($"Duplicate road ID: {edge.roadId}");
+                    }
+
+                    if (string.IsNullOrWhiteSpace(edge.segmentId))
+                    {
+                        errors.Add($"Road edge {edge.edgeId} has an empty segment ID.");
+                    }
+                    else if (!segmentIds.Add(edge.segmentId))
+                    {
+                        errors.Add($"Duplicate road segment ID: {edge.segmentId}");
+                    }
+
+                    if (edge.speedLimitMph <= 0f)
+                    {
+                        errors.Add($"Road edge {edge.edgeId} has an invalid speed limit.");
+                    }
+
+                    if (edge.laneCount <= 0)
+                    {
+                        errors.Add($"Road edge {edge.edgeId} has an invalid lane count.");
+                    }
+
+                    if (edge.laneWidthMeters <= 0f)
+                    {
+                        errors.Add($"Road edge {edge.edgeId} has an invalid lane width.");
+                    }
+
+                    if (edge.surfaceType == LwsRoadSurfaceType.Unknown)
+                    {
+                        errors.Add($"Road edge {edge.edgeId} has an unknown surface type.");
+                    }
+                }
+
                 if (!nodeIds.Contains(edge.fromNodeId))
                 {
                     errors.Add($"Road edge {edge.edgeId} references missing from-node {edge.fromNodeId}.");
@@ -111,9 +199,40 @@ namespace LWS.InterstateHauler
                     errors.Add($"Road edge {edge.edgeId} references missing to-node {edge.toNodeId}.");
                 }
 
-                if (edge.distanceMeters < 0f)
+                if (edge.distanceMeters <= 0f)
                 {
-                    errors.Add($"Road edge {edge.edgeId} has a negative distance.");
+                    errors.Add($"Road edge {edge.edgeId} has a non-positive distance.");
+                }
+
+                if (edge.laneCenterOffsetsMeters != null &&
+                    edge.laneCenterOffsetsMeters.Count > 0 &&
+                    edge.laneCount > 0 &&
+                    edge.laneCenterOffsetsMeters.Count != edge.laneCount)
+                {
+                    errors.Add($"Road edge {edge.edgeId} lane offset count does not match lane count.");
+                }
+
+                float previousDistance = -1f;
+                foreach (LwsRoadSample sample in edge.samples)
+                {
+                    if (sample == null)
+                    {
+                        errors.Add($"Road edge {edge.edgeId} contains a null sample.");
+                        continue;
+                    }
+
+                    if (sample.distanceFromStartMeters < previousDistance)
+                    {
+                        errors.Add($"Road edge {edge.edgeId} samples are not ordered by distance.");
+                        break;
+                    }
+
+                    previousDistance = sample.distanceFromStartMeters;
+
+                    if (sample.forward.sqrMagnitude <= 0.0001f)
+                    {
+                        errors.Add($"Road edge {edge.edgeId} contains a sample with no forward direction.");
+                    }
                 }
             }
 
