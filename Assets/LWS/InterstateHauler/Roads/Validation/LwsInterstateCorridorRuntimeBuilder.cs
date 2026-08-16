@@ -34,6 +34,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool createUtsTrafficValidation = true;
         [SerializeField] private bool createNavigationValidation = true;
         [SerializeField] private bool createWeatherValidation = true;
+        [SerializeField] private bool createRoadConditionValidation = true;
         [SerializeField] private LwsUtsTrafficProfile validationTrafficProfile;
         [SerializeField] private GameObject[] validationTrafficPrefabs;
 
@@ -107,6 +108,11 @@ namespace LWS.InterstateHauler
             if (createWeatherValidation)
             {
                 BuildWeatherValidation();
+            }
+
+            if (createRoadConditionValidation)
+            {
+                BuildRoadConditionValidation();
             }
 
             Debug.Log($"Interstate corridor generated. EasyRoads: {LastEasyRoadsBuildSucceeded}. {LastBuildMessage}", this);
@@ -187,6 +193,34 @@ namespace LWS.InterstateHauler
             if (roadGraphProvider.GetComponent<LwsWeatherDebugPanel>() == null)
             {
                 roadGraphProvider.gameObject.AddComponent<LwsWeatherDebugPanel>();
+            }
+        }
+
+        private void BuildRoadConditionValidation()
+        {
+            if (roadGraphProvider == null)
+            {
+                return;
+            }
+
+            if (roadGraphProvider.GetComponent<LwsRoadConditionRuntimeController>() == null)
+            {
+                roadGraphProvider.gameObject.AddComponent<LwsRoadConditionRuntimeController>();
+            }
+
+            if (roadGraphProvider.GetComponent<LwsWeatheradeAdapter>() == null)
+            {
+                roadGraphProvider.gameObject.AddComponent<LwsWeatheradeAdapter>();
+            }
+
+            if (roadGraphProvider.GetComponent<LwsNwhRoadConditionAdapter>() == null)
+            {
+                roadGraphProvider.gameObject.AddComponent<LwsNwhRoadConditionAdapter>();
+            }
+
+            if (roadGraphProvider.GetComponent<LwsRoadConditionDebugPanel>() == null)
+            {
+                roadGraphProvider.gameObject.AddComponent<LwsRoadConditionDebugPanel>();
             }
         }
 

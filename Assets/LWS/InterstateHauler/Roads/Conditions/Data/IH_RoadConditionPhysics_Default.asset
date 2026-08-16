@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7085041e51224d018f6d1c7561f93571, type: 3}
+  m_Name: IH_RoadConditionPhysics_Default
+  m_EditorClassIdentifier:
+  profile:
+    profileId: road_condition.default
+    displayName: Default Road Condition Physics
+    wettingRatePerSecond: 0.004
+    heavyRainMultiplier: 2.4
+    standingWaterBuildRatePerSecond: 0.0015
+    standingWaterDrainRatePerSecond: 0.0008
+    dryingRatePerSecond: 0.0012
+    daylightDryingMultiplier: 0.75
+    windDryingPerMeterSecond: 0.015
+    snowAccumulationRatePerSecond: 0.0025
+    heavySnowMultiplier: 2.2
+    snowCompactionRatePerSecond: 0.0007
+    snowMeltRatePerSecond: 0.0018
+    iceFormationRatePerSecond: 0.0012
+    iceMeltRatePerSecond: 0.0025
+    freezingTemperatureC: 0
+    snowAccumulationMaxTemperatureC: 1.5
+    meltTemperatureC: 1.5
+    surfaceTemperatureFollowRateCPerSecond: 2.5
+    standingWaterWetnessThreshold: 0.7
+    snowPackThreshold: 0.55
+    hydroplaningSpeedMetersPerSecond: 24
+    gripProfiles:
+    - condition: 0
+      longitudinalGripMultiplier01: 1
+      lateralGripMultiplier01: 1
+      brakingGripMultiplier01: 1
+      rollingResistanceMultiplier: 1
+    - condition: 1
+      longitudinalGripMultiplier01: 0.92
+      lateralGripMultiplier01: 0.95
+      brakingGripMultiplier01: 0.9
+      rollingResistanceMultiplier: 1.03
+    - condition: 2
+      longitudinalGripMultiplier01: 0.72
+      lateralGripMultiplier01: 0.78
+      brakingGripMultiplier01: 0.68
+      rollingResistanceMultiplier: 1.08
+    - condition: 3
+      longitudinalGripMultiplier01: 0.5
+      lateralGripMultiplier01: 0.58
+      brakingGripMultiplier01: 0.45
+      rollingResistanceMultiplier: 1.18
+    - condition: 4
+      longitudinalGripMultiplier01: 0.42
+      lateralGripMultiplier01: 0.5
+      brakingGripMultiplier01: 0.38
+      rollingResistanceMultiplier: 1.22
+    - condition: 5
+      longitudinalGripMultiplier01: 0.3
+      lateralGripMultiplier01: 0.36
+      brakingGripMultiplier01: 0.27
+      rollingResistanceMultiplier: 1.28
+    - condition: 6
+      longitudinalGripMultiplier01: 0.14
+      lateralGripMultiplier01: 0.18
+      brakingGripMultiplier01: 0.12
+      rollingResistanceMultiplier: 1.1
+    - condition: 7
+      longitudinalGripMultiplier01: 0.32
+      lateralGripMultiplier01: 0.4
+      brakingGripMultiplier01: 0.3
+      rollingResistanceMultiplier: 1.24
