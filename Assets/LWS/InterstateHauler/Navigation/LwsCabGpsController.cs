@@ -14,10 +14,14 @@ namespace LWS.InterstateHauler
         [SerializeField] private Vector2 screenSize = new Vector2(460f, 270f);
         [SerializeField] private float screenScale = 0.00105f;
         [SerializeField] private float displayRefreshIntervalSeconds = 0.15f;
+        [SerializeField] private Color dayPanelColor = new Color(0.02f, 0.04f, 0.045f, 1f);
+        [SerializeField] private Color nightPanelColor = new Color(0.005f, 0.012f, 0.018f, 1f);
 
         private ILwsNavigationService _navigationService;
         private ILwsGpsVoiceGuidanceService _voiceService;
+        private ILwsWeatherService _weatherService;
         private Canvas _canvas;
+        private Image _panelImage;
         private LwsGpsMapGraphic _mapGraphic;
         private Text _instructionText;
         private Text _distanceText;
@@ -104,8 +108,8 @@ namespace LWS.InterstateHauler
             root.AddComponent<GraphicRaycaster>();
 
             GameObject panel = CreateUiChild(root.transform, "Screen Panel", new Vector2(0f, 0f), screenSize);
-            Image panelImage = panel.AddComponent<Image>();
-            panelImage.color = new Color(0.02f, 0.04f, 0.045f, 1f);
+            _panelImage = panel.AddComponent<Image>();
+            _panelImage.color = dayPanelColor;
 
             GameObject map = CreateUiChild(panel.transform, "Map", new Vector2(0f, 28f), new Vector2(screenSize.x - 28f, screenSize.y - 96f));
             _mapGraphic = map.AddComponent<LwsGpsMapGraphic>();
@@ -126,6 +130,7 @@ namespace LWS.InterstateHauler
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _navigationService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _voiceService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _weatherService);
         }
 
         private void ConfigureVoice()
@@ -184,6 +189,19 @@ namespace LWS.InterstateHauler
             {
                 _roadText.text = active ? $"{state.currentRoadDisplayName} | {FormatDistance(state.distanceRemainingMeters)} left" : "GPS ready";
             }
+
+            ApplyWeatherTheme();
+        }
+
+        private void ApplyWeatherTheme()
+        {
+            if (_panelImage == null)
+            {
+                return;
+            }
+
+            float daylight = _weatherService != null ? _weatherService.CurrentSnapshot.Daylight01 : 1f;
+            _panelImage.color = Color.Lerp(nightPanelColor, dayPanelColor, Mathf.Clamp01(daylight));
         }
 
         private static string FormatDistance(float meters)

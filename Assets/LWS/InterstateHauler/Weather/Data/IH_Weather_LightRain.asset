@@ -1,0 +1,32 @@
+﻿%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b27a99c2f0554b3d9224b2cf5cdd063b, type: 3}
+  m_Name: IH_Weather_LightRain
+  m_EditorClassIdentifier:
+  preset:
+    presetId: light_rain
+    displayName: Light Rain
+    condition: 4
+    precipitationType: 1
+    precipitationIntensity01: 0.28
+    cloudCover01: 0.75
+    fogIntensity01: 0.18
+    windSpeedMetersPerSecond: 6
+    windDirectionWorld: {x: 0.24253562, y: 0, z: 0.9701425}
+    lightningActive: 0
+    stormIntensity01: 0.15
+    ambientTemperatureC: 14
+    visibilityMeters: 9000
+    weatherMakerProfileName: WeatherMakerProfile_LightRain
+    weatherMakerProfilePath: Assets/WeatherMaker/Prefab/Profiles/Weather/Individual/Rain/WeatherMakerProfile_LightRain.asset
+    defaultTransitionSeconds: 10
+    notes: Prompt 012 validation preset. Atmospheric only; no road traction or accumulation changes.

@@ -125,6 +125,20 @@ namespace LWS.InterstateHauler.Editor
         private const string GpsVoiceMatrixPath = "Documentation/InterstateHauler/011_GPS_Voice_Matrix.md";
         private const string GpsTestMatrixPath = "Documentation/InterstateHauler/011_GPS_Test_Matrix.md";
         private const string Prompt012HandoffPath = "Documentation/InterstateHauler/011_Prompt012_Handoff.md";
+        private const string WeatherCorePath = "Assets/LWS/InterstateHauler/Weather/LwsWeather.cs";
+        private const string WeatherPresetDefinitionPath = "Assets/LWS/InterstateHauler/Weather/LwsWeatherPresetDefinition.cs";
+        private const string WeatherMakerAdapterPath = "Assets/LWS/InterstateHauler/Weather/LwsWeatherMakerAdapter.cs";
+        private const string WeatherDebugPanelPath = "Assets/LWS/InterstateHauler/Weather/LwsWeatherDebugPanel.cs";
+        private const string WeatherMakerReadmePath = "Assets/WeatherMaker/Readme.txt";
+        private const string WeatherMakerManualPath = "Assets/WeatherMaker/UserManual.md";
+        private const string WeatherMakerPrefabPath = "Assets/WeatherMaker/Prefab/WeatherMakerPrefab.prefab";
+        private const string WeatherMakerScriptPath = "Assets/WeatherMaker/Prefab/Scripts/Manager/WeatherMakerScript.cs";
+        private const string WeatherMakerDayNightPath = "Assets/WeatherMaker/Prefab/Scripts/Sky/WeatherMakerDayNightCycleManagerScript.cs";
+        private const string WeatherDocsPath = "Documentation/InterstateHauler/012_Weather_Maker_Integration.md";
+        private const string WeatherMakerApiMatrixPath = "Documentation/InterstateHauler/012_WeatherMaker_API_Matrix.md";
+        private const string WeatherPresetMatrixPath = "Documentation/InterstateHauler/012_Weather_Preset_Matrix.md";
+        private const string WeatherTestMatrixPath = "Documentation/InterstateHauler/012_Weather_Test_Matrix.md";
+        private const string Prompt013HandoffPath = "Documentation/InterstateHauler/012_Prompt013_Handoff.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -144,6 +158,20 @@ namespace LWS.InterstateHauler.Editor
             "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Truck_1.prefab",
             "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Truck_2.prefab",
             "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/City_bus.prefab"
+        };
+
+        private static readonly string[] WeatherPresetPaths =
+        {
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_Clear.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_PartlyCloudy.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_Cloudy.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_Overcast.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_LightRain.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_HeavyRain.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_Thunderstorm.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_LightSnow.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_HeavySnow.asset",
+            "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_Fog.asset"
         };
 
         private static readonly string[] VendorRoots =
@@ -206,6 +234,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateEasyRoadsInterstateCorridorFoundation(report);
             ValidateUtsHighwayTrafficFoundation(report);
             ValidateGpsRoutingVoiceFoundation(report);
+            ValidateWeatherMakerAtmosphereFoundation(report);
             return report;
         }
 
@@ -2008,6 +2037,221 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 011 GPS routing, Compass API matrix, maneuver matrix, voice matrix, test matrix, and Prompt 012 handoff exist."
                     : "Missing Prompt 011 documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateWeatherMakerAtmosphereFoundation(LwsProjectValidationReport report)
+        {
+            ValidateWeatherRuntimeFiles(report);
+            ValidateWeatherMakerPackage(report);
+            ValidateWeatherPresetAssets(report);
+            ValidateWeatherServiceAndSceneWiring(report);
+            ValidateWeatherAuthorityAndPerformanceBoundary(report);
+            ValidatePrompt012Documentation(report);
+        }
+
+        private static void ValidateWeatherRuntimeFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                WeatherCorePath,
+                WeatherPresetDefinitionPath,
+                WeatherMakerAdapterPath,
+                WeatherDebugPanelPath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 012 Weather Runtime Files",
+                missing.Count == 0
+                    ? "LWS weather service, preset definition, Weather Maker adapter, and debug panel exist."
+                    : "Missing Prompt 012 weather runtime files: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateWeatherMakerPackage(LwsProjectValidationReport report)
+        {
+            string readme = File.Exists(WeatherMakerReadmePath) ? File.ReadAllText(WeatherMakerReadmePath) : string.Empty;
+            string manual = File.Exists(WeatherMakerManualPath) ? File.ReadAllText(WeatherMakerManualPath) : string.Empty;
+            string weatherMakerScript = File.Exists(WeatherMakerScriptPath) ? File.ReadAllText(WeatherMakerScriptPath) : string.Empty;
+            string dayNightScript = File.Exists(WeatherMakerDayNightPath) ? File.ReadAllText(WeatherMakerDayNightPath) : string.Empty;
+
+            bool packagePresent = File.Exists(WeatherMakerPrefabPath) &&
+                                  File.Exists(WeatherMakerScriptPath) &&
+                                  readme.Contains("Current Version : 8.0.9");
+            bool urpCompatible = manual.Contains("Unity 6000 or newer") &&
+                                 manual.Contains("URP 17.3 or newer") &&
+                                 manual.Contains("Window") &&
+                                 manual.Contains("Enable URP");
+            bool apiPresent = weatherMakerScript.Contains("RaiseWeatherProfileChanged") &&
+                              weatherMakerScript.Contains("LoadResource<T>") &&
+                              weatherMakerScript.Contains("PerformanceProfile") &&
+                              dayNightScript.Contains("public float TimeOfDay") &&
+                              dayNightScript.Contains("public float Speed");
+
+            report.Add(
+                packagePresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Weather Maker Package",
+                packagePresent
+                    ? "Weather Maker 8.0.9 package root, runtime prefab, and WeatherMakerScript are present."
+                    : "Weather Maker 8.0.9 package/runtime prefab was not confirmed.");
+
+            report.Add(
+                urpCompatible ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Weather Maker Unity/URP Compatibility",
+                urpCompatible
+                    ? "Weather Maker documentation confirms Unity 6000+ and URP 17.3+ support."
+                    : "Weather Maker URP compatibility was not confirmed from installed docs.");
+
+            report.Add(
+                apiPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Weather Maker Runtime API",
+                apiPresent
+                    ? "Weather Maker exposes profile transition, resource loading, performance profile, and day/night time APIs used by LWS."
+                    : "Expected Weather Maker runtime APIs were not found.");
+        }
+
+        private static void ValidateWeatherPresetAssets(LwsProjectValidationReport report)
+        {
+            var missing = WeatherPresetPaths.Where(path => !File.Exists(path)).ToList();
+            if (missing.Count > 0)
+            {
+                report.Add(LwsValidationSeverity.Error, "Weather Preset Assets", "Missing weather preset assets: " + string.Join(", ", missing));
+                return;
+            }
+
+            var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var invalid = new List<string>();
+            foreach (string path in WeatherPresetPaths)
+            {
+                LwsWeatherPresetDefinition definition = AssetDatabase.LoadAssetAtPath<LwsWeatherPresetDefinition>(path);
+                if (definition == null)
+                {
+                    invalid.Add($"{path}: asset did not import as a weather preset definition.");
+                    continue;
+                }
+
+                if (!definition.ValidateDefinition(out string message))
+                {
+                    invalid.Add($"{path}: {message}");
+                    continue;
+                }
+
+                if (!ids.Add(definition.PresetId))
+                {
+                    invalid.Add($"{path}: duplicate weather preset ID {definition.PresetId}");
+                    continue;
+                }
+
+                if (!File.Exists(definition.Preset.weatherMakerProfilePath))
+                {
+                    invalid.Add($"{path}: Weather Maker profile path missing: {definition.Preset.weatherMakerProfilePath}");
+                }
+            }
+
+            bool requiredMappings = ids.Contains(LwsWeatherPresetCatalog.ClearId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.PartlyCloudyId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.CloudyId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.OvercastId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.LightRainId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.HeavyRainId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.ThunderstormId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.LightSnowId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.HeavySnowId) &&
+                                    ids.Contains(LwsWeatherPresetCatalog.FogId);
+
+            report.Add(
+                invalid.Count == 0 && requiredMappings ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Weather Preset Assets",
+                invalid.Count == 0 && requiredMappings
+                    ? "All Prompt 012 LWS weather presets import, validate, and reference existing Weather Maker profile assets."
+                    : "Weather preset assets are incomplete or invalid: " + string.Join("; ", invalid));
+        }
+
+        private static void ValidateWeatherServiceAndSceneWiring(LwsProjectValidationReport report)
+        {
+            string bootstrapText = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                : string.Empty;
+            string builderText = File.Exists(InterstateCorridorBuilderPath) ? File.ReadAllText(InterstateCorridorBuilderPath) : string.Empty;
+            string gpsText = File.Exists(CabGpsControllerPath) ? File.ReadAllText(CabGpsControllerPath) : string.Empty;
+
+            bool serviceRegistered = bootstrapText.Contains("ILwsWeatherService") &&
+                                     bootstrapText.Contains("LwsWeatherCoordinator");
+            bool builderCreatesWeather = builderText.Contains("createWeatherValidation") &&
+                                         builderText.Contains("LwsWeatherMakerAdapter") &&
+                                         builderText.Contains("LwsWeatherDebugPanel");
+            bool gpsUsesWeatherSeam = gpsText.Contains("ILwsWeatherService") &&
+                                      gpsText.Contains("CurrentSnapshot.Daylight01") &&
+                                      !gpsText.Contains("WeatherMaker");
+
+            report.Add(
+                serviceRegistered && builderCreatesWeather && gpsUsesWeatherSeam ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Weather Service and Validation Scene Wiring",
+                serviceRegistered && builderCreatesWeather && gpsUsesWeatherSeam
+                    ? "Weather service is registered, corridor validation creates the adapter/debug panel, and cab GPS consumes only the LWS daylight seam."
+                    : "Weather service registration, validation wiring, or GPS day/night seam is incomplete.");
+        }
+
+        private static void ValidateWeatherAuthorityAndPerformanceBoundary(LwsProjectValidationReport report)
+        {
+            string weatherCore = File.Exists(WeatherCorePath) ? File.ReadAllText(WeatherCorePath) : string.Empty;
+            string adapter = File.Exists(WeatherMakerAdapterPath) ? File.ReadAllText(WeatherMakerAdapterPath) : string.Empty;
+            string debugPanel = File.Exists(WeatherDebugPanelPath) ? File.ReadAllText(WeatherDebugPanelPath) : string.Empty;
+
+            bool noRoadPhysics = !weatherCore.Contains("WheelCollider") &&
+                                 !weatherCore.Contains("NWH") &&
+                                 !weatherCore.Contains("friction") &&
+                                 !weatherCore.Contains("Weatherade") &&
+                                 adapter.Contains("Weatherade remains deferred to Prompt 013");
+            bool reflectedBoundary = adapter.Contains("ResolveType(WeatherMakerScriptTypeName)") &&
+                                     adapter.Contains("RaiseWeatherProfileChanged") &&
+                                     adapter.Contains("LoadWeatherMakerResource") &&
+                                     !weatherCore.Contains("DigitalRuby.WeatherMaker");
+            bool noHotSceneSearches = !adapter.Contains("FindObjectsByType") &&
+                                      !adapter.Contains("Resources.FindObjectsOfTypeAll") &&
+                                      !debugPanel.Contains("FindObjectsByType") &&
+                                      debugPanel.Contains("RefreshCache");
+
+            report.Add(
+                noRoadPhysics ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 013 Road Physics Separation",
+                noRoadPhysics
+                    ? "Prompt 012 weather code exposes semantic precipitation/wind/temperature but does not add road traction, Weatherade accumulation, or NWH tire coupling."
+                    : "Weather code appears to cross into road-condition physics or Weatherade/NWH authority.");
+
+            report.Add(
+                reflectedBoundary ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Weather Maker Adapter Boundary",
+                reflectedBoundary
+                    ? "Weather Maker concrete classes stay inside the reflection adapter; Prompt 013-facing LWS weather service has no DigitalRuby concrete dependency."
+                    : "Weather Maker dependency may be leaking outside the adapter boundary.");
+
+            report.Add(
+                noHotSceneSearches ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Weather Runtime Performance Guards",
+                noHotSceneSearches
+                    ? "Weather debug diagnostics use cached state and the adapter avoids broad per-frame scene searches."
+                    : "Weather runtime/debug code may contain unsafe hot-path scene searches.");
+        }
+
+        private static void ValidatePrompt012Documentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                WeatherDocsPath,
+                WeatherMakerApiMatrixPath,
+                WeatherPresetMatrixPath,
+                WeatherTestMatrixPath,
+                Prompt013HandoffPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 012 Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 012 Weather Maker integration docs, API matrix, preset matrix, test matrix, and Prompt 013 handoff exist."
+                    : "Missing Prompt 012 documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()
