@@ -159,6 +159,28 @@ namespace LWS.InterstateHauler.Editor
         private const string RoadConditionMatrixPath = "Documentation/InterstateHauler/013_Road_Condition_Matrix.md";
         private const string RoadConditionTestMatrixPath = "Documentation/InterstateHauler/013_Road_Condition_Test_Matrix.md";
         private const string Prompt014HandoffPath = "Documentation/InterstateHauler/013_Prompt014_Handoff.md";
+        private const string SceneStreamerRootPath = "Assets/Plugins/Pixel Crushers/Scene Streamer";
+        private const string SceneStreamerReadmePath = "Assets/Plugins/Pixel Crushers/Scene Streamer/_README.txt";
+        private const string SceneStreamerScriptPath = "Assets/Plugins/Pixel Crushers/Scene Streamer/Scripts/SceneStreamer.cs";
+        private const string SceneStreamerNeighboringScenesPath = "Assets/Plugins/Pixel Crushers/Scene Streamer/Scripts/NeighboringScenes.cs";
+        private const string WorldStreamingTypesPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsWorldStreamingTypes.cs";
+        private const string WorldStreamingPolicyScriptPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsWorldStreamingPolicy.cs";
+        private const string WorldStreamingManifestScriptPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsWorldStreamingManifest.cs";
+        private const string WorldStreamingServicePath = "Assets/LWS/InterstateHauler/World/Streaming/LwsWorldStreamingService.cs";
+        private const string SceneStreamerAdapterPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsSceneStreamerAdapter.cs";
+        private const string WorldStreamingCoordinatorPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsWorldStreamingCoordinator.cs";
+        private const string StreamedChunkSceneRootPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsStreamedChunkSceneRoot.cs";
+        private const string StreamingHighwayChunkBuilderPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsStreamingHighwayChunkBuilder.cs";
+        private const string StreamingHighwayGraphBootstrapPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsStreamingHighwayGraphBootstrap.cs";
+        private const string StreamingDebugPanelPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsStreamingDebugPanel.cs";
+        private const string WorldStreamingPolicyAssetPath = "Assets/LWS/InterstateHauler/World/Streaming/Data/IH_WorldStreamingPolicy_Validation.asset";
+        private const string WorldStreamingManifestAssetPath = "Assets/LWS/InterstateHauler/World/Streaming/Data/IH_WorldStreamingManifest_Validation.asset";
+        private const string StreamingHighwayValidationScenePath = "Assets/LWS/InterstateHauler/World/Streaming/Validation/StreamingHighwayValidation.unity";
+        private const string SceneStreamingDocsPath = "Documentation/InterstateHauler/014_Scene_Streamer_Highway_Chunks.md";
+        private const string SceneStreamerApiMatrixPath = "Documentation/InterstateHauler/014_SceneStreamer_API_Matrix.md";
+        private const string ChunkMatrixPath = "Documentation/InterstateHauler/014_Chunk_Matrix.md";
+        private const string StreamingTestMatrixPath = "Documentation/InterstateHauler/014_Streaming_Test_Matrix.md";
+        private const string Prompt015HandoffPath = "Documentation/InterstateHauler/014_Prompt015_Handoff.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -192,6 +214,15 @@ namespace LWS.InterstateHauler.Editor
             "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_LightSnow.asset",
             "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_HeavySnow.asset",
             "Assets/LWS/InterstateHauler/Weather/Data/IH_Weather_Fog.asset"
+        };
+
+        private static readonly string[] StreamingChunkScenePaths =
+        {
+            "Assets/LWS/InterstateHauler/World/Streaming/Validation/IH_Chunk_000_Start.unity",
+            "Assets/LWS/InterstateHauler/World/Streaming/Validation/IH_Chunk_001_HighwayA.unity",
+            "Assets/LWS/InterstateHauler/World/Streaming/Validation/IH_Chunk_002_HighwayB.unity",
+            "Assets/LWS/InterstateHauler/World/Streaming/Validation/IH_Chunk_003_HighwayC.unity",
+            "Assets/LWS/InterstateHauler/World/Streaming/Validation/IH_Chunk_004_Turnaround.unity"
         };
 
         private static readonly string[] VendorRoots =
@@ -256,6 +287,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateGpsRoutingVoiceFoundation(report);
             ValidateWeatherMakerAtmosphereFoundation(report);
             ValidateWeatheradeRoadConditionFoundation(report);
+            ValidateSceneStreamerHighwayChunksFoundation(report);
             return report;
         }
 
@@ -2471,6 +2503,189 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 013 Weatherade/NWH road condition docs, API matrices, condition/test matrices, and Prompt 014 handoff exist."
                     : "Missing Prompt 013 documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateSceneStreamerHighwayChunksFoundation(LwsProjectValidationReport report)
+        {
+            ValidateSceneStreamerPackageAndApi(report);
+            ValidateWorldStreamingRuntimeFiles(report);
+            ValidateWorldStreamingManifestAndBuildSettings(report);
+            ValidateWorldStreamingOwnershipAndPerformance(report);
+            ValidatePrompt014Documentation(report);
+        }
+
+        private static void ValidateSceneStreamerPackageAndApi(LwsProjectValidationReport report)
+        {
+            string readme = File.Exists(SceneStreamerReadmePath) ? File.ReadAllText(SceneStreamerReadmePath) : string.Empty;
+            string streamer = File.Exists(SceneStreamerScriptPath) ? File.ReadAllText(SceneStreamerScriptPath) : string.Empty;
+            string neighbors = File.Exists(SceneStreamerNeighboringScenesPath) ? File.ReadAllText(SceneStreamerNeighboringScenesPath) : string.Empty;
+
+            bool rootExists = Directory.Exists(SceneStreamerRootPath);
+            bool versionConfirmed = readme.Contains("Version 1.26.1");
+            bool expectedApi = streamer.Contains("public static void SetCurrentScene") &&
+                               streamer.Contains("public static bool IsSceneLoaded") &&
+                               streamer.Contains("SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive)") &&
+                               streamer.Contains("SceneManager.UnloadSceneAsync(sceneName)") &&
+                               streamer.Contains("public StringAsyncEvent onLoading") &&
+                               streamer.Contains("public StringEvent onLoaded") &&
+                               neighbors.Contains("public string[] sceneNames");
+
+            report.Add(
+                rootExists && versionConfirmed ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Scene Streamer Package",
+                rootExists && versionConfirmed
+                    ? "Pixel Crushers Scene Streamer 1.26.1 is installed under Assets/Plugins/Pixel Crushers/Scene Streamer."
+                    : "Scene Streamer package or version could not be confirmed.");
+
+            report.Add(
+                expectedApi ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Scene Streamer Runtime API",
+                expectedApi
+                    ? "Scene Streamer exposes SetCurrentScene, IsSceneLoaded, additive load/unload, events, and NeighboringScenes metadata."
+                    : "Expected Scene Streamer public/current-scene APIs or neighboring-scene metadata were not found.");
+        }
+
+        private static void ValidateWorldStreamingRuntimeFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                WorldStreamingTypesPath,
+                WorldStreamingPolicyScriptPath,
+                WorldStreamingManifestScriptPath,
+                WorldStreamingServicePath,
+                SceneStreamerAdapterPath,
+                WorldStreamingCoordinatorPath,
+                StreamedChunkSceneRootPath,
+                StreamingHighwayChunkBuilderPath,
+                StreamingHighwayGraphBootstrapPath,
+                StreamingDebugPanelPath,
+                WorldStreamingPolicyAssetPath,
+                WorldStreamingManifestAssetPath,
+                StreamingHighwayValidationScenePath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            var missingScenes = StreamingChunkScenePaths.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 && missingScenes.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 014 Streaming Runtime Files",
+                missing.Count == 0 && missingScenes.Count == 0
+                    ? "World streaming service, Scene Streamer adapter, coordinator, chunk builders, debug panel, manifest/policy assets, master scene, and chunk scenes exist."
+                    : "Missing Prompt 014 files: " + string.Join(", ", missing.Concat(missingScenes)));
+        }
+
+        private static void ValidateWorldStreamingManifestAndBuildSettings(LwsProjectValidationReport report)
+        {
+            LwsWorldStreamingManifest manifest = AssetDatabase.LoadAssetAtPath<LwsWorldStreamingManifest>(WorldStreamingManifestAssetPath);
+            if (manifest == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "World Streaming Manifest", $"{WorldStreamingManifestAssetPath} did not import as a LWS world streaming manifest.");
+                return;
+            }
+
+            LwsWorldStreamingValidationResult validation = manifest.ValidateManifest();
+            bool expectedChunkCount = manifest.chunks != null && manifest.chunks.Count == 5;
+            bool noChunkOwnsGlobalContent = manifest.chunks != null &&
+                                            manifest.chunks.All(c => c != null && !c.containsGlobalServices && !c.containsPlayerContent);
+            bool allScenesExist = manifest.chunks != null &&
+                                  manifest.chunks.All(c => c != null && File.Exists(c.scenePath));
+            var buildScenes = new HashSet<string>(
+                EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path),
+                StringComparer.OrdinalIgnoreCase);
+            bool buildSettingsContainAll = buildScenes.Contains(StreamingHighwayValidationScenePath) &&
+                                           manifest.chunks != null &&
+                                           manifest.chunks.All(c => c != null && buildScenes.Contains(c.scenePath));
+
+            report.Add(
+                validation.IsValid && expectedChunkCount && noChunkOwnsGlobalContent && allScenesExist ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "World Streaming Manifest",
+                validation.IsValid && expectedChunkCount && noChunkOwnsGlobalContent && allScenesExist
+                    ? "Streaming manifest validates with five chunks, stable neighbors, physical presentation only, and existing scene paths."
+                    : $"Streaming manifest is invalid or incomplete: {validation.Summary}");
+
+            report.Add(
+                buildSettingsContainAll ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Streaming Build Settings",
+                buildSettingsContainAll
+                    ? "Master streaming validation scene and all chunk scenes are enabled in Editor Build Settings for additive loading."
+                    : "Streaming validation scenes are missing from Editor Build Settings.");
+        }
+
+        private static void ValidateWorldStreamingOwnershipAndPerformance(LwsProjectValidationReport report)
+        {
+            string bootstrapText = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                : string.Empty;
+            string types = File.Exists(WorldStreamingTypesPath) ? File.ReadAllText(WorldStreamingTypesPath) : string.Empty;
+            string service = File.Exists(WorldStreamingServicePath) ? File.ReadAllText(WorldStreamingServicePath) : string.Empty;
+            string coordinator = File.Exists(WorldStreamingCoordinatorPath) ? File.ReadAllText(WorldStreamingCoordinatorPath) : string.Empty;
+            string adapter = File.Exists(SceneStreamerAdapterPath) ? File.ReadAllText(SceneStreamerAdapterPath) : string.Empty;
+            string debugPanel = File.Exists(StreamingDebugPanelPath) ? File.ReadAllText(StreamingDebugPanelPath) : string.Empty;
+            string masterScene = File.Exists(StreamingHighwayValidationScenePath) ? File.ReadAllText(StreamingHighwayValidationScenePath) : string.Empty;
+
+            bool serviceRegistered = bootstrapText.Contains("ILwsWorldStreamingService") &&
+                                     bootstrapText.Contains("new LwsWorldStreamingService()") &&
+                                     bootstrapText.Contains("typeof(ILwsWorldStreamingService)");
+            bool semanticBoundary = !types.Contains("PixelCrushers") &&
+                                    !service.Contains("PixelCrushers") &&
+                                    adapter.Contains("PixelCrushers.SceneStreamer.SceneStreamer") &&
+                                    adapter.Contains("SetCurrentScene") &&
+                                    adapter.Contains("LoadSceneAsync(sceneName, LoadSceneMode.Additive)");
+            bool globalContentInMaster = masterScene.Contains("Lws Streaming Highway Validation Runtime") &&
+                                         masterScene.Contains("LWS Streaming Player Truck Spawner") &&
+                                         masterScene.Contains("IH_WorldStreamingManifest_Validation");
+            bool chunksDoNotOwnGlobals = StreamingChunkScenePaths
+                .Where(File.Exists)
+                .Select(File.ReadAllText)
+                .All(text => !text.Contains("LwsApplicationBootstrap") &&
+                             !text.Contains("LwsPlayerTruckSpawner") &&
+                             !text.Contains("LwsWeatherMakerAdapter") &&
+                             !text.Contains("LwsUtsHighwayTrafficController"));
+            bool performanceGuards = coordinator.Contains("trailerLookupIntervalSeconds") &&
+                                     coordinator.Contains("_nextTrailerLookupTime") &&
+                                     coordinator.Contains("Time.unscaledTime < _nextTrailerLookupTime") &&
+                                     debugPanel.Contains("refreshIntervalSeconds");
+
+            report.Add(
+                serviceRegistered && semanticBoundary ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "World Streaming Service Boundary",
+                serviceRegistered && semanticBoundary
+                    ? "World streaming service is registered and Scene Streamer concrete dependency stays behind the LWS adapter."
+                    : "World streaming registration or Scene Streamer dependency boundary is incomplete.");
+
+            report.Add(
+                globalContentInMaster && chunksDoNotOwnGlobals ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Streaming Scene Ownership",
+                globalContentInMaster && chunksDoNotOwnGlobals
+                    ? "Master scene owns bootstrap/player/global services; chunk scenes avoid global services and player-owned content."
+                    : "Streaming scene ownership may place global/player systems inside additive chunks.");
+
+            report.Add(
+                performanceGuards ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Streaming Performance Guards",
+                performanceGuards
+                    ? "Streaming coordinator and debug panel use cached/throttled diagnostics instead of broad per-frame scene scans."
+                    : "Streaming runtime/debug code may need review for hot-path scene searches or missing refresh cadence guards.");
+        }
+
+        private static void ValidatePrompt014Documentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                SceneStreamingDocsPath,
+                SceneStreamerApiMatrixPath,
+                ChunkMatrixPath,
+                StreamingTestMatrixPath,
+                Prompt015HandoffPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 014 Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 014 Scene Streamer docs, API matrix, chunk matrix, streaming test matrix, and Prompt 015 handoff exist."
+                    : "Missing Prompt 014 documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

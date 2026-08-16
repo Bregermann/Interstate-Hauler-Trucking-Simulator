@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 547b7d67276c46609b1a5780fa405257, type: 3}
+  m_Name: IH_WorldStreamingPolicy_Validation
+  m_EditorClassIdentifier: 
+  loadAheadDistanceMeters: 1500
+  keepBehindDistanceMeters: 800
+  preloadMarginMeters: 250
+  unloadDistanceMeters: 2100
+  unloadHysteresisMeters: 300
+  tractorSafetyMarginMeters: 140
+  trailerSafetyMarginMeters: 180
+  maximumConcurrentLoads: 2
+  minimumLoadedNeighborCount: 1
+  evaluationIntervalSeconds: 0.25
+  ultraOptionalSceneryScale: 1.2
+  highOptionalSceneryScale: 1
+  mediumOptionalSceneryScale: 0.85
+  lowOptionalSceneryScale: 0.7
+  steamDeckOptionalSceneryScale: 0.65
