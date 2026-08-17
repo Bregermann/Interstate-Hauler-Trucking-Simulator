@@ -9,6 +9,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Bricks_rain
   m_Shader: {fileID: 4800000, guid: f991bab50fb19d345bd3ba0af74434e0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _COVERAGE_ON
   - _DRIPS_ON
@@ -23,12 +25,18 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap:
+    RenderType: Opaque
     SRSGroupName: Opaque
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _AlbedoLOD:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -88,6 +96,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 21921935555788b49b1942a7097bdabe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _TerrainHolesTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -96,21 +108,37 @@ Material:
         m_Texture: {fileID: 2800000, guid: 50ac780d28ff21a46a890f77fd0e8c65, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AlphaClip: 0
     - _AlphaToCoverage: 0
     - _BaseCoverageNormalsBlend: 0.2588235
     - _BaseCoverageNormalsBlendOverride: 0
+    - _Blend: 0
     - _BlendByNormalsPower: -0
     - _BlendByNormalsPowerOverride: 0
     - _BlendByNormalsStrength: 5
     - _BlendByNormalsStrengthOverride: 0
     - _BumpScale: 1
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
     - _CovMasks0_triBlendContrast: 0
     - _Coverage: 1
     - _CoverageAmount: 0.75
     - _CoverageAmountOverride: 0
-    - _CoverageAreaBias: 0.0265
+    - _CoverageAreaBias: 0.014
     - _CoverageAreaBiasOverride: 0
     - _CoverageAreaFalloffHardness: 0.75
     - _CoverageAreaMaskRange: 1
@@ -120,7 +148,7 @@ Material:
     - _CoverageDisplacementOffset: 0.256
     - _CoverageDisplacementOffsetOverride: 0
     - _CoverageDisplacementOverride: 0
-    - _CoverageLeakReduction: 0.166
+    - _CoverageLeakReduction: 0.374
     - _CoverageLeakReductionOverride: 0
     - _CoverageMicroRelief: 0.05
     - _CoverageMicroReliefOverride: 0
@@ -134,8 +162,10 @@ Material:
     - _CoverageTex0Override: 0
     - _CoverageTiling: 0.15
     - _CoverageTilingOverride: 0
+    - _Cull: 2
     - _CullMode: 2
     - _Cutoff: 0.5
+    - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _Displacement: 0
     - _DisplacementOverride: 0
@@ -154,10 +184,13 @@ Material:
     - _DripsSpeed: 0.2
     - _DripsSpeedOverride: 0
     - _DripsTilingOverride: 0
+    - _DripsTriBlendContrast: 12
+    - _DripsTriBlendContrastOverride: 0
     - _DstBlend: 0
     - _Emission: 0
     - _EmissionMasking: 0.98
     - _EmissionMaskingOverride: 0
+    - _EnvironmentReflections: 1
     - _GlossMapScale: 0.503
     - _Glossiness: 0
     - _GlossyReflections: 1
@@ -193,8 +226,10 @@ Material:
     - _PuddlesSlopeOverride: 0
     - _PuddlesTiling: 0.5
     - _PuddlesTilingOverride: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Ripples: 1
-    - _RipplesAmount: 4
+    - _RipplesAmount: 3
     - _RipplesAmountOverride: 0
     - _RipplesFPS: 30
     - _RipplesFPSOverride: 0
@@ -209,6 +244,7 @@ Material:
     - _SSS_intensityOverride: 0
     - _ScreenSpaceSparklesTiling: 2
     - _ScreenSpaceSparklesTilingOverride: 0
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _Sparkle: 1
     - _SparkleBrightnessRT: 4
@@ -239,6 +275,7 @@ Material:
     - _SssOverride: 0
     - _Stochastic: 0
     - _StochasticOverride: 0
+    - _Surface: 0
     - _TessEdgeL: 5
     - _TessEdgeLOverride: 0
     - _TessFactorSnow: 0
@@ -273,16 +310,19 @@ Material:
     - _UseEmissionMap: 0
     - _UseGlossMap: 0
     - _WetColorOverride: 0
-    - _WetnessAmount: 0.3
+    - _WetnessAmount: 0.4
     - _WetnessAmountOverride: 0
+    - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
+    - _BaseColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+    - _Color: {r: 0.39622638, g: 0.39622638, b: 0.39622638, a: 1}
     - _CoverageColor: {r: 1, g: 1, b: 1, a: 1}
     - _DripsTiling: {r: 2, g: 1, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _PrecipitationDirRange: {r: 0, g: 1, b: 0, a: 0}
     - _PuddlesRange: {r: 0.5, g: 1, b: 0, a: 0}
+    - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _TessSnowdriftRange: {r: 0.63, g: 0.775, b: 0, a: 0}
     - _TracesColor: {r: 0.1, g: 0.25, b: 0.4, a: 1}
     - _TracesColorBlendRange: {r: 0, g: 1, b: 0, a: 0}

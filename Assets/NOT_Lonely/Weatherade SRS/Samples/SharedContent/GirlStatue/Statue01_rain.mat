@@ -9,12 +9,15 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Statue01_rain
   m_Shader: {fileID: 4800000, guid: f991bab50fb19d345bd3ba0af74434e0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _COVERAGE_ON
   - _DRIPS_ON
-  - _METALLIC_MAP
+  - _METALLICSPECGLOSSMAP
   - _NORMALMAP
   - _RIPPLES_ON
+  - _SPECGLOSSMAP
   m_InvalidKeywords:
   - _AOSOURCE_OCCLUSION_MAP
   - _COVERAGEDISPLACEMENTOFFSETOVERRIDE_ON
@@ -24,17 +27,17 @@ Material:
   - _DISPLACEMENT_ON
   - _GLOSSYREFLECTIONS_ON
   - _MASKCOVERAGEBYALPHA_ON
-  - _METALLICGLOSSMAP
+  - _METALLIC_MAP
   - _PAINTABLECOVERAGEOVERRIDE_ON
   - _PAINTABLECOVERAGE_ON
   - _SMOOTHNESSTEXTURECHANNEL_METALLIC_ALPHA
   - _SPARKLE_ON
   - _SPARKLE_TEX_LS
   - _SPARKLE_TEX_SS
-  - _SPECGLOSSMAP
   - _SPECULARHIGHLIGHTS_ON
   - _TESSEDGELOVERRIDE_ON
   - _TESSELLATIONOVERRIDE_ON
+  - _TESSELLATION_ON
   - _TRACE_DETAIL
   - _USEEMISSIONMAP_ON
   - _USEGLOSSMAP_ON
@@ -44,13 +47,19 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap:
+    RenderType: Opaque
     SRSGroupName: Opaque
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseColor:
         m_Texture: {fileID: 2800000, guid: 5612f7c708032a742b4ae73f2575f6f9, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseMap:
+        m_Texture: {fileID: 2800000, guid: c7cf46a2569b2534281f5bda83f9c160, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BlueNoise:
@@ -157,23 +166,39 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
     - _AOSource: 0
+    - _AlphaClip: 0
     - _AlphaToCoverage: 0
     - _BaseCoverageNormalsBlend: 0
     - _BaseCoverageNormalsBlendOverride: 0
     - _BaseSnowNormalsBlend: 1
+    - _Blend: 0
     - _BlendByNormalsPower: 0
     - _BlendByNormalsPowerOverride: 0
     - _BlendByNormalsStrength: 5
     - _BlendByNormalsStrengthOverride: 0
     - _BumpScale: 1
+    - _ClearCoatMask: 0
+    - _ClearCoatSmoothness: 0
     - _CovMasks0_triBlendContrast: 0
     - _Coverage: 1
     - _CoverageAmount: 0.75
     - _CoverageAmountOverride: 0
-    - _CoverageAreaBias: 0.0265
+    - _CoverageAreaBias: 0.014
     - _CoverageAreaBiasOverride: 0
     - _CoverageAreaFalloffHardness: 0.75
     - _CoverageAreaMaskBrightness: 1
@@ -187,7 +212,7 @@ Material:
     - _CoverageDisplacementOffset1: 0.5
     - _CoverageDisplacementOffsetOverride: 1
     - _CoverageDisplacementOverride: 1
-    - _CoverageLeakReduction: 0.166
+    - _CoverageLeakReduction: 0.374
     - _CoverageLeakReductionOverride: 0
     - _CoverageMasksTexOverride: 0
     - _CoverageMicroRelief: 1
@@ -197,20 +222,22 @@ Material:
     - _CoverageNormalsOverlay: 0
     - _CoverageNormalsOverlayOverride: 0
     - _CoverageNormalsSource: 1
-    - _CoverageOverride: 1
+    - _CoverageOverride: 0
     - _CoverageSmoothnessContrast: 0.1
     - _CoverageSmoothnessContrastOverride: 0
     - _CoverageTex0Override: 0
     - _CoverageTiling: 0.15
     - _CoverageTilingOverride: 0
+    - _Cull: 2
     - _CullMode: 2
     - _Cutoff: 0.5
+    - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _Displacement: 1
     - _DisplacementOverride: 1
     - _DistanceFadeFalloff: 50
     - _DistanceFadeFalloffOverride: 0
-    - _DistanceFadeStart: 5
+    - _DistanceFadeStart: 500
     - _DistanceFadeStartOverride: 0
     - _DistortionAmount: 0.002
     - _DistortionAmountOverride: 0
@@ -223,11 +250,14 @@ Material:
     - _DripsSpeed: 0.2
     - _DripsSpeedOverride: 0
     - _DripsTilingOverride: 1
+    - _DripsTriBlendContrast: 12
+    - _DripsTriBlendContrastOverride: 0
     - _DstBlend: 0
     - _Emission: 0
     - _EmissionMasking: 0.98
     - _EmissionMaskingOverride: 0
     - _EmissionScaleUI: 0
+    - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 1
     - _GlossyReflections: 1
@@ -270,8 +300,10 @@ Material:
     - _PuddlesSlopeOverride: 0
     - _PuddlesTiling: 0.5
     - _PuddlesTilingOverride: 0
+    - _QueueOffset: 0
+    - _ReceiveShadows: 1
     - _Ripples: 1
-    - _RipplesAmount: 4
+    - _RipplesAmount: 3
     - _RipplesAmountOverride: 0
     - _RipplesFPS: 30
     - _RipplesFPSOverride: 0
@@ -291,6 +323,7 @@ Material:
     - _ScreenSpaceSparklesTilingOverride: 0
     - _Shaded: 1
     - _ShowAlpha: 1
+    - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SnowAOIntensity: 0
     - _SnowAOIntensityOverride: 0
@@ -332,6 +365,7 @@ Material:
     - _Stochastic: 0
     - _StochasticOverride: 0
     - _Strength: 2
+    - _Surface: 0
     - _TessEdgeL: 5
     - _TessEdgeLOverride: 1
     - _TessFactorSnow: 0.313
@@ -343,7 +377,7 @@ Material:
     - _TessPhongStrength: 0.5
     - _TessSnowdriftRangeOverride: 1
     - _TessValue: 15
-    - _Tessellation: 0
+    - _Tessellation: 1
     - _TessellationOverride: 1
     - _TraceDetail: 1
     - _TraceDetailIntensity: 0.1
@@ -383,17 +417,18 @@ Material:
     - _UseGlossMap: 1
     - _UseMetallicMap: 1
     - _WetColorOverride: 0
-    - _WetnessAmount: 0.3
+    - _WetnessAmount: 0.4
     - _WetnessAmountOverride: 0
+    - _WorkflowMode: 1
     - _ZWrite: 1
     - __dirty: 1
     m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CoverageAreaMaskRange: {r: 0.308, g: 0.661, b: 0, a: 0}
     - _CoverageColor: {r: 0.9292453, g: 0.96967655, b: 1, a: 1}
-    - _DripsTiling: {r: 2, g: 1, b: 0, a: 0}
-    - _Emission: {r: 0, g: 0, b: 0, a: 1}
-    - _EmissionColor: {r: 1, g: 0, b: 0, a: 1}
+    - _DripsTiling: {r: 2.5, g: 1, b: 0, a: 0}
+    - _EmissionColor: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColorUI: {r: 1, g: 1, b: 1, a: 1}
     - _PrecipitationDirHardness: {r: 0.4758619, g: 1, b: 0, a: 0}
     - _PrecipitationDirRange: {r: 0, g: 1, b: 0, a: 0}

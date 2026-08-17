@@ -55,7 +55,7 @@ namespace NOT_Lonely.Weatherade
 
 #if UNITY_EDITOR
         [MenuItem("GameObject/NOT_Lonely/Weatherade/Rain Coverage Instance", false, 10)]
-        public static void CreateNewSnowCoverageInstance()
+        public static void CreateNewRainCoverageInstance()
         {
             if (NL_Utilities.FindObjectOfType<CoverageBase>(true))
             {

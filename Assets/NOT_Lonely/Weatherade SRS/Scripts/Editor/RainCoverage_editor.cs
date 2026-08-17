@@ -25,9 +25,9 @@ namespace NOT_Lonely.Weatherade
         private SerializedProperty depthLayerMask;
         private SerializedProperty depthTextureFormat;
         private SerializedProperty coverageAreaFalloffHardness;
-        private SerializedProperty forcePositionUpdate;
         private SerializedProperty useFollowTarget;
         private SerializedProperty followTarget;
+        private SerializedProperty forcePositionUpdate;
         private SerializedProperty targetPositionOffsetY;
         private SerializedProperty updateRate;
         private SerializedProperty updateDistanceThreshold;
@@ -108,7 +108,6 @@ namespace NOT_Lonely.Weatherade
             depthCopyMtl = serializedObject.FindProperty("depthCopyMtl");
             texBlured = serializedObject.FindProperty("texBlured");
             texRGBA = serializedObject.FindProperty("texRGBA");
-            forcePositionUpdate = serializedObject.FindProperty("forcePositionUpdate");
 
             areaSize = serializedObject.FindProperty("areaSize");
             areaDepth = serializedObject.FindProperty("areaDepth");
@@ -118,6 +117,7 @@ namespace NOT_Lonely.Weatherade
             blurKernelSize = serializedObject.FindProperty("blurKernelSize");
             coverageAreaFalloffHardness = serializedObject.FindProperty("coverageAreaFalloffHardness");
             useFollowTarget = serializedObject.FindProperty("useFollowTarget");
+            forcePositionUpdate = serializedObject.FindProperty("forcePositionUpdate");
             followTarget = serializedObject.FindProperty("followTarget");
             targetPositionOffsetY = serializedObject.FindProperty("targetPositionOffsetY");
             updateRate = serializedObject.FindProperty("updateRate");
@@ -271,7 +271,7 @@ namespace NOT_Lonely.Weatherade
             {
                 EditorGUILayout.PropertyField(coverage, NL_Styles.coverageText);
 
-                NL_Utilities.BeginUICategory("MASKS", NL_Styles.lineB, textureMasksFoldout);
+                NL_Utilities.BeginUICategory("MASKS", NL_Styles.lineB, null, textureMasksFoldout);
                 if (textureMasksFoldout.boolValue)
                 {
                     EditorGUILayout.PropertyField(paintableCoverage, NL_Styles.paintableWetnessText);
@@ -283,7 +283,7 @@ namespace NOT_Lonely.Weatherade
                 }
                 NL_Utilities.EndUICategory();
 
-                NL_Utilities.BeginUICategory("WETNESS", NL_Styles.lineB, wetnessFoldout);
+                NL_Utilities.BeginUICategory("WETNESS", NL_Styles.lineB, null, wetnessFoldout);
                 if (wetnessFoldout.boolValue)
                 {
                     EditorGUILayout.PropertyField(wetColor, NL_Styles.wetColorText);
@@ -291,7 +291,7 @@ namespace NOT_Lonely.Weatherade
                 }
                 NL_Utilities.EndUICategory();
 
-                NL_Utilities.BeginUICategory("PUDDLES", NL_Styles.lineB, puddlesFoldout);
+                NL_Utilities.BeginUICategory("PUDDLES", NL_Styles.lineB, null, puddlesFoldout);
                 if (puddlesFoldout.boolValue)
                 {
                     EditorGUILayout.PropertyField(puddlesAmount, NL_Styles.puddlesAmountText);
@@ -302,7 +302,7 @@ namespace NOT_Lonely.Weatherade
                 }
                 NL_Utilities.EndUICategory();
 
-                NL_Utilities.BeginUICategory("RIPPLES AND SPOTS", NL_Styles.lineB, ripplesAndSpotsFoldout);
+                NL_Utilities.BeginUICategory("RIPPLES AND SPOTS", NL_Styles.lineB, null, ripplesAndSpotsFoldout);
                 if (ripplesAndSpotsFoldout.boolValue)
                 {
                     EditorGUILayout.PropertyField(ripples, NL_Styles.ripplesText);
@@ -315,7 +315,7 @@ namespace NOT_Lonely.Weatherade
                 }
                 NL_Utilities.EndUICategory();
 
-                NL_Utilities.BeginUICategory("DRIPS", NL_Styles.lineB, dripsFoldout);
+                NL_Utilities.BeginUICategory("DRIPS", NL_Styles.lineB, null, dripsFoldout);
                 if (dripsFoldout.boolValue)
                 {
                     EditorGUILayout.PropertyField(drips, NL_Styles.dripsText);
@@ -331,7 +331,7 @@ namespace NOT_Lonely.Weatherade
                 }
                 NL_Utilities.EndUICategory();
 
-                NL_Utilities.BeginUICategory("AREA MASK", NL_Styles.lineB, areaMaskFoldout);
+                NL_Utilities.BeginUICategory("AREA MASK", NL_Styles.lineB, null, areaMaskFoldout);
                 if (areaMaskFoldout.boolValue)
                 {
                     //coverageAreaMaskRange.vector2Value = DrawRangeSlider(coverageAreaMaskRange.vector2Value, NL_Styles.coverageAreaMaskRangeText, offset);
@@ -343,7 +343,7 @@ namespace NOT_Lonely.Weatherade
                 }
                 NL_Utilities.EndUICategory();
 
-                NL_Utilities.BeginUICategory("BLEND BY NORMALS", NL_Styles.lineB, blendByNormalFoldout);
+                NL_Utilities.BeginUICategory("BLEND BY NORMALS", NL_Styles.lineB, null, blendByNormalFoldout);
                 if (blendByNormalFoldout.boolValue)
                 {
                     EditorGUILayout.PropertyField(blendByNormalsStrength, NL_Styles.blendByNormalsStrengthText);
@@ -351,7 +351,7 @@ namespace NOT_Lonely.Weatherade
                 }
                 NL_Utilities.EndUICategory();
 
-                NL_Utilities.BeginUICategory("DISTANCE FADE", NL_Styles.lineB, distanceFadeFoldout);
+                NL_Utilities.BeginUICategory("DISTANCE FADE", NL_Styles.lineB, null, distanceFadeFoldout);
                 if (distanceFadeFoldout.boolValue)
                 {
                     EditorGUILayout.PropertyField(distanceFadeStart, NL_Styles.distanceFadeStartText);

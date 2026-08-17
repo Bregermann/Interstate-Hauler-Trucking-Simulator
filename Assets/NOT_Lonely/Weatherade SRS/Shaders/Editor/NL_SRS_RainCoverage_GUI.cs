@@ -1,208 +1,180 @@
-#if UNITY_EDITOR
-using NOT_Lonely.TotalBrush;
-using NOT_Lonely.Weatherade;
-using System;
-using System.Reflection;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.Rendering;
-
-public class NL_SRS_RainCoverage_GUI : SRS_CoverageShaderGUI_base
+namespace NOT_Lonely.Weatherade.ShaderGUI
 {
-    MaterialProperty specularHighlights = null;
-    MaterialProperty glossyReflections = null;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEditor;
+    using UnityEngine;
+    using NOT_Lonely.Weatherade;
+    using NOT_Lonely.TotalBrush;
+    using UnityEditor.Rendering.Universal.ShaderGUI;
+    using UnityEditor.Rendering;
 
-    //TextureOverridable primaryMasks = new TextureOverridable() { propName = "_PrimaryMasks" };
-    //Texture2DArrayOverridable ripplesTex = new Texture2DArrayOverridable() { propName = "_RipplesTex" };
-    ColorOverridable wetColor = new ColorOverridable() { propName = "_WetColor" };
-    FloatOverridable wetnessAmount = new FloatOverridable() { propName = "_WetnessAmount" };
-    FloatOverridable puddlesAmount = new FloatOverridable() { propName = "_PuddlesAmount" };
-    Vector2DOverridable puddlesRange = new Vector2DOverridable() { propName = "_PuddlesRange" };
-    FloatOverridable puddlesMult = new FloatOverridable() { propName = "_PuddlesMult" };
-    //FloatOverridable puddlesBlendContrast = new FloatOverridable() { propName = "_PuddlesBlendContrast" };
-    //FloatOverridable puddlesBlendStrength = new FloatOverridable() { propName = "_PuddlesBlendStrength" };
-    FloatOverridable puddlesTiling = new FloatOverridable() { propName = "_PuddlesTiling" };
-    FloatOverridable puddlesSlope = new FloatOverridable() { propName = "_PuddlesSlope" };
-    ToggleOverridable ripples = new ToggleOverridable() { propName = "_Ripples", keywordName = "_RIPPLES_ON" };
-    FloatOverridable ripplesAmount = new FloatOverridable() { propName = "_RipplesAmount" };
-    FloatOverridable ripplesIntensity = new FloatOverridable() { propName = "_RipplesIntensity" };
-    FloatOverridable ripplesTiling = new FloatOverridable() { propName = "_RipplesTiling" };
-    FloatOverridable ripplesFPS = new FloatOverridable() { propName = "_RipplesFPS" };
-    FloatOverridable spotsIntensity = new FloatOverridable() { propName = "_SpotsIntensity" };
-    FloatOverridable spotsAmount = new FloatOverridable() { propName = "_SpotsAmount" };
-    ToggleOverridable drips = new ToggleOverridable() { propName = "_Drips", keywordName = "_DRIPS_ON" };
-    FloatOverridable dripsIntensity = new FloatOverridable() { propName = "_DripsIntensity" };
-    FloatOverridable dripsSpeed = new FloatOverridable() { propName = "_DripsSpeed" };
-    Vector2DOverridable dripsTiling = new Vector2DOverridable() { propName = "_DripsTiling" };
-    FloatOverridable distortionTiling = new FloatOverridable() { propName = "_DistortionTiling" };
-    FloatOverridable distortionAmount = new FloatOverridable() { propName = "_DistortionAmount" };
-
-    public override void FindProperties()
+    public class NL_SRS_RainCoverage_GUI : BaseShaderGUI
     {
-        base.FindProperties();
+        private RainShadersGUI rainCoverageGUI;
 
-        specularHighlights = FindProperty("_SpecularHighlights", props, false);
-        glossyReflections = FindProperty("_GlossyReflections", props, false);
+        #region StandardLitShaderGUI
+        static readonly string[] workflowModeNames = Enum.GetNames(typeof(LitGUI.WorkflowMode));
 
-        //InitOverridable(primaryMasks);
-        //InitOverridable(ripplesTex);
-        InitOverridable(wetColor);
-        InitOverridable(wetnessAmount);
-        InitOverridable(puddlesAmount);
-        InitOverridable(puddlesMult);
-        InitOverridable(puddlesRange);
-        //InitOverridable(puddlesBlendContrast);
-        //InitOverridable(puddlesBlendStrength);
-        InitOverridable(puddlesTiling);
-        InitOverridable(puddlesSlope);
-        InitOverridable(ripples);
-        InitOverridable(ripplesAmount);
-        InitOverridable(ripplesIntensity);
-        InitOverridable(ripplesTiling);
-        InitOverridable(ripplesFPS);
-        InitOverridable(spotsIntensity);
-        InitOverridable(spotsAmount);
-        InitOverridable(drips);
-        InitOverridable(dripsIntensity);
-        InitOverridable(dripsSpeed);
-        InitOverridable(dripsTiling);
-        InitOverridable(distortionTiling);
-        InitOverridable(distortionAmount);
-    }
+        private LitGUI.LitProperties litProperties;
+        private URP_LitDetailGUI.LitProperties litDetailProperties;
 
-    public override void ShaderPropertiesGUI(Material material)
-    {
-        base.ShaderPropertiesGUI(material);
-
-        if (coverageProperties)
+        public override void FillAdditionalFoldouts(MaterialHeaderScopeList materialScopesList)
         {
-            if (RainCoverage.instance == null) EditorGUILayout.HelpBox("There's no Rain Coverage instance in the scene. Please add one to make the rain shaders work correctly.", MessageType.Warning);
+            materialScopesList.RegisterHeaderScope(URP_LitDetailGUI.Styles.detailInputs, Expandable.Details, _ => URP_LitDetailGUI.DoDetailArea(litDetailProperties, materialEditor));
+        }
+
+        // collect properties from the material properties
+        public override void FindProperties(MaterialProperty[] properties)
+        {
+            base.FindProperties(properties);
+            litProperties = new LitGUI.LitProperties(properties);
+            litDetailProperties = new URP_LitDetailGUI.LitProperties(properties);
+        }
+
+        // material changed check
+        public override void ValidateMaterial(Material material)
+        {
+            SetMaterialKeywords(material, LitGUI.SetMaterialKeywords, URP_LitDetailGUI.SetMaterialKeywords);
+
+            //SRS
+            if(rainCoverageGUI == null) rainCoverageGUI = new RainShadersGUI();
+            rainCoverageGUI.SetCoverageMaterialKeywords(material);
+            SnowCoverage.UpdateMtl(material);
+            //
+        }
+
+        // material main surface options
+        public override void DrawSurfaceOptions(Material material)
+        {
+            // Use default labelWidth
+            EditorGUIUtility.labelWidth = 0f;
+
+            if (litProperties.workflowMode != null)
+                DoPopup(LitGUI.Styles.workflowModeText, litProperties.workflowMode, workflowModeNames);
+
+            base.DrawSurfaceOptions(material);
+        }
+
+        // material main surface inputs
+        public override void DrawSurfaceInputs(Material material)
+        {
+            base.DrawSurfaceInputs(material);
+            LitGUI.Inputs(litProperties, materialEditor, material);
+            DrawEmissionProperties(material, true);
+            DrawTileOffset(materialEditor, baseMapProp);
+        }
+
+        // material main advanced options
+        public override void DrawAdvancedOptions(Material material)
+        {
+            if (litProperties.reflections != null && litProperties.highlights != null)
+            {
+                materialEditor.ShaderProperty(litProperties.highlights, LitGUI.Styles.highlightsText);
+                materialEditor.ShaderProperty(litProperties.reflections, LitGUI.Styles.reflectionsText);
+            }
+
+            base.DrawAdvancedOptions(material);
+        }
+
+        public override void AssignNewShaderToMaterial(Material material, Shader oldShader, Shader newShader)
+        {
+            if (material == null)
+                throw new ArgumentNullException("material");
+
+            // _Emission property is lost after assigning Standard shader to the material
+            // thus transfer it before assigning the new shader
+            if (material.HasColor("_Emission"))
+            {
+                material.SetColor("_EmissionColor", material.GetColor("_Emission"));
+            }
+            
+            base.AssignNewShaderToMaterial(material, oldShader, newShader);
+
+            //SRS: pass the _MainTex from BiRP to URP
+            Texture albedoTex = material.GetTexture("_MainTex");
+            if (albedoTex != null)
+            {
+                material.SetTexture("_BaseMap", albedoTex);
+            }
+
+            if (oldShader == null || !oldShader.name.Contains("Legacy Shaders/"))
+            {
+                SetupMaterialBlendMode(material);
+                return;
+            }
+
+            SurfaceType surfaceType = SurfaceType.Opaque;
+            BlendMode blendMode = BlendMode.Alpha;
+            if (oldShader.name.Contains("/Transparent/Cutout/"))
+            {
+                surfaceType = SurfaceType.Opaque;
+                material.SetFloat("_AlphaClip", 1);
+            }
+            else if (oldShader.name.Contains("/Transparent/"))
+            {
+                // NOTE: legacy shaders did not provide physically based transparency
+                // therefore Fade mode
+                surfaceType = SurfaceType.Transparent;
+                blendMode = BlendMode.Alpha;
+            }
+            material.SetFloat("_Blend", (float)blendMode);
+
+            material.SetFloat("_Surface", (float)surfaceType);
+            if (surfaceType == SurfaceType.Opaque)
+            {
+                material.DisableKeyword("_SURFACE_TYPE_TRANSPARENT");
+            }
             else
             {
-                GUILayout.Space(5);
-                GUILayout.BeginHorizontal(NL_Styles.lineB);
-                GUILayout.FlexibleSpace();
-                if (GUILayout.Button("Select Global Coverage Instance", GUILayout.MaxWidth(200))) Selection.activeGameObject = RainCoverage.instance.gameObject;
-                GUILayout.FlexibleSpace();
-                GUILayout.EndHorizontal();
-                GUILayout.Space(5);
+                material.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
             }
 
-            GUILayout.BeginHorizontal(NL_Styles.lineB);
-            if(coverage.prop != null) ToggleValueOverride(coverage, out coverage.localVal);
-            GUILayout.EndHorizontal();
-            GUILayout.Space(5);
-
-            if (coverage.prop.floatValue == 1)//coverage switch
+            if (oldShader.name.Equals("Standard (Specular setup)"))
             {
-                NL_Utilities.BeginUICategory("MASKS", NL_Styles.lineB);
-
-                GUILayout.BeginHorizontal();
-                ToggleValueOverride(paintableCoverage, out paintableCoverage.localVal);
-                EditorGUI.BeginDisabledGroup(material.GetFloat("_PaintableCoverage") == 0);
-                if (GUILayout.Button("Open Total Brush", GUILayout.MaxWidth(120))) NL_TotalBrush.OpenWindowExternal(material.shader.name.Contains("Terrain") ? NL_TotalBrush.Mode.Terrain : NL_TotalBrush.Mode.Mesh);
-                EditorGUI.EndDisabledGroup();
-                GUILayout.EndHorizontal();
-                if (material.GetFloat("_PaintableCoverage") == 1 && m_MaterialEditor.IsInstancingEnabled())
-                    EditorGUILayout.HelpBox("GPU Instancing is enabled on this material, this will break vertex colors " +
-                        "on different objects. Consider disable instancing if you want to use vertex colors.", MessageType.Warning);
-
-                if (terrainHolesTexture == null)
-                {
-                    GUILayout.BeginHorizontal();
-                    ToggleValueOverride(useAveragedNormals, out useAveragedNormals.localVal);
-
-                    EditorGUI.BeginDisabledGroup(useAveragedNormals.prop.floatValue == 0);
-                    if (GUILayout.Button("Average Normals", GUILayout.MaxWidth(120))) NL_TotalBrush.AverageNormals();
-                    EditorGUI.EndDisabledGroup();
-                    GUILayout.EndHorizontal();
-                }
-
-                if (material.HasProperty("_StochasticOverride"))
-                    ToggleValueOverride(stochastic, out stochastic.localVal);
-
-                NL_Utilities.EndUICategory();
-
-                NL_Utilities.BeginUICategory("WETNESS", NL_Styles.lineB);
-                
-
-                ColorValueOverride(wetColor, out wetColor.localVal);
-                FloatValueOverride(wetnessAmount, out wetnessAmount.localVal);
-                NL_Utilities.EndUICategory();
-
-                NL_Utilities.BeginUICategory("PUDDLES", NL_Styles.lineB);
-                FloatValueOverride(puddlesAmount, out puddlesAmount.localVal);
-                FloatValueOverride(puddlesMult, out puddlesMult.localVal);
-                //FloatValueOverride(puddlesBlendStrength, out puddlesBlendStrength.localVal, new Vector2(1, float.PositiveInfinity));
-                //FloatValueOverride(puddlesBlendContrast, out puddlesBlendContrast.localVal, new Vector2(0, float.PositiveInfinity), false, 1);
-                RangeValueOverride(puddlesRange, out puddlesRange.localVal);
-                FloatValueOverride(puddlesTiling, out puddlesTiling.localVal, new Vector2(0, float.PositiveInfinity));
-                FloatValueOverride(puddlesSlope, out puddlesSlope.localVal);
-                NL_Utilities.EndUICategory();
-
-                NL_Utilities.BeginUICategory("RIPPLES AND SPOTS", NL_Styles.lineB);
-                ToggleValueOverride(ripples, out ripples.localVal);
-                FloatValueOverride(ripplesAmount, out ripplesAmount.localVal, new Vector2(0, 15), true);
-                FloatValueOverride(ripplesIntensity, out ripplesIntensity.localVal, new Vector2(0, float.PositiveInfinity));
-                FloatValueOverride(ripplesFPS, out ripplesFPS.localVal, new Vector2(0, 120), true);
-                FloatValueOverride(ripplesTiling, out ripplesTiling.localVal, new Vector2(0, float.PositiveInfinity));
-                FloatValueOverride(spotsIntensity, out spotsIntensity.localVal);
-                if (spotsIntensity.prop.floatValue > 0)
-                    FloatValueOverride(spotsAmount, out spotsAmount.localVal);
-                NL_Utilities.EndUICategory();
-
-                NL_Utilities.BeginUICategory("DRIPS", NL_Styles.lineB);
-                ToggleValueOverride(drips, out drips.localVal);
-                FloatValueOverride(dripsIntensity, out dripsIntensity.localVal);
-                FloatValueOverride(dripsSpeed, out dripsSpeed.localVal);
-                Vector2DValueOverride(dripsTiling, out dripsTiling.localVal);
-                FloatValueOverride(distortionAmount, out distortionAmount.localVal, new Vector2(0, float.PositiveInfinity));
-                if (distortionAmount.prop.floatValue > 0)
-                    FloatValueOverride(distortionTiling, out distortionTiling.localVal, new Vector2(0, float.PositiveInfinity), false, 1);
-                NL_Utilities.EndUICategory();
-
-                NL_Utilities.BeginUICategory("AREA MASK", NL_Styles.lineB);
-                FloatValueOverride(coverageAreaMaskRange, out coverageAreaMaskRange.localVal);
-                FloatValueOverride(coverageAreaBias, out coverageAreaBias.localVal);
-                FloatValueOverride(coverageLeakReduction, out coverageLeakReduction.localVal);
-                FloatValueOverride(precipitationDirOffset, out precipitationDirOffset.localVal);
-                RangeValueOverride(precipitationDirRange, out precipitationDirRange.localVal);
-                NL_Utilities.EndUICategory();
-
-                NL_Utilities.BeginUICategory("BLEND BY NORMALS", NL_Styles.lineB);
-                FloatValueOverride(blendByNormalsStrength, out blendByNormalsStrength.localVal, new Vector2(0, float.PositiveInfinity));
-                FloatValueOverride(blendByNormalsPower, out blendByNormalsPower.localVal, new Vector2(0, float.PositiveInfinity));
-                NL_Utilities.EndUICategory();
-
-                if (distanceFadeStart.prop != null)
-                {
-                    NL_Utilities.BeginUICategory("DISTANCE FADE", NL_Styles.lineB);
-                    FloatValueOverride(distanceFadeStart, out distanceFadeStart.localVal);
-                    FloatValueOverride(distanceFadeFalloff, out distanceFadeFalloff.localVal);
-                    NL_Utilities.EndUICategory();
-                }
+                material.SetFloat("_WorkflowMode", (float)LitGUI.WorkflowMode.Specular);
+                Texture texture = material.GetTexture("_SpecGlossMap");
+                if (texture != null)
+                    material.SetTexture("_MetallicSpecGlossMap", texture);
+            }
+            else
+            {
+                material.SetFloat("_WorkflowMode", (float)LitGUI.WorkflowMode.Metallic);
+                Texture texture = material.GetTexture("_MetallicGlossMap");
+                if (texture != null)
+                    material.SetTexture("_MetallicSpecGlossMap", texture);
             }
         }
-    }
+        #endregion
 
-    override public void SetMaterialKeywords(Material material)
-    {
-        base.SetMaterialKeywords(material);
+        void InitCoverageGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
+        {
+            if (rainCoverageGUI == null) rainCoverageGUI = new RainShadersGUI();
+            rainCoverageGUI.materialEditor = materialEditor;
+            rainCoverageGUI.props = properties;
+        }
 
-        if (material.HasProperty(ripples.ovrdName) && material.GetFloat(ripples.ovrdName) == 1)
-            SetKeyword(material, ripples.keywordName, material.GetFloat(GetPropName(ripples.ovrdName)) == 1);
-        if (material.HasProperty(drips.ovrdName) && material.GetFloat(drips.ovrdName) == 1)
-            SetKeyword(material, drips.keywordName, material.GetFloat(GetPropName(drips.ovrdName)) == 1);
-    }
+        public override void OnGUI(MaterialEditor materialEditor, MaterialProperty[] properties)
+        {
+            if (NL_Styles.lineB == null || NL_Styles.lineB.normal.background == null) NL_Styles.GetStyles();
 
-    override public void ValidateMaterial(Material material)
-    {
-        SetMaterialKeywords(material);
-        /*
-        if(ripplesTex.localVal != null) 
-            material.SetFloat("_RipplesFramesCount", ripplesTex.localVal.depth);
-        */
-        SnowCoverage.UpdateMtl(material);
+            // Use default labelWidth
+            EditorGUIUtility.labelWidth = 0f;
+
+            GUILayout.BeginHorizontal(NL_Styles.header);
+            NL_Utilities.CalcFoldoutSpace(CommonGUI.standardPropsFoldoutName);
+            CommonGUI.unityStandardShaderProps = EditorGUILayout.Foldout(CommonGUI.unityStandardShaderProps, CommonGUI.standardPropsFoldoutName, true);
+            GUILayout.EndHorizontal();
+
+            if (CommonGUI.unityStandardShaderProps)
+            {
+                GUILayout.Space(5);
+                base.OnGUI(materialEditor, properties);
+            }
+
+            InitCoverageGUI(materialEditor, properties);
+            rainCoverageGUI.DrawCoverageGUI(materialEditor);
+        }
     }
 }
-#endif
