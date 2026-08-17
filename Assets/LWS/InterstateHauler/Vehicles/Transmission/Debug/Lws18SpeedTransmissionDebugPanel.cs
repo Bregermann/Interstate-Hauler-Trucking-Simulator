@@ -32,12 +32,11 @@ namespace LWS.InterstateHauler
 
             LwsTransmissionDisplayState state = transmission.DisplayState;
             GUILayout.BeginArea(new Rect(position.x, position.y, 380f, 450f), GUI.skin.box);
-            GUILayout.Label("Interstate Hauler 18-Speed");
-            GUILayout.Label($"Transmission Mode: {state.mode}");
-            GUILayout.Label(transmission.DevelopmentAutomaticModeActive ? "TEST AUTOMATIC: ON" : "TEST AUTOMATIC: OFF");
+            GUILayout.Label("Interstate Hauler Transmission");
+            GUILayout.Label($"Transmission Mode: {state.mode.ToString().ToUpperInvariant()}");
             string buttonLabel = transmission.DevelopmentAutomaticModeActive
-                ? "RETURN TO 18-SPEED MANUAL"
-                : "ENABLE TEST AUTOMATIC";
+                ? "SWITCH TO 18-SPEED MANUAL"
+                : "SWITCH TO AUTOMATIC";
             if (GUILayout.Button(buttonLabel, GUILayout.Height(32f)))
             {
                 bool enableAutomatic = !transmission.DevelopmentAutomaticModeActive;

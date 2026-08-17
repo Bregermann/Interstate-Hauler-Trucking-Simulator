@@ -8,20 +8,19 @@ namespace LWS.InterstateHauler.Tests.PlayMode
     public sealed class Lws18SpeedTransmissionPlayModeTests
     {
         [UnityTest]
-        public IEnumerator ControllerDefaultsToTruck18SpeedAndHandlesMissingInput()
+        public IEnumerator ControllerDefaultsToAutomaticAndStaysNeutralWithMissingInput()
         {
             var go = new GameObject("transmission-controller");
             Lws18SpeedTransmissionController controller = go.AddComponent<Lws18SpeedTransmissionController>();
             controller.SetDefinition(Lws18SpeedTransmissionDefinition.CreateTransientG29DevelopmentPreset());
-            controller.SetMode(LwsTransmissionMode.Truck18Speed);
 
             yield return null;
             yield return null;
 
             LwsTransmissionState state = controller.CaptureState();
-            Assert.AreEqual(LwsTransmissionMode.Truck18Speed, state.mode);
+            Assert.AreEqual(LwsTransmissionMode.Automatic, state.mode);
             Assert.AreEqual(Lws18SpeedGearId.Neutral, state.logicalGear);
-            Assert.AreEqual(LwsShiftRejectionReason.InputUnavailable, state.lastRejectionReason);
+            Assert.AreEqual(LwsShiftRejectionReason.None, state.lastRejectionReason);
             Object.Destroy(go);
         }
 
@@ -31,6 +30,7 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             var go = new GameObject("transmission-controller-no-nwh");
             Lws18SpeedTransmissionController controller = go.AddComponent<Lws18SpeedTransmissionController>();
             controller.SetDefinition(Lws18SpeedTransmissionDefinition.CreateTransientG29DevelopmentPreset());
+            controller.SetMode(LwsTransmissionMode.Truck18Speed);
 
             yield return null;
 

@@ -7,10 +7,12 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class Lws18SpeedTransmissionController : MonoBehaviour, ILwsTruckTransmission, ILwsSaveParticipant
     {
+        public const LwsTransmissionMode DevelopmentDefaultMode = LwsTransmissionMode.Automatic;
+
         [SerializeField] private Lws18SpeedTransmissionDefinition definition;
         [SerializeField] private LwsNwh18SpeedTransmissionAdapter nwhAdapter;
         [SerializeField] private MonoBehaviour fallbackInputSourceBehaviour;
-        [SerializeField] private LwsTransmissionMode mode = LwsTransmissionMode.Truck18Speed;
+        [SerializeField] private LwsTransmissionMode mode = DevelopmentDefaultMode;
         [SerializeField] private LwsManualShiftAssistMode assistMode = LwsManualShiftAssistMode.AssistedManual;
         [SerializeField] private bool configureNwhOnStart = true;
         [SerializeField] private bool registerSaveParticipant = true;

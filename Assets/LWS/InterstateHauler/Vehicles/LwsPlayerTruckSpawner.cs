@@ -110,7 +110,7 @@ namespace LWS.InterstateHauler
             }
 
             transmission.SetDefinition(transmissionDefinition);
-            transmission.SetMode(LwsTransmissionMode.Truck18Speed);
+            transmission.SetMode(Lws18SpeedTransmissionController.DevelopmentDefaultMode);
 
             LwsNwhTrailerCouplingAdapter coupling = truckInstance.GetComponent<LwsNwhTrailerCouplingAdapter>();
             if (coupling == null)
