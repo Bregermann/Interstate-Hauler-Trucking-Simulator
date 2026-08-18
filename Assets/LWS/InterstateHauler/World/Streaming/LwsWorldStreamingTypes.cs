@@ -46,6 +46,18 @@ namespace LWS.InterstateHauler
             }
         }
 
+        public LwsWorldPositionD GlobalBoundsCenter => LwsWorldPositionD.FromVector3(boundsCenter);
+
+        public Bounds GetLocalBounds(LwsWorldPositionD currentOriginOffset)
+        {
+            return LwsWorldCoordinateUtility.GlobalBoundsToLocal(WorldBounds, currentOriginOffset);
+        }
+
+        public Vector3 GetLocalBoundsCenter(LwsWorldPositionD currentOriginOffset)
+        {
+            return LwsWorldCoordinateUtility.GlobalToLocal(GlobalBoundsCenter, currentOriginOffset);
+        }
+
         public bool Contains(Vector3 worldPosition)
         {
             return WorldBounds.Contains(worldPosition);
@@ -171,17 +183,47 @@ namespace LWS.InterstateHauler
             Vector3 trailerPosition)
         {
             TractorPosition = tractorPosition;
+            TractorLocalPosition = tractorPosition;
+            TractorGlobalPositionD = LwsWorldPositionD.FromVector3(tractorPosition);
             Heading = heading.sqrMagnitude > 0.0001f ? heading.normalized : Vector3.forward;
             SpeedMetersPerSecond = Mathf.Max(0f, speedMetersPerSecond);
             HasTrailer = hasTrailer;
             TrailerPosition = trailerPosition;
+            TrailerLocalPosition = trailerPosition;
+            TrailerGlobalPositionD = LwsWorldPositionD.FromVector3(trailerPosition);
         }
 
+        public LwsWorldStreamingAnchorState(
+            Vector3 tractorLocalPosition,
+            LwsWorldPositionD tractorGlobalPosition,
+            Vector3 heading,
+            float speedMetersPerSecond,
+            bool hasTrailer,
+            Vector3 trailerLocalPosition,
+            LwsWorldPositionD trailerGlobalPosition)
+        {
+            TractorPosition = tractorGlobalPosition.ToVector3();
+            TractorLocalPosition = tractorLocalPosition;
+            TractorGlobalPositionD = tractorGlobalPosition;
+            Heading = heading.sqrMagnitude > 0.0001f ? heading.normalized : Vector3.forward;
+            SpeedMetersPerSecond = Mathf.Max(0f, speedMetersPerSecond);
+            HasTrailer = hasTrailer;
+            TrailerPosition = trailerGlobalPosition.ToVector3();
+            TrailerLocalPosition = trailerLocalPosition;
+            TrailerGlobalPositionD = trailerGlobalPosition;
+        }
+
+        // Legacy name retained for existing policy code. This is the canonical global anchor position.
         public Vector3 TractorPosition { get; }
+        public Vector3 TractorLocalPosition { get; }
+        public LwsWorldPositionD TractorGlobalPositionD { get; }
         public Vector3 Heading { get; }
         public float SpeedMetersPerSecond { get; }
         public bool HasTrailer { get; }
+        // Legacy name retained for existing policy code. This is the canonical global trailer position.
         public Vector3 TrailerPosition { get; }
+        public Vector3 TrailerLocalPosition { get; }
+        public LwsWorldPositionD TrailerGlobalPositionD { get; }
 
         public static LwsWorldStreamingAnchorState Default => new LwsWorldStreamingAnchorState(
             Vector3.zero,

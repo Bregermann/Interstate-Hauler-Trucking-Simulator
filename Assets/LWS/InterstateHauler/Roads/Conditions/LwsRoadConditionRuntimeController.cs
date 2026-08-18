@@ -11,6 +11,7 @@ namespace LWS.InterstateHauler
 
         private ILwsRoadConditionService _roadConditionService;
         private ILwsPlayerVehicleService _playerVehicleService;
+        private ILwsWorldOriginService _originService;
         private float _elapsed;
 
         public bool IsReady => _roadConditionService != null;
@@ -60,6 +61,7 @@ namespace LWS.InterstateHauler
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _roadConditionService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _playerVehicleService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _originService);
         }
 
         private void UpdatePlayerRoadContext()
@@ -67,7 +69,7 @@ namespace LWS.InterstateHauler
             LwsPlayerTruck truck = _playerVehicleService != null ? _playerVehicleService.ActiveTruck : null;
             if (truck == null)
             {
-                _roadConditionService.UpdatePlayerRoad(transform.position, transform.forward);
+                _roadConditionService.UpdatePlayerRoad(ResolveGlobalPosition(transform.position), transform.forward);
                 _roadConditionService.SetVehicleSpeedMetersPerSecond(0f);
                 return;
             }
@@ -79,7 +81,14 @@ namespace LWS.InterstateHauler
             }
 
             _roadConditionService.SetVehicleSpeedMetersPerSecond(Mathf.Abs(telemetry.signedSpeedMetersPerSecond));
-            _roadConditionService.UpdatePlayerRoad(truck.transform.position, truck.transform.forward);
+            _roadConditionService.UpdatePlayerRoad(ResolveGlobalPosition(truck.transform.position), truck.transform.forward);
+        }
+
+        private Vector3 ResolveGlobalPosition(Vector3 localPosition)
+        {
+            return _originService != null
+                ? _originService.LocalToGlobal(localPosition).ToVector3()
+                : localPosition;
         }
 
 #if UNITY_EDITOR

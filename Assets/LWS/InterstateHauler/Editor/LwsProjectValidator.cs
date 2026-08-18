@@ -181,6 +181,20 @@ namespace LWS.InterstateHauler.Editor
         private const string ChunkMatrixPath = "Documentation/InterstateHauler/014_Chunk_Matrix.md";
         private const string StreamingTestMatrixPath = "Documentation/InterstateHauler/014_Streaming_Test_Matrix.md";
         private const string Prompt015HandoffPath = "Documentation/InterstateHauler/014_Prompt015_Handoff.md";
+        private const string FloatingOriginPositionPath = "Assets/LWS/InterstateHauler/World/Origin/LwsWorldPositionD.cs";
+        private const string FloatingOriginTypesPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFloatingOriginTypes.cs";
+        private const string FloatingOriginTuningPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFloatingOriginTuning.cs";
+        private const string FloatingOriginServicePath = "Assets/LWS/InterstateHauler/World/Origin/LwsWorldOriginService.cs";
+        private const string FloatingOriginCoordinatorPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFloatingOriginCoordinator.cs";
+        private const string FloatingOriginTransformParticipantPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFloatingOriginTransformParticipant.cs";
+        private const string FloatingOriginRigidbodyParticipantPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFloatingOriginRigidbodyParticipant.cs";
+        private const string FloatingOriginDebugPanelPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFloatingOriginDebugPanel.cs";
+        private const string FloatingOriginValidationTuningPath = "Assets/LWS/InterstateHauler/World/Origin/Data/IH_FloatingOrigin_Validation.asset";
+        private const string FloatingOriginDocsPath = "Documentation/InterstateHauler/015_Floating_Origin_Architecture.md";
+        private const string FloatingOriginParticipantMatrixPath = "Documentation/InterstateHauler/015_Origin_Participant_Matrix.md";
+        private const string FloatingOriginCoordinateMatrixPath = "Documentation/InterstateHauler/015_Coordinate_Matrix.md";
+        private const string FloatingOriginTestMatrixPath = "Documentation/InterstateHauler/015_Floating_Origin_Test_Matrix.md";
+        private const string Prompt016HandoffPath = "Documentation/InterstateHauler/015_Prompt016_Handoff.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -288,6 +302,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateWeatherMakerAtmosphereFoundation(report);
             ValidateWeatheradeRoadConditionFoundation(report);
             ValidateSceneStreamerHighwayChunksFoundation(report);
+            ValidateFloatingOriginFoundation(report);
             return report;
         }
 
@@ -2686,6 +2701,257 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 014 Scene Streamer docs, API matrix, chunk matrix, streaming test matrix, and Prompt 015 handoff exist."
                     : "Missing Prompt 014 documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateFloatingOriginFoundation(LwsProjectValidationReport report)
+        {
+            ValidateFloatingOriginRuntimeFiles(report);
+            ValidateFloatingOriginTuning(report);
+            ValidateFloatingOriginCoordinateModel(report);
+            ValidateFloatingOriginIntegration(report);
+            ValidateFloatingOriginPerformanceGuards(report);
+            ValidatePrompt015Documentation(report);
+        }
+
+        private static void ValidateFloatingOriginRuntimeFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                FloatingOriginPositionPath,
+                FloatingOriginTypesPath,
+                FloatingOriginTuningPath,
+                FloatingOriginServicePath,
+                FloatingOriginCoordinatorPath,
+                FloatingOriginTransformParticipantPath,
+                FloatingOriginRigidbodyParticipantPath,
+                FloatingOriginDebugPanelPath,
+                FloatingOriginValidationTuningPath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 015 Floating Origin Runtime Files",
+                missing.Count == 0
+                    ? "Floating-origin position, service, coordinator, participants, debug panel, and validation tuning asset exist."
+                    : "Missing Prompt 015 floating-origin files: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateFloatingOriginTuning(LwsProjectValidationReport report)
+        {
+            LwsFloatingOriginTuning tuning = AssetDatabase.LoadAssetAtPath<LwsFloatingOriginTuning>(FloatingOriginValidationTuningPath);
+            if (tuning == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "Floating Origin Tuning", $"{FloatingOriginValidationTuningPath} did not import as a LWS floating-origin tuning asset.");
+                return;
+            }
+
+            bool valid = tuning.Validate(out string message);
+            report.Add(valid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error, "Floating Origin Tuning", message);
+
+            bool validationRange = tuning.shiftThresholdMeters >= 600f &&
+                                   tuning.shiftThresholdMeters <= 1000f &&
+                                   Mathf.Approximately(tuning.shiftGridMeters, 500f) &&
+                                   tuning.shiftXAxis &&
+                                   !tuning.shiftYAxis &&
+                                   tuning.shiftZAxis;
+            report.Add(
+                validationRange ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Floating Origin Validation Profile",
+                validationRange
+                    ? "Validation profile uses a low XZ-only threshold with a 500 m grid for repeated drive tests."
+                    : "Floating-origin validation profile differs from the expected low-threshold XZ validation setup.");
+
+            report.Add(
+                tuning.shiftThresholdMeters < 250f ? LwsValidationSeverity.Warning : LwsValidationSeverity.Info,
+                "Floating Origin Threshold Safety",
+                tuning.shiftThresholdMeters < 250f
+                    ? "Floating-origin shift threshold is very low and may trigger excessive validation shifts."
+                    : "Floating-origin shift threshold is above the validator's unsafe-low warning floor.");
+        }
+
+        private static void ValidateFloatingOriginCoordinateModel(LwsProjectValidationReport report)
+        {
+            string position = File.Exists(FloatingOriginPositionPath) ? File.ReadAllText(FloatingOriginPositionPath) : string.Empty;
+            string types = File.Exists(FloatingOriginTypesPath) ? File.ReadAllText(FloatingOriginTypesPath) : string.Empty;
+            string service = File.Exists(FloatingOriginServicePath) ? File.ReadAllText(FloatingOriginServicePath) : string.Empty;
+            string streamingTypes = File.Exists(WorldStreamingTypesPath) ? File.ReadAllText(WorldStreamingTypesPath) : string.Empty;
+            string manifest = File.Exists(WorldStreamingManifestScriptPath) ? File.ReadAllText(WorldStreamingManifestScriptPath) : string.Empty;
+
+            bool doublePrecisionType = position.Contains("double x") &&
+                                       position.Contains("double y") &&
+                                       position.Contains("double z") &&
+                                       position.Contains("ToLocalVector3") &&
+                                       position.Contains("ApproxEquals");
+            bool serviceConversions = service.Contains("LwsWorldPositionD CurrentOriginOffset") &&
+                                      service.Contains("LwsWorldPositionD PlayerGlobalPosition") &&
+                                      service.Contains("LocalToGlobal(Vector3 localPosition)") &&
+                                      service.Contains("GlobalToLocal(LwsWorldPositionD globalPosition)") &&
+                                      !service.Contains("Vector3 CurrentOriginOffset");
+            bool centralizedUtility = types.Contains("LwsWorldCoordinateUtility") &&
+                                      types.Contains("LocalToGlobal") &&
+                                      types.Contains("GlobalToLocal") &&
+                                      types.Contains("CalculateGridAlignedShift");
+            bool streamingGlobalSemantics = streamingTypes.Contains("GlobalBoundsCenter") &&
+                                            streamingTypes.Contains("GetLocalBounds") &&
+                                            streamingTypes.Contains("TractorGlobalPositionD") &&
+                                            manifest.Contains("FindContainingChunk(LwsWorldPositionD globalPosition)");
+
+            report.Add(
+                doublePrecisionType && serviceConversions && centralizedUtility ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Floating Origin Coordinate Model",
+                doublePrecisionType && serviceConversions && centralizedUtility
+                    ? "Double-precision global positions, double origin offset, and centralized local/global conversion helpers are present."
+                    : "Floating-origin coordinate model is incomplete or may still rely on float-only accumulated origin state.");
+
+            report.Add(
+                streamingGlobalSemantics ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Floating Origin Chunk Coordinates",
+                streamingGlobalSemantics
+                    ? "Streaming chunks keep canonical global bounds and derive local bounds from the current origin offset."
+                    : "World streaming chunk metadata is missing global/local coordinate semantics.");
+        }
+
+        private static void ValidateFloatingOriginIntegration(LwsProjectValidationReport report)
+        {
+            string bootstrap = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                : string.Empty;
+            string service = File.Exists(FloatingOriginServicePath) ? File.ReadAllText(FloatingOriginServicePath) : string.Empty;
+            string coordinator = File.Exists(FloatingOriginCoordinatorPath) ? File.ReadAllText(FloatingOriginCoordinatorPath) : string.Empty;
+            string chunkRoot = File.Exists(StreamedChunkSceneRootPath) ? File.ReadAllText(StreamedChunkSceneRootPath) : string.Empty;
+            string playerSpawner = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                : string.Empty;
+            string vehicleAdapter = File.Exists("Assets/LWS/InterstateHauler/Vehicles/NWH/LwsNwhVehicleAdapter.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/NWH/LwsNwhVehicleAdapter.cs")
+                : string.Empty;
+            string streamingCoordinator = File.Exists(WorldStreamingCoordinatorPath) ? File.ReadAllText(WorldStreamingCoordinatorPath) : string.Empty;
+            string gps = File.Exists(CabGpsControllerPath) ? File.ReadAllText(CabGpsControllerPath) : string.Empty;
+            string gpsDebug = File.Exists(GpsDebugPanelPath) ? File.ReadAllText(GpsDebugPanelPath) : string.Empty;
+            string roadDebug = File.Exists(RoadDebugPanelPath) ? File.ReadAllText(RoadDebugPanelPath) : string.Empty;
+            string roadRuntime = File.Exists(RoadConditionRuntimeControllerPath) ? File.ReadAllText(RoadConditionRuntimeControllerPath) : string.Empty;
+            string trafficController = File.Exists(UtsTrafficControllerPath) ? File.ReadAllText(UtsTrafficControllerPath) : string.Empty;
+            string trafficApi = File.Exists(UtsTrafficApiPath) ? File.ReadAllText(UtsTrafficApiPath) : string.Empty;
+            string weatherade = File.Exists(WeatheradeAdapterPath) ? File.ReadAllText(WeatheradeAdapterPath) : string.Empty;
+
+            bool serviceRegistered = bootstrap.Contains("ILwsWorldOriginService") &&
+                                     bootstrap.Contains("new LwsWorldOriginService()") &&
+                                     bootstrap.Contains("typeof(ILwsWorldOriginService)");
+            bool lifecycleEvents = service.Contains("OriginShiftStarting") &&
+                                   service.Contains("OriginShiftCompleted") &&
+                                   service.Contains("TryExecuteQueuedShift") &&
+                                   service.Contains("Physics.SyncTransforms()");
+            bool coordinatorPresent = coordinator.Contains("QueueShift(new LwsOriginShiftRequest") &&
+                                      coordinator.Contains("TryExecuteQueuedShift") &&
+                                      coordinator.Contains("ResolvePlayerLocalPosition");
+            bool participantsPresent = chunkRoot.Contains("ILwsFloatingOriginParticipant") &&
+                                       chunkRoot.Contains("LwsFloatingOriginParticipantKind.LoadedChunkRoot") &&
+                                       chunkRoot.Contains("AlignToCurrentOriginOnRegistration") &&
+                                       playerSpawner.Contains("LwsFloatingOriginRigidbodyParticipant") &&
+                                       playerSpawner.Contains("LwsFloatingOriginParticipantKind.PlayerTractor") &&
+                                       playerSpawner.Contains("LwsFloatingOriginParticipantKind.PlayerTrailer");
+            bool nwhTelemetryGlobal = vehicleAdapter.Contains("ILwsWorldOriginService") &&
+                                      vehicleAdapter.Contains("LocalToGlobal(transform.position)");
+            bool streamingGlobalAnchor = streamingCoordinator.Contains("ILwsWorldOriginService") &&
+                                         streamingCoordinator.Contains("LocalToGlobal(truck.transform.position)") &&
+                                         streamingCoordinator.Contains("LwsFloatingOriginCoordinator");
+            bool roadGpsOriginAware = gps.Contains("ILwsWorldOriginService") &&
+                                      gps.Contains("ResolveGlobalPosition") &&
+                                      gpsDebug.Contains("ILwsWorldOriginService") &&
+                                      roadDebug.Contains("ILwsWorldOriginService") &&
+                                      roadRuntime.Contains("ILwsWorldOriginService");
+            bool trafficOriginAware = trafficController.Contains("OriginShiftCompleted") &&
+                                      trafficController.Contains("GlobalToLocalForTraffic") &&
+                                      trafficController.Contains("LocalToGlobalForTraffic") &&
+                                      trafficController.Contains("LwsFloatingOriginRigidbodyParticipant") &&
+                                      trafficApi.Contains("RefreshPathPointCache");
+            bool weatheradeOriginAware = weatherade.Contains("ILwsWorldOriginService") &&
+                                         weatherade.Contains("OriginShiftCompleted") &&
+                                         weatherade.Contains("UpdateCoverageMaterials");
+
+            report.Add(
+                serviceRegistered && lifecycleEvents && coordinatorPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Floating Origin Service Lifecycle",
+                serviceRegistered && lifecycleEvents && coordinatorPresent
+                    ? "Floating-origin service is registered, threshold shifts are queued, and origin shifts execute at FixedUpdate with lifecycle events."
+                    : "Floating-origin service registration, coordinator, or lifecycle events are incomplete.");
+
+            report.Add(
+                participantsPresent && nwhTelemetryGlobal ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Floating Origin Player/NWH Participants",
+                participantsPresent && nwhTelemetryGlobal
+                    ? "Chunk roots, player tractor, player trailer, and NWH telemetry are origin-aware without modifying NWH source."
+                    : "Player/trailer/chunk origin participation or NWH global telemetry mapping is incomplete.");
+
+            report.Add(
+                streamingGlobalAnchor && roadGpsOriginAware ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Floating Origin Streaming/Road/GPS Integration",
+                streamingGlobalAnchor && roadGpsOriginAware
+                    ? "Streaming anchors, road lookups, road conditions, and GPS/debug queries convert local truck position to global coordinates."
+                    : "Streaming, road, road-condition, or GPS code is missing floating-origin local/global conversion.");
+
+            report.Add(
+                trafficOriginAware && weatheradeOriginAware ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Floating Origin Traffic/Weatherade Integration",
+                trafficOriginAware && weatheradeOriginAware
+                    ? "UTS traffic converts spawn/path positions and refreshes cached paths; Weatherade rebinds coverage after origin shifts."
+                    : "UTS traffic or Weatherade may need further floating-origin cache-refresh validation.");
+        }
+
+        private static void ValidateFloatingOriginPerformanceGuards(LwsProjectValidationReport report)
+        {
+            string service = File.Exists(FloatingOriginServicePath) ? File.ReadAllText(FloatingOriginServicePath) : string.Empty;
+            string coordinator = File.Exists(FloatingOriginCoordinatorPath) ? File.ReadAllText(FloatingOriginCoordinatorPath) : string.Empty;
+            string debugPanel = File.Exists(FloatingOriginDebugPanelPath) ? File.ReadAllText(FloatingOriginDebugPanelPath) : string.Empty;
+
+            bool registeredParticipants = service.Contains("RegisterParticipant") &&
+                                          service.Contains("UnregisterParticipant") &&
+                                          service.Contains("_participants") &&
+                                          service.Contains("_participantSet");
+            bool noPerShiftSceneSweep = !service.Contains("FindObjectsByType") &&
+                                        !service.Contains("FindObjectsOfType") &&
+                                        !service.Contains("GameObject.FindObjects");
+            bool debugNoSceneSearch = !debugPanel.Contains("FindObjectsByType") &&
+                                      !debugPanel.Contains("FindObjectsOfType") &&
+                                      debugPanel.Contains("refreshIntervalSeconds");
+            bool throttledFallbackLookup = coordinator.Contains("trailerLookupIntervalSeconds") &&
+                                           coordinator.Contains("_nextTrailerLookupTime") &&
+                                           coordinator.Contains("Time.unscaledTime < _nextTrailerLookupTime");
+
+            report.Add(
+                registeredParticipants && noPerShiftSceneSweep ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Floating Origin Performance Guards",
+                registeredParticipants && noPerShiftSceneSweep
+                    ? "Origin shifts use a registered participant list and the origin service does not perform scene-wide searches during shifts."
+                    : "Floating-origin shift code may scan the scene or lacks participant registration.");
+
+            report.Add(
+                debugNoSceneSearch && throttledFallbackLookup ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Floating Origin Debug/Lookup Guards",
+                debugNoSceneSearch && throttledFallbackLookup
+                    ? "Floating-origin debug panel avoids scene searches and fallback trailer lookup is throttled."
+                    : "Floating-origin debug or fallback lookup code may need performance review.");
+        }
+
+        private static void ValidatePrompt015Documentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                FloatingOriginDocsPath,
+                FloatingOriginParticipantMatrixPath,
+                FloatingOriginCoordinateMatrixPath,
+                FloatingOriginTestMatrixPath,
+                Prompt016HandoffPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 015 Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 015 floating-origin architecture, participant matrix, coordinate matrix, test matrix, and Prompt 016 handoff exist."
+                    : "Missing Prompt 015 documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

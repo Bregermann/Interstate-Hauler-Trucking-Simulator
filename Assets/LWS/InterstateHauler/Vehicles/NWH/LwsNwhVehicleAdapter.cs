@@ -11,6 +11,8 @@ namespace LWS.InterstateHauler
         [SerializeField] private TrailerHitchModuleWrapper trailerHitch;
         [SerializeField] private LwsVehicleIdentity identity;
 
+        private ILwsWorldOriginService _originService;
+
         public VehicleController VehicleController => vehicleController;
         public bool IsReady => vehicleController != null;
 
@@ -37,6 +39,8 @@ namespace LWS.InterstateHauler
             {
                 identity = GetComponent<LwsVehicleIdentity>();
             }
+
+            ResolveOriginService();
         }
 
         public LwsVehicleTelemetry ReadTelemetry()
@@ -79,7 +83,7 @@ namespace LWS.InterstateHauler
                 fullyGrounded = vehicleController.IsFullyGrounded(),
                 trailerAttached = trailerAttached,
                 trailerId = trailerId,
-                worldPosition = transform.position,
+                worldPosition = ResolveGlobalPosition(),
                 worldRotation = transform.rotation
             };
         }
@@ -99,6 +103,26 @@ namespace LWS.InterstateHauler
 
             LwsVehicleIdentity trailerIdentity = trailerController.GetComponent<LwsVehicleIdentity>();
             return trailerIdentity != null ? trailerIdentity.VehicleId : trailerController.name;
+        }
+
+        private Vector3 ResolveGlobalPosition()
+        {
+            ResolveOriginService();
+            return _originService != null
+                ? _originService.LocalToGlobal(transform.position).ToVector3()
+                : transform.position;
+        }
+
+        private void ResolveOriginService()
+        {
+            if (_originService != null ||
+                LwsApplicationBootstrap.Instance == null ||
+                LwsApplicationBootstrap.Instance.Registry == null)
+            {
+                return;
+            }
+
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _originService);
         }
     }
 }

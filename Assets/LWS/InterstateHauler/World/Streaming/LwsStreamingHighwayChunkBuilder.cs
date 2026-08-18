@@ -220,7 +220,7 @@ namespace LWS.InterstateHauler
                 line.sharedMaterial = material;
                 line.widthMultiplier = 0.14f;
                 line.positionCount = samples.Count;
-                line.useWorldSpace = true;
+                line.useWorldSpace = false;
                 line.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
                 line.receiveShadows = false;
 

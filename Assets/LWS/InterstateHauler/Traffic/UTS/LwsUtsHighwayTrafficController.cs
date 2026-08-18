@@ -39,6 +39,7 @@ namespace LWS.InterstateHauler
         private readonly Dictionary<string, Component> _utsPaths = new Dictionary<string, Component>();
         private readonly List<GameObject> _activeVehicles = new List<GameObject>();
         private readonly LwsUtsTrafficApi _utsApi = new LwsUtsTrafficApi();
+        private ILwsWorldOriginService _originService;
         private Transform _trafficRoot;
         private Transform _lanesRoot;
         private Transform _vehiclesRoot;
@@ -56,6 +57,7 @@ namespace LWS.InterstateHauler
         private bool _prefabSupportLogged;
         private bool _failureLogged;
         private bool _configurationFailedPermanently;
+        private bool _originEventsSubscribed;
         private string _lastMessage = "Not initialized.";
         private string _lastSpawnResult = "No spawn attempted.";
         private string _lastError = string.Empty;
@@ -78,6 +80,7 @@ namespace LWS.InterstateHauler
 
         private void Start()
         {
+            ResolveOriginService();
             if (buildOnStart)
             {
                 TryInitializeFromGraph(roadGraphProvider, roadGraphProvider != null ? roadGraphProvider.Graph : null, true);
@@ -112,6 +115,12 @@ namespace LWS.InterstateHauler
 
         private void OnDestroy()
         {
+            if (_originService != null && _originEventsSubscribed)
+            {
+                _originService.OriginShiftCompleted -= HandleOriginShiftCompleted;
+                _originEventsSubscribed = false;
+            }
+
             UnregisterActiveTraffic();
         }
 
@@ -268,7 +277,7 @@ namespace LWS.InterstateHauler
 
                 var pathObject = new GameObject(lane.laneId);
                 pathObject.transform.SetParent(_lanesRoot, false);
-                Component path = _utsApi.CreatePath(pathObject, lane, trafficPrefabs, spawnPolicy, out string message);
+                Component path = _utsApi.CreatePath(pathObject, lane, trafficPrefabs, spawnPolicy, GlobalToLocalForTraffic, out string message);
                 if (path != null)
                 {
                     _utsPaths[lane.laneId] = path;
@@ -368,7 +377,7 @@ namespace LWS.InterstateHauler
 
                 GameObject prefab = trafficPrefabs[_prefabCursor % trafficPrefabs.Length];
                 _prefabCursor++;
-                GameObject vehicle = _utsApi.SpawnVehicle(prefab, path, lane, spawnIndex, _vehiclesRoot, spawnPolicy, out message);
+                GameObject vehicle = _utsApi.SpawnVehicle(prefab, path, lane, spawnIndex, _vehiclesRoot, spawnPolicy, GlobalToLocalForTraffic, out message);
                 _lastSpawnResult = message;
                 _lastMessage = message;
                 if (vehicle == null)
@@ -381,6 +390,10 @@ namespace LWS.InterstateHauler
                 string trafficId = $"ih.traffic.validation.{_totalSpawned:0000}";
                 LwsTrafficIdentity identity = vehicle.GetComponent<LwsTrafficIdentity>() ?? vehicle.AddComponent<LwsTrafficIdentity>();
                 identity.Configure(trafficId, lane.laneId, prefab.name, ClassifyPrefab(prefab));
+                LwsFloatingOriginRigidbodyParticipant originParticipant =
+                    vehicle.GetComponent<LwsFloatingOriginRigidbodyParticipant>() ??
+                    vehicle.AddComponent<LwsFloatingOriginRigidbodyParticipant>();
+                originParticipant.Configure(trafficId, LwsFloatingOriginParticipantKind.TrafficVehicle, false);
                 TryRegister(identity);
 
                 LwsUtsTrafficVehicleRuntime runtime = vehicle.GetComponent<LwsUtsTrafficVehicleRuntime>() ?? vehicle.AddComponent<LwsUtsTrafficVehicleRuntime>();
@@ -406,10 +419,11 @@ namespace LWS.InterstateHauler
                 return Mathf.Clamp(2 + (_totalSpawned * 3) % Mathf.Max(2, lane.centerline.Length - 4), 1, lane.centerline.Length - 2);
             }
 
+            Vector3 playerGlobal = LocalToGlobalForTraffic(_playerTransform.position);
             int fallbackOffset = 3 + (_totalSpawned % 8);
             return LwsTrafficLaneBuilder.ChooseSpawnPointIndex(
                 lane,
-                _playerTransform.position,
+                playerGlobal,
                 spawnPolicy.minimumPlayerSpawnDistanceMeters,
                 spawnPolicy.maximumPlayerSpawnDistanceMeters,
                 fallbackOffset);
@@ -422,7 +436,7 @@ namespace LWS.InterstateHauler
                 return true;
             }
 
-            return Vector3.Distance(_playerTransform.position, position) >= spawnPolicy.minimumPlayerSpawnDistanceMeters;
+            return Vector3.Distance(LocalToGlobalForTraffic(_playerTransform.position), position) >= spawnPolicy.minimumPlayerSpawnDistanceMeters;
         }
 
         private void DespawnDistantVehicles()
@@ -441,7 +455,9 @@ namespace LWS.InterstateHauler
                     continue;
                 }
 
-                float distance = Vector3.Distance(_playerTransform.position, vehicle.transform.position);
+                float distance = Vector3.Distance(
+                    LocalToGlobalForTraffic(_playerTransform.position),
+                    LocalToGlobalForTraffic(vehicle.transform.position));
                 if (distance > spawnPolicy.despawnDistanceMeters)
                 {
                     RequestDespawn(vehicle, $"Despawned distant traffic vehicle at {distance:0}m.");
@@ -507,6 +523,10 @@ namespace LWS.InterstateHauler
 
             _lanesRoot = EnsureChild(_trafficRoot, LanesRootName);
             _vehiclesRoot = EnsureChild(_trafficRoot, VehiclesRootName);
+            LwsFloatingOriginTransformParticipant laneOriginParticipant =
+                _lanesRoot.GetComponent<LwsFloatingOriginTransformParticipant>() ??
+                _lanesRoot.gameObject.AddComponent<LwsFloatingOriginTransformParticipant>();
+            laneOriginParticipant.Configure("traffic.lanes", LwsFloatingOriginParticipantKind.TrafficLaneRoot, false);
         }
 
         private void EnsureDebugPanel()
@@ -745,6 +765,53 @@ namespace LWS.InterstateHauler
 
             return count;
         }
+
+        public Vector3 GlobalToLocalForTraffic(Vector3 globalPosition)
+        {
+            ResolveOriginService();
+            return _originService != null
+                ? _originService.GlobalToLocal(LwsWorldPositionD.FromVector3(globalPosition))
+                : globalPosition;
+        }
+
+        public Vector3 LocalToGlobalForTraffic(Vector3 localPosition)
+        {
+            ResolveOriginService();
+            return _originService != null
+                ? _originService.LocalToGlobal(localPosition).ToVector3()
+                : localPosition;
+        }
+
+        private void ResolveOriginService()
+        {
+            if (_originService != null ||
+                LwsApplicationBootstrap.Instance == null ||
+                LwsApplicationBootstrap.Instance.Registry == null)
+            {
+                return;
+            }
+
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _originService);
+            if (_originService != null && !_originEventsSubscribed)
+            {
+                _originService.OriginShiftCompleted += HandleOriginShiftCompleted;
+                _originEventsSubscribed = true;
+            }
+        }
+
+        private void HandleOriginShiftCompleted(LwsOriginShiftEvent shiftEvent)
+        {
+            int refreshed = 0;
+            foreach (KeyValuePair<string, Component> pair in _utsPaths)
+            {
+                if (_utsApi.RefreshPathPointCache(pair.Value))
+                {
+                    refreshed++;
+                }
+            }
+
+            _lastMessage = $"Floating-origin shift refreshed {refreshed} UTS path cache(s).";
+        }
     }
 
     [DisallowMultipleComponent]
@@ -770,7 +837,8 @@ namespace LWS.InterstateHauler
             }
 
             _nextCheckTime = Time.time + 0.5f;
-            if (Vector3.Distance(transform.position, _lane.EndPosition) <= Mathf.Max(20f, _policy.despawnNearLaneEndMeters))
+            Vector3 globalPosition = _controller.LocalToGlobalForTraffic(transform.position);
+            if (Vector3.Distance(globalPosition, _lane.EndPosition) <= Mathf.Max(20f, _policy.despawnNearLaneEndMeters))
             {
                 _controller.RequestDespawn(gameObject, $"Despawned traffic vehicle near end of {_lane.laneId}.");
             }

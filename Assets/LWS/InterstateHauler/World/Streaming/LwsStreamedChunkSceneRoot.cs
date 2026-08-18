@@ -5,7 +5,7 @@ using UnityEngine;
 namespace LWS.InterstateHauler
 {
     [DisallowMultipleComponent]
-    public sealed class LwsStreamedChunkSceneRoot : MonoBehaviour, ILwsStreamedChunkParticipant
+    public sealed class LwsStreamedChunkSceneRoot : MonoBehaviour, ILwsStreamedChunkParticipant, ILwsFloatingOriginParticipant
     {
         private const string NeighboringScenesTypeName = "PixelCrushers.SceneStreamer.NeighboringScenes";
 
@@ -14,9 +14,21 @@ namespace LWS.InterstateHauler
         [SerializeField] private string[] neighborSceneNames = Array.Empty<string>();
         [SerializeField] private bool synchronizeSceneStreamerNeighbors = true;
 
+        private ILwsWorldOriginService _originService;
+        private bool _originRegistered;
+
         public string ChunkId => chunkId;
         public string SceneName => sceneName;
         public string[] NeighborSceneNames => neighborSceneNames;
+        public string ParticipantId => $"chunk.{chunkId}";
+        public LwsFloatingOriginParticipantKind ParticipantKind => LwsFloatingOriginParticipantKind.LoadedChunkRoot;
+        public Transform ParticipantTransform => transform;
+        public bool AlignToCurrentOriginOnRegistration => true;
+
+        private void OnEnable()
+        {
+            RegisterFloatingOriginParticipant();
+        }
 
         private void Awake()
         {
@@ -24,6 +36,22 @@ namespace LWS.InterstateHauler
             {
                 EnsureSceneStreamerNeighborMetadata();
             }
+        }
+
+        private void Start()
+        {
+            RegisterFloatingOriginParticipant();
+        }
+
+        private void OnDisable()
+        {
+            if (!_originRegistered)
+            {
+                return;
+            }
+
+            _originService?.UnregisterParticipant(this);
+            _originRegistered = false;
         }
 
         public void OnChunkLoaded(LwsWorldChunkRuntimeState state)
@@ -40,6 +68,36 @@ namespace LWS.InterstateHauler
 
         public void OnChunkUnloaded(LwsWorldChunkRuntimeState state)
         {
+        }
+
+        public bool ApplyOriginShift(LwsOriginShiftEvent shiftEvent, out string message)
+        {
+            transform.position += shiftEvent.LocalTranslationDelta;
+            message = $"{ChunkId} chunk root shifted by {shiftEvent.LocalTranslationDelta}.";
+            return true;
+        }
+
+        private void RegisterFloatingOriginParticipant()
+        {
+            if (_originRegistered)
+            {
+                return;
+            }
+
+            if (_originService == null &&
+                LwsApplicationBootstrap.Instance != null &&
+                LwsApplicationBootstrap.Instance.Registry != null)
+            {
+                LwsApplicationBootstrap.Instance.Registry.TryGet(out _originService);
+            }
+
+            if (_originService == null)
+            {
+                return;
+            }
+
+            _originService.RegisterParticipant(this);
+            _originRegistered = true;
         }
 
         private void EnsureSceneStreamerNeighborMetadata()

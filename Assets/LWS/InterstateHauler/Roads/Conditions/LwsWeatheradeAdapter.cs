@@ -19,12 +19,14 @@ namespace LWS.InterstateHauler
 
         private ILwsRoadConditionService _roadConditionService;
         private ILwsPlayerVehicleService _playerVehicleService;
+        private ILwsWorldOriginService _originService;
         private Type _coverageBaseType;
         private Type _rainCoverageType;
         private Type _snowCoverageType;
         private Component _coverageComponent;
         private CoverageMode _coverageMode = CoverageMode.None;
         private bool _createdCoverageObject;
+        private bool _originEventsSubscribed;
         private LwsRoadConditionSnapshot _lastApplied;
 
         public string AdapterId => "weatherade.visuals";
@@ -51,6 +53,11 @@ namespace LWS.InterstateHauler
         private void OnDisable()
         {
             _roadConditionService?.DetachVisualAdapter(this);
+            if (_originService != null && _originEventsSubscribed)
+            {
+                _originService.OriginShiftCompleted -= HandleOriginShiftCompleted;
+                _originEventsSubscribed = false;
+            }
         }
 
         public void ApplyRoadCondition(LwsRoadConditionSnapshot snapshot)
@@ -134,6 +141,12 @@ namespace LWS.InterstateHauler
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _roadConditionService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _playerVehicleService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _originService);
+            if (_originService != null && !_originEventsSubscribed)
+            {
+                _originService.OriginShiftCompleted += HandleOriginShiftCompleted;
+                _originEventsSubscribed = true;
+            }
         }
 
         private void ResolveTypes()
@@ -209,6 +222,16 @@ namespace LWS.InterstateHauler
 
             Camera mainCamera = Camera.main;
             return mainCamera != null ? mainCamera.transform : transform;
+        }
+
+        private void HandleOriginShiftCompleted(LwsOriginShiftEvent shiftEvent)
+        {
+            ConfigureCoverageBase();
+            if (_coverageComponent != null)
+            {
+                InvokeOptional(_coverageComponent, "UpdateCoverageMaterials");
+                Status = $"Weatherade coverage rebound after origin shift {shiftEvent.NewOriginVersion}.";
+            }
         }
 
         private Component GetWeatheradeSingleton()

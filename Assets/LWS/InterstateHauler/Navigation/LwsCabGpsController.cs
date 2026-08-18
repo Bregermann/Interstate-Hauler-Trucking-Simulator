@@ -20,6 +20,7 @@ namespace LWS.InterstateHauler
         private ILwsNavigationService _navigationService;
         private ILwsGpsVoiceGuidanceService _voiceService;
         private ILwsWeatherService _weatherService;
+        private ILwsWorldOriginService _originService;
         private Canvas _canvas;
         private Image _panelImage;
         private LwsGpsMapGraphic _mapGraphic;
@@ -61,7 +62,7 @@ namespace LWS.InterstateHauler
                 ResolveServices();
             }
 
-            _navigationService?.UpdateVehiclePose(transform.position, transform.forward, Time.deltaTime);
+            _navigationService?.UpdateVehiclePose(ResolveGlobalPosition(), transform.forward, Time.deltaTime);
             if (Time.unscaledTime < _nextRefreshTime)
             {
                 return;
@@ -131,6 +132,7 @@ namespace LWS.InterstateHauler
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _navigationService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _voiceService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _weatherService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _originService);
         }
 
         private void ConfigureVoice()
@@ -172,7 +174,7 @@ namespace LWS.InterstateHauler
             bool active = state != null && state.routeActive && _presentedRoute != null && _presentedRoute.succeeded;
             if (_mapGraphic != null)
             {
-                _mapGraphic.SetRoute(active ? _presentedRoute.waypoints : null, transform.position, transform.forward);
+                _mapGraphic.SetRoute(active ? _presentedRoute.waypoints : null, ResolveGlobalPosition(), transform.forward);
             }
 
             if (_instructionText != null)
@@ -202,6 +204,13 @@ namespace LWS.InterstateHauler
 
             float daylight = _weatherService != null ? _weatherService.CurrentSnapshot.Daylight01 : 1f;
             _panelImage.color = Color.Lerp(nightPanelColor, dayPanelColor, Mathf.Clamp01(daylight));
+        }
+
+        private Vector3 ResolveGlobalPosition()
+        {
+            return _originService != null
+                ? _originService.LocalToGlobal(transform.position).ToVector3()
+                : transform.position;
         }
 
         private static string FormatDistance(float meters)

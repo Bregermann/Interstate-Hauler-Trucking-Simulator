@@ -89,7 +89,15 @@ namespace LWS.InterstateHauler
         private static Vector3 ResolvePlayerPosition()
         {
             LwsPlayerTruck playerTruck = FindFirstObjectByType<LwsPlayerTruck>();
-            return playerTruck != null ? playerTruck.transform.position : Vector3.zero;
+            Vector3 localPosition = playerTruck != null ? playerTruck.transform.position : Vector3.zero;
+            if (LwsApplicationBootstrap.Instance != null &&
+                LwsApplicationBootstrap.Instance.Registry != null &&
+                LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsWorldOriginService originService))
+            {
+                return originService.LocalToGlobal(localPosition).ToVector3();
+            }
+
+            return localPosition;
         }
     }
 }

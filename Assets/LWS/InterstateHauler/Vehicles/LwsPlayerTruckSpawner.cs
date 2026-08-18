@@ -197,6 +197,11 @@ namespace LWS.InterstateHauler
             {
                 truckInstance.AddComponent<LwsTruckDashboardDebugPanel>();
             }
+
+            LwsFloatingOriginRigidbodyParticipant originParticipant =
+                truckInstance.GetComponent<LwsFloatingOriginRigidbodyParticipant>() ??
+                truckInstance.AddComponent<LwsFloatingOriginRigidbodyParticipant>();
+            originParticipant.Configure(spawnedVehicleId, LwsFloatingOriginParticipantKind.PlayerTractor, false);
         }
 
         private void ConfigureTrailerInstance(GameObject trailerInstance)
@@ -213,6 +218,11 @@ namespace LWS.InterstateHauler
                 LwsVehicleRole.Trailer,
                 "NWH Dry Van Validation Trailer",
                 false);
+
+            LwsFloatingOriginRigidbodyParticipant originParticipant =
+                trailerInstance.GetComponent<LwsFloatingOriginRigidbodyParticipant>() ??
+                trailerInstance.AddComponent<LwsFloatingOriginRigidbodyParticipant>();
+            originParticipant.Configure(spawnedTrailerId, LwsFloatingOriginParticipantKind.PlayerTrailer, false);
         }
 
         private void EnsureNwhInputProvider()

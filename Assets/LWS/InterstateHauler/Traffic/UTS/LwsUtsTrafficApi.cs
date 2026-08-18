@@ -115,6 +115,17 @@ namespace LWS.InterstateHauler
 
         public Component CreatePath(GameObject owner, LwsTrafficLaneDefinition lane, GameObject[] prefabs, LwsTrafficSpawnPolicy policy, out string message)
         {
+            return CreatePath(owner, lane, prefabs, policy, null, out message);
+        }
+
+        public Component CreatePath(
+            GameObject owner,
+            LwsTrafficLaneDefinition lane,
+            GameObject[] prefabs,
+            LwsTrafficSpawnPolicy policy,
+            Func<Vector3, Vector3> globalToLocal,
+            out string message)
+        {
             message = string.Empty;
             if (!IsAvailable)
             {
@@ -153,7 +164,7 @@ namespace LWS.InterstateHauler
                 Invoke(path, "DrawCurved", false, forwardDirection);
             }
 
-            PopulatePathPoints(owner.transform, path, lane);
+            PopulatePathPoints(owner.transform, path, lane, globalToLocal);
             if (_walkDirectionType != null)
             {
                 Invoke(path, "DrawCurved", false, Enum.Parse(_walkDirectionType, "Forward"));
@@ -176,6 +187,19 @@ namespace LWS.InterstateHauler
             LwsTrafficSpawnPolicy policy,
             out string message)
         {
+            return SpawnVehicle(prefab, path, lane, pointIndex, parent, policy, null, out message);
+        }
+
+        public GameObject SpawnVehicle(
+            GameObject prefab,
+            Component path,
+            LwsTrafficLaneDefinition lane,
+            int pointIndex,
+            Transform parent,
+            LwsTrafficSpawnPolicy policy,
+            Func<Vector3, Vector3> globalToLocal,
+            out string message)
+        {
             message = string.Empty;
             if (!IsAvailable)
             {
@@ -196,7 +220,10 @@ namespace LWS.InterstateHauler
             }
 
             pointIndex = Mathf.Clamp(pointIndex, 1, lane.centerline.Length - 2);
-            GameObject instance = UnityEngine.Object.Instantiate(prefab, lane.centerline[pointIndex], Quaternion.identity, parent);
+            Vector3 spawnPosition = globalToLocal != null
+                ? globalToLocal(lane.centerline[pointIndex])
+                : lane.centerline[pointIndex];
+            GameObject instance = UnityEngine.Object.Instantiate(prefab, spawnPosition, Quaternion.identity, parent);
             instance.name = $"IH UTS Traffic {prefab.name}";
             Component wheels = FindComponent(instance, _carWheelsType);
             GameObject controlledObject = wheels != null ? wheels.gameObject : instance;
@@ -244,7 +271,38 @@ namespace LWS.InterstateHauler
             return Mathf.Min(max, LwsTrafficLaneBuilder.MilesPerHourToMetersPerSecond(lane != null ? lane.speedLimitMph : 45f) * scale);
         }
 
-        private static void PopulatePathPoints(Transform owner, Component path, LwsTrafficLaneDefinition lane)
+        public bool RefreshPathPointCache(Component path)
+        {
+            if (path == null)
+            {
+                return false;
+            }
+
+            IList positions = GetMember(path, "pathPoint") as IList;
+            IList transforms = GetMember(path, "pathPointTransform") as IList;
+            if (positions == null || transforms == null)
+            {
+                return false;
+            }
+
+            positions.Clear();
+            for (int i = 0; i < transforms.Count; i++)
+            {
+                Transform point = transforms[i] as Transform;
+                if (point != null)
+                {
+                    positions.Add(point.position);
+                }
+            }
+
+            return true;
+        }
+
+        private static void PopulatePathPoints(
+            Transform owner,
+            Component path,
+            LwsTrafficLaneDefinition lane,
+            Func<Vector3, Vector3> globalToLocal)
         {
             IList positions = GetMember(path, "pathPoint") as IList;
             IList transforms = GetMember(path, "pathPointTransform") as IList;
@@ -263,7 +321,9 @@ namespace LWS.InterstateHauler
             {
                 var point = new GameObject($"p{i:000}");
                 point.transform.SetParent(pointsRoot, false);
-                point.transform.position = lane.centerline[i];
+                point.transform.position = globalToLocal != null
+                    ? globalToLocal(lane.centerline[i])
+                    : lane.centerline[i];
                 positions?.Add(point.transform.position);
                 transforms?.Add(point);
             }

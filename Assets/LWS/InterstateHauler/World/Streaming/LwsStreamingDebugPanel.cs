@@ -98,7 +98,8 @@ namespace LWS.InterstateHauler
             _states = _streamingService.ChunkStates.OrderBy(s => s.signedAheadDistanceMeters).ToList();
             _summary =
                 $"World: {_streamingService.WorldId}  Active: {_streamingService.ActiveWorldChunkId}\n" +
-                $"Anchor: {anchor.TractorPosition.x:0},{anchor.TractorPosition.z:0}  Speed: {anchor.SpeedMetersPerSecond:0.0}m/s  Trailer: {anchor.HasTrailer}\n" +
+                $"Anchor Global: {anchor.TractorPosition.x:0},{anchor.TractorPosition.z:0}  Local: {anchor.TractorLocalPosition.x:0},{anchor.TractorLocalPosition.z:0}\n" +
+                $"Speed: {anchor.SpeedMetersPerSecond:0.0}m/s  Trailer: {anchor.HasTrailer}\n" +
                 $"Frozen: {_streamingService.IsFrozen}  Load: {_streamingService.LastLoadDurationSeconds:0.000}s  Unload: {_streamingService.LastUnloadDurationSeconds:0.000}s\n" +
                 $"Last Error: {_streamingService.LastError}";
         }

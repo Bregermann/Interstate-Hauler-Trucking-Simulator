@@ -14,8 +14,11 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool fallbackToTransformWhenNoPlayer = true;
         [SerializeField] private Vector3 fallbackHeading = Vector3.forward;
         [SerializeField] private float trailerLookupIntervalSeconds = 1.0f;
+        [SerializeField] private bool ensureFloatingOriginCoordinator = true;
+        [SerializeField] private LwsFloatingOriginCoordinator floatingOriginCoordinator;
 
         private ILwsWorldStreamingService _streamingService;
+        private ILwsWorldOriginService _originService;
         private ILwsPlayerVehicleService _playerVehicleService;
         private ILwsVehicleRuntimeService _vehicleRuntimeService;
         private string _cachedTrailerId = string.Empty;
@@ -36,6 +39,11 @@ namespace LWS.InterstateHauler
             if (sceneStreamerAdapter == null)
             {
                 sceneStreamerAdapter = GetComponent<LwsSceneStreamerAdapter>();
+            }
+
+            if (ensureFloatingOriginCoordinator)
+            {
+                EnsureFloatingOriginCoordinator();
             }
         }
 
@@ -100,6 +108,7 @@ namespace LWS.InterstateHauler
             }
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _streamingService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _originService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _playerVehicleService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _vehicleRuntimeService);
         }
@@ -115,22 +124,36 @@ namespace LWS.InterstateHauler
                 Vector3 trailerPosition = hasTrailer
                     ? ResolveTrailerPosition(telemetry.trailerId, truck.transform.position - heading * 18f)
                     : truck.transform.position;
+                LwsWorldPositionD tractorGlobal = _originService != null
+                    ? _originService.LocalToGlobal(truck.transform.position)
+                    : LwsWorldPositionD.FromVector3(truck.transform.position);
+                LwsWorldPositionD trailerGlobal = _originService != null
+                    ? _originService.LocalToGlobal(trailerPosition)
+                    : LwsWorldPositionD.FromVector3(trailerPosition);
 
                 return new LwsWorldStreamingAnchorState(
                     truck.transform.position,
+                    tractorGlobal,
                     heading,
                     Mathf.Abs(telemetry.signedSpeedMetersPerSecond),
                     hasTrailer,
-                    trailerPosition);
+                    trailerPosition,
+                    trailerGlobal);
             }
 
             Vector3 fallback = fallbackHeading.sqrMagnitude > 0.0001f ? fallbackHeading.normalized : Vector3.forward;
+            Vector3 fallbackLocal = fallbackToTransformWhenNoPlayer ? transform.position : Vector3.zero;
+            LwsWorldPositionD fallbackGlobal = _originService != null
+                ? _originService.LocalToGlobal(fallbackLocal)
+                : LwsWorldPositionD.FromVector3(fallbackLocal);
             return new LwsWorldStreamingAnchorState(
-                fallbackToTransformWhenNoPlayer ? transform.position : Vector3.zero,
+                fallbackLocal,
+                fallbackGlobal,
                 fallback,
                 0f,
                 false,
-                Vector3.zero);
+                Vector3.zero,
+                LwsWorldPositionD.Zero);
         }
 
         private Vector3 ResolveTrailerPosition(string trailerId, Vector3 fallback)
@@ -172,6 +195,19 @@ namespace LWS.InterstateHauler
             _cachedTrailerId = string.Empty;
             _cachedTrailerTransform = null;
             return fallback;
+        }
+
+        private void EnsureFloatingOriginCoordinator()
+        {
+            if (floatingOriginCoordinator == null)
+            {
+                floatingOriginCoordinator = GetComponent<LwsFloatingOriginCoordinator>();
+            }
+
+            if (floatingOriginCoordinator == null)
+            {
+                floatingOriginCoordinator = gameObject.AddComponent<LwsFloatingOriginCoordinator>();
+            }
         }
     }
 }

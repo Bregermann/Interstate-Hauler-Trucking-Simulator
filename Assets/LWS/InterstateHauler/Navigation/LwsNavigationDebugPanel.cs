@@ -132,10 +132,17 @@ namespace LWS.InterstateHauler
                 LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsPlayerVehicleService playerVehicleService) &&
                 playerVehicleService.ActiveTruck != null)
             {
-                return playerVehicleService.ActiveTruck.transform.position;
+                Vector3 localPosition = playerVehicleService.ActiveTruck.transform.position;
+                return LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsWorldOriginService originService)
+                    ? originService.LocalToGlobal(localPosition).ToVector3()
+                    : localPosition;
             }
 
-            return transform.position;
+            return LwsApplicationBootstrap.Instance != null &&
+                   LwsApplicationBootstrap.Instance.Registry != null &&
+                   LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsWorldOriginService fallbackOriginService)
+                ? fallbackOriginService.LocalToGlobal(transform.position).ToVector3()
+                : transform.position;
         }
 
         private void ResolveServices()

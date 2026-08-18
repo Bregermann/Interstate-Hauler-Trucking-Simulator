@@ -122,6 +122,11 @@ namespace LWS.InterstateHauler
                 .OrderBy(c => c.DistanceTo(worldPosition))
                 .FirstOrDefault();
         }
+
+        public LwsWorldChunkDefinition FindContainingChunk(LwsWorldPositionD globalPosition)
+        {
+            return FindContainingChunk(globalPosition.ToVector3());
+        }
     }
 
     public readonly struct LwsWorldStreamingValidationResult
