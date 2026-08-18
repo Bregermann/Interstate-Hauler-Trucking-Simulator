@@ -8,6 +8,14 @@ Weather service:
 - implementation: `LwsWeatherCoordinator`
 - adapter: `LwsWeatherMakerAdapter`
 
+Prompt 012A runtime lifecycle note:
+
+- `InterstateCorridorValidation` explicitly enables weather validation.
+- The corridor builder carries a serialized reference to `Assets/WeatherMaker/Prefab/WeatherMakerPrefab.prefab`.
+- The Weather Maker runtime should appear once as `IH Weather Maker Runtime`.
+- The old corridor directional light is disabled; Weather Maker owns sun/moon/time-of-day presentation.
+- `LwsWeatherDebugPanel` separates LWS semantic state from Weather Maker presentation diagnostics.
+
 Prompt 013 should consume `ILwsWeatherService.CurrentSnapshot`, not Weather Maker vendor classes.
 
 Relevant snapshot fields:

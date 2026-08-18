@@ -35,6 +35,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool createNavigationValidation = true;
         [SerializeField] private bool createWeatherValidation = true;
         [SerializeField] private bool createRoadConditionValidation = true;
+        [SerializeField] private GameObject weatherMakerPrefab;
         [SerializeField] private LwsUtsTrafficProfile validationTrafficProfile;
         [SerializeField] private GameObject[] validationTrafficPrefabs;
 
@@ -47,6 +48,8 @@ namespace LWS.InterstateHauler
         public float CarriagewayWidthMeters => laneWidthMeters * 2f + rightShoulderWidthMeters + leftShoulderWidthMeters;
         public float CorridorLengthMeters => LastGraph != null && LastGraph.edges.Count > 0 ? LastGraph.edges[0].distanceMeters : 0f;
         public float CorridorLengthMiles => CorridorLengthMeters / MetersPerMile;
+        public bool CreateWeatherValidationEnabled => createWeatherValidation;
+        public bool WeatherMakerPrefabConfigured => weatherMakerPrefab != null;
 
         private void Start()
         {
@@ -187,7 +190,12 @@ namespace LWS.InterstateHauler
 
             if (roadGraphProvider.GetComponent<LwsWeatherMakerAdapter>() == null)
             {
-                roadGraphProvider.gameObject.AddComponent<LwsWeatherMakerAdapter>();
+                LwsWeatherMakerAdapter adapter = roadGraphProvider.gameObject.AddComponent<LwsWeatherMakerAdapter>();
+                adapter.ConfigureWeatherMakerPrefab(weatherMakerPrefab);
+            }
+            else
+            {
+                roadGraphProvider.GetComponent<LwsWeatherMakerAdapter>().ConfigureWeatherMakerPrefab(weatherMakerPrefab);
             }
 
             if (roadGraphProvider.GetComponent<LwsWeatherDebugPanel>() == null)

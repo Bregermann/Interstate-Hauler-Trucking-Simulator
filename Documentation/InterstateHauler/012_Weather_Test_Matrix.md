@@ -8,6 +8,9 @@
 | Service transition events | Clear -> Rain | N/A | N/A | N/A | N/A | N/A | Automated | Coordinator exposes transition and precipitation events. |
 | Duplicate weather service | N/A | N/A | N/A | N/A | N/A | N/A | Automated | Duplicate active coordinator initialization is rejected. |
 | Adapter ownership | Rain/Snow | N/A | N/A | N/A | N/A | N/A | Automated | PlayMode fake adapter verifies one active adapter and safe detach behavior. |
+| Adapter request bridge | Heavy Rain | N/A | N/A | N/A | N/A | N/A | Automated | PlayMode fake adapter verifies the requested LWS preset/profile matches the semantic snapshot. |
+| Weather Maker runtime creation | Clear/default | Main gameplay camera | N/A | N/A | Mirror cameras excluded | N/A | Automated | PlayMode adapter test loads `WeatherMakerPrefab`, verifies exactly one runtime instance, day/night manager availability, camera allow-list binding, and no duplicate runtime after camera refresh. |
+| Corridor weather wiring | Default | Validation observer/gameplay | Required | Required | Required | N/A | Automated | `InterstateCorridorValidation` asserts weather validation enabled, serialized Weather Maker prefab reference present, exactly one `LwsWeatherMakerAdapter`, debug panel present, active weather service attached, and no duplicate runtime on camera rebind. |
 | Day/night snapshot | Noon/Midnight | N/A | N/A | GPS seam | N/A | N/A | Automated | Weather service updates `Daylight01`, `IsDay`, and `IsNight`. |
 | Debug panel service lookup | N/A | N/A | N/A | N/A | N/A | N/A | Automated | PlayMode panel resolves bootstrap weather service. |
 | Clear visual pass | Clear | Cockpit/exterior | Required | Required | Required | Required | Manual required | Confirm sky, sun, visibility, dashboard/GPS readability. |
@@ -25,6 +28,8 @@
 | Traffic regression | Rain/Storm/Snow/Fog/Night | Gameplay | Required | N/A | Optional | Required | Manual required | Traffic must continue spawning and driving. |
 | GPS regression | Rain/Storm/Snow/Fog/Night | Cockpit | Optional | Required | Optional | Required | Manual required | Route, physical display, voice setting, and reroute must remain independent. |
 | Road physics guard | Rain/Snow/Fog | Any | Optional | Optional | Optional | N/A | Automated/manual | LWS snapshot exposes input potential only; no wet/snow/ice traction added. |
+
+Prompt 012A manual visual checks remain required in the normal Unity Editor. Automated tests verify runtime wiring and profile requests; they do not assert rendered pixels for clouds, precipitation, fog, lightning, or sun/moon presentation.
 
 Manual validation scene:
 

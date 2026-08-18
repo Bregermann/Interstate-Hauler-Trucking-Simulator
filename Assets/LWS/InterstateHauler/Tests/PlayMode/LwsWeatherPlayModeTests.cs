@@ -3,6 +3,10 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace LWS.InterstateHauler.Tests.PlayMode
 {
     public sealed class LwsWeatherPlayModeTests
@@ -91,16 +95,96 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             LwsApplicationBootstrap.ResetForTests();
         }
 
+        [UnityTest]
+        public IEnumerator WeatherRequestSnapshotAndAdapterRequestStayAligned()
+        {
+            var registry = new LwsServiceRegistry();
+            var weather = new LwsWeatherCoordinator();
+            registry.Register<ILwsWeatherService>(weather);
+            Assert.IsTrue(registry.InitializeAll().Succeeded);
+
+            var adapter = new FakeWeatherAdapter();
+            Assert.IsTrue(weather.AttachAdapter(adapter));
+
+            LwsServiceResult result = weather.RequestWeather(LwsWeatherPresetCatalog.HeavyRainId, 0f, true);
+            yield return null;
+
+            Assert.IsTrue(result.Succeeded, result.Message);
+            Assert.AreEqual(LwsWeatherPresetCatalog.HeavyRainId, weather.CurrentSnapshot.weatherPresetId);
+            Assert.AreEqual(LwsWeatherPresetCatalog.HeavyRainId, adapter.LastRequestedPresetId);
+            Assert.AreEqual("WeatherMakerProfile_HeavyRain", adapter.LastRequestedProfileName);
+            Assert.AreEqual(0f, adapter.LastTransitionSeconds);
+            Assert.IsTrue(adapter.LastInstant);
+            registry.ShutdownAll();
+        }
+
+#if UNITY_EDITOR
+        [UnityTest]
+        public IEnumerator WeatherMakerAdapterCanInstantiatePrefabAndRefreshCameraWithoutDuplicates()
+        {
+            LwsApplicationBootstrap.ResetForTests();
+            CleanupWeatherMakerRuntime();
+            yield return null;
+
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(LwsWeatherMakerAdapter.DefaultWeatherMakerPrefabPath);
+            Assert.IsNotNull(prefab, LwsWeatherMakerAdapter.DefaultWeatherMakerPrefabPath);
+
+            var cameraObject = new GameObject("IH Gameplay Camera");
+            cameraObject.tag = "MainCamera";
+            cameraObject.AddComponent<Camera>();
+
+            var bootstrapObject = new GameObject("weather-bootstrap-runtime-test");
+            bootstrapObject.AddComponent<LwsApplicationBootstrap>();
+
+            var adapterObject = new GameObject("weather-maker-adapter-runtime-test");
+            LwsWeatherMakerAdapter adapter = adapterObject.AddComponent<LwsWeatherMakerAdapter>();
+            adapter.ConfigureWeatherMakerPrefab(prefab);
+
+            yield return null;
+            yield return null;
+
+            Assert.IsTrue(adapter.WeatherMakerPrefabConfigured);
+            Assert.IsTrue(adapter.WeatherMakerAvailable, adapter.AdapterStatus);
+            Assert.IsTrue(adapter.WeatherMakerInstanceResolved, adapter.AdapterStatus);
+            Assert.AreEqual(1, adapter.WeatherMakerInstanceCount, adapter.AdapterStatus);
+            Assert.IsTrue(adapter.DayNightManagerAvailable, adapter.AdapterStatus);
+
+            int instanceCount = adapter.WeatherMakerInstanceCount;
+            adapter.RefreshCameraBindingForValidation();
+            yield return null;
+
+            Assert.AreEqual(instanceCount, adapter.WeatherMakerInstanceCount);
+            Assert.IsTrue(adapter.WeatherCameraBound, adapter.AdapterStatus);
+            Assert.IsTrue(adapter.ActiveCameraAllowed, adapter.AdapterStatus);
+            Assert.AreEqual("IH Gameplay Camera", adapter.ActiveCameraName);
+
+            Object.Destroy(adapterObject);
+            Object.Destroy(bootstrapObject);
+            Object.Destroy(cameraObject);
+            CleanupWeatherMakerRuntime();
+            LwsApplicationBootstrap.ResetForTests();
+            yield return null;
+        }
+#endif
+
         private sealed class FakeWeatherAdapter : ILwsWeatherRuntimeAdapter
         {
             public bool WeatherMakerAvailable => true;
             public bool WeatherCameraBound => true;
             public string ActiveCameraName => "FakeCamera";
             public string AdapterStatus { get; private set; } = "Ready";
+            public string LastRequestedPresetId { get; private set; } = "None";
+            public string LastRequestedProfileName { get; private set; } = "None";
+            public float LastTransitionSeconds { get; private set; } = -1f;
+            public bool LastInstant { get; private set; }
 
             public bool ApplyWeatherPreset(LwsWeatherPreset preset, float transitionSeconds, bool instant)
             {
                 AdapterStatus = preset.presetId;
+                LastRequestedPresetId = preset.presetId;
+                LastRequestedProfileName = preset.weatherMakerProfileName;
+                LastTransitionSeconds = transitionSeconds;
+                LastInstant = instant;
                 return true;
             }
 
@@ -119,5 +203,22 @@ namespace LWS.InterstateHauler.Tests.PlayMode
                 return true;
             }
         }
+
+#if UNITY_EDITOR
+        private static void CleanupWeatherMakerRuntime()
+        {
+            GameObject runtime = GameObject.Find("IH Weather Maker Runtime");
+            if (runtime != null)
+            {
+                Object.Destroy(runtime);
+            }
+
+            GameObject vendorNamedRuntime = GameObject.Find("WeatherMakerPrefab");
+            if (vendorNamedRuntime != null)
+            {
+                Object.Destroy(vendorNamedRuntime);
+            }
+        }
+#endif
     }
 }

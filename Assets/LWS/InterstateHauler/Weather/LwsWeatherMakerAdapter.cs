@@ -11,34 +11,65 @@ namespace LWS.InterstateHauler
 {
     [DefaultExecutionOrder(120)]
     [DisallowMultipleComponent]
-    public class LwsWeatherMakerAdapter : MonoBehaviour, ILwsWeatherRuntimeAdapter
+    public class LwsWeatherMakerAdapter : MonoBehaviour, ILwsWeatherRuntimeAdapter, ILwsWeatherRuntimeDiagnostics
     {
-        private const string WeatherMakerPrefabPath = "Assets/WeatherMaker/Prefab/WeatherMakerPrefab.prefab";
+        public const string DefaultWeatherMakerPrefabPath = "Assets/WeatherMaker/Prefab/WeatherMakerPrefab.prefab";
         private const string WeatherMakerScriptTypeName = "DigitalRuby.WeatherMaker.WeatherMakerScript";
         private const string WeatherMakerProfileTypeName = "DigitalRuby.WeatherMaker.WeatherMakerProfileScript";
         private const string WeatherMakerPerformanceProfileTypeName = "DigitalRuby.WeatherMaker.WeatherMakerPerformanceProfileScript";
         private const string DayNightManagerTypeName = "DigitalRuby.WeatherMaker.WeatherMakerDayNightCycleManagerScript";
 
+        [SerializeField] private GameObject weatherMakerPrefab;
         [SerializeField] private bool instantiateWeatherMakerIfMissing = true;
         [SerializeField] private bool bindMainCamera = true;
+        [SerializeField] private bool suppressNonWeatherMakerDirectionalLights = true;
         [SerializeField] private bool applyQualityOnStart = true;
         [SerializeField] private LwsRenderQualityTier defaultQualityTier = LwsRenderQualityTier.High;
         [SerializeField] private float cameraRefreshIntervalSeconds = 0.75f;
+        [SerializeField] private string runtimeInstanceName = "IH Weather Maker Runtime";
 
         private ILwsWeatherService _weatherService;
         private object _weatherMakerInstance;
+        private object _dayNightManagerInstance;
         private Type _weatherMakerScriptType;
         private Type _weatherMakerProfileType;
         private Type _weatherMakerPerformanceProfileType;
         private Type _dayNightManagerType;
         private float _nextCameraRefreshTime;
         private bool _attached;
+        private bool _directionalLightsSuppressed;
 
         public bool WeatherMakerAvailable { get; private set; }
         public bool WeatherCameraBound { get; private set; }
         public string ActiveCameraName { get; private set; } = "None";
         public string AdapterStatus { get; private set; } = "Not initialized.";
         public string LastAppliedWeatherMakerProfile { get; private set; } = "None";
+        public bool WeatherMakerPrefabConfigured => weatherMakerPrefab != null;
+        public bool WeatherMakerRuntimeExists => WeatherMakerAvailable;
+        public bool WeatherMakerInstanceResolved { get; private set; }
+        public int WeatherMakerInstanceCount { get; private set; }
+        public bool DayNightManagerAvailable { get; private set; }
+        public string RuntimeInstanceName { get; private set; } = "None";
+        public bool ActiveCameraAllowed { get; private set; }
+        public string LastRequestedLwsPresetId { get; private set; } = "None";
+        public string LastRequestedWeatherMakerProfile { get; private set; } = "None";
+        public string LastResolvedWeatherMakerProfile { get; private set; } = "None";
+        public bool LastWeatherMakerApplySucceeded { get; private set; }
+        public float WeatherMakerTimeOfDayHours { get; private set; } = 12f;
+        public string LastRuntimeError { get; private set; } = string.Empty;
+
+        public void ConfigureWeatherMakerPrefab(GameObject prefab)
+        {
+            if (prefab != null)
+            {
+                weatherMakerPrefab = prefab;
+            }
+        }
+
+        public void RefreshCameraBindingForValidation()
+        {
+            RefreshCameraBinding();
+        }
 
         private void OnEnable()
         {
@@ -81,13 +112,21 @@ namespace LWS.InterstateHauler
 
         public bool ApplyWeatherPreset(LwsWeatherPreset preset, float transitionSeconds, bool instant)
         {
+            LastRequestedLwsPresetId = preset.presetId;
+            LastRequestedWeatherMakerProfile = preset.weatherMakerProfileName;
+            LastResolvedWeatherMakerProfile = "None";
+            LastWeatherMakerApplySucceeded = false;
+            LastRuntimeError = string.Empty;
+
             if (!EnsureWeatherMakerRuntime(true))
             {
+                LastRuntimeError = AdapterStatus;
                 return false;
             }
 
             if (!ResolveWeatherMakerTypes())
             {
+                LastRuntimeError = AdapterStatus;
                 return false;
             }
 
@@ -95,6 +134,7 @@ namespace LWS.InterstateHauler
             if (profile == null)
             {
                 AdapterStatus = $"Weather Maker profile not found: {preset.weatherMakerProfileName}";
+                LastRuntimeError = AdapterStatus;
                 return false;
             }
 
@@ -113,18 +153,22 @@ namespace LWS.InterstateHauler
                 if (raise == null)
                 {
                     AdapterStatus = "WeatherMakerScript.RaiseWeatherProfileChanged API was not found.";
+                    LastRuntimeError = AdapterStatus;
                     return false;
                 }
 
                 raise.Invoke(_weatherMakerInstance, new[] { oldProfile, profile, instant ? 0.001f : Mathf.Max(0.001f, transitionSeconds), -1f, true, null });
                 SetMember(_weatherMakerInstance, "LastLocalProfile", profile);
-                LastAppliedWeatherMakerProfile = preset.weatherMakerProfileName;
-                AdapterStatus = $"Applied Weather Maker profile {preset.weatherMakerProfileName}.";
+                LastResolvedWeatherMakerProfile = GetUnityObjectName(profile);
+                LastAppliedWeatherMakerProfile = LastResolvedWeatherMakerProfile;
+                LastWeatherMakerApplySucceeded = true;
+                AdapterStatus = $"Applied Weather Maker profile {LastResolvedWeatherMakerProfile}.";
                 return true;
             }
             catch (Exception ex)
             {
                 AdapterStatus = $"Weather Maker weather request failed: {ex.GetType().Name}: {ex.Message}";
+                LastRuntimeError = AdapterStatus;
                 Debug.LogWarning(AdapterStatus, this);
                 return false;
             }
@@ -139,13 +183,16 @@ namespace LWS.InterstateHauler
 
             try
             {
-                SetMember(dayNight, "TimeOfDay", LwsWeatherSnapshot.NormalizeHours(hours) * 3600f);
-                AdapterStatus = $"Set Weather Maker time to {LwsWeatherSnapshot.NormalizeHours(hours):0.00}h.";
+                float normalized = LwsWeatherSnapshot.NormalizeHours(hours);
+                SetMember(dayNight, "TimeOfDay", normalized * 3600f);
+                WeatherMakerTimeOfDayHours = normalized;
+                AdapterStatus = $"Set Weather Maker time to {normalized:0.00}h.";
                 return true;
             }
             catch (Exception ex)
             {
                 AdapterStatus = $"Weather Maker time request failed: {ex.GetType().Name}: {ex.Message}";
+                LastRuntimeError = AdapterStatus;
                 Debug.LogWarning(AdapterStatus, this);
                 return false;
             }
@@ -169,6 +216,7 @@ namespace LWS.InterstateHauler
             catch (Exception ex)
             {
                 AdapterStatus = $"Weather Maker time-speed request failed: {ex.GetType().Name}: {ex.Message}";
+                LastRuntimeError = AdapterStatus;
                 Debug.LogWarning(AdapterStatus, this);
                 return false;
             }
@@ -186,6 +234,7 @@ namespace LWS.InterstateHauler
             if (profile == null)
             {
                 AdapterStatus = $"Weather Maker performance profile not found: {profileName}";
+                LastRuntimeError = AdapterStatus;
                 return false;
             }
 
@@ -221,27 +270,32 @@ namespace LWS.InterstateHauler
                 return false;
             }
 
-            _weatherMakerInstance = GetStaticProperty(_weatherMakerScriptType, "Instance");
-            if (_weatherMakerInstance != null)
+            if (IsAlive(_weatherMakerInstance) || RefreshWeatherMakerRuntimeFromScene())
             {
                 WeatherMakerAvailable = true;
+                WeatherMakerInstanceResolved = true;
                 AdapterStatus = "Weather Maker runtime is available.";
+                RefreshDayNightManagerDiagnostic();
+                SuppressCompetingDirectionalLights();
                 return true;
             }
 
             if (!instantiateWeatherMakerIfMissing)
             {
                 WeatherMakerAvailable = false;
+                WeatherMakerInstanceResolved = false;
                 AdapterStatus = "Weather Maker runtime is missing and auto-instantiation is disabled.";
+                LastRuntimeError = AdapterStatus;
                 return false;
             }
 
-#if UNITY_EDITOR
-            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(WeatherMakerPrefabPath);
+            GameObject prefab = ResolveWeatherMakerPrefab();
             if (prefab == null)
             {
                 WeatherMakerAvailable = false;
-                AdapterStatus = $"{WeatherMakerPrefabPath} could not be loaded.";
+                WeatherMakerInstanceResolved = false;
+                AdapterStatus = $"Weather Maker prefab reference missing. Expected {DefaultWeatherMakerPrefabPath}.";
+                LastRuntimeError = AdapterStatus;
                 if (logFailures)
                 {
                     Debug.LogWarning(AdapterStatus, this);
@@ -251,20 +305,26 @@ namespace LWS.InterstateHauler
             }
 
             GameObject instance = Instantiate(prefab);
-            instance.name = "IH Weather Maker Runtime";
+            instance.name = string.IsNullOrWhiteSpace(runtimeInstanceName) ? "IH Weather Maker Runtime" : runtimeInstanceName;
             _weatherMakerInstance = GetComponentInChildrenOfType(instance, _weatherMakerScriptType);
-            if (_weatherMakerInstance != null)
+            RefreshWeatherMakerRuntimeFromScene();
+            if (IsAlive(_weatherMakerInstance))
             {
                 SetMember(_weatherMakerInstance, "IsPermanent", true);
+                SetMember(_weatherMakerInstance, "AutoFindMainCamera", false);
                 WeatherMakerAvailable = true;
-                AdapterStatus = "Instantiated Weather Maker prefab for validation.";
+                WeatherMakerInstanceResolved = true;
+                AdapterStatus = "Instantiated Weather Maker prefab for validation/runtime presentation.";
+                RefreshDayNightManagerDiagnostic();
+                SuppressCompetingDirectionalLights();
                 RefreshCameraBinding();
                 return true;
             }
-#endif
 
             WeatherMakerAvailable = false;
-            AdapterStatus = "Weather Maker runtime could not be created outside the Unity Editor.";
+            WeatherMakerInstanceResolved = false;
+            AdapterStatus = "Weather Maker prefab instantiated, but WeatherMakerScript was not found in the instance.";
+            LastRuntimeError = AdapterStatus;
             if (logFailures)
             {
                 Debug.LogWarning(AdapterStatus, this);
@@ -302,38 +362,40 @@ namespace LWS.InterstateHauler
             if (_dayNightManagerType == null)
             {
                 AdapterStatus = "WeatherMakerDayNightCycleManagerScript type was not found.";
+                DayNightManagerAvailable = false;
+                LastRuntimeError = AdapterStatus;
                 return false;
             }
 
-            dayNight = GetStaticProperty(_dayNightManagerType, "Instance");
-            if (dayNight == null)
+            dayNight = FindSceneComponent(_dayNightManagerType, out _);
+            _dayNightManagerInstance = dayNight;
+            DayNightManagerAvailable = IsAlive(dayNight);
+            if (!DayNightManagerAvailable)
             {
                 AdapterStatus = "Weather Maker day/night manager instance was not found.";
+                LastRuntimeError = AdapterStatus;
                 return false;
             }
 
+            RefreshWeatherMakerTimeDiagnostic(dayNight);
             return true;
         }
 
         private void RefreshCameraBinding()
         {
             WeatherCameraBound = false;
+            ActiveCameraAllowed = false;
             ActiveCameraName = "None";
             if (!bindMainCamera || !EnsureWeatherMakerRuntime(false))
             {
                 return;
             }
 
-            Camera main = Camera.main;
-            if (main == null)
+            Camera camera = FindActiveGameplayCamera();
+            if (camera == null)
             {
-                AdapterStatus = "Camera.main was not found for Weather Maker binding.";
-                return;
-            }
-
-            if (main.targetTexture != null || main.name.IndexOf("mirror", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                AdapterStatus = $"Skipped Weather Maker binding for non-gameplay camera {main.name}.";
+                AdapterStatus = "No supported gameplay camera was found for Weather Maker binding.";
+                LastRuntimeError = AdapterStatus;
                 return;
             }
 
@@ -341,11 +403,165 @@ namespace LWS.InterstateHauler
             if (allowCameras is IList list)
             {
                 list.Clear();
-                list.Add(main);
+                list.Add(camera);
+                ClearListMember(_weatherMakerInstance, "AllowCamerasNames");
+                ClearListMember(_weatherMakerInstance, "AllowCamerasNamesPartial");
+                SetMember(_weatherMakerInstance, "AutoFindMainCamera", false);
+                ClearWeatherMakerCameraIgnoreCache();
                 WeatherCameraBound = true;
-                ActiveCameraName = main.name;
-                AdapterStatus = $"Weather Maker camera bound to {main.name}.";
+                ActiveCameraAllowed = list.Contains(camera);
+                ActiveCameraName = camera.name;
+                AdapterStatus = $"Weather Maker camera bound to {camera.name}.";
             }
+            else
+            {
+                AdapterStatus = "WeatherMakerScript.AllowCameras was not available.";
+                LastRuntimeError = AdapterStatus;
+            }
+        }
+
+        private GameObject ResolveWeatherMakerPrefab()
+        {
+            if (weatherMakerPrefab != null)
+            {
+                return weatherMakerPrefab;
+            }
+
+#if UNITY_EDITOR
+            weatherMakerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(DefaultWeatherMakerPrefabPath);
+#endif
+            return weatherMakerPrefab;
+        }
+
+        private bool RefreshWeatherMakerRuntimeFromScene()
+        {
+            _weatherMakerInstance = FindSceneComponent(_weatherMakerScriptType, out int instanceCount);
+            WeatherMakerInstanceCount = instanceCount;
+            WeatherMakerInstanceResolved = IsAlive(_weatherMakerInstance);
+            WeatherMakerAvailable = WeatherMakerInstanceResolved;
+            RuntimeInstanceName = GetRuntimeRootName(_weatherMakerInstance);
+            return WeatherMakerInstanceResolved;
+        }
+
+        private void RefreshDayNightManagerDiagnostic()
+        {
+            _dayNightManagerType ??= ResolveType(DayNightManagerTypeName);
+            _dayNightManagerInstance = FindSceneComponent(_dayNightManagerType, out _);
+            DayNightManagerAvailable = IsAlive(_dayNightManagerInstance);
+            if (DayNightManagerAvailable)
+            {
+                RefreshWeatherMakerTimeDiagnostic(_dayNightManagerInstance);
+            }
+        }
+
+        private void RefreshWeatherMakerTimeDiagnostic(object dayNight)
+        {
+            object seconds = GetMember(dayNight, "TimeOfDay");
+            if (seconds is float timeSeconds)
+            {
+                WeatherMakerTimeOfDayHours = LwsWeatherSnapshot.NormalizeHours(timeSeconds / 3600f);
+            }
+        }
+
+        private void SuppressCompetingDirectionalLights()
+        {
+            if (_directionalLightsSuppressed || !suppressNonWeatherMakerDirectionalLights || !IsAlive(_weatherMakerInstance))
+            {
+                return;
+            }
+
+            Transform weatherRoot = (_weatherMakerInstance as Component)?.transform.root;
+            Light[] lights = FindObjectsByType<Light>(FindObjectsSortMode.None);
+            for (int i = 0; i < lights.Length; i++)
+            {
+                Light light = lights[i];
+                if (light == null || light.type != LightType.Directional || !light.enabled)
+                {
+                    continue;
+                }
+
+                if (weatherRoot != null && light.transform.IsChildOf(weatherRoot))
+                {
+                    continue;
+                }
+
+                light.enabled = false;
+            }
+
+            _directionalLightsSuppressed = true;
+        }
+
+        private static Camera FindActiveGameplayCamera()
+        {
+            Camera main = Camera.main;
+            if (IsGameplayCamera(main))
+            {
+                return main;
+            }
+
+            Camera[] cameras = Camera.allCameras;
+            for (int i = 0; i < cameras.Length; i++)
+            {
+                if (IsGameplayCamera(cameras[i]))
+                {
+                    return cameras[i];
+                }
+            }
+
+            return null;
+        }
+
+        private static bool IsGameplayCamera(Camera camera)
+        {
+            if (camera == null || !camera.enabled || !camera.gameObject.activeInHierarchy || camera.targetTexture != null)
+            {
+                return false;
+            }
+
+            if (camera.cameraType == CameraType.Preview || camera.cameraType == CameraType.Reflection)
+            {
+                return false;
+            }
+
+            string cameraName = camera.name;
+            return cameraName.IndexOf("mirror", StringComparison.OrdinalIgnoreCase) < 0 &&
+                   cameraName.IndexOf("rendertexture", StringComparison.OrdinalIgnoreCase) < 0 &&
+                   cameraName.IndexOf("reflection", StringComparison.OrdinalIgnoreCase) < 0 &&
+                   cameraName.IndexOf("depth", StringComparison.OrdinalIgnoreCase) < 0;
+        }
+
+        private object FindSceneComponent(Type componentType, out int count)
+        {
+            count = 0;
+            if (componentType == null)
+            {
+                return null;
+            }
+
+            Component first = null;
+            Component[] components = Resources.FindObjectsOfTypeAll<Component>();
+            for (int i = 0; i < components.Length; i++)
+            {
+                Component component = components[i];
+                if (component == null || !componentType.IsInstanceOfType(component))
+                {
+                    continue;
+                }
+
+                GameObject componentObject = component.gameObject;
+                if (componentObject == null || !componentObject.scene.IsValid() || !componentObject.scene.isLoaded)
+                {
+                    continue;
+                }
+
+                count++;
+                if (first == null || componentObject.activeInHierarchy)
+                {
+                    first = component;
+                }
+            }
+
+            return first;
         }
 
         private object LoadWeatherMakerResource(Type resourceType, string resourceName, string assetPath)
@@ -379,6 +595,51 @@ namespace LWS.InterstateHauler
 #endif
 
             return null;
+        }
+
+        private void ClearWeatherMakerCameraIgnoreCache()
+        {
+            MethodInfo clear = _weatherMakerScriptType?.GetMethod("ClearShouldIgnoreCameraCache", BindingFlags.Static | BindingFlags.Public);
+            clear?.Invoke(null, null);
+        }
+
+        private static void ClearListMember(object target, string memberName)
+        {
+            if (GetMember(target, memberName) is IList list)
+            {
+                list.Clear();
+            }
+        }
+
+        private static bool IsAlive(object target)
+        {
+            if (target is UnityEngine.Object unityObject)
+            {
+                return unityObject != null;
+            }
+
+            return target != null;
+        }
+
+        private static string GetRuntimeRootName(object target)
+        {
+            if (target is Component component && component != null)
+            {
+                Transform root = component.transform.root;
+                return root != null ? root.name : component.name;
+            }
+
+            return "None";
+        }
+
+        private static string GetUnityObjectName(object target)
+        {
+            if (target is UnityEngine.Object unityObject && unityObject != null)
+            {
+                return unityObject.name;
+            }
+
+            return target != null ? target.ToString() : "None";
         }
 
         private static string GetPerformanceProfileName(LwsRenderQualityTier tier)
@@ -432,11 +693,6 @@ namespace LWS.InterstateHauler
             }
 
             return null;
-        }
-
-        private static object GetStaticProperty(Type type, string propertyName)
-        {
-            return type?.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public)?.GetValue(null);
         }
 
         private static object GetMember(object target, string memberName)

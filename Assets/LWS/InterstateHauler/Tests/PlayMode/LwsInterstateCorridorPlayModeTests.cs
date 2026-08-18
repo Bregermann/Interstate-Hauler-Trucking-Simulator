@@ -60,11 +60,39 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsNotNull(provider);
             Assert.IsNotNull(Object.FindFirstObjectByType<LwsPlayerTruckSpawner>());
             Assert.IsNotNull(Object.FindFirstObjectByType<LwsApplicationBootstrap>());
+            Assert.IsTrue(builder.CreateWeatherValidationEnabled);
+            Assert.IsTrue(builder.WeatherMakerPrefabConfigured);
             Assert.IsNotNull(builder.LastGraph);
             Assert.IsTrue(builder.LastGraph.Validate().IsValid, builder.LastGraph.Validate().Summary);
             Assert.GreaterOrEqual(Object.FindObjectsByType<LwsRoadSurface>(FindObjectsSortMode.None).Length, 3);
             Assert.IsTrue(provider.TryFindNearestRoad(new Vector3(12.8f, 0.55f, 500f), out LwsRoadLookupResult result));
             Assert.AreEqual(LwsRoadClass.Interstate, result.RoadClass);
+
+            LwsWeatherMakerAdapter[] weatherAdapters = Object.FindObjectsByType<LwsWeatherMakerAdapter>(FindObjectsSortMode.None);
+            Assert.AreEqual(1, weatherAdapters.Length);
+            Assert.IsNotNull(Object.FindFirstObjectByType<LwsWeatherDebugPanel>());
+
+            LwsWeatherMakerAdapter weatherAdapter = weatherAdapters[0];
+            LwsApplicationBootstrap bootstrap = Object.FindFirstObjectByType<LwsApplicationBootstrap>();
+            for (int i = 0; i < 20 && !weatherAdapter.WeatherMakerAvailable; i++)
+            {
+                yield return null;
+            }
+
+            Assert.IsTrue(weatherAdapter.WeatherMakerPrefabConfigured);
+            Assert.IsTrue(weatherAdapter.WeatherMakerAvailable, weatherAdapter.AdapterStatus);
+            Assert.IsTrue(weatherAdapter.WeatherMakerInstanceResolved, weatherAdapter.AdapterStatus);
+            Assert.AreEqual(1, weatherAdapter.WeatherMakerInstanceCount, weatherAdapter.AdapterStatus);
+            Assert.IsTrue(weatherAdapter.DayNightManagerAvailable, weatherAdapter.AdapterStatus);
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsWeatherService weatherService));
+            Assert.AreSame(weatherAdapter, weatherService.ActiveAdapter);
+            Assert.IsTrue(weatherService.TryGetPreset(LwsWeatherPresetCatalog.HeavyRainId, out LwsWeatherPreset heavyRain));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(heavyRain.weatherMakerProfileName));
+
+            int weatherMakerInstanceCount = weatherAdapter.WeatherMakerInstanceCount;
+            weatherAdapter.RefreshCameraBindingForValidation();
+            yield return null;
+            Assert.AreEqual(weatherMakerInstanceCount, weatherAdapter.WeatherMakerInstanceCount);
 
             LwsUtsHighwayTrafficController traffic = Object.FindFirstObjectByType<LwsUtsHighwayTrafficController>();
             Assert.IsNotNull(traffic);
@@ -86,7 +114,6 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             yield return null;
 
             Assert.GreaterOrEqual(traffic.Stats.ActiveVehicles, 1, traffic.LastSpawnResult);
-            LwsApplicationBootstrap bootstrap = Object.FindFirstObjectByType<LwsApplicationBootstrap>();
             Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsTrafficService trafficService));
             Assert.GreaterOrEqual(trafficService.ActiveTrafficVehicles.Count, 1);
         }

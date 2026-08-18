@@ -87,7 +87,23 @@ Weather is global world state.
 
 `LwsApplicationBootstrap` registers one `ILwsWeatherService` backed by `LwsWeatherCoordinator`.
 
-`LwsWeatherCoordinator` prevents duplicate active weather services. `LwsWeatherMakerAdapter` attaches as the runtime adapter, can instantiate the Weather Maker prefab for validation in the Editor, and then applies the current LWS preset/time to Weather Maker.
+`LwsWeatherCoordinator` prevents duplicate active weather services. `LwsWeatherMakerAdapter` attaches as the runtime adapter, can instantiate the Weather Maker prefab for validation, and then applies the current LWS preset/time to Weather Maker.
+
+Prompt 012A repaired the corridor validation runtime hookup. The root cause was validation-scene/runtime wiring that could report valid LWS semantic weather while Weather Maker presentation was not obviously present in the scene. `InterstateCorridorValidation` now explicitly enables weather validation, carries a serialized reference to `Assets/WeatherMaker/Prefab/WeatherMakerPrefab.prefab`, and disables the old full-strength scene directional light so Weather Maker owns the sun/moon/time-of-day presentation.
+
+Runtime diagnostics now report:
+
+- Weather Maker runtime availability
+- Weather Maker instance count
+- Weather Maker runtime instance name
+- day/night manager availability
+- active gameplay camera
+- whether that camera is in `WeatherMakerScript.AllowCameras`
+- requested LWS preset
+- requested/resolved Weather Maker profile
+- last vendor apply success
+- Weather Maker time-of-day
+- last runtime error
 
 The validation corridor runtime builder adds:
 
@@ -156,6 +172,12 @@ Weather Maker profile changes are applied through:
 
 The LWS snapshot tracks transition target and progress for future UI/save/gameplay consumers.
 
+Prompt 012A confirmed the adapter resolves the selected project preset to the configured Weather Maker profile and calls:
+
+`WeatherMakerScript.RaiseWeatherProfileChanged(oldProfile, newProfile, transitionDuration, -1f, true, null)`
+
+The adapter records both the requested LWS preset ID and the resolved Weather Maker profile name so semantic state cannot be mistaken for visual presentation success.
+
 ## Weather Conditions
 
 Clear uses Weather Maker's clear profile and is the default baseline.
@@ -194,11 +216,15 @@ Weather Maker camera binding is owned by `LwsWeatherMakerAdapter`.
 Policy:
 
 - bind `Camera.main` when it is a gameplay camera
+- fall back to the first enabled gameplay camera if `Camera.main` is absent or unsuitable
 - skip cameras with `targetTexture`
 - skip mirror/render texture cameras for screen-space weather overlays
+- clear Weather Maker camera-name allow lists and the vendor camera-ignore cache when rebinding
 - do not run expensive camera discovery every frame
 
 Mirror cameras should receive world lighting/fog naturally where Weather Maker and URP support it, but should not receive cockpit windshield rain overlays.
+
+The active Weather Maker allow list should contain exactly the active gameplay camera. Mirror cameras such as `RenderTextureMirrorCameraL` and `RenderTextureMirrorCameraR` remain excluded.
 
 ## GPS Integration
 
@@ -280,8 +306,8 @@ Authority split:
 
 ## Known Limitations
 
-- Full visual weather validation is pending normal Unity Editor play-mode testing.
-- Weather Maker sun/moon/light authority must be visually checked against the existing corridor directional light and Global Volume.
+- Full visual weather validation is still pending normal Unity Editor Game View testing after Prompt 012A.
+- Weather Maker sun/moon/light authority is now explicit in `InterstateCorridorValidation`; the old validation directional light is disabled.
 - Mirror overlay behavior must be validated in cab, exterior, and mirror quality modes.
 - Weather Maker audio is not yet routed through a production mixer.
 - No physical road wetness, snow buildup, ice, hydroplaning, or tire friction changes are implemented.

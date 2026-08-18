@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 410087040}
+  m_Sun: {fileID: 0}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -144,7 +144,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
@@ -276,7 +276,7 @@ Light:
   serializedVersion: 13
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 0
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1126,6 +1126,11 @@ MonoBehaviour:
   createLaneDebugLines: 1
   showDebugPanel: 1
   createUtsTrafficValidation: 1
+  createNavigationValidation: 1
+  createWeatherValidation: 1
+  createRoadConditionValidation: 1
+  weatherMakerPrefab: {fileID: 1289281111498416, guid: 66bd18e21212b8c4ab51a96f918b3197,
+    type: 3}
   validationTrafficProfile: {fileID: 11400000, guid: 9d8357e4f21e4f8baef1ddad600bdb27,
     type: 2}
   validationTrafficPrefabs:
@@ -1140,8 +1145,8 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 930000001}
-  - {fileID: 940000001}
   - {fileID: 940000011}
+  - {fileID: 940000001}
   - {fileID: 950000001}
   - {fileID: 960000001}
   - {fileID: 970000001}

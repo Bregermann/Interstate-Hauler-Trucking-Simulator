@@ -333,6 +333,22 @@ namespace LWS.InterstateHauler
         bool ApplyQualityTier(LwsRenderQualityTier tier);
     }
 
+    public interface ILwsWeatherRuntimeDiagnostics
+    {
+        bool WeatherMakerRuntimeExists { get; }
+        bool WeatherMakerInstanceResolved { get; }
+        int WeatherMakerInstanceCount { get; }
+        bool DayNightManagerAvailable { get; }
+        string RuntimeInstanceName { get; }
+        bool ActiveCameraAllowed { get; }
+        string LastRequestedLwsPresetId { get; }
+        string LastRequestedWeatherMakerProfile { get; }
+        string LastResolvedWeatherMakerProfile { get; }
+        bool LastWeatherMakerApplySucceeded { get; }
+        float WeatherMakerTimeOfDayHours { get; }
+        string LastRuntimeError { get; }
+    }
+
     public interface ILwsWeatherService : ILwsService
     {
         LwsWeatherSnapshot CurrentSnapshot { get; }

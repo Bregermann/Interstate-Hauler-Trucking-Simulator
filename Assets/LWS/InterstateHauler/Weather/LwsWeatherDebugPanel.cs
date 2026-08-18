@@ -9,10 +9,14 @@ namespace LWS.InterstateHauler
         private static readonly string[] CyclePresetIds =
         {
             LwsWeatherPresetCatalog.ClearId,
+            LwsWeatherPresetCatalog.PartlyCloudyId,
             LwsWeatherPresetCatalog.CloudyId,
+            LwsWeatherPresetCatalog.OvercastId,
             LwsWeatherPresetCatalog.LightRainId,
+            LwsWeatherPresetCatalog.HeavyRainId,
             LwsWeatherPresetCatalog.ThunderstormId,
             LwsWeatherPresetCatalog.LightSnowId,
+            LwsWeatherPresetCatalog.HeavySnowId,
             LwsWeatherPresetCatalog.FogId
         };
 
@@ -24,9 +28,20 @@ namespace LWS.InterstateHauler
         private ILwsWeatherService _weatherService;
         private LwsWeatherSnapshot _snapshot;
         private string _adapterStatus = "No adapter.";
+        private string _lastError = string.Empty;
         private string _activeCamera = "None";
+        private string _runtimeInstance = "None";
+        private string _requestedLwsPreset = "None";
+        private string _requestedVendorProfile = "None";
+        private string _resolvedVendorProfile = "None";
         private bool _weatherMakerAvailable;
+        private bool _weatherMakerInstance;
+        private int _weatherMakerInstanceCount;
+        private bool _dayNightManagerAvailable;
         private bool _cameraBound;
+        private bool _cameraAllowed;
+        private bool _vendorApplySuccess;
+        private float _weatherMakerTimeHours;
         private float _nextRefreshTime;
         private int _cycleIndex;
 
@@ -60,11 +75,12 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            GUILayout.BeginArea(new Rect(12f, 360f, 360f, 430f), GUI.skin.box);
+            GUILayout.BeginArea(new Rect(12f, 360f, 420f, 570f), GUI.skin.box);
             GUILayout.Label("IH Weather Validation");
-            GUILayout.Label($"Initialized: {_weatherService != null}");
-            GUILayout.Label($"Weather Maker Available: {_weatherMakerAvailable}");
+            GUILayout.Label("LWS Semantic State");
+            GUILayout.Label($"LWS Service: {_weatherService != null}");
             GUILayout.Label($"Current Preset: {_snapshot.weatherPresetId}");
+            GUILayout.Label($"Requested LWS Preset: {_requestedLwsPreset}");
             GUILayout.Label($"Condition: {_snapshot.condition}");
             GUILayout.Label($"Precipitation: {_snapshot.precipitationType} {_snapshot.precipitationIntensity01:0.00}");
             GUILayout.Label($"Cloud/Fog: {_snapshot.cloudCover01:0.00} / {_snapshot.fogIntensity01:0.00}");
@@ -74,12 +90,24 @@ namespace LWS.InterstateHauler
             GUILayout.Label($"Time: {_snapshot.timeOfDayHours:0.00}h  Daylight: {_snapshot.daylight01:0.00}");
             GUILayout.Label($"Day/Night: {(_snapshot.isNight ? "Night" : "Day")}");
             GUILayout.Label($"Time Scale: {_weatherService.TimeScale:0.##}x");
-            GUILayout.Label($"Active Camera: {_activeCamera}");
-            GUILayout.Label($"Weather Camera Bound: {_cameraBound}");
             GUILayout.Label($"Last Request: {_weatherService.LastRequest}");
-            if (!string.IsNullOrWhiteSpace(_weatherService.LastError))
+
+            GUILayout.Space(4f);
+            GUILayout.Label("Weather Maker Presentation");
+            GUILayout.Label($"Weather Maker Runtime: {_weatherMakerAvailable}");
+            GUILayout.Label($"Weather Maker Instance: {_weatherMakerInstance} ({_weatherMakerInstanceCount})");
+            GUILayout.Label($"Runtime Instance: {_runtimeInstance}");
+            GUILayout.Label($"Day/Night Manager: {_dayNightManagerAvailable}");
+            GUILayout.Label($"Active Gameplay Camera: {_activeCamera}");
+            GUILayout.Label($"Camera Bound: {_cameraBound}");
+            GUILayout.Label($"Camera Allowed: {_cameraAllowed}");
+            GUILayout.Label($"Requested Vendor Profile: {_requestedVendorProfile}");
+            GUILayout.Label($"Resolved Vendor Profile: {_resolvedVendorProfile}");
+            GUILayout.Label($"Vendor Apply Success: {_vendorApplySuccess}");
+            GUILayout.Label($"Current Time: LWS {_snapshot.timeOfDayHours:0.00}h / WM {_weatherMakerTimeHours:0.00}h");
+            if (!string.IsNullOrWhiteSpace(_lastError))
             {
-                GUILayout.Label($"Last Error: {_weatherService.LastError}");
+                GUILayout.Label($"Last Error: {_lastError}");
             }
             GUILayout.Label($"Adapter: {_adapterStatus}");
 
@@ -94,22 +122,23 @@ namespace LWS.InterstateHauler
             GUILayout.BeginHorizontal();
             DrawWeatherButton("CLEAR", LwsWeatherPresetCatalog.ClearId);
             DrawWeatherButton("PARTLY", LwsWeatherPresetCatalog.PartlyCloudyId);
-            DrawWeatherButton("OVERCAST", LwsWeatherPresetCatalog.OvercastId);
+            DrawWeatherButton("CLOUDY", LwsWeatherPresetCatalog.CloudyId);
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
+            DrawWeatherButton("OVERCAST", LwsWeatherPresetCatalog.OvercastId);
             DrawWeatherButton("LIGHT RAIN", LwsWeatherPresetCatalog.LightRainId);
             DrawWeatherButton("HEAVY RAIN", LwsWeatherPresetCatalog.HeavyRainId);
-            DrawWeatherButton("STORM", LwsWeatherPresetCatalog.ThunderstormId);
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
+            DrawWeatherButton("STORM", LwsWeatherPresetCatalog.ThunderstormId);
             DrawWeatherButton("LIGHT SNOW", LwsWeatherPresetCatalog.LightSnowId);
             DrawWeatherButton("HEAVY SNOW", LwsWeatherPresetCatalog.HeavySnowId);
-            DrawWeatherButton("FOG", LwsWeatherPresetCatalog.FogId);
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
+            DrawWeatherButton("FOG", LwsWeatherPresetCatalog.FogId);
             if (GUILayout.Button("CYCLE WEATHER"))
             {
                 _cycleIndex = (_cycleIndex + 1) % CyclePresetIds.Length;
@@ -180,6 +209,39 @@ namespace LWS.InterstateHauler
             _adapterStatus = adapter != null ? adapter.AdapterStatus : "No adapter.";
             _activeCamera = adapter != null ? adapter.ActiveCameraName : "None";
             _cameraBound = adapter != null && adapter.WeatherCameraBound;
+            _lastError = !string.IsNullOrWhiteSpace(_weatherService.LastError) ? _weatherService.LastError : string.Empty;
+
+            if (adapter is ILwsWeatherRuntimeDiagnostics diagnostics)
+            {
+                _weatherMakerAvailable = diagnostics.WeatherMakerRuntimeExists;
+                _weatherMakerInstance = diagnostics.WeatherMakerInstanceResolved;
+                _weatherMakerInstanceCount = diagnostics.WeatherMakerInstanceCount;
+                _dayNightManagerAvailable = diagnostics.DayNightManagerAvailable;
+                _runtimeInstance = diagnostics.RuntimeInstanceName;
+                _cameraAllowed = diagnostics.ActiveCameraAllowed;
+                _requestedLwsPreset = diagnostics.LastRequestedLwsPresetId;
+                _requestedVendorProfile = diagnostics.LastRequestedWeatherMakerProfile;
+                _resolvedVendorProfile = diagnostics.LastResolvedWeatherMakerProfile;
+                _vendorApplySuccess = diagnostics.LastWeatherMakerApplySucceeded;
+                _weatherMakerTimeHours = diagnostics.WeatherMakerTimeOfDayHours;
+                if (!string.IsNullOrWhiteSpace(diagnostics.LastRuntimeError))
+                {
+                    _lastError = diagnostics.LastRuntimeError;
+                }
+            }
+            else
+            {
+                _weatherMakerInstance = false;
+                _weatherMakerInstanceCount = 0;
+                _dayNightManagerAvailable = false;
+                _runtimeInstance = "None";
+                _cameraAllowed = false;
+                _requestedLwsPreset = _snapshot.weatherPresetId;
+                _requestedVendorProfile = "Unknown";
+                _resolvedVendorProfile = "Unknown";
+                _vendorApplySuccess = false;
+                _weatherMakerTimeHours = _snapshot.timeOfDayHours;
+            }
         }
     }
 }
