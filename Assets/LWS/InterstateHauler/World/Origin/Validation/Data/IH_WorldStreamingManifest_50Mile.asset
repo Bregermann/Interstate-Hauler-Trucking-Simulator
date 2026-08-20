@@ -1,0 +1,515 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2f5572cea6947a8bff926563dd51ac3, type: 3}
+  m_Name: IH_WorldStreamingManifest_50Mile
+  m_EditorClassIdentifier: 
+  worldId: IH_50_MILE_FLOATING_ORIGIN_WORLD
+  policy: {fileID: 11400000, guid: a2e9d6c43ee7499c8fb055d72837d2ef, type: 2}
+  chunks:
+  - chunkId: IH_50MI_CHUNK_000
+    displayName: 50-Mile Validation Chunk 000
+    sceneName: IH_50Mile_Chunk_000
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_000.unity
+    boundsCenter: {x: 0, y: 0, z: 1609.344}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_001
+    roadIds:
+    - IH_TEST_50MI_EB_000
+    - IH_TEST_50MI_WB_000
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_001
+    displayName: 50-Mile Validation Chunk 001
+    sceneName: IH_50Mile_Chunk_001
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_001.unity
+    boundsCenter: {x: 0, y: 0, z: 4828.032}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_000
+    - IH_50MI_CHUNK_002
+    roadIds:
+    - IH_TEST_50MI_EB_001
+    - IH_TEST_50MI_WB_001
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 1
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_002
+    displayName: 50-Mile Validation Chunk 002
+    sceneName: IH_50Mile_Chunk_002
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_002.unity
+    boundsCenter: {x: 0, y: 0, z: 8046.72}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_001
+    - IH_50MI_CHUNK_003
+    roadIds:
+    - IH_TEST_50MI_EB_002
+    - IH_TEST_50MI_WB_002
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 2
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_003
+    displayName: 50-Mile Validation Chunk 003
+    sceneName: IH_50Mile_Chunk_003
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_003.unity
+    boundsCenter: {x: 0, y: 0, z: 11265.408}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_002
+    - IH_50MI_CHUNK_004
+    roadIds:
+    - IH_TEST_50MI_EB_003
+    - IH_TEST_50MI_WB_003
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 3
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_004
+    displayName: 50-Mile Validation Chunk 004
+    sceneName: IH_50Mile_Chunk_004
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_004.unity
+    boundsCenter: {x: 0, y: 0, z: 14484.096}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_003
+    - IH_50MI_CHUNK_005
+    roadIds:
+    - IH_TEST_50MI_EB_004
+    - IH_TEST_50MI_WB_004
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 4
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_005
+    displayName: 50-Mile Validation Chunk 005
+    sceneName: IH_50Mile_Chunk_005
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_005.unity
+    boundsCenter: {x: 0, y: 0, z: 17702.784}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_004
+    - IH_50MI_CHUNK_006
+    roadIds:
+    - IH_TEST_50MI_EB_005
+    - IH_TEST_50MI_WB_005
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 5
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_006
+    displayName: 50-Mile Validation Chunk 006
+    sceneName: IH_50Mile_Chunk_006
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_006.unity
+    boundsCenter: {x: 0, y: 0, z: 20921.472}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_005
+    - IH_50MI_CHUNK_007
+    roadIds:
+    - IH_TEST_50MI_EB_006
+    - IH_TEST_50MI_WB_006
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 6
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_007
+    displayName: 50-Mile Validation Chunk 007
+    sceneName: IH_50Mile_Chunk_007
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_007.unity
+    boundsCenter: {x: 0, y: 0, z: 24140.16}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_006
+    - IH_50MI_CHUNK_008
+    roadIds:
+    - IH_TEST_50MI_EB_007
+    - IH_TEST_50MI_WB_007
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 7
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_008
+    displayName: 50-Mile Validation Chunk 008
+    sceneName: IH_50Mile_Chunk_008
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_008.unity
+    boundsCenter: {x: 0, y: 0, z: 27358.848}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_007
+    - IH_50MI_CHUNK_009
+    roadIds:
+    - IH_TEST_50MI_EB_008
+    - IH_TEST_50MI_WB_008
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 8
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_009
+    displayName: 50-Mile Validation Chunk 009
+    sceneName: IH_50Mile_Chunk_009
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_009.unity
+    boundsCenter: {x: 0, y: 0, z: 30577.536}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_008
+    - IH_50MI_CHUNK_010
+    roadIds:
+    - IH_TEST_50MI_EB_009
+    - IH_TEST_50MI_WB_009
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 9
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_010
+    displayName: 50-Mile Validation Chunk 010
+    sceneName: IH_50Mile_Chunk_010
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_010.unity
+    boundsCenter: {x: 0, y: 0, z: 33796.224}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_009
+    - IH_50MI_CHUNK_011
+    roadIds:
+    - IH_TEST_50MI_EB_010
+    - IH_TEST_50MI_WB_010
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 10
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_011
+    displayName: 50-Mile Validation Chunk 011
+    sceneName: IH_50Mile_Chunk_011
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_011.unity
+    boundsCenter: {x: 0, y: 0, z: 37014.912}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_010
+    - IH_50MI_CHUNK_012
+    roadIds:
+    - IH_TEST_50MI_EB_011
+    - IH_TEST_50MI_WB_011
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 11
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_012
+    displayName: 50-Mile Validation Chunk 012
+    sceneName: IH_50Mile_Chunk_012
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_012.unity
+    boundsCenter: {x: 0, y: 0, z: 40233.6}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_011
+    - IH_50MI_CHUNK_013
+    roadIds:
+    - IH_TEST_50MI_EB_012
+    - IH_TEST_50MI_WB_012
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 12
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_013
+    displayName: 50-Mile Validation Chunk 013
+    sceneName: IH_50Mile_Chunk_013
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_013.unity
+    boundsCenter: {x: 0, y: 0, z: 43452.288}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_012
+    - IH_50MI_CHUNK_014
+    roadIds:
+    - IH_TEST_50MI_EB_013
+    - IH_TEST_50MI_WB_013
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 13
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_014
+    displayName: 50-Mile Validation Chunk 014
+    sceneName: IH_50Mile_Chunk_014
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_014.unity
+    boundsCenter: {x: 0, y: 0, z: 46670.976}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_013
+    - IH_50MI_CHUNK_015
+    roadIds:
+    - IH_TEST_50MI_EB_014
+    - IH_TEST_50MI_WB_014
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 14
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_015
+    displayName: 50-Mile Validation Chunk 015
+    sceneName: IH_50Mile_Chunk_015
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_015.unity
+    boundsCenter: {x: 0, y: 0, z: 49889.664}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_014
+    - IH_50MI_CHUNK_016
+    roadIds:
+    - IH_TEST_50MI_EB_015
+    - IH_TEST_50MI_WB_015
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 15
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_016
+    displayName: 50-Mile Validation Chunk 016
+    sceneName: IH_50Mile_Chunk_016
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_016.unity
+    boundsCenter: {x: 0, y: 0, z: 53108.352}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_015
+    - IH_50MI_CHUNK_017
+    roadIds:
+    - IH_TEST_50MI_EB_016
+    - IH_TEST_50MI_WB_016
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 16
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_017
+    displayName: 50-Mile Validation Chunk 017
+    sceneName: IH_50Mile_Chunk_017
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_017.unity
+    boundsCenter: {x: 0, y: 0, z: 56327.04}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_016
+    - IH_50MI_CHUNK_018
+    roadIds:
+    - IH_TEST_50MI_EB_017
+    - IH_TEST_50MI_WB_017
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 17
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_018
+    displayName: 50-Mile Validation Chunk 018
+    sceneName: IH_50Mile_Chunk_018
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_018.unity
+    boundsCenter: {x: 0, y: 0, z: 59545.728}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_017
+    - IH_50MI_CHUNK_019
+    roadIds:
+    - IH_TEST_50MI_EB_018
+    - IH_TEST_50MI_WB_018
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 18
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_019
+    displayName: 50-Mile Validation Chunk 019
+    sceneName: IH_50Mile_Chunk_019
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_019.unity
+    boundsCenter: {x: 0, y: 0, z: 62764.416}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_018
+    - IH_50MI_CHUNK_020
+    roadIds:
+    - IH_TEST_50MI_EB_019
+    - IH_TEST_50MI_WB_019
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 19
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_020
+    displayName: 50-Mile Validation Chunk 020
+    sceneName: IH_50Mile_Chunk_020
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_020.unity
+    boundsCenter: {x: 0, y: 0, z: 65983.104}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_019
+    - IH_50MI_CHUNK_021
+    roadIds:
+    - IH_TEST_50MI_EB_020
+    - IH_TEST_50MI_WB_020
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 20
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_021
+    displayName: 50-Mile Validation Chunk 021
+    sceneName: IH_50Mile_Chunk_021
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_021.unity
+    boundsCenter: {x: 0, y: 0, z: 69201.792}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_020
+    - IH_50MI_CHUNK_022
+    roadIds:
+    - IH_TEST_50MI_EB_021
+    - IH_TEST_50MI_WB_021
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 21
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_022
+    displayName: 50-Mile Validation Chunk 022
+    sceneName: IH_50Mile_Chunk_022
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_022.unity
+    boundsCenter: {x: 0, y: 0, z: 72420.48}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_021
+    - IH_50MI_CHUNK_023
+    roadIds:
+    - IH_TEST_50MI_EB_022
+    - IH_TEST_50MI_WB_022
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 22
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_023
+    displayName: 50-Mile Validation Chunk 023
+    sceneName: IH_50Mile_Chunk_023
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_023.unity
+    boundsCenter: {x: 0, y: 0, z: 75639.168}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_022
+    - IH_50MI_CHUNK_024
+    roadIds:
+    - IH_TEST_50MI_EB_023
+    - IH_TEST_50MI_WB_023
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 23
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: IH_50MI_CHUNK_024
+    displayName: 50-Mile Validation Chunk 024
+    sceneName: IH_50Mile_Chunk_024
+    scenePath: Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks/IH_50Mile_Chunk_024.unity
+    boundsCenter: {x: 0, y: 0, z: 78857.856}
+    boundsSize: {x: 320, y: 160, z: 3218.688}
+    neighborChunkIds:
+    - IH_50MI_CHUNK_023
+    roadIds:
+    - IH_TEST_50MI_EB_024
+    - IH_TEST_50MI_WB_024
+    trafficContent: 50-mile validation traffic lane presentation.
+    weatheradeContent: 50-mile validation asphalt wetness/snow presentation.
+    preloadPriority: 24
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0

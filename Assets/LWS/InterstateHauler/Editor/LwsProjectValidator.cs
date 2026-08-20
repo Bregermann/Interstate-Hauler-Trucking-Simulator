@@ -195,6 +195,18 @@ namespace LWS.InterstateHauler.Editor
         private const string FloatingOriginCoordinateMatrixPath = "Documentation/InterstateHauler/015_Coordinate_Matrix.md";
         private const string FloatingOriginTestMatrixPath = "Documentation/InterstateHauler/015_Floating_Origin_Test_Matrix.md";
         private const string Prompt016HandoffPath = "Documentation/InterstateHauler/015_Prompt016_Handoff.md";
+        private const string FiftyMileModelPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFiftyMileHighwayModel.cs";
+        private const string FiftyMileChunkBuilderPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFiftyMileHighwayChunkBuilder.cs";
+        private const string FiftyMileValidationControllerPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFiftyMileHighwayValidationController.cs";
+        private const string FiftyMileDebugPanelPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFiftyMileHighwayDebugPanel.cs";
+        private const string FiftyMileValidationScenePath = "Assets/LWS/InterstateHauler/World/Origin/Validation/IH_50MileFloatingOriginValidation.unity";
+        private const string FiftyMileChunkSceneDirectoryPath = "Assets/LWS/InterstateHauler/World/Origin/Validation/Chunks";
+        private const string FiftyMileManifestPath = "Assets/LWS/InterstateHauler/World/Origin/Validation/Data/IH_WorldStreamingManifest_50Mile.asset";
+        private const string FiftyMilePolicyPath = "Assets/LWS/InterstateHauler/World/Origin/Validation/Data/IH_WorldStreamingPolicy_50Mile.asset";
+        private const string FiftyMileOriginTuningPath = "Assets/LWS/InterstateHauler/World/Origin/Validation/Data/IH_FloatingOrigin_50Mile.asset";
+        private const string FiftyMileDocsPath = "Documentation/InterstateHauler/015A_50_Mile_Floating_Origin_Test.md";
+        private const string FiftyMileChunkMatrixPath = "Documentation/InterstateHauler/015A_50_Mile_Chunk_Matrix.md";
+        private const string FiftyMileTestMatrixPath = "Documentation/InterstateHauler/015A_50_Mile_Test_Matrix.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -303,6 +315,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateWeatheradeRoadConditionFoundation(report);
             ValidateSceneStreamerHighwayChunksFoundation(report);
             ValidateFloatingOriginFoundation(report);
+            ValidateFiftyMileFloatingOriginValidation(report);
             return report;
         }
 
@@ -2952,6 +2965,195 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 015 floating-origin architecture, participant matrix, coordinate matrix, test matrix, and Prompt 016 handoff exist."
                     : "Missing Prompt 015 documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateFiftyMileFloatingOriginValidation(LwsProjectValidationReport report)
+        {
+            ValidateFiftyMileRuntimeFiles(report);
+            ValidateFiftyMileManifest(report);
+            ValidateFiftyMileSceneAndBuildSettings(report);
+            ValidateFiftyMileIntegration(report);
+            ValidatePrompt015ADocumentation(report);
+        }
+
+        private static void ValidateFiftyMileRuntimeFiles(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                FiftyMileModelPath,
+                FiftyMileChunkBuilderPath,
+                FiftyMileValidationControllerPath,
+                FiftyMileDebugPanelPath,
+                FiftyMileValidationScenePath,
+                FiftyMileManifestPath,
+                FiftyMilePolicyPath,
+                FiftyMileOriginTuningPath
+            };
+
+            var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 015A 50-Mile Validation Files",
+                missing.Count == 0
+                    ? "50-mile floating-origin scene, model, controller, debug panel, manifest, policy, and origin tuning assets exist."
+                    : "Missing Prompt 015A validation files: " + string.Join(", ", missing));
+        }
+
+        private static void ValidateFiftyMileManifest(LwsProjectValidationReport report)
+        {
+            LwsWorldStreamingManifest manifest = AssetDatabase.LoadAssetAtPath<LwsWorldStreamingManifest>(FiftyMileManifestPath);
+            if (manifest == null)
+            {
+                report.Add(LwsValidationSeverity.Error, "50-Mile Streaming Manifest", $"{FiftyMileManifestPath} did not import as a LWS world streaming manifest.");
+                return;
+            }
+
+            LwsWorldStreamingValidationResult validation = manifest.ValidateManifest();
+            report.Add(
+                validation.IsValid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "50-Mile Streaming Manifest",
+                validation.IsValid ? "50-mile manifest validates under the world streaming schema." : validation.Summary);
+
+            bool hasExactWorld = string.Equals(manifest.worldId, LwsFiftyMileHighwayModel.WorldId, StringComparison.Ordinal);
+            bool hasExactChunkCount = manifest.chunks != null && manifest.chunks.Count == LwsFiftyMileHighwayModel.ChunkCount;
+            bool exactContinuity = hasExactChunkCount;
+            bool stableIds = hasExactChunkCount;
+            if (manifest.chunks != null)
+            {
+                for (int i = 0; i < manifest.chunks.Count; i++)
+                {
+                    LwsWorldChunkDefinition chunk = manifest.chunks[i];
+                    if (chunk == null)
+                    {
+                        exactContinuity = false;
+                        stableIds = false;
+                        continue;
+                    }
+
+                    double expectedStart = i * LwsFiftyMileHighwayModel.ChunkLengthMeters;
+                    double expectedEnd = expectedStart + LwsFiftyMileHighwayModel.ChunkLengthMeters;
+                    exactContinuity &= Math.Abs(chunk.WorldBounds.min.z - expectedStart) <= 0.01d;
+                    exactContinuity &= Math.Abs(chunk.WorldBounds.max.z - expectedEnd) <= 0.01d;
+                    exactContinuity &= Math.Abs(chunk.boundsSize.z - LwsFiftyMileHighwayModel.ChunkLengthMeters) <= 0.01d;
+                    stableIds &= string.Equals(chunk.chunkId, LwsFiftyMileHighwayModel.GetChunkId(i), StringComparison.Ordinal);
+                    stableIds &= string.Equals(chunk.scenePath, LwsFiftyMileHighwayModel.GetChunkScenePath(i), StringComparison.Ordinal);
+                }
+            }
+
+            report.Add(
+                hasExactWorld && hasExactChunkCount && exactContinuity && stableIds ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "50-Mile Chunk Layout",
+                hasExactWorld && hasExactChunkCount && exactContinuity && stableIds
+                    ? "Manifest defines IH_50_MILE_FLOATING_ORIGIN_WORLD as 25 contiguous 3,218.688 m chunks with stable IH_50MI_CHUNK_000..024 IDs."
+                    : "50-mile manifest world ID, chunk count, exact two-mile chunk length, contiguity, or stable chunk IDs are incorrect.");
+        }
+
+        private static void ValidateFiftyMileSceneAndBuildSettings(LwsProjectValidationReport report)
+        {
+            bool masterExists = File.Exists(FiftyMileValidationScenePath);
+            string masterScene = masterExists ? File.ReadAllText(FiftyMileValidationScenePath) : string.Empty;
+            bool masterHasSystems = masterScene.Contains("IH_WorldStreamingManifest_50Mile") ||
+                                    masterScene.Contains("ec17bdf4cfc54785a402576e02833b99");
+            masterHasSystems &= masterScene.Contains("LwsApplicationBootstrap") ||
+                                masterScene.Contains("0bcd3a841dce4fc4bf9a83b48ac2dc21");
+            masterHasSystems &= masterScene.Contains("LwsPlayerTruckSpawner") ||
+                                masterScene.Contains("a7d55a3f708f41dab0fb1dbfa279c0a1");
+            masterHasSystems &= masterScene.Contains("IH_FloatingOrigin_50Mile") ||
+                                masterScene.Contains("7f3a1d8e4b30404591e4ae34068773dd");
+
+            string[] chunkScenePaths = Enumerable
+                .Range(0, LwsFiftyMileHighwayModel.ChunkCount)
+                .Select(LwsFiftyMileHighwayModel.GetChunkScenePath)
+                .ToArray();
+            var missingChunks = chunkScenePaths.Where(path => !File.Exists(path)).ToList();
+            HashSet<string> buildScenePaths = new HashSet<string>(
+                EditorBuildSettings.scenes.Select(scene => scene.path.Replace('\\', '/')),
+                StringComparer.OrdinalIgnoreCase);
+            bool buildSettingsContainAll = buildScenePaths.Contains(FiftyMileValidationScenePath) &&
+                                           chunkScenePaths.All(path => buildScenePaths.Contains(path));
+
+            report.Add(
+                masterExists && masterHasSystems && missingChunks.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "50-Mile Validation Scene",
+                masterExists && masterHasSystems && missingChunks.Count == 0
+                    ? "Master validation scene references bootstrap, player truck spawner, 50-mile streaming manifest, and 50-mile origin tuning; all 25 chunk scenes exist."
+                    : "50-mile master scene is missing required global systems or one or more chunk scenes are missing.");
+
+            report.Add(
+                buildSettingsContainAll ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "50-Mile Build Scenes",
+                buildSettingsContainAll
+                    ? "50-mile master scene and all 25 additive chunk scenes are present in Editor Build Settings."
+                    : "50-mile validation scenes are not all present in Editor Build Settings.");
+        }
+
+        private static void ValidateFiftyMileIntegration(LwsProjectValidationReport report)
+        {
+            string model = File.Exists(FiftyMileModelPath) ? File.ReadAllText(FiftyMileModelPath) : string.Empty;
+            string controller = File.Exists(FiftyMileValidationControllerPath) ? File.ReadAllText(FiftyMileValidationControllerPath) : string.Empty;
+            string chunkBuilder = File.Exists(FiftyMileChunkBuilderPath) ? File.ReadAllText(FiftyMileChunkBuilderPath) : string.Empty;
+            string debugPanel = File.Exists(FiftyMileDebugPanelPath) ? File.ReadAllText(FiftyMileDebugPanelPath) : string.Empty;
+            string service = File.Exists(FloatingOriginServicePath) ? File.ReadAllText(FloatingOriginServicePath) : string.Empty;
+
+            bool exactModel = model.Contains("TotalLengthMeters = 80467.2d") &&
+                              model.Contains("ChunkCount = 25") &&
+                              model.Contains("ChunkLengthMeters = 3218.688d") &&
+                              model.Contains("WholeMileMarkerCount = 51") &&
+                              model.Contains("GetWeatherPresetForMile") &&
+                              model.Contains("CreateRoadGraph");
+            bool globalSystems = controller.Contains("ILwsNavigationService") &&
+                                 controller.Contains("SetDestination") &&
+                                 controller.Contains("ILwsWeatherService") &&
+                                 controller.Contains("RequestWeather") &&
+                                 controller.Contains("LwsUtsHighwayTrafficController") &&
+                                 controller.Contains("InitializeFromGraph") &&
+                                 controller.Contains("ILwsRoadConditionService") &&
+                                 controller.Contains("SetOriginOffsetForValidation") &&
+                                 controller.Contains("ReloadCurrentNeighborhood");
+            bool scenePresentation = chunkBuilder.Contains("EnumerateWholeMileMarkersForChunk") &&
+                                     chunkBuilder.Contains("TextMesh") &&
+                                     chunkBuilder.Contains("CreateFinishMarker") &&
+                                     chunkBuilder.Contains("LwsRoadSurface") &&
+                                     !chunkBuilder.Contains("LoadAllChunks");
+            bool diagnosticsAreBounded = debugPanel.Contains("refreshIntervalSeconds") &&
+                                         debugPanel.Contains("TeleportToMile(0d)") &&
+                                         debugPanel.Contains("TeleportToMile(49d)") &&
+                                         !debugPanel.Contains("FindObjectsByType") &&
+                                         !debugPanel.Contains("FindObjectsOfType");
+            bool validationOriginApi = service.Contains("SetOriginOffsetForValidation") &&
+                                       service.Contains("ResetValidationOrigin");
+
+            report.Add(
+                exactModel && globalSystems && validationOriginApi ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "50-Mile Global Integration",
+                exactModel && globalSystems && validationOriginApi
+                    ? "50-mile validation uses exact global coordinates with Prompt 014 streaming, Prompt 015 origin shifting, GPS, Weather Maker, road conditions, and UTS traffic integration."
+                    : "50-mile validation model/controller is missing required global integration or exact 50-mile constants.");
+
+            report.Add(
+                scenePresentation && diagnosticsAreBounded ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "50-Mile Presentation/Diagnostics",
+                scenePresentation && diagnosticsAreBounded
+                    ? "Chunk presentation builds mile markers/road surfaces and debug diagnostics are cached with explicit teleport buttons."
+                    : "50-mile chunk presentation or debug diagnostics may need review.");
+        }
+
+        private static void ValidatePrompt015ADocumentation(LwsProjectValidationReport report)
+        {
+            string[] docs =
+            {
+                FiftyMileDocsPath,
+                FiftyMileChunkMatrixPath,
+                FiftyMileTestMatrixPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 015A Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 015A 50-mile floating-origin test documentation, chunk matrix, and test matrix exist."
+                    : "Missing Prompt 015A documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()
