@@ -142,12 +142,53 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void AutomaticSelectorSafeSwitchingRejectsDriveReverseChangesAtSpeed()
+        {
+            Assert.IsFalse(Lws18SpeedTransmissionController.CanChangeAutomaticSelectorAtSpeed(
+                LwsAutomaticTransmissionSelector.Drive,
+                LwsAutomaticTransmissionSelector.Reverse,
+                2.0f,
+                0.35f,
+                out string reverseMessage));
+            StringAssert.Contains("STOP VEHICLE BEFORE SELECTING REVERSE", reverseMessage);
+
+            Assert.IsFalse(Lws18SpeedTransmissionController.CanChangeAutomaticSelectorAtSpeed(
+                LwsAutomaticTransmissionSelector.Reverse,
+                LwsAutomaticTransmissionSelector.Drive,
+                -2.0f,
+                0.35f,
+                out string driveMessage));
+            StringAssert.Contains("STOP VEHICLE BEFORE SELECTING DRIVE", driveMessage);
+
+            Assert.IsTrue(Lws18SpeedTransmissionController.CanChangeAutomaticSelectorAtSpeed(
+                LwsAutomaticTransmissionSelector.Drive,
+                LwsAutomaticTransmissionSelector.Reverse,
+                0.1f,
+                0.35f,
+                out _));
+            Assert.IsTrue(Lws18SpeedTransmissionController.CanChangeAutomaticSelectorAtSpeed(
+                LwsAutomaticTransmissionSelector.Reverse,
+                LwsAutomaticTransmissionSelector.Neutral,
+                -4.0f,
+                0.35f,
+                out _));
+        }
+
+        [Test]
+        public void AutomaticSelectorLabelsExposeTruckStyleDriveNeutralReverse()
+        {
+            Assert.AreEqual("DRIVE", Lws18SpeedTransmissionController.GetAutomaticSelectorLabel(LwsAutomaticTransmissionSelector.Drive));
+            Assert.AreEqual("NEUTRAL", Lws18SpeedTransmissionController.GetAutomaticSelectorLabel(LwsAutomaticTransmissionSelector.Neutral));
+            Assert.AreEqual("REVERSE", Lws18SpeedTransmissionController.GetAutomaticSelectorLabel(LwsAutomaticTransmissionSelector.Reverse));
+        }
+
+        [Test]
         public void SavePayloadSerializesLogicalTransmissionStateOnly()
         {
             var payload = new Lws18SpeedTransmissionSavePayload
             {
                 schemaVersion = 1,
-                mode = LwsTransmissionMode.Truck18Speed,
+                mode = LwsTransmissionMode.Automatic,
                 logicalGear = Lws18SpeedGearId.Gear8High,
                 logicalRatioIndex = 18,
                 nwhGear = 18,
@@ -156,12 +197,15 @@ namespace LWS.InterstateHauler.Tests.EditMode
                 engagedRange = LwsTruckRange.High,
                 requestedSplitter = LwsTruckSplitter.High,
                 engagedSplitter = LwsTruckSplitter.High,
+                automaticSelector = LwsAutomaticTransmissionSelector.Reverse,
                 shiftState = LwsTransmissionShiftState.Engaged
             };
 
             string json = JsonUtility.ToJson(payload);
             Lws18SpeedTransmissionSavePayload copy = JsonUtility.FromJson<Lws18SpeedTransmissionSavePayload>(json);
 
+            Assert.AreEqual(LwsTransmissionMode.Automatic, copy.mode);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Reverse, copy.automaticSelector);
             Assert.AreEqual(Lws18SpeedGearId.Gear8High, copy.logicalGear);
             Assert.AreEqual(18, copy.logicalRatioIndex);
             Assert.IsFalse(json.IndexOf("DirectInput", StringComparison.OrdinalIgnoreCase) >= 0);

@@ -22,6 +22,7 @@ namespace LWS.InterstateHauler
         public LwsTruckRange engagedRange;
         public LwsTruckSplitter requestedSplitter;
         public LwsTruckSplitter engagedSplitter;
+        public LwsAutomaticTransmissionSelector automaticSelector;
         public float clutchInput;
         public bool neutral;
         public bool reverse;

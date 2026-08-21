@@ -56,6 +56,13 @@ namespace LWS.InterstateHauler
         ShifterPositionMismatch
     }
 
+    public enum LwsAutomaticTransmissionSelector
+    {
+        Drive,
+        Neutral,
+        Reverse
+    }
+
     public enum LwsManualShiftAssistMode
     {
         AssistedManual,
@@ -161,8 +168,10 @@ namespace LWS.InterstateHauler
         public float gearRatio;
         public float clutch;
         public float engineRpm;
+        public float signedSpeedMetersPerSecond;
         public float predictedTargetRpm;
         public float rpmError;
+        public LwsAutomaticTransmissionSelector automaticSelector;
         public int automaticTargetNwhGear;
         public string automaticTargetLabel;
         public LwsTransmissionShiftState shiftState;
@@ -184,6 +193,7 @@ namespace LWS.InterstateHauler
         public LwsTruckRange engagedRange;
         public LwsTruckSplitter requestedSplitter;
         public LwsTruckSplitter engagedSplitter;
+        public LwsAutomaticTransmissionSelector automaticSelector;
         public LwsTransmissionShiftState shiftState;
         public bool requiresShifterSynchronization;
     }

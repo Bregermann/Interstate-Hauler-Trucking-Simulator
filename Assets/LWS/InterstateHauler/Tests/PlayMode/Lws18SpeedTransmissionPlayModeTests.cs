@@ -19,8 +19,49 @@ namespace LWS.InterstateHauler.Tests.PlayMode
 
             LwsTransmissionState state = controller.CaptureState();
             Assert.AreEqual(LwsTransmissionMode.Automatic, state.mode);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Drive, state.automaticSelector);
             Assert.AreEqual(Lws18SpeedGearId.Neutral, state.logicalGear);
             Assert.AreEqual(LwsShiftRejectionReason.None, state.lastRejectionReason);
+            Object.Destroy(go);
+        }
+
+        [UnityTest]
+        public IEnumerator AutomaticSelectorCanChooseDriveNeutralAndReverseAtRest()
+        {
+            var go = new GameObject("transmission-controller-auto-selector");
+            Lws18SpeedTransmissionController controller = go.AddComponent<Lws18SpeedTransmissionController>();
+            controller.SetDefinition(Lws18SpeedTransmissionDefinition.CreateTransientG29DevelopmentPreset());
+
+            yield return null;
+
+            Assert.IsTrue(controller.TrySetAutomaticSelector(LwsAutomaticTransmissionSelector.Neutral, out string neutralMessage), neutralMessage);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Neutral, controller.AutomaticSelector);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Neutral, controller.DisplayState.automaticSelector);
+
+            Assert.IsTrue(controller.TrySetAutomaticSelector(LwsAutomaticTransmissionSelector.Reverse, out string reverseMessage), reverseMessage);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Reverse, controller.AutomaticSelector);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Reverse, controller.DisplayState.automaticSelector);
+            Assert.AreEqual("R", controller.DisplayState.automaticTargetLabel);
+
+            Assert.IsTrue(controller.TrySetAutomaticSelector(LwsAutomaticTransmissionSelector.Drive, out string driveMessage), driveMessage);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Drive, controller.AutomaticSelector);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Drive, controller.DisplayState.automaticSelector);
+            Object.Destroy(go);
+        }
+
+        [UnityTest]
+        public IEnumerator AutomaticSelectorUnavailableInManualMode()
+        {
+            var go = new GameObject("transmission-controller-auto-selector-manual");
+            Lws18SpeedTransmissionController controller = go.AddComponent<Lws18SpeedTransmissionController>();
+            controller.SetDefinition(Lws18SpeedTransmissionDefinition.CreateTransientG29DevelopmentPreset());
+
+            yield return null;
+
+            Assert.IsTrue(controller.TrySetDevelopmentAutomaticTestMode(false, out _));
+            Assert.IsFalse(controller.TrySetAutomaticSelector(LwsAutomaticTransmissionSelector.Reverse, out string message));
+            StringAssert.Contains("AUTOMATIC SELECTOR UNAVAILABLE IN MANUAL MODE", message);
+            Assert.AreEqual(LwsTransmissionMode.Truck18Speed, controller.CaptureState().mode);
             Object.Destroy(go);
         }
 

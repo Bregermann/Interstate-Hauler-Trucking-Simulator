@@ -185,6 +185,22 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void DevelopmentUiSourceExposesAutomaticTransmissionSelector()
+        {
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+
+            StringAssert.Contains("AddTransmissionSelectorRow", root);
+            StringAssert.Contains("Automatic Selector D", root);
+            StringAssert.Contains("Automatic Selector N", root);
+            StringAssert.Contains("Automatic Selector R", root);
+            StringAssert.Contains("TrySetAutomaticSelector", root);
+            StringAssert.Contains("KeyCode.Alpha1", root);
+            StringAssert.Contains("KeyCode.Alpha2", root);
+            StringAssert.Contains("KeyCode.Alpha3", root);
+            StringAssert.Contains("SelectedButtonColor", root);
+        }
+
+        [Test]
         public void DevelopmentUiSourceUsesOriginAwareNavigationAndCachedSemanticMap()
         {
             string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");

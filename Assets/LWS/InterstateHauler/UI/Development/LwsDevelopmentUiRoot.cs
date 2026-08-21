@@ -20,6 +20,8 @@ namespace LWS.InterstateHauler
         private static readonly Color PanelAccentColor = new Color(0.06f, 0.085f, 0.09f, 0.98f);
         private static readonly Color ButtonColor = new Color(0.12f, 0.17f, 0.18f, 1f);
         private static readonly Color ButtonHoverColor = new Color(0.16f, 0.23f, 0.24f, 1f);
+        private static readonly Color SelectedButtonColor = new Color(0.12f, 0.34f, 0.24f, 1f);
+        private static readonly Color DisabledButtonColor = new Color(0.08f, 0.09f, 0.09f, 0.72f);
         private static readonly Color TextColor = new Color(0.88f, 0.93f, 0.92f, 1f);
         private static readonly Color MutedTextColor = new Color(0.62f, 0.71f, 0.72f, 1f);
         private static readonly Vector2 MinimapPanelSize = new Vector2(304f, 304f);
@@ -416,9 +418,12 @@ namespace LWS.InterstateHauler
         private void BuildOverviewTab()
         {
             LwsNavigationRuntimeState nav = _navigationService?.RuntimeState;
+            Lws18SpeedTransmissionController transmission = FindFirstObjectByType<Lws18SpeedTransmissionController>();
             AddInfo("Scene", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
             AddInfo("Input owner", _inputService != null ? $"{_inputService.ActiveOwner} / {_inputService.ActiveSourceId}" : "missing");
             AddInfo("Truck", _truckControlService?.ActiveState.vehicleId ?? "none");
+            AddInfo("Transmission", FormatTransmissionOverview(transmission));
+            AddInfo("Gear", transmission != null ? transmission.DisplayState.displayLabel : "--");
             AddInfo("Route", nav != null && nav.routeActive ? $"{FormatDistance(nav.distanceRemainingMeters)} remaining" : "inactive");
             AddInfo("Road", $"{ResolveCurrentRoadText()} {ResolveSpeedLimitText()}");
             AddInfo("Weather", _weatherService != null ? _weatherService.CurrentSnapshot.weatherPresetId : "missing");
@@ -462,9 +467,19 @@ namespace LWS.InterstateHauler
             }
 
             AddInfo("Mode", transmission.DevelopmentAutomaticModeActive ? "AUTOMATIC" : "18-SPEED MANUAL");
+            AddInfo("Selector", transmission.DevelopmentAutomaticModeActive
+                ? Lws18SpeedTransmissionController.GetAutomaticSelectorLabel(transmission.AutomaticSelector)
+                : "AUTOMATIC SELECTOR UNAVAILABLE IN MANUAL MODE");
             AddInfo("Display", transmission.DisplayState.displayLabel);
+            AddInfo("Current Gear", transmission.DisplayState.displayLabel);
+            AddInfo("Target Gear", transmission.DisplayState.automaticTargetLabel);
+            AddInfo("RPM", $"{transmission.DisplayState.engineRpm:0}");
+            AddInfo("Vehicle Speed", FormatSignedSpeed(transmission.DisplayState.signedSpeedMetersPerSecond));
+            AddInfo("Range", $"{transmission.DisplayState.engagedRange} (requested {transmission.DisplayState.requestedRange})");
+            AddInfo("Splitter", $"{transmission.DisplayState.engagedSplitter} (requested {transmission.DisplayState.requestedSplitter})");
             AddInfo("Shift state", transmission.DisplayState.shiftState.ToString());
             AddInfo("Last rejection", transmission.DisplayState.lastRejectionReason.ToString());
+            AddTransmissionSelectorRow(transmission);
             AddButtonRow((transmission.DevelopmentAutomaticModeActive ? "SWITCH TO MANUAL" : "SWITCH TO AUTOMATIC", () =>
             {
                 bool nextAutomatic = !transmission.DevelopmentAutomaticModeActive;
@@ -796,6 +811,19 @@ namespace LWS.InterstateHauler
             _lastActionMessage = "Truck command sent through semantic LWS control frame.";
         }
 
+        private void RequestAutomaticSelector(LwsAutomaticTransmissionSelector selector)
+        {
+            Lws18SpeedTransmissionController transmission = FindFirstObjectByType<Lws18SpeedTransmissionController>();
+            if (transmission == null)
+            {
+                _lastActionMessage = "Transmission controller not found.";
+                return;
+            }
+
+            transmission.TrySetAutomaticSelector(selector, out _lastActionMessage);
+            RebuildActiveTab();
+        }
+
         private void RequestTestRoute(bool forceFiftyMile)
         {
             LwsFiftyMileHighwayValidationController fifty = FindFirstObjectByType<LwsFiftyMileHighwayValidationController>();
@@ -1039,6 +1067,22 @@ namespace LWS.InterstateHauler
                     HideBigMap();
                 }
             }
+
+            if (ControlCenterVisible && _activeTab == LwsDevelopmentUiTab.Transmission)
+            {
+                if (WasKeyPressed(KeyCode.Alpha1))
+                {
+                    RequestAutomaticSelector(LwsAutomaticTransmissionSelector.Drive);
+                }
+                else if (WasKeyPressed(KeyCode.Alpha2))
+                {
+                    RequestAutomaticSelector(LwsAutomaticTransmissionSelector.Neutral);
+                }
+                else if (WasKeyPressed(KeyCode.Alpha3))
+                {
+                    RequestAutomaticSelector(LwsAutomaticTransmissionSelector.Reverse);
+                }
+            }
         }
 
         private static bool WasKeyPressed(KeyCode keyCode)
@@ -1055,6 +1099,9 @@ namespace LWS.InterstateHauler
                 case KeyCode.F1: return keyboard.f1Key.wasPressedThisFrame;
                 case KeyCode.M: return keyboard.mKey.wasPressedThisFrame;
                 case KeyCode.Escape: return keyboard.escapeKey.wasPressedThisFrame;
+                case KeyCode.Alpha1: return keyboard.digit1Key.wasPressedThisFrame || keyboard.numpad1Key.wasPressedThisFrame;
+                case KeyCode.Alpha2: return keyboard.digit2Key.wasPressedThisFrame || keyboard.numpad2Key.wasPressedThisFrame;
+                case KeyCode.Alpha3: return keyboard.digit3Key.wasPressedThisFrame || keyboard.numpad3Key.wasPressedThisFrame;
                 default: return false;
             }
 #else
@@ -1134,6 +1181,56 @@ namespace LWS.InterstateHauler
             Text text = CreateText(_contentRoot, $"Info {label}", $"{label}: {value}", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, 13, FontStyle.Normal, TextAnchor.MiddleLeft);
             text.color = MutedTextColor;
             text.gameObject.AddComponent<LayoutElement>().preferredHeight = 24f;
+        }
+
+        private void AddTransmissionSelectorRow(Lws18SpeedTransmissionController transmission)
+        {
+            RectTransform row = CreateRect(_contentRoot, "Automatic Selector Row", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            HorizontalLayoutGroup layout = row.gameObject.AddComponent<HorizontalLayoutGroup>();
+            layout.spacing = 10f;
+            layout.childControlWidth = true;
+            layout.childForceExpandWidth = true;
+            layout.childControlHeight = true;
+            row.gameObject.AddComponent<LayoutElement>().preferredHeight = 48f;
+
+            bool enabled = transmission != null && transmission.DevelopmentAutomaticModeActive;
+            AddTransmissionSelectorButton(row, "D", LwsAutomaticTransmissionSelector.Drive, transmission?.AutomaticSelector ?? LwsAutomaticTransmissionSelector.Drive, enabled);
+            AddTransmissionSelectorButton(row, "N", LwsAutomaticTransmissionSelector.Neutral, transmission?.AutomaticSelector ?? LwsAutomaticTransmissionSelector.Drive, enabled);
+            AddTransmissionSelectorButton(row, "R", LwsAutomaticTransmissionSelector.Reverse, transmission?.AutomaticSelector ?? LwsAutomaticTransmissionSelector.Drive, enabled);
+        }
+
+        private void AddTransmissionSelectorButton(
+            Transform parent,
+            string label,
+            LwsAutomaticTransmissionSelector selector,
+            LwsAutomaticTransmissionSelector activeSelector,
+            bool enabled)
+        {
+            bool selected = enabled && selector == activeSelector;
+            Button button = CreateButton(
+                parent,
+                $"Automatic Selector {label}",
+                label,
+                Vector2.zero,
+                Vector2.one,
+                Vector2.zero,
+                Vector2.zero,
+                () => RequestAutomaticSelector(selector));
+
+            button.interactable = enabled;
+            Color normal = selected ? SelectedButtonColor : enabled ? ButtonColor : DisabledButtonColor;
+            Image image = button.GetComponent<Image>();
+            if (image != null)
+            {
+                image.color = normal;
+            }
+
+            ColorBlock colors = button.colors;
+            colors.normalColor = normal;
+            colors.highlightedColor = selected ? new Color(0.16f, 0.44f, 0.31f, 1f) : ButtonHoverColor;
+            colors.selectedColor = colors.highlightedColor;
+            colors.disabledColor = DisabledButtonColor;
+            button.colors = colors;
         }
 
         private void AddButtonRow(params (string label, Action action)[] buttons)
@@ -1270,6 +1367,42 @@ namespace LWS.InterstateHauler
             }
 
             return $"{meters:0} m";
+        }
+
+        private static string FormatTransmissionOverview(Lws18SpeedTransmissionController transmission)
+        {
+            if (transmission == null)
+            {
+                return "missing";
+            }
+
+            LwsTransmissionDisplayState state = transmission.DisplayState;
+            if (state.mode == LwsTransmissionMode.Automatic)
+            {
+                return $"AUTO {FormatAutomaticSelectorShort(state.automaticSelector)}";
+            }
+
+            return "18-SPEED MANUAL";
+        }
+
+        private static string FormatAutomaticSelectorShort(LwsAutomaticTransmissionSelector selector)
+        {
+            switch (selector)
+            {
+                case LwsAutomaticTransmissionSelector.Drive:
+                    return "D";
+                case LwsAutomaticTransmissionSelector.Neutral:
+                    return "N";
+                case LwsAutomaticTransmissionSelector.Reverse:
+                    return "R";
+                default:
+                    return "D";
+            }
+        }
+
+        private static string FormatSignedSpeed(float metersPerSecond)
+        {
+            return $"{metersPerSecond * 2.23693629f:0.0} mph ({metersPerSecond:0.00} m/s)";
         }
 
         private static string FormatEta(float seconds)

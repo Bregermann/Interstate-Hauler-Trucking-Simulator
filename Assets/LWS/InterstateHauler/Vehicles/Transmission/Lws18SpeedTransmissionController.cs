@@ -13,6 +13,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private LwsNwh18SpeedTransmissionAdapter nwhAdapter;
         [SerializeField] private MonoBehaviour fallbackInputSourceBehaviour;
         [SerializeField] private LwsTransmissionMode mode = DevelopmentDefaultMode;
+        [SerializeField] private LwsAutomaticTransmissionSelector automaticSelector = LwsAutomaticTransmissionSelector.Drive;
         [SerializeField] private LwsManualShiftAssistMode assistMode = LwsManualShiftAssistMode.AssistedManual;
         [SerializeField] private bool configureNwhOnStart = true;
         [SerializeField] private bool registerSaveParticipant = true;
@@ -51,6 +52,8 @@ namespace LWS.InterstateHauler
         public LwsTransmissionAbuseEvent LastAbuseEvent => _lastAbuseEvent;
         public Lws18SpeedTransmissionDefinition Definition => ActiveDefinition;
         public bool DevelopmentAutomaticModeActive => mode == LwsTransmissionMode.Automatic;
+        public LwsAutomaticTransmissionSelector AutomaticSelector => automaticSelector;
+        public float AutomaticDirectionChangeSpeedThresholdMetersPerSecond => automaticStoppedNeutralSpeedMetersPerSecond;
         public int AutomaticTargetNwhGear => _automaticTargetNwhGear;
         public string AutomaticTargetLabel => string.IsNullOrWhiteSpace(_automaticTargetLabel) ? "N" : _automaticTargetLabel;
         public string LastModeSwitchMessage => _lastModeSwitchMessage;
@@ -93,6 +96,7 @@ namespace LWS.InterstateHauler
                 engagedRange = LwsTruckRange.Low,
                 requestedSplitter = LwsTruckSplitter.Low,
                 engagedSplitter = LwsTruckSplitter.Low,
+                automaticSelector = automaticSelector,
                 neutral = true,
                 nwhGear = 0,
                 shiftState = LwsTransmissionShiftState.Idle
@@ -173,6 +177,44 @@ namespace LWS.InterstateHauler
             _state.mode = transmissionMode;
         }
 
+        public bool TrySetAutomaticSelector(LwsAutomaticTransmissionSelector selector, out string message)
+        {
+            ResolveLocalReferences();
+            ConfigureNwhIfNeeded();
+
+            if (mode != LwsTransmissionMode.Automatic)
+            {
+                message = "AUTOMATIC SELECTOR UNAVAILABLE IN MANUAL MODE";
+                _lastModeSwitchMessage = message;
+                return false;
+            }
+
+            selector = NormalizeAutomaticSelector(selector);
+            LwsNwhTransmissionRuntimeState nwhState = ReadNwhState();
+            float speed = nwhState.available ? nwhState.signedSpeedMetersPerSecond : 0f;
+            if (!CanChangeAutomaticSelectorAtSpeed(
+                    automaticSelector,
+                    selector,
+                    speed,
+                    automaticStoppedNeutralSpeedMetersPerSecond,
+                    out message))
+            {
+                _state.lastRejectionReason = LwsShiftRejectionReason.VehicleSpeedMismatch;
+                _state.shiftState = LwsTransmissionShiftState.Rejected;
+                _lastModeSwitchMessage = message;
+                _displayState = BuildDisplayState(nwhState);
+                return false;
+            }
+
+            automaticSelector = selector;
+            _state.automaticSelector = automaticSelector;
+            _nextAutomaticShiftTime = 0f;
+            message = $"Automatic selector set to {GetAutomaticSelectorLabel(automaticSelector)}.";
+            _lastModeSwitchMessage = message;
+            ProcessAutomaticTransmission(ActiveDefinition, ResolveInputSource()?.ReadContinuousInput() ?? default);
+            return true;
+        }
+
         public bool TrySetDevelopmentAutomaticTestMode(bool enabled, out string message)
         {
             ResolveLocalReferences();
@@ -193,16 +235,19 @@ namespace LWS.InterstateHauler
             {
                 mode = LwsTransmissionMode.Automatic;
                 _state.mode = LwsTransmissionMode.Automatic;
+                automaticSelector = LwsAutomaticTransmissionSelector.Drive;
+                _state.automaticSelector = automaticSelector;
                 _state.requiresShifterSynchronization = false;
                 _automaticTargetNwhGear = 0;
                 _automaticTargetLabel = "N";
                 _nextAutomaticShiftTime = Time.time + 0.25f;
-                message = "Development automatic transmission test mode enabled.";
+                message = "Development automatic transmission test mode enabled; selector set to DRIVE.";
             }
             else
             {
                 mode = LwsTransmissionMode.Truck18Speed;
                 _state.mode = LwsTransmissionMode.Truck18Speed;
+                _state.automaticSelector = automaticSelector;
                 _state.requiresShifterSynchronization = true;
                 _automaticTargetNwhGear = 0;
                 _automaticTargetLabel = "N";
@@ -230,12 +275,15 @@ namespace LWS.InterstateHauler
             _state.nwhGear = nwhState.nwhGear;
             _state.engineStalled = nwhState.engineStalled;
             _state.clutchInput = _lastClutchInput;
+            _state.automaticSelector = automaticSelector;
             return _state;
         }
 
         public void RestoreState(LwsTransmissionState state)
         {
+            automaticSelector = NormalizeAutomaticSelector(state.automaticSelector);
             _state = state;
+            _state.automaticSelector = automaticSelector;
             _state.requiresShifterSynchronization = true;
             _lastCommandedNwhGear = state.nwhGear;
             if (nwhAdapter != null && state.nwhGear > -100)
@@ -261,6 +309,7 @@ namespace LWS.InterstateHauler
                 engagedRange = current.engagedRange,
                 requestedSplitter = current.requestedSplitter,
                 engagedSplitter = current.engagedSplitter,
+                automaticSelector = current.automaticSelector,
                 shiftState = current.shiftState,
                 requiresShifterSynchronization = current.requiresShifterSynchronization
             };
@@ -297,6 +346,7 @@ namespace LWS.InterstateHauler
                 engagedRange = payload.engagedRange,
                 requestedSplitter = payload.requestedSplitter,
                 engagedSplitter = payload.engagedSplitter,
+                automaticSelector = NormalizeAutomaticSelector(payload.automaticSelector),
                 neutral = payload.logicalGear == Lws18SpeedGearId.Neutral,
                 reverse = payload.logicalGear == Lws18SpeedGearId.Reverse1,
                 shiftState = LwsTransmissionShiftState.ShifterMismatch,
@@ -317,6 +367,7 @@ namespace LWS.InterstateHauler
                 engagedRange = LwsTruckRange.Low,
                 requestedSplitter = LwsTruckSplitter.Low,
                 engagedSplitter = LwsTruckSplitter.Low,
+                automaticSelector = automaticSelector,
                 neutral = true,
                 nwhGear = 0
             });
@@ -410,6 +461,8 @@ namespace LWS.InterstateHauler
         {
             LwsNwhTransmissionRuntimeState nwhState = ReadNwhState();
             _state.mode = LwsTransmissionMode.Automatic;
+            automaticSelector = NormalizeAutomaticSelector(automaticSelector);
+            _state.automaticSelector = automaticSelector;
             _state.physicalGate = LwsTruckShifterGate.Neutral;
             _state.requestedRange = LwsTruckRange.Low;
             _state.engagedRange = LwsTruckRange.Low;
@@ -418,7 +471,28 @@ namespace LWS.InterstateHauler
             _lastClutchInput = 1f;
             _state.clutchInput = _lastClutchInput;
 
-            int targetNwhGear = ChooseAutomaticTargetGear(activeDefinition, nwhState, continuousInput);
+            if (automaticSelector == LwsAutomaticTransmissionSelector.Neutral)
+            {
+                _automaticTargetNwhGear = 0;
+                _automaticTargetLabel = "N";
+                EngageNeutral(activeDefinition);
+                return;
+            }
+
+            if (!CanKeepAutomaticSelectorAtSpeed(
+                    automaticSelector,
+                    nwhState.available ? nwhState.signedSpeedMetersPerSecond : 0f,
+                    automaticStoppedNeutralSpeedMetersPerSecond,
+                    out string speedMessage))
+            {
+                _lastModeSwitchMessage = speedMessage;
+                Reject(LwsShiftRejectionReason.VehicleSpeedMismatch, LwsTransmissionShiftState.Rejected);
+                return;
+            }
+
+            int targetNwhGear = automaticSelector == LwsAutomaticTransmissionSelector.Reverse
+                ? activeDefinition.ReverseNwhGearIndex
+                : ChooseAutomaticTargetGear(activeDefinition, nwhState, continuousInput);
             _automaticTargetNwhGear = targetNwhGear;
             _automaticTargetLabel = GetAutomaticTargetLabel(activeDefinition, targetNwhGear);
 
@@ -429,6 +503,20 @@ namespace LWS.InterstateHauler
             }
 
             int currentNwhGear = nwhState.available ? nwhState.nwhGear : _state.nwhGear;
+            if (targetNwhGear < 0 && currentNwhGear == targetNwhGear && _lastCommandedNwhGear == targetNwhGear)
+            {
+                _state.logicalGear = Lws18SpeedGearId.Reverse1;
+                _state.logicalRatioIndex = 0;
+                _state.displayLabel = "R";
+                _state.neutral = false;
+                _state.reverse = true;
+                _state.nwhGear = targetNwhGear;
+                _state.shiftState = LwsTransmissionShiftState.Engaged;
+                _state.lastRejectionReason = LwsShiftRejectionReason.None;
+                _displayState = BuildDisplayState(nwhState);
+                return;
+            }
+
             if (targetNwhGear == currentNwhGear && targetNwhGear == _lastCommandedNwhGear)
             {
                 _state.shiftState = LwsTransmissionShiftState.Engaged;
@@ -437,11 +525,17 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            if (Time.time < _nextAutomaticShiftTime)
+            if (targetNwhGear > 0 && Time.time < _nextAutomaticShiftTime)
             {
                 _state.shiftState = LwsTransmissionShiftState.Preselected;
                 _state.lastRejectionReason = LwsShiftRejectionReason.None;
                 _displayState = BuildDisplayState(nwhState);
+                return;
+            }
+
+            if (targetNwhGear < 0)
+            {
+                ApplyAcceptedGear(activeDefinition.ResolveReverse(), 0f, 0f);
                 return;
             }
 
@@ -510,6 +604,11 @@ namespace LWS.InterstateHauler
 
         private string GetAutomaticTargetLabel(Lws18SpeedTransmissionDefinition activeDefinition, int targetNwhGear)
         {
+            if (targetNwhGear < 0)
+            {
+                return "R";
+            }
+
             if (targetNwhGear == 0)
             {
                 return "N";
@@ -536,6 +635,79 @@ namespace LWS.InterstateHauler
             };
         }
 
+        public static bool CanChangeAutomaticSelectorAtSpeed(
+            LwsAutomaticTransmissionSelector currentSelector,
+            LwsAutomaticTransmissionSelector requestedSelector,
+            float signedSpeedMetersPerSecond,
+            float thresholdMetersPerSecond,
+            out string message)
+        {
+            currentSelector = NormalizeAutomaticSelector(currentSelector);
+            requestedSelector = NormalizeAutomaticSelector(requestedSelector);
+            if (requestedSelector == LwsAutomaticTransmissionSelector.Neutral || requestedSelector == currentSelector)
+            {
+                message = "Automatic selector change accepted.";
+                return true;
+            }
+
+            if (Mathf.Abs(signedSpeedMetersPerSecond) <= Mathf.Max(0f, thresholdMetersPerSecond))
+            {
+                message = "Automatic selector change accepted.";
+                return true;
+            }
+
+            message = requestedSelector == LwsAutomaticTransmissionSelector.Reverse
+                ? "STOP VEHICLE BEFORE SELECTING REVERSE"
+                : "STOP VEHICLE BEFORE SELECTING DRIVE";
+            return false;
+        }
+
+        private static bool CanKeepAutomaticSelectorAtSpeed(
+            LwsAutomaticTransmissionSelector selector,
+            float signedSpeedMetersPerSecond,
+            float thresholdMetersPerSecond,
+            out string message)
+        {
+            selector = NormalizeAutomaticSelector(selector);
+            float threshold = Mathf.Max(0f, thresholdMetersPerSecond);
+            if (selector == LwsAutomaticTransmissionSelector.Reverse && signedSpeedMetersPerSecond > threshold)
+            {
+                message = "STOP VEHICLE BEFORE SELECTING REVERSE";
+                return false;
+            }
+
+            if (selector == LwsAutomaticTransmissionSelector.Drive && signedSpeedMetersPerSecond < -threshold)
+            {
+                message = "STOP VEHICLE BEFORE SELECTING DRIVE";
+                return false;
+            }
+
+            message = "Automatic selector speed accepted.";
+            return true;
+        }
+
+        public static string GetAutomaticSelectorLabel(LwsAutomaticTransmissionSelector selector)
+        {
+            switch (NormalizeAutomaticSelector(selector))
+            {
+                case LwsAutomaticTransmissionSelector.Drive:
+                    return "DRIVE";
+                case LwsAutomaticTransmissionSelector.Neutral:
+                    return "NEUTRAL";
+                case LwsAutomaticTransmissionSelector.Reverse:
+                    return "REVERSE";
+                default:
+                    return "DRIVE";
+            }
+        }
+
+        private static LwsAutomaticTransmissionSelector NormalizeAutomaticSelector(LwsAutomaticTransmissionSelector selector)
+        {
+            return Enum.IsDefined(typeof(LwsAutomaticTransmissionSelector), selector)
+                ? selector
+                : LwsAutomaticTransmissionSelector.Drive;
+        }
+
         private void SetNeutralTransmissionState()
         {
             _state.physicalGate = LwsTruckShifterGate.Neutral;
@@ -548,6 +720,7 @@ namespace LWS.InterstateHauler
             _state.displayLabel = "N";
             _state.neutral = true;
             _state.reverse = false;
+            _state.automaticSelector = automaticSelector;
             _state.nwhGear = 0;
             _state.gearRatio = 0f;
             _state.predictedRpm = 0f;
@@ -897,8 +1070,10 @@ namespace LWS.InterstateHauler
                 gearRatio = _state.gearRatio,
                 clutch = _lastClutchInput,
                 engineRpm = nwhState.engineRpm,
+                signedSpeedMetersPerSecond = nwhState.available ? nwhState.signedSpeedMetersPerSecond : 0f,
                 predictedTargetRpm = _state.predictedRpm,
                 rpmError = _state.rpmError,
+                automaticSelector = automaticSelector,
                 automaticTargetNwhGear = _automaticTargetNwhGear,
                 automaticTargetLabel = AutomaticTargetLabel,
                 shiftState = _state.shiftState,
