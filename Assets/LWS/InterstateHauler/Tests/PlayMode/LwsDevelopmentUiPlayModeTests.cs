@@ -2,7 +2,9 @@ using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 
 namespace LWS.InterstateHauler.Tests.PlayMode
 {
@@ -22,6 +24,11 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             foreach (LwsDevelopmentUiRoot root in Object.FindObjectsByType<LwsDevelopmentUiRoot>(FindObjectsSortMode.None))
             {
                 Object.Destroy(root.gameObject);
+            }
+
+            foreach (EventSystem eventSystem in Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None))
+            {
+                Object.Destroy(eventSystem.gameObject);
             }
 
             if (LwsApplicationBootstrap.Instance != null)
@@ -47,12 +54,29 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             yield return null;
 
             Assert.AreEqual(1, Object.FindObjectsByType<LwsDevelopmentUiRoot>(FindObjectsSortMode.None).Length);
-            Assert.IsNotNull(service.RuntimeRoot.Canvas);
-            Assert.IsNotNull(service.RuntimeRoot.CanvasScaler);
-            Assert.IsNotNull(service.RuntimeRoot.ScrollRect);
-            AssertSemanticMapHasRequiredComponents(service.RuntimeRoot.MinimapGraphic);
-            AssertSemanticMapHasRequiredComponents(service.RuntimeRoot.BigMapGraphic);
-            AssertMinimapAnchoredBottomRight(service.RuntimeRoot.MinimapRect);
+            LwsDevelopmentUiRoot root = service.RuntimeRoot;
+            Assert.IsTrue(root.gameObject.activeInHierarchy);
+            Assert.IsNotNull(root.Canvas);
+            Assert.IsTrue(root.Canvas.enabled);
+            Assert.AreEqual(RenderMode.ScreenSpaceOverlay, root.Canvas.renderMode);
+            Assert.IsNotNull(root.CanvasScaler);
+            Assert.AreEqual(CanvasScaler.ScaleMode.ScaleWithScreenSize, root.CanvasScaler.uiScaleMode);
+            Assert.AreEqual(new Vector2(1920f, 1080f), root.CanvasScaler.referenceResolution);
+            Assert.IsNotNull(root.GraphicRaycaster);
+            Assert.IsTrue(root.GraphicRaycaster.enabled);
+            Assert.IsNotNull(root.InputBridge);
+            Assert.IsTrue(root.InputBridge.enabled);
+            Assert.IsTrue(root.InputBridge.IsBound);
+            Assert.IsNotNull(root.DevButtonObject);
+            Assert.IsTrue(root.DevButtonObject.activeInHierarchy);
+            Assert.IsNotNull(root.ControlCenterPanel);
+            Assert.IsFalse(root.ControlCenterPanel.activeSelf);
+            AssertControlCenterUsesCenteredNinetyPercentLayout(root.ControlCenterRect);
+            AssertDevButtonAnchoredBottomLeft(root.DevButtonRect);
+            AssertSemanticMapHasRequiredComponents(root.MinimapGraphic);
+            AssertSemanticMapHasRequiredComponents(root.BigMapGraphic);
+            AssertMinimapAnchoredBottomRight(root.MinimapRect);
+            AssertValidEventSystem();
             Assert.IsFalse(service.IsVisible);
         }
 
@@ -65,10 +89,27 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             yield return null;
 
             Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsDevelopmentUiService service));
+            service.EnsureRuntime();
+            yield return null;
+
+            Button devButton = service.RuntimeRoot.DevButtonObject.GetComponent<Button>();
+            Assert.IsNotNull(devButton);
+            devButton.onClick.Invoke();
+            yield return null;
+
+            Assert.IsTrue(service.IsVisible);
+            Assert.IsFalse(service.RuntimeRoot.DevButtonObject.activeSelf);
+            service.Hide();
+            yield return null;
+
+            Assert.IsFalse(service.IsVisible);
+            Assert.IsTrue(service.RuntimeRoot.DevButtonObject.activeSelf);
+
             service.Show();
             yield return null;
 
             Assert.IsTrue(service.IsVisible);
+            Assert.IsFalse(service.RuntimeRoot.DevButtonObject.activeSelf);
             service.OpenTab(LwsDevelopmentUiTab.GpsNavigation);
             Assert.AreEqual(LwsDevelopmentUiTab.GpsNavigation, service.ActiveTab);
 
@@ -76,16 +117,46 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             yield return null;
 
             Assert.IsTrue(service.IsBigMapVisible);
+            Assert.IsFalse(service.RuntimeRoot.DevButtonObject.activeSelf);
             Assert.AreEqual(0f, Time.timeScale);
 
             service.HideBigMap();
             yield return null;
 
             Assert.IsFalse(service.IsBigMapVisible);
+            Assert.IsFalse(service.RuntimeRoot.DevButtonObject.activeSelf);
             Assert.AreEqual(1f, Time.timeScale);
+
+            service.Toggle();
+            yield return null;
+            Assert.IsFalse(service.IsVisible);
+            Assert.IsTrue(service.RuntimeRoot.DevButtonObject.activeSelf);
+
+            service.Toggle();
+            yield return null;
+            Assert.IsTrue(service.IsVisible);
 
             service.Hide();
             Assert.IsFalse(service.IsVisible);
+            Assert.IsTrue(service.RuntimeRoot.DevButtonObject.activeSelf);
+        }
+
+        [UnityTest]
+        public IEnumerator TransmissionTabCreatesDevelopmentSelectorControlsWithoutController()
+        {
+            var go = new GameObject("development-ui-transmission-bootstrap");
+            LwsApplicationBootstrap bootstrap = go.AddComponent<LwsApplicationBootstrap>();
+
+            yield return null;
+
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsDevelopmentUiService service));
+            service.OpenTab(LwsDevelopmentUiTab.Transmission);
+            yield return null;
+
+            Button[] buttons = service.RuntimeRoot.GetComponentsInChildren<Button>(true);
+            Assert.IsTrue(buttons.Any(button => button.name == "Automatic Selector D"));
+            Assert.IsTrue(buttons.Any(button => button.name == "Automatic Selector N"));
+            Assert.IsTrue(buttons.Any(button => button.name == "Automatic Selector R"));
         }
 
         [UnityTest]
@@ -160,6 +231,42 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.AreEqual(304f, minimap.sizeDelta.y, 0.01f);
             Assert.AreEqual(-28f, minimap.anchoredPosition.x, 0.01f);
             Assert.AreEqual(28f, minimap.anchoredPosition.y, 0.01f);
+        }
+
+        private static void AssertDevButtonAnchoredBottomLeft(RectTransform devButton)
+        {
+            Assert.IsNotNull(devButton);
+            Assert.AreEqual(new Vector2(0f, 0f), devButton.anchorMin);
+            Assert.AreEqual(new Vector2(0f, 0f), devButton.anchorMax);
+            Assert.AreEqual(new Vector2(0f, 0f), devButton.pivot);
+            Assert.AreEqual(82f, devButton.sizeDelta.x, 0.01f);
+            Assert.AreEqual(42f, devButton.sizeDelta.y, 0.01f);
+            Assert.AreEqual(32f, devButton.anchoredPosition.x, 0.01f);
+            Assert.AreEqual(32f, devButton.anchoredPosition.y, 0.01f);
+            Assert.IsNotNull(devButton.GetComponent<Image>());
+            Assert.IsTrue(devButton.GetComponent<Image>().raycastTarget);
+        }
+
+        private static void AssertControlCenterUsesCenteredNinetyPercentLayout(RectTransform controlCenter)
+        {
+            Assert.IsNotNull(controlCenter);
+            Assert.AreEqual(new Vector2(0.05f, 0.05f), controlCenter.anchorMin);
+            Assert.AreEqual(new Vector2(0.95f, 0.95f), controlCenter.anchorMax);
+            Assert.AreEqual(Vector2.zero, controlCenter.offsetMin);
+            Assert.AreEqual(Vector2.zero, controlCenter.offsetMax);
+            Assert.AreEqual(Vector3.one, controlCenter.localScale);
+        }
+
+        private static void AssertValidEventSystem()
+        {
+            EventSystem[] eventSystems = Object.FindObjectsByType<EventSystem>(FindObjectsSortMode.None)
+                .Where(eventSystem => eventSystem.gameObject.activeInHierarchy)
+                .ToArray();
+            Assert.AreEqual(1, eventSystems.Length);
+            BaseInputModule[] modules = eventSystems[0].GetComponents<BaseInputModule>();
+            Assert.IsTrue(modules.Any(module =>
+                module.enabled &&
+                module.GetType().FullName == "UnityEngine.InputSystem.UI.InputSystemUIInputModule"));
         }
     }
 }

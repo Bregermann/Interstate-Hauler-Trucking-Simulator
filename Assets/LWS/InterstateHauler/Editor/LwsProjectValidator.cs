@@ -3232,6 +3232,9 @@ namespace LWS.InterstateHauler.Editor
                                    root.Contains("CanvasScaler.ScaleMode.ScaleWithScreenSize") &&
                                    root.Contains("ScrollRect") &&
                                    root.Contains("InputSystemUIInputModule") &&
+                                   root.Contains("LwsDevelopmentUiInputBridge") &&
+                                   root.Contains("\"DEV Button\"") &&
+                                   root.Contains("LegacyRuntime.ttf") &&
                                    root.Contains("KeyCode.F1") &&
                                    root.Contains("KeyCode.M") &&
                                    root.Contains("KeyCode.Escape") &&
@@ -3241,8 +3244,8 @@ namespace LWS.InterstateHauler.Editor
                 overlayControls ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Development Control Center Overlay",
                 overlayControls
-                    ? "Control center uses a Screen Space Overlay Canvas with scaler, scroll content, F1/M/ESC ownership, cursor restore, and full-map pause handling."
-                    : "Development Control Center is missing required overlay, scaling, input, cursor, or pause behavior.");
+                    ? "Control center uses a Screen Space Overlay Canvas with scaler, scroll content, DEV button fallback, input bridge, Unity 6 runtime font, cursor restore, and full-map pause handling."
+                    : "Development Control Center is missing required overlay, scaling, DEV button, input bridge, font, cursor, or pause behavior.");
 
             bool semanticCommands = root.Contains("ApplyCommandFrame") &&
                                     root.Contains("TrySetDevelopmentAutomaticTestMode") &&

@@ -32,9 +32,18 @@ namespace LWS.InterstateHauler
         public LwsServiceResult Initialize(LwsServiceContext context)
         {
             _registry = context.Registry;
+            LwsDevelopmentUiDiagnostics.LogStage("Service registered");
             if (Application.isPlaying)
             {
-                EnsureRuntime();
+                try
+                {
+                    EnsureRuntime();
+                }
+                catch (System.Exception ex)
+                {
+                    LwsDevelopmentUiDiagnostics.LogFailure("Runtime host created", ex);
+                    return LwsServiceResult.Failure($"Development UI runtime creation failed: {ex.Message}");
+                }
             }
 
             return LwsServiceResult.Success("LWS development UI service initialized.");
@@ -56,6 +65,7 @@ namespace LWS.InterstateHauler
         {
             if (_runtimeRoot != null)
             {
+                _runtimeRoot.gameObject.SetActive(true);
                 return;
             }
 
@@ -63,6 +73,7 @@ namespace LWS.InterstateHauler
             if (existing != null && existing.Length > 0)
             {
                 _runtimeRoot = existing[0];
+                _runtimeRoot.gameObject.SetActive(true);
                 for (int i = 1; i < existing.Length; i++)
                 {
                     Object.Destroy(existing[i].gameObject);
@@ -74,6 +85,7 @@ namespace LWS.InterstateHauler
                 _runtimeRoot = root.AddComponent<LwsDevelopmentUiRoot>();
             }
 
+            LwsDevelopmentUiDiagnostics.LogStage("Runtime host created");
             _runtimeRoot.BindService(this, _registry);
         }
 

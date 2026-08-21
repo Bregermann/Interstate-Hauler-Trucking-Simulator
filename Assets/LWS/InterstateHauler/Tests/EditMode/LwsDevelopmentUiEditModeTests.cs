@@ -185,6 +185,55 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void DevelopmentUiSourceDefinesVisibleRuntimeHostAndDevButton()
+        {
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+
+            StringAssert.Contains("\"Development Canvas\"", root);
+            StringAssert.Contains("\"Persistent HUD Layer\"", root);
+            StringAssert.Contains("\"Modal Overlay Layer\"", root);
+            StringAssert.Contains("\"DEV Button\"", root);
+            StringAssert.Contains("\"[ DEV ]\"", root);
+            StringAssert.Contains("new Vector2(0.05f, 0.05f)", root);
+            StringAssert.Contains("new Vector2(0.95f, 0.95f)", root);
+            StringAssert.Contains("UpdateDevButtonVisibility", root);
+            StringAssert.Contains("LwsDevelopmentUiInputBridge", root);
+        }
+
+        [Test]
+        public void DevelopmentUiSourceUsesInputSystemBridgeAndConfiguredEventSystem()
+        {
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+
+            StringAssert.Contains("Keyboard.current", root);
+            StringAssert.Contains("f1Key.wasPressedThisFrame", root);
+            StringAssert.Contains("InputSystemUIInputModule", root);
+            StringAssert.Contains("AssignDefaultActions", root);
+            StringAssert.Contains("GraphicRaycaster", root);
+            StringAssert.Contains("EventSystem.current", root);
+        }
+
+        [Test]
+        public void DevelopmentUiSourceUsesUnitySixSafeRuntimeFont()
+        {
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+
+            StringAssert.Contains("ResolveUiFont", root);
+            StringAssert.Contains("LegacyRuntime.ttf", root);
+            StringAssert.DoesNotContain("label.font = Resources.GetBuiltinResource<Font>(\"Arial.ttf\")", root);
+        }
+
+        [Test]
+        public void DevelopmentUiSourceAuditsRaycastableButtonsAndDecorativeText()
+        {
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+
+            StringAssert.Contains("image.raycastTarget = true", root);
+            StringAssert.Contains("label.raycastTarget = false", root);
+            StringAssert.Contains("RectMask2D", root);
+        }
+
+        [Test]
         public void DevelopmentUiSourceExposesAutomaticTransmissionSelector()
         {
             string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");

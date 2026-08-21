@@ -26,8 +26,11 @@ namespace LWS.InterstateHauler
         private static readonly Color MutedTextColor = new Color(0.62f, 0.71f, 0.72f, 1f);
         private static readonly Vector2 MinimapPanelSize = new Vector2(304f, 304f);
         private const float MinimapPanelMarginPixels = 28f;
+        private static readonly Vector2 DevButtonSize = new Vector2(82f, 42f);
+        private const float DevButtonMarginPixels = 32f;
         private const float MinimapMetersVisible = 2600f;
         private const float RoadLookupRefreshSeconds = 0.5f;
+        private static Font _uiFont;
 
         private LwsDevelopmentUiService _service;
         private LwsServiceRegistry _registry;
@@ -48,9 +51,14 @@ namespace LWS.InterstateHauler
 
         private Canvas _canvas;
         private CanvasScaler _canvasScaler;
+        private GraphicRaycaster _graphicRaycaster;
+        private RectTransform _hudLayer;
+        private RectTransform _modalLayer;
+        private GameObject _devButton;
         private GameObject _controlCenterPanel;
         private GameObject _bigMapPanel;
         private GameObject _minimapPanel;
+        private LwsDevelopmentUiInputBridge _inputBridge;
         private RectTransform _tabList;
         private RectTransform _contentRoot;
         private ScrollRect _scrollRect;
@@ -81,6 +89,12 @@ namespace LWS.InterstateHauler
         public LwsDevelopmentUiTab ActiveTab => _activeTab;
         public Canvas Canvas => _canvas;
         public CanvasScaler CanvasScaler => _canvasScaler;
+        public GraphicRaycaster GraphicRaycaster => _graphicRaycaster;
+        public LwsDevelopmentUiInputBridge InputBridge => _inputBridge;
+        public GameObject DevButtonObject => _devButton;
+        public RectTransform DevButtonRect => _devButton != null ? _devButton.GetComponent<RectTransform>() : null;
+        public GameObject ControlCenterPanel => _controlCenterPanel;
+        public RectTransform ControlCenterRect => _controlCenterPanel != null ? _controlCenterPanel.GetComponent<RectTransform>() : null;
         public ScrollRect ScrollRect => _scrollRect;
         public LwsSemanticGpsMapGraphic MinimapGraphic => _minimapGraphic;
         public LwsSemanticGpsMapGraphic BigMapGraphic => _bigMapGraphic;
@@ -134,6 +148,23 @@ namespace LWS.InterstateHauler
         {
             _service = service;
             _registry = registry;
+            if (_canvas == null)
+            {
+                BuildUi();
+            }
+
+            if (_inputBridge == null)
+            {
+                _inputBridge = GetComponent<LwsDevelopmentUiInputBridge>();
+                if (_inputBridge == null)
+                {
+                    _inputBridge = gameObject.AddComponent<LwsDevelopmentUiInputBridge>();
+                }
+            }
+
+            _inputBridge?.Bind(this);
+            gameObject.SetActive(true);
+            UpdateDevButtonVisibility();
             ResolveServices();
         }
 
@@ -144,8 +175,12 @@ namespace LWS.InterstateHauler
                 BuildUi();
             }
 
+            gameObject.SetActive(true);
             _controlCenterPanel.SetActive(true);
+            _controlCenterPanel.transform.SetAsLastSibling();
+            UpdateDevButtonVisibility();
             _nextContentRefreshTime = 0f;
+            RebuildActiveTab();
             CaptureCursor();
         }
 
@@ -156,6 +191,7 @@ namespace LWS.InterstateHauler
                 _controlCenterPanel.SetActive(false);
             }
 
+            UpdateDevButtonVisibility();
             RestoreCursorIfClear();
         }
 
@@ -191,7 +227,9 @@ namespace LWS.InterstateHauler
             }
 
             _bigMapPanel.SetActive(true);
+            _bigMapPanel.transform.SetAsLastSibling();
             _minimapPanel.SetActive(false);
+            UpdateDevButtonVisibility();
             PauseForBigMap();
             CaptureCursor();
             RefreshMaps();
@@ -209,6 +247,7 @@ namespace LWS.InterstateHauler
                 _minimapPanel.SetActive(true);
             }
 
+            UpdateDevButtonVisibility();
             RestoreTimeScaleIfPaused();
             RestoreCursorIfClear();
         }
@@ -225,6 +264,14 @@ namespace LWS.InterstateHauler
             }
         }
 
+        private void UpdateDevButtonVisibility()
+        {
+            if (_devButton != null)
+            {
+                _devButton.SetActive(!ControlCenterVisible && !BigMapVisible);
+            }
+        }
+
         private void BuildUi()
         {
             if (_canvas != null)
@@ -232,45 +279,132 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            _canvas = gameObject.AddComponent<Canvas>();
+            _inputBridge = GetComponent<LwsDevelopmentUiInputBridge>();
+            if (_inputBridge == null)
+            {
+                _inputBridge = gameObject.AddComponent<LwsDevelopmentUiInputBridge>();
+            }
+
+            _inputBridge.Bind(this);
+            LwsDevelopmentUiDiagnostics.LogStage("Input bridge ready");
+
+            RectTransform canvasRect = CreateRect(transform, "Development Canvas", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            _canvas = canvasRect.gameObject.AddComponent<Canvas>();
             _canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             _canvas.sortingOrder = 6500;
             _canvas.pixelPerfect = false;
-            _canvasScaler = gameObject.AddComponent<CanvasScaler>();
+            _canvasScaler = canvasRect.gameObject.AddComponent<CanvasScaler>();
             _canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             _canvasScaler.referenceResolution = new Vector2(1920f, 1080f);
             _canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             _canvasScaler.matchWidthOrHeight = 0.5f;
-            gameObject.AddComponent<GraphicRaycaster>();
+            _graphicRaycaster = canvasRect.gameObject.AddComponent<GraphicRaycaster>();
+            _graphicRaycaster.enabled = true;
+            LwsDevelopmentUiDiagnostics.LogStage("Canvas created");
             EnsureEventSystem();
+            _hudLayer = CreateRect(canvasRect, "Persistent HUD Layer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            _modalLayer = CreateRect(canvasRect, "Modal Overlay Layer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            _hudLayer.SetAsFirstSibling();
+            _modalLayer.SetAsLastSibling();
+            BuildDevButton();
             BuildMinimap();
             BuildBigMap();
             BuildControlCenter();
             _controlCenterPanel.SetActive(false);
             _bigMapPanel.SetActive(false);
+            UpdateDevButtonVisibility();
         }
 
-        private static void EnsureEventSystem()
+        private void EnsureEventSystem()
         {
-            if (FindFirstObjectByType<EventSystem>() != null)
+            EventSystem[] eventSystems = FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+            EventSystem selected = null;
+            for (int i = 0; i < eventSystems.Length; i++)
             {
-                return;
+                EventSystem eventSystem = eventSystems[i];
+                if (eventSystem == null || !eventSystem.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+
+#if ENABLE_INPUT_SYSTEM
+                if (eventSystem.GetComponent<InputSystemUIInputModule>() != null)
+                {
+                    selected = eventSystem;
+                    break;
+                }
+#endif
+                if (selected == null)
+                {
+                    selected = eventSystem;
+                }
             }
 
-            GameObject eventSystem = new GameObject("IH Development UI EventSystem");
-            eventSystem.AddComponent<EventSystem>();
+            if (selected == null)
+            {
+                GameObject eventSystemObject = new GameObject("IH Development UI EventSystem");
+                eventSystemObject.transform.SetParent(transform, false);
+                selected = eventSystemObject.AddComponent<EventSystem>();
+            }
+
 #if ENABLE_INPUT_SYSTEM
-            eventSystem.AddComponent<InputSystemUIInputModule>();
+            InputSystemUIInputModule inputModule = selected.GetComponent<InputSystemUIInputModule>();
+            if (inputModule == null)
+            {
+                inputModule = selected.gameObject.AddComponent<InputSystemUIInputModule>();
+            }
+
+            inputModule.enabled = true;
+            if (inputModule.actionsAsset == null)
+            {
+                inputModule.AssignDefaultActions();
+            }
+
+            foreach (BaseInputModule module in selected.GetComponents<BaseInputModule>())
+            {
+                module.enabled = module == inputModule;
+            }
 #else
-            eventSystem.AddComponent<StandaloneInputModule>();
+            StandaloneInputModule inputModule = selected.GetComponent<StandaloneInputModule>();
+            if (inputModule == null)
+            {
+                inputModule = selected.gameObject.AddComponent<StandaloneInputModule>();
+            }
+
+            inputModule.enabled = true;
 #endif
-            DontDestroyOnLoad(eventSystem);
+
+            for (int i = 0; i < eventSystems.Length; i++)
+            {
+                EventSystem eventSystem = eventSystems[i];
+                if (eventSystem != null && eventSystem != selected && eventSystem.gameObject.activeSelf)
+                {
+                    eventSystem.gameObject.SetActive(false);
+                }
+            }
+
+            EventSystem.current = selected;
+            LwsDevelopmentUiDiagnostics.LogStage("EventSystem ready");
+        }
+
+        private void BuildDevButton()
+        {
+            _devButton = CreateFixedButton(
+                _hudLayer,
+                "DEV Button",
+                "[ DEV ]",
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                DevButtonSize,
+                new Vector2(DevButtonMarginPixels, DevButtonMarginPixels),
+                ShowControlCenter).gameObject;
+            LwsDevelopmentUiDiagnostics.LogStage("DEV button created");
         }
 
         private void BuildMinimap()
         {
             _minimapPanel = CreateFixedPanel(
-                transform,
+                _hudLayer,
                 "GPS Minimap",
                 new Vector2(1f, 0f),
                 new Vector2(1f, 0f),
@@ -287,7 +421,7 @@ namespace LWS.InterstateHauler
 
         private void BuildBigMap()
         {
-            _bigMapPanel = CreatePanel(transform, "Full GPS Map", Vector2.zero, Vector2.one, new Vector2(40f, 40f), new Vector2(-40f, -40f), new Color(0.015f, 0.022f, 0.024f, 0.985f));
+            _bigMapPanel = CreatePanel(_modalLayer, "Full GPS Map", Vector2.zero, Vector2.one, new Vector2(40f, 40f), new Vector2(-40f, -40f), new Color(0.015f, 0.022f, 0.024f, 0.985f));
             CreateText(_bigMapPanel.transform, "Big Map Title", "GPS / FULL MAP", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -52f), new Vector2(320f, -12f), 21, FontStyle.Bold, TextAnchor.MiddleLeft);
             _bigMapStatusText = CreateText(_bigMapPanel.transform, "Big Map Status", "No route", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(330f, -52f), new Vector2(-560f, -12f), 15, FontStyle.Normal, TextAnchor.MiddleLeft);
             CreateButton(_bigMapPanel.transform, "Close Big Map", "CLOSE", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-132f, -48f), new Vector2(-24f, -12f), HideBigMap);
@@ -319,27 +453,37 @@ namespace LWS.InterstateHauler
 
         private void BuildControlCenter()
         {
-            _controlCenterPanel = CreatePanel(transform, "Development Control Center", Vector2.zero, Vector2.one, new Vector2(28f, 28f), new Vector2(-28f, -28f), PanelColor);
+            _controlCenterPanel = CreatePanel(_modalLayer, "Development Control Center", new Vector2(0.05f, 0.05f), new Vector2(0.95f, 0.95f), Vector2.zero, Vector2.zero, PanelColor);
             CreateText(_controlCenterPanel.transform, "Control Center Title", "INTERSTATE HAULER DEVELOPMENT CONTROL CENTER", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(22f, -52f), new Vector2(-150f, -12f), 21, FontStyle.Bold, TextAnchor.MiddleLeft);
             CreateButton(_controlCenterPanel.transform, "Close Control Center", "CLOSE", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-132f, -48f), new Vector2(-22f, -12f), HideControlCenter);
 
-            GameObject tabs = CreatePanel(_controlCenterPanel.transform, "Tabs", new Vector2(0f, 0f), new Vector2(0f, 1f), new Vector2(20f, 20f), new Vector2(252f, -68f), PanelAccentColor);
-            _tabList = tabs.GetComponent<RectTransform>();
-            var tabLayout = tabs.AddComponent<VerticalLayoutGroup>();
+            GameObject tabViewport = CreatePanel(_controlCenterPanel.transform, "Tab Bar Viewport", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(20f, -122f), new Vector2(-20f, -72f), PanelAccentColor);
+            tabViewport.AddComponent<RectMask2D>();
+            ScrollRect tabScrollRect = tabViewport.AddComponent<ScrollRect>();
+            tabScrollRect.horizontal = true;
+            tabScrollRect.vertical = false;
+            tabScrollRect.movementType = ScrollRect.MovementType.Clamped;
+            _tabList = CreateRect(tabViewport.transform, "Tab Bar Content", new Vector2(0f, 0f), new Vector2(0f, 1f), Vector2.zero, Vector2.zero);
+            _tabList.pivot = new Vector2(0f, 0.5f);
+            tabScrollRect.viewport = tabViewport.GetComponent<RectTransform>();
+            tabScrollRect.content = _tabList;
+            var tabLayout = _tabList.gameObject.AddComponent<HorizontalLayoutGroup>();
             tabLayout.padding = new RectOffset(8, 8, 8, 8);
             tabLayout.spacing = 6f;
-            tabLayout.childForceExpandWidth = true;
+            tabLayout.childForceExpandWidth = false;
             tabLayout.childControlWidth = true;
             tabLayout.childControlHeight = false;
+            _tabList.gameObject.AddComponent<ContentSizeFitter>().horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             foreach (LwsDevelopmentUiTabDefinition tab in LwsDevelopmentUiCatalog.Tabs)
             {
-                Button button = CreateButton(tabs.transform, $"Tab {tab.Label}", tab.Label, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, () => OpenTab(tab.Tab));
+                Button button = CreateButton(_tabList, $"Tab {tab.Label}", tab.Label, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, () => OpenTab(tab.Tab));
                 LayoutElement layout = button.gameObject.AddComponent<LayoutElement>();
                 layout.preferredHeight = 34f;
+                layout.preferredWidth = 138f;
             }
 
-            GameObject viewport = CreatePanel(_controlCenterPanel.transform, "Scroll Viewport", new Vector2(0f, 0f), Vector2.one, new Vector2(272f, 20f), new Vector2(-20f, -68f), new Color(0.025f, 0.034f, 0.036f, 0.95f));
+            GameObject viewport = CreatePanel(_controlCenterPanel.transform, "Scroll Viewport", new Vector2(0f, 0f), Vector2.one, new Vector2(20f, 20f), new Vector2(-20f, -134f), new Color(0.025f, 0.034f, 0.036f, 0.95f));
             viewport.AddComponent<RectMask2D>();
             _scrollRect = viewport.AddComponent<ScrollRect>();
             _scrollRect.horizontal = false;
@@ -357,6 +501,7 @@ namespace LWS.InterstateHauler
             _scrollRect.content = _contentRoot;
             _scrollRect.viewport = viewport.GetComponent<RectTransform>();
             RebuildActiveTab();
+            LwsDevelopmentUiDiagnostics.LogStage("Control Center created");
         }
 
         private void RebuildActiveTab()
@@ -374,44 +519,57 @@ namespace LWS.InterstateHauler
             switch (_activeTab)
             {
                 case LwsDevelopmentUiTab.Overview:
-                    BuildOverviewTab();
+                    BuildTabSafely("Overview", BuildOverviewTab);
                     break;
                 case LwsDevelopmentUiTab.Truck:
-                    BuildTruckTab();
+                    BuildTabSafely("Truck", BuildTruckTab);
                     break;
                 case LwsDevelopmentUiTab.Transmission:
-                    BuildTransmissionTab();
+                    BuildTabSafely("Transmission", BuildTransmissionTab);
                     break;
                 case LwsDevelopmentUiTab.InputWheel:
-                    BuildInputWheelTab();
+                    BuildTabSafely("Input / Wheel", BuildInputWheelTab);
                     break;
                 case LwsDevelopmentUiTab.Traffic:
-                    BuildTrafficTab();
+                    BuildTabSafely("Traffic", BuildTrafficTab);
                     break;
                 case LwsDevelopmentUiTab.GpsNavigation:
-                    BuildGpsTab();
+                    BuildTabSafely("GPS / Navigation", BuildGpsTab);
                     break;
                 case LwsDevelopmentUiTab.Weather:
-                    BuildWeatherTab();
+                    BuildTabSafely("Weather", BuildWeatherTab);
                     break;
                 case LwsDevelopmentUiTab.RoadConditions:
-                    BuildRoadConditionsTab();
+                    BuildTabSafely("Road Conditions", BuildRoadConditionsTab);
                     break;
                 case LwsDevelopmentUiTab.Streaming:
-                    BuildStreamingTab();
+                    BuildTabSafely("Streaming", BuildStreamingTab);
                     break;
                 case LwsDevelopmentUiTab.FloatingOrigin:
-                    BuildFloatingOriginTab();
+                    BuildTabSafely("Floating Origin", BuildFloatingOriginTab);
                     break;
                 case LwsDevelopmentUiTab.FiftyMileTest:
-                    BuildFiftyMileTab();
+                    BuildTabSafely("50-Mile Test", BuildFiftyMileTab);
                     break;
                 case LwsDevelopmentUiTab.Performance:
-                    BuildPerformanceTab();
+                    BuildTabSafely("Performance", BuildPerformanceTab);
                     break;
                 case LwsDevelopmentUiTab.Systems:
-                    BuildSystemsTab();
+                    BuildTabSafely("Systems", BuildSystemsTab);
                     break;
+            }
+        }
+
+        private void BuildTabSafely(string tabName, Action buildTab)
+        {
+            try
+            {
+                buildTab?.Invoke();
+            }
+            catch (Exception ex)
+            {
+                LwsDevelopmentUiDiagnostics.LogFailure($"{tabName} tab", ex);
+                AddInfo(tabName, $"NOT AVAILABLE IN THIS SCENE ({ex.GetType().Name})");
             }
         }
 
@@ -463,6 +621,7 @@ namespace LWS.InterstateHauler
             if (transmission == null)
             {
                 AddInfo("Transmission", "controller not found");
+                AddTransmissionSelectorRow(null);
                 return;
             }
 
@@ -1046,11 +1205,6 @@ namespace LWS.InterstateHauler
 
         private void HandleKeyboardShortcuts()
         {
-            if (WasKeyPressed(KeyCode.F1))
-            {
-                ToggleControlCenter();
-            }
-
             if (WasKeyPressed(KeyCode.M))
             {
                 ToggleBigMap();
@@ -1096,7 +1250,6 @@ namespace LWS.InterstateHauler
 
             switch (keyCode)
             {
-                case KeyCode.F1: return keyboard.f1Key.wasPressedThisFrame;
                 case KeyCode.M: return keyboard.mKey.wasPressedThisFrame;
                 case KeyCode.Escape: return keyboard.escapeKey.wasPressedThisFrame;
                 case KeyCode.Alpha1: return keyboard.digit1Key.wasPressedThisFrame || keyboard.numpad1Key.wasPressedThisFrame;
@@ -1269,6 +1422,27 @@ namespace LWS.InterstateHauler
             return rect.gameObject;
         }
 
+        private static Button CreateFixedButton(Transform parent, string name, string label, Vector2 anchor, Vector2 pivot, Vector2 size, Vector2 anchoredPosition, Action onClick)
+        {
+            RectTransform rect = CreateFixedRect(parent, name, anchor, pivot, size, anchoredPosition);
+            Image image = rect.gameObject.AddComponent<Image>();
+            image.color = ButtonColor;
+            image.raycastTarget = true;
+            Button button = rect.gameObject.AddComponent<Button>();
+            ColorBlock colors = button.colors;
+            colors.normalColor = ButtonColor;
+            colors.highlightedColor = ButtonHoverColor;
+            colors.pressedColor = new Color(0.08f, 0.13f, 0.14f, 1f);
+            colors.selectedColor = ButtonHoverColor;
+            button.colors = colors;
+            button.onClick.AddListener(() => onClick?.Invoke());
+
+            Text text = CreateText(rect, "Label", label, Vector2.zero, Vector2.one, new Vector2(4f, 2f), new Vector2(-4f, -2f), 13, FontStyle.Bold, TextAnchor.MiddleCenter);
+            text.horizontalOverflow = HorizontalWrapMode.Wrap;
+            text.verticalOverflow = VerticalWrapMode.Truncate;
+            return button;
+        }
+
         private static RectTransform CreateRect(Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
         {
             GameObject go = new GameObject(name, typeof(RectTransform));
@@ -1311,7 +1485,12 @@ namespace LWS.InterstateHauler
         {
             RectTransform rect = CreateRect(parent, name, anchorMin, anchorMax, offsetMin, offsetMax);
             Text label = rect.gameObject.AddComponent<Text>();
-            label.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            Font font = ResolveUiFont();
+            if (font != null)
+            {
+                label.font = font;
+            }
+
             label.fontSize = size;
             label.fontStyle = style;
             label.alignment = alignment;
@@ -1323,11 +1502,35 @@ namespace LWS.InterstateHauler
             return label;
         }
 
+        private static Font ResolveUiFont()
+        {
+            if (_uiFont != null)
+            {
+                return _uiFont;
+            }
+
+            try
+            {
+                _uiFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                if (_uiFont == null)
+                {
+                    _uiFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
+                }
+            }
+            catch (Exception ex)
+            {
+                LwsDevelopmentUiDiagnostics.LogFailure("Font resolve", ex);
+            }
+
+            return _uiFont;
+        }
+
         private static Button CreateButton(Transform parent, string name, string label, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax, Action onClick)
         {
             RectTransform rect = CreateRect(parent, name, anchorMin, anchorMax, offsetMin, offsetMax);
             Image image = rect.gameObject.AddComponent<Image>();
             image.color = ButtonColor;
+            image.raycastTarget = true;
             Button button = rect.gameObject.AddComponent<Button>();
             ColorBlock colors = button.colors;
             colors.normalColor = ButtonColor;
@@ -1416,5 +1619,64 @@ namespace LWS.InterstateHauler
             return minutes >= 60 ? $"{minutes / 60}h {minutes % 60:00}m" : $"{minutes}m";
         }
 
+    }
+
+    [DisallowMultipleComponent]
+    public sealed class LwsDevelopmentUiInputBridge : MonoBehaviour
+    {
+        private LwsDevelopmentUiRoot _root;
+
+        public bool IsBound => _root != null;
+
+        public void Bind(LwsDevelopmentUiRoot root)
+        {
+            _root = root;
+            enabled = true;
+        }
+
+        private void Update()
+        {
+            if (WasF1Pressed())
+            {
+                _root?.ToggleControlCenter();
+            }
+        }
+
+        private static bool WasF1Pressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            Keyboard keyboard = Keyboard.current;
+            return keyboard != null && keyboard.f1Key.wasPressedThisFrame;
+#else
+            return Input.GetKeyDown(KeyCode.F1);
+#endif
+        }
+    }
+
+    internal static class LwsDevelopmentUiDiagnostics
+    {
+        private static readonly HashSet<string> LoggedStages = new HashSet<string>();
+        private static readonly HashSet<string> LoggedFailures = new HashSet<string>();
+
+        public static void LogStage(string stage)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (LoggedStages.Add(stage))
+            {
+                Debug.Log($"[IH Dev UI] {stage}");
+            }
+#endif
+        }
+
+        public static void LogFailure(string stage, Exception exception)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            string key = $"{stage}:{exception.GetType().Name}:{exception.Message}";
+            if (LoggedFailures.Add(key))
+            {
+                Debug.LogError($"[IH Dev UI] {stage} failed: {exception}");
+            }
+#endif
+        }
     }
 }
