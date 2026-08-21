@@ -261,7 +261,7 @@ namespace LWS.InterstateHauler
         {
             _minimapPanel = CreatePanel(transform, "GPS Minimap", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-396f, -306f), new Vector2(-18f, -18f), new Color(0.02f, 0.03f, 0.032f, 0.92f));
             _minimapPanel.AddComponent<RectMask2D>();
-            _minimapGraphic = CreateRect(_minimapPanel.transform, "Semantic Road Graph Map", Vector2.zero, Vector2.one, new Vector2(8f, 56f), new Vector2(-8f, -8f)).gameObject.AddComponent<LwsSemanticGpsMapGraphic>();
+            _minimapGraphic = CreateSemanticMapGraphic(_minimapPanel.transform, "Semantic Road Graph Map", Vector2.zero, Vector2.one, new Vector2(8f, 56f), new Vector2(-8f, -8f));
             _minimapGraphic.raycastTarget = false;
             CreateText(_minimapPanel.transform, "GPS Title", "GPS", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(10f, -38f), new Vector2(82f, -8f), 18, FontStyle.Bold, TextAnchor.MiddleLeft);
             _minimapStatusText = CreateText(_minimapPanel.transform, "GPS Status", "No route", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(78f, -38f), new Vector2(-72f, -8f), 13, FontStyle.Normal, TextAnchor.MiddleLeft);
@@ -277,7 +277,7 @@ namespace LWS.InterstateHauler
 
             GameObject mapFrame = CreatePanel(_bigMapPanel.transform, "Full Map Frame", new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(24f, 112f), new Vector2(-330f, -72f), new Color(0.01f, 0.018f, 0.02f, 1f));
             mapFrame.AddComponent<RectMask2D>();
-            _bigMapGraphic = CreateRect(mapFrame.transform, "Full Semantic Road Graph Map", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).gameObject.AddComponent<LwsSemanticGpsMapGraphic>();
+            _bigMapGraphic = CreateSemanticMapGraphic(mapFrame.transform, "Full Semantic Road Graph Map", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             _bigMapGraphic.raycastTarget = false;
 
             GameObject controls = CreatePanel(_bigMapPanel.transform, "Full Map Controls", new Vector2(1f, 0f), new Vector2(1f, 1f), new Vector2(-306f, 112f), new Vector2(-24f, -72f), PanelAccentColor);
@@ -1106,6 +1106,18 @@ namespace LWS.InterstateHauler
             rect.offsetMax = offsetMax;
             rect.pivot = new Vector2(0.5f, 0.5f);
             return rect;
+        }
+
+        private static LwsSemanticGpsMapGraphic CreateSemanticMapGraphic(Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
+        {
+            RectTransform rect = CreateRect(parent, name, anchorMin, anchorMax, offsetMin, offsetMax);
+            if (rect.GetComponent<CanvasRenderer>() == null)
+            {
+                rect.gameObject.AddComponent<CanvasRenderer>();
+            }
+
+            LwsSemanticGpsMapGraphic graphic = rect.GetComponent<LwsSemanticGpsMapGraphic>();
+            return graphic != null ? graphic : rect.gameObject.AddComponent<LwsSemanticGpsMapGraphic>();
         }
 
         private static Text CreateText(Transform parent, string name, string text, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax, int size, FontStyle style, TextAnchor alignment)

@@ -50,6 +50,8 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsNotNull(service.RuntimeRoot.Canvas);
             Assert.IsNotNull(service.RuntimeRoot.CanvasScaler);
             Assert.IsNotNull(service.RuntimeRoot.ScrollRect);
+            AssertSemanticMapHasRequiredComponents(service.RuntimeRoot.MinimapGraphic);
+            AssertSemanticMapHasRequiredComponents(service.RuntimeRoot.BigMapGraphic);
             Assert.IsFalse(service.IsVisible);
         }
 
@@ -117,6 +119,13 @@ namespace LWS.InterstateHauler.Tests.PlayMode
 
             Assert.IsTrue(root.MinimapGraphic.HasRoutePresentation);
             Assert.AreEqual(1, Object.FindObjectsByType<LwsDevelopmentUiRoot>(FindObjectsSortMode.None).Length);
+        }
+
+        private static void AssertSemanticMapHasRequiredComponents(LwsSemanticGpsMapGraphic mapGraphic)
+        {
+            Assert.IsNotNull(mapGraphic);
+            Assert.IsNotNull(mapGraphic.GetComponent<RectTransform>());
+            Assert.IsNotNull(mapGraphic.GetComponent<CanvasRenderer>());
         }
     }
 }

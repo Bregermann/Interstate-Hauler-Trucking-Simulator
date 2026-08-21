@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 namespace LWS.InterstateHauler
 {
+    [RequireComponent(typeof(CanvasRenderer))]
     public sealed class LwsSemanticGpsMapGraphic : MaskableGraphic
     {
         private readonly List<MapSegment> _roadSegments = new List<MapSegment>();

@@ -79,6 +79,9 @@ namespace LWS.InterstateHauler.Tests.EditMode
             StringAssert.Contains("RebuildRouteCache", map);
             StringAssert.Contains("LwsRoadGraph", map);
             StringAssert.Contains("LwsRouteResult", map);
+            StringAssert.Contains("[RequireComponent(typeof(CanvasRenderer))]", map);
+            StringAssert.Contains("CreateSemanticMapGraphic", root);
+            StringAssert.Contains("AddComponent<CanvasRenderer>()", root);
         }
 
         [Test]
