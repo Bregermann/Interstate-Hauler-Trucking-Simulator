@@ -7,7 +7,7 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsStreamingDebugPanel : MonoBehaviour
     {
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private Rect windowRect = new Rect(12f, 520f, 430f, 360f);
         [SerializeField] private float refreshIntervalSeconds = 0.5f;
 

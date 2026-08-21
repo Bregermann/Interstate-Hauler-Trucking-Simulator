@@ -5,7 +5,7 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsGpsSettingsPanel : MonoBehaviour
     {
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private Rect panelRect = new Rect(390f, 520f, 260f, 120f);
 
         private ILwsPlayerSettingsService _settingsService;

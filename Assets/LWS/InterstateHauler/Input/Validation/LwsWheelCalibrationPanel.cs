@@ -54,7 +54,7 @@ namespace LWS.InterstateHauler
         };
 
         [SerializeField] private LwsWheelInputSource wheelInputSource;
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private int stepIndex;
 
         private string _lastMessage = string.Empty;

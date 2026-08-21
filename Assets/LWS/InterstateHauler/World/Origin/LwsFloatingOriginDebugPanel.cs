@@ -5,7 +5,7 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsFloatingOriginDebugPanel : MonoBehaviour
     {
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private Rect windowRect = new Rect(454f, 520f, 430f, 420f);
         [SerializeField] private float refreshIntervalSeconds = 0.25f;
 

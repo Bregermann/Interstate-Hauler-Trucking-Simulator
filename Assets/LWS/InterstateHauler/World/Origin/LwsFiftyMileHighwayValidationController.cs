@@ -176,6 +176,14 @@ namespace LWS.InterstateHauler
             return _routeRequested;
         }
 
+        public void SetAutomaticWeatherCycle(bool enabled)
+        {
+            automaticWeatherCycle = enabled;
+            LastReport = enabled
+                ? "50-mile automatic weather cycle enabled."
+                : "50-mile automatic weather cycle disabled.";
+        }
+
         public bool TeleportToMile(double mile)
         {
             ResolveServices();

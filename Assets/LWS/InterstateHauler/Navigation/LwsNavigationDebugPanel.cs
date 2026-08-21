@@ -6,7 +6,7 @@ namespace LWS.InterstateHauler
     public sealed class LwsNavigationDebugPanel : MonoBehaviour
     {
         [SerializeField] private LwsRoadGraphProvider roadGraphProvider;
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private Rect panelRect = new Rect(12f, 520f, 360f, 300f);
 
         private ILwsNavigationService _navigationService;

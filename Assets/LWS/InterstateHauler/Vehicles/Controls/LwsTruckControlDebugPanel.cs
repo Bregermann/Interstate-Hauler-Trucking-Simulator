@@ -6,7 +6,7 @@ namespace LWS.InterstateHauler
     public sealed class LwsTruckControlDebugPanel : MonoBehaviour
     {
         [SerializeField] private LwsTruckControlController controller;
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private Rect panelRect = new Rect(12f, 468f, 380f, 420f);
 
         private void Reset()

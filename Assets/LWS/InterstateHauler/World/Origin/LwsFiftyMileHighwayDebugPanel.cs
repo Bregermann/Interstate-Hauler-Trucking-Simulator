@@ -6,7 +6,7 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsFiftyMileHighwayDebugPanel : MonoBehaviour
     {
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private Rect windowRect = new Rect(460f, 12f, 470f, 620f);
         [SerializeField] private float refreshIntervalSeconds = 0.35f;
 

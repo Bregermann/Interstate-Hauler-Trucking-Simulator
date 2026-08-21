@@ -5,7 +5,7 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsTruckDashboardDebugPanel : MonoBehaviour
     {
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private LwsTruckDashboardController dashboard;
         [SerializeField] private LwsTruckMirrorController mirrors;
         [SerializeField] private LwsCabAccessoryAnchorRegistry anchors;

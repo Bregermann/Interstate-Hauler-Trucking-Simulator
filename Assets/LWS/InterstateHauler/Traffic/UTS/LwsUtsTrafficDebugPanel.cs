@@ -6,7 +6,7 @@ namespace LWS.InterstateHauler
     public sealed class LwsUtsTrafficDebugPanel : MonoBehaviour
     {
         [SerializeField] private LwsUtsHighwayTrafficController controller;
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private float refreshIntervalSeconds = 0.25f;
 
         private float _nextRefreshTime;

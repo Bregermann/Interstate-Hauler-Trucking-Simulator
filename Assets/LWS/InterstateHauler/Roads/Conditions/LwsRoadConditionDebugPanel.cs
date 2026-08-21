@@ -5,7 +5,7 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsRoadConditionDebugPanel : MonoBehaviour
     {
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private Rect panelRect = new Rect(12f, 670f, 390f, 430f);
 
         private ILwsRoadConditionService _roadConditionService;

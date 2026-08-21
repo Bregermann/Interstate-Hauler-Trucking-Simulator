@@ -207,6 +207,13 @@ namespace LWS.InterstateHauler.Editor
         private const string FiftyMileDocsPath = "Documentation/InterstateHauler/015A_50_Mile_Floating_Origin_Test.md";
         private const string FiftyMileChunkMatrixPath = "Documentation/InterstateHauler/015A_50_Mile_Chunk_Matrix.md";
         private const string FiftyMileTestMatrixPath = "Documentation/InterstateHauler/015A_50_Mile_Test_Matrix.md";
+        private const string DevelopmentUiTypesPath = "Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiTypes.cs";
+        private const string DevelopmentUiServicePath = "Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs";
+        private const string DevelopmentUiRootPath = "Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs";
+        private const string SemanticGpsMapGraphicPath = "Assets/LWS/InterstateHauler/UI/Development/LwsSemanticGpsMapGraphic.cs";
+        private const string DevelopmentControlCenterDocsPath = "Documentation/InterstateHauler/015B_Development_Control_Center.md";
+        private const string GpsMinimapMapDocsPath = "Documentation/InterstateHauler/015B_GPS_Minimap_and_Map.md";
+        private const string DevelopmentUiTestMatrixPath = "Documentation/InterstateHauler/015B_UI_Test_Matrix.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -249,6 +256,26 @@ namespace LWS.InterstateHauler.Editor
             "Assets/LWS/InterstateHauler/World/Streaming/Validation/IH_Chunk_002_HighwayB.unity",
             "Assets/LWS/InterstateHauler/World/Streaming/Validation/IH_Chunk_003_HighwayC.unity",
             "Assets/LWS/InterstateHauler/World/Streaming/Validation/IH_Chunk_004_Turnaround.unity"
+        };
+
+        private static readonly string[] LegacyDebugPanelPaths =
+        {
+            StreamingDebugPanelPath,
+            GpsDebugPanelPath,
+            GpsSettingsPanelPath,
+            DashboardControllerPath.Replace("LwsTruckDashboardController.cs", "LwsTruckDashboardDebugPanel.cs"),
+            "Assets/LWS/InterstateHauler/Vehicles/Transmission/Debug/Lws18SpeedTransmissionDebugPanel.cs",
+            "Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckDebugPanel.cs",
+            FiftyMileDebugPanelPath,
+            FloatingOriginDebugPanelPath,
+            TruckControlControllerPath.Replace("LwsTruckControlController.cs", "LwsTruckControlDebugPanel.cs"),
+            "Assets/LWS/InterstateHauler/Input/Validation/LwsWheelCalibrationPanel.cs",
+            "Assets/LWS/InterstateHauler/Input/Validation/LwsWheelDeviceDiagnosticsPanel.cs",
+            RoadDebugPanelPath,
+            "Assets/LWS/InterstateHauler/Input/Validation/LwsWheelInputDebugPanel.cs",
+            WeatherDebugPanelPath,
+            RoadConditionDebugPanelPath,
+            UtsTrafficDebugPanelPath
         };
 
         private static readonly string[] VendorRoots =
@@ -316,6 +343,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateSceneStreamerHighwayChunksFoundation(report);
             ValidateFloatingOriginFoundation(report);
             ValidateFiftyMileFloatingOriginValidation(report);
+            ValidateDevelopmentControlCenterGpsMapFoundation(report);
             return report;
         }
 
@@ -3154,6 +3182,126 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 015A 50-mile floating-origin test documentation, chunk matrix, and test matrix exist."
                     : "Missing Prompt 015A documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateDevelopmentControlCenterGpsMapFoundation(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                DevelopmentUiTypesPath,
+                DevelopmentUiServicePath,
+                DevelopmentUiRootPath,
+                SemanticGpsMapGraphicPath
+            };
+
+            var missingFiles = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingFiles.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Development UI Runtime Files",
+                missingFiles.Count == 0
+                    ? "Unified development UI service/root and semantic GPS map graphic files exist."
+                    : "Missing development UI runtime files: " + string.Join(", ", missingFiles));
+
+            bool tabsValid = LwsDevelopmentUiCatalog.ValidateTabs(out string tabMessage) &&
+                             LwsDevelopmentUiCatalog.Tabs.Count == 13;
+            report.Add(
+                tabsValid ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Development UI Tabs",
+                tabsValid
+                    ? "Development Control Center defines the 13 required tabs with stable unique IDs."
+                    : tabMessage);
+
+            string bootstrap = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                : string.Empty;
+            bool bootstrapRegistersUi = bootstrap.Contains("ILwsDevelopmentUiService") &&
+                                        bootstrap.Contains("LwsDevelopmentUiService") &&
+                                        bootstrap.Contains("ILwsNavigationService") &&
+                                        bootstrap.Contains("ILwsRoadGraphService") &&
+                                        bootstrap.Contains("ILwsWorldOriginService");
+            report.Add(
+                bootstrapRegistersUi ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Development UI Service Registration",
+                bootstrapRegistersUi
+                    ? "Bootstrap registers exactly one LWS development UI service after navigation, road graph, and floating-origin services."
+                    : "Bootstrap is missing the development UI service registration or required dependencies.");
+
+            string root = File.Exists(DevelopmentUiRootPath) ? File.ReadAllText(DevelopmentUiRootPath) : string.Empty;
+            string map = File.Exists(SemanticGpsMapGraphicPath) ? File.ReadAllText(SemanticGpsMapGraphicPath) : string.Empty;
+            bool overlayControls = root.Contains("RenderMode.ScreenSpaceOverlay") &&
+                                   root.Contains("CanvasScaler.ScaleMode.ScaleWithScreenSize") &&
+                                   root.Contains("ScrollRect") &&
+                                   root.Contains("InputSystemUIInputModule") &&
+                                   root.Contains("KeyCode.F1") &&
+                                   root.Contains("KeyCode.M") &&
+                                   root.Contains("KeyCode.Escape") &&
+                                   root.Contains("Cursor.lockState") &&
+                                   root.Contains("Time.timeScale");
+            report.Add(
+                overlayControls ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Development Control Center Overlay",
+                overlayControls
+                    ? "Control center uses a Screen Space Overlay Canvas with scaler, scroll content, F1/M/ESC ownership, cursor restore, and full-map pause handling."
+                    : "Development Control Center is missing required overlay, scaling, input, cursor, or pause behavior.");
+
+            bool semanticCommands = root.Contains("ApplyCommandFrame") &&
+                                    root.Contains("TrySetDevelopmentAutomaticTestMode") &&
+                                    root.Contains("RequestWeather") &&
+                                    root.Contains("ForceCondition") &&
+                                    root.Contains("SetDestination") &&
+                                    root.Contains("ClearRoute") &&
+                                    root.Contains("SetAutomaticWeatherCycle");
+            report.Add(
+                semanticCommands ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Development UI Semantic Control Routing",
+                semanticCommands
+                    ? "Development UI routes truck controls, transmission mode, weather, road conditions, GPS, and 50-mile controls through existing LWS APIs."
+                    : "Development UI appears to bypass or miss one or more required LWS semantic control APIs.");
+
+            bool mapUsesSemanticData = map.Contains("LwsRoadGraph") &&
+                                       map.Contains("LwsRouteResult") &&
+                                       map.Contains("MaskableGraphic") &&
+                                       map.Contains("RebuildRoadCache") &&
+                                       map.Contains("RebuildRouteCache") &&
+                                       root.Contains("ILwsNavigationService") &&
+                                       root.Contains("ILwsRoadGraphService") &&
+                                       root.Contains("LocalToGlobal") &&
+                                       root.Contains("CurrentRoute");
+            report.Add(
+                mapUsesSemanticData ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Semantic GPS Map",
+                mapUsesSemanticData
+                    ? "Minimap/full map consume LWS navigation route, road graph, and floating-origin LocalToGlobal conversion instead of a 3D map camera."
+                    : "GPS map is missing semantic road graph, route, navigation, or origin-aware coordinate usage.");
+
+            var legacyVisible = LegacyDebugPanelPaths
+                .Where(File.Exists)
+                .Where(path =>
+                {
+                    string text = File.ReadAllText(path);
+                    return text.Contains("visible = true") || text.Contains("showPanel = true");
+                })
+                .ToList();
+            report.Add(
+                legacyVisible.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Legacy Debug Panels Default Hidden",
+                legacyVisible.Count == 0
+                    ? "Project-owned legacy IMGUI debug panels are default-hidden behind their local visibility gates."
+                    : "One or more legacy IMGUI panels still default visible: " + string.Join(", ", legacyVisible));
+
+            string[] docs =
+            {
+                DevelopmentControlCenterDocsPath,
+                GpsMinimapMapDocsPath,
+                DevelopmentUiTestMatrixPath
+            };
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 015B Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 015B development control center, GPS map, and UI test matrix documentation exists."
+                    : "Missing Prompt 015B documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

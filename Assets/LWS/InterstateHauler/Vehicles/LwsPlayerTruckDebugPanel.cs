@@ -6,7 +6,7 @@ namespace LWS.InterstateHauler
     public sealed class LwsPlayerTruckDebugPanel : MonoBehaviour
     {
         [SerializeField] private LwsPlayerTruck playerTruck;
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
 
         private void Reset()
         {

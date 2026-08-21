@@ -8,7 +8,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private LwsWheelInputSource wheelInputSource;
         [SerializeField] private LwsWheelInputBootstrap wheelBootstrap;
         [SerializeField] private LwsPlayerTruck playerTruck;
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField, Min(0.02f)] private float telemetryRefreshIntervalSeconds = 0.1f;
 
         private LwsVehicleTelemetry _cachedTelemetry;

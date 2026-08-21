@@ -6,7 +6,7 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsWheelDeviceDiagnosticsPanel : MonoBehaviour
     {
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private int maxControlsPerDevice = 6;
         [SerializeField] private bool autoRefresh;
         [SerializeField, Min(0.25f)] private float refreshIntervalSeconds = 2f;

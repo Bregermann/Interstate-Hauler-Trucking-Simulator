@@ -20,7 +20,7 @@ namespace LWS.InterstateHauler
             LwsWeatherPresetCatalog.FogId
         };
 
-        [SerializeField] private bool showPanel = true;
+        [SerializeField] private bool showPanel;
         [SerializeField] private bool developmentOnly = true;
         [SerializeField] private float transitionSeconds = 10f;
         [SerializeField] private float refreshIntervalSeconds = 0.25f;

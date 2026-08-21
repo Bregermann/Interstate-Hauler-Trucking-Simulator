@@ -6,7 +6,7 @@ namespace LWS.InterstateHauler
     public sealed class Lws18SpeedTransmissionDebugPanel : MonoBehaviour
     {
         [SerializeField] private Lws18SpeedTransmissionController transmission;
-        [SerializeField] private bool visible = true;
+        [SerializeField] private bool visible;
         [SerializeField] private Vector2 position = new Vector2(12f, 238f);
 
         private void Reset()
