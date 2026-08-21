@@ -172,6 +172,8 @@ namespace LWS.InterstateHauler.Editor
         private const string StreamedChunkSceneRootPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsStreamedChunkSceneRoot.cs";
         private const string StreamingHighwayChunkBuilderPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsStreamingHighwayChunkBuilder.cs";
         private const string StreamingHighwayGraphBootstrapPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsStreamingHighwayGraphBootstrap.cs";
+        private const string EndlessHighwayModelPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsEndlessHighwayModel.cs";
+        private const string EndlessHighwayControllerPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsEndlessStreamingHighwayController.cs";
         private const string StreamingDebugPanelPath = "Assets/LWS/InterstateHauler/World/Streaming/LwsStreamingDebugPanel.cs";
         private const string WorldStreamingPolicyAssetPath = "Assets/LWS/InterstateHauler/World/Streaming/Data/IH_WorldStreamingPolicy_Validation.asset";
         private const string WorldStreamingManifestAssetPath = "Assets/LWS/InterstateHauler/World/Streaming/Data/IH_WorldStreamingManifest_Validation.asset";
@@ -190,6 +192,8 @@ namespace LWS.InterstateHauler.Editor
         private const string FloatingOriginRigidbodyParticipantPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFloatingOriginRigidbodyParticipant.cs";
         private const string FloatingOriginDebugPanelPath = "Assets/LWS/InterstateHauler/World/Origin/LwsFloatingOriginDebugPanel.cs";
         private const string FloatingOriginValidationTuningPath = "Assets/LWS/InterstateHauler/World/Origin/Data/IH_FloatingOrigin_Validation.asset";
+        private const string GameClockPath = "Assets/LWS/InterstateHauler/World/Time/LwsGameClock.cs";
+        private const string TrafficDemandPath = "Assets/LWS/InterstateHauler/Traffic/LwsTrafficDemand.cs";
         private const string FloatingOriginDocsPath = "Documentation/InterstateHauler/015_Floating_Origin_Architecture.md";
         private const string FloatingOriginParticipantMatrixPath = "Documentation/InterstateHauler/015_Origin_Participant_Matrix.md";
         private const string FloatingOriginCoordinateMatrixPath = "Documentation/InterstateHauler/015_Coordinate_Matrix.md";
@@ -214,6 +218,10 @@ namespace LWS.InterstateHauler.Editor
         private const string DevelopmentControlCenterDocsPath = "Documentation/InterstateHauler/015B_Development_Control_Center.md";
         private const string GpsMinimapMapDocsPath = "Documentation/InterstateHauler/015B_GPS_Minimap_and_Map.md";
         private const string DevelopmentUiTestMatrixPath = "Documentation/InterstateHauler/015B_UI_Test_Matrix.md";
+        private const string GameClockDocsPath = "Documentation/InterstateHauler/015C_Game_Clock.md";
+        private const string TimeBasedTrafficDocsPath = "Documentation/InterstateHauler/015C_Time_Based_Traffic_Density.md";
+        private const string EndlessHighwayDocsPath = "Documentation/InterstateHauler/015C_Endless_Highway_Streaming_Test.md";
+        private const string ClockTrafficTestMatrixPath = "Documentation/InterstateHauler/015C_Clock_Traffic_Test_Matrix.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -344,6 +352,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateFloatingOriginFoundation(report);
             ValidateFiftyMileFloatingOriginValidation(report);
             ValidateDevelopmentControlCenterGpsMapFoundation(report);
+            ValidateEndlessClockTrafficValidationRepair(report);
             return report;
         }
 
@@ -3305,6 +3314,134 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 015B development control center, GPS map, and UI test matrix documentation exists."
                     : "Missing Prompt 015B documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateEndlessClockTrafficValidationRepair(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                GameClockPath,
+                TrafficDemandPath,
+                EndlessHighwayModelPath,
+                EndlessHighwayControllerPath
+            };
+
+            var missingFiles = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingFiles.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 015C Runtime Files",
+                missingFiles.Count == 0
+                    ? "LWS game clock, traffic demand, endless highway model, and endless highway controller files exist."
+                    : "Missing Prompt 015C runtime files: " + string.Join(", ", missingFiles));
+
+            string bootstrap = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
+                : string.Empty;
+            bool clockRegistered = bootstrap.Contains("ILwsGameClockService") &&
+                                   bootstrap.Contains("new LwsGameClockService()");
+            bool demandRegistered = bootstrap.Contains("ILwsTrafficDemandService") &&
+                                    bootstrap.Contains("new LwsTrafficDemandService()") &&
+                                    bootstrap.Contains("typeof(ILwsGameClockService)");
+            report.Add(
+                clockRegistered && demandRegistered ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Game Clock / Traffic Demand Service Registration",
+                clockRegistered && demandRegistered
+                    ? "Bootstrap registers exactly one game clock service and one traffic demand service with the clock dependency."
+                    : "Bootstrap is missing LWS game clock or traffic demand service registration.");
+
+            string weatherAdapter = File.Exists(WeatherMakerAdapterPath) ? File.ReadAllText(WeatherMakerAdapterPath) : string.Empty;
+            bool weatherSlaved = weatherAdapter.Contains("ILwsGameClockService") &&
+                                 weatherAdapter.Contains("GameClockSlaved") &&
+                                 weatherAdapter.Contains("SetTimeScale(0f)") &&
+                                 weatherAdapter.Contains("SetTimeOfDayHours(clock.timeOfDayHours)");
+            report.Add(
+                weatherSlaved ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Weather Maker Clock Authority",
+                weatherSlaved
+                    ? "Weather Maker adapter reads ILwsGameClockService and holds Weather Maker's independent clock at zero speed."
+                    : "Weather Maker may still have an independent day/night clock or missing LWS clock synchronization.");
+
+            string demand = File.Exists(TrafficDemandPath) ? File.ReadAllText(TrafficDemandPath) : string.Empty;
+            string traffic = File.Exists(UtsTrafficControllerPath) ? File.ReadAllText(UtsTrafficControllerPath) : string.Empty;
+            bool demandProfile = demand.Contains("LwsTrafficDemandSample") &&
+                                 demand.Contains("CreateGenericInterstate") &&
+                                 demand.Contains("EvaluateDemand01") &&
+                                 demand.Contains("maximumActiveVehicles = 24") &&
+                                 demand.Contains("daytimeNearbyTarget = 4");
+            bool trafficConsumesDemand = traffic.Contains("ILwsTrafficDemandService") &&
+                                          traffic.Contains("DemandSnapshot") &&
+                                          traffic.Contains("EffectiveSpawnIntervalSeconds") &&
+                                          traffic.Contains("SeedMinimumTrafficPresence") &&
+                                          traffic.Contains("ForceRebuildFromGraph");
+            report.Add(
+                demandProfile && trafficConsumesDemand ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Time-Based Traffic Demand",
+                demandProfile && trafficConsumesDemand
+                    ? "Traffic demand is data-driven by hourly samples, caps at 24 active vehicles, and is consumed by the UTS adapter."
+                    : "Traffic demand profile or UTS demand consumption is incomplete.");
+
+            string endlessModel = File.Exists(EndlessHighwayModelPath) ? File.ReadAllText(EndlessHighwayModelPath) : string.Empty;
+            string endlessController = File.Exists(EndlessHighwayControllerPath) ? File.ReadAllText(EndlessHighwayControllerPath) : string.Empty;
+            string streamingBootstrap = File.Exists(StreamingHighwayGraphBootstrapPath) ? File.ReadAllText(StreamingHighwayGraphBootstrapPath) : string.Empty;
+            bool endlessModelValid = endlessModel.Contains("SegmentLengthMeters = 3218.688d") &&
+                                     endlessModel.Contains("FormatSegmentId") &&
+                                     endlessModel.Contains("CalculateMetersOfRoadAhead") &&
+                                     endlessModel.Contains("DefaultPhysicalChunkPoolSize");
+            bool endlessRuntimeValid = endlessController.Contains("MetersOfRoadAvailableAhead") &&
+                                       endlessController.Contains("RoadAheadUnsafe") &&
+                                       endlessController.Contains("ChunksRecycled") &&
+                                       endlessController.Contains("FormatSegmentId") &&
+                                       !endlessController.Contains("MaxLogicalSegment");
+            bool streamingBootstrapEnabled = streamingBootstrap.Contains("enableEndlessHighwayValidation = true") &&
+                                             streamingBootstrap.Contains("LwsEndlessStreamingHighwayController") &&
+                                             streamingBootstrap.Contains("LwsGameClockCoordinator") &&
+                                             streamingBootstrap.Contains("LwsGameClockHud");
+            report.Add(
+                endlessModelValid && endlessRuntimeValid && streamingBootstrapEnabled ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Endless Streaming Highway Validation",
+                endlessModelValid && endlessRuntimeValid && streamingBootstrapEnabled
+                    ? "StreamingHighwayValidation bootstrap enables a recycled endless highway pool with generated logical segment IDs and road-ahead diagnostics."
+                    : "Endless streaming validation model/controller/bootstrap integration is incomplete.");
+
+            string fiftyMileModel = File.Exists(FiftyMileModelPath) ? File.ReadAllText(FiftyMileModelPath) : string.Empty;
+            bool fiftyMileStillFinite = fiftyMileModel.Contains("TotalLengthMeters = 80467.2d") &&
+                                        fiftyMileModel.Contains("ChunkCount = 25") &&
+                                        !fiftyMileModel.Contains("IH_ENDLESS_TEST_SEG");
+            report.Add(
+                fiftyMileStillFinite ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "50-Mile Validation Remains Finite",
+                fiftyMileStillFinite
+                    ? "IH_50MileFloatingOriginValidation model remains the finite exact 50-mile validation world."
+                    : "50-mile validation may have been accidentally converted to endless semantics.");
+
+            string uiRoot = File.Exists(DevelopmentUiRootPath) ? File.ReadAllText(DevelopmentUiRootPath) : string.Empty;
+            bool uiDiagnostics = uiRoot.Contains("Game Clock") &&
+                                 uiRoot.Contains("Traffic Period") &&
+                                 uiRoot.Contains("Road Ahead") &&
+                                 uiRoot.Contains("10 MI AHEAD") &&
+                                 uiRoot.Contains("60x");
+            report.Add(
+                uiDiagnostics ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Development Control Center Clock/Traffic/Streaming Diagnostics",
+                uiDiagnostics
+                    ? "Development Control Center exposes clock controls, traffic demand diagnostics, endless road-ahead diagnostics, and finite GPS test destinations."
+                    : "Development Control Center is missing one or more Prompt 015C diagnostics or controls.");
+
+            string[] docs =
+            {
+                GameClockDocsPath,
+                TimeBasedTrafficDocsPath,
+                EndlessHighwayDocsPath,
+                ClockTrafficTestMatrixPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 015C Documentation",
+                missingDocs.Count == 0
+                    ? "Prompt 015C game clock, traffic density, endless streaming, and test matrix documentation exists."
+                    : "Missing Prompt 015C documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

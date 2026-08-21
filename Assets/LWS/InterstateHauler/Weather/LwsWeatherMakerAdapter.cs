@@ -29,6 +29,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private string runtimeInstanceName = "IH Weather Maker Runtime";
 
         private ILwsWeatherService _weatherService;
+        private ILwsGameClockService _gameClockService;
         private object _weatherMakerInstance;
         private object _dayNightManagerInstance;
         private Type _weatherMakerScriptType;
@@ -38,6 +39,8 @@ namespace LWS.InterstateHauler
         private float _nextCameraRefreshTime;
         private bool _attached;
         private bool _directionalLightsSuppressed;
+        private bool _gameClockSlaveConfigured;
+        private long _lastAppliedClockVersion = long.MinValue;
 
         public bool WeatherMakerAvailable { get; private set; }
         public bool WeatherCameraBound { get; private set; }
@@ -57,6 +60,7 @@ namespace LWS.InterstateHauler
         public bool LastWeatherMakerApplySucceeded { get; private set; }
         public float WeatherMakerTimeOfDayHours { get; private set; } = 12f;
         public string LastRuntimeError { get; private set; } = string.Empty;
+        public bool GameClockSlaved => _gameClockService != null && _gameClockSlaveConfigured;
 
         public void ConfigureWeatherMakerPrefab(GameObject prefab)
         {
@@ -95,13 +99,40 @@ namespace LWS.InterstateHauler
 
         private void Update()
         {
-            if (_weatherService == null)
+            if (_weatherService == null || _gameClockService == null)
             {
                 ResolveService();
             }
 
             AttachToService();
-            _weatherService?.Tick(Time.deltaTime);
+            if (_gameClockService != null)
+            {
+                if (!_gameClockSlaveConfigured)
+                {
+                    _weatherService?.SetTimeScale(0f);
+                    ApplyTimeScale(0f);
+                    _gameClockSlaveConfigured = true;
+                }
+
+                if (LwsGameClockCoordinator.ActiveInstance == null)
+                {
+                    _gameClockService.Tick(Time.unscaledDeltaTime);
+                }
+
+                LwsGameClockSnapshot clock = _gameClockService.CurrentSnapshot;
+                if (_weatherService != null && _lastAppliedClockVersion != clock.versionTicks)
+                {
+                    _lastAppliedClockVersion = clock.versionTicks;
+                    _weatherService.SetTimeOfDayHours(clock.timeOfDayHours);
+                }
+
+                _weatherService?.Tick(Time.deltaTime);
+            }
+            else
+            {
+                _gameClockSlaveConfigured = false;
+                _weatherService?.Tick(Time.deltaTime);
+            }
 
             if (Time.unscaledTime >= _nextCameraRefreshTime)
             {
@@ -251,6 +282,7 @@ namespace LWS.InterstateHauler
             }
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _weatherService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _gameClockService);
         }
 
         private void AttachToService()

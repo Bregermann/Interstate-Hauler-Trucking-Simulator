@@ -40,6 +40,8 @@ namespace LWS.InterstateHauler
         private readonly List<GameObject> _activeVehicles = new List<GameObject>();
         private readonly LwsUtsTrafficApi _utsApi = new LwsUtsTrafficApi();
         private ILwsWorldOriginService _originService;
+        private ILwsGameClockService _gameClockService;
+        private ILwsTrafficDemandService _trafficDemandService;
         private Transform _trafficRoot;
         private Transform _lanesRoot;
         private Transform _vehiclesRoot;
@@ -51,6 +53,8 @@ namespace LWS.InterstateHauler
         private int _laneCursor;
         private int _prefabCursor;
         private int _totalSpawned;
+        private float _lastSpawnSeconds = -1f;
+        private float _lastCleanupSeconds = -1f;
         private bool _initialized;
         private bool _graphAvailable;
         private bool _diagnosticsLogged;
@@ -72,7 +76,12 @@ namespace LWS.InterstateHauler
         public int GeneratedLaneCount => _utsPaths.Count;
         public int LaneCandidateCount => _lanes.Count;
         public int SpawnablePrefabCount => CountPrefabs(trafficPrefabs);
-        public int MaxActiveVehicles => spawnPolicy != null ? Mathf.Max(0, spawnPolicy.maxActiveVehicles) : 0;
+        public int MaxActiveVehicles => Mathf.Max(spawnPolicy != null ? Mathf.Max(0, spawnPolicy.maxActiveVehicles) : 0, DemandSnapshot.Valid ? DemandSnapshot.MaximumActive : 0);
+        public int TargetActiveVehicles => DemandSnapshot.Valid ? DemandSnapshot.SmoothedTargetActive : MaxActiveVehicles;
+        public int MinimumNearbyTraffic => DemandSnapshot.Valid ? DemandSnapshot.MinimumNearby : 0;
+        public int NearbyTrafficVehicles => DemandSnapshot.Valid ? DemandSnapshot.NearbyActual : 0;
+        public float EffectiveSpawnIntervalSeconds => DemandSnapshot.Valid ? DemandSnapshot.SpawnIntervalSeconds : spawnPolicy != null ? spawnPolicy.spawnIntervalSeconds : 4f;
+        public LwsTrafficDemandSnapshot DemandSnapshot { get; private set; } = LwsTrafficDemandSnapshot.Empty;
         public LwsTrafficDensityTier DensityTier => spawnPolicy != null ? spawnPolicy.densityTier : LwsTrafficDensityTier.Off;
         public string LastSpawnResult => _lastSpawnResult;
         public string LastError => _lastError;
@@ -103,13 +112,16 @@ namespace LWS.InterstateHauler
             ResolvePlayerTransformThrottled();
             PruneNullVehicles();
             DespawnDistantVehicles();
+            RefreshTrafficDemand(Time.deltaTime);
 
-            if (_activeVehicles.Count >= MaxActiveVehicles || Time.time < _nextSpawnTime)
+            if (_activeVehicles.Count >= MaxActiveVehicles ||
+                (_activeVehicles.Count >= TargetActiveVehicles && NearbyTrafficVehicles >= MinimumNearbyTraffic) ||
+                Time.time < _nextSpawnTime)
             {
                 return;
             }
 
-            _nextSpawnTime = Time.time + Mathf.Max(0.25f, spawnPolicy.spawnIntervalSeconds);
+            _nextSpawnTime = Time.time + Mathf.Max(0.25f, EffectiveSpawnIntervalSeconds);
             TrySpawnTrafficVehicle(out _);
         }
 
@@ -141,6 +153,31 @@ namespace LWS.InterstateHauler
         public void InitializeFromGraph(LwsRoadGraphProvider provider, LwsRoadGraph graph)
         {
             TryInitializeFromGraph(provider, graph, true);
+        }
+
+        public bool ForceRebuildFromGraph(LwsRoadGraphProvider provider, LwsRoadGraph graph, string reason)
+        {
+            if (provider != null)
+            {
+                roadGraphProvider = provider;
+            }
+
+            DespawnAllActiveTraffic(string.IsNullOrWhiteSpace(reason) ? "Traffic graph rebuilt." : reason);
+            _lanes.Clear();
+            _utsPaths.Clear();
+            if (_lanesRoot != null)
+            {
+                ClearChildren(_lanesRoot);
+            }
+
+            _initialized = false;
+            _graphAvailable = false;
+            _configurationFailedPermanently = false;
+            _failureLogged = false;
+            _initializationAttempts = 0;
+            _laneCursor = 0;
+            _lastMessage = string.IsNullOrWhiteSpace(reason) ? "Traffic graph rebuild requested." : reason;
+            return TryInitializeFromGraph(roadGraphProvider, graph, false);
         }
 
         public bool TrySpawnOneForValidation(out string message)
@@ -180,7 +217,7 @@ namespace LWS.InterstateHauler
             _lastSpawnResult = spawned > 0
                 ? $"Filled traffic with {spawned} validation vehicle(s)."
                 : "Fill traffic found no safe spawn points.";
-            _nextSpawnTime = Time.time + Mathf.Max(0.25f, spawnPolicy != null ? spawnPolicy.spawnIntervalSeconds : 4f);
+            _nextSpawnTime = Time.time + Mathf.Max(0.25f, EffectiveSpawnIntervalSeconds);
             return spawned;
         }
 
@@ -296,6 +333,7 @@ namespace LWS.InterstateHauler
             _lastMessage = $"UTS highway traffic initialized. Lanes: {_utsPaths.Count}. Prefabs: {trafficPrefabs.Length}.";
             _lastSpawnResult = "Waiting for first scheduled spawn.";
             _nextSpawnTime = Time.time + FirstSpawnDelaySeconds;
+            SeedMinimumTrafficPresence();
             Debug.Log(_lastMessage, this);
             return true;
         }
@@ -399,6 +437,7 @@ namespace LWS.InterstateHauler
                 LwsUtsTrafficVehicleRuntime runtime = vehicle.GetComponent<LwsUtsTrafficVehicleRuntime>() ?? vehicle.AddComponent<LwsUtsTrafficVehicleRuntime>();
                 runtime.Configure(this, lane, spawnPolicy);
                 _activeVehicles.Add(vehicle);
+                _lastSpawnSeconds = Time.time;
                 return true;
             }
 
@@ -410,6 +449,27 @@ namespace LWS.InterstateHauler
             _lastSpawnResult = message;
             _lastMessage = message;
             return false;
+        }
+
+        private void SeedMinimumTrafficPresence()
+        {
+            RefreshTrafficDemand(0f);
+            int target = DemandSnapshot.Valid ? DemandSnapshot.MinimumNearby : Mathf.Min(2, MaxActiveVehicles);
+            target = Mathf.Clamp(target, 0, MaxActiveVehicles);
+            int attempts = Mathf.Max(1, MaxActiveVehicles * 2);
+            int spawned = 0;
+            for (int i = 0; i < attempts && _activeVehicles.Count < target; i++)
+            {
+                if (TrySpawnTrafficVehicle(out _))
+                {
+                    spawned++;
+                }
+            }
+
+            if (spawned > 0)
+            {
+                _lastSpawnResult = $"Seeded {spawned} traffic vehicle(s) for local demand.";
+            }
         }
 
         private int ChooseSpawnIndex(LwsTrafficLaneDefinition lane)
@@ -461,6 +521,73 @@ namespace LWS.InterstateHauler
                 if (distance > spawnPolicy.despawnDistanceMeters)
                 {
                     RequestDespawn(vehicle, $"Despawned distant traffic vehicle at {distance:0}m.");
+                    _lastCleanupSeconds = Time.time;
+                }
+            }
+        }
+
+        private void RefreshTrafficDemand(float deltaTimeSeconds)
+        {
+            ResolveTrafficDemandServices();
+            CountNearbyTraffic(out int nearby, out int sameDirection, out int oppositeDirection);
+            if (_trafficDemandService == null)
+            {
+                DemandSnapshot = LwsTrafficDemandSnapshot.Empty;
+                return;
+            }
+
+            LwsGameClockSnapshot clock = _gameClockService != null
+                ? _gameClockService.CurrentSnapshot
+                : LwsGameClockUtility.CreateSnapshot(new System.DateTime(2026, 6, 1, 8, 0, 0), LwsGameClockTuning.CreateValidationDefault(), 1f, false, 0d, 0);
+            DemandSnapshot = _trafficDemandService.EvaluateDemand(
+                clock,
+                _activeVehicles.Count,
+                nearby,
+                sameDirection,
+                oppositeDirection,
+                deltaTimeSeconds,
+                _lastSpawnSeconds,
+                _lastCleanupSeconds);
+        }
+
+        private void CountNearbyTraffic(out int nearby, out int sameDirection, out int oppositeDirection)
+        {
+            nearby = 0;
+            sameDirection = 0;
+            oppositeDirection = 0;
+            if (_playerTransform == null)
+            {
+                return;
+            }
+
+            float radius = DemandSnapshot.Valid && _trafficDemandService?.ActiveProfile != null
+                ? _trafficDemandService.ActiveProfile.nearbyRadiusMeters
+                : 750f;
+            Vector3 playerGlobal = LocalToGlobalForTraffic(_playerTransform.position);
+            Vector3 playerForward = _playerTransform.forward.sqrMagnitude > 0.0001f ? _playerTransform.forward.normalized : Vector3.forward;
+            for (int i = 0; i < _activeVehicles.Count; i++)
+            {
+                GameObject vehicle = _activeVehicles[i];
+                if (vehicle == null)
+                {
+                    continue;
+                }
+
+                Vector3 vehicleGlobal = LocalToGlobalForTraffic(vehicle.transform.position);
+                if (Vector3.Distance(playerGlobal, vehicleGlobal) > radius)
+                {
+                    continue;
+                }
+
+                nearby++;
+                Vector3 forward = vehicle.transform.forward.sqrMagnitude > 0.0001f ? vehicle.transform.forward.normalized : Vector3.forward;
+                if (Vector3.Dot(playerForward, forward) >= 0f)
+                {
+                    sameDirection++;
+                }
+                else
+                {
+                    oppositeDirection++;
                 }
             }
         }
@@ -585,6 +712,30 @@ namespace LWS.InterstateHauler
             }
 
             _activeVehicles.Clear();
+        }
+
+        private void DespawnAllActiveTraffic(string reason)
+        {
+            for (int i = _activeVehicles.Count - 1; i >= 0; i--)
+            {
+                GameObject vehicle = _activeVehicles[i];
+                if (vehicle == null)
+                {
+                    continue;
+                }
+
+                LwsTrafficIdentity identity = vehicle.GetComponent<LwsTrafficIdentity>();
+                if (identity != null)
+                {
+                    TryUnregister(identity);
+                }
+
+                Destroy(vehicle);
+            }
+
+            _activeVehicles.Clear();
+            _lastCleanupSeconds = Time.time;
+            _lastMessage = reason ?? string.Empty;
         }
 
         private void TryRegister(LwsTrafficIdentity identity)
@@ -792,11 +943,29 @@ namespace LWS.InterstateHauler
             }
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _originService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _gameClockService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _trafficDemandService);
             if (_originService != null && !_originEventsSubscribed)
             {
                 _originService.OriginShiftCompleted += HandleOriginShiftCompleted;
                 _originEventsSubscribed = true;
             }
+        }
+
+        private void ResolveTrafficDemandServices()
+        {
+            if (_gameClockService != null && _trafficDemandService != null)
+            {
+                return;
+            }
+
+            if (LwsApplicationBootstrap.Instance == null || LwsApplicationBootstrap.Instance.Registry == null)
+            {
+                return;
+            }
+
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _gameClockService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _trafficDemandService);
         }
 
         private void HandleOriginShiftCompleted(LwsOriginShiftEvent shiftEvent)

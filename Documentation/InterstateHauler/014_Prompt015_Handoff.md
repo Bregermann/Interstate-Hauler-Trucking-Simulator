@@ -66,6 +66,7 @@ Do not store machine-local floating-origin offsets in career save as authoritati
 
 - Scene Streamer 1.26.1 explicit `LoadScene(string)` path is unsafe in the installed source because the instance `Load(string sceneName)` ignores its argument. Do not edit vendor source casually; keep LWS explicit policy loads isolated unless a later vendor-package decision changes this.
 - Prompt 014 validation scenes are runtime-generated meshes for validation, not production EasyRoads/Vista chunks.
+- Prompt 015C changed `StreamingHighwayValidation` into an effectively endless recycled development highway through `LwsEndlessStreamingHighwayController`. The original five-chunk manifest remains a finite Prompt 014 validation artifact, but the streaming torture test no longer relies on exhausting that finite authored list.
 - Additive load/unload performance needs normal Editor profiling with the Unity Profiler.
 - Trailer straddling/seam behavior needs manual driving validation before this is considered production-safe.
 

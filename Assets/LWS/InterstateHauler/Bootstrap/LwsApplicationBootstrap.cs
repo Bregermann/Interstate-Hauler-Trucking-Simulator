@@ -89,6 +89,7 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsVehicleInputService>(new LwsVehicleInputService());
             registry.Register<ILwsWheelCalibrationService>(new LwsWheelCalibrationService());
             registry.Register<ILwsForceFeedbackService>(new LwsForceFeedbackService(), typeof(ILwsWheelCalibrationService));
+            registry.Register<ILwsGameClockService>(new LwsGameClockService());
             registry.Register<ILwsWeatherService>(new LwsWeatherCoordinator());
             registry.Register<ILwsRenderingService>(new LwsRenderingService());
             registry.Register<ILwsWorldOriginService>(new LwsWorldOriginService());
@@ -97,6 +98,7 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsGpsVoiceGuidanceService>(new LwsGpsVoiceGuidanceService(), typeof(ILwsPlayerSettingsService));
             registry.Register<ILwsNavigationService>(new LwsNavigationService(), typeof(ILwsRoadGraphService), typeof(ILwsGpsVoiceGuidanceService));
             registry.Register<ILwsRoadConditionService>(new LwsRoadConditionCoordinator(), typeof(ILwsWeatherService), typeof(ILwsRoadGraphService), typeof(ILwsNavigationService));
+            registry.Register<ILwsTrafficDemandService>(new LwsTrafficDemandService(), typeof(ILwsGameClockService));
             registry.Register<ILwsTrafficService>(new LwsTrafficService(), typeof(ILwsNavigationService));
             registry.Register<ILwsWorldGenerationCoordinator>(new LwsWorldGenerationCoordinator(), typeof(ILwsNavigationService));
             registry.Register<ILwsPlayerVehicleService>(new LwsPlayerVehicleService(), typeof(ILwsVehicleInputService));

@@ -15,6 +15,9 @@ namespace LWS.InterstateHauler
 
         [SerializeField] private bool registerOnStart = true;
         [SerializeField] private LwsRoadGraphProvider roadGraphProvider;
+        [SerializeField] private bool enableEndlessHighwayValidation = true;
+        [SerializeField] private bool addGameClockRuntime = true;
+        [SerializeField] private bool addGameClockHud = true;
         [SerializeField] private bool addNavigationDebugPanels = true;
         [SerializeField] private bool addWeatherRuntime = true;
         [SerializeField] private bool addRoadConditionRuntime = true;
@@ -23,6 +26,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private GameObject[] validationTrafficPrefabs;
 
         public LwsRoadGraph LastGraph { get; private set; }
+        public bool EndlessHighwayValidationEnabled => enableEndlessHighwayValidation;
 
         private static float CarriagewayWidthMeters => LaneWidthMeters * 2f + RightShoulderWidthMeters + LeftShoulderWidthMeters;
 
@@ -37,8 +41,35 @@ namespace LWS.InterstateHauler
         public void RegisterGlobalGraphAndServices()
         {
             EnsureRoadGraphProvider();
-            LastGraph = CreateDefaultGraph();
-            roadGraphProvider.SetGraph(LastGraph, true);
+            LwsEndlessStreamingHighwayController endless = null;
+            if (enableEndlessHighwayValidation)
+            {
+                endless = EnsureComponent<LwsEndlessStreamingHighwayController>();
+                endless.Configure(roadGraphProvider);
+                endless.RefreshNow();
+                LastGraph = endless.LastGraph;
+            }
+            else
+            {
+                LastGraph = CreateDefaultGraph();
+                roadGraphProvider.SetGraph(LastGraph, true);
+            }
+
+            if (LastGraph == null)
+            {
+                LastGraph = CreateDefaultGraph();
+                roadGraphProvider.SetGraph(LastGraph, true);
+            }
+
+            if (addGameClockRuntime)
+            {
+                EnsureComponent<LwsGameClockCoordinator>();
+            }
+
+            if (addGameClockHud)
+            {
+                EnsureComponent<LwsGameClockHud>();
+            }
 
             if (addNavigationDebugPanels)
             {
@@ -64,6 +95,7 @@ namespace LWS.InterstateHauler
             {
                 LwsUtsHighwayTrafficController traffic = EnsureComponent<LwsUtsHighwayTrafficController>();
                 traffic.ConfigureValidationProfile(validationTrafficProfile, validationTrafficPrefabs);
+                endless?.BindTrafficController(traffic);
                 traffic.InitializeFromGraph(roadGraphProvider, LastGraph);
                 EnsureComponent<LwsUtsTrafficDebugPanel>();
             }

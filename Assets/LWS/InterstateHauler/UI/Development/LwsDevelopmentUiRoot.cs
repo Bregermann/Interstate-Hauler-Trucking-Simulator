@@ -42,8 +42,10 @@ namespace LWS.InterstateHauler
         private ILwsTruckControlService _truckControlService;
         private ILwsTruckDashboardService _dashboardService;
         private ILwsWeatherService _weatherService;
+        private ILwsGameClockService _gameClockService;
         private ILwsRoadConditionService _roadConditionService;
         private ILwsTrafficService _trafficService;
+        private ILwsTrafficDemandService _trafficDemandService;
         private ILwsPlayerSettingsService _playerSettingsService;
         private ILwsWheelCalibrationService _wheelCalibrationService;
         private ILwsForceFeedbackService _forceFeedbackService;
@@ -584,7 +586,9 @@ namespace LWS.InterstateHauler
             AddInfo("Gear", transmission != null ? transmission.DisplayState.displayLabel : "--");
             AddInfo("Route", nav != null && nav.routeActive ? $"{FormatDistance(nav.distanceRemainingMeters)} remaining" : "inactive");
             AddInfo("Road", $"{ResolveCurrentRoadText()} {ResolveSpeedLimitText()}");
+            AddInfo("Game clock", _gameClockService != null ? $"{_gameClockService.CurrentSnapshot.ClockText} / {_gameClockService.CurrentSnapshot.timeScale:0.#}x" : "missing");
             AddInfo("Weather", _weatherService != null ? _weatherService.CurrentSnapshot.weatherPresetId : "missing");
+            AddInfo("Traffic demand", FormatTrafficDemandOverview(FindFirstObjectByType<LwsUtsHighwayTrafficController>()));
             AddInfo("Road condition", _roadConditionService != null ? _roadConditionService.CurrentSnapshot.MajorGameplayState : "missing");
             AddInfo("Origin", _originService != null ? $"{_originService.CurrentOriginOffset} v{_originService.OriginVersion}" : "missing");
             AddInfo("Streaming", _streamingService != null ? $"{_streamingService.WorldId} / {_streamingService.ActiveWorldChunkId}" : "missing");
@@ -673,8 +677,23 @@ namespace LWS.InterstateHauler
         private void BuildTrafficTab()
         {
             LwsUtsHighwayTrafficController traffic = FindFirstObjectByType<LwsUtsHighwayTrafficController>();
+            LwsTrafficDemandSnapshot demand = ResolveTrafficDemandSnapshot(traffic);
             AddInfo("Traffic service", _trafficService != null ? $"{_trafficService.ActiveTrafficVehicles.Count} registered vehicles" : "missing");
             AddInfo("UTS controller", traffic != null ? traffic.UtsAvailability : "not present");
+            AddInfo("Game Time", _gameClockService != null ? _gameClockService.CurrentSnapshot.ClockText : "--");
+            AddInfo("Traffic Profile", demand.Valid ? demand.DisplayName : "missing");
+            AddInfo("Traffic Period", demand.Valid ? demand.TrafficPeriod.ToString() : "--");
+            AddInfo("Demand Multiplier", demand.Valid ? $"{demand.DemandMultiplier:0.00}" : "--");
+            AddInfo("Target Active", demand.Valid ? $"{demand.SmoothedTargetActive} (raw {demand.TargetActive})" : "--");
+            AddInfo("Current Active", traffic != null ? traffic.Stats.ActiveVehicles.ToString() : "--");
+            AddInfo("Minimum Nearby", demand.Valid ? demand.MinimumNearby.ToString() : "--");
+            AddInfo("Nearby Actual", demand.Valid ? demand.NearbyActual.ToString() : "--");
+            AddInfo("Same Direction", demand.Valid ? demand.SameDirection.ToString() : "--");
+            AddInfo("Opposite Direction", demand.Valid ? demand.OppositeDirection.ToString() : "--");
+            AddInfo("Spawn Deficit", demand.Valid ? demand.SpawnDeficit.ToString() : "--");
+            AddInfo("Spawn Interval", demand.Valid ? $"{demand.SpawnIntervalSeconds:0.00}s" : "--");
+            AddInfo("Last Spawn", demand.Valid ? FormatTimestampSeconds(demand.LastSpawnSeconds) : "--");
+            AddInfo("Last Cleanup", demand.Valid ? FormatTimestampSeconds(demand.LastCleanupSeconds) : "--");
             AddInfo("Runtime", traffic != null ? $"active {traffic.Stats.ActiveVehicles}, lanes {traffic.GeneratedLaneCount}, max {traffic.MaxActiveVehicles}" : "--");
             AddButtonRow(("SPAWN ONE", () =>
                 {
@@ -700,6 +719,7 @@ namespace LWS.InterstateHauler
             LwsSemanticGpsMapGraphic map = _minimapGraphic;
             LwsRouteResult route = _navigationService?.CurrentRoute;
             LwsWorldPositionD playerGlobal = ResolvePlayerGlobalPosition();
+            LwsEndlessStreamingHighwayController endless = FindFirstObjectByType<LwsEndlessStreamingHighwayController>();
             AddInfo("Route", state != null && state.routeActive ? $"{state.routeId} / {FormatDistance(state.distanceRemainingMeters)}" : "inactive");
             AddInfo("Next maneuver", state != null ? $"{LwsNavigationManeuverCatalog.GetDisplayName(state.nextManeuver)} / {FormatDistance(state.distanceToNextManeuverMeters)}" : "--");
             AddInfo("ETA", state != null ? FormatEta(state.estimatedTimeRemainingSeconds) : "--");
@@ -733,20 +753,41 @@ namespace LWS.InterstateHauler
                         _lastActionMessage = $"GPS voice {(_playerSettingsService.GpsVoiceGuidanceEnabled ? "enabled" : "disabled")}.";
                     }
                 }));
+            if (endless != null && endless.EndlessValidationEnabled)
+            {
+                AddButtonRow(("10 MI AHEAD", () => RequestEndlessRoute(endless, 10f)),
+                    ("25 MI AHEAD", () => RequestEndlessRoute(endless, 25f)),
+                    ("50 MI AHEAD", () => RequestEndlessRoute(endless, 50f)));
+            }
         }
 
         private void BuildWeatherTab()
         {
             LwsWeatherSnapshot weather = _weatherService != null ? _weatherService.CurrentSnapshot : LwsWeatherSnapshot.Clear;
+            LwsTrafficDemandSnapshot demand = ResolveTrafficDemandSnapshot(FindFirstObjectByType<LwsUtsHighwayTrafficController>());
+            AddInfo("Game Clock", _gameClockService != null ? _gameClockService.CurrentSnapshot.ClockText : "missing");
+            AddInfo("Time Scale", _gameClockService != null ? $"{_gameClockService.CurrentSnapshot.timeScale:0.#}x / paused: {_gameClockService.CurrentSnapshot.paused}" : "--");
+            AddInfo("Traffic Period", demand.Valid ? demand.TrafficPeriod.ToString() : "--");
             AddInfo("Preset", weather.weatherPresetId);
-            AddInfo("Time", $"{weather.timeOfDayHours:0.00}h");
+            AddInfo("Weather Time", $"{weather.timeOfDayHours:0.00}h");
             AddInfo("Conditions", $"{weather.condition}, precip {weather.precipitationIntensity01:0.00}, fog {weather.fogIntensity01:0.00}");
             AddButtonRow(("CLEAR", () => RequestWeather(LwsWeatherPresetCatalog.ClearId)),
                 ("RAIN", () => RequestWeather(LwsWeatherPresetCatalog.HeavyRainId)),
                 ("SNOW", () => RequestWeather(LwsWeatherPresetCatalog.HeavySnowId)),
                 ("FOG", () => RequestWeather(LwsWeatherPresetCatalog.FogId)));
+            AddButtonRow(("-1 HOUR", () => AdjustGameClockHours(-1f)),
+                ("+1 HOUR", () => AdjustGameClockHours(1f)),
+                ("6 AM", () => SetWeatherTime(6f)),
+                ("8 AM", () => SetWeatherTime(8f)));
             AddButtonRow(("NOON", () => SetWeatherTime(12f)),
-                ("NIGHT", () => SetWeatherTime(22f)));
+                ("5 PM", () => SetWeatherTime(17f)),
+                ("8 PM", () => SetWeatherTime(20f)),
+                ("MIDNIGHT", () => SetWeatherTime(0f)));
+            AddButtonRow((_gameClockService != null && _gameClockService.CurrentSnapshot.paused ? "RESUME" : "PAUSE", ToggleGameClockPaused),
+                ("1x", () => SetGameClockScale(1f)),
+                ("6x", () => SetGameClockScale(6f)),
+                ("20x", () => SetGameClockScale(20f)),
+                ("60x", () => SetGameClockScale(60f)));
         }
 
         private void BuildRoadConditionsTab()
@@ -771,21 +812,43 @@ namespace LWS.InterstateHauler
 
         private void BuildStreamingTab()
         {
+            LwsEndlessStreamingHighwayController endless = FindFirstObjectByType<LwsEndlessStreamingHighwayController>();
             if (_streamingService == null)
             {
                 AddInfo("Streaming", "service missing");
+            }
+            else
+            {
+                AddInfo("World", _streamingService.WorldId);
+                AddInfo("Active chunk", _streamingService.ActiveWorldChunkId);
+                AddInfo("Frozen", _streamingService.IsFrozen ? "YES" : "NO");
+                AddInfo("Chunks", $"{_streamingService.ChunkStates.Count}");
+                AddInfo("Last load/unload", $"{_streamingService.LastLoadDurationSeconds:0.000}s / {_streamingService.LastUnloadDurationSeconds:0.000}s");
+                AddButtonRow((_streamingService.IsFrozen ? "UNFREEZE" : "FREEZE", () => _streamingService.SetFrozen(!_streamingService.IsFrozen)),
+                    ("LOAD ALL", () => _streamingService.LoadAllChunks()),
+                    ("UNLOAD DISTANT", () => _streamingService.UnloadDistantChunks()),
+                    ("RELOAD NEAR", () => _streamingService.ReloadCurrentNeighborhood()));
+            }
+
+            if (endless == null)
+            {
+                AddInfo("Endless highway", "not present in current scene");
                 return;
             }
 
-            AddInfo("World", _streamingService.WorldId);
-            AddInfo("Active chunk", _streamingService.ActiveWorldChunkId);
-            AddInfo("Frozen", _streamingService.IsFrozen ? "YES" : "NO");
-            AddInfo("Chunks", $"{_streamingService.ChunkStates.Count}");
-            AddInfo("Last load/unload", $"{_streamingService.LastLoadDurationSeconds:0.000}s / {_streamingService.LastUnloadDurationSeconds:0.000}s");
-            AddButtonRow((_streamingService.IsFrozen ? "UNFREEZE" : "FREEZE", () => _streamingService.SetFrozen(!_streamingService.IsFrozen)),
-                ("LOAD ALL", () => _streamingService.LoadAllChunks()),
-                ("UNLOAD DISTANT", () => _streamingService.UnloadDistantChunks()),
-                ("RELOAD NEAR", () => _streamingService.ReloadCurrentNeighborhood()));
+            AddInfo("Endless Enabled", endless.EndlessValidationEnabled ? "YES" : "NO");
+            AddInfo("Logical Segment", endless.CurrentLogicalSegmentId);
+            AddInfo("Physical Pool", $"{endless.PhysicalChunkPoolSize} slots");
+            AddInfo("Road Ahead", $"{endless.MetersOfRoadAvailableAhead:0} m / target {endless.RoadAheadTargetMeters:0} m");
+            AddInfo("Road Ahead Status", endless.RoadAheadUnsafe ? "STREAMING ROAD AHEAD UNSAFE" : "safe");
+            AddInfo("Lowest Retained", LwsEndlessHighwayModel.FormatSegmentId(endless.LowestSegmentRetained));
+            AddInfo("Highest Generated", LwsEndlessHighwayModel.FormatSegmentId(endless.HighestSegmentGenerated));
+            AddInfo("Chunks Recycled", endless.ChunksRecycled.ToString());
+            AddInfo("Chunk Load Failures", endless.ChunkLoadFailures.ToString());
+            foreach (LwsEndlessHighwaySlotSnapshot slot in endless.SlotSnapshots)
+            {
+                AddInfo($"Slot {slot.PhysicalSlotIndex}", $"{slot.LogicalSegmentId} globalZ {slot.GlobalSegmentStartZ:0} local {slot.LocalPosition}");
+            }
         }
 
         private void BuildFloatingOriginTab()
@@ -936,8 +999,10 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _truckControlService);
             _registry.TryGet(out _dashboardService);
             _registry.TryGet(out _weatherService);
+            _registry.TryGet(out _gameClockService);
             _registry.TryGet(out _roadConditionService);
             _registry.TryGet(out _trafficService);
+            _registry.TryGet(out _trafficDemandService);
             _registry.TryGet(out _playerSettingsService);
             _registry.TryGet(out _wheelCalibrationService);
             _registry.TryGet(out _forceFeedbackService);
@@ -1027,6 +1092,17 @@ namespace LWS.InterstateHauler
             _lastActionMessage = result != null && result.succeeded ? "Route recalculated." : result?.message ?? "Route recalculation failed.";
         }
 
+        private void RequestEndlessRoute(LwsEndlessStreamingHighwayController endless, float milesAhead)
+        {
+            if (endless == null)
+            {
+                _lastActionMessage = "Endless highway controller is missing.";
+                return;
+            }
+
+            endless.TryRequestDestinationMilesAhead(milesAhead, out _lastActionMessage);
+        }
+
         private static bool TryFindRouteDestination(LwsRoadGraph graph, Vector3 origin, out Vector3 destination)
         {
             destination = default;
@@ -1088,6 +1164,14 @@ namespace LWS.InterstateHauler
 
         private void SetWeatherTime(float hours)
         {
+            if (_gameClockService != null)
+            {
+                _gameClockService.SetTimeOfDayHours(hours);
+                _weatherService?.SetTimeOfDayHours(_gameClockService.CurrentSnapshot.timeOfDayHours);
+                _lastActionMessage = $"Game clock set to {_gameClockService.CurrentSnapshot.ClockText}.";
+                return;
+            }
+
             if (_weatherService == null)
             {
                 _lastActionMessage = "Weather service is missing.";
@@ -1096,6 +1180,45 @@ namespace LWS.InterstateHauler
 
             _weatherService.SetTimeOfDayHours(hours);
             _lastActionMessage = $"Weather time set to {hours:0.0}h.";
+        }
+
+        private void AdjustGameClockHours(float hours)
+        {
+            if (_gameClockService == null)
+            {
+                _lastActionMessage = "Game clock service is missing.";
+                return;
+            }
+
+            _gameClockService.AddHours(hours);
+            _weatherService?.SetTimeOfDayHours(_gameClockService.CurrentSnapshot.timeOfDayHours);
+            _lastActionMessage = $"Game clock adjusted to {_gameClockService.CurrentSnapshot.ClockText}.";
+        }
+
+        private void SetGameClockScale(float scale)
+        {
+            if (_gameClockService == null)
+            {
+                _lastActionMessage = "Game clock service is missing.";
+                return;
+            }
+
+            _gameClockService.SetPaused(false);
+            _gameClockService.SetTimeScale(scale);
+            _lastActionMessage = $"Game clock scale set to {scale:0.#}x.";
+        }
+
+        private void ToggleGameClockPaused()
+        {
+            if (_gameClockService == null)
+            {
+                _lastActionMessage = "Game clock service is missing.";
+                return;
+            }
+
+            bool nextPaused = !_gameClockService.CurrentSnapshot.paused;
+            _gameClockService.SetPaused(nextPaused);
+            _lastActionMessage = nextPaused ? "Game clock paused." : "Game clock resumed.";
         }
 
         private void TeleportFifty(LwsFiftyMileHighwayValidationController fifty, double mile)
@@ -1586,6 +1709,32 @@ namespace LWS.InterstateHauler
             }
 
             return "18-SPEED MANUAL";
+        }
+
+        private LwsTrafficDemandSnapshot ResolveTrafficDemandSnapshot(LwsUtsHighwayTrafficController traffic)
+        {
+            if (traffic != null && traffic.DemandSnapshot.Valid)
+            {
+                return traffic.DemandSnapshot;
+            }
+
+            return _trafficDemandService != null ? _trafficDemandService.CurrentSnapshot : LwsTrafficDemandSnapshot.Empty;
+        }
+
+        private string FormatTrafficDemandOverview(LwsUtsHighwayTrafficController traffic)
+        {
+            LwsTrafficDemandSnapshot demand = ResolveTrafficDemandSnapshot(traffic);
+            if (!demand.Valid)
+            {
+                return "missing";
+            }
+
+            return $"{demand.TrafficPeriod} target {demand.SmoothedTargetActive}, nearby {demand.NearbyActual}";
+        }
+
+        private static string FormatTimestampSeconds(float seconds)
+        {
+            return seconds >= 0f ? $"{seconds:0.0}s" : "--";
         }
 
         private static string FormatAutomaticSelectorShort(LwsAutomaticTransmissionSelector selector)

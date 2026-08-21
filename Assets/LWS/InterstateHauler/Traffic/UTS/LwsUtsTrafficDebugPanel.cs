@@ -16,6 +16,7 @@ namespace LWS.InterstateHauler
         private bool _cachedGraphAvailable;
         private int _cachedPrefabCount;
         private int _cachedMaxActive;
+        private LwsTrafficDemandSnapshot _cachedDemand;
         private LwsTrafficDensityTier _cachedDensity;
         private string _cachedLastSpawnResult = string.Empty;
         private string _cachedLastError = string.Empty;
@@ -48,6 +49,7 @@ namespace LWS.InterstateHauler
             _cachedGraphAvailable = controller.GraphAvailable;
             _cachedPrefabCount = controller.SpawnablePrefabCount;
             _cachedMaxActive = controller.MaxActiveVehicles;
+            _cachedDemand = controller.DemandSnapshot;
             _cachedDensity = controller.DensityTier;
             _cachedLastSpawnResult = controller.LastSpawnResult;
             _cachedLastError = controller.LastError;
@@ -69,6 +71,9 @@ namespace LWS.InterstateHauler
             GUILayout.Label($"Spawnable Prefabs: {_cachedPrefabCount}");
             GUILayout.Label($"Active Vehicles: {_cachedStats.ActiveVehicles}");
             GUILayout.Label($"Max Active: {_cachedMaxActive}");
+            GUILayout.Label(_cachedDemand.Valid
+                ? $"Demand: {_cachedDemand.TrafficPeriod} target {_cachedDemand.SmoothedTargetActive}, nearby {_cachedDemand.NearbyActual}, interval {_cachedDemand.SpawnIntervalSeconds:0.00}s"
+                : "Demand: unavailable");
             GUILayout.Label($"Density: {_cachedDensity}");
             GUILayout.Label($"Last Spawn Result: {_cachedLastSpawnResult}");
             GUILayout.Label($"Last Error: {_cachedLastError}");
