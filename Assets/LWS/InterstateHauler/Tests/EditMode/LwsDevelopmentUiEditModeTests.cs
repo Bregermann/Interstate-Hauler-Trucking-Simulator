@@ -66,6 +66,125 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void SemanticMapTwoPointPolylineCreatesVisibleRoadTrianglesWithoutRoute()
+        {
+            var go = new GameObject("semantic-map-two-point-test");
+            try
+            {
+                LwsSemanticGpsMapGraphic graphic = go.AddComponent<LwsSemanticGpsMapGraphic>();
+                LwsRoadGraph graph = CreateTwoPointRoadGraph();
+
+                graphic.SetMapData(graph, null, LwsWorldPositionD.FromVector3(Vector3.zero), Vector3.forward, true, 1200f, Vector2.zero, 0.4f);
+
+                Assert.IsTrue(graphic.GraphBound);
+                Assert.IsTrue(graphic.HasRoadPresentation);
+                Assert.AreEqual("IH_TEST_MINIMAP_GRAPH", graphic.GraphId);
+                Assert.AreEqual(1, graphic.RoadCount);
+                Assert.AreEqual(1, graphic.EdgeCount);
+                Assert.AreEqual(2, graphic.CenterlineSampleCount);
+                Assert.AreEqual(0, graphic.RoutePointCount);
+                Assert.Greater(graphic.BaseRoadVertexCount, 0);
+                Assert.Greater(graphic.BaseRoadTriangleCount, 0);
+                Assert.AreEqual(0, graphic.RouteVertexCount);
+                Assert.AreEqual(0, graphic.RouteTriangleCount);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void SemanticMapRebuildsWhenGraphLateBindsFromNullToValid()
+        {
+            var go = new GameObject("semantic-map-late-bind-test");
+            try
+            {
+                LwsSemanticGpsMapGraphic graphic = go.AddComponent<LwsSemanticGpsMapGraphic>();
+
+                graphic.SetMapData(null, null, LwsWorldPositionD.FromVector3(Vector3.zero), Vector3.forward, true, 1200f, Vector2.zero, 0.4f);
+
+                Assert.IsFalse(graphic.GraphBound);
+                Assert.AreEqual(0, graphic.BaseRoadTriangleCount);
+
+                graphic.SetMapData(CreateTwoPointRoadGraph(), null, LwsWorldPositionD.FromVector3(Vector3.zero), Vector3.forward, true, 1200f, Vector2.zero, 0.4f);
+
+                Assert.IsTrue(graphic.GraphBound);
+                Assert.Greater(graphic.BaseRoadTriangleCount, 0);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void SemanticMapRouteGeometryIsDistinctFromBaseRoadGeometry()
+        {
+            var go = new GameObject("semantic-map-route-test");
+            try
+            {
+                LwsSemanticGpsMapGraphic graphic = go.AddComponent<LwsSemanticGpsMapGraphic>();
+
+                graphic.SetMapData(
+                    CreateTwoPointRoadGraph(),
+                    CreateTwoPointRoute(),
+                    LwsWorldPositionD.FromVector3(Vector3.zero),
+                    Vector3.forward,
+                    true,
+                    1200f,
+                    Vector2.zero,
+                    0.4f);
+
+                Assert.IsTrue(graphic.HasRoadPresentation);
+                Assert.IsTrue(graphic.HasRoutePresentation);
+                Assert.AreEqual(2, graphic.RoutePointCount);
+                Assert.Greater(graphic.RouteVertexCount, 0);
+                Assert.Greater(graphic.RouteTriangleCount, 0);
+                Assert.Greater(graphic.RouteLineWidth, graphic.RoadLineWidth);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void SemanticMapProjectsPlayerToConfiguredViewportCenter()
+        {
+            var go = new GameObject("semantic-map-projection-test");
+            try
+            {
+                LwsSemanticGpsMapGraphic graphic = go.AddComponent<LwsSemanticGpsMapGraphic>();
+                graphic.SetMapData(CreateTwoPointRoadGraph(), null, LwsWorldPositionD.FromVector3(Vector3.zero), Vector3.forward, true, 1200f, Vector2.zero, 0.4f);
+
+                Vector2 playerMap = graphic.ProjectGlobalPointToMap(Vector3.zero);
+                Vector2 aheadMap = graphic.ProjectGlobalPointToMap(new Vector3(0f, 0f, 300f));
+
+                Assert.AreEqual(0.5f, playerMap.x, 0.0001f);
+                Assert.AreEqual(0.4f, playerMap.y, 0.0001f);
+                Assert.AreEqual(0.5f, aheadMap.x, 0.0001f);
+                Assert.Greater(aheadMap.y, playerMap.y);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void DevelopmentUiSourceAnchorsMinimapBottomRight()
+        {
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+
+            StringAssert.Contains("CreateFixedPanel(", root);
+            StringAssert.Contains("\"GPS Minimap\"", root);
+            StringAssert.Contains("new Vector2(1f, 0f)", root);
+            StringAssert.Contains("new Vector2(-MinimapPanelMarginPixels, MinimapPanelMarginPixels)", root);
+            StringAssert.Contains("MinimapMetersVisible", root);
+        }
+
+        [Test]
         public void DevelopmentUiSourceUsesOriginAwareNavigationAndCachedSemanticMap()
         {
             string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
@@ -82,6 +201,70 @@ namespace LWS.InterstateHauler.Tests.EditMode
             StringAssert.Contains("[RequireComponent(typeof(CanvasRenderer))]", map);
             StringAssert.Contains("CreateSemanticMapGraphic", root);
             StringAssert.Contains("AddComponent<CanvasRenderer>()", root);
+            StringAssert.Contains("LineIntersectsExpandedViewport", map);
+            StringAssert.Contains("RefreshRoadLookupCache", root);
+        }
+
+        private static LwsRoadGraph CreateTwoPointRoadGraph()
+        {
+            var graph = new LwsRoadGraph { graphId = "IH_TEST_MINIMAP_GRAPH" };
+            graph.nodes.Add(new LwsRoadNode { nodeId = "MINIMAP_START", position = new Vector3(0f, 0f, -2000f) });
+            graph.nodes.Add(new LwsRoadNode { nodeId = "MINIMAP_END", position = new Vector3(0f, 0f, 2000f) });
+
+            var edge = new LwsRoadEdge
+            {
+                roadId = "IH_TEST_MINIMAP_ROAD",
+                segmentId = "IH_TEST_MINIMAP_SEGMENT",
+                edgeId = "IH_TEST_MINIMAP_EDGE",
+                fromNodeId = "MINIMAP_START",
+                toNodeId = "MINIMAP_END",
+                roadClass = LwsRoadClass.Interstate,
+                direction = LwsRoadDirection.Northbound,
+                surfaceType = LwsRoadSurfaceType.AsphaltInterstate,
+                oneWay = true,
+                distanceMeters = 4000f,
+                travelCost = 4000f,
+                speedLimitMph = 65f,
+                laneCount = 2,
+                laneWidthMeters = 3.7f
+            };
+            edge.samples.Add(CreateSample(edge, 0f, new Vector3(0f, 0f, -2000f)));
+            edge.samples.Add(CreateSample(edge, 4000f, new Vector3(0f, 0f, 2000f)));
+            graph.edges.Add(edge);
+            return graph;
+        }
+
+        private static LwsRoadSample CreateSample(LwsRoadEdge edge, float distance, Vector3 position)
+        {
+            return new LwsRoadSample
+            {
+                roadId = edge.roadId,
+                segmentId = edge.segmentId,
+                distanceFromStartMeters = distance,
+                position = position,
+                forward = Vector3.forward,
+                up = Vector3.up,
+                direction = edge.direction,
+                roadWidthMeters = 11f,
+                laneWidthMeters = edge.laneWidthMeters,
+                laneCount = edge.laneCount,
+                speedLimitMph = edge.speedLimitMph
+            };
+        }
+
+        private static LwsRouteResult CreateTwoPointRoute()
+        {
+            return new LwsRouteResult
+            {
+                routeId = "IH_TEST_MINIMAP_ROUTE",
+                succeeded = true,
+                distanceMeters = 600f,
+                waypoints =
+                {
+                    new Vector3(0f, 0f, -300f),
+                    new Vector3(0f, 0f, 300f)
+                }
+            };
         }
 
         [Test]

@@ -7,14 +7,23 @@ namespace LWS.InterstateHauler
     [RequireComponent(typeof(CanvasRenderer))]
     public sealed class LwsSemanticGpsMapGraphic : MaskableGraphic
     {
+        private const float RoadLineWidthPixels = 4f;
+        private const float RouteOuterLineWidthPixels = 9f;
+        private const float RouteInnerLineWidthPixels = 4f;
+        private const float ExpandedViewportMin = -0.30f;
+        private const float ExpandedViewportMax = 1.30f;
+
         private readonly List<MapSegment> _roadSegments = new List<MapSegment>();
         private readonly List<MapSegment> _routeSegments = new List<MapSegment>();
         private LwsRoadGraph _cachedGraph;
         private LwsRouteResult _cachedRoute;
+        private int _cachedGraphSignature;
+        private int _cachedRouteSignature;
         private LwsWorldPositionD _playerGlobal;
         private Vector3 _playerForward = Vector3.forward;
         private Vector2 _panMeters;
         private float _metersVisible = 900f;
+        private float _playerViewportY = 0.5f;
         private bool _headingUp = true;
         private bool _routeActive;
 
@@ -22,6 +31,21 @@ namespace LWS.InterstateHauler
         public bool HasRoutePresentation => _routeSegments.Count > 0;
         public bool HeadingUp => _headingUp;
         public float MetersVisible => _metersVisible;
+        public float PlayerViewportY => _playerViewportY;
+        public bool GraphBound => _cachedGraph != null;
+        public string GraphId => _cachedGraph != null ? _cachedGraph.graphId : string.Empty;
+        public int RoadCount { get; private set; }
+        public int EdgeCount { get; private set; }
+        public int CenterlineSampleCount { get; private set; }
+        public int RoutePointCount { get; private set; }
+        public int BaseRoadVertexCount { get; private set; }
+        public int BaseRoadTriangleCount { get; private set; }
+        public int RouteVertexCount { get; private set; }
+        public int RouteTriangleCount { get; private set; }
+        public int MapVertexCount => BaseRoadVertexCount + RouteVertexCount;
+        public int MapTriangleCount => BaseRoadTriangleCount + RouteTriangleCount;
+        public float RoadLineWidth => RoadLineWidthPixels;
+        public float RouteLineWidth => RouteOuterLineWidthPixels;
 
         public void SetMapData(
             LwsRoadGraph graph,
@@ -30,17 +54,22 @@ namespace LWS.InterstateHauler
             Vector3 playerForward,
             bool headingUp,
             float metersVisible,
-            Vector2 panMeters)
+            Vector2 panMeters,
+            float playerViewportY = 0.5f)
         {
-            if (!ReferenceEquals(_cachedGraph, graph))
+            int graphSignature = BuildGraphSignature(graph);
+            if (!ReferenceEquals(_cachedGraph, graph) || _cachedGraphSignature != graphSignature)
             {
                 _cachedGraph = graph;
+                _cachedGraphSignature = graphSignature;
                 RebuildRoadCache(graph);
             }
 
-            if (!ReferenceEquals(_cachedRoute, route))
+            int routeSignature = BuildRouteSignature(route);
+            if (!ReferenceEquals(_cachedRoute, route) || _cachedRouteSignature != routeSignature)
             {
                 _cachedRoute = route;
+                _cachedRouteSignature = routeSignature;
                 RebuildRouteCache(route);
             }
 
@@ -49,33 +78,40 @@ namespace LWS.InterstateHauler
             _headingUp = headingUp;
             _metersVisible = Mathf.Max(80f, metersVisible);
             _panMeters = panMeters;
+            _playerViewportY = Mathf.Clamp(playerViewportY, 0.2f, 0.8f);
             _routeActive = route != null && route.succeeded && route.waypoints != null && route.waypoints.Count > 1;
+            RefreshDiagnosticCounts();
             SetVerticesDirty();
+        }
+
+        public Vector2 ProjectGlobalPointToMap(Vector3 globalPoint)
+        {
+            return WorldToMap(globalPoint);
         }
 
         protected override void OnPopulateMesh(VertexHelper vh)
         {
             vh.Clear();
             Rect rect = rectTransform.rect;
-            AddQuad(vh, rect, new Color32(8, 15, 18, 245));
-            AddGrid(vh, rect, 4, new Color32(28, 46, 50, 125));
+            AddQuad(vh, rect, new Color32(12, 22, 25, 248));
+            AddGrid(vh, rect, 4, new Color32(36, 58, 62, 150));
 
             for (int i = 0; i < _roadSegments.Count; i++)
             {
-                AddWorldLine(vh, rect, _roadSegments[i].a, _roadSegments[i].b, 2.25f, new Color32(84, 105, 110, 220));
+                AddWorldLine(vh, rect, _roadSegments[i].a, _roadSegments[i].b, RoadLineWidthPixels, new Color32(148, 170, 172, 235));
             }
 
             if (_routeActive)
             {
                 for (int i = 0; i < _routeSegments.Count; i++)
                 {
-                    AddWorldLine(vh, rect, _routeSegments[i].a, _routeSegments[i].b, 5.5f, new Color32(0, 188, 255, 255));
-                    AddWorldLine(vh, rect, _routeSegments[i].a, _routeSegments[i].b, 2.25f, new Color32(255, 238, 88, 255));
+                    AddWorldLine(vh, rect, _routeSegments[i].a, _routeSegments[i].b, RouteOuterLineWidthPixels, new Color32(0, 186, 255, 255));
+                    AddWorldLine(vh, rect, _routeSegments[i].a, _routeSegments[i].b, RouteInnerLineWidthPixels, new Color32(255, 242, 94, 255));
                 }
 
                 if (_cachedRoute.waypoints.Count > 0)
                 {
-                    AddCircle(vh, rect, WorldToMap(_cachedRoute.waypoints[_cachedRoute.waypoints.Count - 1]), 8f, new Color32(255, 108, 92, 255));
+                    AddCircle(vh, rect, WorldToMap(_cachedRoute.waypoints[_cachedRoute.waypoints.Count - 1]), 10f, new Color32(255, 105, 90, 255));
                 }
             }
 
@@ -85,17 +121,25 @@ namespace LWS.InterstateHauler
         private void RebuildRoadCache(LwsRoadGraph graph)
         {
             _roadSegments.Clear();
+            RoadCount = 0;
+            EdgeCount = 0;
+            CenterlineSampleCount = 0;
             if (graph?.edges == null)
             {
                 return;
             }
 
+            var roadIds = new HashSet<string>();
             foreach (LwsRoadEdge edge in graph.edges)
             {
                 if (edge?.samples == null || edge.samples.Count < 2)
                 {
                     continue;
                 }
+
+                EdgeCount++;
+                CenterlineSampleCount += edge.samples.Count;
+                roadIds.Add(string.IsNullOrWhiteSpace(edge.roadId) ? edge.edgeId : edge.roadId);
 
                 for (int i = 1; i < edge.samples.Count; i++)
                 {
@@ -107,11 +151,14 @@ namespace LWS.InterstateHauler
                     }
                 }
             }
+
+            RoadCount = roadIds.Count;
         }
 
         private void RebuildRouteCache(LwsRouteResult route)
         {
             _routeSegments.Clear();
+            RoutePointCount = route?.waypoints != null ? route.waypoints.Count : 0;
             if (route?.waypoints == null || route.waypoints.Count < 2)
             {
                 return;
@@ -120,6 +167,66 @@ namespace LWS.InterstateHauler
             for (int i = 1; i < route.waypoints.Count; i++)
             {
                 _routeSegments.Add(new MapSegment(route.waypoints[i - 1], route.waypoints[i]));
+            }
+        }
+
+        private void RefreshDiagnosticCounts()
+        {
+            int visibleRoadSegments = CountVisibleSegments(_roadSegments);
+            int visibleRouteSegments = _routeActive ? CountVisibleSegments(_routeSegments) : 0;
+            BaseRoadVertexCount = visibleRoadSegments * 4;
+            BaseRoadTriangleCount = visibleRoadSegments * 2;
+            RouteVertexCount = visibleRouteSegments * 8;
+            RouteTriangleCount = visibleRouteSegments * 4;
+        }
+
+        private int CountVisibleSegments(List<MapSegment> segments)
+        {
+            int count = 0;
+            for (int i = 0; i < segments.Count; i++)
+            {
+                Vector2 a = WorldToMap(segments[i].a);
+                Vector2 b = WorldToMap(segments[i].b);
+                if (LineIntersectsExpandedViewport(a, b))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private static int BuildGraphSignature(LwsRoadGraph graph)
+        {
+            if (graph?.edges == null)
+            {
+                return 0;
+            }
+
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 31 + graph.edges.Count;
+                for (int i = 0; i < graph.edges.Count; i++)
+                {
+                    LwsRoadEdge edge = graph.edges[i];
+                    hash = hash * 31 + (edge?.samples != null ? edge.samples.Count : 0);
+                }
+
+                return hash;
+            }
+        }
+
+        private static int BuildRouteSignature(LwsRouteResult route)
+        {
+            if (route?.waypoints == null)
+            {
+                return 0;
+            }
+
+            unchecked
+            {
+                return route.waypoints.Count * 31 + (route.succeeded ? 1 : 0);
             }
         }
 
@@ -139,19 +246,19 @@ namespace LWS.InterstateHauler
                 }
 
                 forward.Normalize();
-                float angle = -Mathf.Atan2(forward.x, forward.y) * Mathf.Rad2Deg;
+                float angle = Mathf.Atan2(forward.x, forward.y) * Mathf.Rad2Deg;
                 delta = Quaternion.Euler(0f, 0f, angle) * delta;
             }
 
             float half = _metersVisible * 0.5f;
-            return new Vector2(delta.x / half * 0.5f + 0.5f, delta.y / half * 0.5f + 0.5f);
+            return new Vector2(delta.x / half * 0.5f + 0.5f, delta.y / half * 0.5f + _playerViewportY);
         }
 
         private void AddWorldLine(VertexHelper vh, Rect rect, Vector3 a, Vector3 b, float thicknessPixels, Color32 color)
         {
             Vector2 pa = WorldToMap(a);
             Vector2 pb = WorldToMap(b);
-            if (!MaybeVisible(pa) && !MaybeVisible(pb))
+            if (!LineIntersectsExpandedViewport(pa, pb))
             {
                 return;
             }
@@ -159,15 +266,18 @@ namespace LWS.InterstateHauler
             AddLine(vh, rect, pa, pb, thicknessPixels, color);
         }
 
-        private static bool MaybeVisible(Vector2 point)
+        private static bool LineIntersectsExpandedViewport(Vector2 a, Vector2 b)
         {
-            return point.x >= -0.18f && point.x <= 1.18f && point.y >= -0.18f && point.y <= 1.18f;
+            return !(a.x < ExpandedViewportMin && b.x < ExpandedViewportMin) &&
+                   !(a.x > ExpandedViewportMax && b.x > ExpandedViewportMax) &&
+                   !(a.y < ExpandedViewportMin && b.y < ExpandedViewportMin) &&
+                   !(a.y > ExpandedViewportMax && b.y > ExpandedViewportMax);
         }
 
-        private static void AddPlayerMarker(VertexHelper vh, Rect rect)
+        private void AddPlayerMarker(VertexHelper vh, Rect rect)
         {
-            Vector2 center = RectPoint(rect, new Vector2(0.5f, 0.5f));
-            float h = Mathf.Min(rect.width, rect.height) * 0.055f;
+            Vector2 center = RectPoint(rect, new Vector2(0.5f, _playerViewportY));
+            float h = Mathf.Min(rect.width, rect.height) * 0.065f;
             float w = h * 0.7f;
             int start = vh.currentVertCount;
             Color32 color = new Color32(255, 244, 110, 255);

@@ -22,6 +22,10 @@ namespace LWS.InterstateHauler
         private static readonly Color ButtonHoverColor = new Color(0.16f, 0.23f, 0.24f, 1f);
         private static readonly Color TextColor = new Color(0.88f, 0.93f, 0.92f, 1f);
         private static readonly Color MutedTextColor = new Color(0.62f, 0.71f, 0.72f, 1f);
+        private static readonly Vector2 MinimapPanelSize = new Vector2(304f, 304f);
+        private const float MinimapPanelMarginPixels = 28f;
+        private const float MinimapMetersVisible = 2600f;
+        private const float RoadLookupRefreshSeconds = 0.5f;
 
         private LwsDevelopmentUiService _service;
         private LwsServiceRegistry _registry;
@@ -64,6 +68,9 @@ namespace LWS.InterstateHauler
         private CursorLockMode _previousCursorLock;
         private bool _bigMapPausedTime;
         private float _previousTimeScale = 1f;
+        private float _nextRoadLookupTime;
+        private string _cachedRoadDisplayName = "ROAD: UNKNOWN";
+        private string _cachedSpeedLimitText = string.Empty;
         private string _lastActionMessage = "Ready.";
 
         public static LwsDevelopmentUiRoot Instance { get; private set; }
@@ -75,6 +82,7 @@ namespace LWS.InterstateHauler
         public ScrollRect ScrollRect => _scrollRect;
         public LwsSemanticGpsMapGraphic MinimapGraphic => _minimapGraphic;
         public LwsSemanticGpsMapGraphic BigMapGraphic => _bigMapGraphic;
+        public RectTransform MinimapRect => _minimapPanel != null ? _minimapPanel.GetComponent<RectTransform>() : null;
 
         private void Awake()
         {
@@ -259,12 +267,19 @@ namespace LWS.InterstateHauler
 
         private void BuildMinimap()
         {
-            _minimapPanel = CreatePanel(transform, "GPS Minimap", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-396f, -306f), new Vector2(-18f, -18f), new Color(0.02f, 0.03f, 0.032f, 0.92f));
+            _minimapPanel = CreateFixedPanel(
+                transform,
+                "GPS Minimap",
+                new Vector2(1f, 0f),
+                new Vector2(1f, 0f),
+                MinimapPanelSize,
+                new Vector2(-MinimapPanelMarginPixels, MinimapPanelMarginPixels),
+                new Color(0.02f, 0.03f, 0.032f, 0.92f));
             _minimapPanel.AddComponent<RectMask2D>();
-            _minimapGraphic = CreateSemanticMapGraphic(_minimapPanel.transform, "Semantic Road Graph Map", Vector2.zero, Vector2.one, new Vector2(8f, 56f), new Vector2(-8f, -8f));
+            _minimapGraphic = CreateSemanticMapGraphic(_minimapPanel.transform, "Semantic Road Graph Map", Vector2.zero, Vector2.one, new Vector2(8f, 8f), new Vector2(-8f, -46f));
             _minimapGraphic.raycastTarget = false;
             CreateText(_minimapPanel.transform, "GPS Title", "GPS", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(10f, -38f), new Vector2(82f, -8f), 18, FontStyle.Bold, TextAnchor.MiddleLeft);
-            _minimapStatusText = CreateText(_minimapPanel.transform, "GPS Status", "No route", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(78f, -38f), new Vector2(-72f, -8f), 13, FontStyle.Normal, TextAnchor.MiddleLeft);
+            _minimapStatusText = CreateText(_minimapPanel.transform, "GPS Status", "NO ROUTE | ROAD: UNKNOWN", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(64f, -38f), new Vector2(-72f, -8f), 12, FontStyle.Normal, TextAnchor.MiddleLeft);
             CreateButton(_minimapPanel.transform, "Map Button", "MAP", new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-66f, -38f), new Vector2(-8f, -8f), ShowBigMap);
         }
 
@@ -405,7 +420,7 @@ namespace LWS.InterstateHauler
             AddInfo("Input owner", _inputService != null ? $"{_inputService.ActiveOwner} / {_inputService.ActiveSourceId}" : "missing");
             AddInfo("Truck", _truckControlService?.ActiveState.vehicleId ?? "none");
             AddInfo("Route", nav != null && nav.routeActive ? $"{FormatDistance(nav.distanceRemainingMeters)} remaining" : "inactive");
-            AddInfo("Road", nav != null ? $"{nav.currentRoadDisplayName} {ResolveSpeedLimitText()}" : "unknown");
+            AddInfo("Road", $"{ResolveCurrentRoadText()} {ResolveSpeedLimitText()}");
             AddInfo("Weather", _weatherService != null ? _weatherService.CurrentSnapshot.weatherPresetId : "missing");
             AddInfo("Road condition", _roadConditionService != null ? _roadConditionService.CurrentSnapshot.MajorGameplayState : "missing");
             AddInfo("Origin", _originService != null ? $"{_originService.CurrentOriginOffset} v{_originService.OriginVersion}" : "missing");
@@ -508,10 +523,24 @@ namespace LWS.InterstateHauler
         private void BuildGpsTab()
         {
             LwsNavigationRuntimeState state = _navigationService?.RuntimeState;
+            LwsSemanticGpsMapGraphic map = _minimapGraphic;
+            LwsRouteResult route = _navigationService?.CurrentRoute;
+            LwsWorldPositionD playerGlobal = ResolvePlayerGlobalPosition();
             AddInfo("Route", state != null && state.routeActive ? $"{state.routeId} / {FormatDistance(state.distanceRemainingMeters)}" : "inactive");
             AddInfo("Next maneuver", state != null ? $"{LwsNavigationManeuverCatalog.GetDisplayName(state.nextManeuver)} / {FormatDistance(state.distanceToNextManeuverMeters)}" : "--");
             AddInfo("ETA", state != null ? FormatEta(state.estimatedTimeRemainingSeconds) : "--");
-            AddInfo("Current road", state != null ? $"{state.currentRoadDisplayName} {ResolveSpeedLimitText()}" : "--");
+            AddInfo("Current road", $"{ResolveCurrentRoadText()} {ResolveSpeedLimitText()}");
+            AddInfo("Road Graph Bound", map != null && map.GraphBound ? "YES" : "NO");
+            AddInfo("Graph ID", map != null && !string.IsNullOrWhiteSpace(map.GraphId) ? map.GraphId : "--");
+            AddInfo("Road Count", map != null ? map.RoadCount.ToString() : "0");
+            AddInfo("Edge Count", map != null ? map.EdgeCount.ToString() : "0");
+            AddInfo("Centerline Samples", map != null ? map.CenterlineSampleCount.ToString() : "0");
+            AddInfo("Map Vertices", map != null ? map.MapVertexCount.ToString() : "0");
+            AddInfo("Map Triangles", map != null ? map.MapTriangleCount.ToString() : "0");
+            AddInfo("Route Active", route != null && route.succeeded ? "YES" : "NO");
+            AddInfo("Route Points", map != null ? map.RoutePointCount.ToString() : "0");
+            AddInfo("Player Global Position", playerGlobal.ToString());
+            AddInfo("Map Zoom", $"{MinimapMetersVisible:0} m");
             AddInfo("Voice", _playerSettingsService != null && _playerSettingsService.GpsVoiceGuidanceEnabled ? "enabled" : "disabled");
             AddButtonRow(("START TEST ROUTE", () => RequestTestRoute(false)),
                 ("ROUTE TO MILE 50", () => RequestTestRoute(true)),
@@ -662,17 +691,17 @@ namespace LWS.InterstateHauler
         private void RefreshMaps()
         {
             LwsWorldPositionD playerGlobal = ResolvePlayerGlobalPosition();
+            Vector3 playerGlobalVector = playerGlobal.ToVector3();
             Vector3 playerForward = ResolvePlayerForward();
             LwsRoadGraph graph = _roadGraphService?.ActiveGraph;
             LwsRouteResult route = _navigationService?.CurrentRoute;
-            _minimapGraphic?.SetMapData(graph, route, playerGlobal, playerForward, true, 900f, Vector2.zero);
+            _minimapGraphic?.SetMapData(graph, route, playerGlobal, playerForward, true, MinimapMetersVisible, Vector2.zero, 0.4f);
             _bigMapGraphic?.SetMapData(graph, route, playerGlobal, playerForward, false, _bigMapMetersVisible, _bigMapPanMeters);
+            RefreshRoadLookupCache(playerGlobalVector);
 
             LwsNavigationRuntimeState state = _navigationService?.RuntimeState;
             bool routeActive = state != null && state.routeActive;
-            string status = routeActive
-                ? $"{FormatDistance(state.distanceRemainingMeters)} | {FormatEta(state.estimatedTimeRemainingSeconds)} | {state.currentRoadDisplayName} {ResolveSpeedLimitText()}"
-                : "No active route";
+            string status = ResolveMapStatus(graph, state, routeActive);
             if (_minimapStatusText != null)
             {
                 _minimapStatusText.text = status;
@@ -686,9 +715,31 @@ namespace LWS.InterstateHauler
             if (_bigMapDetailText != null)
             {
                 _bigMapDetailText.text = routeActive
-                    ? $"Next: {state.nextInstructionText}\nManeuver: {LwsNavigationManeuverCatalog.GetDisplayName(state.nextManeuver)}\nDistance to maneuver: {FormatDistance(state.distanceToNextManeuverMeters)}\nRemaining: {FormatDistance(state.distanceRemainingMeters)}\nETA: {FormatEta(state.estimatedTimeRemainingSeconds)}\nRoad: {state.currentRoadDisplayName}\nSpeed limit: {ResolveSpeedLimitText()}"
-                    : $"No route active.\nGraph: {(graph != null ? graph.graphId : "missing")}\nPlayer global: {playerGlobal}\nZoom: {_bigMapMetersVisible:0} m";
+                    ? $"Next: {state.nextInstructionText}\nManeuver: {LwsNavigationManeuverCatalog.GetDisplayName(state.nextManeuver)}\nDistance to maneuver: {FormatDistance(state.distanceToNextManeuverMeters)}\nRemaining: {FormatDistance(state.distanceRemainingMeters)}\nETA: {FormatEta(state.estimatedTimeRemainingSeconds)}\nRoad: {ResolveCurrentRoadText()}\nSpeed limit: {ResolveSpeedLimitText()}"
+                    : $"No route active.\nGraph: {(graph != null ? graph.graphId : "missing")}\nRoads: {(_bigMapGraphic != null ? _bigMapGraphic.RoadCount : 0)}\nEdges: {(_bigMapGraphic != null ? _bigMapGraphic.EdgeCount : 0)}\nMap triangles: {(_bigMapGraphic != null ? _bigMapGraphic.BaseRoadTriangleCount : 0)}\nPlayer global: {playerGlobal}\nZoom: {_bigMapMetersVisible:0} m";
             }
+        }
+
+        private string ResolveMapStatus(LwsRoadGraph graph, LwsNavigationRuntimeState state, bool routeActive)
+        {
+            if (_roadGraphService == null || _originService == null)
+            {
+                return "GPS MAP UNAVAILABLE";
+            }
+
+            if (graph == null)
+            {
+                return "NO ROAD GRAPH";
+            }
+
+            if (_minimapGraphic != null && _minimapGraphic.GraphBound && _minimapGraphic.BaseRoadTriangleCount <= 0)
+            {
+                return "MAP GEOMETRY EMPTY";
+            }
+
+            return routeActive
+                ? $"{FormatDistance(state.distanceRemainingMeters)} | {FormatEta(state.estimatedTimeRemainingSeconds)} | {ResolveCurrentRoadText()} {ResolveSpeedLimitText()}"
+                : $"NO ROUTE | {ResolveCurrentRoadText()}";
         }
 
         private void ResolveServices()
@@ -937,14 +988,32 @@ namespace LWS.InterstateHauler
 
         private string ResolveSpeedLimitText()
         {
-            if (_roadGraphService == null)
+            return _cachedSpeedLimitText;
+        }
+
+        private string ResolveCurrentRoadText()
+        {
+            return string.IsNullOrWhiteSpace(_cachedRoadDisplayName) ? "ROAD: UNKNOWN" : _cachedRoadDisplayName;
+        }
+
+        private void RefreshRoadLookupCache(Vector3 playerGlobal)
+        {
+            if (Time.unscaledTime < _nextRoadLookupTime)
             {
-                return string.Empty;
+                return;
             }
 
-            return _roadGraphService.TryFindNearestRoad(ResolvePlayerGlobalPosition().ToVector3(), 80f, out LwsRoadLookupResult road)
-                ? $"{road.SpeedLimitMph:0} mph"
-                : string.Empty;
+            _nextRoadLookupTime = Time.unscaledTime + RoadLookupRefreshSeconds;
+            string navigationRoadName = _navigationService?.RuntimeState?.currentRoadDisplayName;
+            _cachedRoadDisplayName = !string.IsNullOrWhiteSpace(navigationRoadName) ? $"ROAD: {navigationRoadName}" : "ROAD: UNKNOWN";
+            _cachedSpeedLimitText = string.Empty;
+
+            if (_roadGraphService != null && _roadGraphService.TryFindNearestRoad(playerGlobal, 120f, out LwsRoadLookupResult road) && road.Found)
+            {
+                string roadName = LwsRoadDisplayNames.GetRoadDisplayName(road.RoadId, road.SegmentId);
+                _cachedRoadDisplayName = string.IsNullOrWhiteSpace(roadName) ? "ROAD: UNKNOWN" : $"ROAD: {roadName}";
+                _cachedSpeedLimitText = road.SpeedLimitMph > 0f ? $"{road.SpeedLimitMph:0} mph" : string.Empty;
+            }
         }
 
         private void HandleKeyboardShortcuts()
@@ -1095,6 +1164,14 @@ namespace LWS.InterstateHauler
             return rect.gameObject;
         }
 
+        private static GameObject CreateFixedPanel(Transform parent, string name, Vector2 anchor, Vector2 pivot, Vector2 size, Vector2 anchoredPosition, Color color)
+        {
+            RectTransform rect = CreateFixedRect(parent, name, anchor, pivot, size, anchoredPosition);
+            Image image = rect.gameObject.AddComponent<Image>();
+            image.color = color;
+            return rect.gameObject;
+        }
+
         private static RectTransform CreateRect(Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax, Vector2 offsetMin, Vector2 offsetMax)
         {
             GameObject go = new GameObject(name, typeof(RectTransform));
@@ -1105,6 +1182,19 @@ namespace LWS.InterstateHauler
             rect.offsetMin = offsetMin;
             rect.offsetMax = offsetMax;
             rect.pivot = new Vector2(0.5f, 0.5f);
+            return rect;
+        }
+
+        private static RectTransform CreateFixedRect(Transform parent, string name, Vector2 anchor, Vector2 pivot, Vector2 size, Vector2 anchoredPosition)
+        {
+            GameObject go = new GameObject(name, typeof(RectTransform));
+            go.transform.SetParent(parent, false);
+            RectTransform rect = go.GetComponent<RectTransform>();
+            rect.anchorMin = anchor;
+            rect.anchorMax = anchor;
+            rect.pivot = pivot;
+            rect.sizeDelta = size;
+            rect.anchoredPosition = anchoredPosition;
             return rect;
         }
 

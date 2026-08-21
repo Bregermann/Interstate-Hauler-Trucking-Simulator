@@ -52,6 +52,7 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsNotNull(service.RuntimeRoot.ScrollRect);
             AssertSemanticMapHasRequiredComponents(service.RuntimeRoot.MinimapGraphic);
             AssertSemanticMapHasRequiredComponents(service.RuntimeRoot.BigMapGraphic);
+            AssertMinimapAnchoredBottomRight(service.RuntimeRoot.MinimapRect);
             Assert.IsFalse(service.IsVisible);
         }
 
@@ -110,14 +111,35 @@ namespace LWS.InterstateHauler.Tests.PlayMode
 
             LwsDevelopmentUiRoot root = uiService.RuntimeRoot;
             originService.UpdatePlayerLocalPosition(LwsFiftyMileHighwayModel.EastboundStartPosition);
-            yield return null;
+            yield return new WaitForSecondsRealtime(0.12f);
+            Assert.IsTrue(root.MinimapGraphic.GraphBound);
+            Assert.Greater(root.MinimapGraphic.RoadCount, 0);
+            Assert.Greater(root.MinimapGraphic.EdgeCount, 0);
+            Assert.Greater(root.MinimapGraphic.CenterlineSampleCount, 0);
+            Assert.Greater(root.MinimapGraphic.BaseRoadVertexCount, 0);
+            Assert.Greater(root.MinimapGraphic.BaseRoadTriangleCount, 0);
+            Assert.Greater(root.BigMapGraphic.BaseRoadVertexCount, 0);
+            Assert.Greater(root.BigMapGraphic.BaseRoadTriangleCount, 0);
             Assert.IsTrue(root.MinimapGraphic.HasRoutePresentation);
+            Assert.Greater(root.MinimapGraphic.RouteTriangleCount, 0);
+
+            navigationService.ClearRoute();
+            yield return new WaitForSecondsRealtime(0.12f);
+            Assert.Greater(root.MinimapGraphic.BaseRoadTriangleCount, 0);
+            Assert.AreEqual(0, root.MinimapGraphic.RouteTriangleCount);
 
             Assert.IsTrue(originService.SetOriginOffsetForValidation(new LwsWorldPositionD(0d, 0d, 5000d), "map test", out _));
             originService.UpdatePlayerLocalPosition(originService.GlobalToLocal(LwsWorldPositionD.FromVector3(LwsFiftyMileHighwayModel.EastboundStartPosition)));
-            yield return null;
+            navigationService.SetDestination(
+                LwsFiftyMileHighwayModel.EastboundDestinationPosition,
+                LwsFiftyMileHighwayModel.EastboundStartPosition,
+                graph);
+            yield return new WaitForSecondsRealtime(0.12f);
 
             Assert.IsTrue(root.MinimapGraphic.HasRoutePresentation);
+            Vector2 playerMap = root.MinimapGraphic.ProjectGlobalPointToMap(LwsFiftyMileHighwayModel.EastboundStartPosition);
+            Assert.AreEqual(0.5f, playerMap.x, 0.0001f);
+            Assert.AreEqual(0.4f, playerMap.y, 0.0001f);
             Assert.AreEqual(1, Object.FindObjectsByType<LwsDevelopmentUiRoot>(FindObjectsSortMode.None).Length);
         }
 
@@ -126,6 +148,18 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsNotNull(mapGraphic);
             Assert.IsNotNull(mapGraphic.GetComponent<RectTransform>());
             Assert.IsNotNull(mapGraphic.GetComponent<CanvasRenderer>());
+        }
+
+        private static void AssertMinimapAnchoredBottomRight(RectTransform minimap)
+        {
+            Assert.IsNotNull(minimap);
+            Assert.AreEqual(new Vector2(1f, 0f), minimap.anchorMin);
+            Assert.AreEqual(new Vector2(1f, 0f), minimap.anchorMax);
+            Assert.AreEqual(new Vector2(1f, 0f), minimap.pivot);
+            Assert.AreEqual(304f, minimap.sizeDelta.x, 0.01f);
+            Assert.AreEqual(304f, minimap.sizeDelta.y, 0.01f);
+            Assert.AreEqual(-28f, minimap.anchoredPosition.x, 0.01f);
+            Assert.AreEqual(28f, minimap.anchoredPosition.y, 0.01f);
         }
     }
 }
