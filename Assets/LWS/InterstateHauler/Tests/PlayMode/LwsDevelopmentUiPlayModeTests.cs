@@ -142,6 +142,55 @@ namespace LWS.InterstateHauler.Tests.PlayMode
         }
 
         [UnityTest]
+        public IEnumerator GpsHudMinimapFollowsCameraPresentationPolicy()
+        {
+            var go = new GameObject("gps-presentation-bootstrap");
+            LwsApplicationBootstrap bootstrap = go.AddComponent<LwsApplicationBootstrap>();
+
+            yield return null;
+
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsDevelopmentUiService uiService));
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsCameraPresentationService cameraPresentationService));
+            uiService.EnsureRuntime();
+            yield return null;
+
+            LwsDevelopmentUiRoot root = uiService.RuntimeRoot;
+            cameraPresentationService.SetCameraMode(LwsVehicleCameraMode.Exterior, "Chase Camera");
+            yield return null;
+            Assert.IsTrue(root.HudMinimapVisible);
+
+            cameraPresentationService.SetCameraMode(LwsVehicleCameraMode.Cockpit, "Cab Camera");
+            yield return null;
+            Assert.IsFalse(root.HudMinimapVisible);
+            Assert.AreEqual(LwsVehicleCameraMode.Cockpit, root.CameraMode);
+
+            uiService.ShowBigMap();
+            yield return null;
+            Assert.IsFalse(root.HudMinimapVisible);
+
+            uiService.HideBigMap();
+            yield return null;
+            Assert.IsFalse(root.HudMinimapVisible);
+
+            cameraPresentationService.SetCameraMode(LwsVehicleCameraMode.Exterior, "Chase Camera");
+            yield return null;
+            Assert.IsTrue(root.HudMinimapVisible);
+
+            cameraPresentationService.SetGpsPresentationPolicy(LwsGpsPresentationPolicy.ForceHudMinimapOff);
+            yield return null;
+            Assert.IsFalse(root.HudMinimapVisible);
+
+            cameraPresentationService.SetGpsPresentationPolicy(LwsGpsPresentationPolicy.ForceHudMinimapOn);
+            yield return null;
+            Assert.IsTrue(root.HudMinimapVisible);
+
+            cameraPresentationService.SetGpsPresentationPolicy(LwsGpsPresentationPolicy.Auto);
+            cameraPresentationService.SetCameraMode(LwsVehicleCameraMode.Cockpit, "Cab Camera");
+            yield return null;
+            Assert.IsFalse(root.HudMinimapVisible);
+        }
+
+        [UnityTest]
         public IEnumerator TransmissionTabCreatesDevelopmentSelectorControlsWithoutController()
         {
             var go = new GameObject("development-ui-transmission-bootstrap");

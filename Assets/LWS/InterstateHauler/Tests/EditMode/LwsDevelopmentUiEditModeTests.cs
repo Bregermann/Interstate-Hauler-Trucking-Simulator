@@ -25,6 +25,9 @@ namespace LWS.InterstateHauler.Tests.EditMode
             Assert.IsTrue(registry.TryGet(out ILwsDevelopmentUiService service));
             Assert.AreEqual("lws.development.ui", service.ServiceId);
             Assert.AreEqual(1, registry.Registrations.Count(r => r.ServiceType == typeof(ILwsDevelopmentUiService)));
+            Assert.IsTrue(registry.TryGet(out ILwsCameraPresentationService cameraPresentationService));
+            Assert.AreEqual("lws.camera.presentation", cameraPresentationService.ServiceId);
+            Assert.AreEqual(1, registry.Registrations.Count(r => r.ServiceType == typeof(ILwsCameraPresentationService)));
         }
 
         [Test]
@@ -185,6 +188,56 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void CameraPresentationPolicyHidesHudMinimapOnlyInCockpitByDefault()
+        {
+            var service = new LwsCameraPresentationService();
+            service.Initialize(new LwsServiceContext(new LwsServiceRegistry()));
+
+            Assert.AreEqual(LwsGpsPresentationPolicy.Auto, service.GpsPresentationPolicy);
+
+            service.SetCameraMode(LwsVehicleCameraMode.Cockpit, "Cab Camera");
+            Assert.IsFalse(service.ShouldShowHudMinimap);
+
+            service.SetCameraMode(LwsVehicleCameraMode.Exterior, "Chase Camera");
+            Assert.IsTrue(service.ShouldShowHudMinimap);
+
+            service.SetGpsPresentationPolicy(LwsGpsPresentationPolicy.ForceHudMinimapOff);
+            Assert.IsFalse(service.ShouldShowHudMinimap);
+
+            service.SetGpsPresentationPolicy(LwsGpsPresentationPolicy.ForceHudMinimapOn);
+            Assert.IsTrue(service.ShouldShowHudMinimap);
+        }
+
+        [Test]
+        public void CabGpsBindsWorldSpaceCanvasToStableGpsAnchorAndSemanticMap()
+        {
+            var truck = new GameObject("cab-gps-truck");
+            try
+            {
+                var cab = new GameObject("Cab");
+                cab.transform.SetParent(truck.transform, false);
+                LwsCabAccessoryAnchorRegistry anchors = truck.AddComponent<LwsCabAccessoryAnchorRegistry>();
+                anchors.EnsureInitialized();
+
+                LwsCabGpsController gps = truck.AddComponent<LwsCabGpsController>();
+                gps.BindPhysicalScreen();
+
+                Assert.IsTrue(gps.PhysicalGpsBound);
+                Assert.IsNotNull(gps.PhysicalCanvas);
+                Assert.AreEqual(RenderMode.WorldSpace, gps.PhysicalCanvas.renderMode);
+                Assert.IsNotNull(gps.GpsMount);
+                Assert.AreEqual(LwsCabGpsController.DefaultGpsAnchorId, gps.GpsMount.name);
+                Assert.AreSame(gps.GpsMount, gps.PhysicalCanvas.transform.parent);
+                Assert.IsNotNull(gps.SemanticMapGraphic);
+                Assert.IsNotNull(gps.SemanticMapGraphic.GetComponent<CanvasRenderer>());
+            }
+            finally
+            {
+                Object.DestroyImmediate(truck);
+            }
+        }
+
+        [Test]
         public void DevelopmentUiSourceDefinesVisibleRuntimeHostAndDevButton()
         {
             string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
@@ -254,6 +307,7 @@ namespace LWS.InterstateHauler.Tests.EditMode
         {
             string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
             string map = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsSemanticGpsMapGraphic.cs");
+            string cabGps = File.ReadAllText("Assets/LWS/InterstateHauler/Navigation/LwsCabGpsController.cs");
 
             StringAssert.Contains("LocalToGlobal", root);
             StringAssert.Contains("ILwsNavigationService", root);
@@ -268,6 +322,14 @@ namespace LWS.InterstateHauler.Tests.EditMode
             StringAssert.Contains("AddComponent<CanvasRenderer>()", root);
             StringAssert.Contains("LineIntersectsExpandedViewport", map);
             StringAssert.Contains("RefreshRoadLookupCache", root);
+            StringAssert.Contains("LwsSemanticGpsMapGraphic", cabGps);
+            StringAssert.Contains("ILwsRoadGraphService", cabGps);
+            StringAssert.Contains("SetMapData", cabGps);
+            StringAssert.Contains("RenderMode.WorldSpace", cabGps);
+            StringAssert.Contains(LwsCabGpsController.DefaultGpsAnchorId, cabGps);
+            StringAssert.Contains("ILwsCameraPresentationService", root);
+            StringAssert.Contains("ShouldShowHudMinimap", root);
+            StringAssert.Contains("GpsPresentationPolicy", root);
         }
 
         private static LwsRoadGraph CreateTwoPointRoadGraph()

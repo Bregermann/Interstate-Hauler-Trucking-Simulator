@@ -136,6 +136,12 @@ namespace LWS.InterstateHauler
                 truckControls = truckInstance.AddComponent<LwsTruckControlController>();
             }
 
+            LwsNwhCameraPresentationMonitor cameraMonitor = truckInstance.GetComponent<LwsNwhCameraPresentationMonitor>();
+            if (cameraMonitor == null)
+            {
+                cameraMonitor = truckInstance.AddComponent<LwsNwhCameraPresentationMonitor>();
+            }
+
             LwsTruckDashboardController dashboard = truckInstance.GetComponent<LwsTruckDashboardController>();
             if (dashboard == null)
             {
@@ -158,16 +164,16 @@ namespace LWS.InterstateHauler
                 mirrors.Configure(truckDefinition.DashboardDefinition);
             }
 
-            LwsCabGpsController cabGps = truckInstance.GetComponent<LwsCabGpsController>();
-            if (cabGps == null)
-            {
-                truckInstance.AddComponent<LwsCabGpsController>();
-            }
-
             LwsCabAccessoryAnchorRegistry anchors = truckInstance.GetComponent<LwsCabAccessoryAnchorRegistry>();
             if (anchors == null)
             {
                 anchors = truckInstance.AddComponent<LwsCabAccessoryAnchorRegistry>();
+            }
+
+            LwsCabGpsController cabGps = truckInstance.GetComponent<LwsCabGpsController>();
+            if (cabGps == null)
+            {
+                truckInstance.AddComponent<LwsCabGpsController>();
             }
 
             SpawnedTruck = truckInstance.GetComponent<LwsPlayerTruck>();

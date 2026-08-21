@@ -43,6 +43,7 @@ namespace LWS.InterstateHauler
         private ILwsTruckDashboardService _dashboardService;
         private ILwsWeatherService _weatherService;
         private ILwsGameClockService _gameClockService;
+        private ILwsCameraPresentationService _cameraPresentationService;
         private ILwsRoadConditionService _roadConditionService;
         private ILwsTrafficService _trafficService;
         private ILwsTrafficDemandService _trafficDemandService;
@@ -61,6 +62,7 @@ namespace LWS.InterstateHauler
         private GameObject _bigMapPanel;
         private GameObject _minimapPanel;
         private LwsDevelopmentUiInputBridge _inputBridge;
+        private ILwsCameraPresentationService _subscribedCameraPresentationService;
         private RectTransform _tabList;
         private RectTransform _contentRoot;
         private ScrollRect _scrollRect;
@@ -101,6 +103,10 @@ namespace LWS.InterstateHauler
         public LwsSemanticGpsMapGraphic MinimapGraphic => _minimapGraphic;
         public LwsSemanticGpsMapGraphic BigMapGraphic => _bigMapGraphic;
         public RectTransform MinimapRect => _minimapPanel != null ? _minimapPanel.GetComponent<RectTransform>() : null;
+        public GameObject MinimapPanel => _minimapPanel;
+        public bool HudMinimapVisible => _minimapPanel != null && _minimapPanel.activeSelf;
+        public LwsVehicleCameraMode CameraMode => _cameraPresentationService != null ? _cameraPresentationService.CurrentMode : LwsVehicleCameraMode.Unknown;
+        public LwsGpsPresentationPolicy GpsPresentationPolicy => _cameraPresentationService != null ? _cameraPresentationService.GpsPresentationPolicy : LwsGpsPresentationPolicy.Auto;
 
         private void Awake()
         {
@@ -122,6 +128,7 @@ namespace LWS.InterstateHauler
                 Instance = null;
             }
 
+            UnsubscribeCameraPresentationService();
             RestoreCursorIfClear();
             RestoreTimeScaleIfPaused();
         }
@@ -129,6 +136,7 @@ namespace LWS.InterstateHauler
         private void Update()
         {
             ResolveServices();
+            ApplyGpsPresentationVisibility();
             UpdateNavigationPose();
             UpdateFps();
             HandleKeyboardShortcuts();
@@ -230,7 +238,7 @@ namespace LWS.InterstateHauler
 
             _bigMapPanel.SetActive(true);
             _bigMapPanel.transform.SetAsLastSibling();
-            _minimapPanel.SetActive(false);
+            ApplyGpsPresentationVisibility();
             UpdateDevButtonVisibility();
             PauseForBigMap();
             CaptureCursor();
@@ -244,11 +252,7 @@ namespace LWS.InterstateHauler
                 _bigMapPanel.SetActive(false);
             }
 
-            if (_minimapPanel != null)
-            {
-                _minimapPanel.SetActive(true);
-            }
-
+            ApplyGpsPresentationVisibility();
             UpdateDevButtonVisibility();
             RestoreTimeScaleIfPaused();
             RestoreCursorIfClear();
@@ -314,6 +318,7 @@ namespace LWS.InterstateHauler
             BuildControlCenter();
             _controlCenterPanel.SetActive(false);
             _bigMapPanel.SetActive(false);
+            ApplyGpsPresentationVisibility();
             UpdateDevButtonVisibility();
         }
 
@@ -583,6 +588,8 @@ namespace LWS.InterstateHauler
             AddInfo("Input owner", _inputService != null ? $"{_inputService.ActiveOwner} / {_inputService.ActiveSourceId}" : "missing");
             AddInfo("Truck", _truckControlService?.ActiveState.vehicleId ?? "none");
             AddInfo("Transmission", FormatTransmissionOverview(transmission));
+            AddInfo("Camera", FormatCameraMode());
+            AddInfo("HUD Minimap", HudMinimapVisible ? "VISIBLE" : "HIDDEN");
             AddInfo("Gear", transmission != null ? transmission.DisplayState.displayLabel : "--");
             AddInfo("Route", nav != null && nav.routeActive ? $"{FormatDistance(nav.distanceRemainingMeters)} remaining" : "inactive");
             AddInfo("Road", $"{ResolveCurrentRoadText()} {ResolveSpeedLimitText()}");
@@ -720,10 +727,15 @@ namespace LWS.InterstateHauler
             LwsRouteResult route = _navigationService?.CurrentRoute;
             LwsWorldPositionD playerGlobal = ResolvePlayerGlobalPosition();
             LwsEndlessStreamingHighwayController endless = FindFirstObjectByType<LwsEndlessStreamingHighwayController>();
+            LwsCabGpsController cabGps = FindFirstObjectByType<LwsCabGpsController>();
             AddInfo("Route", state != null && state.routeActive ? $"{state.routeId} / {FormatDistance(state.distanceRemainingMeters)}" : "inactive");
             AddInfo("Next maneuver", state != null ? $"{LwsNavigationManeuverCatalog.GetDisplayName(state.nextManeuver)} / {FormatDistance(state.distanceToNextManeuverMeters)}" : "--");
             AddInfo("ETA", state != null ? FormatEta(state.estimatedTimeRemainingSeconds) : "--");
             AddInfo("Current road", $"{ResolveCurrentRoadText()} {ResolveSpeedLimitText()}");
+            AddInfo("Camera Mode", FormatCameraMode());
+            AddInfo("Cab GPS", cabGps != null && cabGps.PhysicalGpsBound ? "ACTIVE" : "MISSING");
+            AddInfo("HUD Minimap", HudMinimapVisible ? "VISIBLE" : "HIDDEN");
+            AddInfo("Presentation Policy", GpsPresentationPolicy.ToString());
             AddInfo("Road Graph Bound", map != null && map.GraphBound ? "YES" : "NO");
             AddInfo("Graph ID", map != null && !string.IsNullOrWhiteSpace(map.GraphId) ? map.GraphId : "--");
             AddInfo("Road Count", map != null ? map.RoadCount.ToString() : "0");
@@ -753,6 +765,10 @@ namespace LWS.InterstateHauler
                         _lastActionMessage = $"GPS voice {(_playerSettingsService.GpsVoiceGuidanceEnabled ? "enabled" : "disabled")}.";
                     }
                 }));
+            AddButtonRow(("AUTO", () => SetGpsPresentationPolicy(LwsGpsPresentationPolicy.Auto)),
+                ("FORCE HUD ON", () => SetGpsPresentationPolicy(LwsGpsPresentationPolicy.ForceHudMinimapOn)),
+                ("FORCE HUD OFF", () => SetGpsPresentationPolicy(LwsGpsPresentationPolicy.ForceHudMinimapOff)),
+                ("FORCE CAB GPS ON", () => SetGpsPresentationPolicy(LwsGpsPresentationPolicy.ForceCabGpsOn)));
             if (endless != null && endless.EndlessValidationEnabled)
             {
                 AddButtonRow(("10 MI AHEAD", () => RequestEndlessRoute(endless, 10f)),
@@ -1000,6 +1016,11 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _dashboardService);
             _registry.TryGet(out _weatherService);
             _registry.TryGet(out _gameClockService);
+            if (_registry.TryGet(out ILwsCameraPresentationService cameraPresentationService))
+            {
+                BindCameraPresentationService(cameraPresentationService);
+            }
+
             _registry.TryGet(out _roadConditionService);
             _registry.TryGet(out _trafficService);
             _registry.TryGet(out _trafficDemandService);
@@ -1007,6 +1028,90 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _wheelCalibrationService);
             _registry.TryGet(out _forceFeedbackService);
             _registry.TryGet(out _playerVehicleService);
+        }
+
+        private void BindCameraPresentationService(ILwsCameraPresentationService service)
+        {
+            if (_subscribedCameraPresentationService == service)
+            {
+                _cameraPresentationService = service;
+                return;
+            }
+
+            UnsubscribeCameraPresentationService();
+            _cameraPresentationService = service;
+            _subscribedCameraPresentationService = service;
+            if (_subscribedCameraPresentationService != null)
+            {
+                _subscribedCameraPresentationService.CameraModeChanged += OnCameraModeChanged;
+                _subscribedCameraPresentationService.GpsPresentationPolicyChanged += OnGpsPresentationPolicyChanged;
+            }
+
+            ApplyGpsPresentationVisibility();
+        }
+
+        private void UnsubscribeCameraPresentationService()
+        {
+            if (_subscribedCameraPresentationService == null)
+            {
+                return;
+            }
+
+            _subscribedCameraPresentationService.CameraModeChanged -= OnCameraModeChanged;
+            _subscribedCameraPresentationService.GpsPresentationPolicyChanged -= OnGpsPresentationPolicyChanged;
+            _subscribedCameraPresentationService = null;
+        }
+
+        private void OnCameraModeChanged(LwsVehicleCameraMode mode)
+        {
+            ApplyGpsPresentationVisibility();
+        }
+
+        private void OnGpsPresentationPolicyChanged(LwsGpsPresentationPolicy policy)
+        {
+            ApplyGpsPresentationVisibility();
+        }
+
+        private void ApplyGpsPresentationVisibility()
+        {
+            if (_minimapPanel == null)
+            {
+                return;
+            }
+
+            bool showHudMinimap = !BigMapVisible &&
+                                  (_cameraPresentationService == null || _cameraPresentationService.ShouldShowHudMinimap);
+            if (_minimapPanel.activeSelf != showHudMinimap)
+            {
+                _minimapPanel.SetActive(showHudMinimap);
+            }
+        }
+
+        private void SetGpsPresentationPolicy(LwsGpsPresentationPolicy policy)
+        {
+            _cameraPresentationService?.SetGpsPresentationPolicy(policy);
+            if (policy == LwsGpsPresentationPolicy.ForceCabGpsOn)
+            {
+                foreach (LwsCabGpsController cabGps in FindObjectsByType<LwsCabGpsController>(FindObjectsSortMode.None))
+                {
+                    cabGps.BindPhysicalScreen();
+                }
+            }
+
+            ApplyGpsPresentationVisibility();
+            _lastActionMessage = $"GPS presentation policy: {policy}.";
+        }
+
+        private string FormatCameraMode()
+        {
+            if (_cameraPresentationService == null)
+            {
+                return "Unknown";
+            }
+
+            return string.IsNullOrWhiteSpace(_cameraPresentationService.CurrentCameraName)
+                ? _cameraPresentationService.CurrentMode.ToString()
+                : $"{_cameraPresentationService.CurrentMode} / {_cameraPresentationService.CurrentCameraName}";
         }
 
         private void UpdateNavigationPose()

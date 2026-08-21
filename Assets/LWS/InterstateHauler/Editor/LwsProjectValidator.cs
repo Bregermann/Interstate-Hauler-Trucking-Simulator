@@ -215,6 +215,7 @@ namespace LWS.InterstateHauler.Editor
         private const string DevelopmentUiServicePath = "Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs";
         private const string DevelopmentUiRootPath = "Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs";
         private const string SemanticGpsMapGraphicPath = "Assets/LWS/InterstateHauler/UI/Development/LwsSemanticGpsMapGraphic.cs";
+        private const string CameraPresentationPath = "Assets/LWS/InterstateHauler/Vehicles/Cameras/LwsCameraPresentation.cs";
         private const string DevelopmentControlCenterDocsPath = "Documentation/InterstateHauler/015B_Development_Control_Center.md";
         private const string GpsMinimapMapDocsPath = "Documentation/InterstateHauler/015B_GPS_Minimap_and_Map.md";
         private const string DevelopmentUiTestMatrixPath = "Documentation/InterstateHauler/015B_UI_Test_Matrix.md";
@@ -2119,7 +2120,9 @@ namespace LWS.InterstateHauler.Editor
                                     voiceText.Contains("!_settingsService.GpsVoiceGuidanceEnabled");
             bool physicalDisplay = cabText.Contains("IH Physical Cab GPS Screen") &&
                                    cabText.Contains("RenderMode.WorldSpace") &&
-                                   cabText.Contains("LwsGpsMapGraphic") &&
+                                   cabText.Contains("LwsSemanticGpsMapGraphic") &&
+                                   cabText.Contains("DefaultGpsAnchorId") &&
+                                   cabText.Contains("IH_CabAnchor_GpsMount") &&
                                    cabText.Contains("AudioSource");
             bool routeGraphic = mapText.Contains("SetRoute") &&
                                 mapText.Contains("VertexHelper") &&
@@ -3200,7 +3203,8 @@ namespace LWS.InterstateHauler.Editor
                 DevelopmentUiTypesPath,
                 DevelopmentUiServicePath,
                 DevelopmentUiRootPath,
-                SemanticGpsMapGraphicPath
+                SemanticGpsMapGraphicPath,
+                CameraPresentationPath
             };
 
             var missingFiles = requiredFiles.Where(path => !File.Exists(path)).ToList();
@@ -3237,6 +3241,8 @@ namespace LWS.InterstateHauler.Editor
 
             string root = File.Exists(DevelopmentUiRootPath) ? File.ReadAllText(DevelopmentUiRootPath) : string.Empty;
             string map = File.Exists(SemanticGpsMapGraphicPath) ? File.ReadAllText(SemanticGpsMapGraphicPath) : string.Empty;
+            string cab = File.Exists(CabGpsControllerPath) ? File.ReadAllText(CabGpsControllerPath) : string.Empty;
+            string cameraPresentation = File.Exists(CameraPresentationPath) ? File.ReadAllText(CameraPresentationPath) : string.Empty;
             bool overlayControls = root.Contains("RenderMode.ScreenSpaceOverlay") &&
                                    root.Contains("CanvasScaler.ScaleMode.ScaleWithScreenSize") &&
                                    root.Contains("ScrollRect") &&
@@ -3278,13 +3284,48 @@ namespace LWS.InterstateHauler.Editor
                                        root.Contains("ILwsNavigationService") &&
                                        root.Contains("ILwsRoadGraphService") &&
                                        root.Contains("LocalToGlobal") &&
-                                       root.Contains("CurrentRoute");
+                                       root.Contains("CurrentRoute") &&
+                                       cab.Contains("LwsSemanticGpsMapGraphic") &&
+                                       cab.Contains("ILwsRoadGraphService") &&
+                                       cab.Contains("SetMapData");
             report.Add(
                 mapUsesSemanticData ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Semantic GPS Map",
                 mapUsesSemanticData
-                    ? "Minimap/full map consume LWS navigation route, road graph, and floating-origin LocalToGlobal conversion instead of a 3D map camera."
+                    ? "Cab GPS, minimap, and full map consume LWS navigation route, road graph, and floating-origin LocalToGlobal conversion instead of a 3D map camera."
                     : "GPS map is missing semantic road graph, route, navigation, or origin-aware coordinate usage.");
+
+            bool cockpitGpsPolicy = cameraPresentation.Contains("ILwsCameraPresentationService") &&
+                                    cameraPresentation.Contains("LwsVehicleCameraMode.Cockpit") &&
+                                    cameraPresentation.Contains("LwsGpsPresentationPolicy.Auto") &&
+                                    cameraPresentation.Contains("ShouldShowHudMinimap") &&
+                                    cameraPresentation.Contains("CameraInsideVehicle") &&
+                                    root.Contains("ApplyGpsPresentationVisibility") &&
+                                    root.Contains("ForceHudMinimapOn") &&
+                                    root.Contains("ForceHudMinimapOff") &&
+                                    root.Contains("ForceCabGpsOn") &&
+                                    root.Contains("new Vector2(1f, 0f)") &&
+                                    cab.Contains("RenderMode.WorldSpace") &&
+                                    cab.Contains("DefaultGpsAnchorId") &&
+                                    cab.Contains("IH_CabAnchor_GpsMount");
+            report.Add(
+                cockpitGpsPolicy ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Cockpit GPS Presentation Policy",
+                cockpitGpsPolicy
+                    ? "Camera presentation service uses NWH cockpit metadata to hide the bottom-right HUD minimap in cockpit, show it outside, and keep a world-space cab GPS mounted to the stable GPS anchor."
+                    : "Cockpit GPS presentation policy, bottom-right HUD minimap switching, or stable world-space cab GPS mount is incomplete.");
+
+            bool singleNavigationAuthority = !root.Contains("new LwsNavigationService") &&
+                                             !cab.Contains("new LwsNavigationService") &&
+                                             !cameraPresentation.Contains("new LwsNavigationService") &&
+                                             root.Contains("ILwsNavigationService") &&
+                                             cab.Contains("ILwsNavigationService");
+            report.Add(
+                singleNavigationAuthority ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "GPS Single Navigation Authority",
+                singleNavigationAuthority
+                    ? "Cab GPS, HUD minimap, and full map are presentations of the existing ILwsNavigationService state."
+                    : "GPS presentation appears to create or bypass the project navigation authority.");
 
             var legacyVisible = LegacyDebugPanelPaths
                 .Where(File.Exists)
