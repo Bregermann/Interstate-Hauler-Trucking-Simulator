@@ -51,6 +51,7 @@ namespace LWS.InterstateHauler
         private ILwsWheelCalibrationService _wheelCalibrationService;
         private ILwsForceFeedbackService _forceFeedbackService;
         private ILwsPlayerVehicleService _playerVehicleService;
+        private ILwsSaveService _saveService;
 
         private Canvas _canvas;
         private CanvasScaler _canvasScaler;
@@ -559,6 +560,9 @@ namespace LWS.InterstateHauler
                 case LwsDevelopmentUiTab.FiftyMileTest:
                     BuildTabSafely("50-Mile Test", BuildFiftyMileTab);
                     break;
+                case LwsDevelopmentUiTab.Persistence:
+                    BuildTabSafely("Save / Persistence", BuildPersistenceTab);
+                    break;
                 case LwsDevelopmentUiTab.Performance:
                     BuildTabSafely("Performance", BuildPerformanceTab);
                     break;
@@ -937,6 +941,45 @@ namespace LWS.InterstateHauler
             }));
         }
 
+        private void BuildPersistenceTab()
+        {
+            if (_saveService == null)
+            {
+                AddInfo("Save service", "missing");
+                return;
+            }
+
+            LwsSaveDiagnostics diagnostics = _saveService.Diagnostics;
+            AddInfo("Pixel Crushers available", diagnostics.pixelCrushersAvailable ? "YES" : "NO");
+            AddInfo("Pixel Crushers version", diagnostics.pixelCrushersVersion);
+            AddInfo("LWS adapter", diagnostics.adapterStatus);
+            AddInfo("Storage", diagnostics.storageStatus);
+            AddInfo("Providers", $"{_saveService.Participants.Count}");
+            AddInfo("Global player position", _originService != null ? _originService.PlayerGlobalPosition.ToString() : "missing");
+            AddInfo("Clock", _gameClockService != null ? $"{_gameClockService.CurrentSnapshot.DateText} {_gameClockService.CurrentSnapshot.ClockText}" : "missing");
+            AddInfo("Weather", _weatherService != null ? _weatherService.CurrentSnapshot.weatherPresetId : "missing");
+            AddInfo("Last save", diagnostics.LastSaveMessage);
+            AddInfo("Last load", diagnostics.LastLoadMessage);
+            AddInfo("Last vendor error", diagnostics.LastVendorError);
+            AddInfo("Validation variable", diagnostics.validationVariableRoundTripped ? "ROUNDTRIP PASS" : "not round-tripped");
+            AddButtonRow(("SAVE TEST STATE", () =>
+                {
+                    LwsSaveOperationResult result = _saveService.SaveTestState();
+                    _lastActionMessage = result.Message;
+                }),
+                ("LOAD TEST STATE", () =>
+                {
+                    LwsSaveOperationResult result = _saveService.LoadTestState();
+                    _lastActionMessage = result.Message;
+                }));
+            AddButtonRow(("PRINT SAVE DIAGNOSTICS", () =>
+            {
+                string report = _saveService.BuildDiagnosticsReport();
+                Debug.Log(report);
+                _lastActionMessage = "Save diagnostics printed to Console.";
+            }));
+        }
+
         private void BuildPerformanceTab()
         {
             AddInfo("FPS", _fpsSmoothed > 0f ? _fpsSmoothed.ToString("0.0") : "--");
@@ -1047,6 +1090,7 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _wheelCalibrationService);
             _registry.TryGet(out _forceFeedbackService);
             _registry.TryGet(out _playerVehicleService);
+            _registry.TryGet(out _saveService);
         }
 
         private void BindCameraPresentationService(ILwsCameraPresentationService service)

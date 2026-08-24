@@ -17,6 +17,7 @@ namespace LWS.InterstateHauler
         Streaming,
         FloatingOrigin,
         FiftyMileTest,
+        Persistence,
         Performance,
         Systems
     }
@@ -50,6 +51,7 @@ namespace LWS.InterstateHauler
             new LwsDevelopmentUiTabDefinition(LwsDevelopmentUiTab.Streaming, "streaming", "Streaming"),
             new LwsDevelopmentUiTabDefinition(LwsDevelopmentUiTab.FloatingOrigin, "floating-origin", "Floating Origin"),
             new LwsDevelopmentUiTabDefinition(LwsDevelopmentUiTab.FiftyMileTest, "fifty-mile-test", "50-Mile Test"),
+            new LwsDevelopmentUiTabDefinition(LwsDevelopmentUiTab.Persistence, "persistence", "Save / Persistence"),
             new LwsDevelopmentUiTabDefinition(LwsDevelopmentUiTab.Performance, "performance", "Performance"),
             new LwsDevelopmentUiTabDefinition(LwsDevelopmentUiTab.Systems, "systems", "Systems")
         };

@@ -228,6 +228,16 @@ namespace LWS.InterstateHauler.Editor
         private const string Stabilization002DocsPath = "Documentation/InterstateHauler/Stabilization_002_Highway_Baseline.md";
         private const string HighwayCrossSectionDocsPath = "Documentation/InterstateHauler/Roads/Highway_Cross_Section_Profile.md";
         private const string UtsTrafficLightAuditDocsPath = "Documentation/InterstateHauler/Traffic/UTS_Traffic_Light_API_Audit.md";
+        private const string PixelCrushersSaveSystemPath = "Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/SaveSystem.cs";
+        private const string PixelCrushersSaverPath = "Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/Savers/Saver.cs";
+        private const string PixelCrushersDiskStorerPath = "Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/Storers/DiskSavedGameDataStorer.cs";
+        private const string PixelCrushersDialogueSaverPath = "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Save System/DialogueSystemSaver.cs";
+        private const string LwsSaveArchitecturePath = "Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs";
+        private const string PixelCrushersSaveArchitectureDocsPath = "Documentation/InterstateHauler/Persistence/016_Pixel_Crushers_Save_Architecture.md";
+        private const string PixelCrushersApiMatrixPath = "Documentation/InterstateHauler/Persistence/016_PixelCrushers_API_Matrix.md";
+        private const string LwsSaveProviderMatrixPath = "Documentation/InterstateHauler/Persistence/016_LWS_Save_Provider_Matrix.md";
+        private const string SaveTestMatrixPath = "Documentation/InterstateHauler/Persistence/016_Save_Test_Matrix.md";
+        private const string Prompt017SaveHandoffPath = "Documentation/InterstateHauler/Persistence/016_Prompt017_Handoff.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -341,6 +351,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateServiceRegistration(report);
             ValidateVendorManagersInProjectScenes(report);
             ValidateSaveParticipants(report);
+            ValidatePixelCrushersSaveArchitecture(report);
             ValidateRoadGraphData(report);
             ValidateProjectOwnership(report);
             ValidateRenderingFoundation(report);
@@ -503,6 +514,91 @@ namespace LWS.InterstateHauler.Editor
                 "Save Participants",
                 result.Succeeded ? $"Save participant IDs are unique. Count: {saveService.Participants.Count}" : result.Message);
             registry.ShutdownAll();
+        }
+
+        private static void ValidatePixelCrushersSaveArchitecture(LwsProjectValidationReport report)
+        {
+            bool saveSystemExists = File.Exists(PixelCrushersSaveSystemPath);
+            bool saverExists = File.Exists(PixelCrushersSaverPath);
+            bool diskStorerExists = File.Exists(PixelCrushersDiskStorerPath);
+            bool dialogueSaverExists = File.Exists(PixelCrushersDialogueSaverPath);
+            report.Add(
+                saveSystemExists && saverExists && diskStorerExists ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Pixel Crushers Save System",
+                saveSystemExists && saverExists && diskStorerExists
+                    ? "PixelCrushers.SaveSystem, Saver, and DiskSavedGameDataStorer are installed."
+                    : "Pixel Crushers Save System runtime files are missing.");
+            report.Add(
+                dialogueSaverExists ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Pixel Crushers Dialogue Save Integration",
+                dialogueSaverExists
+                    ? "DialogueSystemSaver is installed for Dialogue System coexistence."
+                    : "DialogueSystemSaver was not found.");
+
+            string saveText = File.Exists(LwsSaveArchitecturePath) ? File.ReadAllText(LwsSaveArchitecturePath) : string.Empty;
+            bool facade = saveText.Contains("interface ILwsSaveService") &&
+                          saveText.Contains("class LwsSaveService") &&
+                          saveText.Contains("LwsPixelCrushersSaveAdapter");
+            bool storage = saveText.Contains("interface ILwsSaveStorage") &&
+                           saveText.Contains("class LwsPcSaveStorage") &&
+                           saveText.Contains("DiskSavedGameDataStorer");
+            bool providers = saveText.Contains("LwsGlobalPositionSaveParticipant") &&
+                             saveText.Contains("LwsGameClockSaveParticipant") &&
+                             saveText.Contains("LwsWeatherSaveParticipant") &&
+                             saveText.Contains("LwsValidationSaveParticipant");
+            bool globalDoubles = saveText.Contains("double globalX") &&
+                                 saveText.Contains("double globalY") &&
+                                 saveText.Contains("double globalZ") &&
+                                 saveText.Contains("PlayerGlobalPosition");
+            bool noDirectFileWrites = !saveText.Contains("File.WriteAllText") &&
+                                      !saveText.Contains("File.WriteAllBytes") &&
+                                      !saveText.Contains("FileStream") &&
+                                      !saveText.Contains("StreamWriter") &&
+                                      !saveText.Contains("StreamReader");
+            bool devUi = File.Exists(DevelopmentUiTypesPath) &&
+                         File.ReadAllText(DevelopmentUiTypesPath).Contains("Persistence") &&
+                         File.Exists(DevelopmentUiRootPath) &&
+                         File.ReadAllText(DevelopmentUiRootPath).Contains("SAVE TEST STATE") &&
+                         File.ReadAllText(DevelopmentUiRootPath).Contains("LOAD TEST STATE");
+
+            report.Add(
+                facade ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "LWS Save Root",
+                facade ? "ILwsSaveService routes save/load through LwsPixelCrushersSaveAdapter." : "LWS save facade or Pixel Crushers adapter is missing.");
+            report.Add(
+                storage ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "LWS Save Storage Seam",
+                storage ? "LwsPcSaveStorage routes PC/Windows saves through Pixel Crushers DiskSavedGameDataStorer." : "LWS save storage seam is missing.");
+            report.Add(
+                providers ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "LWS Save Providers",
+                providers ? "Global position, game clock, weather, and validation providers are registered." : "Prompt 016 semantic save providers are missing.");
+            report.Add(
+                globalDoubles ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Global Position Save Precision",
+                globalDoubles ? "Player location payload stores global X/Y/Z as doubles from ILwsWorldOriginService." : "Global position payload does not prove double-precision origin state.");
+            report.Add(
+                noDirectFileWrites ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Save File Ownership",
+                noDirectFileWrites ? "LWS Prompt 016 save code contains no direct platform file writes." : "LWS save code contains direct file IO and must route through Pixel Crushers/storage seam.");
+            report.Add(
+                devUi ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Save Development UI",
+                devUi ? "Development control center exposes Save / Persistence proof controls." : "Save / Persistence development controls were not found.");
+
+            string[] docs =
+            {
+                PixelCrushersSaveArchitectureDocsPath,
+                PixelCrushersApiMatrixPath,
+                LwsSaveProviderMatrixPath,
+                SaveTestMatrixPath,
+                Prompt017SaveHandoffPath
+            };
+            bool docsPresent = docs.All(File.Exists);
+            report.Add(
+                docsPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Prompt 016 Documentation",
+                docsPresent ? "Prompt 016 persistence docs and handoff exist." : "One or more Prompt 016 persistence documentation files are missing.");
         }
 
         private static void ValidateRoadGraphData(LwsProjectValidationReport report)
