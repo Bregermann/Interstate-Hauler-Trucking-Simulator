@@ -141,5 +141,38 @@ namespace LWS.InterstateHauler.Tests.EditMode
             StringAssert.DoesNotContain("UTS", source);
             StringAssert.DoesNotContain("Weatherade", source);
         }
+
+        [Test]
+        public void WeatherMakerAdapterContainsGameplayPresentationStabilizationHooks()
+        {
+            string source = File.ReadAllText("Assets/LWS/InterstateHauler/Weather/LwsWeatherMakerAdapter.cs");
+
+            StringAssert.Contains("ILwsCameraPresentationService", source);
+            StringAssert.Contains("PrecipitationManagerTypeName", source);
+            StringAssert.Contains("FullScreenCloudsTypeName", source);
+            StringAssert.Contains("FullScreenFogTypeName", source);
+            StringAssert.Contains("ApplySemanticWeatherToWeatherMakerRuntime", source);
+            StringAssert.Contains("SetTimeScale(0f)", source);
+        }
+
+        [Test]
+        public void DevelopmentWeatherTabExposesVisibleRuntimeDiagnosticsAndInstantApply()
+        {
+            string source = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+
+            StringAssert.Contains("Requested LWS Weather", source);
+            StringAssert.Contains("Actual LWS Weather", source);
+            StringAssert.Contains("Weather Maker Runtime", source);
+            StringAssert.Contains("Weather Maker Applied Profile", source);
+            StringAssert.Contains("Precipitation", source);
+            StringAssert.Contains("Cloud Cover", source);
+            StringAssert.Contains("Fog", source);
+            StringAssert.Contains("Game Time", source);
+            StringAssert.Contains("Daylight", source);
+            StringAssert.Contains("Last Apply", source);
+            StringAssert.Contains("Last Error", source);
+            StringAssert.Contains("INSTANT APPLY", source);
+            StringAssert.Contains("HEAVY SNOW", source);
+        }
     }
 }

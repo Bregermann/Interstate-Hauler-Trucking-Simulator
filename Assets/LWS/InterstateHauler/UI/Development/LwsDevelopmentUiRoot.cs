@@ -86,6 +86,7 @@ namespace LWS.InterstateHauler
         private string _cachedRoadDisplayName = "ROAD: UNKNOWN";
         private string _cachedSpeedLimitText = string.Empty;
         private string _lastActionMessage = "Ready.";
+        private bool _weatherInstantApply = true;
 
         public static LwsDevelopmentUiRoot Instance { get; private set; }
         public bool ControlCenterVisible => _controlCenterPanel != null && _controlCenterPanel.activeSelf;
@@ -781,16 +782,34 @@ namespace LWS.InterstateHauler
         {
             LwsWeatherSnapshot weather = _weatherService != null ? _weatherService.CurrentSnapshot : LwsWeatherSnapshot.Clear;
             LwsTrafficDemandSnapshot demand = ResolveTrafficDemandSnapshot(FindFirstObjectByType<LwsUtsHighwayTrafficController>());
+            ILwsWeatherRuntimeAdapter adapter = _weatherService != null ? _weatherService.ActiveAdapter : null;
+            ILwsWeatherRuntimeDiagnostics diagnostics = adapter as ILwsWeatherRuntimeDiagnostics;
             AddInfo("Game Clock", _gameClockService != null ? _gameClockService.CurrentSnapshot.ClockText : "missing");
             AddInfo("Time Scale", _gameClockService != null ? $"{_gameClockService.CurrentSnapshot.timeScale:0.#}x / paused: {_gameClockService.CurrentSnapshot.paused}" : "--");
             AddInfo("Traffic Period", demand.Valid ? demand.TrafficPeriod.ToString() : "--");
-            AddInfo("Preset", weather.weatherPresetId);
-            AddInfo("Weather Time", $"{weather.timeOfDayHours:0.00}h");
-            AddInfo("Conditions", $"{weather.condition}, precip {weather.precipitationIntensity01:0.00}, fog {weather.fogIntensity01:0.00}");
+            AddInfo("Requested LWS Weather", diagnostics != null ? diagnostics.LastRequestedLwsPresetId : _weatherService != null ? _weatherService.LastRequest : "missing");
+            AddInfo("Actual LWS Weather", $"{weather.weatherPresetId} / {weather.condition}");
+            AddInfo("Weather Maker Runtime", diagnostics != null ? $"{diagnostics.RuntimeInstanceName} ({diagnostics.WeatherMakerInstanceCount})" : adapter != null ? "adapter has no diagnostics" : "missing");
+            AddInfo("Weather Maker Applied Profile", diagnostics != null ? diagnostics.LastResolvedWeatherMakerProfile : "--");
+            AddInfo("Precipitation", diagnostics != null ? diagnostics.PrecipitationDiagnostic : $"{weather.precipitationType} {weather.precipitationIntensity01:0.00}");
+            AddInfo("Cloud Cover", diagnostics != null ? diagnostics.CloudCoverDiagnostic : $"{weather.cloudCover01:0.00}");
+            AddInfo("Fog", diagnostics != null ? diagnostics.FogDiagnostic : $"{weather.fogIntensity01:0.00}");
+            AddInfo("Game Time", $"{weather.timeOfDayHours:0.00}h");
+            AddInfo("Daylight", $"{weather.daylight01:0.00} / night: {weather.isNight}");
+            AddInfo("Last Apply", diagnostics != null ? diagnostics.LastApplySummary : _weatherService != null ? _weatherService.LastRequest : "--");
+            AddInfo("Last Error", diagnostics != null && !string.IsNullOrWhiteSpace(diagnostics.LastRuntimeError) ? diagnostics.LastRuntimeError : _weatherService != null ? _weatherService.LastError : "--");
+            AddInfo("Instant Apply", _weatherInstantApply ? "ON" : "OFF");
             AddButtonRow(("CLEAR", () => RequestWeather(LwsWeatherPresetCatalog.ClearId)),
-                ("RAIN", () => RequestWeather(LwsWeatherPresetCatalog.HeavyRainId)),
-                ("SNOW", () => RequestWeather(LwsWeatherPresetCatalog.HeavySnowId)),
-                ("FOG", () => RequestWeather(LwsWeatherPresetCatalog.FogId)));
+                ("PARTLY", () => RequestWeather(LwsWeatherPresetCatalog.PartlyCloudyId)),
+                ("CLOUDY", () => RequestWeather(LwsWeatherPresetCatalog.CloudyId)),
+                ("OVERCAST", () => RequestWeather(LwsWeatherPresetCatalog.OvercastId)));
+            AddButtonRow(("LIGHT RAIN", () => RequestWeather(LwsWeatherPresetCatalog.LightRainId)),
+                ("HEAVY RAIN", () => RequestWeather(LwsWeatherPresetCatalog.HeavyRainId)),
+                ("STORM", () => RequestWeather(LwsWeatherPresetCatalog.ThunderstormId)));
+            AddButtonRow(("FOG", () => RequestWeather(LwsWeatherPresetCatalog.FogId)),
+                ("LIGHT SNOW", () => RequestWeather(LwsWeatherPresetCatalog.LightSnowId)),
+                ("HEAVY SNOW", () => RequestWeather(LwsWeatherPresetCatalog.HeavySnowId)));
+            AddButtonRow((_weatherInstantApply ? "SMOOTH TRANSITIONS" : "INSTANT APPLY", ToggleWeatherInstantApply));
             AddButtonRow(("-1 HOUR", () => AdjustGameClockHours(-1f)),
                 ("+1 HOUR", () => AdjustGameClockHours(1f)),
                 ("6 AM", () => SetWeatherTime(6f)),
@@ -1262,9 +1281,15 @@ namespace LWS.InterstateHauler
         private void RequestWeather(string presetId)
         {
             LwsServiceResult result = _weatherService != null
-                ? _weatherService.RequestWeather(presetId, 8f, false)
+                ? _weatherService.RequestWeather(presetId, _weatherInstantApply ? 0f : 8f, _weatherInstantApply)
                 : LwsServiceResult.Failure("Weather service is missing.");
             _lastActionMessage = result.Message;
+        }
+
+        private void ToggleWeatherInstantApply()
+        {
+            _weatherInstantApply = !_weatherInstantApply;
+            _lastActionMessage = $"Weather instant apply {(_weatherInstantApply ? "enabled" : "disabled")}.";
         }
 
         private void SetWeatherTime(float hours)

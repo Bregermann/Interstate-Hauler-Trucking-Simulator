@@ -18,6 +18,10 @@ namespace LWS.InterstateHauler
         private const string WeatherMakerProfileTypeName = "DigitalRuby.WeatherMaker.WeatherMakerProfileScript";
         private const string WeatherMakerPerformanceProfileTypeName = "DigitalRuby.WeatherMaker.WeatherMakerPerformanceProfileScript";
         private const string DayNightManagerTypeName = "DigitalRuby.WeatherMaker.WeatherMakerDayNightCycleManagerScript";
+        private const string PrecipitationManagerTypeName = "DigitalRuby.WeatherMaker.WeatherMakerPrecipitationManagerScript";
+        private const string PrecipitationTypeName = "DigitalRuby.WeatherMaker.WeatherMakerPrecipitationType";
+        private const string FullScreenCloudsTypeName = "DigitalRuby.WeatherMaker.WeatherMakerFullScreenCloudsScript";
+        private const string FullScreenFogTypeName = "DigitalRuby.WeatherMaker.WeatherMakerFullScreenFogScript";
 
         [SerializeField] private GameObject weatherMakerPrefab;
         [SerializeField] private bool instantiateWeatherMakerIfMissing = true;
@@ -30,16 +34,22 @@ namespace LWS.InterstateHauler
 
         private ILwsWeatherService _weatherService;
         private ILwsGameClockService _gameClockService;
+        private ILwsCameraPresentationService _cameraPresentationService;
         private object _weatherMakerInstance;
         private object _dayNightManagerInstance;
         private Type _weatherMakerScriptType;
         private Type _weatherMakerProfileType;
         private Type _weatherMakerPerformanceProfileType;
         private Type _dayNightManagerType;
+        private Type _precipitationManagerType;
+        private Type _precipitationType;
+        private Type _fullScreenCloudsType;
+        private Type _fullScreenFogType;
         private float _nextCameraRefreshTime;
         private bool _attached;
         private bool _directionalLightsSuppressed;
         private bool _gameClockSlaveConfigured;
+        private bool _cameraPresentationSubscribed;
         private long _lastAppliedClockVersion = long.MinValue;
 
         public bool WeatherMakerAvailable { get; private set; }
@@ -59,6 +69,10 @@ namespace LWS.InterstateHauler
         public string LastResolvedWeatherMakerProfile { get; private set; } = "None";
         public bool LastWeatherMakerApplySucceeded { get; private set; }
         public float WeatherMakerTimeOfDayHours { get; private set; } = 12f;
+        public string LastApplySummary { get; private set; } = "None";
+        public string PrecipitationDiagnostic { get; private set; } = "None";
+        public string CloudCoverDiagnostic { get; private set; } = "None";
+        public string FogDiagnostic { get; private set; } = "None";
         public string LastRuntimeError { get; private set; } = string.Empty;
         public bool GameClockSlaved => _gameClockService != null && _gameClockSlaveConfigured;
 
@@ -94,6 +108,7 @@ namespace LWS.InterstateHauler
                 _weatherService.DetachAdapter(this);
             }
 
+            UnsubscribeCameraPresentation();
             _attached = false;
         }
 
@@ -139,6 +154,8 @@ namespace LWS.InterstateHauler
                 _nextCameraRefreshTime = Time.unscaledTime + Mathf.Max(0.25f, cameraRefreshIntervalSeconds);
                 RefreshCameraBinding();
             }
+
+            RefreshWeatherMakerVisualDiagnostics();
         }
 
         public bool ApplyWeatherPreset(LwsWeatherPreset preset, float transitionSeconds, bool instant)
@@ -190,10 +207,14 @@ namespace LWS.InterstateHauler
 
                 raise.Invoke(_weatherMakerInstance, new[] { oldProfile, profile, instant ? 0.001f : Mathf.Max(0.001f, transitionSeconds), -1f, true, null });
                 SetMember(_weatherMakerInstance, "LastLocalProfile", profile);
+                string visualHint = ApplySemanticWeatherToWeatherMakerRuntime(preset, transitionSeconds, instant);
+                RefreshWeatherMakerVisualDiagnostics();
                 LastResolvedWeatherMakerProfile = GetUnityObjectName(profile);
                 LastAppliedWeatherMakerProfile = LastResolvedWeatherMakerProfile;
                 LastWeatherMakerApplySucceeded = true;
-                AdapterStatus = $"Applied Weather Maker profile {LastResolvedWeatherMakerProfile}.";
+                string applyMode = instant ? "instant" : $"{transitionSeconds:0.0}s";
+                LastApplySummary = $"{preset.displayName} -> {LastResolvedWeatherMakerProfile} ({applyMode})";
+                AdapterStatus = $"Applied Weather Maker profile {LastResolvedWeatherMakerProfile}. {visualHint}";
                 return true;
             }
             catch (Exception ex)
@@ -283,6 +304,8 @@ namespace LWS.InterstateHauler
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _weatherService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _gameClockService);
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _cameraPresentationService);
+            SubscribeCameraPresentation();
         }
 
         private void AttachToService()
@@ -523,8 +546,14 @@ namespace LWS.InterstateHauler
             _directionalLightsSuppressed = true;
         }
 
-        private static Camera FindActiveGameplayCamera()
+        private Camera FindActiveGameplayCamera()
         {
+            Camera presentationCamera = FindCameraFromPresentationService();
+            if (presentationCamera != null)
+            {
+                return presentationCamera;
+            }
+
             Camera main = Camera.main;
             if (IsGameplayCamera(main))
             {
@@ -537,6 +566,29 @@ namespace LWS.InterstateHauler
                 if (IsGameplayCamera(cameras[i]))
                 {
                     return cameras[i];
+                }
+            }
+
+            return null;
+        }
+
+        private Camera FindCameraFromPresentationService()
+        {
+            if (_cameraPresentationService == null ||
+                string.IsNullOrWhiteSpace(_cameraPresentationService.CurrentCameraName) ||
+                string.Equals(_cameraPresentationService.CurrentCameraName, "Unknown", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
+
+            Camera[] cameras = Camera.allCameras;
+            for (int i = 0; i < cameras.Length; i++)
+            {
+                Camera camera = cameras[i];
+                if (IsGameplayCamera(camera) &&
+                    string.Equals(camera.name, _cameraPresentationService.CurrentCameraName, StringComparison.Ordinal))
+                {
+                    return camera;
                 }
             }
 
@@ -594,6 +646,175 @@ namespace LWS.InterstateHauler
             }
 
             return first;
+        }
+
+        private string ApplySemanticWeatherToWeatherMakerRuntime(LwsWeatherPreset preset, float transitionSeconds, bool instant)
+        {
+            string precipitation = ApplySemanticPrecipitationToWeatherMaker(preset, transitionSeconds, instant);
+            string fog = ApplySemanticFogToWeatherMaker(preset);
+            return $"{precipitation} {fog}".Trim();
+        }
+
+        private string ApplySemanticPrecipitationToWeatherMaker(LwsWeatherPreset preset, float transitionSeconds, bool instant)
+        {
+            _precipitationManagerType ??= ResolveType(PrecipitationManagerTypeName);
+            _precipitationType ??= ResolveType(PrecipitationTypeName);
+            object manager = FindSceneComponent(_precipitationManagerType, out _);
+            if (manager == null || _precipitationType == null)
+            {
+                return "Precipitation manager diagnostics unavailable.";
+            }
+
+            try
+            {
+                string precipitationName = preset.precipitationType switch
+                {
+                    LwsPrecipitationType.Rain => "Rain",
+                    LwsPrecipitationType.Snow => "Snow",
+                    LwsPrecipitationType.Mixed => "Sleet",
+                    _ => "None"
+                };
+
+                float visualDuration = instant ? 0.001f : Mathf.Clamp(transitionSeconds, 0.25f, 4f);
+                SetMember(manager, "PrecipitationChangeDelay", 0f);
+                SetMember(manager, "PrecipitationChangeDuration", visualDuration);
+                SetMember(manager, "PrecipitationIntensity", Mathf.Clamp01(preset.precipitationIntensity01));
+                SetMember(manager, "Precipitation", Enum.Parse(_precipitationType, precipitationName));
+
+                if (instant)
+                {
+                    SetPrecipitationScriptIntensity(GetMember(manager, "RainScript"), precipitationName == "Rain" ? preset.precipitationIntensity01 : 0f);
+                    SetPrecipitationScriptIntensity(GetMember(manager, "SnowScript"), precipitationName == "Snow" ? preset.precipitationIntensity01 : 0f);
+                    SetPrecipitationScriptIntensity(GetMember(manager, "SleetScript"), precipitationName == "Sleet" ? preset.precipitationIntensity01 : 0f);
+                }
+
+                return $"Precipitation {precipitationName} {preset.precipitationIntensity01:0.00}.";
+            }
+            catch (Exception ex)
+            {
+                string message = $"Weather Maker precipitation hint failed: {ex.GetType().Name}: {ex.Message}";
+                LastRuntimeError = message;
+                Debug.LogWarning(message, this);
+                return message;
+            }
+        }
+
+        private string ApplySemanticFogToWeatherMaker(LwsWeatherPreset preset)
+        {
+            _fullScreenFogType ??= ResolveType(FullScreenFogTypeName);
+            try
+            {
+                object fogScript = FindSceneComponent(_fullScreenFogType, out _);
+                object fogProfile = GetMember(fogScript, "FogProfile");
+                if (fogProfile == null)
+                {
+                    return "Fog diagnostics unavailable.";
+                }
+
+                float fog01 = Mathf.Clamp01(preset.fogIntensity01);
+                float density = fog01 <= 0.001f ? 0f : Mathf.Lerp(0.0006f, 0.018f, fog01);
+                SetMember(fogProfile, "FogDensity", density);
+                SetMember(fogProfile, "MaxFogFactor", fog01 > 0.5f ? 0.78f : 0.45f);
+                return $"Fog {fog01:0.00}.";
+            }
+            catch (Exception ex)
+            {
+                string message = $"Weather Maker fog hint failed: {ex.GetType().Name}: {ex.Message}";
+                LastRuntimeError = message;
+                Debug.LogWarning(message, this);
+                return message;
+            }
+        }
+
+        private static void SetPrecipitationScriptIntensity(object script, float intensity)
+        {
+            if (script == null)
+            {
+                return;
+            }
+
+            SetMember(script, "ExternalIntensityMultiplier", 1f);
+            SetMember(script, "Intensity", Mathf.Clamp01(intensity));
+        }
+
+        private void RefreshWeatherMakerVisualDiagnostics()
+        {
+            if (!WeatherMakerAvailable)
+            {
+                PrecipitationDiagnostic = "Weather Maker unavailable.";
+                CloudCoverDiagnostic = "Weather Maker unavailable.";
+                FogDiagnostic = "Weather Maker unavailable.";
+                return;
+            }
+
+            _precipitationManagerType ??= ResolveType(PrecipitationManagerTypeName);
+            _fullScreenCloudsType ??= ResolveType(FullScreenCloudsTypeName);
+            _fullScreenFogType ??= ResolveType(FullScreenFogTypeName);
+
+            try
+            {
+                object precipitationManager = FindSceneComponent(_precipitationManagerType, out _);
+                if (precipitationManager != null)
+                {
+                    float rain = ReadFloatMember(precipitationManager, "RainIntensity");
+                    float snow = ReadFloatMember(precipitationManager, "SnowIntensity");
+                    float target = ReadFloatMember(precipitationManager, "PrecipitationIntensity");
+                    string precipitation = ReadMemberName(precipitationManager, "Precipitation");
+                    PrecipitationDiagnostic = $"{precipitation} target {target:0.00}, rain {rain:0.00}, snow {snow:0.00}";
+                }
+                else
+                {
+                    PrecipitationDiagnostic = "Weather Maker precipitation manager missing.";
+                }
+
+                object cloudScript = FindSceneComponent(_fullScreenCloudsType, out _);
+                object cloudProfile = GetMember(cloudScript, "CloudProfile");
+                CloudCoverDiagnostic = cloudProfile != null
+                    ? $"{GetUnityObjectName(cloudProfile)} cover {ReadFloatMember(cloudProfile, "CloudCoverTotal"):0.00}"
+                    : "Weather Maker cloud profile missing.";
+
+                object fogScript = FindSceneComponent(_fullScreenFogType, out _);
+                object fogProfile = GetMember(fogScript, "FogProfile");
+                FogDiagnostic = fogProfile != null
+                    ? $"{GetUnityObjectName(fogProfile)} density {ReadFloatMember(fogProfile, "FogDensity"):0.0000}, max {ReadFloatMember(fogProfile, "MaxFogFactor"):0.00}"
+                    : "Weather Maker fog profile missing.";
+            }
+            catch (Exception ex)
+            {
+                string message = $"Weather Maker visual diagnostics failed: {ex.GetType().Name}: {ex.Message}";
+                LastRuntimeError = message;
+                PrecipitationDiagnostic = message;
+                CloudCoverDiagnostic = "Weather Maker diagnostics unavailable.";
+                FogDiagnostic = "Weather Maker diagnostics unavailable.";
+            }
+        }
+
+        private void SubscribeCameraPresentation()
+        {
+            if (_cameraPresentationSubscribed || _cameraPresentationService == null)
+            {
+                return;
+            }
+
+            _cameraPresentationService.CameraModeChanged += OnCameraModeChanged;
+            _cameraPresentationSubscribed = true;
+        }
+
+        private void UnsubscribeCameraPresentation()
+        {
+            if (!_cameraPresentationSubscribed || _cameraPresentationService == null)
+            {
+                return;
+            }
+
+            _cameraPresentationService.CameraModeChanged -= OnCameraModeChanged;
+            _cameraPresentationSubscribed = false;
+        }
+
+        private void OnCameraModeChanged(LwsVehicleCameraMode mode)
+        {
+            _nextCameraRefreshTime = 0f;
+            RefreshCameraBinding();
         }
 
         private object LoadWeatherMakerResource(Type resourceType, string resourceName, string assetPath)
@@ -743,6 +964,24 @@ namespace LWS.InterstateHauler
 
             PropertyInfo property = type.GetProperty(memberName, BindingFlags.Instance | BindingFlags.Public);
             return property != null && property.CanRead ? property.GetValue(target) : null;
+        }
+
+        private static string ReadMemberName(object target, string memberName)
+        {
+            object value = GetMember(target, memberName);
+            return value != null ? value.ToString() : "None";
+        }
+
+        private static float ReadFloatMember(object target, string memberName)
+        {
+            object value = GetMember(target, memberName);
+            return value switch
+            {
+                float f => f,
+                double d => (float)d,
+                int i => i,
+                _ => 0f
+            };
         }
 
         private static bool SetMember(object target, string memberName, object value)

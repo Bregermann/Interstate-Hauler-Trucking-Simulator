@@ -158,6 +158,31 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsTrue(adapter.ActiveCameraAllowed, adapter.AdapterStatus);
             Assert.AreEqual("IH Gameplay Camera", adapter.ActiveCameraName);
 
+            LwsApplicationBootstrap bootstrap = LwsApplicationBootstrap.Instance;
+            Assert.IsNotNull(bootstrap);
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsCameraPresentationService cameraPresentationService));
+            cameraPresentationService.SetCameraMode(LwsVehicleCameraMode.Exterior, "IH Gameplay Camera");
+            adapter.RefreshCameraBindingForValidation();
+            yield return null;
+            Assert.AreEqual("IH Gameplay Camera", adapter.ActiveCameraName);
+
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsWeatherService weatherService));
+            LwsServiceResult heavyRain = weatherService.RequestWeather(LwsWeatherPresetCatalog.HeavyRainId, 0f, true);
+            yield return null;
+            yield return null;
+
+            Assert.IsTrue(heavyRain.Succeeded, heavyRain.Message);
+            Assert.IsTrue(adapter.LastWeatherMakerApplySucceeded, adapter.AdapterStatus);
+            Assert.AreEqual("WeatherMakerProfile_HeavyRain", adapter.LastResolvedWeatherMakerProfile);
+            StringAssert.Contains("Heavy Rain", adapter.LastApplySummary);
+            StringAssert.Contains("Rain", adapter.PrecipitationDiagnostic);
+
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsGameClockService gameClockService));
+            gameClockService.SetTimeOfDayHours(20f);
+            yield return null;
+            Assert.IsTrue(adapter.GameClockSlaved, adapter.AdapterStatus);
+            Assert.AreEqual(20f, adapter.WeatherMakerTimeOfDayHours, 0.25f);
+
             Object.Destroy(adapterObject);
             Object.Destroy(bootstrapObject);
             Object.Destroy(cameraObject);

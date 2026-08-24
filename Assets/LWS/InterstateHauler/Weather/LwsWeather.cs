@@ -346,6 +346,11 @@ namespace LWS.InterstateHauler
         string LastResolvedWeatherMakerProfile { get; }
         bool LastWeatherMakerApplySucceeded { get; }
         float WeatherMakerTimeOfDayHours { get; }
+        bool GameClockSlaved { get; }
+        string LastApplySummary { get; }
+        string PrecipitationDiagnostic { get; }
+        string CloudCoverDiagnostic { get; }
+        string FogDiagnostic { get; }
         string LastRuntimeError { get; }
     }
 
