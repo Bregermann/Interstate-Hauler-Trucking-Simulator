@@ -36,6 +36,7 @@ namespace LWS.InterstateHauler
         private string _activeWeatherPreset = string.Empty;
         private double _maxLocalDistanceMeters;
         private double _maxOriginShiftDurationMs;
+        private int _streamingFailureCount;
 
         public double CurrentGlobalDistanceMeters { get; private set; }
         public double CurrentMile => LwsFiftyMileHighwayModel.MetersToMile(CurrentGlobalDistanceMeters);
@@ -43,6 +44,7 @@ namespace LWS.InterstateHauler
         public string CurrentChunkId => LwsFiftyMileHighwayModel.GetChunkId(LwsFiftyMileHighwayModel.GetChunkIndexForMeters(CurrentGlobalDistanceMeters));
         public int ChunkLoadCount { get; private set; }
         public int ChunkUnloadCount { get; private set; }
+        public int StreamingFailureCount => _streamingFailureCount;
         public int WeatherChangeCount { get; private set; }
         public string LastError { get; private set; } = string.Empty;
         public string LastReport { get; private set; } = "50-mile validation not started.";
@@ -50,6 +52,7 @@ namespace LWS.InterstateHauler
         public bool AutomaticWeatherCycle => automaticWeatherCycle;
         public double MaxLocalDistanceMeters => _maxLocalDistanceMeters;
         public double MaxOriginShiftDurationMs => _maxOriginShiftDurationMs;
+        public double MetersRoadAheadAvailable => CalculateMetersRoadAheadAvailable();
         public LwsRoadGraph ActiveGraph => _graph;
         public LwsUtsHighwayTrafficController TrafficController => _trafficController;
         public ILwsWorldStreamingService StreamingService => _streamingService;
@@ -97,6 +100,7 @@ namespace LWS.InterstateHauler
             {
                 _streamingService.ChunkLoaded -= HandleChunkLoaded;
                 _streamingService.ChunkUnloaded -= HandleChunkUnloaded;
+                _streamingService.ChunkFailed -= HandleChunkFailed;
                 _streamingEventsSubscribed = false;
             }
         }
@@ -270,6 +274,7 @@ namespace LWS.InterstateHauler
             {
                 _streamingService.ChunkLoaded += HandleChunkLoaded;
                 _streamingService.ChunkUnloaded += HandleChunkUnloaded;
+                _streamingService.ChunkFailed += HandleChunkFailed;
                 _streamingEventsSubscribed = true;
             }
         }
@@ -374,22 +379,92 @@ namespace LWS.InterstateHauler
             }
 
             _completionLogged = true;
-            LwsTrafficRuntimeStats traffic = _trafficController != null ? _trafficController.Stats : default;
-            string report =
-                "50-MILE FLOATING ORIGIN TEST COMPLETE\n" +
-                $"Distance: {LwsFiftyMileHighwayModel.TotalMiles:0.00} mi\n" +
-                $"Global Distance: {LwsFiftyMileHighwayModel.TotalLengthMeters:0.0} m\n" +
-                $"Origin Shifts: {(_originService != null ? _originService.ShiftCount : 0)}\n" +
-                $"Chunk Loads: {ChunkLoadCount}\n" +
-                $"Chunk Unloads: {ChunkUnloadCount}\n" +
-                $"Max Local Distance: {_maxLocalDistanceMeters:0.0} m\n" +
-                $"Traffic Spawned: {traffic.TotalSpawned}\n" +
-                $"Weather Changes: {WeatherChangeCount}\n" +
-                $"GPS Route: {(_navigationService != null && _navigationService.RuntimeState.routeActive ? "PASS" : "FAIL")}\n" +
-                "Road Continuity: no known failure\n" +
-                $"Last Error: {(string.IsNullOrWhiteSpace(LastError) ? "None" : LastError)}";
+            string report = BuildCertificationReport();
             LastReport = report;
             Debug.Log(report, this);
+        }
+
+        public string BuildCertificationReportForValidation()
+        {
+            return BuildCertificationReport();
+        }
+
+        private string BuildCertificationReport()
+        {
+            LwsTrafficRuntimeStats traffic = _trafficController != null ? _trafficController.Stats : default;
+            long originShifts = _originService != null ? _originService.ShiftCount : 0;
+            long originVersion = _originService != null ? _originService.OriginVersion : 0;
+            string gpsStatus = _navigationService != null && _navigationService.RuntimeState.routeActive ? "PASS" : "FAIL";
+            string streamingError = _streamingService != null && !string.IsNullOrWhiteSpace(_streamingService.LastError)
+                ? _streamingService.LastError
+                : "None";
+            string runtimeErrors = ResolveCertificationRuntimeErrors(streamingError);
+
+            return
+                "50-MILE CERTIFICATION COMPLETE\n" +
+                $"Distance: {LwsFiftyMileHighwayModel.TotalMiles:0.00} mi / {LwsFiftyMileHighwayModel.TotalLengthMeters:0.0} m\n" +
+                $"Origin Shifts: {originShifts}\n" +
+                $"Origin Version: {originVersion}\n" +
+                $"Maximum Local Distance: {_maxLocalDistanceMeters:0.0} m\n" +
+                $"Largest Shift Duration: {_maxOriginShiftDurationMs:0.000} ms\n" +
+                $"Chunk Loads: {ChunkLoadCount}\n" +
+                $"Chunk Unloads: {ChunkUnloadCount}\n" +
+                $"Meters Road Ahead: {MetersRoadAheadAvailable:0.0} m\n" +
+                $"Traffic Spawned: {traffic.TotalSpawned}\n" +
+                $"Weather Transitions: {WeatherChangeCount}\n" +
+                $"GPS Status: {gpsStatus}\n" +
+                $"Streaming Failures: {_streamingFailureCount}\n" +
+                $"Streaming Last Error: {streamingError}\n" +
+                $"Runtime Errors: {runtimeErrors}";
+        }
+
+        private string ResolveCertificationRuntimeErrors(string streamingError)
+        {
+            var errors = new List<string>();
+            if (!string.IsNullOrWhiteSpace(LastError))
+            {
+                errors.Add($"50-mile: {LastError}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(streamingError) && !string.Equals(streamingError, "None", StringComparison.OrdinalIgnoreCase))
+            {
+                errors.Add($"streaming: {streamingError}");
+            }
+
+            if (_originService != null && !string.IsNullOrWhiteSpace(_originService.LastError))
+            {
+                errors.Add($"origin: {_originService.LastError}");
+            }
+
+            return errors.Count == 0 ? "None" : string.Join(" | ", errors);
+        }
+
+        private double CalculateMetersRoadAheadAvailable()
+        {
+            if (_streamingService == null || _streamingService.ActiveManifest == null)
+            {
+                return 0d;
+            }
+
+            double farthestLoadedEnd = CurrentGlobalDistanceMeters;
+            IReadOnlyList<LwsWorldChunkRuntimeState> states = _streamingService.ChunkStates;
+            for (int i = 0; i < states.Count; i++)
+            {
+                LwsWorldChunkRuntimeState state = states[i];
+                if (state == null || !state.IsLoaded ||
+                    !_streamingService.TryGetChunkDefinition(state.chunkId, out LwsWorldChunkDefinition definition))
+                {
+                    continue;
+                }
+
+                double chunkEnd = definition.WorldBounds.max.z;
+                if (chunkEnd >= CurrentGlobalDistanceMeters)
+                {
+                    farthestLoadedEnd = Math.Max(farthestLoadedEnd, chunkEnd);
+                }
+            }
+
+            return Math.Max(0d, Math.Min(LwsFiftyMileHighwayModel.TotalLengthMeters, farthestLoadedEnd) - CurrentGlobalDistanceMeters);
         }
 
         private GameObject ResolveValidationTrailer()
@@ -444,6 +519,12 @@ namespace LWS.InterstateHauler
         private void HandleChunkUnloaded(LwsWorldChunkEvent chunkEvent)
         {
             ChunkUnloadCount++;
+        }
+
+        private void HandleChunkFailed(LwsWorldChunkEvent chunkEvent)
+        {
+            _streamingFailureCount++;
+            LastError = chunkEvent.Message;
         }
     }
 }

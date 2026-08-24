@@ -126,8 +126,10 @@ namespace LWS.InterstateHauler
                 $"Origin Version: {(origin != null ? origin.OriginVersion : 0)}\n\n" +
                 "STREAMING\n" +
                 $"Current Chunk: {(streaming != null ? streaming.ActiveWorldChunkId : "n/a")}\n" +
+                $"Meters Road Ahead: {_controller.MetersRoadAheadAvailable:0.0} m\n" +
                 $"Chunk Loads: {_controller.ChunkLoadCount}  Unloads: {_controller.ChunkUnloadCount}\n" +
-                $"Pending Loads: {(streaming != null ? streaming.LastError : "n/a")}\n\n" +
+                $"Streaming Failures: {_controller.StreamingFailureCount}\n" +
+                $"Streaming Error: {(streaming != null && !string.IsNullOrWhiteSpace(streaming.LastError) ? streaming.LastError : "None")}\n\n" +
                 "TRAFFIC\n" +
                 $"Active Vehicles: {traffic.ActiveVehicles}\n" +
                 $"Total Spawned: {traffic.TotalSpawned}\n" +

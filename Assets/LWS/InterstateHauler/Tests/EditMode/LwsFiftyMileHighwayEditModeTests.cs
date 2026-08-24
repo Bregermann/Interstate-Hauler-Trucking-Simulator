@@ -44,6 +44,22 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void ChunkBoundarySeamsAreExactAcrossTheFullFiftyMiles()
+        {
+            IReadOnlyList<LwsWorldChunkDefinition> chunks = LwsFiftyMileHighwayModel.CreateChunkDefinitions();
+
+            for (int i = 0; i < chunks.Count - 1; i++)
+            {
+                double currentEnd = chunks[i].WorldBounds.max.z;
+                double nextStart = chunks[i + 1].WorldBounds.min.z;
+
+                Assert.That(currentEnd, Is.EqualTo(nextStart).Within(0.002d), $"Chunk seam {i:000}->{i + 1:000}");
+                Assert.That(chunks[i].neighborChunkIds, Contains.Item(chunks[i + 1].chunkId), $"Forward neighbor missing at {i:000}");
+                Assert.That(chunks[i + 1].neighborChunkIds, Contains.Item(chunks[i].chunkId), $"Backward neighbor missing at {i + 1:000}");
+            }
+        }
+
+        [Test]
         public void WholeMileMarkersCoverZeroThroughFifty()
         {
             List<int> markers = Enumerable
@@ -69,6 +85,28 @@ namespace LWS.InterstateHauler.Tests.EditMode
             Assert.AreEqual(LwsWeatherPresetCatalog.LightSnowId, LwsFiftyMileHighwayModel.GetWeatherPresetForMile(35d));
             Assert.AreEqual(LwsWeatherPresetCatalog.HeavySnowId, LwsFiftyMileHighwayModel.GetWeatherPresetForMile(40d));
             Assert.AreEqual(LwsWeatherPresetCatalog.ClearId, LwsFiftyMileHighwayModel.GetWeatherPresetForMile(45d));
+        }
+
+        [Test]
+        public void CertificationTeleportCheckpointsResolveCorrectChunkWeatherAndDistance()
+        {
+            var expected = new (double Mile, string ChunkId, string Weather, double RemainingMiles)[]
+            {
+                (0d, "IH_50MI_CHUNK_000", LwsWeatherPresetCatalog.ClearId, 50d),
+                (10d, "IH_50MI_CHUNK_005", LwsWeatherPresetCatalog.OvercastId, 40d),
+                (25d, "IH_50MI_CHUNK_012", LwsWeatherPresetCatalog.ThunderstormId, 25d),
+                (40d, "IH_50MI_CHUNK_020", LwsWeatherPresetCatalog.HeavySnowId, 10d),
+                (49d, "IH_50MI_CHUNK_024", LwsWeatherPresetCatalog.ClearId, 1d)
+            };
+
+            foreach ((double mile, string chunkId, string weather, double remainingMiles) in expected)
+            {
+                double meters = LwsFiftyMileHighwayModel.MileToMeters(mile);
+
+                Assert.AreEqual(chunkId, LwsFiftyMileHighwayModel.GetChunkId(LwsFiftyMileHighwayModel.GetChunkIndexForMeters(meters)), $"Chunk at Mile {mile}");
+                Assert.AreEqual(weather, LwsFiftyMileHighwayModel.GetWeatherPresetForMile(mile), $"Weather at Mile {mile}");
+                Assert.That((LwsFiftyMileHighwayModel.TotalLengthMeters - meters) / LwsFiftyMileHighwayModel.MetersPerMile, Is.EqualTo(remainingMiles).Within(0.001d), $"Remaining at Mile {mile}");
+            }
         }
 
         [Test]
@@ -106,6 +144,39 @@ namespace LWS.InterstateHauler.Tests.EditMode
 
             Assert.That(chunk.boundsCenter.z, Is.EqualTo(78857.856f).Within(0.01f));
             Assert.That(localCenter.z, Is.EqualTo(1857.856f).Within(0.01f));
+        }
+
+        [Test]
+        public void CertificationReportAndDebugSourceExposeRequiredMetrics()
+        {
+            var owner = new GameObject("50-mile-certification-report-test");
+            try
+            {
+                var controller = owner.AddComponent<LwsFiftyMileHighwayValidationController>();
+                string report = controller.BuildCertificationReportForValidation();
+
+                StringAssert.Contains("50-MILE CERTIFICATION COMPLETE", report);
+                StringAssert.Contains("Distance:", report);
+                StringAssert.Contains("Origin Shifts:", report);
+                StringAssert.Contains("Chunk Loads:", report);
+                StringAssert.Contains("Chunk Unloads:", report);
+                StringAssert.Contains("Traffic Spawned:", report);
+                StringAssert.Contains("Weather Transitions:", report);
+                StringAssert.Contains("GPS Status:", report);
+                StringAssert.Contains("Maximum Local Distance:", report);
+                StringAssert.Contains("Largest Shift Duration:", report);
+                StringAssert.Contains("Meters Road Ahead:", report);
+                StringAssert.Contains("Streaming Failures:", report);
+                StringAssert.Contains("Runtime Errors:", report);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(owner);
+            }
+
+            string debugPanel = System.IO.File.ReadAllText("Assets/LWS/InterstateHauler/World/Origin/LwsFiftyMileHighwayDebugPanel.cs");
+            StringAssert.Contains("Meters Road Ahead", debugPanel);
+            StringAssert.Contains("Streaming Failures", debugPanel);
         }
     }
 }
