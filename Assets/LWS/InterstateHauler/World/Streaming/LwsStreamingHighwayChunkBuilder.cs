@@ -53,6 +53,11 @@ namespace LWS.InterstateHauler
 
             CreateRoadRibbon("IH_TEST_I000_NB_MAIN", "IH_TEST_I000_NB", LwsRoadDirection.Northbound, CarriagewayOffsetMeters, minZ, maxZ, asphalt);
             CreateRoadRibbon("IH_TEST_I000_SB_MAIN", "IH_TEST_I000_SB", LwsRoadDirection.Southbound, -CarriagewayOffsetMeters, minZ, maxZ, asphalt);
+            LwsInterstateRoadsideBuilder.BuildStraightPairedInterstate(
+                _generatedRoot.transform,
+                chunkId,
+                minZ,
+                maxZ);
 
             if (includeServiceArea)
             {

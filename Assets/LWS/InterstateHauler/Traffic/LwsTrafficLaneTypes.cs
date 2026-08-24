@@ -31,6 +31,9 @@ namespace LWS.InterstateHauler
         public float maximumPlayerSpawnDistanceMeters = 650f;
         public float despawnDistanceMeters = 850f;
         public float despawnNearLaneEndMeters = 90f;
+        public float offRoadCleanupDistanceMeters = 22f;
+        public float offRoadCleanupGraceSeconds = 3f;
+        public float safetyFloorMeters = -12f;
         public float targetCruiseSpeedScale = 0.72f;
         public float maximumTrafficSpeedMetersPerSecond = 22f;
         public bool includeRampTraffic = true;
@@ -61,6 +64,12 @@ namespace LWS.InterstateHauler
             if (despawnDistanceMeters < maximumPlayerSpawnDistanceMeters)
             {
                 message = "Traffic despawn distance should be greater than or equal to the maximum spawn distance.";
+                return false;
+            }
+
+            if (offRoadCleanupDistanceMeters <= 0f || offRoadCleanupGraceSeconds < 0f)
+            {
+                message = "Traffic off-road cleanup settings are invalid.";
                 return false;
             }
 

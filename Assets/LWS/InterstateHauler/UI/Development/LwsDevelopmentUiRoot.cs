@@ -1740,10 +1740,6 @@ namespace LWS.InterstateHauler
             try
             {
                 _uiFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
-                if (_uiFont == null)
-                {
-                    _uiFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
-                }
             }
             catch (Exception ex)
             {

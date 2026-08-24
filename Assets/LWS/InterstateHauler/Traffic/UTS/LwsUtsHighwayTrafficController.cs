@@ -239,6 +239,26 @@ namespace LWS.InterstateHauler
             Destroy(vehicle);
         }
 
+        public bool IsInsideActiveRoadNeighborhood(Vector3 globalPosition, LwsTrafficLaneDefinition preferredLane, float maxDistanceMeters)
+        {
+            float maxDistance = Mathf.Max(1f, maxDistanceMeters);
+            if (preferredLane != null && DistanceToLane(preferredLane, globalPosition) <= maxDistance)
+            {
+                return true;
+            }
+
+            for (int i = 0; i < _lanes.Count; i++)
+            {
+                LwsTrafficLaneDefinition lane = _lanes[i];
+                if (lane != null && DistanceToLane(lane, globalPosition) <= maxDistance)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private bool TryInitializeFromGraph(LwsRoadGraphProvider provider, LwsRoadGraph graph, bool scheduleRetry)
         {
             if (_initialized)
@@ -917,6 +937,33 @@ namespace LWS.InterstateHauler
             return count;
         }
 
+        private static float DistanceToLane(LwsTrafficLaneDefinition lane, Vector3 point)
+        {
+            if (lane == null || lane.centerline == null || lane.centerline.Length == 0)
+            {
+                return float.MaxValue;
+            }
+
+            if (lane.centerline.Length == 1)
+            {
+                return Vector3.Distance(point, lane.centerline[0]);
+            }
+
+            float best = float.MaxValue;
+            for (int i = 0; i < lane.centerline.Length - 1; i++)
+            {
+                Vector3 a = lane.centerline[i];
+                Vector3 b = lane.centerline[i + 1];
+                Vector3 ab = b - a;
+                float denominator = ab.sqrMagnitude;
+                float t = denominator > 0.0001f ? Mathf.Clamp01(Vector3.Dot(point - a, ab) / denominator) : 0f;
+                Vector3 closest = a + ab * t;
+                best = Mathf.Min(best, Vector3.Distance(point, closest));
+            }
+
+            return best;
+        }
+
         public Vector3 GlobalToLocalForTraffic(Vector3 globalPosition)
         {
             ResolveOriginService();
@@ -990,6 +1037,7 @@ namespace LWS.InterstateHauler
         private LwsTrafficLaneDefinition _lane;
         private LwsTrafficSpawnPolicy _policy;
         private float _nextCheckTime;
+        private float _outsideRoadSince = -1f;
 
         public void Configure(LwsUtsHighwayTrafficController controller, LwsTrafficLaneDefinition lane, LwsTrafficSpawnPolicy policy)
         {
@@ -1007,6 +1055,30 @@ namespace LWS.InterstateHauler
 
             _nextCheckTime = Time.time + 0.5f;
             Vector3 globalPosition = _controller.LocalToGlobalForTraffic(transform.position);
+            if (globalPosition.y < _policy.safetyFloorMeters)
+            {
+                _controller.RequestDespawn(gameObject, $"Recycled traffic vehicle below safety floor on {_lane.laneId}.");
+                return;
+            }
+
+            if (!_controller.IsInsideActiveRoadNeighborhood(globalPosition, _lane, _policy.offRoadCleanupDistanceMeters))
+            {
+                if (_outsideRoadSince < 0f)
+                {
+                    _outsideRoadSince = Time.time;
+                }
+
+                if (Time.time - _outsideRoadSince >= _policy.offRoadCleanupGraceSeconds)
+                {
+                    _controller.RequestDespawn(gameObject, $"Recycled traffic vehicle outside active road neighborhood on {_lane.laneId}.");
+                    return;
+                }
+            }
+            else
+            {
+                _outsideRoadSince = -1f;
+            }
+
             if (Vector3.Distance(globalPosition, _lane.EndPosition) <= Mathf.Max(20f, _policy.despawnNearLaneEndMeters))
             {
                 _controller.RequestDespawn(gameObject, $"Despawned traffic vehicle near end of {_lane.laneId}.");

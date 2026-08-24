@@ -139,43 +139,64 @@ namespace LWS.InterstateHauler
                 return null;
             }
 
-            Component path = owner.AddComponent(_carWalkPathType);
-            SetMember(path, "walkingPrefabs", prefabs);
-            SetMember(path, "numberOfWays", 1);
-            SetMember(path, "lineSpacing", Mathf.Max(0.6f, lane.laneWidthMeters));
-            SetMember(path, "Density", ResolveDensity(policy));
-            SetMember(path, "_minimalObjectLength", 8f);
-            SetMember(path, "loopPath", true);
-            SetMember(path, "highToSpawn", 1.0f);
-            SetMember(path, "PathType", ResolveEnum("PathType", "VehiclePath"));
-            SetMember(path, "moveSpeed", ResolveTrafficSpeed(lane, policy));
-            SetMember(path, "speadDecrease", 2.5f);
-            SetMember(path, "speadIncrease", 1.5f);
-            SetMember(path, "distanceToCar", 28f);
-            SetMember(path, "distanceToSemaphore", 30f);
-            SetMember(path, "nextPointThreshold", 4f);
-            SetMember(path, "maxAngleToMoveBreak", 8f);
-            SetMember(path, "disableLineDraw", true);
-
-            if (_walkDirectionType != null)
+            bool restoreActive = owner.activeSelf;
+            if (restoreActive)
             {
-                object forwardDirection = Enum.Parse(_walkDirectionType, "Forward");
-                SetMember(path, "direction", forwardDirection, BindingFlags.Instance | BindingFlags.NonPublic);
-                Invoke(path, "DrawCurved", false, forwardDirection);
+                owner.SetActive(false);
             }
 
-            PopulatePathPoints(owner.transform, path, lane, globalToLocal);
-            if (_walkDirectionType != null)
+            try
             {
-                Invoke(path, "DrawCurved", false, Enum.Parse(_walkDirectionType, "Forward"));
-            }
-            else
-            {
-                Invoke(path, "DrawCurved", false);
-            }
+                Component path = owner.AddComponent(_carWalkPathType);
+                SetMember(path, "walkingPrefabs", prefabs);
+                SetMember(path, "numberOfWays", 1);
+                SetMember(path, "lineSpacing", Mathf.Max(0.6f, lane.laneWidthMeters));
+                SetMember(path, "Density", ResolveDensity(policy));
+                SetMember(path, "_minimalObjectLength", 8f);
+                SetMember(path, "loopPath", true);
+                SetMember(path, "highToSpawn", 1.0f);
+                SetMember(path, "PathType", ResolveEnum("PathType", "VehiclePath"));
+                SetMember(path, "moveSpeed", ResolveTrafficSpeed(lane, policy));
+                SetMember(path, "speadDecrease", 2.5f);
+                SetMember(path, "speadIncrease", 1.5f);
+                SetMember(path, "distanceToCar", 28f);
+                SetMember(path, "distanceToSemaphore", 30f);
+                SetMember(path, "nextPointThreshold", 4f);
+                SetMember(path, "maxAngleToMoveBreak", 8f);
+                SetMember(path, "disableLineDraw", true);
 
-            message = $"Created UTS CarWalkPath for {lane.laneId}.";
-            return path;
+                if (_walkDirectionType != null)
+                {
+                    object forwardDirection = Enum.Parse(_walkDirectionType, "Forward");
+                    SetMember(path, "direction", forwardDirection, BindingFlags.Instance | BindingFlags.NonPublic);
+                    Invoke(path, "DrawCurved", false, forwardDirection);
+                }
+
+                PopulatePathPoints(owner.transform, path, lane, globalToLocal);
+                if (_walkDirectionType != null)
+                {
+                    Invoke(path, "DrawCurved", false, Enum.Parse(_walkDirectionType, "Forward"));
+                }
+                else
+                {
+                    Invoke(path, "DrawCurved", false);
+                }
+
+                message = $"Created UTS CarWalkPath for {lane.laneId}.";
+                return path;
+            }
+            catch (Exception ex)
+            {
+                message = $"UTS path creation failed for {lane.laneId}: {ex.GetType().Name}: {ex.Message}";
+                return null;
+            }
+            finally
+            {
+                if (owner != null && restoreActive)
+                {
+                    owner.SetActive(true);
+                }
+            }
         }
 
         public GameObject SpawnVehicle(

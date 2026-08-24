@@ -254,6 +254,11 @@ namespace LWS.InterstateHauler
             root.transform.SetParent(_runtimeRoot, false);
             CreateRoadRibbon(root.transform, "NB Road", LwsEndlessHighwayModel.CarriagewayOffsetMeters, LwsRoadDirection.Northbound);
             CreateRoadRibbon(root.transform, "SB Road", -LwsEndlessHighwayModel.CarriagewayOffsetMeters, LwsRoadDirection.Southbound);
+            LwsInterstateRoadsideBuilder.BuildStraightPairedInterstate(
+                root.transform,
+                $"IH_ENDLESS_SLOT_{slotIndex:00}",
+                0f,
+                (float)LwsEndlessHighwayModel.SegmentLengthMeters);
             return new SlotRuntime(slotIndex, root);
         }
 

@@ -93,6 +93,12 @@ namespace LWS.InterstateHauler
                 BuildLaneDebugLines(_generatedRoot.transform, LastGraph);
             }
 
+            LwsInterstateRoadsideBuilder.BuildFromRoadGraph(
+                _generatedRoot.transform,
+                GraphId,
+                LastGraph,
+                LwsInterstateCrossSectionProfile.CreateValidationDefault());
+
             if (showDebugPanel && roadGraphProvider.GetComponent<LwsRoadGraphDebugPanel>() == null)
             {
                 roadGraphProvider.gameObject.AddComponent<LwsRoadGraphDebugPanel>();

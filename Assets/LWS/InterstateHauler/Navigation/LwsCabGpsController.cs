@@ -287,7 +287,7 @@ namespace LWS.InterstateHauler
         {
             GameObject go = CreateUiChild(parent, name, anchoredPosition, size);
             Text text = go.AddComponent<Text>();
-            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf") ?? Resources.GetBuiltinResource<Font>("Arial.ttf");
+            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             text.fontSize = fontSize;
             text.alignment = anchor;
             text.color = new Color(0.82f, 0.96f, 1f, 1f);

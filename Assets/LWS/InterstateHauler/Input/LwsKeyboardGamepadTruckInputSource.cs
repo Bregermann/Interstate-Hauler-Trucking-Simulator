@@ -12,6 +12,8 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool registerAsFallbackDrivingSource = true;
         [SerializeField] private bool readKeyboard = true;
         [SerializeField] private bool readGamepad = true;
+        [SerializeField] private bool automaticKeyboardDirectionPolicy = true;
+        [SerializeField] private Lws18SpeedTransmissionController transmissionController;
 
         private readonly Dictionary<string, bool> _previous = new Dictionary<string, bool>();
         private ILwsVehicleInputService _inputService;
@@ -20,6 +22,11 @@ namespace LWS.InterstateHauler
 
         public string SourceId => "lws.input.keyboard-gamepad.truck";
         public LwsVehicleCommandFrame LastCommands => _lastCommands;
+
+        public void ConfigureTransmissionController(Lws18SpeedTransmissionController controller)
+        {
+            transmissionController = controller;
+        }
 
         private void Start()
         {
@@ -67,12 +74,20 @@ namespace LWS.InterstateHauler
         private LwsVehicleContinuousInput ReadContinuousNow()
         {
             var continuous = new LwsVehicleContinuousInput();
+            bool forwardHeld = false;
+            bool reverseHeld = false;
             if (readKeyboard && Keyboard.current != null)
             {
                 if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) continuous.steering -= 1f;
                 if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) continuous.steering += 1f;
-                if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) continuous.throttle = 1f;
-                if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) continuous.brake = 1f;
+                forwardHeld = Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed;
+                reverseHeld = Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed;
+                if (!ApplyAutomaticKeyboardDirectionPolicy(ref continuous, forwardHeld, reverseHeld))
+                {
+                    if (forwardHeld) continuous.throttle = 1f;
+                    if (reverseHeld) continuous.brake = 1f;
+                }
+
                 if (Keyboard.current.leftCtrlKey.isPressed || Keyboard.current.rightCtrlKey.isPressed) continuous.clutch = 1f;
             }
 
@@ -86,6 +101,78 @@ namespace LWS.InterstateHauler
             }
 
             return continuous;
+        }
+
+        private bool ApplyAutomaticKeyboardDirectionPolicy(ref LwsVehicleContinuousInput continuous, bool forwardHeld, bool reverseHeld)
+        {
+            if (!automaticKeyboardDirectionPolicy || transmissionController == null)
+            {
+                return false;
+            }
+
+            LwsTransmissionDisplayState state = transmissionController.DisplayState;
+            LwsAutomaticKeyboardDirectionDecision decision = ResolveAutomaticKeyboardDirection(
+                forwardHeld,
+                reverseHeld,
+                state.mode,
+                state.automaticSelector,
+                state.signedSpeedMetersPerSecond,
+                transmissionController.AutomaticDirectionChangeSpeedThresholdMetersPerSecond);
+
+            if (!decision.handled)
+            {
+                return false;
+            }
+
+            if (decision.requestSelectorChange &&
+                !transmissionController.TrySetAutomaticSelector(decision.requestedSelector, out string message))
+            {
+                Debug.LogWarning(message, this);
+                continuous.throttle = 0f;
+                continuous.brake = 1f;
+                return true;
+            }
+
+            continuous.throttle = decision.throttle;
+            continuous.brake = decision.brake;
+            return true;
+        }
+
+        public static LwsAutomaticKeyboardDirectionDecision ResolveAutomaticKeyboardDirection(
+            bool forwardHeld,
+            bool reverseHeld,
+            LwsTransmissionMode mode,
+            LwsAutomaticTransmissionSelector currentSelector,
+            float signedSpeedMetersPerSecond,
+            float stoppedThresholdMetersPerSecond)
+        {
+            if (mode != LwsTransmissionMode.Automatic || !forwardHeld && !reverseHeld)
+            {
+                return LwsAutomaticKeyboardDirectionDecision.NotHandled(currentSelector);
+            }
+
+            if (forwardHeld && reverseHeld)
+            {
+                return LwsAutomaticKeyboardDirectionDecision.Handled(currentSelector, false, 0f, 1f);
+            }
+
+            float threshold = Mathf.Max(0f, stoppedThresholdMetersPerSecond);
+            if (forwardHeld)
+            {
+                if (currentSelector == LwsAutomaticTransmissionSelector.Reverse && signedSpeedMetersPerSecond < -threshold)
+                {
+                    return LwsAutomaticKeyboardDirectionDecision.Handled(currentSelector, false, 0f, 1f);
+                }
+
+                return LwsAutomaticKeyboardDirectionDecision.Handled(LwsAutomaticTransmissionSelector.Drive, currentSelector != LwsAutomaticTransmissionSelector.Drive, 1f, 0f);
+            }
+
+            if (currentSelector == LwsAutomaticTransmissionSelector.Drive && signedSpeedMetersPerSecond > threshold)
+            {
+                return LwsAutomaticKeyboardDirectionDecision.Handled(currentSelector, false, 0f, 1f);
+            }
+
+            return LwsAutomaticKeyboardDirectionDecision.Handled(LwsAutomaticTransmissionSelector.Reverse, currentSelector != LwsAutomaticTransmissionSelector.Reverse, 1f, 0f);
         }
 
         private LwsVehicleCommandFrame ReadCommandsNow()
@@ -205,6 +292,47 @@ namespace LWS.InterstateHauler
             }
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _inputService);
+            if (transmissionController == null)
+            {
+                transmissionController = GetComponent<Lws18SpeedTransmissionController>();
+            }
+        }
+    }
+
+    public readonly struct LwsAutomaticKeyboardDirectionDecision
+    {
+        private LwsAutomaticKeyboardDirectionDecision(
+            bool handled,
+            LwsAutomaticTransmissionSelector requestedSelector,
+            bool requestSelectorChange,
+            float throttle,
+            float brake)
+        {
+            this.handled = handled;
+            this.requestedSelector = requestedSelector;
+            this.requestSelectorChange = requestSelectorChange;
+            this.throttle = Mathf.Clamp01(throttle);
+            this.brake = Mathf.Clamp01(brake);
+        }
+
+        public readonly bool handled;
+        public readonly LwsAutomaticTransmissionSelector requestedSelector;
+        public readonly bool requestSelectorChange;
+        public readonly float throttle;
+        public readonly float brake;
+
+        public static LwsAutomaticKeyboardDirectionDecision NotHandled(LwsAutomaticTransmissionSelector selector)
+        {
+            return new LwsAutomaticKeyboardDirectionDecision(false, selector, false, 0f, 0f);
+        }
+
+        public static LwsAutomaticKeyboardDirectionDecision Handled(
+            LwsAutomaticTransmissionSelector selector,
+            bool requestSelectorChange,
+            float throttle,
+            float brake)
+        {
+            return new LwsAutomaticKeyboardDirectionDecision(true, selector, requestSelectorChange, throttle, brake);
         }
     }
 }

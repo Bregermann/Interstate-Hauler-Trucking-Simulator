@@ -87,6 +87,7 @@ namespace LWS.InterstateHauler.Editor
         private const string RoadGraphProviderPath = "Assets/LWS/InterstateHauler/Roads/LwsRoadGraphProvider.cs";
         private const string RoadSurfacePath = "Assets/LWS/InterstateHauler/Roads/LwsRoadSurface.cs";
         private const string RoadDebugPanelPath = "Assets/LWS/InterstateHauler/Roads/LwsRoadGraphDebugPanel.cs";
+        private const string RoadsideBuilderPath = "Assets/LWS/InterstateHauler/Roads/Presentation/LwsInterstateRoadsideBuilder.cs";
         private const string InterstateCorridorBuilderPath = "Assets/LWS/InterstateHauler/Roads/Validation/LwsInterstateCorridorRuntimeBuilder.cs";
         private const string InterstateCorridorMarkerPath = "Assets/LWS/InterstateHauler/Roads/Validation/LwsInterstateCorridorSceneMarker.cs";
         private const string Prompt009DocsPath = "Documentation/InterstateHauler/009_EasyRoads_Interstate_Corridor.md";
@@ -114,6 +115,7 @@ namespace LWS.InterstateHauler.Editor
         private const string RoutePlannerPath = "Assets/LWS/InterstateHauler/Navigation/LwsRoutePlanner.cs";
         private const string CabGpsControllerPath = "Assets/LWS/InterstateHauler/Navigation/LwsCabGpsController.cs";
         private const string GpsMapGraphicPath = "Assets/LWS/InterstateHauler/Navigation/LwsGpsMapGraphic.cs";
+        private const string GpsVoicePackPath = "Assets/LWS/InterstateHauler/Navigation/LwsGpsVoicePack.cs";
         private const string GpsVoiceGuidancePath = "Assets/LWS/InterstateHauler/Navigation/LwsGpsVoiceGuidance.cs";
         private const string GpsDebugPanelPath = "Assets/LWS/InterstateHauler/Navigation/LwsNavigationDebugPanel.cs";
         private const string GpsSettingsPanelPath = "Assets/LWS/InterstateHauler/Navigation/LwsGpsSettingsPanel.cs";
@@ -223,6 +225,9 @@ namespace LWS.InterstateHauler.Editor
         private const string TimeBasedTrafficDocsPath = "Documentation/InterstateHauler/015C_Time_Based_Traffic_Density.md";
         private const string EndlessHighwayDocsPath = "Documentation/InterstateHauler/015C_Endless_Highway_Streaming_Test.md";
         private const string ClockTrafficTestMatrixPath = "Documentation/InterstateHauler/015C_Clock_Traffic_Test_Matrix.md";
+        private const string Stabilization002DocsPath = "Documentation/InterstateHauler/Stabilization_002_Highway_Baseline.md";
+        private const string HighwayCrossSectionDocsPath = "Documentation/InterstateHauler/Roads/Highway_Cross_Section_Profile.md";
+        private const string UtsTrafficLightAuditDocsPath = "Documentation/InterstateHauler/Traffic/UTS_Traffic_Light_API_Audit.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -354,6 +359,7 @@ namespace LWS.InterstateHauler.Editor
             ValidateFiftyMileFloatingOriginValidation(report);
             ValidateDevelopmentControlCenterGpsMapFoundation(report);
             ValidateEndlessClockTrafficValidationRepair(report);
+            ValidateStabilization002HighwayBaseline(report);
             return report;
         }
 
@@ -3483,6 +3489,115 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0
                     ? "Prompt 015C game clock, traffic density, endless streaming, and test matrix documentation exists."
                     : "Missing Prompt 015C documentation: " + string.Join(", ", missingDocs));
+        }
+
+        private static void ValidateStabilization002HighwayBaseline(LwsProjectValidationReport report)
+        {
+            string[] requiredFiles =
+            {
+                RoadsideBuilderPath,
+                KeyboardGamepadTruckInputPath,
+                UtsTrafficApiPath,
+                UtsTrafficControllerPath,
+                TrafficLaneTypesPath,
+                GpsVoicePackPath
+            };
+
+            var missingFiles = requiredFiles.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingFiles.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Stabilization 002 Runtime Files",
+                missingFiles.Count == 0
+                    ? "Roadside cross-section, automatic keyboard direction, UTS traffic safety, and GPS voice-pack runtime files exist."
+                    : "Missing Stabilization 002 runtime files: " + string.Join(", ", missingFiles));
+
+            string roadside = File.Exists(RoadsideBuilderPath) ? File.ReadAllText(RoadsideBuilderPath) : string.Empty;
+            string endless = File.Exists(EndlessHighwayControllerPath) ? File.ReadAllText(EndlessHighwayControllerPath) : string.Empty;
+            string streaming = File.Exists(StreamingHighwayChunkBuilderPath) ? File.ReadAllText(StreamingHighwayChunkBuilderPath) : string.Empty;
+            string fifty = File.Exists(FiftyMileChunkBuilderPath) ? File.ReadAllText(FiftyMileChunkBuilderPath) : string.Empty;
+            string corridor = File.Exists(InterstateCorridorBuilderPath) ? File.ReadAllText(InterstateCorridorBuilderPath) : string.Empty;
+            string spawner = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                : string.Empty;
+            bool roadsideComplete = roadside.Contains("LwsInterstateCrossSectionProfile") &&
+                                    roadside.Contains("LwsRoadsideRuntimeRoot") &&
+                                    roadside.Contains("BuildStraightPairedInterstate") &&
+                                    roadside.Contains("BuildFromRoadGraph") &&
+                                    roadside.Contains("Guardrail") &&
+                                    roadside.Contains("Ditch") &&
+                                    endless.Contains("BuildStraightPairedInterstate") &&
+                                    streaming.Contains("BuildStraightPairedInterstate") &&
+                                    fifty.Contains("BuildStraightPairedInterstate") &&
+                                    corridor.Contains("BuildFromRoadGraph") &&
+                                    spawner.Contains("EnsureValidationRoadside");
+            report.Add(
+                roadsideComplete ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Reusable Highway Cross-Section Presentation",
+                roadsideComplete
+                    ? "Reusable roadside generation provides shoulders, ditches, guardrails/colliders, median/ground support, and hooks into TruckValidation, corridor, streaming, endless, and 50-mile validation paths."
+                    : "Highway cross-section builder or one of its validation scene hooks is incomplete.");
+
+            string keyboard = File.Exists(KeyboardGamepadTruckInputPath) ? File.ReadAllText(KeyboardGamepadTruckInputPath) : string.Empty;
+            string transmission = File.Exists(TransmissionControllerPath) ? File.ReadAllText(TransmissionControllerPath) : string.Empty;
+            bool automaticKeyboard = keyboard.Contains("ResolveAutomaticKeyboardDirection") &&
+                                     keyboard.Contains("TrySetAutomaticSelector") &&
+                                     keyboard.Contains("LwsTransmissionMode.Automatic") &&
+                                     keyboard.Contains("LwsAutomaticKeyboardDirectionDecision") &&
+                                     transmission.Contains("DevelopmentDefaultMode = LwsTransmissionMode.Automatic");
+            report.Add(
+                automaticKeyboard ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Automatic Keyboard W/S Direction Policy",
+                automaticKeyboard
+                    ? "Keyboard W/S automatic direction changes route through Lws18SpeedTransmissionController and preserve the automatic default."
+                    : "Automatic keyboard direction policy is missing or may bypass transmission authority.");
+
+            string trafficApi = File.Exists(UtsTrafficApiPath) ? File.ReadAllText(UtsTrafficApiPath) : string.Empty;
+            string trafficController = File.Exists(UtsTrafficControllerPath) ? File.ReadAllText(UtsTrafficControllerPath) : string.Empty;
+            string trafficTypes = File.Exists(TrafficLaneTypesPath) ? File.ReadAllText(TrafficLaneTypesPath) : string.Empty;
+            bool trafficSafety = trafficApi.Contains("owner.SetActive(false)") &&
+                                 trafficApi.Contains("PopulatePathPoints") &&
+                                 trafficController.Contains("IsInsideActiveRoadNeighborhood") &&
+                                 trafficController.Contains("outside active road neighborhood") &&
+                                 trafficController.Contains("below safety floor") &&
+                                 trafficTypes.Contains("offRoadCleanupDistanceMeters") &&
+                                 trafficTypes.Contains("safetyFloorMeters");
+            report.Add(
+                trafficSafety ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "UTS Path Initialization and Traffic Cleanup",
+                trafficSafety
+                    ? "Project-side UTS path construction avoids premature vendor Awake point generation and traffic vehicles recycle if they leave the active road neighborhood."
+                    : "UTS path initialization guard or traffic cleanup safety settings are incomplete.");
+
+            string gameClock = File.Exists(GameClockPath) ? File.ReadAllText(GameClockPath) : string.Empty;
+            string cabGps = File.Exists(CabGpsControllerPath) ? File.ReadAllText(CabGpsControllerPath) : string.Empty;
+            string developmentUi = File.Exists(DevelopmentUiRootPath) ? File.ReadAllText(DevelopmentUiRootPath) : string.Empty;
+            string voicePackAsset = File.Exists(DefaultGpsVoicePackPath) ? File.ReadAllText(DefaultGpsVoicePackPath) : string.Empty;
+            bool runtimeFontAndVoicePack = !gameClock.Contains("Arial.ttf") &&
+                                           !cabGps.Contains("Arial.ttf") &&
+                                           !developmentUi.Contains("Arial.ttf") &&
+                                           File.Exists(GpsVoicePackPath) &&
+                                           voicePackAsset.Contains("c56d02dbe17c47e8b9ec7ae957a1584f");
+            report.Add(
+                runtimeFontAndVoicePack ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Runtime UI Font and GPS Voice Pack Import",
+                runtimeFontAndVoicePack
+                    ? "Project-owned runtime UI uses LegacyRuntime.ttf and the default GPS voice-pack asset points at the dedicated LwsGpsVoicePack ScriptableObject file."
+                    : "Runtime UI still references Arial.ttf or the GPS voice-pack asset may still point at the old guidance script.");
+
+            string[] docs =
+            {
+                Stabilization002DocsPath,
+                HighwayCrossSectionDocsPath,
+                UtsTrafficLightAuditDocsPath
+            };
+
+            var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
+            report.Add(
+                missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Stabilization 002 Documentation",
+                missingDocs.Count == 0
+                    ? "Stabilization 002 highway baseline, cross-section profile, and UTS traffic-light API audit documentation exists."
+                    : "Missing Stabilization 002 documentation: " + string.Join(", ", missingDocs));
         }
 
         private static string FindUnityDirectInputNwhSamplePath()

@@ -52,6 +52,11 @@ namespace LWS.InterstateHauler
             CreateRoadRibbon($"{LwsFiftyMileHighwayModel.EastboundRoadId}_{index:000}", LwsFiftyMileHighwayModel.EastboundRoadId, LwsRoadDirection.Eastbound, LwsFiftyMileHighwayModel.CarriagewayOffsetMeters, 0f, endLocal, asphalt);
             CreateRoadRibbon($"{LwsFiftyMileHighwayModel.WestboundRoadId}_{index:000}", LwsFiftyMileHighwayModel.WestboundRoadId, LwsRoadDirection.Westbound, -LwsFiftyMileHighwayModel.CarriagewayOffsetMeters, 0f, endLocal, asphalt);
             CreateMedianAndShoulderStrips(endLocal, shoulder);
+            LwsInterstateRoadsideBuilder.BuildStraightPairedInterstate(
+                _generatedRoot.transform,
+                chunkId,
+                0f,
+                endLocal);
 
             if (index == 0)
             {

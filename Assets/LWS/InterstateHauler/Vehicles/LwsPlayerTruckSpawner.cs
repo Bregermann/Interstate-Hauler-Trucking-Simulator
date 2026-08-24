@@ -18,6 +18,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool spawnOnStart = true;
         [SerializeField] private bool addNwhInputProviderIfMissing = true;
         [SerializeField] private bool addDebugPanel = true;
+        [SerializeField] private bool buildValidationRoadside = true;
 
         public LwsPlayerTruck SpawnedTruck { get; private set; }
         public GameObject SpawnedTrailer { get; private set; }
@@ -63,6 +64,7 @@ namespace LWS.InterstateHauler
             }
 
             EnsureNwhInputProvider();
+            EnsureValidationRoadside();
             return SpawnedTruck;
         }
 
@@ -111,6 +113,14 @@ namespace LWS.InterstateHauler
 
             transmission.SetDefinition(transmissionDefinition);
             transmission.SetMode(Lws18SpeedTransmissionController.DevelopmentDefaultMode);
+
+            LwsKeyboardGamepadTruckInputSource keyboardInput = truckInstance.GetComponent<LwsKeyboardGamepadTruckInputSource>();
+            if (keyboardInput == null)
+            {
+                keyboardInput = truckInstance.AddComponent<LwsKeyboardGamepadTruckInputSource>();
+            }
+
+            keyboardInput.ConfigureTransmissionController(transmission);
 
             LwsNwhTrailerCouplingAdapter coupling = truckInstance.GetComponent<LwsNwhTrailerCouplingAdapter>();
             if (coupling == null)
@@ -240,6 +250,28 @@ namespace LWS.InterstateHauler
 
             var input = new GameObject("NWH Temporary Input Provider");
             input.AddComponent<InputSystemVehicleInputProvider>();
+        }
+
+        private void EnsureValidationRoadside()
+        {
+            if (!buildValidationRoadside)
+            {
+                return;
+            }
+
+            GameObject root = GameObject.Find("IH Truck Validation Roadside Runtime");
+            if (root == null)
+            {
+                root = new GameObject("IH Truck Validation Roadside Runtime");
+                root.transform.SetParent(null, false);
+                root.transform.position = Vector3.zero;
+            }
+
+            LwsInterstateRoadsideBuilder.BuildStraightPairedInterstate(
+                root.transform,
+                "IH_TRUCK_VALIDATION",
+                -120f,
+                360f);
         }
     }
 }

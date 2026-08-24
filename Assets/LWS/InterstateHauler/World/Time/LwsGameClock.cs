@@ -480,8 +480,7 @@ namespace LWS.InterstateHauler
             _clockText = textObject.AddComponent<Text>();
             try
             {
-                _clockText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf") ??
-                                  Resources.GetBuiltinResource<Font>("Arial.ttf");
+                _clockText.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             }
             catch
             {
