@@ -51,6 +51,7 @@ namespace LWS.InterstateHauler.Editor
         private const string LwsRenderingSettingsPath = "Assets/LWS/InterstateHauler/Rendering/Data/IH_RenderingSettings.asset";
         private const string LwsDefaultVolumeProfilePath = "Assets/LWS/InterstateHauler/Rendering/Volume/IH_DefaultVolumeProfile.asset";
         private const string RenderValidationScenePath = "Assets/LWS/InterstateHauler/Rendering/Validation/RenderValidation.unity";
+        private const string BootstrapRuntimePath = "Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs";
         private const string PlayerTruckPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_PlayerTruck_NWH.prefab";
         private const string TestTrailerPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_TestTrailer_DryVan.prefab";
         private const string TruckDefinitionPath = "Assets/LWS/InterstateHauler/Vehicles/Data/IH_TruckDefinition_StarterNwhSemi.asset";
@@ -253,6 +254,12 @@ namespace LWS.InterstateHauler.Editor
         private const string PixelCrushersDiskStorerPath = "Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/Storers/DiskSavedGameDataStorer.cs";
         private const string PixelCrushersDialogueSaverPath = "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Save System/DialogueSystemSaver.cs";
         private const string LwsSaveArchitecturePath = "Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs";
+        private const string LwsSaveProfileTypesPath = "Assets/LWS/InterstateHauler/Save/LwsSaveProfileTypes.cs";
+        private const string PixelCrushersSemanticSaverBridgePath = "Assets/LWS/InterstateHaulerPixelCrushers/Save/LwsPixelCrushersSemanticSaver.cs";
+        private const string PersistencePauseMenuPath = "Assets/LWS/InterstateHauler/UI/Persistence/LwsPersistencePauseMenu.cs";
+        private const string SaveVendorAuditDocsPath = "Documentation/InterstateHauler/Persistence/016_Save_System_Vendor_Audit.md";
+        private const string ConsoleSaveStorageHandoffPath = "Documentation/InterstateHauler/Persistence/016_Console_Save_Storage_Handoff.md";
+        private const string PersistenceRoadmapMergePath = "Documentation/InterstateHauler/Persistence/016_018_Persistence_Roadmap_Merge.md";
         private const string PixelCrushersSaveArchitectureDocsPath = "Documentation/InterstateHauler/Persistence/016_Pixel_Crushers_Save_Architecture.md";
         private const string PixelCrushersApiMatrixPath = "Documentation/InterstateHauler/Persistence/016_PixelCrushers_API_Matrix.md";
         private const string LwsSaveProviderMatrixPath = "Documentation/InterstateHauler/Persistence/016_LWS_Save_Provider_Matrix.md";
@@ -542,57 +549,99 @@ namespace LWS.InterstateHauler.Editor
             bool saverExists = File.Exists(PixelCrushersSaverPath);
             bool diskStorerExists = File.Exists(PixelCrushersDiskStorerPath);
             bool dialogueSaverExists = File.Exists(PixelCrushersDialogueSaverPath);
+            bool semanticBridgeExists = File.Exists(PixelCrushersSemanticSaverBridgePath);
+            bool profileTypesExist = File.Exists(LwsSaveProfileTypesPath);
+            bool pauseMenuExists = File.Exists(PersistencePauseMenuPath);
             report.Add(
                 saveSystemExists && saverExists && diskStorerExists ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Pixel Crushers Save System",
                 saveSystemExists && saverExists && diskStorerExists
-                    ? "PixelCrushers.SaveSystem, Saver, and DiskSavedGameDataStorer are installed."
+                    ? "PixelCrushers.SaveSystem, Saver, and DiskSavedGameDataStorer are installed and selected as the save authority."
                     : "Pixel Crushers Save System runtime files are missing.");
             report.Add(
                 dialogueSaverExists ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
                 "Pixel Crushers Dialogue Save Integration",
                 dialogueSaverExists
-                    ? "DialogueSystemSaver is installed for Dialogue System coexistence."
+                    ? "DialogueSystemSaver is installed for Dialogue System coexistence on the shared Pixel Crushers Save System."
                     : "DialogueSystemSaver was not found.");
 
             string saveText = File.Exists(LwsSaveArchitecturePath) ? File.ReadAllText(LwsSaveArchitecturePath) : string.Empty;
+            string profileText = profileTypesExist ? File.ReadAllText(LwsSaveProfileTypesPath) : string.Empty;
+            string bridgeText = semanticBridgeExists ? File.ReadAllText(PixelCrushersSemanticSaverBridgePath) : string.Empty;
+            string menuText = pauseMenuExists ? File.ReadAllText(PersistencePauseMenuPath) : string.Empty;
+            string bootstrapText = File.Exists(BootstrapRuntimePath) ? File.ReadAllText(BootstrapRuntimePath) : string.Empty;
+            string combinedRuntimeText = saveText + "\n" + profileText + "\n" + bridgeText + "\n" + menuText;
+
             bool facade = saveText.Contains("interface ILwsSaveService") &&
                           saveText.Contains("class LwsSaveService") &&
                           saveText.Contains("LwsPixelCrushersSaveAdapter");
-            bool storage = saveText.Contains("interface ILwsSaveStorage") &&
-                           saveText.Contains("class LwsPcSaveStorage") &&
-                           saveText.Contains("DiskSavedGameDataStorer");
+            bool pixelAuthority = saveText.Contains("SaveToSlotImmediate") &&
+                                  saveText.Contains("LoadFromSlot") &&
+                                  saveText.Contains("DeleteSavedGameInSlot") &&
+                                  saveText.Contains("SavedGameDataStorer") &&
+                                  semanticBridgeExists &&
+                                  bridgeText.Contains("PixelCrushers") &&
+                                  bridgeText.Contains("Saver");
+            bool oldStorageRemoved = !saveText.Contains("interface ILwsSaveStorage") &&
+                                     !saveText.Contains("LwsPcSaveStorage") &&
+                                     !saveText.Contains("LwsInMemorySaveStorage") &&
+                                     !saveText.Contains("DevelopmentTestSlot") &&
+                                     !saveText.Contains("SaveTestState") &&
+                                     !saveText.Contains("LoadTestState") &&
+                                     !saveText.Contains("LwsValidationSaveParticipant");
+            bool profiles = profileText.Contains("class LwsSaveProfileMetadata") &&
+                            profileText.Contains("class LwsManualSaveSlotMetadata") &&
+                            profileText.Contains("ManualSlotCount = 3") &&
+                            profileText.Contains("ProfileDirectoryVendorSlot") &&
+                            saveText.Contains("CreateProfile") &&
+                            saveText.Contains("RenameProfile") &&
+                            saveText.Contains("DeleteProfile");
             bool providers = saveText.Contains("LwsGlobalPositionSaveParticipant") &&
+                             saveText.Contains("LwsPlayerTruckSaveParticipant") &&
                              saveText.Contains("LwsGameClockSaveParticipant") &&
                              saveText.Contains("LwsWeatherSaveParticipant") &&
-                             saveText.Contains("LwsValidationSaveParticipant");
+                             saveText.Contains("LwsRoadConditionSaveParticipant") &&
+                             saveText.Contains("LwsNavigationSaveParticipant");
             bool globalDoubles = saveText.Contains("double globalX") &&
                                  saveText.Contains("double globalY") &&
                                  saveText.Contains("double globalZ") &&
                                  saveText.Contains("PlayerGlobalPosition");
-            bool noDirectFileWrites = !saveText.Contains("File.WriteAllText") &&
-                                      !saveText.Contains("File.WriteAllBytes") &&
-                                      !saveText.Contains("FileStream") &&
-                                      !saveText.Contains("StreamWriter") &&
-                                      !saveText.Contains("StreamReader");
-            bool devUi = File.Exists(DevelopmentUiTypesPath) &&
-                         File.ReadAllText(DevelopmentUiTypesPath).Contains("Persistence") &&
-                         File.Exists(DevelopmentUiRootPath) &&
-                         File.ReadAllText(DevelopmentUiRootPath).Contains("SAVE TEST STATE") &&
-                         File.ReadAllText(DevelopmentUiRootPath).Contains("LOAD TEST STATE");
+            bool noDirectFileWrites = !combinedRuntimeText.Contains("File.WriteAllText") &&
+                                      !combinedRuntimeText.Contains("File.WriteAllBytes") &&
+                                      !combinedRuntimeText.Contains("File.ReadAllText") &&
+                                      !combinedRuntimeText.Contains("File.ReadAllBytes") &&
+                                      !combinedRuntimeText.Contains("Directory.CreateDirectory") &&
+                                      !combinedRuntimeText.Contains("FileStream") &&
+                                      !combinedRuntimeText.Contains("StreamWriter") &&
+                                      !combinedRuntimeText.Contains("StreamReader");
+            bool pauseMenu = pauseMenuExists &&
+                             menuText.Contains("PAUSE MENU") &&
+                             menuText.Contains("SAVE / LOAD") &&
+                             menuText.Contains("CREATE PROFILE") &&
+                             menuText.Contains("OVERWRITE") &&
+                             menuText.Contains("DELETE") &&
+                             bootstrapText.Contains("ILwsPersistenceMenuService");
 
             report.Add(
                 facade ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
-                "LWS Save Root",
-                facade ? "ILwsSaveService routes save/load through LwsPixelCrushersSaveAdapter." : "LWS save facade or Pixel Crushers adapter is missing.");
+                "LWS Save Facade",
+                facade ? "ILwsSaveService is retained as a thin project-facing facade." : "LWS save facade or Pixel Crushers adapter is missing.");
             report.Add(
-                storage ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
-                "LWS Save Storage Seam",
-                storage ? "LwsPcSaveStorage routes PC/Windows saves through Pixel Crushers DiskSavedGameDataStorer." : "LWS save storage seam is missing.");
+                pixelAuthority ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Save Framework Authority",
+                pixelAuthority ? "Runtime save/load/delete flows through Pixel Crushers SaveSystem and SavedGameDataStorer." : "Pixel Crushers Save System is not proven as the single runtime save authority.");
+            report.Add(
+                oldStorageRemoved ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Old Proof Save Path",
+                oldStorageRemoved ? "Old LWS storage/proof-slot classes are removed from production save architecture." : "Old LWS proof storage or proof-slot APIs are still present in production save code.");
+            report.Add(
+                profiles ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Profiles And Manual Slots",
+                profiles ? "Stable profiles and three manual slots per profile are defined with deterministic vendor slot mapping." : "Profile/manual-slot model is missing or incomplete.");
             report.Add(
                 providers ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
-                "LWS Save Providers",
-                providers ? "Global position, game clock, weather, and validation providers are registered." : "Prompt 016 semantic save providers are missing.");
+                "LWS Semantic Save Providers",
+                providers ? "Current LWS semantic state providers are registered for Pixel Crushers capture." : "Prompt 016 semantic save providers are missing.");
             report.Add(
                 globalDoubles ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Global Position Save Precision",
@@ -600,27 +649,29 @@ namespace LWS.InterstateHauler.Editor
             report.Add(
                 noDirectFileWrites ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Save File Ownership",
-                noDirectFileWrites ? "LWS Prompt 016 save code contains no direct platform file writes." : "LWS save code contains direct file IO and must route through Pixel Crushers/storage seam.");
+                noDirectFileWrites ? "Prompt 016 runtime save code contains no direct platform file IO." : "LWS runtime save code contains direct file IO and must route through Pixel Crushers storage.");
             report.Add(
-                devUi ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
-                "Save Development UI",
-                devUi ? "Development control center exposes Save / Persistence proof controls." : "Save / Persistence development controls were not found.");
+                pauseMenu ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Player-Facing Save Menu",
+                pauseMenu ? "Pause menu exposes profile management and manual save/load/delete controls." : "Player-facing persistence pause menu is missing or incomplete.");
 
             string[] docs =
             {
+                SaveVendorAuditDocsPath,
                 PixelCrushersSaveArchitectureDocsPath,
                 PixelCrushersApiMatrixPath,
                 LwsSaveProviderMatrixPath,
                 SaveTestMatrixPath,
+                ConsoleSaveStorageHandoffPath,
+                PersistenceRoadmapMergePath,
                 Prompt017SaveHandoffPath
             };
             bool docsPresent = docs.All(File.Exists);
             report.Add(
                 docsPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
                 "Prompt 016 Documentation",
-                docsPresent ? "Prompt 016 persistence docs and handoff exist." : "One or more Prompt 016 persistence documentation files are missing.");
+                docsPresent ? "Prompt 016 persistence audit, architecture, matrix, console handoff, roadmap merge, and Prompt 017 handoff docs exist." : "One or more Prompt 016 persistence documentation files are missing.");
         }
-
         private static void ValidateRoadGraphData(LwsProjectValidationReport report)
         {
             var graph = new LwsRoadGraph
@@ -3859,4 +3910,3 @@ namespace LWS.InterstateHauler.Editor
 
     }
 }
-

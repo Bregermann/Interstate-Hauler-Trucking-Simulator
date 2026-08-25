@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace LWS.InterstateHauler
 {
@@ -17,8 +18,14 @@ namespace LWS.InterstateHauler
     [Serializable]
     public sealed class LwsSaveSnapshot
     {
-        public int schemaVersion = 1;
+        public int schemaVersion = LwsSaveSchema.CurrentVersion;
+        public string gameVersion = LwsSaveSchema.DefaultGameVersion;
         public string profileId;
+        public string profileDisplayName;
+        public LwsSaveSlotType slotType = LwsSaveSlotType.Manual;
+        public int slotNumber;
+        public int vendorSlotNumber;
+        public string sceneName;
         public long capturedUtcTicks;
         public List<LwsSaveParticipantState> participants = new List<LwsSaveParticipantState>();
     }
@@ -55,65 +62,97 @@ namespace LWS.InterstateHauler
         LwsSaveOperationResult ValidateParticipant();
     }
 
-    public interface ILwsSaveStorage
-    {
-        string StorageId { get; }
-        string Platform { get; }
-        string PixelCrushersStorerTypeName { get; }
-        int DevelopmentProofSlot { get; }
-        bool UsesDirectFileAccess { get; }
-        LwsSaveOperationResult ValidateStorage();
-    }
-
     public interface ILwsSaveService : ILwsService
     {
         IReadOnlyList<ILwsSaveParticipant> Participants { get; }
-        ILwsSaveStorage Storage { get; }
         LwsPixelCrushersSaveAdapter Adapter { get; }
         LwsSaveDiagnostics Diagnostics { get; }
+        IReadOnlyList<LwsSaveProfileMetadata> Profiles { get; }
+        LwsSaveProfileMetadata ActiveProfile { get; }
+        string ActiveProfileId { get; }
+        int ManualSlotCount { get; }
+        bool IsSaving { get; }
+        bool IsLoading { get; }
+        bool CanSave { get; }
+        bool CanLoad { get; }
+        event Action<LwsSaveOperationResult, LwsManualSaveSlotMetadata> SaveCompleted;
+        event Action<LwsSaveOperationResult, LwsManualSaveSlotMetadata> LoadCompleted;
+        event Action<LwsSaveOperationResult, string, int> DeleteCompleted;
         LwsSaveOperationResult RegisterParticipant(ILwsSaveParticipant participant);
         LwsSaveOperationResult UnregisterParticipant(string participantId);
         LwsSaveOperationResult ValidateParticipants();
         LwsSaveSnapshot CaptureSnapshot(string profileId);
         LwsSaveOperationResult RestoreSnapshot(LwsSaveSnapshot snapshot);
         LwsSaveOperationResult ClearAllParticipants();
-        LwsSaveOperationResult SaveToSlot(int slotNumber);
-        LwsSaveOperationResult LoadFromSlot(int slotNumber);
-        bool HasSaveInSlot(int slotNumber);
-        LwsSaveOperationResult DeleteSlot(int slotNumber);
-        LwsSaveOperationResult SaveTestState();
-        LwsSaveOperationResult LoadTestState();
+        LwsSaveOperationResult CreateProfile(string displayName, out LwsSaveProfileMetadata profile);
+        LwsSaveOperationResult SelectProfile(string profileId);
+        LwsSaveOperationResult RenameProfile(string profileId, string displayName);
+        LwsSaveOperationResult DeleteProfile(string profileId);
+        IReadOnlyList<LwsManualSaveSlotMetadata> GetManualSlots(string profileId = null);
+        LwsManualSaveSlotMetadata GetSlotMetadata(string profileId, int manualSlotNumber);
+        int MapToVendorSlot(string profileId, LwsSaveSlotType slotType, int slotNumber);
+        bool HasSave(string profileId, int manualSlotNumber);
+        LwsSaveOperationResult Save(string profileId, int manualSlotNumber, bool overwrite);
+        LwsSaveOperationResult Load(string profileId, int manualSlotNumber);
+        LwsSaveOperationResult Delete(string profileId, int manualSlotNumber);
         string BuildDiagnosticsReport();
     }
 
     public sealed class LwsSaveService : ILwsSaveService
     {
-        public const int DevelopmentTestSlot = 16;
+        private const string DefaultProfileId = "profile.development.driver";
+        private const string DefaultProfileName = "Development Driver";
 
         private readonly List<ILwsSaveParticipant> _participants = new List<ILwsSaveParticipant>();
         private readonly HashSet<string> _participantIds = new HashSet<string>(StringComparer.Ordinal);
 
         private LwsServiceRegistry _registry;
-        private LwsValidationSaveParticipant _validationParticipant;
+        private LwsSaveProfileDirectory _directory = new LwsSaveProfileDirectory();
         private string _lastSaveMessage = "--";
         private string _lastLoadMessage = "--";
+        private string _lastDeleteMessage = "--";
+        private string _pendingProfileId;
+        private LwsSaveSlotType _pendingSlotType = LwsSaveSlotType.Manual;
+        private int _pendingSlotNumber;
+        private int _pendingVendorSlotNumber;
 
         public string ServiceId => "lws.save";
         public IReadOnlyList<ILwsSaveParticipant> Participants => _participants;
-        public ILwsSaveStorage Storage { get; private set; }
         public LwsPixelCrushersSaveAdapter Adapter { get; private set; }
         public LwsSaveDiagnostics Diagnostics { get; private set; } = LwsSaveDiagnostics.Empty;
+        public IReadOnlyList<LwsSaveProfileMetadata> Profiles
+        {
+            get
+            {
+                EnsureDefaultProfile();
+                return _directory.Profiles;
+            }
+        }
+
+        public LwsSaveProfileMetadata ActiveProfile
+        {
+            get
+            {
+                EnsureDefaultProfile();
+                return _directory.FindProfile(_directory.selectedProfileId);
+            }
+        }
+
+        public string ActiveProfileId => ActiveProfile != null ? ActiveProfile.stableProfileId : string.Empty;
+        public int ManualSlotCount => LwsSaveSchema.ManualSlotCount;
+        public bool IsSaving { get; private set; }
+        public bool IsLoading { get; private set; }
+        public bool CanSave => Adapter != null && Adapter.ReadyForRuntimeSaves && ActiveProfile != null && !IsSaving && !IsLoading;
+        public bool CanLoad => Adapter != null && Adapter.ReadyForRuntimeSaves && ActiveProfile != null && !IsSaving && !IsLoading;
+
+        public event Action<LwsSaveOperationResult, LwsManualSaveSlotMetadata> SaveCompleted;
+        public event Action<LwsSaveOperationResult, LwsManualSaveSlotMetadata> LoadCompleted;
+        public event Action<LwsSaveOperationResult, string, int> DeleteCompleted;
 
         public LwsServiceResult Initialize(LwsServiceContext context)
         {
             _registry = context.Registry;
-            Storage = new LwsPcSaveStorage(DevelopmentTestSlot);
-            Adapter = new LwsPixelCrushersSaveAdapter(Storage);
-
-            RegisterParticipant(new LwsPlaceholderSaveParticipant("pixel-crushers.dialogue", 1));
-            RegisterParticipant(new LwsPlaceholderSaveParticipant("compass.navigator", 1));
-            RegisterParticipant(new LwsPlaceholderSaveParticipant("vehicle.truck", 1));
-            RegisterParticipant(new LwsPlaceholderSaveParticipant("jobs.state", 1));
+            Adapter = new LwsPixelCrushersSaveAdapter();
             RegisterSemanticParticipants();
 
             LwsSaveOperationResult validation = ValidateParticipants();
@@ -122,16 +161,20 @@ namespace LWS.InterstateHauler
                 return LwsServiceResult.Failure(validation.Message);
             }
 
-            LwsSaveOperationResult storageValidation = Storage.ValidateStorage();
-            if (!storageValidation.Succeeded)
+            LwsSaveOperationResult adapterValidation = Adapter.Initialize(this);
+            if (adapterValidation.Succeeded)
             {
-                return LwsServiceResult.Failure(storageValidation.Message);
+                LwsSaveOperationResult directoryLoad = Adapter.LoadProfileDirectory(out LwsSaveProfileDirectory loadedDirectory);
+                if (directoryLoad.Succeeded && loadedDirectory != null)
+                {
+                    _directory = loadedDirectory;
+                }
             }
 
-            LwsSaveOperationResult adapterValidation = Adapter.Initialize();
+            EnsureDefaultProfile();
             RefreshDiagnostics("Initialize", adapterValidation);
             return adapterValidation.Succeeded
-                ? LwsServiceResult.Success("LWS save service initialized with Pixel Crushers Save System.")
+                ? LwsServiceResult.Success("LWS persistence facade initialized with Pixel Crushers Save System as the save authority.")
                 : LwsServiceResult.Failure(adapterValidation.Message);
         }
 
@@ -140,9 +183,11 @@ namespace LWS.InterstateHauler
             _participants.Clear();
             _participantIds.Clear();
             _registry = null;
-            _validationParticipant = null;
+            _directory = new LwsSaveProfileDirectory();
             Diagnostics = LwsSaveDiagnostics.Empty;
-            return LwsServiceResult.Success("LWS save service shut down.");
+            IsSaving = false;
+            IsLoading = false;
+            return LwsServiceResult.Success("LWS save facade shut down.");
         }
 
         public LwsSaveOperationResult RegisterParticipant(ILwsSaveParticipant participant)
@@ -206,14 +251,26 @@ namespace LWS.InterstateHauler
                 }
             }
 
-            return LwsSaveOperationResult.Success();
+            return LwsSaveOperationResult.Success("Save participants are valid.");
         }
 
         public LwsSaveSnapshot CaptureSnapshot(string profileId)
         {
+            string resolvedProfileId = string.IsNullOrWhiteSpace(profileId)
+                ? (string.IsNullOrWhiteSpace(_pendingProfileId) ? ActiveProfileId : _pendingProfileId)
+                : profileId;
+            LwsSaveProfileMetadata profile = _directory.FindProfile(resolvedProfileId) ?? ActiveProfile;
+            string sceneName = SceneManager.GetActiveScene().name;
             return new LwsSaveSnapshot
             {
-                profileId = profileId ?? string.Empty,
+                schemaVersion = LwsSaveSchema.CurrentVersion,
+                gameVersion = LwsSaveSchema.ResolveGameVersion(),
+                profileId = profile != null ? profile.stableProfileId : resolvedProfileId ?? string.Empty,
+                profileDisplayName = profile != null ? profile.DisplayNameOrFallback : string.Empty,
+                slotType = _pendingSlotType,
+                slotNumber = _pendingSlotNumber,
+                vendorSlotNumber = _pendingVendorSlotNumber,
+                sceneName = sceneName ?? string.Empty,
                 capturedUtcTicks = DateTime.UtcNow.Ticks,
                 participants = _participants.Select(p => p.CaptureState()).ToList()
             };
@@ -226,8 +283,23 @@ namespace LWS.InterstateHauler
                 return LwsSaveOperationResult.Failure("Cannot restore a null save snapshot.");
             }
 
+            if (!string.IsNullOrWhiteSpace(snapshot.profileId))
+            {
+                SelectProfile(snapshot.profileId);
+            }
+
+            if (snapshot.participants == null)
+            {
+                return LwsSaveOperationResult.Failure("Save snapshot has no participant list.");
+            }
+
             foreach (LwsSaveParticipantState payload in snapshot.participants)
             {
+                if (payload == null || string.IsNullOrWhiteSpace(payload.participantId))
+                {
+                    continue;
+                }
+
                 ILwsSaveParticipant participant = _participants.FirstOrDefault(p => p.ParticipantId == payload.participantId);
                 if (participant == null)
                 {
@@ -241,7 +313,7 @@ namespace LWS.InterstateHauler
                 }
             }
 
-            return LwsSaveOperationResult.Success();
+            return LwsSaveOperationResult.Success("LWS semantic save payload restored by Pixel Crushers saver.");
         }
 
         public LwsSaveOperationResult ClearAllParticipants()
@@ -255,11 +327,143 @@ namespace LWS.InterstateHauler
                 }
             }
 
-            return LwsSaveOperationResult.Success();
+            return LwsSaveOperationResult.Success("Save participants cleared.");
         }
 
-        public LwsSaveOperationResult SaveToSlot(int slotNumber)
+        public LwsSaveOperationResult CreateProfile(string displayName, out LwsSaveProfileMetadata profile)
         {
+            EnsureDefaultProfile();
+            profile = null;
+            string cleanName = string.IsNullOrWhiteSpace(displayName) ? "Driver" : displayName.Trim();
+            long now = DateTime.UtcNow.Ticks;
+            int profileIndex = _directory.AllocateProfileIndex();
+            profile = new LwsSaveProfileMetadata
+            {
+                stableProfileId = $"profile.{Guid.NewGuid():N}",
+                displayName = cleanName,
+                profileIndex = profileIndex,
+                createdUtcTicks = now,
+                lastPlayedUtcTicks = now,
+                lastUsedManualSlot = 1,
+                schemaVersion = LwsSaveSchema.CurrentVersion,
+                gameVersion = LwsSaveSchema.ResolveGameVersion()
+            };
+
+            _directory.profiles.Add(profile);
+            _directory.selectedProfileId = profile.stableProfileId;
+            EnsureProfileSlots(profile);
+            LwsSaveOperationResult result = PersistDirectory("CreateProfile");
+            RefreshDiagnostics("Profile", result);
+            return result.Succeeded
+                ? LwsSaveOperationResult.Success($"Created save profile '{profile.DisplayNameOrFallback}'.")
+                : result;
+        }
+
+        public LwsSaveOperationResult SelectProfile(string profileId)
+        {
+            EnsureDefaultProfile();
+            LwsSaveProfileMetadata profile = _directory.FindProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure($"Save profile not found: {profileId}");
+            }
+
+            _directory.selectedProfileId = profile.stableProfileId;
+            profile.lastPlayedUtcTicks = DateTime.UtcNow.Ticks;
+            EnsureProfileSlots(profile);
+            LwsSaveOperationResult result = PersistDirectory("SelectProfile");
+            RefreshDiagnostics("Profile", result);
+            return result.Succeeded
+                ? LwsSaveOperationResult.Success($"Selected save profile '{profile.DisplayNameOrFallback}'.")
+                : result;
+        }
+
+        public LwsSaveOperationResult RenameProfile(string profileId, string displayName)
+        {
+            LwsSaveProfileMetadata profile = _directory.FindProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure($"Save profile not found: {profileId}");
+            }
+
+            profile.displayName = string.IsNullOrWhiteSpace(displayName) ? profile.DisplayNameOrFallback : displayName.Trim();
+            profile.lastPlayedUtcTicks = DateTime.UtcNow.Ticks;
+            LwsSaveOperationResult result = PersistDirectory("RenameProfile");
+            RefreshDiagnostics("Profile", result);
+            return result.Succeeded
+                ? LwsSaveOperationResult.Success($"Renamed save profile to '{profile.DisplayNameOrFallback}'.")
+                : result;
+        }
+
+        public LwsSaveOperationResult DeleteProfile(string profileId)
+        {
+            LwsSaveProfileMetadata profile = _directory.FindProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure($"Save profile not found: {profileId}");
+            }
+
+            foreach (int vendorSlot in LwsSaveSchema.EnumerateReservedVendorSlots(profile.profileIndex))
+            {
+                if (Adapter != null && Adapter.ReadyForRuntimeSaves)
+                {
+                    Adapter.DeleteSlot(vendorSlot);
+                }
+            }
+
+            _directory.RemoveProfile(profileId);
+            EnsureDefaultProfile();
+            LwsSaveOperationResult result = PersistDirectory("DeleteProfile");
+            RefreshDiagnostics("Delete", result);
+            return result.Succeeded
+                ? LwsSaveOperationResult.Success($"Deleted save profile '{profile.DisplayNameOrFallback}'.")
+                : result;
+        }
+
+        public IReadOnlyList<LwsManualSaveSlotMetadata> GetManualSlots(string profileId = null)
+        {
+            EnsureDefaultProfile();
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            return _directory.GetManualSlotsForProfile(profile);
+        }
+
+        public LwsManualSaveSlotMetadata GetSlotMetadata(string profileId, int manualSlotNumber)
+        {
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            if (profile == null)
+            {
+                return null;
+            }
+
+            return _directory.GetOrCreateManualSlot(profile, Mathf.Clamp(manualSlotNumber, 1, LwsSaveSchema.ManualSlotCount));
+        }
+
+        public int MapToVendorSlot(string profileId, LwsSaveSlotType slotType, int slotNumber)
+        {
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            int profileIndex = profile != null ? profile.profileIndex : 0;
+            return LwsSaveSchema.MapToVendorSlot(profileIndex, slotType, slotNumber);
+        }
+
+        public bool HasSave(string profileId, int manualSlotNumber)
+        {
+            LwsManualSaveSlotMetadata slot = GetSlotMetadata(profileId, manualSlotNumber);
+            if (slot == null)
+            {
+                return false;
+            }
+
+            bool vendorHasSave = Adapter != null && Adapter.ReadyForRuntimeSaves && Adapter.HasSaveInSlot(slot.vendorSlotNumber);
+            return slot.occupied || vendorHasSave;
+        }
+
+        public LwsSaveOperationResult Save(string profileId, int manualSlotNumber, bool overwrite)
+        {
+            if (IsSaving || IsLoading)
+            {
+                return LwsSaveOperationResult.Failure("A save/load operation is already in progress.");
+            }
+
             LwsSaveOperationResult validation = ValidateParticipants();
             if (!validation.Succeeded)
             {
@@ -267,40 +471,131 @@ namespace LWS.InterstateHauler
                 return validation;
             }
 
-            LwsSaveSnapshot snapshot = CaptureSnapshot("development");
-            LwsSaveOperationResult result = Adapter.SaveToSlot(slotNumber, snapshot);
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure("No active save profile is available.");
+            }
+
+            LwsManualSaveSlotMetadata slot = GetSlotMetadata(profile.stableProfileId, manualSlotNumber);
+            if (slot == null)
+            {
+                return LwsSaveOperationResult.Failure("Manual save slot is not available.");
+            }
+
+            if (slot.occupied && !overwrite)
+            {
+                return LwsSaveOperationResult.Failure($"{slot.SlotLabel} already contains a save. Confirm overwrite first.");
+            }
+
+            _pendingProfileId = profile.stableProfileId;
+            _pendingSlotType = LwsSaveSlotType.Manual;
+            _pendingSlotNumber = slot.slotNumber;
+            _pendingVendorSlotNumber = slot.vendorSlotNumber;
+            IsSaving = true;
+            LwsSaveOperationResult result;
+            try
+            {
+                result = Adapter != null
+                    ? Adapter.SaveToSlotImmediate(slot.vendorSlotNumber)
+                    : LwsSaveOperationResult.Failure("Pixel Crushers save adapter is not available.");
+            }
+            finally
+            {
+                IsSaving = false;
+                ClearPendingContext();
+            }
+
+            if (result.Succeeded)
+            {
+                MarkSlotSaved(profile, slot);
+                LwsSaveOperationResult directoryResult = PersistDirectory("Save");
+                if (!directoryResult.Succeeded)
+                {
+                    result = directoryResult;
+                }
+            }
+
             RefreshDiagnostics("Save", result);
+            SaveCompleted?.Invoke(result, slot);
             return result;
         }
 
-        public LwsSaveOperationResult LoadFromSlot(int slotNumber)
+        public LwsSaveOperationResult Load(string profileId, int manualSlotNumber)
         {
-            LwsSaveOperationResult result = Adapter.LoadFromSlot(slotNumber, _participants);
+            if (IsSaving || IsLoading)
+            {
+                return LwsSaveOperationResult.Failure("A save/load operation is already in progress.");
+            }
+
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure("No active save profile is available.");
+            }
+
+            LwsManualSaveSlotMetadata slot = GetSlotMetadata(profile.stableProfileId, manualSlotNumber);
+            if (slot == null || !HasSave(profile.stableProfileId, manualSlotNumber))
+            {
+                return LwsSaveOperationResult.Failure($"No saved game is available in manual slot {manualSlotNumber}.");
+            }
+
+            IsLoading = true;
+            LwsSaveOperationResult result;
+            try
+            {
+                result = Adapter != null
+                    ? Adapter.LoadFromSlot(slot.vendorSlotNumber)
+                    : LwsSaveOperationResult.Failure("Pixel Crushers save adapter is not available.");
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+
+            if (result.Succeeded)
+            {
+                _directory.selectedProfileId = profile.stableProfileId;
+                profile.lastPlayedUtcTicks = DateTime.UtcNow.Ticks;
+                profile.lastUsedManualSlot = slot.slotNumber;
+                PersistDirectory("Load");
+            }
+
             RefreshDiagnostics("Load", result);
+            LoadCompleted?.Invoke(result, slot);
             return result;
         }
 
-        public bool HasSaveInSlot(int slotNumber)
+        public LwsSaveOperationResult Delete(string profileId, int manualSlotNumber)
         {
-            return Adapter != null && Adapter.HasSaveInSlot(slotNumber);
-        }
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure("No active save profile is available.");
+            }
 
-        public LwsSaveOperationResult DeleteSlot(int slotNumber)
-        {
-            LwsSaveOperationResult result = Adapter.DeleteSlot(slotNumber);
+            LwsManualSaveSlotMetadata slot = GetSlotMetadata(profile.stableProfileId, manualSlotNumber);
+            if (slot == null)
+            {
+                return LwsSaveOperationResult.Failure($"Manual save slot {manualSlotNumber} is not available.");
+            }
+
+            LwsSaveOperationResult result = Adapter != null && Adapter.ReadyForRuntimeSaves
+                ? Adapter.DeleteSlot(slot.vendorSlotNumber)
+                : LwsSaveOperationResult.Success("Slot metadata cleared; Pixel Crushers runtime storage is not active in Edit Mode.");
+            if (result.Succeeded)
+            {
+                ClearSlotMetadata(slot);
+                LwsSaveOperationResult directoryResult = PersistDirectory("Delete");
+                if (!directoryResult.Succeeded)
+                {
+                    result = directoryResult;
+                }
+            }
+
             RefreshDiagnostics("Delete", result);
+            DeleteCompleted?.Invoke(result, profile.stableProfileId, manualSlotNumber);
             return result;
-        }
-
-        public LwsSaveOperationResult SaveTestState()
-        {
-            _validationParticipant?.MarkSaved();
-            return SaveToSlot(Storage != null ? Storage.DevelopmentProofSlot : DevelopmentTestSlot);
-        }
-
-        public LwsSaveOperationResult LoadTestState()
-        {
-            return LoadFromSlot(Storage != null ? Storage.DevelopmentProofSlot : DevelopmentTestSlot);
         }
 
         public string BuildDiagnosticsReport()
@@ -314,7 +609,7 @@ namespace LWS.InterstateHauler
             LwsGameClockSnapshot clock = default;
             ILwsGameClockService clockService = null;
             bool clockAvailable = _registry != null && _registry.TryGet(out clockService);
-            if (clockAvailable)
+            if (clockAvailable && clockService != null)
             {
                 clock = clockService.CurrentSnapshot;
             }
@@ -325,28 +620,171 @@ namespace LWS.InterstateHauler
                 weather = weatherService.CurrentSnapshot.weatherPresetId;
             }
 
+            string road = "missing";
+            if (_registry != null && _registry.TryGet(out ILwsRoadConditionService roadService))
+            {
+                road = $"{roadService.CurrentSnapshot.MajorGameplayState} / {roadService.Mode}";
+            }
+
+            string route = "inactive";
+            if (_registry != null && _registry.TryGet(out ILwsNavigationService navigationService) && navigationService.RuntimeState != null)
+            {
+                route = navigationService.RuntimeState.routeActive
+                    ? $"{navigationService.RuntimeState.destinationId} / {navigationService.RuntimeState.distanceRemainingMeters:0} m"
+                    : navigationService.RuntimeState.status.ToString();
+            }
+
             return
                 "SAVE / PERSISTENCE DIAGNOSTICS\n" +
+                "Save framework authority: PIXEL CRUSHERS\n" +
                 $"Pixel Crushers available: {(Adapter != null && Adapter.PixelCrushersAvailable ? "YES" : "NO")}\n" +
-                $"Pixel Crushers version: {LwsPixelCrushersSaveAdapter.KnownPackageVersion}\n" +
+                $"Pixel Crushers Common version: {LwsPixelCrushersSaveAdapter.KnownCommonPackageVersion}\n" +
+                $"Dialogue System version: {LwsPixelCrushersSaveAdapter.KnownDialogueSystemVersion}\n" +
                 $"LWS adapter: {(Adapter != null ? Adapter.Status : "missing")}\n" +
-                $"Storage: {(Storage != null ? $"{Storage.Platform} via {Storage.PixelCrushersStorerTypeName}" : "missing")}\n" +
+                $"Serializer: {Diagnostics.activeSerializer}\n" +
+                $"Storer: {Diagnostics.activeStorer}\n" +
+                $"Profiles: {Profiles.Count}\n" +
+                $"Active profile: {(ActiveProfile != null ? ActiveProfile.DisplayNameOrFallback : "none")}\n" +
                 $"Current save-state providers: {Participants.Count}\n" +
                 $"Current global player position: {global}\n" +
                 $"Current clock: {(clockAvailable ? $"{clock.DateText} {clock.ClockText} {clock.timeScale:0.##}x paused:{clock.paused}" : "missing")}\n" +
                 $"Current weather: {weather}\n" +
+                $"Current road condition: {road}\n" +
+                $"Current route: {route}\n" +
                 $"Last save operation: {Diagnostics.LastSaveMessage}\n" +
                 $"Last load operation: {Diagnostics.LastLoadMessage}\n" +
+                $"Last delete operation: {Diagnostics.LastDeleteMessage}\n" +
                 $"Last vendor error: {Diagnostics.LastVendorError}";
         }
 
         private void RegisterSemanticParticipants()
         {
             RegisterParticipant(new LwsGlobalPositionSaveParticipant(() => _registry));
+            RegisterParticipant(new LwsPlayerTruckSaveParticipant(() => _registry));
             RegisterParticipant(new LwsGameClockSaveParticipant(() => _registry));
             RegisterParticipant(new LwsWeatherSaveParticipant(() => _registry));
-            _validationParticipant = new LwsValidationSaveParticipant();
-            RegisterParticipant(_validationParticipant);
+            RegisterParticipant(new LwsRoadConditionSaveParticipant(() => _registry));
+            RegisterParticipant(new LwsNavigationSaveParticipant(() => _registry));
+        }
+
+        private void EnsureDefaultProfile()
+        {
+            _directory = _directory ?? new LwsSaveProfileDirectory();
+            _directory.EnsureValid();
+            if (_directory.profiles.Count == 0)
+            {
+                long now = DateTime.UtcNow.Ticks;
+                var profile = new LwsSaveProfileMetadata
+                {
+                    stableProfileId = DefaultProfileId,
+                    displayName = DefaultProfileName,
+                    profileIndex = 0,
+                    createdUtcTicks = now,
+                    lastPlayedUtcTicks = now,
+                    lastUsedManualSlot = 1,
+                    schemaVersion = LwsSaveSchema.CurrentVersion,
+                    gameVersion = LwsSaveSchema.ResolveGameVersion()
+                };
+                _directory.profiles.Add(profile);
+                _directory.selectedProfileId = profile.stableProfileId;
+                _directory.nextProfileIndex = Mathf.Max(_directory.nextProfileIndex, 1);
+            }
+
+            foreach (LwsSaveProfileMetadata profile in _directory.profiles)
+            {
+                EnsureProfileSlots(profile);
+            }
+
+            if (_directory.FindProfile(_directory.selectedProfileId) == null)
+            {
+                _directory.selectedProfileId = _directory.profiles[0].stableProfileId;
+            }
+        }
+
+        private LwsSaveProfileMetadata ResolveProfile(string profileId)
+        {
+            EnsureDefaultProfile();
+            return string.IsNullOrWhiteSpace(profileId) ? ActiveProfile : _directory.FindProfile(profileId);
+        }
+
+        private void EnsureProfileSlots(LwsSaveProfileMetadata profile)
+        {
+            if (profile == null)
+            {
+                return;
+            }
+
+            for (int i = 1; i <= LwsSaveSchema.ManualSlotCount; i++)
+            {
+                _directory.GetOrCreateManualSlot(profile, i);
+            }
+        }
+
+        private LwsSaveOperationResult PersistDirectory(string operation)
+        {
+            _directory.EnsureValid();
+            return Adapter != null
+                ? Adapter.StoreProfileDirectory(_directory)
+                : LwsSaveOperationResult.Failure($"Cannot persist profile directory during {operation}; Pixel Crushers adapter is missing.");
+        }
+
+        private void MarkSlotSaved(LwsSaveProfileMetadata profile, LwsManualSaveSlotMetadata slot)
+        {
+            long now = DateTime.UtcNow.Ticks;
+            profile.lastPlayedUtcTicks = now;
+            profile.lastUsedManualSlot = slot.slotNumber;
+            slot.occupied = true;
+            slot.savedUtcTicks = now;
+            slot.schemaVersion = LwsSaveSchema.CurrentVersion;
+            slot.gameVersion = LwsSaveSchema.ResolveGameVersion();
+            slot.sceneName = SceneManager.GetActiveScene().name ?? string.Empty;
+            slot.worldLabel = ResolveWorldLabel();
+            slot.truckDefinitionId = ResolveTruckDefinitionId();
+            slot.routeDestinationId = ResolveRouteDestinationId();
+            slot.weatherPresetId = ResolveWeatherPresetId();
+        }
+
+        private void ClearSlotMetadata(LwsManualSaveSlotMetadata slot)
+        {
+            slot.occupied = false;
+            slot.savedUtcTicks = 0;
+            slot.playtimeSeconds = 0d;
+            slot.sceneName = string.Empty;
+            slot.worldLabel = string.Empty;
+            slot.truckDefinitionId = string.Empty;
+            slot.routeDestinationId = string.Empty;
+            slot.weatherPresetId = string.Empty;
+        }
+
+        private string ResolveWorldLabel()
+        {
+            if (_registry != null && _registry.TryGet(out ILwsWorldStreamingService streaming) && !string.IsNullOrWhiteSpace(streaming.WorldId))
+            {
+                return streaming.WorldId;
+            }
+
+            return SceneManager.GetActiveScene().name ?? string.Empty;
+        }
+
+        private string ResolveTruckDefinitionId()
+        {
+            return _registry != null && _registry.TryGet(out ILwsPlayerVehicleService vehicle) && vehicle.ActiveTruck != null
+                ? vehicle.ActiveTruck.DefinitionId
+                : string.Empty;
+        }
+
+        private string ResolveRouteDestinationId()
+        {
+            return _registry != null && _registry.TryGet(out ILwsNavigationService navigation) && navigation.RuntimeState != null
+                ? navigation.RuntimeState.destinationId ?? string.Empty
+                : string.Empty;
+        }
+
+        private string ResolveWeatherPresetId()
+        {
+            return _registry != null && _registry.TryGet(out ILwsWeatherService weather)
+                ? weather.CurrentSnapshot.weatherPresetId ?? string.Empty
+                : string.Empty;
         }
 
         private void RefreshDiagnostics(string operation, LwsSaveOperationResult result)
@@ -359,38 +797,30 @@ namespace LWS.InterstateHauler
             {
                 _lastLoadMessage = result.Message;
             }
+            else if (string.Equals(operation, "Delete", StringComparison.OrdinalIgnoreCase))
+            {
+                _lastDeleteMessage = result.Message;
+            }
 
             LwsSaveDiagnostics diagnostics = LwsSaveDiagnostics.FromState(
                 Adapter,
-                Storage,
                 Participants.Count,
+                Profiles.Count,
+                ActiveProfile != null ? ActiveProfile.DisplayNameOrFallback : "none",
                 operation,
-                result,
-                _validationParticipant != null ? _validationParticipant.RoundTripSucceeded : false);
+                result);
             diagnostics.lastSaveMessage = _lastSaveMessage;
             diagnostics.lastLoadMessage = _lastLoadMessage;
+            diagnostics.lastDeleteMessage = _lastDeleteMessage;
             Diagnostics = diagnostics;
         }
-    }
 
-    public sealed class LwsPcSaveStorage : ILwsSaveStorage
-    {
-        public LwsPcSaveStorage(int developmentProofSlot)
+        private void ClearPendingContext()
         {
-            DevelopmentProofSlot = developmentProofSlot;
-        }
-
-        public string StorageId => "lws.save.storage.pc";
-        public string Platform => "PC / Windows / Steam";
-        public string PixelCrushersStorerTypeName => LwsPixelCrushersSaveAdapter.DiskSavedGameDataStorerTypeName;
-        public int DevelopmentProofSlot { get; }
-        public bool UsesDirectFileAccess => false;
-
-        public LwsSaveOperationResult ValidateStorage()
-        {
-            return DevelopmentProofSlot >= 0
-                ? LwsSaveOperationResult.Success("PC save storage routes through Pixel Crushers storage.")
-                : LwsSaveOperationResult.Failure("Development save slot must be non-negative.");
+            _pendingProfileId = string.Empty;
+            _pendingSlotType = LwsSaveSlotType.Manual;
+            _pendingSlotNumber = 0;
+            _pendingVendorSlotNumber = 0;
         }
     }
 
@@ -401,136 +831,85 @@ namespace LWS.InterstateHauler
         public const string SavedGameDataStorerTypeName = "PixelCrushers.SavedGameDataStorer";
         public const string DiskSavedGameDataStorerTypeName = "PixelCrushers.DiskSavedGameDataStorer";
         public const string PlayerPrefsSavedGameDataStorerTypeName = "PixelCrushers.PlayerPrefsSavedGameDataStorer";
+        public const string JsonDataSerializerTypeName = "PixelCrushers.JsonDataSerializer";
+        public const string BinaryDataSerializerTypeName = "PixelCrushers.BinaryDataSerializer";
         public const string SaverTypeName = "PixelCrushers.Saver";
-        public const string DialogueSystemSaverTypeName = "PixelCrushers.DialogueSystemSaver";
+        public const string DialogueSystemSaverTypeName = "PixelCrushers.DialogueSystem.DialogueSystemSaver";
         public const string GameSaverTypeName = "PixelCrushers.DialogueSystem.GameSaver";
-        public const string KnownPackageVersion = "2.2.73.2";
+        public const string SemanticSaverTypeName = "LWS.InterstateHauler.LwsPixelCrushersSemanticSaver";
+        public const string KnownCommonPackageVersion = "1.10.73";
+        public const string KnownDialogueSystemVersion = "2.2.73.2";
+        public const string KnownPackageVersion = KnownDialogueSystemVersion;
         public const string RootPath = "Assets/Plugins/Pixel Crushers";
         public const string AssetName = "Pixel Crushers Common Save System / Dialogue System";
 
-        private readonly ILwsSaveStorage _storage;
-
+        private ILwsSaveService _saveService;
         private Type _saveSystemType;
         private Type _savedGameDataType;
+        private Type _savedGameDataStorerType;
         private Type _diskStorerType;
-        private MethodInfo _recordSavedGameDataMethod;
-        private MethodInfo _applySavedGameDataMethod;
+        private Type _jsonSerializerType;
+        private Type _semanticSaverType;
+        private MethodInfo _saveToSlotImmediateMethod;
+        private MethodInfo _loadFromSlotMethod;
+        private MethodInfo _hasSavedGameInSlotMethod;
+        private MethodInfo _deleteSavedGameInSlotMethod;
+        private MethodInfo _serializeMethod;
+        private MethodInfo _deserializeGenericMethod;
         private MethodInfo _setDataMethod;
         private MethodInfo _getDataMethod;
         private MethodInfo _storeSavedGameDataMethod;
         private MethodInfo _retrieveSavedGameDataMethod;
         private MethodInfo _hasDataInSlotMethod;
-        private MethodInfo _deleteSavedGameDataMethod;
         private PropertyInfo _saveSystemInstanceProperty;
         private PropertyInfo _saveSystemStorerProperty;
         private PropertyInfo _saveCurrentSceneProperty;
-
-        public LwsPixelCrushersSaveAdapter(ILwsSaveStorage storage)
-        {
-            _storage = storage;
-        }
+        private PropertyInfo _maxSaveSlotProperty;
+        private PropertyInfo _versionProperty;
+        private PropertyInfo _savedGameVersionProperty;
+        private PropertyInfo _savedGameSceneNameProperty;
+        private FieldInfo _storerField;
+        private FieldInfo _serializerField;
+        private Component _activeStorer;
+        private Component _activeSerializer;
+        private MonoBehaviour _semanticSaver;
 
         public bool PixelCrushersAvailable => _saveSystemType != null && _savedGameDataType != null;
         public bool Initialized { get; private set; }
+        public bool RuntimeBound { get; private set; }
+        public bool ReadyForRuntimeSaves => Initialized && RuntimeBound && _activeStorer != null && _semanticSaver != null;
         public string Status { get; private set; } = "Not initialized.";
         public string LastVendorError { get; private set; } = string.Empty;
         public string ActiveStorerTypeName { get; private set; } = "unknown";
+        public string ActiveSerializerTypeName { get; private set; } = "unknown";
 
-        public LwsSaveOperationResult Initialize()
+        public LwsSaveOperationResult Initialize(ILwsSaveService saveService)
         {
+            _saveService = saveService;
             try
             {
-                _saveSystemType = FindType(SaveSystemTypeName);
-                _savedGameDataType = FindType(SavedGameDataTypeName);
-                _diskStorerType = FindType(DiskSavedGameDataStorerTypeName);
-                if (_saveSystemType == null || _savedGameDataType == null)
+                ResolveTypesAndMethods();
+                if (_saveSystemType == null || _savedGameDataType == null || _savedGameDataStorerType == null)
                 {
-                    return Fail("PIXEL CRUSHERS SAVE SYSTEM UNAVAILABLE: PixelCrushers.SaveSystem or SavedGameData type was not found.");
-                }
-
-                _saveSystemInstanceProperty = _saveSystemType.GetProperty("instance", BindingFlags.Public | BindingFlags.Static);
-                _saveSystemStorerProperty = _saveSystemType.GetProperty("storer", BindingFlags.Public | BindingFlags.Static);
-                _saveCurrentSceneProperty = _saveSystemType.GetProperty("saveCurrentScene", BindingFlags.Public | BindingFlags.Static);
-                _recordSavedGameDataMethod = _saveSystemType.GetMethod("RecordSavedGameData", BindingFlags.Public | BindingFlags.Static);
-                _applySavedGameDataMethod = _saveSystemType.GetMethod("ApplySavedGameData", BindingFlags.Public | BindingFlags.Static, null, new[] { _savedGameDataType }, null);
-                _setDataMethod = _savedGameDataType.GetMethod("SetData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(string), typeof(int), typeof(string) }, null);
-                _getDataMethod = _savedGameDataType.GetMethod("GetData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(string) }, null);
-
-                if (_saveSystemInstanceProperty == null ||
-                    _saveSystemStorerProperty == null ||
-                    _recordSavedGameDataMethod == null ||
-                    _applySavedGameDataMethod == null ||
-                    _setDataMethod == null ||
-                    _getDataMethod == null)
-                {
-                    return Fail("PIXEL CRUSHERS SAVE SYSTEM UNAVAILABLE: required public SaveSystem/SavedGameData APIs were not found.");
+                    return Fail("PIXEL CRUSHERS SAVE SYSTEM UNAVAILABLE: SaveSystem, SavedGameData, or SavedGameDataStorer type was not found.");
                 }
 
                 Initialized = true;
                 if (!Application.isPlaying)
                 {
-                    Status = "READY (Pixel Crushers APIs detected; runtime storer deferred until Play Mode).";
-                    LastVendorError = string.Empty;
+                    Status = "Pixel Crushers Save System types resolved; runtime binding deferred until Play Mode.";
                     return LwsSaveOperationResult.Success(Status);
                 }
 
-                return BindRuntimeStorer();
+                return BindRuntimeAuthority();
             }
             catch (Exception ex)
             {
-                return Fail($"PIXEL CRUSHERS SAVE SYSTEM UNAVAILABLE: {ex.GetType().Name}: {ex.Message}");
+                return Fail($"Pixel Crushers adapter initialization failed: {ex.Message}");
             }
         }
 
-        public LwsSaveOperationResult SaveToSlot(int slotNumber, LwsSaveSnapshot snapshot)
-        {
-            LwsSaveOperationResult ready = EnsureRuntimeReady();
-            if (!ready.Succeeded)
-            {
-                return ready;
-            }
-
-            if (snapshot == null)
-            {
-                return Fail("Cannot save a null LWS save snapshot.");
-            }
-
-            try
-            {
-                object savedGameData = _recordSavedGameDataMethod.Invoke(null, null);
-                if (savedGameData == null)
-                {
-                    return Fail("Pixel Crushers SaveSystem.RecordSavedGameData returned null.");
-                }
-
-                foreach (LwsSaveParticipantState participantState in snapshot.participants)
-                {
-                    if (participantState == null || string.IsNullOrWhiteSpace(participantState.participantId))
-                    {
-                        continue;
-                    }
-
-                    string participantJson = JsonUtility.ToJson(participantState);
-                    _setDataMethod.Invoke(savedGameData, new object[] { participantState.participantId, -1, participantJson });
-                }
-
-                object storer = _saveSystemStorerProperty.GetValue(null, null);
-                _storeSavedGameDataMethod.Invoke(storer, new[] { (object)slotNumber, savedGameData });
-                Status = $"Saved slot {slotNumber} through Pixel Crushers.";
-                LastVendorError = string.Empty;
-                return LwsSaveOperationResult.Success(Status);
-            }
-            catch (TargetInvocationException ex)
-            {
-                return Fail($"Pixel Crushers save failed: {ex.InnerException?.Message ?? ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                return Fail($"Pixel Crushers save failed: {ex.Message}");
-            }
-        }
-
-        public LwsSaveOperationResult LoadFromSlot(int slotNumber, IReadOnlyList<ILwsSaveParticipant> participants)
+        public LwsSaveOperationResult SaveToSlotImmediate(int vendorSlotNumber)
         {
             LwsSaveOperationResult ready = EnsureRuntimeReady();
             if (!ready.Succeeded)
@@ -540,73 +919,66 @@ namespace LWS.InterstateHauler
 
             try
             {
-                object storer = _saveSystemStorerProperty.GetValue(null, null);
-                bool exists = (bool)_hasDataInSlotMethod.Invoke(storer, new object[] { slotNumber });
-                if (!exists)
-                {
-                    return Fail($"Pixel Crushers save slot {slotNumber} does not exist.");
-                }
-
-                object savedGameData = _retrieveSavedGameDataMethod.Invoke(storer, new object[] { slotNumber });
-                if (savedGameData == null)
-                {
-                    return Fail($"Pixel Crushers storer returned no data for slot {slotNumber}.");
-                }
-
-                _applySavedGameDataMethod.Invoke(null, new[] { savedGameData });
-                foreach (ILwsSaveParticipant participant in participants ?? Array.Empty<ILwsSaveParticipant>())
-                {
-                    if (participant == null || string.IsNullOrWhiteSpace(participant.ParticipantId))
-                    {
-                        continue;
-                    }
-
-                    string json = _getDataMethod.Invoke(savedGameData, new object[] { participant.ParticipantId }) as string;
-                    if (string.IsNullOrWhiteSpace(json))
-                    {
-                        continue;
-                    }
-
-                    LwsSaveParticipantState state = JsonUtility.FromJson<LwsSaveParticipantState>(json);
-                    if (state == null)
-                    {
-                        continue;
-                    }
-
-                    LwsSaveOperationResult restore = participant.RestoreState(state);
-                    if (!restore.Succeeded)
-                    {
-                        return restore;
-                    }
-                }
-
-                Status = $"Loaded slot {slotNumber} through Pixel Crushers.";
-                LastVendorError = string.Empty;
-                return LwsSaveOperationResult.Success(Status);
+                _saveToSlotImmediateMethod.Invoke(null, new object[] { vendorSlotNumber });
+                return LwsSaveOperationResult.Success($"Saved through Pixel Crushers slot {vendorSlotNumber}.");
             }
             catch (TargetInvocationException ex)
             {
-                return Fail($"Pixel Crushers load failed: {ex.InnerException?.Message ?? ex.Message}");
+                return Fail($"Pixel Crushers SaveToSlotImmediate failed: {ex.InnerException?.Message ?? ex.Message}");
             }
             catch (Exception ex)
             {
-                return Fail($"Pixel Crushers load failed: {ex.Message}");
+                return Fail($"Pixel Crushers SaveToSlotImmediate failed: {ex.Message}");
             }
         }
 
-        public bool HasSaveInSlot(int slotNumber)
+        public LwsSaveOperationResult LoadFromSlot(int vendorSlotNumber)
         {
             LwsSaveOperationResult ready = EnsureRuntimeReady();
             if (!ready.Succeeded)
+            {
+                return ready;
+            }
+
+            if (!HasSaveInSlot(vendorSlotNumber))
+            {
+                return LwsSaveOperationResult.Failure($"Pixel Crushers slot {vendorSlotNumber} does not contain saved data.");
+            }
+
+            try
+            {
+                _loadFromSlotMethod.Invoke(null, new object[] { vendorSlotNumber });
+                return LwsSaveOperationResult.Success($"Loaded through Pixel Crushers slot {vendorSlotNumber}.");
+            }
+            catch (TargetInvocationException ex)
+            {
+                return Fail($"Pixel Crushers LoadFromSlot failed: {ex.InnerException?.Message ?? ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Fail($"Pixel Crushers LoadFromSlot failed: {ex.Message}");
+            }
+        }
+
+        public bool HasSaveInSlot(int vendorSlotNumber)
+        {
+            if (!Application.isPlaying || !ReadyForRuntimeSaves || _hasSavedGameInSlotMethod == null)
             {
                 return false;
             }
 
-            object storer = _saveSystemStorerProperty.GetValue(null, null);
-            return (bool)_hasDataInSlotMethod.Invoke(storer, new object[] { slotNumber });
+            try
+            {
+                return (bool)_hasSavedGameInSlotMethod.Invoke(null, new object[] { vendorSlotNumber });
+            }
+            catch (Exception ex)
+            {
+                LastVendorError = ex.Message;
+                return false;
+            }
         }
 
-        public LwsSaveOperationResult DeleteSlot(int slotNumber)
+        public LwsSaveOperationResult DeleteSlot(int vendorSlotNumber)
         {
             LwsSaveOperationResult ready = EnsureRuntimeReady();
             if (!ready.Succeeded)
@@ -614,13 +986,278 @@ namespace LWS.InterstateHauler
                 return ready;
             }
 
-            object storer = _saveSystemStorerProperty.GetValue(null, null);
-            _deleteSavedGameDataMethod.Invoke(storer, new object[] { slotNumber });
-            Status = $"Deleted Pixel Crushers slot {slotNumber}.";
+            try
+            {
+                _deleteSavedGameInSlotMethod.Invoke(null, new object[] { vendorSlotNumber });
+                return LwsSaveOperationResult.Success($"Deleted Pixel Crushers slot {vendorSlotNumber}.");
+            }
+            catch (TargetInvocationException ex)
+            {
+                return Fail($"Pixel Crushers DeleteSavedGameInSlot failed: {ex.InnerException?.Message ?? ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Fail($"Pixel Crushers DeleteSavedGameInSlot failed: {ex.Message}");
+            }
+        }
+
+        public LwsSaveOperationResult StoreProfileDirectory(LwsSaveProfileDirectory directory)
+        {
+            if (!Application.isPlaying)
+            {
+                return LwsSaveOperationResult.Success("Profile directory updated in memory; Pixel Crushers runtime storage is inactive in Edit Mode.");
+            }
+
+            LwsSaveOperationResult ready = EnsureRuntimeReady();
+            if (!ready.Succeeded)
+            {
+                return ready;
+            }
+
+            if (directory == null)
+            {
+                return LwsSaveOperationResult.Failure("Cannot store a null save profile directory.");
+            }
+
+            try
+            {
+                directory.EnsureValid();
+                object savedGameData = Activator.CreateInstance(_savedGameDataType);
+                SetSavedGameVersion(savedGameData, LwsSaveSchema.CurrentVersion);
+                SetSavedGameSceneName(savedGameData, SceneManager.GetActiveScene().name ?? string.Empty);
+                string json = SerializeWithPixelCrushers(directory);
+                _setDataMethod.Invoke(savedGameData, new object[] { LwsSaveSchema.ProfileDirectoryRecordKey, -1, json });
+                _storeSavedGameDataMethod.Invoke(_activeStorer, new object[] { LwsSaveSchema.ProfileDirectoryVendorSlot, savedGameData });
+                return LwsSaveOperationResult.Success("Profile directory stored through Pixel Crushers SavedGameDataStorer.");
+            }
+            catch (TargetInvocationException ex)
+            {
+                return Fail($"Pixel Crushers profile directory store failed: {ex.InnerException?.Message ?? ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Fail($"Pixel Crushers profile directory store failed: {ex.Message}");
+            }
+        }
+
+        public LwsSaveOperationResult LoadProfileDirectory(out LwsSaveProfileDirectory directory)
+        {
+            directory = null;
+            if (!Application.isPlaying)
+            {
+                return LwsSaveOperationResult.Success("Profile directory runtime load deferred until Play Mode.");
+            }
+
+            LwsSaveOperationResult ready = EnsureRuntimeReady();
+            if (!ready.Succeeded)
+            {
+                return ready;
+            }
+
+            try
+            {
+                bool hasDirectory = (bool)_hasDataInSlotMethod.Invoke(_activeStorer, new object[] { LwsSaveSchema.ProfileDirectoryVendorSlot });
+                if (!hasDirectory)
+                {
+                    return LwsSaveOperationResult.Success("No Pixel Crushers profile directory save exists yet.");
+                }
+
+                object savedGameData = _retrieveSavedGameDataMethod.Invoke(_activeStorer, new object[] { LwsSaveSchema.ProfileDirectoryVendorSlot });
+                if (savedGameData == null)
+                {
+                    return LwsSaveOperationResult.Success("Pixel Crushers profile directory slot is empty.");
+                }
+
+                string payload = _getDataMethod.Invoke(savedGameData, new object[] { LwsSaveSchema.ProfileDirectoryRecordKey }) as string;
+                if (string.IsNullOrWhiteSpace(payload))
+                {
+                    return LwsSaveOperationResult.Success("Pixel Crushers profile directory record is empty.");
+                }
+
+                directory = DeserializeWithPixelCrushers<LwsSaveProfileDirectory>(payload);
+                directory?.EnsureValid();
+                return LwsSaveOperationResult.Success("Profile directory loaded through Pixel Crushers SavedGameDataStorer.");
+            }
+            catch (TargetInvocationException ex)
+            {
+                return Fail($"Pixel Crushers profile directory load failed: {ex.InnerException?.Message ?? ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Fail($"Pixel Crushers profile directory load failed: {ex.Message}");
+            }
+        }
+
+        private void ResolveTypesAndMethods()
+        {
+            _saveSystemType = FindType(SaveSystemTypeName);
+            _savedGameDataType = FindType(SavedGameDataTypeName);
+            _savedGameDataStorerType = FindType(SavedGameDataStorerTypeName);
+            _diskStorerType = FindType(DiskSavedGameDataStorerTypeName);
+            _jsonSerializerType = FindType(JsonDataSerializerTypeName);
+            _semanticSaverType = FindType(SemanticSaverTypeName);
+
+            if (_saveSystemType == null || _savedGameDataType == null)
+            {
+                return;
+            }
+
+            _saveSystemInstanceProperty = _saveSystemType.GetProperty("instance", BindingFlags.Public | BindingFlags.Static);
+            _saveSystemStorerProperty = _saveSystemType.GetProperty("storer", BindingFlags.Public | BindingFlags.Static);
+            _saveCurrentSceneProperty = _saveSystemType.GetProperty("saveCurrentScene", BindingFlags.Public | BindingFlags.Static);
+            _maxSaveSlotProperty = _saveSystemType.GetProperty("maxSaveSlot", BindingFlags.Public | BindingFlags.Static);
+            _versionProperty = _saveSystemType.GetProperty("version", BindingFlags.Public | BindingFlags.Static);
+            _storerField = _saveSystemType.GetField("m_storer", BindingFlags.NonPublic | BindingFlags.Static);
+            _serializerField = _saveSystemType.GetField("m_serializer", BindingFlags.NonPublic | BindingFlags.Static);
+            _saveToSlotImmediateMethod = _saveSystemType.GetMethod("SaveToSlotImmediate", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(int) }, null);
+            _loadFromSlotMethod = _saveSystemType.GetMethod("LoadFromSlot", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(int) }, null);
+            _hasSavedGameInSlotMethod = _saveSystemType.GetMethod("HasSavedGameInSlot", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(int) }, null);
+            _deleteSavedGameInSlotMethod = _saveSystemType.GetMethod("DeleteSavedGameInSlot", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(int) }, null);
+            _serializeMethod = _saveSystemType.GetMethod("Serialize", BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(object) }, null);
+            _deserializeGenericMethod = _saveSystemType.GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .FirstOrDefault(m => m.Name == "Deserialize" && m.IsGenericMethodDefinition);
+
+            _savedGameVersionProperty = _savedGameDataType.GetProperty("version", BindingFlags.Public | BindingFlags.Instance);
+            _savedGameSceneNameProperty = _savedGameDataType.GetProperty("sceneName", BindingFlags.Public | BindingFlags.Instance);
+            _setDataMethod = _savedGameDataType.GetMethod("SetData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(string), typeof(int), typeof(string) }, null);
+            _getDataMethod = _savedGameDataType.GetMethod("GetData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(string) }, null);
+
+            if (_savedGameDataStorerType != null)
+            {
+                _storeSavedGameDataMethod = _savedGameDataStorerType.GetMethod("StoreSavedGameData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(int), _savedGameDataType }, null);
+                _retrieveSavedGameDataMethod = _savedGameDataStorerType.GetMethod("RetrieveSavedGameData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(int) }, null);
+                _hasDataInSlotMethod = _savedGameDataStorerType.GetMethod("HasDataInSlot", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(int) }, null);
+            }
+        }
+
+        private LwsSaveOperationResult BindRuntimeAuthority()
+        {
+            if (_semanticSaverType == null)
+            {
+                return Fail($"LWS Pixel Crushers semantic saver bridge is missing: {SemanticSaverTypeName}");
+            }
+
+            object saveSystem = _saveSystemInstanceProperty?.GetValue(null, null);
+            Component saveSystemComponent = saveSystem as Component;
+            if (saveSystemComponent == null)
+            {
+                return Fail("Pixel Crushers SaveSystem runtime instance is not a Unity component.");
+            }
+
+            GameObject saveSystemObject = saveSystemComponent.gameObject;
+            _versionProperty?.SetValue(null, LwsSaveSchema.CurrentVersion, null);
+            _maxSaveSlotProperty?.SetValue(null, Mathf.Max(99999, LwsSaveSchema.FirstProfileSlotBase + 999 * LwsSaveSchema.SlotsPerProfile), null);
+            _saveCurrentSceneProperty?.SetValue(null, false, null);
+
+            _activeSerializer = EnsureComponent(saveSystemObject, _jsonSerializerType) as Component;
+            if (_activeSerializer != null)
+            {
+                _serializerField?.SetValue(null, _activeSerializer);
+                ActiveSerializerTypeName = _activeSerializer.GetType().FullName;
+            }
+
+            _activeStorer = EnsureComponent(saveSystemObject, _diskStorerType) as Component;
+            if (_activeStorer == null)
+            {
+                object fallback = _saveSystemStorerProperty?.GetValue(null, null);
+                _activeStorer = fallback as Component;
+            }
+
+            if (_activeStorer == null)
+            {
+                return Fail("Pixel Crushers SavedGameDataStorer could not be created or found.");
+            }
+
+            _storerField?.SetValue(null, _activeStorer);
+            ActiveStorerTypeName = _activeStorer.GetType().FullName;
+
+            _semanticSaver = EnsureSemanticSaver(saveSystemObject);
+            if (_semanticSaver == null)
+            {
+                return Fail("LWS Pixel Crushers semantic saver bridge could not be attached to the Save System object.");
+            }
+
+            RuntimeBound = true;
+            Status = $"Pixel Crushers runtime bound using {ActiveSerializerTypeName} and {ActiveStorerTypeName}.";
             return LwsSaveOperationResult.Success(Status);
         }
 
-        public static Type FindType(string fullName)
+        private LwsSaveOperationResult EnsureRuntimeReady()
+        {
+            if (!Initialized)
+            {
+                return LwsSaveOperationResult.Failure("Pixel Crushers adapter is not initialized.");
+            }
+
+            if (!Application.isPlaying)
+            {
+                return LwsSaveOperationResult.Failure("Pixel Crushers save/load is only available in Play Mode.");
+            }
+
+            if (!RuntimeBound || _activeStorer == null || _semanticSaver == null)
+            {
+                return BindRuntimeAuthority();
+            }
+
+            return LwsSaveOperationResult.Success();
+        }
+
+        private Component EnsureComponent(GameObject owner, Type type)
+        {
+            if (owner == null || type == null || !typeof(Component).IsAssignableFrom(type))
+            {
+                return null;
+            }
+
+            Component existing = owner.GetComponent(type);
+            return existing != null ? existing : owner.AddComponent(type);
+        }
+
+        private MonoBehaviour EnsureSemanticSaver(GameObject owner)
+        {
+            Component component = owner.GetComponent(_semanticSaverType) ?? owner.AddComponent(_semanticSaverType);
+            var behaviour = component as MonoBehaviour;
+            MethodInfo bind = _semanticSaverType.GetMethod("Bind", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(ILwsSaveService) }, null);
+            bind?.Invoke(component, new object[] { _saveService });
+            return behaviour;
+        }
+
+        private string SerializeWithPixelCrushers(object data)
+        {
+            return _serializeMethod != null
+                ? _serializeMethod.Invoke(null, new[] { data }) as string
+                : JsonUtility.ToJson(data);
+        }
+
+        private T DeserializeWithPixelCrushers<T>(string data) where T : class
+        {
+            if (_deserializeGenericMethod != null)
+            {
+                MethodInfo method = _deserializeGenericMethod.MakeGenericMethod(typeof(T));
+                return method.Invoke(null, new object[] { data, null }) as T;
+            }
+
+            return JsonUtility.FromJson<T>(data);
+        }
+
+        private void SetSavedGameVersion(object savedGameData, int version)
+        {
+            _savedGameVersionProperty?.SetValue(savedGameData, version, null);
+        }
+
+        private void SetSavedGameSceneName(object savedGameData, string sceneName)
+        {
+            _savedGameSceneNameProperty?.SetValue(savedGameData, sceneName ?? string.Empty, null);
+        }
+
+        private LwsSaveOperationResult Fail(string message)
+        {
+            LastVendorError = message;
+            Status = message;
+            return LwsSaveOperationResult.Failure(message);
+        }
+
+        private static Type FindType(string fullName)
         {
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
@@ -633,214 +1270,77 @@ namespace LWS.InterstateHauler
 
             return null;
         }
-
-        private void EnsureDiskStorer(Component saveSystemComponent)
-        {
-            if (_diskStorerType == null || saveSystemComponent == null || saveSystemComponent.gameObject == null)
-            {
-                return;
-            }
-
-            Component existing = saveSystemComponent.GetComponent(_diskStorerType);
-            if (existing == null)
-            {
-                existing = saveSystemComponent.gameObject.AddComponent(_diskStorerType);
-            }
-
-            FieldInfo storerField = _saveSystemType.GetField("m_storer", BindingFlags.NonPublic | BindingFlags.Static);
-            if (storerField != null && existing != null)
-            {
-                storerField.SetValue(null, existing);
-            }
-        }
-
-        private LwsSaveOperationResult BindRuntimeStorer()
-        {
-            object saveSystem = _saveSystemInstanceProperty.GetValue(null, null);
-            if (saveSystem is Component saveSystemComponent)
-            {
-                EnsureDiskStorer(saveSystemComponent);
-            }
-
-            object storer = _saveSystemStorerProperty.GetValue(null, null);
-            if (storer == null)
-            {
-                return Fail("PIXEL CRUSHERS SAVE SYSTEM UNAVAILABLE: SaveSystem.storer returned null.");
-            }
-
-            Type storerType = storer.GetType();
-            ActiveStorerTypeName = storerType.FullName;
-            _storeSavedGameDataMethod = storerType.GetMethod("StoreSavedGameData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(int), _savedGameDataType }, null);
-            _retrieveSavedGameDataMethod = storerType.GetMethod("RetrieveSavedGameData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(int) }, null);
-            _hasDataInSlotMethod = storerType.GetMethod("HasDataInSlot", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(int) }, null);
-            _deleteSavedGameDataMethod = storerType.GetMethod("DeleteSavedGameData", BindingFlags.Public | BindingFlags.Instance, null, new[] { typeof(int) }, null);
-
-            if (_storeSavedGameDataMethod == null ||
-                _retrieveSavedGameDataMethod == null ||
-                _hasDataInSlotMethod == null ||
-                _deleteSavedGameDataMethod == null)
-            {
-                return Fail($"PIXEL CRUSHERS SAVE SYSTEM UNAVAILABLE: storer {ActiveStorerTypeName} is missing required storage APIs.");
-            }
-
-            _saveCurrentSceneProperty?.SetValue(null, false, null);
-            Initialized = true;
-            Status = $"READY ({ActiveStorerTypeName})";
-            LastVendorError = string.Empty;
-            return LwsSaveOperationResult.Success(Status);
-        }
-
-        private LwsSaveOperationResult EnsureReady()
-        {
-            if (!Initialized)
-            {
-                return Initialize();
-            }
-
-            return PixelCrushersAvailable
-                ? LwsSaveOperationResult.Success(Status)
-                : Fail("PIXEL CRUSHERS SAVE SYSTEM UNAVAILABLE");
-        }
-
-        private LwsSaveOperationResult EnsureRuntimeReady()
-        {
-            LwsSaveOperationResult ready = EnsureReady();
-            if (!ready.Succeeded)
-            {
-                return ready;
-            }
-
-            if (!Application.isPlaying)
-            {
-                return Fail("Pixel Crushers save/load proof requires Play Mode so the runtime SaveSystem and storer can be created safely.");
-            }
-
-            return _storeSavedGameDataMethod != null &&
-                   _retrieveSavedGameDataMethod != null &&
-                   _hasDataInSlotMethod != null &&
-                   _deleteSavedGameDataMethod != null
-                ? LwsSaveOperationResult.Success(Status)
-                : BindRuntimeStorer();
-        }
-
-        private LwsSaveOperationResult Fail(string message)
-        {
-            Initialized = false;
-            LastVendorError = message;
-            Status = message;
-            return LwsSaveOperationResult.Failure(message);
-        }
     }
 
     [Serializable]
     public sealed class LwsSaveDiagnostics
     {
         public bool pixelCrushersAvailable;
+        public string pixelCrushersCommonVersion;
         public string pixelCrushersVersion;
+        public string dialogueSystemVersion;
         public string adapterStatus;
-        public string storageStatus;
+        public string activeSerializer;
+        public string activeStorer;
         public int providerCount;
+        public int profileCount;
+        public string activeProfile;
         public string lastOperation;
         public bool lastOperationSucceeded;
         public string lastSaveMessage;
         public string lastLoadMessage;
+        public string lastDeleteMessage;
         public string lastVendorError;
-        public bool validationVariableRoundTripped;
 
         public string LastSaveMessage => string.IsNullOrWhiteSpace(lastSaveMessage) ? "--" : lastSaveMessage;
         public string LastLoadMessage => string.IsNullOrWhiteSpace(lastLoadMessage) ? "--" : lastLoadMessage;
+        public string LastDeleteMessage => string.IsNullOrWhiteSpace(lastDeleteMessage) ? "--" : lastDeleteMessage;
         public string LastVendorError => string.IsNullOrWhiteSpace(lastVendorError) ? "--" : lastVendorError;
 
         public static LwsSaveDiagnostics Empty => new LwsSaveDiagnostics
         {
             pixelCrushersAvailable = false,
+            pixelCrushersCommonVersion = LwsPixelCrushersSaveAdapter.KnownCommonPackageVersion,
             pixelCrushersVersion = LwsPixelCrushersSaveAdapter.KnownPackageVersion,
+            dialogueSystemVersion = LwsPixelCrushersSaveAdapter.KnownDialogueSystemVersion,
             adapterStatus = "Not initialized.",
-            storageStatus = "Not initialized.",
+            activeSerializer = "unknown",
+            activeStorer = "unknown",
             providerCount = 0,
+            profileCount = 0,
+            activeProfile = "none",
             lastOperation = "None",
             lastOperationSucceeded = false,
             lastSaveMessage = "--",
             lastLoadMessage = "--",
-            lastVendorError = "--",
-            validationVariableRoundTripped = false
+            lastDeleteMessage = "--",
+            lastVendorError = "--"
         };
 
         public static LwsSaveDiagnostics FromState(
             LwsPixelCrushersSaveAdapter adapter,
-            ILwsSaveStorage storage,
             int providerCount,
+            int profileCount,
+            string activeProfile,
             string operation,
-            LwsSaveOperationResult result,
-            bool validationRoundTrip)
+            LwsSaveOperationResult result)
         {
-            var diagnostics = new LwsSaveDiagnostics
+            return new LwsSaveDiagnostics
             {
                 pixelCrushersAvailable = adapter != null && adapter.PixelCrushersAvailable,
+                pixelCrushersCommonVersion = LwsPixelCrushersSaveAdapter.KnownCommonPackageVersion,
                 pixelCrushersVersion = LwsPixelCrushersSaveAdapter.KnownPackageVersion,
+                dialogueSystemVersion = LwsPixelCrushersSaveAdapter.KnownDialogueSystemVersion,
                 adapterStatus = adapter != null ? adapter.Status : "missing",
-                storageStatus = storage != null ? $"{storage.Platform} / {storage.PixelCrushersStorerTypeName}" : "missing",
+                activeSerializer = adapter != null ? adapter.ActiveSerializerTypeName : "unknown",
+                activeStorer = adapter != null ? adapter.ActiveStorerTypeName : "unknown",
                 providerCount = providerCount,
+                profileCount = profileCount,
+                activeProfile = activeProfile ?? "none",
                 lastOperation = operation ?? "None",
                 lastOperationSucceeded = result.Succeeded,
-                lastVendorError = adapter != null ? adapter.LastVendorError : string.Empty,
-                validationVariableRoundTripped = validationRoundTrip
+                lastVendorError = adapter != null ? adapter.LastVendorError : string.Empty
             };
-
-            if (string.Equals(operation, "Save", StringComparison.OrdinalIgnoreCase))
-            {
-                diagnostics.lastSaveMessage = result.Message;
-            }
-            else if (string.Equals(operation, "Load", StringComparison.OrdinalIgnoreCase))
-            {
-                diagnostics.lastLoadMessage = result.Message;
-            }
-
-            return diagnostics;
-        }
-    }
-
-    public sealed class LwsPlaceholderSaveParticipant : ILwsSaveParticipant
-    {
-        public LwsPlaceholderSaveParticipant(string participantId, int payloadVersion)
-        {
-            ParticipantId = participantId;
-            PayloadVersion = payloadVersion;
-        }
-
-        public string ParticipantId { get; }
-        public int PayloadVersion { get; }
-
-        public LwsSaveParticipantState CaptureState()
-        {
-            return new LwsSaveParticipantState
-            {
-                participantId = ParticipantId,
-                payloadVersion = PayloadVersion,
-                payloadJson = "{}"
-            };
-        }
-
-        public LwsSaveOperationResult RestoreState(LwsSaveParticipantState state)
-        {
-            if (state == null || state.participantId != ParticipantId)
-            {
-                return LwsSaveOperationResult.Failure($"Payload does not belong to {ParticipantId}.");
-            }
-
-            return LwsSaveOperationResult.Success();
-        }
-
-        public LwsSaveOperationResult ClearState()
-        {
-            return LwsSaveOperationResult.Success();
-        }
-
-        public LwsSaveOperationResult ValidateParticipant()
-        {
-            return PayloadVersion > 0
-                ? LwsSaveOperationResult.Success()
-                : LwsSaveOperationResult.Failure($"Invalid payload version for {ParticipantId}.");
         }
     }
 
@@ -877,9 +1377,17 @@ namespace LWS.InterstateHauler
             }
 
             _lastRestored = JsonUtility.FromJson<LwsGlobalPositionSavePayload>(state.payloadJson);
-            return _lastRestored.IsValid
-                ? LwsSaveOperationResult.Success("Global double-precision player position payload restored for Prompt 017 resume.")
-                : LwsSaveOperationResult.Failure("Global position payload is invalid.");
+            if (!_lastRestored.IsValid)
+            {
+                return LwsSaveOperationResult.Failure("Global position payload is invalid.");
+            }
+
+            if (TryGetService(out ILwsWorldOriginService originService))
+            {
+                originService.UpdatePlayerLocalPosition(new Vector3(_lastRestored.localX, _lastRestored.localY, _lastRestored.localZ));
+            }
+
+            return LwsSaveOperationResult.Success("Global double-precision player position payload restored.");
         }
 
         public LwsSaveOperationResult ClearState()
@@ -960,6 +1468,125 @@ namespace LWS.InterstateHauler
                                !double.IsNaN(globalY) &&
                                !double.IsNaN(globalZ) &&
                                Math.Abs(rotationW) > 0.000001f;
+    }
+
+    public sealed class LwsPlayerTruckSaveParticipant : ILwsSaveParticipant
+    {
+        private readonly Func<LwsServiceRegistry> _registryProvider;
+        private LwsPlayerTruckSavePayload _lastRestored;
+
+        public LwsPlayerTruckSaveParticipant(Func<LwsServiceRegistry> registryProvider)
+        {
+            _registryProvider = registryProvider;
+        }
+
+        public string ParticipantId => "lws.vehicle.player-truck";
+        public int PayloadVersion => 1;
+        public LwsPlayerTruckSavePayload LastRestored => _lastRestored;
+
+        public LwsSaveParticipantState CaptureState()
+        {
+            LwsPlayerTruckState truckState = default;
+            if (TryGetService(out ILwsPlayerVehicleService vehicleService) && vehicleService.ActiveTruck != null)
+            {
+                truckState = vehicleService.ActiveTruck.CaptureState();
+            }
+
+            var payload = new LwsPlayerTruckSavePayload
+            {
+                schemaVersion = LwsSaveSchema.CurrentVersion,
+                state = truckState,
+                capturedUtcTicks = DateTime.UtcNow.Ticks
+            };
+
+            return new LwsSaveParticipantState
+            {
+                participantId = ParticipantId,
+                payloadVersion = PayloadVersion,
+                payloadJson = JsonUtility.ToJson(payload)
+            };
+        }
+
+        public LwsSaveOperationResult RestoreState(LwsSaveParticipantState state)
+        {
+            if (state == null || state.participantId != ParticipantId)
+            {
+                return LwsSaveOperationResult.Failure($"Payload does not belong to {ParticipantId}.");
+            }
+
+            _lastRestored = JsonUtility.FromJson<LwsPlayerTruckSavePayload>(state.payloadJson);
+            if (TryGetService(out ILwsPlayerVehicleService vehicleService) && vehicleService.ActiveTruck != null)
+            {
+                LwsPlayerTruck truck = vehicleService.ActiveTruck;
+                LwsPlayerTruckState restored = _lastRestored.state;
+                Quaternion rotation = NormalizeRotation(restored.pose.rotation);
+                truck.transform.SetPositionAndRotation(restored.pose.position, rotation);
+
+                Rigidbody rb = null;
+                if (truck.NwhAdapter != null && truck.NwhAdapter.VehicleController != null)
+                {
+                    rb = truck.NwhAdapter.VehicleController.vehicleRigidbody;
+                }
+
+                if (rb == null)
+                {
+                    rb = truck.GetComponent<Rigidbody>();
+                }
+
+                if (rb != null)
+                {
+                    rb.linearVelocity = restored.linearVelocity;
+                    rb.angularVelocity = restored.angularVelocity;
+                }
+
+                if (truck.TransmissionController != null)
+                {
+                    truck.TransmissionController.RestoreState(restored.transmissionState);
+                }
+
+                Physics.SyncTransforms();
+                return LwsSaveOperationResult.Success("Player truck semantic state restored to the active truck.");
+            }
+
+            return LwsSaveOperationResult.Success("Player truck semantic state captured for deferred restore; active truck is not available yet.");
+        }
+
+        public LwsSaveOperationResult ClearState()
+        {
+            _lastRestored = null;
+            return LwsSaveOperationResult.Success();
+        }
+
+        public LwsSaveOperationResult ValidateParticipant()
+        {
+            return LwsSaveOperationResult.Success("Player truck save participant captures identity, pose, motion, trailer attachment, and transmission state shape.");
+        }
+
+        private bool TryGetService<T>(out T service) where T : class, ILwsService
+        {
+            service = null;
+            LwsServiceRegistry registry = _registryProvider?.Invoke();
+            return registry != null && registry.TryGet(out service);
+        }
+
+        private static Quaternion NormalizeRotation(Quaternion rotation)
+        {
+            float magnitude = Mathf.Sqrt(rotation.x * rotation.x + rotation.y * rotation.y + rotation.z * rotation.z + rotation.w * rotation.w);
+            if (magnitude <= 0.000001f)
+            {
+                return Quaternion.identity;
+            }
+
+            return new Quaternion(rotation.x / magnitude, rotation.y / magnitude, rotation.z / magnitude, rotation.w / magnitude);
+        }
+    }
+
+    [Serializable]
+    public sealed class LwsPlayerTruckSavePayload
+    {
+        public int schemaVersion = LwsSaveSchema.CurrentVersion;
+        public LwsPlayerTruckState state;
+        public long capturedUtcTicks;
     }
 
     public sealed class LwsGameClockSaveParticipant : ILwsSaveParticipant
@@ -1175,32 +1802,43 @@ namespace LWS.InterstateHauler
         public long worldTimeTicks;
     }
 
-    public sealed class LwsValidationSaveParticipant : ILwsSaveParticipant
+    public sealed class LwsRoadConditionSaveParticipant : ILwsSaveParticipant
     {
-        private string _currentValue = "not-saved";
-        private string _lastSavedValue = string.Empty;
-        private string _lastLoadedValue = string.Empty;
-        private int _saveCount;
+        private readonly Func<LwsServiceRegistry> _registryProvider;
+        private LwsRoadConditionSavePayload _lastRestored;
 
-        public string ParticipantId => "lws.validation.proof";
-        public int PayloadVersion => 1;
-        public bool RoundTripSucceeded => !string.IsNullOrEmpty(_lastSavedValue) && _lastSavedValue == _lastLoadedValue;
-        public string CurrentValue => _currentValue;
-
-        public void MarkSaved()
+        public LwsRoadConditionSaveParticipant(Func<LwsServiceRegistry> registryProvider)
         {
-            _saveCount++;
-            _currentValue = $"validation-{_saveCount}-{DateTime.UtcNow.Ticks}";
-            _lastSavedValue = _currentValue;
+            _registryProvider = registryProvider;
         }
+
+        public string ParticipantId => "lws.road-condition.semantic";
+        public int PayloadVersion => 1;
+        public LwsRoadConditionSavePayload LastRestored => _lastRestored;
 
         public LwsSaveParticipantState CaptureState()
         {
+            var payload = new LwsRoadConditionSavePayload
+            {
+                schemaVersion = LwsSaveSchema.CurrentVersion,
+                capturedUtcTicks = DateTime.UtcNow.Ticks
+            };
+
+            if (TryGetService(out ILwsRoadConditionService roadService))
+            {
+                payload.mode = roadService.Mode;
+                payload.currentRoadKey = roadService.CurrentRoadKey;
+                payload.snapshot = roadService.CurrentSnapshot;
+                payload.accumulationSpeedMultiplier = roadService.AccumulationSpeedMultiplier;
+                payload.temperatureOverrideEnabled = roadService.TemperatureOverrideEnabled;
+                payload.surfaceTemperatureOverrideC = roadService.SurfaceTemperatureOverrideC;
+            }
+
             return new LwsSaveParticipantState
             {
                 participantId = ParticipantId,
                 payloadVersion = PayloadVersion,
-                payloadJson = JsonUtility.ToJson(new LwsValidationSavePayload { value = _currentValue, saveCount = _saveCount })
+                payloadJson = JsonUtility.ToJson(payload)
             };
         }
 
@@ -1211,29 +1849,198 @@ namespace LWS.InterstateHauler
                 return LwsSaveOperationResult.Failure($"Payload does not belong to {ParticipantId}.");
             }
 
-            LwsValidationSavePayload payload = JsonUtility.FromJson<LwsValidationSavePayload>(state.payloadJson);
-            _currentValue = payload.value;
-            _lastLoadedValue = payload.value;
-            _saveCount = payload.saveCount;
-            return LwsSaveOperationResult.Success(RoundTripSucceeded ? "Validation variable round-tripped." : "Validation variable restored.");
+            _lastRestored = JsonUtility.FromJson<LwsRoadConditionSavePayload>(state.payloadJson);
+            if (TryGetService(out ILwsRoadConditionService roadService))
+            {
+                roadService.SetAccumulationSpeedMultiplier(_lastRestored.accumulationSpeedMultiplier <= 0f ? 1f : _lastRestored.accumulationSpeedMultiplier);
+                roadService.SetSurfaceTemperatureOverride(_lastRestored.temperatureOverrideEnabled, _lastRestored.surfaceTemperatureOverrideC);
+                if (_lastRestored.mode == LwsRoadConditionOverrideMode.AutoFromWeather)
+                {
+                    roadService.SetAutoFromWeather();
+                }
+                else
+                {
+                    roadService.ForceCondition(_lastRestored.mode);
+                }
+            }
+
+            return LwsSaveOperationResult.Success("Road condition semantic intent restored.");
         }
 
         public LwsSaveOperationResult ClearState()
         {
-            _currentValue = "cleared";
+            _lastRestored = null;
             return LwsSaveOperationResult.Success();
         }
 
         public LwsSaveOperationResult ValidateParticipant()
         {
-            return LwsSaveOperationResult.Success("Validation save participant is ready.");
+            return LwsSaveOperationResult.Success("Road-condition save participant captures condition, override mode, and physical grip semantics.");
+        }
+
+        private bool TryGetService<T>(out T service) where T : class, ILwsService
+        {
+            service = null;
+            LwsServiceRegistry registry = _registryProvider?.Invoke();
+            return registry != null && registry.TryGet(out service);
         }
     }
 
     [Serializable]
-    public struct LwsValidationSavePayload
+    public sealed class LwsRoadConditionSavePayload
     {
-        public string value;
-        public int saveCount;
+        public int schemaVersion = LwsSaveSchema.CurrentVersion;
+        public LwsRoadConditionOverrideMode mode;
+        public string currentRoadKey;
+        public LwsRoadConditionSnapshot snapshot;
+        public float accumulationSpeedMultiplier = 1f;
+        public bool temperatureOverrideEnabled;
+        public float surfaceTemperatureOverrideC;
+        public long capturedUtcTicks;
+    }
+
+    public sealed class LwsNavigationSaveParticipant : ILwsSaveParticipant
+    {
+        private readonly Func<LwsServiceRegistry> _registryProvider;
+        private LwsNavigationSavePayload _lastRestored;
+
+        public LwsNavigationSaveParticipant(Func<LwsServiceRegistry> registryProvider)
+        {
+            _registryProvider = registryProvider;
+        }
+
+        public string ParticipantId => "lws.navigation.destination-intent";
+        public int PayloadVersion => 1;
+        public LwsNavigationSavePayload LastRestored => _lastRestored;
+
+        public LwsSaveParticipantState CaptureState()
+        {
+            var payload = new LwsNavigationSavePayload
+            {
+                schemaVersion = LwsSaveSchema.CurrentVersion,
+                capturedUtcTicks = DateTime.UtcNow.Ticks
+            };
+
+            if (TryGetService(out ILwsNavigationService navigationService))
+            {
+                LwsNavigationRuntimeState runtime = navigationService.RuntimeState;
+                LwsRouteResult route = navigationService.CurrentRoute;
+                payload.routeActive = runtime != null && runtime.routeActive;
+                payload.routeId = runtime != null ? runtime.routeId : string.Empty;
+                payload.destinationId = runtime != null ? runtime.destinationId : string.Empty;
+                payload.currentRoadId = runtime != null ? runtime.currentRoadId : string.Empty;
+                payload.currentEdgeId = runtime != null ? runtime.currentEdgeId : string.Empty;
+                payload.currentRoadDisplayName = runtime != null ? runtime.currentRoadDisplayName : string.Empty;
+                payload.distanceRemainingMeters = runtime != null ? runtime.distanceRemainingMeters : 0f;
+                payload.playerPosition = runtime != null ? runtime.playerPosition : ResolveOriginPosition();
+                payload.playerForward = runtime != null ? runtime.playerForward : Vector3.forward;
+
+                if (route != null)
+                {
+                    payload.originNodeId = route.originNodeId;
+                    payload.destinationNodeId = route.destinationNodeId;
+                    payload.destinationId = string.IsNullOrWhiteSpace(route.destinationId) ? payload.destinationId : route.destinationId;
+                    payload.destinationWorldPosition = route.waypoints != null && route.waypoints.Count > 0
+                        ? route.waypoints[route.waypoints.Count - 1]
+                        : payload.playerPosition;
+                }
+            }
+
+            return new LwsSaveParticipantState
+            {
+                participantId = ParticipantId,
+                payloadVersion = PayloadVersion,
+                payloadJson = JsonUtility.ToJson(payload)
+            };
+        }
+
+        public LwsSaveOperationResult RestoreState(LwsSaveParticipantState state)
+        {
+            if (state == null || state.participantId != ParticipantId)
+            {
+                return LwsSaveOperationResult.Failure($"Payload does not belong to {ParticipantId}.");
+            }
+
+            _lastRestored = JsonUtility.FromJson<LwsNavigationSavePayload>(state.payloadJson);
+            if (!TryGetService(out ILwsNavigationService navigationService))
+            {
+                return LwsSaveOperationResult.Success("Navigation save payload stored for deferred restore; navigation service is not available.");
+            }
+
+            if (!_lastRestored.routeActive)
+            {
+                navigationService.ClearRoute();
+                return LwsSaveOperationResult.Success("Inactive navigation state restored.");
+            }
+
+            if (!TryGetService(out ILwsRoadGraphService roadGraphService) || roadGraphService.ActiveGraph == null)
+            {
+                return LwsSaveOperationResult.Success("Navigation destination intent restored; route will recalculate when a road graph is available.");
+            }
+
+            var request = new LwsRouteRequest
+            {
+                requestId = $"restore.{DateTime.UtcNow:yyyyMMddHHmmss}",
+                originNodeId = _lastRestored.originNodeId,
+                destinationNodeId = _lastRestored.destinationNodeId,
+                destinationId = string.IsNullOrWhiteSpace(_lastRestored.destinationId) ? "restored.destination" : _lastRestored.destinationId,
+                useOriginWorldPosition = true,
+                originWorldPosition = _lastRestored.playerPosition,
+                useDestinationWorldPosition = _lastRestored.destinationWorldPosition != Vector3.zero,
+                destinationWorldPosition = _lastRestored.destinationWorldPosition,
+                truckRouteRequired = true
+            };
+            LwsRouteResult result = navigationService.RequestRoute(request, roadGraphService.ActiveGraph);
+            return result != null && result.succeeded
+                ? LwsSaveOperationResult.Success("Navigation destination intent restored and route recalculated.")
+                : LwsSaveOperationResult.Success("Navigation destination intent restored; route recalculation is pending a compatible road graph.");
+        }
+
+        public LwsSaveOperationResult ClearState()
+        {
+            _lastRestored = null;
+            if (TryGetService(out ILwsNavigationService navigationService))
+            {
+                navigationService.ClearRoute();
+            }
+
+            return LwsSaveOperationResult.Success();
+        }
+
+        public LwsSaveOperationResult ValidateParticipant()
+        {
+            return LwsSaveOperationResult.Success("Navigation save participant captures destination intent, not duplicate route authority.");
+        }
+
+        private Vector3 ResolveOriginPosition()
+        {
+            return TryGetService(out ILwsWorldOriginService originService) ? originService.PlayerGlobalPosition.ToVector3() : Vector3.zero;
+        }
+
+        private bool TryGetService<T>(out T service) where T : class, ILwsService
+        {
+            service = null;
+            LwsServiceRegistry registry = _registryProvider?.Invoke();
+            return registry != null && registry.TryGet(out service);
+        }
+    }
+
+    [Serializable]
+    public sealed class LwsNavigationSavePayload
+    {
+        public int schemaVersion = LwsSaveSchema.CurrentVersion;
+        public bool routeActive;
+        public string routeId;
+        public string destinationId;
+        public string originNodeId;
+        public string destinationNodeId;
+        public Vector3 destinationWorldPosition;
+        public Vector3 playerPosition;
+        public Vector3 playerForward;
+        public string currentRoadId;
+        public string currentEdgeId;
+        public string currentRoadDisplayName;
+        public float distanceRemainingMeters;
+        public long capturedUtcTicks;
     }
 }

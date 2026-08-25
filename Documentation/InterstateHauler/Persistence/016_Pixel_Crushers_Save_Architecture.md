@@ -2,12 +2,25 @@
 
 ## Summary
 
-Pixel Crushers Save System is the authoritative save-state framework for Interstate: Hauler. LWS owns the project-facing facade, stable semantic payloads, and platform storage seam. Gameplay systems should use `ILwsSaveService` and should not call Pixel Crushers or platform file APIs directly.
+Pixel Crushers Save System is the authoritative save-state framework for Interstate: Hauler. LWS owns only the project-facing facade, profile/slot semantics, stable semantic payloads, validation, and gameplay-facing UI state.
+
+The final runtime flow is:
+
+```text
+Gameplay semantics
+-> ILwsSaveService thin facade / LWS Saver payloads
+-> Pixel Crushers SaveSystem
+-> Pixel Crushers SavedGameData
+-> Pixel Crushers SavedGameDataStorer
+```
+
+There is no production LWS storage backend, no in-memory production database, and no proof slot.
 
 ## Installed Asset
 
 - Exact asset: Pixel Crushers Common Save System / Dialogue System
-- Version: 2.2.73.2, discovered from Pixel Crushers asset metadata
+- Common version: 1.10.73 from installed Pixel Crushers Common skill metadata
+- Dialogue System version: 2.2.73.2 from `Assets/Plugins/Pixel Crushers/Dialogue System/_README.txt`
 - Root path: `Assets/Plugins/Pixel Crushers`
 - Main namespace: `PixelCrushers`
 - Dialogue namespace: `PixelCrushers.DialogueSystem`
@@ -15,92 +28,82 @@ Pixel Crushers Save System is the authoritative save-state framework for Interst
 
 ## Vendor Authority
 
-Pixel Crushers owns save orchestration, `SavedGameData`, saver collection/application, and the storer implementation. LWS does not create a competing JSON slot framework.
+Pixel Crushers owns save orchestration, save/load/delete slot operations, `SavedGameData`, serializer selection, storer selection, saver registration, and persistence lifecycle.
 
-Prompt 016 uses these discovered Pixel Crushers APIs through `LwsPixelCrushersSaveAdapter`:
+Prompt 016 uses these discovered Pixel Crushers APIs:
 
-- `PixelCrushers.SaveSystem.RecordSavedGameData()`
-- `PixelCrushers.SaveSystem.ApplySavedGameData(SavedGameData)`
-- `PixelCrushers.SaveSystem.storer`
+- `PixelCrushers.SaveSystem.SaveToSlotImmediate(int)`
+- `PixelCrushers.SaveSystem.LoadFromSlot(int)`
+- `PixelCrushers.SaveSystem.HasSavedGameInSlot(int)`
+- `PixelCrushers.SaveSystem.DeleteSavedGameInSlot(int)`
+- `PixelCrushers.SaveSystem.Serialize(object)`
+- `PixelCrushers.SaveSystem.Deserialize<T>(string, T)`
+- `PixelCrushers.Saver.RecordData()`
+- `PixelCrushers.Saver.ApplyData(string)`
 - `PixelCrushers.SavedGameData.SetData(string key, int sceneIndex, string data)`
 - `PixelCrushers.SavedGameData.GetData(string key)`
-- `PixelCrushers.SavedGameDataStorer.StoreSavedGameData(int slotNumber, SavedGameData data)`
-- `PixelCrushers.SavedGameDataStorer.RetrieveSavedGameData(int slotNumber)`
-- `PixelCrushers.SavedGameDataStorer.HasDataInSlot(int slotNumber)`
-- `PixelCrushers.SavedGameDataStorer.DeleteSavedGameData(int slotNumber)`
+- `PixelCrushers.SavedGameDataStorer.StoreSavedGameData(int, SavedGameData)`
+- `PixelCrushers.SavedGameDataStorer.RetrieveSavedGameData(int)`
+- `PixelCrushers.SavedGameDataStorer.HasDataInSlot(int)`
+- `PixelCrushers.SavedGameDataStorer.DeleteSavedGameData(int)`
 
-Because Pixel Crushers is installed without asmdefs while LWS uses asmdefs, the adapter resolves these exact public types/members reflectively. No vendor asmdefs were added or modified.
+Because Pixel Crushers is installed without asmdefs while LWS uses asmdefs, `LwsPixelCrushersSaveAdapter` resolves Pixel Crushers members reflectively. No vendor asmdefs or source files are modified.
 
-## LWS Save Root
+## LWS Runtime Pieces
 
-- Interface: `ILwsSaveService`
+- Facade: `ILwsSaveService`
 - Implementation: `LwsSaveService`
-- Adapter: `LwsPixelCrushersSaveAdapter`
-- Storage seam: `ILwsSaveStorage`
-- PC storage implementation: `LwsPcSaveStorage`
+- Vendor adapter: `LwsPixelCrushersSaveAdapter`
+- Vendor saver bridge: `LwsPixelCrushersSemanticSaver`
+- Profile directory payload: `LwsSaveProfileDirectory`
+- Manual slot payload: `LwsManualSaveSlotMetadata`
+- Runtime player menu: `ILwsPersistenceMenuService` / `LwsPersistencePauseMenu`
 
-`LwsSaveService` keeps the existing LWS participant registration model, but Prompt 016 save/load operations persist those participants into Pixel Crushers `SavedGameData` records through the adapter.
+`LwsSaveService` maps player-facing profile/manual slot choices to deterministic Pixel Crushers slot numbers. It does not own save files, serialize the whole game independently, or use an LWS storage backend.
+
+## Profiles And Slots
+
+- Default profile: `profile.development.driver`
+- Minimum manual slots per profile: 3
+- Profile directory vendor slot: `16000`
+- First profile save slot base: `16100`
+- Slots per profile namespace: 20
+- Autosave and backup ranges are reserved for Prompt 017.
+
+The player sees Slot 1, Slot 2, and Slot 3. Vendor slot numbers remain internal.
 
 ## Semantic Providers
 
 Prompt 016 registers these project-owned providers:
 
 - `LwsGlobalPositionSaveParticipant`
+- `LwsPlayerTruckSaveParticipant`
 - `LwsGameClockSaveParticipant`
 - `LwsWeatherSaveParticipant`
-- `LwsValidationSaveParticipant`
+- `LwsRoadConditionSaveParticipant`
+- `LwsNavigationSaveParticipant`
 
-Deferred placeholders remain for truck, jobs, compass, and Dialogue System integration points until Prompts 017-018 and later gameplay prompts provide complete resume data.
+The Prompt 006 transmission controller remains the transmission authority and self-registers as `vehicle.transmission.player` when present.
 
-## Global Position
+## Dialogue System
 
-Player location is captured from `ILwsWorldOriginService.PlayerGlobalPosition`, which is a `LwsWorldPositionD` double-precision global coordinate. The save payload stores:
+Dialogue System state should use Pixel Crushers `DialogueSystemSaver`, `ConversationStateSaver`, and related vendor components. LWS does not duplicate dialogue persistence. Dialogue savers and LWS semantic saver coexist under the same Pixel Crushers `SaveSystem` instance.
 
-- `double globalX`
-- `double globalY`
-- `double globalZ`
-- local position diagnostic fields
-- rotation quaternion seam
-- origin version
-- origin shift count
+## Player-Facing Menu
 
-Prompt 016 does not yet execute the full polished world-resume sequence. Prompt 017 should consume the restored payload to restore world origin, streaming neighborhood, truck pose, trailer pose, GPS intent, and road condition context.
+`LwsPersistencePauseMenu` provides the current gameplay pause save/load UI:
 
-## Game Clock
+- Resume
+- Save / Load
+- Profiles
+- Save Slot 1-3
+- Load occupied slots
+- Overwrite with confirmation
+- Delete with confirmation
+- Create/select/rename/delete profiles
 
-`LwsGameClockSaveParticipant` captures `ILwsGameClockService.CurrentSnapshot` and restores through:
-
-- `ILwsGameClockService.SetDateTime(...)`
-- `ILwsGameClockService.SetTimeScale(...)`
-- `ILwsGameClockService.SetPaused(...)`
-
-Weather Maker does not own authoritative time; it should continue following the restored LWS game clock.
-
-## Weather
-
-`LwsWeatherSaveParticipant` captures `ILwsWeatherService.CurrentSnapshot` as semantic LWS weather state. It restores through:
-
-- `ILwsWeatherService.SetState(...)`
-- `ILwsWeatherService.SetTimeOfDayHours(...)`
-
-Weather Maker GameObjects and internals are not serialized as authority.
-
-## Development Proof
-
-The development control center now has a `Save / Persistence` tab with:
-
-- `SAVE TEST STATE`
-- `LOAD TEST STATE`
-- `PRINT SAVE DIAGNOSTICS`
-
-The proof slot is `16`, exposed by `LwsSaveService.DevelopmentTestSlot`.
-
-## Failure Behavior
-
-If Pixel Crushers is unavailable, `LwsPixelCrushersSaveAdapter` reports `PIXEL CRUSHERS SAVE SYSTEM UNAVAILABLE` and does not fall back to a homegrown save system.
+This is not a final Heat UI screen, but it is a player-facing runtime menu with clickable Unity UI controls. The dev control center only links to it and prints diagnostics.
 
 ## Deferred Work
 
-Prompt 017 owns complete mid-route save/resume for truck, trailer, streaming, GPS destination, road condition state, and player pose application.
-
-Prompt 018 owns profiles, manual save UX, autosave, backup saves, and platform profile management.
+Prompt 017 owns complete mid-route load ordering, scene restart/resume sequencing, autosave, rolling backups, corruption handling, and deeper streaming/trailer recovery.

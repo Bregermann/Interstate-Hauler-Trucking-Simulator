@@ -135,31 +135,25 @@ Bootstrap behavior:
 
 ## 7. Save Architecture
 
-LWS owns simulator-level save orchestration.
+Prompt 002 originally established a project-owned save seam. Prompt 016 supersedes the proof storage layer: Pixel Crushers Save System is now the actual save framework authority.
 
-Created:
+Current Prompt 016 rule:
+
+- Pixel Crushers owns save orchestration, serialization framework, slot save/load/delete, `SavedGameData`, and the `SavedGameDataStorer` backend.
+- LWS owns only semantic payloads, project-specific saver participants, profile/slot mapping, UI-facing state, validation, and the thin `ILwsSaveService` facade.
+- Old proof concepts such as custom LWS storage, in-memory production storage, and proof test slots are removed from production architecture.
+
+Current LWS pieces:
 
 - `ILwsSaveService`
-- `ILwsSaveParticipant`
-- `ILwsSaveStorage`
 - `LwsSaveService`
-- `LwsSaveSnapshot`
-- `LwsSaveParticipantState`
-- `LwsInMemorySaveStorage`
+- `LwsPixelCrushersSaveAdapter`
+- `LwsPixelCrushersSemanticSaver`
+- `LwsSaveProfileDirectory`
+- `LwsManualSaveSlotMetadata`
+- `ILwsSaveParticipant`
 
-Current placeholder participants:
-
-- `pixel-crushers.dialogue`
-- `compass.navigator`
-- `vehicle.truck`
-- `world.state`
-- `weather.state`
-- `jobs.state`
-
-These placeholders establish stable child payload slots without implementing the final career save system.
-
-Physical storage remains abstract. No gameplay system calls `System.IO`, `Application.persistentDataPath`, Steam APIs, or console APIs.
-
+Physical storage remains abstract through Pixel Crushers `SavedGameDataStorer`. No gameplay system should call `System.IO`, `Application.persistentDataPath`, Steam APIs, or console APIs directly.
 ## 8. Input Architecture
 
 Created:

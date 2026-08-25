@@ -52,6 +52,7 @@ namespace LWS.InterstateHauler
         private ILwsForceFeedbackService _forceFeedbackService;
         private ILwsPlayerVehicleService _playerVehicleService;
         private ILwsSaveService _saveService;
+        private ILwsPersistenceMenuService _persistenceMenuService;
         private LwsCompassNavigatorProAdapter _compassNavigatorProAdapter;
 
         private Canvas _canvas;
@@ -1123,36 +1124,60 @@ namespace LWS.InterstateHauler
             }
 
             LwsSaveDiagnostics diagnostics = _saveService.Diagnostics;
-            AddInfo("Pixel Crushers available", diagnostics.pixelCrushersAvailable ? "YES" : "NO");
-            AddInfo("Pixel Crushers version", diagnostics.pixelCrushersVersion);
-            AddInfo("LWS adapter", diagnostics.adapterStatus);
-            AddInfo("Storage", diagnostics.storageStatus);
-            AddInfo("Providers", $"{_saveService.Participants.Count}");
+            AddInfo("Save authority", "PIXEL CRUSHERS");
+            AddInfo("Pixel Crushers", diagnostics.pixelCrushersAvailable ? "available" : "missing");
+            AddInfo("Common version", diagnostics.pixelCrushersCommonVersion);
+            AddInfo("Dialogue System", diagnostics.dialogueSystemVersion);
+            AddInfo("Adapter", diagnostics.adapterStatus);
+            AddInfo("Serializer", diagnostics.activeSerializer);
+            AddInfo("Storer", diagnostics.activeStorer);
+            AddInfo("Profiles", $"{_saveService.Profiles.Count}");
+            AddInfo("Active profile", _saveService.ActiveProfile != null ? _saveService.ActiveProfile.DisplayNameOrFallback : "none");
+            AddInfo("Manual slots", $"{_saveService.ManualSlotCount}");
+            foreach (LwsManualSaveSlotMetadata slot in _saveService.GetManualSlots())
+            {
+                string savedAt = slot.savedUtcTicks > 0 ? new DateTime(slot.savedUtcTicks, DateTimeKind.Utc).ToLocalTime().ToString("yyyy-MM-dd HH:mm") : "empty";
+                AddInfo(slot.SlotLabel, slot.occupied ? $"OCCUPIED | {savedAt} | {slot.sceneName}" : "EMPTY");
+            }
+
             AddInfo("Global player position", _originService != null ? _originService.PlayerGlobalPosition.ToString() : "missing");
             AddInfo("Clock", _gameClockService != null ? $"{_gameClockService.CurrentSnapshot.DateText} {_gameClockService.CurrentSnapshot.ClockText}" : "missing");
             AddInfo("Weather", _weatherService != null ? _weatherService.CurrentSnapshot.weatherPresetId : "missing");
             AddInfo("Last save", diagnostics.LastSaveMessage);
             AddInfo("Last load", diagnostics.LastLoadMessage);
+            AddInfo("Last delete", diagnostics.LastDeleteMessage);
             AddInfo("Last vendor error", diagnostics.LastVendorError);
-            AddInfo("Validation variable", diagnostics.validationVariableRoundTripped ? "ROUNDTRIP PASS" : "not round-tripped");
-            AddButtonRow(("SAVE TEST STATE", () =>
+            AddButtonRow(("OPEN SAVE MENU", () =>
                 {
-                    LwsSaveOperationResult result = _saveService.SaveTestState();
-                    _lastActionMessage = result.Message;
-                }),
-                ("LOAD TEST STATE", () =>
-                {
-                    LwsSaveOperationResult result = _saveService.LoadTestState();
-                    _lastActionMessage = result.Message;
-                }));
-            AddButtonRow(("PRINT SAVE DIAGNOSTICS", () =>
-            {
-                string report = _saveService.BuildDiagnosticsReport();
-                Debug.Log(report);
-                _lastActionMessage = "Save diagnostics printed to Console.";
-            }));
-        }
+                    if (_persistenceMenuService == null)
+                    {
+                        _lastActionMessage = "Persistence pause menu service is missing.";
+                        return;
+                    }
 
+                    HideControlCenter();
+                    _persistenceMenuService.Show();
+                    _lastActionMessage = "Opened player-facing Save / Load menu.";
+                }),
+                ("SAVE SLOT 1", () =>
+                {
+                    LwsSaveOperationResult result = _saveService.Save(_saveService.ActiveProfileId, 1, true);
+                    _lastActionMessage = result.Message;
+                    RebuildActiveTab();
+                }));
+            AddButtonRow(("LOAD SLOT 1", () =>
+                {
+                    LwsSaveOperationResult result = _saveService.Load(_saveService.ActiveProfileId, 1);
+                    _lastActionMessage = result.Message;
+                    RebuildActiveTab();
+                }),
+                ("PRINT SAVE DIAGNOSTICS", () =>
+                {
+                    string report = _saveService.BuildDiagnosticsReport();
+                    Debug.Log(report);
+                    _lastActionMessage = "Save diagnostics printed to Console.";
+                }));
+        }
         private void BuildPerformanceTab()
         {
             AddInfo("FPS", _fpsSmoothed > 0f ? _fpsSmoothed.ToString("0.0") : "--");
@@ -1273,6 +1298,7 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _forceFeedbackService);
             _registry.TryGet(out _playerVehicleService);
             _registry.TryGet(out _saveService);
+            _registry.TryGet(out _persistenceMenuService);
             _compassNavigatorProAdapter = ResolveCompassNavigatorProAdapter();
         }
 
@@ -2376,5 +2402,3 @@ namespace LWS.InterstateHauler
         }
     }
 }
-
-

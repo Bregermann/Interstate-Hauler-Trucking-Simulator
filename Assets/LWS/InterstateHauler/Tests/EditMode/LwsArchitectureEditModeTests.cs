@@ -54,7 +54,7 @@ namespace LWS.InterstateHauler.Tests.EditMode
             saveService.Initialize(new LwsServiceContext(new LwsServiceRegistry()));
 
             LwsSaveOperationResult duplicate = saveService.RegisterParticipant(
-                new LwsPlaceholderSaveParticipant("vehicle.truck", 1));
+                new LwsGlobalPositionSaveParticipant(() => new LwsServiceRegistry()));
 
             Assert.IsFalse(duplicate.Succeeded);
         }

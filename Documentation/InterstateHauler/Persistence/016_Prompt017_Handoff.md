@@ -1,44 +1,57 @@
 # Prompt 017 Handoff - Mid-Route Save / Resume
 
-Use `ILwsSaveService` as the save entry point. Do not call Pixel Crushers APIs directly from gameplay systems.
+Use `ILwsSaveService` as the project-facing save entry point. Pixel Crushers Save System remains the actual save authority.
 
 ## Implemented Prompt 016 APIs
 
-- Save service: `ILwsSaveService`
+- Save facade: `ILwsSaveService`
 - Save implementation: `LwsSaveService`
 - Pixel Crushers adapter: `LwsPixelCrushersSaveAdapter`
-- PC storage seam: `ILwsSaveStorage` / `LwsPcSaveStorage`
-- Proof slot: `LwsSaveService.DevelopmentTestSlot`
-- Save proof: `ILwsSaveService.SaveTestState()`
-- Load proof: `ILwsSaveService.LoadTestState()`
+- Pixel Crushers saver bridge: `LwsPixelCrushersSemanticSaver`
+- Profile types: `LwsSaveProfileDirectory`, `LwsSaveProfileMetadata`, `LwsManualSaveSlotMetadata`
+- Manual slots: `Save(profileId, slot, overwrite)`, `Load(profileId, slot)`, `Delete(profileId, slot)`, `HasSave(profileId, slot)`
+- Runtime menu service: `ILwsPersistenceMenuService`
 - Diagnostics: `ILwsSaveService.BuildDiagnosticsReport()`
 
 ## Pixel Crushers APIs Used
 
-- `PixelCrushers.SaveSystem.RecordSavedGameData()`
-- `PixelCrushers.SaveSystem.ApplySavedGameData(SavedGameData)`
-- `PixelCrushers.SaveSystem.storer`
-- `PixelCrushers.SavedGameData.SetData(string key, int sceneIndex, string data)`
-- `PixelCrushers.SavedGameData.GetData(string key)`
-- `PixelCrushers.SavedGameDataStorer.StoreSavedGameData(int slotNumber, SavedGameData data)`
-- `PixelCrushers.SavedGameDataStorer.RetrieveSavedGameData(int slotNumber)`
+- `SaveSystem.SaveToSlotImmediate(int)`
+- `SaveSystem.LoadFromSlot(int)`
+- `SaveSystem.HasSavedGameInSlot(int)`
+- `SaveSystem.DeleteSavedGameInSlot(int)`
+- `SaveSystem.Serialize(object)`
+- `SaveSystem.Deserialize<T>(string, T)`
+- `SavedGameData.SetData(string, int, string)`
+- `SavedGameData.GetData(string)`
+- `SavedGameDataStorer.StoreSavedGameData(int, SavedGameData)`
+- `SavedGameDataStorer.RetrieveSavedGameData(int)`
+- `SavedGameDataStorer.HasDataInSlot(int)`
+- `SavedGameDataStorer.DeleteSavedGameData(int)`
 
 ## Payloads Prompt 017 Should Consume
 
+- Profile directory: `LwsSaveProfileDirectory`
+- Semantic snapshot: `LwsSaveSnapshot`
 - Global position: `LwsGlobalPositionSavePayload`
+- Player truck: `LwsPlayerTruckSavePayload`
+- Transmission: existing `Lws18SpeedTransmissionController` save participant
 - Clock: `LwsGameClockSavePayload`
 - Weather: `LwsWeatherSavePayload`
-- Existing transmission participant: `Lws18SpeedTransmissionController` via `ILwsSaveParticipant`
+- Road condition: `LwsRoadConditionSavePayload`
+- Navigation destination intent: `LwsNavigationSavePayload`
 
 ## Required Resume Work
 
-Prompt 017 should apply the restored global position to:
+Prompt 017 should finalize load ordering for:
 
-- `ILwsWorldOriginService`
-- active streaming neighborhood / `ILwsWorldStreamingService`
-- player tractor transform and NWH state
-- trailer identity/attachment and trailer transform
+- target scene selection and validation
+- floating origin restoration before vehicle placement
+- streamed road/chunk neighborhood restoration
+- player tractor pose and NWH runtime state
+- trailer identity/attachment and trailer pose
 - GPS destination intent and route recalculation
 - road-condition service context
+- Save/load busy UI and post-load camera focus
+- autosave, rolling backups, and corruption recovery
 
-Dialogue System variables should use Pixel Crushers `DialogueSystemSaver`; do not duplicate Dialogue System persistence in LWS.
+Dialogue System variables should use Pixel Crushers `DialogueSystemSaver`; LWS should not duplicate Dialogue System persistence.
