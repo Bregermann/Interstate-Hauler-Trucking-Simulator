@@ -79,6 +79,47 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             yield return null;
         }
 
+
+        [UnityTest]
+        public IEnumerator WeatheradeAdapterBindsRoadRendererToRainAndSnowMaterials()
+        {
+            var roadObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            roadObject.name = "weatherade-road-surface-test";
+            Renderer renderer = roadObject.GetComponent<Renderer>();
+            renderer.sharedMaterial = LwsWeatheradeMaterialFactory.CreateFallbackLitMaterial("IH Weatherade Test Dry Material", new Color(0.07f, 0.07f, 0.065f, 1f));
+            roadObject.AddComponent<LwsRoadSurface>().Configure("road.weatherade.test", "segment.weatherade.test", LwsRoadSurfaceType.AsphaltInterstate, "Weatherade adapter test asphalt");
+
+            var adapterObject = new GameObject("weatherade-adapter-test");
+            LwsWeatheradeAdapter adapter = adapterObject.AddComponent<LwsWeatheradeAdapter>();
+            yield return null;
+
+            Assert.IsTrue(adapter.IsAvailable, adapter.Status);
+
+            LwsRoadConditionSnapshot wet = LwsRoadConditionSnapshot.CreateDry("road.weatherade.test", "segment.weatherade.test", "edge.weatherade.test", LwsRoadSurfaceType.AsphaltInterstate, 10f, LwsRoadConditionProfile.Default());
+            wet.condition = LwsRoadConditionType.Wet;
+            wet.wetness01 = 0.9f;
+            wet.standingWater01 = 0.5f;
+            adapter.ApplyRoadCondition(wet);
+            yield return null;
+
+            Assert.GreaterOrEqual(adapter.BoundWeatheradeSurfaceCount, 1, adapter.RoadMaterialDiagnostic);
+            Assert.IsTrue(LwsWeatheradeMaterialFactory.IsWeatheradeMaterialForMode(renderer.sharedMaterial, LwsWeatheradeSurfaceMaterialMode.Rain), renderer.sharedMaterial != null && renderer.sharedMaterial.shader != null ? renderer.sharedMaterial.shader.name : "missing material");
+
+            LwsRoadConditionSnapshot snow = wet;
+            snow.condition = LwsRoadConditionType.LightSnow;
+            snow.wetness01 = 0f;
+            snow.standingWater01 = 0f;
+            snow.snowDepth01 = 0.8f;
+            adapter.ApplyRoadCondition(snow);
+            yield return null;
+
+            Assert.IsTrue(LwsWeatheradeMaterialFactory.IsWeatheradeMaterialForMode(renderer.sharedMaterial, LwsWeatheradeSurfaceMaterialMode.Snow), renderer.sharedMaterial != null && renderer.sharedMaterial.shader != null ? renderer.sharedMaterial.shader.name : "missing material");
+            Assert.IsTrue(adapter.RoadMaterialCompatible, adapter.RoadMaterialDiagnostic);
+
+            Object.Destroy(adapterObject);
+            Object.Destroy(roadObject);
+            yield return null;
+        }
         private sealed class FakePhysicsAdapter : ILwsRoadConditionPhysicsAdapter
         {
             public string AdapterId => "fake.physics";

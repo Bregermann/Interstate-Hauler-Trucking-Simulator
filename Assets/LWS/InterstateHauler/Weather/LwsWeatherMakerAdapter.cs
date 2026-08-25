@@ -1015,7 +1015,7 @@ namespace LWS.InterstateHauler
         }
     }
 
-    [Obsolete("Use LwsWeatherMakerAdapter for Prompt 012 atmospheric weather. Weatherade remains deferred to Prompt 013.")]
+    [Obsolete("Use LwsWeatherMakerAdapter for atmospheric weather and LwsWeatheradeAdapter for road accumulation.")]
     public sealed class LwsWeatherMakerWeatheradeAdapter : LwsWeatherMakerAdapter
     {
     }

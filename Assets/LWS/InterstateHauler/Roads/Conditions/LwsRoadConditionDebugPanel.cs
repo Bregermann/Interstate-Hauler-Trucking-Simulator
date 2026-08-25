@@ -6,10 +6,11 @@ namespace LWS.InterstateHauler
     public sealed class LwsRoadConditionDebugPanel : MonoBehaviour
     {
         [SerializeField] private bool visible;
-        [SerializeField] private Rect panelRect = new Rect(12f, 670f, 390f, 430f);
+        [SerializeField] private Rect panelRect = new Rect(12f, 670f, 440f, 560f);
 
         private ILwsRoadConditionService _roadConditionService;
         private ILwsPlayerVehicleService _playerVehicleService;
+        private LwsWeatheradeAdapter _weatheradeAdapter;
         private float _nextRefreshTime;
         private bool _measuringBrakeDistance;
         private Vector3 _brakeStartPosition;
@@ -58,6 +59,16 @@ namespace LWS.InterstateHauler
             GUILayout.Label($"Temp: {snapshot.surfaceTemperatureC:0.0} C  Speed: {telemetry.speedMetersPerSecond * 2.236936f:0.0} MPH");
             GUILayout.Label($"Wet {snapshot.wetness01:0.00}  Water {snapshot.standingWater01:0.00}  Snow {snapshot.snowDepth01:0.00}  Packed {snapshot.packedSnow01:0.00}  Ice {snapshot.ice01:0.00}");
             GUILayout.Label($"Grip Lng {snapshot.longitudinalGripMultiplier01:0.00}  Lat {snapshot.lateralGripMultiplier01:0.00}  Brake {snapshot.brakingGripMultiplier01:0.00}  Hydro {snapshot.hydroplaningRisk01:0.00}");
+
+            if (_weatheradeAdapter != null)
+            {
+                GUILayout.Label($"Weatherade: {_weatheradeAdapter.Status}");
+                GUILayout.Label($"Road material: {(_weatheradeAdapter.RoadMaterialCompatible ? "COMPATIBLE" : "CHECK")} / {_weatheradeAdapter.RoadMaterialDiagnostic}");
+                GUILayout.Label($"Rain: {_weatheradeAdapter.RainCoverageDiagnostic}");
+                GUILayout.Label($"Snow: {_weatheradeAdapter.SnowCoverageDiagnostic}");
+                GUILayout.Label($"Depth: {_weatheradeAdapter.DepthRendererDiagnostic}");
+                GUILayout.Label($"Last vendor apply: {_weatheradeAdapter.LastVendorApplyDiagnostic}");
+            }
 
             GUILayout.Space(4f);
             if (GUILayout.Button("AUTO FROM WEATHER"))
@@ -131,6 +142,7 @@ namespace LWS.InterstateHauler
 
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _roadConditionService);
             LwsApplicationBootstrap.Instance.Registry.TryGet(out _playerVehicleService);
+            _weatheradeAdapter = FindFirstObjectByType<LwsWeatheradeAdapter>();
         }
 
         private LwsVehicleTelemetry ReadTelemetry()

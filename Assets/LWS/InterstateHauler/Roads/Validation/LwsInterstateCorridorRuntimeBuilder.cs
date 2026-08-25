@@ -251,7 +251,7 @@ namespace LWS.InterstateHauler
             try
             {
                 _easyRoadsNetwork = Activator.CreateInstance(roadNetworkType);
-                Material roadMaterial = Resources.Load<Material>("Materials/roads/road material") ?? CreateRuntimeMaterial("IH Runtime Asphalt", new Color(0.07f, 0.07f, 0.065f, 1f));
+                Material roadMaterial = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial("IH Runtime Asphalt Weatherade", new Color(0.07f, 0.07f, 0.065f, 1f));
                 object mainRoadType = CreateEasyRoadsRoadType(roadTypeType, "IH Validation Interstate", CarriagewayWidthMeters, roadMaterial);
                 object rampRoadType = CreateEasyRoadsRoadType(roadTypeType, "IH Validation Ramp", 7.5f, roadMaterial);
 
@@ -361,8 +361,8 @@ namespace LWS.InterstateHauler
 
         private void BuildServiceArea(Transform parent)
         {
-            Material asphalt = CreateRuntimeMaterial("IH Service Asphalt", new Color(0.09f, 0.09f, 0.085f, 1f));
-            Material shoulder = CreateRuntimeMaterial("IH Shoulder Concrete", new Color(0.31f, 0.31f, 0.29f, 1f));
+            Material asphalt = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial("IH Service Asphalt Weatherade", new Color(0.09f, 0.09f, 0.085f, 1f));
+            Material shoulder = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial("IH Shoulder Concrete Weatherade", new Color(0.31f, 0.31f, 0.29f, 1f));
             CreatePavedRect(parent, "IH_TEST_I000 Service And Trailer Pickup Area", new Vector3(-38f, roadSurfaceY, -95f), new Vector2(120f, 120f), asphalt, "IH_TEST_I000_SERVICE");
             CreatePavedRect(parent, "IH_TEST_I000 Turnaround Apron", new Vector3(0f, roadSurfaceY, 3420f), new Vector2(110f, 95f), asphalt, "IH_TEST_I000_TURNAROUND");
             CreatePavedRect(parent, "IH_TEST_I000 Start Shoulder Pad", new Vector3(34f, roadSurfaceY, 45f), new Vector2(26f, 170f), shoulder, "IH_TEST_I000_SHOULDER_START");
@@ -408,7 +408,7 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            Material asphalt = CreateRuntimeMaterial("IH Fallback Asphalt", new Color(0.065f, 0.065f, 0.06f, 1f));
+            Material asphalt = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial("IH Fallback Asphalt Weatherade", new Color(0.065f, 0.065f, 0.06f, 1f));
             foreach (LwsRoadEdge edge in graph.edges)
             {
                 if (edge == null || edge.samples == null || edge.samples.Count < 2)

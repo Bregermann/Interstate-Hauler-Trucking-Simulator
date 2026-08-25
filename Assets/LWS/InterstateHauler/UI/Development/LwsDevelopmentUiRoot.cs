@@ -933,9 +933,17 @@ namespace LWS.InterstateHauler
             }
 
             LwsRoadConditionSnapshot state = _roadConditionService.CurrentSnapshot;
+            LwsWeatheradeAdapter weatheradeAdapter = FindFirstObjectByType<LwsWeatheradeAdapter>();
             AddInfo("Mode", _roadConditionService.Mode.ToString());
             AddInfo("Condition", $"{state.MajorGameplayState} / {state.condition}");
             AddInfo("Grip", $"long {state.longitudinalGripMultiplier01:0.00}, lateral {state.lateralGripMultiplier01:0.00}, brake {state.brakingGripMultiplier01:0.00}");
+            AddInfo("Weatherade Runtime", weatheradeAdapter != null ? (weatheradeAdapter.IsAvailable ? "READY" : "ERROR") : "missing");
+            AddInfo("Weatherade RainCoverage", weatheradeAdapter != null ? weatheradeAdapter.RainCoverageDiagnostic : "missing");
+            AddInfo("Weatherade SnowCoverage", weatheradeAdapter != null ? weatheradeAdapter.SnowCoverageDiagnostic : "missing");
+            AddInfo("Road Material Compatible", weatheradeAdapter != null ? (weatheradeAdapter.RoadMaterialCompatible ? "YES" : "NO") : "missing");
+            AddInfo("Weatherade Materials", weatheradeAdapter != null ? weatheradeAdapter.RoadMaterialDiagnostic : "missing");
+            AddInfo("Weatherade Depth", weatheradeAdapter != null ? weatheradeAdapter.DepthRendererDiagnostic : "missing");
+            AddInfo("Weatherade Apply", weatheradeAdapter != null ? weatheradeAdapter.LastVendorApplyDiagnostic : "missing");
             AddButtonRow(("AUTO", () => _roadConditionService.SetAutoFromWeather()),
                 ("DRY", () => _roadConditionService.ForceCondition(LwsRoadConditionOverrideMode.ForceDry)),
                 ("WET", () => _roadConditionService.ForceCondition(LwsRoadConditionOverrideMode.ForceWet)),

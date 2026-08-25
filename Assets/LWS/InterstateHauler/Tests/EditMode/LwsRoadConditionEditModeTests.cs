@@ -159,6 +159,32 @@ namespace LWS.InterstateHauler.Tests.EditMode
             StringAssert.DoesNotContain("NWH.", source);
         }
 
+
+        [Test]
+        public void WeatheradeMaterialFactoryTargetsInstalledVendorShaders()
+        {
+            string factorySource = File.ReadAllText("Assets/LWS/InterstateHauler/Roads/Conditions/LwsWeatheradeMaterialFactory.cs");
+            string adapterSource = File.ReadAllText("Assets/LWS/InterstateHauler/Roads/Conditions/LwsWeatheradeAdapter.cs");
+
+            StringAssert.Contains("NOT_Lonely/Weatherade/Rain Coverage", factorySource);
+            StringAssert.Contains("NOT_Lonely/Weatherade/Snow Coverage", factorySource);
+            StringAssert.Contains("RainCoverage", adapterSource);
+            StringAssert.Contains("SnowCoverage", adapterSource);
+            StringAssert.Contains("UpdateCoverageMaterials", adapterSource);
+            StringAssert.Contains("autoBindWeatheradeRoadMaterials", adapterSource);
+        }
+
+        [Test]
+        public void ValidationHighwayBuildersUseWeatheradeRoadSurfaceMaterials()
+        {
+            string corridor = File.ReadAllText("Assets/LWS/InterstateHauler/Roads/Validation/LwsInterstateCorridorRuntimeBuilder.cs");
+            string streaming = File.ReadAllText("Assets/LWS/InterstateHauler/World/Streaming/LwsStreamingHighwayChunkBuilder.cs");
+            string fiftyMile = File.ReadAllText("Assets/LWS/InterstateHauler/World/Origin/LwsFiftyMileHighwayChunkBuilder.cs");
+
+            StringAssert.Contains("LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial", corridor);
+            StringAssert.Contains("LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial", streaming);
+            StringAssert.Contains("LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial", fiftyMile);
+        }
         private static LwsRoadConditionSnapshot CreateDry(LwsRoadConditionProfile profile)
         {
             return LwsRoadConditionSnapshot.CreateDry(

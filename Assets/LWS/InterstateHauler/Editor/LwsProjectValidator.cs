@@ -138,6 +138,8 @@ namespace LWS.InterstateHauler.Editor
         private const string WeatherMakerDayNightPath = "Assets/WeatherMaker/Prefab/Scripts/Sky/WeatherMakerDayNightCycleManagerScript.cs";
         private const string WeatherDocsPath = "Documentation/InterstateHauler/012_Weather_Maker_Integration.md";
         private const string WeatherMakerApiMatrixPath = "Documentation/InterstateHauler/012_WeatherMaker_API_Matrix.md";
+        private const string WeatherMakerRecoveredDocsPath = "Documentation/InterstateHauler/Weather/012_WeatherMaker_Integration_Recovered.md";
+        private const string WeatherMakerRecoveredApiMatrixPath = "Documentation/InterstateHauler/Weather/WeatherMaker_API_Matrix.md";
         private const string WeatherPresetMatrixPath = "Documentation/InterstateHauler/012_Weather_Preset_Matrix.md";
         private const string WeatherTestMatrixPath = "Documentation/InterstateHauler/012_Weather_Test_Matrix.md";
         private const string Prompt013HandoffPath = "Documentation/InterstateHauler/012_Prompt013_Handoff.md";
@@ -148,15 +150,21 @@ namespace LWS.InterstateHauler.Editor
         private const string WeatheradeRainCoveragePath = "Assets/NOT_Lonely/Weatherade SRS/Scripts/RainCoverage.cs";
         private const string WeatheradeSnowCoveragePath = "Assets/NOT_Lonely/Weatherade SRS/Scripts/SnowCoverage.cs";
         private const string WeatheradeCoverageBasePath = "Assets/NOT_Lonely/Weatherade SRS/Scripts/CoverageBase.cs";
+        private const string WeatheradeRainCoverageShaderPath = "Assets/NOT_Lonely/Weatherade SRS/Shaders/RainCoverage/MeshRender/RainCoverage.shader";
+        private const string WeatheradeSnowCoverageShaderPath = "Assets/NOT_Lonely/Weatherade SRS/Shaders/SnowCoverage/MeshRender/SnowCoverage.shader";
         private const string RoadConditionCorePath = "Assets/LWS/InterstateHauler/Roads/Conditions/LwsRoadCondition.cs";
         private const string RoadConditionProfilePath = "Assets/LWS/InterstateHauler/Roads/Conditions/LwsRoadConditionPhysicsProfile.cs";
         private const string RoadConditionRuntimeControllerPath = "Assets/LWS/InterstateHauler/Roads/Conditions/LwsRoadConditionRuntimeController.cs";
         private const string WeatheradeAdapterPath = "Assets/LWS/InterstateHauler/Roads/Conditions/LwsWeatheradeAdapter.cs";
+        private const string WeatheradeMaterialFactoryPath = "Assets/LWS/InterstateHauler/Roads/Conditions/LwsWeatheradeMaterialFactory.cs";
         private const string NwhRoadConditionAdapterPath = "Assets/LWS/InterstateHauler/Roads/Conditions/LwsNwhRoadConditionAdapter.cs";
         private const string RoadConditionDebugPanelPath = "Assets/LWS/InterstateHauler/Roads/Conditions/LwsRoadConditionDebugPanel.cs";
         private const string DefaultRoadConditionProfilePath = "Assets/LWS/InterstateHauler/Roads/Conditions/Data/IH_RoadConditionPhysics_Default.asset";
         private const string RoadConditionDocsPath = "Documentation/InterstateHauler/013_Weatherade_NWH_Road_Conditions.md";
         private const string WeatheradeApiMatrixPath = "Documentation/InterstateHauler/013_Weatherade_API_Matrix.md";
+        private const string WeatheradeRecoveredDocsPath = "Documentation/InterstateHauler/Weather/013_Weatherade_NWH_Integration_Recovered.md";
+        private const string WeatheradeRecoveredApiMatrixPath = "Documentation/InterstateHauler/Weather/Weatherade_API_Matrix.md";
+        private const string WeatherVisualTestMatrixPath = "Documentation/InterstateHauler/Weather/Weather_Visual_Test_Matrix.md";
         private const string NwhSurfaceApiMatrixPath = "Documentation/InterstateHauler/013_NWH_Surface_API_Matrix.md";
         private const string RoadConditionMatrixPath = "Documentation/InterstateHauler/013_Road_Condition_Matrix.md";
         private const string RoadConditionTestMatrixPath = "Documentation/InterstateHauler/013_Road_Condition_Test_Matrix.md";
@@ -2432,8 +2440,7 @@ namespace LWS.InterstateHauler.Editor
             bool noRoadPhysics = !weatherCore.Contains("WheelCollider") &&
                                  !weatherCore.Contains("NWH") &&
                                  !weatherCore.Contains("friction") &&
-                                 !weatherCore.Contains("Weatherade") &&
-                                 adapter.Contains("Weatherade remains deferred to Prompt 013");
+                                 !weatherCore.Contains("Weatherade");
             bool reflectedBoundary = adapter.Contains("ResolveType(WeatherMakerScriptTypeName)") &&
                                      adapter.Contains("RaiseWeatherProfileChanged") &&
                                      adapter.Contains("LoadWeatherMakerResource") &&
@@ -2471,6 +2478,9 @@ namespace LWS.InterstateHauler.Editor
             {
                 WeatherDocsPath,
                 WeatherMakerApiMatrixPath,
+                WeatherMakerRecoveredDocsPath,
+                WeatherMakerRecoveredApiMatrixPath,
+                WeatherVisualTestMatrixPath,
                 WeatherPresetMatrixPath,
                 WeatherTestMatrixPath,
                 Prompt013HandoffPath
@@ -2481,7 +2491,7 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Prompt 012 Documentation",
                 missingDocs.Count == 0
-                    ? "Prompt 012 Weather Maker integration docs, API matrix, preset matrix, test matrix, and Prompt 013 handoff exist."
+                    ? "Prompt 012 Weather Maker integration docs, recovered API matrix, visual test matrix, preset matrix, test matrix, and Prompt 013 handoff exist."
                     : "Missing Prompt 012 documentation: " + string.Join(", ", missingDocs));
         }
 
@@ -2503,6 +2513,7 @@ namespace LWS.InterstateHauler.Editor
                 RoadConditionProfilePath,
                 RoadConditionRuntimeControllerPath,
                 WeatheradeAdapterPath,
+                WeatheradeMaterialFactoryPath,
                 NwhRoadConditionAdapterPath,
                 RoadConditionDebugPanelPath,
                 DefaultRoadConditionProfilePath
@@ -2513,7 +2524,7 @@ namespace LWS.InterstateHauler.Editor
                 missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Prompt 013 Road Condition Runtime Files",
                 missing.Count == 0
-                    ? "Road condition service, physics profile, runtime controller, Weatherade adapter, NWH adapter, debug panel, and tuning asset exist."
+                    ? "Road condition service, physics profile, runtime controller, Weatherade adapter/material factory, NWH adapter, debug panel, and tuning asset exist."
                     : "Missing Prompt 013 road condition files: " + string.Join(", ", missing));
         }
 
@@ -2524,6 +2535,8 @@ namespace LWS.InterstateHauler.Editor
             string rain = File.Exists(WeatheradeRainCoveragePath) ? File.ReadAllText(WeatheradeRainCoveragePath) : string.Empty;
             string snow = File.Exists(WeatheradeSnowCoveragePath) ? File.ReadAllText(WeatheradeSnowCoveragePath) : string.Empty;
             string coverage = File.Exists(WeatheradeCoverageBasePath) ? File.ReadAllText(WeatheradeCoverageBasePath) : string.Empty;
+            string rainShader = File.Exists(WeatheradeRainCoverageShaderPath) ? File.ReadAllText(WeatheradeRainCoverageShaderPath) : string.Empty;
+            string snowShader = File.Exists(WeatheradeSnowCoverageShaderPath) ? File.ReadAllText(WeatheradeSnowCoverageShaderPath) : string.Empty;
 
             bool rootExists = Directory.Exists(WeatheradeRootPath);
             bool expectedVersion = version.Contains("1.1.8");
@@ -2534,6 +2547,8 @@ namespace LWS.InterstateHauler.Editor
                                      snow.Contains("coverageAmount") &&
                                      coverage.Contains("UpdateCoverageMaterials");
             bool urpPackagePresent = File.Exists(WeatheradeUrpPackagePath);
+            bool coverageShadersPresent = rainShader.Contains("NOT_Lonely/Weatherade/Rain Coverage") &&
+                                          snowShader.Contains("NOT_Lonely/Weatherade/Snow Coverage");
 
             report.Add(
                 rootExists && expectedVersion ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
@@ -2555,8 +2570,14 @@ namespace LWS.InterstateHauler.Editor
                 urpPackagePresent
                     ? "Weatherade URP 17.1 support package is present locally; import/setup remains a manual vendor step if visual validation requires it."
                     : "Weatherade URP support package was not found locally.");
-        }
 
+            report.Add(
+                coverageShadersPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Weatherade Coverage Shaders",
+                coverageShadersPresent
+                    ? "Weatherade Rain Coverage and Snow Coverage mesh shaders are present for LWS-generated road material binding."
+                    : "Weatherade rain/snow mesh coverage shader assets were not found.");
+        }
         private static void ValidateRoadConditionServiceAndSceneWiring(LwsProjectValidationReport report)
         {
             string bootstrapText = File.Exists("Assets/LWS/InterstateHauler/Bootstrap/LwsApplicationBootstrap.cs")
@@ -2617,6 +2638,7 @@ namespace LWS.InterstateHauler.Editor
         {
             string core = File.Exists(RoadConditionCorePath) ? File.ReadAllText(RoadConditionCorePath) : string.Empty;
             string weatherade = File.Exists(WeatheradeAdapterPath) ? File.ReadAllText(WeatheradeAdapterPath) : string.Empty;
+            string weatheradeMaterialFactory = File.Exists(WeatheradeMaterialFactoryPath) ? File.ReadAllText(WeatheradeMaterialFactoryPath) : string.Empty;
             string nwh = File.Exists(NwhRoadConditionAdapterPath) ? File.ReadAllText(NwhRoadConditionAdapterPath) : string.Empty;
             string runtime = File.Exists(RoadConditionRuntimeControllerPath) ? File.ReadAllText(RoadConditionRuntimeControllerPath) : string.Empty;
 
@@ -2627,6 +2649,8 @@ namespace LWS.InterstateHauler.Editor
             bool weatheradeReflected = weatherade.Contains("NOT_Lonely.Weatherade.RainCoverage") &&
                                        weatherade.Contains("SetMember") &&
                                        weatherade.Contains("UpdateCoverageMaterials") &&
+                                       weatheradeMaterialFactory.Contains("NOT_Lonely/Weatherade/Rain Coverage") &&
+                                       weatheradeMaterialFactory.Contains("NOT_Lonely/Weatherade/Snow Coverage") &&
                                        !core.Contains("Weatherade");
             bool nwhOnlyInAdapter = nwh.Contains("NWH.Common.Vehicles") &&
                                     nwh.Contains("LongitudinalFrictionGrip") &&
@@ -2638,6 +2662,7 @@ namespace LWS.InterstateHauler.Editor
                                     nwh.Contains("rebindIntervalSeconds") &&
                                     nwh.Contains("maintenanceApplyIntervalSeconds") &&
                                     weatherade.Contains("EnsureCoverage") &&
+                                    weatherade.Contains("roadMaterialRefreshIntervalSeconds") &&
                                     !runtime.Contains("FindObjectsByType");
 
             report.Add(
@@ -2651,23 +2676,25 @@ namespace LWS.InterstateHauler.Editor
                 weatheradeReflected && nwhOnlyInAdapter ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Weatherade/NWH Adapter Boundaries",
                 weatheradeReflected && nwhOnlyInAdapter
-                    ? "Weatherade concrete API is isolated in its adapter, and NWH tire API use is isolated in the NWH adapter."
+                    ? "Weatherade concrete API and material workflow stay inside LWS Weatherade support, and NWH tire API use is isolated in the NWH adapter."
                     : "Weatherade or NWH concrete dependencies may be leaking into the wrong layer.");
 
             report.Add(
                 throttledRuntime ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
                 "Road Condition Performance Guards",
                 throttledRuntime
-                    ? "Road condition simulation, NWH rebinding, and NWH maintenance apply are cadence-driven; runtime controller avoids broad scene searches."
+                    ? "Road condition simulation, Weatherade surface scans, NWH rebinding, and NWH maintenance apply are cadence-driven; runtime controller avoids broad scene searches."
                     : "Road condition code may need performance review for scene searches or missing update cadence guards.");
         }
-
         private static void ValidatePrompt013Documentation(LwsProjectValidationReport report)
         {
             string[] docs =
             {
                 RoadConditionDocsPath,
                 WeatheradeApiMatrixPath,
+                WeatheradeRecoveredDocsPath,
+                WeatheradeRecoveredApiMatrixPath,
+                WeatherVisualTestMatrixPath,
                 NwhSurfaceApiMatrixPath,
                 RoadConditionMatrixPath,
                 RoadConditionTestMatrixPath,
@@ -2679,7 +2706,7 @@ namespace LWS.InterstateHauler.Editor
                 missingDocs.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Prompt 013 Documentation",
                 missingDocs.Count == 0
-                    ? "Prompt 013 Weatherade/NWH road condition docs, API matrices, condition/test matrices, and Prompt 014 handoff exist."
+                    ? "Prompt 013 Weatherade/NWH road condition docs, recovered API matrices, visual test matrix, condition/test matrices, and Prompt 014 handoff exist."
                     : "Missing Prompt 013 documentation: " + string.Join(", ", missingDocs));
         }
 

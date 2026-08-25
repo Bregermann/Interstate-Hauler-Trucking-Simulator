@@ -65,8 +65,8 @@ namespace LWS.InterstateHauler
             Transform laneMarkingsRoot = EnsureChild(_generatedRoot.transform, LaneMarkingsRootName);
             Transform roadsideRoot = EnsureChild(_generatedRoot.transform, RoadsideSupportRootName);
 
-            Material asphalt = CreateRuntimeMaterial("IH 50-Mile Asphalt", new Color(0.06f, 0.06f, 0.055f, 1f));
-            Material shoulder = CreateRuntimeMaterial("IH 50-Mile Shoulder", new Color(0.26f, 0.26f, 0.24f, 1f));
+            Material asphalt = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial("IH 50-Mile Asphalt Weatherade", new Color(0.06f, 0.06f, 0.055f, 1f));
+            Material shoulder = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial("IH 50-Mile Shoulder Weatherade", new Color(0.26f, 0.26f, 0.24f, 1f));
             Material grass = CreateRuntimeMaterial("IH 50-Mile Grass", new Color(0.12f, 0.24f, 0.1f, 1f));
             Material whiteMarker = CreateRuntimeMaterial("IH 50-Mile Marker White", new Color(0.95f, 0.95f, 0.86f, 1f));
             Material yellowMarker = CreateRuntimeMaterial("IH 50-Mile Marker Yellow", new Color(1f, 0.82f, 0.08f, 1f));

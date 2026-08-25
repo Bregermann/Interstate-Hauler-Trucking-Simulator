@@ -48,8 +48,8 @@ namespace LWS.InterstateHauler
             _generatedRoot = new GameObject($"{chunkId} Runtime Road Presentation");
             _generatedRoot.transform.SetParent(transform, false);
 
-            Material asphalt = CreateRuntimeMaterial("IH Streamed Asphalt", new Color(0.065f, 0.065f, 0.06f, 1f));
-            Material shoulder = CreateRuntimeMaterial("IH Streamed Shoulder", new Color(0.3f, 0.3f, 0.28f, 1f));
+            Material asphalt = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial("IH Streamed Asphalt Weatherade", new Color(0.065f, 0.065f, 0.06f, 1f));
+            Material shoulder = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial("IH Streamed Shoulder Weatherade", new Color(0.3f, 0.3f, 0.28f, 1f));
 
             CreateRoadRibbon("IH_TEST_I000_NB_MAIN", "IH_TEST_I000_NB", LwsRoadDirection.Northbound, CarriagewayOffsetMeters, minZ, maxZ, asphalt);
             CreateRoadRibbon("IH_TEST_I000_SB_MAIN", "IH_TEST_I000_SB", LwsRoadDirection.Southbound, -CarriagewayOffsetMeters, minZ, maxZ, asphalt);
