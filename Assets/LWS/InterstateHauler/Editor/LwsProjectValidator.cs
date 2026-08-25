@@ -255,6 +255,7 @@ namespace LWS.InterstateHauler.Editor
         private const string PixelCrushersDialogueSaverPath = "Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Save System/DialogueSystemSaver.cs";
         private const string LwsSaveArchitecturePath = "Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs";
         private const string LwsSaveProfileTypesPath = "Assets/LWS/InterstateHauler/Save/LwsSaveProfileTypes.cs";
+        private const string LwsSaveLoadCoordinatorPath = "Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs";
         private const string PixelCrushersSemanticSaverBridgePath = "Assets/LWS/InterstateHaulerPixelCrushers/Save/LwsPixelCrushersSemanticSaver.cs";
         private const string PersistencePauseMenuPath = "Assets/LWS/InterstateHauler/UI/Persistence/LwsPersistencePauseMenu.cs";
         private const string SaveVendorAuditDocsPath = "Documentation/InterstateHauler/Persistence/016_Save_System_Vendor_Audit.md";
@@ -265,6 +266,11 @@ namespace LWS.InterstateHauler.Editor
         private const string LwsSaveProviderMatrixPath = "Documentation/InterstateHauler/Persistence/016_LWS_Save_Provider_Matrix.md";
         private const string SaveTestMatrixPath = "Documentation/InterstateHauler/Persistence/016_Save_Test_Matrix.md";
         private const string Prompt017SaveHandoffPath = "Documentation/InterstateHauler/Persistence/016_Prompt017_Handoff.md";
+        private const string Prompt017MidRouteResumeDocsPath = "Documentation/InterstateHauler/Persistence/017_Mid_Route_Save_Resume.md";
+        private const string Prompt017LoadStateMachineDocsPath = "Documentation/InterstateHauler/Persistence/017_Load_State_Machine.md";
+        private const string Prompt017AutosaveBackupRecoveryDocsPath = "Documentation/InterstateHauler/Persistence/017_Autosave_Backup_Recovery.md";
+        private const string Prompt017ConsolePersistenceHandoffPath = "Documentation/InterstateHauler/Persistence/017_Console_Persistence_Handoff.md";
+        private const string Prompt017WorldResumeContextDocsPath = "Documentation/InterstateHauler/Persistence/017_World_Resume_Context.md";
         private const string SelectedNwhTruckPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab";
         private const string SelectedNwhTrailerPath = "Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTrailer Variant.prefab";
         private const string LogitechG29ProfilePath = "Assets/LWS/InterstateHauler/Input/Data/IH_LogitechG29Profile.asset";
@@ -551,6 +557,7 @@ namespace LWS.InterstateHauler.Editor
             bool dialogueSaverExists = File.Exists(PixelCrushersDialogueSaverPath);
             bool semanticBridgeExists = File.Exists(PixelCrushersSemanticSaverBridgePath);
             bool profileTypesExist = File.Exists(LwsSaveProfileTypesPath);
+            bool coordinatorExists = File.Exists(LwsSaveLoadCoordinatorPath);
             bool pauseMenuExists = File.Exists(PersistencePauseMenuPath);
             report.Add(
                 saveSystemExists && saverExists && diskStorerExists ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
@@ -567,10 +574,11 @@ namespace LWS.InterstateHauler.Editor
 
             string saveText = File.Exists(LwsSaveArchitecturePath) ? File.ReadAllText(LwsSaveArchitecturePath) : string.Empty;
             string profileText = profileTypesExist ? File.ReadAllText(LwsSaveProfileTypesPath) : string.Empty;
+            string coordinatorText = coordinatorExists ? File.ReadAllText(LwsSaveLoadCoordinatorPath) : string.Empty;
             string bridgeText = semanticBridgeExists ? File.ReadAllText(PixelCrushersSemanticSaverBridgePath) : string.Empty;
             string menuText = pauseMenuExists ? File.ReadAllText(PersistencePauseMenuPath) : string.Empty;
             string bootstrapText = File.Exists(BootstrapRuntimePath) ? File.ReadAllText(BootstrapRuntimePath) : string.Empty;
-            string combinedRuntimeText = saveText + "\n" + profileText + "\n" + bridgeText + "\n" + menuText;
+            string combinedRuntimeText = saveText + "\n" + profileText + "\n" + coordinatorText + "\n" + bridgeText + "\n" + menuText;
 
             bool facade = saveText.Contains("interface ILwsSaveService") &&
                           saveText.Contains("class LwsSaveService") &&
@@ -622,6 +630,37 @@ namespace LWS.InterstateHauler.Editor
                              menuText.Contains("DELETE") &&
                              bootstrapText.Contains("ILwsPersistenceMenuService");
 
+            bool prompt017Coordinator = coordinatorExists &&
+                                        coordinatorText.Contains("class LwsSaveLoadCoordinator") &&
+                                        coordinatorText.Contains("PreReadVendorSlot") &&
+                                        coordinatorText.Contains("LoadPreparedVendorSlot") &&
+                                        coordinatorText.Contains("EstablishingOrigin") &&
+                                        coordinatorText.Contains("ApplyingVendorSave");
+            bool prompt017ResumeContext = coordinatorText.Contains("LwsWorldResumeSaveParticipant") &&
+                                           coordinatorText.Contains("LwsWorldResumeContextPayload") &&
+                                           coordinatorText.Contains("stableWorldId") &&
+                                           coordinatorText.Contains("savedGlobalX") &&
+                                           profileText.Contains("WorldResumeContextParticipantId");
+            bool prompt017Autosave = profileText.Contains("AutosaveSlotOffset") &&
+                                     profileText.Contains("BackupSlotOffset") &&
+                                     profileText.Contains("MapAutosaveToVendorSlot") &&
+                                     profileText.Contains("MapManualBackupToVendorSlot") &&
+                                     profileText.Contains("MapAutosaveBackupToVendorSlot") &&
+                                     saveText.Contains("SaveAutosave") &&
+                                     saveText.Contains("RequestAutosave") &&
+                                     saveText.Contains("TickAutosave") &&
+                                     menuText.Contains("AUTOSAVE");
+            bool prompt017Backups = saveText.Contains("PrepareBackupBeforeOverwrite") &&
+                                    saveText.Contains("PrepareRecoveryOffer") &&
+                                    saveText.Contains("CopySavedGameDataSlot") &&
+                                    saveText.Contains("RetrieveSavedGameData") &&
+                                    saveText.Contains("StoreSavedGameData") &&
+                                    !combinedRuntimeText.Contains("File.Copy");
+            bool prompt017StationaryTruckResume = saveText.Contains("hasGlobalPosition") &&
+                                                   saveText.Contains("rb.linearVelocity = Vector3.zero") &&
+                                                   saveText.Contains("rb.angularVelocity = Vector3.zero") &&
+                                                   !saveText.Contains("rb.linearVelocity = restored.linearVelocity") &&
+                                                   !saveText.Contains("rb.angularVelocity = restored.angularVelocity");
             report.Add(
                 facade ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "LWS Save Facade",
@@ -654,6 +693,26 @@ namespace LWS.InterstateHauler.Editor
                 pauseMenu ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
                 "Player-Facing Save Menu",
                 pauseMenu ? "Pause menu exposes profile management and manual save/load/delete controls." : "Player-facing persistence pause menu is missing or incomplete.");
+            report.Add(
+                prompt017Coordinator ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Prompt 017 Load Coordinator",
+                prompt017Coordinator ? "LWS coordinates pre-read, world preparation, origin establishment, and Pixel Crushers load application without owning storage." : "Prompt 017 load coordinator is missing or does not show required pre-read/world-prep/load phases.");
+            report.Add(
+                prompt017ResumeContext ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "World Resume Context",
+                prompt017ResumeContext ? "Stable world ID and double-precision global resume position are captured as LWS semantic payloads." : "World resume context payload or participant is missing.");
+            report.Add(
+                prompt017Autosave ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Autosave Slot Architecture",
+                prompt017Autosave ? "Autosave uses reserved Pixel Crushers profile slots and runtime safe-state scheduling." : "Autosave schema, runtime service, or menu presentation is missing.");
+            report.Add(
+                prompt017Backups ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Vendor-Backed Save Recovery",
+                prompt017Backups ? "Manual and autosave backups copy Pixel Crushers SavedGameData through the vendor storer, with recovery offers and no direct file copy." : "Backup/recovery path is missing or appears to bypass Pixel Crushers storage.");
+            report.Add(
+                prompt017StationaryTruckResume ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Stationary Truck Resume",
+                prompt017StationaryTruckResume ? "Player truck restores from global pose and zeros unsafe Rigidbody velocities on resume." : "Player truck resume does not prove global pose restore with stationary physics.");
 
             string[] docs =
             {
@@ -671,6 +730,19 @@ namespace LWS.InterstateHauler.Editor
                 docsPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
                 "Prompt 016 Documentation",
                 docsPresent ? "Prompt 016 persistence audit, architecture, matrix, console handoff, roadmap merge, and Prompt 017 handoff docs exist." : "One or more Prompt 016 persistence documentation files are missing.");
+            string[] prompt017Docs =
+            {
+                Prompt017MidRouteResumeDocsPath,
+                Prompt017LoadStateMachineDocsPath,
+                Prompt017AutosaveBackupRecoveryDocsPath,
+                Prompt017ConsolePersistenceHandoffPath,
+                Prompt017WorldResumeContextDocsPath
+            };
+            bool prompt017DocsPresent = prompt017Docs.All(File.Exists);
+            report.Add(
+                prompt017DocsPresent ? LwsValidationSeverity.Info : LwsValidationSeverity.Warning,
+                "Prompt 017 Documentation",
+                prompt017DocsPresent ? "Prompt 017 mid-route resume, load state machine, autosave/backup/recovery, console handoff, and world resume context docs exist." : "One or more Prompt 017 persistence documentation files are missing.");
         }
         private static void ValidateRoadGraphData(LwsProjectValidationReport report)
         {
@@ -1546,7 +1618,6 @@ namespace LWS.InterstateHauler.Editor
                 CabAnchorPath,
                 CabInteriorRecoveryPath
             };
-
             var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
             report.Add(
                 missing.Count == 0 ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
@@ -1638,7 +1709,6 @@ namespace LWS.InterstateHauler.Editor
                     ? "The validation spawner installs dashboard/mirror/cab components, bootstrap registers the dashboard service, and LwsPlayerTruck exposes the cab systems."
                     : "Dashboard/mirror/cab runtime wiring is incomplete.");
         }
-
         private static void ValidateSourceCabInventory(LwsProjectValidationReport report)
         {
             string truckText = File.Exists(SelectedNwhTruckPath) ? File.ReadAllText(SelectedNwhTruckPath) : string.Empty;
@@ -1739,7 +1809,6 @@ namespace LWS.InterstateHauler.Editor
                     ? "Prompt 008 documentation and Prompt 009 handoff exist."
                     : "Missing Prompt 008 documentation: " + string.Join(", ", missingDocs));
         }
-
         private static void ValidateEasyRoadsInterstateCorridorFoundation(LwsProjectValidationReport report)
         {
             ValidateInterstateCorridorRuntimeFiles(report);

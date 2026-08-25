@@ -67,12 +67,18 @@ namespace LWS.InterstateHauler
         IReadOnlyList<ILwsSaveParticipant> Participants { get; }
         LwsPixelCrushersSaveAdapter Adapter { get; }
         LwsSaveDiagnostics Diagnostics { get; }
+        LwsSaveLoadCoordinator LoadCoordinator { get; }
+        LwsSaveRecoveryOffer RecoveryOffer { get; }
+        LwsAutosaveConfiguration AutosaveConfiguration { get; }
         IReadOnlyList<LwsSaveProfileMetadata> Profiles { get; }
         LwsSaveProfileMetadata ActiveProfile { get; }
         string ActiveProfileId { get; }
         int ManualSlotCount { get; }
         bool IsSaving { get; }
         bool IsLoading { get; }
+        bool PendingAutosave { get; }
+        string LastFailure { get; }
+        LwsSaveLoadCoordinatorPhase LoadPhase { get; }
         bool CanSave { get; }
         bool CanLoad { get; }
         event Action<LwsSaveOperationResult, LwsManualSaveSlotMetadata> SaveCompleted;
@@ -90,11 +96,20 @@ namespace LWS.InterstateHauler
         LwsSaveOperationResult DeleteProfile(string profileId);
         IReadOnlyList<LwsManualSaveSlotMetadata> GetManualSlots(string profileId = null);
         LwsManualSaveSlotMetadata GetSlotMetadata(string profileId, int manualSlotNumber);
+        LwsManualSaveSlotMetadata GetAutosaveSlotMetadata(string profileId = null);
         int MapToVendorSlot(string profileId, LwsSaveSlotType slotType, int slotNumber);
         bool HasSave(string profileId, int manualSlotNumber);
+        bool HasAutosave(string profileId = null);
         LwsSaveOperationResult Save(string profileId, int manualSlotNumber, bool overwrite);
+        LwsSaveOperationResult SaveAutosave(string profileId = null, string reason = null);
+        LwsSaveOperationResult RequestAutosave(string reason);
         LwsSaveOperationResult Load(string profileId, int manualSlotNumber);
+        LwsSaveOperationResult LoadAutosave(string profileId = null);
+        LwsSaveOperationResult LoadRecoveryBackup();
+        void DismissRecoveryOffer();
         LwsSaveOperationResult Delete(string profileId, int manualSlotNumber);
+        LwsSaveOperationResult DeleteAutosave(string profileId = null);
+        void TickAutosave(float deltaTimeSeconds);
         string BuildDiagnosticsReport();
     }
 
@@ -115,11 +130,19 @@ namespace LWS.InterstateHauler
         private LwsSaveSlotType _pendingSlotType = LwsSaveSlotType.Manual;
         private int _pendingSlotNumber;
         private int _pendingVendorSlotNumber;
+        private readonly LwsAutosaveConfiguration _autosaveConfiguration = new LwsAutosaveConfiguration();
+        private float _autosaveElapsedSeconds;
+        private float _lastAutosaveRealtime = -9999f;
+        private string _pendingAutosaveReason = string.Empty;
+        private LwsAutosaveRuntimeDriver _autosaveDriver;
 
         public string ServiceId => "lws.save";
         public IReadOnlyList<ILwsSaveParticipant> Participants => _participants;
         public LwsPixelCrushersSaveAdapter Adapter { get; private set; }
         public LwsSaveDiagnostics Diagnostics { get; private set; } = LwsSaveDiagnostics.Empty;
+        public LwsSaveLoadCoordinator LoadCoordinator { get; private set; }
+        public LwsSaveRecoveryOffer RecoveryOffer { get; private set; } = LwsSaveRecoveryOffer.None;
+        public LwsAutosaveConfiguration AutosaveConfiguration => _autosaveConfiguration;
         public IReadOnlyList<LwsSaveProfileMetadata> Profiles
         {
             get
@@ -142,8 +165,11 @@ namespace LWS.InterstateHauler
         public int ManualSlotCount => LwsSaveSchema.ManualSlotCount;
         public bool IsSaving { get; private set; }
         public bool IsLoading { get; private set; }
-        public bool CanSave => Adapter != null && Adapter.ReadyForRuntimeSaves && ActiveProfile != null && !IsSaving && !IsLoading;
-        public bool CanLoad => Adapter != null && Adapter.ReadyForRuntimeSaves && ActiveProfile != null && !IsSaving && !IsLoading;
+        public bool PendingAutosave { get; private set; }
+        public string LastFailure { get; private set; } = string.Empty;
+        public LwsSaveLoadCoordinatorPhase LoadPhase => LoadCoordinator != null ? LoadCoordinator.Phase : LwsSaveLoadCoordinatorPhase.Idle;
+        public bool CanSave => IsOperationSafe(out _);
+        public bool CanLoad => Adapter != null && Adapter.ReadyForRuntimeSaves && ActiveProfile != null && !IsSaving && !IsLoading && (LoadCoordinator == null || !LoadCoordinator.IsLoadActive);
 
         public event Action<LwsSaveOperationResult, LwsManualSaveSlotMetadata> SaveCompleted;
         public event Action<LwsSaveOperationResult, LwsManualSaveSlotMetadata> LoadCompleted;
@@ -153,6 +179,7 @@ namespace LWS.InterstateHauler
         {
             _registry = context.Registry;
             Adapter = new LwsPixelCrushersSaveAdapter();
+            LoadCoordinator = new LwsSaveLoadCoordinator(this, () => _registry);
             RegisterSemanticParticipants();
 
             LwsSaveOperationResult validation = ValidateParticipants();
@@ -172,6 +199,7 @@ namespace LWS.InterstateHauler
             }
 
             EnsureDefaultProfile();
+            EnsureAutosaveRuntimeDriver();
             RefreshDiagnostics("Initialize", adapterValidation);
             return adapterValidation.Succeeded
                 ? LwsServiceResult.Success("LWS persistence facade initialized with Pixel Crushers Save System as the save authority.")
@@ -182,11 +210,29 @@ namespace LWS.InterstateHauler
         {
             _participants.Clear();
             _participantIds.Clear();
+            if (_autosaveDriver != null)
+            {
+                if (Application.isPlaying)
+                {
+                    UnityEngine.Object.Destroy(_autosaveDriver.gameObject);
+                }
+                else
+                {
+                    UnityEngine.Object.DestroyImmediate(_autosaveDriver.gameObject);
+                }
+
+                _autosaveDriver = null;
+            }
+
             _registry = null;
             _directory = new LwsSaveProfileDirectory();
             Diagnostics = LwsSaveDiagnostics.Empty;
             IsSaving = false;
             IsLoading = false;
+            PendingAutosave = false;
+            LastFailure = string.Empty;
+            LoadCoordinator = null;
+            RecoveryOffer = LwsSaveRecoveryOffer.None;
             return LwsServiceResult.Success("LWS save facade shut down.");
         }
 
@@ -293,13 +339,10 @@ namespace LWS.InterstateHauler
                 return LwsSaveOperationResult.Failure("Save snapshot has no participant list.");
             }
 
-            foreach (LwsSaveParticipantState payload in snapshot.participants)
+            foreach (LwsSaveParticipantState payload in snapshot.participants
+                         .Where(p => p != null && !string.IsNullOrWhiteSpace(p.participantId))
+                         .OrderBy(p => GetRestoreOrder(p.participantId)))
             {
-                if (payload == null || string.IsNullOrWhiteSpace(payload.participantId))
-                {
-                    continue;
-                }
-
                 ILwsSaveParticipant participant = _participants.FirstOrDefault(p => p.ParticipantId == payload.participantId);
                 if (participant == null)
                 {
@@ -438,6 +481,11 @@ namespace LWS.InterstateHauler
             return _directory.GetOrCreateManualSlot(profile, Mathf.Clamp(manualSlotNumber, 1, LwsSaveSchema.ManualSlotCount));
         }
 
+        public LwsManualSaveSlotMetadata GetAutosaveSlotMetadata(string profileId = null)
+        {
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            return profile != null ? _directory.GetOrCreateAutosaveSlot(profile) : null;
+        }
         public int MapToVendorSlot(string profileId, LwsSaveSlotType slotType, int slotNumber)
         {
             LwsSaveProfileMetadata profile = ResolveProfile(profileId);
@@ -457,11 +505,24 @@ namespace LWS.InterstateHauler
             return slot.occupied || vendorHasSave;
         }
 
+        public bool HasAutosave(string profileId = null)
+        {
+            LwsManualSaveSlotMetadata slot = GetAutosaveSlotMetadata(profileId);
+            if (slot == null)
+            {
+                return false;
+            }
+
+            bool vendorHasSave = Adapter != null && Adapter.ReadyForRuntimeSaves && Adapter.HasSaveInSlot(slot.vendorSlotNumber);
+            return slot.occupied || vendorHasSave;
+        }
         public LwsSaveOperationResult Save(string profileId, int manualSlotNumber, bool overwrite)
         {
-            if (IsSaving || IsLoading)
+            if (!IsOperationSafe(out string safeMessage))
             {
-                return LwsSaveOperationResult.Failure("A save/load operation is already in progress.");
+                LwsSaveOperationResult unsafeResult = LwsSaveOperationResult.Failure(safeMessage);
+                RefreshDiagnostics("Save", unsafeResult);
+                return unsafeResult;
             }
 
             LwsSaveOperationResult validation = ValidateParticipants();
@@ -488,10 +549,15 @@ namespace LWS.InterstateHauler
                 return LwsSaveOperationResult.Failure($"{slot.SlotLabel} already contains a save. Confirm overwrite first.");
             }
 
-            _pendingProfileId = profile.stableProfileId;
-            _pendingSlotType = LwsSaveSlotType.Manual;
-            _pendingSlotNumber = slot.slotNumber;
-            _pendingVendorSlotNumber = slot.vendorSlotNumber;
+            LwsSaveOperationResult backup = PrepareBackupBeforeOverwrite(profile, slot, LwsSaveLoadSlotKind.ManualPrimary);
+            if (!backup.Succeeded)
+            {
+                RefreshDiagnostics("Save", backup);
+                SaveCompleted?.Invoke(backup, slot);
+                return backup;
+            }
+
+            SetPendingContext(profile, LwsSaveSlotType.Manual, slot.slotNumber, slot.vendorSlotNumber);
             IsSaving = true;
             LwsSaveOperationResult result;
             try
@@ -508,7 +574,9 @@ namespace LWS.InterstateHauler
 
             if (result.Succeeded)
             {
-                MarkSlotSaved(profile, slot);
+                MarkSlotSaved(profile, slot, true);
+                DismissRecoveryOffer();
+                PendingAutosave = false;
                 LwsSaveOperationResult directoryResult = PersistDirectory("Save");
                 if (!directoryResult.Succeeded)
                 {
@@ -516,14 +584,118 @@ namespace LWS.InterstateHauler
                 }
             }
 
+            LastFailure = result.Succeeded ? string.Empty : result.Message;
             RefreshDiagnostics("Save", result);
             SaveCompleted?.Invoke(result, slot);
             return result;
         }
+        public LwsSaveOperationResult SaveAutosave(string profileId = null, string reason = null)
+        {
+            if (!_autosaveConfiguration.autosaveEnabled)
+            {
+                return LwsSaveOperationResult.Success("Autosave is disabled.");
+            }
 
+            if (!IsOperationSafe(out string safeMessage))
+            {
+                PendingAutosave = true;
+                _pendingAutosaveReason = string.IsNullOrWhiteSpace(reason) ? "unsafe state" : reason;
+                LwsSaveOperationResult deferred = LwsSaveOperationResult.Success($"Autosave deferred: {safeMessage}");
+                RefreshDiagnostics("Autosave", deferred);
+                return deferred;
+            }
+
+            LwsSaveOperationResult validation = ValidateParticipants();
+            if (!validation.Succeeded)
+            {
+                RefreshDiagnostics("Autosave", validation);
+                return validation;
+            }
+
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure("No active save profile is available for autosave.");
+            }
+
+            LwsManualSaveSlotMetadata slot = _directory.GetOrCreateAutosaveSlot(profile);
+            if (slot == null)
+            {
+                return LwsSaveOperationResult.Failure("Autosave slot metadata is not available.");
+            }
+
+            LwsSaveOperationResult backup = PrepareBackupBeforeOverwrite(profile, slot, LwsSaveLoadSlotKind.AutosavePrimary);
+            if (!backup.Succeeded)
+            {
+                RefreshDiagnostics("Autosave", backup);
+                SaveCompleted?.Invoke(backup, slot);
+                return backup;
+            }
+
+            SetPendingContext(profile, LwsSaveSlotType.Autosave, slot.slotNumber, slot.vendorSlotNumber);
+            IsSaving = true;
+            LwsSaveOperationResult result;
+            try
+            {
+                result = Adapter != null
+                    ? Adapter.SaveToSlotImmediate(slot.vendorSlotNumber)
+                    : LwsSaveOperationResult.Failure("Pixel Crushers save adapter is not available.");
+            }
+            finally
+            {
+                IsSaving = false;
+                ClearPendingContext();
+            }
+
+            if (result.Succeeded)
+            {
+                MarkSlotSaved(profile, slot, false);
+                DismissRecoveryOffer();
+                PendingAutosave = false;
+                _pendingAutosaveReason = string.Empty;
+                _autosaveElapsedSeconds = 0f;
+                _lastAutosaveRealtime = Time.realtimeSinceStartup;
+                LwsSaveOperationResult directoryResult = PersistDirectory("Autosave");
+                if (!directoryResult.Succeeded)
+                {
+                    result = directoryResult;
+                }
+            }
+
+            LastFailure = result.Succeeded ? string.Empty : result.Message;
+            RefreshDiagnostics("Autosave", result);
+            SaveCompleted?.Invoke(result, slot);
+            return result;
+        }
+
+        public LwsSaveOperationResult RequestAutosave(string reason)
+        {
+            if (!_autosaveConfiguration.autosaveEnabled)
+            {
+                return LwsSaveOperationResult.Success("Autosave request ignored because autosave is disabled.");
+            }
+
+            _autosaveConfiguration.Sanitize();
+            if (!IsOperationSafe(out string safeMessage))
+            {
+                PendingAutosave = true;
+                _pendingAutosaveReason = string.IsNullOrWhiteSpace(reason) ? "requested" : reason;
+                return LwsSaveOperationResult.Success($"Autosave pending: {safeMessage}");
+            }
+
+            float now = Time.realtimeSinceStartup;
+            if (now - _lastAutosaveRealtime < _autosaveConfiguration.minimumTimeBetweenAutosavesSeconds)
+            {
+                PendingAutosave = true;
+                _pendingAutosaveReason = string.IsNullOrWhiteSpace(reason) ? "minimum interval" : reason;
+                return LwsSaveOperationResult.Success("Autosave pending until minimum interval elapses.");
+            }
+
+            return SaveAutosave(ActiveProfileId, reason);
+        }
         public LwsSaveOperationResult Load(string profileId, int manualSlotNumber)
         {
-            if (IsSaving || IsLoading)
+            if (IsSaving || IsLoading || (LoadCoordinator != null && LoadCoordinator.IsLoadActive))
             {
                 return LwsSaveOperationResult.Failure("A save/load operation is already in progress.");
             }
@@ -540,13 +712,23 @@ namespace LWS.InterstateHauler
                 return LwsSaveOperationResult.Failure($"No saved game is available in manual slot {manualSlotNumber}.");
             }
 
+            LwsLoadApplicationContext context = null;
+            LwsSaveOperationResult preRead = LoadCoordinator != null
+                ? LoadCoordinator.PreReadVendorSlot(profile, slot.vendorSlotNumber, LwsSaveLoadSlotKind.ManualPrimary, out context)
+                : LwsSaveOperationResult.Failure("LWS load coordinator is not available.");
+            if (!preRead.Succeeded)
+            {
+                LwsSaveOperationResult recovery = PrepareRecoveryOffer(profile, slot, LwsSaveLoadSlotKind.ManualPrimary, LwsSaveLoadSlotKind.ManualBackup, preRead.Message);
+                RefreshDiagnostics("Load", preRead);
+                LoadCompleted?.Invoke(preRead, slot);
+                return recovery.Succeeded && RecoveryOffer.available ? LwsSaveOperationResult.Failure(RecoveryOffer.displayMessage) : preRead;
+            }
+
             IsLoading = true;
             LwsSaveOperationResult result;
             try
             {
-                result = Adapter != null
-                    ? Adapter.LoadFromSlot(slot.vendorSlotNumber)
-                    : LwsSaveOperationResult.Failure("Pixel Crushers save adapter is not available.");
+                result = LoadCoordinator.LoadPreparedVendorSlot(context);
             }
             finally
             {
@@ -558,14 +740,138 @@ namespace LWS.InterstateHauler
                 _directory.selectedProfileId = profile.stableProfileId;
                 profile.lastPlayedUtcTicks = DateTime.UtcNow.Ticks;
                 profile.lastUsedManualSlot = slot.slotNumber;
+                DismissRecoveryOffer();
                 PersistDirectory("Load");
             }
+            else
+            {
+                PrepareRecoveryOffer(profile, slot, LwsSaveLoadSlotKind.ManualPrimary, LwsSaveLoadSlotKind.ManualBackup, result.Message);
+            }
 
+            LastFailure = result.Succeeded ? string.Empty : result.Message;
             RefreshDiagnostics("Load", result);
             LoadCompleted?.Invoke(result, slot);
             return result;
         }
 
+        public LwsSaveOperationResult LoadAutosave(string profileId = null)
+        {
+            if (IsSaving || IsLoading || (LoadCoordinator != null && LoadCoordinator.IsLoadActive))
+            {
+                return LwsSaveOperationResult.Failure("A save/load operation is already in progress.");
+            }
+
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure("No active save profile is available.");
+            }
+
+            LwsManualSaveSlotMetadata slot = _directory.GetOrCreateAutosaveSlot(profile);
+            if (slot == null || !HasAutosave(profile.stableProfileId))
+            {
+                return LwsSaveOperationResult.Failure("No autosave is available for the active profile.");
+            }
+
+            LwsLoadApplicationContext context = null;
+            LwsSaveOperationResult preRead = LoadCoordinator != null
+                ? LoadCoordinator.PreReadVendorSlot(profile, slot.vendorSlotNumber, LwsSaveLoadSlotKind.AutosavePrimary, out context)
+                : LwsSaveOperationResult.Failure("LWS load coordinator is not available.");
+            if (!preRead.Succeeded)
+            {
+                LwsSaveOperationResult recovery = PrepareRecoveryOffer(profile, slot, LwsSaveLoadSlotKind.AutosavePrimary, LwsSaveLoadSlotKind.AutosaveBackup, preRead.Message);
+                RefreshDiagnostics("Load", preRead);
+                LoadCompleted?.Invoke(preRead, slot);
+                return recovery.Succeeded && RecoveryOffer.available ? LwsSaveOperationResult.Failure(RecoveryOffer.displayMessage) : preRead;
+            }
+
+            IsLoading = true;
+            LwsSaveOperationResult result;
+            try
+            {
+                result = LoadCoordinator.LoadPreparedVendorSlot(context);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+
+            if (result.Succeeded)
+            {
+                _directory.selectedProfileId = profile.stableProfileId;
+                profile.lastPlayedUtcTicks = DateTime.UtcNow.Ticks;
+                DismissRecoveryOffer();
+                PersistDirectory("LoadAutosave");
+            }
+            else
+            {
+                PrepareRecoveryOffer(profile, slot, LwsSaveLoadSlotKind.AutosavePrimary, LwsSaveLoadSlotKind.AutosaveBackup, result.Message);
+            }
+
+            LastFailure = result.Succeeded ? string.Empty : result.Message;
+            RefreshDiagnostics("Load", result);
+            LoadCompleted?.Invoke(result, slot);
+            return result;
+        }
+
+        public LwsSaveOperationResult LoadRecoveryBackup()
+        {
+            if (RecoveryOffer == null || !RecoveryOffer.available)
+            {
+                return LwsSaveOperationResult.Failure("No recovery backup is currently available.");
+            }
+
+            if (IsSaving || IsLoading || (LoadCoordinator != null && LoadCoordinator.IsLoadActive))
+            {
+                return LwsSaveOperationResult.Failure("A save/load operation is already in progress.");
+            }
+
+            LwsSaveRecoveryOffer offer = RecoveryOffer;
+            LwsSaveProfileMetadata profile = ResolveProfile(offer.profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure("Recovery backup profile is not available.");
+            }
+
+            LwsLoadApplicationContext context = null;
+            LwsSaveOperationResult preRead = LoadCoordinator != null
+                ? LoadCoordinator.PreReadVendorSlot(profile, offer.backupVendorSlotNumber, offer.backupSlotKind, out context)
+                : LwsSaveOperationResult.Failure("LWS load coordinator is not available.");
+            if (!preRead.Succeeded)
+            {
+                RecoveryOffer.failureMessage = preRead.Message;
+                RefreshDiagnostics("Load", preRead);
+                return preRead;
+            }
+
+            IsLoading = true;
+            LwsSaveOperationResult result;
+            try
+            {
+                result = LoadCoordinator.LoadPreparedVendorSlot(context);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+
+            if (result.Succeeded)
+            {
+                _directory.selectedProfileId = profile.stableProfileId;
+                profile.lastPlayedUtcTicks = DateTime.UtcNow.Ticks;
+                DismissRecoveryOffer();
+                PersistDirectory("LoadRecovery");
+            }
+
+            LastFailure = result.Succeeded ? string.Empty : result.Message;
+            RefreshDiagnostics("Load", result);
+            return result;
+        }
+
+        public void DismissRecoveryOffer()
+        {
+            RecoveryOffer = LwsSaveRecoveryOffer.None;
+        }
         public LwsSaveOperationResult Delete(string profileId, int manualSlotNumber)
         {
             LwsSaveProfileMetadata profile = ResolveProfile(profileId);
@@ -583,9 +889,16 @@ namespace LWS.InterstateHauler
             LwsSaveOperationResult result = Adapter != null && Adapter.ReadyForRuntimeSaves
                 ? Adapter.DeleteSlot(slot.vendorSlotNumber)
                 : LwsSaveOperationResult.Success("Slot metadata cleared; Pixel Crushers runtime storage is not active in Edit Mode.");
+            if (result.Succeeded && slot.backupVendorSlotNumber > 0 && Adapter != null && Adapter.ReadyForRuntimeSaves)
+            {
+                Adapter.DeleteSlot(slot.backupVendorSlotNumber);
+            }
+
             if (result.Succeeded)
             {
-                ClearSlotMetadata(slot);
+                ClearSlotMetadata(slot, true);
+                LwsManualSaveSlotMetadata backupSlot = _directory.GetOrCreateManualBackupSlot(profile, slot.slotNumber);
+                ClearSlotMetadata(backupSlot, true);
                 LwsSaveOperationResult directoryResult = PersistDirectory("Delete");
                 if (!directoryResult.Succeeded)
                 {
@@ -593,11 +906,83 @@ namespace LWS.InterstateHauler
                 }
             }
 
+            LastFailure = result.Succeeded ? string.Empty : result.Message;
             RefreshDiagnostics("Delete", result);
             DeleteCompleted?.Invoke(result, profile.stableProfileId, manualSlotNumber);
             return result;
         }
 
+        public LwsSaveOperationResult DeleteAutosave(string profileId = null)
+        {
+            LwsSaveProfileMetadata profile = ResolveProfile(profileId);
+            if (profile == null)
+            {
+                return LwsSaveOperationResult.Failure("No active save profile is available.");
+            }
+
+            LwsManualSaveSlotMetadata slot = _directory.GetOrCreateAutosaveSlot(profile);
+            if (slot == null)
+            {
+                return LwsSaveOperationResult.Failure("Autosave slot metadata is not available.");
+            }
+
+            LwsSaveOperationResult result = Adapter != null && Adapter.ReadyForRuntimeSaves
+                ? Adapter.DeleteSlot(slot.vendorSlotNumber)
+                : LwsSaveOperationResult.Success("Autosave metadata cleared; Pixel Crushers runtime storage is not active in Edit Mode.");
+            if (result.Succeeded && slot.backupVendorSlotNumber > 0 && Adapter != null && Adapter.ReadyForRuntimeSaves)
+            {
+                Adapter.DeleteSlot(slot.backupVendorSlotNumber);
+            }
+
+            if (result.Succeeded)
+            {
+                ClearSlotMetadata(slot, true);
+                LwsManualSaveSlotMetadata backupSlot = _directory.GetOrCreateAutosaveBackupSlot(profile);
+                ClearSlotMetadata(backupSlot, true);
+                LwsSaveOperationResult directoryResult = PersistDirectory("DeleteAutosave");
+                if (!directoryResult.Succeeded)
+                {
+                    result = directoryResult;
+                }
+            }
+
+            LastFailure = result.Succeeded ? string.Empty : result.Message;
+            RefreshDiagnostics("Delete", result);
+            DeleteCompleted?.Invoke(result, profile.stableProfileId, slot.slotNumber);
+            return result;
+        }
+
+        public void TickAutosave(float deltaTimeSeconds)
+        {
+            if (!Application.isPlaying || !_autosaveConfiguration.autosaveEnabled)
+            {
+                return;
+            }
+
+            _autosaveConfiguration.Sanitize();
+            _autosaveElapsedSeconds += Mathf.Max(0f, deltaTimeSeconds);
+            bool intervalDue = _autosaveElapsedSeconds >= _autosaveConfiguration.autosaveIntervalSeconds;
+            if (!intervalDue && !PendingAutosave)
+            {
+                return;
+            }
+
+            float now = Time.realtimeSinceStartup;
+            if (now - _lastAutosaveRealtime < _autosaveConfiguration.minimumTimeBetweenAutosavesSeconds)
+            {
+                PendingAutosave = true;
+                return;
+            }
+
+            if (!IsOperationSafe(out string safeMessage))
+            {
+                PendingAutosave = true;
+                _pendingAutosaveReason = safeMessage;
+                return;
+            }
+
+            SaveAutosave(ActiveProfileId, string.IsNullOrWhiteSpace(_pendingAutosaveReason) ? "periodic" : _pendingAutosaveReason);
+        }
         public string BuildDiagnosticsReport()
         {
             LwsWorldPositionD global = LwsWorldPositionD.Zero;
@@ -659,6 +1044,7 @@ namespace LWS.InterstateHauler
 
         private void RegisterSemanticParticipants()
         {
+            RegisterParticipant(new LwsWorldResumeSaveParticipant(() => _registry));
             RegisterParticipant(new LwsGlobalPositionSaveParticipant(() => _registry));
             RegisterParticipant(new LwsPlayerTruckSaveParticipant(() => _registry));
             RegisterParticipant(new LwsGameClockSaveParticipant(() => _registry));
@@ -717,7 +1103,11 @@ namespace LWS.InterstateHauler
             for (int i = 1; i <= LwsSaveSchema.ManualSlotCount; i++)
             {
                 _directory.GetOrCreateManualSlot(profile, i);
+                _directory.GetOrCreateManualBackupSlot(profile, i);
             }
+
+            _directory.GetOrCreateAutosaveSlot(profile);
+            _directory.GetOrCreateAutosaveBackupSlot(profile);
         }
 
         private LwsSaveOperationResult PersistDirectory(string operation)
@@ -728,11 +1118,15 @@ namespace LWS.InterstateHauler
                 : LwsSaveOperationResult.Failure($"Cannot persist profile directory during {operation}; Pixel Crushers adapter is missing.");
         }
 
-        private void MarkSlotSaved(LwsSaveProfileMetadata profile, LwsManualSaveSlotMetadata slot)
+        private void MarkSlotSaved(LwsSaveProfileMetadata profile, LwsManualSaveSlotMetadata slot, bool markManualAsLastUsed)
         {
             long now = DateTime.UtcNow.Ticks;
             profile.lastPlayedUtcTicks = now;
-            profile.lastUsedManualSlot = slot.slotNumber;
+            if (markManualAsLastUsed && slot.slotType == LwsSaveSlotType.Manual)
+            {
+                profile.lastUsedManualSlot = slot.slotNumber;
+            }
+
             slot.occupied = true;
             slot.savedUtcTicks = now;
             slot.schemaVersion = LwsSaveSchema.CurrentVersion;
@@ -744,8 +1138,13 @@ namespace LWS.InterstateHauler
             slot.weatherPresetId = ResolveWeatherPresetId();
         }
 
-        private void ClearSlotMetadata(LwsManualSaveSlotMetadata slot)
+        private void ClearSlotMetadata(LwsManualSaveSlotMetadata slot, bool clearBackupFields = false)
         {
+            if (slot == null)
+            {
+                return;
+            }
+
             slot.occupied = false;
             slot.savedUtcTicks = 0;
             slot.playtimeSeconds = 0d;
@@ -754,6 +1153,11 @@ namespace LWS.InterstateHauler
             slot.truckDefinitionId = string.Empty;
             slot.routeDestinationId = string.Empty;
             slot.weatherPresetId = string.Empty;
+            if (clearBackupFields)
+            {
+                slot.backupExists = false;
+                slot.backupSavedUtcTicks = 0;
+            }
         }
 
         private string ResolveWorldLabel()
@@ -787,9 +1191,229 @@ namespace LWS.InterstateHauler
                 : string.Empty;
         }
 
+        private LwsSaveOperationResult PrepareBackupBeforeOverwrite(LwsSaveProfileMetadata profile, LwsManualSaveSlotMetadata slot, LwsSaveLoadSlotKind primaryKind)
+        {
+            if (profile == null || slot == null)
+            {
+                return LwsSaveOperationResult.Failure("Cannot prepare a backup without profile and slot metadata.");
+            }
+
+            bool hasExistingPrimary = slot.occupied || (Adapter != null && Adapter.ReadyForRuntimeSaves && Adapter.HasSaveInSlot(slot.vendorSlotNumber));
+            if (!hasExistingPrimary)
+            {
+                return LwsSaveOperationResult.Success("No existing primary save to back up.");
+            }
+
+            if (slot.backupVendorSlotNumber <= 0)
+            {
+                return LwsSaveOperationResult.Failure($"{slot.SlotLabel} has no reserved backup vendor slot.");
+            }
+
+            if (Adapter == null || !Adapter.ReadyForRuntimeSaves)
+            {
+                return LwsSaveOperationResult.Failure("Pixel Crushers adapter must be ready before preserving a backup.");
+            }
+
+            if (!Adapter.HasSaveInSlot(slot.vendorSlotNumber))
+            {
+                return LwsSaveOperationResult.Success("Primary slot metadata was occupied, but Pixel Crushers has no primary data to preserve.");
+            }
+
+            LwsSaveOperationResult copy = Adapter.CopySavedGameDataSlot(slot.vendorSlotNumber, slot.backupVendorSlotNumber);
+            if (!copy.Succeeded)
+            {
+                return copy;
+            }
+
+            long backupTicks = slot.savedUtcTicks > 0 ? slot.savedUtcTicks : DateTime.UtcNow.Ticks;
+            slot.backupExists = true;
+            slot.backupSavedUtcTicks = backupTicks;
+
+            LwsManualSaveSlotMetadata backupSlot = primaryKind == LwsSaveLoadSlotKind.AutosavePrimary
+                ? _directory.GetOrCreateAutosaveBackupSlot(profile)
+                : _directory.GetOrCreateManualBackupSlot(profile, slot.slotNumber);
+            if (backupSlot != null)
+            {
+                backupSlot.occupied = true;
+                backupSlot.savedUtcTicks = backupTicks;
+                backupSlot.schemaVersion = slot.schemaVersion;
+                backupSlot.gameVersion = slot.gameVersion;
+                backupSlot.sceneName = slot.sceneName;
+                backupSlot.worldLabel = slot.worldLabel;
+                backupSlot.truckDefinitionId = slot.truckDefinitionId;
+                backupSlot.routeDestinationId = slot.routeDestinationId;
+                backupSlot.weatherPresetId = slot.weatherPresetId;
+            }
+
+            return LwsSaveOperationResult.Success($"Previous {slot.SlotLabel} preserved in hidden Pixel Crushers backup slot.");
+        }
+
+        private LwsSaveOperationResult PrepareRecoveryOffer(
+            LwsSaveProfileMetadata profile,
+            LwsManualSaveSlotMetadata primarySlot,
+            LwsSaveLoadSlotKind primaryKind,
+            LwsSaveLoadSlotKind backupKind,
+            string failureMessage)
+        {
+            RecoveryOffer = LwsSaveRecoveryOffer.None;
+            if (profile == null || primarySlot == null || primarySlot.backupVendorSlotNumber <= 0)
+            {
+                return LwsSaveOperationResult.Failure("No recovery backup metadata is available.");
+            }
+
+            if (Adapter == null || !Adapter.ReadyForRuntimeSaves || !Adapter.HasSaveInSlot(primarySlot.backupVendorSlotNumber))
+            {
+                return LwsSaveOperationResult.Failure("No Pixel Crushers backup save is available for recovery.");
+            }
+
+            LwsLoadApplicationContext backupContext = null;
+            LwsSaveOperationResult validation = LoadCoordinator != null
+                ? LoadCoordinator.PreReadVendorSlot(profile, primarySlot.backupVendorSlotNumber, backupKind, out backupContext)
+                : LwsSaveOperationResult.Failure("LWS load coordinator is not available for backup validation.");
+            if (LoadCoordinator != null)
+            {
+                LoadCoordinator.ResetAfterFailure();
+            }
+
+            if (!validation.Succeeded)
+            {
+                return validation;
+            }
+
+            long backupTicks = primarySlot.backupSavedUtcTicks > 0
+                ? primarySlot.backupSavedUtcTicks
+                : backupContext != null && backupContext.Snapshot != null ? backupContext.Snapshot.capturedUtcTicks : DateTime.UtcNow.Ticks;
+            string timestamp = FormatUtc(backupTicks);
+            string displayMessage = $"SAVE COULD NOT BE LOADED. A BACKUP FROM {timestamp} IS AVAILABLE.";
+            RecoveryOffer = new LwsSaveRecoveryOffer
+            {
+                available = true,
+                profileId = profile.stableProfileId,
+                primarySlotNumber = primarySlot.slotNumber,
+                primarySlotKind = primaryKind,
+                primaryVendorSlotNumber = primarySlot.vendorSlotNumber,
+                backupSlotKind = backupKind,
+                backupVendorSlotNumber = primarySlot.backupVendorSlotNumber,
+                backupTimestampUtcTicks = backupTicks,
+                failureMessage = failureMessage ?? string.Empty,
+                displayMessage = displayMessage
+            };
+            return LwsSaveOperationResult.Success(displayMessage);
+        }
+
+        private bool IsOperationSafe(out string message)
+        {
+            if (IsSaving)
+            {
+                message = "PLEASE WAIT... save already in progress.";
+                return false;
+            }
+
+            if (IsLoading || (LoadCoordinator != null && LoadCoordinator.IsLoadActive))
+            {
+                message = "PLEASE WAIT... load already in progress.";
+                return false;
+            }
+
+            if (Adapter == null || !Adapter.ReadyForRuntimeSaves)
+            {
+                message = "PLEASE WAIT... Pixel Crushers runtime storage is not ready.";
+                return false;
+            }
+
+            if (ActiveProfile == null)
+            {
+                message = "PLEASE WAIT... no active save profile is selected.";
+                return false;
+            }
+
+            if (_registry != null && _registry.TryGet(out ILwsWorldOriginService originService) && originService.ShiftInProgress)
+            {
+                message = "PLEASE WAIT... world origin shift in progress.";
+                return false;
+            }
+
+            message = string.Empty;
+            return true;
+        }
+
+        private void SetPendingContext(LwsSaveProfileMetadata profile, LwsSaveSlotType slotType, int slotNumber, int vendorSlotNumber)
+        {
+            _pendingProfileId = profile != null ? profile.stableProfileId : string.Empty;
+            _pendingSlotType = slotType;
+            _pendingSlotNumber = slotNumber;
+            _pendingVendorSlotNumber = vendorSlotNumber;
+        }
+
+        private void EnsureAutosaveRuntimeDriver()
+        {
+            if (!Application.isPlaying || _autosaveDriver != null)
+            {
+                return;
+            }
+
+            LwsAutosaveRuntimeDriver[] existing = UnityEngine.Object.FindObjectsByType<LwsAutosaveRuntimeDriver>(FindObjectsSortMode.None);
+            if (existing != null && existing.Length > 0)
+            {
+                _autosaveDriver = existing[0];
+                for (int i = 1; i < existing.Length; i++)
+                {
+                    if (existing[i] != null)
+                    {
+                        UnityEngine.Object.Destroy(existing[i].gameObject);
+                    }
+                }
+            }
+            else
+            {
+                GameObject driverObject = new GameObject("IH Autosave Runtime Driver");
+                _autosaveDriver = driverObject.AddComponent<LwsAutosaveRuntimeDriver>();
+                UnityEngine.Object.DontDestroyOnLoad(driverObject);
+            }
+
+            _autosaveDriver.Bind(this);
+        }
+
+        private static int GetRestoreOrder(string participantId)
+        {
+            if (string.Equals(participantId, LwsSaveSchema.WorldResumeContextParticipantId, StringComparison.Ordinal))
+            {
+                return 0;
+            }
+
+            switch (participantId)
+            {
+                case "lws.world.global-position":
+                    return 10;
+                case "lws.vehicle.player-truck":
+                    return 20;
+                case "vehicle.transmission.player":
+                    return 30;
+                case "lws.game-clock":
+                    return 40;
+                case "lws.weather.semantic":
+                    return 50;
+                case "lws.road-condition.semantic":
+                    return 60;
+                case "lws.navigation.destination-intent":
+                    return 70;
+                default:
+                    return 100;
+            }
+        }
+
+        private static string FormatUtc(long utcTicks)
+        {
+            if (utcTicks <= 0)
+            {
+                return "unknown time";
+            }
+
+            return new DateTime(utcTicks, DateTimeKind.Utc).ToLocalTime().ToString("yyyy-MM-dd HH:mm");
+        }
         private void RefreshDiagnostics(string operation, LwsSaveOperationResult result)
         {
-            if (string.Equals(operation, "Save", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(operation, "Save", StringComparison.OrdinalIgnoreCase) || string.Equals(operation, "Autosave", StringComparison.OrdinalIgnoreCase))
             {
                 _lastSaveMessage = result.Message;
             }
@@ -1001,6 +1625,92 @@ namespace LWS.InterstateHauler
             }
         }
 
+        public LwsSaveOperationResult TryReadSemanticSnapshot(
+            int vendorSlotNumber,
+            out LwsSaveSnapshot snapshot,
+            out int vendorVersion,
+            out string vendorSceneName)
+        {
+            snapshot = null;
+            vendorVersion = 0;
+            vendorSceneName = string.Empty;
+            LwsSaveOperationResult ready = EnsureRuntimeReady();
+            if (!ready.Succeeded)
+            {
+                return ready;
+            }
+
+            try
+            {
+                bool hasData = _hasDataInSlotMethod != null && (bool)_hasDataInSlotMethod.Invoke(_activeStorer, new object[] { vendorSlotNumber });
+                if (!hasData)
+                {
+                    return LwsSaveOperationResult.Failure($"Pixel Crushers slot {vendorSlotNumber} does not contain saved data.");
+                }
+
+                object savedGameData = _retrieveSavedGameDataMethod.Invoke(_activeStorer, new object[] { vendorSlotNumber });
+                if (savedGameData == null)
+                {
+                    return LwsSaveOperationResult.Failure($"Pixel Crushers slot {vendorSlotNumber} returned no SavedGameData.");
+                }
+
+                vendorVersion = GetSavedGameVersion(savedGameData);
+                vendorSceneName = GetSavedGameSceneName(savedGameData);
+                string payload = _getDataMethod.Invoke(savedGameData, new object[] { LwsSaveSchema.SemanticSnapshotRecordKey }) as string;
+                if (string.IsNullOrWhiteSpace(payload))
+                {
+                    return LwsSaveOperationResult.Failure($"Pixel Crushers slot {vendorSlotNumber} has no LWS semantic snapshot record.");
+                }
+
+                snapshot = DeserializeWithPixelCrushers<LwsSaveSnapshot>(payload);
+                return snapshot != null
+                    ? LwsSaveOperationResult.Success($"Pixel Crushers slot {vendorSlotNumber} pre-read completed.")
+                    : LwsSaveOperationResult.Failure($"Pixel Crushers slot {vendorSlotNumber} semantic snapshot could not be deserialized.");
+            }
+            catch (TargetInvocationException ex)
+            {
+                return Fail($"Pixel Crushers SavedGameData pre-read failed: {ex.InnerException?.Message ?? ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Fail($"Pixel Crushers SavedGameData pre-read failed: {ex.Message}");
+            }
+        }
+
+        public LwsSaveOperationResult CopySavedGameDataSlot(int sourceVendorSlotNumber, int backupVendorSlotNumber)
+        {
+            LwsSaveOperationResult ready = EnsureRuntimeReady();
+            if (!ready.Succeeded)
+            {
+                return ready;
+            }
+
+            try
+            {
+                bool hasData = _hasDataInSlotMethod != null && (bool)_hasDataInSlotMethod.Invoke(_activeStorer, new object[] { sourceVendorSlotNumber });
+                if (!hasData)
+                {
+                    return LwsSaveOperationResult.Success($"Pixel Crushers source slot {sourceVendorSlotNumber} is empty; no backup needed.");
+                }
+
+                object savedGameData = _retrieveSavedGameDataMethod.Invoke(_activeStorer, new object[] { sourceVendorSlotNumber });
+                if (savedGameData == null)
+                {
+                    return LwsSaveOperationResult.Failure($"Pixel Crushers source slot {sourceVendorSlotNumber} returned no data for backup.");
+                }
+
+                _storeSavedGameDataMethod.Invoke(_activeStorer, new object[] { backupVendorSlotNumber, savedGameData });
+                return LwsSaveOperationResult.Success($"Pixel Crushers slot {sourceVendorSlotNumber} backed up to hidden slot {backupVendorSlotNumber}.");
+            }
+            catch (TargetInvocationException ex)
+            {
+                return Fail($"Pixel Crushers backup slot copy failed: {ex.InnerException?.Message ?? ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                return Fail($"Pixel Crushers backup slot copy failed: {ex.Message}");
+            }
+        }
         public LwsSaveOperationResult StoreProfileDirectory(LwsSaveProfileDirectory directory)
         {
             if (!Application.isPlaying)
@@ -1250,6 +1960,18 @@ namespace LWS.InterstateHauler
             _savedGameSceneNameProperty?.SetValue(savedGameData, sceneName ?? string.Empty, null);
         }
 
+        private int GetSavedGameVersion(object savedGameData)
+        {
+            object value = _savedGameVersionProperty?.GetValue(savedGameData, null);
+            return value is int intValue ? intValue : 0;
+        }
+
+        private string GetSavedGameSceneName(object savedGameData)
+        {
+            return _savedGameSceneNameProperty?.GetValue(savedGameData, null) as string ?? string.Empty;
+        }
+
+
         private LwsSaveOperationResult Fail(string message)
         {
             LastVendorError = message;
@@ -1384,7 +2106,8 @@ namespace LWS.InterstateHauler
 
             if (TryGetService(out ILwsWorldOriginService originService))
             {
-                originService.UpdatePlayerLocalPosition(new Vector3(_lastRestored.localX, _lastRestored.localY, _lastRestored.localZ));
+                var savedGlobal = new LwsWorldPositionD(_lastRestored.globalX, _lastRestored.globalY, _lastRestored.globalZ);
+                originService.UpdatePlayerLocalPosition(originService.GlobalToLocal(savedGlobal));
             }
 
             return LwsSaveOperationResult.Success("Global double-precision player position payload restored.");
@@ -1487,15 +2210,26 @@ namespace LWS.InterstateHauler
         public LwsSaveParticipantState CaptureState()
         {
             LwsPlayerTruckState truckState = default;
+            bool hasGlobalPosition = false;
+            LwsWorldPositionD global = LwsWorldPositionD.Zero;
             if (TryGetService(out ILwsPlayerVehicleService vehicleService) && vehicleService.ActiveTruck != null)
             {
                 truckState = vehicleService.ActiveTruck.CaptureState();
+                if (TryGetService(out ILwsWorldOriginService originService))
+                {
+                    global = originService.LocalToGlobal(vehicleService.ActiveTruck.transform.position);
+                    hasGlobalPosition = true;
+                }
             }
 
             var payload = new LwsPlayerTruckSavePayload
             {
                 schemaVersion = LwsSaveSchema.CurrentVersion,
                 state = truckState,
+                hasGlobalPosition = hasGlobalPosition,
+                globalX = global.x,
+                globalY = global.y,
+                globalZ = global.z,
                 capturedUtcTicks = DateTime.UtcNow.Ticks
             };
 
@@ -1520,7 +2254,14 @@ namespace LWS.InterstateHauler
                 LwsPlayerTruck truck = vehicleService.ActiveTruck;
                 LwsPlayerTruckState restored = _lastRestored.state;
                 Quaternion rotation = NormalizeRotation(restored.pose.rotation);
-                truck.transform.SetPositionAndRotation(restored.pose.position, rotation);
+                Vector3 localPosition = restored.pose.position;
+                if (_lastRestored.hasGlobalPosition && TryGetService(out ILwsWorldOriginService originService))
+                {
+                    localPosition = originService.GlobalToLocal(new LwsWorldPositionD(_lastRestored.globalX, _lastRestored.globalY, _lastRestored.globalZ));
+                    originService.UpdatePlayerLocalPosition(localPosition);
+                }
+
+                truck.transform.SetPositionAndRotation(localPosition, rotation);
 
                 Rigidbody rb = null;
                 if (truck.NwhAdapter != null && truck.NwhAdapter.VehicleController != null)
@@ -1535,9 +2276,12 @@ namespace LWS.InterstateHauler
 
                 if (rb != null)
                 {
-                    rb.linearVelocity = restored.linearVelocity;
-                    rb.angularVelocity = restored.angularVelocity;
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.Sleep();
                 }
+
+                RestoreAttachedTrailerPose(restored.trailerAttachment);
 
                 if (truck.TransmissionController != null)
                 {
@@ -1559,7 +2303,38 @@ namespace LWS.InterstateHauler
 
         public LwsSaveOperationResult ValidateParticipant()
         {
-            return LwsSaveOperationResult.Success("Player truck save participant captures identity, pose, motion, trailer attachment, and transmission state shape.");
+            return LwsSaveOperationResult.Success("Player truck save participant captures identity, global pose, diagnostic motion, trailer attachment, and transmission state shape.");
+        }
+
+        private static void RestoreAttachedTrailerPose(LwsTrailerAttachmentState attachment)
+        {
+            if (!attachment.attached || string.IsNullOrWhiteSpace(attachment.trailerId))
+            {
+                return;
+            }
+
+            foreach (LwsVehicleIdentity identity in UnityEngine.Object.FindObjectsByType<LwsVehicleIdentity>(FindObjectsSortMode.None))
+            {
+                if (identity == null || !string.Equals(identity.VehicleId, attachment.trailerId, StringComparison.Ordinal))
+                {
+                    continue;
+                }
+
+                identity.transform.SetPositionAndRotation(attachment.trailerPose.position, NormalizeRotation(attachment.trailerPose.rotation));
+                foreach (Rigidbody rb in identity.GetComponentsInChildren<Rigidbody>(true))
+                {
+                    if (rb == null)
+                    {
+                        continue;
+                    }
+
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.Sleep();
+                }
+
+                return;
+            }
         }
 
         private bool TryGetService<T>(out T service) where T : class, ILwsService
@@ -1586,6 +2361,10 @@ namespace LWS.InterstateHauler
     {
         public int schemaVersion = LwsSaveSchema.CurrentVersion;
         public LwsPlayerTruckState state;
+        public bool hasGlobalPosition;
+        public double globalX;
+        public double globalY;
+        public double globalZ;
         public long capturedUtcTicks;
     }
 

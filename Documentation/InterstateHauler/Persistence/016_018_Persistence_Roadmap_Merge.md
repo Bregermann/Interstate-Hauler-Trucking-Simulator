@@ -1,30 +1,39 @@
 # Prompt 016 / 018 Persistence Roadmap Merge
 
-## Prompt 016 Now Owns
+## Prompt 016
 
-- Save vendor audit and final save authority selection
+COMPLETE.
+
+Prompt 016 owns:
+
+- save vendor audit and final save authority selection
 - Pixel Crushers Save System architecture
-- Thin LWS save facade
-- Player profiles
-- Manual Save / Load / Delete
-- Manual slot metadata
-- Minimum three manual slots per profile
-- Player-facing pause Save / Load menu
-- Overwrite/delete confirmations
-- Console storage seam documentation
+- thin LWS save facade
+- player profiles
+- manual Save / Load / Delete
+- manual slot metadata
+- minimum three manual slots per profile
+- player-facing pause Save / Load menu
+- overwrite/delete confirmations
+- console storage seam documentation
 
-## Prompt 017 Now Owns
+## Prompt 017
 
-- True mid-route load application
-- Restart/resume sequencing
-- Autosave
-- Rolling backups
-- Failure/corruption recovery
-- Scene/streaming/world-origin load ordering
-- Trailer and cargo load ordering beyond the basic current-scene payload
+COMPLETE.
 
-## Original Prompt 018
+Prompt 017 owns:
 
-ABSORBED.
+- true mid-route load application
+- restart/resume sequencing
+- autosave
+- one-generation rolling backups
+- failure/corruption recovery
+- scene/world-origin load ordering
+- trailer resume ordering where current trailer semantics exist
+- busy/failure/recovery UI state
 
-Do not run the original Prompt 018 separately. Any remaining profile/manual-save work belongs to Prompt 016 follow-up stabilization; autosave/backups/recovery belong to Prompt 017.
+## Prompt 018
+
+ABSORBED — DO NOT RUN SEPARATELY.
+
+Original Prompt 018 autosave/backups/recovery work is absorbed into Prompt 016 and Prompt 017.

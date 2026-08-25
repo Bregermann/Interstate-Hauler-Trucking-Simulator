@@ -19,8 +19,8 @@ The core rule is one authority per responsibility:
 - Weatherade owns visual surface accumulation.
 - Compass owns navigation presentation only.
 - UTS is traffic/pedestrian runtime content only.
-- Pixel Crushers owns dialogue/quest state only.
-- LWS owns root save orchestration.
+- Pixel Crushers owns dialogue/quest state and the production save framework.
+- LWS owns save semantics, profile/slot labels, and a thin facade over Pixel Crushers.
 
 The project also follows the mandatory Vendor Asset First Rule documented in `Documentation/InterstateHauler/000_Vendor_Asset_First_Rule.md`. Before creating substantial custom functionality, future prompts must audit relevant installed commercial assets and use vendor solutions wherever they provide the complete feature, most of the feature, or an appropriate foundation. If a relevant installed asset is not used, the prompt must explain why.
 
@@ -377,7 +377,7 @@ PlayMode tests:
 - No force feedback or wheel hardware integration exists yet.
 - No production traffic behavior exists yet.
 - No world generation or streaming implementation exists yet.
-- No final physical save storage exists yet.
+- Current PC physical save storage exists through Pixel Crushers `DiskSavedGameDataStorer`; future console storage should replace the Pixel Crushers `SavedGameDataStorer` backend.
 
 ## 22. Prompt 003 Recommendations
 

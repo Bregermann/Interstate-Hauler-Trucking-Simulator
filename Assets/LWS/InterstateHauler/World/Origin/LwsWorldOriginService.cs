@@ -37,6 +37,7 @@ namespace LWS.InterstateHauler
         bool QueueShift(LwsOriginShiftRequest request);
         bool TryExecuteQueuedShift(out LwsOriginShiftEvent shiftEvent);
         bool ForceShiftNow(Vector3 playerLocalPosition, string reason, out LwsOriginShiftEvent shiftEvent);
+        bool SetOriginOffset(LwsWorldPositionD targetOriginOffset, string reason, out LwsOriginShiftEvent shiftEvent);
         bool SetOriginOffsetForValidation(LwsWorldPositionD targetOriginOffset, string reason, out LwsOriginShiftEvent shiftEvent);
         void ResetValidationOrigin();
         void RegisterParticipant(ILwsFloatingOriginParticipant participant);
@@ -183,7 +184,7 @@ namespace LWS.InterstateHauler
             return ExecuteShift(new LwsOriginShiftRequest(delta, reason), out shiftEvent);
         }
 
-        public bool SetOriginOffsetForValidation(LwsWorldPositionD targetOriginOffset, string reason, out LwsOriginShiftEvent shiftEvent)
+        public bool SetOriginOffset(LwsWorldPositionD targetOriginOffset, string reason, out LwsOriginShiftEvent shiftEvent)
         {
             LwsWorldPositionD delta = targetOriginOffset - CurrentOriginOffset;
             if (delta.SqrMagnitude <= 0.000001d)
@@ -193,8 +194,13 @@ namespace LWS.InterstateHauler
             }
 
             return ExecuteShift(
-                new LwsOriginShiftRequest(delta.ToVector3(), string.IsNullOrWhiteSpace(reason) ? "Validation origin offset set." : reason),
+                new LwsOriginShiftRequest(delta.ToVector3(), string.IsNullOrWhiteSpace(reason) ? "Origin offset set." : reason),
                 out shiftEvent);
+        }
+
+        public bool SetOriginOffsetForValidation(LwsWorldPositionD targetOriginOffset, string reason, out LwsOriginShiftEvent shiftEvent)
+        {
+            return SetOriginOffset(targetOriginOffset, string.IsNullOrWhiteSpace(reason) ? "Validation origin offset set." : reason, out shiftEvent);
         }
 
         public void ResetValidationOrigin()

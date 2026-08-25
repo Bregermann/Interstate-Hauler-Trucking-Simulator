@@ -351,7 +351,7 @@ namespace LWS.InterstateHauler
                     break;
             }
 
-            _statusText.text = _saveService.IsSaving ? "SAVING..." : _saveService.IsLoading ? "LOADING..." : _lastStatus;
+            _statusText.text = IsPersistenceBusy() ? ResolveBusyLabel() : _lastStatus;
         }
 
         private void BuildMainView()
@@ -376,16 +376,22 @@ namespace LWS.InterstateHauler
             SetHeader("SAVE / LOAD");
             LwsSaveProfileMetadata profile = _saveService.ActiveProfile;
             AddInfo("Current profile", profile != null ? profile.DisplayNameOrFallback : "none");
-            AddInfo("Busy", _saveService.IsSaving ? "SAVING..." : _saveService.IsLoading ? "LOADING..." : "READY");
+            AddInfo("Busy", ResolveBusyLabel());
+
+            if (_saveService.RecoveryOffer != null && _saveService.RecoveryOffer.available)
+            {
+                AddRecoveryRow(_saveService.RecoveryOffer);
+            }
+
+            AddAutosaveRow(_saveService.GetAutosaveSlotMetadata());
 
             foreach (LwsManualSaveSlotMetadata slot in _saveService.GetManualSlots())
             {
                 AddSlotRow(slot);
             }
 
-            AddButton("BACK", () => SetView(LwsPersistenceMenuView.Main), true);
+            AddButton("BACK", () => SetView(LwsPersistenceMenuView.Main), !IsPersistenceBusy());
         }
-
         private void BuildProfilesView()
         {
             SetHeader("PROFILES");
@@ -424,6 +430,39 @@ namespace LWS.InterstateHauler
             }, true);
         }
 
+        private void AddAutosaveRow(LwsManualSaveSlotMetadata slot)
+        {
+            RectTransform row = AddRow("Autosave", 74f);
+            bool occupied = slot != null && slot.occupied;
+            string detail = occupied
+                ? $"AUTOSAVE: {FormatUtc(slot.savedUtcTicks)} | {SafeLabel(slot.sceneName, "unknown scene")} | {SafeLabel(slot.worldLabel, "unknown world")}"
+                : "AUTOSAVE: EMPTY";
+            if (_saveService.PendingAutosave)
+            {
+                detail += " | PENDING";
+            }
+
+            CreateText(row, "Autosave Detail", detail, new Vector2(0f, 0f), new Vector2(0.58f, 1f), new Vector2(14f, 8f), new Vector2(-8f, -8f), 15, FontStyle.Normal, TextAnchor.MiddleLeft, TextColor);
+            CreateButton(row, "Load Autosave", "LOAD", new Vector2(0.59f, 0.12f), new Vector2(0.78f, 0.88f), Vector2.zero, Vector2.zero, RunLoadAutosave, occupied && !IsPersistenceBusy());
+            CreateButton(row, "Delete Autosave", "DELETE", new Vector2(0.79f, 0.12f), new Vector2(1f, 0.88f), Vector2.zero, new Vector2(-10f, 0f), () =>
+            {
+                Confirm("DELETE AUTOSAVE?", "This removes the autosave and its hidden recovery backup.", RunDeleteAutosave, LwsPersistenceMenuView.SaveLoad);
+            }, occupied && !IsPersistenceBusy());
+        }
+
+        private void AddRecoveryRow(LwsSaveRecoveryOffer offer)
+        {
+            RectTransform row = AddRow("Recovery Offer", 74f);
+            string detail = offer != null ? offer.displayMessage : "Recovery backup available.";
+            CreateText(row, "Recovery Detail", detail, new Vector2(0f, 0f), new Vector2(0.56f, 1f), new Vector2(14f, 8f), new Vector2(-8f, -8f), 14, FontStyle.Bold, TextAnchor.MiddleLeft, TextColor);
+            CreateButton(row, "Load Backup", "LOAD BACKUP", new Vector2(0.57f, 0.12f), new Vector2(0.78f, 0.88f), Vector2.zero, Vector2.zero, RunLoadRecovery, !IsPersistenceBusy());
+            CreateButton(row, "Cancel Backup", "CANCEL", new Vector2(0.79f, 0.12f), new Vector2(1f, 0.88f), Vector2.zero, new Vector2(-10f, 0f), () =>
+            {
+                _saveService.DismissRecoveryOffer();
+                _lastStatus = "Recovery backup offer dismissed.";
+                RebuildView();
+            }, !IsPersistenceBusy());
+        }
         private void AddSlotRow(LwsManualSaveSlotMetadata slot)
         {
             RectTransform row = AddRow($"Slot {slot.slotNumber}", 74f);
@@ -441,12 +480,12 @@ namespace LWS.InterstateHauler
                 {
                     RunSave(slot.slotNumber, false);
                 }
-            }, !_saveService.IsSaving && !_saveService.IsLoading);
+            }, !IsPersistenceBusy());
             CreateButton(row, "Load", "LOAD", new Vector2(0.69f, 0.12f), new Vector2(0.84f, 0.88f), Vector2.zero, Vector2.zero, () => RunLoad(slot.slotNumber), slot.occupied && !_saveService.IsSaving && !_saveService.IsLoading);
             CreateButton(row, "Delete", "DELETE", new Vector2(0.85f, 0.12f), new Vector2(1f, 0.88f), Vector2.zero, new Vector2(-10f, 0f), () =>
             {
                 Confirm($"DELETE SLOT {slot.slotNumber}?", "This cannot be undone.", () => RunDelete(slot.slotNumber), LwsPersistenceMenuView.SaveLoad);
-            }, slot.occupied && !_saveService.IsSaving && !_saveService.IsLoading);
+            }, slot.occupied && !IsPersistenceBusy());
         }
 
         private void AddProfileRow(LwsSaveProfileMetadata profile)
@@ -478,6 +517,40 @@ namespace LWS.InterstateHauler
             }, _saveService.Profiles.Count > 1);
         }
 
+        private bool IsPersistenceBusy()
+        {
+            return _saveService != null &&
+                   (_saveService.IsSaving ||
+                    _saveService.IsLoading ||
+                    (_saveService.LoadCoordinator != null && _saveService.LoadCoordinator.IsLoadActive));
+        }
+
+        private string ResolveBusyLabel()
+        {
+            if (_saveService == null)
+            {
+                return "MISSING";
+            }
+
+            if (_saveService.IsSaving)
+            {
+                return "SAVING...";
+            }
+
+            if (_saveService.LoadPhase == LwsSaveLoadCoordinatorPhase.LoadingTargetWorld ||
+                _saveService.LoadPhase == LwsSaveLoadCoordinatorPhase.PreparingWorld ||
+                _saveService.LoadPhase == LwsSaveLoadCoordinatorPhase.WaitingForWorldReady)
+            {
+                return "LOADING WORLD...";
+            }
+
+            if (_saveService.IsLoading || (_saveService.LoadCoordinator != null && _saveService.LoadCoordinator.IsLoadActive))
+            {
+                return "LOADING...";
+            }
+
+            return _saveService.PendingAutosave ? "AUTOSAVE PENDING" : "READY";
+        }
         private void RunSave(int slotNumber, bool overwrite)
         {
             LwsSaveOperationResult result = _saveService.Save(_saveService.ActiveProfileId, slotNumber, overwrite);
@@ -495,6 +568,27 @@ namespace LWS.InterstateHauler
         private void RunDelete(int slotNumber)
         {
             LwsSaveOperationResult result = _saveService.Delete(_saveService.ActiveProfileId, slotNumber);
+            _lastStatus = result.Message;
+            SetView(LwsPersistenceMenuView.SaveLoad);
+        }
+
+        private void RunLoadAutosave()
+        {
+            LwsSaveOperationResult result = _saveService.LoadAutosave(_saveService.ActiveProfileId);
+            _lastStatus = result.Message;
+            SetView(LwsPersistenceMenuView.SaveLoad);
+        }
+
+        private void RunDeleteAutosave()
+        {
+            LwsSaveOperationResult result = _saveService.DeleteAutosave(_saveService.ActiveProfileId);
+            _lastStatus = result.Message;
+            SetView(LwsPersistenceMenuView.SaveLoad);
+        }
+
+        private void RunLoadRecovery()
+        {
+            LwsSaveOperationResult result = _saveService.LoadRecoveryBackup();
             _lastStatus = result.Message;
             SetView(LwsPersistenceMenuView.SaveLoad);
         }

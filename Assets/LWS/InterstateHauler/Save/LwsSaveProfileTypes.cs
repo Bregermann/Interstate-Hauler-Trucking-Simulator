@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,10 +18,14 @@ namespace LWS.InterstateHauler
         public const int FirstProfileSlotBase = 16100;
         public const int SlotsPerProfile = 20;
         public const int ManualSlotCount = 3;
+        public const int AutosaveSlotNumber = 1;
+        public const int AutosaveBackupSlotNumber = ManualSlotCount + 1;
         public const int AutosaveSlotOffset = 10;
         public const int BackupSlotOffset = 15;
         public const string ProfileDirectoryRecordKey = "lws.profile-directory";
         public const string SemanticSnapshotRecordKey = "lws.semantic-state";
+        public const string WorldResumeContextParticipantId = "lws.world.resume-context";
+        public const string DefaultStableWorldId = "world.interstate-corridor-validation";
         public const string DefaultGameVersion = "0.1-dev";
 
         public static int MapToVendorSlot(int profileIndex, LwsSaveSlotType slotType, int slotNumber)
@@ -41,6 +45,21 @@ namespace LWS.InterstateHauler
             }
         }
 
+        public static int MapAutosaveToVendorSlot(int profileIndex)
+        {
+            return MapToVendorSlot(profileIndex, LwsSaveSlotType.Autosave, AutosaveSlotNumber);
+        }
+
+        public static int MapManualBackupToVendorSlot(int profileIndex, int manualSlotNumber)
+        {
+            return MapToVendorSlot(profileIndex, LwsSaveSlotType.Backup, Mathf.Clamp(manualSlotNumber, 1, ManualSlotCount));
+        }
+
+        public static int MapAutosaveBackupToVendorSlot(int profileIndex)
+        {
+            return MapToVendorSlot(profileIndex, LwsSaveSlotType.Backup, AutosaveBackupSlotNumber);
+        }
+
         public static IEnumerable<int> EnumerateReservedVendorSlots(int profileIndex)
         {
             for (int i = 1; i <= ManualSlotCount; i++)
@@ -48,12 +67,14 @@ namespace LWS.InterstateHauler
                 yield return MapToVendorSlot(profileIndex, LwsSaveSlotType.Manual, i);
             }
 
-            yield return MapToVendorSlot(profileIndex, LwsSaveSlotType.Autosave, 1);
+            yield return MapAutosaveToVendorSlot(profileIndex);
 
-            for (int i = 1; i <= 5; i++)
+            for (int i = 1; i <= ManualSlotCount; i++)
             {
-                yield return MapToVendorSlot(profileIndex, LwsSaveSlotType.Backup, i);
+                yield return MapManualBackupToVendorSlot(profileIndex, i);
             }
+
+            yield return MapAutosaveBackupToVendorSlot(profileIndex);
         }
 
         public static string ResolveGameVersion()
@@ -96,8 +117,28 @@ namespace LWS.InterstateHauler
         public string truckDefinitionId;
         public string routeDestinationId;
         public string weatherPresetId;
+        public bool backupExists;
+        public long backupSavedUtcTicks;
+        public int backupVendorSlotNumber;
 
-        public string SlotLabel => slotType == LwsSaveSlotType.Manual ? $"SLOT {slotNumber}" : $"{slotType.ToString().ToUpperInvariant()} {slotNumber}";
+        public string SlotLabel
+        {
+            get
+            {
+                switch (slotType)
+                {
+                    case LwsSaveSlotType.Manual:
+                        return $"SLOT {slotNumber}";
+                    case LwsSaveSlotType.Autosave:
+                        return "AUTOSAVE";
+                    case LwsSaveSlotType.Backup:
+                        return $"BACKUP {slotNumber}";
+                    default:
+                        return $"{slotType.ToString().ToUpperInvariant()} {slotNumber}";
+                }
+            }
+        }
+
         public string OccupancyLabel => occupied ? "OCCUPIED" : "EMPTY";
     }
 
@@ -110,9 +151,11 @@ namespace LWS.InterstateHauler
         public string gameVersion = LwsSaveSchema.DefaultGameVersion;
         public List<LwsSaveProfileMetadata> profiles = new List<LwsSaveProfileMetadata>();
         public List<LwsManualSaveSlotMetadata> manualSlots = new List<LwsManualSaveSlotMetadata>();
+        public List<LwsManualSaveSlotMetadata> systemSlots = new List<LwsManualSaveSlotMetadata>();
 
         public IReadOnlyList<LwsSaveProfileMetadata> Profiles => profiles;
         public IReadOnlyList<LwsManualSaveSlotMetadata> ManualSlots => manualSlots;
+        public IReadOnlyList<LwsManualSaveSlotMetadata> SystemSlots => systemSlots;
 
         public LwsSaveProfileMetadata FindProfile(string profileId)
         {
@@ -132,6 +175,14 @@ namespace LWS.InterstateHauler
                 string.Equals(s.stableProfileId, profileId, StringComparison.Ordinal));
         }
 
+        public LwsManualSaveSlotMetadata FindSystemSlot(string profileId, LwsSaveSlotType slotType, int slotNumber)
+        {
+            return systemSlots.Find(s =>
+                s.slotType == slotType &&
+                s.slotNumber == slotNumber &&
+                string.Equals(s.stableProfileId, profileId, StringComparison.Ordinal));
+        }
+
         public LwsManualSaveSlotMetadata GetOrCreateManualSlot(LwsSaveProfileMetadata profile, int slotNumber)
         {
             if (profile == null)
@@ -139,30 +190,61 @@ namespace LWS.InterstateHauler
                 return null;
             }
 
+            slotNumber = Mathf.Clamp(slotNumber, 1, LwsSaveSchema.ManualSlotCount);
             LwsManualSaveSlotMetadata slot = FindManualSlot(profile.stableProfileId, slotNumber);
             if (slot != null)
             {
                 slot.vendorSlotNumber = LwsSaveSchema.MapToVendorSlot(profile.profileIndex, LwsSaveSlotType.Manual, slotNumber);
+                slot.backupVendorSlotNumber = LwsSaveSchema.MapManualBackupToVendorSlot(profile.profileIndex, slotNumber);
                 return slot;
             }
 
-            slot = new LwsManualSaveSlotMetadata
-            {
-                stableProfileId = profile.stableProfileId,
-                slotType = LwsSaveSlotType.Manual,
-                slotNumber = slotNumber,
-                vendorSlotNumber = LwsSaveSchema.MapToVendorSlot(profile.profileIndex, LwsSaveSlotType.Manual, slotNumber),
-                occupied = false,
-                schemaVersion = LwsSaveSchema.CurrentVersion,
-                gameVersion = LwsSaveSchema.ResolveGameVersion(),
-                sceneName = string.Empty,
-                worldLabel = string.Empty,
-                truckDefinitionId = string.Empty,
-                routeDestinationId = string.Empty,
-                weatherPresetId = string.Empty
-            };
+            slot = CreateSlot(profile, LwsSaveSlotType.Manual, slotNumber, LwsSaveSchema.MapToVendorSlot(profile.profileIndex, LwsSaveSlotType.Manual, slotNumber));
+            slot.backupVendorSlotNumber = LwsSaveSchema.MapManualBackupToVendorSlot(profile.profileIndex, slotNumber);
             manualSlots.Add(slot);
             return slot;
+        }
+
+        public LwsManualSaveSlotMetadata GetOrCreateAutosaveSlot(LwsSaveProfileMetadata profile)
+        {
+            if (profile == null)
+            {
+                return null;
+            }
+
+            LwsManualSaveSlotMetadata slot = FindSystemSlot(profile.stableProfileId, LwsSaveSlotType.Autosave, LwsSaveSchema.AutosaveSlotNumber);
+            if (slot != null)
+            {
+                slot.vendorSlotNumber = LwsSaveSchema.MapAutosaveToVendorSlot(profile.profileIndex);
+                slot.backupVendorSlotNumber = LwsSaveSchema.MapAutosaveBackupToVendorSlot(profile.profileIndex);
+                return slot;
+            }
+
+            slot = CreateSlot(profile, LwsSaveSlotType.Autosave, LwsSaveSchema.AutosaveSlotNumber, LwsSaveSchema.MapAutosaveToVendorSlot(profile.profileIndex));
+            slot.backupVendorSlotNumber = LwsSaveSchema.MapAutosaveBackupToVendorSlot(profile.profileIndex);
+            systemSlots.Add(slot);
+            return slot;
+        }
+
+        public LwsManualSaveSlotMetadata GetOrCreateManualBackupSlot(LwsSaveProfileMetadata profile, int manualSlotNumber)
+        {
+            if (profile == null)
+            {
+                return null;
+            }
+
+            manualSlotNumber = Mathf.Clamp(manualSlotNumber, 1, LwsSaveSchema.ManualSlotCount);
+            return GetOrCreateSystemSlot(profile, LwsSaveSlotType.Backup, manualSlotNumber, LwsSaveSchema.MapManualBackupToVendorSlot(profile.profileIndex, manualSlotNumber));
+        }
+
+        public LwsManualSaveSlotMetadata GetOrCreateAutosaveBackupSlot(LwsSaveProfileMetadata profile)
+        {
+            if (profile == null)
+            {
+                return null;
+            }
+
+            return GetOrCreateSystemSlot(profile, LwsSaveSlotType.Backup, LwsSaveSchema.AutosaveBackupSlotNumber, LwsSaveSchema.MapAutosaveBackupToVendorSlot(profile.profileIndex));
         }
 
         public List<LwsManualSaveSlotMetadata> GetManualSlotsForProfile(LwsSaveProfileMetadata profile)
@@ -192,6 +274,7 @@ namespace LWS.InterstateHauler
         {
             int removed = profiles.RemoveAll(p => string.Equals(p.stableProfileId, profileId, StringComparison.Ordinal));
             manualSlots.RemoveAll(s => string.Equals(s.stableProfileId, profileId, StringComparison.Ordinal));
+            systemSlots.RemoveAll(s => string.Equals(s.stableProfileId, profileId, StringComparison.Ordinal));
             if (string.Equals(selectedProfileId, profileId, StringComparison.Ordinal))
             {
                 selectedProfileId = profiles.Count > 0 ? profiles[0].stableProfileId : string.Empty;
@@ -206,6 +289,7 @@ namespace LWS.InterstateHauler
             gameVersion = string.IsNullOrWhiteSpace(gameVersion) ? LwsSaveSchema.ResolveGameVersion() : gameVersion;
             profiles ??= new List<LwsSaveProfileMetadata>();
             manualSlots ??= new List<LwsManualSaveSlotMetadata>();
+            systemSlots ??= new List<LwsManualSaveSlotMetadata>();
 
             int next = 0;
             foreach (LwsSaveProfileMetadata profile in profiles)
@@ -219,6 +303,14 @@ namespace LWS.InterstateHauler
                 profile.gameVersion = string.IsNullOrWhiteSpace(profile.gameVersion) ? gameVersion : profile.gameVersion;
                 profile.schemaVersion = profile.schemaVersion <= 0 ? LwsSaveSchema.CurrentVersion : profile.schemaVersion;
                 next = Mathf.Max(next, profile.profileIndex + 1);
+                for (int i = 1; i <= LwsSaveSchema.ManualSlotCount; i++)
+                {
+                    GetOrCreateManualSlot(profile, i);
+                    GetOrCreateManualBackupSlot(profile, i);
+                }
+
+                GetOrCreateAutosaveSlot(profile);
+                GetOrCreateAutosaveBackupSlot(profile);
             }
 
             nextProfileIndex = Mathf.Max(nextProfileIndex, next);
@@ -226,6 +318,42 @@ namespace LWS.InterstateHauler
             {
                 selectedProfileId = profiles.Count > 0 ? profiles[0].stableProfileId : string.Empty;
             }
+        }
+
+        private LwsManualSaveSlotMetadata GetOrCreateSystemSlot(LwsSaveProfileMetadata profile, LwsSaveSlotType slotType, int slotNumber, int vendorSlotNumber)
+        {
+            LwsManualSaveSlotMetadata slot = FindSystemSlot(profile.stableProfileId, slotType, slotNumber);
+            if (slot != null)
+            {
+                slot.vendorSlotNumber = vendorSlotNumber;
+                return slot;
+            }
+
+            slot = CreateSlot(profile, slotType, slotNumber, vendorSlotNumber);
+            systemSlots.Add(slot);
+            return slot;
+        }
+
+        private static LwsManualSaveSlotMetadata CreateSlot(LwsSaveProfileMetadata profile, LwsSaveSlotType slotType, int slotNumber, int vendorSlotNumber)
+        {
+            return new LwsManualSaveSlotMetadata
+            {
+                stableProfileId = profile.stableProfileId,
+                slotType = slotType,
+                slotNumber = slotNumber,
+                vendorSlotNumber = vendorSlotNumber,
+                occupied = false,
+                schemaVersion = LwsSaveSchema.CurrentVersion,
+                gameVersion = LwsSaveSchema.ResolveGameVersion(),
+                sceneName = string.Empty,
+                worldLabel = string.Empty,
+                truckDefinitionId = string.Empty,
+                routeDestinationId = string.Empty,
+                weatherPresetId = string.Empty,
+                backupExists = false,
+                backupSavedUtcTicks = 0,
+                backupVendorSlotNumber = 0
+            };
         }
     }
 
