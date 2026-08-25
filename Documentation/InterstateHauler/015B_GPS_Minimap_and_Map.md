@@ -1,12 +1,18 @@
 # Prompt 015B - GPS Minimap And Full Map
 
-## Result
+## Current Presentation Policy
 
-Prompt 015B adds a functional semantic GPS minimap and full-screen map. The later GPS presentation repair keeps the same navigation authority while splitting the display policy between cockpit and exterior cameras.
+Compass Navigator Pro 4 is now the normal player-facing GPS/minimap presentation. LWS remains the only navigation authority; Compass receives LWS route, POI, and position data as a presentation layer.
 
-The map is not a 3D camera. It renders LWS road graph and route data through `LwsSemanticGpsMapGraphic`, a uGUI `MaskableGraphic`.
+Default camera behavior:
 
-## Data Sources
+- Cockpit camera: world-space cab Compass GPS active, screen-space HUD minimap hidden.
+- Exterior/chase/other camera: screen-space Compass HUD minimap visible, cab GPS may remain active.
+- Full map: M key or MAP button opens the Compass Pro full-map state when the vendor runtime is available.
+
+## Authority
+
+There is still one navigation authority:
 
 - Road geometry: `ILwsRoadGraphService.ActiveGraph`
 - Active route: `ILwsNavigationService.CurrentRoute`
@@ -14,18 +20,38 @@ The map is not a 3D camera. It renders LWS road graph and route data through `Lw
 - Player local pose: active `LwsPlayerTruck` or `ILwsWorldOriginService.PlayerLocalPosition`
 - Player global pose: `ILwsWorldOriginService.LocalToGlobal`
 
-## Minimap
+Compass Navigator Pro does not own destinations, route planning, route progress, save data, or highway graph state.
 
-- Position: bottom-right overlay
-- Default orientation: heading-up
-- Visible by default while the big map is closed and the active camera is not cockpit
-- Hidden automatically in cockpit camera mode
-- Shows cached road graph geometry
-- Shows active route polyline
-- Shows player marker
-- Shows destination marker when a route exists
-- Shows remaining distance, ETA, current road, and speed-limit text where available
-- Includes a MAP button that opens the full map
+## Compass Navigator Pro Adapter
+
+Runtime adapter: `Assets/LWS/InterstateHauler/Navigation/Compass/LwsCompassNavigatorProAdapter.cs`
+
+Vendor package:
+
+- Product: Compass Navigator Pro 4
+- Version: 6.0.2
+- Root: `Assets/Plugins/Kronnect/CompassNavigatorPro`
+- Namespace: `CompassNavigatorPro`
+- Prefab: `Assets/Plugins/Kronnect/CompassNavigatorPro/Resources/CNPro/Prefabs/CompassNavigatorPro.prefab`
+
+The adapter instantiates vendor prefab instances for:
+
+- HUD/exterior minimap
+- cockpit world-space GPS
+
+It feeds both from the same `ILwsNavigationService` route state and converts global LWS route/POI positions to local Unity space through `ILwsWorldOriginService.GlobalToLocal`.
+
+## Fallback Semantic Map
+
+The old `LwsSemanticGpsMapGraphic` remains as a project-owned fallback and test utility. It is no longer the normal player-facing GPS presentation when Compass Navigator Pro is available.
+
+Fallback responsibilities:
+
+- validate LWS road graph and route shape without vendor UI
+- provide an emergency HUD/full-map fallback if Compass Pro is missing or not ready
+- support existing EditMode/PlayMode tests that verify semantic map geometry
+
+The development UI hides this fallback minimap while Compass Navigator Pro owns the HUD/cab/full-map presentation.
 
 ## Cockpit Cab GPS
 
@@ -33,31 +59,28 @@ The cockpit navigation display is a physical world-space UI mounted to the playe
 
 - Controller: `LwsCabGpsController`
 - Stable anchor: `IH_CabAnchor_GpsMount`
-- Runtime hierarchy: `IH_PlayerTruck_NWH_Runtime/Cab/IH_CabAccessoryAnchors/IH_CabAnchor_GpsMount/IH Physical Cab GPS Screen`
+- Runtime hierarchy: `IH_PlayerTruck_NWH_Runtime/Cab/IH_CabAccessoryAnchors/IH_CabAnchor_GpsMount/IH Cab GPS Compass Navigator Pro`
 - Canvas mode: `World Space`
-- Map renderer: `LwsSemanticGpsMapGraphic`
-- Orientation: heading-up
-- Navigation source: the same `ILwsNavigationService`, `ILwsRoadGraphService`, and `ILwsWorldOriginService` used by the HUD minimap and full map
-
-Default cockpit policy:
-
-- Cockpit camera: world-space cab GPS active, screen-space HUD minimap hidden
-- Exterior/chase camera: world-space cab GPS may remain active, screen-space HUD minimap visible
+- Orientation: heading-up through Compass `miniMapOrientation = Follow`
+- Navigation source: the same LWS navigation services used by the HUD minimap and full map
 
 The cab GPS is parented under the truck/cab hierarchy, so it follows truck movement and floating-origin shifts naturally. Its map content remains semantic/global and does not depend on loaded physical road chunk objects.
+
+## HUD Minimap
+
+- Position: bottom-right overlay through Compass `miniMapLocation = BottomRight`
+- Default orientation: heading-up
+- Visible while the full map is closed and the active camera is not cockpit
+- Hidden automatically in cockpit camera mode
+- Shows vendor-rendered roads/world view, LWS route, player icon, destination POI, and limited road POIs
 
 ## Full Map
 
 - Toggle: M key or minimap MAP button
-- Close: CLOSE button or Escape
+- Close: vendor full-map close behavior, CLOSE fallback button, or Escape
 - Pause: pauses gameplay by default while open
-- Controls:
-  - Center player
-  - Center route
-  - Zoom in
-  - Zoom out
-  - Reset zoom
-  - Pan north/south/east/west
+- Preferred implementation: Compass `miniMapFullScreenState`
+- Fallback implementation: project-owned semantic full map only if Compass is unavailable
 
 Opening the full map does not change the camera-based minimap policy. Closing the full map restores the correct state: cockpit keeps the HUD minimap hidden, while exterior/chase shows it.
 
@@ -84,15 +107,15 @@ The GPS / Navigation tab provides:
 
 ## Floating-Origin Safety
 
-The map converts local player position into semantic global position using `ILwsWorldOriginService.LocalToGlobal`. Road graph samples and route waypoints are already semantic/global positions, so the map remains stable through floating-origin shifts and streamed highway chunks.
+Route and POI positions are refreshed against `ILwsWorldOriginService.OriginVersion`. Physical streaming chunks may load/unload independently; the GPS presentation continues consuming LWS semantic road graph and route state.
 
 ## Performance
 
-- Road graph presentation is rebuilt only when the active `LwsRoadGraph` reference changes.
-- Route presentation is rebuilt only when the active `LwsRouteResult` reference changes.
-- Player marker/heading and map text refresh frequently.
-- No minimap camera, render texture, or scene-wide object search is used for road presentation.
+- Compass minimap capture is vendor-managed and should be profiled in later Steam Deck/performance passes.
+- LWS route conversion is refreshed only when the active route or floating-origin version changes.
+- Road POIs are capped by `LwsCompassNavigatorProAdapter.maximumRoadPoiCount` to avoid clutter and runtime cost.
+- The fallback semantic map still rebuilds only on graph/route changes when it is used.
 
 ## Prompt 016 Handoff Note
 
-Prompt 016 should consume the semantic route/map state already exposed here if it needs route-aware world generation, economy, or destination validation. Prompt 015B did not begin Prompt 016.
+Prompt 016 should consume the semantic route/map state already exposed here if it needs route-aware world generation, economy, or destination validation. Prompt 015B and the Compass repair did not begin Prompt 016.

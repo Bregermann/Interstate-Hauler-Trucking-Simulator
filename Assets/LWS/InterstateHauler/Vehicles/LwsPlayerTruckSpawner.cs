@@ -208,6 +208,12 @@ namespace LWS.InterstateHauler
                 truckInstance.AddComponent<LwsCabGpsController>();
             }
 
+            LwsCompassNavigatorProAdapter compassAdapter = truckInstance.GetComponent<LwsCompassNavigatorProAdapter>();
+            if (compassAdapter == null)
+            {
+                truckInstance.AddComponent<LwsCompassNavigatorProAdapter>();
+            }
+
             SpawnedTruck = truckInstance.GetComponent<LwsPlayerTruck>();
             if (SpawnedTruck == null)
             {

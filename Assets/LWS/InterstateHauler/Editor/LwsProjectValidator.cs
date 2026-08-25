@@ -220,6 +220,14 @@ namespace LWS.InterstateHauler.Editor
         private const string CameraPresentationPath = "Assets/LWS/InterstateHauler/Vehicles/Cameras/LwsCameraPresentation.cs";
         private const string DevelopmentControlCenterDocsPath = "Documentation/InterstateHauler/015B_Development_Control_Center.md";
         private const string GpsMinimapMapDocsPath = "Documentation/InterstateHauler/015B_GPS_Minimap_and_Map.md";
+        private const string CompassNavigatorProRootPath = "Assets/Plugins/Kronnect/CompassNavigatorPro";
+        private const string CompassNavigatorProControllerPath = "Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/CompassPro.cs";
+        private const string CompassNavigatorProRoutePath = "Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/CompassProRoute.cs";
+        private const string CompassNavigatorProPoiPath = "Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/CompassProPOI.cs";
+        private const string CompassNavigatorProPrefabPath = "Assets/Plugins/Kronnect/CompassNavigatorPro/Resources/CNPro/Prefabs/CompassNavigatorPro.prefab";
+        private const string CompassNavigatorProAdapterPath = "Assets/LWS/InterstateHauler/Navigation/Compass/LwsCompassNavigatorProAdapter.cs";
+        private const string CompassNavigatorProApiMatrixPath = "Documentation/InterstateHauler/Navigation/CompassNavigatorPro4_API_Matrix.md";
+        private const string CompassNavigatorProIntegrationDocsPath = "Documentation/InterstateHauler/Navigation/011_CompassNavigatorPro4_Integration.md";
         private const string DevelopmentUiTestMatrixPath = "Documentation/InterstateHauler/015B_UI_Test_Matrix.md";
         private const string GameClockDocsPath = "Documentation/InterstateHauler/015C_Game_Clock.md";
         private const string TimeBasedTrafficDocsPath = "Documentation/InterstateHauler/015C_Time_Based_Traffic_Density.md";
@@ -3345,6 +3353,10 @@ namespace LWS.InterstateHauler.Editor
             string map = File.Exists(SemanticGpsMapGraphicPath) ? File.ReadAllText(SemanticGpsMapGraphicPath) : string.Empty;
             string cab = File.Exists(CabGpsControllerPath) ? File.ReadAllText(CabGpsControllerPath) : string.Empty;
             string cameraPresentation = File.Exists(CameraPresentationPath) ? File.ReadAllText(CameraPresentationPath) : string.Empty;
+            string compassAdapter = File.Exists(CompassNavigatorProAdapterPath) ? File.ReadAllText(CompassNavigatorProAdapterPath) : string.Empty;
+            string truckSpawner = File.Exists("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                ? File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs")
+                : string.Empty;
             bool overlayControls = root.Contains("RenderMode.ScreenSpaceOverlay") &&
                                    root.Contains("CanvasScaler.ScaleMode.ScaleWithScreenSize") &&
                                    root.Contains("ScrollRect") &&
@@ -3392,10 +3404,10 @@ namespace LWS.InterstateHauler.Editor
                                        cab.Contains("SetMapData");
             report.Add(
                 mapUsesSemanticData ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
-                "Semantic GPS Map",
+                "Fallback Semantic GPS Map",
                 mapUsesSemanticData
-                    ? "Cab GPS, minimap, and full map consume LWS navigation route, road graph, and floating-origin LocalToGlobal conversion instead of a 3D map camera."
-                    : "GPS map is missing semantic road graph, route, navigation, or origin-aware coordinate usage.");
+                    ? "Fallback uGUI GPS map consumes LWS navigation route, road graph, and floating-origin LocalToGlobal conversion; Compass Navigator Pro owns the normal player-facing GPS presentation."
+                    : "Fallback GPS map is missing semantic road graph, route, navigation, or origin-aware coordinate usage.");
 
             bool cockpitGpsPolicy = cameraPresentation.Contains("ILwsCameraPresentationService") &&
                                     cameraPresentation.Contains("LwsVehicleCameraMode.Cockpit") &&
@@ -3429,6 +3441,47 @@ namespace LWS.InterstateHauler.Editor
                     ? "Cab GPS, HUD minimap, and full map are presentations of the existing ILwsNavigationService state."
                     : "GPS presentation appears to create or bypass the project navigation authority.");
 
+            bool compassVendorInstalled = Directory.Exists(CompassNavigatorProRootPath) &&
+                                          File.Exists(CompassNavigatorProControllerPath) &&
+                                          File.Exists(CompassNavigatorProRoutePath) &&
+                                          File.Exists(CompassNavigatorProPoiPath) &&
+                                          File.Exists(CompassNavigatorProPrefabPath);
+            report.Add(
+                compassVendorInstalled ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Compass Navigator Pro 4 Vendor",
+                compassVendorInstalled
+                    ? "Kronnect Compass Navigator Pro 4 package files are installed under Assets/Plugins/Kronnect/CompassNavigatorPro."
+                    : "Compass Navigator Pro 4 vendor package is missing one or more required runtime scripts or prefab assets.");
+
+            bool compassAdapterReady = compassAdapter.Contains("LwsCompassNavigatorProAdapter") &&
+                                       compassAdapter.Contains("CompassNavigatorPro.CompassPro") &&
+                                       compassAdapter.Contains("CompassNavigatorPro.CompassProPOI") &&
+                                       compassAdapter.Contains("CompassProNavMeshRoute") &&
+                                       compassAdapter.Contains("SetRoute") &&
+                                       compassAdapter.Contains("miniMapFullScreenState") &&
+                                       compassAdapter.Contains("GlobalToLocal") &&
+                                       compassAdapter.Contains("ILwsNavigationRoutePresenter") &&
+                                       truckSpawner.Contains("AddComponent<LwsCompassNavigatorProAdapter>");
+            report.Add(
+                compassAdapterReady ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Compass Navigator Pro Presentation Adapter",
+                compassAdapterReady
+                    ? "LWS spawns the Compass Navigator Pro adapter on the player truck and feeds vendor HUD, cab GPS, POI, route, fullscreen map, and floating-origin presentation from LWS navigation state."
+                    : "Compass Navigator Pro adapter is missing route/POI/full-map/origin handling or is not added by the player truck spawner.");
+
+            bool compassDevUiReady = root.Contains("LwsCompassNavigatorProAdapter") &&
+                                     root.Contains("SetHudMinimapVisible") &&
+                                     root.Contains("SetFullMapVisible") &&
+                                     root.Contains("Compass Pro 4") &&
+                                     root.Contains("Compass Vendor Runtime") &&
+                                     !root.Contains("GPS MAP UNAVAILABLE");
+            report.Add(
+                compassDevUiReady ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "Compass Navigator Pro Development UI",
+                compassDevUiReady
+                    ? "Development UI exposes Compass Navigator Pro diagnostics, uses the vendor fullscreen map when available, and hides the old fallback minimap while the vendor runtime owns GPS presentation."
+                    : "Development UI is missing Compass Navigator Pro diagnostics/fullscreen routing or still exposes the old unavailable GPS message.");
+
             var legacyVisible = LegacyDebugPanelPaths
                 .Where(File.Exists)
                 .Where(path =>
@@ -3448,6 +3501,8 @@ namespace LWS.InterstateHauler.Editor
             {
                 DevelopmentControlCenterDocsPath,
                 GpsMinimapMapDocsPath,
+                CompassNavigatorProApiMatrixPath,
+                CompassNavigatorProIntegrationDocsPath,
                 DevelopmentUiTestMatrixPath
             };
             var missingDocs = docs.Where(path => !File.Exists(path)).ToList();

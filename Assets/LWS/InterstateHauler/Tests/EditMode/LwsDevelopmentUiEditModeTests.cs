@@ -340,6 +340,28 @@ namespace LWS.InterstateHauler.Tests.EditMode
             StringAssert.Contains("GpsPresentationPolicy", root);
         }
 
+        [Test]
+        public void DevelopmentUiSourceUsesCompassNavigatorProPresentationWhenAvailable()
+        {
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+            string adapter = File.ReadAllText("Assets/LWS/InterstateHauler/Navigation/Compass/LwsCompassNavigatorProAdapter.cs");
+            string spawner = File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs");
+            string validator = File.ReadAllText("Assets/LWS/InterstateHauler/Editor/LwsProjectValidator.cs");
+
+            StringAssert.Contains("LwsCompassNavigatorProAdapter", root);
+            StringAssert.Contains("SetHudMinimapVisible", root);
+            StringAssert.Contains("SetFullMapVisible", root);
+            StringAssert.Contains("Compass Pro 4", root);
+            Assert.IsFalse(root.Contains("GPS MAP UNAVAILABLE"));
+            StringAssert.Contains("CompassNavigatorPro.CompassPro", adapter);
+            StringAssert.Contains("CompassNavigatorPro.CompassProPOI", adapter);
+            StringAssert.Contains("CompassProNavMeshRoute", adapter);
+            StringAssert.Contains("SetRoute", adapter);
+            StringAssert.Contains("miniMapFullScreenState", adapter);
+            StringAssert.Contains("GlobalToLocal", adapter);
+            StringAssert.Contains("AddComponent<LwsCompassNavigatorProAdapter>", spawner);
+            StringAssert.Contains("Compass Navigator Pro 4 Vendor", validator);
+        }
         private static LwsRoadGraph CreateTwoPointRoadGraph()
         {
             var graph = new LwsRoadGraph { graphId = "IH_TEST_MINIMAP_GRAPH" };

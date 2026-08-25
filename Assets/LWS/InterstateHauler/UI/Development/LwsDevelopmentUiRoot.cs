@@ -52,6 +52,7 @@ namespace LWS.InterstateHauler
         private ILwsForceFeedbackService _forceFeedbackService;
         private ILwsPlayerVehicleService _playerVehicleService;
         private ILwsSaveService _saveService;
+        private LwsCompassNavigatorProAdapter _compassNavigatorProAdapter;
 
         private Canvas _canvas;
         private CanvasScaler _canvasScaler;
@@ -102,7 +103,8 @@ namespace LWS.InterstateHauler
 
         public static LwsDevelopmentUiRoot Instance { get; private set; }
         public bool ControlCenterVisible => _controlCenterPanel != null && _controlCenterPanel.activeSelf;
-        public bool BigMapVisible => _bigMapPanel != null && _bigMapPanel.activeSelf;
+        public bool BigMapVisible => (_bigMapPanel != null && _bigMapPanel.activeSelf) ||
+                                     (_compassNavigatorProAdapter != null && _compassNavigatorProAdapter.FullMapVisible);
         public LwsDevelopmentUiTab ActiveTab => _activeTab;
         public Canvas Canvas => _canvas;
         public CanvasScaler CanvasScaler => _canvasScaler;
@@ -118,7 +120,8 @@ namespace LWS.InterstateHauler
         public RectTransform MinimapRect => _minimapPanel != null ? _minimapPanel.GetComponent<RectTransform>() : null;
         public GameObject MinimapPanel => _minimapPanel;
         public GameObject TransmissionHudPanel => _transmissionHudPanel;
-        public bool HudMinimapVisible => _minimapPanel != null && _minimapPanel.activeSelf;
+        public bool HudMinimapVisible => (_compassNavigatorProAdapter != null && _compassNavigatorProAdapter.HudMinimapVisible) ||
+                                          (_minimapPanel != null && _minimapPanel.activeSelf);
         public LwsVehicleCameraMode CameraMode => _cameraPresentationService != null ? _cameraPresentationService.CurrentMode : LwsVehicleCameraMode.Unknown;
         public LwsGpsPresentationPolicy GpsPresentationPolicy => _cameraPresentationService != null ? _cameraPresentationService.GpsPresentationPolicy : LwsGpsPresentationPolicy.Auto;
 
@@ -251,6 +254,23 @@ namespace LWS.InterstateHauler
                 BuildUi();
             }
 
+            ResolveServices();
+            LwsCompassNavigatorProAdapter compass = ResolveCompassNavigatorProAdapter();
+            if (compass != null && compass.VendorRuntimeReady && compass.FullMapSupported && compass.SetFullMapVisible(true))
+            {
+                if (_bigMapPanel != null && _bigMapPanel.activeSelf)
+                {
+                    _bigMapPanel.SetActive(false);
+                }
+
+                ApplyGpsPresentationVisibility();
+                UpdateDevButtonVisibility();
+                PauseForBigMap();
+                CaptureCursor();
+                RefreshMaps();
+                return;
+            }
+
             _bigMapPanel.SetActive(true);
             _bigMapPanel.transform.SetAsLastSibling();
             ApplyGpsPresentationVisibility();
@@ -262,6 +282,13 @@ namespace LWS.InterstateHauler
 
         public void HideBigMap()
         {
+            ResolveServices();
+            LwsCompassNavigatorProAdapter compass = ResolveCompassNavigatorProAdapter();
+            if (compass != null && compass.FullMapVisible)
+            {
+                compass.SetFullMapVisible(false);
+            }
+
             if (_bigMapPanel != null)
             {
                 _bigMapPanel.SetActive(false);
@@ -790,6 +817,7 @@ namespace LWS.InterstateHauler
             LwsWorldPositionD playerGlobal = ResolvePlayerGlobalPosition();
             LwsEndlessStreamingHighwayController endless = FindFirstObjectByType<LwsEndlessStreamingHighwayController>();
             LwsCabGpsController cabGps = FindFirstObjectByType<LwsCabGpsController>();
+            LwsCompassNavigatorProAdapter compass = ResolveCompassNavigatorProAdapter();
             AddInfo("Route", state != null && state.routeActive ? $"{state.routeId} / {FormatDistance(state.distanceRemainingMeters)}" : "inactive");
             AddInfo("Next maneuver", state != null ? $"{LwsNavigationManeuverCatalog.GetDisplayName(state.nextManeuver)} / {FormatDistance(state.distanceToNextManeuverMeters)}" : "--");
             AddInfo("ETA", state != null ? FormatEta(state.estimatedTimeRemainingSeconds) : "--");
@@ -798,6 +826,16 @@ namespace LWS.InterstateHauler
             AddInfo("Cab GPS", cabGps != null && cabGps.PhysicalGpsBound ? "ACTIVE" : "MISSING");
             AddInfo("HUD Minimap", HudMinimapVisible ? "VISIBLE" : "HIDDEN");
             AddInfo("Presentation Policy", GpsPresentationPolicy.ToString());
+            AddInfo("Compass Pro 4", compass != null ? compass.BuildDiagnosticsSummary() : "missing");
+            AddInfo("Compass Vendor Runtime", compass != null && compass.VendorRuntimeReady ? "READY" : "ERROR");
+            AddInfo("Compass Version", compass != null ? compass.PackageVersion : "--");
+            AddInfo("Compass Player Target", compass != null ? compass.name : "--");
+            AddInfo("Compass POIs", compass != null ? compass.VendorPoiCount.ToString() : "0");
+            AddInfo("Compass Route", compass != null && compass.VendorRoutePresentationActive ? "YES" : "NO");
+            AddInfo("Compass NavMesh Route", compass != null ? compass.NavMeshRouteStatus : "not checked");
+            AddInfo("Compass Cockpit", compass != null && compass.CabPresentationReady ? "READY" : "MISSING");
+            AddInfo("Compass Exterior", compass != null && compass.HudPresentationReady ? "READY" : "MISSING");
+            AddInfo("Compass Last Error", compass != null && !string.IsNullOrWhiteSpace(compass.LastError) ? compass.LastError : "--");
             AddInfo("Road Graph Bound", map != null && map.GraphBound ? "YES" : "NO");
             AddInfo("Graph ID", map != null && !string.IsNullOrWhiteSpace(map.GraphId) ? map.GraphId : "--");
             AddInfo("Road Count", map != null ? map.RoadCount.ToString() : "0");
@@ -1094,9 +1132,18 @@ namespace LWS.InterstateHauler
 
         private string ResolveMapStatus(LwsRoadGraph graph, LwsNavigationRuntimeState state, bool routeActive)
         {
+            LwsCompassNavigatorProAdapter compass = ResolveCompassNavigatorProAdapter();
+            string roadStatus = $"{ResolveCurrentRoadText()} {ResolveSpeedLimitText()}".Trim();
+            if (compass != null && compass.VendorRuntimeReady)
+            {
+                return routeActive && state != null
+                    ? $"COMPASS GPS | {FormatDistance(state.distanceRemainingMeters)} | {FormatEta(state.estimatedTimeRemainingSeconds)} | {roadStatus}"
+                    : $"COMPASS GPS READY | {roadStatus}";
+            }
+
             if (_roadGraphService == null || _originService == null)
             {
-                return "GPS MAP UNAVAILABLE";
+                return "COMPASS GPS WAITING FOR LWS NAVIGATION";
             }
 
             if (graph == null)
@@ -1109,9 +1156,9 @@ namespace LWS.InterstateHauler
                 return "MAP GEOMETRY EMPTY";
             }
 
-            return routeActive
-                ? $"{FormatDistance(state.distanceRemainingMeters)} | {FormatEta(state.estimatedTimeRemainingSeconds)} | {ResolveCurrentRoadText()} {ResolveSpeedLimitText()}"
-                : $"NO ROUTE | {ResolveCurrentRoadText()}";
+            return routeActive && state != null
+                ? $"{FormatDistance(state.distanceRemainingMeters)} | {FormatEta(state.estimatedTimeRemainingSeconds)} | {roadStatus}"
+                : $"NO ROUTE | {roadStatus}";
         }
 
         private void ResolveServices()
@@ -1148,6 +1195,18 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _forceFeedbackService);
             _registry.TryGet(out _playerVehicleService);
             _registry.TryGet(out _saveService);
+            _compassNavigatorProAdapter = ResolveCompassNavigatorProAdapter();
+        }
+
+
+        private LwsCompassNavigatorProAdapter ResolveCompassNavigatorProAdapter()
+        {
+            if (_compassNavigatorProAdapter == null)
+            {
+                _compassNavigatorProAdapter = FindFirstObjectByType<LwsCompassNavigatorProAdapter>();
+            }
+
+            return _compassNavigatorProAdapter;
         }
 
         private void BindCameraPresentationService(ILwsCameraPresentationService service)
@@ -1199,8 +1258,26 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            bool showHudMinimap = !BigMapVisible &&
+            LwsCompassNavigatorProAdapter compass = ResolveCompassNavigatorProAdapter();
+            bool fallbackFullMapVisible = _bigMapPanel != null && _bigMapPanel.activeSelf;
+            bool vendorFullMapVisible = compass != null && compass.FullMapVisible;
+            bool showHudMinimap = !fallbackFullMapVisible &&
+                                  !vendorFullMapVisible &&
                                   (_cameraPresentationService == null || _cameraPresentationService.ShouldShowHudMinimap);
+
+            if (compass != null && compass.VendorRuntimeReady)
+            {
+                compass.SetHudMinimapVisible(showHudMinimap);
+                if (_minimapPanel.activeSelf)
+                {
+                    _minimapPanel.SetActive(false);
+                    LwsDevelopmentUiDiagnostics.LogHud(
+                        $"Fallback HUD minimap hidden; Compass Navigator Pro owns GPS presentation for camera {CameraMode}.");
+                }
+
+                return;
+            }
+
             if (_minimapPanel.activeSelf != showHudMinimap)
             {
                 _minimapPanel.SetActive(showHudMinimap);
