@@ -8,13 +8,13 @@ namespace LWS.InterstateHauler
     public sealed class LwsCabAccessoryAnchorRegistry : MonoBehaviour
     {
         [SerializeField] private bool createDefaultAnchors = true;
-        [SerializeField] private bool attachDevelopmentHulaPlaceholder = true;
+        [SerializeField] private bool attachDevelopmentHulaPlaceholder;
         [SerializeField] private string anchorRootName = "IH_CabAccessoryAnchors";
         [SerializeField] private List<LwsCabAccessoryAnchorDefinition> defaultAnchors = new List<LwsCabAccessoryAnchorDefinition>
         {
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Dashboard01", anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(-0.38f, 1.35f, 1.15f), localEulerAngles = new Vector3(0f, 0f, 0f), localScale = Vector3.one, expectedContent = "hula girl / bobblehead", notes = "Primary left dashboard accessory location." },
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Dashboard02", anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(0.34f, 1.35f, 1.15f), localEulerAngles = new Vector3(0f, 0f, 0f), localScale = Vector3.one, expectedContent = "souvenir / mini flag / coffee cup", notes = "Secondary dashboard accessory location." },
-            new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_GpsMount", anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(0.28f, 1.22f, 1.20f), localEulerAngles = new Vector3(62f, -8f, 0f), localScale = Vector3.one, expectedContent = "world-space cab GPS", notes = "Center-right dashboard GPS mount for cockpit navigation." },
+            new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_GpsMount", anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(0.36f, 1.15f, 1.08f), localEulerAngles = Vector3.zero, localScale = Vector3.one, expectedContent = "world-space cab GPS", notes = "Center-right dashboard GPS mount for cockpit navigation." },
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Hanging01", anchorType = LwsCabAccessoryAnchorType.HangingAccessory, localPosition = new Vector3(0f, 1.82f, 1.02f), localEulerAngles = new Vector3(0f, 0f, 0f), localScale = Vector3.one, expectedContent = "hanging dice / air freshener", notes = "Windshield hanging accessory location." },
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_PassengerSeat", anchorType = LwsCabAccessoryAnchorType.PassengerSeat, localPosition = new Vector3(0.82f, 0.82f, -0.2f), localEulerAngles = new Vector3(0f, -12f, 0f), localScale = Vector3.one, expectedContent = "future dog companion / bag", notes = "Passenger seat placement." },
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Sleeper", anchorType = LwsCabAccessoryAnchorType.Sleeper, localPosition = new Vector3(0f, 0.72f, -1.35f), localEulerAngles = new Vector3(0f, 180f, 0f), localScale = Vector3.one, expectedContent = "future dog or cat companion / bedding", notes = "Sleeper placement." },

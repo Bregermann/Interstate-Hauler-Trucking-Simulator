@@ -230,6 +230,10 @@ namespace LWS.InterstateHauler.Tests.EditMode
                 Assert.AreSame(gps.GpsMount, gps.PhysicalCanvas.transform.parent);
                 Assert.IsNotNull(gps.SemanticMapGraphic);
                 Assert.IsNotNull(gps.SemanticMapGraphic.GetComponent<CanvasRenderer>());
+                Assert.AreEqual(0.00042f, gps.ScreenScale, 0.00001f);
+                Assert.AreEqual(0.27f, gps.ApproximatePhysicalSizeMeters.x, 0.01f);
+                Assert.AreEqual(0.17f, gps.ApproximatePhysicalSizeMeters.y, 0.01f);
+                Assert.AreEqual(180f, gps.LocalScreenEulerAngles.y, 0.01f);
             }
             finally
             {

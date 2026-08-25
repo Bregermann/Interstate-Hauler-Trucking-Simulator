@@ -1,3 +1,4 @@
+using NWH.VehiclePhysics2;
 using NWH.VehiclePhysics2.Input;
 using UnityEngine;
 
@@ -6,12 +7,22 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsNwhVehicleInputProvider : VehicleInputProviderBase
     {
+        [SerializeField] private VehicleController vehicleController;
         [SerializeField] private MonoBehaviour inputSourceBehaviour;
         [SerializeField] private LwsTruckControlController truckControlController;
+        [SerializeField] private Lws18SpeedTransmissionController transmissionController;
         [SerializeField] private bool validationGearMappingEnabled;
+        [SerializeField] private bool translateSemanticInputForNwhReverse = true;
+        [SerializeField] private bool logDriveInputDiagnostics = true;
 
         private ILwsVehicleInputSource _inputSource;
+        private ILwsVehicleInputService _inputService;
         private bool _truckControlLookupAttempted;
+        private bool _forwardDiagnosticLogged;
+        private bool _reverseDiagnosticLogged;
+
+        public LwsVehicleContinuousInput LastSemanticContinuousInput { get; private set; }
+        public LwsVehicleContinuousInput LastNwhContinuousInput { get; private set; }
 
         public void SetInputSource(ILwsVehicleInputSource inputSource)
         {
@@ -29,6 +40,16 @@ namespace LWS.InterstateHauler
             _truckControlLookupAttempted = controller != null;
         }
 
+        public void SetTransmissionController(Lws18SpeedTransmissionController controller)
+        {
+            transmissionController = controller;
+        }
+
+        public void SetVehicleController(VehicleController controller)
+        {
+            vehicleController = controller;
+        }
+
         public override void Awake()
         {
             base.Awake();
@@ -37,40 +58,81 @@ namespace LWS.InterstateHauler
 
         private void ResolveSource()
         {
+            if (vehicleController == null)
+            {
+                vehicleController = GetComponent<VehicleController>();
+            }
+
+            if (transmissionController == null)
+            {
+                transmissionController = GetComponent<Lws18SpeedTransmissionController>();
+            }
+
             if (_inputSource == null && inputSourceBehaviour != null)
             {
                 _inputSource = inputSourceBehaviour as ILwsVehicleInputSource;
             }
 
+            if (_inputSource == null)
+            {
+                ResolveInputService();
+                if (_inputService != null && _inputService.HasActiveSource)
+                {
+                    _inputSource = _inputService;
+                }
+            }
+
             if (truckControlController == null && !_truckControlLookupAttempted)
             {
-                truckControlController = FindFirstObjectByType<LwsTruckControlController>();
+                truckControlController = GetComponent<LwsTruckControlController>();
+                if (truckControlController == null)
+                {
+                    truckControlController = FindFirstObjectByType<LwsTruckControlController>();
+                }
+
                 _truckControlLookupAttempted = true;
             }
         }
 
         public override float Steering()
         {
-            ResolveSource();
-            return _inputSource?.ReadContinuousInput().steering ?? 0f;
+            if (!isActiveAndEnabled)
+            {
+                return 0f;
+            }
+
+            return ReadNwhContinuousInput().steering;
         }
 
         public override float Throttle()
         {
-            ResolveSource();
-            float input = _inputSource?.ReadContinuousInput().throttle ?? 0f;
-            return truckControlController != null ? Mathf.Max(input, truckControlController.CurrentState.cruiseThrottleOutput) : input;
+            if (!isActiveAndEnabled)
+            {
+                return 0f;
+            }
+
+            LwsVehicleContinuousInput input = ReadNwhContinuousInput();
+            return input.throttle;
         }
 
         public override float Brakes()
         {
-            ResolveSource();
-            float input = _inputSource?.ReadContinuousInput().brake ?? 0f;
-            return truckControlController != null ? Mathf.Max(input, truckControlController.CurrentState.cruiseBrakeOutput) : input;
+            if (!isActiveAndEnabled)
+            {
+                return 0f;
+            }
+
+            LwsVehicleContinuousInput input = ReadNwhContinuousInput();
+            return input.brake;
         }
 
         public override float Handbrake()
         {
+            if (!isActiveAndEnabled)
+            {
+                return 0f;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -82,12 +144,21 @@ namespace LWS.InterstateHauler
 
         public override float Clutch()
         {
-            ResolveSource();
-            return _inputSource?.ReadContinuousInput().clutch ?? 0f;
+            if (!isActiveAndEnabled)
+            {
+                return 0f;
+            }
+
+            return ReadNwhContinuousInput().clutch;
         }
 
         public override bool EngineStartStop()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -99,6 +170,11 @@ namespace LWS.InterstateHauler
 
         public override bool Horn()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -111,6 +187,11 @@ namespace LWS.InterstateHauler
 
         public override bool LowBeamLights()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -122,6 +203,11 @@ namespace LWS.InterstateHauler
 
         public override bool HighBeamLights()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -133,6 +219,11 @@ namespace LWS.InterstateHauler
 
         public override bool HazardLights()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -144,6 +235,11 @@ namespace LWS.InterstateHauler
 
         public override bool LeftBlinker()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -155,6 +251,11 @@ namespace LWS.InterstateHauler
 
         public override bool RightBlinker()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -166,6 +267,11 @@ namespace LWS.InterstateHauler
 
         public override bool CruiseControl()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -177,6 +283,11 @@ namespace LWS.InterstateHauler
 
         public override bool TrailerAttachDetach()
         {
+            if (!isActiveAndEnabled)
+            {
+                return false;
+            }
+
             ResolveSource();
             if (truckControlController != null)
             {
@@ -188,6 +299,11 @@ namespace LWS.InterstateHauler
 
         public override int ShiftInto()
         {
+            if (!isActiveAndEnabled)
+            {
+                return -999;
+            }
+
             ResolveSource();
             if (_inputSource == null || !validationGearMappingEnabled)
             {
@@ -209,6 +325,120 @@ namespace LWS.InterstateHauler
             return intent.requestedLogicalGear >= 1 && intent.requestedLogicalGear <= 8
                 ? intent.requestedLogicalGear
                 : -999;
+        }
+
+        public static LwsVehicleContinuousInput TranslateSemanticInputForNwh(
+            LwsVehicleContinuousInput semanticInput,
+            bool swapThrottleBrakeInReverse,
+            bool reverseDriveState)
+        {
+            return LwsNwhInputAxisTranslator.TranslateSemanticInputForNwh(
+                semanticInput,
+                swapThrottleBrakeInReverse,
+                reverseDriveState);
+        }
+
+        private LwsVehicleContinuousInput ReadNwhContinuousInput()
+        {
+            ResolveSource();
+            LwsVehicleContinuousInput semanticInput = _inputSource?.ReadContinuousInput() ?? default;
+            if (truckControlController != null)
+            {
+                LwsTruckControlState state = truckControlController.CurrentState;
+                semanticInput.throttle = Mathf.Max(semanticInput.throttle, state.cruiseThrottleOutput);
+                semanticInput.brake = Mathf.Max(semanticInput.brake, state.cruiseBrakeOutput);
+            }
+
+            bool reverseDriveState = IsNwhReverseDriveState();
+            bool swapInReverse = vehicleController == null ||
+                                 vehicleController.input == null ||
+                                 vehicleController.input.swapInputInReverse;
+            LwsVehicleContinuousInput nwhInput = LwsNwhInputAxisTranslator.TranslateSemanticInputForNwh(
+                semanticInput,
+                translateSemanticInputForNwhReverse && swapInReverse,
+                reverseDriveState);
+
+            LastSemanticContinuousInput = semanticInput;
+            LastNwhContinuousInput = nwhInput;
+            LogInputDiagnosticIfNeeded(semanticInput, nwhInput, reverseDriveState);
+            return nwhInput;
+        }
+
+        private bool IsNwhReverseDriveState()
+        {
+            if (transmissionController != null)
+            {
+                LwsTransmissionDisplayState state = transmissionController.DisplayState;
+                if (transmissionController.AutomaticModeActive && state.automaticSelector == LwsAutomaticTransmissionSelector.Reverse)
+                {
+                    return true;
+                }
+
+                if (state.nwhGear < 0)
+                {
+                    return true;
+                }
+            }
+
+            return vehicleController != null &&
+                   vehicleController.powertrain.transmission != null &&
+                   vehicleController.powertrain.transmission.Gear < 0;
+        }
+
+        private void ResolveInputService()
+        {
+            if (_inputService != null ||
+                LwsApplicationBootstrap.Instance == null ||
+                LwsApplicationBootstrap.Instance.Registry == null)
+            {
+                return;
+            }
+
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out _inputService);
+        }
+
+        private void LogInputDiagnosticIfNeeded(
+            LwsVehicleContinuousInput semanticInput,
+            LwsVehicleContinuousInput nwhInput,
+            bool reverseDriveState)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (!logDriveInputDiagnostics)
+            {
+                return;
+            }
+
+            bool forwardDrive = !reverseDriveState && semanticInput.throttle > 0.05f;
+            bool reverseDrive = reverseDriveState && semanticInput.throttle > 0.05f;
+            if ((!forwardDrive || _forwardDiagnosticLogged) && (!reverseDrive || _reverseDiagnosticLogged))
+            {
+                return;
+            }
+
+            if (forwardDrive)
+            {
+                _forwardDiagnosticLogged = true;
+            }
+
+            if (reverseDrive)
+            {
+                _reverseDiagnosticLogged = true;
+            }
+
+            int nwhGear = vehicleController != null && vehicleController.powertrain.transmission != null
+                ? vehicleController.powertrain.transmission.Gear
+                : 0;
+            float ratio = vehicleController != null && vehicleController.powertrain.transmission != null
+                ? vehicleController.powertrain.transmission.currentGearRatio
+                : 0f;
+            float speed = vehicleController != null ? vehicleController.SpeedSigned : 0f;
+            string selector = transmissionController != null
+                ? transmissionController.AutomaticSelector.ToString()
+                : "Unknown";
+            Debug.Log(
+                $"[IH Truck Input] Semantic THR {semanticInput.throttle:0.00} BRK {semanticInput.brake:0.00} STR {semanticInput.steering:0.00} -> NWH THR {nwhInput.throttle:0.00} BRK {nwhInput.brake:0.00}; selector {selector}; NWH gear {nwhGear}; ratio {ratio:0.000}; speed {speed:0.00} m/s.",
+                this);
+#endif
         }
 
         private static bool IsPressed(LwsMomentaryIntent intent)

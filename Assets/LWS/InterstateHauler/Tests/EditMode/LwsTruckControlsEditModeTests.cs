@@ -1,3 +1,4 @@
+using System.IO;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -26,6 +27,38 @@ namespace LWS.InterstateHauler.Tests.EditMode
             Assert.AreEqual(LwsMomentaryIntent.Held, combined.horn);
             Assert.AreEqual(LwsMomentaryIntent.Pressed, combined.transmissionShiftUp);
             Assert.AreEqual(LwsMomentaryIntent.Pressed, combined.transmissionShiftDown);
+        }
+
+        [Test]
+        public void NwhBridgeTranslatesSemanticThrottleForReverseSwap()
+        {
+            var semantic = new LwsVehicleContinuousInput
+            {
+                steering = 0.25f,
+                throttle = 1f,
+                brake = 0f,
+                clutch = 0f
+            };
+
+            LwsVehicleContinuousInput drive = LwsNwhInputAxisTranslator.TranslateSemanticInputForNwh(semantic, true, false);
+            LwsVehicleContinuousInput reverse = LwsNwhInputAxisTranslator.TranslateSemanticInputForNwh(semantic, true, true);
+
+            Assert.AreEqual(1f, drive.throttle);
+            Assert.AreEqual(0f, drive.brake);
+            Assert.AreEqual(0f, reverse.throttle);
+            Assert.AreEqual(1f, reverse.brake);
+            Assert.AreEqual(0.25f, reverse.steering);
+        }
+
+        [Test]
+        public void PlayerTruckSpawnerInstallsLwsNwhBridgeInsteadOfStockInputProvider()
+        {
+            string source = File.ReadAllText("Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruckSpawner.cs");
+
+            StringAssert.Contains("AddComponent<LwsNwhVehicleInputProvider>", source);
+            StringAssert.Contains("SetInputSource(drivingInputSource)", source);
+            StringAssert.Contains("SetFallbackInputSource(keyboardInput)", source);
+            StringAssert.DoesNotContain("AddComponent<InputSystemVehicleInputProvider>", source);
         }
 
         [Test]

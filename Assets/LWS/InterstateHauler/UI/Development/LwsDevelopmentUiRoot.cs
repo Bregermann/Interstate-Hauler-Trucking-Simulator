@@ -336,6 +336,7 @@ namespace LWS.InterstateHauler
             _bigMapPanel.SetActive(false);
             ApplyGpsPresentationVisibility();
             UpdateDevButtonVisibility();
+            LwsDevelopmentUiDiagnostics.LogHud("Persistent HUD ready: DEV bottom-left, transmission controls bottom-center, GPS minimap camera policy active.");
         }
 
         private void EnsureEventSystem()
@@ -1203,6 +1204,8 @@ namespace LWS.InterstateHauler
             if (_minimapPanel.activeSelf != showHudMinimap)
             {
                 _minimapPanel.SetActive(showHudMinimap);
+                LwsDevelopmentUiDiagnostics.LogHud(
+                    $"HUD minimap {(showHudMinimap ? "visible" : "hidden")} for camera {CameraMode}; persistent DEV/transmission HUD remains enabled.");
             }
         }
 
@@ -2199,6 +2202,16 @@ namespace LWS.InterstateHauler
             if (LoggedFailures.Add(key))
             {
                 Debug.LogError($"[IH Dev UI] {stage} failed: {exception}");
+            }
+#endif
+        }
+
+        public static void LogHud(string message)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (LoggedStages.Add($"HUD:{message}"))
+            {
+                Debug.Log($"[IH HUD] {message}");
             }
 #endif
         }

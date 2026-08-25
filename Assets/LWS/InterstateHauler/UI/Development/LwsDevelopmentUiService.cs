@@ -128,5 +128,29 @@ namespace LWS.InterstateHauler
             EnsureRuntime();
             _runtimeRoot?.ToggleBigMap();
         }
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void EnsureDevelopmentRuntimeAfterSceneLoad()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (!Application.isPlaying || Object.FindFirstObjectByType<LwsDevelopmentUiRoot>() != null)
+            {
+                return;
+            }
+
+            if (LwsApplicationBootstrap.Instance != null &&
+                LwsApplicationBootstrap.Instance.Registry != null &&
+                LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsDevelopmentUiService service))
+            {
+                service.EnsureRuntime();
+                LwsDevelopmentUiDiagnostics.LogHud("Persistent HUD self-healed through registered development UI service.");
+                return;
+            }
+
+            var root = new GameObject("IH Development UI Runtime");
+            root.AddComponent<LwsDevelopmentUiRoot>();
+            LwsDevelopmentUiDiagnostics.LogHud("Persistent HUD self-healed without a registered development UI service.");
+#endif
+        }
     }
 }

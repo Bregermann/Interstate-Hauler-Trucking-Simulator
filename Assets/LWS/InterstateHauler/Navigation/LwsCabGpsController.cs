@@ -13,9 +13,9 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool createPhysicalScreen = true;
         [SerializeField] private string gpsAnchorId = DefaultGpsAnchorId;
         [SerializeField] private Vector3 localScreenPosition = Vector3.zero;
-        [SerializeField] private Vector3 localScreenEulerAngles = Vector3.zero;
+        [SerializeField] private Vector3 localScreenEulerAngles = new Vector3(0f, 180f, 0f);
         [SerializeField] private Vector2 screenSize = new Vector2(640f, 400f);
-        [SerializeField] private float screenScale = 0.00105f;
+        [SerializeField] private float screenScale = 0.00042f;
         [SerializeField] private float mapMetersVisible = 2600f;
         [SerializeField, Range(0.2f, 0.8f)] private float playerViewportY = 0.38f;
         [SerializeField] private bool addGraphicRaycaster;
@@ -39,6 +39,7 @@ namespace LWS.InterstateHauler
         private float _nextRefreshTime;
         private AudioSource _voiceAudioSource;
         private Transform _gpsMount;
+        private bool _placementDiagnosticLogged;
 
         public string PresenterId => "lws.cab.gps";
         public string GpsAnchorId => gpsAnchorId;
@@ -49,7 +50,9 @@ namespace LWS.InterstateHauler
         public bool RouteRendered => _presentedRoute != null && _presentedRoute.succeeded;
         public Vector3 LocalScreenPosition => localScreenPosition;
         public Vector3 LocalScreenEulerAngles => localScreenEulerAngles;
+        public Vector2 ScreenSize => screenSize;
         public float ScreenScale => screenScale;
+        public Vector2 ApproximatePhysicalSizeMeters => screenSize * screenScale;
 
         private void Start()
         {
@@ -142,6 +145,7 @@ namespace LWS.InterstateHauler
             _distanceText = CreateText(panel.transform, "Distance", new Vector2(screenSize.x * 0.29f, -122f), new Vector2(screenSize.x * 0.38f, 28f), 20, TextAnchor.MiddleRight);
             _roadText = CreateText(panel.transform, "Road", new Vector2(-screenSize.x * 0.17f, -122f), new Vector2(screenSize.x * 0.56f, 28f), 18, TextAnchor.MiddleLeft);
             _cameraPresentationService?.SetCabGpsActive(true);
+            LogPlacementDiagnostic(parent, root.transform);
             RefreshDisplay();
         }
 
@@ -295,6 +299,22 @@ namespace LWS.InterstateHauler
             text.verticalOverflow = VerticalWrapMode.Truncate;
             text.raycastTarget = false;
             return text;
+        }
+
+        private void LogPlacementDiagnostic(Transform parent, Transform screen)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (_placementDiagnosticLogged)
+            {
+                return;
+            }
+
+            _placementDiagnosticLogged = true;
+            Vector2 physicalSize = ApproximatePhysicalSizeMeters;
+            Debug.Log(
+                $"[IH Cab GPS] Bound world-space GPS to {parent.name}; local pos {screen.localPosition}; local euler {screen.localEulerAngles}; scale {screenScale:0.00000}; approx size {physicalSize.x:0.00}m x {physicalSize.y:0.00}m.",
+                this);
+#endif
         }
 
         private static Transform FindChildRecursive(Transform root, string childName)

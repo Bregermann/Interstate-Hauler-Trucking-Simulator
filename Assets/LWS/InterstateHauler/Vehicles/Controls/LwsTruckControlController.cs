@@ -515,6 +515,7 @@ namespace LWS.InterstateHauler
             if (identity == null) identity = GetComponent<LwsVehicleIdentity>();
             if (vehicleAdapter == null) vehicleAdapter = GetComponent<LwsNwhVehicleAdapter>();
             if (nwhControlAdapter == null) nwhControlAdapter = GetComponent<LwsNwhTruckControlAdapter>();
+            if (nwhInputProvider == null) nwhInputProvider = GetComponent<LwsNwhVehicleInputProvider>();
             if (nwhInputProvider == null) nwhInputProvider = FindFirstObjectByType<LwsNwhVehicleInputProvider>();
             if (trailerCoupling == null) trailerCoupling = GetComponent<LwsNwhTrailerCouplingAdapter>();
             if (transmissionController == null) transmissionController = GetComponent<Lws18SpeedTransmissionController>();

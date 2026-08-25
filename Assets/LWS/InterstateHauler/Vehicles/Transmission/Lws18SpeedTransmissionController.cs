@@ -179,6 +179,12 @@ namespace LWS.InterstateHauler
             _state.mode = transmissionMode;
         }
 
+        public void SetFallbackInputSource(ILwsVehicleInputSource inputSource)
+        {
+            _fallbackInputSource = inputSource;
+            fallbackInputSourceBehaviour = inputSource as MonoBehaviour;
+        }
+
         public bool TrySetTransmissionMode(LwsTransmissionMode transmissionMode, out string message)
         {
             switch (transmissionMode)

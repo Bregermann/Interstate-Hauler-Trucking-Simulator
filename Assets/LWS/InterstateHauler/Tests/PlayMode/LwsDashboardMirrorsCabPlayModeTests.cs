@@ -46,7 +46,7 @@ namespace LWS.InterstateHauler.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator CabAnchorRegistryAttachesHulaPlaceholderWithoutPhysics()
+        public IEnumerator CabAnchorRegistryKeepsHulaPlaceholderDisabledByDefault()
         {
             GameObject root = new GameObject("cab-life-playmode");
             new GameObject("Cab").transform.SetParent(root.transform, false);
@@ -54,10 +54,9 @@ namespace LWS.InterstateHauler.Tests.PlayMode
 
             registry.EnsureInitialized();
 
-            Assert.IsTrue(registry.HulaPlaceholderAttached);
+            Assert.IsFalse(registry.HulaPlaceholderAttached);
             Assert.IsTrue(registry.TryGetAnchor("IH_CabAnchor_Dashboard01", out LwsCabAccessoryAnchor anchor));
-            Assert.IsTrue(anchor.Occupied);
-            Assert.IsNull(anchor.AttachedAccessory.GetComponent<Rigidbody>());
+            Assert.IsFalse(anchor.Occupied);
             yield return null;
             Object.Destroy(root);
         }

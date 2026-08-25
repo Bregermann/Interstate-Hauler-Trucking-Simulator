@@ -1,5 +1,4 @@
 using NWH.VehiclePhysics2;
-using NWH.VehiclePhysics2.Input;
 using UnityEngine;
 
 namespace LWS.InterstateHauler
@@ -121,6 +120,27 @@ namespace LWS.InterstateHauler
             }
 
             keyboardInput.ConfigureTransmissionController(transmission);
+            transmission.SetFallbackInputSource(keyboardInput);
+
+            LwsNwhVehicleInputProvider nwhInputProvider = truckInstance.GetComponent<LwsNwhVehicleInputProvider>();
+            if (nwhInputProvider == null)
+            {
+                nwhInputProvider = truckInstance.AddComponent<LwsNwhVehicleInputProvider>();
+            }
+
+            ILwsVehicleInputService inputService = ResolveVehicleInputService();
+            if (inputService != null && !inputService.HasActiveSource)
+            {
+                inputService.SetInputSource(keyboardInput, LwsVehicleInputOwner.KeyboardMouse, true);
+            }
+
+            ILwsVehicleInputSource drivingInputSource = inputService != null
+                ? (ILwsVehicleInputSource)inputService
+                : keyboardInput;
+            nwhInputProvider.SetVehicleController(truckInstance.GetComponent<VehicleController>());
+            nwhInputProvider.SetInputSource(drivingInputSource);
+            nwhInputProvider.SetTransmissionController(transmission);
+            nwhInputProvider.SetValidationGearMappingEnabled(false);
 
             LwsNwhTrailerCouplingAdapter coupling = truckInstance.GetComponent<LwsNwhTrailerCouplingAdapter>();
             if (coupling == null)
@@ -145,6 +165,8 @@ namespace LWS.InterstateHauler
             {
                 truckControls = truckInstance.AddComponent<LwsTruckControlController>();
             }
+
+            nwhInputProvider.SetTruckControlController(truckControls);
 
             LwsNwhCameraPresentationMonitor cameraMonitor = truckInstance.GetComponent<LwsNwhCameraPresentationMonitor>();
             if (cameraMonitor == null)
@@ -243,13 +265,29 @@ namespace LWS.InterstateHauler
 
         private void EnsureNwhInputProvider()
         {
-            if (!addNwhInputProviderIfMissing || FindFirstObjectByType<VehicleInputProviderBase>() != null)
+            if (!addNwhInputProviderIfMissing)
             {
                 return;
             }
 
-            var input = new GameObject("NWH Temporary Input Provider");
-            input.AddComponent<InputSystemVehicleInputProvider>();
+            if (SpawnedTruck != null && SpawnedTruck.GetComponent<LwsNwhVehicleInputProvider>() != null)
+            {
+                return;
+            }
+
+            Debug.LogWarning("Player truck spawned without an LWS NWH vehicle input provider; stock NWH input was not added to avoid double-feeding the drivetrain.", this);
+        }
+
+        private static ILwsVehicleInputService ResolveVehicleInputService()
+        {
+            if (LwsApplicationBootstrap.Instance == null || LwsApplicationBootstrap.Instance.Registry == null)
+            {
+                return null;
+            }
+
+            return LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsVehicleInputService service)
+                ? service
+                : null;
         }
 
         private void EnsureValidationRoadside()

@@ -162,6 +162,8 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             cameraPresentationService.SetCameraMode(LwsVehicleCameraMode.Cockpit, "Cab Camera");
             yield return null;
             Assert.IsFalse(root.HudMinimapVisible);
+            Assert.IsTrue(root.DevButtonObject.activeInHierarchy);
+            Assert.IsTrue(root.TransmissionHudPanel.activeInHierarchy);
             Assert.AreEqual(LwsVehicleCameraMode.Cockpit, root.CameraMode);
 
             uiService.ShowBigMap();
@@ -188,6 +190,7 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             cameraPresentationService.SetCameraMode(LwsVehicleCameraMode.Cockpit, "Cab Camera");
             yield return null;
             Assert.IsFalse(root.HudMinimapVisible);
+            Assert.IsTrue(root.TransmissionHudPanel.activeInHierarchy);
         }
 
         [UnityTest]
