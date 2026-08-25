@@ -37,12 +37,12 @@ namespace LWS.InterstateHauler.Editor
             if (created)
             {
                 SerializedProperty policy = serialized.FindProperty("spawnPolicy");
-                policy.FindPropertyRelative("densityTier").enumValueIndex = (int)LwsTrafficDensityTier.Sparse;
-                policy.FindPropertyRelative("maxActiveVehicles").intValue = 8;
-                policy.FindPropertyRelative("spawnIntervalSeconds").floatValue = 4f;
-                policy.FindPropertyRelative("minimumPlayerSpawnDistanceMeters").floatValue = 140f;
-                policy.FindPropertyRelative("maximumPlayerSpawnDistanceMeters").floatValue = 650f;
-                policy.FindPropertyRelative("despawnDistanceMeters").floatValue = 850f;
+                policy.FindPropertyRelative("densityTier").enumValueIndex = (int)LwsTrafficDensityTier.Dense;
+                policy.FindPropertyRelative("maxActiveVehicles").intValue = 32;
+                policy.FindPropertyRelative("spawnIntervalSeconds").floatValue = 1.25f;
+                policy.FindPropertyRelative("minimumPlayerSpawnDistanceMeters").floatValue = 120f;
+                policy.FindPropertyRelative("maximumPlayerSpawnDistanceMeters").floatValue = 1800f;
+                policy.FindPropertyRelative("despawnDistanceMeters").floatValue = 2600f;
                 policy.FindPropertyRelative("despawnNearLaneEndMeters").floatValue = 90f;
                 policy.FindPropertyRelative("targetCruiseSpeedScale").floatValue = 0.72f;
                 policy.FindPropertyRelative("maximumTrafficSpeedMetersPerSecond").floatValue = 22f;

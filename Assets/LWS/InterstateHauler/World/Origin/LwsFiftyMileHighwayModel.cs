@@ -30,7 +30,7 @@ namespace LWS.InterstateHauler
         public const float MedianWidthMeters = 14.0f;
         public const float RoadSurfaceY = 0.55f;
         public const float SpeedLimitMph = 65f;
-        public const float RoadGraphSampleSpacingMeters = 500f;
+        public const float RoadGraphSampleSpacingMeters = 125f;
 
         public static float CarriagewayWidthMeters =>
             LaneWidthMeters * 2f + RightShoulderWidthMeters + LeftShoulderWidthMeters;

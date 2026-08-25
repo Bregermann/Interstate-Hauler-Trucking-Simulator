@@ -144,6 +144,12 @@ namespace LWS.InterstateHauler
             }
         }
 
+        public void SetPlayerOverride(Transform player)
+        {
+            playerOverride = player;
+            _playerTransform = player;
+        }
+
         public void ConfigureValidationProfile(LwsUtsTrafficProfile profile, GameObject[] fallbackPrefabs)
         {
             validationTrafficProfile = profile;
@@ -204,6 +210,7 @@ namespace LWS.InterstateHauler
                 return 0;
             }
 
+            ResolvePlayerTransformThrottled();
             int spawned = 0;
             int maxAttempts = Mathf.Max(1, MaxActiveVehicles * 2);
             for (int i = 0; i < maxAttempts && _activeVehicles.Count < MaxActiveVehicles; i++)
@@ -473,6 +480,7 @@ namespace LWS.InterstateHauler
 
         private void SeedMinimumTrafficPresence()
         {
+            ResolvePlayerTransformThrottled();
             RefreshTrafficDemand(0f);
             int target = DemandSnapshot.Valid ? DemandSnapshot.MinimumNearby : Mathf.Min(2, MaxActiveVehicles);
             target = Mathf.Clamp(target, 0, MaxActiveVehicles);

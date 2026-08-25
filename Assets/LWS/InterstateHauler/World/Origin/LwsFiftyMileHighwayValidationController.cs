@@ -17,7 +17,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool requestGpsRouteOnStart = true;
         [SerializeField] private bool addDevelopmentPanels = true;
         [SerializeField] private bool automaticWeatherCycle = true;
-        [SerializeField] private bool fillTrafficOnStart;
+        [SerializeField] private bool fillTrafficOnStart = true;
         [SerializeField] private float weatherTransitionSeconds = 15f;
 
         private readonly HashSet<int> _reportedCheckpoints = new HashSet<int>();
@@ -112,6 +112,7 @@ namespace LWS.InterstateHauler
             EnsureRoadGraphProvider();
             _graph = LwsFiftyMileHighwayModel.CreateRoadGraph();
             roadGraphProvider.SetGraph(_graph, true);
+            EnsureValidationTruckSpawned();
 
             if (addDevelopmentPanels)
             {
@@ -135,6 +136,11 @@ namespace LWS.InterstateHauler
 
             _trafficController = EnsureComponent<LwsUtsHighwayTrafficController>();
             _trafficController.ConfigureValidationProfile(validationTrafficProfile, validationTrafficPrefabs);
+            if (playerTruckSpawner != null && playerTruckSpawner.SpawnedTruck != null)
+            {
+                _trafficController.SetPlayerOverride(playerTruckSpawner.SpawnedTruck.transform);
+            }
+
             _trafficController.InitializeFromGraph(roadGraphProvider, _graph);
             if (fillTrafficOnStart)
             {
@@ -289,6 +295,14 @@ namespace LWS.InterstateHauler
             if (roadGraphProvider == null)
             {
                 roadGraphProvider = gameObject.AddComponent<LwsRoadGraphProvider>();
+            }
+        }
+
+        private void EnsureValidationTruckSpawned()
+        {
+            if (playerTruckSpawner != null && playerTruckSpawner.SpawnedTruck == null)
+            {
+                playerTruckSpawner.SpawnValidationRig();
             }
         }
 

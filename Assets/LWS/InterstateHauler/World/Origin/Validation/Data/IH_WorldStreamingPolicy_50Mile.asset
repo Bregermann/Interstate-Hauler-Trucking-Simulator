@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 547b7d67276c46609b1a5780fa405257, type: 3}
   m_Name: IH_WorldStreamingPolicy_50Mile
   m_EditorClassIdentifier: 
-  loadAheadDistanceMeters: 7000
-  keepBehindDistanceMeters: 3800
+  loadAheadDistanceMeters: 16000
+  keepBehindDistanceMeters: 7000
   preloadMarginMeters: 500
-  unloadDistanceMeters: 10000
+  unloadDistanceMeters: 22000
   unloadHysteresisMeters: 600
   tractorSafetyMarginMeters: 180
   trailerSafetyMarginMeters: 220
-  maximumConcurrentLoads: 3
-  minimumLoadedNeighborCount: 1
+  maximumConcurrentLoads: 4
+  minimumLoadedNeighborCount: 2
   evaluationIntervalSeconds: 0.2
   ultraOptionalSceneryScale: 1
   highOptionalSceneryScale: 1

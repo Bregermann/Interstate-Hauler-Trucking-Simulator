@@ -6,9 +6,16 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsFiftyMileHighwayChunkBuilder : MonoBehaviour
     {
+        public const string RuntimeRoadRootSuffix = "Proving Ground Interstate Runtime";
+        public const string MainRoadSurfaceRootName = "Main Road Surface";
+        public const string ShouldersAndMedianRootName = "Shoulders And Median";
+        public const string LaneMarkingsRootName = "Lane Markings";
+        public const string RoadsideSupportRootName = "Roadside Support";
+
         [SerializeField] private int chunkIndex;
         [SerializeField] private bool buildOnStart = true;
         [SerializeField] private bool createLaneDebugLines = true;
+        [SerializeField] private bool createLaneMarkings = true;
         [SerializeField] private bool createWholeMileMarkers = true;
         [SerializeField] private bool createQuarterMileMarkers;
 
@@ -16,6 +23,8 @@ namespace LWS.InterstateHauler
 
         public int ChunkIndex => Mathf.Clamp(chunkIndex, 0, LwsFiftyMileHighwayModel.ChunkCount - 1);
         public bool WasBuilt => _generatedRoot != null;
+        public Vector3 GeneratedRootLocalPosition => _generatedRoot != null ? _generatedRoot.transform.localPosition : default;
+        public float ChunkStartLocalZ => (float)LwsFiftyMileHighwayModel.GetChunkStartMeters(ChunkIndex);
 
         private void Start()
         {
@@ -39,34 +48,46 @@ namespace LWS.InterstateHauler
 
             int index = ChunkIndex;
             string chunkId = LwsFiftyMileHighwayModel.GetChunkId(index);
-            _generatedRoot = new GameObject($"{chunkId} 50-Mile Runtime Presentation");
+            _generatedRoot = new GameObject($"{chunkId} {RuntimeRoadRootSuffix}");
             _generatedRoot.transform.SetParent(transform, false);
+            _generatedRoot.transform.localPosition = new Vector3(0f, 0f, (float)LwsFiftyMileHighwayModel.GetChunkStartMeters(index));
+
+            Transform roadSurfaceRoot = EnsureChild(_generatedRoot.transform, MainRoadSurfaceRootName);
+            Transform shoulderRoot = EnsureChild(_generatedRoot.transform, ShouldersAndMedianRootName);
+            Transform laneMarkingsRoot = EnsureChild(_generatedRoot.transform, LaneMarkingsRootName);
+            Transform roadsideRoot = EnsureChild(_generatedRoot.transform, RoadsideSupportRootName);
 
             Material asphalt = CreateRuntimeMaterial("IH 50-Mile Asphalt", new Color(0.06f, 0.06f, 0.055f, 1f));
             Material shoulder = CreateRuntimeMaterial("IH 50-Mile Shoulder", new Color(0.26f, 0.26f, 0.24f, 1f));
             Material grass = CreateRuntimeMaterial("IH 50-Mile Grass", new Color(0.12f, 0.24f, 0.1f, 1f));
-            Material marker = CreateRuntimeMaterial("IH 50-Mile Marker White", new Color(0.95f, 0.95f, 0.86f, 1f));
+            Material whiteMarker = CreateRuntimeMaterial("IH 50-Mile Marker White", new Color(0.95f, 0.95f, 0.86f, 1f));
+            Material yellowMarker = CreateRuntimeMaterial("IH 50-Mile Marker Yellow", new Color(1f, 0.82f, 0.08f, 1f));
 
             float endLocal = (float)(LwsFiftyMileHighwayModel.GetChunkEndMeters(index) - LwsFiftyMileHighwayModel.GetChunkStartMeters(index));
-            CreateGroundRibbon("IH_50MI_GROUND", 0f, endLocal, 190f, grass);
-            CreateRoadRibbon($"{LwsFiftyMileHighwayModel.EastboundRoadId}_{index:000}", LwsFiftyMileHighwayModel.EastboundRoadId, LwsRoadDirection.Eastbound, LwsFiftyMileHighwayModel.CarriagewayOffsetMeters, 0f, endLocal, asphalt);
-            CreateRoadRibbon($"{LwsFiftyMileHighwayModel.WestboundRoadId}_{index:000}", LwsFiftyMileHighwayModel.WestboundRoadId, LwsRoadDirection.Westbound, -LwsFiftyMileHighwayModel.CarriagewayOffsetMeters, 0f, endLocal, asphalt);
-            CreateMedianAndShoulderStrips(endLocal, shoulder);
+            CreateGroundRibbon(roadsideRoot, "IH_50MI_GROUND", 0f, endLocal, 190f, grass);
+            CreateRoadRibbon(roadSurfaceRoot, $"{LwsFiftyMileHighwayModel.EastboundRoadId}_{index:000}", LwsFiftyMileHighwayModel.EastboundRoadId, LwsRoadDirection.Eastbound, LwsFiftyMileHighwayModel.CarriagewayOffsetMeters, 0f, endLocal, asphalt);
+            CreateRoadRibbon(roadSurfaceRoot, $"{LwsFiftyMileHighwayModel.WestboundRoadId}_{index:000}", LwsFiftyMileHighwayModel.WestboundRoadId, LwsRoadDirection.Westbound, -LwsFiftyMileHighwayModel.CarriagewayOffsetMeters, 0f, endLocal, asphalt);
+            CreateMedianAndShoulderStrips(shoulderRoot, endLocal, shoulder);
+            if (createLaneMarkings)
+            {
+                CreateLaneMarkings(laneMarkingsRoot, 0f, endLocal, whiteMarker, yellowMarker);
+            }
+
             LwsInterstateRoadsideBuilder.BuildStraightPairedInterstate(
-                _generatedRoot.transform,
+                roadsideRoot,
                 chunkId,
                 0f,
                 endLocal);
 
             if (index == 0)
             {
-                CreatePavedRect("Mile 0 Start Pad", new Vector3(LwsFiftyMileHighwayModel.CarriagewayOffsetMeters, LwsFiftyMileHighwayModel.RoadSurfaceY + 0.02f, 70f), new Vector2(95f, 165f), asphalt, "IH_TEST_50MI_START_PAD");
+                CreatePavedRect(roadSurfaceRoot, "Mile 0 Start Pad", new Vector3(LwsFiftyMileHighwayModel.CarriagewayOffsetMeters, LwsFiftyMileHighwayModel.RoadSurfaceY + 0.02f, 70f), new Vector2(95f, 165f), asphalt, "IH_TEST_50MI_START_PAD");
             }
 
             if (index == LwsFiftyMileHighwayModel.ChunkCount - 1)
             {
-                CreatePavedRect("Mile 50 Turnaround Pad", new Vector3(0f, LwsFiftyMileHighwayModel.RoadSurfaceY + 0.03f, endLocal - 70f), new Vector2(150f, 160f), asphalt, "IH_TEST_50MI_TURNAROUND_PAD");
-                CreateFinishMarker(endLocal, marker);
+                CreatePavedRect(roadSurfaceRoot, "Mile 50 Turnaround Pad", new Vector3(0f, LwsFiftyMileHighwayModel.RoadSurfaceY + 0.03f, endLocal - 70f), new Vector2(150f, 160f), asphalt, "IH_TEST_50MI_TURNAROUND_PAD");
+                CreateFinishMarker(endLocal, whiteMarker);
             }
 
             if (createWholeMileMarkers)
@@ -75,17 +96,17 @@ namespace LWS.InterstateHauler
                 {
                     double globalMeters = LwsFiftyMileHighwayModel.MileToMeters(mile);
                     float localZ = (float)(globalMeters - LwsFiftyMileHighwayModel.GetChunkStartMeters(index));
-                    CreateMileMarker(mile, localZ, marker);
+                    CreateMileMarker(mile, localZ, whiteMarker);
                 }
             }
 
             if (createQuarterMileMarkers)
             {
-                CreateQuarterMileMarkers(index, marker);
+                CreateQuarterMileMarkers(index, whiteMarker);
             }
         }
 
-        private void CreateRoadRibbon(string segmentId, string roadId, LwsRoadDirection direction, float xOffset, float startZ, float endZ, Material material)
+        private void CreateRoadRibbon(Transform parent, string segmentId, string roadId, LwsRoadDirection direction, float xOffset, float startZ, float endZ, Material material)
         {
             Vector3[] samples =
             {
@@ -94,8 +115,8 @@ namespace LWS.InterstateHauler
             };
 
             Mesh mesh = CreateRibbonMesh(samples, LwsFiftyMileHighwayModel.CarriagewayWidthMeters);
-            GameObject go = new GameObject($"{segmentId} Streamed Road");
-            go.transform.SetParent(_generatedRoot.transform, false);
+            GameObject go = new GameObject($"{segmentId} Mainline Paved Road Surface");
+            go.transform.SetParent(parent, false);
             go.AddComponent<MeshFilter>().sharedMesh = mesh;
             go.AddComponent<MeshRenderer>().sharedMaterial = material;
             go.AddComponent<MeshCollider>().sharedMesh = mesh;
@@ -107,7 +128,7 @@ namespace LWS.InterstateHauler
             }
         }
 
-        private void CreateGroundRibbon(string segmentId, float startZ, float endZ, float width, Material material)
+        private void CreateGroundRibbon(Transform parent, string segmentId, float startZ, float endZ, float width, Material material)
         {
             Vector3[] samples =
             {
@@ -117,16 +138,54 @@ namespace LWS.InterstateHauler
 
             Mesh mesh = CreateRibbonMesh(samples, width);
             GameObject go = new GameObject($"{segmentId} Grass Base");
-            go.transform.SetParent(_generatedRoot.transform, false);
+            go.transform.SetParent(parent, false);
             go.AddComponent<MeshFilter>().sharedMesh = mesh;
             go.AddComponent<MeshRenderer>().sharedMaterial = material;
         }
 
-        private void CreateMedianAndShoulderStrips(float endLocal, Material material)
+        private void CreateMedianAndShoulderStrips(Transform parent, float endLocal, Material material)
         {
-            CreatePavedRect("50-Mile Median Strip", new Vector3(0f, LwsFiftyMileHighwayModel.RoadSurfaceY - 0.01f, endLocal * 0.5f), new Vector2(LwsFiftyMileHighwayModel.MedianWidthMeters, endLocal), material, "IH_TEST_50MI_MEDIAN");
-            CreatePavedRect("50-Mile EB Right Shoulder Visual", new Vector3(42f, LwsFiftyMileHighwayModel.RoadSurfaceY - 0.005f, endLocal * 0.5f), new Vector2(3f, endLocal), material, "IH_TEST_50MI_EB_SHOULDER");
-            CreatePavedRect("50-Mile WB Right Shoulder Visual", new Vector3(-42f, LwsFiftyMileHighwayModel.RoadSurfaceY - 0.005f, endLocal * 0.5f), new Vector2(3f, endLocal), material, "IH_TEST_50MI_WB_SHOULDER");
+            float carriageway = LwsFiftyMileHighwayModel.CarriagewayOffsetMeters;
+            float halfLanes = LwsFiftyMileHighwayModel.LaneWidthMeters;
+            float innerShoulderHalf = LwsFiftyMileHighwayModel.LeftShoulderWidthMeters * 0.5f;
+            float outerShoulderHalf = LwsFiftyMileHighwayModel.RightShoulderWidthMeters * 0.5f;
+            float y = LwsFiftyMileHighwayModel.RoadSurfaceY + 0.018f;
+            CreatePavedRect(parent, "50-Mile Median Separation", new Vector3(0f, LwsFiftyMileHighwayModel.RoadSurfaceY - 0.012f, endLocal * 0.5f), new Vector2(LwsFiftyMileHighwayModel.MedianWidthMeters, endLocal), material, "IH_TEST_50MI_MEDIAN", false);
+            CreatePavedRect(parent, "50-Mile Eastbound Median Shoulder", new Vector3(carriageway - halfLanes - innerShoulderHalf, y, endLocal * 0.5f), new Vector2(LwsFiftyMileHighwayModel.LeftShoulderWidthMeters, endLocal), material, "IH_TEST_50MI_EB_MEDIAN_SHOULDER", false);
+            CreatePavedRect(parent, "50-Mile Eastbound Outer Shoulder", new Vector3(carriageway + halfLanes + outerShoulderHalf, y, endLocal * 0.5f), new Vector2(LwsFiftyMileHighwayModel.RightShoulderWidthMeters, endLocal), material, "IH_TEST_50MI_EB_OUTER_SHOULDER", false);
+            CreatePavedRect(parent, "50-Mile Westbound Median Shoulder", new Vector3(-carriageway + halfLanes + innerShoulderHalf, y, endLocal * 0.5f), new Vector2(LwsFiftyMileHighwayModel.LeftShoulderWidthMeters, endLocal), material, "IH_TEST_50MI_WB_MEDIAN_SHOULDER", false);
+            CreatePavedRect(parent, "50-Mile Westbound Outer Shoulder", new Vector3(-carriageway - halfLanes - outerShoulderHalf, y, endLocal * 0.5f), new Vector2(LwsFiftyMileHighwayModel.RightShoulderWidthMeters, endLocal), material, "IH_TEST_50MI_WB_OUTER_SHOULDER", false);
+        }
+
+        private void CreateLaneMarkings(Transform parent, float startZ, float endZ, Material white, Material yellow)
+        {
+            float ebCenter = LwsFiftyMileHighwayModel.CarriagewayOffsetMeters;
+            float wbCenter = -LwsFiftyMileHighwayModel.CarriagewayOffsetMeters;
+            float laneEdgeOffset = LwsFiftyMileHighwayModel.LaneWidthMeters;
+            float y = LwsFiftyMileHighwayModel.RoadSurfaceY + 0.045f;
+
+            CreateDashedMarking(parent, "EB Dashed White Lane Divider", ebCenter, startZ, endZ, y, 0.16f, 9f, 15f, white);
+            CreateDashedMarking(parent, "WB Dashed White Lane Divider", wbCenter, startZ, endZ, y, 0.16f, 9f, 15f, white);
+            CreateSolidMarking(parent, "EB Outer White Edge Line", ebCenter + laneEdgeOffset, startZ, endZ, y, 0.14f, white);
+            CreateSolidMarking(parent, "EB Median Yellow Edge Line", ebCenter - laneEdgeOffset, startZ, endZ, y, 0.16f, yellow);
+            CreateSolidMarking(parent, "WB Outer White Edge Line", wbCenter - laneEdgeOffset, startZ, endZ, y, 0.14f, white);
+            CreateSolidMarking(parent, "WB Median Yellow Edge Line", wbCenter + laneEdgeOffset, startZ, endZ, y, 0.16f, yellow);
+        }
+
+        private void CreateSolidMarking(Transform parent, string name, float x, float startZ, float endZ, float y, float width, Material material)
+        {
+            GameObject go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+            go.AddComponent<MeshFilter>().sharedMesh = CreateMarkingMesh(x, startZ, endZ, y, width);
+            go.AddComponent<MeshRenderer>().sharedMaterial = material;
+        }
+
+        private void CreateDashedMarking(Transform parent, string name, float x, float startZ, float endZ, float y, float width, float dashLength, float gapLength, Material material)
+        {
+            GameObject go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+            go.AddComponent<MeshFilter>().sharedMesh = CreateDashedMarkingMesh(x, startZ, endZ, y, width, dashLength, gapLength);
+            go.AddComponent<MeshRenderer>().sharedMaterial = material;
         }
 
         private static Mesh CreateRibbonMesh(IReadOnlyList<Vector3> samples, float width)
@@ -201,10 +260,10 @@ namespace LWS.InterstateHauler
             }
         }
 
-        private void CreatePavedRect(string name, Vector3 center, Vector2 size, Material material, string segmentId)
+        private void CreatePavedRect(Transform parent, string name, Vector3 center, Vector2 size, Material material, string segmentId, bool addCollider = true)
         {
             GameObject go = new GameObject(name);
-            go.transform.SetParent(_generatedRoot.transform, false);
+            go.transform.SetParent(parent, false);
             go.transform.localPosition = center;
 
             Mesh mesh = new Mesh { name = $"{name} Mesh" };
@@ -230,8 +289,78 @@ namespace LWS.InterstateHauler
 
             go.AddComponent<MeshFilter>().sharedMesh = mesh;
             go.AddComponent<MeshRenderer>().sharedMaterial = material;
-            go.AddComponent<MeshCollider>().sharedMesh = mesh;
+            if (addCollider)
+            {
+                go.AddComponent<MeshCollider>().sharedMesh = mesh;
+            }
+
             go.AddComponent<LwsRoadSurface>().Configure("IH_TEST_50MI_SUPPORT", segmentId, LwsRoadSurfaceType.AsphaltInterstate, "50-mile validation support pavement");
+        }
+
+        private static Mesh CreateMarkingMesh(float x, float startZ, float endZ, float y, float width)
+        {
+            var mesh = new Mesh { name = "IH 50-Mile Lane Marking Mesh" };
+            float halfWidth = Mathf.Max(0.02f, width) * 0.5f;
+            mesh.vertices = new[]
+            {
+                new Vector3(x - halfWidth, y, startZ),
+                new Vector3(x - halfWidth, y, endZ),
+                new Vector3(x + halfWidth, y, endZ),
+                new Vector3(x + halfWidth, y, startZ)
+            };
+            mesh.triangles = new[] { 0, 1, 2, 0, 2, 3 };
+            mesh.uv = new[]
+            {
+                new Vector2(0f, 0f),
+                new Vector2(0f, 1f),
+                new Vector2(1f, 1f),
+                new Vector2(1f, 0f)
+            };
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
+        }
+
+        private static Mesh CreateDashedMarkingMesh(float x, float startZ, float endZ, float y, float width, float dashLength, float gapLength)
+        {
+            float length = Mathf.Max(0f, endZ - startZ);
+            float step = Mathf.Max(1f, dashLength + gapLength);
+            int dashCount = Mathf.Max(1, Mathf.CeilToInt(length / step));
+            var vertices = new Vector3[dashCount * 4];
+            var uvs = new Vector2[dashCount * 4];
+            var triangles = new int[dashCount * 6];
+            float halfWidth = Mathf.Max(0.02f, width) * 0.5f;
+
+            for (int dash = 0; dash < dashCount; dash++)
+            {
+                float z0 = startZ + dash * step;
+                float z1 = Mathf.Min(endZ, z0 + Mathf.Max(0.1f, dashLength));
+                int vertexIndex = dash * 4;
+                vertices[vertexIndex] = new Vector3(x - halfWidth, y, z0);
+                vertices[vertexIndex + 1] = new Vector3(x - halfWidth, y, z1);
+                vertices[vertexIndex + 2] = new Vector3(x + halfWidth, y, z1);
+                vertices[vertexIndex + 3] = new Vector3(x + halfWidth, y, z0);
+                uvs[vertexIndex] = new Vector2(0f, 0f);
+                uvs[vertexIndex + 1] = new Vector2(0f, 1f);
+                uvs[vertexIndex + 2] = new Vector2(1f, 1f);
+                uvs[vertexIndex + 3] = new Vector2(1f, 0f);
+
+                int triangleIndex = dash * 6;
+                triangles[triangleIndex] = vertexIndex;
+                triangles[triangleIndex + 1] = vertexIndex + 1;
+                triangles[triangleIndex + 2] = vertexIndex + 2;
+                triangles[triangleIndex + 3] = vertexIndex;
+                triangles[triangleIndex + 4] = vertexIndex + 2;
+                triangles[triangleIndex + 5] = vertexIndex + 3;
+            }
+
+            var mesh = new Mesh { name = "IH 50-Mile Dashed Lane Marking Mesh" };
+            mesh.vertices = vertices;
+            mesh.triangles = triangles;
+            mesh.uv = uvs;
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
         }
 
         private void CreateMileMarker(int mile, float localZ, Material material)
@@ -328,6 +457,20 @@ namespace LWS.InterstateHauler
 
             Vector3 previous = samples[index] - samples[Mathf.Max(0, index - 1)];
             return previous.sqrMagnitude > 0.0001f ? previous.normalized : Vector3.forward;
+        }
+
+        private static Transform EnsureChild(Transform parent, string childName)
+        {
+            Transform existing = parent.Find(childName);
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            GameObject childObject = new GameObject(childName);
+            Transform child = childObject.transform;
+            child.SetParent(parent, false);
+            return child;
         }
 
         private static Material CreateRuntimeMaterial(string name, Color color)

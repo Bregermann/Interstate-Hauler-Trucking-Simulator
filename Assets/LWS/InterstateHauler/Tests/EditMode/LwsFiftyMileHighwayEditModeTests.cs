@@ -1,13 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 
 namespace LWS.InterstateHauler.Tests.EditMode
 {
     public sealed class LwsFiftyMileHighwayEditModeTests
     {
+        private const string FiftyMileScenePath = "Assets/LWS/InterstateHauler/World/Origin/Validation/IH_50MileFloatingOriginValidation.unity";
+        private const string InterstateTrafficProfilePath = "Assets/LWS/InterstateHauler/Traffic/Data/IH_TrafficProfile_InterstateValidation.asset";
+
         [Test]
         public void ExactTotalRoadLengthIsFiftyMiles()
         {
@@ -135,6 +140,84 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void RoadGraphHasDenseSamplesForTrafficAndGps()
+        {
+            LwsRoadGraph graph = LwsFiftyMileHighwayModel.CreateRoadGraph();
+
+            Assert.That(LwsFiftyMileHighwayModel.RoadGraphSampleSpacingMeters, Is.LessThanOrEqualTo(125f));
+            Assert.That(graph.edges[0].samples.Count, Is.GreaterThan(600));
+            Assert.That(graph.edges[1].samples.Count, Is.EqualTo(graph.edges[0].samples.Count));
+        }
+
+        [Test]
+        public void ChunkBuilderOffsetsRuntimeRoadToGlobalChunkPosition()
+        {
+            var owner = new GameObject("50-mile-chunk-offset-test");
+            try
+            {
+                var builder = owner.AddComponent<LwsFiftyMileHighwayChunkBuilder>();
+                builder.Configure(7);
+                builder.BuildChunk();
+
+                Assert.IsTrue(builder.WasBuilt);
+                Assert.That(builder.GeneratedRootLocalPosition.z, Is.EqualTo(builder.ChunkStartLocalZ).Within(0.01f));
+                Assert.That(builder.GeneratedRootLocalPosition.z, Is.EqualTo((float)LwsFiftyMileHighwayModel.GetChunkStartMeters(7)).Within(0.01f));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(owner);
+            }
+        }
+
+        [Test]
+        public void ChunkBuilderCreatesExplicitInterstateRoadHierarchy()
+        {
+            var owner = new GameObject("50-mile-chunk-hierarchy-test");
+            try
+            {
+                var builder = owner.AddComponent<LwsFiftyMileHighwayChunkBuilder>();
+                builder.Configure(0);
+                builder.BuildChunk();
+
+                Transform runtimeRoot = owner.transform.GetChild(0);
+                Assert.IsNotNull(runtimeRoot.Find(LwsFiftyMileHighwayChunkBuilder.MainRoadSurfaceRootName));
+                Assert.IsNotNull(runtimeRoot.Find(LwsFiftyMileHighwayChunkBuilder.ShouldersAndMedianRootName));
+                Assert.IsNotNull(runtimeRoot.Find(LwsFiftyMileHighwayChunkBuilder.LaneMarkingsRootName));
+                Assert.IsNotNull(runtimeRoot.Find(LwsFiftyMileHighwayChunkBuilder.RoadsideSupportRootName));
+                Assert.IsNotNull(FindDescendant(runtimeRoot, "EB Dashed White Lane Divider"));
+                Assert.IsNotNull(FindDescendant(runtimeRoot, "WB Dashed White Lane Divider"));
+                Assert.That(runtimeRoot.GetComponentsInChildren<LwsRoadSurface>(true).Length, Is.GreaterThanOrEqualTo(2));
+                Assert.That(runtimeRoot.GetComponentsInChildren<MeshCollider>(true).Length, Is.GreaterThanOrEqualTo(2));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(owner);
+            }
+        }
+
+        [Test]
+        public void FiftyMileSceneFillsTrafficOnStart()
+        {
+            string sceneText = File.ReadAllText(FiftyMileScenePath);
+
+            StringAssert.Contains("fillTrafficOnStart: 1", sceneText);
+        }
+
+        [Test]
+        public void InterstateValidationTrafficProfileIsDenseEnoughForProvingGround()
+        {
+            LwsUtsTrafficProfile profile = AssetDatabase.LoadAssetAtPath<LwsUtsTrafficProfile>(InterstateTrafficProfilePath);
+
+            Assert.IsNotNull(profile);
+            Assert.IsTrue(profile.TrafficEnabled);
+            Assert.AreEqual(LwsTrafficDensityTier.Dense, profile.SpawnPolicy.densityTier);
+            Assert.That(profile.SpawnPolicy.maxActiveVehicles, Is.GreaterThanOrEqualTo(32));
+            Assert.That(profile.SpawnPolicy.spawnIntervalSeconds, Is.LessThanOrEqualTo(1.25f));
+            Assert.That(profile.SpawnPolicy.maximumPlayerSpawnDistanceMeters, Is.GreaterThanOrEqualTo(1800f));
+            Assert.That(profile.SpawnPolicy.despawnDistanceMeters, Is.GreaterThanOrEqualTo(2600f));
+        }
+
+        [Test]
         public void ChunkPlacementAfterOriginOffsetUsesGlobalMinusOffset()
         {
             LwsWorldChunkDefinition chunk = LwsFiftyMileHighwayModel.CreateChunkDefinitions()[24];
@@ -177,6 +260,30 @@ namespace LWS.InterstateHauler.Tests.EditMode
             string debugPanel = System.IO.File.ReadAllText("Assets/LWS/InterstateHauler/World/Origin/LwsFiftyMileHighwayDebugPanel.cs");
             StringAssert.Contains("Meters Road Ahead", debugPanel);
             StringAssert.Contains("Streaming Failures", debugPanel);
+        }
+
+        private static Transform FindDescendant(Transform root, string childName)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+
+            if (string.Equals(root.name, childName, StringComparison.Ordinal))
+            {
+                return root;
+            }
+
+            for (int i = 0; i < root.childCount; i++)
+            {
+                Transform found = FindDescendant(root.GetChild(i), childName);
+                if (found != null)
+                {
+                    return found;
+                }
+            }
+
+            return null;
         }
     }
 }
