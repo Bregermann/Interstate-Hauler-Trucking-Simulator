@@ -14,7 +14,7 @@ Dead Air is designed to build for itch.io WebGL.
 
 ## Input
 
-Dead Air uses `DeadAirBasicAutomaticInputSource`, which reads Unity keyboard/gamepad input and routes continuous driving through `ILwsVehicleInputService`.
+Dead Air uses the shared `LwsKeyboardGamepadTruckInputSource` with `LwsTruckInputMode.BasicAutomatic`, which reads Unity keyboard/gamepad input and routes continuous driving through `ILwsVehicleInputService`.
 
 The final vehicle flow remains:
 
@@ -22,15 +22,19 @@ Input source -> LWS vehicle input service -> LWS NWH input adapter -> NWH vehicl
 
 Transmission flow remains:
 
-Input source -> `Lws18SpeedTransmissionController` automatic mode -> NWH adapter
+Input source -> `Lws18SpeedTransmissionController.TrySetAutomaticMode` / automatic mode -> NWH adapter
 
 ## Audio
 
-`DeadAirAudioDirector` uses Unity `AudioSource` and `AudioClip` only. Missing clips fall back to subtitles so WebGL builds can still run before final audio is authored.
+`DeadAirAudioDirector` uses Unity `AudioSource` and `AudioClip` only. Missing clips fall back to subtitles so WebGL builds can still run before final audio is authored. Audio collision behavior is data-driven (`Queue`, `Interrupt`, `Ignore`, `Wait`) and does not use native plugins.
+
+## Off-Road Failure
+
+`DeadAirValidRoadZone` and `DeadAirOffRoadFailureController` use Unity transforms, box volumes, timers, and the existing UI ending overlay. The void failure path is WebGL-safe and does not require custom render features, native plugins, file IO, threads, or platform-specific input.
 
 ## Validation Status
 
-Automated WebGL build was not run in this pass. The project has known normal-Editor-authoritative validation policy because earlier batchmode paths reported false vendor negatives.
+Automated WebGL build was attempted through Unity 6000.4.10f1 batchmode on 2026-08-24, but the process stalled in Unity Licensing Client reconnect loops before the Dead Air scene builder or WebGL build could run. This is separate from the previously known vendor batchmode false-negative path and still requires normal Unity Editor validation.
 
 Use the normal Unity Editor to:
 
@@ -38,6 +42,6 @@ Use the normal Unity Editor to:
 2. Run `Dead Air/Build Or Refresh Main Scene`.
 3. Run `Dead Air/Validate Jam Mode`.
 4. Switch platform to WebGL.
-5. Build to `Builds/DeadAir_WebGL`.
+5. Run `Dead Air/Build WebGL`, which calls `DeadAir.Editor.DeadAirWebGLBuilder.BuildWebGl`.
 
 Do not overwrite Interstate production builds.

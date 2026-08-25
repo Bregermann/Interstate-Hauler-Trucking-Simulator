@@ -40,6 +40,31 @@ namespace DeadAir
             GpsStateChanged?.Invoke(state);
         }
 
+        public void SetEnabled(bool enabled)
+        {
+            state.enabled = enabled;
+            state.presentationMode = enabled ? DeadAirGpsPresentationMode.Normal : DeadAirGpsPresentationMode.Hidden;
+            GpsStateChanged?.Invoke(state);
+        }
+
+        public void SetDestination(string destination)
+        {
+            state.destination = destination;
+            GpsStateChanged?.Invoke(state);
+        }
+
+        public void SetRouteVisible(bool visible)
+        {
+            state.routeVisible = visible;
+            GpsStateChanged?.Invoke(state);
+        }
+
+        public void SetRecalculating(bool recalculating)
+        {
+            state.presentationMode = recalculating ? DeadAirGpsPresentationMode.Recalculating : DeadAirGpsPresentationMode.Normal;
+            GpsStateChanged?.Invoke(state);
+        }
+
         public void SetGpsInstruction(string instruction, DeadAirGpsArrow arrow, float distanceMeters, bool intentionallyWrong)
         {
             state.enabled = true;

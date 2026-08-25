@@ -15,6 +15,8 @@ namespace DeadAir
         [SerializeField] private bool forceInputOwnership = true;
         [SerializeField] private Lws18SpeedTransmissionController transmissionController;
         [SerializeField] private float steeringResponse = 1f;
+        [SerializeField] private bool allowCameraCycle;
+        [SerializeField] private bool suppressDrivingInput;
 
         private readonly Dictionary<string, bool> _previous = new Dictionary<string, bool>();
         private ILwsVehicleInputService _inputService;
@@ -22,6 +24,8 @@ namespace DeadAir
         private LwsVehicleCommandFrame _commands;
 
         public string SourceId => "dead-air.input.basic-automatic";
+        public bool CameraCycleAllowed => allowCameraCycle;
+        public bool DrivingInputSuppressed => suppressDrivingInput;
         public bool HornHeld => LwsVehicleCommandFrameUtility.IsActive(_commands.horn) || LwsVehicleCommandFrameUtility.IsActive(_commands.airHorn);
         public LwsVehicleContinuousInput LastContinuousInput => _continuous;
         public LwsVehicleCommandFrame LastCommandFrame => _commands;
@@ -29,6 +33,21 @@ namespace DeadAir
         public void SetTransmissionController(Lws18SpeedTransmissionController controller)
         {
             transmissionController = controller;
+        }
+
+        public void SetCameraCycleAllowed(bool allowed)
+        {
+            allowCameraCycle = allowed;
+        }
+
+        public void SetDrivingInputSuppressed(bool suppressed)
+        {
+            suppressDrivingInput = suppressed;
+            if (suppressed)
+            {
+                _continuous = default;
+                _commands = default;
+            }
         }
 
         public void Activate()
@@ -84,6 +103,11 @@ namespace DeadAir
 
         private LwsVehicleContinuousInput ReadContinuousNow()
         {
+            if (suppressDrivingInput)
+            {
+                return default;
+            }
+
             var continuous = new LwsVehicleContinuousInput();
             bool forwardHeld = false;
             bool reverseHeld = false;
@@ -155,6 +179,11 @@ namespace DeadAir
 
         private LwsVehicleCommandFrame ReadCommandsNow()
         {
+            if (suppressDrivingInput)
+            {
+                return default;
+            }
+
             var commands = new LwsVehicleCommandFrame();
 #if ENABLE_INPUT_SYSTEM
             Keyboard keyboard = Keyboard.current;
@@ -165,7 +194,7 @@ namespace DeadAir
                 commands.pause = Edge("kb.pause", keyboard.escapeKey.isPressed);
                 commands.menuCancel = commands.pause;
                 commands.interact = Edge("kb.interact", keyboard.enterKey.isPressed);
-                commands.cameraCycle = Edge("kb.camera", keyboard.tabKey.isPressed);
+                commands.cameraCycle = CameraCycleEdge("kb.camera", keyboard.tabKey.isPressed);
                 commands.flipOffDriver = Edge("kb.flipOff", keyboard.fKey.isPressed);
             }
 
@@ -179,7 +208,7 @@ namespace DeadAir
                     pause = Edge("gp.pause", gamepad.startButton.isPressed),
                     menuCancel = Edge("gp.cancel", gamepad.buttonEast.isPressed),
                     interact = Edge("gp.interact", gamepad.buttonSouth.isPressed),
-                    cameraCycle = Edge("gp.camera", gamepad.selectButton.isPressed),
+                    cameraCycle = CameraCycleEdge("gp.camera", gamepad.selectButton.isPressed),
                     flipOffDriver = Edge("gp.flipOff", gamepad.leftStickButton.isPressed && gamepad.rightStickButton.isPressed)
                 };
                 commands = LwsVehicleCommandFrameUtility.Combine(commands, gamepadCommands);
@@ -190,7 +219,7 @@ namespace DeadAir
             commands.pause = Edge("kb.pause", Input.GetKey(KeyCode.Escape));
             commands.menuCancel = commands.pause;
             commands.interact = Edge("kb.interact", Input.GetKey(KeyCode.Return));
-            commands.cameraCycle = Edge("kb.camera", Input.GetKey(KeyCode.Tab));
+            commands.cameraCycle = CameraCycleEdge("kb.camera", Input.GetKey(KeyCode.Tab));
             commands.flipOffDriver = Edge("kb.flipOff", Input.GetKey(KeyCode.F));
 #endif
             return commands;
@@ -203,6 +232,12 @@ namespace DeadAir
             if (current && !previous) return LwsMomentaryIntent.Pressed;
             if (!current && previous) return LwsMomentaryIntent.Released;
             return current ? LwsMomentaryIntent.Held : LwsMomentaryIntent.None;
+        }
+
+        private LwsMomentaryIntent CameraCycleEdge(string key, bool current)
+        {
+            LwsMomentaryIntent intent = Edge(key, current);
+            return allowCameraCycle ? intent : LwsMomentaryIntent.None;
         }
 
         private void ResolveServices()

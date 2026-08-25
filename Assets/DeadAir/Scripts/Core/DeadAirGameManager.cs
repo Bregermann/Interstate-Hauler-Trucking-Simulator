@@ -11,23 +11,33 @@ namespace DeadAir
         [SerializeField] private bool ensureLwsBootstrap = true;
         [SerializeField] private bool forceBasicAutomaticOnStart = true;
         [SerializeField] private DeadAirControlMode defaultControlMode = DeadAirControlMode.BasicAutomatic;
+        [SerializeField] private DeadAirStartRigController startRigController;
+        [SerializeField] private DeadAirCockpitCameraLock cockpitCameraLock;
+        [SerializeField] private DeadAirOffRoadFailureController offRoadFailureController;
         [SerializeField] private DeadAirStoryDirector storyDirector;
         [SerializeField] private DeadAirVehicleAdapter vehicleAdapter;
         [SerializeField] private DeadAirAudioDirector audioDirector;
         [SerializeField] private DeadAirGPSDirector gpsDirector;
         [SerializeField] private DeadAirEndingDirector endingDirector;
         [SerializeField] private DeadAirAnomalyDirector anomalyDirector;
+        [SerializeField] private DeadAirDashboardMisinformationDirector dashboardDirector;
+        [SerializeField] private DeadAirTrafficHorrorDirector trafficHorrorDirector;
         [SerializeField] private DeadAirHud hud;
 
         public static DeadAirGameManager Instance { get; private set; }
         public DeadAirGameState State { get; private set; } = DeadAirGameState.Boot;
         public DeadAirControlMode DefaultControlMode => defaultControlMode;
+        public DeadAirStartRigController StartRigController => startRigController;
+        public DeadAirCockpitCameraLock CockpitCameraLock => cockpitCameraLock;
+        public DeadAirOffRoadFailureController OffRoadFailureController => offRoadFailureController;
         public DeadAirStoryDirector StoryDirector => storyDirector;
         public DeadAirVehicleAdapter VehicleAdapter => vehicleAdapter;
         public DeadAirAudioDirector AudioDirector => audioDirector;
         public DeadAirGPSDirector GpsDirector => gpsDirector;
         public DeadAirEndingDirector EndingDirector => endingDirector;
         public DeadAirAnomalyDirector AnomalyDirector => anomalyDirector;
+        public DeadAirDashboardMisinformationDirector DashboardDirector => dashboardDirector;
+        public DeadAirTrafficHorrorDirector TrafficHorrorDirector => trafficHorrorDirector;
 
         private void Awake()
         {
@@ -65,16 +75,26 @@ namespace DeadAir
         public void BeginRun()
         {
             ResolveSceneReferences();
+            DeadAirVehicleAdapter rigVehicle = startRigController != null ? startRigController.InitializeRig() : null;
+            if (rigVehicle != null)
+            {
+                vehicleAdapter = rigVehicle;
+            }
+
             storyDirector?.ResetRun();
             endingDirector?.ResetEnding();
             anomalyDirector?.ClearAllAnomalies();
+            dashboardDirector?.Clear();
+            trafficHorrorDirector?.Cleanup();
             gpsDirector?.ResetGps();
             audioDirector?.StopAll();
+            offRoadFailureController?.ResetBoundaryState();
             if (forceBasicAutomaticOnStart && defaultControlMode == DeadAirControlMode.BasicAutomatic)
             {
                 vehicleAdapter?.EnableBasicAutomatic();
             }
 
+            cockpitCameraLock?.ApplyCockpitLock(vehicleAdapter);
             State = DeadAirGameState.Playing;
         }
 
@@ -87,6 +107,18 @@ namespace DeadAir
 
             State = DeadAirGameState.Ending;
             endingDirector?.PlayEnding(endingId);
+        }
+
+        public void RequestVoidFailure()
+        {
+            if (State == DeadAirGameState.Ending)
+            {
+                return;
+            }
+
+            State = DeadAirGameState.Ending;
+            vehicleAdapter?.SetDeadAirDrivingInputLocked(true);
+            endingDirector?.PlayEnding(DeadAirEndingId.SuckedIntoVoid);
         }
 
         public void RestartRun()
@@ -104,11 +136,16 @@ namespace DeadAir
         private void ResolveSceneReferences()
         {
             if (storyDirector == null) storyDirector = FindFirstObjectByType<DeadAirStoryDirector>();
+            if (startRigController == null) startRigController = FindFirstObjectByType<DeadAirStartRigController>();
+            if (cockpitCameraLock == null) cockpitCameraLock = FindFirstObjectByType<DeadAirCockpitCameraLock>();
+            if (offRoadFailureController == null) offRoadFailureController = FindFirstObjectByType<DeadAirOffRoadFailureController>();
             if (vehicleAdapter == null) vehicleAdapter = FindFirstObjectByType<DeadAirVehicleAdapter>();
             if (audioDirector == null) audioDirector = FindFirstObjectByType<DeadAirAudioDirector>();
             if (gpsDirector == null) gpsDirector = FindFirstObjectByType<DeadAirGPSDirector>();
             if (endingDirector == null) endingDirector = FindFirstObjectByType<DeadAirEndingDirector>();
             if (anomalyDirector == null) anomalyDirector = FindFirstObjectByType<DeadAirAnomalyDirector>();
+            if (dashboardDirector == null) dashboardDirector = FindFirstObjectByType<DeadAirDashboardMisinformationDirector>();
+            if (trafficHorrorDirector == null) trafficHorrorDirector = FindFirstObjectByType<DeadAirTrafficHorrorDirector>();
             if (hud == null) hud = FindFirstObjectByType<DeadAirHud>();
         }
 

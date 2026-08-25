@@ -20,6 +20,8 @@ namespace DeadAir
         private DeadAirGameManager _manager;
         private DeadAirAudioDirector _audioDirector;
         private DeadAirGPSDirector _gpsDirector;
+        private DeadAirDashboardMisinformationDirector _dashboardDirector;
+        private DeadAirOffRoadFailureController _offRoadFailureController;
         private ILwsNavigationService _navigationService;
         private ILwsRoadGraphService _roadGraphService;
         private readonly StringBuilder _builder = new StringBuilder(512);
@@ -52,8 +54,17 @@ namespace DeadAir
 
             if (_speedText != null)
             {
+                DeadAirDashboardMisinformationDirector.DashboardState dashboard = _dashboardDirector != null
+                    ? _dashboardDirector.CurrentState
+                    : default;
+                string speedText = dashboard.active && !string.IsNullOrWhiteSpace(dashboard.overrideSpeedText)
+                    ? dashboard.overrideSpeedText
+                    : $"{vehicle.speedMph:0} MPH";
+                string gearText = dashboard.active && !string.IsNullOrWhiteSpace(dashboard.overrideGearText)
+                    ? dashboard.overrideGearText
+                    : vehicle.transmissionMode;
                 _speedText.text = vehicle.available
-                    ? $"{vehicle.speedMph:0} MPH  |  {vehicle.transmissionMode}"
+                    ? $"{speedText}  |  {gearText}"
                     : "TRUCK OFFLINE";
             }
 
@@ -82,6 +93,7 @@ namespace DeadAir
             _builder.Length = 0;
             _builder.AppendLine($"DEAD AIR | {(_manager != null ? _manager.State.ToString() : "NO MANAGER")}");
             _builder.AppendLine($"Speed: {vehicle.signedSpeedMph:0.0} mph");
+            _builder.AppendLine($"Trailer: {(vehicle.trailerConnected ? "CONNECTED" : "PENDING")}");
             if (_manager != null && _manager.StoryDirector != null)
             {
                 _builder.AppendLine($"Beat: {_manager.StoryDirector.CurrentBeatId}");
@@ -91,6 +103,27 @@ namespace DeadAir
             if (_manager != null && _manager.EndingDirector != null)
             {
                 _builder.AppendLine($"Ending: {_manager.EndingDirector.CurrentEnding}");
+            }
+
+            if (_offRoadFailureController != null && _offRoadFailureController.ShowRuntimeDebug)
+            {
+                DeadAirRoadBoundaryEvaluation road = _offRoadFailureController.LastEvaluation;
+                _builder.AppendLine($"Road: tractor {(road.tractorValid ? "VALID" : "OFF")} / trailer {(road.trailerValid ? "VALID" : "OFF")}");
+                _builder.AppendLine($"Void: {(road.entireRigOffRoad ? "GRACE" : "CLEAR")} {road.graceTimerSeconds:0.00}/{road.graceDurationSeconds:0.00}s");
+            }
+
+            if (_dashboardDirector != null && _dashboardDirector.CurrentState.active)
+            {
+                _builder.AppendLine($"Dash: {_dashboardDirector.CurrentState.eventKind} {_dashboardDirector.CurrentState.warningLampId}");
+                if (!string.IsNullOrWhiteSpace(_dashboardDirector.CurrentState.overrideFuelText))
+                {
+                    _builder.AppendLine($"Fuel Lie: {_dashboardDirector.CurrentState.overrideFuelText}");
+                }
+
+                if (!string.IsNullOrWhiteSpace(_dashboardDirector.CurrentState.overrideClockText))
+                {
+                    _builder.AppendLine($"Clock Lie: {_dashboardDirector.CurrentState.overrideClockText}");
+                }
             }
 
             _debugText.text = _builder.ToString();
@@ -183,6 +216,8 @@ namespace DeadAir
             if (_manager == null) _manager = DeadAirGameManager.Instance != null ? DeadAirGameManager.Instance : FindFirstObjectByType<DeadAirGameManager>();
             if (_audioDirector == null) _audioDirector = _manager != null ? _manager.AudioDirector : FindFirstObjectByType<DeadAirAudioDirector>();
             if (_gpsDirector == null) _gpsDirector = _manager != null ? _manager.GpsDirector : FindFirstObjectByType<DeadAirGPSDirector>();
+            if (_dashboardDirector == null) _dashboardDirector = FindFirstObjectByType<DeadAirDashboardMisinformationDirector>();
+            if (_offRoadFailureController == null) _offRoadFailureController = _manager != null ? _manager.OffRoadFailureController : FindFirstObjectByType<DeadAirOffRoadFailureController>();
             if (LwsApplicationBootstrap.Instance != null && LwsApplicationBootstrap.Instance.Registry != null)
             {
                 if (_navigationService == null) LwsApplicationBootstrap.Instance.Registry.TryGet(out _navigationService);

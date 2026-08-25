@@ -56,10 +56,32 @@ namespace DeadAir
                     DeadAirGameManager.Instance?.GpsDirector?.SetGpsInstruction(effect.gpsInstructionOverride, effect.gpsArrow, 805f, true);
                     DeadAirGameManager.Instance?.GpsDirector?.SetCorrupted(true);
                     break;
-                case DeadAirAnomalyKind.Lightning:
                 case DeadAirAnomalyKind.DashboardOverride:
+                    FindFirstObjectByType<DeadAirDashboardMisinformationDirector>()?.Apply(new DeadAirDashboardMisinformationDirector.DashboardState
+                    {
+                        eventKind = DeadAirDashboardEventKind.WarningLamp,
+                        warningLampId = effect.effectId,
+                        durationSeconds = Mathf.Max(0f, effect.transitionSeconds)
+                    });
+                    break;
                 case DeadAirAnomalyKind.AudioStatic:
+                    DeadAirGameManager.Instance?.AudioDirector?.PlaySubtitleOnly("CB", "static", DeadAirAudioChannel.CBRadio, 0.8f);
+                    break;
                 case DeadAirAnomalyKind.TrafficHint:
+                    FindFirstObjectByType<DeadAirTrafficHorrorDirector>()?.Play(new DeadAirTrafficHorrorDirector.TrafficEvent
+                    {
+                        eventId = effect.effectId,
+                        kind = DeadAirTrafficHorrorEventKind.HeadlightsBehind
+                    });
+                    break;
+                case DeadAirAnomalyKind.AmbientSilence:
+                    DeadAirGameManager.Instance?.AudioDirector?.StopAll();
+                    break;
+                case DeadAirAnomalyKind.AmbientRestore:
+                case DeadAirAnomalyKind.WeatherRestore:
+                    ClearAllAnomalies();
+                    break;
+                case DeadAirAnomalyKind.Lightning:
                     Debug.Log($"[Dead Air] Anomaly hook applied: {effect.kind} ({effect.effectId}).", this);
                     break;
             }
@@ -71,6 +93,8 @@ namespace DeadAir
             LastAppliedEffect = string.Empty;
             RenderSettings.fog = false;
             DeadAirGameManager.Instance?.GpsDirector?.ResetGps();
+            FindFirstObjectByType<DeadAirDashboardMisinformationDirector>()?.Clear();
+            FindFirstObjectByType<DeadAirTrafficHorrorDirector>()?.Cleanup();
         }
 
         private void ResolveServices()

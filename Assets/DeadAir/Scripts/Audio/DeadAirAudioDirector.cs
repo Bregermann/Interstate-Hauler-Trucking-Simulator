@@ -20,12 +20,18 @@ namespace DeadAir
             public float postDelaySeconds = 0.1f;
             [Range(0f, 1f)] public float volume = 1f;
             public bool staticSquelch;
+            public bool staticBefore;
+            public bool staticAfter;
+            public bool cbSquelchBefore;
+            public bool cbSquelchAfter;
+            public float staticSeconds = 0.08f;
         }
 
         [Serializable]
         public sealed class AudioSequence
         {
             public string sequenceId;
+            public DeadAirAudioCollisionBehavior collisionBehavior = DeadAirAudioCollisionBehavior.Queue;
             public bool interruptCurrent;
             public bool queueIfBusy = true;
             public List<AudioStep> steps = new List<AudioStep>();
@@ -54,18 +60,18 @@ namespace DeadAir
             }
 
             EnsureSources();
-            if (sequence.interruptCurrent)
+            DeadAirAudioCollisionBehavior collisionBehavior = sequence.interruptCurrent
+                ? DeadAirAudioCollisionBehavior.Interrupt
+                : sequence.collisionBehavior;
+
+            if (collisionBehavior == DeadAirAudioCollisionBehavior.Interrupt)
             {
                 StopAll();
             }
 
             if (_playRoutine != null)
             {
-                if (sequence.queueIfBusy)
-                {
-                    _queue.Enqueue(sequence);
-                }
-
+                HandleBusySequence(sequence, collisionBehavior);
                 return;
             }
 
@@ -127,6 +133,11 @@ namespace DeadAir
                     yield return new WaitForSeconds(step.preDelaySeconds);
                 }
 
+                if (step.staticBefore || step.cbSquelchBefore)
+                {
+                    yield return SimulateStatic(step);
+                }
+
                 SubtitleChanged?.Invoke(step.speaker, step.subtitle, step.channel);
                 if (step.clip != null && _sources.TryGetValue(step.channel, out AudioSource source))
                 {
@@ -140,9 +151,9 @@ namespace DeadAir
                     LastWarning = $"Audio step in {sequence.sequenceId} has no clip; subtitle-only fallback used.";
                 }
 
-                if (step.staticSquelch)
+                if (step.staticSquelch || step.staticAfter || step.cbSquelchAfter)
                 {
-                    yield return new WaitForSeconds(0.08f);
+                    yield return SimulateStatic(step);
                 }
 
                 if (step.postDelaySeconds > 0f)
@@ -159,6 +170,48 @@ namespace DeadAir
             {
                 _playRoutine = StartCoroutine(PlayRoutine(_queue.Dequeue()));
             }
+        }
+
+        private void HandleBusySequence(AudioSequence sequence, DeadAirAudioCollisionBehavior collisionBehavior)
+        {
+            switch (collisionBehavior)
+            {
+                case DeadAirAudioCollisionBehavior.Queue:
+                    if (sequence.queueIfBusy)
+                    {
+                        _queue.Enqueue(sequence);
+                    }
+                    else
+                    {
+                        LastWarning = $"Audio sequence {sequence.sequenceId} was dropped because queueIfBusy is false.";
+                    }
+
+                    break;
+                case DeadAirAudioCollisionBehavior.Wait:
+                    StartCoroutine(WaitThenPlay(sequence));
+                    break;
+                case DeadAirAudioCollisionBehavior.Ignore:
+                    LastWarning = $"Audio sequence {sequence.sequenceId} ignored because another sequence is playing.";
+                    break;
+            }
+        }
+
+        private IEnumerator WaitThenPlay(AudioSequence sequence)
+        {
+            while (_playRoutine != null)
+            {
+                yield return null;
+            }
+
+            Play(sequence);
+        }
+
+        private IEnumerator SimulateStatic(AudioStep step)
+        {
+            LastWarning = step.cbSquelchBefore || step.cbSquelchAfter
+                ? $"CB squelch marker on {step.channel}."
+                : $"Static marker on {step.channel}.";
+            yield return new WaitForSeconds(Mathf.Max(0.01f, step.staticSeconds));
         }
 
         private void EnsureSources()

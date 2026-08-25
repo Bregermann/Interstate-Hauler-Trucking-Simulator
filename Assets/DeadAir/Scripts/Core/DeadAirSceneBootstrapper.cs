@@ -1,4 +1,7 @@
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace DeadAir
 {
@@ -6,13 +9,30 @@ namespace DeadAir
     [DisallowMultipleComponent]
     public sealed class DeadAirSceneBootstrapper : MonoBehaviour
     {
+        private const string DefaultPlayerTruckPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_PlayerTruck_NWH.prefab";
+        private const string DefaultDeliveryTrailerPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_TestTrailer_DryVan.prefab";
+
         [SerializeField] private bool createRuntimeSystems = true;
         [SerializeField] private bool createDefaultUi = true;
         [SerializeField] private bool createUnplacedBeatLayout = true;
         [SerializeField] private bool spawnPlayerTruck = true;
         [SerializeField] private GameObject playerTruckPrefab;
+        [SerializeField] private GameObject deliveryTrailerPrefab;
         [SerializeField] private Vector3 truckSpawnPosition;
         [SerializeField] private Vector3 truckSpawnEulerAngles;
+
+        public void ConfigurePrefabs(GameObject truckPrefab, GameObject trailerPrefab)
+        {
+            if (truckPrefab != null)
+            {
+                playerTruckPrefab = truckPrefab;
+            }
+
+            if (trailerPrefab != null)
+            {
+                deliveryTrailerPrefab = trailerPrefab;
+            }
+        }
 
         private void Awake()
         {
@@ -24,6 +44,9 @@ namespace DeadAir
             EnsureRoot("ENVIRONMENT");
             Transform ui = EnsureRoot("UI");
             EnsureRoot("DEBUG");
+            DeadAirStartMarker ensuredStartMarker = EnsureStartMarker(start);
+            DeadAirStartMarker startMarker = DeadAirBeatLayoutUtility.FindPreferredRuntimeStartMarker() ?? ensuredStartMarker;
+            ResolveEditorDefaultPrefabs();
 
             if (!createRuntimeSystems)
             {
@@ -36,6 +59,12 @@ namespace DeadAir
             EnsureComponent<DeadAirGPSDirector>(systems, "Dead Air GPS Director");
             EnsureComponent<DeadAirEndingDirector>(systems, "Dead Air Ending Director");
             EnsureComponent<DeadAirAnomalyDirector>(systems, "Dead Air Anomaly Director");
+            EnsureComponent<DeadAirDashboardMisinformationDirector>(systems, "Dead Air Dashboard Director");
+            EnsureComponent<DeadAirTrafficHorrorDirector>(systems, "Dead Air Traffic Horror Director");
+            DeadAirStartRigController startRig = EnsureComponent<DeadAirStartRigController>(start, "Dead Air Start Rig Controller");
+            startRig.Configure(playerTruckPrefab, deliveryTrailerPrefab, startMarker);
+            EnsureComponent<DeadAirCockpitCameraLock>(systems, "Dead Air Cockpit Camera Lock");
+            EnsureComponent<DeadAirOffRoadFailureController>(systems, "Dead Air Off-Road Failure Controller");
 
             if (createDefaultUi)
             {
@@ -44,12 +73,13 @@ namespace DeadAir
 
             if (spawnPlayerTruck)
             {
-                EnsurePlayerTruck(start);
+                EnsurePlayerTruck(startRig);
             }
 
             if (createUnplacedBeatLayout)
             {
                 DeadAirBeatLayoutUtility.EnsureUnplacedBeatLayout();
+                DeadAirBeatLayoutUtility.EnsureConstructionKit();
             }
         }
 
@@ -77,8 +107,50 @@ namespace DeadAir
             return go.AddComponent<T>();
         }
 
-        private void EnsurePlayerTruck(Transform start)
+        private static DeadAirStartMarker EnsureStartMarker(Transform start)
         {
+            Transform marker = start.Find("DeadAirStartMarker");
+            if (marker == null)
+            {
+                marker = new GameObject("DeadAirStartMarker").transform;
+                marker.SetParent(start, false);
+            }
+
+            DeadAirStartMarker startMarker = marker.GetComponent<DeadAirStartMarker>();
+            if (startMarker == null)
+            {
+                startMarker = marker.gameObject.AddComponent<DeadAirStartMarker>();
+            }
+
+            Transform truck = EnsureChild(marker, "TRUCK_START_REFERENCE");
+            Transform trailer = EnsureChild(marker, "TRAILER_START_REFERENCE");
+            trailer.localPosition = trailer.localPosition == Vector3.zero ? new Vector3(0f, 0f, -13.5f) : trailer.localPosition;
+            EnsureChild(marker, "FORWARD_DIRECTION").localPosition = new Vector3(0f, 0f, 8f);
+            startMarker.ConfigureRigReferences(truck, trailer);
+            return startMarker;
+        }
+
+        private static Transform EnsureChild(Transform parent, string name)
+        {
+            Transform existing = parent.Find(name);
+            if (existing != null)
+            {
+                return existing;
+            }
+
+            GameObject child = new GameObject(name);
+            child.transform.SetParent(parent, false);
+            return child.transform;
+        }
+
+        private void EnsurePlayerTruck(DeadAirStartRigController startRig)
+        {
+            if (startRig != null)
+            {
+                startRig.InitializeRig();
+                return;
+            }
+
             DeadAirVehicleAdapter existing = FindFirstObjectByType<DeadAirVehicleAdapter>();
             if (existing != null)
             {
@@ -91,6 +163,7 @@ namespace DeadAir
                 return;
             }
 
+            Transform start = EnsureRoot("START");
             GameObject truck = Instantiate(playerTruckPrefab, truckSpawnPosition, Quaternion.Euler(truckSpawnEulerAngles), start);
             truck.name = "Dead Air Player Truck";
             DeadAirVehicleAdapter adapter = truck.GetComponent<DeadAirVehicleAdapter>();
@@ -99,12 +172,28 @@ namespace DeadAir
                 adapter = truck.AddComponent<DeadAirVehicleAdapter>();
             }
 
-            if (truck.GetComponent<DeadAirBasicAutomaticInputSource>() == null)
+            LWS.InterstateHauler.LwsKeyboardGamepadTruckInputSource inputSource = truck.GetComponent<LWS.InterstateHauler.LwsKeyboardGamepadTruckInputSource>();
+            if (inputSource == null)
             {
-                truck.AddComponent<DeadAirBasicAutomaticInputSource>();
+                inputSource = truck.AddComponent<LWS.InterstateHauler.LwsKeyboardGamepadTruckInputSource>();
             }
 
             adapter.EnableBasicAutomatic();
+        }
+
+        private void ResolveEditorDefaultPrefabs()
+        {
+#if UNITY_EDITOR
+            if (playerTruckPrefab == null)
+            {
+                playerTruckPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(DefaultPlayerTruckPrefabPath);
+            }
+
+            if (deliveryTrailerPrefab == null)
+            {
+                deliveryTrailerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(DefaultDeliveryTrailerPrefabPath);
+            }
+#endif
         }
     }
 }

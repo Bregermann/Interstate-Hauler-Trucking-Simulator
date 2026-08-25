@@ -10,16 +10,29 @@ namespace DeadAir
     {
         [SerializeField] private LwsNwhVehicleAdapter lwsVehicleAdapter;
         [SerializeField] private Lws18SpeedTransmissionController transmissionController;
+        [SerializeField] private LwsKeyboardGamepadTruckInputSource sharedKeyboardGamepadInputSource;
+        [SerializeField] private LwsNwhTrailerCouplingAdapter trailerCouplingAdapter;
         [SerializeField] private DeadAirBasicAutomaticInputSource basicAutomaticInputSource;
         [SerializeField] private Rigidbody fallbackRigidbody;
         [SerializeField] private float movingThresholdMph = 1f;
 
         private bool _hornActive;
         private bool _wasHornActive;
+        private bool _deadAirTrailerConsideredConnected;
+        private bool _deadAirDrivingInputLocked;
+        private GameObject _deadAirDeliveryTrailer;
 
         public event Action HornStarted;
         public event Action HornStopped;
         public DeadAirVehicleSnapshot CurrentSnapshot { get; private set; }
+        public bool CameraCycleSuppressed => sharedKeyboardGamepadInputSource != null && sharedKeyboardGamepadInputSource.CameraCycleSuppressed ||
+                                             basicAutomaticInputSource != null && !basicAutomaticInputSource.CameraCycleAllowed;
+        public bool TrailerAttachedForDeadAir => trailerCouplingAdapter != null && trailerCouplingAdapter.IsTrailerAttached;
+        public bool TrailerConsideredConnectedForDeadAir => TrailerAttachedForDeadAir || _deadAirTrailerConsideredConnected;
+        public bool DeadAirDrivingInputLocked => _deadAirDrivingInputLocked;
+        public string CurrentTrailerId => trailerCouplingAdapter != null && !string.IsNullOrWhiteSpace(trailerCouplingAdapter.CurrentTrailerId)
+            ? trailerCouplingAdapter.CurrentTrailerId
+            : _deadAirDeliveryTrailer != null ? _deadAirDeliveryTrailer.name : string.Empty;
 
         private void Reset()
         {
@@ -53,8 +66,20 @@ namespace DeadAir
         {
             ResolveReferences();
             bool automaticSet = true;
-            if (transmissionController != null &&
-                !transmissionController.TrySetDevelopmentAutomaticTestMode(true, out string message))
+            if (sharedKeyboardGamepadInputSource != null)
+            {
+                sharedKeyboardGamepadInputSource.enabled = true;
+                sharedKeyboardGamepadInputSource.SetDrivingInputSuppressed(false);
+                sharedKeyboardGamepadInputSource.ConfigureTransmissionController(transmissionController);
+                sharedKeyboardGamepadInputSource.SetCameraCycleSuppressed(true);
+                if (!sharedKeyboardGamepadInputSource.TrySetInputMode(LwsTruckInputMode.BasicAutomatic, out string message))
+                {
+                    automaticSet = false;
+                    Debug.LogWarning(message, this);
+                }
+            }
+            else if (transmissionController != null &&
+                !transmissionController.TrySetAutomaticMode(out string message))
             {
                 automaticSet = false;
                 Debug.LogWarning(message, this);
@@ -62,11 +87,58 @@ namespace DeadAir
 
             if (basicAutomaticInputSource != null)
             {
+                basicAutomaticInputSource.enabled = false;
+                basicAutomaticInputSource.SetDrivingInputSuppressed(false);
+                basicAutomaticInputSource.SetCameraCycleAllowed(false);
                 basicAutomaticInputSource.SetTransmissionController(transmissionController);
-                basicAutomaticInputSource.Activate();
             }
 
+            _deadAirDrivingInputLocked = false;
             return automaticSet;
+        }
+
+        public void SetDeadAirCameraCycleSuppressed(bool suppressed)
+        {
+            ResolveReferences();
+            if (sharedKeyboardGamepadInputSource != null)
+            {
+                sharedKeyboardGamepadInputSource.SetCameraCycleSuppressed(suppressed);
+            }
+
+            if (basicAutomaticInputSource != null)
+            {
+                basicAutomaticInputSource.SetCameraCycleAllowed(!suppressed);
+            }
+        }
+
+        public void ConfigureDeadAirTrailerState(bool consideredConnected, GameObject deliveryTrailer)
+        {
+            _deadAirTrailerConsideredConnected = consideredConnected;
+            if (deliveryTrailer != null)
+            {
+                _deadAirDeliveryTrailer = deliveryTrailer;
+            }
+        }
+
+        public void RequestTrailerAttachDetach()
+        {
+            ResolveReferences();
+            trailerCouplingAdapter?.RequestAttachDetach();
+        }
+
+        public void SetDeadAirDrivingInputLocked(bool locked)
+        {
+            ResolveReferences();
+            _deadAirDrivingInputLocked = locked;
+            if (sharedKeyboardGamepadInputSource != null)
+            {
+                sharedKeyboardGamepadInputSource.SetDrivingInputSuppressed(locked);
+            }
+
+            if (basicAutomaticInputSource != null)
+            {
+                basicAutomaticInputSource.SetDrivingInputSuppressed(locked);
+            }
         }
 
         public DeadAirVehicleSnapshot CaptureSnapshot()
@@ -87,7 +159,8 @@ namespace DeadAir
                     moving = Mathf.Abs(telemetry.signedSpeedMetersPerSecond) * 2.23693629f >= movingThresholdMph,
                     reverse = telemetry.reverse || telemetry.signedSpeedMetersPerSecond < -0.25f,
                     hornActive = _hornActive,
-                    transmissionMode = transmission.mode.ToString()
+                    transmissionMode = transmission.mode.ToString(),
+                    trailerConnected = TrailerConsideredConnectedForDeadAir
                 };
             }
 
@@ -104,12 +177,20 @@ namespace DeadAir
                 moving = velocity.magnitude * 2.23693629f >= movingThresholdMph,
                 reverse = signed < -0.25f,
                 hornActive = _hornActive,
-                transmissionMode = transmissionController != null ? transmissionController.DisplayState.mode.ToString() : "Unknown"
+                transmissionMode = transmissionController != null ? transmissionController.DisplayState.mode.ToString() : "Unknown",
+                trailerConnected = TrailerConsideredConnectedForDeadAir
             };
         }
 
         private bool ResolveHornActive()
         {
+            if (sharedKeyboardGamepadInputSource != null)
+            {
+                LwsVehicleCommandFrame commands = sharedKeyboardGamepadInputSource.LastCommands;
+                return LwsVehicleCommandFrameUtility.IsActive(commands.horn) ||
+                       LwsVehicleCommandFrameUtility.IsActive(commands.airHorn);
+            }
+
             if (basicAutomaticInputSource != null)
             {
                 return basicAutomaticInputSource.HornHeld;
@@ -122,8 +203,11 @@ namespace DeadAir
         {
             if (lwsVehicleAdapter == null) lwsVehicleAdapter = GetComponent<LwsNwhVehicleAdapter>();
             if (transmissionController == null) transmissionController = GetComponent<Lws18SpeedTransmissionController>();
+            if (sharedKeyboardGamepadInputSource == null) sharedKeyboardGamepadInputSource = GetComponent<LwsKeyboardGamepadTruckInputSource>();
+            if (sharedKeyboardGamepadInputSource == null) sharedKeyboardGamepadInputSource = gameObject.AddComponent<LwsKeyboardGamepadTruckInputSource>();
+            if (trailerCouplingAdapter == null) trailerCouplingAdapter = GetComponent<LwsNwhTrailerCouplingAdapter>();
+            if (trailerCouplingAdapter == null) trailerCouplingAdapter = gameObject.AddComponent<LwsNwhTrailerCouplingAdapter>();
             if (basicAutomaticInputSource == null) basicAutomaticInputSource = GetComponent<DeadAirBasicAutomaticInputSource>();
-            if (basicAutomaticInputSource == null) basicAutomaticInputSource = gameObject.AddComponent<DeadAirBasicAutomaticInputSource>();
             if (fallbackRigidbody == null) fallbackRigidbody = GetComponent<Rigidbody>();
         }
     }

@@ -17,6 +17,14 @@ namespace DeadAir
         BasicAutomatic
     }
 
+    public enum DeadAirPlacementStatus
+    {
+        Unplaced,
+        Draft,
+        Placed,
+        Approved
+    }
+
     public enum DeadAirTriggerCategory
     {
         Dispatch,
@@ -48,7 +56,8 @@ namespace DeadAir
         Exit17,
         TrustDispatch,
         Lost,
-        TrustNoOne
+        TrustNoOne,
+        SuckedIntoVoid
     }
 
     public enum DeadAirGpsArrow
@@ -82,6 +91,14 @@ namespace DeadAir
         SFX
     }
 
+    public enum DeadAirAudioCollisionBehavior
+    {
+        Queue,
+        Interrupt,
+        Ignore,
+        Wait
+    }
+
     public enum DeadAirAnomalyKind
     {
         None,
@@ -92,7 +109,49 @@ namespace DeadAir
         DashboardOverride,
         AudioStatic,
         GpsCorruption,
-        TrafficHint
+        TrafficHint,
+        AmbientSilence,
+        AmbientRestore,
+        WeatherRestore
+    }
+
+    public enum DeadAirRoadPieceKind
+    {
+        Straight,
+        Curve,
+        Fork,
+        ExitRamp,
+        Merge,
+        DeadEnd
+    }
+
+    public enum DeadAirSignKind
+    {
+        RoadSign,
+        ExitSign,
+        WarningSign,
+        DestinationSign,
+        AnomalySign
+    }
+
+    public enum DeadAirDashboardEventKind
+    {
+        None,
+        Flicker,
+        WrongSpeed,
+        WrongGear,
+        WarningLamp,
+        Blackout,
+        Reset
+    }
+
+    public enum DeadAirTrafficHorrorEventKind
+    {
+        None,
+        HeadlightsBehind,
+        PassingTruck,
+        StoppedVehicle,
+        PhantomConvoy
     }
 
     [Serializable]
@@ -107,6 +166,7 @@ namespace DeadAir
         public float routeDistanceMiles;
         public Vector3 position;
         public GameObject triggerObject;
+        public string choiceId;
         public DeadAirChoiceOutcome choiceOutcome;
         public float timestamp;
 
@@ -158,6 +218,25 @@ namespace DeadAir
         public bool reverse;
         public bool hornActive;
         public string transmissionMode;
+        public bool trailerConnected;
+    }
+
+    [Serializable]
+    public struct DeadAirRoadBoundaryEvaluation
+    {
+        public bool tractorFrontValid;
+        public bool tractorRearValid;
+        public bool trailerFrontValid;
+        public bool trailerRearValid;
+        public bool tractorValid;
+        public bool trailerValid;
+        public bool anyRigPointValid;
+        public bool entireRigOffRoad;
+        public int validZoneCount;
+        public float graceTimerSeconds;
+        public float graceDurationSeconds;
+
+        public bool GraceActive => entireRigOffRoad && graceTimerSeconds > 0f && graceTimerSeconds < graceDurationSeconds;
     }
 
     [Serializable]
@@ -171,6 +250,7 @@ namespace DeadAir
         public float estimatedPlaybackSeconds = 8f;
         public float routeDistanceMiles;
         public Color debugColor = new Color(0.2f, 0.85f, 1f, 0.35f);
+        public DeadAirPlacementStatus placementStatus = DeadAirPlacementStatus.Unplaced;
         public DeadAirChoiceOutcome choiceOutcome = DeadAirChoiceOutcome.None;
         public bool critical = true;
     }

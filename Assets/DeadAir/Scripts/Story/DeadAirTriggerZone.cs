@@ -13,6 +13,7 @@ namespace DeadAir
         [SerializeField] private string displayName = "Dead Air Beat";
         [SerializeField, TextArea] private string description;
         [SerializeField, TextArea] private string notes = "PLACEMENT STATUS: UNPLACED";
+        [SerializeField] private DeadAirPlacementStatus placementStatus = DeadAirPlacementStatus.Unplaced;
         [SerializeField] private bool triggerEnabled = true;
         [SerializeField] private bool triggerOnce = true;
         [SerializeField] private DeadAirTriggerCategory category = DeadAirTriggerCategory.Story;
@@ -26,15 +27,18 @@ namespace DeadAir
         private float _nextAllowedTime;
         private BoxCollider _boxCollider;
 
+        public static bool ShowDeadAirGizmos { get; set; } = true;
         public string BeatId => beatId;
         public string DisplayName => displayName;
         public string Notes => notes;
+        public DeadAirPlacementStatus PlacementStatus => placementStatus;
         public bool TriggerEnabled => triggerEnabled;
         public bool TriggerOnce => triggerOnce;
         public DeadAirTriggerCategory Category => category;
         public float RouteDistanceMiles => routeDistanceMiles;
         public int SequenceIndex => sequenceIndex;
         public bool HasTriggered => _triggered;
+        public virtual string ChoiceId => string.Empty;
 
         protected virtual DeadAirChoiceOutcome ChoiceOutcome => DeadAirChoiceOutcome.None;
 
@@ -73,6 +77,7 @@ namespace DeadAir
             estimatedPlaybackSeconds = beat.estimatedPlaybackSeconds;
             routeDistanceMiles = beat.routeDistanceMiles;
             debugColor = beat.debugColor;
+            placementStatus = beat.placementStatus;
             sequenceIndex = index;
         }
 
@@ -102,6 +107,7 @@ namespace DeadAir
                 routeDistanceMiles = routeDistanceMiles,
                 position = transform.position,
                 triggerObject = gameObject,
+                choiceId = ChoiceId,
                 choiceOutcome = ChoiceOutcome,
                 timestamp = Time.time
             };
@@ -112,6 +118,13 @@ namespace DeadAir
 
         protected virtual void OnActivated(DeadAirTriggerEvent triggerEvent, DeadAirStoryDirector director)
         {
+            if (triggerEvent.category == DeadAirTriggerCategory.Ending && DeadAirGameManager.Instance != null)
+            {
+                DeadAirEndingId ending = DeadAirGameManager.Instance.EndingDirector != null
+                    ? DeadAirGameManager.Instance.EndingDirector.ResolveEndingFromChoices(director)
+                    : DeadAirEndingId.Lost;
+                DeadAirGameManager.Instance.RequestEnding(ending);
+            }
         }
 
         protected void SetCategory(DeadAirTriggerCategory value)
@@ -122,6 +135,12 @@ namespace DeadAir
         private bool CanActivate(Collider other)
         {
             if (!triggerEnabled || triggerOnce && _triggered || Time.time < _nextAllowedTime)
+            {
+                return false;
+            }
+
+            DeadAirGameManager manager = DeadAirGameManager.Instance;
+            if (manager != null && manager.State != DeadAirGameState.Playing)
             {
                 return false;
             }
@@ -144,6 +163,11 @@ namespace DeadAir
 
         private void OnDrawGizmos()
         {
+            if (!ShowDeadAirGizmos)
+            {
+                return;
+            }
+
             EnsureCollider();
             Gizmos.color = debugColor;
             Matrix4x4 previous = Gizmos.matrix;
@@ -157,8 +181,33 @@ namespace DeadAir
 
 #if UNITY_EDITOR
             Handles.color = Color.white;
-            Handles.Label(transform.position + Vector3.up * 2f, $"{sequenceIndex:00} {beatId}\n{displayName}\n{category}");
+            string pacing = BuildPacingLabel();
+            Handles.Label(
+                transform.position + Vector3.up * 2f,
+                $"{sequenceIndex:00} {beatId}\n{displayName}\n{category} | {placementStatus}\n{routeDistanceMiles:0.0} route mi\n{pacing}");
 #endif
         }
+
+#if UNITY_EDITOR
+        private string BuildPacingLabel()
+        {
+            DeadAirStartMarker start = FindFirstObjectByType<DeadAirStartMarker>();
+            if (start == null)
+            {
+                return "Distance from Start: no DeadAirStartMarker";
+            }
+
+            float straightLineMiles = Vector3.Distance(start.transform.position, transform.position) / 1609.344f;
+            float estimatedSeconds = straightLineMiles / Mathf.Max(1f, start.ReferenceSpeedMph) * 3600f;
+            float delta = estimatedSeconds - Mathf.Max(0f, estimatedPlaybackSeconds);
+            return $"Straight-line from Start: {straightLineMiles:0.00} mi\nEst @ {start.ReferenceSpeedMph:0} MPH: {FormatSeconds(estimatedSeconds)}\nTarget: {FormatSeconds(estimatedPlaybackSeconds)}  Delta: {delta:+0;-0;0}s";
+        }
+
+        private static string FormatSeconds(float seconds)
+        {
+            int total = Mathf.Max(0, Mathf.RoundToInt(seconds));
+            return $"{total / 60}m {total % 60:00}s";
+        }
+#endif
     }
 }

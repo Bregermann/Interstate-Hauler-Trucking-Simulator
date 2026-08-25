@@ -23,7 +23,17 @@ namespace DeadAir
             public float holdSeconds = 4f;
         }
 
+        [Serializable]
+        public sealed class EndingEligibilityRule
+        {
+            public DeadAirEndingId endingId = DeadAirEndingId.Lost;
+            public string choiceId = "CHOICE_01";
+            public DeadAirChoiceOutcome requiredOutcome = DeadAirChoiceOutcome.None;
+        }
+
         [SerializeField] private List<EndingConfig> endings = new List<EndingConfig>();
+        [SerializeField] private List<EndingEligibilityRule> eligibilityRules = new List<EndingEligibilityRule>();
+        [SerializeField] private DeadAirEndingId fallbackEnding = DeadAirEndingId.Lost;
         [SerializeField] private bool buildRuntimeOverlay = true;
 
         private CanvasGroup _overlay;
@@ -33,6 +43,7 @@ namespace DeadAir
 
         public DeadAirEndingId CurrentEnding { get; private set; } = DeadAirEndingId.None;
         public IReadOnlyList<EndingConfig> Endings => endings;
+        public IReadOnlyList<EndingEligibilityRule> EligibilityRules => eligibilityRules;
 
         private void Awake()
         {
@@ -55,6 +66,37 @@ namespace DeadAir
             _endingRoutine = StartCoroutine(EndingRoutine(ResolveConfig(endingId)));
         }
 
+        public DeadAirEndingId ResolveEndingFromChoices(DeadAirStoryDirector story)
+        {
+            EnsureDefaultEndings();
+            if (story == null)
+            {
+                return fallbackEnding;
+            }
+
+            for (int i = 0; i < eligibilityRules.Count; i++)
+            {
+                EndingEligibilityRule rule = eligibilityRules[i];
+                if (rule == null || string.IsNullOrWhiteSpace(rule.choiceId))
+                {
+                    continue;
+                }
+
+                if (story.TryGetChoice(rule.choiceId, out DeadAirChoiceOutcome outcome) &&
+                    outcome == rule.requiredOutcome)
+                {
+                    return rule.endingId;
+                }
+            }
+
+            return fallbackEnding;
+        }
+
+        public void PlayResolvedEnding(DeadAirStoryDirector story)
+        {
+            PlayEnding(ResolveEndingFromChoices(story));
+        }
+
         public void ResetEnding()
         {
             CurrentEnding = DeadAirEndingId.None;
@@ -75,7 +117,7 @@ namespace DeadAir
         {
             BuildOverlay();
             _titleText.text = config.title;
-            _bodyText.text = config.description + "\n\nPress Enter to restart.";
+            _bodyText.text = config.description + "\n\nTRY AGAIN\nPress Enter to restart.";
             _overlay.blocksRaycasts = true;
             float elapsed = 0f;
             while (elapsed < config.fadeSeconds)
@@ -109,15 +151,35 @@ namespace DeadAir
 
         private void EnsureDefaultEndings()
         {
-            if (endings.Count > 0)
+            if (endings.Count == 0)
             {
-                return;
+                endings.Add(new EndingConfig { endingId = DeadAirEndingId.Exit17, title = "EXIT 17", description = "The exit sign is real. This time." });
+                endings.Add(new EndingConfig { endingId = DeadAirEndingId.TrustDispatch, title = "TRUST DISPATCH", description = "You kept the radio alive. Something kept listening back." });
+                endings.Add(new EndingConfig { endingId = DeadAirEndingId.Lost, title = "LOST", description = "The highway loops until the signal eats the horizon." });
+                endings.Add(new EndingConfig { endingId = DeadAirEndingId.TrustNoOne, title = "TRUST NO ONE", description = "You ignored every voice and found the only road that was not hungry." });
             }
 
-            endings.Add(new EndingConfig { endingId = DeadAirEndingId.Exit17, title = "EXIT 17", description = "The exit sign is real. This time." });
-            endings.Add(new EndingConfig { endingId = DeadAirEndingId.TrustDispatch, title = "TRUST DISPATCH", description = "You kept the radio alive. Something kept listening back." });
-            endings.Add(new EndingConfig { endingId = DeadAirEndingId.Lost, title = "LOST", description = "The highway loops until the signal eats the horizon." });
-            endings.Add(new EndingConfig { endingId = DeadAirEndingId.TrustNoOne, title = "TRUST NO ONE", description = "You ignored every voice and found the only road that was not hungry." });
+            EnsureEndingConfig(DeadAirEndingId.SuckedIntoVoid, "SUCKED INTO THE VOID", "You left the marked road and the dark took the rig.");
+
+            if (eligibilityRules.Count == 0)
+            {
+                eligibilityRules.Add(new EndingEligibilityRule { endingId = DeadAirEndingId.Exit17, choiceId = "CHOICE_03_EXIT17", requiredOutcome = DeadAirChoiceOutcome.Exit17 });
+                eligibilityRules.Add(new EndingEligibilityRule { endingId = DeadAirEndingId.TrustNoOne, choiceId = "CHOICE_03_EXIT17", requiredOutcome = DeadAirChoiceOutcome.TrustNoOne });
+                eligibilityRules.Add(new EndingEligibilityRule { endingId = DeadAirEndingId.TrustDispatch, choiceId = "CHOICE_01", requiredOutcome = DeadAirChoiceOutcome.TrustDispatch });
+            }
+        }
+
+        private void EnsureEndingConfig(DeadAirEndingId endingId, string title, string description)
+        {
+            for (int i = 0; i < endings.Count; i++)
+            {
+                if (endings[i] != null && endings[i].endingId == endingId)
+                {
+                    return;
+                }
+            }
+
+            endings.Add(new EndingConfig { endingId = endingId, title = title, description = description });
         }
 
         private void BuildOverlay()
