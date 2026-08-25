@@ -1,3 +1,4 @@
+// Recompile at 8/25/2026 2:31:48 AM
 // Copyright (c) Pixel Crushers. All rights reserved.
 
 using PixelCrushers.DialogueSystem.SequencerCommands;

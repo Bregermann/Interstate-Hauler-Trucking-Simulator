@@ -1,5 +1,7 @@
 # Interstate Hauler - Vendor Authority Matrix
 
+This matrix is governed by the mandatory Vendor Asset First Rule in `Documentation/InterstateHauler/000_Vendor_Asset_First_Rule.md`. Future work must audit relevant installed assets before creating custom functionality, use vendor systems wherever they provide the requested capability or a strong foundation, and report why any relevant installed asset was not used.
+
 | Responsibility | Authoritative System | LWS Interface/Adapter | Non-Authoritative Systems | Reason | Future Prompt |
 | --- | --- | --- | --- | --- | --- |
 | Player tractor physics | NWH Vehicle Physics 2 | `LwsNwhVehicleAdapter` | UTS, DOTween, hand-rolled Rigidbody controllers | NWH owns drivetrain, Rigidbody, wheel, engine, clutch, and modules. | Vehicle integration |

@@ -22,6 +22,8 @@ The core rule is one authority per responsibility:
 - Pixel Crushers owns dialogue/quest state only.
 - LWS owns root save orchestration.
 
+The project also follows the mandatory Vendor Asset First Rule documented in `Documentation/InterstateHauler/000_Vendor_Asset_First_Rule.md`. Before creating substantial custom functionality, future prompts must audit relevant installed commercial assets and use vendor solutions wherever they provide the complete feature, most of the feature, or an appropriate foundation. If a relevant installed asset is not used, the prompt must explain why.
+
 ## 2. Namespace And Folder Organization
 
 Runtime root:
