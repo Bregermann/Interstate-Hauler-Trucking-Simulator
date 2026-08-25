@@ -174,6 +174,15 @@ namespace PixelCrushers
             m_textTableInstanceID = EntityUtility.GetEntityId(newTable);
         }
 
+        public void Refresh()
+        {
+            ResetLanguagesTab();
+            ResetFieldsTab();
+            m_needRefreshLists = true;
+            m_needToUpdateSO = true;
+            m_needToApplyBeforeUpdateSO = false;
+        }
+
         private void OnGUI()
         {
             if (Event.current.commandName == "ObjectSelectorClosed" || Event.current.commandName == "ObjectSelectorUpdated")
