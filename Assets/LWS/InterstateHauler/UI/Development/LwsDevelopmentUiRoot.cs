@@ -64,6 +64,7 @@ namespace LWS.InterstateHauler
         private GameObject _bigMapPanel;
         private GameObject _minimapPanel;
         private GameObject _transmissionHudPanel;
+        private LwsWeatherTestPanel _weatherTestPanel;
         private LwsDevelopmentUiInputBridge _inputBridge;
         private ILwsCameraPresentationService _subscribedCameraPresentationService;
         private RectTransform _tabList;
@@ -120,6 +121,8 @@ namespace LWS.InterstateHauler
         public RectTransform MinimapRect => _minimapPanel != null ? _minimapPanel.GetComponent<RectTransform>() : null;
         public GameObject MinimapPanel => _minimapPanel;
         public GameObject TransmissionHudPanel => _transmissionHudPanel;
+        public LwsWeatherTestPanel WeatherTestPanel => _weatherTestPanel;
+        public bool WeatherTestPanelVisible => _weatherTestPanel != null && _weatherTestPanel.Visible;
         public bool HudMinimapVisible => (_compassNavigatorProAdapter != null && _compassNavigatorProAdapter.HudMinimapVisible) ||
                                           (_minimapPanel != null && _minimapPanel.activeSelf);
         public LwsVehicleCameraMode CameraMode => _cameraPresentationService != null ? _cameraPresentationService.CurrentMode : LwsVehicleCameraMode.Unknown;
@@ -136,6 +139,7 @@ namespace LWS.InterstateHauler
             Instance = this;
             DontDestroyOnLoad(gameObject);
             BuildUi();
+            EnsureWeatherTestPanel();
         }
 
         private void OnDestroy()
@@ -192,12 +196,18 @@ namespace LWS.InterstateHauler
 
             _inputBridge?.Bind(this);
             gameObject.SetActive(true);
+            EnsureWeatherTestPanel();
             UpdateDevButtonVisibility();
             ResolveServices();
         }
 
         public void ShowControlCenter()
         {
+            if (WeatherTestPanelVisible)
+            {
+                HideWeatherTestPanel();
+            }
+
             if (_controlCenterPanel == null)
             {
                 BuildUi();
@@ -230,6 +240,11 @@ namespace LWS.InterstateHauler
                 HideBigMap();
             }
 
+            if (WeatherTestPanelVisible)
+            {
+                HideWeatherTestPanel();
+            }
+
             if (ControlCenterVisible)
             {
                 HideControlCenter();
@@ -249,6 +264,11 @@ namespace LWS.InterstateHauler
 
         public void ShowBigMap()
         {
+            if (WeatherTestPanelVisible)
+            {
+                HideWeatherTestPanel();
+            }
+
             if (_bigMapPanel == null)
             {
                 BuildUi();
@@ -302,6 +322,11 @@ namespace LWS.InterstateHauler
 
         public void ToggleBigMap()
         {
+            if (WeatherTestPanelVisible)
+            {
+                HideWeatherTestPanel();
+            }
+
             if (BigMapVisible)
             {
                 HideBigMap();
@@ -312,11 +337,55 @@ namespace LWS.InterstateHauler
             }
         }
 
+        public void ShowWeatherTestPanel()
+        {
+            EnsureWeatherTestPanel();
+            _weatherTestPanel.Show();
+            UpdateDevButtonVisibility();
+        }
+
+        public void HideWeatherTestPanel()
+        {
+            _weatherTestPanel?.Hide();
+            UpdateDevButtonVisibility();
+        }
+
+        public void ToggleWeatherTestPanel()
+        {
+            EnsureWeatherTestPanel();
+            _weatherTestPanel.Toggle();
+            UpdateDevButtonVisibility();
+        }
+
+        public void CaptureDevelopmentCursor()
+        {
+            CaptureCursor();
+        }
+
+        public void RestoreDevelopmentCursorIfClear()
+        {
+            RestoreCursorIfClear();
+        }
+
+        private void EnsureWeatherTestPanel()
+        {
+            if (_weatherTestPanel == null)
+            {
+                _weatherTestPanel = GetComponent<LwsWeatherTestPanel>();
+                if (_weatherTestPanel == null)
+                {
+                    _weatherTestPanel = gameObject.AddComponent<LwsWeatherTestPanel>();
+                }
+            }
+
+            _weatherTestPanel.Bind(this, _registry);
+        }
+
         private void UpdateDevButtonVisibility()
         {
             if (_devButton != null)
             {
-                _devButton.SetActive(!ControlCenterVisible && !BigMapVisible);
+                _devButton.SetActive(!ControlCenterVisible && !BigMapVisible && !WeatherTestPanelVisible);
             }
         }
 
@@ -359,6 +428,7 @@ namespace LWS.InterstateHauler
             BuildMinimap();
             BuildBigMap();
             BuildControlCenter();
+            EnsureWeatherTestPanel();
             _controlCenterPanel.SetActive(false);
             _bigMapPanel.SetActive(false);
             ApplyGpsPresentationVisibility();
@@ -1810,6 +1880,10 @@ namespace LWS.InterstateHauler
                 {
                     HideBigMap();
                 }
+                else if (WeatherTestPanelVisible)
+                {
+                    HideWeatherTestPanel();
+                }
             }
 
             if (ControlCenterVisible && _activeTab == LwsDevelopmentUiTab.Transmission)
@@ -1867,7 +1941,7 @@ namespace LWS.InterstateHauler
 
         private void RestoreCursorIfClear()
         {
-            if (!_cursorCaptured || ControlCenterVisible || BigMapVisible)
+            if (!_cursorCaptured || ControlCenterVisible || BigMapVisible || WeatherTestPanelVisible)
             {
                 return;
             }
@@ -2302,3 +2376,5 @@ namespace LWS.InterstateHauler
         }
     }
 }
+
+

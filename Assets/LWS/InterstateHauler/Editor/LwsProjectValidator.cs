@@ -226,6 +226,7 @@ namespace LWS.InterstateHauler.Editor
         private const string DevelopmentUiTypesPath = "Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiTypes.cs";
         private const string DevelopmentUiServicePath = "Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs";
         private const string DevelopmentUiRootPath = "Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs";
+        private const string WeatherTestPanelPath = "Assets/LWS/InterstateHauler/UI/Development/LwsWeatherTestPanel.cs";
         private const string SemanticGpsMapGraphicPath = "Assets/LWS/InterstateHauler/UI/Development/LwsSemanticGpsMapGraphic.cs";
         private const string CameraPresentationPath = "Assets/LWS/InterstateHauler/Vehicles/Cameras/LwsCameraPresentation.cs";
         private const string DevelopmentControlCenterDocsPath = "Documentation/InterstateHauler/015B_Development_Control_Center.md";
@@ -239,6 +240,7 @@ namespace LWS.InterstateHauler.Editor
         private const string CompassNavigatorProApiMatrixPath = "Documentation/InterstateHauler/Navigation/CompassNavigatorPro4_API_Matrix.md";
         private const string CompassNavigatorProIntegrationDocsPath = "Documentation/InterstateHauler/Navigation/011_CompassNavigatorPro4_Integration.md";
         private const string DevelopmentUiTestMatrixPath = "Documentation/InterstateHauler/015B_UI_Test_Matrix.md";
+        private const string F2WeatherTestPanelDocsPath = "Documentation/InterstateHauler/Weather/F2_Weather_Test_Panel.md";
         private const string GameClockDocsPath = "Documentation/InterstateHauler/015C_Game_Clock.md";
         private const string TimeBasedTrafficDocsPath = "Documentation/InterstateHauler/015C_Time_Based_Traffic_Density.md";
         private const string EndlessHighwayDocsPath = "Documentation/InterstateHauler/015C_Endless_Highway_Streaming_Test.md";
@@ -3356,6 +3358,7 @@ namespace LWS.InterstateHauler.Editor
                 DevelopmentUiTypesPath,
                 DevelopmentUiServicePath,
                 DevelopmentUiRootPath,
+                WeatherTestPanelPath,
                 SemanticGpsMapGraphicPath,
                 CameraPresentationPath
             };
@@ -3410,6 +3413,8 @@ namespace LWS.InterstateHauler.Editor
                                    root.Contains("KeyCode.F1") &&
                                    root.Contains("KeyCode.M") &&
                                    root.Contains("KeyCode.Escape") &&
+                                   root.Contains("LwsWeatherTestPanel") &&
+                                   root.Contains("WeatherTestPanelVisible") &&
                                    root.Contains("Cursor.lockState") &&
                                    root.Contains("Time.timeScale");
             report.Add(
@@ -3420,7 +3425,7 @@ namespace LWS.InterstateHauler.Editor
                     : "Development Control Center is missing required overlay, scaling, DEV button, input bridge, font, cursor, or pause behavior.");
 
             bool semanticCommands = root.Contains("ApplyCommandFrame") &&
-                                    root.Contains("TrySetDevelopmentAutomaticTestMode") &&
+                                    (root.Contains("TrySetDevelopmentAutomaticTestMode") || root.Contains("TrySetTransmissionMode")) &&
                                     root.Contains("RequestWeather") &&
                                     root.Contains("ForceCondition") &&
                                     root.Contains("SetDestination") &&
@@ -3433,6 +3438,31 @@ namespace LWS.InterstateHauler.Editor
                     ? "Development UI routes truck controls, transmission mode, weather, road conditions, GPS, and 50-mile controls through existing LWS APIs."
                     : "Development UI appears to bypass or miss one or more required LWS semantic control APIs.");
 
+
+            string f2WeatherPanel = File.Exists(WeatherTestPanelPath) ? File.ReadAllText(WeatherTestPanelPath) : string.Empty;
+            bool f2PanelReady = f2WeatherPanel.Contains("PanelObjectName = \"F2 Weather Test Panel\"") &&
+                                f2WeatherPanel.Contains("f2Key.wasPressedThisFrame") &&
+                                f2WeatherPanel.Contains("Input.GetKeyDown(KeyCode.F2)") &&
+                                f2WeatherPanel.Contains("ButtonPreferredHeight = 60f") &&
+                                f2WeatherPanel.Contains("CanvasScaler.ScaleMode.ScaleWithScreenSize") &&
+                                f2WeatherPanel.Contains("ILwsWeatherService") &&
+                                f2WeatherPanel.Contains("RequestWeather(presetId, 0f, true)") &&
+                                f2WeatherPanel.Contains("ILwsGameClockService") &&
+                                f2WeatherPanel.Contains("SetTimeOfDayHours") &&
+                                f2WeatherPanel.Contains("ILwsRoadConditionService") &&
+                                f2WeatherPanel.Contains("ForceCondition(mode)") &&
+                                f2WeatherPanel.Contains("LwsWeatheradeAdapter") &&
+                                f2WeatherPanel.Contains("DRY ROAD") &&
+                                f2WeatherPanel.Contains("PUDDLED ROAD") &&
+                                !f2WeatherPanel.Contains("private void OnGUI") &&
+                                !f2WeatherPanel.Contains("WeatherMakerScript") &&
+                                !f2WeatherPanel.Contains("NOT_Lonely.Weatherade");
+            report.Add(
+                f2PanelReady ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                "F2 Weather/Road Test Panel",
+                f2PanelReady
+                    ? "F2 creates a large uGUI weather/time/road-condition test panel that routes buttons through LWS semantic services and reads Weatherade diagnostics without direct vendor authority."
+                    : "F2 weather test panel is missing, too small, not wired to LWS semantic services, uses OnGUI, or reaches into Weather Maker/Weatherade vendor authority.");
             bool mapUsesSemanticData = map.Contains("LwsRoadGraph") &&
                                        map.Contains("LwsRouteResult") &&
                                        map.Contains("MaskableGraphic") &&
@@ -3546,7 +3576,8 @@ namespace LWS.InterstateHauler.Editor
                 GpsMinimapMapDocsPath,
                 CompassNavigatorProApiMatrixPath,
                 CompassNavigatorProIntegrationDocsPath,
-                DevelopmentUiTestMatrixPath
+                DevelopmentUiTestMatrixPath,
+                F2WeatherTestPanelDocsPath
             };
             var missingDocs = docs.Where(path => !File.Exists(path)).ToList();
             report.Add(
@@ -3828,3 +3859,4 @@ namespace LWS.InterstateHauler.Editor
 
     }
 }
+

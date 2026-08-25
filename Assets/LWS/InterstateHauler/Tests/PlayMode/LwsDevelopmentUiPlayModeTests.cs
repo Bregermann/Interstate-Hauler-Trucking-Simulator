@@ -67,6 +67,12 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsNotNull(root.InputBridge);
             Assert.IsTrue(root.InputBridge.enabled);
             Assert.IsTrue(root.InputBridge.IsBound);
+            Assert.IsNotNull(root.WeatherTestPanel);
+            Assert.IsFalse(root.WeatherTestPanelVisible);
+            Assert.IsNotNull(root.WeatherTestPanel.Canvas);
+            Assert.AreEqual(RenderMode.ScreenSpaceOverlay, root.WeatherTestPanel.Canvas.renderMode);
+            Assert.AreEqual(CanvasScaler.ScaleMode.ScaleWithScreenSize, root.WeatherTestPanel.CanvasScaler.uiScaleMode);
+            Assert.AreEqual(new Vector2(1920f, 1080f), root.WeatherTestPanel.CanvasScaler.referenceResolution);
             Assert.IsNotNull(root.DevButtonObject);
             Assert.IsTrue(root.DevButtonObject.activeInHierarchy);
             Assert.IsNotNull(root.ControlCenterPanel);
@@ -266,6 +272,93 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.AreEqual(1, Object.FindObjectsByType<LwsDevelopmentUiRoot>(FindObjectsSortMode.None).Length);
         }
 
+
+        [UnityTest]
+        public IEnumerator WeatherTestPanelShowsLargeControlsAndCallsSemanticServices()
+        {
+            var go = new GameObject("weather-test-panel-bootstrap");
+            LwsApplicationBootstrap bootstrap = go.AddComponent<LwsApplicationBootstrap>();
+
+            yield return null;
+
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsDevelopmentUiService service));
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsWeatherService weatherService));
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsGameClockService clockService));
+            Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsRoadConditionService roadConditionService));
+
+            service.ShowWeatherTestPanel();
+            yield return null;
+
+            LwsDevelopmentUiRoot root = service.RuntimeRoot;
+            Assert.IsTrue(service.IsWeatherTestPanelVisible);
+            Assert.IsTrue(root.WeatherTestPanelVisible);
+            AssertWeatherPanelUsesLargeCenteredLayout(root.WeatherTestPanel.PanelRect);
+
+            Button[] buttons = root.WeatherTestPanel.GetComponentsInChildren<Button>(true);
+            Assert.IsTrue(buttons.Any(button => button.name == "Weather HEAVY RAIN"));
+            Assert.IsTrue(buttons.Any(button => button.name == "Time MIDNIGHT"));
+            Assert.IsTrue(buttons.Any(button => button.name == "Road PUDDLED ROAD"));
+            Assert.IsTrue(buttons.Any(button => button.name == "Close F2 Weather Test Panel"));
+
+            buttons.First(button => button.name == "Weather HEAVY RAIN").onClick.Invoke();
+            yield return null;
+            Assert.AreEqual(LwsWeatherPresetCatalog.HeavyRainId, weatherService.CurrentSnapshot.weatherPresetId);
+
+            buttons.First(button => button.name == "Time MIDNIGHT").onClick.Invoke();
+            yield return null;
+            Assert.AreEqual(0f, clockService.CurrentSnapshot.timeOfDayHours, 0.01f);
+            Assert.AreEqual(0f, weatherService.CurrentSnapshot.timeOfDayHours, 0.01f);
+
+            buttons.First(button => button.name == "Road PUDDLED ROAD").onClick.Invoke();
+            yield return null;
+            Assert.AreEqual(LwsRoadConditionOverrideMode.ForceStandingWater, roadConditionService.Mode);
+            Assert.GreaterOrEqual(roadConditionService.CurrentSnapshot.standingWater01, 0.7f);
+
+            buttons.First(button => button.name == "Close F2 Weather Test Panel").onClick.Invoke();
+            yield return null;
+            Assert.IsFalse(service.IsWeatherTestPanelVisible);
+            Assert.IsFalse(root.WeatherTestPanelVisible);
+        }
+
+        [UnityTest]
+        public IEnumerator WeatherTestPanelSuppressesKeyboardGamepadDrivingInputWhileOpen()
+        {
+            var go = new GameObject("weather-test-panel-input-bootstrap");
+            go.AddComponent<LwsApplicationBootstrap>();
+            var inputObject = new GameObject("keyboard-gamepad-source");
+            LwsKeyboardGamepadTruckInputSource source = inputObject.AddComponent<LwsKeyboardGamepadTruckInputSource>();
+            source.SetDrivingInputSuppressed(false);
+
+            yield return null;
+
+            Assert.IsTrue(LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsDevelopmentUiService service));
+            service.ShowWeatherTestPanel();
+            yield return null;
+
+            Assert.IsTrue(source.DrivingInputSuppressed);
+            service.HideWeatherTestPanel();
+            yield return null;
+
+            Assert.IsFalse(source.DrivingInputSuppressed);
+            Object.Destroy(inputObject);
+        }
+        private static void AssertWeatherPanelUsesLargeCenteredLayout(RectTransform panel)
+        {
+            Assert.IsNotNull(panel);
+            Assert.AreEqual(new Vector2(0.08f, 0.04f), panel.anchorMin);
+            Assert.AreEqual(new Vector2(0.92f, 0.96f), panel.anchorMax);
+            Assert.AreEqual(Vector2.zero, panel.offsetMin);
+            Assert.AreEqual(Vector2.zero, panel.offsetMax);
+
+            Button[] buttons = panel.GetComponentsInChildren<Button>(true);
+            Assert.GreaterOrEqual(buttons.Length, 22);
+            foreach (Button button in buttons.Where(button => button.name.StartsWith("Weather ") || button.name.StartsWith("Time ") || button.name.StartsWith("Road ")))
+            {
+                LayoutElement layoutElement = button.GetComponent<LayoutElement>();
+                Assert.IsNotNull(layoutElement, button.name);
+                Assert.GreaterOrEqual(layoutElement.preferredHeight, 50f, button.name);
+            }
+        }
         private static void AssertSemanticMapHasRequiredComponents(LwsSemanticGpsMapGraphic mapGraphic)
         {
             Assert.IsNotNull(mapGraphic);
@@ -322,3 +415,5 @@ namespace LWS.InterstateHauler.Tests.PlayMode
         }
     }
 }
+
+

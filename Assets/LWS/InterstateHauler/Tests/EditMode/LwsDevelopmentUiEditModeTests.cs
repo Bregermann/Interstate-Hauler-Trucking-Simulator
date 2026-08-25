@@ -362,6 +362,65 @@ namespace LWS.InterstateHauler.Tests.EditMode
             StringAssert.Contains("AddComponent<LwsCompassNavigatorProAdapter>", spawner);
             StringAssert.Contains("Compass Navigator Pro 4 Vendor", validator);
         }
+
+        [Test]
+        public void WeatherTestPanelDefinesLargeReadableSemanticControls()
+        {
+            Assert.AreEqual(10, LwsWeatherTestPanel.WeatherButtonDefinitions.Count);
+            Assert.IsTrue(LwsWeatherTestPanel.WeatherButtonDefinitions.Any(b => b.Label == "CLEAR" && b.PresetId == LwsWeatherPresetCatalog.ClearId));
+            Assert.IsTrue(LwsWeatherTestPanel.WeatherButtonDefinitions.Any(b => b.Label == "PARTLY CLOUDY" && b.PresetId == LwsWeatherPresetCatalog.PartlyCloudyId));
+            Assert.IsTrue(LwsWeatherTestPanel.WeatherButtonDefinitions.Any(b => b.Label == "HEAVY SNOW" && b.PresetId == LwsWeatherPresetCatalog.HeavySnowId));
+
+            Assert.AreEqual(6, LwsWeatherTestPanel.TimeButtonDefinitions.Count);
+            Assert.IsTrue(LwsWeatherTestPanel.TimeButtonDefinitions.Any(b => b.Label == "DAWN" && Mathf.Approximately(b.Hour, 6f)));
+            Assert.IsTrue(LwsWeatherTestPanel.TimeButtonDefinitions.Any(b => b.Label == "MIDNIGHT" && Mathf.Approximately(b.Hour, 0f)));
+
+            Assert.AreEqual(5, LwsWeatherTestPanel.RoadButtonDefinitions.Count);
+            Assert.IsTrue(LwsWeatherTestPanel.RoadButtonDefinitions.Any(b => b.Label == "DRY ROAD" && b.Mode == LwsRoadConditionOverrideMode.ForceDry));
+            Assert.IsTrue(LwsWeatherTestPanel.RoadButtonDefinitions.Any(b => b.Label == "PUDDLED ROAD" && b.Mode == LwsRoadConditionOverrideMode.ForceStandingWater));
+            Assert.IsTrue(LwsWeatherTestPanel.RoadButtonDefinitions.Any(b => b.Label == "ICY ROAD" && b.Mode == LwsRoadConditionOverrideMode.ForceIce));
+
+            Assert.AreEqual("F2", LwsWeatherTestPanel.ToggleHotkeyName);
+            Assert.AreEqual(60f, LwsWeatherTestPanel.ButtonPreferredHeight, 0.01f);
+            Assert.AreEqual(new Vector2(1920f, 1080f), LwsWeatherTestPanel.ReferenceResolution);
+        }
+
+        [Test]
+        public void WeatherTestPanelSourceUsesLwsServicesAndNoVendorAuthorityOrOnGui()
+        {
+            string source = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsWeatherTestPanel.cs");
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+            string service = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs");
+
+            StringAssert.Contains("f2Key.wasPressedThisFrame", source);
+            StringAssert.Contains("Input.GetKeyDown(KeyCode.F2)", source);
+            StringAssert.Contains("ILwsWeatherService", source);
+            StringAssert.Contains("RequestWeather(presetId, 0f, true)", source);
+            StringAssert.Contains("ILwsGameClockService", source);
+            StringAssert.Contains("SetTimeOfDayHours", source);
+            StringAssert.Contains("ILwsRoadConditionService", source);
+            StringAssert.Contains("ForceCondition(mode)", source);
+            StringAssert.Contains("LwsWeatheradeAdapter", source);
+            StringAssert.Contains("CanvasScaler.ScaleMode.ScaleWithScreenSize", source);
+            StringAssert.Contains("ButtonPreferredHeight = 60f", source);
+            StringAssert.Contains("RenderMode.ScreenSpaceOverlay", source);
+            StringAssert.Contains("AddComponent<LwsWeatherTestPanel>", root);
+            StringAssert.Contains("ShowWeatherTestPanel", service);
+            StringAssert.Contains("ToggleWeatherTestPanel", service);
+            StringAssert.DoesNotContain("private void OnGUI", source);
+            StringAssert.DoesNotContain("WeatherMakerScript", source);
+            StringAssert.DoesNotContain("NOT_Lonely.Weatherade", source);
+        }
+
+        [Test]
+        public void WeatherTestPanelFormatsWeatheradeCoverageDiagnostics()
+        {
+            Assert.AreEqual("ACTIVE", LwsWeatherTestPanel.ResolveCoverageActivity("RainCoverage wetness 1.00, puddles 0.75."));
+            Assert.AreEqual("INACTIVE", LwsWeatherTestPanel.ResolveCoverageActivity("SnowCoverage inactive while RainCoverage owns the active Weatherade instance."));
+            Assert.AreEqual("UNKNOWN", LwsWeatherTestPanel.ResolveCoverageActivity(string.Empty));
+            Assert.AreEqual("SUCCESS", LwsWeatherTestPanel.ResolveCoverageUpdateStatus("Weatherade UpdateCoverageMaterials invoked for Rain."));
+            Assert.AreEqual("FAILURE", LwsWeatherTestPanel.ResolveCoverageUpdateStatus("Weatherade UpdateCoverageMaterials API was not found."));
+        }
         private static LwsRoadGraph CreateTwoPointRoadGraph()
         {
             var graph = new LwsRoadGraph { graphId = "IH_TEST_MINIMAP_GRAPH" };
@@ -456,3 +515,4 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
     }
 }
+

@@ -6,6 +6,7 @@ namespace LWS.InterstateHauler
     {
         bool IsVisible { get; }
         bool IsBigMapVisible { get; }
+        bool IsWeatherTestPanelVisible { get; }
         LwsDevelopmentUiTab ActiveTab { get; }
         LwsDevelopmentUiRoot RuntimeRoot { get; }
         void EnsureRuntime();
@@ -16,6 +17,9 @@ namespace LWS.InterstateHauler
         void ShowBigMap();
         void HideBigMap();
         void ToggleBigMap();
+        void ShowWeatherTestPanel();
+        void HideWeatherTestPanel();
+        void ToggleWeatherTestPanel();
     }
 
     public sealed class LwsDevelopmentUiService : ILwsDevelopmentUiService
@@ -26,6 +30,7 @@ namespace LWS.InterstateHauler
         public string ServiceId => "lws.development.ui";
         public bool IsVisible => _runtimeRoot != null && _runtimeRoot.ControlCenterVisible;
         public bool IsBigMapVisible => _runtimeRoot != null && _runtimeRoot.BigMapVisible;
+        public bool IsWeatherTestPanelVisible => _runtimeRoot != null && _runtimeRoot.WeatherTestPanelVisible;
         public LwsDevelopmentUiTab ActiveTab => _runtimeRoot != null ? _runtimeRoot.ActiveTab : LwsDevelopmentUiTab.Overview;
         public LwsDevelopmentUiRoot RuntimeRoot => _runtimeRoot;
 
@@ -129,6 +134,23 @@ namespace LWS.InterstateHauler
             _runtimeRoot?.ToggleBigMap();
         }
 
+        public void ShowWeatherTestPanel()
+        {
+            EnsureRuntime();
+            _runtimeRoot?.ShowWeatherTestPanel();
+        }
+
+        public void HideWeatherTestPanel()
+        {
+            _runtimeRoot?.HideWeatherTestPanel();
+        }
+
+        public void ToggleWeatherTestPanel()
+        {
+            EnsureRuntime();
+            _runtimeRoot?.ToggleWeatherTestPanel();
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void EnsureDevelopmentRuntimeAfterSceneLoad()
         {
@@ -154,3 +176,4 @@ namespace LWS.InterstateHauler
         }
     }
 }
+
