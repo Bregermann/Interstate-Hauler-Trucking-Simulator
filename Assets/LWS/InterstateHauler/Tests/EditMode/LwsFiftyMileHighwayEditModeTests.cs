@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -150,22 +151,80 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
-        public void ChunkBuilderOffsetsRuntimeRoadToGlobalChunkPosition()
+        public void ChunkBuilderKeepsRuntimeRoadLocalToPositionedChunkRoot()
         {
             var owner = new GameObject("50-mile-chunk-offset-test");
             try
             {
+                owner.transform.position = new Vector3(0f, 0f, (float)LwsFiftyMileHighwayModel.GetChunkStartMeters(7));
                 var builder = owner.AddComponent<LwsFiftyMileHighwayChunkBuilder>();
                 builder.Configure(7);
                 builder.BuildChunk();
 
                 Assert.IsTrue(builder.WasBuilt);
-                Assert.That(builder.GeneratedRootLocalPosition.z, Is.EqualTo(builder.ChunkStartLocalZ).Within(0.01f));
-                Assert.That(builder.GeneratedRootLocalPosition.z, Is.EqualTo((float)LwsFiftyMileHighwayModel.GetChunkStartMeters(7)).Within(0.01f));
+                Assert.That(builder.GeneratedRootLocalPosition, Is.EqualTo(Vector3.zero));
+                Assert.That(owner.transform.GetChild(0).position.z, Is.EqualTo((float)LwsFiftyMileHighwayModel.GetChunkStartMeters(7)).Within(0.01f));
             }
             finally
             {
                 UnityEngine.Object.DestroyImmediate(owner);
+            }
+        }
+
+        [Test]
+        public void ChunkScenesAreMetadataOnlyAndUseRuntimeGeneration()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                string sceneText = File.ReadAllText(LwsFiftyMileHighwayModel.GetChunkScenePath(i));
+
+                StringAssert.Contains($"m_Name: {LwsFiftyMileHighwayModel.GetChunkSceneName(i)}", sceneText);
+                StringAssert.Contains($"chunkId: {LwsFiftyMileHighwayModel.GetChunkId(i)}", sceneText);
+                StringAssert.Contains("buildOnStart: 1", sceneText);
+                StringAssert.Contains("createLaneMarkings: 1", sceneText);
+                StringAssert.DoesNotContain("MeshFilter:", sceneText);
+                StringAssert.DoesNotContain("MeshRenderer:", sceneText);
+                StringAssert.DoesNotContain("MeshCollider:", sceneText);
+            }
+        }
+
+        [Test]
+        public void ChunkScenesHaveValidYamlDocumentSeparators()
+        {
+            for (int i = 0; i < LwsFiftyMileHighwayModel.ChunkCount; i++)
+            {
+                string sceneText = File.ReadAllText(LwsFiftyMileHighwayModel.GetChunkScenePath(i));
+
+                StringAssert.DoesNotContain("m_NavMeshData: {fileID: 0}--- !u!1", sceneText);
+                StringAssert.Contains("m_NavMeshData: {fileID: 0}\n--- !u!1", sceneText.Replace("\r\n", "\n"));
+            }
+        }
+
+        [Test]
+        public void ChunkSceneRootsOwnGlobalPlacementSoRuntimeMeshesAreNotDoubleOffset()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                string sceneText = File.ReadAllText(LwsFiftyMileHighwayModel.GetChunkScenePath(i));
+                string expectedZ = ((float)LwsFiftyMileHighwayModel.GetChunkStartMeters(i)).ToString("0.###", CultureInfo.InvariantCulture);
+                string expectedRootPosition = $"m_LocalPosition: {{x: 0, y: 0, z: {expectedZ}}}";
+
+                StringAssert.Contains(expectedRootPosition, sceneText);
+            }
+        }
+
+        [Test]
+        public void FiftyMileChunkScenesAreRegisteredForNameBasedAdditiveLoading()
+        {
+            var buildScenePaths = new HashSet<string>(
+                EditorBuildSettings.scenes
+                    .Where(scene => scene.enabled)
+                    .Select(scene => scene.path),
+                StringComparer.OrdinalIgnoreCase);
+
+            for (int i = 0; i < LwsFiftyMileHighwayModel.ChunkCount; i++)
+            {
+                Assert.That(buildScenePaths, Contains.Item(LwsFiftyMileHighwayModel.GetChunkScenePath(i)));
             }
         }
 

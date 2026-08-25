@@ -26,6 +26,14 @@ namespace LWS.InterstateHauler
         public Vector3 GeneratedRootLocalPosition => _generatedRoot != null ? _generatedRoot.transform.localPosition : default;
         public float ChunkStartLocalZ => (float)LwsFiftyMileHighwayModel.GetChunkStartMeters(ChunkIndex);
 
+        private void Awake()
+        {
+            if (Application.isPlaying && buildOnStart)
+            {
+                BuildChunk();
+            }
+        }
+
         private void Start()
         {
             if (buildOnStart)
@@ -50,7 +58,7 @@ namespace LWS.InterstateHauler
             string chunkId = LwsFiftyMileHighwayModel.GetChunkId(index);
             _generatedRoot = new GameObject($"{chunkId} {RuntimeRoadRootSuffix}");
             _generatedRoot.transform.SetParent(transform, false);
-            _generatedRoot.transform.localPosition = new Vector3(0f, 0f, (float)LwsFiftyMileHighwayModel.GetChunkStartMeters(index));
+            _generatedRoot.transform.localPosition = Vector3.zero;
 
             Transform roadSurfaceRoot = EnsureChild(_generatedRoot.transform, MainRoadSurfaceRootName);
             Transform shoulderRoot = EnsureChild(_generatedRoot.transform, ShouldersAndMedianRootName);
