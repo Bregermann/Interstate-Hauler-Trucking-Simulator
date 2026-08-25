@@ -76,11 +76,13 @@ namespace LWS.InterstateHauler.Editor
         private const string MirrorControllerPath = "Assets/LWS/InterstateHauler/Vehicles/Mirrors/LwsTruckMirrorController.cs";
         private const string CabAnchorRegistryPath = "Assets/LWS/InterstateHauler/Vehicles/Cab/Accessories/LwsCabAccessoryAnchorRegistry.cs";
         private const string CabAnchorPath = "Assets/LWS/InterstateHauler/Vehicles/Cab/Accessories/LwsCabAccessoryAnchor.cs";
+        private const string CabInteriorRecoveryPath = "Assets/LWS/InterstateHauler/Vehicles/Cab/LwsTruckCabInteriorRecovery.cs";
         private const string DashboardDocsPath = "Documentation/InterstateHauler/008_Dashboard_and_Mirrors.md";
         private const string DashboardBindingMatrixPath = "Documentation/InterstateHauler/008_Dashboard_Binding_Matrix.md";
         private const string MirrorQualityMatrixPath = "Documentation/InterstateHauler/008_Mirror_Quality_Matrix.md";
         private const string CabAnchorMatrixPath = "Documentation/InterstateHauler/008_Cab_Anchor_Matrix.md";
         private const string Prompt009HandoffPath = "Documentation/InterstateHauler/008_Prompt009_Handoff.md";
+        private const string CabInteriorRecoveryDocsPath = "Documentation/InterstateHauler/Cab/008_Cab_Interior_Recovery.md";
         private const string InterstateCorridorScenePath = "Assets/LWS/InterstateHauler/Roads/Validation/InterstateCorridorValidation.unity";
         private const string EasyRoadsExportBoundaryPath = "Assets/LWS/InterstateHauler/Roads/EasyRoads/LwsEasyRoadsExportBoundary.cs";
         private const string RoadGraphRuntimePath = "Assets/LWS/InterstateHauler/Roads/LwsRoadGraphRuntime.cs";
@@ -1488,7 +1490,8 @@ namespace LWS.InterstateHauler.Editor
                 DashboardTypesPath,
                 MirrorControllerPath,
                 CabAnchorRegistryPath,
-                CabAnchorPath
+                CabAnchorPath,
+                CabInteriorRecoveryPath
             };
 
             var missing = requiredFiles.Where(path => !File.Exists(path)).ToList();
@@ -1566,12 +1569,14 @@ namespace LWS.InterstateHauler.Editor
             bool spawnerInstalls = spawnerText.Contains("LwsTruckDashboardController") &&
                                    spawnerText.Contains("LwsTruckMirrorController") &&
                                    spawnerText.Contains("LwsCabAccessoryAnchorRegistry") &&
+                                   spawnerText.Contains("LwsTruckCabInteriorRecovery") &&
                                    spawnerText.Contains("LwsTruckDashboardDebugPanel");
             bool serviceRegistered = bootstrapText.Contains("ILwsTruckDashboardService") &&
                                      bootstrapText.Contains("LwsTruckDashboardService");
             bool playerTruckExposes = playerTruckText.Contains("DashboardController") &&
                                       playerTruckText.Contains("MirrorController") &&
-                                      playerTruckText.Contains("CabAccessoryAnchorRegistry");
+                                      playerTruckText.Contains("CabAccessoryAnchorRegistry") &&
+                                      playerTruckText.Contains("CabInteriorRecovery");
 
             report.Add(
                 spawnerInstalls && serviceRegistered && playerTruckExposes ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
@@ -1628,10 +1633,13 @@ namespace LWS.InterstateHauler.Editor
         {
             string registryText = File.Exists(CabAnchorRegistryPath) ? File.ReadAllText(CabAnchorRegistryPath) : string.Empty;
             string anchorText = File.Exists(CabAnchorPath) ? File.ReadAllText(CabAnchorPath) : string.Empty;
+            string recoveryText = File.Exists(CabInteriorRecoveryPath) ? File.ReadAllText(CabInteriorRecoveryPath) : string.Empty;
             string[] requiredIds =
             {
                 "IH_CabAnchor_Dashboard01",
                 "IH_CabAnchor_Dashboard02",
+                "IH_CabAnchor_GpsMount",
+                "IH_CabAnchor_DashDecoration",
                 "IH_CabAnchor_Hanging01",
                 "IH_CabAnchor_PassengerSeat",
                 "IH_CabAnchor_Sleeper",
@@ -1641,15 +1649,22 @@ namespace LWS.InterstateHauler.Editor
             bool physicsSafe = anchorText.Contains("GetComponent<Rigidbody>()") &&
                                anchorText.Contains("Collider[]") &&
                                anchorText.Contains("colliders[i].enabled = false");
-            bool hulaPlaceholder = registryText.Contains("IH_DevHulaGirl_Placeholder") &&
-                                   registryText.Contains("LwsCabAccessoryBobble");
+            bool dashDecoration = registryText.Contains("IH_DashDecoration_Placeholder") &&
+                                  registryText.Contains("DashDecorationPlaceholderAttached") &&
+                                  recoveryText.Contains("EnsureDashDecorationPlaceholder") &&
+                                  recoveryText.Contains("GetComponent<TextMesh>()");
+            bool sleeperRecovery = recoveryText.Contains("IH_SleeperInterior_Placeholder") &&
+                                   recoveryText.Contains("IH_Sleeper_BunkBase") &&
+                                   recoveryText.Contains("IH_Sleeper_OverheadStorage");
+            bool noVisibleLegacyText = !registryText.Contains("label.text = \"HULA\"") &&
+                                       !registryText.Contains("IH_DevHulaGirl_Placeholder");
 
             report.Add(
-                missingIds.Count == 0 && physicsSafe && hulaPlaceholder ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
+                missingIds.Count == 0 && physicsSafe && dashDecoration && sleeperRecovery && noVisibleLegacyText ? LwsValidationSeverity.Info : LwsValidationSeverity.Error,
                 "Cab Life Anchors",
-                missingIds.Count == 0 && physicsSafe && hulaPlaceholder
-                    ? "Required cab accessory anchor IDs exist, accessory attachments are presentation-only, and the hula placeholder hook exists."
-                    : "Cab accessory anchor foundation is incomplete.");
+                missingIds.Count == 0 && physicsSafe && dashDecoration && sleeperRecovery && noVisibleLegacyText
+                    ? "Required cab accessory anchor IDs exist, accessory attachments are presentation-only, the non-text dash decoration placeholder exists, and sleeper recovery is wired."
+                    : "Cab accessory anchor foundation, dash decoration, sleeper recovery, or legacy text cleanup is incomplete.");
         }
 
         private static void ValidatePrompt008Documentation(LwsProjectValidationReport report)
@@ -1660,6 +1675,7 @@ namespace LWS.InterstateHauler.Editor
                 DashboardBindingMatrixPath,
                 MirrorQualityMatrixPath,
                 CabAnchorMatrixPath,
+                CabInteriorRecoveryDocsPath,
                 Prompt009HandoffPath
             };
             var missingDocs = docs.Where(path => !File.Exists(path)).ToList();

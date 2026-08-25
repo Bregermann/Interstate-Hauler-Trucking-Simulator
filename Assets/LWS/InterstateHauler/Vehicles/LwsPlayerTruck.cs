@@ -17,6 +17,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private LwsTruckDashboardController dashboardController;
         [SerializeField] private LwsTruckMirrorController mirrorController;
         [SerializeField] private LwsCabAccessoryAnchorRegistry cabAccessoryAnchorRegistry;
+        [SerializeField] private LwsTruckCabInteriorRecovery cabInteriorRecovery;
         [SerializeField] private bool registerWithBootstrap = true;
 
         private ILwsPlayerVehicleService _playerVehicleService;
@@ -33,6 +34,7 @@ namespace LWS.InterstateHauler
         public LwsTruckDashboardController DashboardController => dashboardController;
         public LwsTruckMirrorController MirrorController => mirrorController;
         public LwsCabAccessoryAnchorRegistry CabAccessoryAnchorRegistry => cabAccessoryAnchorRegistry;
+        public LwsTruckCabInteriorRecovery CabInteriorRecovery => cabInteriorRecovery;
         public bool IsReady => nwhAdapter != null && nwhAdapter.VehicleController != null;
         public LwsVehicleTelemetry LastTelemetry { get; private set; }
 
@@ -161,6 +163,11 @@ namespace LWS.InterstateHauler
             if (cabAccessoryAnchorRegistry == null)
             {
                 cabAccessoryAnchorRegistry = GetComponent<LwsCabAccessoryAnchorRegistry>();
+            }
+
+            if (cabInteriorRecovery == null)
+            {
+                cabInteriorRecovery = GetComponent<LwsTruckCabInteriorRecovery>();
             }
         }
 

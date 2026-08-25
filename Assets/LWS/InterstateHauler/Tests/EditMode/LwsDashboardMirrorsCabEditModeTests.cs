@@ -73,13 +73,57 @@ namespace LWS.InterstateHauler.Tests.EditMode
 
             registry.EnsureInitialized();
 
-            Assert.GreaterOrEqual(registry.CountByType(LwsCabAccessoryAnchorType.DashboardAccessory), 2);
+            Assert.GreaterOrEqual(registry.CountByType(LwsCabAccessoryAnchorType.DashboardAccessory), 4);
             Assert.AreEqual(1, registry.CountByType(LwsCabAccessoryAnchorType.HangingAccessory));
             Assert.AreEqual(1, registry.CountByType(LwsCabAccessoryAnchorType.PassengerSeat));
             Assert.AreEqual(1, registry.CountByType(LwsCabAccessoryAnchorType.Sleeper));
             Assert.AreEqual(1, registry.CountByType(LwsCabAccessoryAnchorType.PersonalMemento));
             Assert.IsTrue(registry.TryGetAnchor("IH_CabAnchor_Dashboard01", out _));
+            Assert.IsTrue(registry.TryGetAnchor(LwsCabAccessoryAnchorRegistry.GpsMountAnchorId, out _));
+            Assert.IsTrue(registry.TryGetAnchor(LwsCabAccessoryAnchorRegistry.DashDecorationAnchorId, out _));
             Assert.IsTrue(registry.Validate(out string message), message);
+            Object.DestroyImmediate(go);
+        }
+
+        [Test]
+        public void CabInteriorRecoveryCreatesDashDecorationAndSleeperWithoutTextPlaceholder()
+        {
+            GameObject go = new GameObject("cab-recovery-test");
+            new GameObject("Cab").transform.SetParent(go.transform, false);
+            LwsCabAccessoryAnchorRegistry registry = go.AddComponent<LwsCabAccessoryAnchorRegistry>();
+            LwsTruckCabInteriorRecovery recovery = go.AddComponent<LwsTruckCabInteriorRecovery>();
+
+            recovery.ApplyRecovery();
+
+            Assert.IsTrue(recovery.GpsMountReady);
+            Assert.IsTrue(recovery.DashDecorationReady);
+            Assert.IsTrue(recovery.SleeperInteriorReady);
+            Assert.IsTrue(registry.TryGetAnchor(LwsCabAccessoryAnchorRegistry.DashDecorationAnchorId, out LwsCabAccessoryAnchor decorationAnchor));
+            Assert.IsTrue(decorationAnchor.Occupied);
+            Assert.AreEqual(LwsCabAccessoryAnchorRegistry.DashDecorationPlaceholderName, decorationAnchor.AttachedAccessory.name);
+            Assert.IsNull(decorationAnchor.AttachedAccessory.GetComponent<TextMesh>());
+            Assert.IsTrue(registry.TryGetAnchor("IH_CabAnchor_Sleeper", out LwsCabAccessoryAnchor sleeperAnchor));
+            Assert.IsTrue(sleeperAnchor.Occupied);
+            Assert.AreEqual(LwsTruckCabInteriorRecovery.SleeperPlaceholderRootName, sleeperAnchor.AttachedAccessory.name);
+            Object.DestroyImmediate(go);
+        }
+
+        [Test]
+        public void CabGpsFallbackCanvasCanBeHiddenForCompassPresentation()
+        {
+            GameObject go = new GameObject("cab-gps-fallback-test");
+            new GameObject("Cab").transform.SetParent(go.transform, false);
+            go.AddComponent<LwsCabAccessoryAnchorRegistry>().EnsureInitialized();
+            LwsCabGpsController gps = go.AddComponent<LwsCabGpsController>();
+
+            gps.BindPhysicalScreen();
+            Assert.IsTrue(gps.PhysicalGpsBound);
+            Assert.IsTrue(gps.FallbackPhysicalScreenVisible);
+            Assert.AreEqual(RenderMode.WorldSpace, gps.PhysicalCanvas.renderMode);
+
+            gps.SetFallbackPhysicalScreenVisible(false);
+            Assert.IsFalse(gps.FallbackPhysicalScreenVisible);
+            Assert.IsTrue(gps.PhysicalGpsBound);
             Object.DestroyImmediate(go);
         }
 

@@ -44,6 +44,7 @@ namespace LWS.InterstateHauler
         public string PresenterId => "lws.cab.gps";
         public string GpsAnchorId => gpsAnchorId;
         public bool PhysicalGpsBound => _canvas != null;
+        public bool FallbackPhysicalScreenVisible => _canvas != null && _canvas.gameObject.activeSelf;
         public Canvas PhysicalCanvas => _canvas;
         public Transform GpsMount => _gpsMount;
         public LwsSemanticGpsMapGraphic SemanticMapGraphic => _mapGraphic;
@@ -147,6 +148,17 @@ namespace LWS.InterstateHauler
             _cameraPresentationService?.SetCabGpsActive(true);
             LogPlacementDiagnostic(parent, root.transform);
             RefreshDisplay();
+        }
+
+        public void SetFallbackPhysicalScreenVisible(bool visible)
+        {
+            if (_canvas == null)
+            {
+                return;
+            }
+
+            _canvas.gameObject.SetActive(visible);
+            _cameraPresentationService?.SetCabGpsActive(visible);
         }
 
         private void ResolveServices()

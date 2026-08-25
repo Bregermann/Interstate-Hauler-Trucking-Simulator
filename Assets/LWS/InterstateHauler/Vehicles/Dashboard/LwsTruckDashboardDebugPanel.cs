@@ -62,7 +62,7 @@ namespace LWS.InterstateHauler
                 GUILayout.Label($"Passenger: {anchors.CountByType(LwsCabAccessoryAnchorType.PassengerSeat)}");
                 GUILayout.Label($"Sleeper: {anchors.CountByType(LwsCabAccessoryAnchorType.Sleeper)}");
                 GUILayout.Label($"Mementos: {anchors.CountByType(LwsCabAccessoryAnchorType.PersonalMemento)}");
-                GUILayout.Label($"Hula: {anchors.HulaPlaceholderAttached} @ {anchors.HulaPlaceholderAnchorId}");
+                GUILayout.Label($"Dash Decoration: {anchors.DashDecorationPlaceholderAttached} @ {anchors.DashDecorationPlaceholderAnchorId}");
             }
 
             GUILayout.EndArea();

@@ -43,7 +43,7 @@ It feeds both from the same `ILwsNavigationService` route state and converts glo
 
 ## Fallback Semantic Map
 
-The old `LwsSemanticGpsMapGraphic` remains as a project-owned fallback and test utility. It is no longer the normal player-facing GPS presentation when Compass Navigator Pro is available.
+The old `LwsSemanticGpsMapGraphic` remains as a project-owned fallback and test utility. It is no longer the normal player-facing GPS presentation when Compass Navigator Pro is available, and the cab fallback canvas is hidden once the Compass cab GPS is created.
 
 Fallback responsibilities:
 

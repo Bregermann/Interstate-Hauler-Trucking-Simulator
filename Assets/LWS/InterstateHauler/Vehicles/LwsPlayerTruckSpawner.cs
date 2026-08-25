@@ -202,6 +202,12 @@ namespace LWS.InterstateHauler
                 anchors = truckInstance.AddComponent<LwsCabAccessoryAnchorRegistry>();
             }
 
+            LwsTruckCabInteriorRecovery cabRecovery = truckInstance.GetComponent<LwsTruckCabInteriorRecovery>();
+            if (cabRecovery == null)
+            {
+                truckInstance.AddComponent<LwsTruckCabInteriorRecovery>();
+            }
+
             LwsCabGpsController cabGps = truckInstance.GetComponent<LwsCabGpsController>();
             if (cabGps == null)
             {

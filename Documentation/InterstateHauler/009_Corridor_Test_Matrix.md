@@ -20,6 +20,6 @@
 | 18-speed | Low/high range and split behavior | Manual required | Prompt 006 architecture untouched. |
 | Controls | Signals, cruise, Jake, parking brake | Manual required | Prompt 007 architecture untouched. |
 | Flip Off Driver | No-target gesture safe | Manual required | No traffic target yet by design. |
-| Cab Life | Anchors and hula placeholder | Manual required | Prompt 008 cab anchor system untouched. |
+| Cab Life | Anchors and dash decoration placeholder | Manual required | Prompt 008 cab anchor system untouched. |
 | Aspect ratios | 16:9, 16:10, 21:9, 32:9 cockpit usability | Manual required | Prompt 008 owns cab scaling. |
 | Automation | Runtime/EditMode/PlayMode C# builds | Passed | Dotnet project builds completed with warnings only. |

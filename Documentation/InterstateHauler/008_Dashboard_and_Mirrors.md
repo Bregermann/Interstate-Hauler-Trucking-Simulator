@@ -9,7 +9,7 @@ Prompt 008 establishes the first LWS-owned cockpit layer for the NWH Euro semi:
 - the stock NWH dash GUI controller is disabled on the spawned LWS truck instance so LWS owns the cab state presentation
 - left/right mirror cameras are controlled by LWS mirror quality presets tied to Prompt 003 rendering settings
 - Cab Life accessory anchors are created as stable semantic IDs under the spawned LWS truck instance
-- a development hula-girl placeholder proves the anchor path without production collectible art
+- a non-text dashboard decoration placeholder proves the anchor path without production collectible art
 
 No vendor source or original vendor prefab was modified.
 
@@ -207,7 +207,8 @@ Stable anchors created on the spawned LWS truck instance:
 
 | Anchor ID | Type | Expected Content |
 | --- | --- | --- |
-| `IH_CabAnchor_Dashboard01` | Dashboard accessory | hula girl / bobblehead |
+| `IH_CabAnchor_Dashboard01` | Dashboard accessory | dashboard bobble accessory |
+| `IH_CabAnchor_DashDecoration` | Dashboard accessory | small non-text dash decoration placeholder |
 | `IH_CabAnchor_Dashboard02` | Dashboard accessory | souvenir / mini flag / coffee cup |
 | `IH_CabAnchor_Hanging01` | Hanging accessory | dice / air freshener |
 | `IH_CabAnchor_PassengerSeat` | Passenger seat | future dog companion / bag |
@@ -216,26 +217,26 @@ Stable anchors created on the spawned LWS truck instance:
 
 These IDs are the future save/load handle. Save systems should store equipped accessory IDs and anchor IDs, not world-space transforms.
 
-## Hula Placeholder
+## Dashboard Decoration Placeholder
 
-The registry attaches `IH_DevHulaGirl_Placeholder` to `IH_CabAnchor_Dashboard01` at runtime when validation tooling is enabled.
+The cab recovery pass attaches `IH_DashDecoration_Placeholder` to `IH_CabAnchor_DashDecoration` at runtime when the spawned truck needs development cab decoration. The placeholder is a small presentation-only cube, not text.
 
 The placeholder:
 
-- is TextMesh-based development art, not production collectible content
+- is simple cube development art, not production collectible content
 - has no Rigidbody
 - disables any colliders found under attached accessories
 - uses `LwsCabAccessoryBobble` for lightweight presentation-only motion
 - does not affect NWH center of mass, wheels, trailer, or collision response
 
-Prompt 074 owns production hula-girl art, unlocks, inventory, and cab customization UI.
+A later cab-life/customization prompt owns production dashboard accessory art, unlocks, inventory, and cab customization UI.
 
 ## Performance
 
 Automated performance measurements were not taken in this environment. Expected costs:
 
 - Cab anchors: negligible, static transforms plus a small registry list
-- Hula placeholder: trivial TextMesh plus one lightweight bobble update
+- Dash decoration placeholder: one lightweight cube plus optional bobble update
 - Mirrors: primary cost risk, because left/right mirror cameras render extra views
 
 Manual profiling still required:
@@ -251,7 +252,7 @@ Required normal Editor visual checks:
 
 | Aspect | Status | Notes |
 | --- | --- | --- |
-| 16:9 | Manual required | Verify gauges, mirrors, and hula placeholder from cab camera. |
+| 16:9 | Manual required | Verify gauges, mirrors, GPS, sleeper cues, and dash decoration from cab camera. |
 | 16:10 / 1280x800 | Manual required | Steam Deck readability check. |
 | 21:9 | Manual required | Verify dashboard framing and mirror usefulness. |
 | 32:9 | Manual required | Verify no stretched mirror/cockpit artifacts. |
@@ -265,6 +266,8 @@ Added EditMode tests:
 - signal/hazard blink behavior
 - mirror preset validation
 - cab anchor registry required categories
+- cab recovery creates dash decoration and sleeper placeholders without text or physics
+- cab GPS fallback canvas can be hidden for Compass presentation
 - unsafe accessory Rigidbody rejection
 - dashboard service duplicate rejection
 
@@ -272,7 +275,7 @@ Added PlayMode tests:
 
 - dashboard service/controller publish path
 - mirror Off disables mirror cameras
-- hula placeholder attaches without physics
+- dash decoration placeholder remains disabled by registry default
 - dashboard snapshot consumes Prompt 007 control state
 
 Normal Unity Editor Test Runner remains authoritative.
@@ -285,7 +288,7 @@ Normal Unity Editor Test Runner remains authoritative.
 - Engine brake, retarder, independent trailer brake, and wipers are semantic states only for the starter truck.
 - No full dashboard illumination/day-night dimmer system yet.
 - No final mirror adjustment UI yet.
-- No production hula art or Cab Life inventory/economy.
+- No production dashboard accessory art or Cab Life inventory/economy.
 
 ## Prompt 009 Recommendations
 

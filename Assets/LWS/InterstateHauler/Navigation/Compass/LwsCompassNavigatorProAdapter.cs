@@ -658,6 +658,8 @@ namespace LWS.InterstateHauler
                     legacyMaps[i].gameObject.SetActive(false);
                 }
             }
+
+            cabGps.SetFallbackPhysicalScreenVisible(false);
         }
 
         private static bool InvokeSetRoute(Component compass, List<Vector3> routePoints)

@@ -7,14 +7,19 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsCabAccessoryAnchorRegistry : MonoBehaviour
     {
+        public const string GpsMountAnchorId = "IH_CabAnchor_GpsMount";
+        public const string DashDecorationAnchorId = "IH_CabAnchor_DashDecoration";
+        public const string DashDecorationPlaceholderName = "IH_DashDecoration_Placeholder";
+
         [SerializeField] private bool createDefaultAnchors = true;
-        [SerializeField] private bool attachDevelopmentHulaPlaceholder;
+        [SerializeField] private bool attachDevelopmentDashDecorationPlaceholder;
         [SerializeField] private string anchorRootName = "IH_CabAccessoryAnchors";
         [SerializeField] private List<LwsCabAccessoryAnchorDefinition> defaultAnchors = new List<LwsCabAccessoryAnchorDefinition>
         {
-            new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Dashboard01", anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(-0.38f, 1.35f, 1.15f), localEulerAngles = new Vector3(0f, 0f, 0f), localScale = Vector3.one, expectedContent = "hula girl / bobblehead", notes = "Primary left dashboard accessory location." },
+            new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Dashboard01", anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(-0.38f, 1.35f, 1.15f), localEulerAngles = new Vector3(0f, 0f, 0f), localScale = Vector3.one, expectedContent = "dashboard bobble accessory", notes = "Primary left dashboard accessory location." },
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Dashboard02", anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(0.34f, 1.35f, 1.15f), localEulerAngles = new Vector3(0f, 0f, 0f), localScale = Vector3.one, expectedContent = "souvenir / mini flag / coffee cup", notes = "Secondary dashboard accessory location." },
-            new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_GpsMount", anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(0.36f, 1.15f, 1.08f), localEulerAngles = Vector3.zero, localScale = Vector3.one, expectedContent = "world-space cab GPS", notes = "Center-right dashboard GPS mount for cockpit navigation." },
+            new LwsCabAccessoryAnchorDefinition { anchorId = GpsMountAnchorId, anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(0.36f, 1.15f, 1.08f), localEulerAngles = Vector3.zero, localScale = Vector3.one, expectedContent = "world-space cab GPS", notes = "Center-right dashboard GPS mount for cockpit navigation." },
+            new LwsCabAccessoryAnchorDefinition { anchorId = DashDecorationAnchorId, anchorType = LwsCabAccessoryAnchorType.DashboardAccessory, localPosition = new Vector3(-0.46f, 1.31f, 1.1f), localEulerAngles = new Vector3(0f, 12f, 0f), localScale = Vector3.one, expectedContent = "small dashboard decoration placeholder", notes = "Stable non-text placeholder mount replacing the old temporary text label." },
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Hanging01", anchorType = LwsCabAccessoryAnchorType.HangingAccessory, localPosition = new Vector3(0f, 1.82f, 1.02f), localEulerAngles = new Vector3(0f, 0f, 0f), localScale = Vector3.one, expectedContent = "hanging dice / air freshener", notes = "Windshield hanging accessory location." },
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_PassengerSeat", anchorType = LwsCabAccessoryAnchorType.PassengerSeat, localPosition = new Vector3(0.82f, 0.82f, -0.2f), localEulerAngles = new Vector3(0f, -12f, 0f), localScale = Vector3.one, expectedContent = "future dog companion / bag", notes = "Passenger seat placement." },
             new LwsCabAccessoryAnchorDefinition { anchorId = "IH_CabAnchor_Sleeper", anchorType = LwsCabAccessoryAnchorType.Sleeper, localPosition = new Vector3(0f, 0.72f, -1.35f), localEulerAngles = new Vector3(0f, 180f, 0f), localScale = Vector3.one, expectedContent = "future dog or cat companion / bedding", notes = "Sleeper placement." },
@@ -23,13 +28,13 @@ namespace LWS.InterstateHauler
 
         private readonly List<LwsCabAccessoryAnchor> _anchors = new List<LwsCabAccessoryAnchor>();
         private Transform _anchorRoot;
-        private GameObject _hulaPlaceholder;
+        private GameObject _dashDecorationPlaceholder;
         private bool _initialized;
         private bool _initializing;
 
         public IReadOnlyList<LwsCabAccessoryAnchor> Anchors => _anchors;
-        public bool HulaPlaceholderAttached => _hulaPlaceholder != null && _hulaPlaceholder.transform.parent != null;
-        public string HulaPlaceholderAnchorId => HulaPlaceholderAttached ? _hulaPlaceholder.transform.parent.GetComponent<LwsCabAccessoryAnchor>()?.AnchorId : string.Empty;
+        public bool DashDecorationPlaceholderAttached => _dashDecorationPlaceholder != null && _dashDecorationPlaceholder.transform.parent != null;
+        public string DashDecorationPlaceholderAnchorId => DashDecorationPlaceholderAttached ? _dashDecorationPlaceholder.transform.parent.GetComponent<LwsCabAccessoryAnchor>()?.AnchorId : string.Empty;
 
         private void Awake()
         {
@@ -63,9 +68,9 @@ namespace LWS.InterstateHauler
                 EnsureDefaultAnchors();
             }
 
-            if (attachDevelopmentHulaPlaceholder)
+            if (attachDevelopmentDashDecorationPlaceholder)
             {
-                EnsureDevelopmentHulaPlaceholder();
+                EnsureDevelopmentDashDecorationPlaceholder();
             }
 
             _initialized = true;
@@ -184,30 +189,33 @@ namespace LWS.InterstateHauler
             RefreshAnchors();
         }
 
-        private void EnsureDevelopmentHulaPlaceholder()
+        private void EnsureDevelopmentDashDecorationPlaceholder()
         {
-            if (!TryGetAnchor("IH_CabAnchor_Dashboard01", out LwsCabAccessoryAnchor anchor))
+            if (!TryGetAnchor(DashDecorationAnchorId, out LwsCabAccessoryAnchor anchor))
             {
                 return;
             }
 
             if (anchor.Occupied)
             {
-                _hulaPlaceholder = anchor.AttachedAccessory;
+                _dashDecorationPlaceholder = anchor.AttachedAccessory;
                 return;
             }
 
-            _hulaPlaceholder = new GameObject("IH_DevHulaGirl_Placeholder");
-            TextMesh label = _hulaPlaceholder.AddComponent<TextMesh>();
-            label.text = "HULA";
-            label.characterSize = 0.06f;
-            label.anchor = TextAnchor.MiddleCenter;
-            label.alignment = TextAlignment.Center;
-            label.color = new Color(0.25f, 0.95f, 0.7f);
-            _hulaPlaceholder.AddComponent<LwsCabAccessoryBobble>();
-            _hulaPlaceholder.transform.localScale = Vector3.one;
+            _dashDecorationPlaceholder = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            _dashDecorationPlaceholder.name = DashDecorationPlaceholderName;
+            _dashDecorationPlaceholder.transform.localScale = new Vector3(0.14f, 0.045f, 0.08f);
+            Collider collider = _dashDecorationPlaceholder.GetComponent<Collider>();
+            if (collider != null)
+            {
+                DestroyPresentationCollider(collider);
+            }
 
-            LwsCabAccessoryAttachmentResult result = anchor.Attach(_hulaPlaceholder);
+            Renderer renderer = _dashDecorationPlaceholder.GetComponent<Renderer>();
+            ApplyPresentationMaterial(renderer, new Color(0.11f, 0.55f, 0.62f, 1f));
+            _dashDecorationPlaceholder.AddComponent<LwsCabAccessoryBobble>();
+
+            LwsCabAccessoryAttachmentResult result = anchor.Attach(_dashDecorationPlaceholder);
             if (!result.Succeeded)
             {
                 Debug.LogWarning(result.Message, this);
@@ -274,6 +282,44 @@ namespace LWS.InterstateHauler
             }
 
             return null;
+        }
+
+        private static void ApplyPresentationMaterial(Renderer renderer, Color color)
+        {
+            if (renderer == null)
+            {
+                return;
+            }
+
+            Shader shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard") ?? Shader.Find("Diffuse");
+            if (shader == null)
+            {
+                return;
+            }
+
+            Material material = new Material(shader)
+            {
+                color = color,
+                hideFlags = HideFlags.DontSave
+            };
+            renderer.sharedMaterial = material;
+        }
+
+        private static void DestroyPresentationCollider(Collider collider)
+        {
+            if (collider == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Object.Destroy(collider);
+            }
+            else
+            {
+                Object.DestroyImmediate(collider);
+            }
         }
     }
 }
