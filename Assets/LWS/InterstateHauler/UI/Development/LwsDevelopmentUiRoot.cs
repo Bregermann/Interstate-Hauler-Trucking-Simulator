@@ -62,16 +62,27 @@ namespace LWS.InterstateHauler
         private GameObject _controlCenterPanel;
         private GameObject _bigMapPanel;
         private GameObject _minimapPanel;
+        private GameObject _transmissionHudPanel;
         private LwsDevelopmentUiInputBridge _inputBridge;
         private ILwsCameraPresentationService _subscribedCameraPresentationService;
         private RectTransform _tabList;
         private RectTransform _contentRoot;
         private ScrollRect _scrollRect;
         private Text _minimapStatusText;
+        private Text _transmissionHudStatusText;
+        private Text _transmissionHudModeButtonText;
         private Text _bigMapStatusText;
         private Text _bigMapDetailText;
+        private Button _transmissionHudModeButton;
+        private Button _transmissionHudShiftDownButton;
+        private Button _transmissionHudDriveButton;
+        private Button _transmissionHudNeutralButton;
+        private Button _transmissionHudReverseButton;
+        private Button _transmissionHudShiftUpButton;
         private LwsSemanticGpsMapGraphic _minimapGraphic;
         private LwsSemanticGpsMapGraphic _bigMapGraphic;
+        private Lws18SpeedTransmissionController _cachedTransmissionController;
+        private LwsKeyboardGamepadTruckInputSource _cachedKeyboardGamepadSource;
         private LwsDevelopmentUiTab _activeTab = LwsDevelopmentUiTab.Overview;
         private float _nextContentRefreshTime;
         private float _nextMapRefreshTime;
@@ -106,6 +117,7 @@ namespace LWS.InterstateHauler
         public LwsSemanticGpsMapGraphic BigMapGraphic => _bigMapGraphic;
         public RectTransform MinimapRect => _minimapPanel != null ? _minimapPanel.GetComponent<RectTransform>() : null;
         public GameObject MinimapPanel => _minimapPanel;
+        public GameObject TransmissionHudPanel => _transmissionHudPanel;
         public bool HudMinimapVisible => _minimapPanel != null && _minimapPanel.activeSelf;
         public LwsVehicleCameraMode CameraMode => _cameraPresentationService != null ? _cameraPresentationService.CurrentMode : LwsVehicleCameraMode.Unknown;
         public LwsGpsPresentationPolicy GpsPresentationPolicy => _cameraPresentationService != null ? _cameraPresentationService.GpsPresentationPolicy : LwsGpsPresentationPolicy.Auto;
@@ -139,6 +151,7 @@ namespace LWS.InterstateHauler
         {
             ResolveServices();
             ApplyGpsPresentationVisibility();
+            RefreshTransmissionHud();
             UpdateNavigationPose();
             UpdateFps();
             HandleKeyboardShortcuts();
@@ -315,6 +328,7 @@ namespace LWS.InterstateHauler
             _hudLayer.SetAsFirstSibling();
             _modalLayer.SetAsLastSibling();
             BuildDevButton();
+            BuildTransmissionHud();
             BuildMinimap();
             BuildBigMap();
             BuildControlCenter();
@@ -408,6 +422,40 @@ namespace LWS.InterstateHauler
                 new Vector2(DevButtonMarginPixels, DevButtonMarginPixels),
                 ShowControlCenter).gameObject;
             LwsDevelopmentUiDiagnostics.LogStage("DEV button created");
+        }
+
+        private void BuildTransmissionHud()
+        {
+            _transmissionHudPanel = CreateFixedPanel(
+                _hudLayer,
+                "Transmission Test Controls",
+                new Vector2(0.5f, 0f),
+                new Vector2(0.5f, 0f),
+                new Vector2(720f, 98f),
+                new Vector2(0f, 28f),
+                new Color(0.018f, 0.028f, 0.03f, 0.92f));
+
+            _transmissionHudStatusText = CreateText(
+                _transmissionHudPanel.transform,
+                "Transmission HUD Status",
+                "TRANSMISSION: SEARCHING",
+                new Vector2(0f, 1f),
+                new Vector2(1f, 1f),
+                new Vector2(14f, -36f),
+                new Vector2(-14f, -8f),
+                13,
+                FontStyle.Bold,
+                TextAnchor.MiddleCenter);
+
+            _transmissionHudModeButton = CreateButton(_transmissionHudPanel.transform, "Transmission Mode Toggle", "MANUAL", new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(12f, 10f), new Vector2(132f, 42f), RequestTransmissionModeToggle);
+            _transmissionHudShiftDownButton = CreateButton(_transmissionHudPanel.transform, "Transmission Shift Down", "SHIFT -", new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(142f, 10f), new Vector2(252f, 42f), () => RequestManualShiftStep(-1));
+            _transmissionHudDriveButton = CreateButton(_transmissionHudPanel.transform, "Automatic Selector D", "D", new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(262f, 10f), new Vector2(352f, 42f), () => RequestAutomaticSelector(LwsAutomaticTransmissionSelector.Drive));
+            _transmissionHudNeutralButton = CreateButton(_transmissionHudPanel.transform, "Automatic Selector N", "N", new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(362f, 10f), new Vector2(452f, 42f), () => RequestAutomaticSelector(LwsAutomaticTransmissionSelector.Neutral));
+            _transmissionHudReverseButton = CreateButton(_transmissionHudPanel.transform, "Automatic Selector R", "R", new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(462f, 10f), new Vector2(552f, 42f), () => RequestAutomaticSelector(LwsAutomaticTransmissionSelector.Reverse));
+            _transmissionHudShiftUpButton = CreateButton(_transmissionHudPanel.transform, "Transmission Shift Up", "SHIFT +", new Vector2(0f, 0f), new Vector2(0f, 0f), new Vector2(562f, 10f), new Vector2(708f, 42f), () => RequestManualShiftStep(1));
+
+            _transmissionHudModeButtonText = _transmissionHudModeButton.GetComponentInChildren<Text>();
+            LwsDevelopmentUiDiagnostics.LogStage("Transmission HUD created");
         }
 
         private void BuildMinimap()
@@ -655,10 +703,18 @@ namespace LWS.InterstateHauler
             AddInfo("Shift state", transmission.DisplayState.shiftState.ToString());
             AddInfo("Last rejection", transmission.DisplayState.lastRejectionReason.ToString());
             AddTransmissionSelectorRow(transmission);
-            AddButtonRow((transmission.DevelopmentAutomaticModeActive ? "SWITCH TO MANUAL" : "SWITCH TO AUTOMATIC", () =>
+            if (!transmission.AutomaticModeActive)
             {
-                bool nextAutomatic = !transmission.DevelopmentAutomaticModeActive;
-                transmission.TrySetDevelopmentAutomaticTestMode(nextAutomatic, out _lastActionMessage);
+                AddButtonRow(("SHIFT -", () => SendTruckCommand((ref LwsVehicleCommandFrame c) => c.transmissionShiftDown = LwsMomentaryIntent.Pressed)),
+                    ("SHIFT +", () => SendTruckCommand((ref LwsVehicleCommandFrame c) => c.transmissionShiftUp = LwsMomentaryIntent.Pressed)));
+            }
+
+            AddButtonRow((transmission.AutomaticModeActive ? "SWITCH TO 18-SPEED MANUAL" : "SWITCH TO AUTOMATIC", () =>
+            {
+                LwsTransmissionMode nextMode = transmission.AutomaticModeActive
+                    ? LwsTransmissionMode.Truck18Speed
+                    : LwsTransmissionMode.Automatic;
+                transmission.TrySetTransmissionMode(nextMode, out _lastActionMessage);
                 RebuildActiveTab();
             }));
         }
@@ -1150,6 +1206,100 @@ namespace LWS.InterstateHauler
             }
         }
 
+        private void RefreshTransmissionHud()
+        {
+            if (_transmissionHudPanel == null || _transmissionHudStatusText == null)
+            {
+                return;
+            }
+
+            Lws18SpeedTransmissionController transmission = ResolveTransmissionController();
+            if (transmission == null)
+            {
+                _transmissionHudStatusText.text = "TRANSMISSION: MISSING";
+                SetButtonInteractable(_transmissionHudModeButton, false, false);
+                SetButtonInteractable(_transmissionHudShiftDownButton, false, false);
+                SetButtonInteractable(_transmissionHudShiftUpButton, false, false);
+                SetSelectorHudButtons(null);
+                return;
+            }
+
+            LwsTransmissionDisplayState state = transmission.DisplayState;
+            LwsVehicleContinuousInput continuous = _inputService != null ? _inputService.ReadContinuousInput() : default;
+            LwsTruckControlState truckState = _truckControlService != null ? _truckControlService.ActiveState : default;
+            LwsKeyboardGamepadTruckInputSource keyboard = ResolveKeyboardGamepadSource();
+            string keyState = keyboard != null
+                ? $"W {(keyboard.KeyboardForwardHeld ? 1 : 0)} S {(keyboard.KeyboardReverseHeld ? 1 : 0)} A {(keyboard.KeyboardLeftHeld ? 1 : 0)} D {(keyboard.KeyboardRightHeld ? 1 : 0)}"
+                : "W/S/A/D --";
+            string modeText = FormatTransmissionHudMode(state);
+            string engineText = truckState.engineRunning ? "ENGINE ON" : "ENGINE OFF";
+            string parkText = truckState.parkingBrakeOn ? "PARK ON" : "PARK OFF";
+            _transmissionHudStatusText.text =
+                $"{modeText} | {FormatSignedSpeed(state.signedSpeedMetersPerSecond)} | {engineText} | {parkText} | {keyState} | THR {continuous.throttle:0.00} BRK {continuous.brake:0.00}";
+
+            bool automatic = transmission.AutomaticModeActive;
+            SetButtonText(_transmissionHudModeButtonText, automatic ? "MANUAL" : "AUTO");
+            SetButtonInteractable(_transmissionHudModeButton, true, false);
+            SetButtonInteractable(_transmissionHudShiftDownButton, !automatic, false);
+            SetButtonInteractable(_transmissionHudShiftUpButton, !automatic, false);
+            SetSelectorHudButtons(transmission);
+        }
+
+        private static string FormatTransmissionHudMode(LwsTransmissionDisplayState state)
+        {
+            if (state.mode == LwsTransmissionMode.Automatic)
+            {
+                return $"AUTO {FormatAutomaticSelectorShort(state.automaticSelector)} | GEAR {SafeGearLabel(state.displayLabel)} | TARGET {SafeGearLabel(state.automaticTargetLabel)}";
+            }
+
+            return $"MANUAL | GEAR {SafeGearLabel(state.displayLabel)} | RANGE {state.engagedRange} | SPLIT {state.engagedSplitter} | CLUTCH {state.clutch:0.00}";
+        }
+
+        private static string SafeGearLabel(string label)
+        {
+            return string.IsNullOrWhiteSpace(label) ? "N" : label;
+        }
+
+        private void SetSelectorHudButtons(Lws18SpeedTransmissionController transmission)
+        {
+            bool enabled = transmission != null && transmission.AutomaticModeActive;
+            LwsAutomaticTransmissionSelector active = transmission != null ? transmission.AutomaticSelector : LwsAutomaticTransmissionSelector.Drive;
+            SetButtonInteractable(_transmissionHudDriveButton, enabled, enabled && active == LwsAutomaticTransmissionSelector.Drive);
+            SetButtonInteractable(_transmissionHudNeutralButton, enabled, enabled && active == LwsAutomaticTransmissionSelector.Neutral);
+            SetButtonInteractable(_transmissionHudReverseButton, enabled, enabled && active == LwsAutomaticTransmissionSelector.Reverse);
+        }
+
+        private static void SetButtonInteractable(Button button, bool interactable, bool selected)
+        {
+            if (button == null)
+            {
+                return;
+            }
+
+            button.interactable = interactable;
+            Color normal = selected ? SelectedButtonColor : interactable ? ButtonColor : DisabledButtonColor;
+            Image image = button.GetComponent<Image>();
+            if (image != null)
+            {
+                image.color = normal;
+            }
+
+            ColorBlock colors = button.colors;
+            colors.normalColor = normal;
+            colors.highlightedColor = selected ? new Color(0.16f, 0.44f, 0.31f, 1f) : ButtonHoverColor;
+            colors.selectedColor = colors.highlightedColor;
+            colors.disabledColor = DisabledButtonColor;
+            button.colors = colors;
+        }
+
+        private static void SetButtonText(Text text, string value)
+        {
+            if (text != null)
+            {
+                text.text = value;
+            }
+        }
+
         private void SetGpsPresentationPolicy(LwsGpsPresentationPolicy policy)
         {
             _cameraPresentationService?.SetGpsPresentationPolicy(policy);
@@ -1203,9 +1353,43 @@ namespace LWS.InterstateHauler
             _lastActionMessage = "Truck command sent through semantic LWS control frame.";
         }
 
+        private void RequestTransmissionModeToggle()
+        {
+            Lws18SpeedTransmissionController transmission = ResolveTransmissionController();
+            if (transmission == null)
+            {
+                _lastActionMessage = "Transmission controller not found.";
+                RefreshTransmissionHud();
+                return;
+            }
+
+            LwsTransmissionMode nextMode = transmission.AutomaticModeActive
+                ? LwsTransmissionMode.Truck18Speed
+                : LwsTransmissionMode.Automatic;
+            transmission.TrySetTransmissionMode(nextMode, out _lastActionMessage);
+            RefreshTransmissionHud();
+            RebuildActiveTab();
+        }
+
+        private void RequestManualShiftStep(int direction)
+        {
+            SendTruckCommand((ref LwsVehicleCommandFrame c) =>
+            {
+                if (direction > 0)
+                {
+                    c.transmissionShiftUp = LwsMomentaryIntent.Pressed;
+                }
+                else
+                {
+                    c.transmissionShiftDown = LwsMomentaryIntent.Pressed;
+                }
+            });
+            RefreshTransmissionHud();
+        }
+
         private void RequestAutomaticSelector(LwsAutomaticTransmissionSelector selector)
         {
-            Lws18SpeedTransmissionController transmission = FindFirstObjectByType<Lws18SpeedTransmissionController>();
+            Lws18SpeedTransmissionController transmission = ResolveTransmissionController();
             if (transmission == null)
             {
                 _lastActionMessage = "Transmission controller not found.";
@@ -1213,6 +1397,7 @@ namespace LWS.InterstateHauler
             }
 
             transmission.TrySetAutomaticSelector(selector, out _lastActionMessage);
+            RefreshTransmissionHud();
             RebuildActiveTab();
         }
 
@@ -1445,6 +1630,26 @@ namespace LWS.InterstateHauler
         {
             Vector3 local = ResolvePlayerLocalPosition();
             return _originService != null ? _originService.LocalToGlobal(local) : LwsWorldPositionD.FromVector3(local);
+        }
+
+        private Lws18SpeedTransmissionController ResolveTransmissionController()
+        {
+            if (_cachedTransmissionController == null)
+            {
+                _cachedTransmissionController = FindFirstObjectByType<Lws18SpeedTransmissionController>();
+            }
+
+            return _cachedTransmissionController;
+        }
+
+        private LwsKeyboardGamepadTruckInputSource ResolveKeyboardGamepadSource()
+        {
+            if (_cachedKeyboardGamepadSource == null)
+            {
+                _cachedKeyboardGamepadSource = FindFirstObjectByType<LwsKeyboardGamepadTruckInputSource>();
+            }
+
+            return _cachedKeyboardGamepadSource;
         }
 
         private Vector3 ResolvePlayerLocalPosition()

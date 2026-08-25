@@ -42,6 +42,21 @@ namespace LWS.InterstateHauler.Tests.EditMode
         [Test]
         public void AutomaticKeyboardDirectionPolicyBrakesBeforeChangingDirection()
         {
+            LwsAutomaticKeyboardDirectionDecision forwardThrottle =
+                LwsKeyboardGamepadTruckInputSource.ResolveAutomaticKeyboardDirection(
+                    true,
+                    false,
+                    LwsTransmissionMode.Automatic,
+                    LwsAutomaticTransmissionSelector.Drive,
+                    0f,
+                    0.35f);
+
+            Assert.IsTrue(forwardThrottle.handled);
+            Assert.IsFalse(forwardThrottle.requestSelectorChange);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Drive, forwardThrottle.requestedSelector);
+            Assert.AreEqual(1f, forwardThrottle.throttle);
+            Assert.AreEqual(0f, forwardThrottle.brake);
+
             LwsAutomaticKeyboardDirectionDecision forwardBrake =
                 LwsKeyboardGamepadTruckInputSource.ResolveAutomaticKeyboardDirection(
                     false,
@@ -82,6 +97,20 @@ namespace LWS.InterstateHauler.Tests.EditMode
             Assert.IsFalse(reverseBrake.requestSelectorChange);
             Assert.AreEqual(0f, reverseBrake.throttle);
             Assert.AreEqual(1f, reverseBrake.brake);
+
+            LwsAutomaticKeyboardDirectionDecision selectDrive =
+                LwsKeyboardGamepadTruckInputSource.ResolveAutomaticKeyboardDirection(
+                    true,
+                    false,
+                    LwsTransmissionMode.Automatic,
+                    LwsAutomaticTransmissionSelector.Reverse,
+                    -0.05f,
+                    0.35f);
+
+            Assert.IsTrue(selectDrive.requestSelectorChange);
+            Assert.AreEqual(LwsAutomaticTransmissionSelector.Drive, selectDrive.requestedSelector);
+            Assert.AreEqual(1f, selectDrive.throttle);
+            Assert.AreEqual(0f, selectDrive.brake);
         }
 
         [Test]

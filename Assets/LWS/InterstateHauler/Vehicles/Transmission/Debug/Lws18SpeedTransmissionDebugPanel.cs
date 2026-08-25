@@ -34,16 +34,59 @@ namespace LWS.InterstateHauler
             GUILayout.BeginArea(new Rect(position.x, position.y, 380f, 450f), GUI.skin.box);
             GUILayout.Label("Interstate Hauler Transmission");
             GUILayout.Label($"Transmission Mode: {state.mode.ToString().ToUpperInvariant()}");
-            string buttonLabel = transmission.DevelopmentAutomaticModeActive
+            string buttonLabel = transmission.AutomaticModeActive
                 ? "SWITCH TO 18-SPEED MANUAL"
                 : "SWITCH TO AUTOMATIC";
             if (GUILayout.Button(buttonLabel, GUILayout.Height(32f)))
             {
-                bool enableAutomatic = !transmission.DevelopmentAutomaticModeActive;
-                if (!transmission.TrySetDevelopmentAutomaticTestMode(enableAutomatic, out string message))
+                LwsTransmissionMode nextMode = transmission.AutomaticModeActive
+                    ? LwsTransmissionMode.Truck18Speed
+                    : LwsTransmissionMode.Automatic;
+                if (!transmission.TrySetTransmissionMode(nextMode, out string message))
                 {
                     Debug.LogWarning(message, this);
                 }
+            }
+
+            if (transmission.AutomaticModeActive)
+            {
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("D", GUILayout.Height(28f)) &&
+                    !transmission.TrySetAutomaticSelector(LwsAutomaticTransmissionSelector.Drive, out string driveMessage))
+                {
+                    Debug.LogWarning(driveMessage, this);
+                }
+
+                if (GUILayout.Button("N", GUILayout.Height(28f)) &&
+                    !transmission.TrySetAutomaticSelector(LwsAutomaticTransmissionSelector.Neutral, out string neutralMessage))
+                {
+                    Debug.LogWarning(neutralMessage, this);
+                }
+
+                if (GUILayout.Button("R", GUILayout.Height(28f)) &&
+                    !transmission.TrySetAutomaticSelector(LwsAutomaticTransmissionSelector.Reverse, out string reverseMessage))
+                {
+                    Debug.LogWarning(reverseMessage, this);
+                }
+
+                GUILayout.EndHorizontal();
+            }
+            else
+            {
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("SHIFT -", GUILayout.Height(28f)) &&
+                    !transmission.TryShiftManualByStep(-1, out string downMessage))
+                {
+                    Debug.LogWarning(downMessage, this);
+                }
+
+                if (GUILayout.Button("SHIFT +", GUILayout.Height(28f)) &&
+                    !transmission.TryShiftManualByStep(1, out string upMessage))
+                {
+                    Debug.LogWarning(upMessage, this);
+                }
+
+                GUILayout.EndHorizontal();
             }
 
             if (!string.IsNullOrWhiteSpace(transmission.LastModeSwitchMessage))

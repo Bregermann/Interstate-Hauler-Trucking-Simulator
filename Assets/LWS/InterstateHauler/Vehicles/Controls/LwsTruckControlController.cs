@@ -268,7 +268,29 @@ namespace LWS.InterstateHauler
                 Publish("DifferentialLock", _state.differentialLocked.ToString());
             }
 
+            if (Pressed(commands.transmissionShiftDown))
+            {
+                ApplyManualTransmissionStep(-1);
+            }
+
+            if (Pressed(commands.transmissionShiftUp))
+            {
+                ApplyManualTransmissionStep(1);
+            }
+
             ApplyCruiseCommands(commands, continuous);
+        }
+
+        private void ApplyManualTransmissionStep(int direction)
+        {
+            if (transmissionController == null)
+            {
+                Publish(direction > 0 ? "TransmissionShiftUp" : "TransmissionShiftDown", "Transmission controller missing");
+                return;
+            }
+
+            transmissionController.TryShiftManualByStep(direction, out string message);
+            Publish(direction > 0 ? "TransmissionShiftUp" : "TransmissionShiftDown", message);
         }
 
         private void ApplyCruiseCommands(LwsVehicleCommandFrame commands, LwsVehicleContinuousInput continuous)

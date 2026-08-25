@@ -183,6 +183,79 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void DevelopmentAutomaticLaunchesFromCrawlerLow()
+        {
+            GameObject go = new GameObject("transmission-controller-launch-gear");
+            try
+            {
+                Lws18SpeedTransmissionController controller = go.AddComponent<Lws18SpeedTransmissionController>();
+
+                Assert.AreEqual(1, controller.AutomaticStartingForwardGear);
+                Assert.IsTrue(controller.Definition.TryGetMappingForNwhGear(controller.AutomaticStartingForwardGear, out Lws18SpeedRatioMapping mapping));
+                Assert.AreEqual(Lws18SpeedGearId.LowLow, mapping.gearId);
+                Assert.AreEqual("LO-L", mapping.displayLabel);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void ManualShiftStepsResolveThroughEighteenSpeedMapping()
+        {
+            Lws18SpeedTransmissionDefinition definition = Lws18SpeedTransmissionDefinition.CreateTransientG29DevelopmentPreset();
+
+            Assert.IsTrue(Lws18SpeedTransmissionController.TryBuildManualStepIntent(
+                definition,
+                0,
+                0,
+                1,
+                out LwsTruckGearIntent firstIntent,
+                out int firstGear,
+                out string firstMessage), firstMessage);
+            Assert.AreEqual(1, firstGear);
+            Assert.AreEqual(LwsTruckShifterGate.Gate2, firstIntent.physicalGate);
+            Assert.AreEqual(LwsTruckRange.Low, firstIntent.range);
+            Assert.AreEqual(LwsTruckSplitter.Low, firstIntent.splitter);
+            Assert.IsFalse(firstIntent.neutralRequested);
+
+            Assert.IsTrue(Lws18SpeedTransmissionController.TryBuildManualStepIntent(
+                definition,
+                3,
+                3,
+                1,
+                out LwsTruckGearIntent upIntent,
+                out int upGear,
+                out string upMessage), upMessage);
+            Assert.AreEqual(4, upGear);
+            Assert.AreEqual(LwsTruckShifterGate.Gate3, upIntent.physicalGate);
+            Assert.AreEqual(LwsTruckSplitter.High, upIntent.splitter);
+
+            Assert.IsTrue(Lws18SpeedTransmissionController.TryBuildManualStepIntent(
+                definition,
+                1,
+                1,
+                -1,
+                out LwsTruckGearIntent neutralIntent,
+                out int neutralGear,
+                out string neutralMessage), neutralMessage);
+            Assert.AreEqual(0, neutralGear);
+            Assert.IsTrue(neutralIntent.neutralRequested);
+
+            Assert.IsTrue(Lws18SpeedTransmissionController.TryBuildManualStepIntent(
+                definition,
+                0,
+                0,
+                -1,
+                out LwsTruckGearIntent reverseIntent,
+                out int reverseGear,
+                out string reverseMessage), reverseMessage);
+            Assert.AreEqual(-1, reverseGear);
+            Assert.IsTrue(reverseIntent.reverseRequested);
+        }
+
+        [Test]
         public void SavePayloadSerializesLogicalTransmissionStateOnly()
         {
             var payload = new Lws18SpeedTransmissionSavePayload

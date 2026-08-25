@@ -5,6 +5,12 @@ using UnityEngine.InputSystem.Controls;
 
 namespace LWS.InterstateHauler
 {
+    public enum LwsTruckInputMode
+    {
+        StandardTruck,
+        BasicAutomatic
+    }
+
     [DefaultExecutionOrder(-110)]
     [DisallowMultipleComponent]
     public sealed class LwsKeyboardGamepadTruckInputSource : MonoBehaviour, ILwsVehicleInputSource
@@ -12,25 +18,85 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool registerAsFallbackDrivingSource = true;
         [SerializeField] private bool readKeyboard = true;
         [SerializeField] private bool readGamepad = true;
+        [SerializeField] private LwsTruckInputMode inputMode = LwsTruckInputMode.StandardTruck;
         [SerializeField] private bool automaticKeyboardDirectionPolicy = true;
+        [SerializeField] private bool suppressCameraCycle;
+        [SerializeField] private bool suppressDrivingInput;
         [SerializeField] private Lws18SpeedTransmissionController transmissionController;
 
         private readonly Dictionary<string, bool> _previous = new Dictionary<string, bool>();
         private ILwsVehicleInputService _inputService;
         private LwsVehicleCommandFrame _lastCommands;
         private LwsVehicleContinuousInput _lastContinuous;
+        private bool _keyboardForwardHeld;
+        private bool _keyboardReverseHeld;
+        private bool _keyboardLeftHeld;
+        private bool _keyboardRightHeld;
 
         public string SourceId => "lws.input.keyboard-gamepad.truck";
+        public LwsTruckInputMode InputMode => inputMode;
+        public bool CameraCycleSuppressed => suppressCameraCycle;
+        public bool DrivingInputSuppressed => suppressDrivingInput;
         public LwsVehicleCommandFrame LastCommands => _lastCommands;
+        public bool KeyboardForwardHeld => _keyboardForwardHeld;
+        public bool KeyboardReverseHeld => _keyboardReverseHeld;
+        public bool KeyboardLeftHeld => _keyboardLeftHeld;
+        public bool KeyboardRightHeld => _keyboardRightHeld;
 
         public void ConfigureTransmissionController(Lws18SpeedTransmissionController controller)
         {
             transmissionController = controller;
         }
 
+        public bool TrySetInputMode(LwsTruckInputMode mode, out string message)
+        {
+            inputMode = mode;
+            ResolveServices();
+            if (transmissionController == null)
+            {
+                message = mode == LwsTruckInputMode.BasicAutomatic
+                    ? "Basic Automatic input mode selected; transmission controller is not available yet."
+                    : "Standard truck input mode selected; transmission controller is not available yet.";
+                return mode != LwsTruckInputMode.BasicAutomatic;
+            }
+
+            if (mode == LwsTruckInputMode.BasicAutomatic)
+            {
+                return transmissionController.TrySetAutomaticMode(out message);
+            }
+
+            return transmissionController.TrySetTruck18SpeedManualMode(out message);
+        }
+
+        public void SetCameraCycleSuppressed(bool suppressed)
+        {
+            suppressCameraCycle = suppressed;
+        }
+
+        public void SetDrivingInputSuppressed(bool suppressed)
+        {
+            suppressDrivingInput = suppressed;
+            if (suppressed)
+            {
+                _lastContinuous = default;
+                _lastCommands = default;
+            }
+        }
+
+        public static LwsVehicleCommandFrame SuppressCameraCycle(LwsVehicleCommandFrame commands)
+        {
+            commands.cameraCycle = LwsMomentaryIntent.None;
+            return commands;
+        }
+
         private void Start()
         {
             ResolveServices();
+            if (inputMode == LwsTruckInputMode.BasicAutomatic && transmissionController != null)
+            {
+                transmissionController.TrySetAutomaticMode(out _);
+            }
+
             if (registerAsFallbackDrivingSource &&
                 _inputService != null &&
                 !_inputService.HasActiveSource)
@@ -73,15 +139,28 @@ namespace LWS.InterstateHauler
 
         private LwsVehicleContinuousInput ReadContinuousNow()
         {
+            if (suppressDrivingInput)
+            {
+                _keyboardForwardHeld = false;
+                _keyboardReverseHeld = false;
+                _keyboardLeftHeld = false;
+                _keyboardRightHeld = false;
+                return default;
+            }
+
             var continuous = new LwsVehicleContinuousInput();
             bool forwardHeld = false;
             bool reverseHeld = false;
             if (readKeyboard && Keyboard.current != null)
             {
-                if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) continuous.steering -= 1f;
-                if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) continuous.steering += 1f;
+                _keyboardLeftHeld = Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed;
+                _keyboardRightHeld = Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed;
+                if (_keyboardLeftHeld) continuous.steering -= 1f;
+                if (_keyboardRightHeld) continuous.steering += 1f;
                 forwardHeld = Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed;
                 reverseHeld = Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed;
+                _keyboardForwardHeld = forwardHeld;
+                _keyboardReverseHeld = reverseHeld;
                 if (!ApplyAutomaticKeyboardDirectionPolicy(ref continuous, forwardHeld, reverseHeld))
                 {
                     if (forwardHeld) continuous.throttle = 1f;
@@ -98,6 +177,14 @@ namespace LWS.InterstateHauler
                     : continuous.steering;
                 continuous.throttle = Mathf.Max(continuous.throttle, Gamepad.current.rightTrigger.ReadValue());
                 continuous.brake = Mathf.Max(continuous.brake, Gamepad.current.leftTrigger.ReadValue());
+            }
+
+            if (!readKeyboard || Keyboard.current == null)
+            {
+                _keyboardForwardHeld = false;
+                _keyboardReverseHeld = false;
+                _keyboardLeftHeld = false;
+                _keyboardRightHeld = false;
             }
 
             return continuous;
@@ -177,6 +264,11 @@ namespace LWS.InterstateHauler
 
         private LwsVehicleCommandFrame ReadCommandsNow()
         {
+            if (suppressDrivingInput)
+            {
+                return default;
+            }
+
             LwsVehicleCommandFrame keyboard = readKeyboard ? ReadKeyboardCommands() : default;
             LwsVehicleCommandFrame gamepad = readGamepad ? ReadGamepadCommands() : default;
             return LwsVehicleCommandFrameUtility.Combine(keyboard, gamepad);
@@ -211,6 +303,8 @@ namespace LWS.InterstateHauler
                 retarderIncrease = Edge("kb.retarderUp", keyboard.homeKey.isPressed),
                 retarderDecrease = Edge("kb.retarderDown", keyboard.endKey.isPressed),
                 differentialLock = Edge("kb.diffLock", keyboard.oKey.isPressed),
+                transmissionShiftUp = Edge("kb.transmissionShiftUp", keyboard.periodKey.isPressed),
+                transmissionShiftDown = Edge("kb.transmissionShiftDown", keyboard.commaKey.isPressed),
                 cruiseControl = Edge("kb.cruiseToggle", keyboard.cKey.isPressed),
                 cruiseSet = Edge("kb.cruiseSet", keyboard.rKey.isPressed && !shift),
                 cruiseResume = Edge("kb.cruiseResume", keyboard.rKey.isPressed && shift),
@@ -219,7 +313,7 @@ namespace LWS.InterstateHauler
                 cruiseDecrease = Edge("kb.cruiseDecrease", keyboard.minusKey.isPressed),
                 trailerAttachDetach = Edge("kb.trailerAttach", keyboard.tKey.isPressed),
                 trailerBrake = Edge("kb.trailerBrake", keyboard.spaceKey.isPressed),
-                cameraCycle = Edge("kb.cameraCycle", keyboard.tabKey.isPressed),
+                cameraCycle = CameraCycleEdge("kb.cameraCycle", keyboard.tabKey.isPressed),
                 lookReset = Edge("kb.lookReset", keyboard.backquoteKey.isPressed),
                 flipOffDriver = Edge("kb.flipOff", keyboard.fKey.isPressed),
                 interact = Edge("kb.interact", keyboard.enterKey.isPressed),
@@ -255,7 +349,7 @@ namespace LWS.InterstateHauler
                 cruiseControl = Edge("gp.cruiseToggle", gamepad.dpad.right.isPressed),
                 cruiseCancel = Edge("gp.cruiseCancel", gamepad.dpad.left.isPressed),
                 trailerAttachDetach = Edge("gp.trailerAttach", gamepad.dpad.down.isPressed),
-                cameraCycle = Edge("gp.cameraCycle", gamepad.selectButton.isPressed),
+                cameraCycle = CameraCycleEdge("gp.cameraCycle", gamepad.selectButton.isPressed),
                 flipOffDriver = Edge("gp.flipOff", gamepad.leftStickButton.isPressed && gamepad.rightStickButton.isPressed),
                 pause = Edge("gp.pause", gamepad.startButton.isPressed),
                 menuSubmit = Edge("gp.submit", gamepad.buttonSouth.isPressed),
@@ -282,6 +376,12 @@ namespace LWS.InterstateHauler
             }
 
             return current ? LwsMomentaryIntent.Held : LwsMomentaryIntent.None;
+        }
+
+        private LwsMomentaryIntent CameraCycleEdge(string key, bool current)
+        {
+            LwsMomentaryIntent intent = Edge(key, current);
+            return suppressCameraCycle ? LwsMomentaryIntent.None : intent;
         }
 
         private void ResolveServices()

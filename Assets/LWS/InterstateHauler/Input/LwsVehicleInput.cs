@@ -98,6 +98,8 @@ namespace LWS.InterstateHauler
         public LwsMomentaryIntent retarderIncrease;
         public LwsMomentaryIntent retarderDecrease;
         public LwsMomentaryIntent differentialLock;
+        public LwsMomentaryIntent transmissionShiftUp;
+        public LwsMomentaryIntent transmissionShiftDown;
         public LwsMomentaryIntent trailerAttachDetach;
         public LwsMomentaryIntent trailerBrake;
         public LwsMomentaryIntent cameraCycle;

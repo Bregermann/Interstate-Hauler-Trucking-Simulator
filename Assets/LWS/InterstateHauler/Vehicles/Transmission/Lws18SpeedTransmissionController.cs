@@ -18,7 +18,7 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool configureNwhOnStart = true;
         [SerializeField] private bool registerSaveParticipant = true;
         [SerializeField] private bool logRejectedShifts;
-        [SerializeField] private int automaticStartingForwardGear = 3;
+        [SerializeField] private int automaticStartingForwardGear = 1;
         [SerializeField] private int automaticMaximumForwardGear = 18;
         [SerializeField] private float automaticUpshiftRpm = 1850f;
         [SerializeField] private float automaticDownshiftRpm = 1050f;
@@ -51,9 +51,11 @@ namespace LWS.InterstateHauler
         public LwsTransmissionDisplayState DisplayState => _displayState;
         public LwsTransmissionAbuseEvent LastAbuseEvent => _lastAbuseEvent;
         public Lws18SpeedTransmissionDefinition Definition => ActiveDefinition;
+        public bool AutomaticModeActive => mode == LwsTransmissionMode.Automatic;
         public bool DevelopmentAutomaticModeActive => mode == LwsTransmissionMode.Automatic;
         public LwsAutomaticTransmissionSelector AutomaticSelector => automaticSelector;
         public float AutomaticDirectionChangeSpeedThresholdMetersPerSecond => automaticStoppedNeutralSpeedMetersPerSecond;
+        public int AutomaticStartingForwardGear => Mathf.Clamp(automaticStartingForwardGear, 1, 18);
         public int AutomaticTargetNwhGear => _automaticTargetNwhGear;
         public string AutomaticTargetLabel => string.IsNullOrWhiteSpace(_automaticTargetLabel) ? "N" : _automaticTargetLabel;
         public string LastModeSwitchMessage => _lastModeSwitchMessage;
@@ -177,6 +179,31 @@ namespace LWS.InterstateHauler
             _state.mode = transmissionMode;
         }
 
+        public bool TrySetTransmissionMode(LwsTransmissionMode transmissionMode, out string message)
+        {
+            switch (transmissionMode)
+            {
+                case LwsTransmissionMode.Automatic:
+                    return TrySetAutomaticMode(out message);
+                case LwsTransmissionMode.Truck18Speed:
+                    return TrySetTruck18SpeedManualMode(out message);
+                default:
+                    message = $"{transmissionMode} is not controlled by the 18-speed transmission authority.";
+                    _lastModeSwitchMessage = message;
+                    return false;
+            }
+        }
+
+        public bool TrySetAutomaticMode(out string message)
+        {
+            return TrySwitchAutomaticMode(true, out message);
+        }
+
+        public bool TrySetTruck18SpeedManualMode(out string message)
+        {
+            return TrySwitchAutomaticMode(false, out message);
+        }
+
         public bool TrySetAutomaticSelector(LwsAutomaticTransmissionSelector selector, out string message)
         {
             ResolveLocalReferences();
@@ -217,6 +244,11 @@ namespace LWS.InterstateHauler
 
         public bool TrySetDevelopmentAutomaticTestMode(bool enabled, out string message)
         {
+            return TrySwitchAutomaticMode(enabled, out message);
+        }
+
+        private bool TrySwitchAutomaticMode(bool enabled, out string message)
+        {
             ResolveLocalReferences();
             ConfigureNwhIfNeeded();
 
@@ -240,8 +272,8 @@ namespace LWS.InterstateHauler
                 _state.requiresShifterSynchronization = false;
                 _automaticTargetNwhGear = 0;
                 _automaticTargetLabel = "N";
-                _nextAutomaticShiftTime = Time.time + 0.25f;
-                message = "Development automatic transmission test mode enabled; selector set to DRIVE.";
+                _nextAutomaticShiftTime = 0f;
+                message = "Automatic transmission mode enabled; selector set to DRIVE.";
             }
             else
             {
@@ -262,6 +294,139 @@ namespace LWS.InterstateHauler
         public void SetAssistMode(LwsManualShiftAssistMode manualAssistMode)
         {
             assistMode = manualAssistMode;
+        }
+
+        public bool TryShiftManualByStep(int direction, out string message)
+        {
+            if (mode != LwsTransmissionMode.Truck18Speed)
+            {
+                message = "Manual shift commands are only available in 18-speed manual mode.";
+                _lastModeSwitchMessage = message;
+                return false;
+            }
+
+            LwsNwhTransmissionRuntimeState nwhState = ReadNwhState();
+            int currentNwhGear = nwhState.available ? nwhState.nwhGear : _state.nwhGear;
+            if (!TryBuildManualStepIntent(ActiveDefinition, currentNwhGear, _state.logicalRatioIndex, direction, out LwsTruckGearIntent intent, out int targetNwhGear, out message))
+            {
+                _lastModeSwitchMessage = message;
+                return false;
+            }
+
+            _state.requiresShifterSynchronization = false;
+            ProcessGearIntent(intent, _lastClutchInput);
+            bool accepted = _state.lastRejectionReason == LwsShiftRejectionReason.None ||
+                            _state.lastRejectionReason == LwsShiftRejectionReason.DuplicateRequestSuppressed;
+            message = accepted
+                ? $"Manual development shift selected {GetAutomaticTargetLabel(ActiveDefinition, targetNwhGear)}."
+                : $"Manual development shift rejected: {_state.lastRejectionReason}.";
+            _lastModeSwitchMessage = message;
+            return accepted;
+        }
+
+        public static bool TryBuildManualStepIntent(
+            Lws18SpeedTransmissionDefinition activeDefinition,
+            int currentNwhGear,
+            int currentLogicalRatioIndex,
+            int direction,
+            out LwsTruckGearIntent gearIntent,
+            out int targetNwhGear,
+            out string message)
+        {
+            gearIntent = new LwsTruckGearIntent
+            {
+                physicalGate = LwsTruckShifterGate.Neutral,
+                neutralRequested = true
+            };
+            targetNwhGear = 0;
+
+            if (activeDefinition == null)
+            {
+                message = "18-speed transmission definition is not available.";
+                return false;
+            }
+
+            if (direction == 0)
+            {
+                message = "Manual shift step direction must be non-zero.";
+                return false;
+            }
+
+            int currentRatio = ResolveCurrentManualRatioIndex(activeDefinition, currentNwhGear, currentLogicalRatioIndex);
+            if (direction > 0)
+            {
+                targetNwhGear = currentRatio < 1 ? 1 : Mathf.Min(18, currentRatio + 1);
+            }
+            else
+            {
+                targetNwhGear = currentRatio > 1 ? currentRatio - 1 : currentRatio == 1 ? 0 : activeDefinition.ReverseNwhGearIndex;
+            }
+
+            if (targetNwhGear < 0)
+            {
+                gearIntent = new LwsTruckGearIntent
+                {
+                    physicalGate = activeDefinition.ReverseGate,
+                    range = LwsTruckRange.Low,
+                    splitter = LwsTruckSplitter.Low,
+                    reverseRequested = true
+                };
+                message = "Manual shift step resolved to reverse.";
+                return true;
+            }
+
+            if (targetNwhGear == 0)
+            {
+                gearIntent = new LwsTruckGearIntent
+                {
+                    physicalGate = LwsTruckShifterGate.Neutral,
+                    range = LwsTruckRange.Low,
+                    splitter = LwsTruckSplitter.Low,
+                    neutralRequested = true
+                };
+                message = "Manual shift step resolved to neutral.";
+                return true;
+            }
+
+            if (!activeDefinition.TryGetMappingForNwhGear(targetNwhGear, out Lws18SpeedRatioMapping mapping))
+            {
+                message = $"No 18-speed mapping exists for NWH gear {targetNwhGear}.";
+                return false;
+            }
+
+            gearIntent = new LwsTruckGearIntent
+            {
+                physicalGate = mapping.physicalGate,
+                range = mapping.range,
+                splitter = mapping.splitter,
+                requestedLogicalGear = mapping.logicalRatioIndex
+            };
+            message = $"Manual shift step resolved to {mapping.displayLabel}.";
+            return true;
+        }
+
+        private static int ResolveCurrentManualRatioIndex(
+            Lws18SpeedTransmissionDefinition activeDefinition,
+            int currentNwhGear,
+            int currentLogicalRatioIndex)
+        {
+            if (currentNwhGear < 0)
+            {
+                return -1;
+            }
+
+            if (currentNwhGear == 0)
+            {
+                return 0;
+            }
+
+            if (activeDefinition != null &&
+                activeDefinition.TryGetMappingForNwhGear(currentNwhGear, out Lws18SpeedRatioMapping mapping))
+            {
+                return mapping.logicalRatioIndex;
+            }
+
+            return Mathf.Clamp(currentLogicalRatioIndex, 0, 18);
         }
 
         public void ApplyGearIntent(LwsTruckGearIntent gearIntent)
@@ -557,7 +722,7 @@ namespace LWS.InterstateHauler
             LwsNwhTransmissionRuntimeState nwhState,
             LwsVehicleContinuousInput continuousInput)
         {
-            int minimumForwardGear = Mathf.Clamp(automaticStartingForwardGear, 1, 18);
+            int minimumForwardGear = AutomaticStartingForwardGear;
             int maximumForwardGear = Mathf.Clamp(Mathf.Max(automaticMaximumForwardGear, minimumForwardGear), minimumForwardGear, 18);
             int currentNwhGear = nwhState.available ? nwhState.nwhGear : _state.nwhGear;
             float speed = nwhState.available ? Mathf.Abs(nwhState.signedSpeedMetersPerSecond) : 0f;

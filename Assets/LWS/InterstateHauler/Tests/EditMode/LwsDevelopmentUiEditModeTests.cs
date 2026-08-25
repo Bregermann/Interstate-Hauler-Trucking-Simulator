@@ -296,6 +296,10 @@ namespace LWS.InterstateHauler.Tests.EditMode
             StringAssert.Contains("Automatic Selector N", root);
             StringAssert.Contains("Automatic Selector R", root);
             StringAssert.Contains("TrySetAutomaticSelector", root);
+            StringAssert.Contains("\"Transmission Test Controls\"", root);
+            StringAssert.Contains("\"Transmission Shift Down\"", root);
+            StringAssert.Contains("\"Transmission Shift Up\"", root);
+            StringAssert.Contains("RefreshTransmissionHud", root);
             StringAssert.Contains("KeyCode.Alpha1", root);
             StringAssert.Contains("KeyCode.Alpha2", root);
             StringAssert.Contains("KeyCode.Alpha3", root);

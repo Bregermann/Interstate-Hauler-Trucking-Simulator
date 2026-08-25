@@ -64,6 +64,8 @@ namespace LWS.InterstateHauler
                 retarderIncrease = Combine(a.retarderIncrease, b.retarderIncrease),
                 retarderDecrease = Combine(a.retarderDecrease, b.retarderDecrease),
                 differentialLock = Combine(a.differentialLock, b.differentialLock),
+                transmissionShiftUp = Combine(a.transmissionShiftUp, b.transmissionShiftUp),
+                transmissionShiftDown = Combine(a.transmissionShiftDown, b.transmissionShiftDown),
                 trailerAttachDetach = Combine(a.trailerAttachDetach, b.trailerAttachDetach),
                 trailerBrake = Combine(a.trailerBrake, b.trailerBrake),
                 cameraCycle = Combine(a.cameraCycle, b.cameraCycle),

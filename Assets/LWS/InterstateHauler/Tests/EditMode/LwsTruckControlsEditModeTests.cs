@@ -10,18 +10,22 @@ namespace LWS.InterstateHauler.Tests.EditMode
         {
             LwsVehicleCommandFrame keyboard = new LwsVehicleCommandFrame
             {
-                parkingBrakeToggle = LwsMomentaryIntent.Pressed
+                parkingBrakeToggle = LwsMomentaryIntent.Pressed,
+                transmissionShiftUp = LwsMomentaryIntent.Pressed
             };
             LwsVehicleCommandFrame wheel = new LwsVehicleCommandFrame
             {
                 parkingBrakeToggle = LwsMomentaryIntent.Held,
-                horn = LwsMomentaryIntent.Held
+                horn = LwsMomentaryIntent.Held,
+                transmissionShiftDown = LwsMomentaryIntent.Pressed
             };
 
             LwsVehicleCommandFrame combined = LwsVehicleCommandFrameUtility.Combine(keyboard, wheel);
 
             Assert.AreEqual(LwsMomentaryIntent.Pressed, combined.parkingBrakeToggle);
             Assert.AreEqual(LwsMomentaryIntent.Held, combined.horn);
+            Assert.AreEqual(LwsMomentaryIntent.Pressed, combined.transmissionShiftUp);
+            Assert.AreEqual(LwsMomentaryIntent.Pressed, combined.transmissionShiftDown);
         }
 
         [Test]
