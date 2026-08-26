@@ -151,7 +151,10 @@ namespace LWS.InterstateHauler
     {
         public const string CanvasObjectName = "F3 Save Load Canvas";
         public const string DirectSaveHotkeyName = "F3";
-        public const float ButtonPreferredHeight = 60f;
+        public const float DefaultVisibleRowHeight = 100f;
+        public const float ButtonPreferredHeight = DefaultVisibleRowHeight;
+        public const float InfoRowPreferredHeight = 72f;
+        public const float MinimumVisibleElementHeight = 60f;
         public static readonly Vector2 ReferenceResolution = new Vector2(1920f, 1080f);
 
         private static readonly Color BackdropColor = new Color(0f, 0f, 0f, 0.52f);
@@ -412,7 +415,7 @@ namespace LWS.InterstateHauler
             _contentRoot = CreateRect(_panel, "Content", Vector2.zero, Vector2.one, new Vector2(34f, 104f), new Vector2(-34f, -112f));
             VerticalLayoutGroup layout = _contentRoot.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.childControlWidth = true;
-            layout.childControlHeight = false;
+            layout.childControlHeight = true;
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
             layout.spacing = 14f;
@@ -435,6 +438,7 @@ namespace LWS.InterstateHauler
                 SetHeader("SAVE / LOAD");
                 AddInfo("Save service", "missing");
                 AddButton("RESUME", Hide, true);
+                FinalizeGeneratedLayout();
                 return;
             }
 
@@ -455,6 +459,7 @@ namespace LWS.InterstateHauler
             }
 
             _statusText.text = IsPersistenceBusy() ? ResolveBusyLabel() : _lastStatus;
+            FinalizeGeneratedLayout();
         }
 
         private void BuildMainView()
@@ -537,7 +542,7 @@ namespace LWS.InterstateHauler
 
         private void AddAutosaveRow(LwsManualSaveSlotMetadata slot)
         {
-            RectTransform row = AddRow("Autosave", 104f);
+            RectTransform row = AddRow("Autosave", DefaultVisibleRowHeight);
             bool occupied = slot != null && slot.occupied;
             string detail = occupied
                 ? $"AUTOSAVE\nSaved: {FormatUtc(slot.savedUtcTicks)}\nLocation: {SafeLabel(slot.worldLabel, SafeLabel(slot.sceneName, "unknown world"))} | Playtime: {FormatDuration(slot.playtimeSeconds)}"
@@ -557,7 +562,7 @@ namespace LWS.InterstateHauler
 
         private void AddRecoveryRow(LwsSaveRecoveryOffer offer)
         {
-            RectTransform row = AddRow("Recovery Offer", 104f);
+            RectTransform row = AddRow("Recovery Offer", DefaultVisibleRowHeight);
             string detail = offer != null && !string.IsNullOrWhiteSpace(offer.displayMessage)
                 ? $"SAVE COULD NOT BE LOADED\n{offer.displayMessage}"
                 : "SAVE COULD NOT BE LOADED\nA recovery backup is available.";
@@ -573,7 +578,7 @@ namespace LWS.InterstateHauler
 
         private void AddSlotRow(LwsManualSaveSlotMetadata slot)
         {
-            RectTransform row = AddRow($"Slot {slot.slotNumber}", 104f);
+            RectTransform row = AddRow($"Slot {slot.slotNumber}", DefaultVisibleRowHeight);
             string detail = slot.occupied
                 ? $"{slot.SlotLabel}\nSaved: {FormatUtc(slot.savedUtcTicks)}\nLocation: {SafeLabel(slot.worldLabel, SafeLabel(slot.sceneName, "unknown world"))} | Playtime: {FormatDuration(slot.playtimeSeconds)}"
                 : $"{slot.SlotLabel}\nEMPTY";
@@ -598,7 +603,7 @@ namespace LWS.InterstateHauler
 
         private void AddProfileRow(LwsSaveProfileMetadata profile)
         {
-            RectTransform row = AddRow($"Profile {profile.profileIndex}", 88f);
+            RectTransform row = AddRow($"Profile {profile.profileIndex}", DefaultVisibleRowHeight);
             bool active = _saveService.ActiveProfile != null && string.Equals(_saveService.ActiveProfile.stableProfileId, profile.stableProfileId, StringComparison.Ordinal);
             string label = $"{profile.DisplayNameOrFallback}\nLast played: {FormatUtc(profile.lastPlayedUtcTicks)} | Playtime: {FormatDuration(profile.totalPlaytimeSeconds)}";
             CreateText(row, "Profile Detail", label, new Vector2(0f, 0f), new Vector2(0.48f, 1f), new Vector2(18f, 8f), new Vector2(-8f, -8f), 18, active ? FontStyle.Bold : FontStyle.Normal, TextAnchor.MiddleLeft, active ? TextColor : MutedTextColor);
@@ -812,7 +817,7 @@ namespace LWS.InterstateHauler
 
         private void AddInfo(string label, string value)
         {
-            RectTransform row = AddRow($"Info {label}", 42f);
+            RectTransform row = AddRow($"Info {label}", InfoRowPreferredHeight);
             CreateText(row, "Label", $"{label}: {value}", Vector2.zero, Vector2.one, new Vector2(18f, 4f), new Vector2(-18f, -4f), 18, FontStyle.Normal, TextAnchor.MiddleLeft, MutedTextColor);
         }
 
@@ -824,7 +829,7 @@ namespace LWS.InterstateHauler
 
         private InputField AddInput(string placeholder, string value)
         {
-            RectTransform row = AddRow($"Input {placeholder}", 64f);
+            RectTransform row = AddRow($"Input {placeholder}", DefaultVisibleRowHeight);
             Image image = row.gameObject.GetComponent<Image>();
             if (image != null)
             {
@@ -842,14 +847,131 @@ namespace LWS.InterstateHauler
         }
         private RectTransform AddRow(string name, float height)
         {
+            float safeHeight = Mathf.Max(height, MinimumVisibleElementHeight);
             RectTransform row = CreateRect(_contentRoot, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            row.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeHeight);
             row.gameObject.AddComponent<Image>().color = RowColor;
             LayoutElement layout = row.gameObject.AddComponent<LayoutElement>();
-            layout.minHeight = height;
-            layout.preferredHeight = height;
+            layout.minHeight = safeHeight;
+            layout.preferredHeight = safeHeight;
+            layout.flexibleHeight = 0f;
             return row;
         }
 
+        private void FinalizeGeneratedLayout()
+        {
+            if (_contentRoot == null || _canvas == null || !_canvas.gameObject.activeInHierarchy)
+            {
+                return;
+            }
+
+            Canvas.ForceUpdateCanvases();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(_contentRoot);
+            Canvas.ForceUpdateCanvases();
+            int repaired = RepairCollapsedVisibleElements(_contentRoot);
+            if (repaired > 0)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(_contentRoot);
+                Canvas.ForceUpdateCanvases();
+            }
+        }
+
+        private int RepairCollapsedVisibleElements(RectTransform root)
+        {
+            int repaired = 0;
+            RectTransform[] rects = root.GetComponentsInChildren<RectTransform>(false);
+            foreach (RectTransform rect in rects)
+            {
+                if (rect == null || rect == root || !IsIntendedVisiblePersistenceElement(rect))
+                {
+                    continue;
+                }
+
+                bool invertedAnchors = rect.anchorMin.y > rect.anchorMax.y;
+                bool collapsed = rect.rect.height <= 1f || (Mathf.Approximately(rect.anchorMin.y, rect.anchorMax.y) && Mathf.Abs(rect.sizeDelta.y) <= 1f);
+                LayoutElement layout = rect.GetComponent<LayoutElement>();
+                bool collapsedLayout = layout != null && (layout.preferredHeight <= 0f || layout.minHeight <= 0f);
+                if (!invertedAnchors && !collapsed && !collapsedLayout)
+                {
+                    continue;
+                }
+
+                float fallbackHeight = ResolveFallbackHeight(rect);
+                ApplyFallbackHeight(rect, fallbackHeight);
+                Debug.LogError($"Persistence UI row collapsed to zero height and was repaired: {BuildHierarchyPath(rect.transform)}", rect);
+                repaired++;
+            }
+
+            return repaired;
+        }
+
+        private static bool IsIntendedVisiblePersistenceElement(RectTransform rect)
+        {
+            GameObject gameObject = rect.gameObject;
+            return gameObject.activeInHierarchy &&
+                   (rect.GetComponent<Graphic>() != null ||
+                    rect.GetComponent<Button>() != null ||
+                    rect.GetComponent<InputField>() != null ||
+                    rect.GetComponent<LayoutElement>() != null);
+        }
+
+        private static float ResolveFallbackHeight(RectTransform rect)
+        {
+            if (rect.name.StartsWith("Info ", StringComparison.Ordinal) ||
+                rect.GetComponent<Text>() != null)
+            {
+                return InfoRowPreferredHeight;
+            }
+
+            if (rect.GetComponent<Button>() != null)
+            {
+                return ButtonPreferredHeight;
+            }
+
+            return DefaultVisibleRowHeight;
+        }
+
+        private static void ApplyFallbackHeight(RectTransform rect, float height)
+        {
+            if (rect.anchorMin.y > rect.anchorMax.y)
+            {
+                float min = rect.anchorMax.y;
+                float max = rect.anchorMin.y;
+                rect.anchorMin = new Vector2(rect.anchorMin.x, min);
+                rect.anchorMax = new Vector2(rect.anchorMax.x, max);
+            }
+
+            LayoutElement layout = rect.GetComponent<LayoutElement>();
+            if (layout != null)
+            {
+                layout.minHeight = Mathf.Max(layout.minHeight, height);
+                layout.preferredHeight = Mathf.Max(layout.preferredHeight, height);
+                layout.flexibleHeight = 0f;
+            }
+
+            if (rect.rect.height <= 1f || (Mathf.Approximately(rect.anchorMin.y, rect.anchorMax.y) && Mathf.Abs(rect.sizeDelta.y) <= 1f))
+            {
+                rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
+            }
+        }
+
+        private static string BuildHierarchyPath(Transform transform)
+        {
+            if (transform == null)
+            {
+                return "<null>";
+            }
+
+            Stack<string> parts = new Stack<string>();
+            Transform current = transform;
+            while (current != null)
+            {
+                parts.Push(current.name);
+                current = current.parent;
+            }
+
+            return string.Join("/", parts);
+        }
 
         private void CloseDevelopmentOverlays()
         {
@@ -1009,6 +1131,11 @@ namespace LWS.InterstateHauler
             {
                 button.onClick.AddListener(() => onClick());
             }
+
+            LayoutElement layout = rect.gameObject.AddComponent<LayoutElement>();
+            layout.minHeight = MinimumVisibleElementHeight;
+            layout.preferredHeight = ButtonPreferredHeight;
+            layout.flexibleHeight = 0f;
 
             CreateText(rect, "Label", label, Vector2.zero, Vector2.one, new Vector2(12f, 4f), new Vector2(-12f, -4f), 20, FontStyle.Bold, TextAnchor.MiddleCenter, interactable ? TextColor : MutedTextColor);
             return button;

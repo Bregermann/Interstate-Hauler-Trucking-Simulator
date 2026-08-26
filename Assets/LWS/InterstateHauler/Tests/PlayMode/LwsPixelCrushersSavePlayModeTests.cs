@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using UnityEngine.UI;
 
 namespace LWS.InterstateHauler.Tests.PlayMode
 {
@@ -180,6 +181,7 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsNotNull(menuService.RuntimeRoot);
             Assert.AreEqual(LwsPersistenceMenuView.Main, menuService.RuntimeRoot.CurrentView);
             Assert.AreEqual(LwsPersistenceMenuOpenContext.PauseMenu, menuService.RuntimeRoot.OpenContext);
+            AssertPersistenceContentHasPositiveVisibleHeights(menuService.RuntimeRoot, "Escape pause menu");
 
             menuService.ShowSaveLoad();
             yield return null;
@@ -188,6 +190,7 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsTrue(inputSource.DrivingInputSuppressed);
             Assert.AreEqual(LwsPersistenceMenuView.SaveLoad, menuService.RuntimeRoot.CurrentView);
             Assert.AreEqual(LwsPersistenceMenuOpenContext.DirectSaveLoad, menuService.RuntimeRoot.OpenContext);
+            AssertPersistenceContentHasPositiveVisibleHeights(menuService.RuntimeRoot, "F3 save/load menu");
 
             menuService.Hide();
             yield return null;
@@ -196,6 +199,56 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsFalse(inputSource.DrivingInputSuppressed);
             Assert.AreEqual(1f, Time.timeScale);
             Object.Destroy(inputObject);
+        }
+        private static void AssertPersistenceContentHasPositiveVisibleHeights(LwsPersistencePauseMenu menu, string context)
+        {
+            Assert.IsNotNull(menu, context + " menu root is missing.");
+            Canvas.ForceUpdateCanvases();
+
+            RectTransform content = menu.GetComponentsInChildren<RectTransform>(false)
+                .FirstOrDefault(rect => rect != null && rect.name == "Content");
+            Assert.IsNotNull(content, context + " Content RectTransform is missing.");
+
+            foreach (RectTransform rect in content.GetComponentsInChildren<RectTransform>(false))
+            {
+                if (rect == content || !IsIntendedVisiblePersistenceElement(rect))
+                {
+                    continue;
+                }
+
+                Assert.LessOrEqual(rect.anchorMin.y, rect.anchorMax.y, context + " has inverted vertical anchors at " + BuildPath(rect.transform) + ".");
+                Assert.Greater(rect.rect.height, 1f, context + " has a collapsed visible RectTransform at " + BuildPath(rect.transform) + ".");
+
+                LayoutElement layout = rect.GetComponent<LayoutElement>();
+                if (layout != null)
+                {
+                    Assert.Greater(layout.minHeight, 1f, context + " has a non-positive minHeight at " + BuildPath(rect.transform) + ".");
+                    Assert.Greater(layout.preferredHeight, 1f, context + " has a non-positive preferredHeight at " + BuildPath(rect.transform) + ".");
+                }
+            }
+        }
+
+        private static bool IsIntendedVisiblePersistenceElement(RectTransform rect)
+        {
+            GameObject gameObject = rect.gameObject;
+            return gameObject.activeInHierarchy &&
+                   (rect.GetComponent<Graphic>() != null ||
+                    rect.GetComponent<Button>() != null ||
+                    rect.GetComponent<InputField>() != null ||
+                    rect.GetComponent<LayoutElement>() != null);
+        }
+
+        private static string BuildPath(Transform transform)
+        {
+            string path = transform.name;
+            Transform current = transform.parent;
+            while (current != null)
+            {
+                path = current.name + "/" + path;
+                current = current.parent;
+            }
+
+            return path;
         }
     }
 }
