@@ -63,8 +63,10 @@ The cockpit navigation display is a physical world-space UI mounted to the playe
 - Canvas mode: `World Space`
 - Orientation: heading-up through Compass `miniMapOrientation = Follow`
 - Navigation source: the same LWS navigation services used by the HUD minimap and full map
+- Placement reference: `LwsCabGpsController.PhysicalScreenTransform`
+- Cab Compass sizing: `miniMapPositionAndSize = UserDefined`, with vendor `MiniMap Root` and `MiniMap` RectTransforms fitted to the physical GPS screen
 
-The cab GPS is parented under the truck/cab hierarchy, so it follows truck movement and floating-origin shifts naturally. Its map content remains semantic/global and does not depend on loaded physical road chunk objects.
+The cab GPS is parented under the truck/cab hierarchy, so it follows truck movement and floating-origin shifts naturally. Its map content remains semantic/global and does not depend on loaded physical road chunk objects. The exterior HUD minimap still uses Compass-controlled bottom-right placement and is unchanged by the cab fit repair.
 
 ## HUD Minimap
 

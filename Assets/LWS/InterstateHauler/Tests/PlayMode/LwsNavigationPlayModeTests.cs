@@ -75,6 +75,8 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             yield return null;
 
             Assert.IsTrue(gps.PhysicalGpsBound);
+            Assert.IsNotNull(gps.PhysicalScreenTransform);
+            Assert.AreSame(gps.PhysicalCanvas.transform, gps.PhysicalScreenTransform);
             Assert.IsNotNull(cab.transform.Find("IH Physical Cab GPS Screen"));
             Object.Destroy(truck);
         }

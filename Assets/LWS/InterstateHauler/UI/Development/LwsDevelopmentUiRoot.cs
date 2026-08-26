@@ -204,6 +204,12 @@ namespace LWS.InterstateHauler
 
         public void ShowControlCenter()
         {
+            HidePersistenceMenuOverlay();
+            if (BigMapVisible)
+            {
+                HideBigMap();
+            }
+
             if (WeatherTestPanelVisible)
             {
                 HideWeatherTestPanel();
@@ -236,16 +242,6 @@ namespace LWS.InterstateHauler
 
         public void ToggleControlCenter()
         {
-            if (BigMapVisible)
-            {
-                HideBigMap();
-            }
-
-            if (WeatherTestPanelVisible)
-            {
-                HideWeatherTestPanel();
-            }
-
             if (ControlCenterVisible)
             {
                 HideControlCenter();
@@ -265,6 +261,12 @@ namespace LWS.InterstateHauler
 
         public void ShowBigMap()
         {
+            HidePersistenceMenuOverlay();
+            if (ControlCenterVisible)
+            {
+                HideControlCenter();
+            }
+
             if (WeatherTestPanelVisible)
             {
                 HideWeatherTestPanel();
@@ -323,11 +325,6 @@ namespace LWS.InterstateHauler
 
         public void ToggleBigMap()
         {
-            if (WeatherTestPanelVisible)
-            {
-                HideWeatherTestPanel();
-            }
-
             if (BigMapVisible)
             {
                 HideBigMap();
@@ -340,6 +337,7 @@ namespace LWS.InterstateHauler
 
         public void ShowWeatherTestPanel()
         {
+            HidePersistenceMenuOverlay();
             EnsureWeatherTestPanel();
             _weatherTestPanel.Show();
             UpdateDevButtonVisibility();
@@ -358,6 +356,17 @@ namespace LWS.InterstateHauler
             UpdateDevButtonVisibility();
         }
 
+
+        public void HidePersistenceMenuOverlay()
+        {
+            ResolveServices();
+            if (_persistenceMenuService != null && _persistenceMenuService.IsOpen)
+            {
+                _persistenceMenuService.Hide();
+            }
+
+            UpdateDevButtonVisibility();
+        }
         public void CaptureDevelopmentCursor()
         {
             CaptureCursor();
@@ -386,7 +395,8 @@ namespace LWS.InterstateHauler
         {
             if (_devButton != null)
             {
-                _devButton.SetActive(!ControlCenterVisible && !BigMapVisible && !WeatherTestPanelVisible);
+                bool persistenceOpen = _persistenceMenuService != null && _persistenceMenuService.IsOpen;
+                _devButton.SetActive(!ControlCenterVisible && !BigMapVisible && !WeatherTestPanelVisible && !persistenceOpen);
             }
         }
 
@@ -1967,7 +1977,8 @@ namespace LWS.InterstateHauler
 
         private void RestoreCursorIfClear()
         {
-            if (!_cursorCaptured || ControlCenterVisible || BigMapVisible || WeatherTestPanelVisible)
+            bool persistenceOpen = _persistenceMenuService != null && _persistenceMenuService.IsOpen;
+            if (!_cursorCaptured || ControlCenterVisible || BigMapVisible || WeatherTestPanelVisible || persistenceOpen)
             {
                 return;
             }

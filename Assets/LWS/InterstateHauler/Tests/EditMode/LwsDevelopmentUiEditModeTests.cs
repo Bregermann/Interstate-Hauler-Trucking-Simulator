@@ -364,6 +364,58 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void PersistenceMenuSourceDefinesReadableF3SaveLoadFlow()
+        {
+            string source = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Persistence/LwsPersistencePauseMenu.cs");
+
+            StringAssert.Contains("DirectSaveHotkeyName = \"F3\"", source);
+            StringAssert.Contains("ShowSaveLoad", source);
+            StringAssert.Contains("ToggleSaveLoad", source);
+            StringAssert.Contains("LwsPersistenceMenuOpenContext", source);
+            StringAssert.Contains("DirectSaveLoad", source);
+            StringAssert.Contains("INTERSTATE HAULER\\nSAVE / LOAD", source);
+            StringAssert.Contains("SETTINGS (COMING LATER)", source);
+            StringAssert.Contains("CONTROLS (COMING LATER)", source);
+            StringAssert.Contains("QUIT TO MAIN MENU (COMING LATER)", source);
+            StringAssert.Contains("BackFromSaveLoad", source);
+            StringAssert.Contains("ResolveSaveSystemStatus", source);
+            StringAssert.Contains("ButtonPreferredHeight = 60f", source);
+            StringAssert.Contains("CanvasScaler.ScaleMode.ScaleWithScreenSize", source);
+            StringAssert.Contains("ILwsSaveService", source);
+            StringAssert.DoesNotContain("SaveSystem.SaveToSlot", source);
+            StringAssert.DoesNotContain("private void OnGUI", source);
+        }
+
+        [Test]
+        public void DevelopmentUiSourceCoordinatesF2F3EscapeOverlayExclusivity()
+        {
+            string persistence = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Persistence/LwsPersistencePauseMenu.cs");
+            string root = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");
+            string weather = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsWeatherTestPanel.cs");
+
+            StringAssert.Contains("CloseDevelopmentOverlays", persistence);
+            StringAssert.Contains("HidePersistenceMenuOverlay", root);
+            StringAssert.Contains("_persistenceMenuService.Hide", root);
+            StringAssert.Contains("HidePersistenceMenuOverlay", weather);
+            StringAssert.Contains("persistenceOpen", root);
+            StringAssert.Contains("_devButton.SetActive(!ControlCenterVisible && !BigMapVisible && !WeatherTestPanelVisible && !persistenceOpen)", root);
+        }
+
+        [Test]
+        public void CompassCabPresentationUsesPhysicalGpsScreenAndVendorUserDefinedPlacement()
+        {
+            string cabGps = File.ReadAllText("Assets/LWS/InterstateHauler/Navigation/LwsCabGpsController.cs");
+            string adapter = File.ReadAllText("Assets/LWS/InterstateHauler/Navigation/Compass/LwsCompassNavigatorProAdapter.cs");
+
+            StringAssert.Contains("PhysicalScreenTransform", cabGps);
+            StringAssert.Contains("PhysicalScreenTransform", adapter);
+            StringAssert.Contains("FitCabCompassToPhysicalScreen", adapter);
+            StringAssert.Contains("MiniMap Root", adapter);
+            StringAssert.Contains("SetEnumProperty(compass, \"miniMapPositionAndSize\", cab ? \"UserDefined\" : \"ControlledByCompassNavigatorPro\")", adapter);
+            StringAssert.Contains("SetHudMinimapVisible", adapter);
+            StringAssert.Contains("BottomRight", adapter);
+        }
+        [Test]
         public void WeatherTestPanelDefinesLargeReadableSemanticControls()
         {
             Assert.AreEqual(10, LwsWeatherTestPanel.WeatherButtonDefinitions.Count);

@@ -46,6 +46,7 @@ namespace LWS.InterstateHauler
         public bool PhysicalGpsBound => _canvas != null;
         public bool FallbackPhysicalScreenVisible => _canvas != null && _canvas.gameObject.activeSelf;
         public Canvas PhysicalCanvas => _canvas;
+        public Transform PhysicalScreenTransform => _canvas != null ? _canvas.transform : null;
         public Transform GpsMount => _gpsMount;
         public LwsSemanticGpsMapGraphic SemanticMapGraphic => _mapGraphic;
         public bool RouteRendered => _presentedRoute != null && _presentedRoute.succeeded;

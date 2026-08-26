@@ -171,12 +171,23 @@ namespace LWS.InterstateHauler.Tests.PlayMode
             Assert.IsTrue(bootstrap.Registry.TryGet(out ILwsPersistenceMenuService menuService));
             Assert.IsFalse(menuService.IsOpen);
 
-            menuService.Show();
+            menuService.ShowPauseMenu();
             yield return null;
 
             Assert.IsTrue(menuService.IsOpen);
             Assert.IsTrue(inputSource.DrivingInputSuppressed);
             Assert.AreEqual(0f, Time.timeScale);
+            Assert.IsNotNull(menuService.RuntimeRoot);
+            Assert.AreEqual(LwsPersistenceMenuView.Main, menuService.RuntimeRoot.CurrentView);
+            Assert.AreEqual(LwsPersistenceMenuOpenContext.PauseMenu, menuService.RuntimeRoot.OpenContext);
+
+            menuService.ShowSaveLoad();
+            yield return null;
+
+            Assert.IsTrue(menuService.IsOpen);
+            Assert.IsTrue(inputSource.DrivingInputSuppressed);
+            Assert.AreEqual(LwsPersistenceMenuView.SaveLoad, menuService.RuntimeRoot.CurrentView);
+            Assert.AreEqual(LwsPersistenceMenuOpenContext.DirectSaveLoad, menuService.RuntimeRoot.OpenContext);
 
             menuService.Hide();
             yield return null;

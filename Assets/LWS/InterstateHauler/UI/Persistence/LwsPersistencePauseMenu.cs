@@ -17,8 +17,11 @@ namespace LWS.InterstateHauler
         LwsPersistencePauseMenu RuntimeRoot { get; }
         void EnsureRuntime();
         void Show();
+        void ShowPauseMenu();
+        void ShowSaveLoad();
         void Hide();
         void Toggle();
+        void ToggleSaveLoad();
     }
 
     public sealed class LwsPersistenceMenuService : ILwsPersistenceMenuService
@@ -89,8 +92,19 @@ namespace LWS.InterstateHauler
 
         public void Show()
         {
+            ShowPauseMenu();
+        }
+
+        public void ShowPauseMenu()
+        {
             EnsureRuntime();
-            _runtimeRoot?.Show();
+            _runtimeRoot?.ShowPauseMenu();
+        }
+
+        public void ShowSaveLoad()
+        {
+            EnsureRuntime();
+            _runtimeRoot?.ShowSaveLoad();
         }
 
         public void Hide()
@@ -106,6 +120,15 @@ namespace LWS.InterstateHauler
                 _runtimeRoot.Toggle();
             }
         }
+
+        public void ToggleSaveLoad()
+        {
+            EnsureRuntime();
+            if (_runtimeRoot != null)
+            {
+                _runtimeRoot.ToggleSaveLoad();
+            }
+        }
     }
 
     public enum LwsPersistenceMenuView
@@ -116,17 +139,30 @@ namespace LWS.InterstateHauler
         Confirm
     }
 
+    public enum LwsPersistenceMenuOpenContext
+    {
+        PauseMenu,
+        DirectSaveLoad
+    }
+
     [DefaultExecutionOrder(-45)]
     [DisallowMultipleComponent]
     public sealed class LwsPersistencePauseMenu : MonoBehaviour
     {
-        private static readonly Color BackdropColor = new Color(0.01f, 0.015f, 0.018f, 0.74f);
-        private static readonly Color PanelColor = new Color(0.05f, 0.065f, 0.07f, 0.96f);
-        private static readonly Color RowColor = new Color(0.08f, 0.105f, 0.11f, 0.92f);
-        private static readonly Color ButtonColor = new Color(0.13f, 0.18f, 0.19f, 1f);
+        public const string CanvasObjectName = "F3 Save Load Canvas";
+        public const string DirectSaveHotkeyName = "F3";
+        public const float ButtonPreferredHeight = 60f;
+        public static readonly Vector2 ReferenceResolution = new Vector2(1920f, 1080f);
+
+        private static readonly Color BackdropColor = new Color(0f, 0f, 0f, 0.52f);
+        private static readonly Color PanelColor = new Color(0.028f, 0.034f, 0.034f, 0.98f);
+        private static readonly Color RowColor = new Color(0.045f, 0.058f, 0.057f, 0.96f);
+        private static readonly Color ButtonColor = new Color(0.11f, 0.18f, 0.19f, 1f);
+        private static readonly Color ButtonHoverColor = new Color(0.16f, 0.27f, 0.28f, 1f);
+        private static readonly Color ButtonPressedColor = new Color(0.08f, 0.13f, 0.14f, 1f);
         private static readonly Color ButtonDisabledColor = new Color(0.08f, 0.08f, 0.08f, 0.72f);
-        private static readonly Color TextColor = new Color(0.88f, 0.94f, 0.93f, 1f);
-        private static readonly Color MutedTextColor = new Color(0.62f, 0.72f, 0.72f, 1f);
+        private static readonly Color TextColor = new Color(0.92f, 0.96f, 0.94f, 1f);
+        private static readonly Color MutedTextColor = new Color(0.7f, 0.78f, 0.78f, 1f);
         private static Font _uiFont;
 
         private readonly Dictionary<LwsKeyboardGamepadTruckInputSource, bool> _suppressedDrivingSources = new Dictionary<LwsKeyboardGamepadTruckInputSource, bool>();
@@ -134,6 +170,7 @@ namespace LWS.InterstateHauler
         private LwsServiceRegistry _registry;
         private ILwsSaveService _saveService;
         private ILwsVehicleInputService _inputService;
+        private ILwsDevelopmentUiService _developmentUiService;
         private Canvas _canvas;
         private RectTransform _panel;
         private RectTransform _contentRoot;
@@ -141,6 +178,8 @@ namespace LWS.InterstateHauler
         private Text _statusText;
         private InputField _profileNameInput;
         private LwsPersistenceMenuView _view = LwsPersistenceMenuView.Main;
+        private LwsPersistenceMenuView _profileReturnView = LwsPersistenceMenuView.Main;
+        private LwsPersistenceMenuOpenContext _openContext = LwsPersistenceMenuOpenContext.PauseMenu;
         private string _lastStatus = "Ready.";
         private string _pendingConfirmTitle;
         private string _pendingConfirmBody;
@@ -153,6 +192,7 @@ namespace LWS.InterstateHauler
 
         public bool IsOpen => _canvas != null && _canvas.gameObject.activeSelf;
         public LwsPersistenceMenuView CurrentView => _view;
+        public LwsPersistenceMenuOpenContext OpenContext => _openContext;
 
         public void Bind(LwsPersistenceMenuService service, LwsServiceRegistry registry)
         {
@@ -165,22 +205,43 @@ namespace LWS.InterstateHauler
 
         public void Show()
         {
+            ShowPauseMenu();
+        }
+
+        public void ShowPauseMenu()
+        {
+            ShowInternal(LwsPersistenceMenuView.Main, LwsPersistenceMenuOpenContext.PauseMenu);
+        }
+
+        public void ShowSaveLoad()
+        {
+            ShowInternal(LwsPersistenceMenuView.SaveLoad, LwsPersistenceMenuOpenContext.DirectSaveLoad);
+        }
+
+        private void ShowInternal(LwsPersistenceMenuView view, LwsPersistenceMenuOpenContext context)
+        {
             BuildIfNeeded();
             ResolveServices();
-            if (_canvas == null || IsOpen)
+            if (_canvas == null)
             {
                 return;
             }
 
-            _pauseSnapshotTaken = true;
-            _previousTimeScale = Time.timeScale;
-            _previousCursorVisible = Cursor.visible;
-            _previousCursorLockMode = Cursor.lockState;
+            CloseDevelopmentOverlays();
+            if (!IsOpen)
+            {
+                _pauseSnapshotTaken = true;
+                _previousTimeScale = Time.timeScale;
+                _previousCursorVisible = Cursor.visible;
+                _previousCursorLockMode = Cursor.lockState;
+            }
+
             Time.timeScale = 0f;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             SuppressDrivingInputSources(true);
-            _view = LwsPersistenceMenuView.Main;
+            _openContext = context;
+            _view = view;
             _canvas.gameObject.SetActive(true);
             RebuildView();
         }
@@ -203,16 +264,40 @@ namespace LWS.InterstateHauler
             }
             else
             {
-                Show();
+                ShowPauseMenu();
             }
+        }
+
+        public void ToggleSaveLoad()
+        {
+            if (IsOpen && _view == LwsPersistenceMenuView.SaveLoad && _openContext == LwsPersistenceMenuOpenContext.DirectSaveLoad)
+            {
+                Hide();
+                return;
+            }
+
+            ShowSaveLoad();
         }
 
         private void Update()
         {
             ResolveServices();
+            if (WasDirectSavePressed())
+            {
+                ToggleSaveLoad();
+                return;
+            }
+
             if (WasPausePressed())
             {
-                Toggle();
+                if (IsOpen)
+                {
+                    Hide();
+                }
+                else
+                {
+                    ShowPauseMenu();
+                }
             }
         }
 
@@ -276,6 +361,7 @@ namespace LWS.InterstateHauler
 
             _registry.TryGet(out _saveService);
             _registry.TryGet(out _inputService);
+            _registry.TryGet(out _developmentUiService);
         }
 
         private void BuildIfNeeded()
@@ -285,13 +371,13 @@ namespace LWS.InterstateHauler
                 return;
             }
 
-            RectTransform canvasRect = CreateRect(transform, "Persistence Canvas", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            RectTransform canvasRect = CreateRect(transform, CanvasObjectName, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
             _canvas = canvasRect.gameObject.AddComponent<Canvas>();
             _canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             _canvas.sortingOrder = 6900;
             CanvasScaler scaler = canvasRect.gameObject.AddComponent<CanvasScaler>();
             scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            scaler.referenceResolution = ReferenceResolution;
             scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
             canvasRect.gameObject.AddComponent<GraphicRaycaster>();
@@ -299,20 +385,20 @@ namespace LWS.InterstateHauler
 
             Image backdrop = canvasRect.gameObject.AddComponent<Image>();
             backdrop.color = BackdropColor;
+            backdrop.raycastTarget = true;
 
-            _panel = CreateRect(canvasRect, "Pause Save Panel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(-520f, -390f), new Vector2(520f, 390f));
+            _panel = CreateRect(canvasRect, "Pause Save Panel", new Vector2(0.08f, 0.04f), new Vector2(0.92f, 0.96f), Vector2.zero, Vector2.zero);
             _panel.gameObject.AddComponent<Image>().color = PanelColor;
-            _titleText = CreateText(_panel, "Title", "INTERSTATE HAULER", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(28f, -58f), new Vector2(-28f, -14f), 28, FontStyle.Bold, TextAnchor.MiddleLeft, TextColor);
-            _statusText = CreateText(_panel, "Status", "Ready.", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(28f, 18f), new Vector2(-28f, 58f), 16, FontStyle.Normal, TextAnchor.MiddleLeft, MutedTextColor);
-            _contentRoot = CreateRect(_panel, "Content", Vector2.zero, Vector2.one, new Vector2(28f, 74f), new Vector2(-28f, -78f));
+            _titleText = CreateText(_panel, "Title", "INTERSTATE HAULER", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(34f, -96f), new Vector2(-34f, -20f), 34, FontStyle.Bold, TextAnchor.MiddleCenter, TextColor);
+            _titleText.verticalOverflow = VerticalWrapMode.Overflow;
+            _statusText = CreateText(_panel, "Status", "Ready.", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(34f, 22f), new Vector2(-34f, 86f), 18, FontStyle.Normal, TextAnchor.MiddleLeft, MutedTextColor);
+            _contentRoot = CreateRect(_panel, "Content", Vector2.zero, Vector2.one, new Vector2(34f, 104f), new Vector2(-34f, -112f));
             VerticalLayoutGroup layout = _contentRoot.gameObject.AddComponent<VerticalLayoutGroup>();
             layout.childControlWidth = true;
             layout.childControlHeight = false;
             layout.childForceExpandWidth = true;
             layout.childForceExpandHeight = false;
-            layout.spacing = 10f;
-            ContentSizeFitter fitter = _contentRoot.gameObject.AddComponent<ContentSizeFitter>();
-            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            layout.spacing = 14f;
         }
 
         private void RebuildView()
@@ -356,27 +442,30 @@ namespace LWS.InterstateHauler
 
         private void BuildMainView()
         {
-            SetHeader("PAUSE MENU");
+            SetHeader("INTERSTATE HAULER\nPAUSED");
             AddInfo("Current profile", _saveService.ActiveProfile != null ? _saveService.ActiveProfile.DisplayNameOrFallback : "none");
-            AddInfo("Save authority", "PIXEL CRUSHERS");
-            AddInfo("Storage path", _saveService.Diagnostics.activeStorer);
+            AddInfo("Save system", ResolveSaveSystemStatus());
             AddButton("RESUME", Hide, true);
             AddButton("SAVE / LOAD", () => SetView(LwsPersistenceMenuView.SaveLoad), true);
-            AddButton("PROFILES", () => SetView(LwsPersistenceMenuView.Profiles), true);
-            AddButton("PRINT SAVE DIAGNOSTICS", () =>
-            {
-                Debug.Log(_saveService.BuildDiagnosticsReport());
-                _lastStatus = "Save diagnostics printed to Console.";
-                RebuildView();
-            }, true);
+            AddButton("SETTINGS (COMING LATER)", null, false);
+            AddButton("CONTROLS (COMING LATER)", null, false);
+            AddButton("QUIT TO MAIN MENU (COMING LATER)", null, false);
+            AddButton("QUIT GAME", QuitGame, true);
         }
 
         private void BuildSaveLoadView()
         {
-            SetHeader("SAVE / LOAD");
+            SetHeader("INTERSTATE HAULER\nSAVE / LOAD");
             LwsSaveProfileMetadata profile = _saveService.ActiveProfile;
             AddInfo("Current profile", profile != null ? profile.DisplayNameOrFallback : "none");
-            AddInfo("Busy", ResolveBusyLabel());
+            AddInfo("Save system", ResolveSaveSystemStatus());
+            AddInfo("Autosave", ResolveAutosaveStatus());
+            if (!string.IsNullOrWhiteSpace(_saveService.LastFailure))
+            {
+                AddInfo("Last error", _saveService.LastFailure);
+            }
+
+            AddProfileActionRow();
 
             if (_saveService.RecoveryOffer != null && _saveService.RecoveryOffer.available)
             {
@@ -390,11 +479,11 @@ namespace LWS.InterstateHauler
                 AddSlotRow(slot);
             }
 
-            AddButton("BACK", () => SetView(LwsPersistenceMenuView.Main), !IsPersistenceBusy());
+            AddButton(_openContext == LwsPersistenceMenuOpenContext.DirectSaveLoad ? "CLOSE" : "BACK", BackFromSaveLoad, !IsPersistenceBusy());
         }
         private void BuildProfilesView()
         {
-            SetHeader("PROFILES");
+            SetHeader("INTERSTATE HAULER\nPROFILES");
             AddInfo("Active", _saveService.ActiveProfile != null ? _saveService.ActiveProfile.DisplayNameOrFallback : "none");
             _profileNameInput = AddInput("Profile Name", _saveService.ActiveProfile != null ? _saveService.ActiveProfile.DisplayNameOrFallback : "Driver");
             AddButton("CREATE PROFILE", () =>
@@ -402,16 +491,15 @@ namespace LWS.InterstateHauler
                 LwsSaveOperationResult result = _saveService.CreateProfile(_profileNameInput.text, out _);
                 _lastStatus = result.Message;
                 RebuildView();
-            }, true);
+            }, !IsPersistenceBusy());
 
             foreach (LwsSaveProfileMetadata profile in _saveService.Profiles)
             {
                 AddProfileRow(profile);
             }
 
-            AddButton("BACK", () => SetView(LwsPersistenceMenuView.Main), true);
+            AddButton("BACK", () => SetView(_profileReturnView), !IsPersistenceBusy());
         }
-
         private void BuildConfirmView()
         {
             SetHeader(_pendingConfirmTitle ?? "CONFIRM");
@@ -432,19 +520,19 @@ namespace LWS.InterstateHauler
 
         private void AddAutosaveRow(LwsManualSaveSlotMetadata slot)
         {
-            RectTransform row = AddRow("Autosave", 74f);
+            RectTransform row = AddRow("Autosave", 104f);
             bool occupied = slot != null && slot.occupied;
             string detail = occupied
-                ? $"AUTOSAVE: {FormatUtc(slot.savedUtcTicks)} | {SafeLabel(slot.sceneName, "unknown scene")} | {SafeLabel(slot.worldLabel, "unknown world")}"
-                : "AUTOSAVE: EMPTY";
+                ? $"AUTOSAVE\nSaved: {FormatUtc(slot.savedUtcTicks)}\nLocation: {SafeLabel(slot.worldLabel, SafeLabel(slot.sceneName, "unknown world"))} | Playtime: {FormatDuration(slot.playtimeSeconds)}"
+                : "AUTOSAVE\nNO AUTOSAVE";
             if (_saveService.PendingAutosave)
             {
-                detail += " | PENDING";
+                detail += "\nPending safe autosave.";
             }
 
-            CreateText(row, "Autosave Detail", detail, new Vector2(0f, 0f), new Vector2(0.58f, 1f), new Vector2(14f, 8f), new Vector2(-8f, -8f), 15, FontStyle.Normal, TextAnchor.MiddleLeft, TextColor);
-            CreateButton(row, "Load Autosave", "LOAD", new Vector2(0.59f, 0.12f), new Vector2(0.78f, 0.88f), Vector2.zero, Vector2.zero, RunLoadAutosave, occupied && !IsPersistenceBusy());
-            CreateButton(row, "Delete Autosave", "DELETE", new Vector2(0.79f, 0.12f), new Vector2(1f, 0.88f), Vector2.zero, new Vector2(-10f, 0f), () =>
+            CreateText(row, "Autosave Detail", detail, new Vector2(0f, 0f), new Vector2(0.57f, 1f), new Vector2(18f, 8f), new Vector2(-8f, -8f), 18, FontStyle.Normal, TextAnchor.MiddleLeft, TextColor);
+            CreateButton(row, "Load Autosave", "LOAD", new Vector2(0.58f, 0.14f), new Vector2(0.78f, 0.86f), Vector2.zero, Vector2.zero, RunLoadAutosave, occupied && !IsPersistenceBusy());
+            CreateButton(row, "Delete Autosave", "DELETE", new Vector2(0.79f, 0.14f), new Vector2(1f, 0.86f), Vector2.zero, new Vector2(-10f, 0f), () =>
             {
                 Confirm("DELETE AUTOSAVE?", "This removes the autosave and its hidden recovery backup.", RunDeleteAutosave, LwsPersistenceMenuView.SaveLoad);
             }, occupied && !IsPersistenceBusy());
@@ -452,61 +540,64 @@ namespace LWS.InterstateHauler
 
         private void AddRecoveryRow(LwsSaveRecoveryOffer offer)
         {
-            RectTransform row = AddRow("Recovery Offer", 74f);
-            string detail = offer != null ? offer.displayMessage : "Recovery backup available.";
-            CreateText(row, "Recovery Detail", detail, new Vector2(0f, 0f), new Vector2(0.56f, 1f), new Vector2(14f, 8f), new Vector2(-8f, -8f), 14, FontStyle.Bold, TextAnchor.MiddleLeft, TextColor);
-            CreateButton(row, "Load Backup", "LOAD BACKUP", new Vector2(0.57f, 0.12f), new Vector2(0.78f, 0.88f), Vector2.zero, Vector2.zero, RunLoadRecovery, !IsPersistenceBusy());
-            CreateButton(row, "Cancel Backup", "CANCEL", new Vector2(0.79f, 0.12f), new Vector2(1f, 0.88f), Vector2.zero, new Vector2(-10f, 0f), () =>
+            RectTransform row = AddRow("Recovery Offer", 104f);
+            string detail = offer != null && !string.IsNullOrWhiteSpace(offer.displayMessage)
+                ? $"SAVE COULD NOT BE LOADED\n{offer.displayMessage}"
+                : "SAVE COULD NOT BE LOADED\nA recovery backup is available.";
+            CreateText(row, "Recovery Detail", detail, new Vector2(0f, 0f), new Vector2(0.56f, 1f), new Vector2(18f, 8f), new Vector2(-8f, -8f), 18, FontStyle.Bold, TextAnchor.MiddleLeft, TextColor);
+            CreateButton(row, "Load Backup", "LOAD BACKUP", new Vector2(0.57f, 0.14f), new Vector2(0.78f, 0.86f), Vector2.zero, Vector2.zero, RunLoadRecovery, !IsPersistenceBusy());
+            CreateButton(row, "Cancel Backup", "CANCEL", new Vector2(0.79f, 0.14f), new Vector2(1f, 0.86f), Vector2.zero, new Vector2(-10f, 0f), () =>
             {
                 _saveService.DismissRecoveryOffer();
                 _lastStatus = "Recovery backup offer dismissed.";
                 RebuildView();
             }, !IsPersistenceBusy());
         }
+
         private void AddSlotRow(LwsManualSaveSlotMetadata slot)
         {
-            RectTransform row = AddRow($"Slot {slot.slotNumber}", 74f);
+            RectTransform row = AddRow($"Slot {slot.slotNumber}", 104f);
             string detail = slot.occupied
-                ? $"{slot.SlotLabel}: {FormatUtc(slot.savedUtcTicks)} | {SafeLabel(slot.sceneName, "unknown scene")} | truck {SafeLabel(slot.truckDefinitionId, "unknown")}"
-                : $"{slot.SlotLabel}: EMPTY";
-            CreateText(row, "Slot Detail", detail, new Vector2(0f, 0f), new Vector2(0.52f, 1f), new Vector2(14f, 8f), new Vector2(-8f, -8f), 15, FontStyle.Normal, TextAnchor.MiddleLeft, TextColor);
-            CreateButton(row, "Save", slot.occupied ? "OVERWRITE" : "SAVE", new Vector2(0.53f, 0.12f), new Vector2(0.68f, 0.88f), Vector2.zero, Vector2.zero, () =>
+                ? $"{slot.SlotLabel}\nSaved: {FormatUtc(slot.savedUtcTicks)}\nLocation: {SafeLabel(slot.worldLabel, SafeLabel(slot.sceneName, "unknown world"))} | Playtime: {FormatDuration(slot.playtimeSeconds)}"
+                : $"{slot.SlotLabel}\nEMPTY";
+            CreateText(row, "Slot Detail", detail, new Vector2(0f, 0f), new Vector2(0.52f, 1f), new Vector2(18f, 8f), new Vector2(-8f, -8f), 18, FontStyle.Normal, TextAnchor.MiddleLeft, TextColor);
+            CreateButton(row, "Save", slot.occupied ? "OVERWRITE" : "SAVE", new Vector2(0.53f, 0.14f), new Vector2(0.68f, 0.86f), Vector2.zero, Vector2.zero, () =>
             {
                 if (slot.occupied)
                 {
-                    Confirm($"OVERWRITE SLOT {slot.slotNumber}?", "Existing saved game data in this manual slot will be replaced.", () => RunSave(slot.slotNumber, true), LwsPersistenceMenuView.SaveLoad);
+                    Confirm($"OVERWRITE SLOT {slot.slotNumber}?", "Existing saved game data in this manual slot will be backed up, then replaced.", () => RunSave(slot.slotNumber, true), LwsPersistenceMenuView.SaveLoad);
                 }
                 else
                 {
                     RunSave(slot.slotNumber, false);
                 }
             }, !IsPersistenceBusy());
-            CreateButton(row, "Load", "LOAD", new Vector2(0.69f, 0.12f), new Vector2(0.84f, 0.88f), Vector2.zero, Vector2.zero, () => RunLoad(slot.slotNumber), slot.occupied && !_saveService.IsSaving && !_saveService.IsLoading);
-            CreateButton(row, "Delete", "DELETE", new Vector2(0.85f, 0.12f), new Vector2(1f, 0.88f), Vector2.zero, new Vector2(-10f, 0f), () =>
+            CreateButton(row, "Load", "LOAD", new Vector2(0.69f, 0.14f), new Vector2(0.84f, 0.86f), Vector2.zero, Vector2.zero, () => RunLoad(slot.slotNumber), slot.occupied && !_saveService.IsSaving && !_saveService.IsLoading);
+            CreateButton(row, "Delete", "DELETE", new Vector2(0.85f, 0.14f), new Vector2(1f, 0.86f), Vector2.zero, new Vector2(-10f, 0f), () =>
             {
-                Confirm($"DELETE SLOT {slot.slotNumber}?", "This cannot be undone.", () => RunDelete(slot.slotNumber), LwsPersistenceMenuView.SaveLoad);
+                Confirm($"DELETE SLOT {slot.slotNumber}?", "This deletes the manual save and its hidden recovery backup.", () => RunDelete(slot.slotNumber), LwsPersistenceMenuView.SaveLoad);
             }, slot.occupied && !IsPersistenceBusy());
         }
 
         private void AddProfileRow(LwsSaveProfileMetadata profile)
         {
-            RectTransform row = AddRow($"Profile {profile.profileIndex}", 64f);
+            RectTransform row = AddRow($"Profile {profile.profileIndex}", 88f);
             bool active = _saveService.ActiveProfile != null && string.Equals(_saveService.ActiveProfile.stableProfileId, profile.stableProfileId, StringComparison.Ordinal);
-            string label = $"{profile.DisplayNameOrFallback} | id {profile.stableProfileId}";
-            CreateText(row, "Profile Detail", label, new Vector2(0f, 0f), new Vector2(0.48f, 1f), new Vector2(14f, 8f), new Vector2(-8f, -8f), 14, active ? FontStyle.Bold : FontStyle.Normal, TextAnchor.MiddleLeft, active ? TextColor : MutedTextColor);
-            CreateButton(row, "Select", active ? "ACTIVE" : "SELECT", new Vector2(0.50f, 0.12f), new Vector2(0.65f, 0.88f), Vector2.zero, Vector2.zero, () =>
+            string label = $"{profile.DisplayNameOrFallback}\nLast played: {FormatUtc(profile.lastPlayedUtcTicks)} | Playtime: {FormatDuration(profile.totalPlaytimeSeconds)}";
+            CreateText(row, "Profile Detail", label, new Vector2(0f, 0f), new Vector2(0.48f, 1f), new Vector2(18f, 8f), new Vector2(-8f, -8f), 18, active ? FontStyle.Bold : FontStyle.Normal, TextAnchor.MiddleLeft, active ? TextColor : MutedTextColor);
+            CreateButton(row, "Select", active ? "ACTIVE" : "SELECT", new Vector2(0.50f, 0.14f), new Vector2(0.65f, 0.86f), Vector2.zero, Vector2.zero, () =>
             {
                 LwsSaveOperationResult result = _saveService.SelectProfile(profile.stableProfileId);
                 _lastStatus = result.Message;
                 RebuildView();
-            }, !active);
-            CreateButton(row, "Rename", "RENAME", new Vector2(0.66f, 0.12f), new Vector2(0.81f, 0.88f), Vector2.zero, Vector2.zero, () =>
+            }, !active && !IsPersistenceBusy());
+            CreateButton(row, "Rename", "RENAME", new Vector2(0.66f, 0.14f), new Vector2(0.81f, 0.86f), Vector2.zero, Vector2.zero, () =>
             {
                 LwsSaveOperationResult result = _saveService.RenameProfile(profile.stableProfileId, _profileNameInput != null ? _profileNameInput.text : profile.DisplayNameOrFallback);
                 _lastStatus = result.Message;
                 RebuildView();
-            }, true);
-            CreateButton(row, "Delete", "DELETE", new Vector2(0.82f, 0.12f), new Vector2(1f, 0.88f), Vector2.zero, new Vector2(-10f, 0f), () =>
+            }, !IsPersistenceBusy());
+            CreateButton(row, "Delete", "DELETE", new Vector2(0.82f, 0.14f), new Vector2(1f, 0.86f), Vector2.zero, new Vector2(-10f, 0f), () =>
             {
                 Confirm($"DELETE PROFILE {profile.DisplayNameOrFallback}?", "This removes only this profile and its reserved Pixel Crushers save slots.", () =>
                 {
@@ -514,9 +605,8 @@ namespace LWS.InterstateHauler
                     _lastStatus = result.Message;
                     SetView(LwsPersistenceMenuView.Profiles);
                 }, LwsPersistenceMenuView.Profiles);
-            }, _saveService.Profiles.Count > 1);
+            }, _saveService.Profiles.Count > 1 && !IsPersistenceBusy());
         }
-
         private bool IsPersistenceBusy()
         {
             return _saveService != null &&
@@ -550,6 +640,83 @@ namespace LWS.InterstateHauler
             }
 
             return _saveService.PendingAutosave ? "AUTOSAVE PENDING" : "READY";
+        }
+
+        private string ResolveSaveSystemStatus()
+        {
+            if (_saveService == null)
+            {
+                return "MISSING";
+            }
+
+            string storer = string.IsNullOrWhiteSpace(_saveService.Diagnostics.activeStorer) ? "unknown storer" : _saveService.Diagnostics.activeStorer;
+            return $"PIXEL CRUSHERS | {storer} | {ResolveBusyLabel()}";
+        }
+
+        private string ResolveAutosaveStatus()
+        {
+            if (_saveService == null)
+            {
+                return "UNKNOWN";
+            }
+
+            LwsAutosaveConfiguration configuration = _saveService.AutosaveConfiguration;
+            string enabled = configuration != null && configuration.autosaveEnabled ? "ON" : "OFF";
+            string pending = _saveService.PendingAutosave ? " | PENDING" : string.Empty;
+            return $"{enabled}{pending}";
+        }
+
+        private void AddProfileActionRow()
+        {
+            RectTransform row = AddRow("Profile Actions", ButtonPreferredHeight);
+            CreateButton(row, "Select Profile", "SELECT PROFILE", new Vector2(0f, 0.10f), new Vector2(0.24f, 0.90f), new Vector2(0f, 0f), new Vector2(-8f, 0f), () => SetProfilesView(LwsPersistenceMenuView.SaveLoad), !IsPersistenceBusy());
+            CreateButton(row, "New Profile", "NEW PROFILE", new Vector2(0.25f, 0.10f), new Vector2(0.49f, 0.90f), new Vector2(0f, 0f), new Vector2(-8f, 0f), () => SetProfilesView(LwsPersistenceMenuView.SaveLoad), !IsPersistenceBusy());
+            CreateButton(row, "Rename Profile", "RENAME PROFILE", new Vector2(0.50f, 0.10f), new Vector2(0.74f, 0.90f), new Vector2(0f, 0f), new Vector2(-8f, 0f), () => SetProfilesView(LwsPersistenceMenuView.SaveLoad), !IsPersistenceBusy());
+            CreateButton(row, "Delete Profile", "DELETE PROFILE", new Vector2(0.75f, 0.10f), new Vector2(1f, 0.90f), new Vector2(0f, 0f), new Vector2(-10f, 0f), ConfirmDeleteActiveProfile, _saveService.Profiles.Count > 1 && !IsPersistenceBusy());
+        }
+
+        private void ConfirmDeleteActiveProfile()
+        {
+            LwsSaveProfileMetadata profile = _saveService.ActiveProfile;
+            if (profile == null)
+            {
+                _lastStatus = "No active profile is selected.";
+                RebuildView();
+                return;
+            }
+
+            Confirm($"DELETE PROFILE {profile.DisplayNameOrFallback}?", "This removes this profile and its reserved Pixel Crushers save slots.", () =>
+            {
+                LwsSaveOperationResult result = _saveService.DeleteProfile(profile.stableProfileId);
+                _lastStatus = result.Message;
+                SetView(LwsPersistenceMenuView.SaveLoad);
+            }, LwsPersistenceMenuView.SaveLoad);
+        }
+
+        private void SetProfilesView(LwsPersistenceMenuView returnView)
+        {
+            _profileReturnView = returnView;
+            SetView(LwsPersistenceMenuView.Profiles);
+        }
+
+        private void BackFromSaveLoad()
+        {
+            if (_openContext == LwsPersistenceMenuOpenContext.DirectSaveLoad)
+            {
+                Hide();
+                return;
+            }
+
+            SetView(LwsPersistenceMenuView.Main);
+        }
+
+        private void QuitGame()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
         private void RunSave(int slotNumber, bool overwrite)
         {
@@ -628,19 +795,19 @@ namespace LWS.InterstateHauler
 
         private void AddInfo(string label, string value)
         {
-            RectTransform row = AddRow($"Info {label}", 34f);
-            CreateText(row, "Label", $"{label}: {value}", Vector2.zero, Vector2.one, new Vector2(12f, 2f), new Vector2(-12f, -2f), 15, FontStyle.Normal, TextAnchor.MiddleLeft, MutedTextColor);
+            RectTransform row = AddRow($"Info {label}", 42f);
+            CreateText(row, "Label", $"{label}: {value}", Vector2.zero, Vector2.one, new Vector2(18f, 4f), new Vector2(-18f, -4f), 18, FontStyle.Normal, TextAnchor.MiddleLeft, MutedTextColor);
         }
 
         private void AddButton(string label, Action action, bool interactable)
         {
-            RectTransform row = AddRow($"Button Row {label}", 46f);
+            RectTransform row = AddRow($"Button Row {label}", ButtonPreferredHeight);
             CreateButton(row, label, label, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, action, interactable);
         }
 
         private InputField AddInput(string placeholder, string value)
         {
-            RectTransform row = AddRow($"Input {placeholder}", 48f);
+            RectTransform row = AddRow($"Input {placeholder}", 64f);
             Image image = row.gameObject.GetComponent<Image>();
             if (image != null)
             {
@@ -648,15 +815,14 @@ namespace LWS.InterstateHauler
             }
 
             InputField input = row.gameObject.AddComponent<InputField>();
-            Text text = CreateText(row, "Text", value ?? string.Empty, Vector2.zero, Vector2.one, new Vector2(14f, 4f), new Vector2(-14f, -4f), 16, FontStyle.Normal, TextAnchor.MiddleLeft, TextColor);
-            Text placeholderText = CreateText(row, "Placeholder", placeholder, Vector2.zero, Vector2.one, new Vector2(14f, 4f), new Vector2(-14f, -4f), 16, FontStyle.Italic, TextAnchor.MiddleLeft, MutedTextColor);
+            Text text = CreateText(row, "Text", value ?? string.Empty, Vector2.zero, Vector2.one, new Vector2(18f, 6f), new Vector2(-18f, -6f), 22, FontStyle.Normal, TextAnchor.MiddleLeft, TextColor);
+            Text placeholderText = CreateText(row, "Placeholder", placeholder, Vector2.zero, Vector2.one, new Vector2(18f, 6f), new Vector2(-18f, -6f), 22, FontStyle.Italic, TextAnchor.MiddleLeft, MutedTextColor);
             input.textComponent = text;
             input.placeholder = placeholderText;
             input.text = value ?? string.Empty;
             input.targetGraphic = image;
             return input;
         }
-
         private RectTransform AddRow(string name, float height)
         {
             RectTransform row = CreateRect(_contentRoot, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
@@ -667,6 +833,31 @@ namespace LWS.InterstateHauler
             return row;
         }
 
+
+        private void CloseDevelopmentOverlays()
+        {
+            ResolveServices();
+            if (_developmentUiService == null || _developmentUiService.RuntimeRoot == null)
+            {
+                return;
+            }
+
+            LwsDevelopmentUiRoot root = _developmentUiService.RuntimeRoot;
+            if (root.ControlCenterVisible)
+            {
+                root.HideControlCenter();
+            }
+
+            if (root.BigMapVisible)
+            {
+                root.HideBigMap();
+            }
+
+            if (root.WeatherTestPanelVisible)
+            {
+                root.HideWeatherTestPanel();
+            }
+        }
         private void SuppressDrivingInputSources(bool suppress)
         {
             if (suppress)
@@ -776,6 +967,7 @@ namespace LWS.InterstateHauler
             label.color = color;
             label.horizontalOverflow = HorizontalWrapMode.Wrap;
             label.verticalOverflow = VerticalWrapMode.Truncate;
+            label.raycastTarget = false;
             label.text = text ?? string.Empty;
             return label;
         }
@@ -785,15 +977,23 @@ namespace LWS.InterstateHauler
             RectTransform rect = CreateRect(parent, name, anchorMin, anchorMax, offsetMin, offsetMax);
             Image image = rect.gameObject.AddComponent<Image>();
             image.color = interactable ? ButtonColor : ButtonDisabledColor;
+            image.raycastTarget = true;
             Button button = rect.gameObject.AddComponent<Button>();
             button.targetGraphic = image;
             button.interactable = interactable;
+            ColorBlock colors = button.colors;
+            colors.normalColor = interactable ? ButtonColor : ButtonDisabledColor;
+            colors.highlightedColor = ButtonHoverColor;
+            colors.pressedColor = ButtonPressedColor;
+            colors.disabledColor = ButtonDisabledColor;
+            colors.selectedColor = ButtonHoverColor;
+            button.colors = colors;
             if (onClick != null)
             {
                 button.onClick.AddListener(() => onClick());
             }
 
-            CreateText(rect, "Label", label, Vector2.zero, Vector2.one, new Vector2(6f, 2f), new Vector2(-6f, -2f), 14, FontStyle.Bold, TextAnchor.MiddleCenter, TextColor);
+            CreateText(rect, "Label", label, Vector2.zero, Vector2.one, new Vector2(12f, 4f), new Vector2(-12f, -4f), 20, FontStyle.Bold, TextAnchor.MiddleCenter, interactable ? TextColor : MutedTextColor);
             return button;
         }
 
@@ -817,6 +1017,34 @@ namespace LWS.InterstateHauler
             return new DateTime(ticks, DateTimeKind.Utc).ToLocalTime().ToString("yyyy-MM-dd HH:mm");
         }
 
+
+        private static string FormatDuration(double seconds)
+        {
+            if (seconds <= 0d || double.IsNaN(seconds) || double.IsInfinity(seconds))
+            {
+                return "00:00:00";
+            }
+
+            TimeSpan span = TimeSpan.FromSeconds(seconds);
+            if (span.TotalHours >= 1d)
+            {
+                return $"{(int)span.TotalHours:00}:{span.Minutes:00}:{span.Seconds:00}";
+            }
+
+            return $"00:{span.Minutes:00}:{span.Seconds:00}";
+        }
+
+        private static bool WasDirectSavePressed()
+        {
+#if ENABLE_INPUT_SYSTEM
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && keyboard.f3Key.wasPressedThisFrame)
+            {
+                return true;
+            }
+#endif
+            return Input.GetKeyDown(KeyCode.F3);
+        }
         private static string SafeLabel(string value, string fallback)
         {
             return string.IsNullOrWhiteSpace(value) ? fallback : value;

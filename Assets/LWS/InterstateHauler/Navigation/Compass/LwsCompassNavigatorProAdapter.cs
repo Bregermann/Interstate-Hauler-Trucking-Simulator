@@ -248,11 +248,17 @@ namespace LWS.InterstateHauler
                 EnsureCabGpsController();
                 if (_cabGpsController != null && _cabGpsController.GpsMount != null)
                 {
+                    Transform physicalScreen = _cabGpsController.PhysicalScreenTransform;
+                    Transform cabParent = physicalScreen != null && physicalScreen.parent != null ? physicalScreen.parent : _cabGpsController.GpsMount;
+                    Vector3 localPosition = physicalScreen != null ? physicalScreen.localPosition : _cabGpsController.LocalScreenPosition;
+                    Quaternion localRotation = physicalScreen != null ? physicalScreen.localRotation : Quaternion.Euler(_cabGpsController.LocalScreenEulerAngles);
+                    Vector3 localScale = physicalScreen != null ? physicalScreen.localScale : Vector3.one * _cabGpsController.ScreenScale;
+
                     DisableLegacyCabMapGraphic(_cabGpsController);
-                    _cabRoot = CreateCompassInstance("IH Cab GPS Compass Navigator Pro", _cabGpsController.GpsMount, true);
-                    _cabRoot.transform.localPosition = _cabGpsController.LocalScreenPosition;
-                    _cabRoot.transform.localRotation = Quaternion.Euler(_cabGpsController.LocalScreenEulerAngles);
-                    _cabRoot.transform.localScale = Vector3.one * _cabGpsController.ScreenScale;
+                    _cabRoot = CreateCompassInstance("IH Cab GPS Compass Navigator Pro", cabParent, true);
+                    _cabRoot.transform.localPosition = localPosition;
+                    _cabRoot.transform.localRotation = localRotation;
+                    _cabRoot.transform.localScale = localScale;
                     RectTransform rect = _cabRoot.GetComponent<RectTransform>();
                     if (rect != null)
                     {
@@ -261,6 +267,7 @@ namespace LWS.InterstateHauler
 
                     _cabCompass = FindCompassComponent(_cabRoot);
                     ConfigureCompass(_cabCompass, true);
+                    FitCabCompassToPhysicalScreen(_cabRoot, _cabGpsController.ScreenSize);
                     _cameraPresentationService?.SetCabGpsActive(true);
                 }
             }
@@ -494,7 +501,7 @@ namespace LWS.InterstateHauler
             SetProperty(compass, "showCompassBar", false);
             SetProperty(compass, "showMiniMap", true);
             SetEnumProperty(compass, "miniMapLocation", cab ? "MiddleCenter" : "BottomRight");
-            SetEnumProperty(compass, "miniMapPositionAndSize", "ControlledByCompassNavigatorPro");
+            SetEnumProperty(compass, "miniMapPositionAndSize", cab ? "UserDefined" : "ControlledByCompassNavigatorPro");
             SetEnumProperty(compass, "miniMapOrientation", "Follow");
             SetEnumProperty(compass, "miniMapStyle", "SciFi2");
             SetEnumProperty(compass, "miniMapContents", "TopDownWorldView");
@@ -643,6 +650,72 @@ namespace LWS.InterstateHauler
             }
         }
 
+
+        private static void FitCabCompassToPhysicalScreen(GameObject root, Vector2 screenSize)
+        {
+            if (root == null)
+            {
+                return;
+            }
+
+            RectTransform rootRect = root.GetComponent<RectTransform>();
+            if (rootRect != null)
+            {
+                rootRect.anchorMin = new Vector2(0.5f, 0.5f);
+                rootRect.anchorMax = new Vector2(0.5f, 0.5f);
+                rootRect.pivot = new Vector2(0.5f, 0.5f);
+                rootRect.anchoredPosition = Vector2.zero;
+                rootRect.sizeDelta = screenSize;
+            }
+
+            RectTransform miniMapRoot = FindRectTransformRecursive(root.transform, "MiniMap Root");
+            if (miniMapRoot != null)
+            {
+                miniMapRoot.anchorMin = Vector2.zero;
+                miniMapRoot.anchorMax = Vector2.one;
+                miniMapRoot.pivot = new Vector2(0.5f, 0.5f);
+                miniMapRoot.anchoredPosition = Vector2.zero;
+                miniMapRoot.sizeDelta = Vector2.zero;
+                miniMapRoot.localRotation = Quaternion.identity;
+                miniMapRoot.localScale = Vector3.one;
+            }
+
+            RectTransform miniMap = FindRectTransformRecursive(root.transform, "MiniMap");
+            if (miniMap != null)
+            {
+                miniMap.anchorMin = Vector2.zero;
+                miniMap.anchorMax = Vector2.one;
+                miniMap.pivot = new Vector2(0.5f, 0.5f);
+                miniMap.anchoredPosition = Vector2.zero;
+                miniMap.sizeDelta = Vector2.zero;
+                miniMap.localRotation = Quaternion.identity;
+                miniMap.localScale = Vector3.one;
+            }
+        }
+
+        private static RectTransform FindRectTransformRecursive(Transform root, string objectName)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+
+            if (string.Equals(root.name, objectName, StringComparison.Ordinal))
+            {
+                return root as RectTransform;
+            }
+
+            for (int i = 0; i < root.childCount; i++)
+            {
+                RectTransform result = FindRectTransformRecursive(root.GetChild(i), objectName);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            return null;
+        }
         private static void DisableLegacyCabMapGraphic(LwsCabGpsController cabGps)
         {
             if (cabGps == null)

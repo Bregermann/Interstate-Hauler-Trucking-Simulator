@@ -149,6 +149,7 @@ namespace LWS.InterstateHauler
                 return;
             }
 
+            _ownerRoot?.HidePersistenceMenuOverlay();
             _ownerRoot?.HideControlCenter();
             _ownerRoot?.HideBigMap();
             _dimmer.SetActive(true);
