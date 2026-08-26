@@ -97,23 +97,32 @@ namespace LWS.InterstateHauler.Tests.EditMode
             Assert.IsFalse(LwsGameplayStateRules.AllowsDrivingInput(LwsGameplayState.Paused));
             Assert.IsFalse(LwsGameplayStateRules.AllowsDrivingInput(LwsGameplayState.Transitioning));
             Assert.IsFalse(LwsGameplayStateRules.AllowsDrivingInput(LwsGameplayState.RecoveryError));
+            Assert.IsTrue(LwsGameplayStateRules.AllowsDrivingInput(LwsGameplayState.AtDepot));
+            Assert.IsFalse(LwsGameplayStateRules.AllowsDrivingInput(LwsGameplayState.JobSelection));
+            Assert.IsTrue(LwsGameplayStateRules.AllowsDrivingInput(LwsGameplayState.TrailerPickup));
         }
 
         [Test]
-        public void FutureStatesAreReservedVocabularyOnly()
+        public void Prompt020StatesAreActiveAndLaterStatesRemainReservedVocabularyOnly()
         {
-            LwsGameplayState[] reserved =
+            LwsGameplayState[] activePrompt020States =
             {
                 LwsGameplayState.AtDepot,
                 LwsGameplayState.JobSelection,
-                LwsGameplayState.TrailerPickup,
+                LwsGameplayState.TrailerPickup
+            };
+
+            LwsGameplayState[] stillReserved =
+            {
                 LwsGameplayState.HaulActive,
                 LwsGameplayState.Delivery,
                 LwsGameplayState.DeliveryResults
             };
 
-            Assert.IsTrue(reserved.All(LwsGameplayStateRules.IsFutureReservedState));
-            Assert.IsFalse(reserved.Any(LwsGameplayStateRules.IsCurrentRuntimeState));
+            Assert.IsTrue(activePrompt020States.All(LwsGameplayStateRules.IsCurrentRuntimeState));
+            Assert.IsFalse(activePrompt020States.Any(LwsGameplayStateRules.IsFutureReservedState));
+            Assert.IsTrue(stillReserved.All(LwsGameplayStateRules.IsFutureReservedState));
+            Assert.IsFalse(stillReserved.Any(LwsGameplayStateRules.IsCurrentRuntimeState));
         }
 
         [Test]

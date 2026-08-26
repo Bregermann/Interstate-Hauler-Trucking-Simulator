@@ -30,6 +30,7 @@ namespace LWS.InterstateHauler
         private ILwsVehicleInputService _inputService;
         private ILwsVehicleInputSource _fallbackInputSource;
         private ILwsSaveService _saveService;
+        private ILwsGameplayStateService _gameplayStateService;
         private LwsTransmissionState _state;
         private LwsTransmissionDisplayState _displayState;
         private LwsTransmissionAbuseEvent _lastAbuseEvent;
@@ -134,6 +135,12 @@ namespace LWS.InterstateHauler
         {
             ResolveServices();
             ConfigureNwhIfNeeded();
+
+            if (_gameplayStateService != null && !_gameplayStateService.AllowsDrivingInput)
+            {
+                _displayState = BuildDisplayState(ReadNwhState());
+                return;
+            }
 
             ILwsVehicleInputSource source = ResolveInputSource();
             if (mode == LwsTransmissionMode.Automatic)
@@ -1317,6 +1324,11 @@ namespace LWS.InterstateHauler
             if (_saveService == null)
             {
                 LwsApplicationBootstrap.Instance.Registry.TryGet(out _saveService);
+            }
+
+            if (_gameplayStateService == null)
+            {
+                LwsApplicationBootstrap.Instance.Registry.TryGet(out _gameplayStateService);
             }
         }
 

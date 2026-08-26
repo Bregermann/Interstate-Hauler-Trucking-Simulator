@@ -1050,6 +1050,7 @@ namespace LWS.InterstateHauler
             RegisterParticipant(new LwsGameClockSaveParticipant(() => _registry));
             RegisterParticipant(new LwsWeatherSaveParticipant(() => _registry));
             RegisterParticipant(new LwsRoadConditionSaveParticipant(() => _registry));
+            RegisterParticipant(new LwsActiveJobSaveParticipant(() => _registry));
             RegisterParticipant(new LwsNavigationSaveParticipant(() => _registry));
         }
 
@@ -1395,6 +1396,8 @@ namespace LWS.InterstateHauler
                     return 50;
                 case "lws.road-condition.semantic":
                     return 60;
+                case "lws.job.active":
+                    return 65;
                 case "lws.navigation.destination-intent":
                     return 70;
                 default:

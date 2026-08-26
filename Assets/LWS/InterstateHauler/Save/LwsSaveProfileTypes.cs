@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,6 +25,7 @@ namespace LWS.InterstateHauler
         public const string ProfileDirectoryRecordKey = "lws.profile-directory";
         public const string SemanticSnapshotRecordKey = "lws.semantic-state";
         public const string WorldResumeContextParticipantId = "lws.world.resume-context";
+        public const string ActiveJobParticipantId = "lws.job.active";
         public const string DefaultStableWorldId = "world.interstate-corridor-validation";
         public const string DefaultGameVersion = "0.1-dev";
 

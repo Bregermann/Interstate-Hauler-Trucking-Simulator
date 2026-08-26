@@ -29,6 +29,7 @@ namespace LWS.InterstateHauler
 
         [Header("Validation")]
         [SerializeField] private bool createServiceArea = true;
+        [SerializeField] private bool createDepotJobBoardValidation = true;
         [SerializeField] private bool createLaneDebugLines = true;
         [SerializeField] private bool showDebugPanel = true;
         [SerializeField] private bool createUtsTrafficValidation = true;
@@ -76,6 +77,11 @@ namespace LWS.InterstateHauler
             if (createServiceArea)
             {
                 BuildServiceArea(_generatedRoot.transform);
+            }
+
+            if (createDepotJobBoardValidation)
+            {
+                BuildDepotJobBoardValidation(_generatedRoot.transform);
             }
 
             string easyRoadsMessage = "EasyRoads runtime generation was disabled.";
@@ -368,6 +374,81 @@ namespace LWS.InterstateHauler
             CreatePavedRect(parent, "IH_TEST_I000 Start Shoulder Pad", new Vector3(34f, roadSurfaceY, 45f), new Vector2(26f, 170f), shoulder, "IH_TEST_I000_SHOULDER_START");
         }
 
+        private void BuildDepotJobBoardValidation(Transform parent)
+        {
+            LwsJobCatalog catalog = Resources.Load<LwsJobCatalog>(LwsJobCatalogService.ValidationCatalogResourcePath);
+            LwsDepotDefinition depotDefinition = null;
+            if (catalog != null)
+            {
+                foreach (LwsDepotDefinition candidate in catalog.DepotDefinitions)
+                {
+                    if (candidate != null && string.Equals(candidate.StableDepotId, "depot.validation.interstate-corridor", StringComparison.Ordinal))
+                    {
+                        depotDefinition = candidate;
+                        break;
+                    }
+                }
+            }
+
+            if (depotDefinition == null)
+            {
+                Debug.LogWarning("Prompt 020 validation depot definition was not found in the authored job catalog.", this);
+                return;
+            }
+
+            GameObject depotRoot = new GameObject("IH Validation Depot Runtime");
+            depotRoot.transform.SetParent(parent, false);
+            depotRoot.transform.position = new Vector3(-38f, roadSurfaceY, -95f);
+
+            BoxCollider zone = depotRoot.AddComponent<BoxCollider>();
+            zone.isTrigger = true;
+            zone.center = new Vector3(0f, 4f, 0f);
+            zone.size = new Vector3(128f, 8f, 128f);
+
+            GameObject terminal = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            terminal.name = "IH Validation Job Board Terminal";
+            terminal.transform.SetParent(depotRoot.transform, false);
+            terminal.transform.localPosition = new Vector3(-34f, 1.2f, -33f);
+            terminal.transform.localRotation = Quaternion.Euler(0f, 24f, 0f);
+            terminal.transform.localScale = new Vector3(3.2f, 2.4f, 1.0f);
+            Renderer terminalRenderer = terminal.GetComponent<Renderer>();
+            if (terminalRenderer != null)
+            {
+                terminalRenderer.sharedMaterial = CreateRuntimeMaterial("IH Validation Job Board Terminal", new Color(0.11f, 0.15f, 0.16f, 1f));
+            }
+
+            GameObject sign = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            sign.name = "IH Validation Job Board Sign";
+            sign.transform.SetParent(depotRoot.transform, false);
+            sign.transform.localPosition = new Vector3(-34f, 3.0f, -32.45f);
+            sign.transform.localRotation = terminal.transform.localRotation;
+            sign.transform.localScale = new Vector3(4.4f, 1.0f, 0.18f);
+            Renderer signRenderer = sign.GetComponent<Renderer>();
+            if (signRenderer != null)
+            {
+                signRenderer.sharedMaterial = CreateRuntimeMaterial("IH Validation Job Board Sign", new Color(0.82f, 0.70f, 0.32f, 1f));
+            }
+
+            GameObject label = new GameObject("IH Validation Job Board Label");
+            label.transform.SetParent(sign.transform, false);
+            label.transform.localPosition = new Vector3(0f, 0f, -0.62f);
+            label.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+            label.transform.localScale = new Vector3(0.22f, 0.22f, 0.22f);
+            TextMesh text = label.AddComponent<TextMesh>();
+            text.text = "JOB BOARD";
+            text.anchor = TextAnchor.MiddleCenter;
+            text.alignment = TextAlignment.Center;
+            text.characterSize = 1f;
+            text.fontSize = 42;
+            text.color = Color.black;
+
+            LwsDepotRuntime runtime = depotRoot.AddComponent<LwsDepotRuntime>();
+            runtime.Configure(depotDefinition, zone, terminal.transform, 12f);
+
+            LwsJobBoardTerminal boardTerminal = terminal.AddComponent<LwsJobBoardTerminal>();
+            boardTerminal.Configure(runtime, terminal.transform, 12f, 1f);
+            LwsJobBoardPresenter.EnsureScenePresenter();
+        }
         private void CreatePavedRect(Transform parent, string name, Vector3 center, Vector2 size, Material material, string segmentId)
         {
             GameObject go = new GameObject(name);

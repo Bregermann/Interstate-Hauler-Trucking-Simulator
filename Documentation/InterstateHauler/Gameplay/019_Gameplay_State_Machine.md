@@ -81,11 +81,11 @@ DELIVERY_RESULTS
     +--> FREE_DRIVE
 ```
 
-Future owners:
+Current and future owners:
 
-- `AT_DEPOT`: depot prompt.
-- `JOB_SELECTION`: job board/job generation prompts.
-- `TRAILER_PICKUP`: trailer assignment prompt.
+- `AT_DEPOT`: active Prompt 020 depot presence state.
+- `JOB_SELECTION`: active Prompt 020 authored job-board state.
+- `TRAILER_PICKUP`: active after Prompt 020 job acceptance; Prompt 021 owns physical trailer assignment.
 - `HAUL_ACTIVE`: haul/job runtime prompt.
 - `DELIVERY`: delivery/parking prompt.
 - `DELIVERY_RESULTS`: economy/rewards/results prompt.
@@ -141,3 +141,32 @@ When a future prompt needs a new macro gameplay mode:
 4. Add or update transition validation in `LwsGameplayStateService`.
 5. Update this document's current/future transition graph.
 6. Keep feature behavior in the owning system, not in the state machine.
+## Prompt 020 Active State Update
+
+Prompt 020 activates three previously reserved macro states:
+
+- `AT_DEPOT`: player tractor is inside a registered enabled depot context and not inside the modal job board. Driving is allowed so the player can maneuver around the yard.
+- `JOB_SELECTION`: player is browsing/selecting an authored job through the job board. Driving is blocked.
+- `TRAILER_PICKUP`: an Active Job exists with `Status = AwaitingTrailerPickup`. Driving is allowed. Prompt 021 owns physical trailer assignment and pickup completion.
+
+Current Prompt 020 transitions:
+
+```text
+FREE_DRIVE
+    |
+    | canonical tractor enters eligible depot
+    v
+AT_DEPOT
+    |
+    | interact with job board
+    v
+JOB_SELECTION
+    |
+    +-- close/cancel --> AT_DEPOT
+    |
+    +-- accept authored job --> TRAILER_PICKUP
+```
+
+Depot presence is separate from macro gameplay state. Entering a depot during `TRAILER_PICKUP`, `HAUL_ACTIVE`, `DELIVERY`, `LOADING_WORLD`, or `RECOVERY_ERROR` updates depot presence only and does not blindly force `AT_DEPOT`.
+
+Prompt 020 adds no new global state manager and does not persist raw `LwsGameplayState` as career authority. Active job semantic status is persisted through the Pixel Crushers semantic save snapshot and derives the appropriate macro state after load.

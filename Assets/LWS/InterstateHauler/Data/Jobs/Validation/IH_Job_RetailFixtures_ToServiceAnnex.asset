@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60ee5fd10279455a9f9cdd35e313aa61, type: 3}
+  m_Name: IH_Job_RetailFixtures_ToServiceAnnex
+  m_EditorClassIdentifier: 
+  schemaVersion: 1
+  stableJobDefinitionId: job.validation.retail-fixtures.service-annex
+  displayName: Retail Fixtures to Service Annex
+  enabled: 1
+  originDepot: {fileID: 11400000, guid: 3d2e4fc3933a4b72882f8cb3e393fd4f, type: 2}
+  destination: {fileID: 11400000, guid: 7b36564e878a43fbb67f63fc8623f7de, type: 2}
+  cargoId: cargo.retail-fixtures
+  cargoDisplayName: Retail Fixtures
+  flavorText: Short validation move for checking low-speed job board flow without leaving the service area.
+  requiredTrailerTypeId: trailer.dry-van
+  cargoWeightLbs: 18000
+  estimatedDistanceMiles: 1.2
+  quotedGrossPayCents: 78000
+  developerNotes: Prompt 020 sample authored job. Production format, validation content.

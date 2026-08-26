@@ -114,6 +114,7 @@ namespace LWS.InterstateHauler
             switch (state)
             {
                 case LwsGameplayState.FreeDrive:
+                case LwsGameplayState.AtDepot:
                 case LwsGameplayState.TrailerPickup:
                 case LwsGameplayState.HaulActive:
                     return true;
@@ -129,15 +130,15 @@ namespace LWS.InterstateHauler
                    state == LwsGameplayState.FreeDrive ||
                    state == LwsGameplayState.Paused ||
                    state == LwsGameplayState.Transitioning ||
-                   state == LwsGameplayState.RecoveryError;
+                   state == LwsGameplayState.RecoveryError ||
+                   state == LwsGameplayState.AtDepot ||
+                   state == LwsGameplayState.JobSelection ||
+                   state == LwsGameplayState.TrailerPickup;
         }
 
         public static bool IsFutureReservedState(LwsGameplayState state)
         {
-            return state == LwsGameplayState.AtDepot ||
-                   state == LwsGameplayState.JobSelection ||
-                   state == LwsGameplayState.TrailerPickup ||
-                   state == LwsGameplayState.HaulActive ||
+            return state == LwsGameplayState.HaulActive ||
                    state == LwsGameplayState.Delivery ||
                    state == LwsGameplayState.DeliveryResults;
         }
@@ -145,7 +146,10 @@ namespace LWS.InterstateHauler
         public static bool IsPauseReturnState(LwsGameplayState state)
         {
             return state == LwsGameplayState.FreeDrive ||
-                   IsFutureReservedState(state);
+                   state == LwsGameplayState.AtDepot ||
+                   state == LwsGameplayState.TrailerPickup ||
+                   state == LwsGameplayState.HaulActive ||
+                   state == LwsGameplayState.Delivery;
         }
     }
 
@@ -307,8 +311,10 @@ namespace LWS.InterstateHauler
                         targetState == LwsGameplayState.Paused ||
                         targetState == LwsGameplayState.LoadingWorld ||
                         targetState == LwsGameplayState.Transitioning ||
+                        targetState == LwsGameplayState.AtDepot ||
+                        targetState == LwsGameplayState.TrailerPickup ||
                         LwsGameplayStateRules.IsFutureReservedState(targetState),
-                        "FreeDrive may pause, load, transition, or enter a future reserved gameplay state.",
+                        "FreeDrive may pause, load, transition, enter AtDepot/TrailerPickup, or enter a future reserved gameplay state.",
                         out rejectionReason);
 
                 case LwsGameplayState.Paused:
@@ -325,10 +331,42 @@ namespace LWS.InterstateHauler
                         "LoadingWorld may complete to FreeDrive or fail to RecoveryError.",
                         out rejectionReason);
 
+                case LwsGameplayState.AtDepot:
+                    return Allow(
+                        targetState == LwsGameplayState.FreeDrive ||
+                        targetState == LwsGameplayState.JobSelection ||
+                        targetState == LwsGameplayState.Paused ||
+                        targetState == LwsGameplayState.LoadingWorld ||
+                        targetState == LwsGameplayState.Transitioning,
+                        "AtDepot may enter FreeDrive, JobSelection, Paused, LoadingWorld, or Transitioning.",
+                        out rejectionReason);
+
+                case LwsGameplayState.JobSelection:
+                    return Allow(
+                        targetState == LwsGameplayState.AtDepot ||
+                        targetState == LwsGameplayState.TrailerPickup ||
+                        targetState == LwsGameplayState.LoadingWorld ||
+                        targetState == LwsGameplayState.RecoveryError,
+                        "JobSelection may close to AtDepot, accept to TrailerPickup, load, or fail to RecoveryError.",
+                        out rejectionReason);
+
+                case LwsGameplayState.TrailerPickup:
+                    return Allow(
+                        targetState == LwsGameplayState.Paused ||
+                        targetState == LwsGameplayState.LoadingWorld ||
+                        targetState == LwsGameplayState.Transitioning ||
+                        targetState == LwsGameplayState.FreeDrive ||
+                        targetState == LwsGameplayState.HaulActive ||
+                        targetState == LwsGameplayState.Delivery,
+                        "TrailerPickup may pause, load, transition, clear to FreeDrive, or enter future haul/delivery flow.",
+                        out rejectionReason);
+
                 case LwsGameplayState.Transitioning:
                     return Allow(
                         targetState == LwsGameplayState.FreeDrive ||
                         targetState == LwsGameplayState.RecoveryError ||
+                        targetState == LwsGameplayState.AtDepot ||
+                        targetState == LwsGameplayState.TrailerPickup ||
                         LwsGameplayStateRules.IsFutureReservedState(targetState),
                         "Transitioning may complete to a gameplay state or fail to RecoveryError.",
                         out rejectionReason);

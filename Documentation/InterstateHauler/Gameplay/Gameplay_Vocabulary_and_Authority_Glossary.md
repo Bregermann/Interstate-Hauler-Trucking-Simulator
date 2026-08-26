@@ -35,15 +35,15 @@ Future prompts may extend this glossary when a real new gameplay system or macro
 | TRANSITIONING | `Transitioning` | No | Short-lived broad transition that is not specifically save/load. Do not use as a dumping ground. |
 | RECOVERY_ERROR | `RecoveryError` | No | Critical gameplay/load transition failed and the game must remain in recovery/retry/cancel flow. |
 
-## Future Reserved States
+## Gameplay Flow Terms
 
-These are canonical future vocabulary only. Prompt 019 does not implement their gameplay systems.
+These are canonical gameplay-flow terms. Prompt 020 activates depot/job-board states; later states remain reserved vocabulary until their owning prompts.
 
 | Canonical Term | Code Name | Expected Driving | Future Owner |
 |---|---|---|---|
-| AT_DEPOT | `AtDepot` | Context-dependent/no by default | Prompt 020 depot implementation |
-| JOB_SELECTION | `JobSelection` | No | Prompt 020/023 job UI/data |
-| TRAILER_PICKUP | `TrailerPickup` | Yes | Prompt 021 trailer assignment/pickup |
+| AT_DEPOT | `AtDepot` | Yes | Active in Prompt 020 depot presence. |
+| JOB_SELECTION | `JobSelection` | No | Active in Prompt 020 authored job board. |
+| TRAILER_PICKUP | `TrailerPickup` | Yes | Activated after Prompt 020 job acceptance; Prompt 021 owns physical pickup. |
 | HAUL_ACTIVE | `HaulActive` | Yes | Job/haul systems |
 | DELIVERY | `Delivery` | Context-dependent | Prompt 022 delivery/parking |
 | DELIVERY_RESULTS | `DeliveryResults` | No | Economy/results/statistics systems |
@@ -137,3 +137,79 @@ Future prompts that introduce macro gameplay modes must:
 4. Update this glossary.
 5. Update the transition diagram in `019_Gameplay_State_Machine.md`.
 6. Not create a separate global state manager.
+## Prompt 020 Depot and Authored Job Vocabulary
+
+Prompt 020 activates depot/job-board gameplay on top of the Prompt 019 macro state service. Depot presence remains separate from gameplay state.
+
+| Term | Canonical Meaning | Authority |
+| --- | --- | --- |
+| Depot | A named trucking gameplay location where activities may occur: job board, pickup, delivery, services, parking, or future company facilities. A depot does not own jobs, money, reputation, save files, or macro state. | LWS depot semantics |
+| Depot Definition | Stable authored ScriptableObject data for a depot. It stores `StableDepotId`, display name, world identity, and whether the depot has a job board. | `LwsDepotDefinition` |
+| Depot Runtime Instance | Scene-side depot representation with trigger bounds and interaction references. It is not the persistent depot identity. | `LwsDepotRuntime` |
+| Depot Presence | Whether the canonical player tractor is currently inside a registered depot gameplay area. Trailer-only collider entry does not count. | `ILwsDepotService` |
+| Destination | A stable semantic trucking destination referenced by authored jobs. It is not merely a Transform. | LWS destination data |
+| Destination Definition | Stable authored ScriptableObject data for a destination. Prompt 023 expands authoring workflow. | `LwsDestinationDefinition` |
+| Job Definition | Developer-authored ScriptableObject source content for a potential haul. It is not mutable player progress or a UI row. | `LwsJobDefinition` |
+| Job Catalog | Runtime-safe collection of authored job/depot/destination assets. It does not use `AssetDatabase` at runtime. | `LwsJobCatalog`, `ILwsJobCatalogService` |
+| Job Offer | Runtime representation of an authored job currently eligible for a job board. It is derived from a Job Definition. | `LwsJobOffer` |
+| Job Offer Provider | Service that produces current offers from authored content. | `ILwsJobOfferProvider` |
+| Authored Job Offer Provider | Production provider that filters `LwsJobDefinition` assets by current depot. It does not randomize jobs. | `LwsAuthoredJobOfferProvider` |
+| Job Board | Player-facing UI for browsing and accepting authored job offers at an eligible depot. | `ILwsJobBoardService`, `LwsJobBoardPresenter` |
+| Job Board Service | Coordinates current depot, authored offers, selection, acceptance, and state transitions. It does not generate jobs or write save files. | `LwsJobBoardService` |
+| Active Job | Persistent player-specific snapshot created when the player accepts an offer. It stores stable semantic job values and source provenance. | `LwsActiveJob` |
+| Active Job Service | Single authority for the current accepted job. Prompt 020 supports one active job maximum. | `ILwsActiveJobService`, `LwsActiveJobService` |
+| Job Status | Persistent job lifecycle vocabulary such as `AwaitingTrailerPickup`, `HaulActive`, `Delivery`, `Completed`, `Failed`, and `Abandoned`. | `LwsJobStatus` |
+
+Prompt 020 status updates:
+
+- `AT_DEPOT`: ACTIVE / IMPLEMENTED IN PROMPT 020. `AllowsDrivingInput = YES`.
+- `JOB_SELECTION`: ACTIVE / IMPLEMENTED IN PROMPT 020. `AllowsDrivingInput = NO`.
+- `TRAILER_PICKUP`: ACTIVE STATE ENTERED AFTER JOB ACCEPTANCE. `AllowsDrivingInput = YES`. Physical pickup gameplay belongs to Prompt 021.
+
+Depot/job-board flow:
+
+```text
+                 DEPOT PRESENCE
+                       |
+                       v
+             LWS GAMEPLAY STATE
+                       |
+             +---------+---------+
+             |                   |
+             v                   v
+         AT_DEPOT          JOB_SELECTION
+                                  |
+                                  | ACCEPT
+                                  v
+                          LwsActiveJobService
+                                  |
+                                  v
+                          TRAILER_PICKUP
+```
+
+Authored content flow:
+
+```text
+LwsDepotDefinition
+
+LwsDestinationDefinition
+
+LwsJobDefinition
+        |
+        v
+LwsJobCatalog
+        |
+        v
+LwsAuthoredJobOfferProvider
+        |
+        v
+LwsJobBoardService
+        |
+        v
+PLAYER
+        |
+        v
+LwsActiveJobService
+```
+
+Scriptable Sheets role: `LwsDepotDefinition`, `LwsDestinationDefinition`, `LwsJobDefinition`, and `LwsJobCatalog` are normal serialized ScriptableObjects intentionally shaped for Scriptable Sheets table editing. Prompt 023 owns the high-volume Scriptable Sheets job and destination authoring workflow.

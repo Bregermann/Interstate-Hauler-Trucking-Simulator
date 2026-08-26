@@ -54,6 +54,10 @@ namespace LWS.InterstateHauler
         private ILwsPlayerVehicleService _playerVehicleService;
         private ILwsSaveService _saveService;
         private ILwsPersistenceMenuService _persistenceMenuService;
+        private ILwsDepotService _depotService;
+        private ILwsJobCatalogService _jobCatalogService;
+        private ILwsJobBoardService _jobBoardService;
+        private ILwsActiveJobService _activeJobService;
         private LwsCompassNavigatorProAdapter _compassNavigatorProAdapter;
 
         private Canvas _canvas;
@@ -753,6 +757,11 @@ namespace LWS.InterstateHauler
             AddInfo("Driving allowed", _gameplayStateService != null ? (_gameplayStateService.AllowsDrivingInput ? "YES" : "NO") : "missing");
             AddInfo("Input owner", _inputService != null ? $"{_inputService.ActiveOwner} / {_inputService.ActiveSourceId}" : "missing");
             AddInfo("Truck", _truckControlService?.ActiveState.vehicleId ?? "none");
+            AddInfo("Depot", _depotService != null && _depotService.IsPlayerAtDepot && _depotService.CurrentDepotDefinition != null ? $"{_depotService.CurrentDepotId} / {_depotService.CurrentDepotDefinition.DisplayName}" : "none");
+            AddInfo("Authored jobs", _jobCatalogService != null ? $"{_jobCatalogService.JobDefinitionCount} jobs / {_jobCatalogService.DepotDefinitionCount} depots / {_jobCatalogService.DestinationDefinitionCount} destinations" : "missing");
+            AddInfo("Job board", _jobBoardService != null ? $"{(_jobBoardService.IsOpen ? "OPEN" : "closed")} / offers {_jobBoardService.CurrentOffers.Count}" : "missing");
+            LwsActiveJob activeJob = _activeJobService?.CurrentActiveJob;
+            AddInfo("Active job", activeJob != null ? $"{activeJob.stableActiveJobId} / {activeJob.status} / {activeJob.originDepotId} -> {activeJob.destinationId}" : "none");
             AddInfo("Transmission", FormatTransmissionOverview(transmission));
             AddInfo("Camera", FormatCameraMode());
             AddInfo("HUD Minimap", HudMinimapVisible ? "VISIBLE" : "HIDDEN");
@@ -1314,6 +1323,10 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _playerVehicleService);
             _registry.TryGet(out _saveService);
             _registry.TryGet(out _persistenceMenuService);
+            _registry.TryGet(out _depotService);
+            _registry.TryGet(out _jobCatalogService);
+            _registry.TryGet(out _jobBoardService);
+            _registry.TryGet(out _activeJobService);
             _compassNavigatorProAdapter = ResolveCompassNavigatorProAdapter();
         }
 

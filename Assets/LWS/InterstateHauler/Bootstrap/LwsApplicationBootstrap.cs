@@ -111,8 +111,13 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsVehicleRuntimeService>(new LwsVehicleRuntimeService(), typeof(ILwsVehicleInputService));
             registry.Register<ILwsTruckControlService>(new LwsTruckControlService(), typeof(ILwsPlayerVehicleService), typeof(ILwsVehicleRuntimeService));
             registry.Register<ILwsTruckDashboardService>(new LwsTruckDashboardService(), typeof(ILwsTruckControlService), typeof(ILwsVehicleRuntimeService), typeof(ILwsRenderingService));
+            registry.Register<ILwsDepotService>(new LwsDepotService(), typeof(ILwsGameplayStateService));
+            registry.Register<ILwsJobCatalogService>(new LwsJobCatalogService(), typeof(ILwsDepotService));
+            registry.Register<ILwsJobOfferProvider>(new LwsAuthoredJobOfferProvider(), typeof(ILwsJobCatalogService));
+            registry.Register<ILwsActiveJobService>(new LwsActiveJobService(), typeof(ILwsGameplayStateService), typeof(ILwsSaveService));
+            registry.Register<ILwsJobBoardService>(new LwsJobBoardService(), typeof(ILwsDepotService), typeof(ILwsJobOfferProvider), typeof(ILwsActiveJobService), typeof(ILwsGameplayStateService), typeof(ILwsSaveService));
             registry.Register<ILwsPersistenceMenuService>(new LwsPersistenceMenuService(), typeof(ILwsSaveService), typeof(ILwsVehicleInputService), typeof(ILwsGameplayStateService));
-            registry.Register<ILwsDevelopmentUiService>(new LwsDevelopmentUiService(), typeof(ILwsNavigationService), typeof(ILwsRoadGraphService), typeof(ILwsWorldOriginService), typeof(ILwsPlayerSettingsService), typeof(ILwsCameraPresentationService), typeof(ILwsGameplayStateService));
+            registry.Register<ILwsDevelopmentUiService>(new LwsDevelopmentUiService(), typeof(ILwsNavigationService), typeof(ILwsRoadGraphService), typeof(ILwsWorldOriginService), typeof(ILwsPlayerSettingsService), typeof(ILwsCameraPresentationService), typeof(ILwsGameplayStateService), typeof(ILwsDepotService), typeof(ILwsJobCatalogService), typeof(ILwsJobBoardService), typeof(ILwsActiveJobService));
 
             return registry;
         }

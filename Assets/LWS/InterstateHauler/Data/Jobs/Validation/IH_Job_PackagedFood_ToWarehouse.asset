@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60ee5fd10279455a9f9cdd35e313aa61, type: 3}
+  m_Name: IH_Job_PackagedFood_ToWarehouse
+  m_EditorClassIdentifier: 
+  schemaVersion: 1
+  stableJobDefinitionId: job.validation.packaged-food.warehouse
+  displayName: Packaged Food to Validation Warehouse
+  enabled: 1
+  originDepot: {fileID: 11400000, guid: 3d2e4fc3933a4b72882f8cb3e393fd4f, type: 2}
+  destination: {fileID: 11400000, guid: a7e132a631d1487f82ce52ce75db7389, type: 2}
+  cargoId: cargo.packaged-food
+  cargoDisplayName: Packaged Food
+  flavorText: Keep the pallets clean and dry. The validation warehouse wants this food shipment before the next simulated weather pass.
+  requiredTrailerTypeId: trailer.dry-van
+  cargoWeightLbs: 22000
+  estimatedDistanceMiles: 8.5
+  quotedGrossPayCents: 95000
+  developerNotes: Prompt 020 sample authored job. Production format, validation content.

@@ -17,6 +17,7 @@ namespace LWS.InterstateHauler
 
         private ILwsVehicleInputSource _inputSource;
         private ILwsVehicleInputService _inputService;
+        private ILwsGameplayStateService _gameplayStateService;
         private bool _truckControlLookupAttempted;
         private bool _forwardDiagnosticLogged;
         private bool _reverseDiagnosticLogged;
@@ -341,8 +342,13 @@ namespace LWS.InterstateHauler
         private LwsVehicleContinuousInput ReadNwhContinuousInput()
         {
             ResolveSource();
+            ResolveInputService();
             LwsVehicleContinuousInput semanticInput = _inputSource?.ReadContinuousInput() ?? default;
-            if (truckControlController != null)
+            if (_gameplayStateService != null && !_gameplayStateService.AllowsDrivingInput)
+            {
+                semanticInput = default;
+            }
+            else if (truckControlController != null)
             {
                 LwsTruckControlState state = truckControlController.CurrentState;
                 semanticInput.throttle = Mathf.Max(semanticInput.throttle, state.cruiseThrottleOutput);
@@ -387,14 +393,21 @@ namespace LWS.InterstateHauler
 
         private void ResolveInputService()
         {
-            if (_inputService != null ||
-                LwsApplicationBootstrap.Instance == null ||
+            if (LwsApplicationBootstrap.Instance == null ||
                 LwsApplicationBootstrap.Instance.Registry == null)
             {
                 return;
             }
 
-            LwsApplicationBootstrap.Instance.Registry.TryGet(out _inputService);
+            if (_inputService == null)
+            {
+                LwsApplicationBootstrap.Instance.Registry.TryGet(out _inputService);
+            }
+
+            if (_gameplayStateService == null)
+            {
+                LwsApplicationBootstrap.Instance.Registry.TryGet(out _gameplayStateService);
+            }
         }
 
         private void LogInputDiagnosticIfNeeded(

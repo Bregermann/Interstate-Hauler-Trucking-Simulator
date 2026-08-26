@@ -97,6 +97,7 @@ namespace LWS.InterstateHauler.Tests.EditMode
             CollectionAssert.Contains(ids, "lws.game-clock");
             CollectionAssert.Contains(ids, "lws.weather.semantic");
             CollectionAssert.Contains(ids, "lws.road-condition.semantic");
+            CollectionAssert.Contains(ids, LwsSaveSchema.ActiveJobParticipantId);
             CollectionAssert.Contains(ids, "lws.navigation.destination-intent");
             Assert.IsFalse(ids.Contains("lws.validation.proof"));
         }

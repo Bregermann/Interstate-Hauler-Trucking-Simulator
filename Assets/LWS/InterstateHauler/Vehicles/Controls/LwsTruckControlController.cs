@@ -23,6 +23,7 @@ namespace LWS.InterstateHauler
         private readonly HashSet<LwsTruckNativePulse> _nativePulses = new HashSet<LwsTruckNativePulse>();
         private ILwsVehicleInputService _inputService;
         private ILwsTruckControlService _truckControlService;
+        private ILwsGameplayStateService _gameplayStateService;
         private LwsTruckControlCapabilities _capabilities;
         private LwsTruckControlState _state;
         private bool _serviceRegistered;
@@ -91,6 +92,14 @@ namespace LWS.InterstateHauler
         {
             ResolveServices();
             RegisterWithServiceIfNeeded();
+
+            bool gameplayAcceptsTruckControls = _gameplayStateService == null || _gameplayStateService.AllowsDrivingInput;
+            if (!gameplayAcceptsTruckControls)
+            {
+                SyncReadbackState(default);
+                _truckControlService?.PublishState(this, _state);
+                return;
+            }
 
             LwsVehicleCommandFrame commands = ReadCombinedCommands();
             LwsVehicleContinuousInput continuous = _inputService != null
@@ -546,6 +555,11 @@ namespace LWS.InterstateHauler
             if (_truckControlService == null)
             {
                 LwsApplicationBootstrap.Instance.Registry.TryGet(out _truckControlService);
+            }
+
+            if (_gameplayStateService == null)
+            {
+                LwsApplicationBootstrap.Instance.Registry.TryGet(out _gameplayStateService);
             }
         }
 

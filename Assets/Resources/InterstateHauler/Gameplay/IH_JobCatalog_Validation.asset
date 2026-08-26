@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbcbeb0b81d0491ebca799ae762343f1, type: 3}
+  m_Name: IH_JobCatalog_Validation
+  m_EditorClassIdentifier: 
+  schemaVersion: 1
+  catalogId: catalog.jobs.validation.interstate-corridor
+  displayName: Interstate Corridor Validation Job Catalog
+  depotDefinitions:
+  - {fileID: 11400000, guid: 3d2e4fc3933a4b72882f8cb3e393fd4f, type: 2}
+  destinationDefinitions:
+  - {fileID: 11400000, guid: a7e132a631d1487f82ce52ce75db7389, type: 2}
+  - {fileID: 11400000, guid: cc8d8d65146b4d84a977845965d6fa9c, type: 2}
+  - {fileID: 11400000, guid: 7b36564e878a43fbb67f63fc8623f7de, type: 2}
+  jobDefinitions:
+  - {fileID: 11400000, guid: db210c291e5b464c986bf70330a06677, type: 2}
+  - {fileID: 11400000, guid: fb070c981dd94a66a4e0746bfb19fbef, type: 2}
+  - {fileID: 11400000, guid: 87ad8038d14d42db8dd2768ab69f6e5c, type: 2}
+  developerNotes: Prompt 020 runtime-safe Resources catalog for validation authored jobs. Scriptable Sheets can inspect and edit the referenced ScriptableObjects.

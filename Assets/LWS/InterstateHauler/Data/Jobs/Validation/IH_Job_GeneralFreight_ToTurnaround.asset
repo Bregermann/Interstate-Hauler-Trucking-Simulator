@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60ee5fd10279455a9f9cdd35e313aa61, type: 3}
+  m_Name: IH_Job_GeneralFreight_ToTurnaround
+  m_EditorClassIdentifier: 
+  schemaVersion: 1
+  stableJobDefinitionId: job.validation.general-freight.turnaround
+  displayName: General Freight to North Turnaround
+  enabled: 1
+  originDepot: {fileID: 11400000, guid: 3d2e4fc3933a4b72882f8cb3e393fd4f, type: 2}
+  destination: {fileID: 11400000, guid: cc8d8d65146b4d84a977845965d6fa9c, type: 2}
+  cargoId: cargo.general-freight
+  cargoDisplayName: General Freight
+  flavorText: A straightforward validation haul across the corridor. Use it to confirm depot acceptance and the trailer-pickup handoff.
+  requiredTrailerTypeId: trailer.dry-van
+  cargoWeightLbs: 32000
+  estimatedDistanceMiles: 2.3
+  quotedGrossPayCents: 120000
+  developerNotes: Prompt 020 sample authored job. Production format, validation content.
