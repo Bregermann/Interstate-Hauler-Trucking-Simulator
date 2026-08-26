@@ -56,6 +56,10 @@ namespace LWS.InterstateHauler
             {
                 Debug.LogError($"LWS bootstrap failed: {result.Message}");
             }
+            else if (_registry.TryGet(out ILwsGameplayStateService gameplayStateService))
+            {
+                gameplayStateService.EnterFreeDrive("LWS bootstrap services ready.");
+            }
 
             return result;
         }
@@ -84,6 +88,7 @@ namespace LWS.InterstateHauler
         {
             var registry = new LwsServiceRegistry();
 
+            registry.Register<ILwsGameplayStateService>(new LwsGameplayStateService());
             registry.Register<ILwsSaveService>(new LwsSaveService());
             registry.Register<ILwsPlayerSettingsService>(new LwsPlayerSettingsService());
             registry.Register<ILwsVehicleInputService>(new LwsVehicleInputService());
@@ -106,8 +111,8 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsVehicleRuntimeService>(new LwsVehicleRuntimeService(), typeof(ILwsVehicleInputService));
             registry.Register<ILwsTruckControlService>(new LwsTruckControlService(), typeof(ILwsPlayerVehicleService), typeof(ILwsVehicleRuntimeService));
             registry.Register<ILwsTruckDashboardService>(new LwsTruckDashboardService(), typeof(ILwsTruckControlService), typeof(ILwsVehicleRuntimeService), typeof(ILwsRenderingService));
-            registry.Register<ILwsPersistenceMenuService>(new LwsPersistenceMenuService(), typeof(ILwsSaveService), typeof(ILwsVehicleInputService));
-            registry.Register<ILwsDevelopmentUiService>(new LwsDevelopmentUiService(), typeof(ILwsNavigationService), typeof(ILwsRoadGraphService), typeof(ILwsWorldOriginService), typeof(ILwsPlayerSettingsService), typeof(ILwsCameraPresentationService));
+            registry.Register<ILwsPersistenceMenuService>(new LwsPersistenceMenuService(), typeof(ILwsSaveService), typeof(ILwsVehicleInputService), typeof(ILwsGameplayStateService));
+            registry.Register<ILwsDevelopmentUiService>(new LwsDevelopmentUiService(), typeof(ILwsNavigationService), typeof(ILwsRoadGraphService), typeof(ILwsWorldOriginService), typeof(ILwsPlayerSettingsService), typeof(ILwsCameraPresentationService), typeof(ILwsGameplayStateService));
 
             return registry;
         }

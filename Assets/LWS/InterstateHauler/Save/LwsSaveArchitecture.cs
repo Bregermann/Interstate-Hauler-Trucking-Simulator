@@ -1268,7 +1268,7 @@ namespace LWS.InterstateHauler
 
             LwsLoadApplicationContext backupContext = null;
             LwsSaveOperationResult validation = LoadCoordinator != null
-                ? LoadCoordinator.PreReadVendorSlot(profile, primarySlot.backupVendorSlotNumber, backupKind, out backupContext)
+                ? LoadCoordinator.PreReadVendorSlot(profile, primarySlot.backupVendorSlotNumber, backupKind, out backupContext, false)
                 : LwsSaveOperationResult.Failure("LWS load coordinator is not available for backup validation.");
             if (LoadCoordinator != null)
             {

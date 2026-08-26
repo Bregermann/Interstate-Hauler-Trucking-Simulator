@@ -229,6 +229,7 @@ namespace LWS.InterstateHauler
     {
         private readonly ILwsSaveService _saveService;
         private readonly Func<LwsServiceRegistry> _registryProvider;
+        private bool _suppressGameplayStateMapping;
 
         public LwsSaveLoadCoordinator(ILwsSaveService saveService, Func<LwsServiceRegistry> registryProvider)
         {
@@ -248,47 +249,57 @@ namespace LWS.InterstateHauler
             LwsSaveProfileMetadata profile,
             int vendorSlotNumber,
             LwsSaveLoadSlotKind slotKind,
-            out LwsLoadApplicationContext context)
+            out LwsLoadApplicationContext context,
+            bool mapGameplayState = true)
         {
             context = null;
-            if (_saveService == null || _saveService.Adapter == null)
+            bool previousGameplayStateSuppression = _suppressGameplayStateMapping;
+            _suppressGameplayStateMapping = !mapGameplayState;
+            try
             {
-                return Fail("Pixel Crushers save adapter is not available for pre-read.");
-            }
+                if (_saveService == null || _saveService.Adapter == null)
+                {
+                    return Fail("Pixel Crushers save adapter is not available for pre-read.");
+                }
 
-            SetPhase(LwsSaveLoadCoordinatorPhase.ReadingVendorSlot);
-            LwsSaveOperationResult preRead = _saveService.Adapter.TryReadSemanticSnapshot(
-                vendorSlotNumber,
-                out LwsSaveSnapshot snapshot,
-                out int vendorVersion,
-                out string vendorSceneName);
-            if (!preRead.Succeeded)
-            {
-                return Fail(preRead.Message);
-            }
+                SetPhase(LwsSaveLoadCoordinatorPhase.ReadingVendorSlot);
+                LwsSaveOperationResult preRead = _saveService.Adapter.TryReadSemanticSnapshot(
+                    vendorSlotNumber,
+                    out LwsSaveSnapshot snapshot,
+                    out int vendorVersion,
+                    out string vendorSceneName);
+                if (!preRead.Succeeded)
+                {
+                    return Fail(preRead.Message);
+                }
 
-            SetPhase(LwsSaveLoadCoordinatorPhase.ValidatingSave);
-            LwsSaveOperationResult validation = ValidatePreRead(profile, snapshot, vendorSlotNumber, out LwsWorldResumeContextPayload resumeContext, out LwsWorldResumeSceneBinding binding);
-            if (!validation.Succeeded)
-            {
-                return Fail(validation.Message);
-            }
+                SetPhase(LwsSaveLoadCoordinatorPhase.ValidatingSave);
+                LwsSaveOperationResult validation = ValidatePreRead(profile, snapshot, vendorSlotNumber, out LwsWorldResumeContextPayload resumeContext, out LwsWorldResumeSceneBinding binding);
+                if (!validation.Succeeded)
+                {
+                    return Fail(validation.Message);
+                }
 
-            context = new LwsLoadApplicationContext
+                context = new LwsLoadApplicationContext
+                {
+                    ProfileId = profile != null ? profile.stableProfileId : snapshot.profileId,
+                    VendorSlotNumber = vendorSlotNumber,
+                    SlotKind = slotKind,
+                    Snapshot = snapshot,
+                    ResumeContext = resumeContext,
+                    WorldBinding = binding,
+                    VendorSavedGameVersion = vendorVersion,
+                    VendorSavedGameSceneName = vendorSceneName ?? string.Empty
+                };
+                CurrentContext = context;
+                LastResumeContext = resumeContext;
+                LastFailure = string.Empty;
+                return LwsSaveOperationResult.Success("Pixel Crushers SavedGameData pre-read completed without applying gameplay state.");
+            }
+            finally
             {
-                ProfileId = profile != null ? profile.stableProfileId : snapshot.profileId,
-                VendorSlotNumber = vendorSlotNumber,
-                SlotKind = slotKind,
-                Snapshot = snapshot,
-                ResumeContext = resumeContext,
-                WorldBinding = binding,
-                VendorSavedGameVersion = vendorVersion,
-                VendorSavedGameSceneName = vendorSceneName ?? string.Empty
-            };
-            CurrentContext = context;
-            LastResumeContext = resumeContext;
-            LastFailure = string.Empty;
-            return LwsSaveOperationResult.Success("Pixel Crushers SavedGameData pre-read completed without applying gameplay state.");
+                _suppressGameplayStateMapping = previousGameplayStateSuppression;
+            }
         }
         public LwsSaveOperationResult LoadPreparedVendorSlot(LwsLoadApplicationContext context)
         {
@@ -730,6 +741,30 @@ namespace LWS.InterstateHauler
         private void SetPhase(LwsSaveLoadCoordinatorPhase phase)
         {
             Phase = phase;
+            MapMacroGameplayState(phase);
+        }
+
+        private void MapMacroGameplayState(LwsSaveLoadCoordinatorPhase phase)
+        {
+            if (_suppressGameplayStateMapping || !TryGetService(out ILwsGameplayStateService gameplayStateService))
+            {
+                return;
+            }
+
+            switch (phase)
+            {
+                case LwsSaveLoadCoordinatorPhase.Complete:
+                    gameplayStateService.EnterFreeDrive("LWS save/load coordinator completed.");
+                    break;
+                case LwsSaveLoadCoordinatorPhase.Failed:
+                    gameplayStateService.EnterRecoveryError(string.IsNullOrWhiteSpace(LastFailure) ? "LWS save/load coordinator failed." : LastFailure);
+                    break;
+                case LwsSaveLoadCoordinatorPhase.Idle:
+                    break;
+                default:
+                    gameplayStateService.EnterLoadingWorld($"LWS save/load coordinator phase: {phase}.");
+                    break;
+            }
         }
 
         private static LwsWorldPositionD CalculateResumeOriginOffset(LwsWorldPositionD savedGlobal, LwsFloatingOriginTuning tuning)

@@ -43,6 +43,7 @@ namespace LWS.InterstateHauler
         private ILwsTruckDashboardService _dashboardService;
         private ILwsWeatherService _weatherService;
         private ILwsGameClockService _gameClockService;
+        private ILwsGameplayStateService _gameplayStateService;
         private ILwsCameraPresentationService _cameraPresentationService;
         private ILwsRoadConditionService _roadConditionService;
         private ILwsTrafficService _trafficService;
@@ -747,6 +748,9 @@ namespace LWS.InterstateHauler
             LwsNavigationRuntimeState nav = _navigationService?.RuntimeState;
             Lws18SpeedTransmissionController transmission = FindFirstObjectByType<Lws18SpeedTransmissionController>();
             AddInfo("Scene", UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            AddInfo("Gameplay state", _gameplayStateService != null ? $"{_gameplayStateService.CurrentState} / prev {_gameplayStateService.PreviousState} / age {_gameplayStateService.StateAge.TotalSeconds:0}s" : "missing");
+            AddInfo("Gameplay reason", _gameplayStateService != null ? _gameplayStateService.LastTransitionReason : "missing");
+            AddInfo("Driving allowed", _gameplayStateService != null ? (_gameplayStateService.AllowsDrivingInput ? "YES" : "NO") : "missing");
             AddInfo("Input owner", _inputService != null ? $"{_inputService.ActiveOwner} / {_inputService.ActiveSourceId}" : "missing");
             AddInfo("Truck", _truckControlService?.ActiveState.vehicleId ?? "none");
             AddInfo("Transmission", FormatTransmissionOverview(transmission));
@@ -1295,6 +1299,7 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _dashboardService);
             _registry.TryGet(out _weatherService);
             _registry.TryGet(out _gameClockService);
+            _registry.TryGet(out _gameplayStateService);
             if (_registry.TryGet(out ILwsCameraPresentationService cameraPresentationService))
             {
                 BindCameraPresentationService(cameraPresentationService);

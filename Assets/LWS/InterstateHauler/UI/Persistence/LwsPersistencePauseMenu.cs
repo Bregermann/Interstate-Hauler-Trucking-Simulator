@@ -170,6 +170,7 @@ namespace LWS.InterstateHauler
         private LwsServiceRegistry _registry;
         private ILwsSaveService _saveService;
         private ILwsVehicleInputService _inputService;
+        private ILwsGameplayStateService _gameplayStateService;
         private ILwsDevelopmentUiService _developmentUiService;
         private Canvas _canvas;
         private RectTransform _panel;
@@ -215,7 +216,10 @@ namespace LWS.InterstateHauler
 
         public void ShowSaveLoad()
         {
-            ShowInternal(LwsPersistenceMenuView.SaveLoad, LwsPersistenceMenuOpenContext.DirectSaveLoad);
+            LwsPersistenceMenuOpenContext context = IsOpen && _openContext == LwsPersistenceMenuOpenContext.PauseMenu
+                ? LwsPersistenceMenuOpenContext.PauseMenu
+                : LwsPersistenceMenuOpenContext.DirectSaveLoad;
+            ShowInternal(LwsPersistenceMenuView.SaveLoad, context);
         }
 
         private void ShowInternal(LwsPersistenceMenuView view, LwsPersistenceMenuOpenContext context)
@@ -234,6 +238,11 @@ namespace LWS.InterstateHauler
                 _previousTimeScale = Time.timeScale;
                 _previousCursorVisible = Cursor.visible;
                 _previousCursorLockMode = Cursor.lockState;
+            }
+
+            if (context == LwsPersistenceMenuOpenContext.PauseMenu && (_gameplayStateService == null || _gameplayStateService.CurrentState != LwsGameplayState.Paused))
+            {
+                _gameplayStateService?.Pause("Escape pause menu opened.");
             }
 
             Time.timeScale = 0f;
@@ -314,6 +323,8 @@ namespace LWS.InterstateHauler
 
         private void HideImmediate()
         {
+            bool wasOpen = IsOpen;
+            LwsPersistenceMenuOpenContext closingContext = _openContext;
             SuppressDrivingInputSources(false);
             if (_pauseSnapshotTaken)
             {
@@ -326,6 +337,11 @@ namespace LWS.InterstateHauler
             if (_canvas != null)
             {
                 _canvas.gameObject.SetActive(false);
+            }
+
+            if (wasOpen && closingContext == LwsPersistenceMenuOpenContext.PauseMenu && _gameplayStateService != null && _gameplayStateService.CurrentState == LwsGameplayState.Paused)
+            {
+                _gameplayStateService.Resume("Escape pause menu closed.");
             }
         }
 
@@ -361,6 +377,7 @@ namespace LWS.InterstateHauler
 
             _registry.TryGet(out _saveService);
             _registry.TryGet(out _inputService);
+            _registry.TryGet(out _gameplayStateService);
             _registry.TryGet(out _developmentUiService);
         }
 
