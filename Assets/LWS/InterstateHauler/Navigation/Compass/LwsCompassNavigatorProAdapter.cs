@@ -19,6 +19,8 @@ namespace LWS.InterstateHauler
         private const string CompassPrefabResourcePath = "CNPro/Prefabs/CompassNavigatorPro";
         private const string CompassPoiPrefabResourcePath = "CNPro/Prefabs/CompassPOI";
         private const float RouteRefreshIntervalSeconds = 0.2f;
+        private const float CabCompassMinimumVisibleRectPixels = 1f;
+        private const float CabCompassFallbackVisibleElementSize = 100f;
 
         [SerializeField] private bool createHudPresentation = true;
         [SerializeField] private bool createCabPresentation = true;
@@ -658,6 +660,7 @@ namespace LWS.InterstateHauler
                 return;
             }
 
+            Vector2 safeScreenSize = SanitizeCabScreenSize(screenSize);
             RectTransform rootRect = root.GetComponent<RectTransform>();
             if (rootRect != null)
             {
@@ -665,32 +668,167 @@ namespace LWS.InterstateHauler
                 rootRect.anchorMax = new Vector2(0.5f, 0.5f);
                 rootRect.pivot = new Vector2(0.5f, 0.5f);
                 rootRect.anchoredPosition = Vector2.zero;
-                rootRect.sizeDelta = screenSize;
+                rootRect.sizeDelta = safeScreenSize;
+                rootRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, safeScreenSize.x);
+                rootRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, safeScreenSize.y);
             }
 
             RectTransform miniMapRoot = FindRectTransformRecursive(root.transform, "MiniMap Root");
             if (miniMapRoot != null)
             {
-                miniMapRoot.anchorMin = Vector2.zero;
-                miniMapRoot.anchorMax = Vector2.one;
-                miniMapRoot.pivot = new Vector2(0.5f, 0.5f);
-                miniMapRoot.anchoredPosition = Vector2.zero;
-                miniMapRoot.sizeDelta = Vector2.zero;
-                miniMapRoot.localRotation = Quaternion.identity;
-                miniMapRoot.localScale = Vector3.one;
+                FitCabChildRectToScreen(miniMapRoot, safeScreenSize);
             }
 
             RectTransform miniMap = FindRectTransformRecursive(root.transform, "MiniMap");
             if (miniMap != null)
             {
-                miniMap.anchorMin = Vector2.zero;
-                miniMap.anchorMax = Vector2.one;
-                miniMap.pivot = new Vector2(0.5f, 0.5f);
-                miniMap.anchoredPosition = Vector2.zero;
-                miniMap.sizeDelta = Vector2.zero;
-                miniMap.localRotation = Quaternion.identity;
-                miniMap.localScale = Vector3.one;
+                FitCabChildRectToScreen(miniMap, safeScreenSize);
             }
+
+            RectTransform miniMapMask = FindRectTransformRecursive(root.transform, "MiniMapMask");
+            if (miniMapMask != null)
+            {
+                FitCabChildRectToScreen(miniMapMask, safeScreenSize);
+            }
+
+            if (rootRect != null)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(rootRect);
+            }
+
+            Canvas.ForceUpdateCanvases();
+            ValidateCabCompassVisibilityOnce(root, safeScreenSize);
+        }
+
+        private static Vector2 SanitizeCabScreenSize(Vector2 screenSize)
+        {
+            return new Vector2(
+                Mathf.Max(CabCompassFallbackVisibleElementSize, screenSize.x),
+                Mathf.Max(CabCompassFallbackVisibleElementSize, screenSize.y));
+        }
+
+        private static void FitCabChildRectToScreen(RectTransform rect, Vector2 screenSize)
+        {
+            if (rect == null)
+            {
+                return;
+            }
+
+            rect.anchorMin = new Vector2(0.5f, 0.5f);
+            rect.anchorMax = new Vector2(0.5f, 0.5f);
+            rect.pivot = new Vector2(0.5f, 0.5f);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = screenSize;
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, screenSize.x);
+            rect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, screenSize.y);
+            rect.localRotation = Quaternion.identity;
+            rect.localScale = Vector3.one;
+        }
+
+        private static void ValidateCabCompassVisibilityOnce(GameObject root, Vector2 screenSize)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            RectTransform[] rects = root.GetComponentsInChildren<RectTransform>(true);
+            for (int i = 0; i < rects.Length; i++)
+            {
+                RectTransform rect = rects[i];
+                if (!IsVisibleCabCompassElement(rect))
+                {
+                    continue;
+                }
+
+                if (HasInvertedAnchors(rect) ||
+                    rect.rect.width <= CabCompassMinimumVisibleRectPixels ||
+                    rect.rect.height <= CabCompassMinimumVisibleRectPixels ||
+                    IsEffectivelyZeroScale(rect.localScale))
+                {
+                    Vector2 repairSize = IsFullScreenCabCompassElement(rect)
+                        ? screenSize
+                        : new Vector2(CabCompassFallbackVisibleElementSize, CabCompassFallbackVisibleElementSize);
+                    FitCabChildRectToScreen(rect, repairSize);
+                    Debug.LogError(
+                        $"Cab Compass GPS presentation RectTransform collapsed and was repaired: {BuildHierarchyPath(rect.transform)}",
+                        rect);
+                }
+            }
+#endif
+        }
+
+        private static bool IsVisibleCabCompassElement(RectTransform rect)
+        {
+            if (rect == null || !rect.gameObject.activeInHierarchy || !IsVisibleByCanvasGroups(rect.transform))
+            {
+                return false;
+            }
+
+            if (IsFullScreenCabCompassElement(rect))
+            {
+                return true;
+            }
+
+            Canvas canvas = rect.GetComponent<Canvas>();
+            if (canvas != null && canvas.enabled)
+            {
+                return true;
+            }
+
+            Graphic graphic = rect.GetComponent<Graphic>();
+            return graphic != null && graphic.enabled && graphic.color.a > 0.01f;
+        }
+
+        private static bool IsFullScreenCabCompassElement(RectTransform rect)
+        {
+            if (rect == null)
+            {
+                return false;
+            }
+
+            return string.Equals(rect.name, "MiniMap Root", StringComparison.Ordinal) ||
+                   string.Equals(rect.name, "MiniMap", StringComparison.Ordinal) ||
+                   string.Equals(rect.name, "MiniMapMask", StringComparison.Ordinal);
+        }
+
+        private static bool IsVisibleByCanvasGroups(Transform transform)
+        {
+            while (transform != null)
+            {
+                CanvasGroup canvasGroup = transform.GetComponent<CanvasGroup>();
+                if (canvasGroup != null && canvasGroup.alpha <= 0.01f)
+                {
+                    return false;
+                }
+
+                transform = transform.parent;
+            }
+
+            return true;
+        }
+
+        private static bool HasInvertedAnchors(RectTransform rect)
+        {
+            return rect.anchorMin.x > rect.anchorMax.x || rect.anchorMin.y > rect.anchorMax.y;
+        }
+
+        private static bool IsEffectivelyZeroScale(Vector3 scale)
+        {
+            return Mathf.Abs(scale.x) <= 0.0001f || Mathf.Abs(scale.y) <= 0.0001f || Mathf.Abs(scale.z) <= 0.0001f;
+        }
+
+        private static string BuildHierarchyPath(Transform transform)
+        {
+            if (transform == null)
+            {
+                return string.Empty;
+            }
+
+            string path = transform.name;
+            while (transform.parent != null)
+            {
+                transform = transform.parent;
+                path = $"{transform.name}/{path}";
+            }
+
+            return path;
         }
 
         private static RectTransform FindRectTransformRecursive(Transform root, string objectName)

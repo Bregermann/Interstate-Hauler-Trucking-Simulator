@@ -1,5 +1,7 @@
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace LWS.InterstateHauler.Tests.EditMode
 {
@@ -120,11 +122,47 @@ namespace LWS.InterstateHauler.Tests.EditMode
             Assert.IsTrue(gps.PhysicalGpsBound);
             Assert.IsTrue(gps.FallbackPhysicalScreenVisible);
             Assert.AreEqual(RenderMode.WorldSpace, gps.PhysicalCanvas.renderMode);
+            RectTransform canvasRect = gps.PhysicalCanvas.GetComponent<RectTransform>();
+            AssertPositiveRect(canvasRect, 640f, 400f);
+            AssertPositiveRect(gps.SemanticMapGraphic.GetComponent<RectTransform>(), 612f, 304f);
 
             gps.SetFallbackPhysicalScreenVisible(false);
             Assert.IsFalse(gps.FallbackPhysicalScreenVisible);
             Assert.IsTrue(gps.PhysicalGpsBound);
             Object.DestroyImmediate(go);
+        }
+
+        [Test]
+        public void CabCompassFitRepairsCriticalRuntimeRectsToPositiveScreenSize()
+        {
+            GameObject root = new GameObject("IH Cab GPS Compass Navigator Pro", typeof(RectTransform), typeof(Canvas));
+            GameObject miniMapRoot = new GameObject("MiniMap Root", typeof(RectTransform), typeof(Canvas), typeof(CanvasGroup));
+            GameObject miniMap = new GameObject("MiniMap", typeof(RectTransform), typeof(Image));
+            GameObject miniMapMask = new GameObject("MiniMapMask", typeof(RectTransform), typeof(Image), typeof(Mask));
+
+            try
+            {
+                miniMapRoot.transform.SetParent(root.transform, false);
+                miniMap.transform.SetParent(miniMapRoot.transform, false);
+                miniMapMask.transform.SetParent(miniMap.transform, false);
+                root.GetComponent<Canvas>().renderMode = RenderMode.WorldSpace;
+
+                MethodInfo fitMethod = typeof(LwsCompassNavigatorProAdapter).GetMethod(
+                    "FitCabCompassToPhysicalScreen",
+                    BindingFlags.NonPublic | BindingFlags.Static);
+                Assert.IsNotNull(fitMethod);
+
+                fitMethod.Invoke(null, new object[] { root, new Vector2(640f, 400f) });
+
+                AssertPositiveRect(root.GetComponent<RectTransform>(), 640f, 400f);
+                AssertPositiveRect(miniMapRoot.GetComponent<RectTransform>(), 640f, 400f);
+                AssertPositiveRect(miniMap.GetComponent<RectTransform>(), 640f, 400f);
+                AssertPositiveRect(miniMapMask.GetComponent<RectTransform>(), 640f, 400f);
+            }
+            finally
+            {
+                Object.DestroyImmediate(root);
+            }
         }
 
         [Test]
@@ -160,6 +198,19 @@ namespace LWS.InterstateHauler.Tests.EditMode
             Assert.IsFalse(secondResult.Succeeded);
             Object.DestroyImmediate(firstGo);
             Object.DestroyImmediate(secondGo);
+        }
+
+        private static void AssertPositiveRect(RectTransform rect, float expectedWidth, float expectedHeight)
+        {
+            Assert.IsNotNull(rect);
+            Assert.AreEqual(expectedWidth, rect.sizeDelta.x, 0.01f);
+            Assert.AreEqual(expectedHeight, rect.sizeDelta.y, 0.01f);
+            Assert.Greater(rect.rect.width, 1f);
+            Assert.Greater(rect.rect.height, 1f);
+            Assert.LessOrEqual(rect.anchorMin.x, rect.anchorMax.x);
+            Assert.LessOrEqual(rect.anchorMin.y, rect.anchorMax.y);
+            Assert.Greater(Mathf.Abs(rect.localScale.x), 0.0001f);
+            Assert.Greater(Mathf.Abs(rect.localScale.y), 0.0001f);
         }
     }
 }
