@@ -461,6 +461,10 @@ namespace DeadAir.Editor
             {
                 warnings.Add("DeadAirOffRoadFailureController is not serialized in the scene; run Dead Air/Build Or Refresh Main Scene or enter Play Mode to let the bootstrapper create it.");
             }
+            else if (!failure.EnableOffRoadVoidFailure)
+            {
+                warnings.Add("DeadAirOffRoadFailureController has off-road void failure disabled for temporary Dead Air playtesting.");
+            }
 
             DeadAirValidRoadZone[] zones = Object.FindObjectsByType<DeadAirValidRoadZone>(FindObjectsSortMode.None);
             DeadAirValidRoadZone[] runtimeZones = zones.Where(z => z != null && z.RuntimeCandidate).ToArray();

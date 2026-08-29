@@ -105,7 +105,7 @@ namespace DeadAir
                 _builder.AppendLine($"Ending: {_manager.EndingDirector.CurrentEnding}");
             }
 
-            if (_offRoadFailureController != null && _offRoadFailureController.ShowRuntimeDebug)
+            if (_offRoadFailureController != null && _offRoadFailureController.EnableOffRoadVoidFailure && _offRoadFailureController.ShowRuntimeDebug)
             {
                 DeadAirRoadBoundaryEvaluation road = _offRoadFailureController.LastEvaluation;
                 _builder.AppendLine($"Road: tractor {(road.tractorValid ? "VALID" : "OFF")} / trailer {(road.trailerValid ? "VALID" : "OFF")}");

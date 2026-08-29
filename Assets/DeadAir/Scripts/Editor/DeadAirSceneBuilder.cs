@@ -48,7 +48,8 @@ namespace DeadAir.Editor
             DeadAirStartRigController startRig = EnsureComponent<DeadAirStartRigController>(start, "Dead Air Start Rig Controller");
             startRig.Configure(truckPrefab, trailerPrefab, startMarker);
             EnsureComponent<DeadAirCockpitCameraLock>(systems, "Dead Air Cockpit Camera Lock");
-            EnsureComponent<DeadAirOffRoadFailureController>(systems, "Dead Air Off-Road Failure Controller");
+            DeadAirOffRoadFailureController offRoadFailure = EnsureComponent<DeadAirOffRoadFailureController>(systems, "Dead Air Off-Road Failure Controller");
+            offRoadFailure.SetOffRoadVoidFailureEnabled(false);
             EnsureComponent<DeadAirHud>(ui, "Dead Air HUD");
             EnsurePlayerRig(startRig, startMarker, truckPrefab, trailerPrefab);
             DeadAirBeatLayoutUtility.EnsureUnplacedBeatLayout();

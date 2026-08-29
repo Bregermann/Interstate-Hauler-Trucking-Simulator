@@ -111,6 +111,11 @@ namespace DeadAir
 
         public void RequestVoidFailure()
         {
+            if (offRoadFailureController != null && !offRoadFailureController.EnableOffRoadVoidFailure)
+            {
+                return;
+            }
+
             if (State == DeadAirGameState.Ending)
             {
                 return;

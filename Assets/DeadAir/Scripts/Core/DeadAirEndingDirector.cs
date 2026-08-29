@@ -52,6 +52,8 @@ namespace DeadAir
             {
                 BuildOverlay();
             }
+
+            ResetEnding();
         }
 
         public void PlayEnding(DeadAirEndingId endingId)

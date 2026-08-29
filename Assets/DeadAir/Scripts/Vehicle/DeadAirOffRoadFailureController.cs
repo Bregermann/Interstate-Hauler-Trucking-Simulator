@@ -9,6 +9,8 @@ namespace DeadAir
     {
         [SerializeField] private DeadAirVehicleAdapter vehicleAdapter;
         [SerializeField] private DeadAirStartRigController startRigController;
+        [SerializeField, InspectorName("Enable Off-Road Void Failure")]
+        private bool enableOffRoadVoidFailure;
         [SerializeField] private float graceSeconds = 1.25f;
         [SerializeField] private bool monitorOnStart = true;
         [SerializeField] private bool showRuntimeDebug = true;
@@ -26,7 +28,8 @@ namespace DeadAir
         private DeadAirRoadBoundaryEvaluation _lastEvaluation;
 
         public float GraceSeconds => Mathf.Max(0.05f, graceSeconds);
-        public bool Monitoring => _monitoring;
+        public bool EnableOffRoadVoidFailure => enableOffRoadVoidFailure;
+        public bool Monitoring => enableOffRoadVoidFailure && _monitoring;
         public bool FailureTriggered => _failureTriggered;
         public bool ShowRuntimeDebug => showRuntimeDebug;
         public DeadAirRoadBoundaryEvaluation LastEvaluation => _lastEvaluation;
@@ -34,12 +37,12 @@ namespace DeadAir
         private void Awake()
         {
             ResolveReferences();
-            _monitoring = monitorOnStart;
+            ResetBoundaryState();
         }
 
         private void Update()
         {
-            if (!_monitoring || _failureTriggered)
+            if (!enableOffRoadVoidFailure || !_monitoring || _failureTriggered)
             {
                 return;
             }
@@ -72,15 +75,21 @@ namespace DeadAir
         {
             _graceTimer = 0f;
             _failureTriggered = false;
-            _monitoring = monitorOnStart;
+            _monitoring = enableOffRoadVoidFailure && monitorOnStart;
             _lastEvaluation = default;
             vehicleAdapter?.SetDeadAirDrivingInputLocked(false);
         }
 
+        public void SetOffRoadVoidFailureEnabled(bool enabled)
+        {
+            enableOffRoadVoidFailure = enabled;
+            ResetBoundaryState();
+        }
+
         public void SetMonitoring(bool monitoring)
         {
-            _monitoring = monitoring;
-            if (!monitoring)
+            _monitoring = enableOffRoadVoidFailure && monitoring;
+            if (!enableOffRoadVoidFailure || !monitoring)
             {
                 _graceTimer = 0f;
             }
@@ -151,6 +160,12 @@ namespace DeadAir
 
         private void TriggerVoidFailure()
         {
+            if (!enableOffRoadVoidFailure)
+            {
+                ResetBoundaryState();
+                return;
+            }
+
             _failureTriggered = true;
             _monitoring = false;
             vehicleAdapter?.SetDeadAirDrivingInputLocked(true);
