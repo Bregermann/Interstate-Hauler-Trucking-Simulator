@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -22,10 +23,13 @@ namespace DeadAir
         [SerializeField] private Color debugColor = new Color(0.2f, 0.85f, 1f, 0.28f);
         [SerializeField] private float cooldownSeconds = 0.25f;
         [SerializeField] private int sequenceIndex;
+        [SerializeField] private DeadAirGpsNarrativeEvent gpsEvent = new DeadAirGpsNarrativeEvent();
 
         private bool _triggered;
         private float _nextAllowedTime;
         private BoxCollider _boxCollider;
+        private Coroutine _gpsEventRoutine;
+        private bool _gpsControllerMissingWarningLogged;
 
         public static bool ShowDeadAirGizmos { get; set; } = true;
         public string BeatId => beatId;
@@ -37,6 +41,7 @@ namespace DeadAir
         public DeadAirTriggerCategory Category => category;
         public float RouteDistanceMiles => routeDistanceMiles;
         public int SequenceIndex => sequenceIndex;
+        public DeadAirGpsNarrativeEvent GpsEvent => gpsEvent;
         public bool HasTriggered => _triggered;
         public virtual string ChoiceId => string.Empty;
 
@@ -80,11 +85,20 @@ namespace DeadAir
             placementStatus = beat.placementStatus;
             sequenceIndex = index;
         }
+        public void ConfigureGpsEvent(DeadAirGpsNarrativeEvent value)
+        {
+            gpsEvent = value != null ? value.Clone() : new DeadAirGpsNarrativeEvent();
+        }
 
         public void ResetRuntimeState()
         {
             _triggered = false;
             _nextAllowedTime = 0f;
+            if (_gpsEventRoutine != null)
+            {
+                StopCoroutine(_gpsEventRoutine);
+                _gpsEventRoutine = null;
+            }
         }
 
         protected void ActivateTrigger()
@@ -114,6 +128,7 @@ namespace DeadAir
 
             director?.HandleTrigger(triggerEvent);
             OnActivated(triggerEvent, director);
+            DispatchConfiguredGpsEvent();
         }
 
         protected virtual void OnActivated(DeadAirTriggerEvent triggerEvent, DeadAirStoryDirector director)
@@ -125,6 +140,53 @@ namespace DeadAir
             category = value;
         }
 
+
+        private void DispatchConfiguredGpsEvent()
+        {
+            if (gpsEvent == null || !gpsEvent.ShouldRun)
+            {
+                return;
+            }
+
+            DeadAirGpsNarrativeEvent snapshot = gpsEvent.Clone();
+            if (_gpsEventRoutine != null)
+            {
+                StopCoroutine(_gpsEventRoutine);
+                _gpsEventRoutine = null;
+            }
+
+            if (snapshot.delayBeforeGpsEvent <= 0f)
+            {
+                ExecuteGpsEvent(snapshot);
+                return;
+            }
+
+            _gpsEventRoutine = StartCoroutine(DispatchGpsEventAfterDelay(snapshot));
+        }
+
+        private IEnumerator DispatchGpsEventAfterDelay(DeadAirGpsNarrativeEvent snapshot)
+        {
+            yield return new WaitForSeconds(snapshot.delayBeforeGpsEvent);
+            ExecuteGpsEvent(snapshot);
+            _gpsEventRoutine = null;
+        }
+
+        private void ExecuteGpsEvent(DeadAirGpsNarrativeEvent snapshot)
+        {
+            DeadAirGPSController gps = DeadAirGPSController.ResolveShared();
+            if (gps == null)
+            {
+                if (!_gpsControllerMissingWarningLogged)
+                {
+                    _gpsControllerMissingWarningLogged = true;
+                    Debug.LogWarning($"Dead Air GPS event on trigger {BeatId} could not find a DeadAirGPSController.", this);
+                }
+
+                return;
+            }
+
+            gps.ExecuteEvent(snapshot);
+        }
         private bool CanActivate(Collider other)
         {
             if (!triggerEnabled || triggerOnce && _triggered || Time.time < _nextAllowedTime)

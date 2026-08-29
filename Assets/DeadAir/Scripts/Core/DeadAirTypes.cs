@@ -69,7 +69,9 @@ namespace DeadAir
         Left,
         Right,
         Exit,
-        UTurn
+        UTurn,
+        ExitLeft,
+        ExitRight
     }
 
     public enum DeadAirGpsPresentationMode
@@ -81,6 +83,19 @@ namespace DeadAir
         Hidden
     }
 
+
+    public enum DeadAirGpsNarrativeEventType
+    {
+        None,
+        ChangeDirection,
+        FlashAndChangeDirection,
+        Glitch,
+        GlitchThenDirection,
+        Recalculating,
+        RecalculatingThenDirection,
+        ClearOverlay,
+        CustomCombined
+    }
     public enum DeadAirAudioChannel
     {
         Dispatcher,
@@ -206,6 +221,50 @@ namespace DeadAir
         }
     }
 
+
+    [Serializable]
+    public sealed class DeadAirGpsNarrativeEvent
+    {
+        [Header("DEAD AIR GPS EVENT")]
+        public bool enableGpsEvent;
+
+        public DeadAirGpsNarrativeEventType eventType = DeadAirGpsNarrativeEventType.None;
+        [Min(0f)] public float delayBeforeGpsEvent;
+
+        [Header("Direction")]
+        public string primaryText = "CONTINUE STRAIGHT";
+        public string secondaryText = "8.0 MI";
+        public DeadAirGpsArrow arrow = DeadAirGpsArrow.Straight;
+        [Min(0f)] public float distanceMeters = 12874.752f;
+        public string destination;
+        public bool routeVisible = true;
+        public bool intentionallyWrong;
+
+        [Header("Effects")]
+        public bool flash = true;
+        public bool glitch;
+        [Min(0.05f)] public float glitchDuration = 0.75f;
+        [Range(0f, 1f)] public float glitchIntensity = 0.65f;
+
+        [Header("Recalculating")]
+        public bool recalculating;
+        public string recalculatingMessage = "RECALCULATING...";
+        [Min(0f)] public float recalculatingDuration = 1.4f;
+        public string finalPrimaryText = "TAKE NEXT EXIT";
+        public string finalSecondaryText = "1 MI";
+        public DeadAirGpsArrow finalArrow = DeadAirGpsArrow.ExitRight;
+
+        [Header("Audio")]
+        public AudioClip gpsAudioClip;
+        [Range(0f, 1f)] public float gpsAudioVolume = 0.75f;
+
+        public bool ShouldRun => enableGpsEvent && eventType != DeadAirGpsNarrativeEventType.None;
+
+        public DeadAirGpsNarrativeEvent Clone()
+        {
+            return (DeadAirGpsNarrativeEvent)MemberwiseClone();
+        }
+    }
     [Serializable]
     public struct DeadAirVehicleSnapshot
     {

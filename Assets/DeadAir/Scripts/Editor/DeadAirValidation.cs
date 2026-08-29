@@ -129,6 +129,10 @@ namespace DeadAir.Editor
             {
                 warnings.Add("DeadAirTrafficHorrorDirector is not serialized in the scene; the bootstrapper/builder should create it.");
             }
+            if (Object.FindFirstObjectByType<DeadAirGPSController>() == null)
+            {
+                warnings.Add("DeadAirGPSController is not serialized in the scene; the bootstrapper/builder should create it for the in-cab narrative GPS overlay.");
+            }
 
             DeadAirTriggerZone[] triggers = Object.FindObjectsByType<DeadAirTriggerZone>(FindObjectsSortMode.None);
             HashSet<string> beatIds = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);

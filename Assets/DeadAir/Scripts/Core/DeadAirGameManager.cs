@@ -18,6 +18,7 @@ namespace DeadAir
         [SerializeField] private DeadAirVehicleAdapter vehicleAdapter;
         [SerializeField] private DeadAirAudioDirector audioDirector;
         [SerializeField] private DeadAirGPSDirector gpsDirector;
+        [SerializeField] private DeadAirGPSController gpsNarrativeController;
         [SerializeField] private DeadAirEndingDirector endingDirector;
         [SerializeField] private DeadAirAnomalyDirector anomalyDirector;
         [SerializeField] private DeadAirDashboardMisinformationDirector dashboardDirector;
@@ -34,6 +35,7 @@ namespace DeadAir
         public DeadAirVehicleAdapter VehicleAdapter => vehicleAdapter;
         public DeadAirAudioDirector AudioDirector => audioDirector;
         public DeadAirGPSDirector GpsDirector => gpsDirector;
+        public DeadAirGPSController GpsNarrativeController => gpsNarrativeController;
         public DeadAirEndingDirector EndingDirector => endingDirector;
         public DeadAirAnomalyDirector AnomalyDirector => anomalyDirector;
         public DeadAirDashboardMisinformationDirector DashboardDirector => dashboardDirector;
@@ -87,6 +89,8 @@ namespace DeadAir
             dashboardDirector?.Clear();
             trafficHorrorDirector?.Cleanup();
             gpsDirector?.ResetGps();
+            gpsNarrativeController?.AttachToCurrentTruck();
+            gpsNarrativeController?.SetNormal();
             audioDirector?.StopAll();
             offRoadFailureController?.ResetBoundaryState();
             if (forceBasicAutomaticOnStart && defaultControlMode == DeadAirControlMode.BasicAutomatic)
@@ -139,6 +143,7 @@ namespace DeadAir
             if (vehicleAdapter == null) vehicleAdapter = FindFirstObjectByType<DeadAirVehicleAdapter>();
             if (audioDirector == null) audioDirector = FindFirstObjectByType<DeadAirAudioDirector>();
             if (gpsDirector == null) gpsDirector = FindFirstObjectByType<DeadAirGPSDirector>();
+            if (gpsNarrativeController == null) gpsNarrativeController = FindFirstObjectByType<DeadAirGPSController>();
             if (endingDirector == null) endingDirector = FindFirstObjectByType<DeadAirEndingDirector>();
             if (anomalyDirector == null) anomalyDirector = FindFirstObjectByType<DeadAirAnomalyDirector>();
             if (dashboardDirector == null) dashboardDirector = FindFirstObjectByType<DeadAirDashboardMisinformationDirector>();

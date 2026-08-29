@@ -41,6 +41,7 @@ namespace DeadAir.Editor
             EnsureComponent<DeadAirStoryDirector>(systems, "Dead Air Story Director");
             EnsureComponent<DeadAirAudioDirector>(systems, "Dead Air Audio Director");
             EnsureComponent<DeadAirGPSDirector>(systems, "Dead Air GPS Director");
+            EnsureComponent<DeadAirGPSController>(systems, "Dead Air GPS Controller");
             EnsureComponent<DeadAirEndingDirector>(systems, "Dead Air Ending Director");
             EnsureComponent<DeadAirAnomalyDirector>(systems, "Dead Air Anomaly Director");
             EnsureComponent<DeadAirDashboardMisinformationDirector>(systems, "Dead Air Dashboard Director");
@@ -267,6 +268,56 @@ namespace DeadAir.Editor
                 900,
                 new Vector3(0f, 2f, 118f),
                 new Vector3(20f, 8f, 18f));
+            DeadAirTriggerZone gpsFlash = EnsureBlockoutTrigger<DeadAirTriggerZone>(
+                gameplay,
+                "TEST_GPS_FLASH_TRIGGER",
+                BlockoutBeat("TEST_GPS_FLASH_TRIGGER", "GPS FLASH TEST", DeadAirTriggerCategory.GPS, 0.16f, "Dead Air GPS flashes and changes direction."),
+                901,
+                new Vector3(0f, 2f, 205f),
+                new Vector3(20f, 8f, 18f));
+            gpsFlash.ConfigureGpsEvent(new DeadAirGpsNarrativeEvent
+            {
+                enableGpsEvent = true,
+                eventType = DeadAirGpsNarrativeEventType.FlashAndChangeDirection,
+                primaryText = "EXIT 12",
+                secondaryText = "1 MI",
+                arrow = DeadAirGpsArrow.ExitRight,
+                distanceMeters = 1609.344f,
+                destination = "Exit 12",
+                routeVisible = true,
+                intentionallyWrong = true,
+                flash = true
+            });
+
+            DeadAirTriggerZone gpsRecalculating = EnsureBlockoutTrigger<DeadAirTriggerZone>(
+                gameplay,
+                "TEST_GPS_RECALCULATING_TRIGGER",
+                BlockoutBeat("TEST_GPS_RECALCULATING_TRIGGER", "GPS RECALCULATING TEST", DeadAirTriggerCategory.GPS, 0.22f, "Dead Air GPS glitches, recalculates, then lies."),
+                902,
+                new Vector3(18f, 2f, 288f),
+                new Vector3(20f, 8f, 18f));
+            gpsRecalculating.ConfigureGpsEvent(new DeadAirGpsNarrativeEvent
+            {
+                enableGpsEvent = true,
+                eventType = DeadAirGpsNarrativeEventType.RecalculatingThenDirection,
+                primaryText = "RECALCULATING...",
+                secondaryText = string.Empty,
+                arrow = DeadAirGpsArrow.None,
+                distanceMeters = 1609.344f,
+                destination = "Exit 12",
+                routeVisible = true,
+                intentionallyWrong = true,
+                flash = true,
+                glitch = true,
+                glitchDuration = 0.75f,
+                glitchIntensity = 0.75f,
+                recalculating = true,
+                recalculatingMessage = "RECALCULATING...",
+                recalculatingDuration = 1.4f,
+                finalPrimaryText = "TAKE EXIT 12",
+                finalSecondaryText = "1 MI",
+                finalArrow = DeadAirGpsArrow.ExitRight
+            });
 
             DeadAirChoiceStartTrigger choiceStart = EnsureBlockoutTrigger<DeadAirChoiceStartTrigger>(
                 gameplay,

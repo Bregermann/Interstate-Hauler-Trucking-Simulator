@@ -57,6 +57,7 @@ namespace DeadAir
             EnsureComponent<DeadAirStoryDirector>(systems, "Dead Air Story Director");
             EnsureComponent<DeadAirAudioDirector>(systems, "Dead Air Audio Director");
             EnsureComponent<DeadAirGPSDirector>(systems, "Dead Air GPS Director");
+            DeadAirGPSController gpsController = EnsureComponent<DeadAirGPSController>(systems, "Dead Air GPS Controller");
             EnsureComponent<DeadAirEndingDirector>(systems, "Dead Air Ending Director");
             EnsureComponent<DeadAirAnomalyDirector>(systems, "Dead Air Anomaly Director");
             EnsureComponent<DeadAirDashboardMisinformationDirector>(systems, "Dead Air Dashboard Director");
@@ -73,6 +74,7 @@ namespace DeadAir
             if (spawnPlayerTruck)
             {
                 EnsurePlayerTruck(startRig);
+                gpsController.AttachToCurrentTruck();
             }
 
             if (createUnplacedBeatLayout)

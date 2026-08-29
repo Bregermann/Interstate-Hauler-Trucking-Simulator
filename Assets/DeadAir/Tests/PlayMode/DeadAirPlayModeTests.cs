@@ -20,6 +20,7 @@ namespace DeadAir.Tests.PlayMode
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirGameManager>());
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirStoryDirector>());
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirGPSDirector>());
+                Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirGPSController>());
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirDashboardMisinformationDirector>());
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirTrafficHorrorDirector>());
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirStartRigController>());

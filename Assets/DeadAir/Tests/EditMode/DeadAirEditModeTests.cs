@@ -1,3 +1,4 @@
+using System.IO;
 using LWS.InterstateHauler;
 using NUnit.Framework;
 using UnityEngine;
@@ -370,6 +371,38 @@ namespace DeadAir.Tests.EditMode
             float timer = DeadAirOffRoadFailureController.UpdateGraceTimer(true, 0.9f, 0.4f, 1.25f, out bool triggered);
             Assert.IsTrue(triggered);
             Assert.GreaterOrEqual(timer, 1.25f);
+        }
+        [Test]
+        public void GpsNarrativeEventsDefaultDisabledOnTrigger()
+        {
+            var go = new GameObject("Dead Air Trigger");
+            try
+            {
+                DeadAirTriggerZone trigger = go.AddComponent<DeadAirTriggerZone>();
+                Assert.IsNotNull(trigger.GpsEvent);
+                Assert.IsFalse(trigger.GpsEvent.ShouldRun);
+            }
+            finally
+            {
+                Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void GpsExitArrowsHaveDistinctGlyphs()
+        {
+            Assert.AreEqual("EXIT >", DeadAirGPSController.GetArrowGlyph(DeadAirGpsArrow.ExitRight));
+            Assert.AreEqual("< EXIT", DeadAirGPSController.GetArrowGlyph(DeadAirGpsArrow.ExitLeft));
+        }
+
+        [Test]
+        public void GpsControllerExposesObviousPositioningSection()
+        {
+            string source = File.ReadAllText("Assets/DeadAir/Scripts/UI/DeadAirGPSController.cs");
+            StringAssert.Contains("EDIT DEAD AIR GPS POSITION HERE", source);
+            StringAssert.Contains("GPS_LOCAL_POSITION", source);
+            StringAssert.Contains("GPS_LOCAL_EULER_ANGLES", source);
+            StringAssert.Contains("GPS_LOCAL_SCALE", source);
         }
     }
 }
