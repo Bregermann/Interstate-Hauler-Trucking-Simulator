@@ -58,14 +58,7 @@ namespace DeadAir
 
         public void PlayEnding(DeadAirEndingId endingId)
         {
-            EnsureDefaultEndings();
-            if (_endingRoutine != null)
-            {
-                StopCoroutine(_endingRoutine);
-            }
-
-            CurrentEnding = endingId;
-            _endingRoutine = StartCoroutine(EndingRoutine(ResolveConfig(endingId)));
+            ResetEnding();
         }
 
         public DeadAirEndingId ResolveEndingFromChoices(DeadAirStoryDirector story)

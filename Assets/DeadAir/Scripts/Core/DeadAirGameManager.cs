@@ -100,30 +100,22 @@ namespace DeadAir
 
         public void RequestEnding(DeadAirEndingId endingId)
         {
+            endingDirector?.ResetEnding();
+            vehicleAdapter?.SetDeadAirDrivingInputLocked(false);
             if (State == DeadAirGameState.Ending)
             {
-                return;
+                State = DeadAirGameState.Playing;
             }
-
-            State = DeadAirGameState.Ending;
-            endingDirector?.PlayEnding(endingId);
         }
 
         public void RequestVoidFailure()
         {
-            if (offRoadFailureController != null && !offRoadFailureController.EnableOffRoadVoidFailure)
-            {
-                return;
-            }
-
+            endingDirector?.ResetEnding();
+            vehicleAdapter?.SetDeadAirDrivingInputLocked(false);
             if (State == DeadAirGameState.Ending)
             {
-                return;
+                State = DeadAirGameState.Playing;
             }
-
-            State = DeadAirGameState.Ending;
-            vehicleAdapter?.SetDeadAirDrivingInputLocked(true);
-            endingDirector?.PlayEnding(DeadAirEndingId.SuckedIntoVoid);
         }
 
         public void RestartRun()

@@ -761,6 +761,7 @@ MonoBehaviour:
   spawnOnStart: 1
   addNwhInputProviderIfMissing: 1
   addDebugPanel: 1
+  buildValidationRoadside: 1
 --- !u!1 &960000000
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,7 +835,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &970000001
 Transform:
   m_ObjectHideFlags: 0
@@ -923,6 +924,8 @@ MonoBehaviour:
       retarderIncrease: 0
       retarderDecrease: 0
       differentialLock: 0
+      transmissionShiftUp: 0
+      transmissionShiftDown: 0
       trailerAttachDetach: 0
       trailerBrake: 0
       cameraCycle: 0
@@ -962,9 +965,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf4c90435784e48b5c883f7477f3dfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vehicleController: {fileID: 0}
   inputSourceBehaviour: {fileID: 970000002}
   truckControlController: {fileID: 0}
+  transmissionController: {fileID: 0}
   validationGearMappingEnabled: 0
+  translateSemanticInputForNwhReverse: 1
+  logDriveInputDiagnostics: 1
 --- !u!114 &970000004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1123,6 +1130,7 @@ MonoBehaviour:
   roadSurfaceY: 0.55
   sampleSpacingMeters: 50
   createServiceArea: 1
+  createDepotJobBoardValidation: 1
   createLaneDebugLines: 1
   showDebugPanel: 1
   createUtsTrafficValidation: 1

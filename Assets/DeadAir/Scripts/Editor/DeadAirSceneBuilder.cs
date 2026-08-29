@@ -48,8 +48,6 @@ namespace DeadAir.Editor
             DeadAirStartRigController startRig = EnsureComponent<DeadAirStartRigController>(start, "Dead Air Start Rig Controller");
             startRig.Configure(truckPrefab, trailerPrefab, startMarker);
             EnsureComponent<DeadAirCockpitCameraLock>(systems, "Dead Air Cockpit Camera Lock");
-            DeadAirOffRoadFailureController offRoadFailure = EnsureComponent<DeadAirOffRoadFailureController>(systems, "Dead Air Off-Road Failure Controller");
-            offRoadFailure.SetOffRoadVoidFailureEnabled(false);
             EnsureComponent<DeadAirHud>(ui, "Dead Air HUD");
             EnsurePlayerRig(startRig, startMarker, truckPrefab, trailerPrefab);
             DeadAirBeatLayoutUtility.EnsureUnplacedBeatLayout();
@@ -296,14 +294,6 @@ namespace DeadAir.Editor
                 new Vector3(114f, 2f, 530f),
                 new Vector3(26f, 8f, 28f));
             rightCommit.ConfigureChoice("TEST_CHOICE", DeadAirChoiceOutcome.TrustGPS);
-
-            EnsureBlockoutTrigger<DeadAirTriggerZone>(
-                gameplay,
-                "TEMP_END_TRIGGER",
-                BlockoutBeat("TEMP_END_TRIGGER", "TEMPORARY BLOCKOUT END", DeadAirTriggerCategory.Ending, 0.52f, "Temporary ending-flow validation trigger."),
-                920,
-                new Vector3(74f, 2f, 748f),
-                new Vector3(30f, 8f, 24f));
 
             ConfigureMarker(
                 story.transform,

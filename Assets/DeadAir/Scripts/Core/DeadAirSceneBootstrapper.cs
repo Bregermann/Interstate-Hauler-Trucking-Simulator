@@ -64,8 +64,6 @@ namespace DeadAir
             DeadAirStartRigController startRig = EnsureComponent<DeadAirStartRigController>(start, "Dead Air Start Rig Controller");
             startRig.Configure(playerTruckPrefab, deliveryTrailerPrefab, startMarker);
             EnsureComponent<DeadAirCockpitCameraLock>(systems, "Dead Air Cockpit Camera Lock");
-            DeadAirOffRoadFailureController offRoadFailure = EnsureComponent<DeadAirOffRoadFailureController>(systems, "Dead Air Off-Road Failure Controller");
-            offRoadFailure.SetOffRoadVoidFailureEnabled(false);
 
             if (createDefaultUi)
             {

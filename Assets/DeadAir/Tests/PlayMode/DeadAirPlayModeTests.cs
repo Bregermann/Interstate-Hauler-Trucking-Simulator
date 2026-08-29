@@ -24,7 +24,7 @@ namespace DeadAir.Tests.PlayMode
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirTrafficHorrorDirector>());
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirStartRigController>());
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirCockpitCameraLock>());
-                Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirOffRoadFailureController>());
+                Assert.IsNull(Object.FindFirstObjectByType<DeadAirOffRoadFailureController>());
                 Assert.IsNotNull(GameObject.Find("DEAD_AIR_UNPLACED_GAMEPLAY"));
                 Assert.IsNotNull(GameObject.Find("DEAD_AIR_CONSTRUCTION_KIT"));
                 Assert.IsNotNull(Object.FindFirstObjectByType<DeadAirStartMarker>());
@@ -154,7 +154,7 @@ namespace DeadAir.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator VoidFailureLocksInputAndRestartRestoresRun()
+        public IEnumerator VoidFailureRequestIsIgnoredWhileFailureMechanicIsDisabled()
         {
             var managerObject = new GameObject("Dead Air Manager");
             var truckObject = new GameObject("Dead Air Truck");
@@ -162,7 +162,8 @@ namespace DeadAir.Tests.PlayMode
             {
                 DeadAirGameManager manager = managerObject.AddComponent<DeadAirGameManager>();
                 managerObject.AddComponent<DeadAirEndingDirector>();
-                managerObject.AddComponent<DeadAirOffRoadFailureController>();
+                DeadAirOffRoadFailureController offRoadFailure = managerObject.AddComponent<DeadAirOffRoadFailureController>();
+                offRoadFailure.SetOffRoadVoidFailureEnabled(true);
                 DeadAirVehicleAdapter adapter = truckObject.AddComponent<DeadAirVehicleAdapter>();
                 truckObject.AddComponent<Rigidbody>();
                 yield return null;
@@ -170,16 +171,16 @@ namespace DeadAir.Tests.PlayMode
                 manager.RequestVoidFailure();
                 yield return null;
 
-                Assert.AreEqual(DeadAirGameState.Ending, manager.State);
-                Assert.IsTrue(adapter.DeadAirDrivingInputLocked);
+                Assert.AreEqual(DeadAirGameState.Playing, manager.State);
+                Assert.IsFalse(adapter.DeadAirDrivingInputLocked);
+                Assert.AreEqual(DeadAirEndingId.None, manager.EndingDirector.CurrentEnding);
 
-                manager.RestartRun();
+                manager.RequestEnding(DeadAirEndingId.Lost);
                 yield return null;
 
                 Assert.AreEqual(DeadAirGameState.Playing, manager.State);
                 Assert.IsFalse(adapter.DeadAirDrivingInputLocked);
-                Assert.IsNotNull(manager.OffRoadFailureController);
-                Assert.IsFalse(manager.OffRoadFailureController.FailureTriggered);
+                Assert.AreEqual(DeadAirEndingId.None, manager.EndingDirector.CurrentEnding);
             }
             finally
             {

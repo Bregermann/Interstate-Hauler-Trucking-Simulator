@@ -16,20 +16,13 @@ namespace DeadAir.Tests.EditMode
         }
 
         [Test]
-        public void BeatLayoutContainsRequiredEndTrigger()
+        public void BeatLayoutOmitsRuntimeEndingTriggerWhileFailureMechanicIsDisabled()
         {
-            bool found = false;
             foreach (DeadAirBeatDefinition beat in DeadAirBeatLayoutUtility.CreateDefaultBeatDefinitions())
             {
-                if (beat.beatId == "ENDING_TRIGGER")
-                {
-                    found = true;
-                    Assert.AreEqual(DeadAirTriggerCategory.Ending, beat.category);
-                    Assert.IsTrue(beat.critical);
-                }
+                Assert.AreNotEqual("ENDING_TRIGGER", beat.beatId);
+                Assert.AreNotEqual(DeadAirTriggerCategory.Ending, beat.category);
             }
-
-            Assert.IsTrue(found);
         }
 
         [Test]

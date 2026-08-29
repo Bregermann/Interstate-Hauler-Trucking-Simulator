@@ -275,7 +275,6 @@ namespace DeadAir.Editor
                 "DA_TRIGGER_TRAFFIC",
                 "DA_TRIGGER_DASHBOARD",
                 "DA_TRIGGER_GENERIC_STORY",
-                "DA_TRIGGER_ENDING",
                 "DA_SIGN_DESTINATION",
                 "DA_SIGN_MILEAGE",
                 "DA_SIGN_EXIT",
@@ -453,13 +452,13 @@ namespace DeadAir.Editor
 
             if (!ending.Contains("SuckedIntoVoid") || !ending.Contains("SUCKED INTO THE VOID"))
             {
-                errors.Add("Dead Air void loss screen config is missing.");
+                warnings.Add("Dead Air void loss screen config is retained in source but runtime ending/failure application is disabled for playtesting.");
             }
 
             DeadAirOffRoadFailureController failure = Object.FindFirstObjectByType<DeadAirOffRoadFailureController>();
             if (failure == null)
             {
-                warnings.Add("DeadAirOffRoadFailureController is not serialized in the scene; run Dead Air/Build Or Refresh Main Scene or enter Play Mode to let the bootstrapper create it.");
+                warnings.Add("DeadAirOffRoadFailureController is temporarily absent from the Dead Air runtime scene so off-road void failure cannot interrupt playtesting.");
             }
             else if (!failure.EnableOffRoadVoidFailure)
             {
@@ -575,7 +574,7 @@ namespace DeadAir.Editor
 
             if (Object.FindFirstObjectByType<DeadAirOffRoadFailureController>() == null)
             {
-                errors.Add("Playable blockout requires DeadAirOffRoadFailureController.");
+                warnings.Add("Playable blockout off-road void failure controller is temporarily omitted from runtime setup.");
             }
 
             DeadAirRoadPiece[] roadPieces = blockout.GetComponentsInChildren<DeadAirRoadPiece>(true);
@@ -613,7 +612,6 @@ namespace DeadAir.Editor
             ValidateBlockoutTrigger<DeadAirChoiceStartTrigger>(blockout, "TEST_CHOICE_START", DeadAirTriggerCategory.ChoiceStart, errors);
             ValidateBlockoutTrigger<DeadAirChoiceCommitTrigger>(blockout, "TEST_LEFT_COMMIT", DeadAirTriggerCategory.ChoiceCommit, errors);
             ValidateBlockoutTrigger<DeadAirChoiceCommitTrigger>(blockout, "TEST_RIGHT_COMMIT", DeadAirTriggerCategory.ChoiceCommit, errors);
-            ValidateBlockoutTrigger<DeadAirTriggerZone>(blockout, "TEMP_END_TRIGGER", DeadAirTriggerCategory.Ending, errors);
 
             if (FindSceneObjectByName(blockout, "VOID_FAILURE_TEST_AREA") == null)
             {

@@ -118,13 +118,6 @@ namespace DeadAir
 
         protected virtual void OnActivated(DeadAirTriggerEvent triggerEvent, DeadAirStoryDirector director)
         {
-            if (triggerEvent.category == DeadAirTriggerCategory.Ending && DeadAirGameManager.Instance != null)
-            {
-                DeadAirEndingId ending = DeadAirGameManager.Instance.EndingDirector != null
-                    ? DeadAirGameManager.Instance.EndingDirector.ResolveEndingFromChoices(director)
-                    : DeadAirEndingId.Lost;
-                DeadAirGameManager.Instance.RequestEnding(ending);
-            }
         }
 
         protected void SetCategory(DeadAirTriggerCategory value)

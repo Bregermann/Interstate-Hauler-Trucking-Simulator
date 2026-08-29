@@ -32,8 +32,7 @@ namespace DeadAir
                 Beat("DA_015", "Split Horizon", DeadAirTriggerCategory.Environment, 39.0f, "Route choice pressure builds."),
                 Beat("DA_016", "Radio Cutout", DeadAirTriggerCategory.CBRadio, 43.3f, "Dead air becomes explicit."),
                 Beat("DA_017", "Last Correct Instruction", DeadAirTriggerCategory.GPS, 47.1f, "One instruction may be true."),
-                Beat("DA_018", "The Choice Narrows", DeadAirTriggerCategory.Story, 49.2f, "Final setup before ending trigger."),
-                Beat("ENDING_TRIGGER", "Ending Trigger", DeadAirTriggerCategory.Ending, 50.0f, "Resolve ending from committed choices.")
+                Beat("DA_018", "The Choice Narrows", DeadAirTriggerCategory.Story, 49.2f, "Final setup before ending trigger.")
             };
         }
 
@@ -136,7 +135,6 @@ namespace DeadAir
             EnsureTemplateTrigger<DeadAirTrafficHorrorEventTrigger>(story, "DA_TRIGGER_TRAFFIC", DeadAirTriggerCategory.Traffic);
             EnsureTemplateTrigger<DeadAirDashboardEventTrigger>(story, "DA_TRIGGER_DASHBOARD", DeadAirTriggerCategory.Dashboard);
             EnsureTemplateTrigger<DeadAirTriggerZone>(story, "DA_TRIGGER_GENERIC_STORY", DeadAirTriggerCategory.Story);
-            EnsureTemplateTrigger<DeadAirTriggerZone>(story, "DA_TRIGGER_ENDING", DeadAirTriggerCategory.Ending);
 
             Transform signs = EnsureChild(root, "SIGNS");
             EnsureSign(signs, "DA_SIGN_DESTINATION", DeadAirSignKind.DestinationSign, "DESTINATION");
