@@ -63,7 +63,8 @@ namespace LWS.InterstateHauler
         DPadUp = 39,
         DPadDown = 40,
         DPadLeft = 41,
-        DPadRight = 42
+        DPadRight = 42,
+        ResetTruckUpright = 43
     }
 
     public enum LwsWheelCompatibilityStatus

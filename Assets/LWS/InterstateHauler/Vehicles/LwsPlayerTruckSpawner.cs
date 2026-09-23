@@ -208,6 +208,20 @@ namespace LWS.InterstateHauler
                 truckInstance.AddComponent<LwsTruckCabInteriorRecovery>();
             }
 
+            LwsTruckStabilityController stability = truckInstance.GetComponent<LwsTruckStabilityController>();
+            if (stability == null)
+            {
+                stability = truckInstance.AddComponent<LwsTruckStabilityController>();
+            }
+
+            stability.ApplyStabilityTuning();
+
+            LwsTruckUprightRecoveryController uprightRecovery = truckInstance.GetComponent<LwsTruckUprightRecoveryController>();
+            if (uprightRecovery == null)
+            {
+                truckInstance.AddComponent<LwsTruckUprightRecoveryController>();
+            }
+
             LwsCabGpsController cabGps = truckInstance.GetComponent<LwsCabGpsController>();
             if (cabGps == null)
             {

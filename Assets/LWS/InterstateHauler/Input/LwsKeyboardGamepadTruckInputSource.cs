@@ -315,6 +315,7 @@ namespace LWS.InterstateHauler
                 trailerBrake = Edge("kb.trailerBrake", keyboard.spaceKey.isPressed),
                 cameraCycle = CameraCycleEdge("kb.cameraCycle", keyboard.tabKey.isPressed),
                 lookReset = Edge("kb.lookReset", keyboard.backquoteKey.isPressed),
+                resetTruckUpright = Edge("kb.resetTruckUpright", keyboard.uKey.isPressed),
                 flipOffDriver = Edge("kb.flipOff", keyboard.fKey.isPressed),
                 interact = Edge("kb.interact", keyboard.enterKey.isPressed),
                 menuSubmit = Edge("kb.submit", keyboard.enterKey.isPressed),
@@ -335,10 +336,11 @@ namespace LWS.InterstateHauler
                 return default;
             }
 
+            bool resetTruckChord = gamepad.selectButton.isPressed && gamepad.buttonNorth.isPressed;
             return new LwsVehicleCommandFrame
             {
                 parkingBrakeToggle = Edge("gp.parkingBrake", gamepad.buttonEast.isPressed),
-                lowBeamLights = Edge("gp.lowBeam", gamepad.buttonNorth.isPressed),
+                lowBeamLights = Edge("gp.lowBeam", gamepad.buttonNorth.isPressed && !resetTruckChord),
                 highBeamLights = Edge("gp.highBeam", gamepad.buttonWest.isPressed),
                 leftIndicator = Edge("gp.leftSignal", gamepad.leftShoulder.isPressed),
                 rightIndicator = Edge("gp.rightSignal", gamepad.rightShoulder.isPressed),
@@ -349,7 +351,8 @@ namespace LWS.InterstateHauler
                 cruiseControl = Edge("gp.cruiseToggle", gamepad.dpad.right.isPressed),
                 cruiseCancel = Edge("gp.cruiseCancel", gamepad.dpad.left.isPressed),
                 trailerAttachDetach = Edge("gp.trailerAttach", gamepad.dpad.down.isPressed),
-                cameraCycle = CameraCycleEdge("gp.cameraCycle", gamepad.selectButton.isPressed),
+                cameraCycle = CameraCycleEdge("gp.cameraCycle", gamepad.selectButton.isPressed && !resetTruckChord),
+                resetTruckUpright = Edge("gp.resetTruckUpright", resetTruckChord),
                 flipOffDriver = Edge("gp.flipOff", gamepad.leftStickButton.isPressed && gamepad.rightStickButton.isPressed),
                 pause = Edge("gp.pause", gamepad.startButton.isPressed),
                 menuSubmit = Edge("gp.submit", gamepad.buttonSouth.isPressed),

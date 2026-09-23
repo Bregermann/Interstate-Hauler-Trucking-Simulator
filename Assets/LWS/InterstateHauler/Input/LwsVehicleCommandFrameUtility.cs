@@ -70,6 +70,7 @@ namespace LWS.InterstateHauler
                 trailerBrake = Combine(a.trailerBrake, b.trailerBrake),
                 cameraCycle = Combine(a.cameraCycle, b.cameraCycle),
                 lookReset = Combine(a.lookReset, b.lookReset),
+                resetTruckUpright = Combine(a.resetTruckUpright, b.resetTruckUpright),
                 flipOffDriver = Combine(a.flipOffDriver, b.flipOffDriver),
                 interact = Combine(a.interact, b.interact),
                 menuSubmit = Combine(a.menuSubmit, b.menuSubmit),

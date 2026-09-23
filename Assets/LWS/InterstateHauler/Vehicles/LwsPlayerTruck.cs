@@ -18,6 +18,8 @@ namespace LWS.InterstateHauler
         [SerializeField] private LwsTruckMirrorController mirrorController;
         [SerializeField] private LwsCabAccessoryAnchorRegistry cabAccessoryAnchorRegistry;
         [SerializeField] private LwsTruckCabInteriorRecovery cabInteriorRecovery;
+        [SerializeField] private LwsTruckStabilityController stabilityController;
+        [SerializeField] private LwsTruckUprightRecoveryController uprightRecoveryController;
         [SerializeField] private bool registerWithBootstrap = true;
 
         private ILwsPlayerVehicleService _playerVehicleService;
@@ -35,6 +37,8 @@ namespace LWS.InterstateHauler
         public LwsTruckMirrorController MirrorController => mirrorController;
         public LwsCabAccessoryAnchorRegistry CabAccessoryAnchorRegistry => cabAccessoryAnchorRegistry;
         public LwsTruckCabInteriorRecovery CabInteriorRecovery => cabInteriorRecovery;
+        public LwsTruckStabilityController StabilityController => stabilityController;
+        public LwsTruckUprightRecoveryController UprightRecoveryController => uprightRecoveryController;
         public bool IsReady => nwhAdapter != null && nwhAdapter.VehicleController != null;
         public LwsVehicleTelemetry LastTelemetry { get; private set; }
 
@@ -45,6 +49,7 @@ namespace LWS.InterstateHauler
 
         private void Awake()
         {
+            EnsureRuntimeSupportComponents();
             ResolveLocalReferences();
         }
 
@@ -168,6 +173,30 @@ namespace LWS.InterstateHauler
             if (cabInteriorRecovery == null)
             {
                 cabInteriorRecovery = GetComponent<LwsTruckCabInteriorRecovery>();
+            }
+
+            if (stabilityController == null)
+            {
+                stabilityController = GetComponent<LwsTruckStabilityController>();
+            }
+
+            if (uprightRecoveryController == null)
+            {
+                uprightRecoveryController = GetComponent<LwsTruckUprightRecoveryController>();
+            }
+        }
+
+
+        private void EnsureRuntimeSupportComponents()
+        {
+            if (GetComponent<LwsTruckStabilityController>() == null)
+            {
+                gameObject.AddComponent<LwsTruckStabilityController>();
+            }
+
+            if (GetComponent<LwsTruckUprightRecoveryController>() == null)
+            {
+                gameObject.AddComponent<LwsTruckUprightRecoveryController>();
             }
         }
 

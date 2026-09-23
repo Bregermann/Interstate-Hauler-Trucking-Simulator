@@ -52,6 +52,7 @@ namespace LWS.InterstateHauler
         public LwsWheelControlBinding trailerBrakeBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.TrailerBrake, LwsWheelControlKind.Button);
         public LwsWheelControlBinding cameraCycleBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.CameraCycle, LwsWheelControlKind.Button);
         public LwsWheelControlBinding lookResetBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.LookReset, LwsWheelControlKind.Button);
+        public LwsWheelControlBinding resetTruckUprightBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.ResetTruckUpright, LwsWheelControlKind.Button);
         public LwsWheelControlBinding flipOffDriverBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.FlipOffDriver, LwsWheelControlKind.Button);
         public LwsWheelControlBinding interactBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.Interact, LwsWheelControlKind.Button);
         public LwsWheelControlBinding menuSubmitBinding = LwsWheelControlBinding.Unbound(LwsWheelLogicalControl.MenuSubmit, LwsWheelControlKind.Button);
@@ -148,6 +149,7 @@ namespace LWS.InterstateHauler
                 case LwsWheelLogicalControl.TrailerBrake: return trailerBrakeBinding;
                 case LwsWheelLogicalControl.CameraCycle: return cameraCycleBinding;
                 case LwsWheelLogicalControl.LookReset: return lookResetBinding;
+                case LwsWheelLogicalControl.ResetTruckUpright: return resetTruckUprightBinding;
                 case LwsWheelLogicalControl.FlipOffDriver: return flipOffDriverBinding;
                 case LwsWheelLogicalControl.Interact: return interactBinding;
                 case LwsWheelLogicalControl.MenuSubmit: return menuSubmitBinding;
@@ -198,6 +200,7 @@ namespace LWS.InterstateHauler
                 case LwsWheelLogicalControl.TrailerBrake: trailerBrakeBinding = binding; break;
                 case LwsWheelLogicalControl.CameraCycle: cameraCycleBinding = binding; break;
                 case LwsWheelLogicalControl.LookReset: lookResetBinding = binding; break;
+                case LwsWheelLogicalControl.ResetTruckUpright: resetTruckUprightBinding = binding; break;
                 case LwsWheelLogicalControl.FlipOffDriver: flipOffDriverBinding = binding; break;
                 case LwsWheelLogicalControl.Interact: interactBinding = binding; break;
                 case LwsWheelLogicalControl.MenuSubmit: menuSubmitBinding = binding; break;
@@ -259,6 +262,7 @@ namespace LWS.InterstateHauler
             NormalizeBinding(ref trailerBrakeBinding, LwsWheelLogicalControl.TrailerBrake, LwsWheelControlKind.Button);
             NormalizeBinding(ref cameraCycleBinding, LwsWheelLogicalControl.CameraCycle, LwsWheelControlKind.Button);
             NormalizeBinding(ref lookResetBinding, LwsWheelLogicalControl.LookReset, LwsWheelControlKind.Button);
+            NormalizeBinding(ref resetTruckUprightBinding, LwsWheelLogicalControl.ResetTruckUpright, LwsWheelControlKind.Button);
             NormalizeBinding(ref flipOffDriverBinding, LwsWheelLogicalControl.FlipOffDriver, LwsWheelControlKind.Button);
             NormalizeBinding(ref interactBinding, LwsWheelLogicalControl.Interact, LwsWheelControlKind.Button);
             NormalizeBinding(ref menuSubmitBinding, LwsWheelLogicalControl.MenuSubmit, LwsWheelControlKind.Button);

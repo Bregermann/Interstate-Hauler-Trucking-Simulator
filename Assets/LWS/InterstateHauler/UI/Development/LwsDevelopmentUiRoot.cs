@@ -27,6 +27,7 @@ namespace LWS.InterstateHauler
         private static readonly Vector2 MinimapPanelSize = new Vector2(304f, 304f);
         private const float MinimapPanelMarginPixels = 28f;
         private static readonly Vector2 DevButtonSize = new Vector2(82f, 42f);
+        private static readonly Vector2 ResetTruckButtonSize = new Vector2(132f, 42f);
         private const float DevButtonMarginPixels = 32f;
         private const float MinimapMetersVisible = 2600f;
         private const float RoadLookupRefreshSeconds = 0.5f;
@@ -66,6 +67,7 @@ namespace LWS.InterstateHauler
         private RectTransform _hudLayer;
         private RectTransform _modalLayer;
         private GameObject _devButton;
+        private GameObject _resetTruckButton;
         private GameObject _controlCenterPanel;
         private GameObject _bigMapPanel;
         private GameObject _minimapPanel;
@@ -398,10 +400,16 @@ namespace LWS.InterstateHauler
 
         private void UpdateDevButtonVisibility()
         {
+            bool persistenceOpen = _persistenceMenuService != null && _persistenceMenuService.IsOpen;
+            bool hudButtonsVisible = !ControlCenterVisible && !BigMapVisible && !WeatherTestPanelVisible && !persistenceOpen;
             if (_devButton != null)
             {
-                bool persistenceOpen = _persistenceMenuService != null && _persistenceMenuService.IsOpen;
-                _devButton.SetActive(!ControlCenterVisible && !BigMapVisible && !WeatherTestPanelVisible && !persistenceOpen);
+                _devButton.SetActive(hudButtonsVisible);
+            }
+
+            if (_resetTruckButton != null)
+            {
+                _resetTruckButton.SetActive(hudButtonsVisible);
             }
         }
 
@@ -440,6 +448,7 @@ namespace LWS.InterstateHauler
             _hudLayer.SetAsFirstSibling();
             _modalLayer.SetAsLastSibling();
             BuildDevButton();
+            BuildResetTruckButton();
             BuildTransmissionHud();
             BuildMinimap();
             BuildBigMap();
@@ -536,6 +545,21 @@ namespace LWS.InterstateHauler
                 new Vector2(DevButtonMarginPixels, DevButtonMarginPixels),
                 ShowControlCenter).gameObject;
             LwsDevelopmentUiDiagnostics.LogStage("DEV button created");
+        }
+
+
+        private void BuildResetTruckButton()
+        {
+            _resetTruckButton = CreateFixedButton(
+                _hudLayer,
+                "Reset Truck Button",
+                "RESET TRUCK",
+                new Vector2(0f, 0f),
+                new Vector2(0f, 0f),
+                ResetTruckButtonSize,
+                new Vector2(DevButtonMarginPixels, DevButtonMarginPixels + DevButtonSize.y + 10f),
+                RequestResetTruckUpright).gameObject;
+            LwsDevelopmentUiDiagnostics.LogStage("Reset truck button created");
         }
 
         private void BuildTransmissionHud()
@@ -799,6 +823,7 @@ namespace LWS.InterstateHauler
             AddButtonRow(("TRAILER", () => SendTruckCommand((ref LwsVehicleCommandFrame c) => c.trailerAttachDetach = LwsMomentaryIntent.Pressed)),
                 ("CAMERA", () => SendTruckCommand((ref LwsVehicleCommandFrame c) => c.cameraCycle = LwsMomentaryIntent.Pressed)),
                 ("LOOK RESET", () => SendTruckCommand((ref LwsVehicleCommandFrame c) => c.lookReset = LwsMomentaryIntent.Pressed)));
+            AddButtonRow(("RESET TRUCK", RequestResetTruckUpright));
         }
 
         private void BuildTransmissionTab()
@@ -1563,6 +1588,37 @@ namespace LWS.InterstateHauler
             LwsVehicleContinuousInput continuous = _inputService != null ? _inputService.ReadContinuousInput() : default;
             controller.ApplyCommandFrame(frame, continuous);
             _lastActionMessage = "Truck command sent through semantic LWS control frame.";
+        }
+
+
+        private void RequestResetTruckUpright()
+        {
+            LwsTruckUprightRecoveryController recovery = ResolveUprightRecoveryController();
+            if (recovery != null && recovery.RequestResetUpright("Development UI"))
+            {
+                _lastActionMessage = "Truck reset upright.";
+                return;
+            }
+
+            _lastActionMessage = "Reset truck unavailable; no active player truck recovery component found.";
+        }
+
+        private LwsTruckUprightRecoveryController ResolveUprightRecoveryController()
+        {
+            ResolveServices();
+            LwsPlayerTruck truck = _playerVehicleService?.ActiveTruck ?? FindAnyObjectByType<LwsPlayerTruck>();
+            if (truck != null)
+            {
+                LwsTruckUprightRecoveryController recovery = truck.UprightRecoveryController ?? truck.GetComponent<LwsTruckUprightRecoveryController>();
+                if (recovery == null)
+                {
+                    recovery = truck.gameObject.AddComponent<LwsTruckUprightRecoveryController>();
+                }
+
+                return recovery;
+            }
+
+            return FindAnyObjectByType<LwsTruckUprightRecoveryController>();
         }
 
         private void RequestTransmissionModeToggle()

@@ -104,6 +104,7 @@ namespace LWS.InterstateHauler
         public LwsMomentaryIntent trailerBrake;
         public LwsMomentaryIntent cameraCycle;
         public LwsMomentaryIntent lookReset;
+        public LwsMomentaryIntent resetTruckUpright;
         public LwsMomentaryIntent flipOffDriver;
         public LwsMomentaryIntent interact;
         public LwsMomentaryIntent menuSubmit;

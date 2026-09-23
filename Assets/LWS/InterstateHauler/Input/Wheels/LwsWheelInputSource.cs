@@ -345,6 +345,7 @@ namespace LWS.InterstateHauler
                 trailerBrake = ReadButtonIntent(_calibrationProfile.trailerBrakeBinding),
                 cameraCycle = ReadButtonIntent(_calibrationProfile.cameraCycleBinding),
                 lookReset = ReadButtonIntent(_calibrationProfile.lookResetBinding),
+                resetTruckUpright = ReadButtonIntent(_calibrationProfile.resetTruckUprightBinding),
                 flipOffDriver = ReadButtonIntent(_calibrationProfile.flipOffDriverBinding),
                 interact = ReadButtonIntent(_calibrationProfile.interactBinding),
                 menuSubmit = ReadButtonIntent(_calibrationProfile.menuSubmitBinding),
