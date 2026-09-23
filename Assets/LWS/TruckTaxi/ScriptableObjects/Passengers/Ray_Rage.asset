@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299edc6c00037fe4298940caf68ff456, type: 3}
+  m_Name: Ray_Rage
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.PassengerProfile
+  passengerName: Ray Rage
+  portrait: {fileID: 0}
+  passengerRating: 4.5
+  personality: Road Rage Passenger
+  basePatience: 300
+  baseTipChance: 0.5
+  dialogueSet:
+  - I ordered the XL. This feels accurate.
+  - Five stars for the turning radius. Eventually.
+  possibleRequests:
+  - {fileID: 11400000, guid: f3ea2391d4a800646afe10ea285eff22, type: 2}
+  - {fileID: 11400000, guid: a4734cce16fd11e4abe881e6f90153a0, type: 2}
+  - {fileID: 11400000, guid: be473475d5bff6d4db958023e3beae44, type: 2}
+  requestFrequency: 20
+  requestDifficultyRange: {x: 0.8, y: 1.2}
+  preferredDrivingStyle: Chaotic
+  specialTraits: []
+  chaosAffinity: 1
+  smoothAffinity: 1
+  collisionReaction: That is going in my highlight reel!
+  shortcutReaction: A bold interpretation of a road.
+  speedReaction: My calendar just skipped a day.

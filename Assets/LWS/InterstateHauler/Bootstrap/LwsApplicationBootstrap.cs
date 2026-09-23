@@ -12,6 +12,8 @@ namespace LWS.InterstateHauler
 
         [SerializeField] private bool dontDestroyOnLoad = true;
         [SerializeField] private bool initializeOnAwake = true;
+        [Tooltip("Driving-only examples skip career profiles, autosaves, jobs and persistence menus.")]
+        [SerializeField] private bool drivingSandbox;
 
         private LwsServiceRegistry _registry;
         private bool _shutdownComplete;
@@ -50,7 +52,7 @@ namespace LWS.InterstateHauler
                 return LwsServiceResult.Success("LWS bootstrap is already initialized.");
             }
 
-            _registry = CreateDefaultRegistry();
+            _registry = CreateDefaultRegistry(!drivingSandbox);
             LwsServiceResult result = _registry.InitializeAll();
             if (!result.Succeeded)
             {
@@ -84,12 +86,12 @@ namespace LWS.InterstateHauler
             }
         }
 
-        public static LwsServiceRegistry CreateDefaultRegistry()
+        public static LwsServiceRegistry CreateDefaultRegistry(bool includeCareerServices = true)
         {
             var registry = new LwsServiceRegistry();
 
             registry.Register<ILwsGameplayStateService>(new LwsGameplayStateService());
-            registry.Register<ILwsSaveService>(new LwsSaveService());
+            if (includeCareerServices) registry.Register<ILwsSaveService>(new LwsSaveService());
             registry.Register<ILwsPlayerSettingsService>(new LwsPlayerSettingsService());
             registry.Register<ILwsVehicleInputService>(new LwsVehicleInputService());
             registry.Register<ILwsWheelCalibrationService>(new LwsWheelCalibrationService());
@@ -111,6 +113,7 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsVehicleRuntimeService>(new LwsVehicleRuntimeService(), typeof(ILwsVehicleInputService));
             registry.Register<ILwsTruckControlService>(new LwsTruckControlService(), typeof(ILwsPlayerVehicleService), typeof(ILwsVehicleRuntimeService));
             registry.Register<ILwsTruckDashboardService>(new LwsTruckDashboardService(), typeof(ILwsTruckControlService), typeof(ILwsVehicleRuntimeService), typeof(ILwsRenderingService));
+            if (!includeCareerServices) return registry;
             registry.Register<ILwsDepotService>(new LwsDepotService(), typeof(ILwsGameplayStateService));
             registry.Register<ILwsJobCatalogService>(new LwsJobCatalogService(), typeof(ILwsDepotService));
             registry.Register<ILwsJobOfferProvider>(new LwsAuthoredJobOfferProvider(), typeof(ILwsJobCatalogService));

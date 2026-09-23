@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299edc6c00037fe4298940caf68ff456, type: 3}
+  m_Name: Cam_Era
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.PassengerProfile
+  passengerName: Cam Era
+  portrait: {fileID: 0}
+  passengerRating: 4.5
+  personality: Tourist
+  basePatience: 300
+  baseTipChance: 0.5
+  dialogueSet:
+  - I ordered the XL. This feels accurate.
+  - Five stars for the turning radius. Eventually.
+  possibleRequests:
+  - {fileID: 11400000, guid: 9a3a9071b8668c243a7ee3653e6e24bd, type: 2}
+  - {fileID: 11400000, guid: 1115259c503f2d248832de6540e54c6b, type: 2}
+  requestFrequency: 20
+  requestDifficultyRange: {x: 0.8, y: 1.2}
+  preferredDrivingStyle: Calm
+  specialTraits: []
+  chaosAffinity: -1
+  smoothAffinity: 1
+  collisionReaction: My insurance agent just felt a disturbance.
+  shortcutReaction: A bold interpretation of a road.
+  speedReaction: My calendar just skipped a day.

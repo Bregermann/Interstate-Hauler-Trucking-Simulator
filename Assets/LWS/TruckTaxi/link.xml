@@ -1,0 +1,14 @@
+<linker>
+  <!-- Existing adapters discover these vendor APIs by name. Preserve only required classes. -->
+  <assembly fullname="Assembly-CSharp">
+    <type fullname="WalkPath" preserve="all" />
+    <type fullname="CarWalkPath" preserve="all" />
+    <type fullname="MovePath" preserve="all" />
+    <type fullname="CarAIController" preserve="all" />
+    <type fullname="CarMove" preserve="all" />
+    <type fullname="CarWheels" preserve="all" />
+    <type fullname="PeopleWalkPath" preserve="all" />
+    <type fullname="Passersby" preserve="all" />
+    <type fullname="Michsky.UI.Heat.ButtonManager" preserve="all" />
+  </assembly>
+</linker>

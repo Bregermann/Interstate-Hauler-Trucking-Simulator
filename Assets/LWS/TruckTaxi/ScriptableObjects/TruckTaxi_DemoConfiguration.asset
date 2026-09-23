@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 681f95181c2614a4bb4162a668405f60, type: 3}
+  m_Name: TruckTaxi_DemoConfiguration
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiConfiguration
+  passengers:
+  - {fileID: 11400000, guid: ca28f1b00a01d994599e0cab8cab0a5a, type: 2}
+  - {fileID: 11400000, guid: 009ae3a402dabfb4494fd854c44eae28, type: 2}
+  - {fileID: 11400000, guid: a492d1d13dabada4ab1855675a7fad44, type: 2}
+  - {fileID: 11400000, guid: 488bd780fe51c0b4e91338f317e7b430, type: 2}
+  - {fileID: 11400000, guid: 3c18da10302b9794b904827d5e560958, type: 2}
+  - {fileID: 11400000, guid: 0dc6acff58d99f548b48b0e6193e0390, type: 2}
+  - {fileID: 11400000, guid: d9f5d0d1a6a665640aa3d9be4c979903, type: 2}
+  - {fileID: 11400000, guid: 419497acb1af0de41a5b56608ca09c24, type: 2}
+  - {fileID: 11400000, guid: e85cc6083da92c848adcb3a45745e4b5, type: 2}
+  - {fileID: 11400000, guid: 6571dd82a0e18e242ac0497ce2792171, type: 2}
+  requests:
+  - {fileID: 11400000, guid: 4d63d3f9e6ff7c848a0950778aa4e5c0, type: 2}
+  - {fileID: 11400000, guid: 8c38c454f61f70149b4f5bcc4e330256, type: 2}
+  - {fileID: 11400000, guid: f3ea2391d4a800646afe10ea285eff22, type: 2}
+  - {fileID: 11400000, guid: b31ecc97c9efe704e955bcc82a25f062, type: 2}
+  - {fileID: 11400000, guid: a4734cce16fd11e4abe881e6f90153a0, type: 2}
+  - {fileID: 11400000, guid: ce4530b11ddfbc2459225d20aac63b20, type: 2}
+  - {fileID: 11400000, guid: 9a3a9071b8668c243a7ee3653e6e24bd, type: 2}
+  - {fileID: 11400000, guid: c17d8ccba39e62046aae399b386c8341, type: 2}
+  - {fileID: 11400000, guid: be473475d5bff6d4db958023e3beae44, type: 2}
+  - {fileID: 11400000, guid: 1115259c503f2d248832de6540e54c6b, type: 2}
+  - {fileID: 11400000, guid: 596c21af7df4ed54fba36e1517c4357e, type: 2}
+  minimumTripDistance: 150
+  maximumTripDistance: 950
+  rideFrequency: 6
+  offerDuration: 30
+  stoppedSpeed: 0.5
+  boardingSeconds: 1.5
+  exitingSeconds: 1
+  baseFareCents: 500
+  centsPerMeter: 1.5
+  centsPerSecond: 2
+  tipFraction: 0.2
+  impactPenaltyCents: 100
+  chaosCentsPerPoint: 0.1
+  trafficRamScore: 100
+  pedestrianHitScore: 250
+  propertyDamageScore: 50
+  shortcutScore: 300
+  nearMissScore: 75
+  hardLandingScore: 200
+  offroadScorePerSecond: 5
+  minimumImpactSpeed: 3
+  collisionCooldown: 3
+  nearMissSpeed: 8
+  nearMissRadius: 5
+  pedestrianRespawnSeconds: 12
+  fastDrivingSpeed: 18
+  speedReactionCooldown: 15
+  gentleAcceleration: 2
+  smoothRatingPerSecond: 0.003
+  hardLandingSpeed: 6
+  offerSound: {fileID: 0}
+  acceptSound: {fileID: 0}
+  boardingSound: {fileID: 0}
+  exitSound: {fileID: 0}
+  requestSound: {fileID: 0}
+  requestSuccessSound: {fileID: 0}
+  requestFailureSound: {fileID: 0}
+  collisionSound: {fileID: 0}
+  fareSound: {fileID: 0}

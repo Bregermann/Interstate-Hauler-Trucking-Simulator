@@ -1,0 +1,164 @@
+using System.Collections;
+using LWS.InterstateHauler;
+using UnityEngine;
+
+namespace LWS.TruckTaxi
+{
+    [DefaultExecutionOrder(400)]
+    public sealed class TruckTaxiBootstrap : MonoBehaviour
+    {
+        public static TruckTaxiBootstrap Instance { get; private set; }
+        public TruckTaxiConfiguration configuration;
+        public LwsPlayerTruckSpawner spawner;
+        public LwsRoadGraphProvider roadGraph;
+        public TruckTaxiTrafficAdapter traffic;
+        public TruckTaxiHud hud;
+        public Transform playerSpawn;
+        public TruckTaxiPedestrianPopulation pedestrians;
+        public TruckTaxiSession Session { get; private set; }
+        public TruckTaxiConfiguration Configuration => configuration;
+        public LwsPlayerTruck Player { get; private set; }
+        public TruckTaxiGPSAdapter GPS { get; private set; }
+        public bool Ready { get; private set; }
+        public bool Paused { get; private set; }
+        private ILwsGameplayStateService gameplay;
+        private Rigidbody body;
+        private AudioSource audioSource;
+        private TruckTaxiRideLocation[] locations;
+        private TruckTaxiImpactTarget[] resetTargets;
+        private TruckTaxiState observedState = (TruckTaxiState)(-1);
+        private float lastSpeed;
+        private GameObject waitingPassenger;
+        private void Awake()
+        {
+            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+            Instance = this;
+        }
+        private IEnumerator Start()
+        {
+            if (configuration == null || spawner == null || roadGraph == null || LwsApplicationBootstrap.Instance == null)
+            { Debug.LogError("Truck Taxi scene configuration incomplete.",this); yield break; }
+            if (LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsSaveService careerSave))
+            { Debug.LogError("Truck Taxi requires the drivingSandbox bootstrap to protect career saves.",this); yield break; }
+            LwsApplicationBootstrap.Instance.Registry.TryGet(out gameplay);
+            Player = spawner.SpawnValidationRig();
+            if (Player == null) yield break;
+            body = Player.GetComponent<Rigidbody>();
+            locations = FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None);
+            System.Array.Sort(locations,(a,b)=>string.CompareOrdinal(a.locationId,b.locationId));
+            resetTargets = FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None);
+            Session = new TruckTaxiSession(configuration,locations,Random.Range(1,int.MaxValue));
+            GPS = gameObject.AddComponent<TruckTaxiGPSAdapter>(); GPS.Initialize(Player.transform,roadGraph);
+            var sensor = Player.GetComponent<TruckTaxiCollisionObserver>() ?? Player.gameObject.AddComponent<TruckTaxiCollisionObserver>();
+            sensor.Initialize(this);
+            audioSource = gameObject.AddComponent<AudioSource>(); audioSource.playOnAwake = false; audioSource.spatialBlend = 0;
+            Session.RequestResolved += OnRequestResolved;
+            Session.RequestCreated += OnRequestCreated;
+            Session.DrivingEvent += OnDrivingEvent;
+            Session.Changed += OnSessionChanged;
+            traffic.Initialize();
+            pedestrians.Initialize();
+            // The existing development HUD auto-creates in Editor builds, even without its service.
+            // Hide only that instance in this isolated scene; the taxi HUD owns these surfaces.
+            foreach (var root in FindObjectsByType<LwsDevelopmentUiRoot>(FindObjectsSortMode.None)) root.gameObject.SetActive(false);
+            yield return null;
+            GPS.ConfigureDemoPresentation();
+            Ready = true;
+            hud.Initialize(this);
+            SetPaused(true);
+            OnSessionChanged();
+        }
+        private void Update()
+        {
+            if (!Ready || Paused || body == null) return;
+            float speed = body.linearVelocity.magnitude;
+            float acceleration = Time.deltaTime > 0 ? (speed-lastSpeed)/Time.deltaTime : 0;
+            lastSpeed = speed;
+            bool onRoad = roadGraph.TryFindNearestRoad(body.position,out var road) && road.LateralDistanceMeters <= 10;
+            Session.Tick(Time.deltaTime,body.position,speed,acceleration,onRoad);
+        }
+        private void OnSessionChanged()
+        {
+            if (Session.State == observedState) return;
+            observedState = Session.State;
+            switch (Session.State)
+            {
+                case TruckTaxiState.RideOffered: Play(configuration.offerSound); ShowWaitingPassenger(); break;
+                case TruckTaxiState.DrivingToPickup: GPS.SetPickupDestination(Session.Pickup); Play(configuration.acceptSound); SetPaused(false); break;
+                case TruckTaxiState.PassengerBoarding: Play(configuration.boardingSound); break;
+                case TruckTaxiState.DrivingToDestination:
+                    GPS.SetRideDestination(Session.Destination);
+                    if(waitingPassenger != null) waitingPassenger.SetActive(false);
+                    break;
+                case TruckTaxiState.PassengerExiting: Play(configuration.exitSound); break;
+                case TruckTaxiState.RideComplete: GPS.ClearDestination(); Play(configuration.fareSound); SetPaused(true); break;
+                case TruckTaxiState.RideFailed: GPS.ClearDestination(); SetPaused(true); break;
+                case TruckTaxiState.Inactive:
+                case TruckTaxiState.Available:
+                    GPS.ClearDestination(); if(waitingPassenger!=null) waitingPassenger.SetActive(false);
+                    SetPaused(Session.State == TruckTaxiState.Inactive); break;
+            }
+        }
+        private void ShowWaitingPassenger()
+        {
+            if (waitingPassenger == null)
+            {
+                waitingPassenger = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                waitingPassenger.name = "Waiting taxi passenger";
+                Destroy(waitingPassenger.GetComponent<Collider>());
+                waitingPassenger.transform.localScale = new Vector3(0.7f,0.95f,0.7f);
+            }
+            waitingPassenger.SetActive(true);
+            var point = Session.Pickup.passengerSpawnPoint;
+            waitingPassenger.transform.position = point != null ? point.position : Session.Pickup.StopPosition + Vector3.right*5 + Vector3.up;
+        }
+        private void OnRequestResolved(TaxiRequestProgress r) => Play(r.State == TaxiRequestState.Succeeded ? configuration.requestSuccessSound : configuration.requestFailureSound);
+        private void OnRequestCreated(TaxiRequestProgress r) => Play(configuration.requestSound);
+        private void OnDrivingEvent(TaxiEventType _) => Play(configuration.collisionSound);
+        public void Play(AudioClip clip) { if(clip!=null && audioSource!=null) audioSource.PlayOneShot(clip); }
+        public void StartShift() { Session?.StartShift(); SetPaused(false); }
+        public void SetPaused(bool value)
+        {
+            Paused = value;
+            if (value) gameplay?.Pause("Truck Taxi menu"); else if(gameplay?.CurrentState == LwsGameplayState.Paused) gameplay.Resume("Truck Taxi driving");
+            // Taxi pause is local presentation policy, not a second global state authority.
+            Time.timeScale = value ? 0 : 1;
+            Cursor.lockState = CursorLockMode.None; Cursor.visible = true;
+        }
+        public void TeleportNear(TruckTaxiRideLocation location)
+        {
+            if(Player==null || body==null || location==null) return;
+            Teleport(location.StopPosition + Vector3.up*1.6f, location.truckStopPoint != null ? location.truckStopPoint.rotation : Quaternion.identity);
+        }
+        private void Teleport(Vector3 position, Quaternion rotation)
+        {
+            if (!body.isKinematic) { body.linearVelocity = Vector3.zero; body.angularVelocity = Vector3.zero; }
+            body.position = position; body.rotation = rotation;
+            Player.transform.SetPositionAndRotation(position,rotation);
+            Physics.SyncTransforms(); Session?.DiscardTeleportDistance(); lastSpeed = 0;
+        }
+        public void ResetCity()
+        {
+            if(!Ready) return;
+            Session.EndShift();
+            traffic.ResetTraffic();
+            pedestrians.ResetPopulation();
+            foreach(var target in resetTargets) if(target!=null) target.ResetTarget();
+            Teleport(playerSpawn.position,playerSpawn.rotation);
+            Player.GetComponent<TruckTaxiCollisionObserver>().ResetTracking();
+            Session.StartShift(); SetPaused(false);
+        }
+        public void SpawnPedestrian()
+        {
+            pedestrians.SpawnOne();
+        }
+        private void OnDestroy()
+        {
+            if(Instance != this) return;
+            Time.timeScale = 1;
+            if(Session!=null) { Session.Changed-=OnSessionChanged; Session.RequestResolved-=OnRequestResolved; Session.RequestCreated-=OnRequestCreated; Session.DrivingEvent-=OnDrivingEvent; }
+            if(waitingPassenger!=null) Destroy(waitingPassenger);
+            Instance = null;
+        }
+    }
+}
