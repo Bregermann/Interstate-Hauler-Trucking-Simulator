@@ -5,7 +5,10 @@ namespace LWS.TruckTaxi
     [CreateAssetMenu(menuName = "Truck Taxi/Passenger Profile")]
     public sealed class PassengerProfile : ScriptableObject
     {
+        public string passengerId;
         public string passengerName;
+        public TruckTaxiVoiceProfile voiceProfile;
+        public TruckTaxiDialogueSet authoredDialogue;
         public Sprite portrait;
         [Range(1,5)] public float passengerRating = 4.5f;
         public string personality;
