@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using NWH.Common.Cameras;
 
 namespace LWS.TruckTaxi.Tests
 {
@@ -86,17 +87,34 @@ namespace LWS.TruckTaxi.Tests
             host.Session.DeclineRide();
             for(int i=0;i<3;i++)
             {
-                Assert.IsTrue(host.Session.OfferRide());
+                string[] passengerIds={"passenger-d9f5d0d1a6a6","large-yeti","analytical-robot"};
+                var selected=System.Array.Find(host.Configuration.passengerDatabase.passengers,p=>p.passengerId==passengerIds[i]);
+                Assert.IsNotNull(selected,passengerIds[i]);
+                Assert.IsTrue(host.Session.OfferRide(selected));
                 yield return new WaitForSecondsRealtime(.2f);
                 Capture("Offer"+i,1920,1080);
                 Assert.IsTrue(host.Session.AcceptRide());
                 Assert.IsTrue(host.GPS.RouteReady,"Pickup route failed");
+                yield return null;
+                Assert.IsNotNull(host.Passengers.PrimaryActor);
+                Assert.IsTrue(host.PickupZone.Visible);
+                Assert.AreEqual(host.Session.Pickup.detectionRadius,host.PickupZone.Radius);
+                if(i==0)
+                {
+                    Assert.IsTrue(host.Passengers.Dialogue.AudioPlaying,"Authored neutral demo greeting should play.");
+                    Assert.IsNotEmpty(host.Passengers.Dialogue.Subtitle);
+                }
                 host.TeleportNear(host.Session.Pickup);
                 // Deterministic loop integration, not a claim of physical driving/coupling.
                 body.isKinematic=true;
+                yield return null;
+                if(i==0) Capture("FactoryPickupBoarding",1920,1080);
                 float until=Time.realtimeSinceStartup+6;
                 while(host.Session.State!=TruckTaxiState.DrivingToDestination && Time.realtimeSinceStartup<until) yield return null;
                 Assert.AreEqual(TruckTaxiState.DrivingToDestination,host.Session.State);
+                Assert.IsNotNull(host.Passengers.PrimaryActor);
+                Assert.IsTrue(host.Passengers.PrimaryActor.transform.IsChildOf(host.Player.transform));
+                Assert.IsFalse(host.PickupZone.Visible);
                 Assert.AreEqual(host.Session.Destination.locationId,host.GPS.TargetId);
                 Assert.IsNotEmpty(host.Session.Passenger.passengerName);
                 Assert.Greater(host.Session.Requests.Count,0,"No authored passenger request generated.");
@@ -115,6 +133,16 @@ namespace LWS.TruckTaxi.Tests
                 }
                 yield return new WaitForSecondsRealtime(.2f);
                 Capture("Passenger"+i,1920,1080);
+                if(i==2)
+                {
+                    var changer=host.Player.GetComponentInChildren<CameraChanger>(true); int prior=changer.currentCameraIndex;
+                    for(int n=0;n<changer.cameras.Count && !changer.cameras[changer.currentCameraIndex].name.Contains("Driver");n++) changer.NextCamera();
+                    yield return null;
+                    Capture("FactoryDashboardPassenger",1920,1080);
+                    var renderer=host.Passengers.PrimaryActor.GetComponentInChildren<Renderer>();
+                    Debug.Log("TAXI PASSENGER CAB: "+host.Session.Passenger.passengerId+" world bounds="+renderer.bounds+" viewport="+Camera.main.WorldToViewportPoint(renderer.bounds.center));
+                    for(int n=0;n<changer.cameras.Count && changer.currentCameraIndex!=prior;n++) changer.NextCamera();
+                }
                 host.Session.RecordEvent(TaxiEventType.Shortcut,"test.shortcut");
                 host.Session.RecordEvent(TaxiEventType.TrafficRam,"test.traffic",8);
                 host.Session.RecordEvent(TaxiEventType.PedestrianHit,"test.npc",8);
@@ -128,6 +156,7 @@ namespace LWS.TruckTaxi.Tests
                 Capture("Ride"+i,1920,1080);
                 yield return null;
                 host.Session.ContinueShift();
+                Assert.IsFalse(host.Passengers.Oversized.Applied);
             }
             Assert.Greater(host.Session.ShiftEarnings,0);
             body.isKinematic=false;
@@ -137,6 +166,17 @@ namespace LWS.TruckTaxi.Tests
             host.Session.OfferRide(); host.Session.AcceptRide(); host.TeleportNear(host.Session.Pickup);
             body.isKinematic=true;
             float boardDeadline=Time.realtimeSinceStartup+6;
+            while(!host.Session.HasPassenger && Time.realtimeSinceStartup<boardDeadline) yield return null;
+            Assert.IsTrue(host.Session.HasPassenger);
+            int ejected=host.Passengers.EjectedBodies;
+            Assert.IsTrue(host.Passengers.RequestEjection());
+            Assert.Greater(host.Passengers.EjectedBodies,ejected);
+            Assert.IsNull(host.Passengers.PrimaryActor);
+            Assert.IsFalse(host.Session.HasPassenger);
+            yield return new WaitForSeconds(3.2f);
+            Assert.AreEqual(TruckTaxiState.Available,host.Session.State);
+            host.Session.OfferRide(); host.Session.AcceptRide(); host.TeleportNear(host.Session.Pickup);
+            boardDeadline=Time.realtimeSinceStartup+6;
             while(!host.Session.HasPassenger && Time.realtimeSinceStartup<boardDeadline) yield return null;
             Assert.IsTrue(host.Session.HasPassenger);
             body.isKinematic=false;
@@ -174,7 +214,7 @@ namespace LWS.TruckTaxi.Tests
             Object.Destroy(obstacle); Object.Destroy(point.gameObject);
             yield return null;
         }
-        private static void Capture(string name,int width,int height)
+        internal static void Capture(string name,int width,int height)
         {
             var camera=Camera.main;
             Assert.IsNotNull(camera,"No gameplay camera.");
@@ -187,7 +227,7 @@ namespace LWS.TruckTaxi.Tests
             {
                 foreach(var canvas in canvases)
                     if(canvas.isRootCanvas && canvas.renderMode==RenderMode.ScreenSpaceOverlay)
-                    { overlays.Add(canvas); canvas.renderMode=RenderMode.ScreenSpaceCamera; canvas.worldCamera=camera; canvas.planeDistance=1; }
+                    { overlays.Add(canvas); canvas.renderMode=RenderMode.ScreenSpaceCamera; canvas.worldCamera=camera; canvas.planeDistance=camera.nearClipPlane+.01f; }
                 camera.targetTexture=texture;
                 Canvas.ForceUpdateCanvases();
                 camera.Render(); RenderTexture.active=texture;

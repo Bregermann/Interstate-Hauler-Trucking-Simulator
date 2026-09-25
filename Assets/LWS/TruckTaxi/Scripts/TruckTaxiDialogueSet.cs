@@ -9,7 +9,10 @@ namespace LWS.TruckTaxi
         RequestIntroduction, RequestReminder, RequestSuccess, RequestFailure,
         SpeedPositive, SpeedNegative, CollisionPositive, CollisionNegative, TrafficRamReaction,
         PedestrianHitReaction, ShortcutReaction, OffroadReaction, NearMissReaction, PropertyDamageReaction,
-        Arrival, RideFailure, Ejection, PairExchange, SpecialMechanic
+        Arrival, RideFailure, Ejection, PairExchange, SpecialMechanic,
+        HardBrakeReaction, HardAccelerationReaction, WrongWayReaction, AirTimeReaction, SmoothDrivingReaction,
+        TrafficComplaint, GPSComplaint, ArrivalGood, ArrivalBad, TipHigh, TipLow, NoTip, EjectionThreat,
+        EjectionReaction, PairPassengerReaction, UniqueMechanicReaction
     }
 
     [Serializable]

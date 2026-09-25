@@ -1,0 +1,93 @@
+# Truck Taxi Missing Models
+
+Fallback art is playable, not final casting or a completed generated model.
+
+## GeneratedCreature
+- space-monkey / Agent Bananas: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- merchant-bear / Baron Tollpaw: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- chaotic-marsupial / Bongo Cratefoot: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- fantasy-dwarf / Borin Axleforge: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- space-hero / Captain Applause: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- property-cat / Chairman Whiskers: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- tech-hero / Cora Circuit: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- cheetah-challenger / Dash Stopwatch: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- sensible-faun / Fern Wayfinder: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- hover-companion / Flicker: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- angry-fantasy-villain / Grint Cindersnout: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- insult-sensitive-creature / Grumble Gnash: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- quiet-hero / Jett Sandrunner: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- kangaroo-jumper / Kip Springstep: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- polite-tyrant / Lord Courtesy: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- military-bird / Major Wingfield: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- smug-bio-villain / Perfect Specimen Nine: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- jersey-creature / Pine Barrens Percy: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- angry-power-warrior / Prince Volt: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- unstable-engineer / Professor Loosebolt: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- alien-tinkerer / Rivet Starwrench: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- laughing-lunatic / Roo Riot: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- critical-old-mentor / Sage Mossledger: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- fantasy-archer / Syl Arrowlane: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- ominous-attendant / The Velvet Attendant: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- mystical-mask / The Wooden Adviser: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- bird-loving-android / Unit Finch: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- grumpy-green-warrior / Verdant Scowl: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- purple-dragon / Violet Emberwing: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- talking-sidekick / Zip Chattertail: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+## ModularHuman
+- passenger-d9f5d0d1a6a6 / Al Lee: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art
+- card-game-hero / Ari Wildcard: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- clueless-adult / Benny Wonder: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-488bd780fe51 / Bill Rush: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p004 / Bree Brightside: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- stock-car-veteran / Buck Fender: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-e85cc6083da9 / Cam Era: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p002 / Casey Caution: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- rich-card-rival / Cassian Deckworth: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- martial-arts-celebrity / Champ Spotlight: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- sports-commentator / Coach Mack Playbook: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p005 / Darius Fastlane: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- offroad-lunatic / Dirtstorm Dani: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- scheming-scientist / Doctor Cranium: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- nervous-scientist / Doctor Quiver: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- time-scientist / Doctor Secondhand: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- food-obsessed-dad / Donut Doug: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-3c18da10302b / Dot Matrix: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p001 / Earl Switchback: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p003 / Grant Deadline: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-a492d1d13dab / Joy Ride: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- street-baller / Jules Crossover: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- short-anxious-fighter / Kip Laststand: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- mechanic-inventor / Kira Torque: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- smuggler / Lane Sidestreet: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p007 / Martin Cadenza: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p009 / Marvin No Tip Phelps: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-009ae3a402da / Max Volume: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- simulation-passenger / Mim Plumb: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p006 / Miss Mabel Grace: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-0dc6acff58d9 / Nora Brake: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- lazy-cop / Officer Later: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- comic-book-nerd / Panel Pete: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-ca28f1b00a01 / Pat Pending: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- fantasy-professor / Professor Oddroute: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-419497acb1af / Ray Rage: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- nascar-superfan / Rex Threewide: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- passenger-6571dd82a0e1 / Robin Roundabout: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- reptile-superfan / Rory Roar: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- washed-up-entertainer / Rusty Encore: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- manual-comedy / Sam Checklist: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- color-commentator / Sid Booth: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- ancient-billionaire / Sterling Withers: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- sleepy-inventor / Stu Drowsley: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- crime-psychopath / Vic Mayhem: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- veteran-trucker / Walt Eighteen: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+## OversizedPassenger
+- large-yeti / Boulder Frostfoot: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- bald-chaos-warrior / Bront Cheerstrike: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- giant-alien-elder / Grand Elder Grumble: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- p008 / Gus Thunderseat: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- large-roadside-creature / Munch Gravelgut: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- muscle-animal / Tank Stripejaw: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- giant-chicken / The Chicken: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+## Robot
+- analytical-robot / Cobalt Unit Seven: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used
+- robot-villain / Doctor Malfunction: FINAL MODEL MISSING / fallback prefab; WARNING final model missing; fallback is not final casting/art; WARNING reference voice missing; subtitles used

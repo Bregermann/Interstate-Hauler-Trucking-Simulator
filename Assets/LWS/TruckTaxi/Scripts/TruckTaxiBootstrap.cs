@@ -19,6 +19,10 @@ namespace LWS.TruckTaxi
         public TruckTaxiConfiguration Configuration => configuration;
         public LwsPlayerTruck Player { get; private set; }
         public TruckTaxiGPSAdapter GPS { get; private set; }
+        public TruckTaxiRouteDistanceService RouteDistances { get; private set; }
+        public TruckTaxiVehicleHandlingOverride Handling { get; private set; }
+        public TruckTaxiPassengerRuntime Passengers { get; private set; }
+        public TruckTaxiPickupZoneVisualizer PickupZone { get; private set; }
         public bool Ready { get; private set; }
         public bool Paused { get; private set; }
         private ILwsGameplayStateService gameplay;
@@ -28,7 +32,6 @@ namespace LWS.TruckTaxi
         private TruckTaxiImpactTarget[] resetTargets;
         private TruckTaxiState observedState = (TruckTaxiState)(-1);
         private float lastSpeed;
-        private GameObject waitingPassenger;
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -47,7 +50,8 @@ namespace LWS.TruckTaxi
             locations = FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None);
             System.Array.Sort(locations,(a,b)=>string.CompareOrdinal(a.locationId,b.locationId));
             resetTargets = FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None);
-            Session = new TruckTaxiSession(configuration,locations,Random.Range(1,int.MaxValue));
+            RouteDistances = new TruckTaxiRouteDistanceService(roadGraph.Graph);
+            Session = new TruckTaxiSession(configuration,locations,Random.Range(1,int.MaxValue),RouteDistances,()=>body.position);
             GPS = gameObject.AddComponent<TruckTaxiGPSAdapter>(); GPS.Initialize(Player.transform,roadGraph);
             var sensor = Player.GetComponent<TruckTaxiCollisionObserver>() ?? Player.gameObject.AddComponent<TruckTaxiCollisionObserver>();
             sensor.Initialize(this);
@@ -62,7 +66,11 @@ namespace LWS.TruckTaxi
             // Hide only that instance in this isolated scene; the taxi HUD owns these surfaces.
             foreach (var root in FindObjectsByType<LwsDevelopmentUiRoot>(FindObjectsSortMode.None)) root.gameObject.SetActive(false);
             yield return null;
+            Handling = Player.gameObject.AddComponent<TruckTaxiVehicleHandlingOverride>();
+            Handling.Initialize(Player.GetComponent<NWH.VehiclePhysics2.VehicleController>());
             GPS.ConfigureDemoPresentation();
+            Passengers=gameObject.AddComponent<TruckTaxiPassengerRuntime>(); Passengers.Initialize(this);
+            PickupZone=gameObject.AddComponent<TruckTaxiPickupZoneVisualizer>(); PickupZone.Initialize(this);
             Ready = true;
             hud.Initialize(this);
             SetPaused(true);
@@ -83,34 +91,21 @@ namespace LWS.TruckTaxi
             observedState = Session.State;
             switch (Session.State)
             {
-                case TruckTaxiState.RideOffered: Play(configuration.offerSound); ShowWaitingPassenger(); break;
+                case TruckTaxiState.RideOffered: Play(configuration.offerSound); break;
                 case TruckTaxiState.DrivingToPickup: GPS.SetPickupDestination(Session.Pickup); Play(configuration.acceptSound); SetPaused(false); break;
                 case TruckTaxiState.PassengerBoarding: Play(configuration.boardingSound); break;
                 case TruckTaxiState.DrivingToDestination:
                     GPS.SetRideDestination(Session.Destination);
-                    if(waitingPassenger != null) waitingPassenger.SetActive(false);
                     break;
                 case TruckTaxiState.PassengerExiting: Play(configuration.exitSound); break;
                 case TruckTaxiState.RideComplete: GPS.ClearDestination(); Play(configuration.fareSound); SetPaused(true); break;
                 case TruckTaxiState.RideFailed: GPS.ClearDestination(); SetPaused(true); break;
+                case TruckTaxiState.PassengerEjected: GPS.ClearDestination(); SetPaused(false); break;
                 case TruckTaxiState.Inactive:
                 case TruckTaxiState.Available:
-                    GPS.ClearDestination(); if(waitingPassenger!=null) waitingPassenger.SetActive(false);
+                    GPS.ClearDestination();
                     SetPaused(Session.State == TruckTaxiState.Inactive); break;
             }
-        }
-        private void ShowWaitingPassenger()
-        {
-            if (waitingPassenger == null)
-            {
-                waitingPassenger = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-                waitingPassenger.name = "Waiting taxi passenger";
-                Destroy(waitingPassenger.GetComponent<Collider>());
-                waitingPassenger.transform.localScale = new Vector3(0.7f,0.95f,0.7f);
-            }
-            waitingPassenger.SetActive(true);
-            var point = Session.Pickup.passengerSpawnPoint;
-            waitingPassenger.transform.position = point != null ? point.position : Session.Pickup.StopPosition + Vector3.right*5 + Vector3.up;
         }
         private void OnRequestResolved(TaxiRequestProgress r) => Play(r.State == TaxiRequestState.Succeeded ? configuration.requestSuccessSound : configuration.requestFailureSound);
         private void OnRequestCreated(TaxiRequestProgress r) => Play(configuration.requestSound);
@@ -157,7 +152,6 @@ namespace LWS.TruckTaxi
             if(Instance != this) return;
             Time.timeScale = 1;
             if(Session!=null) { Session.Changed-=OnSessionChanged; Session.RequestResolved-=OnRequestResolved; Session.RequestCreated-=OnRequestCreated; Session.DrivingEvent-=OnDrivingEvent; }
-            if(waitingPassenger!=null) Destroy(waitingPassenger);
             Instance = null;
         }
     }

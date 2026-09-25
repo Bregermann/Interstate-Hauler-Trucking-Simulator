@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299edc6c00037fe4298940caf68ff456, type: 3}
+  m_Name: nervous-scientist
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.PassengerProfile
+  passengerId: nervous-scientist
+  passengerName: Doctor Quiver
+  developmentReference: N-Brio-style transformation scientist
+  archetype: N-Brio-style transformation scientist
+  description: Nervous scientist with unpredictable mood shifts
+  casting: {fileID: 11400000, guid: eff1093b26e687c4bbd1e0f0a9d8655c, type: 2}
+  appearance: {fileID: 11400000, guid: 26d42c8a1138f00489d48f2fe48500e6, type: 2}
+  animatorProfile: {fileID: 11400000, guid: 6777792d239f2d04783f0f4c92011e70, type: 2}
+  seatProfile: {fileID: 11400000, guid: b10e43188bd94b34988571ffdcb7d0a8, type: 2}
+  modelPrefab: {fileID: 0}
+  runtimePrefab: {fileID: 5488034468021174946, guid: 4b3fe5d4d5799fc41a396b455739caf0,
+    type: 3}
+  pairPassenger: {fileID: 0}
+  companion: {fileID: 0}
+  available: 1
+  rarity: 0
+  spawnWeight: 1
+  districts: []
+  uniqueMechanics: 08000000
+  baseSatisfaction: 4
+  tipMultiplier: 1
+  speedPreference: 0
+  collisionPreference: 0
+  shortcutPreference: 0
+  offroadPreference: 0
+  canBeEjected: 1
+  ejectionImpulse: 6
+  ejectionChaosReward: 75
+  ejectionFarePenaltyCents: 500
+  ejectionRatingPenalty: 1
+  ejectionReactions: {fileID: 0}
+  ejectionReaction: This was not the exit I had in mind!
+  voiceProfile: {fileID: 11400000, guid: 1c63a970a36f287418b2cab957aa0dd0, type: 2}
+  authoredDialogue: {fileID: 11400000, guid: df21a85190e49114986b786fe789893d, type: 2}
+  portrait: {fileID: 0}
+  passengerRating: 4.5
+  personality: Nervous scientist with unpredictable mood shifts
+  basePatience: 360
+  baseTipChance: 0.5
+  dialogueSet:
+  - The destination may change if the formula takes effect.
+  - Nervous scientist with unpredictable mood shifts
+  possibleRequests:
+  - {fileID: 11400000, guid: 4d63d3f9e6ff7c848a0950778aa4e5c0, type: 2}
+  - {fileID: 11400000, guid: b31ecc97c9efe704e955bcc82a25f062, type: 2}
+  - {fileID: 11400000, guid: be473475d5bff6d4db958023e3beae44, type: 2}
+  - {fileID: 11400000, guid: 596c21af7df4ed54fba36e1517c4357e, type: 2}
+  - {fileID: 11400000, guid: c17d8ccba39e62046aae399b386c8341, type: 2}
+  - {fileID: 11400000, guid: ce4530b11ddfbc2459225d20aac63b20, type: 2}
+  - {fileID: 11400000, guid: a4734cce16fd11e4abe881e6f90153a0, type: 2}
+  - {fileID: 11400000, guid: f3ea2391d4a800646afe10ea285eff22, type: 2}
+  - {fileID: 11400000, guid: 1115259c503f2d248832de6540e54c6b, type: 2}
+  - {fileID: 11400000, guid: 8c38c454f61f70149b4f5bcc4e330256, type: 2}
+  - {fileID: 11400000, guid: 9a3a9071b8668c243a7ee3653e6e24bd, type: 2}
+  requestFrequency: 20
+  requestDifficultyRange: {x: 0.8, y: 1.2}
+  preferredDrivingStyle: 
+  specialTraits:
+  - DestinationChanger
+  chaosAffinity: 0
+  smoothAffinity: 0.4
+  collisionReaction: My coffee has become airborne.
+  shortcutReaction: Is this on the map?
+  speedReaction: My calendar just skipped a day.

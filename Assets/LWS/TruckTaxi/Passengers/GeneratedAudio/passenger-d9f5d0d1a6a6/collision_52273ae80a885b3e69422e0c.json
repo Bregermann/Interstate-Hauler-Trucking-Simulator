@@ -1,0 +1,57 @@
+{
+  "hash": "52273ae80a885b3e69422e0cd60a13eb72c960e64ca052d2877254740b14c164",
+  "wavSha256": "dc687d1a44b375b96148d38716e970b702b9558cbea268b287bb6933ccc1edcb",
+  "text": "That is going in my highlight reel!",
+  "voiceProfileId": "demo-neutral-original-al-lee",
+  "reference": {
+    "path": "F:\\Codexprojects\\MyVoiceForRecording\\WorkHere\\voice_refs\\neutralvoicesample.wav",
+    "sha256": "bfc0d3dbe1373bafc44b0fea18037b5edac9335b3c54ec963f94562275a7f4dd",
+    "duration": 9.709455782312926,
+    "sample_rate": 44100,
+    "channels": 2,
+    "subtype": "PCM_32",
+    "warnings": [
+      "Stereo reference: Chatterbox will downmix to mono."
+    ]
+  },
+  "emotion": "Neutral",
+  "options": {
+    "model": "turbo",
+    "preset": "Lecture Neutral",
+    "parameters": {
+      "temperature": 0.8,
+      "top_p": 0.95,
+      "top_k": 1000,
+      "repetition_penalty": 1.2
+    },
+    "voice_reference": {
+      "path": "F:\\Codexprojects\\MyVoiceForRecording\\WorkHere\\voice_refs\\neutralvoicesample.wav",
+      "sha256": "bfc0d3dbe1373bafc44b0fea18037b5edac9335b3c54ec963f94562275a7f4dd",
+      "duration": 9.709455782312926,
+      "sample_rate": 44100,
+      "channels": 2,
+      "subtype": "PCM_32",
+      "warnings": [
+        "Stereo reference: Chatterbox will downmix to mono."
+      ]
+    },
+    "device": "auto"
+  },
+  "provenance": {
+    "source": {
+      "path": "F:\\Codexprojects\\MyVoiceForRecording\\chatterbox",
+      "git_commit": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "pyproject_sha256": "f896db30b4ec89e0550ddb37814b791d8485045bbbe54f8be9ae256e387c3047",
+      "tts_sha256": "520c4439bcfb7642452e950b3df7d427a625ed57e0bbab31c344dd8c78c01081",
+      "turbo_sha256": "327f34d83234238ba8434fac3d4105965d70ba6dab3377ce62eba2537d618b70"
+    },
+    "weights_repo": "ResembleAI/chatterbox-turbo",
+    "weights_revision": "749d1c1a46eb10492095d68fbcf55691ccf137cd",
+    "torch": "2.6.0+cu124",
+    "cuda_runtime": "12.4",
+    "device": "cuda",
+    "generation_seconds": 1.1231966999985161,
+    "seed_reproducibility": "best effort; CUDA/library changes can affect results"
+  },
+  "adapterVersion": 1
+}

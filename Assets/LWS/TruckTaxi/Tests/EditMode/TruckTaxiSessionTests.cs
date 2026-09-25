@@ -38,6 +38,34 @@ namespace LWS.TruckTaxi.Tests
             session.Tick(.1f,session.Destination.StopPosition,0,0,true);
             session.Tick(2,session.Destination.StopPosition,0,0,true);
         }
+        [Test] public void EjectionPaysPenaltyOnceAndAllowsNextRide()
+        {
+            Board(); int signals=0; session.PassengerEjected+=()=>signals++;
+            Assert.IsTrue(session.EjectPassenger()); long earnings=session.ShiftEarnings;
+            Assert.AreEqual(TruckTaxiState.PassengerEjected,session.State);
+            Assert.IsFalse(session.HasPassenger); Assert.IsFalse(session.EjectPassenger());
+            Assert.AreEqual(1,signals); Assert.AreEqual(earnings,session.ShiftEarnings);
+            Assert.AreEqual(0,session.CompletedRides); Assert.AreEqual(passenger.ejectionFarePenaltyCents,session.LastFare.Penalties);
+            session.Tick(3.1f,Vector3.zero,0,0,true);
+            Assert.AreEqual(TruckTaxiState.Available,session.State); Assert.IsTrue(session.OfferRide());
+        }
+        [Test] public void NeverTipsPreservesFareButRemovesTip()
+        {
+            passenger.uniqueMechanics=new[]{TruckTaxiMechanic.NeverTips}; Board(); Arrive();
+            Assert.AreEqual(0,session.LastFare.Tip); Assert.Greater(session.LastFare.Total,0);
+        }
+        [Test] public void PickupVisualUsesExactlyTheGameplayRadiusAndSpeed()
+        {
+            session.StartShift(); session.OfferRide(); session.AcceptRide();
+            Vector3 center=session.Pickup.StopPosition; float radius=session.Pickup.detectionRadius;
+            Assert.AreEqual(TruckTaxiPickupVisualState.Approaching,TruckTaxiPickupZoneVisualizer.Evaluate(session,center+Vector3.right*(radius+.1f),0));
+            Assert.AreEqual(TruckTaxiPickupVisualState.Inside,TruckTaxiPickupZoneVisualizer.Evaluate(session,center+Vector3.right*(radius-.1f),0));
+            Assert.AreEqual(TruckTaxiPickupVisualState.TooFast,TruckTaxiPickupZoneVisualizer.Evaluate(session,center,config.stoppedSpeed+.1f));
+            session.Tick(.1f,center,0,0,true);
+            Assert.AreEqual(TruckTaxiPickupVisualState.Boarding,TruckTaxiPickupZoneVisualizer.Evaluate(session,center,0));
+            session.Tick(.1f,center+Vector3.right*(radius+1),0,0,true);
+            Assert.AreEqual(TruckTaxiState.DrivingToPickup,session.State);
+        }
         [Test] public void ThreeConsecutiveRidesPayOnceEach()
         {
             for(int i=0;i<3;i++)
@@ -71,6 +99,19 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreNotEqual(session.Pickup.locationId,session.Destination.locationId);
             session.Tick(config.offerDuration+1,Vector3.zero,0,0,true);
             Assert.AreEqual(TruckTaxiState.Available,session.State);
+            Assert.IsNull(session.Offer);
+        }
+        [Test] public void OfferSnapshotIsCompleteBeforeNotificationAndAcceptedWithoutReroll()
+        {
+            session.StartShift();
+            bool complete=false;
+            session.Changed+=()=> { if(session.State==TruckTaxiState.RideOffered) complete=session.Offer!=null && session.Offer.Trip.Meters>0; };
+            Assert.IsTrue(session.OfferRide()); Assert.IsTrue(complete);
+            var offer=session.Offer;
+            Assert.Greater(offer.EstimatedFareCents,config.baseFareCents);
+            Assert.IsFalse(offer.Trip.Navigable); Assert.AreEqual("Straight-Line Fallback (no graph)",offer.Trip.Source);
+            Assert.IsTrue(session.AcceptRide());
+            Assert.AreSame(offer.Passenger,session.Passenger); Assert.AreSame(offer.Pickup,session.Pickup); Assert.AreSame(offer.Destination,session.Destination);
         }
         [Test] public void SameCollisionHasPersonalitySpecificSatisfaction()
         {
@@ -145,6 +186,14 @@ namespace LWS.TruckTaxi.Tests
             var graph=Editor.TruckTaxiDemoBuilder.CreateGraph();
             Assert.IsTrue(graph.Validate().IsValid,graph.Validate().Summary);
             Assert.AreEqual(45,graph.nodes.Count); Assert.AreEqual(160,graph.edges.Count);
+            var distances=new TruckTaxiRouteDistanceService(graph);
+            Vector3 a=graph.nodes[0].position,b=graph.nodes[24].position;
+            var leg=distances.Measure(a,b);
+            Assert.IsTrue(leg.Navigable);
+            Assert.Greater(leg.Meters,Vector3.Distance(a,b)+100,"Offer distance must follow the city streets, not the diagonal.");
+            float sum=0;
+            for(int i=1;i<leg.Points.Count;i++) sum+=Vector3.Distance(leg.Points[i-1],leg.Points[i]);
+            Assert.That(leg.Meters,Is.EqualTo(sum).Within(.01));
             var planner=new LwsRoutePlanner(LwsNavigationTuning.Default());
             for(int from=0;from<20;from++) for(int to=0;to<20;to++)
             {

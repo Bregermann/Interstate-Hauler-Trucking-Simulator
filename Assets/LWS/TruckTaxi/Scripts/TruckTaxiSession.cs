@@ -5,7 +5,7 @@ using UnityEngine;
 namespace LWS.TruckTaxi
 {
     public enum TruckTaxiState { Inactive, StartingShift, Available, RideOffered, DrivingToPickup, PassengerBoarding,
-        DrivingToDestination, PassengerExiting, RideComplete, RideFailed }
+        DrivingToDestination, PassengerExiting, RideComplete, RideFailed, PassengerEjected }
 
     public sealed class TaxiRequestProgress
     {
@@ -42,6 +42,7 @@ namespace LWS.TruckTaxi
         public PassengerProfile Passenger { get; private set; }
         public TruckTaxiRideLocation Pickup { get; private set; }
         public TruckTaxiRideLocation Destination { get; private set; }
+        public TruckTaxiRideOffer Offer { get; private set; }
         public IReadOnlyList<TaxiRequestProgress> Requests => requests;
         public TaxiFare LastFare { get; private set; }
         public float ElapsedRide { get; private set; }
@@ -61,6 +62,12 @@ namespace LWS.TruckTaxi
         public event Action<TaxiRequestProgress> RequestResolved;
         public event Action<TaxiRequestProgress> RequestCreated;
         public event Action<TaxiEventType> DrivingEvent;
+        public event Action PassengerEjected;
+        public event Action DestinationChanged;
+        public float BoardingProgress => State == TruckTaxiState.PassengerBoarding ? Mathf.Clamp01(StateAge / Mathf.Max(.1f,config.boardingSeconds)) : 0;
+        public float BoardingMaximumSpeed => config.stoppedSpeed;
+        public Func<bool> PassengerReadyToBoard { get; set; }
+        public long MechanicFareAdjustment { get; private set; }
         private readonly TruckTaxiConfiguration config;
         private readonly System.Random random;
         private readonly List<TruckTaxiRideLocation> locations;
@@ -68,12 +75,17 @@ namespace LWS.TruckTaxi
         private float chaos, requestClock, nextSpeedReaction;
         private Vector3 lastPosition;
         private bool hasPosition;
+        private readonly TruckTaxiRouteDistanceService routeDistances;
+        private readonly Func<Vector3> playerPosition;
 
-        public TruckTaxiSession(TruckTaxiConfiguration config, IEnumerable<TruckTaxiRideLocation> locations, int seed)
+        public TruckTaxiSession(TruckTaxiConfiguration config, IEnumerable<TruckTaxiRideLocation> locations, int seed,
+            TruckTaxiRouteDistanceService routeDistances = null, Func<Vector3> playerPosition = null)
         {
             this.config = config;
             this.locations = new List<TruckTaxiRideLocation>(locations);
             random = new System.Random(seed);
+            this.routeDistances = routeDistances ?? new TruckTaxiRouteDistanceService(null);
+            this.playerPosition = playerPosition ?? (() => lastPosition);
         }
         private void SetState(TruckTaxiState value)
         {
@@ -87,33 +99,51 @@ namespace LWS.TruckTaxi
         }
         public void EndShift()
         {
-            Passenger = null; Pickup = Destination = null; requests.Clear(); hasPosition = false;
+            Passenger = null; Pickup = Destination = null; Offer = null; requests.Clear(); hasPosition = false;
             SetState(TruckTaxiState.Inactive);
         }
-        public bool OfferRide()
+        public bool OfferRide(PassengerProfile forcedPassenger = null)
         {
-            if (State != TruckTaxiState.Available || config.passengers == null || config.passengers.Length == 0) return false;
+            if (State != TruckTaxiState.Available) return false;
             var pairs = new List<(TruckTaxiRideLocation, TruckTaxiRideLocation)>();
             foreach (var from in locations)
             foreach (var to in locations)
             {
                 if (from == null || to == null || from == to || from.locationId == to.locationId || !from.pickupAllowed || !to.dropoffAllowed) continue;
-                float distance = Vector3.Distance(from.StopPosition, to.StopPosition);
+                float distance = routeDistances.BetweenStops(from, to).Meters;
                 if (distance >= config.minimumTripDistance && distance <= config.maximumTripDistance) pairs.Add((from,to));
             }
             if (pairs.Count == 0) return false;
             var pair = pairs[random.Next(pairs.Count)];
             Pickup = pair.Item1; Destination = pair.Item2;
-            Passenger = config.passengers[random.Next(config.passengers.Length)];
+            var candidates = config.passengerDatabase != null
+                ? new List<PassengerProfile>(config.passengerDatabase.Query(new TruckTaxiPassengerQuery { availableOnly=true, district=Pickup.district }))
+                : new List<PassengerProfile>(config.passengers ?? Array.Empty<PassengerProfile>());
+            candidates.RemoveAll(p=>p==null || !p.available || p.spawnWeight<=0);
+            if (forcedPassenger != null) Passenger = forcedPassenger;
+            else
+            {
+                if (candidates.Count == 0) return false;
+                float total = 0; foreach(var candidate in candidates) total += candidate.spawnWeight;
+                double roll = random.NextDouble() * total;
+                Passenger = candidates[candidates.Count-1];
+                foreach(var candidate in candidates) { roll -= candidate.spawnWeight; if(roll<=0) { Passenger=candidate; break; } }
+            }
             if (Passenger == null) return false;
+            Vector3 origin = playerPosition();
+            Offer = new TruckTaxiRideOffer(Passenger, Pickup, Destination, origin,
+                routeDistances.Measure(origin, Pickup.StopPosition), routeDistances.BetweenStops(Pickup, Destination), config);
             requests.Clear(); chaos = 0; TrackedCollisions = 0; ElapsedRide = DistanceDriven = 0;
-            Satisfaction = 4; requestClock = 0; nextSpeedReaction = 0; hasPosition = false; LastFare = null; Reaction = "";
+            Satisfaction = Passenger.baseSatisfaction; MechanicFareAdjustment=0;
+            requestClock = 0; nextSpeedReaction = 0; hasPosition = false; LastFare = null; Reaction = "";
             SetState(TruckTaxiState.RideOffered);
             return true;
         }
         public bool AcceptRide()
         {
             if (State != TruckTaxiState.RideOffered) return false;
+            if (Offer == null) return false;
+            Passenger = Offer.Passenger; Pickup = Offer.Pickup; Destination = Offer.Destination;
             if (Passenger.dialogueSet != null && Passenger.dialogueSet.Length > 0)
                 React(Passenger.dialogueSet[random.Next(Passenger.dialogueSet.Length)]);
             SetState(TruckTaxiState.DrivingToPickup); return true;
@@ -121,17 +151,18 @@ namespace LWS.TruckTaxi
         public void DeclineRide()
         {
             if (State != TruckTaxiState.RideOffered) return;
-            Passenger = null; Pickup = Destination = null; SetState(TruckTaxiState.Available);
+            Passenger = null; Pickup = Destination = null; Offer = null; SetState(TruckTaxiState.Available);
         }
         public void ContinueShift()
         {
-            if (State != TruckTaxiState.RideComplete && State != TruckTaxiState.RideFailed) return;
-            Passenger = null; Pickup = Destination = null; requests.Clear(); SetState(TruckTaxiState.Available);
+            if (State != TruckTaxiState.RideComplete && State != TruckTaxiState.RideFailed && State != TruckTaxiState.PassengerEjected) return;
+            Passenger = null; Pickup = Destination = null; Offer = null; requests.Clear(); SetState(TruckTaxiState.Available);
         }
         public void Tick(float deltaTime, Vector3 playerPosition, float speed, float acceleration, bool onRoad)
         {
             if (deltaTime <= 0 || State == TruckTaxiState.Inactive) return;
             StateAge += deltaTime; ReactionAge += deltaTime;
+            if (State == TruckTaxiState.PassengerEjected && StateAge >= 3) { ContinueShift(); return; }
             if (State == TruckTaxiState.Available && StateAge >= config.rideFrequency) OfferRide();
             else if (State == TruckTaxiState.RideOffered && StateAge >= config.offerDuration) DeclineRide();
             else if (State == TruckTaxiState.DrivingToPickup && Pickup.Contains(playerPosition) && speed <= config.stoppedSpeed)
@@ -139,7 +170,7 @@ namespace LWS.TruckTaxi
             else if (State == TruckTaxiState.PassengerBoarding)
             {
                 if (!Pickup.Contains(playerPosition) || speed > config.stoppedSpeed) SetState(TruckTaxiState.DrivingToPickup);
-                else if (StateAge >= config.boardingSeconds)
+                else if (StateAge >= config.boardingSeconds && (PassengerReadyToBoard==null || PassengerReadyToBoard()))
                 {
                     hasPosition = false; SetState(TruckTaxiState.DrivingToDestination); GenerateRequest();
                 }
@@ -245,7 +276,33 @@ namespace LWS.TruckTaxi
             }
             DrivingEvent?.Invoke(type); Changed?.Invoke();
         }
-        private void React(string value) { Reaction = value; ReactionAge = 0; }
+        public void React(string value) { Reaction = value; ReactionAge = 0; }
+        public void ApplyMechanicReward(int chaosReward, long fareCents)
+        {
+            if (!HasPassenger) return;
+            chaos += Mathf.Clamp(chaosReward,-1000,1000);
+            MechanicFareAdjustment = Math.Max(-10000,Math.Min(10000,MechanicFareAdjustment + fareCents));
+        }
+        public bool ChangeDestination()
+        {
+            if (State != TruckTaxiState.DrivingToDestination) return false;
+            var next = locations.Find(l=>l!=null && l.dropoffAllowed && l!=Pickup && l!=Destination);
+            if(next==null) return false;
+            Destination=next; DestinationChanged?.Invoke(); Changed?.Invoke(); return true;
+        }
+        public bool EjectPassenger()
+        {
+            if (!HasPassenger || Passenger == null || !Passenger.canBeEjected) return false;
+            foreach(var request in requests) if(request.State==TaxiRequestState.Active) Resolve(request,false);
+            Satisfaction=Mathf.Clamp(Satisfaction-Passenger.ejectionRatingPenalty,1,5);
+            chaos+=Passenger.ejectionChaosReward;
+            LastFare=EstimateFare(); LastFare.Tip=0; LastFare.Penalties+=Passenger.ejectionFarePenaltyCents;
+            ShiftEarnings+=LastFare.Total; ShiftScore+=LastFare.Score;
+            React(Passenger.ejectionReaction);
+            PassengerEjected?.Invoke();
+            SetState(TruckTaxiState.PassengerEjected);
+            return true;
+        }
         private void Resolve(TaxiRequestProgress request, bool success)
         {
             if (request.State != TaxiRequestState.Active) return;
@@ -269,6 +326,8 @@ namespace LWS.TruckTaxi
             if (Passenger != null && Passenger.chaosAffinity > 0)
                 fare.Chaos = (long)Math.Round(ChaosScore * config.chaosCentsPerPoint * Passenger.chaosAffinity);
             if (Passenger != null && Passenger.chaosAffinity < 0) fare.Penalties = config.impactPenaltyCents * TrackedCollisions;
+            if(MechanicFareAdjustment>=0) fare.Requests+=MechanicFareAdjustment;
+            else fare.Penalties-=MechanicFareAdjustment;
             return fare;
         }
         private void FinishRide()
@@ -277,8 +336,9 @@ namespace LWS.TruckTaxi
             foreach (var r in requests)
                 if (r.State == TaxiRequestState.Active) Resolve(r,IsArrivalRequest(r.Definition.requestType) && r.Elapsed <= r.Definition.timer);
             LastFare = EstimateFare();
-            if (random.NextDouble() <= Passenger.baseTipChance * Mathf.Clamp01((Satisfaction-1)/4))
-                LastFare.Tip = (long)Math.Round(LastFare.Total * config.tipFraction);
+            bool neverTips = Array.IndexOf(Passenger.uniqueMechanics ?? Array.Empty<TruckTaxiMechanic>(),TruckTaxiMechanic.NeverTips)>=0;
+            if (!neverTips && random.NextDouble() <= Passenger.baseTipChance * Mathf.Clamp01((Satisfaction-1)/4))
+                LastFare.Tip = (long)Math.Round(LastFare.Total * config.tipFraction * Passenger.tipMultiplier);
             ShiftEarnings += LastFare.Total; ShiftScore += LastFare.Score; CompletedRides++;
             SetState(TruckTaxiState.RideComplete);
         }

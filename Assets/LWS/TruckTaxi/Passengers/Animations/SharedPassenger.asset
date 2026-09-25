@@ -1,0 +1,83 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f767cb3b4e6c46418614cca84e44078, type: 3}
+  m_Name: SharedPassenger
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiAnimatorProfile
+  controller: {fileID: 9100000, guid: f19ba11d8b469884e8566a0535c99966, type: 2}
+  animations:
+  - action: 0
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: Idle_Normal
+  - action: 1
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: Idle_Impatient
+  - action: 2
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: Idle_Angry
+  - action: 3
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: Idle_Nervous
+  - action: 4
+    clip: {fileID: 7400000, guid: 400dd67f207e1ef48bef3a1b83d85131, type: 3}
+    stateName: Idle_Drunk
+  - action: 5
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: Idle_Excited
+  - action: 6
+    clip: {fileID: 7400000, guid: 3200054a003414d419e2fc99f40a02a3, type: 3}
+    stateName: Walk_Normal
+  - action: 7
+    clip: {fileID: 7400000, guid: 826471464d5b5cb42bf1feae5b0902b6, type: 3}
+    stateName: Walk_Fast
+  - action: 8
+    clip: {fileID: 7400000, guid: 826471464d5b5cb42bf1feae5b0902b6, type: 3}
+    stateName: Run
+  - action: 9
+    clip: {fileID: 7400000, guid: 6b9bf6d2922dca74b8f373e2bff2d054, type: 3}
+    stateName: Wait_Phone
+  - action: 10
+    clip: {fileID: 7400000, guid: dca3c5377f5457e4390ff35c9fd6f94d, type: 3}
+    stateName: Wave_Taxi
+  - action: 11
+    clip: {fileID: 7400000, guid: 6b9bf6d2922dca74b8f373e2bff2d054, type: 3}
+    stateName: Point
+  - action: 12
+    clip: {fileID: 7400000, guid: eb63f968ffdd2bd4e98cee812755b037, type: 3}
+    stateName: Complain
+  - action: 13
+    clip: {fileID: 7400000, guid: dca3c5377f5457e4390ff35c9fd6f94d, type: 3}
+    stateName: Cheer
+  - action: 14
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: Panic
+  - action: 15
+    clip: {fileID: 7400000, guid: dca3c5377f5457e4390ff35c9fd6f94d, type: 3}
+    stateName: Celebrate
+  - action: 16
+    clip: {fileID: 7400000, guid: eb63f968ffdd2bd4e98cee812755b037, type: 3}
+    stateName: AngryGesture
+  - action: 17
+    clip: {fileID: 7400000, guid: 3200054a003414d419e2fc99f40a02a3, type: 3}
+    stateName: ApproachVehicle
+  - action: 18
+    clip: {fileID: 7400000, guid: f24ae38c2ab5e354b9fab36c376c7755, type: 3}
+    stateName: BoardAbstraction
+  - action: 19
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: ExitAbstraction
+  - action: 20
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: Passenger_Ejected
+  - action: 21
+    clip: {fileID: 7400000, guid: f49cd3993788c3944a1fc118acc20c10, type: 3}
+    stateName: Passenger_Ragdoll
+  allowProceduralFallback: 1

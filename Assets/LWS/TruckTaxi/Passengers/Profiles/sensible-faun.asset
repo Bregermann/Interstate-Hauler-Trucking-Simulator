@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299edc6c00037fe4298940caf68ff456, type: 3}
+  m_Name: sensible-faun
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.PassengerProfile
+  passengerId: sensible-faun
+  passengerName: Fern Wayfinder
+  developmentReference: Elora-style sensible faun
+  archetype: Elora-style sensible faun
+  description: Practical, sensible, calls out foolish decisions
+  casting: {fileID: 11400000, guid: 0ca7299f672566b4ea12ee191bd55e18, type: 2}
+  appearance: {fileID: 11400000, guid: c30c9f628a2c90e47b9dc0492628d704, type: 2}
+  animatorProfile: {fileID: 11400000, guid: 6777792d239f2d04783f0f4c92011e70, type: 2}
+  seatProfile: {fileID: 11400000, guid: a1bc4e00b0f76a8459801ed186af7c39, type: 2}
+  modelPrefab: {fileID: 0}
+  runtimePrefab: {fileID: 4411828549484781011, guid: fc18e560afbd9bb48912c19fcf1b1f28,
+    type: 3}
+  pairPassenger: {fileID: 0}
+  companion: {fileID: 0}
+  available: 1
+  rarity: 0
+  spawnWeight: 1
+  districts: []
+  uniqueMechanics: 09000000
+  baseSatisfaction: 4
+  tipMultiplier: 1
+  speedPreference: -1
+  collisionPreference: -1
+  shortcutPreference: -1
+  offroadPreference: -1
+  canBeEjected: 1
+  ejectionImpulse: 6
+  ejectionChaosReward: 75
+  ejectionFarePenaltyCents: 500
+  ejectionRatingPenalty: 1
+  ejectionReactions: {fileID: 0}
+  ejectionReaction: This was not the exit I had in mind!
+  voiceProfile: {fileID: 11400000, guid: 80d5fd38e3d236147be2c589d8fb825d, type: 2}
+  authoredDialogue: {fileID: 11400000, guid: 088418f1fbc18ca44960dd77eb8de2ba, type: 2}
+  portrait: {fileID: 0}
+  passengerRating: 4.5
+  personality: Practical, sensible, calls out foolish decisions
+  basePatience: 360
+  baseTipChance: 0.5
+  dialogueSet:
+  - Let's not involve the emergency services.
+  - Practical, sensible, calls out foolish decisions
+  possibleRequests:
+  - {fileID: 11400000, guid: 4d63d3f9e6ff7c848a0950778aa4e5c0, type: 2}
+  - {fileID: 11400000, guid: b31ecc97c9efe704e955bcc82a25f062, type: 2}
+  - {fileID: 11400000, guid: be473475d5bff6d4db958023e3beae44, type: 2}
+  - {fileID: 11400000, guid: 596c21af7df4ed54fba36e1517c4357e, type: 2}
+  - {fileID: 11400000, guid: c17d8ccba39e62046aae399b386c8341, type: 2}
+  - {fileID: 11400000, guid: ce4530b11ddfbc2459225d20aac63b20, type: 2}
+  - {fileID: 11400000, guid: a4734cce16fd11e4abe881e6f90153a0, type: 2}
+  - {fileID: 11400000, guid: f3ea2391d4a800646afe10ea285eff22, type: 2}
+  - {fileID: 11400000, guid: 1115259c503f2d248832de6540e54c6b, type: 2}
+  - {fileID: 11400000, guid: 8c38c454f61f70149b4f5bcc4e330256, type: 2}
+  - {fileID: 11400000, guid: 9a3a9071b8668c243a7ee3653e6e24bd, type: 2}
+  requestFrequency: 20
+  requestDifficultyRange: {x: 0.8, y: 1.2}
+  preferredDrivingStyle: 
+  specialTraits:
+  - BackseatDriver
+  chaosAffinity: -1
+  smoothAffinity: 1.5
+  collisionReaction: My coffee has become airborne.
+  shortcutReaction: Is this on the map?
+  speedReaction: My calendar just skipped a day.

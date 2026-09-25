@@ -6,6 +6,7 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiConfiguration : ScriptableObject
     {
         public PassengerProfile[] passengers;
+        public TruckTaxiPassengerDatabase passengerDatabase;
         public PassengerRequestDefinition[] requests;
         [Header("Ride generation")]
         public float minimumTripDistance = 150;

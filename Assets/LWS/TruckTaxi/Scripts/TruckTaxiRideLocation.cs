@@ -19,6 +19,10 @@ namespace LWS.TruckTaxi
             if (!debugGizmos) return;
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(StopPosition, detectionRadius);
+            Gizmos.color=Color.green; Gizmos.DrawRay(StopPosition,Vector3.up*4);
+            if(truckStopPoint!=null) Gizmos.DrawRay(StopPosition,truckStopPoint.forward*4);
+            if(passengerSpawnPoint!=null)
+            { Gizmos.color=Color.cyan; Gizmos.DrawWireCube(passengerSpawnPoint.position+Vector3.up,new Vector3(.7f,2,.7f)); }
         }
     }
 }

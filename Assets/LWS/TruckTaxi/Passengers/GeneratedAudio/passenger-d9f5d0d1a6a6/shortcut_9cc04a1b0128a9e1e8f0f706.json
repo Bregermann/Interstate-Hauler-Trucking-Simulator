@@ -1,0 +1,57 @@
+{
+  "hash": "9cc04a1b0128a9e1e8f0f7064e2f33000f25ff9dc497eef9a3b842220bcd9739",
+  "wavSha256": "a08ef8065c70cedbb2e7c63fbf01e8023c23010c02e3a0aa545257fc01706839",
+  "text": "A bold interpretation of a road.",
+  "voiceProfileId": "demo-neutral-original-al-lee",
+  "reference": {
+    "path": "F:\\Codexprojects\\MyVoiceForRecording\\WorkHere\\voice_refs\\neutralvoicesample.wav",
+    "sha256": "bfc0d3dbe1373bafc44b0fea18037b5edac9335b3c54ec963f94562275a7f4dd",
+    "duration": 9.709455782312926,
+    "sample_rate": 44100,
+    "channels": 2,
+    "subtype": "PCM_32",
+    "warnings": [
+      "Stereo reference: Chatterbox will downmix to mono."
+    ]
+  },
+  "emotion": "Neutral",
+  "options": {
+    "model": "turbo",
+    "preset": "Lecture Neutral",
+    "parameters": {
+      "temperature": 0.8,
+      "top_p": 0.95,
+      "top_k": 1000,
+      "repetition_penalty": 1.2
+    },
+    "voice_reference": {
+      "path": "F:\\Codexprojects\\MyVoiceForRecording\\WorkHere\\voice_refs\\neutralvoicesample.wav",
+      "sha256": "bfc0d3dbe1373bafc44b0fea18037b5edac9335b3c54ec963f94562275a7f4dd",
+      "duration": 9.709455782312926,
+      "sample_rate": 44100,
+      "channels": 2,
+      "subtype": "PCM_32",
+      "warnings": [
+        "Stereo reference: Chatterbox will downmix to mono."
+      ]
+    },
+    "device": "auto"
+  },
+  "provenance": {
+    "source": {
+      "path": "F:\\Codexprojects\\MyVoiceForRecording\\chatterbox",
+      "git_commit": "5de7a54aa4e5e2baadb0182dde554908b48b85c2",
+      "pyproject_sha256": "f896db30b4ec89e0550ddb37814b791d8485045bbbe54f8be9ae256e387c3047",
+      "tts_sha256": "520c4439bcfb7642452e950b3df7d427a625ed57e0bbab31c344dd8c78c01081",
+      "turbo_sha256": "327f34d83234238ba8434fac3d4105965d70ba6dab3377ce62eba2537d618b70"
+    },
+    "weights_repo": "ResembleAI/chatterbox-turbo",
+    "weights_revision": "749d1c1a46eb10492095d68fbcf55691ccf137cd",
+    "torch": "2.6.0+cu124",
+    "cuda_runtime": "12.4",
+    "device": "cuda",
+    "generation_seconds": 1.316507300001831,
+    "seed_reproducibility": "best effort; CUDA/library changes can affect results"
+  },
+  "adapterVersion": 1
+}
