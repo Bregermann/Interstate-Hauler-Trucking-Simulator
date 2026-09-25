@@ -30,6 +30,9 @@ YOU, PICKUP and DESTINATION have labels/shapes and route geometry. The existing
 LWS graph supplies `TruckTaxiRouteDistanceService`; straight-line is a labelled
 fallback. Trip distance is pickup-to-destination. The immutable offer is the exact
 passenger/pickup/destination accepted; tests assert identity and camera framing.
+Coincident/nearby labels separate into vertical lanes while small colored pins
+remain at exact coordinates. Center/corner collision cases have dedicated tests;
+the final Windows offer capture was reviewed after this correction.
 
 ## 4. HUD
 
@@ -130,7 +133,7 @@ separate representations/voices; bespoke pair performances remain content work.
 
 ## 14. Testing
 
-Python adapter: 11/11. Blender fixture: PASS. Final EditMode: 49/49, no skips,
+Python adapter: 11/11. Blender fixture: PASS. Final EditMode: 52/52, no skips,
 including every prefab, Humanoid/ragdoll and idempotency, real cached voice import.
 Final PlayMode: 3/3 (46.13s), including three successive human/oversized/robot rides,
 pickup VFX, ejection, actual NWH keyboard drive and physical collision fixtures.
@@ -143,11 +146,14 @@ human driving, physical wheel-device operation or exhaustive production QA.
 ## 15. Final Source Control Commit
 
 Requested source commit: `truck-taxi: complete passenger factory and arcade gameplay systems`.
-Hash recorded after commit in the validation follow-up. Scoped to
+Hash: `95084dff8330afb5693fa366cd4c551e289b297f` (1,480 files, including generated
+profiles/prefabs/metadata and intentional game WAVs). Scoped to
 `Assets/LWS/TruckTaxi`, `Tools/TruckTaxiPassengerFactory` and `Tools/UnityAssetCatalog`.
 Temporary pipeline-validation WAV/manifests excluded. Unrelated Dead Air, freight,
 Compass import, materials and project-settings changes remain uncommitted.
 No push.
+The subsequent Windows-validation commit contains only the offer-label separation,
+three layout regression cases, opt-in player test-harness fixes and this report.
 
 ## 16. Windows Build
 
@@ -155,7 +161,13 @@ Unity 6000.4.10f1, StandaloneWindows64, Development. Existing builder:
 `LWS.TruckTaxi.Editor.TruckTaxiDemoBuilder.BuildWindows`.
 Scene `Assets/LWS/TruckTaxi/Scenes/TruckTaxi_DemoCity.unity`.
 Output `Builds/TruckTaxiDemo/TruckTaxi.exe`.
-Final build result/warnings/errors: pending executable-validation stage.
+Final result: SUCCEEDED, 328,843,526 bytes reported by BuildPipeline, zero errors.
+The compile log contains 76 unique C# warnings: 54 deprecated APIs, 15 existing
+vendor Scene Streamer type conflicts, seven unused fields. These were not hidden
+or resolved by modifying vendors. Full log: `Validation/Prompt002WindowsBuild.log`.
+Player runtime DLL SHA256:
+`00FDEB0623FD5A36D7F673E3C4589BA01E6D168C495A02DF8A0E54E27427A76A`.
+No Truck Taxi Editor assembly is present in the player Managed directory.
 
 ## 17. Actual EXE Test
 
@@ -163,7 +175,27 @@ Opt-in `-truck-taxi-smoke` harness exercises actual Windows player startup,
 normal keyboard/NWH motion, offer, pickup route/VFX, generated greeting/subtitle,
 boarding, destination route, cockpit capture, fare completion, next ride and
 hold-to-eject. Complete ride is teleport-assisted, not claimed as manual driving.
-Final execution result: pending executable-validation stage.
+Final execution: PASS, actual Windows process exit code 0. Keyboard E/W moved the
+existing NWH tractor 22.9m. One complete assisted ride, authored request, fare,
+second ride, generated greeting playback, subtitles, hold-ejection, external body
+and post-ejection Available state passed. Ambient traffic/pedestrian population
+was present; movement was separately asserted in PlayMode.
+
+Reviewed real-player camera captures: Windows_Offer (actual roads, distinct labels,
+route and both distances), Windows_Cockpit (live physical map, subtitle, no HUD
+overlap), Windows_Ejection (external passenger body). All live under
+`Builds/TruckTaxiDemo/Validation`; Windows_Fare and other states are also captured.
+GPS logged 640x340, actual lossy scale (0.0002300,0.0002300,0.0002300),
+0.1472x0.0782m, destination target set and route ready.
+
+First hidden-window attempt completed ride/ejection but failed synthetic input and
+returned black swap-chain captures. The opt-in harness now clones input settings
+with IgnoreFocus and renders the actual gameplay camera/UI into a capture target.
+Normal launches are unchanged. The rebuilt player passed twice, including the final
+label fix. This is automated standalone validation, not human-driven playtesting.
+No Error/Exception/Assert was reported in the final smoke transaction. The bark-only
+Pixel Crushers controller warns that no full conversation database is assigned;
+runtime bark audio/subtitles nevertheless passed. No conversation system is claimed.
 
 ## 18. Known Limitations
 

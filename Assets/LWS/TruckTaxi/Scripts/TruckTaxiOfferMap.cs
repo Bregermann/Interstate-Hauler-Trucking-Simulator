@@ -9,6 +9,8 @@ namespace LWS.TruckTaxi
         private UnityEngine.UI.RawImage image;
         private TruckTaxiOfferRouteGraphic routes;
         private RectTransform[] markers;
+        private RectTransform[] pins;
+        private readonly Rect[] labelRects=new Rect[3];
         private TruckTaxiRideOffer offer;
         private readonly Vector3[] points=new Vector3[3];
         public void Initialize(TruckTaxiHud hud,TruckTaxiGPSAdapter adapter)
@@ -18,10 +20,15 @@ namespace LWS.TruckTaxi
             var path=TruckTaxiHud.Rect(transform,"Offer road paths",Vector2.zero,Vector2.one);
             routes=path.gameObject.AddComponent<TruckTaxiOfferRouteGraphic>(); routes.raycastTarget=false;
             markers=new RectTransform[3];
+            pins=new RectTransform[3];
             string[] labels={"YOU","A  PICKUP","B  DESTINATION"};
             Color[] colors={new Color(.1f,.8f,.96f),new Color(1,.82f,.18f),new Color(.95f,.42f,.75f)};
             for(int i=0;i<3;i++)
             {
+                pins[i]=hud.Panel(transform,labels[i]+" point",Vector2.zero,Vector2.zero);
+                pins[i].sizeDelta=new Vector2(10,10);
+                pins[i].localRotation=Quaternion.Euler(0,0,45);
+                pins[i].GetComponent<UnityEngine.UI.Image>().color=colors[i];
                 var badge=hud.Panel(transform,labels[i],Vector2.zero,Vector2.zero);
                 badge.sizeDelta=new Vector2(i==2 ? 225 : 150,38);
                 var label=hud.Text(badge,labels[i],new Vector2(.06f,.05f),new Vector2(.94f,.95f),22);
@@ -45,11 +52,33 @@ namespace LWS.TruckTaxi
             for(int i=0;i<3;i++)
             {
                 Vector3 position=camera.WorldToViewportPoint(points[i]);
-                float margin=markers[i].sizeDelta.x*.5f/Mathf.Max(1,size.x);
-                float y=position.y+(i==0 ? -24 : 24)/Mathf.Max(1,size.y);
-                markers[i].anchorMin=markers[i].anchorMax=new Vector2(Mathf.Clamp(position.x,margin,1-margin),Mathf.Clamp(y,.05f,.95f));
+                pins[i].anchorMin=pins[i].anchorMax=new Vector2(position.x,position.y);
+                pins[i].anchoredPosition=Vector2.zero;
+                var center=Vector2.Scale(new Vector2(position.x,position.y),size)+Vector2.up*(i==0 ? -28 : 28);
+                labelRects[i]=PlaceLabel(center,markers[i].sizeDelta,size,labelRects,i);
+                markers[i].anchorMin=markers[i].anchorMax=new Vector2(labelRects[i].center.x/Mathf.Max(1,size.x),labelRects[i].center.y/Mathf.Max(1,size.y));
                 markers[i].anchoredPosition=Vector2.zero;
             }
+        }
+        public static Rect PlaceLabel(Vector2 center,Vector2 labelSize,Vector2 mapSize,Rect[] occupied,int count)
+        {
+            // Three labels need at most three separated vertical lanes. Pins stay
+            // at the exact coordinates even when nearby labels move apart.
+            Rect candidate=default;
+            for(int attempt=0;attempt<9;attempt++)
+            {
+                float offset=attempt==0 ? 0 : ((attempt+1)/2)*(labelSize.y+6)*(attempt%2==1 ? 1 : -1);
+                candidate=new Rect(Mathf.Clamp(center.x-labelSize.x*.5f,0,Mathf.Max(0,mapSize.x-labelSize.x)),
+                    Mathf.Clamp(center.y+offset-labelSize.y*.5f,0,Mathf.Max(0,mapSize.y-labelSize.y)),labelSize.x,labelSize.y);
+                bool overlaps=false;
+                for(int j=0;j<count;j++)
+                {
+                    var padded=new Rect(occupied[j].x-3,occupied[j].y-3,occupied[j].width+6,occupied[j].height+6);
+                    if(candidate.Overlaps(padded)) { overlaps=true; break; }
+                }
+                if(!overlaps) return candidate;
+            }
+            return candidate;
         }
     }
 

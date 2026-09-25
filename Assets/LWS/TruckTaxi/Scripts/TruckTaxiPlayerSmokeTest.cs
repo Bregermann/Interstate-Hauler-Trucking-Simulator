@@ -14,6 +14,7 @@ namespace LWS.TruckTaxi
     {
         private bool failed;
         private Keyboard testKeyboard;
+        private InputSettings originalInputSettings;
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void LaunchIfRequested()
         {
@@ -25,12 +26,21 @@ namespace LWS.TruckTaxi
         {
             Application.logMessageReceived-=TrackError;
             if(testKeyboard!=null) InputSystem.RemoveDevice(testKeyboard);
+            if(originalInputSettings!=null)
+            {
+                var temporary=InputSystem.settings;
+                InputSystem.settings=originalInputSettings;
+                Destroy(temporary);
+            }
         }
         private void TrackError(string condition,string stack,LogType type)
         { if(type==LogType.Error || type==LogType.Exception || type==LogType.Assert) failed=true; }
         private IEnumerator Start()
         {
             Application.runInBackground=true;
+            originalInputSettings=InputSystem.settings;
+            InputSystem.settings=Instantiate(originalInputSettings);
+            InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
             Screen.SetResolution(1920,1080,FullScreenMode.Windowed);
             float deadline=Time.realtimeSinceStartup+60;
             while((TruckTaxiBootstrap.Instance==null || !TruckTaxiBootstrap.Instance.Ready) && Time.realtimeSinceStartup<deadline) yield return null;
@@ -40,7 +50,7 @@ namespace LWS.TruckTaxi
             Directory.CreateDirectory(output);
             yield return new WaitForSecondsRealtime(2);
             yield return new WaitForEndOfFrame();
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"Windows_Start.png"));
+            Capture(Path.Combine(output,"Windows_Start.png"));
             host.StartShift();
             yield return new WaitForSeconds(2);
             testKeyboard=InputSystem.AddDevice<Keyboard>("Taxi standalone validation keyboard");
@@ -53,6 +63,8 @@ namespace LWS.TruckTaxi
             yield return new WaitForSeconds(5);
             InputSystem.QueueStateEvent(testKeyboard,new KeyboardState());
             float distance=Vector3.ProjectOnPlane(host.Player.transform.position-driveStart,Vector3.up).magnitude;
+            Debug.Log("TRUCK TAXI PLAYER INPUT: focus="+Application.isFocused+" keyboardEnabled="+testKeyboard.enabled+
+                " telemetry="+JsonUtility.ToJson(host.Player.LastTelemetry)+" controls="+JsonUtility.ToJson(host.Player.TruckControlController.CurrentState));
             if(distance<3) Debug.LogError("TRUCK TAXI PLAYER SMOKE: normal keyboard input did not move tractor.");
             else Debug.Log("TRUCK TAXI PLAYER INPUT PASS: keyboard E/W drove "+distance.ToString("0.0")+" metres through existing input/NWH.");
             if(host.traffic.ActiveCount==0 || host.pedestrians.ActiveCount==0)
@@ -63,7 +75,7 @@ namespace LWS.TruckTaxi
             host.Session.OfferRide(audition);
             yield return new WaitForSecondsRealtime(1);
             yield return new WaitForEndOfFrame();
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"Windows_Offer.png"));
+            Capture(Path.Combine(output,"Windows_Offer.png"));
             host.Session.AcceptRide();
             yield return null;
             if(!host.Passengers.Dialogue.AudioPlaying || string.IsNullOrWhiteSpace(host.Passengers.Dialogue.Subtitle))
@@ -80,7 +92,7 @@ namespace LWS.TruckTaxi
                 Debug.LogError("TRUCK TAXI PLAYER SMOKE: pickup, authored request or route failed.");
             yield return new WaitForSecondsRealtime(2);
             yield return new WaitForEndOfFrame();
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"Windows_Passenger.png"));
+            Capture(Path.Combine(output,"Windows_Passenger.png"));
             var changer=host.Player.GetComponentInChildren<CameraChanger>(true);
             if(changer==null || host.GPS.DashboardScreen==null)
                 Debug.LogError("TRUCK TAXI PLAYER SMOKE: cockpit camera/dashboard GPS missing.");
@@ -92,9 +104,11 @@ namespace LWS.TruckTaxi
                 var screen=host.GPS.DashboardScreen;
                 if(screen.rect.width<=1 || screen.rect.height<=1 || !screen.gameObject.activeInHierarchy)
                     Debug.LogError("TRUCK TAXI PLAYER SMOKE: physical GPS collapsed or inactive.");
-                Debug.Log("TRUCK TAXI PLAYER GPS: rect="+screen.rect+" lossyScale="+screen.lossyScale+" target="+host.GPS.TargetId+" route="+host.GPS.RouteReady);
+                Debug.Log("TRUCK TAXI PLAYER GPS: rect="+screen.rect+" lossyScale="+screen.lossyScale.ToString("F7")+" physical="+
+                    (screen.rect.width*screen.lossyScale.x).ToString("F4")+"x"+(screen.rect.height*screen.lossyScale.y).ToString("F4")+
+                    "m target="+host.GPS.TargetId+" route="+host.GPS.RouteReady);
                 yield return new WaitForEndOfFrame();
-                ScreenCapture.CaptureScreenshot(Path.Combine(output,"Windows_Cockpit.png"));
+                Capture(Path.Combine(output,"Windows_Cockpit.png"));
                 for(int n=0;n<changer.cameras.Count && changer.currentCameraIndex!=priorCamera;n++) changer.NextCamera();
             }
             host.TeleportNear(host.Session.Destination);
@@ -103,7 +117,7 @@ namespace LWS.TruckTaxi
             if(host.Session.CompletedRides!=1) Debug.LogError("TRUCK TAXI PLAYER SMOKE: ride did not complete.");
             yield return new WaitForSecondsRealtime(1);
             yield return new WaitForEndOfFrame();
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"Windows_Fare.png"));
+            Capture(Path.Combine(output,"Windows_Fare.png"));
             yield return new WaitForSecondsRealtime(1);
             host.Session.ContinueShift();
             if(!host.Session.OfferRide(audition)) Debug.LogError("TRUCK TAXI PLAYER SMOKE: second ride unavailable.");
@@ -117,12 +131,43 @@ namespace LWS.TruckTaxi
             if(host.Session.State!=TruckTaxiState.PassengerEjected || host.Passengers.EjectedBodies<=prior || host.Passengers.PrimaryActor!=null)
                 Debug.LogError("TRUCK TAXI PLAYER SMOKE: hold-to-eject failed.");
             yield return new WaitForEndOfFrame();
-            ScreenCapture.CaptureScreenshot(Path.Combine(output,"Windows_Ejection.png"));
+            Capture(Path.Combine(output,"Windows_Ejection.png"));
             yield return new WaitForSecondsRealtime(3.5f);
             if(host.Session.State!=TruckTaxiState.Available) Debug.LogError("TRUCK TAXI PLAYER SMOKE: post-ejection cleanup/next ride failed.");
             else Debug.Log("TRUCK TAXI PLAYER EJECTION PASS: hold input, passenger physics body, fare consequence, cleanup and next-ride availability.");
             Debug.Log(failed ? "TRUCK TAXI PLAYER SMOKE FAIL" : "TRUCK TAXI PLAYER SMOKE PASS: one teleport-assisted ride in built Windows player.");
             Application.Quit(failed?2:0);
+        }
+        // A hidden Windows launch has no usable swap-chain screenshot. Render the
+        // actual player camera/UI into a target, just as the Editor capture does.
+        private static void Capture(string path)
+        {
+            var camera=Camera.main;
+            if(camera==null) { Debug.LogError("TRUCK TAXI PLAYER SMOKE: no capture camera."); return; }
+            var overlays=new System.Collections.Generic.List<Canvas>();
+            var texture=new RenderTexture(1920,1080,24);
+            var prior=camera.targetTexture;
+            var active=RenderTexture.active;
+            Texture2D pixels=null;
+            try
+            {
+                foreach(var mapCamera in FindObjectsByType<Camera>(FindObjectsSortMode.None))
+                    if(mapCamera!=camera && mapCamera.enabled && mapCamera.targetTexture!=null) mapCamera.Render();
+                foreach(var canvas in FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+                    if(canvas.isRootCanvas && canvas.renderMode==RenderMode.ScreenSpaceOverlay)
+                    { overlays.Add(canvas); canvas.renderMode=RenderMode.ScreenSpaceCamera; canvas.worldCamera=camera; canvas.planeDistance=camera.nearClipPlane+.01f; }
+                camera.targetTexture=texture;
+                Canvas.ForceUpdateCanvases(); camera.Render(); RenderTexture.active=texture;
+                pixels=new Texture2D(1920,1080,TextureFormat.RGB24,false);
+                pixels.ReadPixels(new Rect(0,0,1920,1080),0,0); pixels.Apply();
+                File.WriteAllBytes(path,pixels.EncodeToPNG());
+            }
+            finally
+            {
+                camera.targetTexture=prior; RenderTexture.active=active;
+                foreach(var canvas in overlays) { canvas.renderMode=RenderMode.ScreenSpaceOverlay; canvas.worldCamera=null; }
+                texture.Release(); Destroy(texture); if(pixels!=null) Destroy(pixels);
+            }
         }
     }
 }
