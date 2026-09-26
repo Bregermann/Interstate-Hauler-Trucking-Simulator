@@ -24,6 +24,7 @@ namespace LWS.TruckTaxi
         private UnityEngine.UI.Image portrait;
         private GameObject start, accept, decline, next, resume;
         private GameObject eject;
+        private GameObject throwContainer;
         private TextMeshProUGUI ejectProgress;
         private TruckTaxiDebugPanel debug;
         private TruckTaxiOfferMap offerMap;
@@ -58,7 +59,7 @@ namespace LWS.TruckTaxi
             if(EventSystem.current == null) new GameObject("Truck Taxi Event System",typeof(EventSystem),typeof(InputSystemUIInputModule));
             var telemetryBand=Panel(root,"Telemetry background",new Vector2(0,0),new Vector2(.72f,.105f));
             speed = Text(telemetryBand,"Truck telemetry",new Vector2(.025f,.05f),new Vector2(.33f,.91f),30);
-            status = Text(telemetryBand,"Shift",new Vector2(.39f,.05f),new Vector2(.99f,.91f),28);
+            status = Text(telemetryBand,"Shift",new Vector2(.39f,.05f),new Vector2(.99f,.91f),22);
             ridePanel = Panel(root,"Passenger and requests",new Vector2(0.73f,0.33f),new Vector2(0.99f,0.9f));
             portrait = Rect(ridePanel,"Passenger portrait",new Vector2(.05f,.85f),new Vector2(.22f,.98f)).gameObject.AddComponent<UnityEngine.UI.Image>();
             portrait.preserveAspect=true;
@@ -87,7 +88,8 @@ namespace LWS.TruckTaxi
             Button(root,"DEBUG",new Vector2(0.89f,0.11f),new Vector2(0.99f,0.17f),()=>debug.Toggle());
             Button(root,"GPS ON / OFF",new Vector2(.73f,.11f),new Vector2(.88f,.17f),()=>host.GPS.ToggleHud());
             Button(root,"GPS SETTINGS",new Vector2(.89f,.19f),new Vector2(.99f,.25f),()=>GPSSettings?.Toggle());
-            Button(root,"FIND GAS",new Vector2(.73f,.19f),new Vector2(.88f,.25f),()=>host.Fuel?.RouteToGas());
+            Button(root,"SERVICES / TOW",new Vector2(.73f,.19f),new Vector2(.88f,.25f),()=>EnvironmentNeeds?.OpenServices());
+            throwContainer=Button(root,"THROW FILLED CONTAINER",new Vector2(.73f,.265f),new Vector2(.99f,.325f),()=>host.DriverNeeds?.ThrowFilledContainer());
             eject=Button(ridePanel,"HOLD TO EJECT",new Vector2(.05f,.08f),new Vector2(.95f,.21f),()=>{});
             var ejectEvents=eject.AddComponent<EventTrigger>();
             var down=new EventTrigger.Entry { eventID=EventTriggerType.PointerDown };
@@ -129,14 +131,15 @@ namespace LWS.TruckTaxi
         private void Update()
         {
             if(host == null || host.Session == null) return;
-            bool rescuing=host.Fuel?.IsRescuing==true;
+            bool rescuing=host.Fuel?.IsRescuing==true || host.Roadside?.IsRecovering==true;
             fuelFade.gameObject.SetActive(rescuing);
             if(rescuing)
             {
-                fuelFade.transform.SetAsLastSibling(); fuelFade.color=new Color(0,0,0,host.Fuel.FadeAlpha);
+                fuelFade.transform.SetAsLastSibling(); fuelFade.color=new Color(0,0,0,host.Roadside?.IsRecovering==true ? host.Roadside.FadeAlpha : host.Fuel.FadeAlpha);
                 UIInput.Focus(null); return;
             }
             if(UIInput.Debug.WasPressedThisFrame()) debug.Toggle();
+            if(UIInput.Services.WasPressedThisFrame() && !appreciationRunning && host.Roadside?.CanRequest==true) EnvironmentNeeds?.OpenServices();
             if(!appreciationRunning)
             {
                 if(UIInput.Cancel.WasPressedThisFrame() || UIInput.Pause.WasPressedThisFrame()) HandlePause();
@@ -175,7 +178,7 @@ namespace LWS.TruckTaxi
         }
         private void HandlePause()
         {
-            if(host.Fuel?.IsRescuing==true) return;
+            if(host.Fuel?.IsRescuing==true || host.Roadside?.IsRecovering==true) return;
             if(EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) EnvironmentNeeds.Close();
             else if(AudioSettings!=null && AudioSettings.IsOpen) AudioSettings.Close();
             else if(GPSSettings!=null && GPSSettings.IsOpen) GPSSettings.Close();
@@ -187,6 +190,7 @@ namespace LWS.TruckTaxi
         private void Refresh()
         {
             var s = host.Session;
+            throwContainer.SetActive(host.DriverNeeds?.State?.FilledJug==true && host.DriverNeeds.CanInteract);
             bool canEject=s.HasPassenger && s.Passenger!=null && s.Passenger.canBeEjected && !host.Paused;
             eject.SetActive(canEject); ejectProgress.gameObject.SetActive(canEject);
             ejectProgress.text=host.Passengers.EjectionHoldProgress>0 ? "EJECTING  "+(host.Passengers.EjectionHoldProgress*100).ToString("0")+"%" : "HOLD F / VIEW TO EJECT";
@@ -209,9 +213,9 @@ namespace LWS.TruckTaxi
             details.rectTransform.anchorMin=new Vector2(.04f,.24f);
             details.rectTransform.anchorMax=new Vector2(offered || ended ? .49f : .94f,.83f);
             status.text = "TRUCK TAXI   |   " + s.State.ToString().ToUpperInvariant() + "\nCASH " + Money(s.WalletBalanceCents) + "   /   " + s.CompletedRides+" RIDES";
+            status.text += "\n" + (host.Roadside?.Condition ?? "VEHICLE INITIALIZING");
             float mph=host.Player!=null ? host.Player.GetComponent<Rigidbody>().linearVelocity.magnitude*2.236936f : 0;
             speed.text=$"{mph:0} MPH\nFUEL {(host.Fuel!=null ? host.Fuel.Fraction*100 : 100):0}%";
-            if(!string.IsNullOrEmpty(host.Fuel?.Feedback)) status.text+="\n"+host.Fuel.Feedback;
             title.text=inactive ? "TRUCK TAXI" : offered ? "RIDE REQUEST" : s.State==TruckTaxiState.RideComplete ? "FARE COMPLETE" : "RIDE ENDED";
             if(appreciation) title.text="SPECIAL APPRECIATION";
             if(inactive) details.text="SHIFT EARNINGS\n"+Money(s.ShiftEarnings)+"\n\nDOWNTOWN / RESIDENTIAL / INDUSTRIAL";

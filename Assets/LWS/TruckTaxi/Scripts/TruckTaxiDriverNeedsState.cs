@@ -16,6 +16,7 @@ namespace LWS.TruckTaxi
         private int nextCue;
         private readonly int[] items = new int[Enum.GetValues(typeof(TruckTaxiNeedsItem)).Length];
         private TruckTaxiNeedsItem reservedContainer;
+        private bool freePlayInventoryGranted;
         public float Hunger { get; private set; }
         public float Thirst { get; private set; }
         public float StrangeUiSeconds { get; private set; }
@@ -47,6 +48,13 @@ namespace LWS.TruckTaxi
             this.settings = settings != null ? settings : throw new ArgumentNullException(nameof(settings));
             random = new System.Random(seed); SampleCycle(); SetPressure(settings.startingBladder);
             AddItem(TruckTaxiNeedsItem.EmptyPissJug);
+        }
+        public void GrantFreePlayTestInventory()
+        {
+            if (freePlayInventoryGranted) return;
+            freePlayInventoryGranted = true;
+            foreach (var entry in TruckTaxiNeedsItems.Store)
+                if (Count(entry.Item) == 0) AddItem(entry.Item);
         }
         private void SampleCycle()
         {

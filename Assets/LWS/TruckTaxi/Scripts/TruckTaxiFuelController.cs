@@ -17,6 +17,8 @@ namespace LWS.TruckTaxi
         [Min(.01f), Tooltip("Multiplies NWH power-based consumption; 12 gives a sandbox-sized tank lifetime.")]
         public float consumptionMultiplier = 12;
         [Header("Cartoon rescue")]
+        [Tooltip("Optional legacy arcade rescue. Off by default: use the confirmed roadside-assistance action.")]
+        public bool automaticOutOfFuelRescue;
         [Range(2, 10)] public float launchSpeed = 6;
         [Range(.2f, 2)] public float launchSeconds = 1;
         public AudioClip explosionClip, evilLaughClip;
@@ -87,6 +89,8 @@ namespace LWS.TruckTaxi
         private void BeginRescue()
         {
             if (host == null || IsRescuing || host.Paused) return;
+            Feedback = "OUT OF FUEL - CALL TOW TRUCK";
+            if (!automaticOutOfFuelRescue) return;
             StartCoroutine(Rescue());
         }
         private IEnumerator Rescue()

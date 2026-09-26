@@ -15,7 +15,9 @@ namespace LWS.TruckTaxi
         private TruckTaxiHud hud;
         private TruckTaxiEnvironmentCoordinator environment;
         private TruckTaxiDriverNeedsCoordinator needs;
-        private RectTransform panel, driverPage, environmentPage, storePage, inventoryPage, jugPanel, jugFill, bladderFill;
+        private RectTransform panel, driverPage, environmentPage, storePage, inventoryPage, servicesPage, towPage, jugPanel, jugFill, bladderFill;
+        private TextMeshProUGUI serviceStatus, towText;
+        private TextMeshProUGUI[] rideRequestsLabels;
         private TextMeshProUGUI clockText, meterText, needText, jugText, debugText, environmentText, inventoryText, storeText, storeFeedback;
         private CanvasGroup bandGroup;
         private readonly List<Action> refreshControls = new List<Action>();
@@ -24,7 +26,9 @@ namespace LWS.TruckTaxi
         private bool wasPaused, syncing;
         private float nextRefresh;
         public bool IsOpen => panel != null && panel.gameObject.activeSelf;
-        public Transform FocusRoot => environmentPage != null && environmentPage.gameObject.activeSelf ? environmentPage :
+        public Transform FocusRoot => towPage != null && towPage.gameObject.activeSelf ? towPage :
+            servicesPage != null && servicesPage.gameObject.activeSelf ? servicesPage :
+            environmentPage != null && environmentPage.gameObject.activeSelf ? environmentPage :
             storePage != null && storePage.gameObject.activeSelf ? storePage :
             inventoryPage != null && inventoryPage.gameObject.activeSelf ? inventoryPage : driverPage;
 
@@ -46,9 +50,12 @@ namespace LWS.TruckTaxi
             environmentPage = TruckTaxiHud.Rect(panel, "Development environment page", Vector2.zero, Vector2.one);
             storePage = TruckTaxiHud.Rect(panel, "Truck stop store page", Vector2.zero, Vector2.one);
             inventoryPage = TruckTaxiHud.Rect(panel, "Driver inventory page", Vector2.zero, Vector2.one);
-            BuildDriverPage(); BuildEnvironmentPage(); BuildStorePage(); BuildInventoryPage();
+            servicesPage = TruckTaxiHud.Rect(panel, "Services page", Vector2.zero, Vector2.one);
+            towPage = TruckTaxiHud.Rect(panel, "Tow confirmation", Vector2.zero, Vector2.one);
+            BuildDriverPage(); BuildEnvironmentPage(); BuildStorePage(); BuildInventoryPage(); BuildServicesPage();
             environmentPage.gameObject.SetActive(false); panel.gameObject.SetActive(false);
             storePage.gameObject.SetActive(false); inventoryPage.gameObject.SetActive(false);
+            servicesPage.gameObject.SetActive(false); towPage.gameObject.SetActive(false);
             jugPanel = hud.Panel(hud.Root, "Jug timing", new Vector2(.35f, .75f), new Vector2(.71f, .915f));
             jugText = hud.Text(jugPanel, "Jug prompt", new Vector2(.03f, .43f), new Vector2(.97f, .95f), 25);
             var track = TruckTaxiHud.Rect(jugPanel, "Jug progress track", new Vector2(.04f, .14f), new Vector2(.96f, .36f));
@@ -74,7 +81,7 @@ namespace LWS.TruckTaxi
             startJugControls.AddRange(jug.GetComponentsInChildren<UnityEngine.UI.Selectable>(true));
             hud.Button(driverPage, "DISPOSE OF FILLED JUG", new Vector2(.515f, .42f), new Vector2(.95f, .52f), () => { needs.DisposeJug(); Refresh(); });
             hud.Button(driverPage, "CLEAN CAB", new Vector2(.05f, .29f), new Vector2(.485f, .39f), () => { needs.CleanCab(); Refresh(); });
-            hud.Button(driverPage, "RESUME RIDE ROUTE", new Vector2(.515f, .29f), new Vector2(.95f, .39f), () => { needs.RestoreRideRoute(); Refresh(); });
+            hud.Button(driverPage, "SERVICES / TOW", new Vector2(.515f, .29f), new Vector2(.95f, .39f), ShowServices);
             debugText = hud.Text(driverPage, "Driver detail", new Vector2(.05f, .16f), new Vector2(.95f, .275f), 22);
             hud.Button(driverPage, "STORE", new Vector2(.05f, .035f), new Vector2(.27f, .13f), ShowStore);
             hud.Button(driverPage, "ITEMS", new Vector2(.29f, .035f), new Vector2(.51f, .13f), ShowInventory);
@@ -143,22 +150,61 @@ namespace LWS.TruckTaxi
             GridButton("AUTO WEATHER", .715f, 2, 3, () => environment.SetAutomaticWeather(!environment.AutomaticWeather));
             AddHeatSlider("Game time", .655f, 0, 23.99f, () => environment.Clock.CurrentSnapshot.timeOfDayHours, environment.SetTime);
             AddHeatSlider("Time scale", .595f, 0, 180, () => environment.Clock.CurrentSnapshot.timeScale, environment.SetTimeScale);
-            string[] weatherNames = { "CLEAR", "CLOUDS", "OVERCAST", "RAIN", "HEAVY RAIN", "STORM", "FOG", "NEXT" };
-            string[] weatherIds = { "clear", "partly_cloudy", "overcast", "light_rain", "heavy_rain", "thunderstorm", "fog" };
+            string[] weatherNames = { "CLEAR", "CLOUDS", "OVERCAST", "RAIN", "HEAVY RAIN", "STORM", "FOG", "NEXT", "SNOW", "HEAVY SNOW", "BLIZZARD" };
+            string[] weatherIds = { "clear", "partly_cloudy", "overcast", "light_rain", "heavy_rain", "thunderstorm", "fog", "", "light_snow", "heavy_snow", "blizzard" };
             for (int i = 0; i < weatherNames.Length; i++)
             {
                 int index = i;
-                GridButton(weatherNames[i], .50f - (i / 4) * .075f, i % 4, 4, () => { if (index == 7) environment.NextWeather(); else environment.ForceWeather(weatherIds[index]); });
+                GridButton(weatherNames[i], .505f - (i / 4) * .068f, i % 4, 4, () => { if (index == 7) environment.NextWeather(); else environment.ForceWeather(weatherIds[index]); });
             }
             string[] levels = { "BLADDER 0%", "50%", "90%", "CRISIS" };
             float[] values = { 0, .5f, .9f, 1 };
-            for (int i = 0; i < 4; i++) { int index = i; GridButton(levels[i], .325f, i, 4, () => needs.DebugSetBladder(values[index])); }
-            GridButton("START JUG", .25f, 0, 3, () => { needs.DebugSetBladder(.9f); BeginJug(); });
-            GridButton("JUG SUCCESS", .25f, 1, 3, () => needs.DebugFinishJug(true));
-            GridButton("JUG SPILL", .25f, 2, 3, () => needs.DebugFinishJug(false));
-            GridButton("CLEAR CAB MESS", .175f, 0, 2, needs.DebugClearCabMess);
-            GridButton("DRIVER NEEDS", .175f, 1, 2, ShowDriver);
-            hud.Button(environmentPage, "CLOSE", new Vector2(.25f, .04f), new Vector2(.75f, .13f), Close);
+            for (int i = 0; i < 4; i++) { int index = i; GridButton(levels[i], .29f, i, 4, () => needs.DebugSetBladder(values[index])); }
+            GridButton("START JUG", .218f, 0, 3, () => { needs.DebugSetBladder(.9f); BeginJug(); });
+            GridButton("JUG SUCCESS", .218f, 1, 3, () => needs.DebugFinishJug(true));
+            GridButton("JUG SPILL", .218f, 2, 3, () => needs.DebugFinishJug(false));
+            GridButton("CLEAR CAB MESS", .146f, 0, 2, needs.DebugClearCabMess);
+            GridButton("DRIVER NEEDS", .146f, 1, 2, ShowDriver);
+            hud.Button(environmentPage, "CLOSE", new Vector2(.25f, .025f), new Vector2(.75f, .115f), Close);
+        }
+        private void BuildServicesPage()
+        {
+            hud.Text(servicesPage, "Services heading", new Vector2(.04f, .91f), new Vector2(.96f, .99f), 32).text = "SERVICES / ROADSIDE ASSISTANCE";
+            serviceStatus = hud.Text(servicesPage, "Vehicle condition", new Vector2(.05f, .65f), new Vector2(.95f, .90f), 20);
+            ServiceButton("FIND STORE", .54f, 0, () => needs.RouteToStore());
+            ServiceButton("FIND FOOD / DRINK", .54f, 1, () => needs.RouteToService(TruckTaxiServiceCapability.Food | TruckTaxiServiceCapability.Drink));
+            ServiceButton("FIND GAS", .425f, 0, () => needs.RouteToService(TruckTaxiServiceCapability.Refuel));
+            ServiceButton("ROUTE TO RESTROOM", .425f, 1, () => needs.RouteToBathroom());
+            ServiceButton("FIND REPAIR", .31f, 0, () => needs.RouteToService(TruckTaxiServiceCapability.RepairGeneralDamage));
+            ServiceButton("CALL TOW TRUCK", .31f, 1, () => { ShowTow(); return true; });
+            var requests = hud.Button(servicesPage, "RIDE REQUESTS", new Vector2(.05f, .195f), new Vector2(.49f, .295f),
+                () => { host.Session.SetRideRequestsEnabled(!host.Session.RideRequestsEnabled); Refresh(); });
+            rideRequestsLabels = requests.GetComponentsInChildren<TextMeshProUGUI>(true);
+            ServiceButton("RESUME RIDE ROUTE", .195f, 1, () => { needs.RestoreRideRoute(); return true; });
+            hud.Button(servicesPage, "BACK", new Vector2(.05f, .04f), new Vector2(.49f, .14f), ShowDriver);
+            hud.Button(servicesPage, "CLOSE", new Vector2(.51f, .04f), new Vector2(.95f, .14f), Close);
+            hud.Text(towPage, "Tow heading", new Vector2(.05f, .84f), new Vector2(.95f, .96f), 34).text = "CALL TOW TRUCK";
+            towText = hud.Text(towPage, "Tow quote", new Vector2(.06f, .28f), new Vector2(.94f, .8f), 26);
+            hud.Button(towPage, "CONFIRM TOW", new Vector2(.05f, .08f), new Vector2(.49f, .2f), () =>
+            { if (host.Roadside?.CanRequest == true) { Close(); host.SetPaused(false); host.Roadside.ConfirmTow(); } });
+            hud.Button(towPage, "CANCEL", new Vector2(.51f, .08f), new Vector2(.95f, .2f), ShowServices);
+        }
+        private void ServiceButton(string label, float y, int column, Func<bool> action) =>
+            hud.Button(servicesPage, label, new Vector2(.05f + column * .46f, y), new Vector2(.49f + column * .46f, y + .1f),
+                () => { action(); Refresh(); });
+        public void OpenServices() { Open(); ShowServices(); }
+        private void ShowServices() { SelectPage(servicesPage); Refresh(); }
+        private void ShowTow()
+        {
+            if (host.Roadside?.PrepareQuote() != true) { Refresh(); return; }
+            towText.text = host.Roadside.Feedback + "\n\nThe connected truck and trailer will be recovered together. Passenger reaction depends on personality.";
+            SelectPage(towPage);
+        }
+        private void SelectPage(RectTransform page)
+        {
+            foreach (var item in new[] { driverPage, environmentPage, storePage, inventoryPage, servicesPage, towPage })
+                item.gameObject.SetActive(item == page);
+            hud.UIInput.Focus(page);
         }
         private void GridButton(string label, float y, int column, int count, Action action)
         {
@@ -188,16 +234,15 @@ namespace LWS.TruckTaxi
         public void Close() { if (!IsOpen) return; panel.gameObject.SetActive(false); host.SetPaused(wasPaused); }
         public void Toggle() { if (IsOpen) Close(); else Open(); }
         private void ShowDriver()
-        { driverPage.gameObject.SetActive(true); environmentPage.gameObject.SetActive(false); storePage.gameObject.SetActive(false); inventoryPage.gameObject.SetActive(false); hud.UIInput.Focus(driverPage); }
+        { SelectPage(driverPage); }
         private void ShowStore()
-        { driverPage.gameObject.SetActive(false); environmentPage.gameObject.SetActive(false); inventoryPage.gameObject.SetActive(false); storePage.gameObject.SetActive(true); Refresh(); hud.UIInput.Focus(storePage); }
+        { SelectPage(storePage); Refresh(); }
         private void ShowInventory()
-        { driverPage.gameObject.SetActive(false); environmentPage.gameObject.SetActive(false); storePage.gameObject.SetActive(false); inventoryPage.gameObject.SetActive(true); Refresh(); hud.UIInput.Focus(inventoryPage); }
+        { SelectPage(inventoryPage); Refresh(); }
         private void ShowEnvironment()
         {
             if (!Debug.isDebugBuild) return;
-            driverPage.gameObject.SetActive(false); storePage.gameObject.SetActive(false); inventoryPage.gameObject.SetActive(false);
-            environmentPage.gameObject.SetActive(true); hud.UIInput.Focus(environmentPage); Refresh();
+            SelectPage(environmentPage); Refresh();
         }
         private void BeginJug()
         {
@@ -231,6 +276,9 @@ namespace LWS.TruckTaxi
             bladderFill.anchorMax = new Vector2(Mathf.Max(.005f, state.Pressure), 1);
             bladderFill.GetComponent<UnityEngine.UI.Image>().color = state.Pressure >= .85f ? new Color(1, .35f, .25f) : new Color(.3f, .8f, .6f);
             if (!IsOpen) return;
+            serviceStatus.text = (host.Roadside?.Diagnostics ?? "Vehicle initializing") + "\n" + needs.Feedback;
+            if (rideRequestsLabels != null)
+                foreach (var label in rideRequestsLabels) label.text = "RIDE REQUESTS: " + (host.Session.RideRequestsEnabled ? "ON" : "OFF");
             storeText.text = "TRUCK STOP STORE  |  " + TruckTaxiHud.Money(host.Session.WalletBalanceCents);
             storeFeedback.text = string.IsNullOrEmpty(needs.Feedback) ?
                 (needs.NearbyStore != null ? needs.NearbyStore.displayName : "Stop inside a store bay to buy.") : needs.Feedback;
@@ -239,8 +287,7 @@ namespace LWS.TruckTaxi
                 "EMPTY BOTTLES " + state.Count(TruckTaxiNeedsItem.EmptyBottle) + "  JUGS " + state.Count(TruckTaxiNeedsItem.EmptyPissJug) +
                 "  FILLED " + (state.Count(TruckTaxiNeedsItem.FilledBottle) + state.Count(TruckTaxiNeedsItem.FilledJug)) + "\n" +
                 (state.CabMess ? "CAB NEEDS CLEANUP  |  " : "") +
-                (needs.NearbyStore != null ? "STORE: " + needs.NearbyStore.displayName : needs.NearbyBathroom != null ?
-                    "RESTROOM: " + needs.NearbyBathroom.displayName : "No service bay nearby.");
+                (needs.NearbyService != null ? "SERVICE: " + needs.NearbyService.displayName : "No service bay nearby.");
             debugText.text = needs.Feedback;
             inventoryText.text = "WATER " + state.Count(TruckTaxiNeedsItem.WaterBottle) + "  SODA " + state.Count(TruckTaxiNeedsItem.Soda) +
                 "  ENERGY " + state.Count(TruckTaxiNeedsItem.EnergyDrink) + "  FOOD " +

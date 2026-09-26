@@ -29,6 +29,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiEnvironmentCoordinator Environment { get; private set; }
         public TruckTaxiDriverNeedsCoordinator DriverNeeds { get; private set; }
         public TruckTaxiFuelController Fuel { get; private set; }
+        public TruckTaxiRoadsideAssistance Roadside { get; private set; }
         public TruckTaxiVehicleObjectiveCoordinator VehicleObjectives { get; private set; }
         public bool Ready { get; private set; }
         public bool Paused { get; private set; }
@@ -107,13 +108,15 @@ namespace LWS.TruckTaxi
                 DriverNeeds=GetComponent<TruckTaxiDriverNeedsCoordinator>() ?? gameObject.AddComponent<TruckTaxiDriverNeedsCoordinator>();
                 if(DriverNeeds.Initialize(this,Environment)) hud.InitializeEnvironment(Environment,DriverNeeds);
             }
+            Roadside = GetComponent<TruckTaxiRoadsideAssistance>() ?? gameObject.AddComponent<TruckTaxiRoadsideAssistance>();
+            Roadside.Initialize(this);
             SetPaused(true);
             OnSessionChanged();
         }
         private void Update()
         {
             if (!Ready || body == null) return;
-            if(Fuel?.IsRescuing==true) { lastSpeed=0; return; }
+            if(Fuel?.IsRescuing==true || Roadside?.IsRecovering==true) { lastSpeed=0; return; }
             if(Environment?.Clock!=null)
             {
                 var clock=Environment.Clock.CurrentSnapshot;
@@ -157,12 +160,12 @@ namespace LWS.TruckTaxi
                     GPS.SetRideDestination(Session.Destination);
                     break;
                 case TruckTaxiState.PassengerExiting: Play(configuration.exitSound); break;
-                case TruckTaxiState.RideComplete: GPS.ClearDestination(); Play(configuration.fareSound); SetPaused(true); break;
-                case TruckTaxiState.RideFailed: GPS.ClearDestination(); SetPaused(true); break;
-                case TruckTaxiState.PassengerEjected: GPS.ClearDestination(); SetPaused(false); break;
+                case TruckTaxiState.RideComplete: GPS.ClearRideDestination(); Play(configuration.fareSound); SetPaused(true); break;
+                case TruckTaxiState.RideFailed: GPS.ClearRideDestination(); SetPaused(true); break;
+                case TruckTaxiState.PassengerEjected: GPS.ClearRideDestination(); SetPaused(false); break;
                 case TruckTaxiState.Inactive:
                 case TruckTaxiState.Available:
-                    GPS.ClearDestination();
+                    GPS.ClearRideDestination();
                     SetPaused(Session.State == TruckTaxiState.Inactive); break;
             }
         }

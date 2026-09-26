@@ -14,6 +14,8 @@ namespace LWS.TruckTaxi
         public TruckTaxiBathroomPoint RoutedBathroom { get; private set; }
         public TruckTaxiBathroomPoint NearbyBathroom { get; private set; }
         public TruckTaxiStorePoint NearbyStore { get; private set; }
+        public TruckTaxiServicePoint NearbyService { get; private set; }
+        public InputAction ThrowContainerAction { get; private set; }
         public IReadOnlyList<TruckTaxiStorePoint> Stores => stores;
         public string Feedback { get; private set; } = "";
         public InputAction JugHoldAction { get; private set; }
@@ -24,7 +26,7 @@ namespace LWS.TruckTaxi
         public bool CanInteract => host != null && host.Ready && !host.Paused &&
             (host.Session.State == TruckTaxiState.Available || host.Session.State == TruckTaxiState.DrivingToPickup || host.Session.State == TruckTaxiState.DrivingToDestination);
         public bool IsMoving => body != null && body.linearVelocity.magnitude > settings.bathroomMaximumSpeed;
-        public bool ProperlyStopped => NearbyBathroom != null && body != null && NearbyBathroom.CanUse(body.position, body.linearVelocity.magnitude, settings.bathroomMaximumSpeed);
+        public bool ProperlyStopped => ServiceInReach(TruckTaxiServiceCapability.Restroom) != null;
         public event Action<TruckTaxiDriverNeedEvent> DriverNeedsEvent;
         private TruckTaxiBootstrap host;
         private TruckTaxiEnvironmentCoordinator environment;
@@ -56,6 +58,8 @@ namespace LWS.TruckTaxi
             if (body == null) return false;
             indicatorSources = owner.Player.GetComponentsInChildren<LwsKeyboardGamepadTruckInputSource>(true);
             State = new TruckTaxiDriverNeedsState(settings, 20925);
+            TruckTaxiServicePoint.BindExistingPoints(owner.gameObject.scene);
+            if (owner.gameObject.scene.name == TruckTaxiMainMenu.FreePlaySceneName) State.GrantFreePlayTestInventory();
             State.Event += OnJugInputEvent;
             State.Event += OnNeedEvent;
             var found = FindObjectsByType<TruckTaxiBathroomPoint>(FindObjectsSortMode.None);
@@ -86,6 +90,9 @@ namespace LWS.TruckTaxi
             JugHoldAction = actions.FindAction("DriverNeedsJugHold") ?? actions.AddAction("DriverNeedsJugHold", InputActionType.Button, "<Keyboard>/insert");
             JugCueAction = actions.FindAction("DriverNeedsJugCue") ?? actions.AddAction("DriverNeedsJugCue", InputActionType.Button, "<Keyboard>/delete");
             JugHoldAction.AddBinding("<Gamepad>/leftShoulder"); JugCueAction.AddBinding("<Gamepad>/rightShoulder");
+            ThrowContainerAction = actions.FindAction("ThrowFilledContainer") ?? actions.AddAction("ThrowFilledContainer", InputActionType.Button, "<Keyboard>/home");
+            ThrowContainerAction.AddCompositeBinding("ButtonWithOneModifier")
+                .With("Modifier", "<Gamepad>/select").With("Button", "<Gamepad>/rightShoulder");
             if (wasEnabled) actions.Enable();
             previousVelocity = body.linearVelocity;
             RefreshProximity();
@@ -99,10 +106,14 @@ namespace LWS.TruckTaxi
         private void Update()
         {
             if (State == null || body == null) return;
+            bool throwChord = Gamepad.current != null && Gamepad.current.selectButton.isPressed && Gamepad.current.rightShoulder.isPressed;
+            foreach (var source in indicatorSources)
+                if (source != null) { if (throwChord) source.AcquireGamepadIndicatorSuppression(ThrowContainerAction); else source.ReleaseGamepadIndicatorSuppression(ThrowContainerAction); }
             if (!host.Paused) State.TickArcadeEffects(Time.deltaTime);
             if (Time.unscaledTime >= nextProximityCheck) { nextProximityCheck = Time.unscaledTime + .2f; RefreshProximity(); }
             if (State.JugActive) liquidLoop?.SetPaused(host.Paused);
             if (!CanInteract) { previousVelocity = body.linearVelocity; return; }
+            if (ThrowContainerAction.WasPressedThisFrame()) ThrowFilledContainer();
             // Controller jug initiation is an explicit HUD command; normal indicator taps never start it.
             if (!JugActive && JugHoldAction.WasPressedThisFrame() && JugHoldAction.activeControl?.device is Keyboard) StartJug();
             float acceleration = Time.deltaTime > 0 ? Mathf.Abs(Vector3.Dot((body.linearVelocity - previousVelocity) / Time.deltaTime, host.Player.transform.right)) : 0;
@@ -120,6 +131,7 @@ namespace LWS.TruckTaxi
         {
             NearbyBathroom = null; NearbyStore = null;
             if (body == null) return;
+            NearbyService = ServiceInReach(TruckTaxiServiceCapability.None);
             float distance = float.PositiveInfinity;
             foreach (var point in bathrooms)
             {
@@ -140,7 +152,12 @@ namespace LWS.TruckTaxi
         {
             RefreshProximity();
             var entry = TruckTaxiNeedsItems.Find(item);
-            if (entry == null || NearbyStore == null || !State.CanAdd(item) || host?.Session == null ||
+            var service = NearbyStore != null ? NearbyStore.GetComponent<TruckTaxiServicePoint>() : null;
+            bool sold = service != null && service.Supports(TruckTaxiServiceCapability.Store) &&
+                (entry == null || entry.HungerRelief <= 0 || service.Supports(TruckTaxiServiceCapability.Food)) &&
+                (entry == null || entry.ThirstRelief <= 0 || service.Supports(TruckTaxiServiceCapability.Drink)) &&
+                (item != TruckTaxiNeedsItem.EmptyPissJug || service.Supports(TruckTaxiServiceCapability.PissJugs));
+            if (entry == null || !sold || !State.CanAdd(item) || host?.Session == null ||
                 !host.Ready || host.Session.State == TruckTaxiState.Inactive || State.JugActive)
             { Feedback = "Stop inside a store bay first, or make room for the item."; return false; }
             if (!host.Session.TrySpend(entry.PriceCents))
@@ -151,19 +168,24 @@ namespace LWS.TruckTaxi
         }
         public bool RouteToStore()
         {
-            if (host?.GPS == null || body == null || stores.Length == 0)
-            { Feedback = "No authored store is available in this level."; return false; }
-            TruckTaxiStorePoint nearest = null; float distance = float.PositiveInfinity;
-            foreach (var point in stores)
-            {
-                if (point == null || !point.isActiveAndEnabled) continue;
-                float candidate = (point.Position - body.position).sqrMagnitude;
-                if (candidate < distance) { distance = candidate; nearest = point; }
-            }
-            if (nearest == null) return false;
-            host.GPS.SetServiceDestination(nearest.stableId, nearest.displayName, nearest.Position);
-            Feedback = "Store route: " + nearest.displayName;
-            return true;
+            return RouteToService(TruckTaxiServiceCapability.Store);
+        }
+        public bool RouteToService(TruckTaxiServiceCapability capability)
+        {
+            if (host?.GPS == null || body == null) return false;
+            var point = TruckTaxiServicePoint.Nearest(body.position, capability, host.gameObject.scene,
+                capability == (TruckTaxiServiceCapability.Food | TruckTaxiServiceCapability.Drink));
+            if (point == null) { Feedback = "No compatible service is available in this level."; return false; }
+            host.GPS.SetServiceDestination(point.stableId, point.displayName, point.Position);
+            Feedback = "Service route: " + point.displayName; return true;
+        }
+        public TruckTaxiServicePoint ServiceInReach(TruckTaxiServiceCapability capability)
+        {
+            if (body == null || host == null) return null;
+            foreach (var point in TruckTaxiServicePoint.Points)
+                if (point != null && point.gameObject.scene == host.gameObject.scene && point.Supports(capability) &&
+                    point.CanUse(body.position, body.linearVelocity.magnitude, settings.bathroomMaximumSpeed)) return point;
+            return null;
         }
         public bool ConsumeItem(TruckTaxiNeedsItem item)
         {
@@ -190,7 +212,7 @@ namespace LWS.TruckTaxi
         }
         public bool ThrowFilledContainer()
         {
-            if (State == null || State.JugActive || throwAnchor == null || body == null) return false;
+            if (!CanInteract || State == null || State.JugActive || throwAnchor == null || body == null) return false;
             var item = State.Count(TruckTaxiNeedsItem.FilledJug) > 0 ? TruckTaxiNeedsItem.FilledJug : TruckTaxiNeedsItem.FilledBottle;
             if (!State.ThrowFilled(item)) { Feedback = "No filled container to throw."; return false; }
             StartCoroutine(ThrowContainer(item));
@@ -229,19 +251,7 @@ namespace LWS.TruckTaxi
         }
         public bool RouteToBathroom()
         {
-            if (host?.GPS == null || body == null || bathrooms.Length == 0) { Feedback = "No authored restroom is available in this level."; return false; }
-            TruckTaxiBathroomPoint nearest = null; float distance = float.PositiveInfinity;
-            foreach (var point in bathrooms)
-            {
-                if (point == null || !point.isActiveAndEnabled || point.location == null) continue;
-                float candidate = (point.Position - body.position).sqrMagnitude;
-                if (candidate < distance) { distance = candidate; nearest = point; }
-            }
-            if (nearest == null) return false;
-            RoutedBathroom = nearest;
-            host.GPS.SetServiceDestination(nearest.stableId, nearest.displayName, nearest.Position);
-            Feedback = "Restroom route: " + nearest.displayName;
-            return true;
+            return RouteToService(TruckTaxiServiceCapability.Restroom);
         }
         public bool UseBathroom()
         {
@@ -252,19 +262,20 @@ namespace LWS.TruckTaxi
         public bool DisposeJug()
         {
             RefreshProximity();
-            if (State.DisposeJug(ProperlyStopped && NearbyBathroom.allowsJugDisposal)) return true;
-            Feedback = "A filled jug can be disposed of while stopped at a restroom."; return false;
+            if (State.DisposeJug(ServiceInReach(TruckTaxiServiceCapability.DisposeWaste) != null)) return true;
+            Feedback = "Dispose at a waste service. Or throw it out the window."; return false;
         }
         public bool CleanCab()
         {
             RefreshProximity();
-            if (State.CleanCab(ProperlyStopped && NearbyBathroom.allowsCabCleanup))
+            if (State.CleanCab(ServiceInReach(TruckTaxiServiceCapability.CleanCab) != null))
             { host.Session.ChargeService(Mathf.Max(0, settings.spillCleanupCostCents)); return true; }
             Feedback = "Cab cleanup is available while stopped at a restroom."; return false;
         }
         public void RestoreRideRoute()
         {
             RoutedBathroom = null;
+            host.GPS.ClearDestination();
             if (host.Session.State == TruckTaxiState.DrivingToPickup) host.GPS.SetPickupDestination(host.Session.Pickup);
             else if (host.Session.State == TruckTaxiState.DrivingToDestination)
             {
@@ -283,7 +294,7 @@ namespace LWS.TruckTaxi
             {
                 case TruckTaxiDriverNeedEvent.BladderUrgent: Feedback = "Restroom break needed soon."; category = TruckTaxiDialogueCategory.BladderUrgent; break;
                 case TruckTaxiDriverNeedEvent.JugStarted: Feedback = "Steady hands. Three cues."; category = TruckTaxiDialogueCategory.JugStarted; break;
-                case TruckTaxiDriverNeedEvent.JugSucceeded: Feedback = "TRUCKER'S BOTTLE - no spill. Dispose of the filled jug at a restroom."; category = TruckTaxiDialogueCategory.JugSucceeded; break;
+                case TruckTaxiDriverNeedEvent.JugSucceeded: Feedback = "No spill. Dispose at a service stop. Or throw it out the window."; category = TruckTaxiDialogueCategory.JugSucceeded; break;
                 case TruckTaxiDriverNeedEvent.JugSpilled:
                 case TruckTaxiDriverNeedEvent.CrisisAccident:
                     Feedback = kind == TruckTaxiDriverNeedEvent.CrisisAccident ? "An embarrassing incident. Shift continues; cab needs cleanup." : "That did not go to plan. Cab needs cleanup.";
@@ -350,6 +361,7 @@ namespace LWS.TruckTaxi
         }
         private void OnDisable()
         {
+            foreach (var source in indicatorSources) if (source != null) source.ReleaseGamepadIndicatorSuppression(ThrowContainerAction);
             if (State?.JugActive == true) State.CancelJug();
             liquidLoop?.Stop();
         }

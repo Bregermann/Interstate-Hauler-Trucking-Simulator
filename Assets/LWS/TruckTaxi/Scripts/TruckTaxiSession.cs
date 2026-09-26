@@ -75,7 +75,9 @@ namespace LWS.TruckTaxi
     // One local ride session. No freight ActiveJob, global gameplay state, files or save slots.
     public sealed class TruckTaxiSession
     {
+        public const string RideRequestsPreferenceKey = "TruckTaxi.RideRequestsEnabled.v1";
         public TruckTaxiState State { get; private set; } = TruckTaxiState.Inactive;
+        public bool RideRequestsEnabled { get; private set; }
         public PassengerProfile Passenger { get; private set; }
         public TruckTaxiRideLocation Pickup { get; private set; }
         public TruckTaxiRideLocation Destination { get; private set; }
@@ -232,6 +234,7 @@ namespace LWS.TruckTaxi
             TruckTaxiRouteDistanceService routeDistances = null, Func<Vector3> playerPosition = null)
         {
             this.config = config;
+            RideRequestsEnabled = PlayerPrefs.GetInt(RideRequestsPreferenceKey, 1) != 0;
             this.locations = new List<TruckTaxiRideLocation>(locations);
             random = new System.Random(seed);
             this.routeDistances = routeDistances ?? new TruckTaxiRouteDistanceService(null);
@@ -242,6 +245,14 @@ namespace LWS.TruckTaxi
         private void SetState(TruckTaxiState value)
         {
             State = value; StateAge = 0; Changed?.Invoke();
+        }
+        public void SetRideRequestsEnabled(bool enabled)
+        {
+            if (RideRequestsEnabled == enabled) return;
+            RideRequestsEnabled = enabled;
+            PlayerPrefs.SetInt(RideRequestsPreferenceKey, enabled ? 1 : 0);
+            PlayerPrefs.Save();
+            Changed?.Invoke();
         }
         public void StartShift()
         {
@@ -258,7 +269,7 @@ namespace LWS.TruckTaxi
         }
         public bool OfferRide(PassengerProfile forcedPassenger = null)
         {
-            if (State != TruckTaxiState.Available) return false;
+            if (State != TruckTaxiState.Available || !RideRequestsEnabled) return false;
             var pairs = new List<(TruckTaxiRideLocation, TruckTaxiRideLocation)>();
             foreach (var from in locations)
             foreach (var to in locations)
@@ -470,6 +481,38 @@ namespace LWS.TruckTaxi
             if (State != TruckTaxiState.RideComplete && State != TruckTaxiState.RideFailed && State != TruckTaxiState.PassengerEjected) return;
             Passenger = null; Pickup = Destination = null; Offer = null; CurrentRideId=null; requests.Clear(); SetState(TruckTaxiState.Available);
         }
+        public void CancelTemporaryActionsForRecovery()
+        {
+            if(State==TruckTaxiState.RideOffered) DeclineRide();
+            foreach(var request in requests)
+                if(request.State==TaxiRequestState.Active && request.Definition.IsStop) Resolve(request,false);
+            stopStarted=false;
+            requestClock=0;
+            hasPosition=false;
+            OfferTimerPaused=false;
+            Changed?.Invoke();
+        }
+        public void ApplyRoadsideAssistanceConsequence()
+        {
+            if(!HasPassenger || Passenger==null) return;
+            if(Passenger.pickupPatience==TruckTaxiPickupPatience.VeryImpatient || HasTag(Passenger,"TimeObsessed"))
+            { FailRide("Passenger cancelled after roadside assistance."); return; }
+            if(Passenger.chaosAffinity>0 || HasTag(Passenger,"chaotic","chaos"))
+            {
+                chaos+=25;
+                Satisfaction=Mathf.Clamp(Satisfaction+.1f,1,5);
+                React("Passenger enjoyed the roadside detour.");
+            }
+            else if(Passenger.pickupPatience==TruckTaxiPickupPatience.Patient ||
+                Passenger.pickupPatience==TruckTaxiPickupPatience.VeryPatient)
+                React("Passenger will wait through roadside assistance.");
+            else
+            {
+                Satisfaction=Mathf.Clamp(Satisfaction-(Passenger.pickupPatience==TruckTaxiPickupPatience.Impatient ? .75f : .5f),1,5);
+                React("Passenger was upset by the roadside delay.");
+            }
+            Changed?.Invoke();
+        }
         public void Tick(float deltaTime, Vector3 playerPosition, float speed, float acceleration, bool onRoad)
         {
             if (deltaTime <= 0 || State == TruckTaxiState.Inactive) return;
@@ -484,7 +527,7 @@ namespace LWS.TruckTaxi
                 { FailRide("Passenger cancelled: pickup wait expired."); return; }
             }
             if (State == TruckTaxiState.PassengerEjected && StateAge >= 3) { ContinueShift(); return; }
-            if (State == TruckTaxiState.Available && StateAge >= config.rideFrequency*FrequencyMultiplier()) OfferRide();
+            if (State == TruckTaxiState.Available && RideRequestsEnabled && StateAge >= config.rideFrequency*FrequencyMultiplier()) OfferRide();
             else if (State == TruckTaxiState.RideOffered && StateAge >= OfferDuration) DeclineRide();
             else if (State == TruckTaxiState.DrivingToPickup && Pickup.Contains(playerPosition) && speed <= config.stoppedSpeed)
                 SetState(TruckTaxiState.PassengerBoarding);

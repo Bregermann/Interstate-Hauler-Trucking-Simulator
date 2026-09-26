@@ -11,8 +11,13 @@ namespace LWS.TruckTaxi.Tests
         private TruckTaxiConfiguration config;
         private PassengerProfile passenger;
         private TruckTaxiSession session;
+        private bool hadRideRequestsPreference;
+        private int previousRideRequestsPreference;
         [SetUp] public void SetUp()
         {
+            hadRideRequestsPreference=PlayerPrefs.HasKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            previousRideRequestsPreference=PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey);
+            PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
             config=ScriptableObject.CreateInstance<TruckTaxiConfiguration>(); objects.Add(config);
             passenger=ScriptableObject.CreateInstance<PassengerProfile>(); objects.Add(passenger);
             passenger.passengerName="Test commuter"; passenger.basePatience=1000; passenger.requestDifficultyRange=Vector2.one;
@@ -33,7 +38,14 @@ namespace LWS.TruckTaxi.Tests
                 session.Capabilities.Stops.Add(stop);
             }
         }
-        [TearDown] public void TearDown() { foreach(var o in objects) Object.DestroyImmediate(o); objects.Clear(); }
+        [TearDown] public void TearDown()
+        {
+            foreach(var o in objects) Object.DestroyImmediate(o);
+            objects.Clear();
+            if(hadRideRequestsPreference) PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,previousRideRequestsPreference);
+            else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            PlayerPrefs.Save();
+        }
         private void Board()
         {
             session.StartShift(); Assert.IsTrue(session.OfferRide()); Assert.IsTrue(session.AcceptRide());
@@ -45,6 +57,83 @@ namespace LWS.TruckTaxi.Tests
         {
             session.Tick(.1f,session.Destination.StopPosition,0,0,true);
             session.Tick(2,session.Destination.StopPosition,0,0,true);
+        }
+        [Test] public void RideRequestsDefaultOnWhenNoPreferenceExists()
+        {
+            PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            var fresh=new TruckTaxiSession(config,new TruckTaxiRideLocation[0],19);
+            Assert.IsTrue(fresh.RideRequestsEnabled);
+        }
+        [Test] public void RideRequestsOffBlocksAutomaticAndManualOffersAndPersists()
+        {
+            session.StartShift();
+            session.SetRideRequestsEnabled(false);
+            Assert.IsFalse(session.RideRequestsEnabled);
+            Assert.AreEqual(0,PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey));
+            Assert.IsFalse(session.OfferRide());
+            session.Tick(config.rideFrequency*10+1,Vector3.zero,0,0,true);
+            Assert.AreEqual(TruckTaxiState.Available,session.State);
+            Assert.IsNull(session.Offer);
+            var reloaded=new TruckTaxiSession(config,new TruckTaxiRideLocation[0],19);
+            Assert.IsFalse(reloaded.RideRequestsEnabled);
+            session.SetRideRequestsEnabled(true);
+            Assert.IsTrue(session.OfferRide());
+        }
+        [Test] public void DisablingRideRequestsDoesNotCancelAnAcceptedRideOrCurrentOffer()
+        {
+            session.StartShift();
+            Assert.IsTrue(session.OfferRide());
+            session.SetRideRequestsEnabled(false);
+            Assert.AreEqual(TruckTaxiState.RideOffered,session.State);
+            Assert.IsTrue(session.AcceptRide());
+            Assert.AreEqual(TruckTaxiState.DrivingToPickup,session.State);
+            Assert.IsNotNull(session.CurrentRideId);
+        }
+        [Test] public void RoadsideAssistancePreservesPatientRideAndVeryImpatientPassengerCancels()
+        {
+            passenger.pickupPatience=TruckTaxiPickupPatience.Patient;
+            Board();
+            string rideId=session.CurrentRideId;
+            float satisfaction=session.Satisfaction;
+            session.CancelTemporaryActionsForRecovery();
+            session.ApplyRoadsideAssistanceConsequence();
+            Assert.AreEqual(TruckTaxiState.DrivingToDestination,session.State);
+            Assert.AreEqual(rideId,session.CurrentRideId);
+            Assert.AreEqual(satisfaction,session.Satisfaction);
+            session.EndShift();
+            passenger.pickupPatience=TruckTaxiPickupPatience.VeryImpatient;
+            Board();
+            session.ApplyRoadsideAssistanceConsequence();
+            Assert.AreEqual(TruckTaxiState.RideFailed,session.State);
+        }
+        [Test] public void ChaosFriendlyPassengerEnjoysRoadsideAssistance()
+        {
+            passenger.chaosAffinity=1;
+            Board();
+            float satisfaction=session.Satisfaction;
+            int chaos=session.ChaosScore;
+            session.ApplyRoadsideAssistanceConsequence();
+            Assert.AreEqual(TruckTaxiState.DrivingToDestination,session.State);
+            Assert.Greater(session.Satisfaction,satisfaction);
+            Assert.Greater(session.ChaosScore,chaos);
+        }
+        [Test] public void RecoveryResolvesTemporaryStopWithoutCancelingRide()
+        {
+            Board();
+            var definition=ScriptableObject.CreateInstance<PassengerRequestDefinition>();
+            objects.Add(definition);
+            definition.requestType=TaxiRequestType.ScenicRoute;
+            definition.target=1;
+            definition.timer=100;
+            Assert.IsTrue(session.GenerateRequest(definition));
+            var stop=session.ActiveStop;
+            Assert.IsNotNull(stop);
+            string rideId=session.CurrentRideId;
+            session.CancelTemporaryActionsForRecovery();
+            Assert.AreEqual(TaxiRequestState.Failed,stop.State);
+            Assert.IsNull(session.ActiveStop);
+            Assert.AreEqual(TruckTaxiState.DrivingToDestination,session.State);
+            Assert.AreEqual(rideId,session.CurrentRideId);
         }
         [Test] public void EjectionPaysPenaltyOnceAndAllowsNextRide()
         {

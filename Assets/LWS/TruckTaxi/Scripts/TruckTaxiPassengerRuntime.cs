@@ -163,7 +163,8 @@ namespace LWS.TruckTaxi
         {
             if(host?.Session==null) return;
             Dialogue.SetPaused(host.Paused && host.Session.State!=TruckTaxiState.RideComplete && host.Session.State!=TruckTaxiState.RideFailed);
-            bool hold=!host.Paused && host.Session.HasPassenger && passenger!=null && passenger.canBeEjected && (uiEjectHeld || EjectAction.IsPressed());
+            bool throwChord=Gamepad.current!=null && Gamepad.current.selectButton.isPressed && Gamepad.current.rightShoulder.isPressed;
+            bool hold=!throwChord && !host.Paused && host.Session.HasPassenger && passenger!=null && passenger.canBeEjected && (uiEjectHeld || EjectAction.IsPressed());
             EjectionHoldProgress=hold ? Mathf.Min(1,EjectionHoldProgress+Time.unscaledDeltaTime/EjectionHoldSeconds) : 0;
             if(EjectionHoldProgress>=1) RequestEjection();
             if(host.Paused) return;

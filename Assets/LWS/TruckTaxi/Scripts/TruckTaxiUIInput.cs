@@ -16,6 +16,7 @@ namespace LWS.TruckTaxi
         public InputAction Cancel { get; }
         public InputAction Pause { get; }
         public InputAction Debug { get; }
+        public InputAction Services { get; }
         private InputAction navigate;
         private Transform scope;
         private readonly List<Selectable> controls=new List<Selectable>();
@@ -37,6 +38,7 @@ namespace LWS.TruckTaxi
             Cancel.AddBinding("<Keyboard>/backspace");
             Pause=Button("Pause","<Keyboard>/escape","<Gamepad>/start");
             Debug=Button("Debug","<Keyboard>/f8",null);
+            Services=Button("Services","<Keyboard>/end",null);
             navigate=Actions.AddAction("Navigate",InputActionType.Value);
             navigate.expectedControlType="Vector2";
             navigate.AddCompositeBinding("2DVector").With("Up","<Keyboard>/upArrow").With("Down","<Keyboard>/downArrow").With("Left","<Keyboard>/leftArrow").With("Right","<Keyboard>/rightArrow");

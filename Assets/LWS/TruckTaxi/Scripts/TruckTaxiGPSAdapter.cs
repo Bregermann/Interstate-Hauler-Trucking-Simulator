@@ -46,6 +46,8 @@ namespace LWS.TruckTaxi
         public Camera PreviewCamera => previewCompass != null ? previewCameraField?.GetValue(previewCompass) as Camera : null;
         public string TargetId { get; private set; }
         public bool IsServiceDestination => serviceTargetActive;
+        public bool HasReachedServiceDestination => serviceTargetActive && player!=null &&
+            Vector3.ProjectOnPlane(serviceTargetPosition-player.position,Vector3.up).sqrMagnitude<=9;
         public bool RouteReady => player!=null && (target != null || stopTarget!=null || serviceTargetActive) && ((target!=null && target.Contains(player.position)) ||
             (serviceTargetActive && Vector3.ProjectOnPlane(serviceTargetPosition-player.position,Vector3.up).sqrMagnitude<=9) ||
             (stopTarget!=null && stopTarget.IsValidStop(player.position,0)) ||
@@ -219,15 +221,18 @@ namespace LWS.TruckTaxi
             UpdatePreviewCenter();
             // Compare cached rects only; reapply after vendor layout/resolution changes, not every frame.
             RefreshMapElementSizing();
+            if(HasReachedServiceDestination) ClearDestination();
         }
         private void OnDestroy()
         {
             if(cameraPresentation!=null) cameraPresentation.SetGpsPresentationPolicy(originalPolicy);
         }
         public void SetPickupDestination(TruckTaxiRideLocation location) => SetDestination(location, "pickup");
-        public void SetRideDestination(TruckTaxiRideLocation location) => SetDestination(location, "dropoff");
+        public void SetRideDestination(TruckTaxiRideLocation location)
+        { if (!serviceTargetActive) SetDestination(location, "dropoff"); }
         public void SetStopDestination(TruckTaxiStopObjectivePoint point)
         {
+            if(serviceTargetActive) return;
             if(point==null || navigation==null || player==null || graph==null) return;
             serviceTargetActive=false; MapMarkers?.ClearServiceTarget();
             stopTarget=point; target=null; TargetId=point.stableId;
@@ -269,6 +274,18 @@ namespace LWS.TruckTaxi
             },graph.Graph);
             if(!result.succeeded) Debug.LogWarning("Taxi service route: "+result.message,this);
             MapMarkers?.RequestRefresh();
+        }
+        // Session state transitions only release ride-owned navigation. An offer preview
+        // never claims a route, so declining it leaves the exact service route in place.
+        public void ClearRideDestination()
+        {
+            if(!serviceTargetActive) ClearDestination();
+        }
+        public bool CompleteServiceDestination(string stableId)
+        {
+            if(!serviceTargetActive || TargetId!=stableId) return false;
+            ClearDestination();
+            return true;
         }
         public void ClearDestination()
         { target=null; stopTarget=null; serviceTargetActive=false; TargetId=""; MapMarkers?.ClearServiceTarget(); navigation?.ClearRoute(); }
