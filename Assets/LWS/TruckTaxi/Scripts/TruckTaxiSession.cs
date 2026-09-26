@@ -24,6 +24,8 @@ namespace LWS.TruckTaxi
             Target=continuous ? Mathf.Max(.1f,value) : Mathf.Max(1,Mathf.RoundToInt(value));
         }
         public float Remaining => Mathf.Max(0, Definition.timer - Elapsed);
+        public string Description => Definition.requestType==TaxiRequestType.HitPedestrian
+            ? (Target<=1 ? "Hit a pedestrian" : $"Hit {Mathf.CeilToInt(Target)} pedestrians") : Definition.description;
     }
 
     public sealed class TaxiFare
@@ -62,6 +64,11 @@ namespace LWS.TruckTaxi
         public event Action<TaxiRequestProgress> RequestResolved;
         public event Action<TaxiRequestProgress> RequestCreated;
         public event Action<TaxiEventType> DrivingEvent;
+        public event Action<TruckTaxiPedestrianImpact> PedestrianImpact;
+        public TruckTaxiPedestrianImpact? LastPedestrianImpact { get; private set; }
+        public int PedestriansHit { get; private set; }
+        public string CurrentRideId { get; private set; }
+        private readonly HashSet<string> hitPedestrians=new HashSet<string>();
         public event Action PassengerEjected;
         public event Action DestinationChanged;
         public float BoardingProgress => State == TruckTaxiState.PassengerBoarding ? Mathf.Clamp01(StateAge / Mathf.Max(.1f,config.boardingSeconds)) : 0;
@@ -99,7 +106,7 @@ namespace LWS.TruckTaxi
         }
         public void EndShift()
         {
-            Passenger = null; Pickup = Destination = null; Offer = null; requests.Clear(); hasPosition = false;
+            Passenger = null; Pickup = Destination = null; Offer = null; requests.Clear(); hasPosition = false; CurrentRideId=null;
             SetState(TruckTaxiState.Inactive);
         }
         public bool OfferRide(PassengerProfile forcedPassenger = null)
@@ -144,6 +151,7 @@ namespace LWS.TruckTaxi
             if (State != TruckTaxiState.RideOffered) return false;
             if (Offer == null) return false;
             Passenger = Offer.Passenger; Pickup = Offer.Pickup; Destination = Offer.Destination;
+            CurrentRideId=Guid.NewGuid().ToString("N");
             if (Passenger.dialogueSet != null && Passenger.dialogueSet.Length > 0)
                 React(Passenger.dialogueSet[random.Next(Passenger.dialogueSet.Length)]);
             SetState(TruckTaxiState.DrivingToPickup); return true;
@@ -228,8 +236,11 @@ namespace LWS.TruckTaxi
                 if (definition == null) continue;
                 bool allowed = true;
                 foreach (var old in requests)
+                {
+                    if(old.State==TaxiRequestState.Active && !definition.IsCompatibleWith(old.Definition)) allowed=false;
                     if (old.Definition == definition && (old.State == TaxiRequestState.Active || !definition.allowMultipleInstances ||
                         ElapsedRide - old.ResolvedAt < definition.cooldown)) allowed = false;
+                }
                 if (allowed) eligible.Add(definition);
             }
             if (eligible.Count == 0) return false;
@@ -238,15 +249,27 @@ namespace LWS.TruckTaxi
             var progress = new TaxiRequestProgress(chosen, difficulty);
             requests.Add(progress);
             RequestCreated?.Invoke(progress);
-            React(string.IsNullOrEmpty(chosen.dialogue) ? chosen.description : chosen.dialogue);
+            React(chosen.requestType==TaxiRequestType.HitPedestrian || string.IsNullOrEmpty(chosen.dialogue) ? progress.Description : chosen.dialogue);
             Changed?.Invoke(); return true;
         }
-        public void RecordEvent(TaxiEventType type, string targetId, float impactSpeed = 0, int scoreOverride = -1, string passengerDialogue = null)
+        public void RecordPedestrianHit(string id,float speed,Vector3 impulse,Vector3 position) =>
+            RecordEvent(TaxiEventType.PedestrianHit,id,speed,pedestrianImpact:new TruckTaxiPedestrianImpact(id,speed,impulse,position,
+                HasPassenger ? Passenger?.passengerId : null, HasPassenger ? CurrentRideId : null));
+        public void RecordEvent(TaxiEventType type, string targetId, float impactSpeed = 0, int scoreOverride = -1, string passengerDialogue = null,
+            TruckTaxiPedestrianImpact? pedestrianImpact=null)
         {
+            if(type==TaxiEventType.PedestrianHit)
+            {
+                if(!float.IsFinite(impactSpeed) || impactSpeed<Mathf.Max(.1f,config.pedestrianImpact.minimumRagdollImpactSpeed) ||
+                    string.IsNullOrEmpty(targetId) || !hitPedestrians.Add(targetId)) return;
+                LastPedestrianImpact=pedestrianImpact ?? new TruckTaxiPedestrianImpact(targetId,impactSpeed,Vector3.zero,lastPosition,
+                    HasPassenger ? Passenger?.passengerId : null,HasPassenger ? CurrentRideId : null);
+                PedestriansHit++; PedestrianImpact?.Invoke(LastPedestrianImpact.Value);
+            }
             if (State != TruckTaxiState.DrivingToDestination) return;
             bool impact = type == TaxiEventType.Collision || type == TaxiEventType.TrafficRam ||
                 type == TaxiEventType.PedestrianHit || type == TaxiEventType.PropDamage;
-            if (impact && impactSpeed < config.minimumImpactSpeed) return;
+            if (impact && type!=TaxiEventType.PedestrianHit && impactSpeed < config.minimumImpactSpeed) return;
             chaos += scoreOverride >= 0 ? scoreOverride : config.Score(type);
             if (impact)
             {
@@ -308,7 +331,7 @@ namespace LWS.TruckTaxi
             if (request.State != TaxiRequestState.Active) return;
             request.State = success ? TaxiRequestState.Succeeded : TaxiRequestState.Failed;
             request.ResolvedAt = ElapsedRide;
-            React((success ? "REQUEST COMPLETE: " : "REQUEST FAILED: ") + request.Definition.description);
+            React((success ? "REQUEST COMPLETE: " : "REQUEST FAILED: ") + request.Description);
             Satisfaction = Mathf.Clamp(Satisfaction + (success ? request.Definition.ratingModifier : -0.2f),1,5);
             RequestResolved?.Invoke(request);
         }

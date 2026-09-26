@@ -14,7 +14,8 @@ namespace LWS.TruckTaxi
         private void Awake() { home = transform.position; rotation = transform.rotation; body = GetComponent<Rigidbody>(); }
         public bool Hit()
         {
-            if (kind == TaxiImpactKind.Pedestrian) return GetComponent<TruckTaxiPedestrian>()?.Struck() ?? false;
+            // Pedestrians require measured impact context through the collision observer.
+            if (kind == TaxiImpactKind.Pedestrian) return false;
             if (kind == TaxiImpactKind.Property)
             {
                 if (Damaged) return false;

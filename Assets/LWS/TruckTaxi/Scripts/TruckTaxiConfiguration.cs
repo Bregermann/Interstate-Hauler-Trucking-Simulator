@@ -36,7 +36,8 @@ namespace LWS.TruckTaxi
         public float collisionCooldown = 3;
         public float nearMissSpeed = 8;
         public float nearMissRadius = 5;
-        public float pedestrianRespawnSeconds = 12;
+        [Header("Pedestrian impact / UTS ragdoll")]
+        public TruckTaxiPedestrianImpactSettings pedestrianImpact = new TruckTaxiPedestrianImpactSettings();
         [Header("Passenger driving reactions")]
         public float fastDrivingSpeed = 18;
         public float speedReactionCooldown = 15;

@@ -18,7 +18,7 @@ namespace LWS.TruckTaxi
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void LaunchIfRequested()
         {
-            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke")) return;
+            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke")) return;
             new GameObject("Truck Taxi command-line smoke test").AddComponent<TruckTaxiPlayerSmokeTest>();
         }
         private void OnEnable() { Application.logMessageReceived+=TrackError; }
@@ -48,6 +48,14 @@ namespace LWS.TruckTaxi
             if(host==null || !host.Ready) { Debug.LogError("TRUCK TAXI PLAYER SMOKE: startup timed out."); Application.Quit(2); yield break; }
             string output=Path.GetFullPath(Path.Combine(Application.dataPath,"../Validation"));
             Directory.CreateDirectory(output);
+            if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-pedestrian-smoke"))
+            {
+                yield return TruckTaxiPedestrianRuntimeProbe.Run(host,(ok,message)=> {
+                    if(ok) Debug.Log("PEDESTRIAN CHECK PASS: "+message); else Debug.LogError("PEDESTRIAN CHECK FAIL: "+message);
+                },name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
+                Debug.Log(failed ? "TRUCK TAXI PEDESTRIAN STANDALONE FAIL" : "TRUCK TAXI PEDESTRIAN STANDALONE PASS");
+                Application.Quit(failed?2:0); yield break;
+            }
             yield return new WaitForSecondsRealtime(2);
             yield return new WaitForEndOfFrame();
             Capture(Path.Combine(output,"Windows_Start.png"));

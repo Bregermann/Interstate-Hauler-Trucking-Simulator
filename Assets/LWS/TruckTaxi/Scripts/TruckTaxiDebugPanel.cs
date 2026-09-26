@@ -20,7 +20,8 @@ namespace LWS.TruckTaxi
             diagnostics=ui.Text(panel,"Session diagnostics",new Vector2(.03f,.70f),new Vector2(.97f,.98f),23);
             pages=new[]{TruckTaxiHud.Rect(panel,"Ride tools",new Vector2(0,.07f),new Vector2(1,.70f)),
                 TruckTaxiHud.Rect(panel,"Presentation tools",new Vector2(0,.07f),new Vector2(1,.70f)),
-                TruckTaxiHud.Rect(panel,"Passenger tools",new Vector2(0,.07f),new Vector2(1,.70f))};
+                TruckTaxiHud.Rect(panel,"Passenger tools",new Vector2(0,.07f),new Vector2(1,.70f)),
+                TruckTaxiHud.Rect(panel,"Pedestrian tools",new Vector2(0,.07f),new Vector2(1,.70f))};
             string[] actions={"Start Shift","End Shift","Force Ride Offer","Auto Accept","Teleport Near Pickup","Force Passenger Boarding",
                 "Teleport Near Destination","Complete Ride","Fail Ride","Generate Request","Complete Current Request","Fail Current Request",
                 "Add Chaos Score","Spawn Traffic","Spawn Pedestrian","Reset Demo City"};
@@ -45,6 +46,13 @@ namespace LWS.TruckTaxi
                 ui.Button(pages[2],action.ToUpperInvariant(),new Vector2(left,top-.13f),new Vector2(left+.46f,top),()=>Execute(action));
             }
             pages[2].gameObject.SetActive(false);
+            string[] pedestrianActions={"Ragdoll Nearest Pedestrian","Ragdoll All Visible Pedestrians","Reset Pedestrians","Show Pedestrian Colliders","Show Last Pedestrian Impact"};
+            for(int i=0;i<pedestrianActions.Length;i++)
+            {
+                string action=pedestrianActions[i]; float top=.98f-i*.18f;
+                ui.Button(pages[3],action.ToUpperInvariant(),new Vector2(.03f,top-.14f),new Vector2(.97f,top),()=>Execute(action));
+            }
+            pages[3].gameObject.SetActive(false);
             ui.Button(panel,"NEXT TOOL PAGE",new Vector2(.25f,.01f),new Vector2(.75f,.065f),()=>{
                 pages[page].gameObject.SetActive(false); page=(page+1)%pages.Length; pages[page].gameObject.SetActive(true);
             });
@@ -72,6 +80,11 @@ namespace LWS.TruckTaxi
                 case "Add Chaos Score": s.DebugChaos(); break;
                 case "Spawn Traffic": host.traffic.SpawnTraffic(); break;
                 case "Spawn Pedestrian": host.SpawnPedestrian(); break;
+                case "Ragdoll Nearest Pedestrian": host.pedestrians.DebugRagdoll(host.Player.transform.position,Camera.main,false); break;
+                case "Ragdoll All Visible Pedestrians": host.pedestrians.DebugRagdoll(host.Player.transform.position,Camera.main,true); break;
+                case "Reset Pedestrians": host.pedestrians.ResetPopulation(); break;
+                case "Show Pedestrian Colliders": host.pedestrians.ShowColliders=!host.pedestrians.ShowColliders; break;
+                case "Show Last Pedestrian Impact": Debug.Log(PedestrianDiagnostics()); break;
                 case "Reset Demo City": host.ResetCity(); break;
                 case "Regenerate Ride Offer": s.DeclineRide(); s.OfferRide(); break;
                 case "Show Offer Map": host.hud.SetOfferMapVisible(true); Toggle(); break;
@@ -107,6 +120,14 @@ namespace LWS.TruckTaxi
             diagnostics.text=$"DEVELOPMENT / TAXI SESSION\n{s.State} | {s.Passenger?.passengerName ?? "NO PASSENGER"}\n{s.Pickup?.locationName} -> {s.Destination?.locationName}\nREQUESTS {s.Requests.Count} | FARE {TruckTaxiHud.Money(s.EstimateFare().Total)} | {s.ElapsedRide:0}s\nCHAOS {s.ChaosScore} | SATISFACTION {s.Satisfaction:0.0} | COLLISIONS {s.TrackedCollisions} | TRAFFIC {host.traffic.ActiveCount}";
             if(page==1) diagnostics.text=$"PRESENTATION / HANDLING\nPICKUP {s.Offer?.ToPickup.Meters:0.0}m [{s.Offer?.ToPickup.Source}]  TRIP {s.Offer?.Trip.Meters:0.0}m [{s.Offer?.Trip.Source}]\nTAXI OVERRIDE {host.Handling.Applied} | {host.Handling.SpeedMph:0.0} MPH\nSTEER INPUT {host.Handling.SteeringInput:0.00} | ANGLE {host.Handling.SteeringAngle:0.0} | YAW ASSIST {host.Handling.YawAssist:0.0}";
             if(page==2) diagnostics.text=$"PASSENGER / PICKUP\nSELECTED {SelectedPassenger()?.passengerName}\nACTIVE {s.Passenger?.passengerName} | PAIR {s.Passenger?.pairPassenger?.passengerName}\nRADIUS {host.PickupZone.Radius:0.0}m | DISTANCE {host.PickupZone.Distance:0.0}m | {host.PickupZone.State}\nVOICE {host.Passengers.Dialogue.IsPlaying} | EJECTED {host.Passengers.EjectedBodies}";
+            if(page==3) diagnostics.text=PedestrianDiagnostics();
+        }
+        private string PedestrianDiagnostics()
+        {
+            var hit=host.Session.LastPedestrianImpact;
+            TruckTaxiPedestrian found=null;
+            foreach(var ped in host.pedestrians.People) if(ped!=null && ped.PedestrianId==hit?.PedestrianId) { found=ped; break; }
+            return $"PEDESTRIANS {host.pedestrians.ActiveCount} | HITS {host.Session.PedestriansHit}\nID {hit?.PedestrianId ?? "NONE"}\nIMPACT {hit?.Speed:0.0} m/s | IMPULSE {hit?.Impulse.magnitude:0.0} N s\nRAGDOLL {(found!=null ? found.IsRagdoll.ToString() : "NONE / CLEANED UP")} | HIT EVENT {found?.HitEventSent}\nDebug ragdoll tools do not award score. Collider guides use Scene gizmos.";
         }
         private PassengerProfile SelectedPassenger()
         {

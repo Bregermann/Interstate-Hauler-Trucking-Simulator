@@ -60,7 +60,13 @@ MonoBehaviour:
   collisionCooldown: 3
   nearMissSpeed: 8
   nearMissRadius: 5
-  pedestrianRespawnSeconds: 12
+  pedestrianImpact:
+    minimumRagdollImpactSpeed: 2
+    impactForceMultiplier: 40
+    maximumRagdollImpulse: 900
+    upwardImpulse: 70
+    angularImpulse: 2
+    ragdollLifetime: 15
   fastDrivingSpeed: 18
   speedReactionCooldown: 15
   gentleAcceleration: 2

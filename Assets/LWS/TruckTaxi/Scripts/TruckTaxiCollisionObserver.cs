@@ -49,6 +49,22 @@ namespace LWS.TruckTaxi
         {
             if (host == null || host.Session == null) return;
             var target = collision.collider.GetComponentInParent<TruckTaxiImpactTarget>();
+            if(target!=null && target.kind==TaxiImpactKind.Pedestrian)
+            {
+                var pedestrian=target.GetComponent<TruckTaxiPedestrian>();
+                if(pedestrian==null || pedestrian.IsRagdoll) return;
+                Vector3 contact=collision.contactCount>0 ? collision.GetContact(0).point : target.transform.position;
+                // Collision relative velocity is pre-solver; the other body's current
+                // velocity already includes the contact impulse and understates the hit.
+                Vector3 relative=incomingVelocity.normalized*collision.relativeVelocity.magnitude;
+                if(Vector3.Dot(incomingVelocity,(contact-body.worldCenterOfMass).normalized)<=.1f) return;
+                if(!pedestrian.TryStrike(relative,contact)) return;
+                LastImpactSpeed=relative.magnitude; LastRelativeVelocity=relative;
+                LastImpulse=pedestrian.LastImpulse.magnitude; LastTarget=target.targetId; LastCollisionTime=Time.time;
+                host.Session.RecordPedestrianHit(target.targetId,LastImpactSpeed,pedestrian.LastImpulse,contact);
+                pedestrian.MarkHitEventSent();
+                return; // Ragdoll bone contacts must never fall through to generic collision scoring.
+            }
             int key = target != null ? target.GetInstanceID() : collision.collider.GetInstanceID();
             if (lastImpact.TryGetValue(key,out float at) && Time.time - at < host.Configuration.collisionCooldown) return;
             if (collision.relativeVelocity.magnitude < host.Configuration.minimumImpactSpeed) return;

@@ -6,6 +6,8 @@ namespace LWS.TruckTaxi
         SmoothRide, NoCollisions, MaximumChaos, ScenicRoute, NearMiss }
     public enum TaxiEventType { Collision, TrafficRam, PedestrianHit, PropDamage, Shortcut, ScenicPoint, NearMiss, HardLanding }
     public enum TaxiRequestState { Active, Succeeded, Failed }
+    [System.Flags]
+    public enum TaxiRequestBehavior { None=0, Impact=1, Offroad=2, HardAcceleration=4 }
 
     [CreateAssetMenu(menuName = "Truck Taxi/Passenger Request")]
     public sealed class PassengerRequestDefinition : ScriptableObject
@@ -23,5 +25,16 @@ namespace LWS.TruckTaxi
         public bool allowMultipleInstances;
         [Tooltip("Smooth rides fail above this acceleration/braking magnitude (m/s squared).")]
         public float maximumAcceleration = 5;
+        [Tooltip("Additional behavior this request requires; used to exclude contradictory active requests.")]
+        public TaxiRequestBehavior requiredBehavior;
+        [Tooltip("Additional behavior this request forbids.")]
+        public TaxiRequestBehavior forbiddenBehavior;
+        public TaxiRequestBehavior RequiredBehavior => requiredBehavior |
+            (requestType==TaxiRequestType.HitPedestrian || requestType==TaxiRequestType.RamTraffic || requestType==TaxiRequestType.PropertyDamage
+                ? TaxiRequestBehavior.Impact : requestType==TaxiRequestType.Offroad ? TaxiRequestBehavior.Offroad : TaxiRequestBehavior.None);
+        public TaxiRequestBehavior ForbiddenBehavior => forbiddenBehavior |
+            (requestType==TaxiRequestType.NoCollisions || requestType==TaxiRequestType.SmoothRide ? TaxiRequestBehavior.Impact : TaxiRequestBehavior.None);
+        public bool IsCompatibleWith(PassengerRequestDefinition other) => other!=null &&
+            (RequiredBehavior & other.ForbiddenBehavior)==0 && (other.RequiredBehavior & ForbiddenBehavior)==0;
     }
 }

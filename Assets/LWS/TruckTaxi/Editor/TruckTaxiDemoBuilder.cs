@@ -77,7 +77,7 @@ namespace LWS.TruckTaxi.Editor
         private static TruckTaxiConfiguration CreateContent()
         {
             var config=Asset<TruckTaxiConfiguration>(Root+"/ScriptableObjects/TruckTaxi_DemoConfiguration.asset");
-            var descriptions=new[]{"Beat the clock","Use a shortcut","Ram one traffic car","Bump one fictional pedestrian","Knock over roadside clutter",
+            var descriptions=new[]{"Beat the clock","Use a shortcut","Ram one traffic car","Hit a pedestrian","Knock over roadside clutter",
                 "Spend 5 seconds offroad","Keep the ride smooth","Arrive without a collision","Make 400 chaos points","Visit a scenic overlook","Thread a near miss"};
             var defs=new List<PassengerRequestDefinition>();
             for(int i=0;i<descriptions.Length;i++)
@@ -340,7 +340,7 @@ namespace LWS.TruckTaxi.Editor
         {
             var population=new GameObject("UTS Taxi Pedestrians").AddComponent<TruckTaxiPedestrianPopulation>();
             Type pathType=Resolve("PeopleWalkPath");
-            var prefabs=AssetDatabase.FindAssets("t:Prefab",new[]{"Assets/UTS_FullPack/Models/People/Prefabs/Womans"}).Take(2).Select(g=>AssetDatabase.LoadAssetAtPath<GameObject>(AssetDatabase.GUIDToAssetPath(g))).ToArray();
+            var prefabs=CreateRagdollPrefabs();
             if(prefabs.Length==0) throw new InvalidOperationException("UTS adult pedestrian prefabs missing.");
             var paths=new List<Component>();
             for(int i=0;i<4;i++)
@@ -358,6 +358,58 @@ namespace LWS.TruckTaxi.Editor
                 paths.Add(path);
             }
             population.peoplePaths=paths.ToArray(); return population;
+        }
+        private static GameObject[] CreateRagdollPrefabs()
+        {
+            string folder=Root+"/Prefabs/Pedestrians";
+            Directory.CreateDirectory(folder); AssetDatabase.Refresh();
+            return new[]{"Girl_11","Girl_22"}.Select(name=>
+            {
+                string path=folder+"/Taxi_"+name+".prefab";
+                var existing=AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if(existing!=null) return existing;
+                var source=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/UTS_FullPack/Models/People/RagDoll Prefabs/"+name+".prefab");
+                if(source==null) throw new InvalidOperationException("UTS jointed ragdoll missing: "+name);
+                var instance=(GameObject)PrefabUtility.InstantiatePrefab(source);
+                try
+                {
+                    instance.name="Taxi_"+name;
+                    var vendor=instance.GetComponent(Resolve("NPCStats"));
+                    var original=new SerializedObject(vendor);
+                    var adapter=instance.AddComponent(Resolve("TruckTaxiUtsRagdollAdapter"));
+                    var copy=new SerializedObject(adapter);
+                    foreach(string field in new[]{"destroy","timeToDestroy","boundsMass","ragdollElements","col"})
+                        copy.CopyFromSerializedProperty(original.FindProperty(field));
+                    copy.FindProperty("destroy").boolValue=false;
+                    copy.FindProperty("ragdollElements").ClearArray();
+                    copy.ApplyModifiedPropertiesWithoutUndo();
+                    Object.DestroyImmediate(vendor);
+                    return PrefabUtility.SaveAsPrefabAsset(instance,path);
+                }
+                finally { Object.DestroyImmediate(instance); }
+            }).ToArray();
+        }
+        [MenuItem("Truck Taxi/Update Pedestrian Ragdolls")]
+        public static void UpdatePedestrianContent()
+        {
+            if(!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            var prefabs=CreateRagdollPrefabs();
+            var scene=EditorSceneManager.OpenScene(ScenePath);
+            var population=Object.FindFirstObjectByType<TruckTaxiPedestrianPopulation>();
+            if(population==null) throw new InvalidOperationException("Existing UTS pedestrian population missing.");
+            foreach(var path in population.peoplePaths)
+            {
+                Member(path,"walkingPrefabs",prefabs); EditorUtility.SetDirty(path);
+            }
+            var request=AssetDatabase.LoadAssetAtPath<PassengerRequestDefinition>(Root+"/ScriptableObjects/Requests/HitPedestrian.asset");
+            request.description="Hit a pedestrian"; request.dialogue="Hit a pedestrian. I will put it in the review.";
+            EditorUtility.SetDirty(request);
+            var configuration=Object.FindFirstObjectByType<TruckTaxiBootstrap>().configuration;
+            // Persist the new Inspector section without resetting designer tuning.
+            configuration.pedestrianImpact ??= new TruckTaxiPedestrianImpactSettings();
+            EditorUtility.SetDirty(configuration);
+            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
+            Debug.Log("TRUCK TAXI PEDESTRIANS: existing four UTS paths now use project-owned UTS ragdoll variants; request wording updated.");
         }
         private static void BuildLighting()
         {

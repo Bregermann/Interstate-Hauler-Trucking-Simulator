@@ -61,7 +61,7 @@ namespace LWS.TruckTaxi
             Session.DrivingEvent += OnDrivingEvent;
             Session.Changed += OnSessionChanged;
             traffic.Initialize();
-            pedestrians.Initialize();
+            pedestrians.Initialize(configuration.pedestrianImpact);
             // The existing development HUD auto-creates in Editor builds, even without its service.
             // Hide only that instance in this isolated scene; the taxi HUD owns these surfaces.
             foreach (var root in FindObjectsByType<LwsDevelopmentUiRoot>(FindObjectsSortMode.None)) root.gameObject.SetActive(false);

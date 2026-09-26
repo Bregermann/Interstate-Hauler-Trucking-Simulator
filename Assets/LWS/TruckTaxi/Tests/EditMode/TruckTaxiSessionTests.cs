@@ -181,6 +181,69 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsFalse(registry.TryGet(out ILwsActiveJobService jobs));
             Assert.IsTrue(registry.TryGet(out ILwsNavigationService navigation));
         }
+        [Test] public void PedestrianBonesCannotDuplicateEventScoreObjectiveOrReaction()
+        {
+            var request=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); objects.Add(request);
+            request.requestType=TaxiRequestType.HitPedestrian; request.target=2;
+            passenger.possibleRequests=new[]{request}; passenger.passengerId="passenger.test"; passenger.chaosAffinity=1;
+            Board(); int events=0,contextEvents=0;
+            session.DrivingEvent+=type=> { if(type==TaxiEventType.PedestrianHit) events++; };
+            session.PedestrianImpact+=hit=>contextEvents++;
+            float satisfaction=session.Satisfaction;
+            for(int i=0;i<12;i++) session.RecordPedestrianHit("same-person",5,Vector3.forward*200,Vector3.one);
+            Assert.AreEqual(1,events); Assert.AreEqual(1,contextEvents); Assert.AreEqual(1,session.PedestriansHit);
+            Assert.AreEqual(1,session.Requests[0].Progress); Assert.AreEqual(config.pedestrianHitScore,session.ChaosScore);
+            Assert.Greater(session.Satisfaction,satisfaction); Assert.AreEqual(1,session.TrackedCollisions);
+            Assert.AreEqual("Hit 2 pedestrians",session.Requests[0].Description);
+            Assert.AreEqual("passenger.test",session.LastPedestrianImpact.Value.PassengerId);
+            Assert.AreEqual(session.CurrentRideId,session.LastPedestrianImpact.Value.RideId);
+            Assert.AreEqual(Vector3.one,session.LastPedestrianImpact.Value.Position);
+            session.RecordPedestrianHit("next-person",7,Vector3.forward*280,Vector3.zero);
+            Assert.AreEqual(TaxiRequestState.Succeeded,session.Requests[0].State);
+        }
+        [Test] public void LowSpeedDoesNotConsumePedestrianHitGuard()
+        {
+            Board(); session.RecordPedestrianHit("person",1,Vector3.zero,Vector3.zero);
+            Assert.Zero(session.PedestriansHit); Assert.Zero(session.ChaosScore);
+            session.RecordPedestrianHit("person",2.5f,Vector3.forward*100,Vector3.zero);
+            Assert.AreEqual(1,session.PedestriansHit); Assert.Greater(session.ChaosScore,0);
+        }
+        [TestCase(TaxiRequestType.HitPedestrian)]
+        [TestCase(TaxiRequestType.RamTraffic)]
+        [TestCase(TaxiRequestType.PropertyDamage)]
+        public void ImpactRequirementsCannotBeAssignedAlongsideNoCollisions(TaxiRequestType type)
+        {
+            var safe=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); objects.Add(safe); safe.requestType=TaxiRequestType.NoCollisions;
+            var impact=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); objects.Add(impact); impact.requestType=type;
+            Assert.IsFalse(safe.IsCompatibleWith(impact)); Assert.IsFalse(impact.IsCompatibleWith(safe));
+            passenger.possibleRequests=new[]{safe}; Board(); passenger.possibleRequests=new[]{impact};
+            Assert.IsFalse(session.GenerateRequest()); Assert.AreEqual(1,session.Requests.Count);
+            session.DebugResolveRequest(false); Assert.IsTrue(session.GenerateRequest());
+        }
+        [Test] public void AuthoredBehaviorRulesAreSymmetricAndExtensible()
+        {
+            var a=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); objects.Add(a);
+            var b=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); objects.Add(b);
+            a.requiredBehavior=TaxiRequestBehavior.Offroad; b.forbiddenBehavior=TaxiRequestBehavior.Offroad;
+            Assert.IsFalse(a.IsCompatibleWith(b)); Assert.IsFalse(b.IsCompatibleWith(a));
+            b.forbiddenBehavior=TaxiRequestBehavior.None; Assert.IsTrue(a.IsCompatibleWith(b));
+        }
+        [Test] public void PedestrianImpulseIsDirectionalSpeedDependentFiniteAndCapped()
+        {
+            var tuning=new TruckTaxiPedestrianImpactSettings();
+            var slow=tuning.CalculateImpulse(Vector3.forward*3);
+            var fast=tuning.CalculateImpulse(Vector3.forward*20);
+            Assert.Greater(fast.magnitude,slow.magnitude); Assert.Greater(slow.z,0);
+            Assert.LessOrEqual(tuning.CalculateImpulse(Vector3.left*10000).magnitude,900.01f);
+            Assert.AreEqual(Vector3.zero,tuning.CalculateImpulse(new Vector3(float.NaN,0,0)));
+        }
+        [Test] public void PlayerContentHasNaturalPedestrianWording()
+        {
+            foreach(var path in System.IO.Directory.EnumerateFiles("Assets/LWS/TruckTaxi/ScriptableObjects","*.asset",System.IO.SearchOption.AllDirectories))
+                StringAssert.DoesNotContain("fictional pedestrian",System.IO.File.ReadAllText(path).ToLowerInvariant(),path);
+            var request=UnityEditor.AssetDatabase.LoadAssetAtPath<PassengerRequestDefinition>("Assets/LWS/TruckTaxi/ScriptableObjects/Requests/HitPedestrian.asset");
+            Assert.AreEqual("Hit a pedestrian",new TaxiRequestProgress(request,1).Description);
+        }
         [Test] public void CityGraphValidAndRoutesAllStops()
         {
             var graph=Editor.TruckTaxiDemoBuilder.CreateGraph();

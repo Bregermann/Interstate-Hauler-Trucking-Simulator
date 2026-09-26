@@ -155,7 +155,7 @@ namespace LWS.TruckTaxi
                 for(int i=Mathf.Max(0,s.Requests.Count-3);i<s.Requests.Count;i++)
                 {
                     var r=s.Requests[i];
-                    b.AppendLine(r.Definition.description);
+                    b.AppendLine(r.Description);
                     b.AppendLine(r.State==TaxiRequestState.Active ? $"{r.Progress:0}/{r.Target:0.#}  |  {r.Remaining:0}s" : r.State.ToString().ToUpperInvariant());
                 }
                 requestText.text=b.ToString();

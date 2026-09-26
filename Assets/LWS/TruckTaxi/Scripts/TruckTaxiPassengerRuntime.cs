@@ -131,7 +131,7 @@ namespace LWS.TruckTaxi
             actor.transform.SetPositionAndRotation(truck.position+truck.right*(2.8f+index)+Vector3.up*2,Quaternion.LookRotation(truck.forward,Vector3.up));
             actor.Eject(host.Player.GetComponent<Rigidbody>().linearVelocity+truck.right*(profile?.ejectionImpulse ?? 6)+Vector3.up*3,truck); EjectedBodies++;
         }
-        private void OnRequest(TaxiRequestProgress request) { pendingRequest=request.Definition.dialogue; modifiers.Invoke(m=>m.OnRequestStarted(request)); }
+        private void OnRequest(TaxiRequestProgress request) { pendingRequest=request.Definition.requestType==TaxiRequestType.HitPedestrian ? request.Description : request.Definition.dialogue; modifiers.Invoke(m=>m.OnRequestStarted(request)); }
         private void OnResolved(TaxiRequestProgress request)
         {
             modifiers.Invoke(m=>m.OnRequestCompleted(request));
