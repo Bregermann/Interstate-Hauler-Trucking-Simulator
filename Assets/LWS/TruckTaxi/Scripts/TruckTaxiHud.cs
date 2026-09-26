@@ -13,6 +13,8 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiHud : MonoBehaviour
     {
         public GameObject heatButtonPrefab;
+        public GameObject heatSliderPrefab;
+        public GameObject heatSwitchPrefab;
         public TMP_FontAsset font;
         private TruckTaxiBootstrap host;
         private RectTransform root, modal, ridePanel, pausePanel;
@@ -23,6 +25,7 @@ namespace LWS.TruckTaxi
         private TextMeshProUGUI ejectProgress;
         private TruckTaxiDebugPanel debug;
         private TruckTaxiOfferMap offerMap;
+        public TruckTaxiGPSSettingsPanel GPSSettings { get; private set; }
         private UnityEngine.UI.Image offerPortrait;
         private bool showOfferMap=true;
         private InputAction confirm, cancel, debugKey, pause;
@@ -61,8 +64,10 @@ namespace LWS.TruckTaxi
             decline = Button(modal,"DECLINE",new Vector2(0.52f,0.06f),new Vector2(0.94f,0.19f),()=>host.Session.DeclineRide());
             next = Button(modal,"NEXT FARE",new Vector2(0.18f,0.06f),new Vector2(0.82f,0.19f),()=>host.Session.ContinueShift());
             Button(root,"RESET UPRIGHT",new Vector2(0.73f,0.03f),new Vector2(0.88f,0.09f),()=>host.Player.UprightRecoveryController.RequestResetUpright("Truck Taxi HUD"));
-            Button(root,"PAUSE",new Vector2(0.89f,0.03f),new Vector2(0.99f,0.09f),()=>host.SetPaused(!host.Paused));
+            Button(root,"PAUSE",new Vector2(0.89f,0.03f),new Vector2(0.99f,0.09f),HandlePause);
             Button(root,"DEBUG",new Vector2(0.89f,0.11f),new Vector2(0.99f,0.17f),()=>debug.Toggle());
+            Button(root,"GPS ON / OFF",new Vector2(.73f,.11f),new Vector2(.88f,.17f),()=>host.GPS.ToggleHud());
+            Button(root,"GPS SETTINGS",new Vector2(.89f,.19f),new Vector2(.99f,.25f),()=>GPSSettings?.Toggle());
             eject=Button(ridePanel,"HOLD TO EJECT",new Vector2(.05f,.08f),new Vector2(.95f,.21f),()=>{});
             var ejectEvents=eject.AddComponent<EventTrigger>();
             var down=new EventTrigger.Entry { eventID=EventTriggerType.PointerDown };
@@ -76,6 +81,12 @@ namespace LWS.TruckTaxi
             Button(pausePanel,"END SHIFT",new Vector2(0.1f,0.33f),new Vector2(0.9f,0.48f),()=>host.Session.EndShift());
             Button(pausePanel,"QUIT DEMO",new Vector2(0.1f,0.11f),new Vector2(0.9f,0.26f),()=>Application.Quit());
             debug = gameObject.AddComponent<TruckTaxiDebugPanel>(); debug.Initialize(host,this);
+            if(heatSliderPrefab!=null && heatSwitchPrefab!=null)
+            {
+                GPSSettings=gameObject.AddComponent<TruckTaxiGPSSettingsPanel>();
+                GPSSettings.Initialize(host,this);
+            }
+            else Debug.LogError("Truck Taxi GPS settings need the Heat slider/switch prefab references on TruckTaxiHud.",this);
             confirm = new InputAction("Taxi Confirm",InputActionType.Button,"<Keyboard>/enter");
             confirm.AddBinding("<Gamepad>/buttonSouth");
             cancel = new InputAction("Taxi Decline",InputActionType.Button,"<Keyboard>/backspace");
@@ -90,7 +101,12 @@ namespace LWS.TruckTaxi
         {
             if(host == null || host.Session == null) return;
             if(debugKey.WasPressedThisFrame()) debug.Toggle();
-            if(pause.WasPressedThisFrame()) host.SetPaused(!host.Paused);
+            if(pause.WasPressedThisFrame()) HandlePause();
+            if(GPSSettings!=null && GPSSettings.IsOpen)
+            {
+                if(Time.unscaledTime>=refreshAt) { refreshAt=Time.unscaledTime+.15f; Refresh(); }
+                return;
+            }
             if(confirm.WasPressedThisFrame() && EventSystem.current?.currentSelectedGameObject == null)
             {
                 switch(host.Session.State)
@@ -104,6 +120,11 @@ namespace LWS.TruckTaxi
             if(cancel.WasPressedThisFrame()) host.Session.DeclineRide();
             if(Time.unscaledTime >= refreshAt) { refreshAt = Time.unscaledTime + 0.15f; Refresh(); }
         }
+        private void HandlePause()
+        {
+            if(GPSSettings!=null && GPSSettings.IsOpen) GPSSettings.Close();
+            else host.SetPaused(!host.Paused);
+        }
         private void Refresh()
         {
             var s = host.Session;
@@ -114,8 +135,10 @@ namespace LWS.TruckTaxi
             bool ended=s.State==TruckTaxiState.RideComplete || s.State==TruckTaxiState.RideFailed;
             modal.gameObject.SetActive(offered||inactive||ended);
             start.SetActive(inactive); accept.SetActive(offered); decline.SetActive(offered); next.SetActive(ended);
-            pausePanel.gameObject.SetActive(host.Paused && !inactive && !ended);
+            bool gpsSettings=GPSSettings!=null && GPSSettings.IsOpen;
+            pausePanel.gameObject.SetActive(host.Paused && !inactive && !ended && !gpsSettings);
             if(pausePanel.gameObject.activeSelf) modal.gameObject.SetActive(false);
+            if(gpsSettings) modal.gameObject.SetActive(false);
             offerMap.transform.parent.gameObject.SetActive(offered && showOfferMap);
             offerMap.Show(offered ? s.Offer : null);
             offerPortrait.sprite=offered ? s.Passenger?.portrait : null;
@@ -140,7 +163,7 @@ namespace LWS.TruckTaxi
             }
             else if(ended) details.text=s.Reaction;
             bool active = s.State==TruckTaxiState.DrivingToPickup || s.State==TruckTaxiState.PassengerBoarding || s.HasPassenger;
-            ridePanel.gameObject.SetActive(active);
+            ridePanel.gameObject.SetActive(active && !gpsSettings);
             if(active)
             {
                 portrait.sprite=s.Passenger.portrait;

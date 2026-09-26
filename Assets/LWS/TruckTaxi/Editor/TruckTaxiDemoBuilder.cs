@@ -19,6 +19,24 @@ namespace LWS.TruckTaxi.Editor
         public const string Root = "Assets/LWS/TruckTaxi";
         public const string ScenePath = Root+"/Scenes/TruckTaxi_DemoCity.unity";
         private static Material asphalt, grass, concrete, yellow, teal, coral;
+        private static void AssignGPSControls(TruckTaxiHud hud)
+        {
+            hud.heatSliderPrefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Heat - Complete Modern UI/Prefabs/UI Elements/Slider/Slider.prefab");
+            hud.heatSwitchPrefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Heat - Complete Modern UI/Prefabs/UI Elements/Switch/Switch.prefab");
+            if(hud.heatSliderPrefab==null || hud.heatSwitchPrefab==null) throw new InvalidOperationException("Heat GPS settings controls are missing.");
+        }
+        // Targeted reference wiring for existing cities; does not regenerate scene content.
+        [MenuItem("Truck Taxi/Update GPS Settings References")]
+        public static void UpdateGPSSettingsReferences()
+        {
+            if(!Application.isBatchMode && !EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo()) return;
+            var scene=EditorSceneManager.OpenScene(ScenePath);
+            var hud=Object.FindFirstObjectByType<TruckTaxiHud>();
+            if(hud==null) throw new InvalidOperationException("Truck Taxi HUD missing.");
+            AssignGPSControls(hud);
+            EditorSceneManager.MarkSceneDirty(scene);
+            EditorSceneManager.SaveScene(scene);
+        }
         [MenuItem("Truck Taxi/Create Or Refresh Demo City")]
         public static void CreateDemo()
         {
@@ -63,6 +81,7 @@ namespace LWS.TruckTaxi.Editor
             host.pedestrians=BuildPedestrianPaths();
             host.hud=host.gameObject.AddComponent<TruckTaxiHud>();
             host.hud.heatButtonPrefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Heat - Complete Modern UI/Prefabs/UI Elements/Button/Button.prefab");
+            AssignGPSControls(host.hud);
             host.hud.font=TMP_Settings.defaultFontAsset;
             if(host.hud.heatButtonPrefab==null) throw new InvalidOperationException("Heat button prefab missing.");
             EditorSceneManager.MarkSceneDirty(scene);

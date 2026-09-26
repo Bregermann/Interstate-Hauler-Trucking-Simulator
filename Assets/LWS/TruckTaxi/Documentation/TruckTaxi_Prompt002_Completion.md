@@ -46,8 +46,10 @@ captures reviewed for layout, not human usability sign-off at every resolution.
 
 `TruckTaxiGPSAdapter` fits the existing live Compass world Canvas to the tractor
 `interior` physical screen. Actual rect 640x340, lossy pixel scale 0.00023,
-physical dimensions 0.1472x0.0782m. The redundant floating HUD Canvas is disabled;
-its existing map camera still supplies the offer preview. No extra navigator.
+physical dimensions 0.1472x0.0782m. The subsequent GPS display repair restores the
+floating HUD in every camera with a player toggle and in-game display settings.
+Its existing map camera still supplies the offer preview. No extra navigator.
+See `TruckTaxi_GPS_Display.md` for current behavior and route visibility tests.
 Pickup/destination routes, exact offer, cockpit display and nonzero bounds are
 covered in PlayMode. Destination changes use the same existing route request.
 

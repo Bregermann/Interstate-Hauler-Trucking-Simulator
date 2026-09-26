@@ -18,6 +18,7 @@ namespace LWS.TruckTaxi
         public Vector2 dashboardScreenPixels = new Vector2(640, 340);
         public float dashboardPixelScale = .00023f;
         private Component previewCompass;
+        private Component cabCompass;
         private Canvas previewCanvas;
         private ILwsCameraPresentationService cameraPresentation;
         private LwsGpsPresentationPolicy originalPolicy;
@@ -25,6 +26,11 @@ namespace LWS.TruckTaxi
         private System.Reflection.PropertyInfo followOffsetProperty;
         private Vector3 previewCenter;
         private bool previewing;
+        public TruckTaxiGPSDisplaySettings DisplaySettings { get; private set; }
+        public Component CabCompass => cabCompass;
+        public Component HudCompass => previewCompass;
+        public bool HudVisible => DisplaySettings != null && DisplaySettings.showHud;
+        public event System.Action DisplaySettingsChanged;
         public RectTransform DashboardScreen { get; private set; }
         public Camera PreviewCamera => previewCompass != null ? previewCameraField?.GetValue(previewCompass) as Camera : null;
         public string TargetId { get; private set; }
@@ -33,6 +39,7 @@ namespace LWS.TruckTaxi
         public void Initialize(Transform tractor, LwsRoadGraphProvider provider)
         {
             player = tractor; graph = provider;
+            DisplaySettings = TruckTaxiGPSDisplaySettings.Load();
             LwsApplicationBootstrap.Instance.Registry.TryGet(out navigation);
         }
         public void ConfigureDemoPresentation()
@@ -64,24 +71,27 @@ namespace LWS.TruckTaxi
                     previewCompass=component; previewCanvas=canvas;
                     previewCameraField=type.GetField("miniMapCamera");
                     followOffsetProperty=type.GetProperty("miniMapFollowOffset");
-                    Set(component,"miniMapKeepStraight",true);
-                    Set(component,"miniMapShowPlayerIcon",false);
-                    Set(component,"miniMapShowPOIs",false);
-                    canvas.enabled=false;
+                    // Below the existing taxi menus, but visible in every driving camera.
+                    canvas.sortingOrder=850;
+                    SetEnum(component,"miniMapLocation","BottomLeft");
+                    Set(component,"miniMapLocationOffset",new Vector2(28,220));
                 }
                 else if (canvas.renderMode == RenderMode.WorldSpace && interior != null)
                 {
+                    cabCompass=component;
                     DashboardScreen=component.transform as RectTransform;
                     DashboardScreen.SetParent(interior,false);
-                    DashboardScreen.localPosition=dashboardScreenPosition;
+                    // The vendor map ignores depth, but its route does not. Keep the entire
+                    // display just in front of the authored physical screen, not inside it.
+                    DashboardScreen.localPosition=dashboardScreenPosition+dashboardScreenNormal.normalized*.004f;
                     DashboardScreen.localRotation=Quaternion.LookRotation(-dashboardScreenNormal,Vector3.up);
                     DashboardScreen.localScale=Vector3.one*dashboardPixelScale;
                     FitScreen(DashboardScreen);
                     foreach(var rect in DashboardScreen.GetComponentsInChildren<RectTransform>(true))
                         if(rect.name=="MiniMap Root" || rect.name=="MiniMap" || rect.name=="MiniMapMask") FitScreen(rect);
-                    Set(component,"miniMapCaptureSize",260f);
                 }
             }
+            ApplyDisplaySettings(false);
         }
         private void FitScreen(RectTransform rect)
         {
@@ -98,13 +108,56 @@ namespace LWS.TruckTaxi
         public void FrameOffer(TruckTaxiRideOffer offer)
         {
             previewing=offer!=null;
-            if(offer==null || previewCompass==null) return;
+            if(previewCompass==null) return;
+            ApplyDisplaySettings(false);
+            if(offer==null) return;
             var bounds=new Bounds(offer.PlayerPosition,Vector3.zero);
             foreach(var point in offer.ToPickup.Points) bounds.Encapsulate(point);
             foreach(var point in offer.Trip.Points) bounds.Encapsulate(point);
             previewCenter=bounds.center;
             Set(previewCompass,"miniMapCaptureSize",Mathf.Max(160,Mathf.Max(bounds.size.x,bounds.size.z)*1.3f));
             UpdatePreviewCenter();
+        }
+        public void ToggleHud()
+        {
+            DisplaySettings.showHud=!DisplaySettings.showHud;
+            ApplyDisplaySettings();
+        }
+        public void ResetDisplaySettings()
+        {
+            DisplaySettings=new TruckTaxiGPSDisplaySettings();
+            ApplyDisplaySettings();
+        }
+        public void ApplyDisplaySettings(bool save = true)
+        {
+            if(DisplaySettings==null) return;
+            DisplaySettings.Validate();
+            ConfigureDisplay(cabCompass,DisplaySettings.cabRangeMeters,false);
+            ConfigureDisplay(previewCompass,DisplaySettings.hudRangeMeters,previewing);
+            if(previewCompass!=null)
+            {
+                Set(previewCompass,"miniMapSize",DisplaySettings.hudSize);
+                if(!previewing) followOffsetProperty?.SetValue(previewCompass,Vector3.zero);
+                // Offer preview keeps using this camera even when the player's HUD is off.
+                // Only suppress the duplicate canvas while that modal map owns the texture.
+                previewCanvas.enabled=!previewing;
+            }
+            cameraPresentation?.SetGpsPresentationPolicy(previewing || DisplaySettings.showHud
+                ? LwsGpsPresentationPolicy.ForceHudMinimapOn : LwsGpsPresentationPolicy.ForceHudMinimapOff);
+            if(save) DisplaySettings.Save();
+            DisplaySettingsChanged?.Invoke();
+        }
+        private void ConfigureDisplay(Component compass,float range,bool offer)
+        {
+            if(compass==null) return;
+            if(!offer) Set(compass,"miniMapCaptureSize",range);
+            Set(compass,"miniMapKeepStraight",offer || DisplaySettings.northUp);
+            Set(compass,"miniMapShowPlayerIcon",!offer);
+            Set(compass,"miniMapShowPOIs",!offer && DisplaySettings.showPois);
+            Set(compass,"showRoute",true);
+            Set(compass,"routeShowOnMiniMap",true);
+            Set(compass,"routeColor",DisplaySettings.RouteColor);
+            Set(compass,"routeWidth",DisplaySettings.routeWidth);
         }
         private void UpdatePreviewCenter()
         {
@@ -115,7 +168,6 @@ namespace LWS.TruckTaxi
         private void LateUpdate()
         {
             UpdatePreviewCenter();
-            if(previewCanvas!=null) previewCanvas.enabled=false;
         }
         private void OnDestroy()
         {
