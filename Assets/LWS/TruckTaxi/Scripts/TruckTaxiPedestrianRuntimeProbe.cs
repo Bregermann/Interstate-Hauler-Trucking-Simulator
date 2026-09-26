@@ -28,6 +28,7 @@ namespace LWS.TruckTaxi
             if(!host.Session.HasPassenger) yield break;
             check(host.Session.Requests.Count==1 && host.Session.Requests[0].Description=="Hit 2 pedestrians","Natural objective displayed");
             int count=host.pedestrians.ActiveCount, hitEvents=0, contextEvents=0;
+            Debug.Log($"TAXI PEDESTRIAN PROBE POPULATION: initial {count}, target {host.pedestrians.TargetCount}, graph spawn nodes {host.pedestrians.GraphWalkableSpawnCount}.");
             Action<TaxiEventType> eventListener=type=> { if(type==TaxiEventType.PedestrianHit) hitEvents++; };
             Action<TruckTaxiPedestrianImpact> contextListener=hit=>contextEvents++;
             host.Session.DrivingEvent+=eventListener; host.Session.PedestrianImpact+=contextListener;
@@ -67,9 +68,11 @@ namespace LWS.TruckTaxi
                         truck.linearVelocity=Vector3.forward*speed;
                         yield return new WaitForFixedUpdate();
                     }
+                    float retainedForwardSpeed = Vector3.Dot(truck.linearVelocity, Vector3.forward);
                     truck.linearVelocity=Vector3.zero; truck.angularVelocity=Vector3.zero; truck.isKinematic=true;
                     check(ped.IsRagdoll,"Real NWH tractor contact activated UTS ragdoll at "+speed+" m/s");
                     if(!ped.IsRagdoll) yield break;
+                    check(retainedForwardSpeed >= speed*.75f,"Tractor kept forward momentum through pedestrian trigger hit");
                     check(ped.HitEventSent,"Collision emitted authoritative pedestrian hit");
                     check(hitEvents==run+1 && contextEvents==run+1,"Exactly one hit event and one context event per person");
                     check(host.Session.Requests[0].Progress==run+1,"Objective advanced exactly once");
@@ -94,14 +97,19 @@ namespace LWS.TruckTaxi
                 deadline=Time.realtimeSinceStartup+host.configuration.pedestrianImpact.ragdollLifetime+3;
                 while(retired.Any(p=>p!=null) && Time.realtimeSinceStartup<deadline) yield return null;
                 check(retired.All(p=>p==null),"Ragdolls cleaned up after configured lifetime");
-                // Dense population replacement is bounded and waits for a clear UTS entrance.
-                // Destruction completing does not imply its replacement exists in that same frame.
+                // Dense graph spawning may still be ramping when the first hit is staged.
+                // Replenishment is complete at the configured cap, not the earlier snapshot.
+                int expectedCount=host.pedestrians.DensityEnabled ? host.pedestrians.TargetCount : count;
                 float maintenance=host.pedestrians.DensityEnabled ? host.pedestrians.densityProfile.maintenanceInterval : .5f;
                 deadline=Time.realtimeSinceStartup+Mathf.Max(10,maintenance*8);
-                while(host.pedestrians.ActiveCount<count && Time.realtimeSinceStartup<deadline) yield return null;
-                check(host.pedestrians.ActiveCount==count,"Same UTS population replenished without accumulation");
-                check(host.pedestrians.People.All(p=>p!=null && !p.IsRagdoll && !p.HitEventSent && !ids.Contains(p.PedestrianId)),"Replacement bodies have fresh IDs, animation and hit guards");
-                check(host.pedestrians.People.All(p=>p.GetComponent<Animator>().enabled && p.HasJointedRagdoll),"Replacement UTS rigs initialized normally");
+                while(host.pedestrians.ActiveCount<expectedCount && Time.realtimeSinceStartup<deadline) yield return null;
+                check(host.pedestrians.ActiveCount==expectedCount,
+                    $"UTS population replenished to target (initial {count}, active {host.pedestrians.ActiveCount}, target {expectedCount}, graph spawn nodes {host.pedestrians.GraphWalkableSpawnCount}, rejected {host.pedestrians.RejectedSpawnAttempts})");
+                check(host.pedestrians.People.All(p=>p!=null && !ids.Contains(p.PedestrianId)),
+                    "Struck pedestrians retired; replacement IDs are fresh");
+                check(host.pedestrians.People.Where(p=>p!=null && !p.IsRagdoll).All(p=>!p.HitEventSent &&
+                    p.GetComponent<Animator>().enabled && p.HasJointedRagdoll),
+                    "Walking replacements have fresh hit guards and initialized UTS rigs");
                 capture?.Invoke("Pedestrian_Cleanup");
                 Debug.Log("TAXI PEDESTRIAN PROBE COMPLETE: two real tractor impacts, UTS bone physics, event/score/objective/reaction and cleanup.");
             }

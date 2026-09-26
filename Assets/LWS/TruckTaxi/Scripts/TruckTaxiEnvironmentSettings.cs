@@ -55,10 +55,12 @@ namespace LWS.TruckTaxi
         };
         [Header("Taxi snow (metres, real seconds)")]
         [Range(0.1f, 1f)] public float maximumSnowDepthMeters = .6f;
-        [Min(0)] public float lightSnowMetersPerSecond = .0005f;
-        [Min(0)] public float heavySnowMetersPerSecond = .002f;
-        [Min(0)] public float blizzardMetersPerSecond = .005f;
+        [Min(0)] public float lightSnowMetersPerSecond = .0066667f;
+        [Min(0)] public float heavySnowMetersPerSecond = .0171429f;
+        [Min(0)] public float blizzardMetersPerSecond = .024f;
+        [Min(0)] public float snowMeltMetersPerSecond = .01f;
         [Range(0, .6f)] public float plowResidualDepthMeters = .04f;
+        [Min(0)] public float tireCompressionMetersPerMeter = .002f;
         [Range(128, 8192)] public int maximumSnowCells = 4096;
         [Header("Driver bladder")]
         [Tooltip("Time from empty to full in IN-GAME hours. Sampled once after each relief.")]

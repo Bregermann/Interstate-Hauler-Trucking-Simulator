@@ -65,6 +65,20 @@ namespace LWS.TruckTaxi
             return changed;
         }
 
+        public bool Melt(float metres)
+        {
+            if (!float.IsFinite(metres) || metres <= 0) return false;
+            bool changed = false;
+            for (int i = 0; i < cells.Count; i++)
+            {
+                Cell cell = cells[i];
+                float next = Mathf.Max(0, cell.depth - metres);
+                if (next >= cell.depth) continue;
+                cell.depth = next; cells[i] = cell; changed = true;
+            }
+            return changed;
+        }
+
         public float DepthAt(Vector3 position)
         {
             float closest = float.MaxValue, depth = 0;
@@ -94,6 +108,21 @@ namespace LWS.TruckTaxi
             return cleared;
         }
 
+        public int CompressSweep(Vector3 from, Vector3 to, float tireWidth, float metres)
+        {
+            if (!float.IsFinite(from.x) || !float.IsFinite(to.x) || tireWidth <= 0 || !float.IsFinite(metres) || metres <= 0) return 0;
+            int compressed = 0;
+            for (int i = 0; i < cells.Count; i++)
+            {
+                Cell cell = cells[i];
+                if (DistanceToSegmentXZ((cell.a + cell.b) * .5f, from, to) > tireWidth * .5f + cell.width * .25f) continue;
+                float next = Mathf.Max(0, cell.depth - metres);
+                if (next >= cell.depth) continue;
+                cell.depth = next; cells[i] = cell; compressed++;
+            }
+            return compressed;
+        }
+
         private static float DistanceToSegmentXZ(Vector3 p, Vector3 a, Vector3 b)
         {
             Vector2 start = new Vector2(a.x, a.z), end = new Vector2(b.x, b.z), point = new Vector2(p.x, p.z);
@@ -107,10 +136,15 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiSnow : MonoBehaviour
     {
         [SerializeField, HideInInspector] private Shader[] runtimeCoverageShaders;
+        [SerializeField, HideInInspector] private Texture2D weatheradeSnowTexture;
+        [SerializeField, HideInInspector] private Texture2D weatheradeSnowDetailTexture;
+        [SerializeField, HideInInspector] private Texture2D weatheradeSnowSparkleTexture;
+        [SerializeField, HideInInspector] private int weatheradeDepthRendererIndex = -1;
         public const string BlizzardId = "blizzard";
         public TruckTaxiSnowRegion Region { get; private set; }
         public TruckTaxiSnowplow Plow { get; private set; }
         public string Diagnostic { get; private set; } = "Not initialized";
+        // Compatibility with existing probes: this is the hidden depth-cell budget, not rendered geometry.
         public int VisibleCellCount => Region?.Count ?? 0;
         public float PlayerSnowDepth => owner?.Player != null ? Region?.DepthAt(owner.Player.transform.position) ?? 0 : 0;
         private TruckTaxiBootstrap owner;
@@ -119,6 +153,7 @@ namespace LWS.TruckTaxi
         private TruckTaxiSnowTraction traction;
         private bool initialized;
         private float nextVisualUpdate;
+        private float backgroundDepth;
 
         public void Initialize(TruckTaxiBootstrap taxi, TruckTaxiEnvironmentCoordinator environment, TruckTaxiEnvironmentSettings configuration)
         {
@@ -127,15 +162,17 @@ namespace LWS.TruckTaxi
             Region = new TruckTaxiSnowRegion(settings.maximumSnowDepthMeters);
             foreach (LwsTrafficLaneDefinition lane in taxi.traffic.cityLanes ?? Array.Empty<LwsTrafficLaneDefinition>())
                 Region.AddLane(lane, settings.maximumSnowCells);
-            if (Region.Count == 0) { Diagnostic = "No authored Taxi traffic lanes for snow geometry."; return; }
+            if (Region.Count == 0) { Diagnostic = "No authored Taxi traffic lanes for gameplay snow depth."; return; }
             surface = gameObject.AddComponent<TruckTaxiSnowSurface>();
-            surface.Initialize(Region);
+            surface.Initialize(Region, GetComponent<LwsWeatheradeAdapter>());
+            surface.ConfigureVendorTextures(weatheradeSnowTexture, weatheradeSnowDetailTexture, weatheradeSnowSparkleTexture);
+            surface.ConfigureDepthRenderer(weatheradeDepthRendererIndex);
             traction = taxi.Player.gameObject.AddComponent<TruckTaxiSnowTraction>();
             traction.Initialize(taxi.Player.GetComponent<VehicleController>(), Region);
             Plow = gameObject.AddComponent<TruckTaxiSnowplow>();
             Plow.Initialize(taxi, Region, settings, surface);
             initialized = true;
-            Diagnostic = $"Taxi snow active on {Region.Count} bounded cells; maximum {Region.MaximumDepth:0.00} m.";
+            Diagnostic = $"Taxi snow depth active on {Region.Count} hidden cells; Weatherade owns visuals; maximum {Region.MaximumDepth:0.00} m.";
         }
 
         public void Tick(float deltaSeconds, string weatherId)
@@ -144,14 +181,36 @@ namespace LWS.TruckTaxi
             float rate = weatherId == BlizzardId ? settings.blizzardMetersPerSecond :
                 weatherId == LwsWeatherPresetCatalog.HeavySnowId ? settings.heavySnowMetersPerSecond :
                 weatherId == LwsWeatherPresetCatalog.LightSnowId ? settings.lightSnowMetersPerSecond : 0;
-            if (Region.Accumulate(Mathf.Min(deltaSeconds, .25f) * rate)) surface.MarkDirty();
+            float step = Mathf.Min(deltaSeconds, .25f);
+            if (rate > 0)
+            {
+                float amount = step * rate;
+                backgroundDepth = Mathf.Min(Region.MaximumDepth, backgroundDepth + amount);
+                Region.Accumulate(amount);
+            }
+            else
+            {
+                float amount = step * settings.snowMeltMetersPerSecond;
+                backgroundDepth = Mathf.Max(0, backgroundDepth - amount);
+                Region.Melt(amount);
+            }
             Plow.Tick(weatherId);
-            traction.Tick();
+            traction.Tick(surface, settings.tireCompressionMetersPerMeter);
             if (Time.time >= nextVisualUpdate)
             {
+                surface.SetCoverage(backgroundDepth / Region.MaximumDepth);
                 surface.Refresh();
-                nextVisualUpdate = Time.time + .5f;
+                nextVisualUpdate = Time.time + .2f;
             }
+        }
+        public void ClearSnow()
+        {
+            if (!initialized) return;
+            Region.Melt(Region.MaximumDepth);
+            backgroundDepth = 0;
+            traction.ClearModifiers();
+            surface.SetCoverage(0);
+            surface.Refresh();
         }
         private void OnEnable()
         {
@@ -177,6 +236,9 @@ namespace LWS.TruckTaxi
         {
             public WheelUAPI api;
             public float longitudinal, lateral, rolling;
+            public float appliedLongitudinal, appliedLateral, appliedRolling;
+            public Vector3 lastContact;
+            public bool hasContact, modified;
         }
         public void Initialize(VehicleController vehicle, TruckTaxiSnowRegion snow)
         {
@@ -186,38 +248,98 @@ namespace LWS.TruckTaxi
             {
                 WheelUAPI api = component?.wheelUAPI;
                 if (api == null) continue;
-                wheels.Add(new Wheel { api = api, longitudinal = api.LongitudinalFrictionGrip,
-                    lateral = api.LateralFrictionGrip, rolling = api.RollingResistanceTorque });
+                wheels.Add(new Wheel { api = api });
             }
         }
-        public void Tick()
+        public void Tick() { Tick(null, 0); }
+        public void Tick(TruckTaxiSnowSurface surface, float compressionMetersPerMeter)
         {
-            if (region == null || Time.time < nextApply) return;
-            nextApply = Time.time + .2f;
-            float depth = region.DepthAt(transform.position);
-            CurrentGripMultiplier = GripForDepth(depth, region.MaximumDepth);
-            CurrentRollingMultiplier = RollingForDepth(depth, region.MaximumDepth);
-            foreach (Wheel wheel in wheels)
+            if (region == null) return;
+            bool apply = Time.time >= nextApply;
+            if (apply)
             {
-                if (wheel.api == null) continue;
-                wheel.api.LongitudinalFrictionGrip = wheel.longitudinal * CurrentGripMultiplier;
-                wheel.api.LateralFrictionGrip = wheel.lateral * CurrentGripMultiplier;
-                wheel.api.RollingResistanceTorque = wheel.rolling * CurrentRollingMultiplier;
+                nextApply = Time.time + .2f;
+                CurrentGripMultiplier = 1;
+                CurrentRollingMultiplier = 1;
+            }
+            for (int i = 0; i < wheels.Count; i++)
+            {
+                Wheel wheel = wheels[i];
+                WheelUAPI api = wheel.api;
+                if (api == null) continue;
+                bool grounded = api.IsGrounded;
+                Vector3 contact = grounded ? api.HitPoint : Vector3.zero;
+                float depth = grounded ? region.DepthAt(contact) : 0;
+                if (grounded && (depth > .001f || surface != null && surface.Coverage01 > .001f) && wheel.hasContact)
+                {
+                    float distance = Vector2.Distance(new Vector2(contact.x, contact.z), new Vector2(wheel.lastContact.x, wheel.lastContact.z));
+                    if (distance >= .05f && distance <= 5f)
+                    {
+                        float width = Mathf.Max(.15f, api.Width);
+                        if (depth > .001f) region.CompressSweep(wheel.lastContact, contact, width, distance * Mathf.Max(0, compressionMetersPerMeter));
+                        surface?.TraceWheel(i, wheel.lastContact, contact, width);
+                    }
+                    else surface?.StopWheelTrace(i);
+                }
+                else surface?.StopWheelTrace(i);
+                wheel.hasContact = grounded;
+                if (grounded) wheel.lastContact = contact;
+                if (apply)
+                {
+                    float grip = GripForDepth(depth, region.MaximumDepth);
+                    float rolling = RollingForDepth(depth, region.MaximumDepth);
+                    CurrentGripMultiplier = Mathf.Min(CurrentGripMultiplier, grip);
+                    CurrentRollingMultiplier = Mathf.Max(CurrentRollingMultiplier, rolling);
+                    if (depth <= .001f) Restore(ref wheel);
+                    else Apply(ref wheel, grip, rolling);
+                }
+                wheels[i] = wheel;
             }
         }
         public static float GripForDepth(float depth, float maximumDepth) =>
             Mathf.Lerp(1, .42f, Mathf.Clamp01(depth / Mathf.Max(.1f, maximumDepth)));
         public static float RollingForDepth(float depth, float maximumDepth) =>
             Mathf.Lerp(1, 2.5f, Mathf.Clamp01(depth / Mathf.Max(.1f, maximumDepth)));
+        private static void Apply(ref Wheel wheel, float grip, float rolling)
+        {
+            WheelUAPI api = wheel.api;
+            if (!wheel.modified || !Mathf.Approximately(api.LongitudinalFrictionGrip, wheel.appliedLongitudinal))
+                wheel.longitudinal = api.LongitudinalFrictionGrip;
+            if (!wheel.modified || !Mathf.Approximately(api.LateralFrictionGrip, wheel.appliedLateral))
+                wheel.lateral = api.LateralFrictionGrip;
+            if (!wheel.modified || !Mathf.Approximately(api.RollingResistanceTorque, wheel.appliedRolling))
+                wheel.rolling = api.RollingResistanceTorque;
+            wheel.appliedLongitudinal = wheel.longitudinal * grip;
+            wheel.appliedLateral = wheel.lateral * grip;
+            wheel.appliedRolling = wheel.rolling * rolling;
+            api.LongitudinalFrictionGrip = wheel.appliedLongitudinal;
+            api.LateralFrictionGrip = wheel.appliedLateral;
+            api.RollingResistanceTorque = wheel.appliedRolling;
+            wheel.modified = true;
+        }
+        private static void Restore(ref Wheel wheel)
+        {
+            if (!wheel.modified || wheel.api == null) return;
+            WheelUAPI api = wheel.api;
+            if (Mathf.Approximately(api.LongitudinalFrictionGrip, wheel.appliedLongitudinal)) api.LongitudinalFrictionGrip = wheel.longitudinal;
+            if (Mathf.Approximately(api.LateralFrictionGrip, wheel.appliedLateral)) api.LateralFrictionGrip = wheel.lateral;
+            if (Mathf.Approximately(api.RollingResistanceTorque, wheel.appliedRolling)) api.RollingResistanceTorque = wheel.rolling;
+            wheel.modified = false;
+        }
         private void OnDisable()
         {
-            foreach (Wheel wheel in wheels)
+            ClearModifiers();
+        }
+        public void ClearModifiers()
+        {
+            for (int i = 0; i < wheels.Count; i++)
             {
-                if (wheel.api == null) continue;
-                wheel.api.LongitudinalFrictionGrip = wheel.longitudinal;
-                wheel.api.LateralFrictionGrip = wheel.lateral;
-                wheel.api.RollingResistanceTorque = wheel.rolling;
+                Wheel wheel = wheels[i];
+                Restore(ref wheel);
+                wheels[i] = wheel;
             }
+            CurrentGripMultiplier = 1;
+            CurrentRollingMultiplier = 1;
         }
     }
 }

@@ -25,6 +25,12 @@ namespace LWS.TruckTaxi
         private readonly Dictionary<Component, PathAccess> bindings = new Dictionary<Component, PathAccess>();
         private readonly List<TruckTaxiPedestrian> fallen = new List<TruckTaxiPedestrian>();
         private readonly Dictionary<TruckTaxiPedestrian, TruckTaxiPopulationPresentation> presentations = new Dictionary<TruckTaxiPedestrian, TruckTaxiPopulationPresentation>();
+        private readonly Dictionary<TruckTaxiPedestrian, WalkAgent> walkers = new Dictionary<TruckTaxiPedestrian, WalkAgent>();
+        private readonly Stack<int> freeRows = new Stack<int>();
+        private TruckTaxiPedestrianWalkGraph walkGraph;
+        private Component runtimePath;
+        private Vector3[,] runtimePoints;
+        private int nextRow;
         private bool initialized;
         private bool appliedWobbleStyle;
         private bool baselineValidation;
@@ -43,6 +49,10 @@ namespace LWS.TruckTaxi
         public bool Ready => initialized && bindings.Count > 0;
         public int ActiveCount => people.Count;
         public int PresentationCount => presentations.Count;
+        public int GraphNodeCount => walkGraph?.Count ?? 0;
+        public int GraphWalkableSpawnCount => walkGraph?.WalkableSpawnCount ?? 0;
+        public int GraphRoadSegmentCount => walkGraph?.RoadSegmentCount ?? 0;
+        public int GraphWalkerCount => walkers.Count;
         public int ReducedShadowCount { get; private set; }
         public IReadOnlyList<TruckTaxiPedestrian> People => people;
         public bool ShowColliders { get; set; }
@@ -99,11 +109,25 @@ namespace LWS.TruckTaxi
             initialized = true;
             if (DensityEnabled)
             {
-                // UTS distributes its batch along the authored sidewalk loops. Do not stack 144 people at four entrances.
-                float ratio = BaselineActiveCount > 0 ? (float)TargetCount / BaselineActiveCount : 0;
-                if (!Mathf.Approximately(ratio, 1))
+                ClearPeople();
+                walkGraph = new TruckTaxiPedestrianWalkGraph(roadLanes, pedestrianAreas, peoplePaths,
+                    signalIntersections, TruckTaxiBootstrap.Instance?.roadGraph?.Graph,
+                    System.Array.FindAll(FindObjectsByType<TruckTaxiWorldAnchor>(FindObjectsSortMode.None),
+                        anchor => anchor != null && anchor.gameObject.scene == gameObject.scene),
+                    System.Array.FindAll(FindObjectsByType<TruckTaxiSurface>(FindObjectsSortMode.None),
+                        surface => surface != null && surface.gameObject.scene == gameObject.scene),
+                    densityProfile.spawnRadius, transform.position);
+                if (walkGraph != null && walkGraph.HasRoadBounds && walkGraph.WalkableSpawnCount > 0 && TargetCount > 0)
                 {
-                    ClearPeople();
+                    CreateRuntimePath();
+                    for (int i = 0; i < Mathf.Min(24, TargetCount); i++)
+                        if (!SpawnGraphOne()) break;
+                }
+                else
+                {
+                    Debug.LogWarning("TAXI PEDESTRIANS: no grounded walk graph nodes; retaining authored UTS paths.", this);
+                    walkGraph = null;
+                    float ratio = BaselineActiveCount > 0 ? (float)TargetCount / BaselineActiveCount : 0;
                     if (ratio > 0)
                         foreach (var entry in bindings)
                         {
@@ -111,24 +135,27 @@ namespace LWS.TruckTaxi
                             Bind(entry.Key, TargetCount, true);
                         }
                 }
-                Debug.Log($"TAXI PEDESTRIANS: original cap {maximumPeople}, observed UTS startup {BaselineActiveCount}, multiplier {(baselineValidation ? 1 : densityProfile.pedestrianDensityMultiplier)}, target/cap {TargetCount}/{densityProfile.maximumActivePedestrians}, spawned {ActiveCount}.", this);
+                Debug.Log($"TAXI PEDESTRIANS: UTS baseline {BaselineActiveCount}, graph nodes {GraphNodeCount}, target {TargetCount}, initial {ActiveCount}.", this);
             }
             nextMaintenance = Time.time + .5f;
         }
-        private void Bind(Component path, int limit, bool dense)
+        private void Bind(Component path, int limit, bool dense, int graphNode = -1)
         {
             var parent=bindings[path].Parent;
             if(parent==null) return;
             foreach(Transform child in parent.transform)
             {
                 if(child.GetComponent<TruckTaxiPedestrian>()!=null) continue;
-                if (people.Count >= limit || (pathAreas.TryGetValue(path, out var area) && !area.Allows(child.position, roadLanes)) ||
-                    (dense && !densityProfile.AllowsSpawn(child.position, transform.position)))
+                Vector3 spawnPosition = graphNode >= 0 ? walkGraph[graphNode] : child.position;
+                if (people.Count >= limit || (graphNode < 0 && pathAreas.TryGetValue(path, out var area) && !area.Allows(spawnPosition, roadLanes)) ||
+                    (dense && !CanSpawnAt(spawnPosition)))
                 { child.gameObject.SetActive(false); Destroy(child.gameObject); RejectedSpawnAttempts++; continue; }
+                if (graphNode >= 0) child.position = spawnPosition;
                 child.gameObject.layer=0;
                 if(child.GetComponent<Rigidbody>()==null) child.gameObject.AddComponent<Rigidbody>();
                 var ped=child.gameObject.AddComponent<TruckTaxiPedestrian>();
                 ped.settings=settings;
+                ped.ConfigureTractor(TruckTaxiBootstrap.Instance?.Player?.GetComponent<Rigidbody>());
                 ped.SetVisualBinding(TruckTaxiWobbleVisual.BindPedestrian(child, null, null, 1.7f, serial), useWobblePeople);
                 child.gameObject.AddComponent<TruckTaxiAiPedestrianImpact>();
                 child.gameObject.AddComponent<TruckTaxiPedestrianGesture>();
@@ -139,6 +166,7 @@ namespace LWS.TruckTaxi
                 var presentation = new TruckTaxiPopulationPresentation(ped.gameObject, true);
                 presentations.Add(ped, presentation);
                 presentation.Refresh(DensityEnabled ? densityProfile : null, PresentationObserver());
+                if (graphNode >= 0) BindGraphWalker(ped, graphNode);
             }
         }
         public void SpawnOne()
@@ -147,6 +175,7 @@ namespace LWS.TruckTaxi
         }
         private bool TrySpawnOne()
         {
+            if (walkGraph != null) return SpawnGraphOne();
             if (!Ready || people.Count >= TargetCount || activePaths.Count == 0) return false;
             for (int attempt = 0; attempt < activePaths.Count; attempt++)
             {
@@ -163,27 +192,156 @@ namespace LWS.TruckTaxi
         private bool CanSpawnAt(Vector3 position)
         {
             if (!densityProfile.AllowsSpawn(position, transform.position)) return false;
+            if (Physics.CheckCapsule(position + Vector3.up * .65f, position + Vector3.up * 1.55f,
+                .35f, ~0, QueryTriggerInteraction.Ignore)) return false;
             float clearance = Mathf.Max(.25f, densityProfile.pedestrianSpawnClearance);
             foreach (var ped in people)
                 if (ped != null && (ped.transform.position - position).sqrMagnitude < clearance * clearance) return false;
             var player = TruckTaxiBootstrap.Instance?.Player;
             return player == null || (player.transform.position - position).sqrMagnitude >= 25;
         }
+        private void CreateRuntimePath()
+        {
+            var source = activePaths[0];
+            var go = new GameObject("UTS dynamic pedestrian waypoints");
+            go.SetActive(false);
+            go.transform.SetParent(transform, false);
+            runtimePath = go.AddComponent(source.GetType());
+            var type = source.GetType();
+            int capacity = TargetCount;
+            runtimePoints = new Vector3[capacity, 4];
+            type.GetField("points").SetValue(runtimePath, runtimePoints);
+            var lengths = new int[capacity];
+            var forwards = new bool[capacity];
+            for (int i = 0; i < capacity; i++) { lengths[i] = 4; forwards[i] = true; }
+            type.GetField("pointLength").SetValue(runtimePath, lengths);
+            type.GetField("_forward").SetValue(runtimePath, forwards);
+            type.GetField("numberOfWays").SetValue(runtimePath, capacity);
+            type.GetField("loopPath").SetValue(runtimePath, true);
+            type.GetField("disableLineDraw").SetValue(runtimePath, true);
+            foreach (var flag in new[] { "_ignorePeople", "_ignoreCar", "_ignoreBicycle" })
+                type.GetField(flag, BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(runtimePath, false);
+            go.SetActive(true);
+        }
+        private bool SpawnGraphOne()
+        {
+            if (walkGraph == null || runtimePath == null || people.Count >= TargetCount || bindings.Count == 0) return false;
+            for (int attempt = 0; attempt < Mathf.Min(walkGraph.Count, 32); attempt++)
+            {
+                int node = walkGraph.NextSpawnNode();
+                if (node < 0 || !CanSpawnAt(walkGraph[node])) { RejectedSpawnAttempts++; continue; }
+                var source = activePaths[pathCursor++ % activePaths.Count];
+                if (source == null || !bindings.TryGetValue(source, out var access)) continue;
+                int before = people.Count;
+                access.SpawnSingle();
+                Bind(source, TargetCount, true, node);
+                if (people.Count > before) return true;
+            }
+            return false;
+        }
+        private void BindGraphWalker(TruckTaxiPedestrian ped, int node)
+        {
+            int row = freeRows.Count > 0 ? freeRows.Pop() : nextRow++;
+            if (row >= runtimePoints.GetLength(0)) return;
+            var move = ped.GetComponent("MovePath");
+            var actor = ped.GetComponent("Passersby");
+            if (move == null || actor == null) return;
+            var walker = new WalkAgent(ped, move, actor, row, node);
+            walkers.Add(ped, walker);
+            SetWaypoint(walker, node);
+            PlanNextWalk(walker);
+        }
+        private void SetWaypoint(WalkAgent walker, int node)
+        {
+            var position = walkGraph[node];
+            for (int i = 0; i < 4; i++) runtimePoints[walker.Row, i] = position;
+            walker.MoveType.GetField("walkPath").SetValue(walker.Move, runtimePath);
+            walker.MoveType.GetField("w").SetValue(walker.Move, walker.Row);
+            walker.MoveType.GetField("forward").SetValue(walker.Move, true);
+            walker.MoveType.GetField("loop").SetValue(walker.Move, true);
+            walker.MoveType.GetField("targetPoint").SetValue(walker.Move, 1);
+            walker.MoveType.GetField("targetPointsTotal").SetValue(walker.Move, 2);
+            walker.MoveType.GetField("finishPos").SetValue(walker.Move, position);
+            walker.MoveType.GetField("randXFinish").SetValue(walker.Move, 0f);
+            walker.MoveType.GetField("randZFinish").SetValue(walker.Move, 0f);
+            walker.NextNode = node;
+        }
+        private void PlanNextWalk(WalkAgent walker)
+        {
+            int destination = walkGraph.PickDestination(walker.CurrentNode, Random.value < .4f ? 45 : 180);
+            if (destination < 0 || !walkGraph.Route(walker.CurrentNode, destination, walker.Route) || walker.Route.Count == 0)
+            {
+                walker.IdleUntil = Time.time + Random.Range(1f, 3f);
+                walker.ActorType.GetProperty("LastState").SetValue(walker.Actor, System.Enum.Parse(walker.ActorType.GetProperty("LastState").PropertyType, "idle1"));
+                walker.ActorType.GetProperty("ANIMATION_STATE").SetValue(walker.Actor, System.Enum.Parse(walker.ActorType.GetProperty("ANIMATION_STATE").PropertyType, "idle1"));
+                return;
+            }
+            var walkState = System.Enum.Parse(walker.ActorType.GetProperty("LastState").PropertyType, "walk");
+            walker.ActorType.GetProperty("LastState").SetValue(walker.Actor, walkState);
+            walker.ActorType.GetProperty("ANIMATION_STATE").SetValue(walker.Actor, walkState);
+            walker.RouteIndex = 0;
+            SetWaypoint(walker, walker.Route[0]);
+        }
+        private void UpdateWalker(WalkAgent walker)
+        {
+            if (walker.Pedestrian == null || walker.Pedestrian.IsRagdoll) return;
+            if (walker.IdleUntil > Time.time) return;
+            if (walker.IdleUntil > 0)
+            {
+                walker.IdleUntil = 0;
+                PlanNextWalk(walker);
+                return;
+            }
+            Vector3 delta = walker.Pedestrian.transform.position - walkGraph[walker.NextNode];
+            delta.y = 0;
+            if (delta.sqrMagnitude > 1.5f * 1.5f) return;
+            walker.CurrentNode = walker.NextNode;
+            if (++walker.RouteIndex < walker.Route.Count)
+            {
+                SetWaypoint(walker, walker.Route[walker.RouteIndex]);
+                return;
+            }
+            SetWaypoint(walker, walker.CurrentNode);
+            walker.IdleUntil = Time.time + Random.Range(1f, 6f);
+            var idle = System.Enum.Parse(walker.ActorType.GetProperty("LastState").PropertyType, "idle1");
+            walker.ActorType.GetProperty("LastState").SetValue(walker.Actor, idle);
+            walker.ActorType.GetProperty("ANIMATION_STATE").SetValue(walker.Actor, idle);
+        }
+        private sealed class WalkAgent
+        {
+            public readonly TruckTaxiPedestrian Pedestrian;
+            public readonly Component Move;
+            public readonly Component Actor;
+            public readonly System.Type MoveType;
+            public readonly System.Type ActorType;
+            public readonly int Row;
+            public readonly List<int> Route = new List<int>();
+            public int CurrentNode;
+            public int NextNode;
+            public int RouteIndex;
+            public float IdleUntil;
+            public WalkAgent(TruckTaxiPedestrian pedestrian, Component move, Component actor, int row, int node)
+            { Pedestrian = pedestrian; Move = move; Actor = actor; MoveType = move.GetType(); ActorType = actor.GetType(); Row = row; CurrentNode = node; NextNode = node; }
+        }
         public void ResetPopulation()
         {
-            ClearPeople(); initialized = false; pathCursor = 0; Initialize();
+            ClearPeople();
+            if (runtimePath != null) Destroy(runtimePath.gameObject);
+            runtimePath = null; runtimePoints = null; walkGraph = null;
+            initialized = false; pathCursor = 0; Initialize();
         }
         private void ClearPeople()
         {
             foreach(var ped in people)
                 if(ped!=null) { ped.Expired-=Retire; ped.gameObject.SetActive(false); Destroy(ped.gameObject); }
-            people.Clear(); origins.Clear(); fallen.Clear(); presentations.Clear();
+            people.Clear(); origins.Clear(); fallen.Clear(); presentations.Clear(); walkers.Clear(); freeRows.Clear(); nextRow = 0;
         }
         private void Retire(TruckTaxiPedestrian ped)
         {
             if(!origins.TryGetValue(ped,out var path)) return;
             ped.Expired-=Retire; people.Remove(ped); origins.Remove(ped);
             presentations.Remove(ped);
+            if (walkers.TryGetValue(ped, out var walker)) { freeRows.Push(walker.Row); walkers.Remove(ped); }
             fallen.Remove(ped); RetiredCount++;
             ped.gameObject.SetActive(false); Destroy(ped.gameObject);
             // Dense replacement is deferred to the bounded maintenance pass, including simultaneous mass impacts.
@@ -219,6 +377,7 @@ namespace LWS.TruckTaxi
                 }
             }
             fallen.RemoveAll(p => p == null || !p.IsRagdoll);
+            foreach (var walker in walkers.Values) UpdateWalker(walker);
             while (fallen.Count > Mathf.Max(1, densityProfile.maximumActiveRagdolls))
                 Retire(fallen[0]);
             for (int i = 0; i < Mathf.Max(1, densityProfile.maximumSpawnsPerPass) && people.Count < TargetCount; i++)

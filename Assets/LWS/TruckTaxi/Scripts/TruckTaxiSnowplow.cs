@@ -1,5 +1,4 @@
 using LWS.InterstateHauler;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace LWS.TruckTaxi
@@ -18,7 +17,6 @@ namespace LWS.TruckTaxi
         private Vector3 previousBladePosition;
         private float nextDispatch;
         private Material bladeMaterial;
-        private readonly List<Collider> clearedChassis = new List<Collider>();
 
         public void Initialize(TruckTaxiBootstrap taxi, TruckTaxiSnowRegion snow, TruckTaxiEnvironmentSettings configuration, TruckTaxiSnowSurface presentation)
         {
@@ -56,15 +54,7 @@ namespace LWS.TruckTaxi
                 // A dispatched plow starts on a cleared vehicle-sized patch, not embedded in 0.6 m snow.
                 region.ClearSweep(ai.transform.position - ai.transform.forward * 3,
                     blade.position, 4.5f, settings.plowResidualDepthMeters);
-                surface.MarkDirty(); surface.Refresh();
-                // The cutting chassis must not hit the old depth mesh while its swept geometry awaits the next rebuild.
-                // Wheels still use the real surface; buildings, vehicles and ordinary road collisions are unchanged.
-                foreach (var collider in ai.GetComponentsInChildren<Collider>())
-                    if (!collider.isTrigger && !(collider is WheelCollider) && surface.DepthCollider != null)
-                    {
-                        Physics.IgnoreCollision(collider, surface.DepthCollider, true);
-                        clearedChassis.Add(collider);
-                    }
+                surface.TracePlow(ai.transform.position - ai.transform.forward * 3, blade.position, 4.5f);
                 previousBladePosition = blade.position;
                 Diagnostic = "UTS snowplow dispatched.";
                 return;
@@ -74,8 +64,10 @@ namespace LWS.TruckTaxi
             if (distance >= .1f && distance <= 12f)
             {
                 int count = region.ClearSweep(previousBladePosition, current, 4.5f, settings.plowResidualDepthMeters);
-                if (count > 0) { ClearedCellCount += count; surface.MarkDirty(); }
+                ClearedCellCount += count;
+                surface.TracePlow(previousBladePosition, current, 4.5f);
             }
+            else surface.StopPlowTrace();
             previousBladePosition = current;
         }
 
@@ -96,10 +88,7 @@ namespace LWS.TruckTaxi
 
         private void Release()
         {
-            if (surface != null && surface.DepthCollider != null)
-                foreach (var collider in clearedChassis)
-                    if (collider != null) Physics.IgnoreCollision(collider, surface.DepthCollider, false);
-            clearedChassis.Clear();
+            if (surface != null) surface.StopPlowTrace();
             if (!string.IsNullOrEmpty(VehicleId) && owner?.traffic != null) owner.traffic.ReleaseDedicatedVehicle(VehicleId);
             VehicleId = null;
             if (blade != null) Destroy(blade.gameObject);

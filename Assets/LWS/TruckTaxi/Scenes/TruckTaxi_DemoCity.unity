@@ -6029,7 +6029,7 @@ MonoBehaviour:
   m_Script: {fileID: 365290288, guid: f56d46228aee4734f9114056c53bb57e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectid: 
+  projectid: 17860862108632
   resourcesFolderName: Resources
   resourcesFullFolderName: 
   runtimeAIFlag: 1
@@ -13809,6 +13809,7 @@ GameObject:
   - component: {fileID: 335098247}
   - component: {fileID: 335098246}
   - component: {fileID: 335098245}
+  - component: {fileID: 335098249}
   m_Layer: 0
   m_Name: TT_RESTROOM_Service_Stop
   m_TagString: Untagged
@@ -13910,6 +13911,26 @@ MonoBehaviour:
   anchorType: 5
   authoredName: Service Stop
   roadType: 
+--- !u!114 &335098249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335098243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: 447bac7b-993f-4ec7-b960-9b017c605fdd
+  displayName: Service Stop
+  capabilities: 448
+  location: {fileID: 335098247}
+  recoveryAnchor: {fileID: 0}
+  radius: 11
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
 --- !u!1 &339037333
 GameObject:
   m_ObjectHideFlags: 0
@@ -93305,6 +93326,7 @@ GameObject:
   - component: {fileID: 1226252180}
   - component: {fileID: 1226252179}
   - component: {fileID: 1226252178}
+  - component: {fileID: 1226252182}
   m_Layer: 0
   m_Name: TT_GAS_Route_66
   m_TagString: Untagged
@@ -93406,6 +93428,26 @@ MonoBehaviour:
   anchorType: 4
   authoredName: Route 66
   roadType: 
+--- !u!114 &1226252182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226252176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: 27ad4838-5397-4657-a9c9-3245bc19bd4d
+  displayName: Route 66 / REPAIR & RECOVERY
+  capabilities: 511
+  location: {fileID: 0}
+  recoveryAnchor: {fileID: 1226252177}
+  radius: 7
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
 --- !u!1 &1227098714
 GameObject:
   m_ObjectHideFlags: 0
@@ -94812,6 +94854,7 @@ GameObject:
   - component: {fileID: 1257548699}
   - component: {fileID: 1257548700}
   - component: {fileID: 1257548701}
+  - component: {fileID: 1257548702}
   m_Layer: 0
   m_Name: Wrong Turn Diner
   m_TagString: Untagged
@@ -94882,6 +94925,26 @@ MonoBehaviour:
   allowsCabCleanup: 1
   stopRadius: 11
   verticalTolerance: 3
+--- !u!114 &1257548702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1257548698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: taxi.stop.01.restroom
+  displayName: Wrong Turn Diner Restroom
+  capabilities: 448
+  location: {fileID: 1257548700}
+  recoveryAnchor: {fileID: 0}
+  radius: 11
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
 --- !u!1 &1260513866
 GameObject:
   m_ObjectHideFlags: 0
@@ -101493,6 +101556,7 @@ GameObject:
   - component: {fileID: 1432207597}
   - component: {fileID: 1432207598}
   - component: {fileID: 1432207599}
+  - component: {fileID: 1432207600}
   m_Layer: 0
   m_Name: Corner Market
   m_TagString: Untagged
@@ -101580,6 +101644,26 @@ MonoBehaviour:
   location: {fileID: 1432207597}
   stopRadius: 11
   verticalTolerance: 3
+--- !u!114 &1432207600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1432207595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: taxi.stop.07.restroom
+  displayName: Corner Market Restroom
+  capabilities: 448
+  location: {fileID: 1432207597}
+  recoveryAnchor: {fileID: 0}
+  radius: 11
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
 --- !u!1 &1435644856
 GameObject:
   m_ObjectHideFlags: 0
@@ -115597,6 +115681,7 @@ GameObject:
   - component: {fileID: 1839113218}
   - component: {fileID: 1839113217}
   - component: {fileID: 1839113216}
+  - component: {fileID: 1839113220}
   m_Layer: 0
   m_Name: TT_STORE_Corner_Shop
   m_TagString: Untagged
@@ -115696,6 +115781,26 @@ MonoBehaviour:
   anchorType: 3
   authoredName: Corner Shop
   roadType: 
+--- !u!114 &1839113220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839113214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: 07de453b-fbc7-451b-80a8-d58687547c04
+  displayName: Corner Shop
+  capabilities: 8128
+  location: {fileID: 1839113218}
+  recoveryAnchor: {fileID: 0}
+  radius: 12
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
 --- !u!1 &1841251855
 GameObject:
   m_ObjectHideFlags: 0
@@ -124129,6 +124234,7 @@ GameObject:
   - component: {fileID: 2096585880}
   - component: {fileID: 2096585881}
   - component: {fileID: 2096585882}
+  - component: {fileID: 2096585883}
   m_Layer: 0
   m_Name: Cargo Cult Coffee
   m_TagString: Untagged
@@ -124196,6 +124302,26 @@ MonoBehaviour:
   location: {fileID: 2096585881}
   stopRadius: 11
   verticalTolerance: 3
+--- !u!114 &2096585883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2096585879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: TT_STORE_taxi.stop.12
+  displayName: Cargo Cult Coffee Store
+  capabilities: 8128
+  location: {fileID: 2096585881}
+  recoveryAnchor: {fileID: 0}
+  radius: 11
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
 --- !u!1 &2097476100
 GameObject:
   m_ObjectHideFlags: 0
@@ -124557,10 +124683,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiSnow
   runtimeCoverageShaders:
+  - {fileID: 4800000, guid: 6f965386d564397448b33118a85d0f86, type: 3}
   - {fileID: 4800000, guid: de57de671ea300a4294b02d151ddeece, type: 3}
   - {fileID: 4800000, guid: 82226a8cdad529d4ea882f2399a673bf, type: 3}
   - {fileID: 4800000, guid: e1cdf480ab417a14fb2a2441d29872a6, type: 3}
   - {fileID: 4800000, guid: d0b14971f315dd342b652197bb59d6a1, type: 3}
+  - {fileID: 4800000, guid: 1eec6dff0fe58e14d81d3965d19f058f, type: 3}
+  weatheradeSnowTexture: {fileID: 2800000, guid: d1e56c8ed5a0d0e478b7731cd7c1ba76,
+    type: 3}
+  weatheradeSnowDetailTexture: {fileID: 2800000, guid: d0b5b89c7e88bd7458d9cd833ddb03e2,
+    type: 3}
+  weatheradeSnowSparkleTexture: {fileID: 2800000, guid: 21921935555788b49b1942a7097bdabe,
+    type: 3}
+  weatheradeDepthRendererIndex: 1
 --- !u!114 &2113431614
 MonoBehaviour:
   m_ObjectHideFlags: 0

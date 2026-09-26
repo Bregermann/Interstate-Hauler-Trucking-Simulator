@@ -36,8 +36,8 @@ namespace LWS.TruckTaxi
             bool stillPresent = spawned && TruckTaxiBootstrap.Instance.traffic.TryResolveVehicle(id, out afterVehicle);
             float moved = stillPresent ? Vector3.Distance(before, afterVehicle.transform.position) : 0;
             var surface = snow.GetComponent<TruckTaxiSnowSurface>();
-            bool geometry = surface != null && surface.RenderedCells > 0;
-            LastResult = $"Weather={environment.CurrentTaxiWeatherId}, cells={snow.VisibleCellCount}, visibleGeometry={geometry}, playerDepth={snow.PlayerSnowDepth:0.000}m, plowId={id ?? "none"}, UTSmoved={moved:0.0}m, newlyCleared={snow.Plow.ClearedCellCount - cleared}.";
+            bool noRaisedGeometry = surface != null && surface.RenderedCells == 0 && surface.DepthCollider == null;
+            LastResult = $"Weather={environment.CurrentTaxiWeatherId}, hiddenCells={snow.VisibleCellCount}, noRaisedGeometry={noRaisedGeometry}, WeatheradeMaskReady={surface?.TraceMaskReady}, roadDepthSources={surface?.RoadDepthSourceCount}, groundSnowSurfaces={surface?.GroundSnowSurfaceCount}, playerDepth={snow.PlayerSnowDepth:0.000}m, plowId={id ?? "none"}, UTSmoved={moved:0.0}m, newlyCleared={snow.Plow.ClearedCellCount - cleared}.";
             Debug.Log("TAXI SNOW PROBE: " + LastResult, this);
         }
     }

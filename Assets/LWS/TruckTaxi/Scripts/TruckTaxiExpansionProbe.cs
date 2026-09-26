@@ -143,10 +143,14 @@ namespace LWS.TruckTaxi
             Check(TruckTaxiRoadRage.ActiveCount==0,"Aggression restores normal UTS values after its duration");
             host.Environment.ForceWeather(TruckTaxiSnow.BlizzardId); host.Environment.SetFrozen(false);
             host.Environment.Snow.Region.Accumulate(.6f);
-            host.Environment.Snow.GetComponent<TruckTaxiSnowSurface>().MarkDirty();
+            var snowSurface=host.Environment.Snow.GetComponent<TruckTaxiSnowSurface>();
+            snowSurface.SetCoverage(1); snowSurface.Refresh();
             yield return new WaitForSecondsRealtime(7);
             var snow=host.Environment.Snow;
-            Check(snow.GetComponent<TruckTaxiSnowSurface>().RenderedCells>0,"Snow builds visible physical depth geometry");
+            Check(snowSurface.TraceMaskReady && snowSurface.RoadDepthSourceCount>0,
+                "Weatherade snow coverage has a live trace mask and road depth sources");
+            Check(snowSurface.RenderedCells==0 && snowSurface.DepthCollider==null,
+                "Taxi snow has no raised visual cells or depth collider");
             yield return Until(()=>!string.IsNullOrEmpty(snow.Plow.VehicleId),30);
             string plowId=snow.Plow.VehicleId;
             Vector3 before=host.traffic.TryResolveVehicle(plowId,out var plow) ? plow.transform.position : Vector3.zero;
@@ -159,22 +163,26 @@ namespace LWS.TruckTaxi
             Check(plow!=null && Vector3.Distance(before,plow.transform.position)>1,"UTS physically drives the plow");
             Check(snow.Plow.ClearedCellCount>cleared,"Moving blade clears only swept snow cells"); Capture("Blizzard");
             host.Environment.ForceWeather("clear");
-            host.Environment.Snow.Region.ClearSweep(new Vector3(-1000,0,0),new Vector3(1000,0,0),3000,0);
-            host.Environment.Snow.GetComponent<TruckTaxiSnowSurface>().MarkDirty();
+            snow.ClearSnow();
             yield return new WaitForSecondsRealtime(.6f);
             if(TruckTaxiGasStationPoint.Points.Count>0)
             {
-                body.isKinematic=false;
-                long charges=host.Session.ServiceChargesCents;
-                host.Fuel.Fuel.amount=0;
-                yield return Until(()=>host.Fuel.IsRescuing,2); Check(host.Fuel.IsRescuing,"Empty NWH tank starts cartoon rescue");
-                yield return new WaitForSecondsRealtime(.25f); Capture("FuelLaunch");
-                yield return Until(()=>!host.Fuel.IsRescuing,10);
-                Check(host.Fuel.Rescues==1 && host.Fuel.Fraction>.98f,"Fuel rescue refills exactly once");
-                Check(host.Session.ServiceChargesCents>charges,"Rescue charges double-cost service rather than free reset");
-                var station=TruckTaxiGasStationPoint.Nearest(body.position);
-                Check(station!=null && Vector3.ProjectOnPlane(station.RecoveryPosition-body.position,Vector3.up).magnitude<5,"Recovery arrives at nearest gas bay");
-                Check(Vector3.Dot(body.transform.up,Vector3.up)>.9f,"NWH/LWS recovery returns upright"); Capture("GasRecovery");
+                host.Fuel.automaticOutOfFuelRescue=true;
+                try
+                {
+                    body.isKinematic=false;
+                    long charges=host.Session.ServiceChargesCents;
+                    host.Fuel.Fuel.amount=0;
+                    yield return Until(()=>host.Fuel.IsRescuing,2); Check(host.Fuel.IsRescuing,"Empty NWH tank starts cartoon rescue");
+                    yield return new WaitForSecondsRealtime(.25f); Capture("FuelLaunch");
+                    yield return Until(()=>!host.Fuel.IsRescuing,10);
+                    Check(host.Fuel.Rescues==1 && host.Fuel.Fraction>.98f,"Fuel rescue refills exactly once");
+                    Check(host.Session.ServiceChargesCents>charges,"Rescue charges double-cost service rather than free reset");
+                    var station=TruckTaxiGasStationPoint.Nearest(body.position);
+                    Check(station!=null && Vector3.ProjectOnPlane(station.RecoveryPosition-body.position,Vector3.up).magnitude<5,"Recovery arrives at nearest gas bay");
+                    Check(Vector3.Dot(body.transform.up,Vector3.up)>.9f,"NWH/LWS recovery returns upright"); Capture("GasRecovery");
+                }
+                finally { if(host!=null && host.Fuel!=null) host.Fuel.automaticOutOfFuelRescue=false; }
             }
             Destroy(passenger);
             host.ReturnToMainMenu();

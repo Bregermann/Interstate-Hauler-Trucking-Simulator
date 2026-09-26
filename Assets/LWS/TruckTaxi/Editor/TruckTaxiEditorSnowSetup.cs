@@ -10,6 +10,37 @@ namespace LWS.TruckTaxi.Editor
 {
     public static class TruckTaxiEditorSnowSetup
     {
+        [MenuItem("Truck Taxi/Migrate Snow Rates")]
+        public static void MigrateSnowSettingsAsset()
+        {
+            var settings = AssetDatabase.LoadAssetAtPath<TruckTaxiEnvironmentSettings>(TruckTaxiEnvironmentSetup.SettingsPath);
+            if (settings == null) throw new InvalidOperationException("Taxi environment settings asset is missing: " + TruckTaxiEnvironmentSetup.SettingsPath);
+            if (MigrateSnowRates(settings))
+            {
+                EditorUtility.SetDirty(settings);
+                AssetDatabase.SaveAssets();
+            }
+            Debug.Log($"TAXI SNOW: settings now target {settings.maximumSnowDepthMeters:0.00}m in roughly 90s light, 35s heavy, 25s blizzard when using sandbox defaults.", settings);
+        }
+
+        public static bool MigrateSnowRates(TruckTaxiEnvironmentSettings settings)
+        {
+            if (settings == null) throw new ArgumentNullException(nameof(settings));
+            bool changed = false;
+            float maximum = Mathf.Max(.1f, settings.maximumSnowDepthMeters);
+            if (Mathf.Approximately(settings.lightSnowMetersPerSecond, .0005f))
+            { settings.lightSnowMetersPerSecond = maximum / 90f; changed = true; }
+            if (Mathf.Approximately(settings.heavySnowMetersPerSecond, .002f))
+            { settings.heavySnowMetersPerSecond = maximum / 35f; changed = true; }
+            if (Mathf.Approximately(settings.blizzardMetersPerSecond, .005f))
+            { settings.blizzardMetersPerSecond = maximum / 25f; changed = true; }
+            if (settings.snowMeltMetersPerSecond <= 0)
+            { settings.snowMeltMetersPerSecond = .01f; changed = true; }
+            if (settings.tireCompressionMetersPerMeter <= 0)
+            { settings.tireCompressionMetersPerMeter = .002f; changed = true; }
+            return changed;
+        }
+
         [MenuItem("Truck Taxi/Configure Snow")]
         public static void ConfigureDemoScene()
         {
@@ -49,6 +80,7 @@ namespace LWS.TruckTaxi.Editor
             settings.weatherWeights = weights.ToArray();
             if (settings.maximumSnowDepthMeters <= 0) settings.maximumSnowDepthMeters = .6f;
             if (settings.maximumSnowCells <= 0) settings.maximumSnowCells = 4096;
+            MigrateSnowRates(settings);
             EditorUtility.SetDirty(settings);
 
             EnsureSingle<LwsRoadConditionRuntimeController>(host);
@@ -69,8 +101,10 @@ namespace LWS.TruckTaxi.Editor
             // Weatherade creates these materials by Shader.Find; retain explicit player-build dependencies.
             var snow = new SerializedObject(host.GetComponent<TruckTaxiSnow>());
             var shaders = snow.FindProperty("runtimeCoverageShaders");
-            string[] names = { "Hidden/NOT_Lonely/NL_GaussianBlur", "Hidden/NOT_Lonely/Weatherade/NL_TexturePacking",
-                "Hidden/NOT_Lonely/Weatherade/NL_TraceMaskGen", "Hidden/NOT_Lonely/Weatherade/DepthRenderer" };
+            string[] names = { "NOT_Lonely/Weatherade/Snow Coverage",
+                "Hidden/NOT_Lonely/NL_GaussianBlur", "Hidden/NOT_Lonely/Weatherade/NL_TexturePacking",
+                "Hidden/NOT_Lonely/Weatherade/NL_TraceMaskGen", "Hidden/NOT_Lonely/Weatherade/DepthRenderer",
+                "NOT_Lonely/Weatherade/Extra/NL_DepthOccluder" };
             shaders.arraySize = names.Length;
             for (int i = 0; i < names.Length; i++)
             {
@@ -78,8 +112,33 @@ namespace LWS.TruckTaxi.Editor
                 if (shader == null) throw new InvalidOperationException("Required Weatherade shader not installed: " + names[i]);
                 shaders.GetArrayElementAtIndex(i).objectReferenceValue = shader;
             }
+            AssignVendorTexture(snow, "weatheradeSnowTexture", "Snow_01_n_h_sm.tif");
+            AssignVendorTexture(snow, "weatheradeSnowDetailTexture", "SnowDetail.tif");
+            AssignVendorTexture(snow, "weatheradeSnowSparkleTexture", "SparkleMask.tif");
+            snow.FindProperty("weatheradeDepthRendererIndex").intValue = ResolveDepthRendererIndex(settings);
             snow.ApplyModifiedProperties();
-            Debug.Log($"TAXI SNOW: weights, Weatherade and bounded runtime snow configured; {markedRoads} existing road renderers marked without mesh regeneration.", host);
+            Debug.Log($"TAXI SNOW: weights, Weatherade and hidden gameplay depth configured; {markedRoads} existing road renderers marked without snow mesh generation.", host);
+        }
+
+        private static void AssignVendorTexture(SerializedObject snow, string propertyName, string fileName)
+        {
+            string path = "Assets/NOT_Lonely/Weatherade SRS/Textures/" + fileName;
+            Texture2D texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if (texture == null) throw new InvalidOperationException("Required Weatherade snow texture not installed: " + path);
+            snow.FindProperty(propertyName).objectReferenceValue = texture;
+        }
+
+        private static int ResolveDepthRendererIndex(TruckTaxiEnvironmentSettings settings)
+        {
+            if (settings.weatherRenderPipeline == null) throw new InvalidOperationException("Taxi weather render pipeline is not configured.");
+            var depthRenderer = AssetDatabase.LoadMainAssetAtPath("Assets/NOT_Lonely/Weatherade SRS/Resources/SRS_DepthRenderer.asset");
+            if (depthRenderer == null) throw new InvalidOperationException("Weatherade SRS depth renderer asset is missing.");
+            var pipeline = new SerializedObject(settings.weatherRenderPipeline);
+            var renderers = pipeline.FindProperty("m_RendererDataList");
+            if (renderers == null) throw new InvalidOperationException("Taxi render pipeline has no renderer list.");
+            for (int i = 0; i < renderers.arraySize; i++)
+                if (renderers.GetArrayElementAtIndex(i).objectReferenceValue == depthRenderer) return i;
+            throw new InvalidOperationException("Taxi render pipeline does not include the installed Weatherade SRS depth renderer.");
         }
 
         private static void EnsureWeight(List<TruckTaxiWeatherWeight> weights, string id, float weight)

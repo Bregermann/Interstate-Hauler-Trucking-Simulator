@@ -1,4 +1,5 @@
 using LWS.InterstateHauler;
+using LWS.TruckTaxi.Editor;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -54,6 +55,50 @@ namespace LWS.TruckTaxi.Tests
             Assert.Less(deepGrip, .5f);
             Assert.Greater(deepRolling, 2f);
             Assert.Greater(clearedGrip, deepGrip);
+        }
+
+        [Test] public void ClearWeatherMeltsDepthAndDryMultipliersAreNeutral()
+        {
+            var region = Region();
+            region.Accumulate(.6f);
+            Assert.IsTrue(region.Melt(.2f));
+            Assert.AreEqual(.4f, region.DepthAt(new Vector3(0, 0, 2)), .001f);
+            Assert.IsTrue(region.Melt(.6f));
+            Assert.AreEqual(0, region.DepthAt(new Vector3(0, 0, 2)), .001f);
+            Assert.IsFalse(region.Melt(.1f));
+            Assert.AreEqual(1, TruckTaxiSnowTraction.GripForDepth(0, .6f), .001f);
+            Assert.AreEqual(1, TruckTaxiSnowTraction.RollingForDepth(0, .6f), .001f);
+        }
+
+        [Test] public void TiresCompressLessThanPlowAndSnowfallRefillsBoth()
+        {
+            var region = Region();
+            region.Accumulate(.6f);
+            Assert.Greater(region.CompressSweep(new Vector3(-1.25f, 0, 1), new Vector3(-1.25f, 0, 5), .5f, .01f), 0);
+            Assert.AreEqual(.59f, region.DepthAt(new Vector3(-1.25f, 0, 2)), .001f);
+            region.ClearSweep(new Vector3(0, 0, 1), new Vector3(0, 0, 5), 4.5f, .04f);
+            Assert.AreEqual(.04f, region.DepthAt(new Vector3(-1.25f, 0, 2)), .001f);
+            region.Accumulate(.1f);
+            Assert.AreEqual(.14f, region.DepthAt(new Vector3(-1.25f, 0, 2)), .001f);
+        }
+
+        [Test] public void SnowRateMigrationOnlyChangesLegacyDefaults()
+        {
+            var settings = ScriptableObject.CreateInstance<TruckTaxiEnvironmentSettings>();
+            try
+            {
+                settings.lightSnowMetersPerSecond = .0005f;
+                settings.heavySnowMetersPerSecond = .002f;
+                settings.blizzardMetersPerSecond = .005f;
+                settings.snowMeltMetersPerSecond = 0;
+                settings.tireCompressionMetersPerMeter = 0;
+                Assert.IsTrue(TruckTaxiEditorSnowSetup.MigrateSnowRates(settings));
+                Assert.AreEqual(.6f / 90f, settings.lightSnowMetersPerSecond, .00001f);
+                Assert.AreEqual(.6f / 35f, settings.heavySnowMetersPerSecond, .00001f);
+                Assert.AreEqual(.6f / 25f, settings.blizzardMetersPerSecond, .00001f);
+                Assert.IsFalse(TruckTaxiEditorSnowSetup.MigrateSnowRates(settings));
+            }
+            finally { Object.DestroyImmediate(settings); }
         }
 
         [Test] public void CellBudgetAndBlizzardIdDoNotChangeGlobalCatalog()

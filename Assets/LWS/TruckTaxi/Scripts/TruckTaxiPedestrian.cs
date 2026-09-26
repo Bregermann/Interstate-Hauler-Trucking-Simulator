@@ -14,6 +14,7 @@ namespace LWS.TruckTaxi
         private Animator animator;
         private ITruckTaxiPedestrianRagdoll vendorRagdoll;
         private TruckTaxiWobbleVisual.Binding visualBinding;
+        private Collider[] tractorColliders = Array.Empty<Collider>();
         private float expiresAt;
         private bool retiring;
         private static PhysicsMaterial impactMaterial;
@@ -66,6 +67,38 @@ namespace LWS.TruckTaxi
             }
             foreach(var body in ragdollBodies) body.isKinematic=true;
         }
+        public void ConfigureTractor(Rigidbody body)
+        {
+            if (body == null) return;
+            var candidates = body.GetComponentsInChildren<Collider>();
+            var solids = new List<Collider>(candidates.Length);
+            foreach (var candidate in candidates)
+                if (candidate != null && !candidate.isTrigger) solids.Add(candidate);
+            tractorColliders = solids.ToArray();
+            IgnoreTractorCollisions(false);
+            var walkingCapsule = GetComponent<CapsuleCollider>();
+            if (walkingCapsule == null) return;
+            var detector = new GameObject("Tractor pedestrian hit trigger");
+            detector.layer = gameObject.layer;
+            detector.transform.SetParent(transform, false);
+            var trigger = detector.AddComponent<CapsuleCollider>();
+            trigger.center = walkingCapsule.center;
+            trigger.radius = walkingCapsule.radius + .3f;
+            trigger.height = walkingCapsule.height + .4f;
+            trigger.direction = walkingCapsule.direction;
+            trigger.isTrigger = true;
+            detector.AddComponent<TruckTaxiPedestrianTractorTrigger>().Initialize(this, body);
+        }
+        private void IgnoreTractorCollisions(bool ragdoll)
+        {
+            foreach (var pedestrianCollider in colliders)
+            {
+                if (pedestrianCollider == null || pedestrianCollider.isTrigger ||
+                    (pedestrianCollider.attachedRigidbody == walkingBody) == ragdoll) continue;
+                foreach (var tractorCollider in tractorColliders)
+                    if (tractorCollider != null) Physics.IgnoreCollision(pedestrianCollider, tractorCollider, true);
+            }
+        }
         public bool TryStrike(Vector3 relativeVelocity,Vector3 contact)
         {
             if(IsRagdoll || retiring || !TruckTaxiPedestrianImpactSettings.Finite(relativeVelocity) ||
@@ -80,6 +113,7 @@ namespace LWS.TruckTaxi
             if(HasJointedRagdoll)
             {
                 foreach(var collider in colliders) if(collider!=null) collider.enabled=!collider.isTrigger && collider.attachedRigidbody!=walkingBody;
+                IgnoreTractorCollisions(true);
                 // NPCStats owns the actual ragdoll switch and removes the walking body/capsule.
                 vendorRagdoll.ActivateRagdoll();
             }
@@ -117,6 +151,31 @@ namespace LWS.TruckTaxi
             // UTS activation destroys its walking body. Recreate through its spawn path,
             // rather than trying to pool an irreversibly changed vendor NPCStats instance.
             if(Expired!=null) Expired(this); else Destroy(gameObject);
+        }
+    }
+
+    // The walking capsule still collides with AI traffic. Only the canonical tractor uses this trigger.
+    public sealed class TruckTaxiPedestrianTractorTrigger : MonoBehaviour
+    {
+        private TruckTaxiPedestrian pedestrian;
+        private Rigidbody tractor;
+        public void Initialize(TruckTaxiPedestrian value, Rigidbody body) { pedestrian = value; tractor = body; }
+        private void OnTriggerEnter(Collider other) { Strike(other); }
+        private void OnTriggerStay(Collider other) { Strike(other); }
+        private void Strike(Collider other)
+        {
+            if (pedestrian == null || pedestrian.IsRagdoll || tractor == null || other.isTrigger ||
+                !other.transform.IsChildOf(tractor.transform)) return;
+            var host = TruckTaxiBootstrap.Instance;
+            if (host == null || host.Session == null) return;
+            var walking = pedestrian.GetComponent<Rigidbody>();
+            Vector3 relative = tractor.linearVelocity - (walking != null ? walking.linearVelocity : Vector3.zero);
+            Vector3 toward = Vector3.ProjectOnPlane(pedestrian.transform.position - tractor.worldCenterOfMass, Vector3.up);
+            if (Vector3.Dot(tractor.linearVelocity, toward.normalized) <= .1f) return;
+            Vector3 contact = pedestrian.transform.position + Vector3.up;
+            if (!pedestrian.TryStrike(relative, contact)) return;
+            host.Session.RecordPedestrianHit(pedestrian.PedestrianId, pedestrian.LastImpactSpeed, pedestrian.LastImpulse, contact);
+            pedestrian.MarkHitEventSent();
         }
     }
 }
