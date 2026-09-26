@@ -24,6 +24,12 @@ namespace LWS.TruckTaxi
         public TruckTaxiPassengerRuntime Passengers { get; private set; }
         public TruckTaxiPickupZoneVisualizer PickupZone { get; private set; }
         public TruckTaxiOptionalStops OptionalStops { get; private set; }
+        public TruckTaxiAudioController Audio { get; private set; }
+        public TruckTaxiSteeringWheelVisual SteeringVisual { get; private set; }
+        public TruckTaxiEnvironmentCoordinator Environment { get; private set; }
+        public TruckTaxiDriverNeedsCoordinator DriverNeeds { get; private set; }
+        public TruckTaxiFuelController Fuel { get; private set; }
+        public TruckTaxiVehicleObjectiveCoordinator VehicleObjectives { get; private set; }
         public bool Ready { get; private set; }
         public bool Paused { get; private set; }
         private ILwsGameplayStateService gameplay;
@@ -56,11 +62,20 @@ namespace LWS.TruckTaxi
             GPS = gameObject.AddComponent<TruckTaxiGPSAdapter>(); GPS.Initialize(Player.transform,roadGraph);
             var sensor = Player.GetComponent<TruckTaxiCollisionObserver>() ?? Player.gameObject.AddComponent<TruckTaxiCollisionObserver>();
             sensor.Initialize(this);
+            Audio=gameObject.AddComponent<TruckTaxiAudioController>(); Audio.Initialize(configuration.audio);
             audioSource = gameObject.AddComponent<AudioSource>(); audioSource.playOnAwake = false; audioSource.spatialBlend = 0;
+            Audio.Route(audioSource,TruckTaxiAudioCategory.UI);
             Session.RequestResolved += OnRequestResolved;
             Session.RequestCreated += OnRequestCreated;
             Session.DrivingEvent += OnDrivingEvent;
             Session.Changed += OnSessionChanged;
+            #if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if(System.Array.Exists(System.Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-baseline-population"))
+            {
+                traffic.ConfigureBaselineForValidation(traffic.densityProfile);
+                pedestrians.ConfigureBaselineForValidation(pedestrians.densityProfile);
+            }
+            #endif
             traffic.Initialize();
             pedestrians.Initialize(configuration.pedestrianImpact);
             // The existing development HUD auto-creates in Editor builds, even without its service.
@@ -69,20 +84,41 @@ namespace LWS.TruckTaxi
             yield return null;
             Handling = Player.gameObject.AddComponent<TruckTaxiVehicleHandlingOverride>();
             Handling.Initialize(Player.GetComponent<NWH.VehiclePhysics2.VehicleController>());
+            SteeringVisual=Player.GetComponent<TruckTaxiSteeringWheelVisual>() ?? Player.gameObject.AddComponent<TruckTaxiSteeringWheelVisual>();
+            SteeringVisual.Initialize(Player.GetComponent<NWH.VehiclePhysics2.VehicleController>());
+            Audio.RouteVehicle(Player.GetComponent<NWH.VehiclePhysics2.VehicleController>());
+            Fuel=GetComponent<TruckTaxiFuelController>() ?? gameObject.AddComponent<TruckTaxiFuelController>();
+            Fuel.Initialize(this);
             GPS.ConfigureDemoPresentation();
             Passengers=gameObject.AddComponent<TruckTaxiPassengerRuntime>(); Passengers.Initialize(this);
             PickupZone=gameObject.AddComponent<TruckTaxiPickupZoneVisualizer>(); PickupZone.Initialize(this);
             OptionalStops=gameObject.AddComponent<TruckTaxiOptionalStops>(); OptionalStops.Initialize(this);
             RebuildObjectiveCapabilities();
             Session.RefreshObjectiveSupport=RefreshDynamicObjectiveSupport;
+            VehicleObjectives=GetComponent<TruckTaxiVehicleObjectiveCoordinator>() ?? gameObject.AddComponent<TruckTaxiVehicleObjectiveCoordinator>();
+            VehicleObjectives.Initialize(this);
             Ready = true;
             hud.Initialize(this);
+            Environment=GetComponent<TruckTaxiEnvironmentCoordinator>();
+            if(Environment!=null && Environment.Initialize(this))
+            {
+                Environment.WeatherAudioRootAvailable+=Audio.RouteWorldTree;
+                if(Environment.WeatherAudioRoot!=null) Audio.RouteWorldTree(Environment.WeatherAudioRoot);
+                DriverNeeds=GetComponent<TruckTaxiDriverNeedsCoordinator>() ?? gameObject.AddComponent<TruckTaxiDriverNeedsCoordinator>();
+                if(DriverNeeds.Initialize(this,Environment)) hud.InitializeEnvironment(Environment,DriverNeeds);
+            }
             SetPaused(true);
             OnSessionChanged();
         }
         private void Update()
         {
             if (!Ready || body == null) return;
+            if(Fuel?.IsRescuing==true) { lastSpeed=0; return; }
+            if(Environment?.Clock!=null)
+            {
+                var clock=Environment.Clock.CurrentSnapshot;
+                Session.SetWorldConditions(clock.totalGameSeconds/60d,clock.timeOfDayHours,DemandWeather(Environment.CurrentTaxiWeatherId));
+            }
             if(Paused)
             {
                 // Offers keep their existing expiry while the modal suppresses driving/simulation.
@@ -95,13 +131,24 @@ namespace LWS.TruckTaxi
             TruckTaxiSurface.TrySample(body.position,Player.transform,out bool onRoad);
             Session.Tick(Time.deltaTime,body.position,speed,acceleration,onRoad);
         }
+        private static TruckTaxiDemandWeather DemandWeather(string id)
+        {
+            if(id==TruckTaxiSnow.BlizzardId) return TruckTaxiDemandWeather.Blizzard;
+            if(id==LwsWeatherPresetCatalog.HeavySnowId) return TruckTaxiDemandWeather.HeavySnow;
+            if(id==LwsWeatherPresetCatalog.LightSnowId) return TruckTaxiDemandWeather.Snow;
+            if(id==LwsWeatherPresetCatalog.ThunderstormId) return TruckTaxiDemandWeather.Storm;
+            if(id==LwsWeatherPresetCatalog.LightRainId || id==LwsWeatherPresetCatalog.HeavyRainId) return TruckTaxiDemandWeather.Rain;
+            return TruckTaxiDemandWeather.Neutral;
+        }
         private void OnSessionChanged()
         {
             if (Session.State == observedState) return;
             observedState = Session.State;
             switch (Session.State)
             {
-                case TruckTaxiState.RideOffered: Play(configuration.offerSound); SetPaused(true); break;
+                case TruckTaxiState.RideOffered:
+                    if(Session.Offer?.TryClaimNotification()==true) Play(configuration.offerSound);
+                    SetPaused(true); break;
                 case TruckTaxiState.AppreciationOffer:
                 case TruckTaxiState.AppreciationSequence: SetPaused(true); break;
                 case TruckTaxiState.DrivingToPickup: GPS.SetPickupDestination(Session.Pickup); Play(configuration.acceptSound); SetPaused(false); break;
@@ -124,9 +171,26 @@ namespace LWS.TruckTaxi
         private void OnDrivingEvent(TaxiEventType _) => Play(configuration.collisionSound);
         public void Play(AudioClip clip) { if(clip!=null && audioSource!=null) audioSource.PlayOneShot(clip); }
         public void StartShift() { Session?.StartShift(); SetPaused(false); }
+        public void ReturnToMainMenu()
+        {
+            if(!UnityEngine.SceneManagement.SceneManager.GetActiveScene().IsValid() ||
+                !Application.CanStreamedLevelBeLoaded(TruckTaxiMainMenu.SceneName)) return;
+            Session.EndShift();
+            int goals=0,chaos=0;
+            foreach(var ride in Session.RideHistory)
+            { chaos+=ride.ChaosScore; foreach(var goal in ride.Goals) if(goal.State==TaxiRequestState.Succeeded) goals++; }
+            TruckTaxiMainMenu.PublishSessionStats(new TruckTaxiMainMenuStats {
+                rides=Session.CompletedRides, earningsCents=Session.ShiftEarnings, averageStars=(float)Session.DriverAverageRating,
+                chaos=chaos, pedestriansHit=Session.PedestriansHit,trafficCollisions=Session.TrafficHits,
+                passengersEjected=Session.EjectedRides,jugEvents=Session.JugsSucceeded+Session.JugsSpilled,
+                bottlesThrown=Session.ContainersThrown,specialEvents=Session.SpecialStopsCompleted,objectivesCompleted=goals });
+            SetPaused(false);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(TruckTaxiMainMenu.SceneName);
+        }
         public void SetPaused(bool value)
         {
             Paused = value;
+            Environment?.SetSessionPaused(value);
             if (value) gameplay?.Pause("Truck Taxi menu"); else if(gameplay?.CurrentState == LwsGameplayState.Paused) gameplay.Resume("Truck Taxi driving");
             // Taxi pause is local presentation policy, not a second global state authority.
             Time.timeScale = value ? 0 : 1;

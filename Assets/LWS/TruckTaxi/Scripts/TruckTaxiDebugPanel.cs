@@ -16,6 +16,7 @@ namespace LWS.TruckTaxi
         private string objectiveMessage="";
         private readonly System.Collections.Generic.HashSet<string> testedObjectives=new System.Collections.Generic.HashSet<string>();
         public bool IsOpen => panel!=null && panel.gameObject.activeSelf;
+        public Transform FocusRoot => panel;
         public void Initialize(TruckTaxiBootstrap value,TruckTaxiHud ui)
         {
             host=value;
@@ -35,7 +36,7 @@ namespace LWS.TruckTaxi
                 float top=.99f-row*.123f, left=.03f+col*.49f;
                 ui.Button(pages[0],action.ToUpperInvariant(),new Vector2(left,top-.10f),new Vector2(left+.46f,top),()=>Execute(action));
             }
-            string[] presentation={"Regenerate Ride Offer","Show Offer Map","Hide Offer Map","Log Route Distance","Debug Route Path","Handling On/Off","Reset Handling Defaults"};
+            string[] presentation={"Regenerate Ride Offer","Show Offer Map","Hide Offer Map","Log Route Distance","Debug Route Path","Handling On/Off","Reset Handling Defaults","Offer Timer 3 Sec","Offer Timer 10 Sec","Pause Offer Timer"};
             for(int i=0;i<presentation.Length;i++)
             {
                 string action=presentation[i]; float top=.99f-(i/2)*.19f,left=.03f+(i%2)*.49f;
@@ -90,6 +91,9 @@ namespace LWS.TruckTaxi
                 case "Rebuild Capabilities": host.RebuildObjectiveCapabilities(); objectiveMessage="Rebuilt from actual scene support"; break;
                 case "End Shift": s.EndShift(); break;
                 case "Force Ride Offer": s.OfferRide(); break;
+                case "Offer Timer 3 Sec": s.DebugSetOfferDuration(3); break;
+                case "Offer Timer 10 Sec": s.DebugSetOfferDuration(10); break;
+                case "Pause Offer Timer": s.OfferTimerPaused=!s.OfferTimerPaused; break;
                 case "Auto Accept": s.AcceptRide(); break;
                 case "Teleport Near Pickup": host.TeleportNear(s.Pickup); break;
                 case "Force Passenger Boarding": host.TeleportNear(s.Pickup); s.DebugBoard(); host.SetPaused(false); break;
@@ -142,6 +146,7 @@ namespace LWS.TruckTaxi
             diagnostics.text=$"DEVELOPMENT / TAXI SESSION\n{s.State} | {s.Passenger?.passengerName ?? "NO PASSENGER"}\n{s.Pickup?.locationName} -> {s.Destination?.locationName}\nREQUESTS {s.Requests.Count} | FARE {TruckTaxiHud.Money(s.EstimateFare().Total)} | {s.ElapsedRide:0}s\nCHAOS {s.ChaosScore} | SATISFACTION {s.Satisfaction:0.0} | COLLISIONS {s.TrackedCollisions} | TRAFFIC {host.traffic.ActiveCount}";
             if(page==1) diagnostics.text=$"PRESENTATION / HANDLING\nPICKUP {s.Offer?.ToPickup.Meters:0.0}m [{s.Offer?.ToPickup.Source}]  TRIP {s.Offer?.Trip.Meters:0.0}m [{s.Offer?.Trip.Source}]\nTAXI OVERRIDE {host.Handling.Applied} | {host.Handling.SpeedMph:0.0} MPH\nSTEER INPUT {host.Handling.SteeringInput:0.00} | ANGLE {host.Handling.SteeringAngle:0.0} | YAW ASSIST {host.Handling.YawAssist:0.0}";
             if(page==2) diagnostics.text=$"PASSENGER / PICKUP\nSELECTED {SelectedPassenger()?.passengerName}\nACTIVE {s.Passenger?.passengerName} | PAIR {s.Passenger?.pairPassenger?.passengerName}\nRADIUS {host.PickupZone.Radius:0.0}m | DISTANCE {host.PickupZone.Distance:0.0}m | {host.PickupZone.State}\nVOICE {host.Passengers.Dialogue.IsPlaying} | EJECTED {host.Passengers.EjectedBodies}";
+            if(page==1) diagnostics.text+=$"\nOFFER {s.Offer?.Id} | {s.OfferRemaining:0.0}/{s.OfferDuration:0.0}s | FILL {s.OfferRemainingNormalized:0.00} | NOTIFIED {s.Offer?.NotificationClaimed}";
             if(page==3) diagnostics.text=PedestrianDiagnostics();
             if(page==4)
             {

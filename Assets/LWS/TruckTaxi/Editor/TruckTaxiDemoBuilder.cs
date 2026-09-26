@@ -84,6 +84,11 @@ namespace LWS.TruckTaxi.Editor
             AssignGPSControls(host.hud);
             host.hud.font=TMP_Settings.defaultFontAsset;
             if(host.hud.heatButtonPrefab==null) throw new InvalidOperationException("Heat button prefab missing.");
+            host.traffic.densityProfile=host.pedestrians.densityProfile=TruckTaxiPopulationAuthoring.EnsureProfile();
+            TruckTaxiMapIconSetup.EnsureAssets();
+            TruckTaxiPresentationSetup.ConfigureHost(host);
+            Physics.SyncTransforms();
+            TruckTaxiEnvironmentSetup.ConfigureScene(host);
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene,ScenePath);
             var scenes=EditorBuildSettings.scenes.ToList();
@@ -488,7 +493,7 @@ namespace LWS.TruckTaxi.Editor
             if(!File.Exists(ScenePath)) throw new InvalidOperationException("Create the Truck Taxi scene first.");
             Directory.CreateDirectory("Builds/TruckTaxiDemo");
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions {
-                scenes=new[]{ScenePath}, locationPathName="Builds/TruckTaxiDemo/TruckTaxi.exe",
+                scenes=new[]{EditorTruckTaxiMainMenuSetup.ScenePath,ScenePath}, locationPathName="Builds/TruckTaxiDemo/TruckTaxi.exe",
                 target=BuildTarget.StandaloneWindows64, options=BuildOptions.Development
             });
             Debug.Log("TRUCK TAXI BUILD: "+report.summary.result+" / "+report.summary.totalSize+" bytes / "+report.summary.totalErrors+" errors");

@@ -3,7 +3,9 @@ using UnityEngine;
 namespace LWS.TruckTaxi
 {
     public enum TaxiRequestType { FastDelivery, Shortcut, RamTraffic, HitPedestrian, PropertyDamage, Offroad,
-        SmoothRide, NoCollisions, MaximumChaos, ScenicRoute, NearMiss, IllicitStop }
+        SmoothRide, NoCollisions, MaximumChaos, ScenicRoute, NearMiss, IllicitStop,
+        FollowVehicle, RamTargetVehicle, LoseVehicle, BlockVehicle, ReachLocationBeforeVehicle,
+        DestroyVehicle, CollectDroppedObjects }
     public enum TaxiEventType { Collision, TrafficRam, PedestrianHit, PropDamage, Shortcut, ScenicPoint, NearMiss, HardLanding }
     public enum TaxiRequestState { Active, Succeeded, Failed }
     [System.Flags]
@@ -23,6 +25,8 @@ namespace LWS.TruckTaxi
         [Min(1)] public float timer = 90;
         [Min(0.1f)] public float target = 1;
         public string targetId;
+        [Tooltip("For vehicle races, the shared authored Truck Taxi ride-location ID.")]
+        public string goalLocationId;
         public long bonusMoneyCents = 400;
         public int bonusScore = 100;
         public float ratingModifier = 0.2f;
@@ -37,6 +41,7 @@ namespace LWS.TruckTaxi
         public TaxiRequestBehavior forbiddenBehavior;
         public TaxiRequestBehavior RequiredBehavior => requiredBehavior |
             (requestType==TaxiRequestType.HitPedestrian || requestType==TaxiRequestType.RamTraffic || requestType==TaxiRequestType.PropertyDamage
+                || requestType==TaxiRequestType.RamTargetVehicle || requestType==TaxiRequestType.DestroyVehicle
                 ? TaxiRequestBehavior.Impact : requestType==TaxiRequestType.Offroad ? TaxiRequestBehavior.Offroad :
                 IsStop ? TaxiRequestBehavior.TimedStop : requestType==TaxiRequestType.MaximumChaos ? TaxiRequestBehavior.Chaos :
                 requestType==TaxiRequestType.NearMiss ? TaxiRequestBehavior.HighSpeed : TaxiRequestBehavior.None);

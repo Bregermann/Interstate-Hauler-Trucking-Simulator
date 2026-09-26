@@ -7,6 +7,7 @@ namespace LWS.TruckTaxi
     public enum TruckTaxiHumanBuild { ThinMale, AverageMale, HeavyMale, HugeMale, ThinFemale, AverageFemale, HeavyFemale, OlderMale, OlderFemale }
     public enum TruckTaxiRigType { Humanoid, Generic, Static }
     public enum TruckTaxiModelBackend { ManualDropFolder, Placeholder, ConfiguredExternal }
+    public enum TruckTaxiVisualStyle { WobblePeople, OriginalUts, AuthoredModel }
     [CreateAssetMenu(menuName = "Truck Taxi/Passengers/Appearance")]
     public sealed class TruckTaxiAppearanceProfile : ScriptableObject
     {
@@ -17,6 +18,8 @@ namespace LWS.TruckTaxi
         public Vector3 bodyScale = Vector3.one;
         [Range(.5f,2)] public float headScale = 1, shoulderWidth = 1, bodyWidth = 1;
         public Color fallbackColor = new Color(.1f,.65f,.7f);
+        public TruckTaxiVisualStyle visualStyle = TruckTaxiVisualStyle.WobblePeople;
+        [Range(.5f, 2f)] public float stylizedUpperBodyScale = 1f;
         public GameObject head, hair, facialHair, eyes, glasses, hat, upperClothing, lowerClothing, shoes;
         public GameObject[] accessories = Array.Empty<GameObject>();
         public Material[] skinMaterials = Array.Empty<Material>();

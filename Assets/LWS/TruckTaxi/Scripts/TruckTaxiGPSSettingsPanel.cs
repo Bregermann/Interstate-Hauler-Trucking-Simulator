@@ -11,6 +11,7 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiGPSSettingsPanel : MonoBehaviour
     {
         private TruckTaxiBootstrap host;
+        private TruckTaxiGPSDisplaySettings standaloneSettings;
         private TruckTaxiHud hud;
         private RectTransform panel;
         private readonly List<Action> refreshControls=new List<Action>();
@@ -21,6 +22,17 @@ namespace LWS.TruckTaxi
         public void Initialize(TruckTaxiBootstrap value,TruckTaxiHud view)
         {
             host=value; hud=view;
+            BuildView();
+        }
+        public void InitializeView(TruckTaxiHud view)
+        {
+            if(panel!=null) return;
+            hud=view;
+            standaloneSettings=TruckTaxiGPSDisplaySettings.Load();
+            BuildView();
+        }
+        private void BuildView()
+        {
             panel=hud.Panel(hud.Root,"GPS display settings",new Vector2(.69f,.29f),new Vector2(.99f,.96f));
             panel.gameObject.SetActive(false);
             hud.Text(panel,"GPS settings heading",new Vector2(.05f,.9f),new Vector2(.95f,.98f),32).text="GPS DISPLAY";
@@ -47,18 +59,17 @@ namespace LWS.TruckTaxi
                 toggle.onValueChanged.AddListener(on=> { if(on && !syncing) { Settings.routeColorIndex=index; Changed(); } });
                 refreshControls.Add(()=>toggle.SetIsOnWithoutNotify(Settings.routeColorIndex==index));
             }
-            hud.Button(panel,"DEFAULTS",new Vector2(.05f,.035f),new Vector2(.48f,.12f),()=>host.GPS.ResetDisplaySettings());
+            hud.Button(panel,"DEFAULTS",new Vector2(.05f,.035f),new Vector2(.48f,.12f),ResetDefaults);
             hud.Button(panel,"CLOSE",new Vector2(.53f,.035f),new Vector2(.95f,.12f),Close);
-            host.GPS.DisplaySettingsChanged+=RefreshControls;
+            if(host!=null) host.GPS.DisplaySettingsChanged+=RefreshControls;
             RefreshControls();
         }
-        private TruckTaxiGPSDisplaySettings Settings => host.GPS.DisplaySettings;
+        private TruckTaxiGPSDisplaySettings Settings => host!=null ? host.GPS.DisplaySettings : standaloneSettings;
         public void Toggle() { if(IsOpen) Close(); else Open(); }
         public void Open()
         {
             if(IsOpen) return;
-            wasPaused=host.Paused;
-            host.SetPaused(true);
+            if(host!=null) { wasPaused=host.Paused; host.SetPaused(true); }
             panel.gameObject.SetActive(true);
             panel.SetAsLastSibling();
             RefreshControls();
@@ -68,9 +79,19 @@ namespace LWS.TruckTaxi
             if(!IsOpen) return;
             panel.gameObject.SetActive(false);
             PlayerPrefs.Save();
-            host.SetPaused(wasPaused);
+            if(host!=null) host.SetPaused(wasPaused);
         }
-        private void Changed() { if(!syncing) host.GPS.ApplyDisplaySettings(); }
+        private void Changed()
+        {
+            if(syncing) return;
+            if(host!=null) host.GPS.ApplyDisplaySettings();
+            else standaloneSettings.Save();
+        }
+        private void ResetDefaults()
+        {
+            if(host!=null) host.GPS.ResetDisplaySettings();
+            else { standaloneSettings=new TruckTaxiGPSDisplaySettings(); standaloneSettings.Save(); RefreshControls(); }
+        }
         private void RefreshControls()
         {
             syncing=true;

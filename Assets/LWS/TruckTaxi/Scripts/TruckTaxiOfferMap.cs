@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace LWS.TruckTaxi
 {
@@ -13,26 +14,31 @@ namespace LWS.TruckTaxi
         private readonly Rect[] labelRects=new Rect[3];
         private TruckTaxiRideOffer offer;
         private readonly Vector3[] points=new Vector3[3];
+        private readonly Dictionary<TruckTaxiMapMarker,UnityEngine.UI.Image> contextPins=new Dictionary<TruckTaxiMapMarker,UnityEngine.UI.Image>();
+        private readonly List<TruckTaxiMapMarker> expiredPins=new List<TruckTaxiMapMarker>();
+        private readonly TruckTaxiMapMarkerType[] pinTypes={TruckTaxiMapMarkerType.Player,TruckTaxiMapMarkerType.PassengerPickup,TruckTaxiMapMarkerType.Destination};
+        private TruckTaxiMapIconRegistry icons;
         public void Initialize(TruckTaxiHud hud,TruckTaxiGPSAdapter adapter)
         {
             gps=adapter;
+            icons=gps.MapMarkers?.Registry ?? Resources.Load<TruckTaxiMapIconRegistry>(TruckTaxiMapIconRegistry.ResourcePath);
             image=gameObject.AddComponent<UnityEngine.UI.RawImage>(); image.raycastTarget=false;
             var path=TruckTaxiHud.Rect(transform,"Offer road paths",Vector2.zero,Vector2.one);
             routes=path.gameObject.AddComponent<TruckTaxiOfferRouteGraphic>(); routes.raycastTarget=false;
             markers=new RectTransform[3];
             pins=new RectTransform[3];
             string[] labels={"YOU","A  PICKUP","B  DESTINATION"};
-            Color[] colors={new Color(.1f,.8f,.96f),new Color(1,.82f,.18f),new Color(.95f,.42f,.75f)};
             for(int i=0;i<3;i++)
             {
                 pins[i]=hud.Panel(transform,labels[i]+" point",Vector2.zero,Vector2.zero);
-                pins[i].sizeDelta=new Vector2(10,10);
-                pins[i].localRotation=Quaternion.Euler(0,0,45);
-                pins[i].GetComponent<UnityEngine.UI.Image>().color=colors[i];
+                pins[i].sizeDelta=new Vector2(34,34);
+                var icon=pins[i].GetComponent<UnityEngine.UI.Image>();
+                icon.sprite=icons?.Find(pinTypes[i])?.icon; icon.preserveAspect=true; icon.raycastTarget=false;
+                icon.color=icons?.Tint(pinTypes[i],TruckTaxiMapMarkerState.Active) ?? Color.white;
                 var badge=hud.Panel(transform,labels[i],Vector2.zero,Vector2.zero);
                 badge.sizeDelta=new Vector2(i==2 ? 225 : 150,38);
                 var label=hud.Text(badge,labels[i],new Vector2(.06f,.05f),new Vector2(.94f,.95f),22);
-                label.text=labels[i]; label.color=colors[i]; label.alignment=TMPro.TextAlignmentOptions.Center;
+                label.text=labels[i]; label.color=icon.color; label.alignment=TMPro.TextAlignmentOptions.Center;
                 markers[i]=badge;
             }
         }
@@ -49,15 +55,43 @@ namespace LWS.TruckTaxi
             routes.Bind(camera,offer);
             points[0]=offer.PlayerPosition; points[1]=offer.Pickup.StopPosition; points[2]=offer.Destination.StopPosition;
             var size=((RectTransform)transform).rect.size;
+            UpdateContextPins(camera);
             for(int i=0;i<3;i++)
             {
                 Vector3 position=camera.WorldToViewportPoint(points[i]);
                 pins[i].anchorMin=pins[i].anchorMax=new Vector2(position.x,position.y);
                 pins[i].anchoredPosition=Vector2.zero;
-                var center=Vector2.Scale(new Vector2(position.x,position.y),size)+Vector2.up*(i==0 ? -28 : 28);
+                var center=Vector2.Scale(new Vector2(position.x,position.y),size)+Vector2.up*(i==0 ? -40 : 40);
                 labelRects[i]=PlaceLabel(center,markers[i].sizeDelta,size,labelRects,i);
                 markers[i].anchorMin=markers[i].anchorMax=new Vector2(labelRects[i].center.x/Mathf.Max(1,size.x),labelRects[i].center.y/Mathf.Max(1,size.y));
                 markers[i].anchoredPosition=Vector2.zero;
+            }
+        }
+        private void UpdateContextPins(Camera camera)
+        {
+            expiredPins.Clear();
+            foreach(var pair in contextPins)
+            {
+                if(pair.Key==null) { if(pair.Value!=null) Destroy(pair.Value.gameObject); expiredPins.Add(pair.Key); }
+                else if(pair.Value!=null) pair.Value.enabled=false;
+            }
+            foreach(var expired in expiredPins) contextPins.Remove(expired);
+            if(gps.MapMarkers==null || icons==null || !gps.DisplaySettings.showPois) return;
+            foreach(var marker in gps.MapMarkers.Markers)
+            {
+                if(marker==null || !marker.Presented || marker.stableId==offer.Pickup.locationId || marker.stableId==offer.Destination.locationId) continue;
+                Vector3 point=camera.WorldToViewportPoint(marker.Position);
+                if(point.z<=0 || point.x<.025f || point.x>.975f || point.y<.025f || point.y>.975f) continue;
+                if(!contextPins.TryGetValue(marker,out var icon))
+                {
+                    var rect=TruckTaxiHud.Rect(transform,"Map context: "+marker.stableId,Vector2.zero,Vector2.zero);
+                    rect.sizeDelta=Vector2.one*28; rect.SetSiblingIndex(2);
+                    icon=rect.gameObject.AddComponent<UnityEngine.UI.Image>(); icon.raycastTarget=false; icon.preserveAspect=true;
+                    contextPins.Add(marker,icon);
+                }
+                icon.sprite=icons.Find(marker.markerType)?.icon; icon.color=icons.Tint(marker.markerType,marker.state);
+                icon.enabled=icon.sprite!=null; icon.rectTransform.anchorMin=icon.rectTransform.anchorMax=new Vector2(point.x,point.y);
+                icon.rectTransform.anchoredPosition=Vector2.zero;
             }
         }
         public static Rect PlaceLabel(Vector2 center,Vector2 labelSize,Vector2 mapSize,Rect[] occupied,int count)

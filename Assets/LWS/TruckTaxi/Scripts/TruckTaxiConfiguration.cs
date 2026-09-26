@@ -13,6 +13,63 @@ namespace LWS.TruckTaxi
         public float maximumTripDistance = 950;
         public float rideFrequency = 6;
         public float offerDuration = 30;
+        [Header("Passenger continuity")]
+        [Range(1, 20)] public int recentOfferCount = 10;
+        [Range(0.01f, 1)] public float recentOfferWeight = 0.2f;
+        [Min(0)] public float recentLocationMinutes = 60;
+        [Min(0), Tooltip("Maximum walk from a destination-only stop to an existing legal pickup bay. Never relocates a recent passenger across town.")]
+        public float repeatPickupAccessRadiusMeters = 40;
+        [Min(0)] public float citywideRelocationMinutes = 360;
+        [Range(0, 1)] public float moderateSameLocationChance = 0.65f;
+        [Header("Passenger rarity multipliers")]
+        [Min(0)] public float commonWeight = 1;
+        [Min(0)] public float uncommonWeight = 0.65f;
+        [Min(0)] public float rareWeight = 0.3f;
+        [Min(0)] public float legendaryWeight = 0.1f;
+        [Header("Pickup patience")]
+        [Min(0)] public float pickupBaseGraceSeconds = 25;
+        [Min(1)] public float pickupMinimumSeconds = 45;
+        [Min(1)] public float pickupReasonableSpeedMetersPerSecond = 12;
+        [Min(0)] public float pickupPatienceMultiplier = 2;
+        [Min(0.1f)] public float timeObsessedPickupMultiplier = 0.6f;
+        [Min(1)] public float pickupMaximumSeconds = 300;
+        [Header("Demand multipliers")]
+        [Min(0.1f)] public float morningFrequencyMultiplier = 0.75f;
+        [Min(0.1f)] public float eveningFrequencyMultiplier = 0.85f;
+        [Min(0.1f)] public float lateNightFrequencyMultiplier = 1.5f;
+        [Min(0.1f)] public float preDawnFrequencyMultiplier = 2f;
+        [Min(0.1f)] public float rainFrequencyMultiplier = 0.8f;
+        [Min(0.1f)] public float stormFrequencyMultiplier = 0.7f;
+        [Min(0.1f)] public float snowFrequencyMultiplier = 0.7f;
+        [Min(0.1f)] public float heavySnowFrequencyMultiplier = 0.65f;
+        [Min(0.1f)] public float blizzardFrequencyMultiplier = 0.6f;
+        [Min(0)] public float morningCommuterWeight = 1.5f;
+        [Min(0)] public float eveningSocialWeight = 1.5f;
+        [Min(0)] public float eveningRareWeight = 1.25f;
+        [Min(0)] public float lateNightRareWeight = 1.5f;
+        [Min(0)] public float lateNightWeirdWeight = 1.5f;
+        [Min(0)] public float lateNightNightlifeWeight = 1.5f;
+        [Min(0)] public float lateNightChaoticWeight = 1.35f;
+        [Min(0)] public float lateNightFlirtatiousWeight = 1.25f;
+        [Min(0)] public float preDawnRareWeight = 1.75f;
+        [Min(0)] public float preDawnWeirdWeight = 1.75f;
+        [Min(0)] public float preDawnNightlifeWeight = 1.25f;
+        [Min(0)] public float preDawnChaoticWeight = 1.5f;
+        [Min(0)] public float preDawnFlirtatiousWeight = 1.1f;
+        [Min(0)] public float morningFareMultiplier = 1.1f;
+        [Min(0)] public float eveningFareMultiplier = 1.1f;
+        [Min(0)] public float lateNightFareMultiplier = 1.25f;
+        [Min(0)] public float preDawnFareMultiplier = 1.35f;
+        [Min(0)] public float rainFareMultiplier = 1.08f;
+        [Min(0)] public float stormFareMultiplier = 1.15f;
+        [Min(0)] public float snowFareMultiplier = 1.2f;
+        [Min(0)] public float heavySnowFareMultiplier = 1.25f;
+        [Min(0)] public float blizzardFareMultiplier = 1.3f;
+        [Min(0)] public float eveningAppreciationMultiplier = 1.2f;
+        [Min(0)] public float lateNightAppreciationMultiplier = 1.25f;
+        [Min(0)] public float preDawnAppreciationMultiplier = 1.4f;
+        [Range(0, 1)] public float appreciationBaseChance = 0.35f;
+        [Min(0)] public float badWeatherPickupTimeMultiplier = 1.25f;
         public float stoppedSpeed = 0.5f;
         public float boardingSeconds = 1.5f;
         public float exitingSeconds = 1;
@@ -47,6 +104,7 @@ namespace LWS.TruckTaxi
         public float smoothRatingPerSecond = 0.003f;
         public float hardLandingSpeed = 6;
         [Header("Optional audio")]
+        public TruckTaxiAudioConfiguration audio;
         public AudioClip offerSound, acceptSound, boardingSound, exitSound, requestSound,
             requestSuccessSound, requestFailureSound, collisionSound, fareSound;
 
@@ -61,6 +119,17 @@ namespace LWS.TruckTaxi
                 case TaxiEventType.NearMiss: return nearMissScore;
                 case TaxiEventType.HardLanding: return hardLandingScore;
                 default: return 0;
+            }
+        }
+
+        public float RarityWeight(TruckTaxiRarity rarity)
+        {
+            switch (rarity)
+            {
+                case TruckTaxiRarity.Uncommon: return uncommonWeight;
+                case TruckTaxiRarity.Rare: return rareWeight;
+                case TruckTaxiRarity.Legendary: return legendaryWeight;
+                default: return commonWeight;
             }
         }
     }

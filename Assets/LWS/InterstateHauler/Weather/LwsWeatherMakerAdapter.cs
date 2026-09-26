@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
@@ -30,6 +31,8 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool applyQualityOnStart = true;
         [SerializeField] private LwsRenderQualityTier defaultQualityTier = LwsRenderQualityTier.High;
         [SerializeField] private float cameraRefreshIntervalSeconds = 0.75f;
+        [SerializeField, Min(0.25f), Tooltip("Refresh diagnostic text at this unscaled interval. Weather and clock updates are not throttled.")]
+        private float diagnosticsRefreshIntervalSeconds = 1f;
         [SerializeField] private string runtimeInstanceName = "IH Weather Maker Runtime";
 
         private ILwsWeatherService _weatherService;
@@ -46,6 +49,14 @@ namespace LWS.InterstateHauler
         private Type _fullScreenCloudsType;
         private Type _fullScreenFogType;
         private float _nextCameraRefreshTime;
+        private float _nextVisualDiagnosticsTime;
+        private Component _managerCacheRoot;
+        private readonly Dictionary<Type, CachedManager> _managerCache = new Dictionary<Type, CachedManager>();
+        private struct CachedManager
+        {
+            public Component component;
+            public float retryAfter;
+        }
         private bool _attached;
         private bool _directionalLightsSuppressed;
         private bool _gameClockSlaveConfigured;
@@ -75,6 +86,7 @@ namespace LWS.InterstateHauler
         public string FogDiagnostic { get; private set; } = "None";
         public string LastRuntimeError { get; private set; } = string.Empty;
         public bool GameClockSlaved => _gameClockService != null && _gameClockSlaveConfigured;
+        public Transform WeatherMakerRuntimeRoot => (_weatherMakerInstance as Component)?.transform.root;
 
         public void ConfigureWeatherMakerPrefab(GameObject prefab)
         {
@@ -91,6 +103,7 @@ namespace LWS.InterstateHauler
 
         private void OnEnable()
         {
+            InvalidateManagerCache();
             ResolveService();
             EnsureWeatherMakerRuntime(false);
             if (applyQualityOnStart)
@@ -109,6 +122,7 @@ namespace LWS.InterstateHauler
             }
 
             UnsubscribeCameraPresentation();
+            InvalidateManagerCache();
             _attached = false;
         }
 
@@ -208,7 +222,7 @@ namespace LWS.InterstateHauler
                 raise.Invoke(_weatherMakerInstance, new[] { oldProfile, profile, instant ? 0.001f : Mathf.Max(0.001f, transitionSeconds), -1f, true, null });
                 SetMember(_weatherMakerInstance, "LastLocalProfile", profile);
                 string visualHint = ApplySemanticWeatherToWeatherMakerRuntime(preset, transitionSeconds, instant);
-                RefreshWeatherMakerVisualDiagnostics();
+                RefreshWeatherMakerVisualDiagnostics(true);
                 LastResolvedWeatherMakerProfile = GetUnityObjectName(profile);
                 LastAppliedWeatherMakerProfile = LastResolvedWeatherMakerProfile;
                 LastWeatherMakerApplySucceeded = true;
@@ -330,7 +344,6 @@ namespace LWS.InterstateHauler
                 WeatherMakerAvailable = true;
                 WeatherMakerInstanceResolved = true;
                 AdapterStatus = "Weather Maker runtime is available.";
-                RefreshDayNightManagerDiagnostic();
                 SuppressCompetingDirectionalLights();
                 return true;
             }
@@ -365,7 +378,8 @@ namespace LWS.InterstateHauler
             RefreshWeatherMakerRuntimeFromScene();
             if (IsAlive(_weatherMakerInstance))
             {
-                SetMember(_weatherMakerInstance, "IsPermanent", true);
+                // Preserve the prefab's lifetime policy: Taxi weather is scene-scoped,
+                // while the normal Interstate prefab is authored as permanent.
                 SetMember(_weatherMakerInstance, "AutoFindMainCamera", false);
                 WeatherMakerAvailable = true;
                 WeatherMakerInstanceResolved = true;
@@ -422,7 +436,7 @@ namespace LWS.InterstateHauler
                 return false;
             }
 
-            dayNight = FindSceneComponent(_dayNightManagerType, out _);
+            dayNight = FindRuntimeManager(_dayNightManagerType);
             _dayNightManagerInstance = dayNight;
             DayNightManagerAvailable = IsAlive(dayNight);
             if (!DayNightManagerAvailable)
@@ -490,7 +504,8 @@ namespace LWS.InterstateHauler
 
         private bool RefreshWeatherMakerRuntimeFromScene()
         {
-            _weatherMakerInstance = FindSceneComponent(_weatherMakerScriptType, out int instanceCount);
+            object found = FindSceneComponent(_weatherMakerScriptType, out int instanceCount);
+            if (IsAlive(found) || !IsAlive(_weatherMakerInstance)) _weatherMakerInstance = found;
             WeatherMakerInstanceCount = instanceCount;
             WeatherMakerInstanceResolved = IsAlive(_weatherMakerInstance);
             WeatherMakerAvailable = WeatherMakerInstanceResolved;
@@ -501,7 +516,7 @@ namespace LWS.InterstateHauler
         private void RefreshDayNightManagerDiagnostic()
         {
             _dayNightManagerType ??= ResolveType(DayNightManagerTypeName);
-            _dayNightManagerInstance = FindSceneComponent(_dayNightManagerType, out _);
+            _dayNightManagerInstance = FindRuntimeManager(_dayNightManagerType);
             DayNightManagerAvailable = IsAlive(_dayNightManagerInstance);
             if (DayNightManagerAvailable)
             {
@@ -623,17 +638,21 @@ namespace LWS.InterstateHauler
             }
 
             Component first = null;
-            Component[] components = Resources.FindObjectsOfTypeAll<Component>();
+            // Discovery is only needed for runtime acquisition or an uncached manager.
+            // Restrict it to the requested type, never every component in the project.
+            UnityEngine.Object[] components = Resources.FindObjectsOfTypeAll(componentType);
             for (int i = 0; i < components.Length; i++)
             {
-                Component component = components[i];
-                if (component == null || !componentType.IsInstanceOfType(component))
+                Component component = components[i] as Component;
+                if (component == null)
                 {
                     continue;
                 }
 
                 GameObject componentObject = component.gameObject;
-                if (componentObject == null || !componentObject.scene.IsValid() || !componentObject.scene.isLoaded)
+                // OnEnable runs during scene activation, before scene.isLoaded is true.
+                // Reject assets (invalid scene), not the runtime we just instantiated.
+                if (componentObject == null || !componentObject.scene.IsValid())
                 {
                     continue;
                 }
@@ -648,10 +667,44 @@ namespace LWS.InterstateHauler
             return first;
         }
 
+        private void InvalidateManagerCache()
+        {
+            _managerCache.Clear();
+            _managerCacheRoot = null;
+            _dayNightManagerInstance = null;
+            _nextVisualDiagnosticsTime = 0f;
+        }
+
+        private Component FindRuntimeManager(Type componentType)
+        {
+            Component root = _weatherMakerInstance as Component;
+            if (root == null || componentType == null) return null;
+            if (_managerCacheRoot != root)
+            {
+                InvalidateManagerCache();
+                _managerCacheRoot = root;
+            }
+
+            float now = Time.unscaledTime;
+            if (_managerCache.TryGetValue(componentType, out CachedManager cached))
+            {
+                if (cached.component != null) return cached.component;
+                // Retry destroyed references immediately, but missing optional managers
+                // at most once a second, including while the game clock is paused.
+                if (ReferenceEquals(cached.component, null) && now < cached.retryAfter) return null;
+            }
+
+            Component found = root.GetComponentInChildren(componentType, true);
+            // Support existing authored setups whose managers are outside the prefab root.
+            if (found == null) found = FindSceneComponent(componentType, out _) as Component;
+            _managerCache[componentType] = new CachedManager { component = found, retryAfter = now + 1f };
+            return found;
+        }
+
         private string ApplySemanticWeatherToWeatherMakerRuntime(LwsWeatherPreset preset, float transitionSeconds, bool instant)
         {
             string precipitation = ApplySemanticPrecipitationToWeatherMaker(preset, transitionSeconds, instant);
-            string fog = ApplySemanticFogToWeatherMaker(preset);
+            string fog = ApplySemanticFogToWeatherMaker(preset, transitionSeconds, instant);
             return $"{precipitation} {fog}".Trim();
         }
 
@@ -659,7 +712,7 @@ namespace LWS.InterstateHauler
         {
             _precipitationManagerType ??= ResolveType(PrecipitationManagerTypeName);
             _precipitationType ??= ResolveType(PrecipitationTypeName);
-            object manager = FindSceneComponent(_precipitationManagerType, out _);
+            object manager = FindRuntimeManager(_precipitationManagerType);
             if (manager == null || _precipitationType == null)
             {
                 return "Precipitation manager diagnostics unavailable.";
@@ -699,12 +752,12 @@ namespace LWS.InterstateHauler
             }
         }
 
-        private string ApplySemanticFogToWeatherMaker(LwsWeatherPreset preset)
+        private string ApplySemanticFogToWeatherMaker(LwsWeatherPreset preset, float transitionSeconds, bool instant)
         {
             _fullScreenFogType ??= ResolveType(FullScreenFogTypeName);
             try
             {
-                object fogScript = FindSceneComponent(_fullScreenFogType, out _);
+                object fogScript = FindRuntimeManager(_fullScreenFogType);
                 object fogProfile = GetMember(fogScript, "FogProfile");
                 if (fogProfile == null)
                 {
@@ -713,8 +766,14 @@ namespace LWS.InterstateHauler
 
                 float fog01 = Mathf.Clamp01(preset.fogIntensity01);
                 float density = fog01 <= 0.001f ? 0f : Mathf.Lerp(0.0006f, 0.018f, fog01);
-                SetMember(fogProfile, "FogDensity", density);
                 SetMember(fogProfile, "MaxFogFactor", fog01 > 0.5f ? 0.78f : 0.45f);
+                // The vendor tween captures its destination. A direct density write
+                // after profile application is overwritten on the next tween tick.
+                MethodInfo showFog = FindMethod(_fullScreenFogType, "ShowFogAnimated",
+                    fogProfile.GetType(), typeof(float), typeof(float), typeof(float?), typeof(string));
+                if (showFog == null) throw new MissingMethodException("Weather Maker ShowFogAnimated API was not found.");
+                showFog.Invoke(fogScript, new object[] { fogProfile, 0f,
+                    instant ? 0.001f : Mathf.Max(0.001f, transitionSeconds), (float?)density, null });
                 return $"Fog {fog01:0.00}.";
             }
             catch (Exception ex)
@@ -737,8 +796,11 @@ namespace LWS.InterstateHauler
             SetMember(script, "Intensity", Mathf.Clamp01(intensity));
         }
 
-        private void RefreshWeatherMakerVisualDiagnostics()
+        private void RefreshWeatherMakerVisualDiagnostics(bool force = false)
         {
+            float now = Time.unscaledTime;
+            if (!force && now < _nextVisualDiagnosticsTime) return;
+            _nextVisualDiagnosticsTime = now + Mathf.Max(0.25f, diagnosticsRefreshIntervalSeconds);
             if (!WeatherMakerAvailable)
             {
                 PrecipitationDiagnostic = "Weather Maker unavailable.";
@@ -753,7 +815,8 @@ namespace LWS.InterstateHauler
 
             try
             {
-                object precipitationManager = FindSceneComponent(_precipitationManagerType, out _);
+                RefreshDayNightManagerDiagnostic();
+                object precipitationManager = FindRuntimeManager(_precipitationManagerType);
                 if (precipitationManager != null)
                 {
                     float rain = ReadFloatMember(precipitationManager, "RainIntensity");
@@ -767,13 +830,13 @@ namespace LWS.InterstateHauler
                     PrecipitationDiagnostic = "Weather Maker precipitation manager missing.";
                 }
 
-                object cloudScript = FindSceneComponent(_fullScreenCloudsType, out _);
+                object cloudScript = FindRuntimeManager(_fullScreenCloudsType);
                 object cloudProfile = GetMember(cloudScript, "CloudProfile");
                 CloudCoverDiagnostic = cloudProfile != null
                     ? $"{GetUnityObjectName(cloudProfile)} cover {ReadFloatMember(cloudProfile, "CloudCoverTotal"):0.00}"
                     : "Weather Maker cloud profile missing.";
 
-                object fogScript = FindSceneComponent(_fullScreenFogType, out _);
+                object fogScript = FindRuntimeManager(_fullScreenFogType);
                 object fogProfile = GetMember(fogScript, "FogProfile");
                 FogDiagnostic = fogProfile != null
                     ? $"{GetUnityObjectName(fogProfile)} density {ReadFloatMember(fogProfile, "FogDensity"):0.0000}, max {ReadFloatMember(fogProfile, "MaxFogFactor"):0.00}"

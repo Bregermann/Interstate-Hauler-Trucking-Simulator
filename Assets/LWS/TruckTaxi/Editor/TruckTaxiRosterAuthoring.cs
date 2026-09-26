@@ -8,6 +8,17 @@ namespace LWS.TruckTaxi.Editor
 {
     public static class TruckTaxiRosterAuthoring
     {
+        [MenuItem("Truck Taxi/Passenger Factory Tools/Configure Requested Cast and Wobble Visuals")]
+        public static void Configure()
+        {
+            EnsureRoster();
+            foreach(var p in TruckTaxiPassengerDialogueAuthoring.AllPassengers())
+                if(p.modelPrefab==null && p.appearance!=null && p.appearance.visualStyle==TruckTaxiVisualStyle.WobblePeople &&
+                    (p.runtimePrefab==null || p.runtimePrefab.transform.Find(TruckTaxiWobbleVisual.VisualName)==null))
+                    TruckTaxiPassengerFactoryBuilder.BuildPrefab(p);
+            TruckTaxiPassengerFactoryBuilder.RegisterAll();
+        }
+
         [Serializable] private sealed class Roster { public Entry[] passengers; }
         [Serializable] private sealed class Entry
         {
@@ -18,13 +29,33 @@ namespace LWS.TruckTaxi.Editor
         public static void EnsureRoster()
         {
             var roster=JsonUtility.FromJson<Roster>(File.ReadAllText("Tools/TruckTaxiPassengerFactory/roster.json"));
+            var requested=JsonUtility.FromJson<Roster>(File.ReadAllText("Tools/TruckTaxiPassengerFactory/requested-cast.json"));
+            var entries=roster.passengers.Concat(requested.passengers).ToArray();
+            if(entries.GroupBy(e=>e.id,StringComparer.OrdinalIgnoreCase).Any(g=>g.Count()>1))
+                throw new InvalidOperationException("Duplicate stable ID in roster source.");
             string folder=TruckTaxiPassengerFactoryBuilder.Root+"/Profiles"; TruckTaxiPassengerDialogueAuthoring.EnsureFolder(folder);
-            foreach(var entry in roster.passengers)
+            foreach(var entry in entries)
             {
                 if(!TruckTaxiChatterboxQueue.IsSafeId(entry.id)) throw new InvalidOperationException("Invalid roster ID");
-                if(TruckTaxiPassengerDialogueAuthoring.AllPassengers().Any(p=>p.passengerId==entry.id)) continue;
+                var existing=TruckTaxiPassengerDialogueAuthoring.AllPassengers().FirstOrDefault(p=>p.passengerId==entry.id);
+                if(existing!=null)
+                {
+                    if(entry.id.StartsWith("glam-",StringComparison.Ordinal))
+                    {
+                        TruckTaxiPassengerFactoryBuilder.BuildMissing(existing);
+                        existing.explicitlyAdult=true;
+                        existing.minimumAdultAge=Math.Max(21,existing.minimumAdultAge);
+                        existing.adultFemalePresentation=true;
+                        existing.flirtatiousPresentation=true;
+                        existing.specialAppreciationEligible=true;
+                        existing.appreciationChance=.35f;
+                        existing.casting.human=true;
+                        EditorUtility.SetDirty(existing); EditorUtility.SetDirty(existing.casting);
+                    }
+                    continue;
+                }
                 var p=ScriptableObject.CreateInstance<PassengerProfile>(); p.passengerId=entry.id; p.passengerName=entry.name;
-                p.developmentReference=entry.reference; p.archetype=entry.reference.Split(';')[0]; p.description=p.personality=entry.personality;
+                p.developmentReference=entry.reference ?? "Original Truck Taxi cast"; p.archetype=(entry.reference ?? entry.name).Split(';')[0]; p.description=p.personality=entry.personality;
                 p.chaosAffinity=entry.chaos; p.smoothAffinity=entry.chaos<0 ? 1.5f : .4f;
                 p.speedPreference=p.collisionPreference=p.shortcutPreference=p.offroadPreference=entry.chaos;
                 p.basePatience=entry.mechanic=="TimeObsessed" ? 150 : 360;
@@ -55,7 +86,13 @@ namespace LWS.TruckTaxi.Editor
                 if(p.seatProfile.seatType==TruckTaxiSeatType.DashboardPassenger || p.seatProfile.seatType==TruckTaxiSeatType.CompanionPassenger)
                 { p.seatProfile.localPosition=new Vector3(.16f,.65f,.4f); p.seatProfile.localScale=Vector3.one*.45f; }
                 p.appearance.fallbackColor=entry.species.IndexOf("green",StringComparison.OrdinalIgnoreCase)>=0 ? new Color(.2f,.65f,.25f) :
-                    entry.species.IndexOf("purple",StringComparison.OrdinalIgnoreCase)>=0 ? new Color(.55f,.2f,.8f) : Color.HSVToRGB((Array.IndexOf(roster.passengers,entry)*.137f)%1,.55f,.8f);
+                    entry.species.IndexOf("purple",StringComparison.OrdinalIgnoreCase)>=0 ? new Color(.55f,.2f,.8f) : Color.HSVToRGB((Array.IndexOf(entries,entry)*.137f)%1,.65f,.85f);
+                if(entry.id.StartsWith("glam-",StringComparison.Ordinal))
+                {
+                    p.explicitlyAdult=true; p.minimumAdultAge=int.TryParse(entry.age,out var years) ? Math.Max(21,years) : 21;
+                    p.adultFemalePresentation=true; p.flirtatiousPresentation=true; p.specialAppreciationEligible=true;
+                    p.appreciationChance=.35f; p.appearance.stylizedUpperBodyScale=1.15f;
+                }
                 p.voiceProfile.description="UNCAST: "+entry.personality; p.voiceProfile.voicePresentation=entry.sex; p.voiceProfile.approximateAge=entry.age;
                 p.voiceProfile.deliveryStyle=entry.personality;
                 var arrival=p.authoredDialogue.lines.First(l=>l.lineId=="arrival"); arrival.text=arrival.subtitle=entry.arrival;
@@ -67,6 +104,7 @@ namespace LWS.TruckTaxi.Editor
                 var p=all.First(x=>x.passengerId==entry.id);
                 if(p.pairPassenger==null) { p.pairPassenger=all.First(x=>x.passengerId==entry.pair); EditorUtility.SetDirty(p); }
             }
+            TruckTaxiPassengerDialogueAuthoring.BuildAllMissingDialogueAssets();
             AssetDatabase.SaveAssets(); TruckTaxiPassengerFactoryBuilder.BuildAllBatch();
             Debug.Log("TRUCK TAXI ROSTER: "+TruckTaxiPassengerDialogueAuthoring.AllPassengers().Length+" profiles, originals preserved.");
         }

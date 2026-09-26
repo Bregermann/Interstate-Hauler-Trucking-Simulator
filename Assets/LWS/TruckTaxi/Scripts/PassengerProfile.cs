@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi
 {
+    public enum TruckTaxiPickupPatience { Normal, VeryImpatient, Impatient, Patient, VeryPatient }
     [CreateAssetMenu(menuName = "Truck Taxi/Passenger Profile")]
     public sealed class PassengerProfile : ScriptableObject
     {
@@ -13,9 +14,9 @@ namespace LWS.TruckTaxi
         [Min(0)] public int minimumAdultAge;
         public bool adultFemalePresentation;
         public bool flirtatiousPresentation;
-        [Range(0,1)] public float appreciationChance=.15f;
+        [Range(0,1)] public float appreciationChance=.35f;
         [Range(1,5)] public float appreciationMinimumSatisfaction=4.5f;
-        public bool CanOfferAppreciation => specialAppreciationEligible && explicitlyAdult && minimumAdultAge>=18 &&
+        public bool CanOfferAppreciation => specialAppreciationEligible && explicitlyAdult && minimumAdultAge>=21 &&
             adultFemalePresentation && flirtatiousPresentation && casting!=null && casting.human;
         [Header("Identity and casting")]
         public string developmentReference, archetype;
@@ -49,6 +50,12 @@ namespace LWS.TruckTaxi
         [Range(1,5)] public float passengerRating = 4.5f;
         public string personality;
         [Min(30)] public float basePatience = 240;
+        public TruckTaxiPickupPatience pickupPatience = TruckTaxiPickupPatience.Normal;
+        [Min(0.1f),Tooltip("Additional authored multiplier applied after the named patience level.")]
+        public float pickupPatienceMultiplier = 1;
+        public float EffectivePickupPatience => Mathf.Max(.1f,pickupPatienceMultiplier) *
+            (pickupPatience==TruckTaxiPickupPatience.VeryImpatient ? .55f : pickupPatience==TruckTaxiPickupPatience.Impatient ? .75f :
+             pickupPatience==TruckTaxiPickupPatience.Patient ? 1.3f : pickupPatience==TruckTaxiPickupPatience.VeryPatient ? 1.65f : 1);
         [Range(0,1)] public float baseTipChance = 0.5f;
         [TextArea] public string[] dialogueSet;
         public PassengerRequestDefinition[] possibleRequests;

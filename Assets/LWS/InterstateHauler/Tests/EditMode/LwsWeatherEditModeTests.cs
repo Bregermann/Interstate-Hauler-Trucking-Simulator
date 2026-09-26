@@ -156,6 +156,15 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void FogDensityUsesVendorTransitionInsteadOfCompetingProfileWrite()
+        {
+            string source = File.ReadAllText("Assets/LWS/InterstateHauler/Weather/LwsWeatherMakerAdapter.cs");
+            StringAssert.Contains("\"ShowFogAnimated\"", source);
+            StringAssert.Contains("(float?)density", source);
+            StringAssert.DoesNotContain("SetMember(fogProfile, \"FogDensity\"", source);
+        }
+
+        [Test]
         public void DevelopmentWeatherTabExposesVisibleRuntimeDiagnosticsAndInstantApply()
         {
             string source = File.ReadAllText("Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs");

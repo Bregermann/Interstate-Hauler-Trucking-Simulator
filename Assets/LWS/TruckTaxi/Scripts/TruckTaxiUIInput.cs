@@ -19,13 +19,18 @@ namespace LWS.TruckTaxi
         private InputAction navigate;
         private Transform scope;
         private readonly List<Selectable> controls=new List<Selectable>();
+        private readonly List<Selectable> candidates=new List<Selectable>();
+        private readonly EventSystem eventSystem;
         private bool gamepad;
         private InputSystemUIInputModule module;
         private InputActionReference moveReference;
         private InputActionReference previousMove,previousSubmit,previousCancel;
         private InputActionAsset asset;
-        public TruckTaxiUIInput()
+        public TruckTaxiUIInput() : this(EventSystem.current) { }
+        public TruckTaxiUIInput(EventSystem uiEventSystem)
         {
+            if(uiEventSystem==null) throw new System.ArgumentNullException(nameof(uiEventSystem));
+            eventSystem=uiEventSystem;
             asset=ScriptableObject.CreateInstance<InputActionAsset>(); asset.AddActionMap(Actions);
             Submit=Button("SubmitAccept","<Keyboard>/enter","<Gamepad>/buttonSouth");
             Cancel=Button("CancelDecline","<Keyboard>/escape","<Gamepad>/buttonEast");
@@ -38,8 +43,8 @@ namespace LWS.TruckTaxi
             navigate.AddCompositeBinding("2DVector").With("Up","<Keyboard>/w").With("Down","<Keyboard>/s").With("Left","<Keyboard>/a").With("Right","<Keyboard>/d");
             navigate.AddBinding("<Gamepad>/dpad"); navigate.AddBinding("<Gamepad>/leftStick");
             foreach(var action in Actions) action.performed+=RememberDevice;
-            module=EventSystem.current.GetComponent<InputSystemUIInputModule>();
-            if(module==null) module=EventSystem.current.gameObject.AddComponent<InputSystemUIInputModule>();
+            module=eventSystem.GetComponent<InputSystemUIInputModule>();
+            if(module==null) module=eventSystem.gameObject.AddComponent<InputSystemUIInputModule>();
             if(module.actionsAsset==null) module.AssignDefaultActions();
             previousMove=module.move; previousSubmit=module.submit; previousCancel=module.cancel;
             moveReference=InputActionReference.Create(navigate);
@@ -52,15 +57,23 @@ namespace LWS.TruckTaxi
         public string Hint(InputAction action)
         {
             for(int i=0;i<action.bindings.Count;i++)
-                if(action.bindings[i].effectivePath.Contains(gamepad ? "Gamepad" : "Keyboard")) return action.GetBindingDisplayString(i);
+                if(!string.IsNullOrEmpty(action.bindings[i].effectivePath) && action.bindings[i].effectivePath.Contains(gamepad ? "Gamepad" : "Keyboard")) return action.GetBindingDisplayString(i);
             return action.GetBindingDisplayString();
         }
         public void Focus(Transform next)
         {
-            var selected=EventSystem.current.currentSelectedGameObject;
-            if(next==scope && (next==null || (selected!=null && selected.activeInHierarchy && selected.transform.IsChildOf(next)))) return;
+            bool scopeChanged=next!=scope;
+            if(scopeChanged)
+            {
+                candidates.Clear();
+                if(next!=null) next.GetComponentsInChildren(true,candidates);
+            }
+            var selected=eventSystem.currentSelectedGameObject;
+            var selectedControl=selected!=null ? selected.GetComponent<Selectable>() : null;
+            bool selectedValid=next!=null && Usable(selectedControl) && selected.transform.IsChildOf(next);
+            if(!scopeChanged && NavigationIsCurrent() && (next==null ? selected==null : selectedValid)) return;
             scope=next; controls.Clear();
-            if(next!=null) foreach(var c in next.GetComponentsInChildren<Selectable>()) if(c.IsInteractable()) controls.Add(c);
+            foreach(var c in candidates) if(Usable(c)) controls.Add(c);
             for(int i=0;i<controls.Count;i++)
             {
                 var c=controls[i];
@@ -69,21 +82,36 @@ namespace LWS.TruckTaxi
                 if(!(c is Slider)) { nav.selectOnLeft=nav.selectOnUp; nav.selectOnRight=nav.selectOnDown; }
                 c.navigation=nav;
             }
-            EventSystem.current.SetSelectedGameObject(controls.Count>0 ? controls[0].gameObject : null);
+            eventSystem.SetSelectedGameObject(!scopeChanged && selectedValid ? selected : controls.Count>0 ? controls[0].gameObject : null);
+        }
+        private static bool Usable(Selectable control) => control!=null && control.isActiveAndEnabled && control.IsInteractable();
+        private bool NavigationIsCurrent()
+        {
+            int index=0;
+            foreach(var candidate in candidates) if(Usable(candidate))
+            {
+                if(index>=controls.Count || controls[index]!=candidate) return false;
+                index++;
+            }
+            return index==controls.Count;
         }
         public void SubmitSelected()
         {
-            var selected=EventSystem.current.currentSelectedGameObject;
+            var selected=eventSystem.currentSelectedGameObject;
             if(scope!=null && selected!=null && selected.activeInHierarchy && selected.transform.IsChildOf(scope))
-                ExecuteEvents.Execute(selected,new BaseEventData(EventSystem.current),ExecuteEvents.submitHandler);
+                ExecuteEvents.Execute(selected,new BaseEventData(eventSystem),ExecuteEvents.submitHandler);
         }
         public void Dispose()
         {
-            Actions.Dispose();
             if(module!=null && module.move==moveReference)
             { module.move=previousMove; module.submit=previousSubmit; module.cancel=previousCancel; }
-            if(moveReference!=null) Object.Destroy(moveReference);
-            if(asset!=null) Object.Destroy(asset);
+            Actions.Dispose();
+            DestroyOwned(moveReference); DestroyOwned(asset);
+        }
+        private static void DestroyOwned(Object value)
+        {
+            if(value==null) return;
+            if(Application.isPlaying) Object.Destroy(value); else Object.DestroyImmediate(value);
         }
     }
 }

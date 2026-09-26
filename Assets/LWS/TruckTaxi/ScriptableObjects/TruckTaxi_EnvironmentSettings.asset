@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25e17acf996652a42b040caad7dbc571, type: 3}
+  m_Name: TruckTaxi_EnvironmentSettings
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiEnvironmentSettings
+  startingTime: 16
+  timeScale: 30
+  timeProgressionEnabled: 1
+  automaticWeather: 1
+  weatherRenderPipeline: {fileID: 11400000, guid: 029f09d551b77bf439d96d0d2efec892,
+    type: 2}
+  startingWeather: clear
+  weatherTransitionSeconds: 25
+  weatherDurationGameHours: {x: 2, y: 5}
+  weatherWeights:
+  - presetId: clear
+    weight: 4
+  - presetId: partly_cloudy
+    weight: 3
+  - presetId: overcast
+    weight: 2
+  - presetId: light_rain
+    weight: 2
+  - presetId: heavy_rain
+    weight: 1
+  - presetId: thunderstorm
+    weight: 0.5
+  - presetId: fog
+    weight: 1
+  - presetId: light_snow
+    weight: 1
+  - presetId: heavy_snow
+    weight: 0.5
+  - presetId: blizzard
+    weight: 0.2
+  maximumSnowDepthMeters: 0.6
+  lightSnowMetersPerSecond: 0.0005
+  heavySnowMetersPerSecond: 0.002
+  blizzardMetersPerSecond: 0.005
+  plowResidualDepthMeters: 0.04
+  maximumSnowCells: 4096
+  bladderCycleGameHours: {x: 4, y: 8}
+  startingBladder: 0
+  crisisGraceGameMinutes: 20
+  spillCleanupCostCents: 500
+  jugDurationSeconds: 8
+  stoppedCueHalfWindow: 0.23
+  drivingCueHalfWindow: 0.11
+  jugReleaseGraceSeconds: 0.8
+  lateralAccelerationSpillThreshold: 4.5
+  bathroomMaximumSpeed: 0.447
+  fallbackReactions:
+  - category: 40
+    calmPassenger: Looks like rain. Take your time.
+    chaosPassenger: Rain makes the city look like a movie.
+  - category: 41
+    calmPassenger: That thunder is a good reason to drive carefully.
+    chaosPassenger: The sky brought its own sound effects.
+  - category: 42
+    calmPassenger: I can barely see the next block.
+    chaosPassenger: Mysterious. I approve of the atmosphere.
+  - category: 43
+    calmPassenger: The city gets quieter after dark.
+    chaosPassenger: Night shift. Now the interesting people come out.
+  - category: 44
+    calmPassenger: Look at that sunset.
+    chaosPassenger: Even this city knows how to make an entrance.
+  - category: 46
+    calmPassenger: We can stop at a restroom. Really.
+    chaosPassenger: This ride has developed an unexpected side quest.
+  - category: 47
+    calmPassenger: Please tell me we are stopping first.
+    chaosPassenger: That is certainly one way to manage a schedule.
+  - category: 48
+    calmPassenger: I would still prefer a restroom next time.
+    chaosPassenger: Flawless technique. A very unusual talent.
+  - category: 49
+    calmPassenger: We need a cleanup stop. Immediately.
+    chaosPassenger: Well. That story is going in the review.
+  - category: 50
+    calmPassenger: Much better. Ready when you are.
+    chaosPassenger: Pit stop complete. Back to the adventure.

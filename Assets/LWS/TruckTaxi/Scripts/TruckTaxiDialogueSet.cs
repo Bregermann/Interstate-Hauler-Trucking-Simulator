@@ -12,7 +12,10 @@ namespace LWS.TruckTaxi
         Arrival, RideFailure, Ejection, PairExchange, SpecialMechanic,
         HardBrakeReaction, HardAccelerationReaction, WrongWayReaction, AirTimeReaction, SmoothDrivingReaction,
         TrafficComplaint, GPSComplaint, ArrivalGood, ArrivalBad, TipHigh, TipLow, NoTip, EjectionThreat,
-        EjectionReaction, PairPassengerReaction, UniqueMechanicReaction
+        EjectionReaction, PairPassengerReaction, UniqueMechanicReaction,
+        RainReaction, StormReaction, FogReaction, NightReaction, SunsetReaction, WeatherChanged,
+        BladderUrgent, JugStarted, JugSucceeded, JugSpilled, BathroomStop,
+        RepeatPickup, PickupCancelled, JugThrownFromWindow
     }
 
     [Serializable]

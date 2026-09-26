@@ -10,42 +10,158 @@ namespace LWS.TruckTaxi
         public GameObject[] trafficPrefabs;
         public LwsTrafficLaneDefinition[] cityLanes;
         public int maximumVehicles = 12;
+        [Min(0)] public int maximumDedicatedVehicles = 8;
+        [Min(10)] public float maximumDedicatedSpawnDistance = 100;
+        [Tooltip("Optional Taxi-only override. Unassigned or disabled preserves the original baseline setup.")]
+        public TruckTaxiPopulationProfile densityProfile;
+        public bool useDensityOverride = true;
         private readonly LwsUtsTrafficApi api = new LwsUtsTrafficApi();
         private readonly List<Component> paths = new List<Component>();
+        private readonly List<LwsTrafficLaneDefinition> validLanes = new List<LwsTrafficLaneDefinition>();
         private readonly List<GameObject> vehicles = new List<GameObject>();
+        private readonly Dictionary<string, GameObject> vehiclesById = new Dictionary<string, GameObject>();
+        private readonly HashSet<GameObject> dedicatedVehicles = new HashSet<GameObject>();
+        private readonly Dictionary<GameObject, TruckTaxiPopulationPresentation> presentations = new Dictionary<GameObject, TruckTaxiPopulationPresentation>();
         private readonly LwsTrafficSpawnPolicy policy = new LwsTrafficSpawnPolicy {
             targetCruiseSpeedScale = 0.7f, maximumTrafficSpeedMetersPerSecond = 12, autoResolveEditorPrefabs = false };
         private float nextMaintenance;
         private int serial;
+        private int spawnCursor;
+        private bool initialized;
+        private bool baselineValidation;
+        public bool IsBaselineValidation => baselineValidation;
+        public int BaselineActiveCount { get; private set; }
+        public int TargetCount => DensityEnabled ? (baselineValidation ?
+            TruckTaxiPopulationProfile.ScaleTarget(densityProfile.measuredTrafficBaseline > 0 ? densityProfile.measuredTrafficBaseline : BaselineActiveCount, 1, densityProfile.maximumActiveTraffic)
+            : densityProfile.TrafficTarget(BaselineActiveCount)) : maximumVehicles;
+        public int SpawnAttempts { get; private set; }
+        public int RejectedSpawnAttempts { get; private set; }
+        public bool DensityEnabled => useDensityOverride && densityProfile != null;
+        public IReadOnlyList<GameObject> Vehicles => vehicles;
+        public IReadOnlyDictionary<string, GameObject> ActiveVehicles => vehiclesById;
+        public bool TryResolveVehicle(string stableId, out GameObject vehicle)
+        {
+            vehicle = null;
+            if (string.IsNullOrEmpty(stableId) || !vehiclesById.TryGetValue(stableId, out var found) || found == null || !found.activeInHierarchy) return false;
+            vehicle = found;
+            return true;
+        }
+        public bool TryGetVehicleAi(string stableId, out Component ai)
+        {
+            ai = null;
+            if (!TryResolveVehicle(stableId, out var vehicle)) return false;
+            foreach (var component in vehicle.GetComponentsInChildren<MonoBehaviour>(true))
+                if (component.GetType().Name == "CarAIController") { ai = component; return true; }
+            return false;
+        }
+        public bool ReleaseDedicatedVehicle(string stableId)
+        {
+            return TryResolveVehicle(stableId, out var vehicle) && dedicatedVehicles.Remove(vehicle);
+        }
+        public bool TrySpawnDedicatedVehicle(Vector3 near, out GameObject vehicle, out string stableId) =>
+            TrySpawnDedicatedVehicle(null, near, out vehicle, out stableId);
+        public bool TrySpawnDedicatedVehicle(string stableId, Vector3 near, out GameObject vehicle)
+        {
+            vehicle = null;
+            if (string.IsNullOrWhiteSpace(stableId)) return false;
+            return TrySpawnDedicatedVehicle(stableId, near, out vehicle, out _);
+        }
+        private bool TrySpawnDedicatedVehicle(string requestedId, Vector3 near, out GameObject vehicle, out string stableId)
+        {
+            vehicle = null; stableId = null;
+            if (requestedId != null && vehiclesById.ContainsKey(requestedId)) return false;
+            if (!initialized || !Ready || trafficPrefabs == null || trafficPrefabs.Length == 0 ||
+                dedicatedVehicles.Count >= maximumDedicatedVehicles || vehicles.Count >= TargetCount + maximumDedicatedVehicles) return false;
+            int bestLane = -1, bestPoint = -1;
+            float bestDistance = maximumDedicatedSpawnDistance * maximumDedicatedSpawnDistance;
+            for (int laneIndex = 0; laneIndex < validLanes.Count; laneIndex++)
+            {
+                var lane = validLanes[laneIndex];
+                if (!lane.spawnEnabled) continue;
+                for (int point = 2; point < lane.centerline.Length - 2; point++)
+                {
+                    Vector3 position = lane.centerline[point];
+                    float distance = (position - near).sqrMagnitude;
+                    if (distance >= bestDistance || !HasSpawnClearance(position, 14, 20)) continue;
+                    bestDistance = distance; bestLane = laneIndex; bestPoint = point;
+                }
+            }
+            if (bestLane < 0) return false;
+            int prefabIndex = spawnCursor++ % trafficPrefabs.Length;
+            vehicle = api.SpawnVehicle(trafficPrefabs[prefabIndex], paths[bestLane], validLanes[bestLane],
+                bestPoint, transform, policy, out string message);
+            if (vehicle == null) { Debug.LogWarning(message, this); return false; }
+            stableId = RegisterVehicle(vehicle, requestedId);
+            dedicatedVehicles.Add(vehicle);
+            return true;
+        }
         public int ActiveCount => vehicles.Count;
+        public int PresentationCount => presentations.Count;
+        public int ReducedShadowCount { get; private set; }
         public bool Ready => paths.Count > 0 && api.IsAvailable;
+        public bool ConfigureDensity(TruckTaxiPopulationProfile profile, bool applyOverride = true)
+        {
+            if (initialized) { Debug.LogWarning("Configure Taxi traffic density before Initialize; live traffic was left untouched.", this); return false; }
+            densityProfile = profile; useDensityOverride = applyOverride; baselineValidation = false; return true;
+        }
+        public bool ConfigureBaselineForValidation(TruckTaxiPopulationProfile profile)
+        {
+            if (!ConfigureDensity(profile)) return false;
+            baselineValidation = true; return true;
+        }
         public void Initialize()
         {
-            if (paths.Count > 0) return;
+            if (initialized) return;
             if (!api.IsAvailable) { Debug.LogError(api.AvailabilitySummary,this); return; }
-            foreach (var lane in cityLanes)
+            foreach (var lane in cityLanes ?? System.Array.Empty<LwsTrafficLaneDefinition>())
             {
+                if (lane == null || lane.centerline == null || lane.centerline.Length < 5) continue;
                 var root = new GameObject(lane.laneId); root.transform.SetParent(transform,false);
                 var path = api.CreatePath(root,lane,trafficPrefabs,policy,out string message);
-                if (path == null) Debug.LogError(message,this);
-                paths.Add(path);
+                if (path == null) { Debug.LogError(message,this); Destroy(root); continue; }
+                paths.Add(path); validLanes.Add(lane);
             }
-            for (int i=0;i<maximumVehicles;i++) SpawnTraffic();
+            // Measure the old startup behavior before enabling any density override.
+            for (int i=0;i<maximumVehicles;i++) TrySpawnTraffic(maximumVehicles, false);
+            BaselineActiveCount = ActiveCount; initialized = true;
+            if (DensityEnabled) Debug.Log($"TAXI TRAFFIC: original cap {maximumVehicles}, observed startup {BaselineActiveCount}, multiplier {(baselineValidation ? 1 : densityProfile.trafficDensityMultiplier)}, target/cap {TargetCount}/{densityProfile.maximumActiveTraffic}.", this);
         }
-        public bool SpawnTraffic()
+        public bool SpawnTraffic() => TrySpawnTraffic(TargetCount, DensityEnabled);
+        private bool TrySpawnTraffic(int limit, bool dense)
         {
-            vehicles.RemoveAll(v=>v==null);
-            if (vehicles.Count >= maximumVehicles || !Ready || trafficPrefabs.Length == 0) return false;
-            int index = serial % paths.Count;
-            var lane = cityLanes[index];
-            int point = 2 + (serial * 23) % Mathf.Max(1,lane.centerline.Length - 4);
+            for (int i = vehicles.Count - 1; i >= 0; i--)
+                if (vehicles[i] == null)
+                {
+                    if (!ReferenceEquals(vehicles[i], null)) ForgetVehicle(vehicles[i]);
+                    vehicles.RemoveAt(i);
+                }
+            if (vehicles.Count - dedicatedVehicles.Count >= limit || !Ready || trafficPrefabs == null || trafficPrefabs.Length == 0) return false;
+            SpawnAttempts++;
+            int cursor = spawnCursor++;
+            int index = cursor % paths.Count;
+            var lane = validLanes[index];
+            // Vary points within each lane, avoiding a common-factor cycle that never visits most road nodes.
+            int point = dense ? DensePointIndex(cursor, paths.Count, lane.centerline.Length)
+                : 2 + (cursor * 23) % (lane.centerline.Length - 4);
             Vector3 position = lane.centerline[point];
-            foreach (var car in vehicles) if (Vector3.Distance(car.transform.position,position)<14) { serial++; return false; }
+            if (dense && !densityProfile.AllowsSpawn(position, transform.position)) { RejectedSpawnAttempts++; return false; }
+            float clearance = dense ? Mathf.Max(1, densityProfile.trafficSpawnClearance) : 14;
+            float playerClearance = dense ? Mathf.Max(1, densityProfile.playerTrafficSpawnClearance) : 20;
+            if (!HasSpawnClearance(position, clearance, playerClearance)) { RejectedSpawnAttempts++; return false; }
+            var vehicle = api.SpawnVehicle(trafficPrefabs[cursor % trafficPrefabs.Length],paths[index],lane,point,transform,policy,out string message);
+            if (vehicle == null) { RejectedSpawnAttempts++; Debug.LogWarning(message,this); return false; }
+            RegisterVehicle(vehicle);
+            return true;
+        }
+        private bool HasSpawnClearance(Vector3 position, float vehicleClearance, float playerClearance)
+        {
+            foreach (var car in vehicles)
+                if (car != null && (car.transform.position-position).sqrMagnitude < vehicleClearance*vehicleClearance) return false;
             var player = TruckTaxiBootstrap.Instance?.Player;
-            if (player != null && Vector3.Distance(player.transform.position,position)<20) { serial++; return false; }
-            var vehicle = api.SpawnVehicle(trafficPrefabs[serial % trafficPrefabs.Length],paths[index],lane,point,transform,policy,out string message);
-            serial++;
-            if (vehicle == null) { Debug.LogWarning(message,this); return false; }
+            return player == null || (player.transform.position-position).sqrMagnitude >= playerClearance*playerClearance;
+        }
+        private string RegisterVehicle(GameObject vehicle, string requestedId = null)
+        {
             // Runtime-added UTS components need their Start lifecycle before AI calls Move.
             foreach (var component in vehicle.GetComponentsInChildren<MonoBehaviour>(true))
             {
@@ -56,32 +172,91 @@ namespace LWS.TruckTaxi
                     StartCoroutine(EnableInitializedAi(component));
                 }
             }
-            var target = vehicle.AddComponent<TruckTaxiImpactTarget>(); target.kind = TaxiImpactKind.Traffic; target.targetId = "taxi.traffic."+serial;
-            vehicles.Add(vehicle); return true;
+            var target = vehicle.AddComponent<TruckTaxiImpactTarget>(); target.kind = TaxiImpactKind.Traffic;
+            if (requestedId == null)
+            {
+                do { requestedId = "taxi.traffic."+(++serial); } while (vehiclesById.ContainsKey(requestedId));
+            }
+            target.targetId = requestedId;
+            vehicles.Add(vehicle);
+            vehiclesById.Add(target.targetId, vehicle);
+            vehicle.AddComponent<TruckTaxiRoadRage>();
+            var presentation = new TruckTaxiPopulationPresentation(vehicle, false);
+            presentations.Add(vehicle, presentation);
+            presentation.Refresh(DensityEnabled ? densityProfile : null, PresentationObserver());
+            return target.targetId;
         }
         private IEnumerator EnableInitializedAi(Behaviour ai)
         {
             yield return null;
             if (ai != null) ai.enabled = true;
         }
+        public static int DensePointIndex(int cursor, int laneCount, int pointCount)
+        {
+            int available = Mathf.Max(1, pointCount - 4);
+            int stride = Mathf.Min(23, available);
+            while (GreatestCommonDivisor(stride, available) != 1) stride--;
+            return 2 + (int)(((long)Mathf.Max(0, cursor) / Mathf.Max(1, laneCount) * stride) % available);
+        }
+        private static int GreatestCommonDivisor(int a, int b)
+        {
+            while (b != 0) { int next = a % b; a = b; b = next; }
+            return a;
+        }
         private void Update()
         {
             if (!Ready || Time.time < nextMaintenance) return;
-            nextMaintenance = Time.time + 3;
+            nextMaintenance = Time.time + (DensityEnabled ? Mathf.Max(.1f, densityProfile.maintenanceInterval) : 3);
+            Vector3 observer = PresentationObserver(); ReducedShadowCount = 0;
             for (int i=vehicles.Count-1;i>=0;i--)
             {
                 var car = vehicles[i];
-                if (car == null) { vehicles.RemoveAt(i); continue; }
-                if (car.transform.position.y < -5 || Mathf.Abs(car.transform.position.x)>420 || Mathf.Abs(car.transform.position.z)>420)
-                { car.SetActive(false); Destroy(car); vehicles.RemoveAt(i); }
+                if (car == null) { if (!ReferenceEquals(car, null)) ForgetVehicle(car); vehicles.RemoveAt(i); continue; }
+                bool outside = DensityEnabled && densityProfile.despawnRadius > 0
+                    ? !densityProfile.AllowsPresence(car.transform.position, transform.position)
+                    : Mathf.Abs(car.transform.position.x)>420 || Mathf.Abs(car.transform.position.z)>420;
+                if (car.transform.position.y < -5 || (!dedicatedVehicles.Contains(car) && (outside || vehicles.Count - dedicatedVehicles.Count > TargetCount)))
+                { car.SetActive(false); Destroy(car); vehicles.RemoveAt(i); ForgetVehicle(car); continue; }
+                if (presentations.TryGetValue(car, out var presentation))
+                {
+                    presentation.Refresh(DensityEnabled ? densityProfile : null, observer);
+                    if (presentation.ShadowsReduced) ReducedShadowCount++;
+                }
             }
-            SpawnTraffic();
+            int budget = DensityEnabled ? Mathf.Max(1, densityProfile.maximumSpawnsPerPass) : 1;
+            int spawned = 0;
+            for (int attempt = 0; attempt < budget * (DensityEnabled ? 8 : 1) && spawned < budget && ActiveCount - dedicatedVehicles.Count < TargetCount; attempt++)
+                if (SpawnTraffic()) spawned++;
         }
         public void ResetTraffic()
         {
             foreach (var vehicle in vehicles) if (vehicle!=null) { vehicle.SetActive(false); Destroy(vehicle); }
-            vehicles.Clear(); serial = 0;
-            for (int i=0;i<maximumVehicles;i++) SpawnTraffic();
+            vehicles.Clear(); presentations.Clear(); vehiclesById.Clear(); dedicatedVehicles.Clear(); spawnCursor = 0;
+            // Keep unique impact IDs across respawns. Dense refill is budgeted by the existing maintenance path.
+            for (int i=0;i<Mathf.Min(maximumVehicles, TargetCount);i++) SpawnTraffic();
+            nextMaintenance = 0;
+        }
+        private Vector3 PresentationObserver()
+        {
+            var player = TruckTaxiBootstrap.Instance?.Player;
+            return player != null ? player.transform.position : transform.position;
+        }
+        private void ForgetVehicle(GameObject vehicle)
+        {
+            presentations.Remove(vehicle);
+            dedicatedVehicles.Remove(vehicle);
+            var target = vehicle != null ? vehicle.GetComponent<TruckTaxiImpactTarget>() : null;
+            if (target != null) vehiclesById.Remove(target.targetId);
+            else
+            {
+                string key = null;
+                foreach (var pair in vehiclesById) if (ReferenceEquals(pair.Value, vehicle)) { key = pair.Key; break; }
+                if (key != null) vehiclesById.Remove(key);
+            }
+        }
+        private void OnDisable()
+        {
+            foreach (var presentation in presentations.Values) presentation.Restore();
         }
     }
 }

@@ -1,0 +1,21 @@
+# Truck Taxi snow
+
+Run **Truck Taxi > Configure Snow** in the Unity Editor after the time/weather and objective-content setup. The helper updates the existing Taxi settings asset, ensures one LWS road-condition controller and Weatherade visual adapter in the Taxi scene, marks already-authored road renderers with the existing `LwsRoadSurface` component, and adds the Taxi snow component. It does not regenerate, delete, or move roads. It has been run and saved in DemoCity for the expansion pass.
+
+Taxi weather IDs are `light_snow`, `heavy_snow`, and `blizzard`. Blizzard is Taxi-only: `TruckTaxiEnvironmentCoordinator.CurrentTaxiWeatherId` and the LWS weather snapshot both report `blizzard` for session demand. The Taxi preset reuses the installed Weather Maker heavy-snow profile through the existing public LWS preset API, with stronger precipitation, wind, fog, and reduced visibility. The shared built-in catalog is unchanged.
+
+Runtime `TruckTaxiSnow.Initialize` is called by the environment coordinator after Bootstrap creates the player. `Tick` is called by that coordinator while unpaused. It builds a bounded lane-cell snow mesh/collider from the already-authored UTS lane centerlines, without editing EasyRoads or baked road meshes. The underlying road stays authored; Weatherade handles surface coverage, while Taxi owns only the extra depth geometry and local clearing. Default depth cap is 0.6 m, with rates 0.0005/0.002/0.005 m per real second for light/heavy/blizzard. Maximum cell count is 4096, in lane order. When reached, later lanes receive no depth geometry; increase the cap or partition authored regions in a larger map.
+
+Deep snow changes the Taxi tractor's NWH wheel grip from 1.0 to 0.42 and rolling resistance from 1.0 to 2.5 at 0.6 m. Plowing leaves 0.04 m and those multipliers recover locally. The Taxi scene should not also attach `LwsNwhRoadConditionAdapter` to the same tractor: both use the same NWH wheel properties and would compete. There is no custom vehicle physics.
+
+During heavy snow/blizzard, `TruckTaxiSnowplow` asks `TruckTaxiTrafficAdapter.TrySpawnDedicatedVehicle` for a UTS car. The visible blade is attached to its UTS AI transform. Dispatch clears one vehicle-sized spawn patch to avoid embedding the chassis in existing deep snow. Thereafter, a road cell is cleared only after the blade moves 0.1-12 m between observations; teleports and a stationary vehicle do not clear snow. The plow chassis ignores only the generated depth collider, whose swept mesh rebuild is throttled; wheels still use the surface, and other world/vehicle collisions remain active. Collision pairs are restored on release. The dedicated slot is released when snow ends. A traffic-cap or spawn-clearance failure is reported through `Diagnostic` and retried after 10 seconds.
+
+The scene's `TruckTaxiSnow` stores explicit references to Weatherade's GaussianBlur, TexturePacking, TraceMaskGen and DepthRenderer shaders. Weatherade creates materials with `Shader.Find` at runtime; these references prevent player-build stripping without changing vendor source or the global Always Included Shaders list.
+
+When no cells retain depth, the collider has a null shared mesh instead of asking
+PhysX to cook an empty mesh. Clearing all snow and subsequently completing fuel
+rescue passed in the final Windows executable without the earlier collider error.
+
+The editor helper creates no prefab or asset by raw YAML. No voices are changed. Snow depth and plowed state are transient and reset on a new Taxi session; persistence and streamed-world coordinate rebasing are not provided. Integration testing forced 0.6 m accumulation, verified physical depth geometry, observed the actual UTS plow move more than 1 m, and verified newly swept cells clear. The blizzard was rendered and inspected. Long-drive handling and close-up final-art approval remain manual checks.
+
+For opt-in observation, attach `TruckTaxiSnowRuntimeProbe` to the Taxi Bootstrap object and invoke **Observe Taxi Snow And Plow** in Play Mode. It reports geometry presence, local depth, UTS vehicle movement over three seconds, and cells cleared in that interval. It does not force weather or count a stationary plow as proof of functionality.

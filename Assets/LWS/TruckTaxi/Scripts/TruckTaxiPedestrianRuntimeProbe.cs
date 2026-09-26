@@ -94,6 +94,11 @@ namespace LWS.TruckTaxi
                 deadline=Time.realtimeSinceStartup+host.configuration.pedestrianImpact.ragdollLifetime+3;
                 while(retired.Any(p=>p!=null) && Time.realtimeSinceStartup<deadline) yield return null;
                 check(retired.All(p=>p==null),"Ragdolls cleaned up after configured lifetime");
+                // Dense population replacement is bounded and waits for a clear UTS entrance.
+                // Destruction completing does not imply its replacement exists in that same frame.
+                float maintenance=host.pedestrians.DensityEnabled ? host.pedestrians.densityProfile.maintenanceInterval : .5f;
+                deadline=Time.realtimeSinceStartup+Mathf.Max(10,maintenance*8);
+                while(host.pedestrians.ActiveCount<count && Time.realtimeSinceStartup<deadline) yield return null;
                 check(host.pedestrians.ActiveCount==count,"Same UTS population replenished without accumulation");
                 check(host.pedestrians.People.All(p=>p!=null && !p.IsRagdoll && !p.HitEventSent && !ids.Contains(p.PedestrianId)),"Replacement bodies have fresh IDs, animation and hit guards");
                 check(host.pedestrians.People.All(p=>p.GetComponent<Animator>().enabled && p.HasJointedRagdoll),"Replacement UTS rigs initialized normally");

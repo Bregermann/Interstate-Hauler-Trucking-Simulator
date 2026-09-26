@@ -29,7 +29,8 @@ namespace LWS.TruckTaxi.Tests
             var unsupported=Asset<PassengerRequestDefinition>(); unsupported.additionalCapabilities=TruckTaxiObjectiveCapability.VehicleDestruction;
             var caps=new TruckTaxiObjectiveCapabilities();
             foreach(var d in definitions) caps.Register(d.RequiredCapabilities,10);
-            Assert.IsFalse(caps.Supports(unsupported));
+            Assert.IsFalse(new TruckTaxiObjectiveCapabilities().Supports(unsupported), "Unregistered destruction must remain gated.");
+            Assert.IsTrue(caps.Supports(unsupported), "The implemented destruction capability was explicitly registered above.");
             var random=new System.Random(20260925);
             for(int run=0;run<10000;run++)
             {
@@ -47,10 +48,29 @@ namespace LWS.TruckTaxi.Tests
                     var progress=new TaxiRequestProgress(d,(float)(.8+random.NextDouble()*.4));
                     Assert.AreEqual(Mathf.Round(progress.Target),progress.Target);
                     StringAssert.DoesNotContain("fictional pedestrian",progress.Description.ToLowerInvariant());
-                    if(d.requestType!=TaxiRequestType.SmoothRide && d.requestType!=TaxiRequestType.NoCollisions)
+                    if(d.requestType!=TaxiRequestType.SmoothRide &&
+                        d.requestType!=TaxiRequestType.NoCollisions &&
+                        !TruckTaxiVehicleObjectives.IsVehicleRequest(d.requestType))
                         Assert.IsTrue(progress.Description.Contains(progress.TargetText) || progress.Target==1,progress.Description);
                 }
             }
+        }
+        [Test] public void GoalSummarySnapshotsExpiryAndEarnedReward()
+        {
+            var session=Session(out _); Board(session);
+            var timed=Asset<PassengerRequestDefinition>(); timed.requestType=TaxiRequestType.FastDelivery; timed.timer=1;
+            Assert.IsTrue(session.GenerateRequest(timed));
+            var expired=session.Requests.Last();
+            session.Tick(2,session.Pickup.StopPosition+Vector3.forward*20,0,0,true);
+            var failure=new TruckTaxiGoalResult(expired);
+            Assert.IsTrue(failure.Expired); Assert.Zero(failure.RewardCents);
+            var goal=Asset<PassengerRequestDefinition>(); goal.requestType=TaxiRequestType.MaximumChaos; goal.bonusMoneyCents=1234;
+            Assert.IsTrue(session.GenerateRequest(goal));
+            var progress=session.Requests.Last();
+            Assert.IsTrue(session.RecordObjectiveProgress(progress,progress.Target,true));
+            var success=new TruckTaxiGoalResult(progress);
+            goal.bonusMoneyCents=9999;
+            Assert.IsFalse(success.Expired); Assert.AreEqual(1234,success.RewardCents);
         }
         [Test] public void ChaosDescriptionDenominatorAndCompletionShareRoundedTarget()
         {

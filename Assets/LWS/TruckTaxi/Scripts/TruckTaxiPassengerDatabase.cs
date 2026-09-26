@@ -37,7 +37,8 @@ namespace LWS.TruckTaxi
                     if (!string.IsNullOrEmpty(query.species) && !string.Equals(p.casting?.species,query.species,StringComparison.OrdinalIgnoreCase)) continue;
                     if (!string.IsNullOrEmpty(query.raceEthnicity) && !string.Equals(p.casting?.raceEthnicity,query.raceEthnicity,StringComparison.OrdinalIgnoreCase)) continue;
                     if (!string.IsNullOrEmpty(query.trait) && !Array.Exists(p.specialTraits ?? Array.Empty<string>(),x=>string.Equals(x,query.trait,StringComparison.OrdinalIgnoreCase))) continue;
-                    if (!string.IsNullOrEmpty(query.district) && p.districts != null && p.districts.Length > 0 && !Array.Exists(p.districts,x=>x==query.district)) continue;
+                    if (!string.IsNullOrEmpty(query.district) && p.districts != null && p.districts.Length > 0 &&
+                        !Array.Exists(p.districts,x=>string.Equals(x,query.district,StringComparison.OrdinalIgnoreCase))) continue;
                     if (query.request.HasValue && !Array.Exists(p.possibleRequests ?? Array.Empty<PassengerRequestDefinition>(),x=>x!=null && x.requestType==query.request)) continue;
                 }
                 yield return p;

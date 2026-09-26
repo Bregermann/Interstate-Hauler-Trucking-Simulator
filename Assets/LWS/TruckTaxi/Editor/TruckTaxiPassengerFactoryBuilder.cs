@@ -18,7 +18,7 @@ namespace LWS.TruckTaxi.Editor
         {
             public int schemaVersion=1;
             public string passengerId,developmentReference,runtimeName,species,raceEthnicity,sexPresentation,approximateAge,bodyDescription,faceDescription,hair,clothing,distinctiveFeatures;
-            public string artStyle="Stylized, game-readable, exaggerated comedy; efficient PS2/PS3-era proportions, original visual identity";
+            public string artStyle="TruckTaxiWobblePeople: bulbous toy-like silhouette, strong colors, simple face, original themed accessories";
             public string requiredPose="Neutral A-pose, feet grounded, no obstructive props";
             public string[] requiredViews={"Front","Three-quarter","Side","Rear"};
             public string referenceSheet="Plain background; consistent proportions and outfit across every view";
@@ -117,7 +117,7 @@ namespace LWS.TruckTaxi.Editor
                 bool human=p.casting==null || p.casting.human;
                 GameObject model=p.modelPrefab;
                 actor.fallbackModel=model==null;
-                if(model==null && human)
+                if(model==null && human && p.appearance.visualStyle==TruckTaxiVisualStyle.OriginalUts)
                 {
                     bool female=p.casting?.sexPresentation?.IndexOf("woman",StringComparison.OrdinalIgnoreCase)>=0 || p.casting?.sexPresentation=="Female";
                     model=AssetDatabase.LoadAssetAtPath<GameObject>(female ? "Assets/UTS_FullPack/Models/People/Prefabs/Womans/business01_f_highpoly.prefab" : "Assets/UTS_FullPack/Models/People/Prefabs/Mans/business01_m.prefab");
@@ -187,22 +187,51 @@ namespace LWS.TruckTaxi.Editor
         }
         private static GameObject Fallback(Transform parent,PassengerProfile p)
         {
-            var visual=new GameObject("Stylized placeholder - final model required"); visual.transform.SetParent(parent,false);
             string materials=Root+"/Materials"; TruckTaxiPassengerDialogueAuthoring.EnsureFolder(materials);
             string path=materials+"/"+p.passengerId+".mat";
             var mat=AssetDatabase.LoadAssetAtPath<Material>(path);
             if(mat==null) { mat=new Material(Shader.Find("Universal Render Pipeline/Lit")); mat.color=p.appearance.fallbackColor; AssetDatabase.CreateAsset(mat,path); }
+            string detailPath=materials+"/WobbleDetail.mat";
+            var detail=AssetDatabase.LoadAssetAtPath<Material>(detailPath);
+            if(detail==null) { detail=new Material(Shader.Find("Universal Render Pipeline/Lit")); detail.color=new Color(.08f,.09f,.1f); AssetDatabase.CreateAsset(detail,detailPath); }
+            Material skin=mat;
+            if(p.casting==null || p.casting.human)
+            {
+                string skinPath=materials+"/WobbleSkin.mat";
+                skin=AssetDatabase.LoadAssetAtPath<Material>(skinPath);
+                if(skin==null) { skin=new Material(Shader.Find("Universal Render Pipeline/Lit")); skin.color=new Color(.78f,.54f,.38f); AssetDatabase.CreateAsset(skin,skinPath); }
+            }
+            var visual=TruckTaxiWobbleVisual.Create(parent,p.appearance.heightMeters,p.appearance.stylizedUpperBodyScale,mat,detail,skin);
             float h=p.appearance.heightMeters;
-            bool robot=p.appearance.characterType==TruckTaxiCharacterType.Robot || p.appearance.characterType==TruckTaxiCharacterType.DashboardPassenger;
-            Primitive(visual.transform,"Body",robot ? PrimitiveType.Cube : PrimitiveType.Capsule,new Vector3(0,h*.48f,0),new Vector3(h*.4f,h*.4f,h*.32f),mat);
-            Primitive(visual.transform,"Head",robot ? PrimitiveType.Cube : PrimitiveType.Sphere,new Vector3(0,h*.85f,0),Vector3.one*h*.34f,mat);
-            Primitive(visual.transform,"Left foot",PrimitiveType.Cube,new Vector3(-h*.13f,h*.08f,.04f),new Vector3(h*.18f,h*.16f,h*.3f),mat);
-            Primitive(visual.transform,"Right foot",PrimitiveType.Cube,new Vector3(h*.13f,h*.08f,.04f),new Vector3(h*.18f,h*.16f,h*.3f),mat);
+            if((p.passengerId ?? "").StartsWith("glam-",StringComparison.Ordinal) && p.casting!=null && p.casting.human)
+            {
+                float upper=p.appearance.stylizedUpperBodyScale;
+                Primitive(visual.transform,"Left clothed chest",PrimitiveType.Sphere,
+                    new Vector3(-h*.13f,h*.61f,h*.16f),new Vector3(h*.21f*upper,h*.19f,h*.19f),mat);
+                Primitive(visual.transform,"Right clothed chest",PrimitiveType.Sphere,
+                    new Vector3(h*.13f,h*.61f,h*.16f),new Vector3(h*.21f*upper,h*.19f,h*.19f),mat);
+            }
             string species=(p.casting?.species ?? "").ToLowerInvariant();
             if(species.Contains("dragon") || species.Contains("cat") || species.Contains("creature"))
             { var tail=Primitive(visual.transform,"Tail",PrimitiveType.Capsule,new Vector3(0,h*.4f,-h*.35f),new Vector3(h*.15f,h*.35f,h*.15f),mat); tail.transform.localEulerAngles=new Vector3(65,0,0); }
             if(species.Contains("bird") || species.Contains("chicken") || species.Contains("dragon"))
             { Primitive(visual.transform,"Left wing",PrimitiveType.Cube,new Vector3(-h*.35f,h*.6f,0),new Vector3(h*.45f,h*.09f,h*.3f),mat); Primitive(visual.transform,"Right wing",PrimitiveType.Cube,new Vector3(h*.35f,h*.6f,0),new Vector3(h*.45f,h*.09f,h*.3f),mat); }
+            string id=p.passengerId ?? "";
+            if(id.StartsWith("racing-",StringComparison.Ordinal))
+            {
+                Primitive(visual.transform,"Racing cap",PrimitiveType.Cylinder,new Vector3(0,h*.985f,0),new Vector3(h*.24f,h*.07f,h*.24f),detail);
+                Primitive(visual.transform,"Cap brim",PrimitiveType.Cube,new Vector3(0,h*.96f,h*.14f),new Vector3(h*.37f,h*.025f,h*.19f),detail);
+            }
+            else if(id.StartsWith("glam-",StringComparison.Ordinal))
+            {
+                Primitive(visual.transform,"Stylized hair",PrimitiveType.Sphere,new Vector3(0,h*.93f,-h*.025f),new Vector3(h*.4f,h*.22f,h*.35f),detail);
+                if(id.Contains("witch") || id.Contains("sorceress"))
+                    Primitive(visual.transform,"Wide hat",PrimitiveType.Cylinder,new Vector3(0,h*1.03f,0),new Vector3(h*.37f,h*.035f,h*.37f),detail);
+                if(id.Contains("fire-fighter") || id.Contains("medic"))
+                    Primitive(visual.transform,"Service badge",PrimitiveType.Cube,new Vector3(0,h*.57f,h*.17f),new Vector3(h*.13f,h*.13f,h*.025f),detail);
+                if(id.Contains("agent") || id.Contains("operative"))
+                    Primitive(visual.transform,"Visor",PrimitiveType.Cube,new Vector3(0,h*.85f,h*.17f),new Vector3(h*.3f,h*.055f,h*.06f),detail);
+            }
             return visual;
         }
         private static GameObject Primitive(Transform parent,string name,PrimitiveType type,Vector3 position,Vector3 scale,Material mat)

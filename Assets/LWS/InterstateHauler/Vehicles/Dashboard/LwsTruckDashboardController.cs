@@ -40,6 +40,13 @@ namespace LWS.InterstateHauler
         public bool HasTachometer => tachometer != null;
         public bool HasGearDisplay => gearDisplay != null;
         public bool HasSteeringWheelVisual => steeringWheelVisual != null;
+        // A mode-specific presenter may lease only the wheel; all gauges and indicators keep updating.
+        public bool SteeringWheelAnimationEnabled { get; set; } = true;
+        public Transform SteeringWheelVisual => steeringWheelVisual;
+        public Quaternion SteeringWheelNeutralRotation
+        {
+            get { CaptureSteeringWheelBaseRotation(); return _steeringWheelBaseRotation; }
+        }
 
         private void Reset()
         {
@@ -240,7 +247,7 @@ namespace LWS.InterstateHauler
 
         private void AnimateSteeringWheel(float steeringInput)
         {
-            if (steeringWheelVisual == null)
+            if (!SteeringWheelAnimationEnabled || steeringWheelVisual == null)
             {
                 return;
             }

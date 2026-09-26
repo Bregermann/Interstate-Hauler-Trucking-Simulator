@@ -200,6 +200,222 @@ Used by: giant-chicken
 - Sad: MISSING
 - Annoyed: MISSING
 
+## voice-glam-aristocrat-warrior
+Used by: glam-aristocrat-warrior
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-armored-huntress
+Used by: glam-armored-huntress
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-brawler-bartender
+Used by: glam-brawler-bartender
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-dark-sorceress
+Used by: glam-dark-sorceress
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-dual-personality
+Used by: glam-dual-personality
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-fire-fighter
+Used by: glam-fire-fighter
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-flower-mystic
+Used by: glam-flower-mystic
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-genius-heiress
+Used by: glam-genius-heiress
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-legendary-medic
+Used by: glam-legendary-medic
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-perfect-operative
+Used by: glam-perfect-operative
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-rebel-biotic
+Used by: glam-rebel-biotic
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-redhead-college-adult
+Used by: glam-redhead-college-adult
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-redhead-reporter
+Used by: glam-redhead-reporter
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-redhead-sorceress
+Used by: glam-redhead-sorceress
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-redhead-survivor
+Used by: glam-redhead-survivor
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-shadow-agent
+Used by: glam-shadow-agent
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-soul-officer
+Used by: glam-soul-officer
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-space-femme
+Used by: glam-space-femme
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-special-forces
+Used by: glam-special-forces
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-spy-agent
+Used by: glam-spy-agent
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-tactical-agent
+Used by: glam-tactical-agent
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-tomb-adventurer
+Used by: glam-tomb-adventurer
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-wild-witch
+Used by: glam-wild-witch
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-glam-witch-gunslinger
+Used by: glam-witch-gunslinger
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
 ## voice-grumpy-green-warrior
 Used by: grumpy-green-warrior
 - Neutral: MISSING
@@ -571,6 +787,51 @@ Used by: purple-dragon
 
 ## voice-quiet-hero
 Used by: quiet-hero
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-racing-blackstripe-veteran
+Used by: racing-blackstripe-veteran
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-racing-excitement-hothead
+Used by: racing-excitement-hothead
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-racing-shorttrack-deadpan
+Used by: racing-shorttrack-deadpan
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-racing-southern-commentator
+Used by: racing-southern-commentator
+- Neutral: MISSING
+- Excited: MISSING
+- Angry: MISSING
+- Afraid: MISSING
+- Sad: MISSING
+- Annoyed: MISSING
+
+## voice-racing-tennessee-veteran
+Used by: racing-tennessee-veteran
 - Neutral: MISSING
 - Excited: MISSING
 - Angry: MISSING

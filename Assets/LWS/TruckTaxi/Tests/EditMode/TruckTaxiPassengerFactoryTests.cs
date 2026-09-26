@@ -42,10 +42,10 @@ namespace LWS.TruckTaxi.Tests
         {
             DatabaseFilters();
         }
-        [Test] public void HumanFallbacksUseValidSharedHumanoidAndRagdoll()
+        [Test] public void OriginalUtsHumanFallbacksUseValidSharedHumanoidAndRagdoll()
         {
             var db=AssetDatabase.LoadAssetAtPath<TruckTaxiPassengerDatabase>(TruckTaxiPassengerFactoryBuilder.DatabasePath);
-            foreach(var p in db.passengers.Where(p=>p.casting.human))
+            foreach(var p in db.passengers.Where(p=>p.casting.human && p.appearance.visualStyle==TruckTaxiVisualStyle.OriginalUts))
             {
                 var animator=p.runtimePrefab.GetComponentInChildren<Animator>(true);
                 Assert.IsNotNull(animator,p.passengerId); Assert.IsTrue(animator.isHuman,p.passengerId);
@@ -56,6 +56,7 @@ namespace LWS.TruckTaxi.Tests
         [Test] public void RebuildingDataAndPrefabRetainsIdsAndAuthoredValues()
         {
             var p=TruckTaxiPassengerDialogueAuthoring.AllPassengers().First(x=>x.passengerId=="analytical-robot");
+            TruckTaxiPassengerFactoryBuilder.BuildMissing(p);
             string before=JsonUtility.ToJson(p),dialogue=JsonUtility.ToJson(p.authoredDialogue);
             string guid=AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(p.runtimePrefab));
             TruckTaxiPassengerFactoryBuilder.BuildMissing(p); TruckTaxiPassengerFactoryBuilder.BuildPrefab(p);

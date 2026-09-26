@@ -21,10 +21,14 @@ namespace LWS.InterstateHauler
         [SerializeField] private LwsTruckInputMode inputMode = LwsTruckInputMode.StandardTruck;
         [SerializeField] private bool automaticKeyboardDirectionPolicy = true;
         [SerializeField] private bool suppressCameraCycle;
+        [SerializeField] private bool suppressGamepadIndicators;
         [SerializeField] private bool suppressDrivingInput;
         [SerializeField] private Lws18SpeedTransmissionController transmissionController;
 
         private readonly Dictionary<string, bool> _previous = new Dictionary<string, bool>();
+        private readonly HashSet<object> _gamepadIndicatorSuppressors = new HashSet<object>();
+        private static readonly System.Predicate<object> DestroyedIndicatorOwner = owner =>
+            owner is UnityEngine.Object unityOwner && unityOwner == null;
         private ILwsVehicleInputService _inputService;
         private LwsVehicleCommandFrame _lastCommands;
         private LwsVehicleContinuousInput _lastContinuous;
@@ -36,6 +40,16 @@ namespace LWS.InterstateHauler
         public string SourceId => "lws.input.keyboard-gamepad.truck";
         public LwsTruckInputMode InputMode => inputMode;
         public bool CameraCycleSuppressed => suppressCameraCycle;
+        public bool GamepadIndicatorsSuppressed
+        {
+            get
+            {
+                // A destroyed Unity owner cannot retain a lease, including when its runtime
+                // OnDestroy was never entered (for example a never-started EditMode object).
+                _gamepadIndicatorSuppressors.RemoveWhere(DestroyedIndicatorOwner);
+                return suppressGamepadIndicators || _gamepadIndicatorSuppressors.Count > 0;
+            }
+        }
         public bool DrivingInputSuppressed => suppressDrivingInput;
         public LwsVehicleCommandFrame LastCommands => _lastCommands;
         public bool KeyboardForwardHeld => _keyboardForwardHeld;
@@ -71,6 +85,22 @@ namespace LWS.InterstateHauler
         public void SetCameraCycleSuppressed(bool suppressed)
         {
             suppressCameraCycle = suppressed;
+        }
+
+        public void SetGamepadIndicatorsSuppressed(bool suppressed)
+        {
+            suppressGamepadIndicators = suppressed;
+        }
+
+        // Temporary users release only their own lease, never another system's suppression.
+        public void AcquireGamepadIndicatorSuppression(object owner)
+        {
+            if (owner != null) _gamepadIndicatorSuppressors.Add(owner);
+        }
+
+        public void ReleaseGamepadIndicatorSuppression(object owner)
+        {
+            if (owner != null) _gamepadIndicatorSuppressors.Remove(owner);
         }
 
         public void SetDrivingInputSuppressed(bool suppressed)
@@ -342,8 +372,8 @@ namespace LWS.InterstateHauler
                 parkingBrakeToggle = Edge("gp.parkingBrake", gamepad.buttonEast.isPressed),
                 lowBeamLights = Edge("gp.lowBeam", gamepad.buttonNorth.isPressed && !resetTruckChord),
                 highBeamLights = Edge("gp.highBeam", gamepad.buttonWest.isPressed),
-                leftIndicator = Edge("gp.leftSignal", gamepad.leftShoulder.isPressed),
-                rightIndicator = Edge("gp.rightSignal", gamepad.rightShoulder.isPressed),
+                leftIndicator = GamepadIndicatorEdge("gp.leftSignal", gamepad.leftShoulder.isPressed),
+                rightIndicator = GamepadIndicatorEdge("gp.rightSignal", gamepad.rightShoulder.isPressed),
                 hazardLights = Edge("gp.hazards", gamepad.leftStickButton.isPressed),
                 wipers = Edge("gp.wipers", gamepad.dpad.up.isPressed),
                 horn = Edge("gp.horn", gamepad.buttonSouth.isPressed),
@@ -385,6 +415,12 @@ namespace LWS.InterstateHauler
         {
             LwsMomentaryIntent intent = Edge(key, current);
             return suppressCameraCycle ? LwsMomentaryIntent.None : intent;
+        }
+
+        private LwsMomentaryIntent GamepadIndicatorEdge(string key, bool current)
+        {
+            LwsMomentaryIntent intent = Edge(key, current);
+            return GamepadIndicatorsSuppressed ? LwsMomentaryIntent.None : intent;
         }
 
         private void ResolveServices()

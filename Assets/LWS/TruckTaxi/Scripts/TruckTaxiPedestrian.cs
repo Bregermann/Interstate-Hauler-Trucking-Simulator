@@ -13,8 +13,10 @@ namespace LWS.TruckTaxi
         private readonly List<Behaviour> movement=new List<Behaviour>();
         private Animator animator;
         private ITruckTaxiPedestrianRagdoll vendorRagdoll;
+        private TruckTaxiWobbleVisual.Binding visualBinding;
         private float expiresAt;
         private bool retiring;
+        private static PhysicsMaterial impactMaterial;
         public bool IsRagdoll { get; private set; }
         public bool HitEventSent { get; private set; }
         public Vector3 LastImpulse { get; private set; }
@@ -23,6 +25,15 @@ namespace LWS.TruckTaxi
         public IReadOnlyList<Rigidbody> RagdollBodies => ragdollBodies;
         public string PedestrianId => GetComponent<TruckTaxiImpactTarget>()?.targetId;
         public event Action<TruckTaxiPedestrian> Expired;
+        public void SetVisualBinding(TruckTaxiWobbleVisual.Binding binding, bool wobbleVisible)
+        {
+            visualBinding = binding;
+            if (!IsRagdoll) visualBinding?.SetWobbleVisible(wobbleVisible);
+        }
+        public void SetWobbleVisible(bool visible)
+        {
+            if (!IsRagdoll) visualBinding?.SetWobbleVisible(visible);
+        }
         private void Awake()
         {
             // Do not RequireComponent: UTS legitimately destroys this body on activation.
@@ -36,10 +47,20 @@ namespace LWS.TruckTaxi
             var bones=new List<Rigidbody>();
             foreach(var body in GetComponentsInChildren<Rigidbody>(true)) if(body!=walkingBody) bones.Add(body);
             ragdollBodies=bones.ToArray(); colliders=GetComponentsInChildren<Collider>(true);
-            walkingBody.mass=70;
+            walkingBody.mass=12;
+            walkingBody.maxDepenetrationVelocity=6;
+            if (impactMaterial == null)
+            {
+                impactMaterial = new PhysicsMaterial("Taxi pedestrian low-friction contact") {
+                    dynamicFriction = .05f, staticFriction = .05f, bounciness = 0,
+                    frictionCombine = PhysicsMaterialCombine.Minimum,
+                    bounceCombine = PhysicsMaterialCombine.Minimum
+                };
+            }
             foreach(var collider in colliders)
             {
                 collider.gameObject.layer=gameObject.layer;
+                if (!collider.isTrigger) collider.sharedMaterial=impactMaterial;
                 // Only the root solid walking capsule participates before the hit.
                 collider.enabled=!collider.isTrigger && collider.attachedRigidbody==walkingBody;
             }
@@ -50,6 +71,8 @@ namespace LWS.TruckTaxi
             if(IsRagdoll || retiring || !TruckTaxiPedestrianImpactSettings.Finite(relativeVelocity) ||
                 !TruckTaxiPedestrianImpactSettings.Finite(contact) || relativeVelocity.magnitude<Mathf.Max(.1f,settings.minimumRagdollImpactSpeed)) return false;
             IsRagdoll=true; LastImpactSpeed=relativeVelocity.magnitude;
+            // The overlay is rigid; reveal UTS skinned renderers before its jointed ragdoll takes over.
+            visualBinding?.SetWobbleVisible(false);
             LastImpulse=settings.CalculateImpulse(relativeVelocity);
             expiresAt=Time.time+Mathf.Clamp(settings.ragdollLifetime,1,60);
             foreach(var component in movement) if(component!=null) component.enabled=false;
@@ -68,7 +91,7 @@ namespace LWS.TruckTaxi
                 walkingBody.isKinematic=false;
                 foreach(var collider in colliders) if(collider!=null && !collider.isTrigger) collider.enabled=true;
             }
-            float mass=70f/ragdollBodies.Length;
+            float mass=12f/ragdollBodies.Length;
             Rigidbody closest=null; float distance=float.PositiveInfinity;
             foreach(var body in ragdollBodies)
             {

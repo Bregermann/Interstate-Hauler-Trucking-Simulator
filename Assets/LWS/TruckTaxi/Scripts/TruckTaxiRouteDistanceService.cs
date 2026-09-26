@@ -79,6 +79,14 @@ namespace LWS.TruckTaxi
 
     public sealed class TruckTaxiRideOffer
     {
+        public string Id { get; } = Guid.NewGuid().ToString("N");
+        public bool NotificationClaimed { get; private set; }
+        public bool TryClaimNotification()
+        {
+            if(NotificationClaimed) return false;
+            NotificationClaimed=true;
+            return true;
+        }
         public PassengerProfile Passenger { get; }
         public TruckTaxiRideLocation Pickup { get; }
         public TruckTaxiRideLocation Destination { get; }

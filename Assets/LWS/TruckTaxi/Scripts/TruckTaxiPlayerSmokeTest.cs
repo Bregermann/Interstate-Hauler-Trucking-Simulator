@@ -18,7 +18,7 @@ namespace LWS.TruckTaxi
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void LaunchIfRequested()
         {
-            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke" || a=="-truck-taxi-objective-smoke")) return;
+            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke" || a=="-truck-taxi-objective-smoke" || a=="-truck-taxi-population-smoke" || a=="-truck-taxi-systems-smoke" || a=="-truck-taxi-steering-smoke")) return;
             new GameObject("Truck Taxi command-line smoke test").AddComponent<TruckTaxiPlayerSmokeTest>();
         }
         private void OnEnable() { Application.logMessageReceived+=TrackError; }
@@ -35,6 +35,8 @@ namespace LWS.TruckTaxi
         }
         private void TrackError(string condition,string stack,LogType type)
         { if(type==LogType.Error || type==LogType.Exception || type==LogType.Assert) failed=true; }
+        private void CheckSystem(bool ok,string message)
+        { if(ok) Debug.Log("SYSTEM CHECK PASS: "+message); else Debug.LogError("SYSTEM CHECK FAIL: "+message); }
         private IEnumerator Start()
         {
             Application.runInBackground=true;
@@ -42,12 +44,38 @@ namespace LWS.TruckTaxi
             InputSystem.settings=Instantiate(originalInputSettings);
             InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
             Screen.SetResolution(1920,1080,FullScreenMode.Windowed);
+            if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name==TruckTaxiMainMenu.SceneName)
+            {
+                DontDestroyOnLoad(gameObject);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(TruckTaxiMainMenu.FreePlaySceneName);
+            }
             float deadline=Time.realtimeSinceStartup+60;
             while((TruckTaxiBootstrap.Instance==null || !TruckTaxiBootstrap.Instance.Ready) && Time.realtimeSinceStartup<deadline) yield return null;
             var host=TruckTaxiBootstrap.Instance;
             if(host==null || !host.Ready) { Debug.LogError("TRUCK TAXI PLAYER SMOKE: startup timed out."); Application.Quit(2); yield break; }
             string output=Path.GetFullPath(Path.Combine(Application.dataPath,"../Validation"));
             Directory.CreateDirectory(output);
+            if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-steering-smoke"))
+            {
+                yield return TruckTaxiSteeringRuntimeProbe.Run(host,CheckSystem,name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
+                Debug.Log(failed ? "TRUCK TAXI STEERING STANDALONE FAIL" : "TRUCK TAXI STEERING STANDALONE PASS");
+                Application.Quit(failed?2:0); yield break;
+            }
+            if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-systems-smoke"))
+            {
+                yield return TruckTaxiOfferRuntimeProbe.Run(host,CheckSystem,name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
+                yield return TruckTaxiMapRuntimeProbe.Run(host,CheckSystem,name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
+                yield return TruckTaxiEnvironmentRuntimeProbe.Run(host,CheckSystem,name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
+                Debug.Log(failed ? "TRUCK TAXI SYSTEMS STANDALONE FAIL" : "TRUCK TAXI SYSTEMS STANDALONE PASS");
+                Application.Quit(failed?2:0); yield break;
+            }
+            if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-population-smoke"))
+            {
+                yield return TruckTaxiPopulationPerformanceProbe.Run(host,(ok,message)=> {
+                    if(ok) Debug.Log("POPULATION CHECK PASS: "+message); else Debug.LogError("POPULATION CHECK FAIL: "+message);
+                },name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
+                Application.Quit(failed?2:0); yield break;
+            }
             if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-objective-smoke"))
             {
                 yield return TruckTaxiObjectiveRuntimeProbe.Run(host,(ok,message)=> {
@@ -159,7 +187,7 @@ namespace LWS.TruckTaxi
         }
         // A hidden Windows launch has no usable swap-chain screenshot. Render the
         // actual player camera/UI into a target, just as the Editor capture does.
-        private static void Capture(string path)
+        public static void Capture(string path)
         {
             var camera=Camera.main;
             if(camera==null) { Debug.LogError("TRUCK TAXI PLAYER SMOKE: no capture camera."); return; }

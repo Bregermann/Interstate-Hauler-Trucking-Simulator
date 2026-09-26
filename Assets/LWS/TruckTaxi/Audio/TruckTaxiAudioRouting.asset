@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8ec58bc3a29d0b4493a36c594e4b703, type: 3}
+  m_Name: TruckTaxiAudioRouting
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiAudioConfiguration
+  buses:
+  - category: 0
+    label: MASTER
+    group: {fileID: 24300002, guid: 316d0c0c5b7867f429fe9d56ce3a3b51, type: 2}
+    volumeParameter: MasterVolume
+    defaultDecibels: 0
+  - category: 1
+    label: PASSENGER VOICES
+    group: {fileID: 8793516547501007055, guid: 316d0c0c5b7867f429fe9d56ce3a3b51, type: 2}
+    volumeParameter: VoicesVolume
+    defaultDecibels: 0
+  - category: 2
+    label: VEHICLE
+    group: {fileID: 7065959066682467594, guid: 316d0c0c5b7867f429fe9d56ce3a3b51, type: 2}
+    volumeParameter: VehicleVolume
+    defaultDecibels: 0
+  - category: 3
+    label: WORLD
+    group: {fileID: 450941812377488198, guid: 316d0c0c5b7867f429fe9d56ce3a3b51, type: 2}
+    volumeParameter: WorldVolume
+    defaultDecibels: 0
+  - category: 4
+    label: UI
+    group: {fileID: -3844264886377457408, guid: 316d0c0c5b7867f429fe9d56ce3a3b51,
+      type: 2}
+    volumeParameter: UIVolume
+    defaultDecibels: 0
+  vehicleMixer: {fileID: 24100000, guid: 285a6821938b77140908a4d3f5e546f7, type: 2}

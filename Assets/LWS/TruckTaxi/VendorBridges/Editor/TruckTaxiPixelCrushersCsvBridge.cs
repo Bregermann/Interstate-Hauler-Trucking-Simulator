@@ -4,5 +4,9 @@ using UnityEditor;
 [InitializeOnLoad]
 public static class TruckTaxiPixelCrushersCsvBridge
 {
-    static TruckTaxiPixelCrushersCsvBridge() => TruckTaxiDialogueImport.ReadVendorCsv=path=>PixelCrushers.CSVUtility.ReadCSVFile(path,PixelCrushers.EncodingType.UTF8);
+    static TruckTaxiPixelCrushersCsvBridge()
+    {
+        TruckTaxiDialogueImport.ReadVendorCsv=path=>PixelCrushers.CSVUtility.ReadCSVFile(path,PixelCrushers.EncodingType.UTF8);
+        TruckTaxiDialogueImport.WriteVendorCsv=(rows,path)=>PixelCrushers.CSVUtility.WriteCSVFile(rows,path,PixelCrushers.EncodingType.UTF8);
+    }
 }

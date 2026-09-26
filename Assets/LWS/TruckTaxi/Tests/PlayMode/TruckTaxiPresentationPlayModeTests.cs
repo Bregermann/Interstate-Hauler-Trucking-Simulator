@@ -10,6 +10,12 @@ namespace LWS.TruckTaxi.Tests
 {
     public class TruckTaxiPresentationPlayModeTests
     {
+        [TearDown]
+        public void RestoreTimeScale()
+        {
+            Time.timeScale=1f;
+        }
+
         [UnityTest]
         public IEnumerator CockpitPresentation()
         {
@@ -88,9 +94,12 @@ namespace LWS.TruckTaxi.Tests
             host.GPS.SetPickupDestination(renderTarget);
             yield return new WaitForSecondsRealtime(.4f);
             host.GPS.CabCompass.GetType().GetProperty("showRoute").SetValue(host.GPS.CabCompass,false);
+            // Let the vendor late update and the subsequent Canvas rebuild consume the toggle.
+            yield return null;
             yield return null;
             TruckTaxiDemoPlayModeTests.Capture("GpsCabRouteOff",1920,1080);
             host.GPS.CabCompass.GetType().GetProperty("showRoute").SetValue(host.GPS.CabCompass,true);
+            yield return null;
             yield return null;
             TruckTaxiDemoPlayModeTests.Capture("GpsCabRouteOn",1920,1080);
             Assert.Greater(CabCyanPixels("GpsCabRouteOn",screen),CabCyanPixels("GpsCabRouteOff",screen)+5,"The vendor route must actually render on the physical screen, not just have geometry.");

@@ -32,6 +32,7 @@ public sealed class TruckTaxiPixelCrushersBarkAdapter : MonoBehaviour, ITruckTax
             manager.SetActive(true);
         }
         source=gameObject.AddComponent<AudioSource>(); source.playOnAwake=false; source.spatialBlend=0; source.volume=.9f;
+        TruckTaxiAudioController.Instance?.Route(source,TruckTaxiAudioCategory.Voices);
     }
     public void Play(string speaker,string subtitle,AudioClip clip)
     {

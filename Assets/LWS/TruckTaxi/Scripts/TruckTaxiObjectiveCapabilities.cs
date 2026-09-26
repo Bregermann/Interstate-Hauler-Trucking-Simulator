@@ -10,7 +10,8 @@ namespace LWS.TruckTaxi
         None=0, Timer=1, Chaos=2, Traffic=4, Pedestrians=8, PedestrianHitDetection=16,
         DestructibleProps=32, Shortcuts=64, Offroad=128, NearMiss=256, ScenicStops=512,
         IllicitStops=1024, PrivateStops=2048, TargetVehicles=4096, Pursuit=8192,
-        VehicleDestruction=16384, Collectibles=32768, DestinationChange=65536
+        VehicleDestruction=16384, Collectibles=32768, DestinationChange=65536,
+        VehicleRaceRoute=131072
     }
 
     // Runtime evidence, not a list of installed assets. Rebuilt at scene initialization or explicitly in debug.
@@ -36,6 +37,17 @@ namespace LWS.TruckTaxi
                 case TaxiRequestType.ScenicRoute: return TruckTaxiObjectiveCapability.ScenicStops;
                 case TaxiRequestType.IllicitStop: return TruckTaxiObjectiveCapability.IllicitStops;
                 case TaxiRequestType.NearMiss: return TruckTaxiObjectiveCapability.Traffic|TruckTaxiObjectiveCapability.NearMiss;
+                case TaxiRequestType.FollowVehicle: case TaxiRequestType.RamTargetVehicle:
+                case TaxiRequestType.BlockVehicle:
+                    return TruckTaxiObjectiveCapability.TargetVehicles;
+                case TaxiRequestType.ReachLocationBeforeVehicle:
+                    return TruckTaxiObjectiveCapability.TargetVehicles|TruckTaxiObjectiveCapability.VehicleRaceRoute;
+                case TaxiRequestType.DestroyVehicle:
+                    return TruckTaxiObjectiveCapability.TargetVehicles|TruckTaxiObjectiveCapability.VehicleDestruction;
+                case TaxiRequestType.LoseVehicle:
+                    return TruckTaxiObjectiveCapability.TargetVehicles|TruckTaxiObjectiveCapability.Pursuit;
+                case TaxiRequestType.CollectDroppedObjects:
+                    return TruckTaxiObjectiveCapability.TargetVehicles|TruckTaxiObjectiveCapability.Collectibles;
                 default: return (TruckTaxiObjectiveCapability)int.MaxValue;
             }
         }
@@ -46,6 +58,11 @@ namespace LWS.TruckTaxi
             switch(type)
             {
                 case TaxiRequestType.RamTraffic: case TaxiRequestType.NearMiss: return Count(TruckTaxiObjectiveCapability.Traffic);
+                case TaxiRequestType.FollowVehicle: case TaxiRequestType.RamTargetVehicle:
+                case TaxiRequestType.LoseVehicle: case TaxiRequestType.BlockVehicle:
+                case TaxiRequestType.ReachLocationBeforeVehicle: case TaxiRequestType.DestroyVehicle:
+                case TaxiRequestType.CollectDroppedObjects:
+                    return Count(TruckTaxiObjectiveCapability.TargetVehicles)>0 ? int.MaxValue : 0;
                 case TaxiRequestType.HitPedestrian: return Count(TruckTaxiObjectiveCapability.Pedestrians);
                 case TaxiRequestType.PropertyDamage: return Count(TruckTaxiObjectiveCapability.DestructibleProps);
                 case TaxiRequestType.Shortcut: return Count(TruckTaxiObjectiveCapability.Shortcuts);

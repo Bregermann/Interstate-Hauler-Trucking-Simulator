@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi
 {
-    public enum TruckTaxiVoiceEmotion { Neutral, Excited, Angry, Afraid, Sad, Annoyed }
+    public enum TruckTaxiVoiceEmotion { Neutral, Excited, Angry, Afraid, Sad, Annoyed, Flirty, Calm, Panic, Sarcastic, Energetic }
 
     [CreateAssetMenu(menuName = "Truck Taxi/Passengers/Voice Profile")]
     public sealed class TruckTaxiVoiceProfile : ScriptableObject
@@ -34,6 +34,11 @@ namespace LWS.TruckTaxi
         public string sadReference;
         public string annoyedReference;
         public VoiceReference[] additionalReferences = Array.Empty<VoiceReference>();
+        [Tooltip("Additional filename tones supported by this voice. The six standard emotions are always supported.")]
+        public TruckTaxiVoiceEmotion[] supportedAdditionalTones = Array.Empty<TruckTaxiVoiceEmotion>();
+        public bool SupportsTone(TruckTaxiVoiceEmotion tone) => Enum.IsDefined(typeof(TruckTaxiVoiceEmotion),tone) &&
+            ((int)tone <= (int)TruckTaxiVoiceEmotion.Annoyed || Array.IndexOf(supportedAdditionalTones ?? Array.Empty<TruckTaxiVoiceEmotion>(),tone)>=0 ||
+            Array.Exists(additionalReferences ?? Array.Empty<VoiceReference>(),r=>r!=null && r.emotion==tone));
 
         [Serializable]
         public sealed class VoiceReference
@@ -61,7 +66,7 @@ namespace LWS.TruckTaxi
             return FindReference(TruckTaxiVoiceEmotion.Neutral);
         }
 
-        private string FindReference(TruckTaxiVoiceEmotion emotion)
+        public string FindReference(TruckTaxiVoiceEmotion emotion)
         {
             string path;
             switch (emotion)
@@ -71,13 +76,32 @@ namespace LWS.TruckTaxi
                 case TruckTaxiVoiceEmotion.Afraid: path = afraidReference; break;
                 case TruckTaxiVoiceEmotion.Sad: path = sadReference; break;
                 case TruckTaxiVoiceEmotion.Annoyed: path = annoyedReference; break;
-                default: path = neutralReference; break;
+                case TruckTaxiVoiceEmotion.Neutral: path = neutralReference; break;
+                default: path = ""; break;
             }
             if (!string.IsNullOrWhiteSpace(path)) return path;
             if (additionalReferences != null)
                 foreach (var reference in additionalReferences)
                     if (reference != null && reference.emotion == emotion && !string.IsNullOrWhiteSpace(reference.path)) return reference.path;
             return "";
+        }
+        public void SetReference(TruckTaxiVoiceEmotion emotion,string path)
+        {
+            if(!SupportsTone(emotion)) throw new ArgumentException("Tone is not authored for this voice: "+emotion);
+            switch(emotion)
+            {
+                case TruckTaxiVoiceEmotion.Neutral: neutralReference=path; return;
+                case TruckTaxiVoiceEmotion.Excited: excitedReference=path; return;
+                case TruckTaxiVoiceEmotion.Angry: angryReference=path; return;
+                case TruckTaxiVoiceEmotion.Afraid: afraidReference=path; return;
+                case TruckTaxiVoiceEmotion.Sad: sadReference=path; return;
+                case TruckTaxiVoiceEmotion.Annoyed: annoyedReference=path; return;
+            }
+            var list=new System.Collections.Generic.List<VoiceReference>(additionalReferences ?? Array.Empty<VoiceReference>());
+            var matches=list.FindAll(r=>r!=null && r.emotion==emotion);
+            if(matches.Count>1) throw new InvalidOperationException("Duplicate authored reference tone: "+emotion);
+            if(matches.Count==1) matches[0].path=path; else list.Add(new VoiceReference { emotion=emotion,path=path });
+            additionalReferences=list.ToArray();
         }
 #endif
     }

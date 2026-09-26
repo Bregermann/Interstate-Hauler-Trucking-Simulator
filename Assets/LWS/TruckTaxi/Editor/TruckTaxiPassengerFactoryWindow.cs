@@ -16,6 +16,8 @@ namespace LWS.TruckTaxi.Editor
         private Label status;
         private TextField logs;
         private DropdownField selectedLine;
+        private TextField referencePreview;
+        private TruckTaxiVoiceReferenceDiscovery.Report referenceReport;
         private string filter="";
         private string typeFilter="All",rarityFilter="All",seatFilter="All";
 
@@ -36,6 +38,13 @@ namespace LWS.TruckTaxi.Editor
             path.RegisterValueChangedCallback(e => { TruckTaxiChatterboxSettings.instance.workHere = e.newValue; TruckTaxiChatterboxSettings.instance.Persist(); }); settings.Add(path);
             var offline = new Toggle("Offline (cached models only)") { value = TruckTaxiChatterboxSettings.instance.offline };
             offline.RegisterValueChangedCallback(e => { TruckTaxiChatterboxSettings.instance.offline = e.newValue; TruckTaxiChatterboxSettings.instance.Persist(); }); settings.Add(offline);
+            var discovery=new Foldout { text="VOICE REFERENCE DISCOVERY",value=false }; rootVisualElement.Add(discovery);
+            var discoveryActions=new VisualElement(); discoveryActions.AddToClassList("actions"); discovery.Add(discoveryActions);
+            AddButton(discoveryActions,"SCAN VOICE REFERENCES",ScanReferences);
+            AddButton(discoveryActions,"PREVIEW MATCHES",()=>{ScanReferences(); EditorUtility.RevealInFinder(TruckTaxiVoiceReferenceDiscovery.WriteReport(referenceReport));});
+            AddButton(discoveryActions,"AUTO-ASSIGN VOICE REFERENCES",AssignReferences);
+            AddButton(discoveryActions,"GENERATE MISSING AUDIO",()=>GenerateValidated(passengers));
+            referencePreview=new TextField { multiline=true,isReadOnly=true }; referencePreview.AddToClassList("logs"); discovery.Add(referencePreview);
             var modelSettings=new Foldout { text="Installed Model Tools (Editor Only)",value=false }; rootVisualElement.Add(modelSettings);
             var blender=new TextField("Blender executable") { value=TruckTaxiFactorySettings.instance.blender };
             blender.RegisterValueChangedCallback(e=>{TruckTaxiFactorySettings.instance.blender=e.newValue; TruckTaxiFactorySettings.instance.Persist();}); modelSettings.Add(blender);
@@ -61,11 +70,15 @@ namespace LWS.TruckTaxi.Editor
             var actions = new VisualElement(); actions.AddToClassList("actions"); rootVisualElement.Add(actions);
             AddButton(actions, "Generate Selected Passenger", () => Generate(false));
             AddButton(actions, "Generate Missing Passenger Audio", () => Generate(true));
-            AddButton(actions, "Generate All Missing Audio", () => TruckTaxiChatterboxQueue.Generate(passengers));
-            AddButton(actions, "Generate All Audio (Cache Aware)", () => TruckTaxiChatterboxQueue.Generate(passengers, false));
+            AddButton(actions, "Generate All Missing Audio", () => GenerateValidated(passengers));
+            AddButton(actions, "Generate All Audio (Cache Aware)", () => GenerateValidated(passengers, false));
             AddButton(actions, "Cancel Queue", TruckTaxiChatterboxQueue.Cancel);
             AddButton(actions, "Resume Queue", TruckTaxiChatterboxQueue.Resume);
             AddButton(actions,"Build All Passengers",()=>TruckTaxiPassengerFactoryBatch.Start(passengers));
+            AddButton(actions,"EXPORT ALL DIALOGUE CSV",()=>ExportDialogue(passengers,"all-passengers.csv"));
+            AddButton(actions,"IMPORT ALL DIALOGUE CSV",()=>ImportDialogue(null));
+            AddButton(actions,"OPEN DIALOGUE SOURCE FOLDER",()=>EditorUtility.RevealInFinder(TruckTaxiPassengerDialogueAuthoring.Root+"/Dialogue"));
+            AddButton(actions,"OPEN GENERATED AUDIO",()=>EditorUtility.RevealInFinder(TruckTaxiChatterboxQueue.AudioRoot));
             AddButton(actions,"Validate All",()=>{ TruckTaxiPassengerFactoryBuilder.WriteReports(); UpdateStatus(); });
             AddButton(actions,"Rebuild Invalid",()=>TruckTaxiPassengerFactoryBatch.Start(passengers.Where(p=>TruckTaxiPassengerFactoryBuilder.Validate(p).Any(i=>i.StartsWith("ERROR"))).ToArray(),true));
             AddButton(actions,"Pause Build",TruckTaxiPassengerFactoryBatch.Pause);
@@ -120,11 +133,14 @@ namespace LWS.TruckTaxi.Editor
             AddButton(commands,"Build Prefab",()=>TruckTaxiPassengerFactoryBuilder.BuildPrefab(passenger));
             AddButton(commands,"Validate Passenger",()=>EditorUtility.DisplayDialog("Validation",string.Join("\n",TruckTaxiPassengerFactoryBuilder.Validate(passenger)),"OK"));
             AddButton(commands,"Register Passenger",TruckTaxiPassengerFactoryBuilder.RegisterAll);
+            AddButton(commands,"OPEN DIALOGUE ASSET",()=>{ Selection.activeObject=passenger.authoredDialogue; EditorGUIUtility.PingObject(passenger.authoredDialogue); });
+            AddButton(commands,"EXPORT SELECTED DIALOGUE CSV",()=>ExportDialogue(new[]{passenger},passenger.passengerId+".csv"));
+            AddButton(commands,"IMPORT SELECTED DIALOGUE CSV",()=>ImportDialogue(passenger.passengerId));
             AddButton(commands,"Import Dialogue",()=>{ string path=EditorUtility.OpenFilePanel("Import dialogue JSON / CSV / tab-separated text","","json,csv,txt,tsv"); if(!string.IsNullOrEmpty(path)) { TruckTaxiDialogueImport.Import(path); Select(passenger); } });
             AddButton(commands,"Open Output Folder",()=>EditorUtility.RevealInFinder(TruckTaxiPassengerFactoryBuilder.Root));
             AddButton(commands,"Open Reference Audio Folder",()=>EditorUtility.RevealInFinder(TruckTaxiChatterboxSettings.instance.workHere+"/voice_refs"));
             AddButton(commands,"Open Generation Log",()=>EditorUtility.RevealInFinder("Tools/TruckTaxiPassengerFactory/Logs"));
-            AddButton(commands,"Regenerate Stale Audio",()=>TruckTaxiChatterboxQueue.Generate(new[]{passenger},true));
+            AddButton(commands,"Regenerate Stale Audio",()=>GenerateValidated(new[]{passenger},true));
             if (passenger.voiceProfile != null)
             {
                 Section("Voice", passenger.voiceProfile, true);
@@ -154,13 +170,47 @@ namespace LWS.TruckTaxi.Editor
         {
             var foldout = new Foldout { text = title, value = expanded }; foldout.Add(new InspectorElement(asset)); details.Add(foldout);
         }
+        private void ExportDialogue(PassengerProfile[] profiles,string filename)
+        {
+            string path=System.IO.Path.Combine(TruckTaxiDialogueImport.ExportFolder,filename);
+            if(System.IO.File.Exists(path) && !EditorUtility.DisplayDialog("Replace CSV export?",
+                "This overwrites the existing CSV. Import your edits first or move the file elsewhere.", "Replace", "Cancel")) return;
+            EditorUtility.RevealInFinder(TruckTaxiDialogueImport.Export(profiles,filename));
+        }
+        private void ImportDialogue(string passengerId)
+        {
+            string path=EditorUtility.OpenFilePanel("Import dialogue CSV",System.IO.Path.GetFullPath(TruckTaxiDialogueImport.ExportFolder),"csv");
+            if(string.IsNullOrEmpty(path)) return;
+            TruckTaxiDialogueImport.Import(path,passengerId);
+            Select(selected);
+        }
         private TruckTaxiDialogueLine CurrentLine() => selected?.authoredDialogue?.lines?.FirstOrDefault(l => l != null && l.lineId == selectedLine?.value);
         private void GenerateLine(bool regenerate)
         {
             var line = CurrentLine(); if (line == null) throw new InvalidOperationException("Select a dialogue line.");
-            TruckTaxiChatterboxQueue.Generate(new[] { selected }, false, regenerate, line);
+            GenerateValidated(new[] { selected }, false, regenerate, line);
         }
-        private void Generate(bool missing) { if (selected != null) TruckTaxiChatterboxQueue.Generate(new[] { selected }, missing); }
+        private void Generate(bool missing) { if (selected != null) GenerateValidated(new[] { selected }, missing); }
+        private void ScanReferences()
+        {
+            referenceReport=TruckTaxiVoiceReferenceDiscovery.Scan();
+            referencePreview?.SetValueWithoutNotify(referenceReport.ToMarkdown());
+            TruckTaxiVoiceReferenceDiscovery.WriteReport(referenceReport);
+        }
+        private void AssignReferences()
+        {
+            ScanReferences();
+            if(referenceReport.HasErrors) throw new InvalidOperationException("Review PREVIEW MATCHES. Resolve UNKNOWN/DUPLICATE rows before assigning. Nothing was changed.");
+            if(!EditorUtility.DisplayDialog("Voice reference assignment",referenceReport.MatchedCount+" validated matches. The full report is shown in VOICE REFERENCE DISCOVERY. Assign these references? Existing differing assignments will be replaced; source WAVs will not be touched.","Assign validated matches","Cancel")) return;
+            TruckTaxiVoiceReferenceDiscovery.ApplyValidated(referenceReport); Select(selected); ScanReferences();
+        }
+        private void GenerateValidated(PassengerProfile[] targets,bool missing=true,bool regenerate=false,TruckTaxiDialogueLine line=null)
+        {
+            ScanReferences();
+            if(referenceReport.HasErrors) throw new InvalidOperationException("Voice filename validation failed. Review PREVIEW MATCHES before generating audio.");
+            if(!EditorUtility.DisplayDialog("Generate passenger audio","Filename matches are validated. Generate using the currently assigned references through the existing WorkHere queue? Scan alone never generates or assigns audio.","Generate","Cancel")) return;
+            TruckTaxiChatterboxQueue.Generate(targets,missing,regenerate,line);
+        }
         private void AddButton(VisualElement parent, string text, Action action) => parent.Add(new Button(() => Run(action)) { text = text });
         private void Run(Action action) { try { action(); } catch (Exception ex) { Debug.LogException(ex); EditorUtility.DisplayDialog("Passenger Factory", ex.Message, "OK"); } }
         private void UpdateStatus()

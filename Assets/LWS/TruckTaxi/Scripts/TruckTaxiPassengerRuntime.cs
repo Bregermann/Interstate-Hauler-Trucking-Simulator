@@ -50,7 +50,8 @@ namespace LWS.TruckTaxi
                     arrived=false; destinationNotified=false; Dialogue.ResetRide(); break;
                 case TruckTaxiState.DrivingToPickup:
                     modifiers.Begin(host,passenger,SayMechanic);
-                    Dialogue.Speak(passenger,TruckTaxiDialogueCategory.PickupGreeting,session,"Your passenger is waiting at the pickup marker.",25);
+                    Dialogue.Speak(passenger,session.IsRepeatPassenger ? TruckTaxiDialogueCategory.RepeatPickup : TruckTaxiDialogueCategory.PickupGreeting,
+                        session,session.IsRepeatPassenger ? "Good to see you again. Same truck, next adventure." : "Your passenger is waiting at the pickup marker.",25);
                     if(PrimaryActor!=null) PrimaryActor.Animate(TruckTaxiPassengerAnimation.Wave_Taxi); break;
                 case TruckTaxiState.PassengerBoarding:
                     if(PrimaryActor!=null) { approachFrom=PrimaryActor.transform.position; PrimaryActor.Animate(TruckTaxiPassengerAnimation.ApproachVehicle); }
@@ -74,7 +75,8 @@ namespace LWS.TruckTaxi
                     ExitAtDestination(); break;
                 case TruckTaxiState.RideFailed:
                     Oversized.Restore(); modifiers.Cleanup(); DestroyActors();
-                    Dialogue.Speak(passenger,TruckTaxiDialogueCategory.RideFailure,session,session.Reaction,85); break;
+                    bool cancelled=session.RideHistory.Count>0 && session.RideHistory[session.RideHistory.Count-1].Outcome==TruckTaxiRideOutcome.PickupCancelled;
+                    Dialogue.Speak(passenger,cancelled ? TruckTaxiDialogueCategory.PickupCancelled : TruckTaxiDialogueCategory.RideFailure,session,session.Reaction,85); break;
                 case TruckTaxiState.Available:
                 case TruckTaxiState.Inactive: Cleanup(); break;
             }

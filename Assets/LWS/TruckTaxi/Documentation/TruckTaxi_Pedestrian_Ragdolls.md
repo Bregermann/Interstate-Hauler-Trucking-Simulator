@@ -48,7 +48,8 @@ Select `ScriptableObjects/TruckTaxi_DemoConfiguration.asset`, section
 
 Horizontal launch follows incoming player velocity and uses collision-relative
 speed measured before the solver. The summed impulse is clamped, then divided
-over the bones. Total ragdoll mass is 70 kg, overriding UTS's per-bone 40 kg.
+over the bones. The current expansion uses 12 kg total cartoon ragdoll mass,
+overriding UTS's per-bone 40 kg and the earlier 70 kg project tuning.
 Dynamic bones use 8/3 solver iterations, continuous collision detection,
 3 m/s maximum depenetration, 12 rad/s angular and 30 m/s linear limits.
 The walking root alone collides before impact; bone colliders activate after.
