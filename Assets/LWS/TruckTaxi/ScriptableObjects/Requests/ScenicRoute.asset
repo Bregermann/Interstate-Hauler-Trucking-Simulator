@@ -13,14 +13,19 @@ MonoBehaviour:
   m_Name: ScenicRoute
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.PassengerRequestDefinition
   requestType: 9
-  description: Visit a scenic overlook
+  objectiveId: taxi.objective.ScenicRoute
+  enabledForSelection: 1
+  additionalCapabilities: 0
+  description: Scenic stop
   timer: 180
   target: 1
   targetId: 
   bonusMoneyCents: 750
   bonusScore: 190
   ratingModifier: 0.2
-  dialogue: Visit a scenic overlook. I will put it in the review.
+  dialogue: Can we pull over somewhere with a view?
   cooldown: 35
   allowMultipleInstances: 0
   maximumAcceleration: 5
+  requiredBehavior: 0
+  forbiddenBehavior: 0

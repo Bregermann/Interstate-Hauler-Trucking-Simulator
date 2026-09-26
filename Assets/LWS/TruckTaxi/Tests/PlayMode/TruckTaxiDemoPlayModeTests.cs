@@ -45,6 +45,8 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsTrue(compass.VendorRuntimeReady,compass.LastError);
             Capture("Start",1920,1080);
             yield return null;
+            float rideFrequency=host.Configuration.rideFrequency;
+            host.Configuration.rideFrequency=120; // Keep a modal offer from pausing the measured input interval.
             host.StartShift();
             yield return new WaitForSeconds(3);
             var body=host.Player.GetComponent<Rigidbody>();
@@ -84,6 +86,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.Greater(Vector3.Distance(personBefore,walkingPerson.transform.position),.2f,"UTS pedestrian did not walk.");
             Assert.Greater(Vector3.Distance(carBefore,movingCar.transform.position),.2f,"UTS traffic did not move.");
             Debug.Log("TRUCK TAXI NWH INPUT: keyboard E/W drove "+driven.ToString("0.0")+" meters.");
+            host.Configuration.rideFrequency=rideFrequency;
             host.Session.DeclineRide();
             for(int i=0;i<3;i++)
             {
@@ -115,7 +118,7 @@ namespace LWS.TruckTaxi.Tests
                 Assert.IsNotNull(host.Passengers.PrimaryActor);
                 Assert.IsTrue(host.Passengers.PrimaryActor.transform.IsChildOf(host.Player.transform));
                 Assert.IsFalse(host.PickupZone.Visible);
-                Assert.AreEqual(host.Session.Destination.locationId,host.GPS.TargetId);
+                Assert.AreEqual(host.Session.ActiveStop?.StopPoint.stableId ?? host.Session.Destination.locationId,host.GPS.TargetId);
                 Assert.IsNotEmpty(host.Session.Passenger.passengerName);
                 Assert.Greater(host.Session.Requests.Count,0,"No authored passenger request generated.");
                 if(i==0)
@@ -147,6 +150,12 @@ namespace LWS.TruckTaxi.Tests
                 host.Session.RecordEvent(TaxiEventType.TrafficRam,"test.traffic",8);
                 host.Session.RecordEvent(TaxiEventType.PedestrianHit,"test.npc",8);
                 Assert.Greater(host.Session.ChaosScore,0);
+                // This fixture covers fare/actor cleanup. The dedicated objective fixture exercises real stop timing.
+                if(host.Session.ActiveStop!=null)
+                {
+                    var optional=host.Session.ActiveStop;
+                    host.Session.Tick(optional.Target,optional.StopPoint.Position,0,0,true);
+                }
                 host.TeleportNear(host.Session.Destination);
                 until=Time.realtimeSinceStartup+6;
                 while(host.Session.State!=TruckTaxiState.RideComplete && Time.realtimeSinceStartup<until) yield return null;

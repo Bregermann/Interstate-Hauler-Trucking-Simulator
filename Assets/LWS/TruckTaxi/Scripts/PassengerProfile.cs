@@ -7,6 +7,16 @@ namespace LWS.TruckTaxi
     {
         public string passengerId;
         public string passengerName;
+        [Header("Optional special appreciation - explicitly authored adults only")]
+        public bool specialAppreciationEligible;
+        public bool explicitlyAdult;
+        [Min(0)] public int minimumAdultAge;
+        public bool adultFemalePresentation;
+        public bool flirtatiousPresentation;
+        [Range(0,1)] public float appreciationChance=.15f;
+        [Range(1,5)] public float appreciationMinimumSatisfaction=4.5f;
+        public bool CanOfferAppreciation => specialAppreciationEligible && explicitlyAdult && minimumAdultAge>=18 &&
+            adultFemalePresentation && flirtatiousPresentation && casting!=null && casting.human;
         [Header("Identity and casting")]
         public string developmentReference, archetype;
         [TextArea] public string description;

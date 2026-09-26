@@ -80,6 +80,13 @@ namespace LWS.TruckTaxi.Tests
             }
             TruckTaxiDemoPlayModeTests.Capture("FactoryDrivingHud",1920,1080);
             Assert.IsNotNull(host.hud.GPSSettings);
+            // Random offers can start almost at pickup, leaving only a few antialiased
+            // route pixels on this small physical screen. Use a fixed long road leg
+            // for the rendering assertion, then restore the actual accepted pickup.
+            var renderTarget=System.Array.Find(Object.FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None),p=>p.locationId=="taxi.stop.03");
+            Assert.IsNotNull(renderTarget);
+            host.GPS.SetPickupDestination(renderTarget);
+            yield return new WaitForSecondsRealtime(.4f);
             host.GPS.CabCompass.GetType().GetProperty("showRoute").SetValue(host.GPS.CabCompass,false);
             yield return null;
             TruckTaxiDemoPlayModeTests.Capture("GpsCabRouteOff",1920,1080);
@@ -87,6 +94,7 @@ namespace LWS.TruckTaxi.Tests
             yield return null;
             TruckTaxiDemoPlayModeTests.Capture("GpsCabRouteOn",1920,1080);
             Assert.Greater(CabCyanPixels("GpsCabRouteOn",screen),CabCyanPixels("GpsCabRouteOff",screen)+5,"The vendor route must actually render on the physical screen, not just have geometry.");
+            host.GPS.SetPickupDestination(offer.Pickup);
             try
             {
                 for(int i=0;i<changer.cameras.Count;i++)

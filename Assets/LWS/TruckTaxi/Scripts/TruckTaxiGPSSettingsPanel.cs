@@ -16,6 +16,7 @@ namespace LWS.TruckTaxi
         private readonly List<Action> refreshControls=new List<Action>();
         private bool syncing, wasPaused;
         public bool IsOpen => panel!=null && panel.gameObject.activeSelf;
+        public Transform FocusRoot => panel;
 
         public void Initialize(TruckTaxiBootstrap value,TruckTaxiHud view)
         {
@@ -100,6 +101,9 @@ namespace LWS.TruckTaxi
             type.GetField("invokeOnAwake").SetValue(heat,false);
             type.GetField("useSounds").SetValue(heat,false);
             foreach(var t in go.GetComponentsInChildren<TMP_Text>(true)) t.enabled=false;
+            // This panel supplies its own value label. Heat's hidden numeric-entry child
+            // must not capture navigation or run a keyboard-only input path on gamepad.
+            foreach(var field in go.GetComponentsInChildren<TMP_InputField>(true)) field.gameObject.SetActive(false);
             var slider=go.GetComponent<Slider>(); slider.minValue=min; slider.maxValue=max; slider.SetValueWithoutNotify(get());
             slider.onValueChanged.AddListener(v=> { if(!syncing) { set(v); Changed(); } });
             refreshControls.Add(()=> { slider.SetValueWithoutNotify(get()); text.text=label+"\n"+format(get()); });
@@ -115,4 +119,3 @@ namespace LWS.TruckTaxi
         }
     }
 }
-

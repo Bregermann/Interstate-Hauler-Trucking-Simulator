@@ -5,7 +5,7 @@ using UnityEngine;
 namespace LWS.TruckTaxi
 {
     public enum TruckTaxiState { Inactive, StartingShift, Available, RideOffered, DrivingToPickup, PassengerBoarding,
-        DrivingToDestination, PassengerExiting, RideComplete, RideFailed, PassengerEjected }
+        DrivingToDestination, PassengerExiting, RideComplete, RideFailed, PassengerEjected, AppreciationOffer, AppreciationSequence }
 
     public sealed class TaxiRequestProgress
     {
@@ -14,25 +14,52 @@ namespace LWS.TruckTaxi
         public float Progress { get; internal set; }
         public float Elapsed { get; internal set; }
         public float Target { get; }
+        public TruckTaxiStopObjectivePoint StopPoint { get; }
         internal float ResolvedAt;
         internal readonly HashSet<string> Targets = new HashSet<string>();
-        public TaxiRequestProgress(PassengerRequestDefinition definition, float difficulty)
+        public TaxiRequestProgress(PassengerRequestDefinition definition, float difficulty, TruckTaxiStopObjectivePoint stop=null,int maximumCount=int.MaxValue)
         {
             Definition = definition;
             float value=definition.target*difficulty;
-            bool continuous=definition.requestType==TaxiRequestType.Offroad || definition.requestType==TaxiRequestType.MaximumChaos;
-            Target=continuous ? Mathf.Max(.1f,value) : Mathf.Max(1,Mathf.RoundToInt(value));
+            StopPoint=stop;
+            Target=stop!=null ? Mathf.Max(1,Mathf.RoundToInt(stop.durationSeconds)) : definition.requestType==TaxiRequestType.MaximumChaos
+                ? Mathf.Max(100,Mathf.RoundToInt(value/100)*100) : definition.requestType==TaxiRequestType.FastDelivery
+                ? Mathf.Max(1,Mathf.RoundToInt(definition.timer)) : Mathf.Max(1,Mathf.Min(maximumCount,Mathf.RoundToInt(value)));
         }
-        public float Remaining => Mathf.Max(0, Definition.timer - Elapsed);
-        public string Description => Definition.requestType==TaxiRequestType.HitPedestrian
-            ? (Target<=1 ? "Hit a pedestrian" : $"Hit {Mathf.CeilToInt(Target)} pedestrians") : Definition.description;
+        public float Remaining => Mathf.Max(0,(Definition.requestType==TaxiRequestType.FastDelivery ? Target : Definition.timer)-Elapsed);
+        public string TargetText => Target.ToString("0",System.Globalization.CultureInfo.InvariantCulture);
+        public string ProgressText => Definition.requestType==TaxiRequestType.FastDelivery ? $"{Mathf.FloorToInt(Elapsed)}/{TargetText}s" :
+            Definition.requestType==TaxiRequestType.NoCollisions || Definition.requestType==TaxiRequestType.SmoothRide ? "UNTIL ARRIVAL" :
+            $"{Mathf.FloorToInt(Progress)}/{TargetText}"+(Definition.IsStop || Definition.requestType==TaxiRequestType.Offroad ? "s" : "");
+        public string Description
+        {
+            get
+            {
+                switch(Definition.requestType)
+                {
+                    case TaxiRequestType.FastDelivery: return $"Arrive within {TargetText} seconds";
+                    case TaxiRequestType.Shortcut: return Target<=1 ? "Use a shortcut" : $"Use {TargetText} different shortcuts";
+                    case TaxiRequestType.RamTraffic: return $"Ram {TargetText} traffic "+(Target<=1 ? "car" : "cars");
+                    case TaxiRequestType.HitPedestrian: return Target<=1 ? "Hit a pedestrian" : $"Hit {TargetText} pedestrians";
+                    case TaxiRequestType.PropertyDamage: return $"Damage {TargetText} roadside "+(Target<=1 ? "prop" : "props");
+                    case TaxiRequestType.Offroad: return $"Drive offroad for {TargetText} seconds";
+                    case TaxiRequestType.MaximumChaos: return $"Make {TargetText} Chaos points";
+                    case TaxiRequestType.NearMiss: return $"Make {TargetText} close traffic "+(Target<=1 ? "pass" : "passes")+" without contact";
+                    case TaxiRequestType.NoCollisions: return "Arrive without a qualifying collision";
+                    case TaxiRequestType.SmoothRide: return "Arrive smoothly without impacts or harsh acceleration";
+                    case TaxiRequestType.ScenicRoute: return $"Scenic stop: enjoy the view for {TargetText}s";
+                    case TaxiRequestType.IllicitStop: return $"Sketchy pickup: wait {TargetText}s";
+                    default: return Definition.description;
+                }
+            }
+        }
     }
 
     public sealed class TaxiFare
     {
         public long Base, Distance, Time, Requests, Chaos, Tip, Penalties;
         public long Total => Math.Max(0, Base + Distance + Time + Requests + Chaos + Tip - Penalties);
-        public float Rating;
+        public int Rating;
         public int ChaosScore;
         public int Score;
     }
@@ -54,12 +81,27 @@ namespace LWS.TruckTaxi
         public int TrackedCollisions { get; private set; }
         public long ShiftEarnings { get; private set; }
         public int CompletedRides { get; private set; }
+        public int TotalStarsEarned { get; private set; }
+        public double DriverAverageRating => CompletedRides==0 ? 0 : (double)TotalStarsEarned/CompletedRides;
+        public string DriverAverageText => CompletedRides==0 ? "--" : Math.Round(DriverAverageRating,1,MidpointRounding.AwayFromZero).ToString("0.0");
+        public static int StarsForSatisfaction(float value) => value>=4.5f ? 5 : value>=3.5f ? 4 : value>=2.5f ? 3 : value>=1.5f ? 2 : 1;
+        public bool SpecialAppreciationAccepted { get; private set; }
+        public TruckTaxiObjectiveCapabilities Capabilities { get; } = new TruckTaxiObjectiveCapabilities();
+        public Action RefreshObjectiveSupport { get; set; }
+        public TaxiRequestProgress ActiveStop
+        {
+            get { foreach(var r in requests) if(r.State==TaxiRequestState.Active && r.Definition.IsStop) return r; return null; }
+        }
+        public event Action<TaxiRequestProgress> StopStarted;
+        private bool stopStarted;
+        private float maximumRideAcceleration;
         public int ShiftScore { get; private set; }
         public float StateAge { get; private set; }
         public string Reaction { get; private set; }
         public float ReactionAge { get; private set; }
         public float OfferRemaining => Mathf.Max(0, config.offerDuration - StateAge);
-        public bool HasPassenger => State == TruckTaxiState.DrivingToDestination || State == TruckTaxiState.PassengerExiting;
+        public bool HasPassenger => State == TruckTaxiState.DrivingToDestination || State == TruckTaxiState.PassengerExiting ||
+            State==TruckTaxiState.AppreciationOffer || State==TruckTaxiState.AppreciationSequence;
         public event Action Changed;
         public event Action<TaxiRequestProgress> RequestResolved;
         public event Action<TaxiRequestProgress> RequestCreated;
@@ -93,6 +135,8 @@ namespace LWS.TruckTaxi
             random = new System.Random(seed);
             this.routeDistances = routeDistances ?? new TruckTaxiRouteDistanceService(null);
             this.playerPosition = playerPosition ?? (() => lastPosition);
+            Capabilities.Register(TruckTaxiObjectiveCapability.Timer,1);
+            Capabilities.Register(TruckTaxiObjectiveCapability.Chaos,1);
         }
         private void SetState(TruckTaxiState value)
         {
@@ -142,6 +186,7 @@ namespace LWS.TruckTaxi
                 routeDistances.Measure(origin, Pickup.StopPosition), routeDistances.BetweenStops(Pickup, Destination), config);
             requests.Clear(); chaos = 0; TrackedCollisions = 0; ElapsedRide = DistanceDriven = 0;
             Satisfaction = Passenger.baseSatisfaction; MechanicFareAdjustment=0;
+            maximumRideAcceleration=0; SpecialAppreciationAccepted=false; stopStarted=false;
             requestClock = 0; nextSpeedReaction = 0; hasPosition = false; LastFare = null; Reaction = "";
             SetState(TruckTaxiState.RideOffered);
             return true;
@@ -186,6 +231,7 @@ namespace LWS.TruckTaxi
             else if (State == TruckTaxiState.DrivingToDestination)
             {
                 ElapsedRide += deltaTime;
+                maximumRideAcceleration=Mathf.Max(maximumRideAcceleration,Mathf.Abs(acceleration));
                 if (speed > 2 && Mathf.Abs(acceleration) <= config.gentleAcceleration)
                     Satisfaction = Mathf.Clamp(Satisfaction + Passenger.smoothAffinity * config.smoothRatingPerSecond * deltaTime,1,5);
                 if (speed >= config.fastDrivingSpeed && ElapsedRide >= nextSpeedReaction && ReactionAge > 5)
@@ -200,18 +246,25 @@ namespace LWS.TruckTaxi
                 {
                     if (request.State != TaxiRequestState.Active) continue;
                     request.Elapsed += deltaTime;
+                    if(request.Definition.IsStop)
+                    {
+                        bool valid=request.StopPoint!=null && request.StopPoint.IsValidStop(playerPosition,speed);
+                        request.Progress=valid ? request.Progress+deltaTime : 0;
+                        if(valid && !stopStarted) { stopStarted=true; StopStarted?.Invoke(request); }
+                        if(!valid) stopStarted=false;
+                    }
                     if (request.Definition.requestType == TaxiRequestType.Offroad && !onRoad && speed > 1) request.Progress += deltaTime;
                     if (request.Definition.requestType == TaxiRequestType.MaximumChaos) request.Progress = ChaosScore;
                     if (request.Definition.requestType == TaxiRequestType.SmoothRide && Mathf.Abs(acceleration) > request.Definition.maximumAcceleration)
                         Resolve(request, false);
                     if (request.State != TaxiRequestState.Active) continue;
                     if (!IsArrivalRequest(request.Definition.requestType) && request.Progress >= request.Target) Resolve(request,true);
-                    else if (request.Elapsed > request.Definition.timer) Resolve(request,false);
+                    else if (request.Remaining<=0) Resolve(request,false);
                 }
                 requestClock += deltaTime;
                 if (requestClock >= Passenger.requestFrequency) { GenerateRequest(); requestClock = 0; }
                 if (ElapsedRide >= Passenger.basePatience) FailRide("Passenger patience exhausted.");
-                else if (Destination.Contains(playerPosition) && speed <= config.stoppedSpeed)
+                else if (ActiveStop==null && Destination.Contains(playerPosition) && speed <= config.stoppedSpeed)
                     SetState(TruckTaxiState.PassengerExiting);
             }
             else if (State == TruckTaxiState.PassengerExiting)
@@ -223,33 +276,47 @@ namespace LWS.TruckTaxi
         private static bool IsArrivalRequest(TaxiRequestType type) =>
             type == TaxiRequestType.FastDelivery || type == TaxiRequestType.NoCollisions || type == TaxiRequestType.SmoothRide;
 
-        public bool GenerateRequest()
+        public bool CanAssign(PassengerRequestDefinition definition,out string reason)
+        {
+            if(!Capabilities.Supports(definition)) { reason="Disabled or missing capability"; return false; }
+            if(Capabilities.TargetLimit(definition.requestType)<=0)
+            { reason="No remaining world targets"; return false; }
+            if(!definition.IsStop && !string.IsNullOrWhiteSpace(definition.targetId))
+            { reason="Specific non-stop target missions do not have a runtime resolver yet"; return false; }
+            if((definition.requestType==TaxiRequestType.NoCollisions || definition.requestType==TaxiRequestType.SmoothRide) && TrackedCollisions>0)
+            { reason="Ride already contains a collision"; return false; }
+            if(definition.requestType==TaxiRequestType.SmoothRide && maximumRideAcceleration>definition.maximumAcceleration)
+            { reason="Ride already contains harsh acceleration"; return false; }
+            if(definition.IsStop && Capabilities.FindStop(definition,Passenger,playerPosition())==null)
+            { reason="No eligible stop point"; return false; }
+            if(definition.IsStop && ActiveStop!=null)
+            { reason="Another stop already owns the GPS detour"; return false; }
+            var set=new List<PassengerRequestDefinition>();
+            foreach(var old in requests) set.Add(old.Definition);
+            set.Add(definition);
+            return Capabilities.ValidateCombination(set,out reason,false);
+        }
+        public bool GenerateRequest(PassengerRequestDefinition forced=null)
         {
             if (State != TruckTaxiState.DrivingToDestination || requests.Count >= 8) return false;
+            RefreshObjectiveSupport?.Invoke();
             int active = 0; foreach (var r in requests) if (r.State == TaxiRequestState.Active) active++;
             if (active >= 3) return false;
-            var source = Passenger.possibleRequests;
+            var source = forced!=null ? new[]{forced} : Passenger.possibleRequests;
             if (source == null || source.Length == 0) return false;
             var eligible = new List<PassengerRequestDefinition>();
             foreach (var definition in source)
             {
-                if (definition == null) continue;
-                bool allowed = true;
-                foreach (var old in requests)
-                {
-                    if(old.State==TaxiRequestState.Active && !definition.IsCompatibleWith(old.Definition)) allowed=false;
-                    if (old.Definition == definition && (old.State == TaxiRequestState.Active || !definition.allowMultipleInstances ||
-                        ElapsedRide - old.ResolvedAt < definition.cooldown)) allowed = false;
-                }
-                if (allowed) eligible.Add(definition);
+                if (CanAssign(definition,out _)) eligible.Add(definition);
             }
             if (eligible.Count == 0) return false;
             var chosen = eligible[random.Next(eligible.Count)];
             float difficulty = Mathf.Lerp(Passenger.requestDifficultyRange.x, Passenger.requestDifficultyRange.y, (float)random.NextDouble());
-            var progress = new TaxiRequestProgress(chosen, difficulty);
+            var progress = new TaxiRequestProgress(chosen, difficulty,chosen.IsStop ? Capabilities.FindStop(chosen,Passenger,playerPosition()) : null,
+                Capabilities.TargetLimit(chosen.requestType));
             requests.Add(progress);
             RequestCreated?.Invoke(progress);
-            React(chosen.requestType==TaxiRequestType.HitPedestrian || string.IsNullOrEmpty(chosen.dialogue) ? progress.Description : chosen.dialogue);
+            React(progress.Description);
             Changed?.Invoke(); return true;
         }
         public void RecordPedestrianHit(string id,float speed,Vector3 impulse,Vector3 position) =>
@@ -287,7 +354,6 @@ namespace LWS.TruckTaxi
                 { Resolve(r,false); continue; }
                 bool matches =
                     (type == TaxiEventType.Shortcut && definition.requestType == TaxiRequestType.Shortcut) ||
-                    (type == TaxiEventType.ScenicPoint && definition.requestType == TaxiRequestType.ScenicRoute) ||
                     (type == TaxiEventType.TrafficRam && definition.requestType == TaxiRequestType.RamTraffic) ||
                     (type == TaxiEventType.PedestrianHit && definition.requestType == TaxiRequestType.HitPedestrian) ||
                     (type == TaxiEventType.PropDamage && definition.requestType == TaxiRequestType.PropertyDamage) ||
@@ -330,6 +396,8 @@ namespace LWS.TruckTaxi
         {
             if (request.State != TaxiRequestState.Active) return;
             request.State = success ? TaxiRequestState.Succeeded : TaxiRequestState.Failed;
+            if(success && request.StopPoint!=null) chaos+=request.StopPoint.chaosReward;
+            if(request.Definition.IsStop) stopStarted=false;
             request.ResolvedAt = ElapsedRide;
             React((success ? "REQUEST COMPLETE: " : "REQUEST FAILED: ") + request.Description);
             Satisfaction = Mathf.Clamp(Satisfaction + (success ? request.Definition.ratingModifier : -0.2f),1,5);
@@ -342,7 +410,7 @@ namespace LWS.TruckTaxi
                 Base = config.baseFareCents,
                 Distance = (long)Math.Round(DistanceDriven * config.centsPerMeter),
                 Time = (long)Math.Round(ElapsedRide * config.centsPerSecond),
-                Rating = Satisfaction, ChaosScore = ChaosScore, Score = ChaosScore
+                Rating = StarsForSatisfaction(Satisfaction), ChaosScore = ChaosScore, Score = ChaosScore
             };
             foreach (var r in requests) if (r.State == TaxiRequestState.Succeeded)
             { fare.Requests += r.Definition.bonusMoneyCents; fare.Score += r.Definition.bonusScore; }
@@ -357,12 +425,29 @@ namespace LWS.TruckTaxi
         {
             if (State != TruckTaxiState.PassengerExiting) return;
             foreach (var r in requests)
-                if (r.State == TaxiRequestState.Active) Resolve(r,IsArrivalRequest(r.Definition.requestType) && r.Elapsed <= r.Definition.timer);
+                if (r.State == TaxiRequestState.Active) Resolve(r,IsArrivalRequest(r.Definition.requestType) && r.Remaining>0);
+            if(Passenger.CanOfferAppreciation && Satisfaction>=Passenger.appreciationMinimumSatisfaction &&
+                StarsForSatisfaction(Satisfaction)==5 && random.NextDouble()<Passenger.appreciationChance)
+            { SetState(TruckTaxiState.AppreciationOffer); return; }
+            AwardFare();
+        }
+        public bool ChooseAppreciation(bool accept)
+        {
+            if(State!=TruckTaxiState.AppreciationOffer) return false;
+            SpecialAppreciationAccepted=accept;
+            if(accept) SetState(TruckTaxiState.AppreciationSequence); else AwardFare();
+            return true;
+        }
+        public void CompleteAppreciation()
+        { if(State==TruckTaxiState.AppreciationSequence) AwardFare(); }
+        private void AwardFare()
+        {
             LastFare = EstimateFare();
             bool neverTips = Array.IndexOf(Passenger.uniqueMechanics ?? Array.Empty<TruckTaxiMechanic>(),TruckTaxiMechanic.NeverTips)>=0;
             if (!neverTips && random.NextDouble() <= Passenger.baseTipChance * Mathf.Clamp01((Satisfaction-1)/4))
                 LastFare.Tip = (long)Math.Round(LastFare.Total * config.tipFraction * Passenger.tipMultiplier);
             ShiftEarnings += LastFare.Total; ShiftScore += LastFare.Score; CompletedRides++;
+            TotalStarsEarned+=LastFare.Rating;
             SetState(TruckTaxiState.RideComplete);
         }
         public void FailRide(string reason)

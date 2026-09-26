@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: SmoothRide
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.PassengerRequestDefinition
   requestType: 6
+  objectiveId: taxi.objective.SmoothRide
+  enabledForSelection: 1
+  additionalCapabilities: 0
   description: Keep the ride smooth
   timer: 180
   target: 1
@@ -24,3 +27,5 @@ MonoBehaviour:
   cooldown: 35
   allowMultipleInstances: 0
   maximumAcceleration: 5
+  requiredBehavior: 0
+  forbiddenBehavior: 0

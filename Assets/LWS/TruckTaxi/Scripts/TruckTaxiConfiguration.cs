@@ -36,6 +36,8 @@ namespace LWS.TruckTaxi
         public float collisionCooldown = 3;
         public float nearMissSpeed = 8;
         public float nearMissRadius = 5;
+        [Min(0), Tooltip("Seconds before the same traffic car can award another near miss. Even gentle contact disqualifies a pass.")]
+        public float nearMissCooldown = 12;
         [Header("Pedestrian impact / UTS ragdoll")]
         public TruckTaxiPedestrianImpactSettings pedestrianImpact = new TruckTaxiPedestrianImpactSettings();
         [Header("Passenger driving reactions")]

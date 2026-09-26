@@ -9,6 +9,7 @@ namespace LWS.TruckTaxi
         private LwsRoadGraphProvider graph;
         private Transform player;
         private TruckTaxiRideLocation target;
+        private TruckTaxiStopObjectivePoint stopTarget;
         // ============================================================
         // TRUCK TAXI DASHBOARD GPS FIT (current tractor interior mesh)
         // Measured physical screen: 0.1472 x 0.0782 metres. No shared prefab edits.
@@ -17,6 +18,8 @@ namespace LWS.TruckTaxi
         public Vector3 dashboardScreenNormal = new Vector3(-.365503f, .168422f, -.915446f);
         public Vector2 dashboardScreenPixels = new Vector2(640, 340);
         public float dashboardPixelScale = .00023f;
+        [Min(0),Tooltip("Local clearance in front of the physical screen. Keeps the depth-tested vendor route out of the cab mesh.")]
+        public float dashboardScreenClearance = .01f;
         private Component previewCompass;
         private Component cabCompass;
         private Canvas previewCanvas;
@@ -34,7 +37,8 @@ namespace LWS.TruckTaxi
         public RectTransform DashboardScreen { get; private set; }
         public Camera PreviewCamera => previewCompass != null ? previewCameraField?.GetValue(previewCompass) as Camera : null;
         public string TargetId { get; private set; }
-        public bool RouteReady => target != null && (target.Contains(player.position) ||
+        public bool RouteReady => (target != null || stopTarget!=null) && ((target!=null && target.Contains(player.position)) ||
+            (stopTarget!=null && stopTarget.IsValidStop(player.position,0)) ||
             (navigation?.CurrentRoute != null && navigation.CurrentRoute.succeeded));
         public void Initialize(Transform tractor, LwsRoadGraphProvider provider)
         {
@@ -83,7 +87,7 @@ namespace LWS.TruckTaxi
                     DashboardScreen.SetParent(interior,false);
                     // The vendor map ignores depth, but its route does not. Keep the entire
                     // display just in front of the authored physical screen, not inside it.
-                    DashboardScreen.localPosition=dashboardScreenPosition+dashboardScreenNormal.normalized*.004f;
+                    DashboardScreen.localPosition=dashboardScreenPosition+dashboardScreenNormal.normalized*dashboardScreenClearance;
                     DashboardScreen.localRotation=Quaternion.LookRotation(-dashboardScreenNormal,Vector3.up);
                     DashboardScreen.localScale=Vector3.one*dashboardPixelScale;
                     FitScreen(DashboardScreen);
@@ -175,11 +179,23 @@ namespace LWS.TruckTaxi
         }
         public void SetPickupDestination(TruckTaxiRideLocation location) => SetDestination(location, "pickup");
         public void SetRideDestination(TruckTaxiRideLocation location) => SetDestination(location, "dropoff");
+        public void SetStopDestination(TruckTaxiStopObjectivePoint point)
+        {
+            if(point==null || navigation==null || player==null || graph==null) return;
+            stopTarget=point; target=null; TargetId=point.stableId;
+            if(point.IsValidStop(player.position,0)) { navigation.ClearRoute(); return; }
+            var result=navigation.RequestRoute(new LwsRouteRequest {
+                requestId="taxi.optional-stop",destinationId=TargetId,useOriginWorldPosition=true,originWorldPosition=player.position,
+                useDestinationWorldPosition=true,destinationWorldPosition=point.Position,truckRouteRequired=true
+            },graph.Graph);
+            if(!result.succeeded) Debug.LogWarning("Taxi optional stop route: "+result.message,this);
+        }
         private void SetDestination(TruckTaxiRideLocation location, string purpose)
         {
             if (location == null || navigation == null || player == null || graph == null) return;
             TargetId = location.locationId;
             target = location;
+            stopTarget=null;
             // A pickup can legitimately be at the previous dropoff. No zero-length route needed.
             if (location.Contains(player.position)) { navigation.ClearRoute(); return; }
             var result = navigation.RequestRoute(new LwsRouteRequest {
@@ -190,6 +206,6 @@ namespace LWS.TruckTaxi
             }, graph.Graph);
             if (!result.succeeded) Debug.LogWarning("Truck Taxi GPS: " + result.message, this);
         }
-        public void ClearDestination() { target = null; TargetId = ""; navigation?.ClearRoute(); }
+        public void ClearDestination() { target = null; stopTarget=null; TargetId = ""; navigation?.ClearRoute(); }
     }
 }

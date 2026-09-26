@@ -45,6 +45,10 @@ namespace LWS.TruckTaxi
                     requestId = "taxi.offer.preview", useOriginWorldPosition = true, originWorldPosition = from,
                     useDestinationWorldPosition = true, destinationWorldPosition = to, truckRouteRequired = true
                 }, graph);
+                // LWS requires at least one edge. Two positions snapping to one valid
+                // node need only the same short access leg used by the preview below.
+                if(!route.succeeded && SharesGraphNode(from,to) && graph.Validate().IsValid)
+                    return new TruckTaxiRouteLeg(Vector3.Distance(from,to),"Road Graph (same-node access)",new[]{from,to},true);
                 if (route.succeeded && route.waypoints.Count > 0)
                 {
                     var points = new List<Vector3>(route.waypoints);
@@ -58,6 +62,18 @@ namespace LWS.TruckTaxi
                 return new TruckTaxiRouteLeg(Vector3.Distance(from, to), "Straight-Line Fallback (route unavailable)", new[] { from, to }, false);
             }
             return new TruckTaxiRouteLeg(Vector3.Distance(from, to), "Straight-Line Fallback (no graph)", new[] { from, to }, false);
+        }
+        private bool SharesGraphNode(Vector3 from,Vector3 to)
+        {
+            LwsRoadNode start=null,end=null; float startDistance=float.MaxValue,endDistance=float.MaxValue;
+            foreach(var node in graph.nodes)
+            {
+                if(node==null) continue;
+                float a=(node.position-from).sqrMagnitude,b=(node.position-to).sqrMagnitude;
+                if(a<startDistance) { startDistance=a; start=node; }
+                if(b<endDistance) { endDistance=b; end=node; }
+            }
+            return start!=null && start==end;
         }
     }
 

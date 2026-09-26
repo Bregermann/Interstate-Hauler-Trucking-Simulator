@@ -131,14 +131,19 @@ namespace LWS.TruckTaxi
             actor.transform.SetPositionAndRotation(truck.position+truck.right*(2.8f+index)+Vector3.up*2,Quaternion.LookRotation(truck.forward,Vector3.up));
             actor.Eject(host.Player.GetComponent<Rigidbody>().linearVelocity+truck.right*(profile?.ejectionImpulse ?? 6)+Vector3.up*3,truck); EjectedBodies++;
         }
-        private void OnRequest(TaxiRequestProgress request) { pendingRequest=request.Definition.requestType==TaxiRequestType.HitPedestrian ? request.Description : request.Definition.dialogue; modifiers.Invoke(m=>m.OnRequestStarted(request)); }
+        private void OnRequest(TaxiRequestProgress request) { pendingRequest=request.Description; modifiers.Invoke(m=>m.OnRequestStarted(request)); }
         private void OnResolved(TaxiRequestProgress request)
         {
             modifiers.Invoke(m=>m.OnRequestCompleted(request));
             Dialogue.Speak(passenger,request.State==TaxiRequestState.Succeeded ? TruckTaxiDialogueCategory.RequestSuccess : TruckTaxiDialogueCategory.RequestFailure,
                 host.Session,request.State==TaxiRequestState.Succeeded ? "That's exactly what I asked for!" : "We missed that one.",75);
         }
-        private void OnDestination() { host.GPS.SetRideDestination(host.Session.Destination); Dialogue.Speak(passenger,TruckTaxiDialogueCategory.GPSComplaint,host.Session,"I've updated our destination.",70); }
+        private void OnDestination()
+        {
+            if(host.Session.ActiveStop!=null) host.GPS.SetStopDestination(host.Session.ActiveStop.StopPoint);
+            else host.GPS.SetRideDestination(host.Session.Destination);
+            Dialogue.Speak(passenger,TruckTaxiDialogueCategory.GPSComplaint,host.Session,"I've updated our destination.",70);
+        }
         private void OnDriving(TaxiEventType type)
         {
             modifiers.Invoke(m=>m.OnDrivingEvent(type));

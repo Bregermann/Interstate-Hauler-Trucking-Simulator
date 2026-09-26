@@ -24,6 +24,14 @@ namespace LWS.TruckTaxi.Tests
                 var stop=go.AddComponent<TruckTaxiRideLocation>(); stop.locationId="stop."+i; go.transform.position=Vector3.right*i*100; locations.Add(stop);
             }
             session=new TruckTaxiSession(config,locations,17);
+            // Explicit evaluator fixture capabilities. Production derives these from actual scene support.
+            foreach(TruckTaxiObjectiveCapability cap in System.Enum.GetValues(typeof(TruckTaxiObjectiveCapability))) session.Capabilities.Register(cap,10);
+            foreach(var category in new[]{TruckTaxiStopCategory.Scenic,TruckTaxiStopCategory.IllicitPickup})
+            {
+                var go=new GameObject("Test optional stop"); objects.Add(go);
+                var stop=go.AddComponent<TruckTaxiStopObjectivePoint>(); stop.stableId="test."+category; stop.category=category; stop.durationSeconds=8;
+                session.Capabilities.Stops.Add(stop);
+            }
         }
         [TearDown] public void TearDown() { foreach(var o in objects) Object.DestroyImmediate(o); objects.Clear(); }
         private void Board()
@@ -138,6 +146,7 @@ namespace LWS.TruckTaxi.Tests
         [TestCase(TaxiRequestType.MaximumChaos)]
         [TestCase(TaxiRequestType.ScenicRoute)]
         [TestCase(TaxiRequestType.NearMiss)]
+        [TestCase(TaxiRequestType.IllicitStop)]
         public void AllRequestTypesCanComplete(TaxiRequestType type)
         {
             var request=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); objects.Add(request);
@@ -149,7 +158,7 @@ namespace LWS.TruckTaxi.Tests
             else if(type==TaxiRequestType.RamTraffic) session.RecordEvent(TaxiEventType.TrafficRam,"car",5);
             else if(type==TaxiRequestType.HitPedestrian) session.RecordEvent(TaxiEventType.PedestrianHit,"npc",5);
             else if(type==TaxiRequestType.PropertyDamage) session.RecordEvent(TaxiEventType.PropDamage,"prop",5);
-            else if(type==TaxiRequestType.ScenicRoute) session.RecordEvent(TaxiEventType.ScenicPoint,"park");
+            else if(request.IsStop) session.Tick(8,session.ActiveStop.StopPoint.Position,0,0,true);
             else if(type==TaxiRequestType.NearMiss) session.RecordEvent(TaxiEventType.NearMiss,"car");
             Arrive();
             Assert.AreEqual(TaxiRequestState.Succeeded,session.Requests[0].State);
@@ -218,7 +227,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsFalse(safe.IsCompatibleWith(impact)); Assert.IsFalse(impact.IsCompatibleWith(safe));
             passenger.possibleRequests=new[]{safe}; Board(); passenger.possibleRequests=new[]{impact};
             Assert.IsFalse(session.GenerateRequest()); Assert.AreEqual(1,session.Requests.Count);
-            session.DebugResolveRequest(false); Assert.IsTrue(session.GenerateRequest());
+            session.DebugResolveRequest(false); Assert.IsFalse(session.GenerateRequest(),"A failed clean-ride objective must not lead to a contradictory whole-ride bundle.");
         }
         [Test] public void AuthoredBehaviorRulesAreSymmetricAndExtensible()
         {
@@ -281,7 +290,7 @@ namespace LWS.TruckTaxi.Tests
             }
             foreach(var request in content.requests)
             { Assert.IsNotEmpty(request.description,request.name); types.Add(request.requestType); }
-            Assert.AreEqual(11,types.Count);
+            Assert.AreEqual(12,types.Count);
         }
     }
 }

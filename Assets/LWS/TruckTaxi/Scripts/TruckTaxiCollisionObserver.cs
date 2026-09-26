@@ -10,6 +10,8 @@ namespace LWS.TruckTaxi
         private Rigidbody body;
         private Vector3 incomingVelocity;
         private readonly Dictionary<int,float> lastImpact = new Dictionary<int,float>();
+        private readonly Dictionary<int,float> lastNearMiss = new Dictionary<int,float>();
+        private readonly Dictionary<int,float> lastContact = new Dictionary<int,float>();
         private readonly Dictionary<TruckTaxiImpactTarget,float> near = new Dictionary<TruckTaxiImpactTarget,float>();
         private readonly HashSet<TruckTaxiImpactTarget> current = new HashSet<TruckTaxiImpactTarget>();
         private readonly List<TruckTaxiImpactTarget> departed = new List<TruckTaxiImpactTarget>();
@@ -33,15 +35,22 @@ namespace LWS.TruckTaxi
                 var target = hits[i].GetComponentInParent<TruckTaxiImpactTarget>();
                 if (target == null || target.kind != TaxiImpactKind.Traffic) continue;
                 current.Add(target);
-                if (!near.ContainsKey(target) && incomingVelocity.magnitude >= host.Configuration.nearMissSpeed) near[target] = Time.time;
+                var other=hits[i].attachedRigidbody;
+                Vector3 relative=incomingVelocity-(other!=null ? other.linearVelocity : Vector3.zero);
+                if (!near.ContainsKey(target) && relative.magnitude >= host.Configuration.nearMissSpeed &&
+                    incomingVelocity.magnitude>=host.Configuration.nearMissSpeed &&
+                    (!lastNearMiss.TryGetValue(target.GetInstanceID(),out float previous) || Time.time-previous>=host.Configuration.nearMissCooldown)) near[target] = Time.time;
             }
             departed.Clear();
             foreach (var pair in near)
             {
                 if (pair.Key != null && current.Contains(pair.Key)) continue;
                 departed.Add(pair.Key);
-                if (pair.Key != null && (!lastImpact.TryGetValue(pair.Key.GetInstanceID(),out float at) || at < pair.Value))
+                if (pair.Key != null && (!lastContact.TryGetValue(pair.Key.GetInstanceID(),out float at) || at < pair.Value))
+                {
                     host.Session.RecordEvent(TaxiEventType.NearMiss,pair.Key.targetId);
+                    lastNearMiss[pair.Key.GetInstanceID()]=Time.time;
+                }
             }
             foreach (var target in departed) near.Remove(target);
         }
@@ -49,6 +58,8 @@ namespace LWS.TruckTaxi
         {
             if (host == null || host.Session == null) return;
             var target = collision.collider.GetComponentInParent<TruckTaxiImpactTarget>();
+            // Even a gentle touch invalidates a near miss; scoring impact thresholds are separate.
+            if(target!=null) lastContact[target.GetInstanceID()]=Time.time;
             if(target!=null && target.kind==TaxiImpactKind.Pedestrian)
             {
                 var pedestrian=target.GetComponent<TruckTaxiPedestrian>();
@@ -87,6 +98,6 @@ namespace LWS.TruckTaxi
                     target.kind == TaxiImpactKind.Pedestrian ? TaxiEventType.PedestrianHit : TaxiEventType.PropDamage;
             host.Session.RecordEvent(type, LastTarget, LastImpactSpeed);
         }
-        public void ResetTracking() { near.Clear(); lastImpact.Clear(); }
+        public void ResetTracking() { near.Clear(); lastImpact.Clear(); lastNearMiss.Clear(); lastContact.Clear(); }
     }
 }

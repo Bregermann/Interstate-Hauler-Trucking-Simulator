@@ -176,7 +176,7 @@ namespace LWS.TruckTaxi.Editor
             }
             return graph;
         }
-        private static void BayEdge(LwsRoadGraph graph,string from,string to,Vector3[] points)
+        internal static void BayEdge(LwsRoadGraph graph,string from,string to,Vector3[] points)
         {
             string id=from+"-"+to;
             var edge=new LwsRoadEdge{edgeId=id,roadId=id,segmentId=id,fromNodeId=from,toNodeId=to,

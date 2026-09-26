@@ -18,6 +18,7 @@ namespace LWS.TruckTaxi
         private void Reset() { GetComponent<BoxCollider>().isTrigger = true; }
         private void OnTriggerEnter(Collider other)
         {
+            if(!isActiveAndEnabled || scenicPoint) return;
             var player = other.GetComponentInParent<LwsPlayerTruck>();
             if (player == null || TruckTaxiBootstrap.Instance == null || player != TruckTaxiBootstrap.Instance.Player) return;
             if (!occupants.Add(other) || occupants.Count != 1) return;

@@ -23,6 +23,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiVehicleHandlingOverride Handling { get; private set; }
         public TruckTaxiPassengerRuntime Passengers { get; private set; }
         public TruckTaxiPickupZoneVisualizer PickupZone { get; private set; }
+        public TruckTaxiOptionalStops OptionalStops { get; private set; }
         public bool Ready { get; private set; }
         public bool Paused { get; private set; }
         private ILwsGameplayStateService gameplay;
@@ -71,6 +72,9 @@ namespace LWS.TruckTaxi
             GPS.ConfigureDemoPresentation();
             Passengers=gameObject.AddComponent<TruckTaxiPassengerRuntime>(); Passengers.Initialize(this);
             PickupZone=gameObject.AddComponent<TruckTaxiPickupZoneVisualizer>(); PickupZone.Initialize(this);
+            OptionalStops=gameObject.AddComponent<TruckTaxiOptionalStops>(); OptionalStops.Initialize(this);
+            RebuildObjectiveCapabilities();
+            Session.RefreshObjectiveSupport=RefreshDynamicObjectiveSupport;
             Ready = true;
             hud.Initialize(this);
             SetPaused(true);
@@ -78,11 +82,17 @@ namespace LWS.TruckTaxi
         }
         private void Update()
         {
-            if (!Ready || Paused || body == null) return;
+            if (!Ready || body == null) return;
+            if(Paused)
+            {
+                // Offers keep their existing expiry while the modal suppresses driving/simulation.
+                if(Session.State==TruckTaxiState.RideOffered) Session.Tick(Time.unscaledDeltaTime,body.position,0,0,true);
+                return;
+            }
             float speed = body.linearVelocity.magnitude;
             float acceleration = Time.deltaTime > 0 ? (speed-lastSpeed)/Time.deltaTime : 0;
             lastSpeed = speed;
-            bool onRoad = roadGraph.TryFindNearestRoad(body.position,out var road) && road.LateralDistanceMeters <= 10;
+            TruckTaxiSurface.TrySample(body.position,Player.transform,out bool onRoad);
             Session.Tick(Time.deltaTime,body.position,speed,acceleration,onRoad);
         }
         private void OnSessionChanged()
@@ -91,7 +101,9 @@ namespace LWS.TruckTaxi
             observedState = Session.State;
             switch (Session.State)
             {
-                case TruckTaxiState.RideOffered: Play(configuration.offerSound); break;
+                case TruckTaxiState.RideOffered: Play(configuration.offerSound); SetPaused(true); break;
+                case TruckTaxiState.AppreciationOffer:
+                case TruckTaxiState.AppreciationSequence: SetPaused(true); break;
                 case TruckTaxiState.DrivingToPickup: GPS.SetPickupDestination(Session.Pickup); Play(configuration.acceptSound); SetPaused(false); break;
                 case TruckTaxiState.PassengerBoarding: Play(configuration.boardingSound); break;
                 case TruckTaxiState.DrivingToDestination:
@@ -146,6 +158,57 @@ namespace LWS.TruckTaxi
         public void SpawnPedestrian()
         {
             pedestrians.SpawnOne();
+        }
+        public void RebuildObjectiveCapabilities()
+        {
+            var caps=Session.Capabilities;
+            caps.Register(TruckTaxiObjectiveCapability.Traffic,traffic.Ready ? traffic.ActiveCount : 0);
+            caps.Register(TruckTaxiObjectiveCapability.Pedestrians,AvailablePedestrians());
+            caps.Register(TruckTaxiObjectiveCapability.PedestrianHitDetection,Player.GetComponent<TruckTaxiCollisionObserver>()!=null ? 1 : 0);
+            caps.Register(TruckTaxiObjectiveCapability.NearMiss,traffic.Ready && Player.GetComponent<TruckTaxiCollisionObserver>()!=null ? 1 : 0);
+            int props=0,shortcuts=0,road=0,offroad=0;
+            foreach(var target in FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None))
+                if(target.isActiveAndEnabled && target.kind==TaxiImpactKind.Property && !target.Damaged && target.GetComponent<Collider>()?.enabled==true) props++;
+            foreach(var shortcut in FindObjectsByType<ShortcutTrigger>(FindObjectsSortMode.None))
+                if(shortcut.isActiveAndEnabled && !shortcut.scenicPoint && shortcut.GetComponent<Collider>()?.enabled==true && shortcut.GetComponent<Collider>().isTrigger) shortcuts++;
+            foreach(var surface in FindObjectsByType<TruckTaxiSurface>(FindObjectsSortMode.None))
+                if(surface.GetComponentInChildren<Collider>()!=null) { if(surface.isRoad) road++; else offroad++; }
+            caps.Register(TruckTaxiObjectiveCapability.DestructibleProps,props);
+            caps.Register(TruckTaxiObjectiveCapability.Shortcuts,shortcuts);
+            caps.Register(TruckTaxiObjectiveCapability.Offroad,road>0 ? offroad : 0);
+            caps.Register(TruckTaxiObjectiveCapability.DestinationChange,locations.Length);
+            caps.Stops.Clear(); int scenic=0,illicit=0,privateStops=0;
+            var ids=new System.Collections.Generic.HashSet<string>();
+            foreach(var point in FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None))
+            {
+                if(string.IsNullOrWhiteSpace(point.stableId) || !ids.Add(point.stableId) || point.radius<6 ||
+                    !RouteDistances.Measure(Vector3.zero,point.Position).Navigable) continue;
+                caps.Stops.Add(point);
+                if(point.category==TruckTaxiStopCategory.Scenic) scenic++;
+                if(point.category==TruckTaxiStopCategory.IllicitPickup) illicit++;
+                if(point.category==TruckTaxiStopCategory.PrivateMeeting) privateStops++;
+            }
+            caps.Stops.Sort((a,b)=>string.CompareOrdinal(a.stableId,b.stableId));
+            caps.Register(TruckTaxiObjectiveCapability.ScenicStops,scenic);
+            caps.Register(TruckTaxiObjectiveCapability.IllicitStops,illicit);
+            caps.Register(TruckTaxiObjectiveCapability.PrivateStops,privateStops);
+        }
+        private void RefreshDynamicObjectiveSupport()
+        {
+            var caps=Session.Capabilities;
+            caps.Register(TruckTaxiObjectiveCapability.Traffic,traffic.Ready ? traffic.ActiveCount : 0);
+            caps.Register(TruckTaxiObjectiveCapability.Pedestrians,AvailablePedestrians());
+            int props=0;
+            foreach(var target in resetTargets)
+                if(target!=null && target.isActiveAndEnabled && target.kind==TaxiImpactKind.Property && !target.Damaged) props++;
+            caps.Register(TruckTaxiObjectiveCapability.DestructibleProps,props);
+        }
+        private int AvailablePedestrians()
+        {
+            int count=0;
+            foreach(var pedestrian in pedestrians.People)
+                if(pedestrian!=null && pedestrian.isActiveAndEnabled && !pedestrian.IsRagdoll && !pedestrian.HitEventSent) count++;
+            return count;
         }
         private void OnDestroy()
         {

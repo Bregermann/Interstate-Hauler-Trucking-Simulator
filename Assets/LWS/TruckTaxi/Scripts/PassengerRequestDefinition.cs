@@ -3,16 +3,22 @@ using UnityEngine;
 namespace LWS.TruckTaxi
 {
     public enum TaxiRequestType { FastDelivery, Shortcut, RamTraffic, HitPedestrian, PropertyDamage, Offroad,
-        SmoothRide, NoCollisions, MaximumChaos, ScenicRoute, NearMiss }
+        SmoothRide, NoCollisions, MaximumChaos, ScenicRoute, NearMiss, IllicitStop }
     public enum TaxiEventType { Collision, TrafficRam, PedestrianHit, PropDamage, Shortcut, ScenicPoint, NearMiss, HardLanding }
     public enum TaxiRequestState { Active, Succeeded, Failed }
     [System.Flags]
-    public enum TaxiRequestBehavior { None=0, Impact=1, Offroad=2, HardAcceleration=4 }
+    public enum TaxiRequestBehavior { None=0, Impact=1, Offroad=2, HardAcceleration=4, HighSpeed=8, TimedStop=16, Chaos=32 }
 
     [CreateAssetMenu(menuName = "Truck Taxi/Passenger Request")]
     public sealed class PassengerRequestDefinition : ScriptableObject
     {
         public TaxiRequestType requestType;
+        public string objectiveId;
+        public bool enabledForSelection = true;
+        public TruckTaxiObjectiveCapability additionalCapabilities;
+        public string StableId => string.IsNullOrWhiteSpace(objectiveId) ? "taxi.objective."+requestType : objectiveId;
+        public bool IsStop => requestType==TaxiRequestType.ScenicRoute || requestType==TaxiRequestType.IllicitStop;
+        public TruckTaxiObjectiveCapability RequiredCapabilities => additionalCapabilities | TruckTaxiObjectiveCapabilities.Required(requestType);
         [TextArea] public string description;
         [Min(1)] public float timer = 90;
         [Min(0.1f)] public float target = 1;
@@ -31,7 +37,9 @@ namespace LWS.TruckTaxi
         public TaxiRequestBehavior forbiddenBehavior;
         public TaxiRequestBehavior RequiredBehavior => requiredBehavior |
             (requestType==TaxiRequestType.HitPedestrian || requestType==TaxiRequestType.RamTraffic || requestType==TaxiRequestType.PropertyDamage
-                ? TaxiRequestBehavior.Impact : requestType==TaxiRequestType.Offroad ? TaxiRequestBehavior.Offroad : TaxiRequestBehavior.None);
+                ? TaxiRequestBehavior.Impact : requestType==TaxiRequestType.Offroad ? TaxiRequestBehavior.Offroad :
+                IsStop ? TaxiRequestBehavior.TimedStop : requestType==TaxiRequestType.MaximumChaos ? TaxiRequestBehavior.Chaos :
+                requestType==TaxiRequestType.NearMiss ? TaxiRequestBehavior.HighSpeed : TaxiRequestBehavior.None);
         public TaxiRequestBehavior ForbiddenBehavior => forbiddenBehavior |
             (requestType==TaxiRequestType.NoCollisions || requestType==TaxiRequestType.SmoothRide ? TaxiRequestBehavior.Impact : TaxiRequestBehavior.None);
         public bool IsCompatibleWith(PassengerRequestDefinition other) => other!=null &&

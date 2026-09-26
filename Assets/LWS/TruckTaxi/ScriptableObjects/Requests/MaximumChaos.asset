@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: MaximumChaos
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.PassengerRequestDefinition
   requestType: 8
+  objectiveId: taxi.objective.MaximumChaos
+  enabledForSelection: 1
+  additionalCapabilities: 0
   description: Make 400 chaos points
   timer: 180
   target: 400
@@ -24,3 +27,5 @@ MonoBehaviour:
   cooldown: 35
   allowMultipleInstances: 0
   maximumAcceleration: 5
+  requiredBehavior: 0
+  forbiddenBehavior: 0

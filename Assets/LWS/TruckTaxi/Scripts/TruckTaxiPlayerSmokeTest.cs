@@ -18,7 +18,7 @@ namespace LWS.TruckTaxi
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void LaunchIfRequested()
         {
-            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke")) return;
+            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke" || a=="-truck-taxi-objective-smoke")) return;
             new GameObject("Truck Taxi command-line smoke test").AddComponent<TruckTaxiPlayerSmokeTest>();
         }
         private void OnEnable() { Application.logMessageReceived+=TrackError; }
@@ -48,6 +48,14 @@ namespace LWS.TruckTaxi
             if(host==null || !host.Ready) { Debug.LogError("TRUCK TAXI PLAYER SMOKE: startup timed out."); Application.Quit(2); yield break; }
             string output=Path.GetFullPath(Path.Combine(Application.dataPath,"../Validation"));
             Directory.CreateDirectory(output);
+            if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-objective-smoke"))
+            {
+                yield return TruckTaxiObjectiveRuntimeProbe.Run(host,(ok,message)=> {
+                    if(ok) Debug.Log("OBJECTIVE CHECK PASS: "+message); else Debug.LogError("OBJECTIVE CHECK FAIL: "+message);
+                },name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
+                Debug.Log(failed ? "TRUCK TAXI OBJECTIVE STANDALONE FAIL" : "TRUCK TAXI OBJECTIVE STANDALONE PASS");
+                Application.Quit(failed?2:0); yield break;
+            }
             if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-pedestrian-smoke"))
             {
                 yield return TruckTaxiPedestrianRuntimeProbe.Run(host,(ok,message)=> {
@@ -59,6 +67,8 @@ namespace LWS.TruckTaxi
             yield return new WaitForSecondsRealtime(2);
             yield return new WaitForEndOfFrame();
             Capture(Path.Combine(output,"Windows_Start.png"));
+            float rideFrequency=host.Configuration.rideFrequency;
+            host.Configuration.rideFrequency=120;
             host.StartShift();
             yield return new WaitForSeconds(2);
             testKeyboard=InputSystem.AddDevice<Keyboard>("Taxi standalone validation keyboard");
@@ -75,6 +85,7 @@ namespace LWS.TruckTaxi
                 " telemetry="+JsonUtility.ToJson(host.Player.LastTelemetry)+" controls="+JsonUtility.ToJson(host.Player.TruckControlController.CurrentState));
             if(distance<3) Debug.LogError("TRUCK TAXI PLAYER SMOKE: normal keyboard input did not move tractor.");
             else Debug.Log("TRUCK TAXI PLAYER INPUT PASS: keyboard E/W drove "+distance.ToString("0.0")+" metres through existing input/NWH.");
+            host.Configuration.rideFrequency=rideFrequency;
             if(host.traffic.ActiveCount==0 || host.pedestrians.ActiveCount==0)
                 Debug.LogError("TRUCK TAXI PLAYER SMOKE: ambient population missing.");
             host.Session.DeclineRide();

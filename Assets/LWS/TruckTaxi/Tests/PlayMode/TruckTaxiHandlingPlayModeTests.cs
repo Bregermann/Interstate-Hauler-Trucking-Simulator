@@ -16,6 +16,8 @@ namespace LWS.TruckTaxi.Tests
         private InputSettings original;
         private GameObject ground,stop;
         private float originalCaptureDelta;
+        private TruckTaxiConfiguration configuration;
+        private float originalRideFrequency;
         [SetUp] public void Setup() { originalCaptureDelta=Time.captureDeltaTime; Time.captureDeltaTime=1f/60f; }
         [TearDown] public void Cleanup()
         {
@@ -24,6 +26,7 @@ namespace LWS.TruckTaxi.Tests
             if(ground!=null) Object.Destroy(ground); if(stop!=null) Object.Destroy(stop);
             Time.timeScale=1;
             Time.captureDeltaTime=originalCaptureDelta;
+            if(configuration!=null) configuration.rideFrequency=originalRideFrequency;
         }
         [UnityTest, Timeout(600000)]
         public IEnumerator LowSpeedUTurnUsesNwhAndOverrideRestores()
@@ -32,6 +35,9 @@ namespace LWS.TruckTaxi.Tests
             float deadline=Time.realtimeSinceStartup+45;
             while((TruckTaxiBootstrap.Instance==null || !TruckTaxiBootstrap.Instance.Ready) && Time.realtimeSinceStartup<deadline) yield return null;
             var host=TruckTaxiBootstrap.Instance; Assert.IsTrue(host.Ready);
+            // A modal ride offer must not interrupt this isolated physics/input fixture.
+            configuration=host.configuration; originalRideFrequency=configuration.rideFrequency;
+            configuration.rideFrequency=600;
             var handling=host.Handling; var vehicle=host.Player.GetComponent<VehicleController>();
             Assert.IsTrue(handling.Applied); Assert.AreEqual(65,vehicle.steering.maximumSteerAngle);
             handling.Restore(); float interstate=vehicle.steering.maximumSteerAngle;

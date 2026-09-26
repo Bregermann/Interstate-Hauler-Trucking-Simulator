@@ -60,6 +60,14 @@ The screen remains 640x340 at actual lossy scale 0.00023, approximately
 
 ## Validation
 
+The later objective/no-mouse pass adds keyboard/gamepad navigation and disables
+unused hidden numeric-entry children in the Heat slider instances. It increases
+the taxi-only face clearance to the configurable `dashboardScreenClearance`
+default of 10 mm after a fixed-route regression revealed remaining depth clipping.
+That focused check rendered 9 cyan route pixels versus 0 with the route hidden.
+See `TruckTaxi_ObjectiveAudit.md` for the newer full regression results. The older
+4 mm measurements below describe the original GPS checkpoint, not the current default.
+
 The automated PlayMode presentation test renders the actual scene and compares
 cyan pixels inside the cab screen with Compass route rendering enabled/disabled.
 The focused run passed: route-on 11 matching pixels, route-off 0. Moving back to
