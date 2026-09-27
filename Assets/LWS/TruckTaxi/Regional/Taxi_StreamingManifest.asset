@@ -87,6 +87,23 @@ MonoBehaviour:
     containsWeatheradePresentation: 1
     containsGlobalServices: 0
     containsPlayerContent: 0
+  - chunkId: taxi.speedway
+    displayName: Thunder Bowl Speedway
+    sceneName: Taxi_ThunderBowlSpeedway
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_ThunderBowlSpeedway.unity
+    boundsCenter: {x: 2800, y: 0, z: -700}
+    boundsSize: {x: 780, y: 120, z: 1000}
+    neighborChunkIds:
+    - taxi.servicearea
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 0
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
   - chunkId: taxi.servicearea
     displayName: ServiceArea
     sceneName: Taxi_ServiceArea
@@ -96,6 +113,7 @@ MonoBehaviour:
     neighborChunkIds:
     - taxi.riverbridge
     - taxi.town02outskirts
+    - taxi.speedway
     roadIds: []
     trafficContent: Validation traffic lane presentation
     weatheradeContent: Weatherade-compatible road/environment presentation

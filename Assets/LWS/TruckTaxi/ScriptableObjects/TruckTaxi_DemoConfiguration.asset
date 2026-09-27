@@ -37,13 +37,30 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1115259c503f2d248832de6540e54c6b, type: 2}
   - {fileID: 11400000, guid: 596c21af7df4ed54fba36e1517c4357e, type: 2}
   - {fileID: 11400000, guid: 97e0e287ef51ef14bac5a34a7df4c213, type: 2}
+  - {fileID: 11400000, guid: 269071d3fa4fa264588ea90fb6f3b13f, type: 2}
+  - {fileID: 11400000, guid: 1d278191e201c3940a7a59a800c554f0, type: 2}
   minimumTripDistance: 150
   maximumTripDistance: 950
   rideFrequency: 6
   offerDuration: 30
+  pickupTargetMinimumSeconds: 20
+  pickupTargetMaximumSeconds: 90
+  pickupHardMaximumSeconds: 180
+  intercityRideChance: 0.1
+  localOffersAfterIntercity: 3
+  speedwayPassengerWeight: 3
+  racingSpeedwayDestinationChance: 0.6
+  offerPickupCandidateLimit: 6
+  offerDestinationCandidateLimit: 12
+  offerFrameBudgetMilliseconds: 3
+  offerTimeoutSeconds: 3
+  logOfferTimings: 0
+  intercityMaximumTripDistance: 20000
+  intercityFareMultiplier: 1.2
   recentOfferCount: 10
   recentOfferWeight: 0.2
   recentLocationMinutes: 60
+  repeatPickupAccessRadiusMeters: 40
   citywideRelocationMinutes: 360
   moderateSameLocationChance: 0.65
   commonWeight: 1
@@ -56,8 +73,15 @@ MonoBehaviour:
   pickupPatienceMultiplier: 2
   timeObsessedPickupMultiplier: 0.6
   pickupMaximumSeconds: 300
+  patienceProgressSampleSeconds: 4
+  wrongWayGraceSeconds: 20
+  unexplainedStopGraceSeconds: 60
+  patienceRecoveryPerSecond: 0.001
+  cancellationFeeCents: 300
   morningFrequencyMultiplier: 0.75
   eveningFrequencyMultiplier: 0.85
+  lateNightFrequencyMultiplier: 1.5
+  preDawnFrequencyMultiplier: 2
   rainFrequencyMultiplier: 0.8
   stormFrequencyMultiplier: 0.7
   snowFrequencyMultiplier: 0.7
@@ -66,14 +90,28 @@ MonoBehaviour:
   morningCommuterWeight: 1.5
   eveningSocialWeight: 1.5
   eveningRareWeight: 1.25
+  lateNightRareWeight: 1.5
+  lateNightWeirdWeight: 1.5
+  lateNightNightlifeWeight: 1.5
+  lateNightChaoticWeight: 1.35
+  lateNightFlirtatiousWeight: 1.25
+  preDawnRareWeight: 1.75
+  preDawnWeirdWeight: 1.75
+  preDawnNightlifeWeight: 1.25
+  preDawnChaoticWeight: 1.5
+  preDawnFlirtatiousWeight: 1.1
   morningFareMultiplier: 1.1
   eveningFareMultiplier: 1.1
+  lateNightFareMultiplier: 1.25
+  preDawnFareMultiplier: 1.35
   rainFareMultiplier: 1.08
   stormFareMultiplier: 1.15
   snowFareMultiplier: 1.2
   heavySnowFareMultiplier: 1.25
   blizzardFareMultiplier: 1.3
   eveningAppreciationMultiplier: 1.2
+  lateNightAppreciationMultiplier: 1.25
+  preDawnAppreciationMultiplier: 1.4
   appreciationBaseChance: 0.35
   badWeatherPickupTimeMultiplier: 1.25
   stoppedSpeed: 0.5

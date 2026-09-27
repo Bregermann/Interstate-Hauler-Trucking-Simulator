@@ -10,28 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42c4474a1dc8ec146ab2122f161035d2, type: 3}
-  m_Name: ScenicRoute
+  m_Name: TakeALap
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.PassengerRequestDefinition
-  requestType: 9
-  objectiveId: taxi.objective.ScenicRoute
+  requestType: 20
+  objectiveId: taxi.objective.take-a-lap
   enabledForSelection: 1
   additionalCapabilities: 0
-  description: Scenic stop
-  timer: 180
+  description: Take a lap at Thunder Bowl Speedway
+  timer: 360
   target: 1
-  targetId: 
+  targetId: taxi.speedway.lap
   goalLocationId: 
-  bonusMoneyCents: 750
-  rewardItem: 12
-  rewardItemCount: 2
+  bonusMoneyCents: 2500
+  rewardItem: 7
+  rewardItemCount: 0
   secondRewardItem: 6
   secondRewardItemCount: 0
-  rewardTipMultiplier: 1
+  rewardTipMultiplier: 1.15
   rewardThirstRelief: 0
-  bonusScore: 190
+  bonusScore: 350
   ratingModifier: 0.2
-  dialogue: Can we pull over somewhere with a view?
-  cooldown: 35
+  dialogue: One full lap. Keep it on the banking!
+  cooldown: 30
   allowMultipleInstances: 0
   maximumAcceleration: 5
   requiredBehavior: 0

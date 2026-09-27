@@ -279,6 +279,7 @@ Transform:
   m_Children:
   - {fileID: 1753872049}
   - {fileID: 95272744}
+  - {fileID: 1537198701}
   m_Father: {fileID: 496305326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8666506
@@ -304,6 +305,62 @@ MonoBehaviour:
   detectionRadius: 11
   tags: []
   debugGizmos: 1
+--- !u!1 &13315444
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 13315445}
+  - component: {fileID: 13315446}
+  m_Layer: 0
+  m_Name: Diner diversion stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &13315445
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13315444}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 932797857}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &13315446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13315444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99fcc5849ebb63e4682e30dcb1bb0350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiStopObjectivePoint
+  stableId: taxi.town02.stop.16.diner
+  displayName: River Overlook
+  district: Industrial
+  category: 3
+  radius: 18
+  durationSeconds: 12
+  maximumSpeed: 0.447
+  viewDirection: {x: 0, y: 0, z: 1}
+  passengerTags: []
+  arrivalDialogue: 
+  completionDialogue: 
+  chaosReward: 0
 --- !u!1 &31238585
 GameObject:
   m_ObjectHideFlags: 0
@@ -485,6 +542,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1589897596}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &78936857
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 78936858}
+  - component: {fileID: 78936860}
+  - component: {fileID: 78936859}
+  m_Layer: 0
+  m_Name: Thunder Bowl Pit Entrance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &78936858
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78936857}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2800, y: 0.2, z: -610}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 508649566}
+  - {fileID: 634567751}
+  m_Father: {fileID: 940360647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &78936859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78936857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7b9c413bfd0447806762e1a932a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapMarker
+  stableId: taxi.speedway.pit-entrance
+  label: Thunder Bowl Pit Entrance
+  markerType: 24
+  state: 2
+  source: {fileID: 0}
+  sourceLocalOffset: {x: 0, y: 0, z: 0}
+  assignedIcon: {fileID: 0}
+  compassPoi: {fileID: 0}
+  presented: 0
+--- !u!114 &78936860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 78936857}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16adf4bf87e7af48bf8570758d60d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiRideLocation
+  locationName: Thunder Bowl Pit Entrance
+  locationId: taxi.speedway.pit-entrance
+  district: Speedway
+  locationType: 10
+  pickupAllowed: 1
+  dropoffAllowed: 1
+  passengerSpawnPoint: {fileID: 634567751}
+  truckStopPoint: {fileID: 508649566}
+  detectionRadius: 17
+  tags: []
+  debugGizmos: 1
 --- !u!1 &89239792
 GameObject:
   m_ObjectHideFlags: 0
@@ -607,6 +743,7 @@ Transform:
   m_Children:
   - {fileID: 606596244}
   - {fileID: 637020218}
+  - {fileID: 762790584}
   m_Father: {fileID: 496305326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &92841863
@@ -1481,6 +1618,7 @@ MonoBehaviour:
   fullPhysicsRadius: 85
   visibleRadius: 170
   populationHysteresis: 20
+  offscreenGraceSeconds: 8
   graphRebuildDistance: 120
   useWobblePeople: 1
   densityProfile: {fileID: 11400000, guid: b45771951f3077741844fbe8b56c2ad0, type: 2}
@@ -3012,7 +3150,7 @@ MonoBehaviour:
   rightLaneHandleColour: {r: 1, g: 1, b: 1, a: 0.5}
   laneHandleSelectedColour: {r: 1, g: 1, b: 0, a: 0.5}
   roadUvThreshold: 1750
-  updateQueue: 442609974
+  updateQueue: 109652613
   scanPresetsFlag: 0
   scanRPFlag: 1
   logChange: 0
@@ -4947,6 +5085,37 @@ MonoBehaviour:
   arrivalDialogue: 
   completionDialogue: 
   chaosReward: 0
+--- !u!1 &336098889
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 336098890}
+  m_Layer: 0
+  m_Name: Passenger Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &336098890
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336098889}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 827197255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &336848637
 GameObject:
   m_ObjectHideFlags: 0
@@ -8353,6 +8522,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450675952}
   m_Mesh: {fileID: 532360199}
+--- !u!1 &452997097
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 452997098}
+  m_Layer: 0
+  m_Name: Truck Stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &452997098
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 452997097}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 686229880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &458332052
 GameObject:
   m_ObjectHideFlags: 0
@@ -8458,6 +8658,62 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1604970762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &469341250
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 469341251}
+  - component: {fileID: 469341252}
+  m_Layer: 0
+  m_Name: Diner diversion stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &469341251
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469341250}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 485041807}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &469341252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469341250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99fcc5849ebb63e4682e30dcb1bb0350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiStopObjectivePoint
+  stableId: taxi.stop.16.diner
+  displayName: Scenic Notch
+  district: Industrial
+  category: 3
+  radius: 18
+  durationSeconds: 12
+  maximumSpeed: 0.447
+  viewDirection: {x: 0, y: 0, z: 1}
+  passengerTags: []
+  arrivalDialogue: 
+  completionDialogue: 
+  chaosReward: 0
 --- !u!1 &485041806
 GameObject:
   m_ObjectHideFlags: 0
@@ -8490,6 +8746,7 @@ Transform:
   m_Children:
   - {fileID: 1304094277}
   - {fileID: 433319196}
+  - {fileID: 469341251}
   m_Father: {fileID: 496305326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &485041808
@@ -8767,6 +9024,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 970157693}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &508649565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 508649566}
+  m_Layer: 0
+  m_Name: Truck Stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &508649566
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508649565}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 78936858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519639636
 GameObject:
@@ -9190,6 +9478,37 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &532986559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 532986560}
+  m_Layer: 0
+  m_Name: Passenger Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &532986560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532986559}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 638705501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &535972919
 GameObject:
   m_ObjectHideFlags: 0
@@ -10407,6 +10726,258 @@ MonoBehaviour:
       position: {x: 4000, y: 0.15, z: 355}
       regionId: Town 02
       sceneChunkId: regional
+    - nodeId: taxi.speedway.gate
+      position: {x: 2800, y: 0.2, z: -470}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.parking
+      position: {x: 2800, y: 0.2, z: -540}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.pit
+      position: {x: 2800, y: 0.2, z: -610}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.vip
+      position: {x: 2960, y: 0.2, z: -480}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.garage
+      position: {x: 2660, y: 0.2, z: -570}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.infield
+      position: {x: 2800, y: 0.2, z: -780}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.approach
+      position: {x: 2800, y: 0.2, z: -250}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.00
+      position: {x: 2800, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.01
+      position: {x: 2820, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.02
+      position: {x: 2840, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.03
+      position: {x: 2860, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.04
+      position: {x: 2880, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.05
+      position: {x: 2900, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.06
+      position: {x: 2920, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.07
+      position: {x: 2938.5337, y: 10, z: -686.8254}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.08
+      position: {x: 2956.355, y: 10, z: -692.23145}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.09
+      position: {x: 2972.7793, y: 10, z: -701.0104}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.10
+      position: {x: 2987.175, y: 10, z: -712.8248}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.11
+      position: {x: 2998.9895, y: 10, z: -727.2208}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.12
+      position: {x: 3007.7686, y: 10, z: -743.6451}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.13
+      position: {x: 3013.1746, y: 10, z: -761.46643}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.14
+      position: {x: 3015, y: 10, z: -780}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.15
+      position: {x: 3013.1746, y: 10, z: -798.53357}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.16
+      position: {x: 3007.7686, y: 10, z: -816.3549}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.17
+      position: {x: 2998.9895, y: 10, z: -832.7792}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.18
+      position: {x: 2987.175, y: 10, z: -847.1752}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.19
+      position: {x: 2972.7793, y: 10, z: -858.9896}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.20
+      position: {x: 2956.355, y: 10, z: -867.76855}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.21
+      position: {x: 2938.5337, y: 10, z: -873.1746}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.22
+      position: {x: 2920, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.23
+      position: {x: 2900, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.24
+      position: {x: 2880, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.25
+      position: {x: 2860, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.26
+      position: {x: 2840, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.27
+      position: {x: 2820, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.28
+      position: {x: 2800, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.29
+      position: {x: 2780, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.30
+      position: {x: 2760, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.31
+      position: {x: 2740, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.32
+      position: {x: 2720, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.33
+      position: {x: 2700, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.34
+      position: {x: 2680, y: 10, z: -875}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.35
+      position: {x: 2661.4663, y: 10, z: -873.1746}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.36
+      position: {x: 2643.645, y: 10, z: -867.76855}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.37
+      position: {x: 2627.2207, y: 10, z: -858.9896}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.38
+      position: {x: 2612.825, y: 10, z: -847.1752}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.39
+      position: {x: 2601.0105, y: 10, z: -832.7792}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.40
+      position: {x: 2592.2314, y: 10, z: -816.3549}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.41
+      position: {x: 2586.8254, y: 10, z: -798.53357}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.42
+      position: {x: 2585, y: 10, z: -780}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.43
+      position: {x: 2586.8254, y: 10, z: -761.46643}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.44
+      position: {x: 2592.2314, y: 10, z: -743.6451}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.45
+      position: {x: 2601.0105, y: 10, z: -727.2208}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.46
+      position: {x: 2612.825, y: 10, z: -712.8248}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.47
+      position: {x: 2627.2207, y: 10, z: -701.0104}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.48
+      position: {x: 2643.645, y: 10, z: -692.23145}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.49
+      position: {x: 2661.4663, y: 10, z: -686.8254}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.50
+      position: {x: 2680, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.51
+      position: {x: 2700, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.52
+      position: {x: 2720, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.53
+      position: {x: 2740, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.54
+      position: {x: 2760, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.track.55
+      position: {x: 2780, y: 10, z: -685}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
     edges:
     - roadId: taxi.0.0-1.0.road
       segmentId: taxi.0.0-1.0.segment
@@ -115600,6 +116171,3174 @@ MonoBehaviour:
         laneWidthMeters: 3.5
         laneCount: 0
         speedLimitMph: 15
+    - roadId: taxi.regional.2800>taxi.speedway.approach
+      segmentId: taxi.regional.2800>taxi.speedway.approach
+      edgeId: taxi.regional.2800>taxi.speedway.approach
+      fromNodeId: taxi.regional.2800
+      toNodeId: taxi.speedway.approach
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 250
+      travelCost: 250
+      speedLimitMph: 25
+      laneCount: 2
+      laneWidthMeters: 6
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.regional.2800>taxi.speedway.approach
+        segmentId: taxi.regional.2800>taxi.speedway.approach
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.14, z: 0}
+        forward: {x: 0, y: 0.00024000001, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 25
+      - roadId: taxi.regional.2800>taxi.speedway.approach
+        segmentId: taxi.regional.2800>taxi.speedway.approach
+        distanceFromStartMeters: 250
+        position: {x: 2800, y: 0.2, z: -250}
+        forward: {x: 0, y: 0.00024000001, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 25
+    - roadId: taxi.speedway.approach>taxi.regional.2800
+      segmentId: taxi.speedway.approach>taxi.regional.2800
+      edgeId: taxi.speedway.approach>taxi.regional.2800
+      fromNodeId: taxi.speedway.approach
+      toNodeId: taxi.regional.2800
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 250
+      travelCost: 250
+      speedLimitMph: 25
+      laneCount: 2
+      laneWidthMeters: 6
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.approach>taxi.regional.2800
+        segmentId: taxi.speedway.approach>taxi.regional.2800
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -250}
+        forward: {x: 0, y: -0.00024000001, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 25
+      - roadId: taxi.speedway.approach>taxi.regional.2800
+        segmentId: taxi.speedway.approach>taxi.regional.2800
+        distanceFromStartMeters: 250
+        position: {x: 2800, y: 0.14, z: 0}
+        forward: {x: 0, y: -0.00024000001, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 25
+    - roadId: taxi.speedway.approach>taxi.speedway.gate
+      segmentId: taxi.speedway.approach>taxi.speedway.gate
+      edgeId: taxi.speedway.approach>taxi.speedway.gate
+      fromNodeId: taxi.speedway.approach
+      toNodeId: taxi.speedway.gate
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 220
+      travelCost: 220
+      speedLimitMph: 25
+      laneCount: 2
+      laneWidthMeters: 6
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.approach>taxi.speedway.gate
+        segmentId: taxi.speedway.approach>taxi.speedway.gate
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -250}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 25
+      - roadId: taxi.speedway.approach>taxi.speedway.gate
+        segmentId: taxi.speedway.approach>taxi.speedway.gate
+        distanceFromStartMeters: 220
+        position: {x: 2800, y: 0.2, z: -470}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 25
+    - roadId: taxi.speedway.gate>taxi.speedway.approach
+      segmentId: taxi.speedway.gate>taxi.speedway.approach
+      edgeId: taxi.speedway.gate>taxi.speedway.approach
+      fromNodeId: taxi.speedway.gate
+      toNodeId: taxi.speedway.approach
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 220
+      travelCost: 220
+      speedLimitMph: 25
+      laneCount: 2
+      laneWidthMeters: 6
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.gate>taxi.speedway.approach
+        segmentId: taxi.speedway.gate>taxi.speedway.approach
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -470}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 25
+      - roadId: taxi.speedway.gate>taxi.speedway.approach
+        segmentId: taxi.speedway.gate>taxi.speedway.approach
+        distanceFromStartMeters: 220
+        position: {x: 2800, y: 0.2, z: -250}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 25
+    - roadId: taxi.speedway.gate>taxi.speedway.parking
+      segmentId: taxi.speedway.gate>taxi.speedway.parking
+      edgeId: taxi.speedway.gate>taxi.speedway.parking
+      fromNodeId: taxi.speedway.gate
+      toNodeId: taxi.speedway.parking
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 70
+      travelCost: 70
+      speedLimitMph: 15
+      laneCount: 2
+      laneWidthMeters: 6
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.gate>taxi.speedway.parking
+        segmentId: taxi.speedway.gate>taxi.speedway.parking
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -470}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 15
+      - roadId: taxi.speedway.gate>taxi.speedway.parking
+        segmentId: taxi.speedway.gate>taxi.speedway.parking
+        distanceFromStartMeters: 70
+        position: {x: 2800, y: 0.2, z: -540}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 15
+    - roadId: taxi.speedway.parking>taxi.speedway.gate
+      segmentId: taxi.speedway.parking>taxi.speedway.gate
+      edgeId: taxi.speedway.parking>taxi.speedway.gate
+      fromNodeId: taxi.speedway.parking
+      toNodeId: taxi.speedway.gate
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 70
+      travelCost: 70
+      speedLimitMph: 15
+      laneCount: 2
+      laneWidthMeters: 6
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.parking>taxi.speedway.gate
+        segmentId: taxi.speedway.parking>taxi.speedway.gate
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -540}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 15
+      - roadId: taxi.speedway.parking>taxi.speedway.gate
+        segmentId: taxi.speedway.parking>taxi.speedway.gate
+        distanceFromStartMeters: 70
+        position: {x: 2800, y: 0.2, z: -470}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 12
+        laneWidthMeters: 6
+        laneCount: 2
+        speedLimitMph: 15
+    - roadId: taxi.speedway.gate>taxi.speedway.vip
+      segmentId: taxi.speedway.gate>taxi.speedway.vip
+      edgeId: taxi.speedway.gate>taxi.speedway.vip
+      fromNodeId: taxi.speedway.gate
+      toNodeId: taxi.speedway.vip
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 160.3122
+      travelCost: 160.3122
+      speedLimitMph: 15
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.gate>taxi.speedway.vip
+        segmentId: taxi.speedway.gate>taxi.speedway.vip
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -470}
+        forward: {x: 0.9980526, y: 0, z: -0.062378287}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+      - roadId: taxi.speedway.gate>taxi.speedway.vip
+        segmentId: taxi.speedway.gate>taxi.speedway.vip
+        distanceFromStartMeters: 160.3122
+        position: {x: 2960, y: 0.2, z: -480}
+        forward: {x: 0.9980526, y: 0, z: -0.062378287}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+    - roadId: taxi.speedway.vip>taxi.speedway.gate
+      segmentId: taxi.speedway.vip>taxi.speedway.gate
+      edgeId: taxi.speedway.vip>taxi.speedway.gate
+      fromNodeId: taxi.speedway.vip
+      toNodeId: taxi.speedway.gate
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 160.3122
+      travelCost: 160.3122
+      speedLimitMph: 15
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.vip>taxi.speedway.gate
+        segmentId: taxi.speedway.vip>taxi.speedway.gate
+        distanceFromStartMeters: 0
+        position: {x: 2960, y: 0.2, z: -480}
+        forward: {x: -0.9980526, y: 0, z: 0.062378287}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+      - roadId: taxi.speedway.vip>taxi.speedway.gate
+        segmentId: taxi.speedway.vip>taxi.speedway.gate
+        distanceFromStartMeters: 160.3122
+        position: {x: 2800, y: 0.2, z: -470}
+        forward: {x: -0.9980526, y: 0, z: 0.062378287}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+    - roadId: taxi.speedway.parking>taxi.speedway.pit
+      segmentId: taxi.speedway.parking>taxi.speedway.pit
+      edgeId: taxi.speedway.parking>taxi.speedway.pit
+      fromNodeId: taxi.speedway.parking
+      toNodeId: taxi.speedway.pit
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 70
+      travelCost: 70
+      speedLimitMph: 15
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.parking>taxi.speedway.pit
+        segmentId: taxi.speedway.parking>taxi.speedway.pit
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -540}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+      - roadId: taxi.speedway.parking>taxi.speedway.pit
+        segmentId: taxi.speedway.parking>taxi.speedway.pit
+        distanceFromStartMeters: 70
+        position: {x: 2800, y: 0.2, z: -610}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+    - roadId: taxi.speedway.pit>taxi.speedway.parking
+      segmentId: taxi.speedway.pit>taxi.speedway.parking
+      edgeId: taxi.speedway.pit>taxi.speedway.parking
+      fromNodeId: taxi.speedway.pit
+      toNodeId: taxi.speedway.parking
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 70
+      travelCost: 70
+      speedLimitMph: 15
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.pit>taxi.speedway.parking
+        segmentId: taxi.speedway.pit>taxi.speedway.parking
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -610}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+      - roadId: taxi.speedway.pit>taxi.speedway.parking
+        segmentId: taxi.speedway.pit>taxi.speedway.parking
+        distanceFromStartMeters: 70
+        position: {x: 2800, y: 0.2, z: -540}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+    - roadId: taxi.speedway.parking>taxi.speedway.garage
+      segmentId: taxi.speedway.parking>taxi.speedway.garage
+      edgeId: taxi.speedway.parking>taxi.speedway.garage
+      fromNodeId: taxi.speedway.parking
+      toNodeId: taxi.speedway.garage
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 143.1782
+      travelCost: 143.1782
+      speedLimitMph: 15
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.parking>taxi.speedway.garage
+        segmentId: taxi.speedway.parking>taxi.speedway.garage
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -540}
+        forward: {x: -0.97780246, y: 0, z: -0.20952909}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+      - roadId: taxi.speedway.parking>taxi.speedway.garage
+        segmentId: taxi.speedway.parking>taxi.speedway.garage
+        distanceFromStartMeters: 143.1782
+        position: {x: 2660, y: 0.2, z: -570}
+        forward: {x: -0.97780246, y: 0, z: -0.20952909}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+    - roadId: taxi.speedway.garage>taxi.speedway.parking
+      segmentId: taxi.speedway.garage>taxi.speedway.parking
+      edgeId: taxi.speedway.garage>taxi.speedway.parking
+      fromNodeId: taxi.speedway.garage
+      toNodeId: taxi.speedway.parking
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 143.1782
+      travelCost: 143.1782
+      speedLimitMph: 15
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.garage>taxi.speedway.parking
+        segmentId: taxi.speedway.garage>taxi.speedway.parking
+        distanceFromStartMeters: 0
+        position: {x: 2660, y: 0.2, z: -570}
+        forward: {x: 0.97780246, y: 0, z: 0.20952909}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+      - roadId: taxi.speedway.garage>taxi.speedway.parking
+        segmentId: taxi.speedway.garage>taxi.speedway.parking
+        distanceFromStartMeters: 143.1782
+        position: {x: 2800, y: 0.2, z: -540}
+        forward: {x: 0.97780246, y: 0, z: 0.20952909}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 15
+    - roadId: taxi.speedway.pit>taxi.speedway.infield
+      segmentId: taxi.speedway.pit>taxi.speedway.infield
+      edgeId: taxi.speedway.pit>taxi.speedway.infield
+      fromNodeId: taxi.speedway.pit
+      toNodeId: taxi.speedway.infield
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 170
+      travelCost: 170
+      speedLimitMph: 12
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.pit>taxi.speedway.infield
+        segmentId: taxi.speedway.pit>taxi.speedway.infield
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -610}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 12
+      - roadId: taxi.speedway.pit>taxi.speedway.infield
+        segmentId: taxi.speedway.pit>taxi.speedway.infield
+        distanceFromStartMeters: 170
+        position: {x: 2800, y: 0.2, z: -780}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 12
+    - roadId: taxi.speedway.infield>taxi.speedway.pit
+      segmentId: taxi.speedway.infield>taxi.speedway.pit
+      edgeId: taxi.speedway.infield>taxi.speedway.pit
+      fromNodeId: taxi.speedway.infield
+      toNodeId: taxi.speedway.pit
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 170
+      travelCost: 170
+      speedLimitMph: 12
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.infield>taxi.speedway.pit
+        segmentId: taxi.speedway.infield>taxi.speedway.pit
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -780}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 12
+      - roadId: taxi.speedway.infield>taxi.speedway.pit
+        segmentId: taxi.speedway.infield>taxi.speedway.pit
+        distanceFromStartMeters: 170
+        position: {x: 2800, y: 0.2, z: -610}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 12
+    - roadId: taxi.speedway.track.00>taxi.speedway.track.01
+      segmentId: taxi.speedway.track.00>taxi.speedway.track.01
+      edgeId: taxi.speedway.track.00>taxi.speedway.track.01
+      fromNodeId: taxi.speedway.track.00
+      toNodeId: taxi.speedway.track.01
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.00>taxi.speedway.track.01
+        segmentId: taxi.speedway.track.00>taxi.speedway.track.01
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.00>taxi.speedway.track.01
+        segmentId: taxi.speedway.track.00>taxi.speedway.track.01
+        distanceFromStartMeters: 20
+        position: {x: 2820, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.01>taxi.speedway.track.02
+      segmentId: taxi.speedway.track.01>taxi.speedway.track.02
+      edgeId: taxi.speedway.track.01>taxi.speedway.track.02
+      fromNodeId: taxi.speedway.track.01
+      toNodeId: taxi.speedway.track.02
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.01>taxi.speedway.track.02
+        segmentId: taxi.speedway.track.01>taxi.speedway.track.02
+        distanceFromStartMeters: 0
+        position: {x: 2820, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.01>taxi.speedway.track.02
+        segmentId: taxi.speedway.track.01>taxi.speedway.track.02
+        distanceFromStartMeters: 20
+        position: {x: 2840, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.02>taxi.speedway.track.03
+      segmentId: taxi.speedway.track.02>taxi.speedway.track.03
+      edgeId: taxi.speedway.track.02>taxi.speedway.track.03
+      fromNodeId: taxi.speedway.track.02
+      toNodeId: taxi.speedway.track.03
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.02>taxi.speedway.track.03
+        segmentId: taxi.speedway.track.02>taxi.speedway.track.03
+        distanceFromStartMeters: 0
+        position: {x: 2840, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.02>taxi.speedway.track.03
+        segmentId: taxi.speedway.track.02>taxi.speedway.track.03
+        distanceFromStartMeters: 20
+        position: {x: 2860, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.03>taxi.speedway.track.04
+      segmentId: taxi.speedway.track.03>taxi.speedway.track.04
+      edgeId: taxi.speedway.track.03>taxi.speedway.track.04
+      fromNodeId: taxi.speedway.track.03
+      toNodeId: taxi.speedway.track.04
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.03>taxi.speedway.track.04
+        segmentId: taxi.speedway.track.03>taxi.speedway.track.04
+        distanceFromStartMeters: 0
+        position: {x: 2860, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.03>taxi.speedway.track.04
+        segmentId: taxi.speedway.track.03>taxi.speedway.track.04
+        distanceFromStartMeters: 20
+        position: {x: 2880, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.04>taxi.speedway.track.05
+      segmentId: taxi.speedway.track.04>taxi.speedway.track.05
+      edgeId: taxi.speedway.track.04>taxi.speedway.track.05
+      fromNodeId: taxi.speedway.track.04
+      toNodeId: taxi.speedway.track.05
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.04>taxi.speedway.track.05
+        segmentId: taxi.speedway.track.04>taxi.speedway.track.05
+        distanceFromStartMeters: 0
+        position: {x: 2880, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.04>taxi.speedway.track.05
+        segmentId: taxi.speedway.track.04>taxi.speedway.track.05
+        distanceFromStartMeters: 20
+        position: {x: 2900, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.05>taxi.speedway.track.06
+      segmentId: taxi.speedway.track.05>taxi.speedway.track.06
+      edgeId: taxi.speedway.track.05>taxi.speedway.track.06
+      fromNodeId: taxi.speedway.track.05
+      toNodeId: taxi.speedway.track.06
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.05>taxi.speedway.track.06
+        segmentId: taxi.speedway.track.05>taxi.speedway.track.06
+        distanceFromStartMeters: 0
+        position: {x: 2900, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.05>taxi.speedway.track.06
+        segmentId: taxi.speedway.track.05>taxi.speedway.track.06
+        distanceFromStartMeters: 20
+        position: {x: 2920, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.06>taxi.speedway.track.07
+      segmentId: taxi.speedway.track.06>taxi.speedway.track.07
+      edgeId: taxi.speedway.track.06>taxi.speedway.track.07
+      fromNodeId: taxi.speedway.track.06
+      toNodeId: taxi.speedway.track.07
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623365
+      travelCost: 18.623365
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.06>taxi.speedway.track.07
+        segmentId: taxi.speedway.track.06>taxi.speedway.track.07
+        distanceFromStartMeters: 0
+        position: {x: 2920, y: 10, z: -685}
+        forward: {x: 0.99518484, y: 0, z: -0.098015495}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.06>taxi.speedway.track.07
+        segmentId: taxi.speedway.track.06>taxi.speedway.track.07
+        distanceFromStartMeters: 18.623365
+        position: {x: 2938.5337, y: 10, z: -686.8254}
+        forward: {x: 0.99518484, y: 0, z: -0.098015495}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.07>taxi.speedway.track.08
+      segmentId: taxi.speedway.track.07>taxi.speedway.track.08
+      edgeId: taxi.speedway.track.07>taxi.speedway.track.08
+      fromNodeId: taxi.speedway.track.07
+      toNodeId: taxi.speedway.track.08
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623209
+      travelCost: 18.623209
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.07>taxi.speedway.track.08
+        segmentId: taxi.speedway.track.07>taxi.speedway.track.08
+        distanceFromStartMeters: 0
+        position: {x: 2938.5337, y: 10, z: -686.8254}
+        forward: {x: 0.95693976, y: 0, z: -0.29028654}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.07>taxi.speedway.track.08
+        segmentId: taxi.speedway.track.07>taxi.speedway.track.08
+        distanceFromStartMeters: 18.623209
+        position: {x: 2956.355, y: 10, z: -692.23145}
+        forward: {x: 0.95693976, y: 0, z: -0.29028654}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.08>taxi.speedway.track.09
+      segmentId: taxi.speedway.track.08>taxi.speedway.track.09
+      edgeId: taxi.speedway.track.08>taxi.speedway.track.09
+      fromNodeId: taxi.speedway.track.08
+      toNodeId: taxi.speedway.track.09
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623314
+      travelCost: 18.623314
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.08>taxi.speedway.track.09
+        segmentId: taxi.speedway.track.08>taxi.speedway.track.09
+        distanceFromStartMeters: 0
+        position: {x: 2956.355, y: 10, z: -692.23145}
+        forward: {x: 0.8819223, y: 0, z: -0.47139466}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.08>taxi.speedway.track.09
+        segmentId: taxi.speedway.track.08>taxi.speedway.track.09
+        distanceFromStartMeters: 18.623314
+        position: {x: 2972.7793, y: 10, z: -701.0104}
+        forward: {x: 0.8819223, y: 0, z: -0.47139466}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.09>taxi.speedway.track.10
+      segmentId: taxi.speedway.track.09>taxi.speedway.track.10
+      edgeId: taxi.speedway.track.09>taxi.speedway.track.10
+      fromNodeId: taxi.speedway.track.09
+      toNodeId: taxi.speedway.track.10
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623077
+      travelCost: 18.623077
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.09>taxi.speedway.track.10
+        segmentId: taxi.speedway.track.09>taxi.speedway.track.10
+        distanceFromStartMeters: 0
+        position: {x: 2972.7793, y: 10, z: -701.0104}
+        forward: {x: 0.7730061, y: 0, z: -0.6343985}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.09>taxi.speedway.track.10
+        segmentId: taxi.speedway.track.09>taxi.speedway.track.10
+        distanceFromStartMeters: 18.623077
+        position: {x: 2987.175, y: 10, z: -712.8248}
+        forward: {x: 0.7730061, y: 0, z: -0.6343985}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.10>taxi.speedway.track.11
+      segmentId: taxi.speedway.track.10>taxi.speedway.track.11
+      edgeId: taxi.speedway.track.10>taxi.speedway.track.11
+      fromNodeId: taxi.speedway.track.10
+      toNodeId: taxi.speedway.track.11
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623264
+      travelCost: 18.623264
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.10>taxi.speedway.track.11
+        segmentId: taxi.speedway.track.10>taxi.speedway.track.11
+        distanceFromStartMeters: 0
+        position: {x: 2987.175, y: 10, z: -712.8248}
+        forward: {x: 0.6343922, y: 0, z: -0.77301145}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.10>taxi.speedway.track.11
+        segmentId: taxi.speedway.track.10>taxi.speedway.track.11
+        distanceFromStartMeters: 18.623264
+        position: {x: 2998.9895, y: 10, z: -727.2208}
+        forward: {x: 0.6343922, y: 0, z: -0.77301145}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.11>taxi.speedway.track.12
+      segmentId: taxi.speedway.track.11>taxi.speedway.track.12
+      edgeId: taxi.speedway.track.11>taxi.speedway.track.12
+      fromNodeId: taxi.speedway.track.11
+      toNodeId: taxi.speedway.track.12
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623318
+      travelCost: 18.623318
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.11>taxi.speedway.track.12
+        segmentId: taxi.speedway.track.11>taxi.speedway.track.12
+        distanceFromStartMeters: 0
+        position: {x: 2998.9895, y: 10, z: -727.2208}
+        forward: {x: 0.47140113, y: 0, z: -0.88191885}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.11>taxi.speedway.track.12
+        segmentId: taxi.speedway.track.11>taxi.speedway.track.12
+        distanceFromStartMeters: 18.623318
+        position: {x: 3007.7686, y: 10, z: -743.6451}
+        forward: {x: 0.47140113, y: 0, z: -0.88191885}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.12>taxi.speedway.track.13
+      segmentId: taxi.speedway.track.12>taxi.speedway.track.13
+      edgeId: taxi.speedway.track.12>taxi.speedway.track.13
+      fromNodeId: taxi.speedway.track.12
+      toNodeId: taxi.speedway.track.13
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.62325
+      travelCost: 18.62325
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.12>taxi.speedway.track.13
+        segmentId: taxi.speedway.track.12>taxi.speedway.track.13
+        distanceFromStartMeters: 0
+        position: {x: 3007.7686, y: 10, z: -743.6451}
+        forward: {x: 0.29028264, y: 0, z: -0.95694095}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.12>taxi.speedway.track.13
+        segmentId: taxi.speedway.track.12>taxi.speedway.track.13
+        distanceFromStartMeters: 18.62325
+        position: {x: 3013.1746, y: 10, z: -761.46643}
+        forward: {x: 0.29028264, y: 0, z: -0.95694095}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.13>taxi.speedway.track.14
+      segmentId: taxi.speedway.track.13>taxi.speedway.track.14
+      edgeId: taxi.speedway.track.13>taxi.speedway.track.14
+      fromNodeId: taxi.speedway.track.13
+      toNodeId: taxi.speedway.track.14
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.62325
+      travelCost: 18.62325
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.13>taxi.speedway.track.14
+        segmentId: taxi.speedway.track.13>taxi.speedway.track.14
+        distanceFromStartMeters: 0
+        position: {x: 3013.1746, y: 10, z: -761.46643}
+        forward: {x: 0.098019384, y: 0, z: -0.99518454}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.13>taxi.speedway.track.14
+        segmentId: taxi.speedway.track.13>taxi.speedway.track.14
+        distanceFromStartMeters: 18.62325
+        position: {x: 3015, y: 10, z: -780}
+        forward: {x: 0.098019384, y: 0, z: -0.99518454}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.14>taxi.speedway.track.15
+      segmentId: taxi.speedway.track.14>taxi.speedway.track.15
+      edgeId: taxi.speedway.track.14>taxi.speedway.track.15
+      fromNodeId: taxi.speedway.track.14
+      toNodeId: taxi.speedway.track.15
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.62325
+      travelCost: 18.62325
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.14>taxi.speedway.track.15
+        segmentId: taxi.speedway.track.14>taxi.speedway.track.15
+        distanceFromStartMeters: 0
+        position: {x: 3015, y: 10, z: -780}
+        forward: {x: -0.098019384, y: 0, z: -0.99518454}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.14>taxi.speedway.track.15
+        segmentId: taxi.speedway.track.14>taxi.speedway.track.15
+        distanceFromStartMeters: 18.62325
+        position: {x: 3013.1746, y: 10, z: -798.53357}
+        forward: {x: -0.098019384, y: 0, z: -0.99518454}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.15>taxi.speedway.track.16
+      segmentId: taxi.speedway.track.15>taxi.speedway.track.16
+      edgeId: taxi.speedway.track.15>taxi.speedway.track.16
+      fromNodeId: taxi.speedway.track.15
+      toNodeId: taxi.speedway.track.16
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.62325
+      travelCost: 18.62325
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.15>taxi.speedway.track.16
+        segmentId: taxi.speedway.track.15>taxi.speedway.track.16
+        distanceFromStartMeters: 0
+        position: {x: 3013.1746, y: 10, z: -798.53357}
+        forward: {x: -0.29028264, y: 0, z: -0.95694095}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.15>taxi.speedway.track.16
+        segmentId: taxi.speedway.track.15>taxi.speedway.track.16
+        distanceFromStartMeters: 18.62325
+        position: {x: 3007.7686, y: 10, z: -816.3549}
+        forward: {x: -0.29028264, y: 0, z: -0.95694095}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.16>taxi.speedway.track.17
+      segmentId: taxi.speedway.track.16>taxi.speedway.track.17
+      edgeId: taxi.speedway.track.16>taxi.speedway.track.17
+      fromNodeId: taxi.speedway.track.16
+      toNodeId: taxi.speedway.track.17
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623318
+      travelCost: 18.623318
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.16>taxi.speedway.track.17
+        segmentId: taxi.speedway.track.16>taxi.speedway.track.17
+        distanceFromStartMeters: 0
+        position: {x: 3007.7686, y: 10, z: -816.3549}
+        forward: {x: -0.47140113, y: 0, z: -0.88191885}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.16>taxi.speedway.track.17
+        segmentId: taxi.speedway.track.16>taxi.speedway.track.17
+        distanceFromStartMeters: 18.623318
+        position: {x: 2998.9895, y: 10, z: -832.7792}
+        forward: {x: -0.47140113, y: 0, z: -0.88191885}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.17>taxi.speedway.track.18
+      segmentId: taxi.speedway.track.17>taxi.speedway.track.18
+      edgeId: taxi.speedway.track.17>taxi.speedway.track.18
+      fromNodeId: taxi.speedway.track.17
+      toNodeId: taxi.speedway.track.18
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623264
+      travelCost: 18.623264
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.17>taxi.speedway.track.18
+        segmentId: taxi.speedway.track.17>taxi.speedway.track.18
+        distanceFromStartMeters: 0
+        position: {x: 2998.9895, y: 10, z: -832.7792}
+        forward: {x: -0.6343922, y: 0, z: -0.77301145}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.17>taxi.speedway.track.18
+        segmentId: taxi.speedway.track.17>taxi.speedway.track.18
+        distanceFromStartMeters: 18.623264
+        position: {x: 2987.175, y: 10, z: -847.1752}
+        forward: {x: -0.6343922, y: 0, z: -0.77301145}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.18>taxi.speedway.track.19
+      segmentId: taxi.speedway.track.18>taxi.speedway.track.19
+      edgeId: taxi.speedway.track.18>taxi.speedway.track.19
+      fromNodeId: taxi.speedway.track.18
+      toNodeId: taxi.speedway.track.19
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623077
+      travelCost: 18.623077
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.18>taxi.speedway.track.19
+        segmentId: taxi.speedway.track.18>taxi.speedway.track.19
+        distanceFromStartMeters: 0
+        position: {x: 2987.175, y: 10, z: -847.1752}
+        forward: {x: -0.7730061, y: 0, z: -0.6343985}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.18>taxi.speedway.track.19
+        segmentId: taxi.speedway.track.18>taxi.speedway.track.19
+        distanceFromStartMeters: 18.623077
+        position: {x: 2972.7793, y: 10, z: -858.9896}
+        forward: {x: -0.7730061, y: 0, z: -0.6343985}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.19>taxi.speedway.track.20
+      segmentId: taxi.speedway.track.19>taxi.speedway.track.20
+      edgeId: taxi.speedway.track.19>taxi.speedway.track.20
+      fromNodeId: taxi.speedway.track.19
+      toNodeId: taxi.speedway.track.20
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623314
+      travelCost: 18.623314
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.19>taxi.speedway.track.20
+        segmentId: taxi.speedway.track.19>taxi.speedway.track.20
+        distanceFromStartMeters: 0
+        position: {x: 2972.7793, y: 10, z: -858.9896}
+        forward: {x: -0.8819223, y: 0, z: -0.47139466}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.19>taxi.speedway.track.20
+        segmentId: taxi.speedway.track.19>taxi.speedway.track.20
+        distanceFromStartMeters: 18.623314
+        position: {x: 2956.355, y: 10, z: -867.76855}
+        forward: {x: -0.8819223, y: 0, z: -0.47139466}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.20>taxi.speedway.track.21
+      segmentId: taxi.speedway.track.20>taxi.speedway.track.21
+      edgeId: taxi.speedway.track.20>taxi.speedway.track.21
+      fromNodeId: taxi.speedway.track.20
+      toNodeId: taxi.speedway.track.21
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623209
+      travelCost: 18.623209
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.20>taxi.speedway.track.21
+        segmentId: taxi.speedway.track.20>taxi.speedway.track.21
+        distanceFromStartMeters: 0
+        position: {x: 2956.355, y: 10, z: -867.76855}
+        forward: {x: -0.95693976, y: 0, z: -0.29028654}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.20>taxi.speedway.track.21
+        segmentId: taxi.speedway.track.20>taxi.speedway.track.21
+        distanceFromStartMeters: 18.623209
+        position: {x: 2938.5337, y: 10, z: -873.1746}
+        forward: {x: -0.95693976, y: 0, z: -0.29028654}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.21>taxi.speedway.track.22
+      segmentId: taxi.speedway.track.21>taxi.speedway.track.22
+      edgeId: taxi.speedway.track.21>taxi.speedway.track.22
+      fromNodeId: taxi.speedway.track.21
+      toNodeId: taxi.speedway.track.22
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623365
+      travelCost: 18.623365
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.21>taxi.speedway.track.22
+        segmentId: taxi.speedway.track.21>taxi.speedway.track.22
+        distanceFromStartMeters: 0
+        position: {x: 2938.5337, y: 10, z: -873.1746}
+        forward: {x: -0.99518484, y: 0, z: -0.098015495}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.21>taxi.speedway.track.22
+        segmentId: taxi.speedway.track.21>taxi.speedway.track.22
+        distanceFromStartMeters: 18.623365
+        position: {x: 2920, y: 10, z: -875}
+        forward: {x: -0.99518484, y: 0, z: -0.098015495}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.22>taxi.speedway.track.23
+      segmentId: taxi.speedway.track.22>taxi.speedway.track.23
+      edgeId: taxi.speedway.track.22>taxi.speedway.track.23
+      fromNodeId: taxi.speedway.track.22
+      toNodeId: taxi.speedway.track.23
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.22>taxi.speedway.track.23
+        segmentId: taxi.speedway.track.22>taxi.speedway.track.23
+        distanceFromStartMeters: 0
+        position: {x: 2920, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.22>taxi.speedway.track.23
+        segmentId: taxi.speedway.track.22>taxi.speedway.track.23
+        distanceFromStartMeters: 20
+        position: {x: 2900, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.23>taxi.speedway.track.24
+      segmentId: taxi.speedway.track.23>taxi.speedway.track.24
+      edgeId: taxi.speedway.track.23>taxi.speedway.track.24
+      fromNodeId: taxi.speedway.track.23
+      toNodeId: taxi.speedway.track.24
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.23>taxi.speedway.track.24
+        segmentId: taxi.speedway.track.23>taxi.speedway.track.24
+        distanceFromStartMeters: 0
+        position: {x: 2900, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.23>taxi.speedway.track.24
+        segmentId: taxi.speedway.track.23>taxi.speedway.track.24
+        distanceFromStartMeters: 20
+        position: {x: 2880, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.24>taxi.speedway.track.25
+      segmentId: taxi.speedway.track.24>taxi.speedway.track.25
+      edgeId: taxi.speedway.track.24>taxi.speedway.track.25
+      fromNodeId: taxi.speedway.track.24
+      toNodeId: taxi.speedway.track.25
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.24>taxi.speedway.track.25
+        segmentId: taxi.speedway.track.24>taxi.speedway.track.25
+        distanceFromStartMeters: 0
+        position: {x: 2880, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.24>taxi.speedway.track.25
+        segmentId: taxi.speedway.track.24>taxi.speedway.track.25
+        distanceFromStartMeters: 20
+        position: {x: 2860, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.25>taxi.speedway.track.26
+      segmentId: taxi.speedway.track.25>taxi.speedway.track.26
+      edgeId: taxi.speedway.track.25>taxi.speedway.track.26
+      fromNodeId: taxi.speedway.track.25
+      toNodeId: taxi.speedway.track.26
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.25>taxi.speedway.track.26
+        segmentId: taxi.speedway.track.25>taxi.speedway.track.26
+        distanceFromStartMeters: 0
+        position: {x: 2860, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.25>taxi.speedway.track.26
+        segmentId: taxi.speedway.track.25>taxi.speedway.track.26
+        distanceFromStartMeters: 20
+        position: {x: 2840, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.26>taxi.speedway.track.27
+      segmentId: taxi.speedway.track.26>taxi.speedway.track.27
+      edgeId: taxi.speedway.track.26>taxi.speedway.track.27
+      fromNodeId: taxi.speedway.track.26
+      toNodeId: taxi.speedway.track.27
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.26>taxi.speedway.track.27
+        segmentId: taxi.speedway.track.26>taxi.speedway.track.27
+        distanceFromStartMeters: 0
+        position: {x: 2840, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.26>taxi.speedway.track.27
+        segmentId: taxi.speedway.track.26>taxi.speedway.track.27
+        distanceFromStartMeters: 20
+        position: {x: 2820, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.27>taxi.speedway.track.28
+      segmentId: taxi.speedway.track.27>taxi.speedway.track.28
+      edgeId: taxi.speedway.track.27>taxi.speedway.track.28
+      fromNodeId: taxi.speedway.track.27
+      toNodeId: taxi.speedway.track.28
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.27>taxi.speedway.track.28
+        segmentId: taxi.speedway.track.27>taxi.speedway.track.28
+        distanceFromStartMeters: 0
+        position: {x: 2820, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.27>taxi.speedway.track.28
+        segmentId: taxi.speedway.track.27>taxi.speedway.track.28
+        distanceFromStartMeters: 20
+        position: {x: 2800, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.28>taxi.speedway.track.29
+      segmentId: taxi.speedway.track.28>taxi.speedway.track.29
+      edgeId: taxi.speedway.track.28>taxi.speedway.track.29
+      fromNodeId: taxi.speedway.track.28
+      toNodeId: taxi.speedway.track.29
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.28>taxi.speedway.track.29
+        segmentId: taxi.speedway.track.28>taxi.speedway.track.29
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.28>taxi.speedway.track.29
+        segmentId: taxi.speedway.track.28>taxi.speedway.track.29
+        distanceFromStartMeters: 20
+        position: {x: 2780, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.29>taxi.speedway.track.30
+      segmentId: taxi.speedway.track.29>taxi.speedway.track.30
+      edgeId: taxi.speedway.track.29>taxi.speedway.track.30
+      fromNodeId: taxi.speedway.track.29
+      toNodeId: taxi.speedway.track.30
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.29>taxi.speedway.track.30
+        segmentId: taxi.speedway.track.29>taxi.speedway.track.30
+        distanceFromStartMeters: 0
+        position: {x: 2780, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.29>taxi.speedway.track.30
+        segmentId: taxi.speedway.track.29>taxi.speedway.track.30
+        distanceFromStartMeters: 20
+        position: {x: 2760, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.30>taxi.speedway.track.31
+      segmentId: taxi.speedway.track.30>taxi.speedway.track.31
+      edgeId: taxi.speedway.track.30>taxi.speedway.track.31
+      fromNodeId: taxi.speedway.track.30
+      toNodeId: taxi.speedway.track.31
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.30>taxi.speedway.track.31
+        segmentId: taxi.speedway.track.30>taxi.speedway.track.31
+        distanceFromStartMeters: 0
+        position: {x: 2760, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.30>taxi.speedway.track.31
+        segmentId: taxi.speedway.track.30>taxi.speedway.track.31
+        distanceFromStartMeters: 20
+        position: {x: 2740, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.31>taxi.speedway.track.32
+      segmentId: taxi.speedway.track.31>taxi.speedway.track.32
+      edgeId: taxi.speedway.track.31>taxi.speedway.track.32
+      fromNodeId: taxi.speedway.track.31
+      toNodeId: taxi.speedway.track.32
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.31>taxi.speedway.track.32
+        segmentId: taxi.speedway.track.31>taxi.speedway.track.32
+        distanceFromStartMeters: 0
+        position: {x: 2740, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.31>taxi.speedway.track.32
+        segmentId: taxi.speedway.track.31>taxi.speedway.track.32
+        distanceFromStartMeters: 20
+        position: {x: 2720, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.32>taxi.speedway.track.33
+      segmentId: taxi.speedway.track.32>taxi.speedway.track.33
+      edgeId: taxi.speedway.track.32>taxi.speedway.track.33
+      fromNodeId: taxi.speedway.track.32
+      toNodeId: taxi.speedway.track.33
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.32>taxi.speedway.track.33
+        segmentId: taxi.speedway.track.32>taxi.speedway.track.33
+        distanceFromStartMeters: 0
+        position: {x: 2720, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.32>taxi.speedway.track.33
+        segmentId: taxi.speedway.track.32>taxi.speedway.track.33
+        distanceFromStartMeters: 20
+        position: {x: 2700, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.33>taxi.speedway.track.34
+      segmentId: taxi.speedway.track.33>taxi.speedway.track.34
+      edgeId: taxi.speedway.track.33>taxi.speedway.track.34
+      fromNodeId: taxi.speedway.track.33
+      toNodeId: taxi.speedway.track.34
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.33>taxi.speedway.track.34
+        segmentId: taxi.speedway.track.33>taxi.speedway.track.34
+        distanceFromStartMeters: 0
+        position: {x: 2700, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.33>taxi.speedway.track.34
+        segmentId: taxi.speedway.track.33>taxi.speedway.track.34
+        distanceFromStartMeters: 20
+        position: {x: 2680, y: 10, z: -875}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.34>taxi.speedway.track.35
+      segmentId: taxi.speedway.track.34>taxi.speedway.track.35
+      edgeId: taxi.speedway.track.34>taxi.speedway.track.35
+      fromNodeId: taxi.speedway.track.34
+      toNodeId: taxi.speedway.track.35
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623365
+      travelCost: 18.623365
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.34>taxi.speedway.track.35
+        segmentId: taxi.speedway.track.34>taxi.speedway.track.35
+        distanceFromStartMeters: 0
+        position: {x: 2680, y: 10, z: -875}
+        forward: {x: -0.99518484, y: 0, z: 0.098015495}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.34>taxi.speedway.track.35
+        segmentId: taxi.speedway.track.34>taxi.speedway.track.35
+        distanceFromStartMeters: 18.623365
+        position: {x: 2661.4663, y: 10, z: -873.1746}
+        forward: {x: -0.99518484, y: 0, z: 0.098015495}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.35>taxi.speedway.track.36
+      segmentId: taxi.speedway.track.35>taxi.speedway.track.36
+      edgeId: taxi.speedway.track.35>taxi.speedway.track.36
+      fromNodeId: taxi.speedway.track.35
+      toNodeId: taxi.speedway.track.36
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623209
+      travelCost: 18.623209
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.35>taxi.speedway.track.36
+        segmentId: taxi.speedway.track.35>taxi.speedway.track.36
+        distanceFromStartMeters: 0
+        position: {x: 2661.4663, y: 10, z: -873.1746}
+        forward: {x: -0.95693976, y: 0, z: 0.29028654}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.35>taxi.speedway.track.36
+        segmentId: taxi.speedway.track.35>taxi.speedway.track.36
+        distanceFromStartMeters: 18.623209
+        position: {x: 2643.645, y: 10, z: -867.76855}
+        forward: {x: -0.95693976, y: 0, z: 0.29028654}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.36>taxi.speedway.track.37
+      segmentId: taxi.speedway.track.36>taxi.speedway.track.37
+      edgeId: taxi.speedway.track.36>taxi.speedway.track.37
+      fromNodeId: taxi.speedway.track.36
+      toNodeId: taxi.speedway.track.37
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623314
+      travelCost: 18.623314
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.36>taxi.speedway.track.37
+        segmentId: taxi.speedway.track.36>taxi.speedway.track.37
+        distanceFromStartMeters: 0
+        position: {x: 2643.645, y: 10, z: -867.76855}
+        forward: {x: -0.8819223, y: 0, z: 0.47139466}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.36>taxi.speedway.track.37
+        segmentId: taxi.speedway.track.36>taxi.speedway.track.37
+        distanceFromStartMeters: 18.623314
+        position: {x: 2627.2207, y: 10, z: -858.9896}
+        forward: {x: -0.8819223, y: 0, z: 0.47139466}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.37>taxi.speedway.track.38
+      segmentId: taxi.speedway.track.37>taxi.speedway.track.38
+      edgeId: taxi.speedway.track.37>taxi.speedway.track.38
+      fromNodeId: taxi.speedway.track.37
+      toNodeId: taxi.speedway.track.38
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623077
+      travelCost: 18.623077
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.37>taxi.speedway.track.38
+        segmentId: taxi.speedway.track.37>taxi.speedway.track.38
+        distanceFromStartMeters: 0
+        position: {x: 2627.2207, y: 10, z: -858.9896}
+        forward: {x: -0.7730061, y: 0, z: 0.6343985}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.37>taxi.speedway.track.38
+        segmentId: taxi.speedway.track.37>taxi.speedway.track.38
+        distanceFromStartMeters: 18.623077
+        position: {x: 2612.825, y: 10, z: -847.1752}
+        forward: {x: -0.7730061, y: 0, z: 0.6343985}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.38>taxi.speedway.track.39
+      segmentId: taxi.speedway.track.38>taxi.speedway.track.39
+      edgeId: taxi.speedway.track.38>taxi.speedway.track.39
+      fromNodeId: taxi.speedway.track.38
+      toNodeId: taxi.speedway.track.39
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623264
+      travelCost: 18.623264
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.38>taxi.speedway.track.39
+        segmentId: taxi.speedway.track.38>taxi.speedway.track.39
+        distanceFromStartMeters: 0
+        position: {x: 2612.825, y: 10, z: -847.1752}
+        forward: {x: -0.6343922, y: 0, z: 0.77301145}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.38>taxi.speedway.track.39
+        segmentId: taxi.speedway.track.38>taxi.speedway.track.39
+        distanceFromStartMeters: 18.623264
+        position: {x: 2601.0105, y: 10, z: -832.7792}
+        forward: {x: -0.6343922, y: 0, z: 0.77301145}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.39>taxi.speedway.track.40
+      segmentId: taxi.speedway.track.39>taxi.speedway.track.40
+      edgeId: taxi.speedway.track.39>taxi.speedway.track.40
+      fromNodeId: taxi.speedway.track.39
+      toNodeId: taxi.speedway.track.40
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623318
+      travelCost: 18.623318
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.39>taxi.speedway.track.40
+        segmentId: taxi.speedway.track.39>taxi.speedway.track.40
+        distanceFromStartMeters: 0
+        position: {x: 2601.0105, y: 10, z: -832.7792}
+        forward: {x: -0.47140113, y: 0, z: 0.88191885}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.39>taxi.speedway.track.40
+        segmentId: taxi.speedway.track.39>taxi.speedway.track.40
+        distanceFromStartMeters: 18.623318
+        position: {x: 2592.2314, y: 10, z: -816.3549}
+        forward: {x: -0.47140113, y: 0, z: 0.88191885}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.40>taxi.speedway.track.41
+      segmentId: taxi.speedway.track.40>taxi.speedway.track.41
+      edgeId: taxi.speedway.track.40>taxi.speedway.track.41
+      fromNodeId: taxi.speedway.track.40
+      toNodeId: taxi.speedway.track.41
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.62325
+      travelCost: 18.62325
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.40>taxi.speedway.track.41
+        segmentId: taxi.speedway.track.40>taxi.speedway.track.41
+        distanceFromStartMeters: 0
+        position: {x: 2592.2314, y: 10, z: -816.3549}
+        forward: {x: -0.29028264, y: 0, z: 0.95694095}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.40>taxi.speedway.track.41
+        segmentId: taxi.speedway.track.40>taxi.speedway.track.41
+        distanceFromStartMeters: 18.62325
+        position: {x: 2586.8254, y: 10, z: -798.53357}
+        forward: {x: -0.29028264, y: 0, z: 0.95694095}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.41>taxi.speedway.track.42
+      segmentId: taxi.speedway.track.41>taxi.speedway.track.42
+      edgeId: taxi.speedway.track.41>taxi.speedway.track.42
+      fromNodeId: taxi.speedway.track.41
+      toNodeId: taxi.speedway.track.42
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.62325
+      travelCost: 18.62325
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.41>taxi.speedway.track.42
+        segmentId: taxi.speedway.track.41>taxi.speedway.track.42
+        distanceFromStartMeters: 0
+        position: {x: 2586.8254, y: 10, z: -798.53357}
+        forward: {x: -0.098019384, y: 0, z: 0.99518454}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.41>taxi.speedway.track.42
+        segmentId: taxi.speedway.track.41>taxi.speedway.track.42
+        distanceFromStartMeters: 18.62325
+        position: {x: 2585, y: 10, z: -780}
+        forward: {x: -0.098019384, y: 0, z: 0.99518454}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.42>taxi.speedway.track.43
+      segmentId: taxi.speedway.track.42>taxi.speedway.track.43
+      edgeId: taxi.speedway.track.42>taxi.speedway.track.43
+      fromNodeId: taxi.speedway.track.42
+      toNodeId: taxi.speedway.track.43
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.62325
+      travelCost: 18.62325
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.42>taxi.speedway.track.43
+        segmentId: taxi.speedway.track.42>taxi.speedway.track.43
+        distanceFromStartMeters: 0
+        position: {x: 2585, y: 10, z: -780}
+        forward: {x: 0.098019384, y: 0, z: 0.99518454}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.42>taxi.speedway.track.43
+        segmentId: taxi.speedway.track.42>taxi.speedway.track.43
+        distanceFromStartMeters: 18.62325
+        position: {x: 2586.8254, y: 10, z: -761.46643}
+        forward: {x: 0.098019384, y: 0, z: 0.99518454}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.43>taxi.speedway.track.44
+      segmentId: taxi.speedway.track.43>taxi.speedway.track.44
+      edgeId: taxi.speedway.track.43>taxi.speedway.track.44
+      fromNodeId: taxi.speedway.track.43
+      toNodeId: taxi.speedway.track.44
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.62325
+      travelCost: 18.62325
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.43>taxi.speedway.track.44
+        segmentId: taxi.speedway.track.43>taxi.speedway.track.44
+        distanceFromStartMeters: 0
+        position: {x: 2586.8254, y: 10, z: -761.46643}
+        forward: {x: 0.29028264, y: 0, z: 0.95694095}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.43>taxi.speedway.track.44
+        segmentId: taxi.speedway.track.43>taxi.speedway.track.44
+        distanceFromStartMeters: 18.62325
+        position: {x: 2592.2314, y: 10, z: -743.6451}
+        forward: {x: 0.29028264, y: 0, z: 0.95694095}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.44>taxi.speedway.track.45
+      segmentId: taxi.speedway.track.44>taxi.speedway.track.45
+      edgeId: taxi.speedway.track.44>taxi.speedway.track.45
+      fromNodeId: taxi.speedway.track.44
+      toNodeId: taxi.speedway.track.45
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623318
+      travelCost: 18.623318
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.44>taxi.speedway.track.45
+        segmentId: taxi.speedway.track.44>taxi.speedway.track.45
+        distanceFromStartMeters: 0
+        position: {x: 2592.2314, y: 10, z: -743.6451}
+        forward: {x: 0.47140113, y: 0, z: 0.88191885}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.44>taxi.speedway.track.45
+        segmentId: taxi.speedway.track.44>taxi.speedway.track.45
+        distanceFromStartMeters: 18.623318
+        position: {x: 2601.0105, y: 10, z: -727.2208}
+        forward: {x: 0.47140113, y: 0, z: 0.88191885}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.45>taxi.speedway.track.46
+      segmentId: taxi.speedway.track.45>taxi.speedway.track.46
+      edgeId: taxi.speedway.track.45>taxi.speedway.track.46
+      fromNodeId: taxi.speedway.track.45
+      toNodeId: taxi.speedway.track.46
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623264
+      travelCost: 18.623264
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.45>taxi.speedway.track.46
+        segmentId: taxi.speedway.track.45>taxi.speedway.track.46
+        distanceFromStartMeters: 0
+        position: {x: 2601.0105, y: 10, z: -727.2208}
+        forward: {x: 0.6343922, y: 0, z: 0.77301145}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.45>taxi.speedway.track.46
+        segmentId: taxi.speedway.track.45>taxi.speedway.track.46
+        distanceFromStartMeters: 18.623264
+        position: {x: 2612.825, y: 10, z: -712.8248}
+        forward: {x: 0.6343922, y: 0, z: 0.77301145}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.46>taxi.speedway.track.47
+      segmentId: taxi.speedway.track.46>taxi.speedway.track.47
+      edgeId: taxi.speedway.track.46>taxi.speedway.track.47
+      fromNodeId: taxi.speedway.track.46
+      toNodeId: taxi.speedway.track.47
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623077
+      travelCost: 18.623077
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.46>taxi.speedway.track.47
+        segmentId: taxi.speedway.track.46>taxi.speedway.track.47
+        distanceFromStartMeters: 0
+        position: {x: 2612.825, y: 10, z: -712.8248}
+        forward: {x: 0.7730061, y: 0, z: 0.6343985}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.46>taxi.speedway.track.47
+        segmentId: taxi.speedway.track.46>taxi.speedway.track.47
+        distanceFromStartMeters: 18.623077
+        position: {x: 2627.2207, y: 10, z: -701.0104}
+        forward: {x: 0.7730061, y: 0, z: 0.6343985}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.47>taxi.speedway.track.48
+      segmentId: taxi.speedway.track.47>taxi.speedway.track.48
+      edgeId: taxi.speedway.track.47>taxi.speedway.track.48
+      fromNodeId: taxi.speedway.track.47
+      toNodeId: taxi.speedway.track.48
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623314
+      travelCost: 18.623314
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.47>taxi.speedway.track.48
+        segmentId: taxi.speedway.track.47>taxi.speedway.track.48
+        distanceFromStartMeters: 0
+        position: {x: 2627.2207, y: 10, z: -701.0104}
+        forward: {x: 0.8819223, y: 0, z: 0.47139466}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.47>taxi.speedway.track.48
+        segmentId: taxi.speedway.track.47>taxi.speedway.track.48
+        distanceFromStartMeters: 18.623314
+        position: {x: 2643.645, y: 10, z: -692.23145}
+        forward: {x: 0.8819223, y: 0, z: 0.47139466}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.48>taxi.speedway.track.49
+      segmentId: taxi.speedway.track.48>taxi.speedway.track.49
+      edgeId: taxi.speedway.track.48>taxi.speedway.track.49
+      fromNodeId: taxi.speedway.track.48
+      toNodeId: taxi.speedway.track.49
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623209
+      travelCost: 18.623209
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.48>taxi.speedway.track.49
+        segmentId: taxi.speedway.track.48>taxi.speedway.track.49
+        distanceFromStartMeters: 0
+        position: {x: 2643.645, y: 10, z: -692.23145}
+        forward: {x: 0.95693976, y: 0, z: 0.29028654}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.48>taxi.speedway.track.49
+        segmentId: taxi.speedway.track.48>taxi.speedway.track.49
+        distanceFromStartMeters: 18.623209
+        position: {x: 2661.4663, y: 10, z: -686.8254}
+        forward: {x: 0.95693976, y: 0, z: 0.29028654}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.49>taxi.speedway.track.50
+      segmentId: taxi.speedway.track.49>taxi.speedway.track.50
+      edgeId: taxi.speedway.track.49>taxi.speedway.track.50
+      fromNodeId: taxi.speedway.track.49
+      toNodeId: taxi.speedway.track.50
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 18.623365
+      travelCost: 18.623365
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.49>taxi.speedway.track.50
+        segmentId: taxi.speedway.track.49>taxi.speedway.track.50
+        distanceFromStartMeters: 0
+        position: {x: 2661.4663, y: 10, z: -686.8254}
+        forward: {x: 0.99518484, y: 0, z: 0.098015495}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.49>taxi.speedway.track.50
+        segmentId: taxi.speedway.track.49>taxi.speedway.track.50
+        distanceFromStartMeters: 18.623365
+        position: {x: 2680, y: 10, z: -685}
+        forward: {x: 0.99518484, y: 0, z: 0.098015495}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.50>taxi.speedway.track.51
+      segmentId: taxi.speedway.track.50>taxi.speedway.track.51
+      edgeId: taxi.speedway.track.50>taxi.speedway.track.51
+      fromNodeId: taxi.speedway.track.50
+      toNodeId: taxi.speedway.track.51
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.50>taxi.speedway.track.51
+        segmentId: taxi.speedway.track.50>taxi.speedway.track.51
+        distanceFromStartMeters: 0
+        position: {x: 2680, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.50>taxi.speedway.track.51
+        segmentId: taxi.speedway.track.50>taxi.speedway.track.51
+        distanceFromStartMeters: 20
+        position: {x: 2700, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.51>taxi.speedway.track.52
+      segmentId: taxi.speedway.track.51>taxi.speedway.track.52
+      edgeId: taxi.speedway.track.51>taxi.speedway.track.52
+      fromNodeId: taxi.speedway.track.51
+      toNodeId: taxi.speedway.track.52
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.51>taxi.speedway.track.52
+        segmentId: taxi.speedway.track.51>taxi.speedway.track.52
+        distanceFromStartMeters: 0
+        position: {x: 2700, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.51>taxi.speedway.track.52
+        segmentId: taxi.speedway.track.51>taxi.speedway.track.52
+        distanceFromStartMeters: 20
+        position: {x: 2720, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.52>taxi.speedway.track.53
+      segmentId: taxi.speedway.track.52>taxi.speedway.track.53
+      edgeId: taxi.speedway.track.52>taxi.speedway.track.53
+      fromNodeId: taxi.speedway.track.52
+      toNodeId: taxi.speedway.track.53
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.52>taxi.speedway.track.53
+        segmentId: taxi.speedway.track.52>taxi.speedway.track.53
+        distanceFromStartMeters: 0
+        position: {x: 2720, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.52>taxi.speedway.track.53
+        segmentId: taxi.speedway.track.52>taxi.speedway.track.53
+        distanceFromStartMeters: 20
+        position: {x: 2740, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.53>taxi.speedway.track.54
+      segmentId: taxi.speedway.track.53>taxi.speedway.track.54
+      edgeId: taxi.speedway.track.53>taxi.speedway.track.54
+      fromNodeId: taxi.speedway.track.53
+      toNodeId: taxi.speedway.track.54
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.53>taxi.speedway.track.54
+        segmentId: taxi.speedway.track.53>taxi.speedway.track.54
+        distanceFromStartMeters: 0
+        position: {x: 2740, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.53>taxi.speedway.track.54
+        segmentId: taxi.speedway.track.53>taxi.speedway.track.54
+        distanceFromStartMeters: 20
+        position: {x: 2760, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.54>taxi.speedway.track.55
+      segmentId: taxi.speedway.track.54>taxi.speedway.track.55
+      edgeId: taxi.speedway.track.54>taxi.speedway.track.55
+      fromNodeId: taxi.speedway.track.54
+      toNodeId: taxi.speedway.track.55
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.54>taxi.speedway.track.55
+        segmentId: taxi.speedway.track.54>taxi.speedway.track.55
+        distanceFromStartMeters: 0
+        position: {x: 2760, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.54>taxi.speedway.track.55
+        segmentId: taxi.speedway.track.54>taxi.speedway.track.55
+        distanceFromStartMeters: 20
+        position: {x: 2780, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.track.55>taxi.speedway.track.00
+      segmentId: taxi.speedway.track.55>taxi.speedway.track.00
+      edgeId: taxi.speedway.track.55>taxi.speedway.track.00
+      fromNodeId: taxi.speedway.track.55
+      toNodeId: taxi.speedway.track.00
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20
+      travelCost: 20
+      speedLimitMph: 45
+      laneCount: 4
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.55>taxi.speedway.track.00
+        segmentId: taxi.speedway.track.55>taxi.speedway.track.00
+        distanceFromStartMeters: 0
+        position: {x: 2780, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+      - roadId: taxi.speedway.track.55>taxi.speedway.track.00
+        segmentId: taxi.speedway.track.55>taxi.speedway.track.00
+        distanceFromStartMeters: 20
+        position: {x: 2800, y: 10, z: -685}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 28
+        laneWidthMeters: 7
+        laneCount: 4
+        speedLimitMph: 45
+    - roadId: taxi.speedway.garage>taxi.speedway.track.43
+      segmentId: taxi.speedway.garage>taxi.speedway.track.43
+      edgeId: taxi.speedway.garage>taxi.speedway.track.43
+      fromNodeId: taxi.speedway.garage
+      toNodeId: taxi.speedway.track.43
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 205.20709
+      travelCost: 205.20709
+      speedLimitMph: 20
+      laneCount: 2
+      laneWidthMeters: 5.5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.garage>taxi.speedway.track.43
+        segmentId: taxi.speedway.garage>taxi.speedway.track.43
+        distanceFromStartMeters: 0
+        position: {x: 2660, y: 0.2, z: -570}
+        forward: {x: -0.35658884, y: 0.047756635, z: -0.93304}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 11
+        laneWidthMeters: 5.5
+        laneCount: 2
+        speedLimitMph: 20
+      - roadId: taxi.speedway.garage>taxi.speedway.track.43
+        segmentId: taxi.speedway.garage>taxi.speedway.track.43
+        distanceFromStartMeters: 205.20709
+        position: {x: 2586.8254, y: 10, z: -761.46643}
+        forward: {x: -0.35658884, y: 0.047756635, z: -0.93304}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 11
+        laneWidthMeters: 5.5
+        laneCount: 2
+        speedLimitMph: 20
+    - roadId: taxi.speedway.track.43>taxi.speedway.garage
+      segmentId: taxi.speedway.track.43>taxi.speedway.garage
+      edgeId: taxi.speedway.track.43>taxi.speedway.garage
+      fromNodeId: taxi.speedway.track.43
+      toNodeId: taxi.speedway.garage
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 205.20709
+      travelCost: 205.20709
+      speedLimitMph: 20
+      laneCount: 2
+      laneWidthMeters: 5.5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.track.43>taxi.speedway.garage
+        segmentId: taxi.speedway.track.43>taxi.speedway.garage
+        distanceFromStartMeters: 0
+        position: {x: 2586.8254, y: 10, z: -761.46643}
+        forward: {x: 0.35658884, y: -0.047756635, z: 0.93304}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 11
+        laneWidthMeters: 5.5
+        laneCount: 2
+        speedLimitMph: 20
+      - roadId: taxi.speedway.track.43>taxi.speedway.garage
+        segmentId: taxi.speedway.track.43>taxi.speedway.garage
+        distanceFromStartMeters: 205.20709
+        position: {x: 2660, y: 0.2, z: -570}
+        forward: {x: 0.35658884, y: -0.047756635, z: 0.93304}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 11
+        laneWidthMeters: 5.5
+        laneCount: 2
+        speedLimitMph: 20
 --- !u!4 &590795209
 Transform:
   m_ObjectHideFlags: 0
@@ -115708,6 +119447,93 @@ Transform:
   m_Children: []
   m_Father: {fileID: 92841862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &612947970
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 612947971}
+  m_Layer: 0
+  m_Name: Truck Stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &612947971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612947970}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 827197255}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &613094994
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 613094995}
+  - component: {fileID: 613094996}
+  m_Layer: 0
+  m_Name: Take a Lap Start Line
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &613094995
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613094994}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2800, y: 10, z: -685}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 940360647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &613094996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613094994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99fcc5849ebb63e4682e30dcb1bb0350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiStopObjectivePoint
+  stableId: taxi.speedway.lap
+  displayName: Thunder Bowl Start Line
+  district: Speedway
+  category: 7
+  radius: 25
+  durationSeconds: 1
+  maximumSpeed: 99
+  viewDirection: {x: 0, y: 0, z: 1}
+  passengerTags: []
+  arrivalDialogue: Let's take a lap.
+  completionDialogue: That was a proper lap!
+  chaosReward: 0
 --- !u!1 &619601339
 GameObject:
   m_ObjectHideFlags: 0
@@ -115944,6 +119770,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1950817508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &634567750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 634567751}
+  m_Layer: 0
+  m_Name: Passenger Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &634567751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 634567750}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 78936858}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &636783077
 GameObject:
   m_ObjectHideFlags: 0
@@ -116070,6 +119927,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 92841862}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &638705500
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 638705501}
+  - component: {fileID: 638705503}
+  - component: {fileID: 638705502}
+  m_Layer: 0
+  m_Name: Thunder Bowl Parking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &638705501
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638705500}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2800, y: 0.2, z: -540}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1948018125}
+  - {fileID: 532986560}
+  m_Father: {fileID: 940360647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &638705502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638705500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7b9c413bfd0447806762e1a932a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapMarker
+  stableId: taxi.speedway.parking
+  label: Thunder Bowl Parking
+  markerType: 24
+  state: 2
+  source: {fileID: 0}
+  sourceLocalOffset: {x: 0, y: 0, z: 0}
+  assignedIcon: {fileID: 0}
+  compassPoi: {fileID: 0}
+  presented: 0
+--- !u!114 &638705503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 638705500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16adf4bf87e7af48bf8570758d60d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiRideLocation
+  locationName: Thunder Bowl Parking
+  locationId: taxi.speedway.parking
+  district: Speedway
+  locationType: 10
+  pickupAllowed: 1
+  dropoffAllowed: 1
+  passengerSpawnPoint: {fileID: 532986560}
+  truckStopPoint: {fileID: 1948018125}
+  detectionRadius: 17
+  tags: []
+  debugGizmos: 1
 --- !u!114 &643716293
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116670,6 +120606,85 @@ MonoBehaviour:
   roadSetback: 5
   walkingPaths:
   - {fileID: 695043925}
+--- !u!1 &686229879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 686229880}
+  - component: {fileID: 686229882}
+  - component: {fileID: 686229881}
+  m_Layer: 0
+  m_Name: Thunder Bowl VIP Entrance
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &686229880
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686229879}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2960, y: 0.2, z: -480}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 452997098}
+  - {fileID: 1224632514}
+  m_Father: {fileID: 940360647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &686229881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686229879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7b9c413bfd0447806762e1a932a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapMarker
+  stableId: taxi.speedway.vip-entrance
+  label: Thunder Bowl VIP Entrance
+  markerType: 24
+  state: 2
+  source: {fileID: 0}
+  sourceLocalOffset: {x: 0, y: 0, z: 0}
+  assignedIcon: {fileID: 0}
+  compassPoi: {fileID: 0}
+  presented: 0
+--- !u!114 &686229882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686229879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16adf4bf87e7af48bf8570758d60d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiRideLocation
+  locationName: Thunder Bowl VIP Entrance
+  locationId: taxi.speedway.vip-entrance
+  district: Speedway
+  locationType: 10
+  pickupAllowed: 1
+  dropoffAllowed: 1
+  passengerSpawnPoint: {fileID: 1224632514}
+  truckStopPoint: {fileID: 452997098}
+  detectionRadius: 17
+  tags: []
+  debugGizmos: 1
 --- !u!1 &686588890
 GameObject:
   m_ObjectHideFlags: 0
@@ -116941,6 +120956,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 262404086}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &700997492
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 700997493}
+  m_Layer: 0
+  m_Name: Passenger Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &700997493
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 700997492}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1661012236}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &709781258
 GameObject:
@@ -117456,6 +121502,62 @@ MonoBehaviour:
   arrivalDialogue: Quick handoff. It's probably just an aggressively wrapped sandwich.
   completionDialogue: Package acquired. Absolutely no follow-up questions.
   chaosReward: 50
+--- !u!1 &762790583
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 762790584}
+  - component: {fileID: 762790585}
+  m_Layer: 0
+  m_Name: Diner diversion stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &762790584
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762790583}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 92841862}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &762790585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 762790583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99fcc5849ebb63e4682e30dcb1bb0350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiStopObjectivePoint
+  stableId: taxi.stop.04.diner
+  displayName: Park Pavilion
+  district: Residential
+  category: 3
+  radius: 18
+  durationSeconds: 12
+  maximumSpeed: 0.447
+  viewDirection: {x: 0, y: 0, z: 1}
+  passengerTags: []
+  arrivalDialogue: 
+  completionDialogue: 
+  chaosReward: 0
 --- !u!1 &763288944
 GameObject:
   m_ObjectHideFlags: 0
@@ -117738,6 +121840,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1021719444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &827197254
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 827197255}
+  - component: {fileID: 827197257}
+  - component: {fileID: 827197256}
+  m_Layer: 0
+  m_Name: Thunder Bowl Main Gate
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &827197255
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827197254}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2800, y: 0.2, z: -470}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 612947971}
+  - {fileID: 336098890}
+  m_Father: {fileID: 940360647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &827197256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827197254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7b9c413bfd0447806762e1a932a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapMarker
+  stableId: taxi.speedway.main-gate
+  label: Thunder Bowl Main Gate
+  markerType: 24
+  state: 2
+  source: {fileID: 0}
+  sourceLocalOffset: {x: 0, y: 0, z: 0}
+  assignedIcon: {fileID: 0}
+  compassPoi: {fileID: 0}
+  presented: 0
+--- !u!114 &827197257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827197254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16adf4bf87e7af48bf8570758d60d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiRideLocation
+  locationName: Thunder Bowl Main Gate
+  locationId: taxi.speedway.main-gate
+  district: Speedway
+  locationType: 10
+  pickupAllowed: 1
+  dropoffAllowed: 1
+  passengerSpawnPoint: {fileID: 336098890}
+  truckStopPoint: {fileID: 612947971}
+  detectionRadius: 17
+  tags: []
+  debugGizmos: 1
 --- !u!1 &842851036
 GameObject:
   m_ObjectHideFlags: 0
@@ -118729,6 +122910,7 @@ Transform:
   m_Children:
   - {fileID: 183087682}
   - {fileID: 600332873}
+  - {fileID: 13315445}
   m_Father: {fileID: 496305326}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &932797858
@@ -118854,6 +123036,45 @@ MonoBehaviour:
   anchorType: 9
   authoredName: Center
   roadType: 
+--- !u!1 &940360646
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 940360647}
+  m_Layer: 0
+  m_Name: Thunder Bowl Speedway Metadata
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &940360647
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940360646}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 827197255}
+  - {fileID: 78936858}
+  - {fileID: 686229880}
+  - {fileID: 1614651558}
+  - {fileID: 638705501}
+  - {fileID: 1661012236}
+  - {fileID: 613094995}
+  - {fileID: 1392041263}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &951604790
 GameObject:
   m_ObjectHideFlags: 0
@@ -122082,6 +126303,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1197445905}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1224632513
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1224632514}
+  m_Layer: 0
+  m_Name: Passenger Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1224632514
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224632513}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 686229880}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1226252176
 GameObject:
   m_ObjectHideFlags: 0
@@ -123083,6 +127335,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 392128582}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1295242180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1295242181}
+  m_Layer: 0
+  m_Name: Passenger Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1295242181
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295242180}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1614651558}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1300400798
 GameObject:
   m_ObjectHideFlags: 0
@@ -124024,6 +128307,9 @@ MonoBehaviour:
     - {x: 166, y: 0.3, z: -75}
     - {x: 75, y: 0.3, z: 166}
     - {x: -166, y: 0.3, z: 75}
+    cruiseMetersPerSecond: 8
+    capacity: 20
+    fleetColor: {r: 1, g: 1, b: 1, a: 1}
   - id: taxi.bus.town02
     points:
     - {x: 3855, y: 0.3, z: -160}
@@ -124059,6 +128345,89 @@ MonoBehaviour:
     - {x: 4166, y: 0.3, z: -75}
     - {x: 4075, y: 0.3, z: 166}
     - {x: 3834, y: 0.3, z: 75}
+    cruiseMetersPerSecond: 8
+    capacity: 20
+    fleetColor: {r: 1, g: 1, b: 1, a: 1}
+  - id: taxi.bus.city01
+    points:
+    - {x: -320, y: 0.25, z: -320}
+    - {x: -160, y: 0.25, z: -320}
+    - {x: 0, y: 0.25, z: -320}
+    - {x: 160, y: 0.25, z: -320}
+    - {x: 320, y: 0.25, z: -320}
+    - {x: 320, y: 0.25, z: -160}
+    - {x: 320, y: 0.25, z: 0}
+    - {x: 320, y: 0.25, z: 160}
+    - {x: 320, y: 0.25, z: 320}
+    - {x: 160, y: 0.25, z: 320}
+    - {x: 0, y: 0.25, z: 320}
+    - {x: -160, y: 0.25, z: 320}
+    - {x: -320, y: 0.25, z: 320}
+    - {x: -320, y: 0.25, z: 160}
+    - {x: -320, y: 0.25, z: 0}
+    - {x: -320, y: 0.25, z: -160}
+    stops:
+    - {x: 0, y: 0.25, z: -320}
+    - {x: 320, y: 0.25, z: 0}
+    - {x: 0, y: 0.25, z: 320}
+    - {x: -320, y: 0.25, z: 0}
+    cruiseMetersPerSecond: 8
+    capacity: 26
+    fleetColor: {r: 0.15, g: 0.65, b: 0.75, a: 1}
+  - id: taxi.bus.shuttle02
+    points:
+    - {x: 3840, y: 0.25, z: -160}
+    - {x: 4000, y: 0.25, z: -160}
+    - {x: 4160, y: 0.25, z: -160}
+    - {x: 4160, y: 0.25, z: 0}
+    - {x: 4160, y: 0.25, z: 160}
+    - {x: 4000, y: 0.25, z: 160}
+    - {x: 3840, y: 0.25, z: 160}
+    - {x: 3840, y: 0.25, z: 0}
+    stops:
+    - {x: 4000, y: 0.25, z: -160}
+    - {x: 4160, y: 0.25, z: 0}
+    - {x: 4000, y: 0.25, z: 160}
+    - {x: 3840, y: 0.25, z: 0}
+    cruiseMetersPerSecond: 7
+    capacity: 12
+    fleetColor: {r: 0.9, g: 0.65, b: 0.15, a: 1}
+  - id: taxi.bus.regional
+    points:
+    - {x: 0, y: 0.25, z: 0}
+    - {x: 350, y: 0.25, z: 0}
+    - {x: 700, y: 0.25, z: -7}
+    - {x: 1100, y: 0.25, z: -7}
+    - {x: 1460, y: 0.25, z: -7}
+    - {x: 1780, y: 8.1, z: -7}
+    - {x: 2220, y: 8.1, z: -7}
+    - {x: 2540, y: 0.25, z: -7}
+    - {x: 2750, y: 0.25, z: -7}
+    - {x: 2800, y: 0.25, z: -45}
+    - {x: 2850, y: 0.25, z: -7}
+    - {x: 3100, y: 0.25, z: -7}
+    - {x: 3600, y: 0.25, z: -7}
+    - {x: 4000, y: 0.25, z: -7}
+    - {x: 4000, y: 0.25, z: 7}
+    - {x: 3600, y: 0.25, z: 7}
+    - {x: 3100, y: 0.25, z: 7}
+    - {x: 2850, y: 0.25, z: 7}
+    - {x: 2540, y: 0.25, z: 7}
+    - {x: 2220, y: 8.1, z: 7}
+    - {x: 1780, y: 8.1, z: 7}
+    - {x: 1460, y: 0.25, z: 7}
+    - {x: 1100, y: 0.25, z: 7}
+    - {x: 700, y: 0.25, z: 7}
+    - {x: 350, y: 0.25, z: 7}
+    - {x: 0, y: 0.25, z: 7}
+    stops:
+    - {x: 0, y: 0.25, z: 0}
+    - {x: 2800, y: 0.25, z: -45}
+    - {x: 4000, y: 0.25, z: -7}
+    - {x: 2850, y: 0.25, z: 7}
+    cruiseMetersPerSecond: 10
+    capacity: 32
+    fleetColor: {r: 0.85, g: 0.2, b: 0.3, a: 1}
   world: {fileID: 2113431616}
   player: {fileID: 0}
   spawnRadius: 340
@@ -124747,6 +129116,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 400363759}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1392041262
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1392041263}
+  - component: {fileID: 1392041264}
+  m_Layer: 0
+  m_Name: Thunder Bowl Speedway
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1392041263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392041262}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2800, y: 0.2, z: -470}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 940360647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1392041264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392041262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7b9c413bfd0447806762e1a932a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapMarker
+  stableId: taxi.speedway.poi
+  label: Thunder Bowl Speedway
+  markerType: 24
+  state: 1
+  source: {fileID: 0}
+  sourceLocalOffset: {x: 0, y: 0, z: 0}
+  assignedIcon: {fileID: 0}
+  compassPoi: {fileID: 0}
+  presented: 0
 --- !u!1 &1395600739
 GameObject:
   m_ObjectHideFlags: 0
@@ -126906,6 +131328,62 @@ Transform:
   m_Children: []
   m_Father: {fileID: 790809915}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1537198700
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1537198701}
+  - component: {fileID: 1537198702}
+  m_Layer: 0
+  m_Name: Diner diversion stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1537198701
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537198700}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8666505}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1537198702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537198700}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99fcc5849ebb63e4682e30dcb1bb0350, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiStopObjectivePoint
+  stableId: taxi.town02.stop.04.diner
+  displayName: Willow Gardens
+  district: Residential
+  category: 3
+  radius: 18
+  durationSeconds: 12
+  maximumSpeed: 0.447
+  viewDirection: {x: 0, y: 0, z: 1}
+  passengerTags: []
+  arrivalDialogue: 
+  completionDialogue: 
+  chaosReward: 0
 --- !u!1 &1540118747
 GameObject:
   m_ObjectHideFlags: 0
@@ -127892,6 +132370,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 700788407}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1614651557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1614651558}
+  - component: {fileID: 1614651560}
+  - component: {fileID: 1614651559}
+  m_Layer: 0
+  m_Name: Thunder Bowl Infield
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1614651558
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614651557}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2800, y: 0.2, z: -780}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2006489504}
+  - {fileID: 1295242181}
+  m_Father: {fileID: 940360647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1614651559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614651557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7b9c413bfd0447806762e1a932a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapMarker
+  stableId: taxi.speedway.infield
+  label: Thunder Bowl Infield
+  markerType: 24
+  state: 2
+  source: {fileID: 0}
+  sourceLocalOffset: {x: 0, y: 0, z: 0}
+  assignedIcon: {fileID: 0}
+  compassPoi: {fileID: 0}
+  presented: 0
+--- !u!114 &1614651560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1614651557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16adf4bf87e7af48bf8570758d60d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiRideLocation
+  locationName: Thunder Bowl Infield
+  locationId: taxi.speedway.infield
+  district: Speedway
+  locationType: 10
+  pickupAllowed: 1
+  dropoffAllowed: 1
+  passengerSpawnPoint: {fileID: 1295242181}
+  truckStopPoint: {fileID: 2006489504}
+  detectionRadius: 17
+  tags: []
+  debugGizmos: 1
 --- !u!1 &1614944069
 GameObject:
   m_ObjectHideFlags: 0
@@ -128252,6 +132809,85 @@ Transform:
   m_Children: []
   m_Father: {fileID: 970138629}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1661012235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1661012236}
+  - component: {fileID: 1661012238}
+  - component: {fileID: 1661012237}
+  m_Layer: 0
+  m_Name: Thunder Bowl Garage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1661012236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661012235}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2660, y: 0.2, z: -570}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2005183353}
+  - {fileID: 700997493}
+  m_Father: {fileID: 940360647}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1661012237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661012235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7b9c413bfd0447806762e1a932a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapMarker
+  stableId: taxi.speedway.garage
+  label: Thunder Bowl Garage
+  markerType: 24
+  state: 2
+  source: {fileID: 0}
+  sourceLocalOffset: {x: 0, y: 0, z: 0}
+  assignedIcon: {fileID: 0}
+  compassPoi: {fileID: 0}
+  presented: 0
+--- !u!114 &1661012238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661012235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c16adf4bf87e7af48bf8570758d60d62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiRideLocation
+  locationName: Thunder Bowl Garage
+  locationId: taxi.speedway.garage
+  district: Speedway
+  locationType: 10
+  pickupAllowed: 1
+  dropoffAllowed: 1
+  passengerSpawnPoint: {fileID: 700997493}
+  truckStopPoint: {fileID: 2005183353}
+  detectionRadius: 17
+  tags: []
+  debugGizmos: 1
 --- !u!1 &1661540163
 GameObject:
   m_ObjectHideFlags: 0
@@ -131289,6 +135925,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1947914208}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1948018124
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1948018125}
+  m_Layer: 0
+  m_Name: Truck Stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1948018125
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948018124}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 638705501}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1948316913
 GameObject:
   m_ObjectHideFlags: 0
@@ -131872,6 +136539,68 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 575388276}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2005183352
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2005183353}
+  m_Layer: 0
+  m_Name: Truck Stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2005183353
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005183352}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1661012236}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2006489503
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2006489504}
+  m_Layer: 0
+  m_Name: Truck Stop
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2006489504
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2006489503}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1614651558}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2016479348
 GameObject:
@@ -132772,6 +137501,13 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 2000, y: 0, z: 0}
       m_Extent: {x: 540, y: 100, z: 500}
+    population: 1
+  - id: taxi.speedway
+    displayName: Thunder Bowl Speedway
+    sceneName: Taxi_ThunderBowlSpeedway
+    bounds:
+      m_Center: {x: 2800, y: 0, z: -700}
+      m_Extent: {x: 390, y: 60, z: 500}
     population: 1
   - id: taxi.servicearea
     displayName: ServiceArea
@@ -135402,3 +140138,4 @@ SceneRoots:
   - {fileID: 178088118}
   - {fileID: 1523119733}
   - {fileID: 496305326}
+  - {fileID: 940360647}
