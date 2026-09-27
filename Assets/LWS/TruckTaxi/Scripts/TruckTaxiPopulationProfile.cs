@@ -7,16 +7,16 @@ namespace LWS.TruckTaxi
     {
         [Header("Truck Taxi only - measured baseline multipliers")]
         [Min(0), Tooltip("Scales the actual initial UTS pedestrian count, not the old maximumPeople cap.")]
-        public float pedestrianDensityMultiplier = 12;
+        public float pedestrianDensityMultiplier = 60;
         [Min(0), Tooltip("Scales the actual initial traffic count, not the theoretical lane capacity.")]
-        public float trafficDensityMultiplier = 5;
+        public float trafficDensityMultiplier = 25;
         [Min(0), Tooltip("0 measures the native startup batch. Set only after recording a verified runtime baseline.")]
         public int measuredPedestrianBaseline;
         [Min(0), Tooltip("0 measures the original startup attempts. Set after recording a verified runtime baseline.")]
         public int measuredTrafficBaseline;
         [Min(0), Tooltip("Explicit live-instance safety cap. Lowering this can reduce the requested multiplier; diagnostics report that.")]
-        public int maximumActivePedestrians = 288;
-        [Min(0)] public int maximumActiveTraffic = 60;
+        public int maximumActivePedestrians = 720;
+        [Min(0)] public int maximumActiveTraffic = 300;
         [Header("Authored city footprint (metres from population host)")]
         [Min(0), Tooltip("0 allows every authored spawn point. This is not a new navigation or spawning system.")]
         public float spawnRadius = 600;

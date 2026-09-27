@@ -12,17 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 232e6eec663387b4995fd4dc292802cb, type: 3}
   m_Name: TruckTaxiCityPopulation
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiPopulationProfile
-  pedestrianDensityMultiplier: 12
-  trafficDensityMultiplier: 5
+  pedestrianDensityMultiplier: 60
+  trafficDensityMultiplier: 25
   measuredPedestrianBaseline: 12
   measuredTrafficBaseline: 12
-  maximumActivePedestrians: 288
-  maximumActiveTraffic: 60
+  maximumActivePedestrians: 720
+  maximumActiveTraffic: 300
   spawnRadius: 600
   despawnRadius: 700
   maintenanceInterval: 0.5
-  maximumSpawnsPerPass: 8
+  maximumSpawnsPerPass: 16
   maximumActiveRagdolls: 24
   pedestrianSpawnClearance: 1.5
   trafficSpawnClearance: 14
   playerTrafficSpawnClearance: 20
+  optimizePresentation: 1
+  cullOffscreenAnimation: 1
+  lodTransitionMultiplier: 1.75
+  pedestrianShadowDistance: 60
+  trafficShadowDistance: 100
+  pedestrianReducedSkinningDistance: 50
+  disableSkinnedMotionVectors: 1
+  presentationDistanceHysteresis: 8

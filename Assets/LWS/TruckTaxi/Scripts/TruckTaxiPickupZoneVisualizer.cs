@@ -18,6 +18,9 @@ namespace LWS.TruckTaxi
         private TruckTaxiBootstrap host;
         private TruckTaxiRideLocation target;
         private LineRenderer ring, beacon;
+        private LineRenderer destinationRing, destinationBeacon;
+        private TextMeshPro destinationMarker;
+        private TruckTaxiRideLocation destinationTarget;
         private MeshRenderer area;
         private TextMeshPro marker;
         private Material material;
@@ -31,6 +34,13 @@ namespace LWS.TruckTaxi
             material=new Material(Shader.Find("Sprites/Default"));
             ring=Line("Pickup radius",.2f); ring.loop=true; ring.positionCount=Segments;
             beacon=Line("Pickup beacon",.3f); beacon.positionCount=2;
+            destinationRing=Line("Dropoff radius",.28f); destinationRing.loop=true; destinationRing.positionCount=Segments;
+            destinationBeacon=Line("Dropoff beacon",.35f); destinationBeacon.positionCount=2;
+            destinationMarker=new GameObject("Dropoff marker",typeof(TextMeshPro)).GetComponent<TextMeshPro>();
+            destinationMarker.transform.SetParent(transform,false);
+            if(host.hud.font!=null) destinationMarker.font=host.hud.font;
+            destinationMarker.fontSize=8; destinationMarker.alignment=TextAlignmentOptions.Center;
+            destinationMarker.rectTransform.sizeDelta=new Vector2(26,5);
             var surface=new GameObject("Pickup inner area",typeof(MeshFilter),typeof(MeshRenderer)); surface.transform.SetParent(transform,false);
             area=surface.GetComponent<MeshRenderer>(); area.sharedMaterial=material; area.shadowCastingMode=UnityEngine.Rendering.ShadowCastingMode.Off;
             disc=new Mesh { name="Taxi pickup area" }; surface.GetComponent<MeshFilter>().sharedMesh=disc;
@@ -38,6 +48,7 @@ namespace LWS.TruckTaxi
             if(host.hud.font!=null) marker.font=host.hud.font;
             marker.fontSize=8; marker.alignment=TextAlignmentOptions.Center; marker.rectTransform.sizeDelta=new Vector2(24,5);
             SetVisible(false);
+            SetDestinationVisible(false);
             host.Session.Changed+=OnSessionChanged;
         }
         private void OnSessionChanged()
@@ -58,10 +69,13 @@ namespace LWS.TruckTaxi
             if(speed>session.BoardingMaximumSpeed) return TruckTaxiPickupVisualState.TooFast;
             return session.State==TruckTaxiState.PassengerBoarding ? TruckTaxiPickupVisualState.Boarding : TruckTaxiPickupVisualState.Inside;
         }
+        public static bool HasDropoffTarget(TruckTaxiSession session) => session!=null && session.Destination!=null &&
+            (session.State==TruckTaxiState.DrivingToDestination || session.State==TruckTaxiState.PassengerExiting);
         private void Update()
         {
             if(host?.Player==null) return;
             var session=host.Session;
+            UpdateDestination(session);
             State=Evaluate(session,host.Player.transform.position,host.Player.GetComponent<Rigidbody>().linearVelocity.magnitude);
             if(State==TruckTaxiPickupVisualState.Hidden || !show) { SetVisible(false); target=null; return; }
             if(forcedState.HasValue) State=forcedState.Value;
@@ -83,6 +97,47 @@ namespace LWS.TruckTaxi
             if(showRadius || showCollider) for(int i=1;i<Segments;i++) Debug.DrawLine(ring.GetPosition(i-1),ring.GetPosition(i),Color.yellow);
             if(showPassengerSpawn && target.passengerSpawnPoint!=null) Debug.DrawRay(target.passengerSpawnPoint.position,Vector3.up*6,Color.cyan);
             if(showPreferredStop) Debug.DrawRay(target.StopPosition,Vector3.up*6,Color.green);
+        }
+        private void UpdateDestination(TruckTaxiSession session)
+        {
+            if(!show || !HasDropoffTarget(session))
+            { destinationTarget=null; SetDestinationVisible(false); return; }
+            if(destinationTarget!=session.Destination)
+            { destinationTarget=session.Destination; BuildDestinationGeometry(); }
+            float distance=Vector3.ProjectOnPlane(host.Player.transform.position-destinationTarget.StopPosition,Vector3.up).magnitude;
+            bool inside=destinationTarget.Contains(host.Player.transform.position);
+            var color=inside ? new Color(.15f,1f,.75f) : new Color(.05f,.75f,1f);
+            color.a=.8f+.2f*Mathf.Sin(Time.time*3);
+            SetDestinationVisible(true);
+            destinationRing.enabled=distance<240;
+            destinationBeacon.enabled=distance>40;
+            destinationRing.startColor=destinationRing.endColor=destinationBeacon.startColor=destinationBeacon.endColor=color;
+            destinationMarker.color=color;
+            destinationMarker.text=(inside ? "DROPOFF ZONE" : "PASSENGER DROPOFF")+"\n"+
+                destinationTarget.locationName+"  "+distance.ToString("0")+" m";
+            destinationMarker.transform.position=destinationTarget.StopPosition+Vector3.up*(distance>80 ? 15 : 6);
+            if(Camera.main!=null) destinationMarker.transform.rotation=Quaternion.LookRotation(
+                destinationMarker.transform.position-Camera.main.transform.position);
+            destinationMarker.transform.localScale=Vector3.one*Mathf.Clamp(distance/50,.5f,3);
+        }
+        private void BuildDestinationGeometry()
+        {
+            var center=Ground(destinationTarget.StopPosition);
+            for(int i=0;i<Segments;i++)
+            {
+                float angle=i*Mathf.PI*2/Segments;
+                destinationRing.SetPosition(i,Ground(destinationTarget.StopPosition+
+                    new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle))*destinationTarget.detectionRadius));
+            }
+            destinationBeacon.SetPosition(0,center);
+            destinationBeacon.SetPosition(1,center+Vector3.up*32);
+        }
+        private void SetDestinationVisible(bool value)
+        {
+            if(destinationRing==null) return;
+            destinationRing.gameObject.SetActive(value);
+            destinationBeacon.gameObject.SetActive(value);
+            destinationMarker.gameObject.SetActive(value);
         }
         private void BuildGeometry()
         {

@@ -7,7 +7,8 @@ using UnityEngine.UI;
 
 namespace LWS.TruckTaxi
 {
-    // Input System owns devices and rebinding; the existing EventSystem owns UI navigation.
+    // Taxi UI actions use Input System; legacy truck commands remain fixed direct reads.
+    // The existing EventSystem owns UI navigation.
     // A single submit dispatch prevents an offer acceptance also submitting the next panel.
     public sealed class TruckTaxiUIInput : System.IDisposable
     {
@@ -17,6 +18,15 @@ namespace LWS.TruckTaxi
         public InputAction Pause { get; }
         public InputAction Debug { get; }
         public InputAction Services { get; }
+        public InputAction ShowControls { get; }
+        public InputAction ToggleRideRequests { get; }
+        public InputAction CenterView { get; }
+        public InputAction CabMouseLook { get; }
+        public InputAction CabMouseLookHold { get; }
+        public InputAction CabGamepadLook { get; }
+        public InputAction Navigate => navigate;
+        public bool UsingGamepad => gamepad;
+        public Transform FocusRoot => scope;
         private InputAction navigate;
         private Transform scope;
         private readonly List<Selectable> controls=new List<Selectable>();
@@ -39,6 +49,12 @@ namespace LWS.TruckTaxi
             Pause=Button("Pause","<Keyboard>/escape","<Gamepad>/start");
             Debug=Button("Debug","<Keyboard>/f8",null);
             Services=Button("Services","<Keyboard>/end",null);
+            ShowControls=Button("ShowControls","<Keyboard>/f1",null);
+            ToggleRideRequests=Button("ToggleRideRequests","<Keyboard>/f2",null);
+            CenterView=Button("CenterView","<Keyboard>/backquote",null);
+            CabMouseLook=Actions.AddAction("CabMouseLook",InputActionType.PassThrough,"<Mouse>/delta");
+            CabMouseLookHold=Actions.AddAction("CabMouseLookHold",InputActionType.Button,"<Mouse>/rightButton");
+            CabGamepadLook=Actions.AddAction("CabGamepadLook",InputActionType.Value,"<Gamepad>/rightStick");
             navigate=Actions.AddAction("Navigate",InputActionType.Value);
             navigate.expectedControlType="Vector2";
             navigate.AddCompositeBinding("2DVector").With("Up","<Keyboard>/upArrow").With("Down","<Keyboard>/downArrow").With("Left","<Keyboard>/leftArrow").With("Right","<Keyboard>/rightArrow");
@@ -55,7 +71,21 @@ namespace LWS.TruckTaxi
         }
         private InputAction Button(string name,string keyboard,string pad)
         { var a=Actions.AddAction(name,InputActionType.Button,keyboard); if(pad!=null) a.AddBinding(pad); return a; }
-        private void RememberDevice(InputAction.CallbackContext context) => gamepad=context.control.device is Gamepad;
+        private void RememberDevice(InputAction.CallbackContext context)
+        {
+            if(context.action==CabMouseLook && context.ReadValue<Vector2>().sqrMagnitude<.001f) return;
+            gamepad=context.control.device is Gamepad;
+        }
+        public void RefreshDeviceFromHardware()
+        {
+            if(Gamepad.current!=null && Gamepad.current.wasUpdatedThisFrame) gamepad=true;
+            if(Keyboard.current!=null && Keyboard.current.wasUpdatedThisFrame ||
+                Mouse.current!=null && Mouse.current.wasUpdatedThisFrame) gamepad=false;
+        }
+        public void ToggleRideRequestsFor(TruckTaxiSession session)
+        {
+            if(session!=null) session.SetRideRequestsEnabled(!session.RideRequestsEnabled);
+        }
         public string Hint(InputAction action)
         {
             for(int i=0;i<action.bindings.Count;i++)

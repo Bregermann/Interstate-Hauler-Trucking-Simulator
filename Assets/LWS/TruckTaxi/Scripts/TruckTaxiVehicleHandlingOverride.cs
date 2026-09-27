@@ -17,6 +17,11 @@ namespace LWS.TruckTaxi
         [Range(90, 500)] public float steeringResponse = 300;
         [Tooltip("Seconds of input smoothing at low speed. Highway smoothing is 0.15 seconds.")]
         [Range(.01f, .2f)] public float lowSpeedSmoothing = .045f;
+        [Header("Truck Taxi only / NWH engine")]
+        [Tooltip("Engine power multiplier at rest; fades to the normal drivetrain by 20 MPH.")]
+        [Range(1, 5)] public float launchPowerAtRest = 3.4f;
+        [Tooltip("Engine power multiplier at 15 MPH.")]
+        [Range(1, 4)] public float launchPowerAt15Mph = 2.2f;
         public bool Applied { get; private set; }
         public float SteeringAngle => vehicle != null ? vehicle.steering.angle : 0;
         public float SteeringInput => vehicle != null ? vehicle.input.Steering : 0;
@@ -26,11 +31,34 @@ namespace LWS.TruckTaxi
         private float originalLock, originalRate;
         private bool originalRaw, originalReturn;
         private AnimationCurve originalCurve, originalSmoothing;
+        private TruckTaxiTemporaryEffects effects;
 
-        public void Initialize(VehicleController controller) { vehicle = controller; Apply(); }
+        public void Initialize(VehicleController controller)
+        {
+            if (vehicle != controller) Restore();
+            vehicle = controller;
+            Apply();
+        }
+        public void BindEffects(TruckTaxiTemporaryEffects activeEffects) { effects = activeEffects; }
+        public float CurrentPowerMultiplier => PowerModifier();
+        public static float LaunchMultiplier(float speedMph, float atRest = 3.4f, float at15Mph = 2.2f)
+        {
+            float speed = float.IsFinite(speedMph) ? Mathf.Abs(speedMph) : 20;
+            if (speed >= 20) return 1;
+            float start = Mathf.Max(1, atRest), middle = Mathf.Clamp(at15Mph, 1, start);
+            float t = speed < 15 ? speed / 15 : (speed - 15) / 5;
+            t = t * t * (3 - 2 * t);
+            return speed < 15 ? Mathf.Lerp(start, middle, t) : Mathf.Lerp(middle, 1, t);
+        }
+        private float PowerModifier()
+        {
+            if (!Applied || vehicle == null) return 1;
+            float launch = LaunchMultiplier(SpeedMph, launchPowerAtRest, launchPowerAt15Mph);
+            return launch * (effects?.VehiclePowerMultiplier ?? 1);
+        }
         public void Apply()
         {
-            if (vehicle == null || Applied) return;
+            if (vehicle == null || Applied || vehicle.powertrain?.engine == null) return;
             var steering = vehicle.steering;
             originalLock = steering.maximumSteerAngle; originalRate = steering.degreesPerSecondLimit;
             originalRaw = steering.useRawInput; originalReturn = steering.returnToCenter;
@@ -47,6 +75,8 @@ namespace LWS.TruckTaxi
                 new Keyframe(1, highSpeedSteeringLock / lowSpeedSteeringLock));
             steering.speedSensitiveSmoothingCurve = AnimationCurve.Linear(0, lowSpeedSmoothing, 1, .15f);
             Applied = true;
+            if (!vehicle.powertrain.engine.powerModifiers.Contains(PowerModifier))
+                vehicle.powertrain.engine.powerModifiers.Add(PowerModifier);
         }
         public void Restore()
         {
@@ -55,14 +85,17 @@ namespace LWS.TruckTaxi
             steering.maximumSteerAngle = originalLock; steering.degreesPerSecondLimit = originalRate;
             steering.useRawInput = originalRaw; steering.returnToCenter = originalReturn;
             steering.speedSensitiveSteeringCurve = originalCurve; steering.speedSensitiveSmoothingCurve = originalSmoothing;
+            vehicle.powertrain?.engine?.powerModifiers.Remove(PowerModifier);
             Applied = false;
         }
         public void Toggle() { if (Applied) Restore(); else Apply(); }
         public void ResetDefaults()
         {
             Restore(); lowSpeedSteeringLock = 65; citySteeringLock = 40; highSpeedSteeringLock = 8;
-            steeringResponse = 300; lowSpeedSmoothing = .045f; Apply();
+            steeringResponse = 300; lowSpeedSmoothing = .045f;
+            launchPowerAtRest = 3.4f; launchPowerAt15Mph = 2.2f; Apply();
         }
+        private void OnEnable() { if (vehicle != null) Apply(); }
         private void OnDisable() => Restore();
     }
 }

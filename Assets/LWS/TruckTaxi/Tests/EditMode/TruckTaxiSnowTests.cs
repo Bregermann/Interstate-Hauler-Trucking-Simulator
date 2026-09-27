@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi.Tests
 {
+    [Category("TaxiIntegrated")]
     public sealed class TruckTaxiSnowTests
     {
         private static TruckTaxiSnowRegion Region()
@@ -53,7 +54,7 @@ namespace LWS.TruckTaxi.Tests
             region.ClearSweep(new Vector3(0, 0, 1), new Vector3(0, 0, 5), 4.5f, .04f);
             float clearedGrip = TruckTaxiSnowTraction.GripForDepth(region.DepthAt(new Vector3(0, 0, 2)), region.MaximumDepth);
             Assert.Less(deepGrip, .5f);
-            Assert.Greater(deepRolling, 2f);
+            Assert.That(deepRolling, Is.InRange(1.1f, 1.25f));
             Assert.Greater(clearedGrip, deepGrip);
         }
 

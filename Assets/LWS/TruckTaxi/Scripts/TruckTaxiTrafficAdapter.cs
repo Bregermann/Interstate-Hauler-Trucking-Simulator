@@ -15,6 +15,15 @@ namespace LWS.TruckTaxi
         [Tooltip("Optional Taxi-only override. Unassigned or disabled preserves the original baseline setup.")]
         public TruckTaxiPopulationProfile densityProfile;
         public bool useDensityOverride = true;
+        [Header("Taxi traffic behaviour")]
+        public bool useTaxiBoulevardLanes = true;
+        public AudioClip trafficHorn;
+        private readonly List<Vector3[]> runtimePathPoints = new List<Vector3[]>();
+        private TruckTaxiIntersection[] intersections = System.Array.Empty<TruckTaxiIntersection>();
+        public int RuntimeLaneCount => validLanes.Count;
+        public int LaneChanges { get; private set; }
+        private readonly List<LaneReservation> laneReservations = new List<LaneReservation>();
+        private struct LaneReservation { public int lane; public Vector3 position; public float until; }
         private readonly LwsUtsTrafficApi api = new LwsUtsTrafficApi();
         private readonly List<Component> paths = new List<Component>();
         private readonly List<LwsTrafficLaneDefinition> validLanes = new List<LwsTrafficLaneDefinition>();
@@ -91,7 +100,7 @@ namespace LWS.TruckTaxi
             vehicle = api.SpawnVehicle(trafficPrefabs[prefabIndex], paths[bestLane], validLanes[bestLane],
                 bestPoint, transform, policy, out string message);
             if (vehicle == null) { Debug.LogWarning(message, this); return false; }
-            stableId = RegisterVehicle(vehicle, requestedId);
+            stableId = RegisterVehicle(vehicle, bestLane, requestedId);
             dedicatedVehicles.Add(vehicle);
             return true;
         }
@@ -113,13 +122,22 @@ namespace LWS.TruckTaxi
         {
             if (initialized) return;
             if (!api.IsAvailable) { Debug.LogError(api.AvailabilitySummary,this); return; }
-            foreach (var lane in cityLanes ?? System.Array.Empty<LwsTrafficLaneDefinition>())
+            intersections = GetComponentsInChildren<TruckTaxiIntersection>();
+            if (intersections.Length == 0) intersections = FindObjectsByType<TruckTaxiIntersection>(FindObjectsSortMode.None);
+            if (trafficHorn == null) trafficHorn = Resources.Load<AudioClip>("NWH Vehicle Physics 2/Defaults/Sound/Horn");
+            foreach (var lane in useTaxiBoulevardLanes ? TruckTaxiTrafficLaneNetwork.ExpandTaxiBoulevards(cityLanes) : cityLanes ?? System.Array.Empty<LwsTrafficLaneDefinition>())
             {
                 if (lane == null || lane.centerline == null || lane.centerline.Length < 5) continue;
                 var root = new GameObject(lane.laneId); root.transform.SetParent(transform,false);
                 var path = api.CreatePath(root,lane,trafficPrefabs,policy,out string message);
                 if (path == null) { Debug.LogError(message,this); Destroy(root); continue; }
                 paths.Add(path); validLanes.Add(lane);
+                var countMethod = path.GetType().GetMethod("getPointsTotal");
+                var pointMethod = path.GetType().GetMethod("getNextPoint");
+                int count = (int)countMethod.Invoke(path, new object[] { 0 });
+                var points = new Vector3[count];
+                for (int p = 0; p < count; p++) points[p] = (Vector3)pointMethod.Invoke(path, new object[] { 0, p });
+                runtimePathPoints.Add(points);
             }
             // Measure the old startup behavior before enabling any density override.
             for (int i=0;i<maximumVehicles;i++) TrySpawnTraffic(maximumVehicles, false);
@@ -150,7 +168,7 @@ namespace LWS.TruckTaxi
             if (!HasSpawnClearance(position, clearance, playerClearance)) { RejectedSpawnAttempts++; return false; }
             var vehicle = api.SpawnVehicle(trafficPrefabs[cursor % trafficPrefabs.Length],paths[index],lane,point,transform,policy,out string message);
             if (vehicle == null) { RejectedSpawnAttempts++; Debug.LogWarning(message,this); return false; }
-            RegisterVehicle(vehicle);
+            RegisterVehicle(vehicle, index);
             return true;
         }
         private bool HasSpawnClearance(Vector3 position, float vehicleClearance, float playerClearance)
@@ -160,7 +178,7 @@ namespace LWS.TruckTaxi
             var player = TruckTaxiBootstrap.Instance?.Player;
             return player == null || (player.transform.position-position).sqrMagnitude >= playerClearance*playerClearance;
         }
-        private string RegisterVehicle(GameObject vehicle, string requestedId = null)
+        private string RegisterVehicle(GameObject vehicle, int lane, string requestedId = null)
         {
             // Runtime-added UTS components need their Start lifecycle before AI calls Move.
             foreach (var component in vehicle.GetComponentsInChildren<MonoBehaviour>(true))
@@ -181,6 +199,7 @@ namespace LWS.TruckTaxi
             vehicles.Add(vehicle);
             vehiclesById.Add(target.targetId, vehicle);
             vehicle.AddComponent<TruckTaxiRoadRage>();
+            vehicle.AddComponent<TruckTaxiTrafficBehaviour>().Initialize(this, lane, target.targetId, trafficHorn);
             var presentation = new TruckTaxiPopulationPresentation(vehicle, false);
             presentations.Add(vehicle, presentation);
             presentation.Refresh(DensityEnabled ? densityProfile : null, PresentationObserver());
@@ -190,6 +209,63 @@ namespace LWS.TruckTaxi
         {
             yield return null;
             if (ai != null) ai.enabled = true;
+        }
+        public float LaneSpeed(int lane) => lane >= 0 && lane < validLanes.Count ? validLanes[lane].speedLimitMph * .44704f : 10;
+
+        public float SignalStoppingDistance(Vector3 front, Vector3 forward, float reach)
+        {
+            float distance = float.PositiveInfinity;
+            foreach (var intersection in intersections)
+                if (intersection != null && intersection.TryGetStopDistance(front, forward, reach, out float candidate))
+                    distance = Mathf.Min(distance, candidate);
+            return distance;
+        }
+
+        public bool TryChangeLane(TruckTaxiTrafficBehaviour driver, bool emergency)
+        {
+            if (driver == null || driver.ChangingLane || driver.LaneIndex < 0 || driver.LaneIndex >= validLanes.Count) return false;
+            Vector3 position = driver.transform.position, forward = driver.transform.forward;
+            // No lateral manoeuvres on junction approaches, curves or unregistered lanes.
+            var graph = TruckTaxiBootstrap.Instance?.roadGraph?.Graph;
+            if(graph!=null)
+                foreach(var node in graph.nodes) if(Vector3.Distance(position,node.position)<28) return false;
+            foreach (var intersection in intersections)
+                if (intersection != null && Vector3.Distance(position, intersection.transform.position) < 35) return false;
+            for (int candidate = 0; candidate < validLanes.Count; candidate++)
+            {
+                if (!TruckTaxiTrafficLaneNetwork.AreAdjacent(validLanes[driver.LaneIndex], validLanes[candidate])) continue;
+                var points = runtimePathPoints[candidate];
+                int closest = -1; float distance = 8 * 8;
+                for (int p = 2; p < points.Length - 3; p++)
+                {
+                    float sqr = (points[p] - position).sqrMagnitude;
+                    if (sqr >= distance || Vector3.Dot((points[p + 1] - points[p]).normalized, forward) < .97f ||
+                        !TruckTaxiTrafficLaneNetwork.IsStraight(points[p - 1], points[p], points[p + 1])) continue;
+                    closest = p; distance = sqr;
+                }
+                if (closest < 0) continue;
+                Vector3 tangent = (points[closest + 1] - points[closest]).normalized;
+                Vector3 lanePosition = points[closest] + tangent * Vector3.Dot(position - points[closest], tangent);
+                float lateral = Vector3.Distance(lanePosition, position);
+                if (lateral < 2.5f || lateral > 5) continue;
+                float rearGap = Mathf.Max(12, driver.Speed * (driver.Personality >= TruckTaxiDriverPersonality.Aggressive ? 1.3f : 1.8f));
+                float ahead = Mathf.Max(15, driver.Speed * 1.6f);
+                if (!driver.GapClear(lanePosition, tangent, ahead, rearGap)) continue;
+                bool reserved=false;
+                for(int r=laneReservations.Count-1;r>=0;r--)
+                {
+                    if(laneReservations[r].until<Time.time) { laneReservations.RemoveAt(r); continue; }
+                    if(laneReservations[r].lane==candidate && Vector3.Distance(laneReservations[r].position,lanePosition)<ahead+rearGap) reserved=true;
+                }
+                if(reserved) continue;
+                int target = closest;
+                while (target < points.Length - 3 && Vector3.Dot(points[target] - position, forward) < ahead) target++;
+                if (Vector3.Dot(points[target] - position, forward) < 10 ||
+                    !TruckTaxiTrafficLaneNetwork.IsStraight(points[target - 1], points[target], points[target + 1])) continue;
+                if (driver.SwitchLane(paths[candidate], target - 1, candidate))
+                { LaneChanges++; laneReservations.Add(new LaneReservation { lane=candidate,position=lanePosition,until=Time.time+4 }); return true; }
+            }
+            return false;
         }
         public static int DensePointIndex(int cursor, int laneCount, int pointCount)
         {

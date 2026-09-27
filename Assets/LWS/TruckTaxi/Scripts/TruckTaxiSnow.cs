@@ -227,6 +227,13 @@ namespace LWS.TruckTaxi
     // Applies local depth through the same public NWH wheel properties as the LWS road-condition adapter.
     public sealed class TruckTaxiSnowTraction : MonoBehaviour
     {
+        [Header("Local taxi snow physics")]
+        [Tooltip("Longitudinal grip at maximum local snow depth.")]
+        [Range(.2f, 1f)] public float deepSnowLongitudinalGrip = .56f;
+        [Tooltip("Lateral grip at maximum local snow depth; lower than drive grip to favor sliding.")]
+        [Range(.15f, 1f)] public float deepSnowLateralGrip = .36f;
+        [Tooltip("Rolling resistance at maximum depth. Keep modest so snow does not bury the taxi.")]
+        [Range(1f, 2f)] public float deepSnowRollingMultiplier = 1.18f;
         private readonly List<Wheel> wheels = new List<Wheel>();
         private TruckTaxiSnowRegion region;
         private float nextApply;
@@ -286,21 +293,26 @@ namespace LWS.TruckTaxi
                 if (grounded) wheel.lastContact = contact;
                 if (apply)
                 {
-                    float grip = GripForDepth(depth, region.MaximumDepth);
-                    float rolling = RollingForDepth(depth, region.MaximumDepth);
-                    CurrentGripMultiplier = Mathf.Min(CurrentGripMultiplier, grip);
+                    float longitudinal = GripForDepth(depth, region.MaximumDepth, deepSnowLongitudinalGrip);
+                    float lateral = GripForDepth(depth, region.MaximumDepth, deepSnowLateralGrip);
+                    float rolling = RollingForDepth(depth, region.MaximumDepth, deepSnowRollingMultiplier);
+                    CurrentGripMultiplier = Mathf.Min(CurrentGripMultiplier, lateral);
                     CurrentRollingMultiplier = Mathf.Max(CurrentRollingMultiplier, rolling);
                     if (depth <= .001f) Restore(ref wheel);
-                    else Apply(ref wheel, grip, rolling);
+                    else Apply(ref wheel, longitudinal, lateral, rolling);
                 }
                 wheels[i] = wheel;
             }
         }
         public static float GripForDepth(float depth, float maximumDepth) =>
-            Mathf.Lerp(1, .42f, Mathf.Clamp01(depth / Mathf.Max(.1f, maximumDepth)));
+            GripForDepth(depth, maximumDepth, .36f);
+        public static float GripForDepth(float depth, float maximumDepth, float deepSnowGrip) =>
+            Mathf.Lerp(1, Mathf.Clamp01(deepSnowGrip), Mathf.Clamp01(depth / Mathf.Max(.1f, maximumDepth)));
         public static float RollingForDepth(float depth, float maximumDepth) =>
-            Mathf.Lerp(1, 2.5f, Mathf.Clamp01(depth / Mathf.Max(.1f, maximumDepth)));
-        private static void Apply(ref Wheel wheel, float grip, float rolling)
+            RollingForDepth(depth, maximumDepth, 1.18f);
+        public static float RollingForDepth(float depth, float maximumDepth, float deepSnowRolling) =>
+            Mathf.Lerp(1, Mathf.Max(1, deepSnowRolling), Mathf.Clamp01(depth / Mathf.Max(.1f, maximumDepth)));
+        private static void Apply(ref Wheel wheel, float longitudinal, float lateral, float rolling)
         {
             WheelUAPI api = wheel.api;
             if (!wheel.modified || !Mathf.Approximately(api.LongitudinalFrictionGrip, wheel.appliedLongitudinal))
@@ -309,8 +321,8 @@ namespace LWS.TruckTaxi
                 wheel.lateral = api.LateralFrictionGrip;
             if (!wheel.modified || !Mathf.Approximately(api.RollingResistanceTorque, wheel.appliedRolling))
                 wheel.rolling = api.RollingResistanceTorque;
-            wheel.appliedLongitudinal = wheel.longitudinal * grip;
-            wheel.appliedLateral = wheel.lateral * grip;
+            wheel.appliedLongitudinal = wheel.longitudinal * longitudinal;
+            wheel.appliedLateral = wheel.lateral * lateral;
             wheel.appliedRolling = wheel.rolling * rolling;
             api.LongitudinalFrictionGrip = wheel.appliedLongitudinal;
             api.LateralFrictionGrip = wheel.appliedLateral;

@@ -58,6 +58,8 @@ namespace LWS.TruckTaxi
             if (body == null) return false;
             indicatorSources = owner.Player.GetComponentsInChildren<LwsKeyboardGamepadTruckInputSource>(true);
             State = new TruckTaxiDriverNeedsState(settings, 20925);
+            host.Handling?.BindEffects(State.Effects);
+            (GetComponent<TruckTaxiEffectPresentation>() ?? gameObject.AddComponent<TruckTaxiEffectPresentation>()).Initialize(State.Effects);
             TruckTaxiServicePoint.BindExistingPoints(owner.gameObject.scene);
             if (owner.gameObject.scene.name == TruckTaxiMainMenu.FreePlaySceneName) State.GrantFreePlayTestInventory();
             State.Event += OnJugInputEvent;
@@ -190,8 +192,8 @@ namespace LWS.TruckTaxi
         public bool ConsumeItem(TruckTaxiNeedsItem item)
         {
             if (State == null || State.JugActive || !State.Consume(item)) { Feedback = "Item unavailable."; return false; }
-            Feedback = item == TruckTaxiNeedsItem.MysteryMushrooms ? "The dashboard briefly seems much more interesting." :
-                item == TruckTaxiNeedsItem.HighOctaneSuppository ? "A ridiculous arcade jolt. No handling change." : "Used " + TruckTaxiNeedsItems.Find(item).Name + ".";
+            Feedback = item == TruckTaxiNeedsItem.MysteryMushrooms ? "Everything looks unusually vivid." :
+                item == TruckTaxiNeedsItem.HighOctaneSuppository ? "High-octane boost active." : "Used " + TruckTaxiNeedsItems.Find(item).Name + ".";
             if (item == TruckTaxiNeedsItem.MysteryMushrooms || item == TruckTaxiNeedsItem.HighOctaneSuppository)
                 host.Session.ApplyMechanicReward(2, 0);
             host.Session.React(Feedback);
@@ -235,7 +237,7 @@ namespace LWS.TruckTaxi
             visual.transform.localScale = item == TruckTaxiNeedsItem.FilledJug ? new Vector3(.12f, .2f, .12f) : new Vector3(.09f, .14f, .09f);
             var collider = visual.GetComponent<Collider>(); collider.enabled = false;
             var projectile = visual.AddComponent<TruckTaxiFilledContainerProjectile>();
-            projectile.Configure(containerImpactClip);
+            projectile.Configure(containerImpactClip, host, body);
             var rigidbody = visual.GetComponent<Rigidbody>(); rigidbody.mass = .35f; rigidbody.isKinematic = true;
             float elapsed = 0;
             while (elapsed < .12f && visual != null && throwAnchor != null)

@@ -19,8 +19,9 @@ namespace LWS.TruckTaxi
         private bool freePlayInventoryGranted;
         public float Hunger { get; private set; }
         public float Thirst { get; private set; }
-        public float StrangeUiSeconds { get; private set; }
-        public float ArcadeRushSeconds { get; private set; }
+        public TruckTaxiTemporaryEffects Effects { get; } = new TruckTaxiTemporaryEffects();
+        public float StrangeUiSeconds => Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.MysteryMushroom).RemainingSeconds;
+        public float ArcadeRushSeconds => Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.HighOctaneBoost).RemainingSeconds;
         public int BottlesThrown { get; private set; }
         public int JugsThrown { get; private set; }
         public float Pressure { get; private set; }
@@ -66,8 +67,8 @@ namespace LWS.TruckTaxi
             if (seconds <= 0 || double.IsNaN(seconds) || double.IsInfinity(seconds)) return;
             double untilFull = (1 - Pressure) * cycleSeconds;
             Pressure = Mathf.Clamp01(Pressure + (float)(seconds / cycleSeconds));
-            Hunger = Mathf.Clamp01(Hunger + (float)(seconds / (8 * 3600)));
-            Thirst = Mathf.Clamp01(Thirst + (float)(seconds / (5 * 3600)));
+            Hunger = Mathf.Clamp01(Hunger + (float)(seconds / (8 * 3600)) * Effects.HungerRateMultiplier);
+            Thirst = Mathf.Clamp01(Thirst + (float)(seconds / (5 * 3600)) * Effects.ThirstRateMultiplier);
             if (Pressure >= .85f && !urgentEmitted) { urgentEmitted = true; Event?.Invoke(TruckTaxiDriverNeedEvent.BladderUrgent); }
             if (Pressure < 1) return;
             crisisSeconds += (float)Math.Max(0, seconds - untilFull);
@@ -83,6 +84,8 @@ namespace LWS.TruckTaxi
             Pressure = float.IsFinite(value) ? Mathf.Clamp01(value) : 0;
             crisisSeconds = 0; urgentEmitted = Pressure < .85f ? false : urgentEmitted;
         }
+        // Called by the completed adult interaction, never by ordinary drinks.
+        public void SatisfyThirst() { Thirst = 0; }
         public bool StartJug()
         {
             if (!CanStartJug) return false;
@@ -157,17 +160,15 @@ namespace LWS.TruckTaxi
                 item != TruckTaxiNeedsItem.HighOctaneSuppository && item != TruckTaxiNeedsItem.MysteryMushrooms) ||
                 (entry.CreatesBottle && !CanAdd(TruckTaxiNeedsItem.EmptyBottle)) || !RemoveItem(item)) return false;
             Hunger = Mathf.Clamp01(Hunger - entry.HungerRelief);
-            Thirst = Mathf.Clamp01(Thirst - entry.ThirstRelief);
             if (entry.CreatesBottle) AddItem(TruckTaxiNeedsItem.EmptyBottle);
-            if (item == TruckTaxiNeedsItem.MysteryMushrooms) StrangeUiSeconds = 12;
-            if (item == TruckTaxiNeedsItem.HighOctaneSuppository) ArcadeRushSeconds = 8;
+            if (item == TruckTaxiNeedsItem.MysteryMushrooms) Effects.Activate(TruckTaxiTemporaryEffectKind.MysteryMushroom);
+            if (item == TruckTaxiNeedsItem.HighOctaneSuppository) Effects.Activate(TruckTaxiTemporaryEffectKind.HighOctaneBoost);
+            if (item == TruckTaxiNeedsItem.EnergyDrink) Effects.Activate(TruckTaxiTemporaryEffectKind.EnergyDrink);
             return true;
         }
         public void TickArcadeEffects(float seconds)
         {
-            if (seconds <= 0 || !float.IsFinite(seconds)) return;
-            StrangeUiSeconds = Mathf.Max(0, StrangeUiSeconds - seconds);
-            ArcadeRushSeconds = Mathf.Max(0, ArcadeRushSeconds - seconds);
+            Effects.Tick(seconds);
         }
         public bool ThrowFilled(TruckTaxiNeedsItem item)
         {

@@ -7,13 +7,22 @@ namespace LWS.TruckTaxi
     // Bounded startup sampling. UTS still owns each actor's locomotion; this only supplies reachable points.
     public sealed class TruckTaxiPedestrianWalkGraph
     {
-        private const int MaximumCells = 1024;
+        private const int MaximumCells = 8192;
+        private readonly Dictionary<long, TruckTaxiIntersection> crossingEntries = new Dictionary<long, TruckTaxiIntersection>();
+        private readonly Dictionary<int, TruckTaxiIntersection> crossingExits = new Dictionary<int, TruckTaxiIntersection>();
+        private readonly List<CrossingJourney> crossingJourneys = new List<CrossingJourney>();
         private readonly List<Vector3> points = new List<Vector3>();
         private readonly List<int>[] links;
         private readonly int[] component;
+        private readonly int[] routePrevious;
+        private readonly int[] routeVisited;
+        private readonly int[] routeQueue;
+        private int routeGeneration;
         private readonly int[] spawnOrder;
         private readonly LwsTrafficLaneDefinition[] lanes;
         private readonly List<RoadSegment> roadSegments = new List<RoadSegment>();
+        private readonly Dictionary<long, List<int>> roadBins = new Dictionary<long, List<int>>();
+        private readonly List<int> longRoadSegments = new List<int>();
         private readonly List<Bounds> buildingBounds = new List<Bounds>();
         private readonly Collider[] obstacleHits = new Collider[32];
         private readonly RaycastHit[] groundHits = new RaycastHit[32];
@@ -24,6 +33,7 @@ namespace LWS.TruckTaxi
         public int Count => points.Count;
         public int WalkableSpawnCount => spawnOrder.Length;
         public int RoadSegmentCount => roadSegments.Count;
+        public int CrossingJourneyCount => crossingJourneys.Count;
         public bool HasRoadBounds => roadSegments.Count > 0 || hasRoadSurfaces;
         public Vector3 this[int index] => points[index];
 
@@ -39,7 +49,7 @@ namespace LWS.TruckTaxi
                 if (lane == null || lane.centerline == null) continue;
                 float radius = Mathf.Max(1.5f, lane.laneWidthMeters * .5f) + setback;
                 for (int i = 1; i < lane.centerline.Length; i++)
-                    roadSegments.Add(new RoadSegment(lane.centerline[i - 1], lane.centerline[i], radius));
+                    AddRoadSegment(new RoadSegment(lane.centerline[i - 1], lane.centerline[i], radius));
             }
             foreach (var edge in roadGraph?.edges ?? new List<LwsRoadEdge>())
             {
@@ -51,7 +61,7 @@ namespace LWS.TruckTaxi
                     float roadWidth = Mathf.Max(a.roadWidthMeters, b.roadWidthMeters);
                     if (roadWidth <= 0) roadWidth = edge.laneCount * edge.laneWidthMeters + edge.medianWidthMeters +
                         edge.leftShoulderWidthMeters + edge.rightShoulderWidthMeters;
-                    roadSegments.Add(new RoadSegment(a.position, b.position, Mathf.Max(2, roadWidth * .5f + 1.5f)));
+                    AddRoadSegment(new RoadSegment(a.position, b.position, Mathf.Max(2, roadWidth * .5f + 1.5f)));
                 }
             }
             foreach (var anchor in anchors ?? System.Array.Empty<TruckTaxiWorldAnchor>())
@@ -108,7 +118,7 @@ namespace LWS.TruckTaxi
                 min = Vector2.Max(min, new Vector2(origin.x - maximumRadius, origin.z - maximumRadius));
                 max = Vector2.Min(max, new Vector2(origin.x + maximumRadius, origin.z + maximumRadius));
             }
-            float spacing = Mathf.Max(10, Mathf.Sqrt(Mathf.Max(1, (max.x - min.x) * (max.y - min.y)) / MaximumCells));
+            float spacing = Mathf.Max(5, Mathf.Sqrt(Mathf.Max(1, (max.x - min.x) * (max.y - min.y)) / MaximumCells));
             int width = Mathf.Max(1, Mathf.CeilToInt((max.x - min.x) / spacing));
             int height = Mathf.Max(1, Mathf.CeilToInt((max.y - min.y) / spacing));
             while (width * height > MaximumCells) { spacing *= 1.05f; width = Mathf.Max(1, Mathf.CeilToInt((max.x - min.x) / spacing)); height = Mathf.Max(1, Mathf.CeilToInt((max.y - min.y) / spacing)); }
@@ -139,28 +149,44 @@ namespace LWS.TruckTaxi
                             if (ClearSegment(points[a], points[b], false)) Connect(edges, a, b);
                         }
                 }
+            var registeredCrosswalks = new HashSet<Component>();
             foreach (var crossing in crossings ?? System.Array.Empty<TruckTaxiIntersection>())
             {
-                if (crossing == null || !crossing.IsConfigured) continue;
+                if (crossing == null || !crossing.IsConfigured || !registeredCrosswalks.Add(crossing.crosswalkPath)) continue;
                 var field = crossing.crosswalkPath.GetType().GetField("points");
                 if (!(field?.GetValue(crossing.crosswalkPath) is Vector3[,] route) || route.GetLength(1) < 4) continue;
-                int previous = -1, first = -1, second = -1, beforeLast = -1;
-                for (int i = 1; i < route.GetLength(1) - 1; i++)
+                for (int way = 0; way < route.GetLength(0); way++)
                 {
-                    if (!TryGround(route[0, i], origin.y, true, out var grounded)) continue;
-                    int node = points.Count; points.Add(grounded); edges.Add(new List<int>(4));
-                    if (first < 0) first = node;
-                    else if (second < 0) second = node;
-                    if (previous >= 0 && ClearSegment(points[previous], grounded, true)) Connect(edges, previous, node);
-                    beforeLast = previous;
-                    previous = node;
+                    int count = route.GetLength(1) - 2;
+                    if (count < 2) continue;
+                    var grounded = new Vector3[count];
+                    bool valid = true, crossesRoad = false;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (!TryGround(route[way, i + 1], origin.y, true, out grounded[i])) { valid = false; break; }
+                        if (i > 0 && !ClearSegment(grounded[i - 1], grounded[i], true)) { valid = false; break; }
+                        if (i > 0 && RoadAt(Vector3.Lerp(grounded[i - 1], grounded[i], .5f))) crossesRoad = true;
+                    }
+                    if (!valid || !crossesRoad || RoadAt(grounded[0]) || RoadAt(grounded[count - 1])) continue;
+                    int first = points.Count;
+                    for (int i = 0; i < count; i++) { points.Add(grounded[i]); edges.Add(new List<int>(4)); }
+                    for (int i = first + 1; i < points.Count; i++) Connect(edges, i - 1, i);
+                    int last = points.Count - 1;
+                    int near = LinkEndpoint(edges, first, points[first] - points[first + 1], gridNodeCount, spacing);
+                    int far = LinkEndpoint(edges, last, points[last] - points[last - 1], gridNodeCount, spacing);
+                    crossingEntries[EdgeKey(first, first + 1)] = crossing;
+                    crossingEntries[EdgeKey(last, last - 1)] = crossing;
+                    crossingExits[first] = crossing;
+                    crossingExits[last] = crossing;
+                    if (near >= 0 && far >= 0) crossingJourneys.Add(new CrossingJourney(first, last, near, far));
                 }
-                if (second >= 0) LinkEndpoint(edges, first, points[first] - points[second], gridNodeCount, spacing);
-                if (beforeLast >= 0) LinkEndpoint(edges, previous, points[previous] - points[beforeLast], gridNodeCount, spacing);
             }
             links = new List<int>[edges.Count];
             for (int i = 0; i < edges.Count; i++) links[i] = edges[i];
             component = new int[points.Count];
+            routePrevious = new int[points.Count];
+            routeVisited = new int[points.Count];
+            routeQueue = new int[points.Count];
             for (int i = 0; i < component.Length; i++) component[i] = -1;
             int id = 0;
             var queue = new Queue<int>();
@@ -248,14 +274,39 @@ namespace LWS.TruckTaxi
         private bool RoadAt(Vector3 p)
         {
             var point = new Vector2(p.x, p.z);
-            foreach (var segment in roadSegments)
-            {
-                if (point.x < segment.Min.x || point.x > segment.Max.x || point.y < segment.Min.y || point.y > segment.Max.y) continue;
-                float t = segment.Direction.sqrMagnitude > .001f ?
-                    Mathf.Clamp01(Vector2.Dot(point - segment.Start, segment.Direction) / segment.Direction.sqrMagnitude) : 0;
-                if ((point - segment.Start - t * segment.Direction).sqrMagnitude < segment.Radius * segment.Radius) return true;
-            }
+            if (roadBins.TryGetValue(CellKey(Mathf.FloorToInt(p.x / 32f), Mathf.FloorToInt(p.z / 32f)), out var nearby))
+                foreach (int index in nearby)
+                    if (ContainsRoad(roadSegments[index], point)) return true;
+            foreach (int index in longRoadSegments)
+                if (ContainsRoad(roadSegments[index], point)) return true;
             return false;
+        }
+        private static bool ContainsRoad(RoadSegment segment, Vector2 point)
+        {
+            if (point.x < segment.Min.x || point.x > segment.Max.x || point.y < segment.Min.y || point.y > segment.Max.y) return false;
+            float t = segment.Direction.sqrMagnitude > .001f ?
+                Mathf.Clamp01(Vector2.Dot(point - segment.Start, segment.Direction) / segment.Direction.sqrMagnitude) : 0;
+            return (point - segment.Start - t * segment.Direction).sqrMagnitude < segment.Radius * segment.Radius;
+        }
+        private static long CellKey(int x, int z) => ((long)x << 32) | (uint)z;
+        private void AddRoadSegment(RoadSegment segment)
+        {
+            int index = roadSegments.Count;
+            roadSegments.Add(segment);
+            int minX = Mathf.FloorToInt(segment.Min.x / 32f), maxX = Mathf.FloorToInt(segment.Max.x / 32f);
+            int minZ = Mathf.FloorToInt(segment.Min.y / 32f), maxZ = Mathf.FloorToInt(segment.Max.y / 32f);
+            if ((long)(maxX - minX + 1) * (maxZ - minZ + 1) > 4096)
+            {
+                longRoadSegments.Add(index);
+                return;
+            }
+            for (int x = minX; x <= maxX; x++)
+                for (int z = minZ; z <= maxZ; z++)
+                {
+                    long key = CellKey(x, z);
+                    if (!roadBins.TryGetValue(key, out var indices)) { indices = new List<int>(); roadBins.Add(key, indices); }
+                    indices.Add(index);
+                }
         }
         private readonly struct RoadSegment
         {
@@ -276,7 +327,7 @@ namespace LWS.TruckTaxi
             if (a == b || edges[a].Contains(b)) return;
             edges[a].Add(b); edges[b].Add(a);
         }
-        private void LinkEndpoint(List<List<int>> edges, int endpoint, Vector3 outward, int gridNodeCount, float spacing)
+        private int LinkEndpoint(List<List<int>> edges, int endpoint, Vector3 outward, int gridNodeCount, float spacing)
         {
             int best = -1; float distance = spacing * spacing * 2.25f;
             outward.y = 0;
@@ -286,12 +337,47 @@ namespace LWS.TruckTaxi
                 if (RoadAt(points[i])) continue;
                 Vector3 offset = points[i] - points[endpoint]; offset.y = 0;
                 float along = Vector3.Dot(offset, outward);
-                if (along < 0 || (offset - outward * along).sqrMagnitude > spacing * spacing * .36f) continue;
+                // An authored curb need not align with the sampled sidewalk grid. Permit a
+                // half-cell inward connector; RoadAt and ClearSegment still reject road shortcuts.
+                if (along < -spacing * .5f || (offset - outward * along).sqrMagnitude > spacing * spacing * .36f) continue;
                 float d = (points[i] - points[endpoint]).sqrMagnitude;
-                if (d >= distance || !ClearSegment(points[i], points[endpoint], true)) continue;
+                if (d >= distance || !ClearSegment(points[i], points[endpoint], false)) continue;
                 best = i; distance = d;
             }
             if (best >= 0) Connect(edges, endpoint, best);
+            return best;
+        }
+        private static long EdgeKey(int from, int to) => ((long)from << 32) | (uint)to;
+        public bool TryCrossingEntry(int from, int to, out TruckTaxiIntersection crossing) =>
+            crossingEntries.TryGetValue(EdgeKey(from, to), out crossing);
+        public bool IsOppositeCurb(int node, int entry, TruckTaxiIntersection crossing) =>
+            node != entry && crossingExits.TryGetValue(node, out var atNode) && atNode == crossing;
+
+        public bool PickCrossingJourney(int start, List<int> result)
+        {
+            if (crossingJourneys.Count == 0) return false;
+            int offset = Random.Range(0, crossingJourneys.Count);
+            for (int i = 0; i < crossingJourneys.Count; i++)
+            {
+                var journey = crossingJourneys[(offset + i) % crossingJourneys.Count];
+                int entry = (points[start] - points[journey.First]).sqrMagnitude <=
+                    (points[start] - points[journey.Last]).sqrMagnitude ? journey.First : journey.Last;
+                int exit = entry == journey.First ? journey.Last : journey.First;
+                if ((points[start] - points[entry]).sqrMagnitude > 60 * 60 || !Route(start, entry, result)) continue;
+                if (result.Count > 0 && result[result.Count - 1] == entry) result.RemoveAt(result.Count - 1);
+                int step = exit > entry ? 1 : -1;
+                for (int node = entry; node != exit + step; node += step) result.Add(node);
+                result.Add(entry == journey.First ? journey.Far : journey.Near);
+                return true;
+            }
+            result.Clear();
+            return false;
+        }
+        private readonly struct CrossingJourney
+        {
+            public readonly int First, Last, Near, Far;
+            public CrossingJourney(int first, int last, int near, int far)
+            { First = first; Last = last; Near = near; Far = far; }
         }
         public int NextSpawnNode()
         {
@@ -317,17 +403,24 @@ namespace LWS.TruckTaxi
         {
             result.Clear();
             if (start < 0 || goal < 0 || start >= points.Count || goal >= points.Count || component[start] != component[goal]) return false;
-            var previous = new int[points.Count];
-            for (int i = 0; i < previous.Length; i++) previous[i] = -1;
-            var queue = new Queue<int>(); queue.Enqueue(start); previous[start] = start;
-            while (queue.Count > 0 && previous[goal] < 0)
+            if (++routeGeneration == int.MaxValue)
             {
-                int node = queue.Dequeue();
-                foreach (int next in links[node])
-                    if (previous[next] < 0) { previous[next] = node; queue.Enqueue(next); }
+                System.Array.Clear(routeVisited, 0, routeVisited.Length);
+                routeGeneration = 1;
             }
-            if (previous[goal] < 0) return false;
-            for (int node = goal; node != start; node = previous[node]) result.Add(node);
+            int head = 0, tail = 0;
+            routeQueue[tail++] = start;
+            routeVisited[start] = routeGeneration;
+            routePrevious[start] = start;
+            while (head < tail && routeVisited[goal] != routeGeneration)
+            {
+                int node = routeQueue[head++];
+                foreach (int next in links[node])
+                    if (routeVisited[next] != routeGeneration)
+                    { routeVisited[next] = routeGeneration; routePrevious[next] = node; routeQueue[tail++] = next; }
+            }
+            if (routeVisited[goal] != routeGeneration) return false;
+            for (int node = goal; node != start; node = routePrevious[node]) result.Add(node);
             result.Reverse();
             return true;
         }

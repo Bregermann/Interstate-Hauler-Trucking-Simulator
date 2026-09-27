@@ -15,6 +15,7 @@ namespace LWS.TruckTaxi
         public float Target { get; }
         public string StopId { get; }
         public bool Expired { get; }
+        public string FailureReason { get; }
         public long RewardCents { get; }
         public int RewardScore { get; }
         public TruckTaxiGoalResult(TaxiRequestProgress request)
@@ -22,6 +23,7 @@ namespace LWS.TruckTaxi
             Type=request.Definition.requestType; Description=request.Description; State=request.State;
             Progress=request.Progress; Target=request.Target; StopId=request.StopPoint?.stableId;
             Expired=request.Expired;
+            FailureReason=request.FailureReason;
             RewardCents=State==TaxiRequestState.Succeeded ? request.Definition.bonusMoneyCents : 0;
             RewardScore=State==TaxiRequestState.Succeeded ? request.Definition.bonusScore : 0;
         }

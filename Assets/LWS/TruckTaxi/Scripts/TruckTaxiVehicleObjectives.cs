@@ -14,6 +14,13 @@ namespace LWS.TruckTaxi
             type == TaxiEventType.TrafficRam && !string.IsNullOrEmpty(assignedId) &&
             observedId == assignedId && float.IsFinite(speed) && speed >= minimumSpeed;
 
+        public static bool MatchesExternalHit(string assignedId, GameObject assignedVehicle,
+            TruckTaxiImpactTarget observed, float speed, float minimumSpeed) =>
+            observed != null && observed.kind == TaxiImpactKind.Traffic &&
+            assignedVehicle != null && assignedVehicle == observed.gameObject &&
+            QualifiesImpact(TaxiEventType.TrafficRam, observed.targetId, assignedId,
+                speed, minimumSpeed);
+
         public static bool InFollowBand(float distance, float playerSpeed, float targetSpeed,
             float minimumDistance, float maximumDistance) =>
             distance >= minimumDistance && distance <= maximumDistance &&
@@ -115,6 +122,7 @@ namespace LWS.TruckTaxi
             public float lastMovingAt;
             public float blockedSeconds;
             public float lastImpactTime = -1;
+            public readonly HashSet<int> creditedProjectiles = new HashSet<int>();
         }
 
         [Min(3)] public float followMinimumDistance = 8;
@@ -134,6 +142,7 @@ namespace LWS.TruckTaxi
         private TruckTaxiMapMarkers markers;
         private System.Action previousRefresh;
         private int missionSerial;
+        private bool recordingExternalHit;
         private readonly TruckTaxiVehicleObjectivesUtsRoute utsRoute =
             new TruckTaxiVehicleObjectivesUtsRoute();
 
@@ -392,7 +401,7 @@ namespace LWS.TruckTaxi
 
         private void OnDrivingEvent(TaxiEventType type)
         {
-            if (type != TaxiEventType.TrafficRam || collisionObserver == null ||
+            if (recordingExternalHit || type != TaxiEventType.TrafficRam || collisionObserver == null ||
                 Time.time - collisionObserver.LastCollisionTime > Time.fixedDeltaTime + 0.01f) return;
             snapshot.Clear();
             snapshot.AddRange(assignments.Values);
@@ -407,17 +416,56 @@ namespace LWS.TruckTaxi
                         assignment.vehicleId, collisionObserver.LastImpactSpeed,
                         host.Configuration.minimumImpactSpeed)) continue;
                 assignment.lastImpactTime = collisionObserver.LastCollisionTime;
-                if (request.Definition.requestType == TaxiRequestType.RamTargetVehicle)
-                    host.Session.RecordObjectiveProgress(request, 1, true);
-                else if (assignment.missionTarget != null)
-                {
-                    bool destroyed = assignment.missionTarget.ApplyQualifiedHit();
-                    if (host.Session.RecordObjectiveProgress(request,
-                        request.Target / assignment.missionTarget.RequiredHits, destroyed) &&
-                        destroyed && assignment.vehicle != null)
-                        Destroy(assignment.vehicle);
-                }
+                CreditQualifiedHit(assignment);
             }
+        }
+
+        // The projectile supplies the observed actor, not a guessed request target ID.
+        // This method owns its event and progress as one operation so the tractor observer
+        // cannot mistake the projectile event for a fresh tractor collision.
+        public bool RecordExternalQualifiedHit(TruckTaxiImpactTarget target, float speed, int projectileId)
+        {
+            if (host?.Session == null || target == null || target.kind != TaxiImpactKind.Traffic ||
+                string.IsNullOrEmpty(target.targetId) || !float.IsFinite(speed) ||
+                speed < host.Configuration.minimumImpactSpeed || projectileId == 0) return false;
+
+            Assignment matched = null;
+            foreach (var assignment in assignments.Values)
+            {
+                if (assignment.request.State != TaxiRequestState.Active ||
+                    (assignment.request.Definition.requestType != TaxiRequestType.RamTargetVehicle &&
+                     assignment.request.Definition.requestType != TaxiRequestType.DestroyVehicle) ||
+                    !TruckTaxiVehicleObjectives.MatchesExternalHit(assignment.vehicleId,
+                        assignment.vehicle, target, speed, host.Configuration.minimumImpactSpeed)) continue;
+                matched = assignment;
+                break;
+            }
+            if (matched != null && !matched.creditedProjectiles.Add(projectileId)) return true;
+
+            recordingExternalHit = true;
+            try { host.Session.RecordEvent(TaxiEventType.TrafficRam, target.targetId, speed); }
+            finally { recordingExternalHit = false; }
+            if (matched != null && matched.request.State == TaxiRequestState.Active &&
+                assignments.ContainsKey(matched.request)) CreditQualifiedHit(matched);
+            return true;
+        }
+
+        private bool CreditQualifiedHit(Assignment assignment)
+        {
+            var request = assignment.request;
+            if (request.State != TaxiRequestState.Active) return false;
+            if (request.Definition.requestType == TaxiRequestType.RamTargetVehicle)
+                return host.Session.RecordObjectiveProgress(request, 1, true);
+            var mission = assignment.missionTarget;
+            if (request.Definition.requestType != TaxiRequestType.DestroyVehicle || mission == null ||
+                mission.StableId != assignment.vehicleId || mission.RequiredHits <= 0) return false;
+            int requiredHits = mission.RequiredHits;
+            var vehicle = assignment.vehicle;
+            bool destroyed = mission.ApplyQualifiedHit();
+            bool recorded = host.Session.RecordObjectiveProgress(request,
+                request.Target / requiredHits, destroyed);
+            if (recorded && destroyed && vehicle != null) Destroy(vehicle);
+            return recorded;
         }
 
         private void Update()

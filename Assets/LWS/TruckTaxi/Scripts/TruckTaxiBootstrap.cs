@@ -30,6 +30,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiDriverNeedsCoordinator DriverNeeds { get; private set; }
         public TruckTaxiFuelController Fuel { get; private set; }
         public TruckTaxiRoadsideAssistance Roadside { get; private set; }
+        public TruckTaxiRoadsideCompanionLoop Companions { get; private set; }
         public TruckTaxiVehicleObjectiveCoordinator VehicleObjectives { get; private set; }
         public bool Ready { get; private set; }
         public bool Paused { get; private set; }
@@ -110,6 +111,14 @@ namespace LWS.TruckTaxi
             }
             Roadside = GetComponent<TruckTaxiRoadsideAssistance>() ?? gameObject.AddComponent<TruckTaxiRoadsideAssistance>();
             Roadside.Initialize(this);
+            if(DriverNeeds?.State!=null)
+            {
+                Companions=GetComponent<TruckTaxiRoadsideCompanionLoop>() ?? gameObject.AddComponent<TruckTaxiRoadsideCompanionLoop>();
+                var adult=System.Array.Find(configuration.passengerDatabase.passengers,
+                    p=>p!=null && p.explicitlyAdult && p.minimumAdultAge>=21 && p.adultFemalePresentation && p.seatProfile!=null);
+                Companions.Initialize(this,Player.transform,adult!=null ? adult.seatProfile : null);
+            }
+            hud.InitializeIntegratedControls();
             SetPaused(true);
             OnSessionChanged();
         }
@@ -169,7 +178,7 @@ namespace LWS.TruckTaxi
                     SetPaused(Session.State == TruckTaxiState.Inactive); break;
             }
         }
-        private void OnRequestResolved(TaxiRequestProgress r) => Play(r.State == TaxiRequestState.Succeeded ? configuration.requestSuccessSound : configuration.requestFailureSound);
+        private void OnRequestResolved(TaxiRequestProgress r) { if (r.State != TaxiRequestState.Succeeded) Play(configuration.requestFailureSound); }
         private void OnRequestCreated(TaxiRequestProgress r) => Play(configuration.requestSound);
         private void OnDrivingEvent(TaxiEventType _) => Play(configuration.collisionSound);
         public void Play(AudioClip clip) { if(clip!=null && audioSource!=null) audioSource.PlayOneShot(clip); }

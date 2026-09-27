@@ -176,7 +176,10 @@ namespace LWS.TruckTaxi
             if (lastWeatherId == snapshot.weatherPresetId) return;
             lastWeatherId = snapshot.weatherPresetId;
             Emit(TruckTaxiDialogueCategory.WeatherChanged);
-            if (snapshot.condition == LwsWeatherCondition.Thunderstorm) Emit(TruckTaxiDialogueCategory.StormReaction);
+            if (snapshot.weatherPresetId == TruckTaxiSnow.BlizzardId) Emit(TruckTaxiDialogueCategory.BlizzardReaction);
+            else if (snapshot.weatherPresetId == LwsWeatherPresetCatalog.LightSnowId ||
+                snapshot.weatherPresetId == LwsWeatherPresetCatalog.HeavySnowId) Emit(TruckTaxiDialogueCategory.SnowReaction);
+            else if (snapshot.condition == LwsWeatherCondition.Thunderstorm) Emit(TruckTaxiDialogueCategory.StormReaction);
             else if (snapshot.precipitationType == LwsPrecipitationType.Rain) Emit(TruckTaxiDialogueCategory.RainReaction);
             else if (snapshot.condition == LwsWeatherCondition.Fog) Emit(TruckTaxiDialogueCategory.FogReaction);
         }

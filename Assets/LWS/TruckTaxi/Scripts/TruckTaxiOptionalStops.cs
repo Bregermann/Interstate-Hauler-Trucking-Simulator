@@ -32,7 +32,9 @@ namespace LWS.TruckTaxi
         private void Refresh(TaxiRequestProgress request)
         {
             if(request.StopPoint!=null && request.State==TaxiRequestState.Succeeded)
-                host.Passengers.Dialogue.Speak(host.Session.Passenger,TruckTaxiDialogueCategory.UniqueMechanicReaction,host.Session,
+                host.Passengers.Dialogue.Speak(host.Session.Passenger,
+                    StopDialogueCategory(request.StopPoint.category, true),
+                    host.Session,
                     request.StopPoint.completionDialogue,100);
             RefreshDestination();
         }
@@ -60,7 +62,7 @@ namespace LWS.TruckTaxi
         }
         private void OnStopStarted(TaxiRequestProgress request)
         {
-            host.Passengers.Dialogue.Speak(host.Session.Passenger,TruckTaxiDialogueCategory.UniqueMechanicReaction,host.Session,
+            host.Passengers.Dialogue.Speak(host.Session.Passenger,StopDialogueCategory(request.StopPoint.category, false),host.Session,
                 request.StopPoint.arrivalDialogue,95);
             var actor=host.Passengers.PrimaryActor;
             var animator=actor!=null ? actor.GetComponentInChildren<Animator>() : null;
@@ -83,6 +85,14 @@ namespace LWS.TruckTaxi
             else if(head!=null) head.localRotation=headRest;
         }
         private void RestoreHead() { if(head!=null) head.localRotation=headRest; head=null; }
+        private static TruckTaxiDialogueCategory StopDialogueCategory(TruckTaxiStopCategory category, bool complete)
+        {
+            if (category == TruckTaxiStopCategory.Scenic)
+                return complete ? TruckTaxiDialogueCategory.ScenicStopComplete : TruckTaxiDialogueCategory.ScenicView;
+            if (category == TruckTaxiStopCategory.IllicitPickup)
+                return complete ? TruckTaxiDialogueCategory.IllicitStopComplete : TruckTaxiDialogueCategory.IllicitStopArrival;
+            return TruckTaxiDialogueCategory.UniqueMechanicReaction;
+        }
         private void OnDrawGizmos()
         {
             if(!showAllPoints || host?.Session==null) return;
