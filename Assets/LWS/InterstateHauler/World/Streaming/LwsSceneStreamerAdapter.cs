@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -31,7 +32,10 @@ namespace LWS.InterstateHauler
         [SerializeField] private bool logDiagnostics;
 
         private Type _sceneStreamerType;
+        private MethodInfo _explicitVendorLoad;
+        private PropertyInfo _vendorInstance;
         private int _pendingOperationCount;
+        private readonly HashSet<string> _pendingScenes = new HashSet<string>();
 
         public bool IsAvailable => ResolveSceneStreamerType() != null;
         public string Status { get; private set; } = "Scene Streamer adapter not initialized.";
@@ -100,6 +104,9 @@ namespace LWS.InterstateHauler
                 return true;
             }
 
+            if (_pendingScenes.Contains(sceneName)) return true;
+            if (!IsAvailable || !Application.CanStreamedLevelBeLoaded(sceneName))
+            { Fail(sceneName, "Scene Streamer scene is not available in build settings."); return false; }
             SceneLoadRequested?.Invoke(sceneName);
             StartCoroutine(LoadSceneAsync(sceneName));
             return true;
@@ -118,6 +125,7 @@ namespace LWS.InterstateHauler
                 return true;
             }
 
+            if (_pendingScenes.Contains(sceneName)) return false;
             SceneUnloadRequested?.Invoke(sceneName);
             StartCoroutine(UnloadSceneAsync(sceneName));
             return true;
@@ -168,58 +176,64 @@ namespace LWS.InterstateHauler
 
         private IEnumerator LoadSceneAsync(string sceneName)
         {
-            _pendingOperationCount++;
-            AsyncOperation operation = null;
-            try
-            {
-                operation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-            }
-            catch (Exception ex)
-            {
-                Fail(sceneName, $"LoadSceneAsync threw {ex.GetType().Name}: {ex.Message}");
-            }
-
-            if (operation == null)
-            {
-                _pendingOperationCount = Mathf.Max(0, _pendingOperationCount - 1);
-                yield break;
-            }
-
-            while (!operation.isDone)
-            {
-                yield return null;
-            }
-
-            _pendingOperationCount = Mathf.Max(0, _pendingOperationCount - 1);
-            Status = $"Loaded additive scene {sceneName}.";
+            yield return ObserveVendorOperation(sceneName, true);
         }
 
         private IEnumerator UnloadSceneAsync(string sceneName)
         {
+            yield return ObserveVendorOperation(sceneName, false);
+        }
+
+        // The vendor owns the asynchronous scene operation. LWS observes completion only.
+        private IEnumerator ObserveVendorOperation(string sceneName, bool loading)
+        {
+            _pendingScenes.Add(sceneName);
             _pendingOperationCount++;
-            AsyncOperation operation = null;
+            bool started = false;
             try
             {
-                operation = SceneManager.UnloadSceneAsync(sceneName);
+                if (loading) InvokeExplicitVendorLoad(sceneName);
+                else
+                {
+                    var method = ResolveSceneStreamerType()?.GetMethod("UnloadScene", BindingFlags.Public | BindingFlags.Static);
+                    if (method == null) throw new MissingMethodException("Scene Streamer unload API unavailable.");
+                    method.Invoke(null, new object[] { sceneName });
+                }
+                started = true;
             }
-            catch (Exception ex)
+            catch (Exception ex) { Fail(sceneName, ex.GetBaseException().Message); }
+            float deadline = Time.realtimeSinceStartup + 60;
+            if (started)
             {
-                Fail(sceneName, $"UnloadSceneAsync threw {ex.GetType().Name}: {ex.Message}");
-            }
-
-            if (operation == null)
-            {
-                _pendingOperationCount = Mathf.Max(0, _pendingOperationCount - 1);
-                yield break;
-            }
-
-            while (!operation.isDone)
-            {
+                while (SceneManager.GetSceneByName(sceneName).isLoaded != loading && Time.realtimeSinceStartup < deadline)
+                    yield return null;
+                // Let Scene Streamer's finish handler update its own registry before another request.
                 yield return null;
+                if (SceneManager.GetSceneByName(sceneName).isLoaded != loading)
+                    Fail(sceneName, "Scene Streamer operation timed out; world preparation remains blocked.");
+                else Status = $"Scene Streamer {(loading ? "loaded" : "unloaded")} {sceneName}.";
             }
-
+            _pendingScenes.Remove(sceneName);
             _pendingOperationCount = Mathf.Max(0, _pendingOperationCount - 1);
-            Status = $"Unloaded additive scene {sceneName}.";
+        }
+
+        private void InvokeExplicitVendorLoad(string sceneName)
+        {
+            // Scene Streamer 1.26.3's public Load(string) ignores its argument. SetCurrentScene
+            // also runs a competing neighbour-unload policy. Use the vendor's exact explicit-load
+            // overload until that bug is fixed upstream; do not copy its loader or edit vendor code.
+            var type = ResolveSceneStreamerType();
+            if (_explicitVendorLoad == null)
+            {
+                var handler = type?.GetNestedType("InternalLoadedHandler", BindingFlags.NonPublic);
+                if (handler != null)
+                    _explicitVendorLoad = type.GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic,
+                        null, new[] { typeof(string), handler, typeof(int) }, null);
+                _vendorInstance = type?.GetProperty("instance", BindingFlags.Static | BindingFlags.NonPublic);
+            }
+            if (_explicitVendorLoad == null || _vendorInstance == null)
+                throw new MissingMethodException("Installed Scene Streamer explicit-load compatibility signature changed; review adapter before loading.");
+            _explicitVendorLoad.Invoke(_vendorInstance.GetValue(null), new object[] { sceneName, null, 0 });
         }
 
         private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -269,7 +283,8 @@ namespace LWS.InterstateHauler
                 return _sceneStreamerType;
             }
 
-            _sceneStreamerType = Type.GetType(SceneStreamerTypeName) ??
+            // Prefer the installed package when a legacy Assets copy is also imported.
+            _sceneStreamerType = Type.GetType($"{SceneStreamerTypeName}, PixelCrushers.SceneStreamer") ?? Type.GetType(SceneStreamerTypeName) ??
                                  Type.GetType($"{SceneStreamerTypeName}, Assembly-CSharp");
             if (_sceneStreamerType != null)
             {

@@ -1,0 +1,10 @@
+<linker>
+  <!-- Scene Streamer 1.26.3 explicit-load compatibility bridge; vendor owns execution. -->
+  <assembly fullname="PixelCrushers.SceneStreamer">
+    <type fullname="PixelCrushers.SceneStreamer.SceneStreamer" preserve="all" />
+    <type fullname="PixelCrushers.SceneStreamer.SceneStreamer/InternalLoadedHandler" preserve="all" />
+  </assembly>
+  <assembly fullname="Assembly-CSharp-firstpass" ignoreIfMissing="1">
+    <type fullname="PixelCrushers.SceneStreamer.SceneStreamer" preserve="all" />
+  </assembly>
+</linker>
