@@ -15,11 +15,19 @@ namespace LWS.TruckTaxi
         [Min(1)] public int centsPerLiter = 150;
         [Min(.1f)] public float litersPerSecond = 8;
         public Transform recoveryAnchor;
-        public Vector3 Position => transform.position;
+        private TruckTaxiServicePoint service;
+        public Vector3 Position
+        {
+            get
+            {
+                if (service == null) service = GetComponent<TruckTaxiServicePoint>();
+                return service != null && service.location != null ? service.Position : transform.position;
+            }
+        }
         public Vector3 RecoveryPosition => recoveryAnchor != null ? recoveryAnchor.position : Position;
         private void OnEnable() => points.Add(this);
         private void OnDisable() => points.Remove(this);
-        public bool CanRefuel(Vector3 position, float speed) => isActiveAndEnabled && float.IsFinite(speed) && speed>=0 && speed <= .5f &&
+        public bool CanRefuel(Vector3 position, float speed) => isActiveAndEnabled && float.IsFinite(speed) && speed>=0 && speed <= TruckTaxiServicePoint.ServiceStopSpeedMetersPerSecond &&
             Mathf.Abs(position.y-Position.y)<=verticalTolerance &&
             Vector3.ProjectOnPlane(position - Position, Vector3.up).sqrMagnitude <= stoppingRadius * stoppingRadius;
         public static TruckTaxiGasStationPoint Nearest(Vector3 position)

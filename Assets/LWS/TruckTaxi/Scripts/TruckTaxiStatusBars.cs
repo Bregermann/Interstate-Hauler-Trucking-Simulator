@@ -26,6 +26,11 @@ namespace LWS.TruckTaxi
             {
                 var row=TruckTaxiHud.Rect(panel,Names[i],new Vector2(i/3f,0),new Vector2((i+1)/3f-.015f,1));
                 CreateRow(hud,row,Names[i],out fills[i],out labels[i]);
+                if(i==1)
+                {
+                    var button=row.gameObject.AddComponent<Button>();
+                    button.onClick.AddListener(()=>hud.EnvironmentNeeds?.OpenRepair());
+                }
             }
             effectPanel=TruckTaxiHud.Rect(hud.Root,"Active item effects",new Vector2(.38f,.28f),new Vector2(.7f,.42f));
             int count=TruckTaxiTemporaryEffects.ProfileCount;
@@ -54,9 +59,10 @@ namespace LWS.TruckTaxi
             Set(0,host.Fuel?.Fraction ?? 1); Set(1,damage!=null ? damage.Damage : 0);
             bool riding=host.Session.HasPassenger;
             labels[2].transform.parent.gameObject.SetActive(riding || host.Session.State==TruckTaxiState.DrivingToPickup);
-            float patience=riding ? 1-host.Session.ElapsedRide/Mathf.Max(1,host.Session.Passenger.basePatience) :
+            float patience=riding ? host.Session.OnboardPatience :
                 host.Session.State==TruckTaxiState.DrivingToPickup ? host.Session.PickupRemaining/Mathf.Max(1,host.Session.PickupDuration) : 1;
             Set(2,patience);
+            labels[2].text=(riding ? "PASSENGER" : "PICKUP")+$"\nPATIENCE {patience*100:0}%";
             for(int i=0;i<effectRows.Length;i++)
             {
                 var snapshot=state?.Effects.GetSnapshot((TruckTaxiTemporaryEffectKind)i) ?? default;

@@ -73,11 +73,20 @@ namespace LWS.TruckTaxi
             foreach (var wheel in wheels)
                 if (ai.transform.InverseTransformPoint(wheel.transform.position).z > 0) { frontWheel = wheel; break; }
             rage = GetComponent<TruckTaxiRoadRage>();
+            foreach (var source in ai.GetComponentsInChildren<AudioSource>(true))
+            {
+                source.spatialBlend = 1;
+                source.rolloffMode = AudioRolloffMode.Linear;
+                source.minDistance = Mathf.Min(source.minDistance, 6);
+                source.maxDistance = Mathf.Min(source.maxDistance, 65);
+                TruckTaxiAudioController.Instance?.Route(source, TruckTaxiAudioCategory.World);
+            }
             if (hornClip != null)
             {
                 var sound = new GameObject("Taxi Traffic Horn"); sound.transform.SetParent(ai.transform, false);
                 horn = sound.AddComponent<AudioSource>(); horn.playOnAwake = false; horn.spatialBlend = 1;
                 horn.clip = hornClip; horn.volume = .35f; horn.minDistance = 6; horn.maxDistance = 65;
+                horn.rolloffMode = AudioRolloffMode.Linear;
                 TruckTaxiAudioController.Instance?.Route(horn, TruckTaxiAudioCategory.World);
             }
             SetIdentity(stableId);

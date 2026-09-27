@@ -70,16 +70,34 @@ namespace LWS.TruckTaxi
         private static readonly TruckTaxiTemporaryEffect[] profiles =
         {
             new TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind.MysteryMushroom, "Mystery mushroom",
-                18, 2, 4, saturation: 100, contrast: 32, bloomIntensity: 1.2f,
+                360, 2, 4, saturation: 100, contrast: 32, bloomIntensity: 1.2f,
                 chromaticAberration: .2f, chaosBonus: 2, dialogueHook: "MysteryMushroom"),
             new TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind.HighOctaneBoost, "High-octane boost",
-                12, .35f, 1.5f, vehiclePowerMultiplier: 1.7f,
+                300, .35f, 1.5f, vehiclePowerMultiplier: 1.7f,
                 chaosBonus: 2, dialogueHook: "HighOctaneBoost"),
             new TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind.EnergyDrink, "Energy drink",
-                14, .5f, 2, vehiclePowerMultiplier: 1.15f, hungerRateMultiplier: .9f,
+                420, .5f, 2, vehiclePowerMultiplier: 1.15f, hungerRateMultiplier: .9f,
                 dialogueHook: "EnergyDrink")
         };
         private readonly float[] remaining = new float[profiles.Length];
+        private readonly TruckTaxiTemporaryEffect[] activeProfiles = new TruckTaxiTemporaryEffect[profiles.Length];
+        public bool ShortDebugDurations { get; private set; }
+        public void SetShortDebugDurations(bool enabled)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            ShortDebugDurations = enabled;
+#endif
+        }
+        private static TruckTaxiTemporaryEffect DebugProfile(TruckTaxiTemporaryEffect profile)
+        {
+            float duration = profile.Kind == TruckTaxiTemporaryEffectKind.MysteryMushroom ? 18 :
+                profile.Kind == TruckTaxiTemporaryEffectKind.HighOctaneBoost ? 12 : 14;
+            return new TruckTaxiTemporaryEffect(profile.Kind, profile.Label, duration,
+                profile.FadeInSeconds, profile.FadeOutSeconds, profile.VehiclePowerMultiplier,
+                profile.HungerRateMultiplier, profile.ThirstRateMultiplier, profile.Saturation,
+                profile.Contrast, profile.BloomIntensity, profile.ChromaticAberration,
+                profile.ChaosBonus, profile.DialogueHook);
+        }
         public static int ProfileCount => profiles.Length;
         public event Action<TruckTaxiTemporaryEffectKind> Started;
         public event Action<TruckTaxiTemporaryEffectKind> Expired;
@@ -123,14 +141,16 @@ namespace LWS.TruckTaxi
         public TruckTaxiTemporaryEffectSnapshot GetSnapshot(TruckTaxiTemporaryEffectKind kind)
         {
             var profile = Profile(kind);
-            return profile == null ? default : new TruckTaxiTemporaryEffectSnapshot(profile, remaining[(int)kind]);
+            return profile == null ? default : new TruckTaxiTemporaryEffectSnapshot(
+                activeProfiles[(int)kind] ?? profile, remaining[(int)kind]);
         }
         public bool Activate(TruckTaxiTemporaryEffectKind kind)
         {
             var profile = Profile(kind);
             if (profile == null) return false;
             bool wasActive = remaining[(int)kind] > 0;
-            remaining[(int)kind] = profile.DurationSeconds;
+            activeProfiles[(int)kind] = ShortDebugDurations ? DebugProfile(profile) : profile;
+            remaining[(int)kind] = activeProfiles[(int)kind].DurationSeconds;
             if (!wasActive) Started?.Invoke(kind);
             return true;
         }
@@ -139,7 +159,8 @@ namespace LWS.TruckTaxi
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             var kind = TruckTaxiTemporaryEffectKind.MysteryMushroom;
             bool wasActive = remaining[(int)kind] > 0;
-            remaining[(int)kind] = profiles[(int)kind].DurationSeconds - profiles[(int)kind].FadeInSeconds;
+            activeProfiles[(int)kind] = ShortDebugDurations ? DebugProfile(profiles[(int)kind]) : profiles[(int)kind];
+            remaining[(int)kind] = activeProfiles[(int)kind].DurationSeconds - activeProfiles[(int)kind].FadeInSeconds;
             if (!wasActive) Started?.Invoke(kind);
             return true;
 #else

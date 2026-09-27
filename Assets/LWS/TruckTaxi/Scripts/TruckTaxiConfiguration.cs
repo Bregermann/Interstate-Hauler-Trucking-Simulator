@@ -17,7 +17,16 @@ namespace LWS.TruckTaxi
         [Min(1)] public float pickupTargetMinimumSeconds = 20;
         [Min(1)] public float pickupTargetMaximumSeconds = 90;
         [Min(1)] public float pickupHardMaximumSeconds = 180;
-        [Range(0, 1)] public float intercityRideChance = 0.2f;
+        [Range(0, 1)] public float intercityRideChance = 0.1f;
+        [Range(0, 10)] public int localOffersAfterIntercity = 3;
+        [Min(1)] public float speedwayPassengerWeight = 3;
+        [Range(0,1)] public float racingSpeedwayDestinationChance = .6f;
+        [Header("Bounded offer generation")]
+        [Range(1, 12)] public int offerPickupCandidateLimit = 6;
+        [Range(1, 24)] public int offerDestinationCandidateLimit = 12;
+        [Range(.5f, 8)] public float offerFrameBudgetMilliseconds = 3;
+        [Range(1, 10)] public float offerTimeoutSeconds = 3;
+        public bool logOfferTimings;
         [Min(0)] public float intercityMaximumTripDistance = 20000;
         [Min(1)] public float intercityFareMultiplier = 1.2f;
         [Header("Passenger continuity")]
@@ -40,6 +49,12 @@ namespace LWS.TruckTaxi
         [Min(0)] public float pickupPatienceMultiplier = 2;
         [Min(0.1f)] public float timeObsessedPickupMultiplier = 0.6f;
         [Min(1)] public float pickupMaximumSeconds = 300;
+        [Header("Onboard behavior (not a ride countdown)")]
+        [Min(1)] public float patienceProgressSampleSeconds = 4;
+        [Min(0)] public float wrongWayGraceSeconds = 20;
+        [Min(0)] public float unexplainedStopGraceSeconds = 60;
+        [Min(0)] public float patienceRecoveryPerSecond = .001f;
+        [Min(0)] public long cancellationFeeCents = 300;
         [Header("Demand multipliers")]
         [Min(0.1f)] public float morningFrequencyMultiplier = 0.75f;
         [Min(0.1f)] public float eveningFrequencyMultiplier = 0.85f;

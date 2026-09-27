@@ -28,6 +28,7 @@ namespace LWS.TruckTaxi.Tests
         public void EffectsRefreshWithoutStackingAndExpireToExactNeutralPower()
         {
             var effects = new TruckTaxiTemporaryEffects();
+            effects.SetShortDebugDurations(true);
             int started = 0, expired = 0;
             effects.Started += _ => started++;
             effects.Expired += _ => expired++;
@@ -56,6 +57,7 @@ namespace LWS.TruckTaxi.Tests
         public void MushroomEnvelopeFadesAndExposesUsableUrpProfile()
         {
             var effects = new TruckTaxiTemporaryEffects();
+            effects.SetShortDebugDurations(true);
             effects.Activate(TruckTaxiTemporaryEffectKind.MysteryMushroom);
             var start = effects.GetSnapshot(TruckTaxiTemporaryEffectKind.MysteryMushroom);
             Assert.AreEqual(0, start.Intensity01);

@@ -13,6 +13,7 @@ namespace LWS.TruckTaxi
         private Material material;
         private Transform head;
         private Quaternion headRest;
+        private readonly TruckTaxiSpeedwayLapTracker lap=new TruckTaxiSpeedwayLapTracker();
         public bool MarkerVisible => ring!=null && ring.enabled;
         public bool showAllPoints;
         public void Initialize(TruckTaxiBootstrap value)
@@ -43,13 +44,15 @@ namespace LWS.TruckTaxi
             var next=host.Session.State==TruckTaxiState.DrivingToDestination ? host.Session.ActiveStop : null;
             if(next==current) return;
             RestoreHead(); current=next;
+            lap.Cancel();
             ring.enabled=label.enabled=current!=null;
             if(current==null)
             {
-                if(host.Session.State==TruckTaxiState.DrivingToDestination) host.GPS.SetRideDestination(host.Session.Destination);
+                if(host.Session.State==TruckTaxiState.DrivingToDestination) host.GPS.SetRideDestination(host.Session.CurrentDesiredDestination);
                 return;
             }
             var point=current.StopPoint;
+            if(current.Definition.requestType==TaxiRequestType.TakeALap) lap.Begin();
             host.GPS.SetStopDestination(point);
             Color color=point.category==TruckTaxiStopCategory.Scenic ? Color.cyan : new Color(1,.4f,.65f);
             ring.startColor=ring.endColor=label.color=color;
@@ -73,7 +76,22 @@ namespace LWS.TruckTaxi
         {
             if(current==null) return;
             var p=current.StopPoint;
-            label.text=(p.category==TruckTaxiStopCategory.Scenic ? "SCENIC STOP" : "SKETCHY PICKUP")+"\n"+p.displayName+"\n"+
+            if(current.Definition.requestType==TaxiRequestType.TakeALap)
+            {
+                if(lap.Tick(host.Player.transform.position))
+                { host.Session.RecordObjectiveProgress(current,1,true); return; }
+                Vector3 checkpoint=lap.NextCheckpoint;
+                for(int i=0;i<65;i++)
+                {
+                    float angle=i*Mathf.PI*2/64;
+                    ring.SetPosition(i,checkpoint+new Vector3(Mathf.Cos(angle)*8,.4f,Mathf.Sin(angle)*8));
+                }
+                label.transform.position=checkpoint+Vector3.up*6;
+                label.text="TAKE A LAP\nCHECKPOINT "+(lap.NextCheckpointIndex+1);
+                if(Camera.main!=null) label.transform.rotation=Quaternion.LookRotation(label.transform.position-Camera.main.transform.position);
+                return;
+            }
+            label.text=(p.category==TruckTaxiStopCategory.Scenic ? "SCENIC STOP" : p.category==TruckTaxiStopCategory.FoodStop ? "DINER STOP" : "SKETCHY PICKUP")+"\n"+p.displayName+"\n"+
                 (current.Progress>0 ? current.ProgressText : "STOP IN THE MARKED BAY");
             if(Camera.main!=null) label.transform.rotation=Quaternion.LookRotation(label.transform.position-Camera.main.transform.position);
             // Small additive look gesture; never move the passenger root out of its authored seat.
@@ -91,6 +109,8 @@ namespace LWS.TruckTaxi
                 return complete ? TruckTaxiDialogueCategory.ScenicStopComplete : TruckTaxiDialogueCategory.ScenicView;
             if (category == TruckTaxiStopCategory.IllicitPickup)
                 return complete ? TruckTaxiDialogueCategory.IllicitStopComplete : TruckTaxiDialogueCategory.IllicitStopArrival;
+            if(category==TruckTaxiStopCategory.FoodStop) return TruckTaxiDialogueCategory.RestaurantReaction;
+            if(category==TruckTaxiStopCategory.Racetrack) return TruckTaxiDialogueCategory.RacetrackReaction;
             return TruckTaxiDialogueCategory.UniqueMechanicReaction;
         }
         private void OnDrawGizmos()

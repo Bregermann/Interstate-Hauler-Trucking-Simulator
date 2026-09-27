@@ -18,6 +18,11 @@ namespace LWS.TruckTaxi
         public string Diagnostics { get; private set; } = "";
         public TruckTaxiServicePoint QuotedDestination { get; private set; }
         public long QuotedCostCents { get; private set; }
+        public long RepairCostCents => vehicle == null ? 0 : (long)System.Math.Ceiling(
+            (Mathf.Clamp01(damage != null ? damage.Damage : 0) +
+             Mathf.Clamp01(vehicle.powertrain.engine.Damage) +
+             Mathf.Clamp01(vehicle.powertrain.transmission.Damage)) * 5000);
+        public bool NeedsRepair => RepairCostCents > 0;
         public bool CanRequest => host != null && host.Ready && !IsRecovering && host.Fuel?.IsRescuing != true &&
             (host.Session.State == TruckTaxiState.Available || host.Session.State == TruckTaxiState.DrivingToPickup ||
              host.Session.State == TruckTaxiState.DrivingToDestination);
@@ -90,6 +95,28 @@ namespace LWS.TruckTaxi
             if (!CanRequest || QuotedDestination == null || !QuotedDestination.Supports(TruckTaxiServiceCapability.RecoverVehicle)) return false;
             StartCoroutine(Recover(QuotedDestination, QuotedCostCents)); return true;
         }
+        public bool RepairAt(TruckTaxiServicePoint service)
+        {
+            if (!CanRequest || service == null || !service.Supports(TruckTaxiServiceCapability.RepairGeneralDamage) ||
+                body == null || !service.CanUse(body.position, body.linearVelocity.magnitude,
+                    TruckTaxiServicePoint.ServiceStopSpeedMetersPerSecond))
+            { Feedback = "Stop inside a repair bay first."; return false; }
+            long cost = RepairCostCents;
+            if (cost <= 0) { Feedback = "Vehicle already repaired."; return false; }
+            if (host.Session.WalletBalanceCents < cost || !host.Session.TrySpend(cost))
+            { Feedback = "Not Enough Cash for Repair"; return false; }
+            if (damage != null) damage.Repair();
+            vehicle.powertrain.engine.Damage = 0;
+            vehicle.powertrain.transmission.Damage = 0;
+            if (service.Supports(TruckTaxiServiceCapability.RepairTires))
+                foreach (var wheel in vehicle.powertrain.wheels) if (wheel.wheelUAPI != null) wheel.wheelUAPI.Damage = 0;
+            Feedback = "Vehicle repaired for " + TruckTaxiHud.Money(cost) + ".";
+            RefreshCondition();
+            if (host.Session.HasPassenger && host.Session.Passenger != null)
+                host.Passengers?.Dialogue?.Speak(host.Session.Passenger,
+                    TruckTaxiDialogueCategory.RepairReaction, host.Session);
+            return true;
+        }
         private IEnumerator Recover(TruckTaxiServicePoint service, long cost)
         {
             IsRecovering = true;
@@ -143,6 +170,9 @@ namespace LWS.TruckTaxi
                 host.Session.DiscardTeleportDistance(); host.Session.ChargeService(cost);
                 host.Session.ApplyRoadsideAssistanceConsequence();
                 Feedback = "RECOVERED TO " + service.displayName + "  " + TruckTaxiHud.Money(cost);
+                if (host.Session.HasPassenger && host.Session.Passenger != null)
+                    host.Passengers?.Dialogue?.Speak(host.Session.Passenger,
+                        TruckTaxiDialogueCategory.RepairReaction, host.Session);
                 yield return new WaitForSecondsRealtime(.3f);
                 for (float t = .35f; t > 0; t -= Time.unscaledDeltaTime) { FadeAlpha = t / .35f; yield return null; }
             }

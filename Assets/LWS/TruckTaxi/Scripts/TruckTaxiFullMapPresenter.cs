@@ -20,15 +20,17 @@ namespace LWS.TruckTaxi
         }
         private readonly List<Place> places=new List<Place>();
         private readonly List<GameObject> rows=new List<GameObject>();
+        private readonly List<GameObject> legendRows=new List<GameObject>();
+        private readonly List<TruckTaxiMapIconRegistry.Entry> legendEntries=new List<TruckTaxiMapIconRegistry.Entry>();
         private TruckTaxiBootstrap host;
         private TruckTaxiGPSAdapter gps;
         private TruckTaxiHud hud;
         private TruckTaxiUIInput input;
-        private RectTransform root,placeList;
-        private TextMeshProUGUI pageText,selectionText;
-        private GameObject routeButton;
+        private RectTransform root,placeList,legendList;
+        private TextMeshProUGUI pageText,selectionText,legendPageText;
+        private GameObject routeButton,stopButton,restoreButton,legendPanel;
         private bool wasPaused;
-        private int page,selected=-1;
+        private int page,selected=-1,legendPage;
         private const int PageSize=8;
         public bool IsOpen => root!=null && root.gameObject.activeSelf;
         public Transform FocusRoot => IsOpen ? root : null;
@@ -52,14 +54,29 @@ namespace LWS.TruckTaxi
             hud.Button(header,"+",new Vector2(.76f,.08f),new Vector2(.82f,.92f),()=>gps.ZoomFullMap(1));
             hud.Button(header,"CLOSE",new Vector2(.85f,.08f),new Vector2(.98f,.92f),Close);
             var sidebar=hud.Panel(root,"Map places",new Vector2(.02f,.12f),new Vector2(.30f,.90f));
-            hud.Text(sidebar,"PLACES",new Vector2(.04f,.93f),new Vector2(.96f,.99f),25).text="PLACES";
-            placeList=TruckTaxiHud.Rect(sidebar,"Place rows",new Vector2(.04f,.18f),new Vector2(.96f,.91f));
+            hud.Text(sidebar,"PLACES",new Vector2(.04f,.93f),new Vector2(.52f,.99f),25).text="PLACES";
+            hud.Button(sidebar,"LEGEND",new Vector2(.55f,.93f),new Vector2(.96f,.99f),ToggleLegend);
+            placeList=TruckTaxiHud.Rect(sidebar,"Place rows",new Vector2(.04f,.29f),new Vector2(.96f,.91f));
             pageText=hud.Text(sidebar,"Page",new Vector2(.31f,.11f),new Vector2(.69f,.18f),20);
             pageText.alignment=TextAlignmentOptions.Center;
             hud.Button(sidebar,"<",new Vector2(.04f,.1f),new Vector2(.29f,.17f),()=>ShowPage(page-1));
             hud.Button(sidebar,">",new Vector2(.71f,.1f),new Vector2(.96f,.17f),()=>ShowPage(page+1));
-            selectionText=hud.Text(sidebar,"Selected place",new Vector2(.04f,.055f),new Vector2(.96f,.105f),18);
+            selectionText=hud.Text(sidebar,"Selected place",new Vector2(.04f,.058f),new Vector2(.96f,.093f),18);
             routeButton=hud.Button(sidebar,"SET GPS DESTINATION",new Vector2(.04f,.005f),new Vector2(.96f,.055f),RouteSelected);
+            stopButton=hud.Button(sidebar,"STOP NAVIGATION",new Vector2(.04f,.23f),new Vector2(.96f,.28f),()=>{ gps.StopNavigation(); UpdateNavigationButtons(); });
+            restoreButton=hud.Button(sidebar,"RESTORE ROUTE",new Vector2(.04f,.18f),new Vector2(.96f,.23f),()=>{
+                if(gps.IsServiceDestination) gps.RestoreServiceRoute(); else gps.RestoreRideRoute();
+                UpdateNavigationButtons();
+            });
+            legendPanel=hud.Panel(root,"Map legend",new Vector2(.66f,.13f),new Vector2(.98f,.90f)).gameObject;
+            hud.Text(legendPanel.transform,"MAP LEGEND",new Vector2(.04f,.93f),new Vector2(.68f,.99f),24).text="MAP LEGEND";
+            hud.Button(legendPanel.transform,"X",new Vector2(.84f,.93f),new Vector2(.96f,.99f),ToggleLegend);
+            legendList=TruckTaxiHud.Rect(legendPanel.transform,"Legend rows",new Vector2(.04f,.12f),new Vector2(.96f,.91f));
+            hud.Button(legendPanel.transform,"<",new Vector2(.04f,.04f),new Vector2(.29f,.10f),()=>ShowLegendPage(legendPage-1));
+            legendPageText=hud.Text(legendPanel.transform,"Legend page",new Vector2(.31f,.04f),new Vector2(.69f,.10f),18);
+            legendPageText.alignment=TextAlignmentOptions.Center;
+            hud.Button(legendPanel.transform,">",new Vector2(.71f,.04f),new Vector2(.96f,.10f),()=>ShowLegendPage(legendPage+1));
+            legendPanel.SetActive(false);
             root.gameObject.SetActive(false);
             var miniRoot=gps.HudCompass?.transform.Find("MiniMap Root") as RectTransform;
             if(miniRoot!=null)
@@ -78,6 +95,7 @@ namespace LWS.TruckTaxi
             if(IsOpen || host==null || gps==null || gps.HudCompass==null || hud?.CanOpenFullMap!=true) return false;
             wasPaused=host.Paused;
             RebuildPlaces();
+            BuildLegend();
             var bounds=new Bounds(host.Player.transform.position,Vector3.zero);
             foreach(var place in places) bounds.Encapsulate(place.Position);
             root.gameObject.SetActive(true);
@@ -86,6 +104,7 @@ namespace LWS.TruckTaxi
             { root.gameObject.SetActive(false); return false; }
             host.SetPaused(true);
             page=0; selected=-1; ShowPage(0);
+            UpdateNavigationButtons();
             root.gameObject.SetActive(true); input.Focus(root); hud.OnFullMapVisibilityChanged();
             return true;
         }
@@ -151,7 +170,11 @@ namespace LWS.TruckTaxi
         public static bool IsRouteable(TruckTaxiMapMarkerType type) =>
             type==TruckTaxiMapMarkerType.Bathroom || type==TruckTaxiMapMarkerType.FoodStop ||
             type==TruckTaxiMapMarkerType.ScenicStop || type==TruckTaxiMapMarkerType.PhotoStop ||
-            type==TruckTaxiMapMarkerType.SpecialEvent || type==TruckTaxiMapMarkerType.PrivateEventStop;
+            type==TruckTaxiMapMarkerType.SpecialEvent || type==TruckTaxiMapMarkerType.PrivateEventStop ||
+            type==TruckTaxiMapMarkerType.Store || type==TruckTaxiMapMarkerType.Gas ||
+            type==TruckTaxiMapMarkerType.Repair || type==TruckTaxiMapMarkerType.TrainStation ||
+            type==TruckTaxiMapMarkerType.BusTerminal || type==TruckTaxiMapMarkerType.Racetrack ||
+            type==TruckTaxiMapMarkerType.ServiceArea;
         private void ShowPage(int next)
         {
             foreach(var row in rows) { row.SetActive(false); Destroy(row); }
@@ -173,6 +196,41 @@ namespace LWS.TruckTaxi
             bool valid=selected>=0 && selected<places.Count;
             selectionText.text=valid ? places[selected].Kind+": "+places[selected].Label : "SELECT A PLACE";
             routeButton.SetActive(valid && places[selected].Routeable && gps.CanSetMapServiceDestination);
+            UpdateNavigationButtons();
+        }
+        private void UpdateNavigationButtons()
+        {
+            stopButton.SetActive(gps.HasNavigationTarget && !gps.GuidanceSuppressed);
+            restoreButton.SetActive(gps.HasNavigationTarget && gps.GuidanceSuppressed);
+        }
+        private void ToggleLegend()
+        {
+            legendPanel.SetActive(!legendPanel.activeSelf);
+            input?.Focus(root);
+        }
+        private void BuildLegend()
+        {
+            legendEntries.Clear();
+            if(gps.MapMarkers?.Registry!=null) legendEntries.AddRange(gps.MapMarkers.Registry.PlayerLegend());
+            legendPage=0; ShowLegendPage(0);
+        }
+        private void ShowLegendPage(int next)
+        {
+            foreach(var row in legendRows) Destroy(row);
+            legendRows.Clear();
+            legendPage=Mathf.Clamp(next,0,Mathf.Max(0,(legendEntries.Count-1)/PageSize));
+            legendPageText.text=$"{legendPage+1} / {Mathf.Max(1,(legendEntries.Count+PageSize-1)/PageSize)}";
+            for(int i=legendPage*PageSize;i<Mathf.Min(legendEntries.Count,(legendPage+1)*PageSize);i++)
+            {
+                var entry=legendEntries[i]; int slot=i-legendPage*PageSize;
+                var row=TruckTaxiHud.Rect(legendList,"Legend: "+entry.label,
+                    new Vector2(0,1-(slot+1)/8f),new Vector2(1,1-slot/8f));
+                var icon=TruckTaxiHud.Rect(row,"Icon",new Vector2(0,.15f),new Vector2(.15f,.85f)).gameObject.AddComponent<Image>();
+                icon.sprite=entry.icon; icon.color=entry.color; icon.preserveAspect=true;
+                var title=hud.Text(row,entry.label,new Vector2(.18f,.5f),new Vector2(1,.98f),17); title.text=entry.label;
+                var detail=hud.Text(row,entry.explanation,new Vector2(.18f,.02f),new Vector2(1,.5f),13); detail.text=entry.explanation;
+                legendRows.Add(row.gameObject);
+            }
         }
         private void RouteSelected()
         {

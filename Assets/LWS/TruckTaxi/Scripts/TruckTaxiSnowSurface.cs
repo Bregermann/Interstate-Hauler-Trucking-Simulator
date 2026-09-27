@@ -24,6 +24,7 @@ namespace LWS.TruckTaxi
         private readonly List<MeshRenderer> groundTargets = new List<MeshRenderer>();
         private readonly Dictionary<MeshRenderer, Material> tracedMaterials = new Dictionary<MeshRenderer, Material>();
         private readonly HashSet<Material> updatedSnowMaterials = new HashSet<Material>();
+        private readonly HashSet<int> warnedIncompatibleRoads = new HashSet<int>();
         private readonly Dictionary<MeshRenderer, GroundBinding> groundBindings = new Dictionary<MeshRenderer, GroundBinding>();
         private readonly Dictionary<Camera, CameraMask> cameraMasks = new Dictionary<Camera, CameraMask>();
         private readonly HashSet<Camera> boundDepthCameras = new HashSet<Camera>();
@@ -35,6 +36,7 @@ namespace LWS.TruckTaxi
         private Material traceMaterial;
         private float coverage01;
         private float nextMaterialCheck;
+        private float nextRoadRegistration;
         private bool createdGenerator;
         private Texture2D snowTexture;
         private Texture2D snowDetailTexture;
@@ -105,7 +107,7 @@ namespace LWS.TruckTaxi
             lastAppliedCoverage = -1;
         }
         public void ConfigureDepthRenderer(int rendererIndex) { depthRendererIndex = rendererIndex; }
-        public void MarkDirty() { }
+        public void MarkDirty() { targetsCached = false; nextRoadRegistration = 0; }
 
         public void RefreshStreamedSurfaces()
         {
@@ -114,6 +116,7 @@ namespace LWS.TruckTaxi
             foreach (var proxy in roadDepthProxies.Values) if (proxy != null) Destroy(proxy.gameObject);
             roadDepthProxies.Clear(); tracedMaterials.Clear();
             RestoreGround(); lastAppliedCoverage = -1;
+            nextRoadRegistration = 0;
         }
 
         private bool IsTaxiScene(UnityEngine.SceneManagement.Scene scene)
@@ -140,6 +143,16 @@ namespace LWS.TruckTaxi
                     snowDepth01 = Mathf.Max(.021f, coverage01)
                 });
                 current = GetCoverageSingleton();
+            }
+            if (coverage01 > .001f && weatherade != null && Time.unscaledTime >= nextRoadRegistration)
+            {
+                weatherade.ApplyRoadCondition(new LwsRoadConditionSnapshot
+                {
+                    condition = LwsRoadConditionType.LightSnow,
+                    snowDepth01 = Mathf.Max(.021f, coverage01)
+                });
+                targetsCached = false;
+                nextRoadRegistration = Time.unscaledTime + 3f;
             }
             if (current == null || current.GetType().FullName != SnowCoverageType)
             {
@@ -311,7 +324,12 @@ namespace LWS.TruckTaxi
             {
                 if (renderer == null) continue;
                 Material material = renderer.sharedMaterial;
-                if (!LwsWeatheradeMaterialFactory.IsWeatheradeMaterialForMode(material, LwsWeatheradeSurfaceMaterialMode.Snow)) continue;
+                if (!LwsWeatheradeMaterialFactory.IsWeatheradeMaterialForMode(material, LwsWeatheradeSurfaceMaterialMode.Snow))
+                {
+                    if (coverage01 > .001f && warnedIncompatibleRoads.Add(renderer.GetInstanceID()))
+                        Debug.LogWarning("Truck Taxi snow: road renderer is not Weatherade snow-compatible: " + renderer.name, renderer);
+                    continue;
+                }
                 if (amountChanged || !updatedSnowMaterials.Contains(material)) updateMaterial.Invoke(current, new object[] { material });
                 updatedSnowMaterials.Add(material);
             }

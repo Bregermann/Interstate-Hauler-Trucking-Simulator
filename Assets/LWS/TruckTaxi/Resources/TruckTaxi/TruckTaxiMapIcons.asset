@@ -15,78 +15,158 @@ MonoBehaviour:
   entries:
   - type: 0
     icon: {fileID: 21300000, guid: 74b7b65e380254640b1550785ef1f125, type: 3}
+    label: Player
+    explanation: Your truck
     color: {r: 0.2, g: 0.88, b: 1, a: 1}
     scale: 1
   - type: 1
     icon: {fileID: 21300000, guid: 0c2adefd5a63cad4ebb0f278640e8dbd, type: 3}
+    label: Passenger pickup
+    explanation: Waiting fare
     color: {r: 1, g: 0.84, b: 0.24, a: 1}
     scale: 1
   - type: 2
     icon: {fileID: 21300000, guid: ada99a8cc60406f4396c9e37d44044e8, type: 3}
+    label: Destination
+    explanation: Final passenger dropoff
     color: {r: 1, g: 1, b: 1, a: 1}
     scale: 1
   - type: 3
     icon: {fileID: 21300000, guid: 13ccb08b84fa96a418f8e8b174216d63, type: 3}
+    label: ActiveRoute
+    explanation: Point of interest
     color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
     scale: 1
   - type: 4
     icon: {fileID: 21300000, guid: de746f19e0914ef408d6a945b9e114ee, type: 3}
+    label: Objective
+    explanation: Current ride objective
     color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
     scale: 1
   - type: 5
     icon: {fileID: 21300000, guid: 75aac6d57c1e2e24c808e49942b9e5e1, type: 3}
+    label: Scenic stop
+    explanation: Point of interest
     color: {r: 0.38, g: 1, b: 0.66, a: 1}
     scale: 1
   - type: 6
     icon: {fileID: 21300000, guid: 28b1e5913d3a9ba4e983446000b7e08b, type: 3}
+    label: Sketchy pickup
+    explanation: Point of interest
     color: {r: 1, g: 0.68, b: 0.35, a: 1}
     scale: 1
   - type: 7
     icon: {fileID: 21300000, guid: 5c9d736a02c58764e923626aa337f2f7, type: 3}
+    label: Private stop
+    explanation: Companion parking destination
     color: {r: 1, g: 0.55, b: 0.73, a: 1}
     scale: 1
   - type: 8
     icon: {fileID: 21300000, guid: 29dd441ac7182a248ab9e57d54aba6c7, type: 3}
+    label: Shortcut
+    explanation: Unexplored shortcut
     color: {r: 0.66, g: 0.82, b: 1, a: 1}
     scale: 1
   - type: 9
     icon: {fileID: 21300000, guid: 970fbb986c7ed5543b48ed7bc2049e66, type: 3}
+    label: Discovered shortcut
+    explanation: Shortcut you found
     color: {r: 0.35, g: 1, b: 0.95, a: 1}
     scale: 1
   - type: 10
     icon: {fileID: 21300000, guid: b03fb4cd2576cab428b158ff95e21008, type: 3}
+    label: Target vehicle
+    explanation: Ride target on the road
     color: {r: 1, g: 0.38, b: 0.38, a: 1}
     scale: 1
   - type: 11
     icon: {fileID: 21300000, guid: 36ba444b2a409a147ad4b2322fb92d39, type: 3}
+    label: Collectible
+    explanation: Point of interest
     color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
     scale: 1
   - type: 12
     icon: {fileID: 21300000, guid: de187af6504058345b53a3c45a58bd7a, type: 3}
+    label: Dropoff
+    explanation: Point of interest
     color: {r: 1, g: 1, b: 1, a: 1}
     scale: 1
   - type: 13
     icon: {fileID: 21300000, guid: 7e9275a0a8f0af74e91d4e0bf4119592, type: 3}
+    label: SpecialEvent
+    explanation: Point of interest
     color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
     scale: 1
   - type: 14
     icon: {fileID: 21300000, guid: e463d88ea69ffcd428033252f85e7182, type: 3}
+    label: Danger
+    explanation: Hazard ahead
     color: {r: 1, g: 0.38, b: 0.38, a: 1}
     scale: 1
   - type: 15
     icon: {fileID: 21300000, guid: e1c696f87950acb4091d8a2b2b41fda2, type: 3}
+    label: Debug
+    explanation: Point of interest
     color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
     scale: 1
   - type: 16
     icon: {fileID: 21300000, guid: dadc685b88103a149833cecda3f436ac, type: 3}
+    label: Restaurant / food
+    explanation: Food and drinks
     color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
     scale: 1
   - type: 17
     icon: {fileID: 21300000, guid: 71ace2feeb1ebcb40b08593ca24d35ba, type: 3}
+    label: PhotoStop
+    explanation: Point of interest
     color: {r: 0.38, g: 1, b: 0.66, a: 1}
     scale: 1
   - type: 18
     icon: {fileID: 21300000, guid: 6c0d97dfe22a4e247a0a5297627f5c06, type: 3}
+    label: Restroom
+    explanation: Use the restroom
+    color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
+    scale: 1
+  - type: 19
+    icon: {fileID: 21300000, guid: ce11f5e051b269f4b90a555974ac3ace, type: 3}
+    label: Store
+    explanation: Buy supplies
+    color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
+    scale: 1
+  - type: 20
+    icon: {fileID: 21300000, guid: d82eaa5a6ae58f14fa058e502c71e9e5, type: 3}
+    label: Gas
+    explanation: Refuel the truck
+    color: {r: 0.95, g: 0.78, b: 0.28, a: 1}
+    scale: 1
+  - type: 21
+    icon: {fileID: 21300000, guid: c56869581dfd11443b4a7a5dad45ea18, type: 3}
+    label: Repair
+    explanation: Fix vehicle damage
+    color: {r: 0.55, g: 0.85, b: 0.95, a: 1}
+    scale: 1
+  - type: 22
+    icon: {fileID: 21300000, guid: 7a18a83c011f584478d3b9847cd641ff, type: 3}
+    label: Train station
+    explanation: Rail passenger stop
+    color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
+    scale: 1
+  - type: 23
+    icon: {fileID: 21300000, guid: 598d07e6b4fcff840858c5462c14e706, type: 3}
+    label: Bus terminal
+    explanation: Bus passenger stop
+    color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
+    scale: 1
+  - type: 24
+    icon: {fileID: 21300000, guid: 64b91df4bbf208145b44240674d6ee2b, type: 3}
+    label: Racetrack
+    explanation: Speedway and taxi stops
+    color: {r: 1, g: 0.42, b: 0.25, a: 1}
+    scale: 1
+  - type: 25
+    icon: {fileID: 21300000, guid: e4f7e61d45c2a894f945d5b92bebbb06, type: 3}
+    label: Service area
+    explanation: Highway services
     color: {r: 0.92, g: 0.92, b: 0.8, a: 1}
     scale: 1
   knownBrightness: 0.75

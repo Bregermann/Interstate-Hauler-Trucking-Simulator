@@ -15,6 +15,16 @@ namespace LWS.TruckTaxi
         public TruckTaxiBathroomPoint NearbyBathroom { get; private set; }
         public TruckTaxiStorePoint NearbyStore { get; private set; }
         public TruckTaxiServicePoint NearbyService { get; private set; }
+        public TruckTaxiServicePoint NearbyRestaurant
+        {
+            get
+            {
+                var point = ServiceInReach(TruckTaxiServiceCapability.Food);
+                return point != null && point.location != null &&
+                    point.location.locationType == TaxiLocationType.Restaurant ? point : null;
+            }
+        }
+        public TruckTaxiServicePoint NearbyRepair => ServiceInReach(TruckTaxiServiceCapability.RepairGeneralDamage);
         public InputAction ThrowContainerAction { get; private set; }
         public IReadOnlyList<TruckTaxiStorePoint> Stores => stores;
         public string Feedback { get; private set; } = "";
@@ -152,20 +162,69 @@ namespace LWS.TruckTaxi
         }
         public bool BuyItem(TruckTaxiNeedsItem item)
         {
-            RefreshProximity();
+            string failure = PurchaseFailureReason(item);
+            if (failure != null) { Feedback = failure; return false; }
             var entry = TruckTaxiNeedsItems.Find(item);
-            var service = NearbyStore != null ? NearbyStore.GetComponent<TruckTaxiServicePoint>() : null;
-            bool sold = service != null && service.Supports(TruckTaxiServiceCapability.Store) &&
-                (entry == null || entry.HungerRelief <= 0 || service.Supports(TruckTaxiServiceCapability.Food)) &&
-                (entry == null || entry.ThirstRelief <= 0 || service.Supports(TruckTaxiServiceCapability.Drink)) &&
-                (item != TruckTaxiNeedsItem.EmptyPissJug || service.Supports(TruckTaxiServiceCapability.PissJugs));
-            if (entry == null || !sold || !State.CanAdd(item) || host?.Session == null ||
-                !host.Ready || host.Session.State == TruckTaxiState.Inactive || State.JugActive)
-            { Feedback = "Stop inside a store bay first, or make room for the item."; return false; }
             if (!host.Session.TrySpend(entry.PriceCents))
-            { Feedback = "Not enough shift cash."; return false; }
+            { Feedback = "Not Enough Cash"; return false; }
             State.AddItem(item);
             Feedback = "Bought " + entry.Name + ".";
+            return true;
+        }
+        public string PurchaseFailureReason(TruckTaxiNeedsItem item)
+        {
+            if (host?.Session == null || State == null || !host.Ready ||
+                host.Session.State == TruckTaxiState.Inactive) return "Service Unavailable";
+            var entry = TruckTaxiNeedsItems.Find(item);
+            if (entry == null) return "Item Unavailable";
+            if (State.JugActive) return "Finish Current Action";
+            var service = NearestServiceAtPosition(TruckTaxiServiceCapability.Store);
+            if (service == null) return "Not In Store Area";
+            if (!service.CanUse(body.position, body.linearVelocity.magnitude, settings.bathroomMaximumSpeed))
+                return "Vehicle Must Stop";
+            if (entry.HungerRelief > 0 && !service.Supports(TruckTaxiServiceCapability.Food) ||
+                entry.ThirstRelief > 0 && !service.Supports(TruckTaxiServiceCapability.Drink) ||
+                item == TruckTaxiNeedsItem.EmptyPissJug && !service.Supports(TruckTaxiServiceCapability.PissJugs))
+                return "Item Not Sold Here";
+            if (entry.Slot.HasValue && decorations != null)
+            {
+                bool full = item == TruckTaxiNeedsItem.AirFreshener ? decorations.IsMounted(TruckTaxiCabSlot.Mirror) :
+                    decorations.IsMounted(TruckTaxiCabSlot.DashboardLeft) && decorations.IsMounted(TruckTaxiCabSlot.DashboardRight);
+                if (full) return "No Slot Available";
+                if (State.Count(item) > decorations.MountedCount(item)) return "Already Owned";
+            }
+            if (!State.CanAdd(item)) return "Inventory Full";
+            if (host.Session.WalletBalanceCents < entry.PriceCents) return "Not Enough Cash";
+            return null;
+        }
+        private TruckTaxiServicePoint NearestServiceAtPosition(TruckTaxiServiceCapability capability)
+        {
+            if (host == null || body == null) return null;
+            TruckTaxiServicePoint best = null; float bestDistance = float.PositiveInfinity;
+            foreach (var point in TruckTaxiServicePoint.Points)
+            {
+                if (point == null || point.gameObject.scene != host.gameObject.scene || !point.Supports(capability)) continue;
+                Vector3 offset = body.position - point.Position;
+                float planar = Vector3.ProjectOnPlane(offset, Vector3.up).sqrMagnitude;
+                if (Mathf.Abs(offset.y) > point.verticalTolerance || planar > point.InteractionRadius * point.InteractionRadius || planar >= bestDistance) continue;
+                best = point; bestDistance = planar;
+            }
+            return best;
+        }
+        public bool EatHere()
+        {
+            RefreshProximity();
+            var restaurant = NearbyRestaurant;
+            if (restaurant == null) { Feedback = "Not In Restaurant Area"; return false; }
+            var meal = TruckTaxiNeedsItems.Find(TruckTaxiNeedsItem.Meal);
+            if (host.Session.WalletBalanceCents < meal.PriceCents || !host.Session.TrySpend(meal.PriceCents))
+            { Feedback = "Not Enough Cash"; return false; }
+            State.EatMeal(meal.HungerRelief);
+            Feedback = "Ate here for " + TruckTaxiHud.Money(meal.PriceCents) + ".";
+            if (host.Session.HasPassenger && host.Session.Passenger != null)
+                host.Passengers?.Dialogue?.Speak(host.Session.Passenger,
+                    TruckTaxiDialogueCategory.RestaurantReaction, host.Session);
+            RestoreRideRoute();
             return true;
         }
         public bool RouteToStore()
@@ -175,6 +234,8 @@ namespace LWS.TruckTaxi
         public bool RouteToService(TruckTaxiServiceCapability capability)
         {
             if (host?.GPS == null || body == null) return false;
+            if (host.Companions?.ActivePrivateStop != null)
+            { Feedback = "Complete the private stop before changing service routes."; return false; }
             var point = TruckTaxiServicePoint.Nearest(body.position, capability, host.gameObject.scene,
                 capability == (TruckTaxiServiceCapability.Food | TruckTaxiServiceCapability.Drink));
             if (point == null) { Feedback = "No compatible service is available in this level."; return false; }
@@ -183,11 +244,9 @@ namespace LWS.TruckTaxi
         }
         public TruckTaxiServicePoint ServiceInReach(TruckTaxiServiceCapability capability)
         {
-            if (body == null || host == null) return null;
-            foreach (var point in TruckTaxiServicePoint.Points)
-                if (point != null && point.gameObject.scene == host.gameObject.scene && point.Supports(capability) &&
-                    point.CanUse(body.position, body.linearVelocity.magnitude, settings.bathroomMaximumSpeed)) return point;
-            return null;
+            var point = NearestServiceAtPosition(capability);
+            return point != null && point.CanUse(body.position, body.linearVelocity.magnitude,
+                settings.bathroomMaximumSpeed) ? point : null;
         }
         public bool ConsumeItem(TruckTaxiNeedsItem item)
         {
@@ -201,14 +260,15 @@ namespace LWS.TruckTaxi
         }
         public bool MountDecoration(TruckTaxiNeedsItem item, TruckTaxiCabSlot slot)
         {
-            if (State == null || decorations == null || State.Count(item) <= decorations.MountedCount(item) ||
-                decorations.IsMounted(slot)) return false;
+            if (State == null || decorations == null || State.Count(item) <= decorations.MountedCount(item))
+            { Feedback = "Item Not Owned"; return false; }
+            if (decorations.IsMounted(slot)) { Feedback = "No Slot Available"; return false; }
             var visual = GameObject.CreatePrimitive(item == TruckTaxiNeedsItem.AirFreshener ? PrimitiveType.Cube : PrimitiveType.Sphere);
             visual.name = TruckTaxiNeedsItems.Find(item)?.Name ?? item.ToString();
             visual.transform.localScale = item == TruckTaxiNeedsItem.AirFreshener ? new Vector3(.07f, .12f, .018f) : Vector3.one * .11f;
             var renderer = visual.GetComponent<Renderer>();
             renderer.material.color = item == TruckTaxiNeedsItem.AirFreshener ? Color.green : item == TruckTaxiNeedsItem.HulaFigure ? Color.magenta : Color.yellow;
-            if (!decorations.Mount(item, slot, visual)) { Destroy(visual); return false; }
+            if (!decorations.Mount(item, slot, visual)) { Destroy(visual); Feedback = "No Slot Available"; return false; }
             Feedback = "Mounted " + TruckTaxiNeedsItems.Find(item).Name + ".";
             return true;
         }
@@ -277,12 +337,23 @@ namespace LWS.TruckTaxi
         public void RestoreRideRoute()
         {
             RoutedBathroom = null;
+            var privateStop = host.Companions?.ActivePrivateStop;
+            if (privateStop != null)
+            {
+                if (host.GPS.IsServiceDestination && host.GPS.TargetId == privateStop.stableId)
+                {
+                    if (!host.GPS.GuidanceSuppressed || host.GPS.RestoreServiceRoute()) return;
+                }
+                host.GPS.SetPrivateStopDestination(privateStop);
+                return;
+            }
             host.GPS.ClearDestination();
             if (host.Session.State == TruckTaxiState.DrivingToPickup) host.GPS.SetPickupDestination(host.Session.Pickup);
             else if (host.Session.State == TruckTaxiState.DrivingToDestination)
             {
                 if (host.Session.ActiveStop?.StopPoint != null) host.GPS.SetStopDestination(host.Session.ActiveStop.StopPoint);
-                else host.GPS.SetRideDestination(host.Session.Destination);
+                else if(host.Session.SafeDropRequested) host.GPS.SetSafeDropDestination(host.Session.CurrentDesiredDestination);
+                else host.GPS.SetRideDestination(host.Session.CurrentDesiredDestination);
             }
             else host.GPS.ClearDestination();
         }

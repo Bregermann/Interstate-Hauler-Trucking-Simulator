@@ -239,14 +239,15 @@ namespace LWS.TruckTaxi
             dirty=true; nextTrafficRefresh=0;
         }
         public void RequestRefresh() { dirty=true; }
-        public void SetServiceTarget(string id,string label,Vector3 position)
+        public void SetServiceTarget(string id,string label,Vector3 position,
+            TruckTaxiMapMarkerType type=TruckTaxiMapMarkerType.Bathroom)
         {
             ClearServiceTarget();
             if(markerRoot==null) return;
             serviceTargetReused=byId.TryGetValue(id,out var previous) && previous!=null;
             if(serviceTargetReused)
                 serviceTargetOriginalState=previous.state;
-            serviceTarget=serviceTargetReused ? previous : Ensure(id,label,TruckTaxiMapMarkerType.Bathroom,null,position);
+            serviceTarget=serviceTargetReused ? previous : Ensure(id,label,type,null,position);
             if(serviceTarget!=null) serviceTarget.state=TruckTaxiMapMarkerState.Active;
             dirty=true;
         }
@@ -281,6 +282,7 @@ namespace LWS.TruckTaxi
             bool ride=session.State==TruckTaxiState.RideOffered || session.State==TruckTaxiState.DrivingToPickup ||
                 session.State==TruckTaxiState.PassengerBoarding || session.HasPassenger || session.State==TruckTaxiState.RideComplete;
             foreach(var marker in stops) if(marker!=null) marker.state=completed.Contains(marker.stableId) ? TruckTaxiMapMarkerState.Completed : TruckTaxiMapMarkerState.Optional;
+            if(serviceTarget!=null) serviceTarget.state=TruckTaxiMapMarkerState.Active;
             foreach(var marker in shortcuts) if(marker!=null)
             {
                 bool known=IsShortcutDiscovered(marker.stableId);
@@ -293,8 +295,12 @@ namespace LWS.TruckTaxi
                     gps.IsServiceDestination ? TruckTaxiMapMarkerState.Known : session.State==TruckTaxiState.RideOffered || session.State==TruckTaxiState.DrivingToPickup || session.State==TruckTaxiState.PassengerBoarding
                         ? TruckTaxiMapMarkerState.Active : TruckTaxiMapMarkerState.Completed);
                 SetRideMarker(session.Destination,TruckTaxiMapMarkerType.Destination,
-                    session.State==TruckTaxiState.RideComplete ? TruckTaxiMapMarkerState.Completed : session.HasPassenger && session.ActiveStop==null && !gps.IsServiceDestination
+                    session.State==TruckTaxiState.RideComplete ? TruckTaxiMapMarkerState.Completed : session.HasPassenger && !session.SafeDropRequested && session.ActiveStop==null && !gps.IsServiceDestination
                         ? TruckTaxiMapMarkerState.Active : TruckTaxiMapMarkerState.Known);
+                if(session.SafeDropRequested && session.SafeDropDestination!=null &&
+                   session.SafeDropDestination.locationId!=session.Destination?.locationId)
+                    SetRideMarker(session.SafeDropDestination,TruckTaxiMapMarkerType.Dropoff,
+                        TruckTaxiMapMarkerState.Active);
             }
             foreach(var request in session.Requests)
             {
@@ -307,6 +313,7 @@ namespace LWS.TruckTaxi
                         shortcut.state=request.Targets.Contains(shortcut.stableId) ? TruckTaxiMapMarkerState.Completed : TruckTaxiMapMarkerState.Optional;
             }
             RefreshImpactTargets();
+            if(serviceTarget!=null) serviceTarget.state=TruckTaxiMapMarkerState.Active;
             endpoint=FindAndStyleLegacyPois();
             nearby.Clear();
             foreach(var marker in markers) if(marker!=null && marker.state!=TruckTaxiMapMarkerState.Hidden && marker.state!=TruckTaxiMapMarkerState.Active &&

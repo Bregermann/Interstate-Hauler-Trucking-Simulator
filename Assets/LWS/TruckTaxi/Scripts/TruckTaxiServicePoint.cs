@@ -17,6 +17,7 @@ namespace LWS.TruckTaxi
     [DisallowMultipleComponent]
     public sealed class TruckTaxiServicePoint : MonoBehaviour
     {
+        public const float ServiceStopSpeedMetersPerSecond = 0.44704f;
         private static readonly HashSet<TruckTaxiServicePoint> points = new HashSet<TruckTaxiServicePoint>();
         public static IReadOnlyCollection<TruckTaxiServicePoint> Points => points;
         public string stableId;
@@ -24,16 +25,17 @@ namespace LWS.TruckTaxi
         public TruckTaxiServiceCapability capabilities;
         public TruckTaxiRideLocation location;
         public Transform recoveryAnchor;
-        [Min(2)] public float radius = 11;
+        [Min(2)] public float radius = 18;
         [Min(.5f)] public float verticalTolerance = 3;
         [Min(0)] public int assistanceBaseCostCents = 5000;
         public Vector3 Position => location != null ? location.StopPosition : transform.position;
         public Vector3 RecoveryPosition => recoveryAnchor != null ? recoveryAnchor.position : Position;
+        public float InteractionRadius => Supports(TruckTaxiServiceCapability.Store) ? Mathf.Max(18, radius) : radius;
         public bool Supports(TruckTaxiServiceCapability required) => isActiveAndEnabled && (capabilities & required) == required;
         public bool CanUse(Vector3 position, float speed, float maximumSpeed) => isActiveAndEnabled &&
-            float.IsFinite(speed) && speed >= 0 && speed <= maximumSpeed &&
+            float.IsFinite(speed) && speed >= 0 && speed <= Mathf.Max(ServiceStopSpeedMetersPerSecond, maximumSpeed) &&
             Mathf.Abs(position.y - Position.y) <= verticalTolerance &&
-            Vector3.ProjectOnPlane(position - Position, Vector3.up).sqrMagnitude <= radius * radius;
+            Vector3.ProjectOnPlane(position - Position, Vector3.up).sqrMagnitude <= InteractionRadius * InteractionRadius;
         private void OnEnable() => points.Add(this);
         private void OnDisable() => points.Remove(this);
         public static TruckTaxiServicePoint Nearest(Vector3 position, TruckTaxiServiceCapability required,

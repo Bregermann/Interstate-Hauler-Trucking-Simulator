@@ -105,7 +105,7 @@ namespace LWS.TruckTaxi
             Button(root,"GPS SETTINGS",new Vector2(.89f,.19f),new Vector2(.99f,.25f),()=>GPSSettings?.Toggle());
             Button(root,"SERVICES / TOW",new Vector2(.73f,.19f),new Vector2(.88f,.25f),()=>EnvironmentNeeds?.OpenServices());
             throwContainer=Button(root,"THROW FILLED CONTAINER",new Vector2(.73f,.265f),new Vector2(.99f,.325f),()=>host.DriverNeeds?.ThrowFilledContainer());
-            companionPickup=Button(root,"PICK UP",new Vector2(.4f,.52f),new Vector2(.6f,.59f),()=>host.Companions?.Interact());
+            companionPickup=Text(root,"Companion horn prompt",new Vector2(.35f,.52f),new Vector2(.65f,.59f),24).gameObject;
             companionPark=Button(root,"PARK",new Vector2(.4f,.52f),new Vector2(.6f,.59f),()=>host.Companions?.Interact());
             eject=Button(ridePanel,"HOLD TO EJECT",new Vector2(.05f,.08f),new Vector2(.95f,.21f),()=>{});
             var ejectEvents=eject.AddComponent<EventTrigger>();
@@ -216,9 +216,17 @@ namespace LWS.TruckTaxi
             if(host?.Session!=null) Refresh();
         }
         private void Accept()
-        { if(host.Session.State==TruckTaxiState.AppreciationOffer) host.Session.ChooseAppreciation(true); else host.Session.AcceptRide(); Refresh(); }
+        {
+            if(host.Session.PendingDiversion!=null) { host.Session.AcceptDiversion(); host.SetPaused(false); }
+            else if(host.Session.State==TruckTaxiState.AppreciationOffer) host.Session.ChooseAppreciation(true);
+            else host.Session.AcceptRide(); Refresh();
+        }
         private void Decline()
-        { if(host.Session.State==TruckTaxiState.AppreciationOffer) host.Session.ChooseAppreciation(false); else host.Session.DeclineRide(); Refresh(); }
+        {
+            if(host.Session.PendingDiversion!=null) { host.Session.DeclineDiversion(); host.SetPaused(false); }
+            else if(host.Session.State==TruckTaxiState.AppreciationOffer) host.Session.ChooseAppreciation(false);
+            else host.Session.DeclineRide(); Refresh();
+        }
         private System.Collections.IEnumerator Appreciation()
         {
             appreciationRunning=true; appreciationFade.gameObject.SetActive(true); appreciationFade.transform.SetAsLastSibling();
@@ -241,7 +249,7 @@ namespace LWS.TruckTaxi
             else if(EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) EnvironmentNeeds.Close();
             else if(AudioSettings!=null && AudioSettings.IsOpen) AudioSettings.Close();
             else if(GPSSettings!=null && GPSSettings.IsOpen) GPSSettings.Close();
-            else if(host.Session.State==TruckTaxiState.RideOffered || host.Session.State==TruckTaxiState.AppreciationOffer) Decline();
+            else if(host.Session.PendingDiversion!=null || host.Session.State==TruckTaxiState.RideOffered || host.Session.State==TruckTaxiState.AppreciationOffer) Decline();
             else if(host.Session.State==TruckTaxiState.RideComplete || host.Session.State==TruckTaxiState.RideFailed) host.Session.ContinueShift();
             else if(host.Session.State!=TruckTaxiState.Inactive && host.Session.State!=TruckTaxiState.AppreciationSequence) host.SetPaused(!host.Paused);
             Refresh();
@@ -251,25 +259,29 @@ namespace LWS.TruckTaxi
             var s = host.Session;
             bool hideNormalHud=NormalHudSuppressed;
             telemetryBand.gameObject.SetActive(!hideNormalHud);
-            companionPickup.SetActive(!hideNormalHud && host.Companions?.Prompt=="PICK UP");
+            companionPickup.SetActive(!hideNormalHud && host.Companions?.CanInteract==true && !host.Companions.HasOnboardCompanion);
+            if(companionPickup.activeSelf) companionPickup.GetComponent<TMP_Text>().text="HONK TO PICK UP ["+host.Companions.HornBinding+"]";
             companionPark.SetActive(!hideNormalHud && host.Companions?.Prompt=="PARK");
             float privateFade=host.Companions?.FadeAlpha ?? 0;
             companionFade.gameObject.SetActive(privateFade>0 && !host.Paused && !hideNormalHud);
             companionFade.color=new Color(0,0,0,privateFade*.45f);
             throwContainer.SetActive(!hideNormalHud && host.DriverNeeds?.State?.FilledJug==true && host.DriverNeeds.CanInteract);
-            bool canEject=s.HasPassenger && s.Passenger!=null && s.Passenger.canBeEjected && !host.Paused;
+            bool companion=host.Companions?.HasOnboardCompanion==true;
+            bool canEject=!host.Paused && (host.Companions?.CanEject==true || s.HasPassenger && s.Passenger!=null && s.Passenger.canBeEjected);
             eject.SetActive(canEject && !hideNormalHud); ejectProgress.gameObject.SetActive(canEject && !hideNormalHud);
-            ejectProgress.text=host.Passengers.EjectionHoldProgress>0 ? "EJECTING  "+(host.Passengers.EjectionHoldProgress*100).ToString("0")+"%" : "HOLD F / VIEW TO EJECT";
+            ejectProgress.text=host.Passengers.EjectionHoldProgress>0 ? "EJECTING  "+(host.Passengers.EjectionHoldProgress*100).ToString("0")+"%" :
+                "HOLD ["+UIInput.Hint(host.Passengers.EjectAction)+"] TO EJECT";
             bool offered=s.State==TruckTaxiState.RideOffered, inactive=s.State==TruckTaxiState.Inactive;
             bool appreciation=s.State==TruckTaxiState.AppreciationOffer;
+            bool diversion=s.PendingDiversion!=null;
             bool ended=s.State==TruckTaxiState.RideComplete || s.State==TruckTaxiState.RideFailed;
             RefreshGoalResults(ended);
-            modal.gameObject.SetActive(!hideNormalHud && (offered||inactive||ended||appreciation));
-            start.SetActive(inactive); accept.SetActive(offered||appreciation); decline.SetActive(offered||appreciation); next.SetActive(ended);
+            modal.gameObject.SetActive(!hideNormalHud && (offered||inactive||ended||appreciation||diversion));
+            start.SetActive(inactive); accept.SetActive(offered||appreciation||diversion); decline.SetActive(offered||appreciation||diversion); next.SetActive(ended);
             OfferCountdown.gameObject.SetActive(offered);
             OfferCountdown.Refresh();
             bool gpsSettings=(GPSSettings!=null && GPSSettings.IsOpen) || (AudioSettings!=null && AudioSettings.IsOpen) || (EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) || Controls?.IsOpen==true || CabLookSettings?.IsOpen==true;
-            pausePanel.gameObject.SetActive(!hideNormalHud && host.Paused && !inactive && !ended && !offered && !appreciation && !appreciationRunning && !gpsSettings);
+            pausePanel.gameObject.SetActive(!hideNormalHud && host.Paused && !inactive && !ended && !offered && !appreciation && !diversion && !appreciationRunning && !gpsSettings);
             if(pausePanel.gameObject.activeSelf) modal.gameObject.SetActive(false);
             if(gpsSettings) modal.gameObject.SetActive(false);
             offerMap.transform.parent.gameObject.SetActive(offered && showOfferMap);
@@ -284,7 +296,18 @@ namespace LWS.TruckTaxi
             speed.text=$"{mph:0} MPH\nFUEL {(host.Fuel!=null ? host.Fuel.Fraction*100 : 100):0}%";
             title.text=inactive ? "TRUCK TAXI" : offered ? "RIDE REQUEST" : s.State==TruckTaxiState.RideComplete ? "FARE COMPLETE" : "RIDE ENDED";
             if(appreciation) title.text="SPECIAL APPRECIATION";
+            if(diversion) title.text="PASSENGER REQUEST";
+            else if(ended && s.LastFare?.IsCancellation==true) title.text="RIDE ABORTED - PASSENGER CANCELLED";
             if(inactive) details.text="SHIFT EARNINGS\n"+Money(s.ShiftEarnings)+"\n\nDOWNTOWN / RESIDENTIAL / INDUSTRIAL";
+            else if(diversion)
+            {
+                var r=s.PendingDiversion; var d=r.Definition;
+                details.text=s.Passenger.passengerName+"\n\n"+r.Description+"\n"+r.StopPoint.displayName+"\n\nREWARD\n"+
+                    Money(d.bonusMoneyCents)+"  /  "+d.bonusScore+" SCORE"+
+                    (d.rewardItemCount>0 ? "\n"+d.rewardItemCount+"x "+TruckTaxiNeedsItems.Find(d.rewardItem)?.Name : "")+
+                    (d.secondRewardItemCount>0 ? "\n"+d.secondRewardItemCount+"x "+TruckTaxiNeedsItems.Find(d.secondRewardItem)?.Name : "")+
+                    (d.rewardThirstRelief ? "\nTHIRST RELIEF" : "")+"\n\n["+UIInput.Hint(UIInput.Submit)+"] ACCEPT DIVERSION   ["+UIInput.Hint(UIInput.Cancel)+"] DECLINE";
+            }
             else if(appreciation) details.text=s.Passenger.passengerName+" offers a special thank-you for an excellent ride.\n\nAccept a private moment, or politely decline.\n\n["+UIInput.Hint(UIInput.Submit)+"] ACCEPT     ["+UIInput.Hint(UIInput.Cancel)+"] DECLINE";
             else if(offered)
             {
@@ -295,19 +318,27 @@ namespace LWS.TruckTaxi
             else if(s.LastFare!=null)
             {
                 var f=s.LastFare;
-                details.text=$"THIS RIDE: {f.Rating} STARS\nDRIVER AVERAGE: {s.DriverAverageText} STARS\n\nBASE {Money(f.Base)}  /  DISTANCE {Money(f.Distance)}\nTIME {Money(f.Time)}  /  REQUESTS {Money(f.Requests)}\nCHAOS +{f.ChaosScore}  /  TIP {Money(f.Tip)}\nPENALTIES -{Money(f.Penalties)}\nFARE {Money(f.Total)}"+(s.SpecialAppreciationAccepted ? "\nSPECIAL APPRECIATION" : "");
+                details.text=$"THIS RIDE: {f.Rating} STARS\nDRIVER AVERAGE: {s.DriverAverageText} STARS\n\n"+
+                    (f.IsCancellation ? "CANCELLATION FEE " : "BASE ")+Money(f.Base)+
+                    $"\nDISTANCE PAY {Money(f.Distance)} / TIME PAY {Money(f.Time)}\nCOMPLETED GOALS {Money(f.Requests)}\nDIVERSION REWARDS {Money(f.Diversions)}\nCHAOS +{f.ChaosScore} / TIP {Money(f.Tip)}\nPENALTIES -{Money(f.Penalties)}\nTOTAL PAID {Money(f.Total)}"+
+                    (s.SpecialAppreciationAccepted ? "\nSPECIAL APPRECIATION" : "");
             }
             else if(ended) details.text=s.Reaction;
             bool active = s.State==TruckTaxiState.DrivingToPickup || s.State==TruckTaxiState.PassengerBoarding || s.HasPassenger;
-            ridePanel.gameObject.SetActive(active && !gpsSettings && !hideNormalHud);
+            ridePanel.gameObject.SetActive((active || companion) && !gpsSettings && !hideNormalHud);
             if(active)
             {
                 portrait.sprite=s.Passenger.portrait;
                 portrait.gameObject.SetActive(portrait.sprite!=null);
-                var target=s.HasPassenger ? s.Destination : s.Pickup;
+                var target=s.HasPassenger ? s.CurrentDesiredDestination : s.Pickup;
                 float distance=Vector3.Distance(host.Player.transform.position,target.StopPosition);
                 requestText.text=s.Passenger.passengerName+"\n"+target.locationName+" / "+distance.ToString("0")+" m\n"+
                     Money(s.EstimateFare().Total)+"  |  "+TruckTaxiSession.StarsForSatisfaction(s.Satisfaction)+" STARS";
+            }
+            else if(companion)
+            {
+                portrait.gameObject.SetActive(false);
+                requestText.text="COMPANION\n"+host.Companions.Prompt+"\n"+host.Companions.ActivePrivateStop?.displayName;
             }
             reaction.text=!string.IsNullOrEmpty(host.Passengers.Dialogue.Subtitle) ? host.Passengers.Dialogue.Subtitle : s.ReactionAge<5 && (active || s.State==TruckTaxiState.PassengerEjected) ? s.Reaction : "";
             if(!active && !host.Paused && string.IsNullOrEmpty(reaction.text)) reaction.text=host.Companions?.Feedback ?? "";

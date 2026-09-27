@@ -45,6 +45,8 @@ namespace LWS.TruckTaxi
         [Range(0, 100)] public float upwardImpulse = 35;
         [Range(1, 30)] public float directImpactSpeed = 8;
         public AudioClip detonationClip;
+        public bool IsPlayerThrown { get; private set; } = true;
+        public bool IsRoadRageGrenade { get; private set; }
 
         public event Action<HitReport> HitReported;
         public bool Detonated => detonated;
@@ -80,6 +82,13 @@ namespace LWS.TruckTaxi
             projectileCollider.material = bounceMaterial;
             IgnoreLauncherCollisions();
             Destroy(gameObject, Mathf.Clamp(maximumLifetime, 15, 30));
+        }
+
+        public void ConfigureNpc(AudioClip clip, Rigidbody launchingBody, bool grenade)
+        {
+            Configure(clip, TruckTaxiBootstrap.Instance, launchingBody);
+            IsPlayerThrown = false;
+            IsRoadRageGrenade = grenade;
         }
 
         private void FixedUpdate()
@@ -183,7 +192,7 @@ namespace LWS.TruckTaxi
                     Vector3.up * Mathf.Min(3, strength * 2);
                 if (pedestrian.TryStrike(strike, contact))
                 {
-                    if (!pedestrian.HitEventSent && host?.Session != null)
+                    if (IsPlayerThrown && !pedestrian.HitEventSent && host?.Session != null)
                     {
                         host.Session.RecordPedestrianHit(pedestrian.PedestrianId, pedestrian.LastImpactSpeed,
                             pedestrian.LastImpulse, contact);
@@ -195,7 +204,7 @@ namespace LWS.TruckTaxi
             {
                 bool valid = speed >= (host?.Configuration != null ? host.Configuration.minimumImpactSpeed : 3) &&
                     target.Hit();
-                if (valid && host?.Session != null)
+                if (valid && IsPlayerThrown && host?.Session != null)
                 {
                     if (target.kind == TaxiImpactKind.Traffic)
                     {
@@ -218,7 +227,7 @@ namespace LWS.TruckTaxi
                     Vector3.up * Mathf.Clamp(upwardImpulse, 0, 100)) * strength, ForceMode.Impulse);
             }
             HitReported?.Invoke(new HitReport(phase, target != null ? target.kind : (TaxiImpactKind?)null,
-                target != null ? target.targetId : null, contact, strength, launcher != null));
+                target != null ? target.targetId : null, contact, strength, IsPlayerThrown));
         }
 
         private void PlayWorldSound(AudioClip clip, Vector3 position)
@@ -229,13 +238,15 @@ namespace LWS.TruckTaxi
             var source = emitter.AddComponent<AudioSource>();
             source.playOnAwake = false;
             source.spatialBlend = 1;
+            source.rolloffMode = AudioRolloffMode.Linear;
+            source.minDistance = 3;
             source.maxDistance = 28;
             TruckTaxiAudioController.Instance?.Route(source, TruckTaxiAudioCategory.World);
             source.PlayOneShot(clip);
             Destroy(emitter, clip.length + .1f);
         }
 
-        private static void SpawnBurst(Vector3 position, float radius)
+        private void SpawnBurst(Vector3 position, float radius)
         {
             var visual = new GameObject("Taxi cartoon container burst");
             visual.transform.position = position;
@@ -250,8 +261,9 @@ namespace LWS.TruckTaxi
             main.startLifetime = new ParticleSystem.MinMaxCurve(.35f, .85f);
             main.startSpeed = new ParticleSystem.MinMaxCurve(radius * .25f, radius * .8f);
             main.startSize = new ParticleSystem.MinMaxCurve(.12f, .55f);
-            main.startColor = new ParticleSystem.MinMaxGradient(new Color(.9f, 1f, .25f, .9f),
-                new Color(.2f, .8f, .25f, .65f));
+            main.startColor = IsRoadRageGrenade ?
+                new ParticleSystem.MinMaxGradient(new Color(1f, .35f, .1f, .9f), new Color(1f, .8f, .2f, .65f)) :
+                new ParticleSystem.MinMaxGradient(new Color(.9f, 1f, .25f, .9f), new Color(.2f, .8f, .25f, .65f));
             var emission = particles.emission;
             emission.rateOverTime = 0;
             emission.SetBursts(new[] { new ParticleSystem.Burst(0, (short)56) });

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi
 {
-    public enum TruckTaxiStopCategory { Scenic, IllicitPickup, PrivateMeeting, FoodStop, PhotoStop, CollectionStop, SpecialEvent }
+    public enum TruckTaxiStopCategory { Scenic, IllicitPickup, PrivateMeeting, FoodStop, PhotoStop, CollectionStop, SpecialEvent, Racetrack }
     public sealed class TruckTaxiStopObjectivePoint : MonoBehaviour
     {
         public string stableId, displayName, district;

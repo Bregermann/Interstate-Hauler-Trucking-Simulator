@@ -21,6 +21,7 @@ namespace LWS.TruckTaxi
         private bool[] colliderDefaults;
         private WheelCollider[] wheels;
         private Animator[] animators;
+        private AudioSource[] sounds;
         private bool[] animatorDefaults;
         private bool bodyWasKinematic;
         private bool bodyUsedGravity;
@@ -55,6 +56,7 @@ namespace LWS.TruckTaxi
             for (int i = 0; i < colliders.Length; i++) colliderDefaults[i] = colliders[i].enabled;
             wheels = GetComponentsInChildren<WheelCollider>(true);
             animators = GetComponentsInChildren<Animator>(true);
+            sounds = GetComponentsInChildren<AudioSource>(true);
             animatorDefaults = new bool[animators.Length];
             for (int i = 0; i < animators.Length; i++) animatorDefaults[i] = animators[i].enabled;
             if (body != null) { bodyWasKinematic = body.isKinematic; bodyUsedGravity = body.useGravity; bodyConstraints = body.constraints; }
@@ -82,6 +84,7 @@ namespace LWS.TruckTaxi
             if (body != null) { body.isKinematic = true; body.useGravity = false; }
             foreach (var wheel in wheels) if (wheel != null) wheel.enabled = false;
             foreach (var animator in animators) if (animator != null) animator.enabled = false;
+            foreach (var sound in sounds) if (sound != null) sound.Stop();
         }
 
         public void Place(Component lanePath, int point, Vector3 position, string stableId, bool full)
@@ -129,6 +132,7 @@ namespace LWS.TruckTaxi
                 foreach (var collider in colliders) if (collider != null) collider.enabled = false;
                 foreach (var wheel in wheels) if (wheel != null) wheel.enabled = false;
                 foreach (var animator in animators) if (animator != null) animator.enabled = false;
+                foreach (var sound in sounds) if (sound != null) sound.Stop();
             }
             else
             {

@@ -25,6 +25,8 @@ namespace LWS.TruckTaxi.Editor
                 var entry=entries.Find(e=>e!=null && e.type==type);
                 if(entry==null) { entry=new TruckTaxiMapIconRegistry.Entry { type=type,color=DefaultColor(type) }; entries.Add(entry); }
                 if(entry.icon==null) entry.icon=VendorSprite(type) ?? CreateGlyph(type);
+                if(string.IsNullOrWhiteSpace(entry.label)) entry.label=LegendLabel(type);
+                if(string.IsNullOrWhiteSpace(entry.explanation)) entry.explanation=LegendExplanation(type);
             }
             registry.entries=entries.ToArray(); EditorUtility.SetDirty(registry); AssetDatabase.SaveAssets();
             Debug.Log("Truck Taxi typed map icons ready: "+AssetPath+" (existing designer mappings preserved).");
@@ -40,6 +42,7 @@ namespace LWS.TruckTaxi.Editor
                 case TruckTaxiMapMarkerType.SpecialEvent: path="Misc/Extras (64x).png"; break;
                 case TruckTaxiMapMarkerType.Debug: path="Misc/Information (64x).png"; break;
                 case TruckTaxiMapMarkerType.ActiveRoute: path="HUD/Map Arrow Dual (64x).png"; break;
+                case TruckTaxiMapMarkerType.Store: path="Misc/Shop (64x).png"; break;
             }
             return path!=null ? AssetDatabase.LoadAssetAtPath<Sprite>(Heat+path) : null;
         }
@@ -74,10 +77,57 @@ namespace LWS.TruckTaxi.Editor
                 case TruckTaxiMapMarkerType.ScenicStop: case TruckTaxiMapMarkerType.PhotoStop: return new Color(.38f,1,.66f);
                 case TruckTaxiMapMarkerType.IllicitStop: return new Color(1,.68f,.35f);
                 case TruckTaxiMapMarkerType.PrivateEventStop: return new Color(1,.55f,.73f);
+                case TruckTaxiMapMarkerType.Gas: return new Color(.95f,.78f,.28f);
+                case TruckTaxiMapMarkerType.Repair: return new Color(.55f,.85f,.95f);
+                case TruckTaxiMapMarkerType.Racetrack: return new Color(1,.42f,.25f);
                 case TruckTaxiMapMarkerType.TargetVehicle: case TruckTaxiMapMarkerType.Danger: return new Color(1,.38f,.38f);
                 case TruckTaxiMapMarkerType.Shortcut: return new Color(.66f,.82f,1);
                 case TruckTaxiMapMarkerType.DiscoveredShortcut: return new Color(.35f,1,.95f);
                 default: return new Color(.92f,.92f,.8f);
+            }
+        }
+        private static string LegendLabel(TruckTaxiMapMarkerType type)
+        {
+            switch(type)
+            {
+                case TruckTaxiMapMarkerType.PassengerPickup: return "Passenger pickup";
+                case TruckTaxiMapMarkerType.ActiveObjective: return "Objective";
+                case TruckTaxiMapMarkerType.ScenicStop: return "Scenic stop";
+                case TruckTaxiMapMarkerType.IllicitStop: return "Sketchy pickup";
+                case TruckTaxiMapMarkerType.PrivateEventStop: return "Private stop";
+                case TruckTaxiMapMarkerType.DiscoveredShortcut: return "Discovered shortcut";
+                case TruckTaxiMapMarkerType.TargetVehicle: return "Target vehicle";
+                case TruckTaxiMapMarkerType.FoodStop: return "Restaurant / food";
+                case TruckTaxiMapMarkerType.Bathroom: return "Restroom";
+                case TruckTaxiMapMarkerType.TrainStation: return "Train station";
+                case TruckTaxiMapMarkerType.BusTerminal: return "Bus terminal";
+                case TruckTaxiMapMarkerType.ServiceArea: return "Service area";
+                default: return type.ToString();
+            }
+        }
+        private static string LegendExplanation(TruckTaxiMapMarkerType type)
+        {
+            switch(type)
+            {
+                case TruckTaxiMapMarkerType.Player: return "Your truck";
+                case TruckTaxiMapMarkerType.PassengerPickup: return "Waiting fare";
+                case TruckTaxiMapMarkerType.Destination: return "Final passenger dropoff";
+                case TruckTaxiMapMarkerType.ActiveObjective: return "Current ride objective";
+                case TruckTaxiMapMarkerType.PrivateEventStop: return "Companion parking destination";
+                case TruckTaxiMapMarkerType.Shortcut: return "Unexplored shortcut";
+                case TruckTaxiMapMarkerType.DiscoveredShortcut: return "Shortcut you found";
+                case TruckTaxiMapMarkerType.TargetVehicle: return "Ride target on the road";
+                case TruckTaxiMapMarkerType.Gas: return "Refuel the truck";
+                case TruckTaxiMapMarkerType.Repair: return "Fix vehicle damage";
+                case TruckTaxiMapMarkerType.Store: return "Buy supplies";
+                case TruckTaxiMapMarkerType.Bathroom: return "Use the restroom";
+                case TruckTaxiMapMarkerType.FoodStop: return "Food and drinks";
+                case TruckTaxiMapMarkerType.Racetrack: return "Speedway and taxi stops";
+                case TruckTaxiMapMarkerType.TrainStation: return "Rail passenger stop";
+                case TruckTaxiMapMarkerType.BusTerminal: return "Bus passenger stop";
+                case TruckTaxiMapMarkerType.ServiceArea: return "Highway services";
+                case TruckTaxiMapMarkerType.Danger: return "Hazard ahead";
+                default: return "Point of interest";
             }
         }
         public static Sprite CreateGlyph(TruckTaxiMapMarkerType type)
@@ -150,6 +200,27 @@ namespace LWS.TruckTaxi.Editor
                 case TruckTaxiMapMarkerType.Bathroom:
                     return Box(p,.19f,.48f,.4f,.84f) || Box(p,.3f,.18f,.48f,.42f) ||
                         (Circle(p,.5f,.48f,.28f) && p.y<=.49f) || Box(p,.19f,.49f,.82f,.56f);
+                case TruckTaxiMapMarkerType.Gas:
+                    return Box(p,.2f,.22f,.56f,.75f) || Box(p,.56f,.25f,.65f,.64f) ||
+                        Line(p,.65f,.64f,.82f,.54f,.04f) || Box(p,.77f,.27f,.85f,.53f);
+                case TruckTaxiMapMarkerType.Store:
+                    return Box(p,.17f,.22f,.83f,.58f) || Box(p,.23f,.59f,.77f,.7f) ||
+                        Box(p,.29f,.7f,.71f,.8f) || Box(p,.42f,.23f,.58f,.49f);
+                case TruckTaxiMapMarkerType.Repair:
+                    return Circle(p,.38f,.66f,.18f) || Line(p,.43f,.58f,.77f,.23f,.09f) ||
+                        Circle(p,.79f,.21f,.11f);
+                case TruckTaxiMapMarkerType.TrainStation:
+                    return Box(p,.2f,.34f,.8f,.75f) || Box(p,.27f,.25f,.37f,.34f) ||
+                        Box(p,.63f,.25f,.73f,.34f) || Line(p,.18f,.18f,.82f,.18f,.04f);
+                case TruckTaxiMapMarkerType.BusTerminal:
+                    return Box(p,.16f,.32f,.84f,.72f) || Circle(p,.29f,.27f,.07f) ||
+                        Circle(p,.71f,.27f,.07f) || Box(p,.3f,.56f,.7f,.65f);
+                case TruckTaxiMapMarkerType.Racetrack:
+                    return (Circle(p,.5f,.5f,.35f) && !Circle(p,.5f,.5f,.23f)) ||
+                        Line(p,.25f,.5f,.75f,.5f,.03f);
+                case TruckTaxiMapMarkerType.ServiceArea:
+                    return Box(p,.18f,.19f,.26f,.81f) || Box(p,.74f,.19f,.82f,.81f) ||
+                        Box(p,.25f,.46f,.75f,.54f);
                 default: throw new ArgumentOutOfRangeException(nameof(type),type,"Expected an installed Heat icon for this type.");
             }
         }

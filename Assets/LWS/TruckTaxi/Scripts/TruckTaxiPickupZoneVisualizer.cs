@@ -1,4 +1,5 @@
 using TMPro;
+using LWS.InterstateHauler;
 using UnityEngine;
 
 namespace LWS.TruckTaxi
@@ -20,6 +21,12 @@ namespace LWS.TruckTaxi
         private LineRenderer ring, beacon;
         private LineRenderer destinationRing, destinationBeacon;
         private TextMeshPro destinationMarker;
+        private TruckTaxiStopObjectivePoint privateTarget;
+        private LineRenderer privateRing, privateBeacon;
+        private TextMeshPro privateMarker;
+        private TruckTaxiRegionalWorld regional;
+        private LwsTruckControlController controls;
+        private Rigidbody playerBody;
         private TruckTaxiRideLocation destinationTarget;
         private MeshRenderer area;
         private TextMeshPro marker;
@@ -30,12 +37,22 @@ namespace LWS.TruckTaxi
         public void Initialize(TruckTaxiBootstrap value)
         {
             host=value;
+            regional=GetComponent<TruckTaxiRegionalWorld>();
+            controls=host.Player.GetComponentInChildren<LwsTruckControlController>(true);
+            playerBody=host.Player.GetComponent<Rigidbody>();
             tint=new MaterialPropertyBlock();
             material=new Material(Shader.Find("Sprites/Default"));
             ring=Line("Pickup radius",.2f); ring.loop=true; ring.positionCount=Segments;
             beacon=Line("Pickup beacon",.3f); beacon.positionCount=2;
             destinationRing=Line("Dropoff radius",.28f); destinationRing.loop=true; destinationRing.positionCount=Segments;
             destinationBeacon=Line("Dropoff beacon",.35f); destinationBeacon.positionCount=2;
+            privateRing=Line("Private stop parking radius",.4f); privateRing.loop=true; privateRing.positionCount=Segments;
+            privateBeacon=Line("Private stop beacon",.32f); privateBeacon.positionCount=2;
+            privateMarker=new GameObject("Private stop label",typeof(TextMeshPro)).GetComponent<TextMeshPro>();
+            privateMarker.transform.SetParent(transform,false);
+            if(host.hud.font!=null) privateMarker.font=host.hud.font;
+            privateMarker.fontSize=8; privateMarker.alignment=TextAlignmentOptions.Center;
+            privateMarker.rectTransform.sizeDelta=new Vector2(28,6);
             destinationMarker=new GameObject("Dropoff marker",typeof(TextMeshPro)).GetComponent<TextMeshPro>();
             destinationMarker.transform.SetParent(transform,false);
             if(host.hud.font!=null) destinationMarker.font=host.hud.font;
@@ -49,6 +66,7 @@ namespace LWS.TruckTaxi
             marker.fontSize=8; marker.alignment=TextAlignmentOptions.Center; marker.rectTransform.sizeDelta=new Vector2(24,5);
             SetVisible(false);
             SetDestinationVisible(false);
+            SetPrivateVisible(false);
             host.Session.Changed+=OnSessionChanged;
         }
         private void OnSessionChanged()
@@ -76,6 +94,7 @@ namespace LWS.TruckTaxi
             if(host?.Player==null) return;
             var session=host.Session;
             UpdateDestination(session);
+            UpdatePrivateStop();
             State=Evaluate(session,host.Player.transform.position,host.Player.GetComponent<Rigidbody>().linearVelocity.magnitude);
             if(State==TruckTaxiPickupVisualState.Hidden || !show) { SetVisible(false); target=null; return; }
             if(forcedState.HasValue) State=forcedState.Value;
@@ -98,12 +117,60 @@ namespace LWS.TruckTaxi
             if(showPassengerSpawn && target.passengerSpawnPoint!=null) Debug.DrawRay(target.passengerSpawnPoint.position,Vector3.up*6,Color.cyan);
             if(showPreferredStop) Debug.DrawRay(target.StopPosition,Vector3.up*6,Color.green);
         }
+        public void SetPrivateStop(TruckTaxiStopObjectivePoint stop)
+        {
+            privateTarget=stop;
+            if(stop==null) { SetPrivateVisible(false); return; }
+            for(int i=0;i<Segments;i++)
+            {
+                float angle=i*Mathf.PI*2/Segments;
+                privateRing.SetPosition(i,Ground(stop.Position+new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle))*stop.radius));
+            }
+            Vector3 center=Ground(stop.Position);
+            privateBeacon.SetPosition(0,center);
+            privateBeacon.SetPosition(1,center+Vector3.up*34);
+        }
+        private void UpdatePrivateStop()
+        {
+            if(privateTarget==null || !show || !privateTarget.gameObject.scene.isLoaded ||
+                regional!=null && !regional.IsPositionAvailable(privateTarget.Position))
+            { SetPrivateVisible(false); return; }
+            var position=host.Player.transform.position;
+            float distance=Vector3.ProjectOnPlane(position-privateTarget.Position,Vector3.up).magnitude;
+            bool inside=distance<=privateTarget.radius && Mathf.Abs(position.y-privateTarget.Position.y)<5f;
+            float speed=playerBody!=null ? playerBody.linearVelocity.magnitude : 0f;
+            bool slow=speed<=privateTarget.maximumSpeed;
+            bool brake=controls!=null && controls.CurrentState.parkingBrakeOn;
+            bool ready=inside && slow && brake;
+            Color color=ready ? new Color(.3f,1f,.6f) : inside && !slow ? new Color(1f,.44f,.12f) :
+                inside ? new Color(1f,.8f,.3f) : new Color(1f,.28f,.62f);
+            color.a=.85f+.15f*Mathf.Sin(Time.time*4f);
+            SetPrivateVisible(true);
+            privateRing.enabled=distance<260f;
+            privateBeacon.enabled=distance>35f;
+            privateRing.startColor=privateRing.endColor=privateBeacon.startColor=privateBeacon.endColor=color;
+            privateMarker.color=color;
+            privateMarker.text=(ready ? "PARKED AT PRIVATE STOP" : inside ? !slow ? "SLOW DOWN" :
+                "PARK & SET BRAKE ("+(host.Companions?.ParkingBrakeBinding ?? "P")+")" : "PRIVATE STOP")+
+                "\n"+distance.ToString("0")+" m";
+            privateMarker.transform.position=privateTarget.Position+Vector3.up*(distance>80f ? 15f : 6f);
+            if(Camera.main!=null) privateMarker.transform.rotation=Quaternion.LookRotation(
+                privateMarker.transform.position-Camera.main.transform.position);
+            privateMarker.transform.localScale=Vector3.one*Mathf.Clamp(distance/50f,.5f,3f);
+        }
+        private void SetPrivateVisible(bool visible)
+        {
+            if(privateRing==null) return;
+            privateRing.gameObject.SetActive(visible);
+            privateBeacon.gameObject.SetActive(visible);
+            privateMarker.gameObject.SetActive(visible);
+        }
         private void UpdateDestination(TruckTaxiSession session)
         {
             if(!show || !HasDropoffTarget(session))
             { destinationTarget=null; SetDestinationVisible(false); return; }
-            if(destinationTarget!=session.Destination)
-            { destinationTarget=session.Destination; BuildDestinationGeometry(); }
+            if(destinationTarget!=session.CurrentDesiredDestination)
+            { destinationTarget=session.CurrentDesiredDestination; BuildDestinationGeometry(); }
             float distance=Vector3.ProjectOnPlane(host.Player.transform.position-destinationTarget.StopPosition,Vector3.up).magnitude;
             bool inside=destinationTarget.Contains(host.Player.transform.position);
             var color=inside ? new Color(.15f,1f,.75f) : new Color(.05f,.75f,1f);

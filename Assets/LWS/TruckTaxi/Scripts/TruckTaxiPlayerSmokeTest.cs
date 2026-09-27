@@ -18,7 +18,7 @@ namespace LWS.TruckTaxi
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void LaunchIfRequested()
         {
-            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke" || a=="-truck-taxi-objective-smoke" || a=="-truck-taxi-population-smoke" || a=="-truck-taxi-systems-smoke" || a=="-truck-taxi-steering-smoke" || a=="-truck-taxi-integrated-smoke" || a=="-truck-taxi-regional-smoke")) return;
+            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke" || a=="-truck-taxi-objective-smoke" || a=="-truck-taxi-population-smoke" || a=="-truck-taxi-systems-smoke" || a=="-truck-taxi-steering-smoke" || a=="-truck-taxi-integrated-smoke" || a=="-truck-taxi-regional-smoke" || a=="-truck-taxi-polish-smoke")) return;
             new GameObject("Truck Taxi command-line smoke test").AddComponent<TruckTaxiPlayerSmokeTest>();
         }
         private void OnEnable() { Application.logMessageReceived+=TrackError; }
@@ -55,6 +55,12 @@ namespace LWS.TruckTaxi
             if(host==null || !host.Ready) { Debug.LogError("TRUCK TAXI PLAYER SMOKE: startup timed out."); Application.Quit(2); yield break; }
             string output=Path.GetFullPath(Path.Combine(Application.dataPath,"../Validation"));
             Directory.CreateDirectory(output);
+            if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-polish-smoke"))
+            {
+                yield return TruckTaxiPolishRuntimeProbe.Run(host,CheckSystem,name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
+                Debug.Log(failed ? "TRUCK TAXI POLISH STANDALONE FAIL" : "TRUCK TAXI POLISH STANDALONE PASS");
+                Application.Quit(failed?2:0); yield break;
+            }
             if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-regional-smoke"))
             {
                 bool companionOnly=Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-companion-only");

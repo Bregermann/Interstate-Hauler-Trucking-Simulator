@@ -5,7 +5,7 @@ namespace LWS.TruckTaxi
     public enum TaxiRequestType { FastDelivery, Shortcut, RamTraffic, HitPedestrian, PropertyDamage, Offroad,
         SmoothRide, NoCollisions, MaximumChaos, ScenicRoute, NearMiss, IllicitStop,
         FollowVehicle, RamTargetVehicle, LoseVehicle, BlockVehicle, ReachLocationBeforeVehicle,
-        DestroyVehicle, CollectDroppedObjects }
+        DestroyVehicle, CollectDroppedObjects, DinerStop, TakeALap }
     public enum TaxiEventType { Collision, TrafficRam, PedestrianHit, PropDamage, Shortcut, ScenicPoint, NearMiss, HardLanding }
     public enum TaxiRequestState { Active, Succeeded, Failed }
     [System.Flags]
@@ -19,7 +19,8 @@ namespace LWS.TruckTaxi
         public bool enabledForSelection = true;
         public TruckTaxiObjectiveCapability additionalCapabilities;
         public string StableId => string.IsNullOrWhiteSpace(objectiveId) ? "taxi.objective."+requestType : objectiveId;
-        public bool IsStop => requestType==TaxiRequestType.ScenicRoute || requestType==TaxiRequestType.IllicitStop;
+        public bool IsStop => requestType==TaxiRequestType.ScenicRoute || requestType==TaxiRequestType.IllicitStop ||
+            requestType==TaxiRequestType.DinerStop || requestType==TaxiRequestType.TakeALap;
         public TruckTaxiObjectiveCapability RequiredCapabilities => additionalCapabilities | TruckTaxiObjectiveCapabilities.Required(requestType);
         [TextArea] public string description;
         [Min(1)] public float timer = 90;
@@ -28,6 +29,14 @@ namespace LWS.TruckTaxi
         [Tooltip("For vehicle races, the shared authored Truck Taxi ride-location ID.")]
         public string goalLocationId;
         public long bonusMoneyCents = 400;
+        [Header("Accepted diversion rewards")]
+        public TruckTaxiNeedsItem rewardItem = TruckTaxiNeedsItem.Snack;
+        [Min(0)] public int rewardItemCount;
+        public TruckTaxiNeedsItem secondRewardItem = TruckTaxiNeedsItem.EnergyDrink;
+        [Min(0)] public int secondRewardItemCount;
+        [Range(1,3)] public float rewardTipMultiplier = 1;
+        [Tooltip("Only use on explicitly consenting adult 21+ content.")]
+        public bool rewardThirstRelief;
         public int bonusScore = 100;
         public float ratingModifier = 0.2f;
         [TextArea] public string dialogue;

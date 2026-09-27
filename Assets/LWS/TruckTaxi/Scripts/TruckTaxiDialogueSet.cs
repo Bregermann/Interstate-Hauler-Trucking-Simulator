@@ -16,7 +16,10 @@ namespace LWS.TruckTaxi
         RainReaction, StormReaction, FogReaction, NightReaction, SunsetReaction, WeatherChanged,
         BladderUrgent, JugStarted, JugSucceeded, JugSpilled, BathroomStop,
         RepeatPickup, PickupCancelled, JugThrownFromWindow, ScenicView,
-        ScenicStopComplete, IllicitStopArrival, IllicitStopComplete, SnowReaction, BlizzardReaction
+        ScenicStopComplete, IllicitStopArrival, IllicitStopComplete, SnowReaction, BlizzardReaction,
+        StoppedTooLong, GoodProgress, DiversionOffered, DiversionAccepted, DiversionDeclined,
+        SketchyExit, SketchyDance, SketchyReturn, RestaurantReaction, RepairReaction,
+        RoadRageReaction, PickupRevenge, RacetrackReaction, TransitReaction, CompanionNearby, PrivateStopReaction
     }
 
     [Serializable]

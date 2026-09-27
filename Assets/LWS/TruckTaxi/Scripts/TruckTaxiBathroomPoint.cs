@@ -16,7 +16,8 @@ namespace LWS.TruckTaxi
         public bool Contains(Vector3 position) => Mathf.Abs(position.y - Position.y) <= verticalTolerance &&
             Vector3.ProjectOnPlane(position - Position, Vector3.up).sqrMagnitude <= stopRadius * stopRadius;
         public bool CanUse(Vector3 position, float speed, float maximumSpeed) => isActiveAndEnabled && location != null &&
-            !string.IsNullOrWhiteSpace(stableId) && float.IsFinite(speed) && speed >= 0 && speed <= maximumSpeed && Contains(position);
+            !string.IsNullOrWhiteSpace(stableId) && float.IsFinite(speed) && speed >= 0 &&
+            speed <= Mathf.Max(TruckTaxiServicePoint.ServiceStopSpeedMetersPerSecond, maximumSpeed) && Contains(position);
         private void OnDrawGizmosSelected() { Gizmos.color = new Color(.25f, .8f, .8f); Gizmos.DrawWireSphere(Position, stopRadius); }
     }
 }

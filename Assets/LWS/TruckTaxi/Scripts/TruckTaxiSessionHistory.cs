@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LWS.TruckTaxi
 {
-    public enum TruckTaxiRideOutcome { Completed, Failed, PickupCancelled, Ejected }
+    public enum TruckTaxiRideOutcome { Completed, Failed, PickupCancelled, Ejected, PassengerCancelled }
     public enum TruckTaxiDemandWeather { Neutral, Rain, Storm, Snow, HeavySnow, Blizzard }
 
     public sealed class TruckTaxiGoalResult
@@ -35,6 +35,8 @@ namespace LWS.TruckTaxi
         public long Distance { get; }
         public long Time { get; }
         public long Requests { get; }
+        public long Diversions { get; }
+        public bool IsCancellation { get; }
         public long Chaos { get; }
         public long Tip { get; }
         public long Penalties { get; }
@@ -45,6 +47,7 @@ namespace LWS.TruckTaxi
         {
             if(fare==null) return;
             Base=fare.Base; Distance=fare.Distance; Time=fare.Time; Requests=fare.Requests;
+            Diversions=fare.Diversions; IsCancellation=fare.IsCancellation;
             Chaos=fare.Chaos; Tip=fare.Tip; Penalties=fare.Penalties; Total=fare.Total;
             Rating=fare.Rating; Score=fare.Score;
         }

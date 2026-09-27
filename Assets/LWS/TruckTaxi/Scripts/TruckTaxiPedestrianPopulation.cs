@@ -19,6 +19,7 @@ namespace LWS.TruckTaxi
         [Min(1)] public float fullPhysicsRadius = 85;
         [Min(1)] public float visibleRadius = 170;
         [Min(0)] public float populationHysteresis = 20;
+        [Range(5, 10)] public float offscreenGraceSeconds = 8;
         [Min(25)] public float graphRebuildDistance = 120;
         [Tooltip("Use clothed WobblePeople visuals; disable for the original UTS pedestrian models.")]
         public bool useWobblePeople = true;
@@ -33,6 +34,8 @@ namespace LWS.TruckTaxi
         private readonly Dictionary<Component, PathAccess> bindings = new Dictionary<Component, PathAccess>();
         private readonly List<TruckTaxiPedestrian> fallen = new List<TruckTaxiPedestrian>();
         private readonly Dictionary<TruckTaxiPedestrian, TruckTaxiPopulationPresentation> presentations = new Dictionary<TruckTaxiPedestrian, TruckTaxiPopulationPresentation>();
+        private readonly Dictionary<TruckTaxiPedestrian, float> visibleUntil = new Dictionary<TruckTaxiPedestrian, float>();
+        private readonly Dictionary<TruckTaxiPedestrian, float> interactionUntil = new Dictionary<TruckTaxiPedestrian, float>();
         private readonly Dictionary<TruckTaxiPedestrian, WalkAgent> walkers = new Dictionary<TruckTaxiPedestrian, WalkAgent>();
         private readonly List<WalkAgent> walkerSchedule = new List<WalkAgent>();
         private readonly Dictionary<TruckTaxiIntersection, int> activeCrossings = new Dictionary<TruckTaxiIntersection, int>();
@@ -83,6 +86,20 @@ namespace LWS.TruckTaxi
             intersection != null && activeCrossings.TryGetValue(intersection, out int count) ? count : 0;
         public int ReducedShadowCount { get; private set; }
         public IReadOnlyList<TruckTaxiPedestrian> People => people;
+        public void PinForInteraction(TruckTaxiPedestrian pedestrian, float seconds = 10)
+        {
+            if (pedestrian != null && people.Contains(pedestrian))
+                interactionUntil[pedestrian] = Mathf.Max(Time.time + Mathf.Clamp(seconds, 0, 30),
+                    interactionUntil.TryGetValue(pedestrian, out float current) ? current : 0);
+        }
+
+        public static bool KeepLive(float distanceSquared, float radius, float hysteresis,
+            float now, float visibleUntil, bool interacting)
+        {
+            if (interacting || now < visibleUntil) return true;
+            float outer = Mathf.Max(0, radius) + Mathf.Max(0, hysteresis);
+            return distanceSquared <= outer * outer;
+        }
         public bool ShowColliders { get; set; }
         public void SetRegionAvailability(Func<Vector3, bool> availability)
         { regionAvailable = availability ?? (_ => true); if (initialized) NotifyRegionChanged(); }
@@ -509,7 +526,7 @@ namespace LWS.TruckTaxi
                 if(ped!=null) { ped.Expired-=Retire; ped.Ragdolled-=OnRagdolled; ped.gameObject.SetActive(false); Destroy(ped.gameObject); }
             foreach (var record in logical.Records) record.Actor = null;
             assigned.Clear();
-            people.Clear(); origins.Clear(); fallen.Clear(); presentations.Clear(); walkers.Clear();
+            people.Clear(); origins.Clear(); fallen.Clear(); presentations.Clear(); visibleUntil.Clear(); interactionUntil.Clear(); walkers.Clear();
             walkerSchedule.Clear(); activeCrossings.Clear(); walkerCursor = 0; freeRows.Clear(); nextRow = 0;
         }
         private void Retire(TruckTaxiPedestrian ped)
@@ -518,6 +535,7 @@ namespace LWS.TruckTaxi
             ped.Expired-=Retire; ped.Ragdolled-=OnRagdolled; people.Remove(ped); origins.Remove(ped);
             if (presentations.TryGetValue(ped, out var presentation)) presentation.Restore();
             presentations.Remove(ped);
+            visibleUntil.Remove(ped); interactionUntil.Remove(ped);
             if (assigned.TryGetValue(ped, out var record))
             { record.Position = ped.transform.position; record.Actor = null; assigned.Remove(ped); }
             if (walkers.TryGetValue(ped, out var walker))
@@ -554,7 +572,27 @@ namespace LWS.TruckTaxi
             }
             Vector3 graphOffset = PresentationObserver() - graphOrigin; graphOffset.y = 0;
             if (graphOffset.sqrMagnitude >= graphRebuildDistance * graphRebuildDistance) graphDirty = true;
-            if (graphDirty)
+            Vector3 observer = PresentationObserver();
+            var camera = Camera.main;
+            foreach (var ped in people)
+            {
+                if (ped == null) continue;
+                Vector3 toPed = ped.transform.position - observer; toPed.y = 0;
+                bool near = toPed.sqrMagnitude < 35 * 35;
+                var player = TruckTaxiBootstrap.Instance?.Player;
+                bool forward = player != null && toPed.sqrMagnitude < 100 * 100 &&
+                    Vector3.Dot(player.transform.forward, toPed.normalized) > .6f;
+                bool onCamera = false;
+                float cameraRadius = visibleRadius + populationHysteresis + 30;
+                if (camera != null && toPed.sqrMagnitude < cameraRadius * cameraRadius)
+                {
+                    Vector3 screen = camera.WorldToViewportPoint(ped.transform.position + Vector3.up);
+                    onCamera = screen.z > 0 && screen.x > -.05f && screen.x < 1.05f &&
+                        screen.y > -.05f && screen.y < 1.05f;
+                }
+                if (near || forward || onCamera) visibleUntil[ped] = Time.time + offscreenGraceSeconds;
+            }
+            if (graphDirty && !HasVisibilityPins())
             {
                 for (int i = people.Count - 1; i >= 0; i--)
                     if (people[i] != null && !people[i].IsRagdoll) Retire(people[i]);
@@ -563,7 +601,7 @@ namespace LWS.TruckTaxi
                 BuildWalkGraph();
                 if (runtimePath == null && walkGraph.WalkableSpawnCount > 0) CreateRuntimePath();
             }
-            Vector3 observer = PresentationObserver(); ReducedShadowCount = 0;
+            ReducedShadowCount = 0;
             for (int i = people.Count - 1; i >= 0; i--)
             {
                 var ped = people[i];
@@ -573,9 +611,14 @@ namespace LWS.TruckTaxi
                     people.RemoveAt(i); continue;
                 }
                 Vector3 offset = ped.transform.position - observer; offset.y = 0;
-                if (!ped.IsRagdoll && (people.Count > maxVisiblePedestrians || ped.transform.position.y < -5 ||
-                    offset.sqrMagnitude > Mathf.Pow(visibleRadius + populationHysteresis, 2) || !regionAvailable(ped.transform.position) ||
-                    (assigned.TryGetValue(ped, out var slot) && !logical.Contains(slot, ped.transform.position))))
+                float until = visibleUntil.TryGetValue(ped, out float grace) ? grace : 0;
+                bool interacting = interactionUntil.TryGetValue(ped, out float interaction) && Time.time < interaction;
+                if (!ped.IsRagdoll && ((people.Count > maxVisiblePedestrians && !interacting && Time.time >= until) ||
+                    ped.transform.position.y < -5 ||
+                    !KeepLive(offset.sqrMagnitude, visibleRadius, populationHysteresis, Time.time, until, interacting) ||
+                    !regionAvailable(ped.transform.position) ||
+                    (assigned.TryGetValue(ped, out var slot) && !logical.Contains(slot, ped.transform.position) &&
+                        !interacting && Time.time >= until)))
                 { Retire(ped); continue; }
                 if (ped.IsRagdoll && !fallen.Contains(ped)) fallen.Add(ped);
                 if (presentations.TryGetValue(ped, out var presentation))
@@ -591,6 +634,14 @@ namespace LWS.TruckTaxi
             UpdatePhysicsBudget(observer);
             for (int i = 0; i < Mathf.Max(1, densityProfile.maximumSpawnsPerPass) && people.Count < Mathf.Min(TargetCount, maxVisiblePedestrians); i++)
                 if (!TrySpawnOne()) break;
+        }
+
+        private bool HasVisibilityPins()
+        {
+            foreach (var ped in people)
+                if (ped != null && ((visibleUntil.TryGetValue(ped, out float grace) && Time.time < grace) ||
+                    (interactionUntil.TryGetValue(ped, out float interaction) && Time.time < interaction))) return true;
+            return false;
         }
         private void UpdatePhysicsBudget(Vector3 observer)
         {

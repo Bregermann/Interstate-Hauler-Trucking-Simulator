@@ -115,7 +115,7 @@ namespace LWS.TruckTaxi
                 case "Set Thirst 100%": host.DriverNeeds?.State?.DebugSetThirst(1f); break;
                 case "Spawn Thirst NPC Near Player": host.Companions?.DebugSpawnNearPlayer(); break;
                 case "Force Nearby Private Stop": host.Companions?.DebugForceNearbyPrivateStop(); break;
-                case "Force Ride Offer": s.OfferRide(); break;
+                case "Force Ride Offer": s.RequestRideOffer(); break;
                 case "Offer Timer 3 Sec": s.DebugSetOfferDuration(3); break;
                 case "Offer Timer 10 Sec": s.DebugSetOfferDuration(10); break;
                 case "Pause Offer Timer": s.OfferTimerPaused=!s.OfferTimerPaused; break;
@@ -137,13 +137,13 @@ namespace LWS.TruckTaxi
                 case "Show Pedestrian Colliders": host.pedestrians.ShowColliders=!host.pedestrians.ShowColliders; break;
                 case "Show Last Pedestrian Impact": Debug.Log(PedestrianDiagnostics()); break;
                 case "Reset Demo City": host.ResetCity(); break;
-                case "Regenerate Ride Offer": s.DeclineRide(); s.OfferRide(); break;
+                case "Regenerate Ride Offer": s.DeclineRide(); s.RequestRideOffer(); break;
                 case "Show Offer Map": host.hud.SetOfferMapVisible(true); Toggle(); break;
                 case "Hide Offer Map": host.hud.SetOfferMapVisible(false); break;
                 case "Handling On/Off": host.Handling.Toggle(); break;
                 case "Reset Handling Defaults": host.Handling.ResetDefaults(); break;
                 case "Next Passenger": passengerIndex++; break;
-                case "Offer Selected Passenger": s.DeclineRide(); s.OfferRide(SelectedPassenger()); break;
+                case "Offer Selected Passenger": s.DeclineRide(); s.RequestRideOffer(SelectedPassenger()); break;
                 case "Eject Passenger": host.Passengers.RequestEjection(); break;
                 case "Test Chatter": host.Passengers.Dialogue.Speak(s.Passenger,TruckTaxiDialogueCategory.GeneralChatter,s,"Passenger voice preview.",90); break;
                 case "Test Arrival": host.Passengers.Dialogue.Speak(s.Passenger,TruckTaxiDialogueCategory.Arrival,s,"We have arrived.",90); break;
@@ -197,7 +197,8 @@ namespace LWS.TruckTaxi
                     $"\nTRAFFIC  LOGICAL {cars?.LogicalCount ?? 0}  LIVE {cars?.ActiveCount ?? 0}  FULL {cars?.FullPhysicsCount ?? 0}  POOLED {cars?.PooledCount ?? 0}"+
                     $"\nPEDESTRIANS  LOGICAL {people?.LogicalCount ?? 0}  LIVE {people?.ActiveCount ?? 0}  FULL {people?.FullPhysicsCount ?? 0}  POOLED {people?.PooledCount ?? 0}"+
                     $"\nSPAWNS / SEC  CARS {cars?.SpawnsPerSecond ?? 0}  PEOPLE {people?.SpawnsPerSecond ?? 0:0.0}"+
-                    $"\nDESPAWNS / SEC  CARS {cars?.DespawnsPerSecond ?? 0}  PEOPLE {people?.DespawnsPerSecond ?? 0:0.0}";
+                    $"\nDESPAWNS / SEC  CARS {cars?.DespawnsPerSecond ?? 0}  PEOPLE {people?.DespawnsPerSecond ?? 0:0.0}"+
+                    $"\nOFFER JOB {s.IsGeneratingOffer} / LOCAL COOLDOWN {s.LocalOffersBeforeIntercity}\n{s.LastOfferDiagnostics}";
             }
         }
         private PassengerRequestDefinition SelectedObjective() => host.configuration.requests[objectiveIndex%host.configuration.requests.Length];

@@ -12,6 +12,9 @@ namespace LWS.TruckTaxi
         public string id;
         public Vector3[] points;
         public Vector3[] stops;
+        public float cruiseMetersPerSecond = 8;
+        public int capacity = 20;
+        public Color fleetColor = Color.white;
     }
 
     // A two-actor maximum UTS bus pool. Routes and paths remain in the persistent scene.
@@ -27,6 +30,8 @@ namespace LWS.TruckTaxi
         public float stopSeconds = 5;
         public int LiveBuses { get; private set; }
         public int RouteCount => states?.Length ?? 0;
+        public int PassengerCount(int index) => index >= 0 && index < RouteCount && states[index] != null ? states[index].Passengers : 0;
+        public float RouteProgressMeters(int index) => index >= 0 && index < RouteCount && states[index] != null ? states[index].Progress : 0;
         public GameObject GetLiveBus(int index) => index >= 0 && index < RouteCount && states[index]?.Actor != null &&
             states[index].Actor.activeInHierarchy ? states[index].Actor : null;
         private readonly LwsUtsTrafficApi api = new LwsUtsTrafficApi();
@@ -47,6 +52,11 @@ namespace LWS.TruckTaxi
             public float DwellUntil;
             public int LastStop = -1;
             public int Generation;
+            public float Progress;
+            public float Length;
+            public int Passengers;
+            public float NextStopUntil;
+            public GameObject BoardingVisual;
         }
 
         private void Start()
@@ -66,7 +76,8 @@ namespace LWS.TruckTaxi
                 var owner = new GameObject(route.id + " UTS path"); owner.transform.SetParent(transform, false);
                 var path = api.CreatePath(owner, lane, new[] { busPrefab }, policy, out string message);
                 if (path == null) { Debug.LogError(message, this); Destroy(owner); continue; }
-                states[i] = new RouteState { Lane = lane, Path = path };
+                states[i] = new RouteState { Lane = lane, Path = path, Length = lane.lengthMeters,
+                    Passengers = Mathf.Min(6, Mathf.Max(0, route.capacity)) };
             }
         }
 
@@ -75,16 +86,22 @@ namespace LWS.TruckTaxi
             if (player == null) player = TruckTaxiBootstrap.Instance?.Player?.transform;
             if (states == null || player == null) return;
             LiveBuses = 0;
+            foreach (var state in states)
+                if (state?.Actor != null && state.Actor.activeSelf) LiveBuses++;
             for (int i = 0; i < states.Length; i++)
             {
                 var state = states[i];
                 if (state == null) continue;
-                Vector3 centre = routes[i].points[0];
-                float distance = Vector3.Distance(player.position, centre);
-                bool available = world == null || world.IsPositionAvailable(centre);
-                if (state.Actor != null && state.Actor.activeSelf && (!available || distance > despawnRadius)) Pool(state);
-                else if (available && distance < spawnRadius && (state.Actor == null || !state.Actor.activeSelf)) Activate(state);
-                if (state.Actor != null && state.Actor.activeSelf) LiveBuses++;
+                var route = routes[i];
+                bool live = state.Actor != null && state.Actor.activeSelf;
+                if (live) state.Progress = ProjectDistance(route.points, state.Actor.transform.position);
+                else AdvanceLogical(state, route, Time.deltaTime);
+                Vector3 position = Sample(route.points, state.Progress);
+                float distance = Vector3.Distance(player.position, position);
+                bool available = world == null || world.IsPositionAvailable(position);
+                if (live && (!available || distance > despawnRadius)) { Pool(state); LiveBuses--; live = false; }
+                else if (!live && available && distance < spawnRadius && LiveBuses < 2)
+                { Activate(state, route); if (state.Actor != null && state.Actor.activeSelf) LiveBuses++; }
             }
         }
 
@@ -102,13 +119,15 @@ namespace LWS.TruckTaxi
                     for (int s = 0; s < stops.Length; s++)
                     {
                         if (s == state.LastStop || (state.Actor.transform.position - stops[s]).sqrMagnitude > 10 * 10) continue;
-                        state.LastStop = s; state.DwellUntil = Time.time + stopSeconds; break;
+                        state.LastStop = s; state.DwellUntil = Time.time + stopSeconds;
+                        ExchangePassengers(state, routes[i]); break;
                     }
                     if (state.LastStop >= 0 && (state.Actor.transform.position - stops[state.LastStop]).sqrMagnitude > 30 * 30)
                         state.LastStop = -1;
                 }
                 bool waiting = state.DwellUntil > Time.time;
                 if (!waiting) state.DwellUntil = 0;
+                if (!waiting && state.BoardingVisual != null) { Destroy(state.BoardingVisual); state.BoardingVisual = null; }
                 SetStop(state, waiting);
                 if (waiting) foreach (var wheel in state.Wheels)
                     wheel.brakeTorque = Mathf.Max(wheel.brakeTorque, 18000);
@@ -117,7 +136,7 @@ namespace LWS.TruckTaxi
             }
         }
 
-        private void Activate(RouteState state)
+        private void Activate(RouteState state, TruckTaxiBusRoute route)
         {
             if (state.Actor == null)
             {
@@ -132,15 +151,23 @@ namespace LWS.TruckTaxi
             }
             else
             {
-                state.Actor.transform.position = state.Lane.centerline[1];
                 if (state.Body != null)
                 { state.Body.isKinematic = false; state.Body.linearVelocity = Vector3.zero; state.Body.angularVelocity = Vector3.zero; }
-                var movePath = FindUts(state.Actor, "MovePath");
-                movePath?.GetType().GetMethod("InitStartPosition")?.Invoke(movePath, new object[] { 0, 1, true, true });
-                movePath?.GetType().GetMethod("SetLookPosition")?.Invoke(movePath, null);
                 state.Actor.SetActive(true);
             }
+            state.Actor.transform.position = Sample(route.points, state.Progress);
+            var movePath = FindUts(state.Actor, "MovePath");
+            movePath?.GetType().GetMethod("InitStartPosition")?.Invoke(movePath,
+                new object[] { 0, SegmentAt(route.points, state.Progress), true, true });
+            movePath?.GetType().GetMethod("SetLookPosition")?.Invoke(movePath, null);
             state.DwellUntil = 0; state.LastStop = -1;
+            ApplyFleetColor(state.Actor, route.fleetColor);
+            foreach (var sound in state.Actor.GetComponentsInChildren<AudioSource>(true))
+            {
+                sound.spatialBlend = 1; sound.rolloffMode = AudioRolloffMode.Linear;
+                sound.minDistance = Mathf.Min(sound.minDistance, 7); sound.maxDistance = Mathf.Min(sound.maxDistance, 65);
+                TruckTaxiAudioController.Instance?.Route(sound, TruckTaxiAudioCategory.World);
+            }
             SetStop(state, false);
             state.AiBehaviour.enabled = false;
             StartCoroutine(EnableInitializedAi(state, ++state.Generation));
@@ -164,6 +191,7 @@ namespace LWS.TruckTaxi
             { state.Body.linearVelocity = Vector3.zero; state.Body.angularVelocity = Vector3.zero; state.Body.isKinematic = true; }
             state.Actor.SetActive(false);
             state.DwellUntil = 0;
+            if (state.BoardingVisual != null) { Destroy(state.BoardingVisual); state.BoardingVisual = null; }
         }
 
         private void OnDisable()
@@ -186,6 +214,94 @@ namespace LWS.TruckTaxi
             float length = 0;
             for (int i = 1; i < points.Length; i++) length += Vector3.Distance(points[i - 1], points[i]);
             return length + Vector3.Distance(points[points.Length - 1], points[0]);
+        }
+
+        private void AdvanceLogical(RouteState state, TruckTaxiBusRoute route, float seconds)
+        {
+            if (Time.time < state.NextStopUntil) return;
+            float previous = state.Progress;
+            state.Progress = Mathf.Repeat(previous + Mathf.Max(1, route.cruiseMetersPerSecond) * seconds, state.Length);
+            if (route.stops == null) return;
+            for (int i = 0; i < route.stops.Length; i++)
+            {
+                float stop = ProjectDistance(route.points, route.stops[i]);
+                if (!(previous <= state.Progress ? stop > previous && stop <= state.Progress : stop > previous || stop <= state.Progress)) continue;
+                state.Progress = stop; state.NextStopUntil = Time.time + stopSeconds;
+                state.Passengers = Mathf.Clamp(state.Passengers + ((i & 1) == 0 ? 2 : -1), 0, route.capacity);
+                break;
+            }
+        }
+
+        private void ExchangePassengers(RouteState state, TruckTaxiBusRoute route)
+        {
+            state.Passengers = Mathf.Clamp(state.Passengers + ((state.LastStop & 1) == 0 ? 2 : -1), 0, route.capacity);
+            if (state.BoardingVisual != null) Destroy(state.BoardingVisual);
+            state.BoardingVisual = new GameObject("Taxi bus boarding passenger");
+            var renderer = state.Actor.GetComponentInChildren<Renderer>();
+            Material material = renderer != null ? renderer.sharedMaterial : null;
+            TruckTaxiWobbleVisual.Create(state.BoardingVisual.transform, 1.5f, 1, material, material);
+            Vector3 curb = route.stops[state.LastStop] + state.Actor.transform.right * 3;
+            Vector3 door = state.Actor.transform.position + state.Actor.transform.right * 1.2f;
+            StartCoroutine(MoveBoarder(state.BoardingVisual, (state.LastStop & 1) == 0 ? curb : door,
+                (state.LastStop & 1) == 0 ? door : curb));
+        }
+
+        private static IEnumerator MoveBoarder(GameObject actor, Vector3 from, Vector3 to)
+        {
+            float elapsed = 0;
+            while (actor != null && elapsed < 2)
+            {
+                elapsed += Time.deltaTime;
+                actor.transform.position = Vector3.Lerp(from, to, Mathf.Clamp01(elapsed / 2));
+                yield return null;
+            }
+        }
+
+        private static void ApplyFleetColor(GameObject actor, Color color)
+        {
+            if (color == Color.white) return;
+            var block = new MaterialPropertyBlock(); block.SetColor("_BaseColor", color);
+            block.SetColor("_Color", color);
+            foreach (var renderer in actor.GetComponentsInChildren<Renderer>(true)) renderer.SetPropertyBlock(block);
+        }
+
+        private static int SegmentAt(Vector3[] points, float distance)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                float length = Vector3.Distance(points[i], points[(i + 1) % points.Length]);
+                if (distance < length) return i;
+                distance -= length;
+            }
+            return 1;
+        }
+
+        public static Vector3 Sample(Vector3[] points, float distance)
+        {
+            for (int i = 0; i < points.Length; i++)
+            {
+                Vector3 a = points[i], b = points[(i + 1) % points.Length];
+                float length = Vector3.Distance(a, b);
+                if (distance <= length) return Vector3.Lerp(a, b, length > 0 ? distance / length : 0);
+                distance -= length;
+            }
+            return points[0];
+        }
+
+        public static float ProjectDistance(Vector3[] points, Vector3 position)
+        {
+            float along = 0, best = 0, bestSqr = float.PositiveInfinity;
+            for (int i = 0; i < points.Length; i++)
+            {
+                Vector3 a = points[i], b = points[(i + 1) % points.Length];
+                Vector3 delta = b - a;
+                float length = delta.magnitude;
+                float t = length > .001f ? Mathf.Clamp01(Vector3.Dot(position - a, delta) / (length * length)) : 0;
+                float sqr = (position - Vector3.Lerp(a, b, t)).sqrMagnitude;
+                if (sqr < bestSqr) { bestSqr = sqr; best = along + t * length; }
+                along += length;
+            }
+            return best;
         }
     }
 }

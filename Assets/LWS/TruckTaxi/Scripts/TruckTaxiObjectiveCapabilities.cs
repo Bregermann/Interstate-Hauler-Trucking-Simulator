@@ -11,7 +11,7 @@ namespace LWS.TruckTaxi
         DestructibleProps=32, Shortcuts=64, Offroad=128, NearMiss=256, ScenicStops=512,
         IllicitStops=1024, PrivateStops=2048, TargetVehicles=4096, Pursuit=8192,
         VehicleDestruction=16384, Collectibles=32768, DestinationChange=65536,
-        VehicleRaceRoute=131072
+        VehicleRaceRoute=131072, FoodStops=262144, Racetrack=524288
     }
 
     // Runtime evidence, not a list of installed assets. Rebuilt at scene initialization or explicitly in debug.
@@ -36,6 +36,8 @@ namespace LWS.TruckTaxi
                 case TaxiRequestType.MaximumChaos: return TruckTaxiObjectiveCapability.Chaos;
                 case TaxiRequestType.ScenicRoute: return TruckTaxiObjectiveCapability.ScenicStops;
                 case TaxiRequestType.IllicitStop: return TruckTaxiObjectiveCapability.IllicitStops;
+                case TaxiRequestType.DinerStop: return TruckTaxiObjectiveCapability.FoodStops;
+                case TaxiRequestType.TakeALap: return TruckTaxiObjectiveCapability.Racetrack;
                 case TaxiRequestType.NearMiss: return TruckTaxiObjectiveCapability.Traffic|TruckTaxiObjectiveCapability.NearMiss;
                 case TaxiRequestType.FollowVehicle: case TaxiRequestType.RamTargetVehicle:
                 case TaxiRequestType.BlockVehicle:
@@ -71,7 +73,9 @@ namespace LWS.TruckTaxi
         }
         public TruckTaxiStopObjectivePoint FindStop(PassengerRequestDefinition definition,PassengerProfile passenger,Vector3 origin)
         {
-            var category=definition.requestType==TaxiRequestType.ScenicRoute ? TruckTaxiStopCategory.Scenic : TruckTaxiStopCategory.IllicitPickup;
+            var category=definition.requestType==TaxiRequestType.ScenicRoute ? TruckTaxiStopCategory.Scenic :
+                definition.requestType==TaxiRequestType.DinerStop ? TruckTaxiStopCategory.FoodStop :
+                definition.requestType==TaxiRequestType.TakeALap ? TruckTaxiStopCategory.Racetrack : TruckTaxiStopCategory.IllicitPickup;
             TruckTaxiStopObjectivePoint best=null; float distance=float.MaxValue;
             foreach(var stop in Stops)
             {

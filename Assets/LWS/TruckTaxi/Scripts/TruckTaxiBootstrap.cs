@@ -41,6 +41,7 @@ namespace LWS.TruckTaxi
         private TruckTaxiImpactTarget[] resetTargets;
         private TruckTaxiState observedState = (TruckTaxiState)(-1);
         private float lastSpeed;
+        private readonly RaycastHit[] patienceObstacles=new RaycastHit[16];
         private void Awake()
         {
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
@@ -87,6 +88,10 @@ namespace LWS.TruckTaxi
             Session.RequestCreated += OnRequestCreated;
             Session.DrivingEvent += OnDrivingEvent;
             Session.Changed += OnSessionChanged;
+            Session.BehaviorReaction+=OnBehaviorReaction;
+            Session.DiversionOffered+=OnDiversionOffered;
+            Session.DestinationChanged+=OnDesiredDestinationChanged;
+            Session.IsLegitimateTrafficOrServiceStop=IsLegitimateWait;
             #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if(System.Array.Exists(System.Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-baseline-population"))
             {
@@ -183,7 +188,7 @@ namespace LWS.TruckTaxi
                 case TruckTaxiState.DrivingToPickup: GPS.SetPickupDestination(Session.Pickup); Play(configuration.acceptSound); SetPaused(false); break;
                 case TruckTaxiState.PassengerBoarding: Play(configuration.boardingSound); break;
                 case TruckTaxiState.DrivingToDestination:
-                    GPS.SetRideDestination(Session.Destination);
+                    GPS.SetRideDestination(Session.CurrentDesiredDestination);
                     break;
                 case TruckTaxiState.PassengerExiting: Play(configuration.exitSound); break;
                 case TruckTaxiState.RideComplete: GPS.ClearRideDestination(); Play(configuration.fareSound); SetPaused(true); break;
@@ -195,7 +200,46 @@ namespace LWS.TruckTaxi
                     SetPaused(Session.State == TruckTaxiState.Inactive); break;
             }
         }
-        private void OnRequestResolved(TaxiRequestProgress r) { if (r.State != TaxiRequestState.Succeeded) Play(configuration.requestFailureSound); }
+        private void OnRequestResolved(TaxiRequestProgress r)
+        {
+            if (r.State != TaxiRequestState.Succeeded) { Play(configuration.requestFailureSound); return; }
+            if(!r.Definition.IsStop || DriverNeeds?.State==null) return;
+            var d=r.Definition;
+            if(d.rewardItemCount>0) DriverNeeds.State.AddItem(d.rewardItem,d.rewardItemCount);
+            if(d.secondRewardItemCount>0) DriverNeeds.State.AddItem(d.secondRewardItem,d.secondRewardItemCount);
+            if(d.rewardThirstRelief && Session.Passenger.explicitlyAdult && Session.Passenger.minimumAdultAge>=21)
+                DriverNeeds.State.SatisfyThirst();
+        }
+        private void OnBehaviorReaction(TruckTaxiDialogueCategory category) =>
+            Passengers?.Dialogue?.Speak(Session.Passenger,category,Session);
+        private void OnDiversionOffered(TaxiRequestProgress request)
+        {
+            Play(configuration.requestSound);
+            OnBehaviorReaction(TruckTaxiDialogueCategory.DiversionOffered);
+            SetPaused(true);
+        }
+        private void OnDesiredDestinationChanged()
+        {
+            if(Session.HasPassenger && Session.ActiveStop==null) GPS.SetRideDestination(Session.CurrentDesiredDestination);
+        }
+        private bool IsLegitimateWait()
+        {
+            if(body==null || Player==null) return false;
+            if(Fuel?.IsRescuing==true || Roadside?.IsRecovering==true) return true;
+            if(body.linearVelocity.sqrMagnitude>9) return false;
+            foreach(var service in TruckTaxiServicePoint.Points)
+                if(service!=null && service.CanUse(body.position,body.linearVelocity.magnitude,.44704f)) return true;
+            Vector3 front=Player.transform.position+Vector3.up+Player.transform.forward*3;
+            if(traffic!=null && traffic.SignalStoppingDistance(front,Player.transform.forward,35)<35) return true;
+            int count=Physics.SphereCastNonAlloc(front,2,Player.transform.forward,patienceObstacles,22,~0,QueryTriggerInteraction.Ignore);
+            for(int i=0;i<count;i++)
+            {
+                var hit=patienceObstacles[i].collider;
+                if(hit==null || hit.transform.IsChildOf(Player.transform)) continue;
+                if(hit.GetComponentInParent<TruckTaxiTrafficBehaviour>()!=null || hit.GetComponentInParent<TruckTaxiPedestrian>()!=null) return true;
+            }
+            return false;
+        }
         private void OnRequestCreated(TaxiRequestProgress r) => Play(configuration.requestSound);
         private void OnDrivingEvent(TaxiEventType _) => Play(configuration.collisionSound);
         public void Play(AudioClip clip) { if(clip!=null && audioSource!=null) audioSource.PlayOneShot(clip); }
@@ -270,7 +314,7 @@ namespace LWS.TruckTaxi
             caps.Register(TruckTaxiObjectiveCapability.Shortcuts,shortcuts);
             caps.Register(TruckTaxiObjectiveCapability.Offroad,road>0 ? offroad : 0);
             caps.Register(TruckTaxiObjectiveCapability.DestinationChange,locations.Length);
-            caps.Stops.Clear(); int scenic=0,illicit=0,privateStops=0;
+            caps.Stops.Clear(); int scenic=0,illicit=0,privateStops=0,food=0,racetracks=0;
             var ids=new System.Collections.Generic.HashSet<string>();
             foreach(var point in FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None))
             {
@@ -280,11 +324,15 @@ namespace LWS.TruckTaxi
                 if(point.category==TruckTaxiStopCategory.Scenic) scenic++;
                 if(point.category==TruckTaxiStopCategory.IllicitPickup) illicit++;
                 if(point.category==TruckTaxiStopCategory.PrivateMeeting) privateStops++;
+                if(point.category==TruckTaxiStopCategory.FoodStop) food++;
+                if(point.category==TruckTaxiStopCategory.Racetrack) racetracks++;
             }
             caps.Stops.Sort((a,b)=>string.CompareOrdinal(a.stableId,b.stableId));
             caps.Register(TruckTaxiObjectiveCapability.ScenicStops,scenic);
             caps.Register(TruckTaxiObjectiveCapability.IllicitStops,illicit);
             caps.Register(TruckTaxiObjectiveCapability.PrivateStops,privateStops);
+            caps.Register(TruckTaxiObjectiveCapability.FoodStops,food);
+            caps.Register(TruckTaxiObjectiveCapability.Racetrack,racetracks);
         }
         private void RefreshDynamicObjectiveSupport()
         {
@@ -319,6 +367,8 @@ namespace LWS.TruckTaxi
             if (regional != null) regional.AvailabilityChanged -= OnRegionalAvailabilityChanged;
             Time.timeScale = 1;
             if(Session!=null) { Session.Changed-=OnSessionChanged; Session.RequestResolved-=OnRequestResolved; Session.RequestCreated-=OnRequestCreated; Session.DrivingEvent-=OnDrivingEvent; }
+            if(Session!=null) { Session.BehaviorReaction-=OnBehaviorReaction; Session.DiversionOffered-=OnDiversionOffered;
+                Session.DestinationChanged-=OnDesiredDestinationChanged; Session.IsLegitimateTrafficOrServiceStop=null; }
             Instance = null;
         }
     }

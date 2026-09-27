@@ -7,7 +7,8 @@ namespace LWS.TruckTaxi
     {
         Player, PassengerPickup, Destination, ActiveRoute, ActiveObjective, ScenicStop,
         IllicitStop, PrivateEventStop, Shortcut, DiscoveredShortcut, TargetVehicle,
-        Collectible, Dropoff, SpecialEvent, Danger, Debug, FoodStop, PhotoStop, Bathroom
+        Collectible, Dropoff, SpecialEvent, Danger, Debug, FoodStop, PhotoStop, Bathroom,
+        Store, Gas, Repair, TrainStation, BusTerminal, Racetrack, ServiceArea
     }
     public enum TruckTaxiMapMarkerState { Hidden, Known, Optional, Active, Completed }
 
@@ -20,6 +21,8 @@ namespace LWS.TruckTaxi
         {
             public TruckTaxiMapMarkerType type;
             public Sprite icon;
+            public string label;
+            [TextArea] public string explanation;
             public Color color=Color.white;
             [Range(.5f,3)] public float scale=1;
         }
@@ -34,6 +37,12 @@ namespace LWS.TruckTaxi
         public bool showDebugPoints;
         public Entry Find(TruckTaxiMapMarkerType type)
         { foreach(var entry in entries) if(entry!=null && entry.type==type) return entry; return null; }
+        public System.Collections.Generic.IEnumerable<Entry> PlayerLegend()
+        {
+            foreach(var entry in entries)
+                if(entry!=null && entry.icon!=null && entry.type!=TruckTaxiMapMarkerType.Debug &&
+                   entry.type!=TruckTaxiMapMarkerType.ActiveRoute && !string.IsNullOrWhiteSpace(entry.label)) yield return entry;
+        }
         public Color Tint(TruckTaxiMapMarkerType type,TruckTaxiMapMarkerState state)
         {
             Color color=Find(type)?.color ?? Color.white;
@@ -53,6 +62,7 @@ namespace LWS.TruckTaxi
                 case TruckTaxiStopCategory.IllicitPickup: return TruckTaxiMapMarkerType.IllicitStop;
                 case TruckTaxiStopCategory.PrivateMeeting: return TruckTaxiMapMarkerType.PrivateEventStop;
                 case TruckTaxiStopCategory.FoodStop: return TruckTaxiMapMarkerType.FoodStop;
+                case TruckTaxiStopCategory.Racetrack: return TruckTaxiMapMarkerType.Racetrack;
                 case TruckTaxiStopCategory.PhotoStop: return TruckTaxiMapMarkerType.PhotoStop;
                 case TruckTaxiStopCategory.CollectionStop: return TruckTaxiMapMarkerType.Collectible;
                 default: return TruckTaxiMapMarkerType.SpecialEvent;

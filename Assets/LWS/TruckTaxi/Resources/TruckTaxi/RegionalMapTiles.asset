@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b24f10a73dabcf409aad37cdd140426, type: 3}
+  m_Name: RegionalMapTiles
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapTileCatalog
+  tileMaterial: {fileID: 2100000, guid: 53e021201f1a71643a6b20dd21c3e0ff, type: 2}
+  tiles:
+  - sceneName: Taxi_Highway
+    texture: {fileID: 2800000, guid: 5fd4587afdfc8e146a963189595e72a1, type: 3}
+    center: {x: 1230, y: 0}
+    size: {x: 560, y: 1020}
+  - sceneName: Taxi_RailCorridor
+    texture: {fileID: 2800000, guid: 9beda9984e33b3949936a9d943327ce0, type: 3}
+    center: {x: 2000, y: 510}
+    size: {x: 4920, y: 120}
+  - sceneName: Taxi_RiverBridge
+    texture: {fileID: 2800000, guid: ce46b9e0fa447a14e86e151495aa0dc0, type: 3}
+    center: {x: 2000, y: 0}
+    size: {x: 1100, y: 1020}
+  - sceneName: Taxi_ServiceArea
+    texture: {fileID: 2800000, guid: f1d96af16ef0c274d93796b194f86f63, type: 3}
+    center: {x: 2800, y: 0}
+    size: {x: 620, y: 1020}
+  - sceneName: Taxi_ThunderBowlSpeedway
+    texture: {fileID: 2800000, guid: ae312eac00e1d6f48b8f1bacc3c39f99, type: 3}
+    center: {x: 2800, y: -700}
+    size: {x: 800, y: 1020}
+  - sceneName: Taxi_Town01
+    texture: {fileID: 2800000, guid: ffe29f7cff67d2e46bf8d6a487a78fa8, type: 3}
+    center: {x: -75, y: 0}
+    size: {x: 970, y: 1020}
+  - sceneName: Taxi_Town01Outskirts
+    texture: {fileID: 2800000, guid: 88ec96ec9e8cd80458bf3019c43df07b, type: 3}
+    center: {x: 680, y: 0}
+    size: {x: 660, y: 1020}
+  - sceneName: Taxi_Town02
+    texture: {fileID: 2800000, guid: f28f1d6879fac874785242a2bfb6cde3, type: 3}
+    center: {x: 4075, y: 0}
+    size: {x: 970, y: 1020}
+  - sceneName: Taxi_Town02Outskirts
+    texture: {fileID: 2800000, guid: b188c5cb34be76c44b38c5a9c1a232c0, type: 3}
+    center: {x: 3350, y: 0}
+    size: {x: 600, y: 1020}
