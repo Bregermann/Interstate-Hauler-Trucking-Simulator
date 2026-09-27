@@ -1,0 +1,163 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2dd89cd9be260540acadbf39800d406, type: 3}
+  m_Name: TruckTaxiVenueCatalog
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiVenueCatalog
+  venues:
+  - id: taxi.stadium
+    displayName: Union Field Stadium
+    town: Town 01
+    district: Stadium
+    regionId: taxi.stadium
+    sceneName: Taxi_SportsStadium
+    type: 0
+    worldPosition: {x: 1080, y: 0, z: -720}
+    mapPosition: {x: 1080, y: 0, z: -720}
+    capacity: 32000
+    influenceRadiusMeters: 420
+    parkingZones:
+    - {x: 920, y: 0.2, z: -730}
+    crowdZones:
+    - {x: 1080, y: 0, z: -625}
+    - {x: 1080, y: 0, z: -815}
+    taxiPickupZones:
+    - {x: 1080, y: 0.2, z: -550}
+    - {x: 920, y: 0.2, z: -730}
+    - {x: 1210, y: 0.2, z: -620}
+    taxiDropoffZones:
+    - {x: 1080, y: 0.2, z: -550}
+    - {x: 920, y: 0.2, z: -730}
+    - {x: 1210, y: 0.2, z: -620}
+    eventIds:
+    - taxi.event.union-field-game
+  - id: taxi.concert
+    displayName: Neon Yard Concert Venue
+    town: Town 02
+    district: Concert
+    regionId: taxi.concert
+    sceneName: Taxi_ConcertVenue
+    type: 1
+    worldPosition: {x: 3720, y: 0, z: -720}
+    mapPosition: {x: 3720, y: 0, z: -720}
+    capacity: 9000
+    influenceRadiusMeters: 420
+    parkingZones:
+    - {x: 3540, y: 0.2, z: -730}
+    crowdZones:
+    - {x: 3720, y: 0, z: -625}
+    - {x: 3720, y: 0, z: -815}
+    taxiPickupZones:
+    - {x: 3720, y: 0.2, z: -545}
+    - {x: 3540, y: 0.2, z: -730}
+    - {x: 3860, y: 0.2, z: -675}
+    taxiDropoffZones:
+    - {x: 3720, y: 0.2, z: -545}
+    - {x: 3540, y: 0.2, z: -730}
+    - {x: 3860, y: 0.2, z: -675}
+    eventIds:
+    - taxi.event.neon-yard-concert
+  - id: taxi.speedway
+    displayName: Thunder Bowl Speedway
+    town: Regional
+    district: Speedway
+    regionId: taxi.speedway
+    sceneName: Taxi_ThunderBowlSpeedway
+    type: 2
+    worldPosition: {x: 2800, y: 0, z: -780}
+    mapPosition: {x: 2800, y: 0, z: -780}
+    capacity: 18000
+    influenceRadiusMeters: 420
+    parkingZones:
+    - {x: 2800, y: 0.2, z: -610}
+    crowdZones:
+    - {x: 2800, y: 0, z: -685}
+    - {x: 2800, y: 0, z: -875}
+    taxiPickupZones:
+    - {x: 2800, y: 0.2, z: -470}
+    - {x: 2800, y: 0.2, z: -610}
+    - {x: 2960, y: 0.2, z: -480}
+    - {x: 2800, y: 0.2, z: -780}
+    - {x: 2800, y: 0.2, z: -540}
+    - {x: 2660, y: 0.2, z: -570}
+    taxiDropoffZones:
+    - {x: 2800, y: 0.2, z: -470}
+    - {x: 2800, y: 0.2, z: -610}
+    - {x: 2960, y: 0.2, z: -480}
+    - {x: 2800, y: 0.2, z: -780}
+    - {x: 2800, y: 0.2, z: -540}
+    - {x: 2660, y: 0.2, z: -570}
+    eventIds:
+    - taxi.event.thunder-bowl-race
+  events:
+  - id: taxi.event.union-field-game
+    venueId: taxi.stadium
+    displayName: Union Field Saturday Game
+    type: 0
+    recurrence: 4
+    firstDate: 2020-01-01
+    lastDate: 2099-12-31
+    weekday: 6
+    startHour: 15
+    endHour: 18
+    startMinute: 0
+    endMinute: 0
+    arrivalLeadMinutes: 120
+    departureMinutes: 120
+    announcementLeadMinutes: 30
+    attendanceScale: 1
+    trafficMultiplier: 1.8
+    crowdMultiplier: 2.1
+    fareMultiplier: 1.6
+    rideFrequencyMultiplier: 1.7
+    showOnMap: 1
+  - id: taxi.event.neon-yard-concert
+    venueId: taxi.concert
+    displayName: Neon Yard Live
+    type: 2
+    recurrence: 4
+    firstDate: 2020-01-01
+    lastDate: 2099-12-31
+    weekday: 5
+    startHour: 20
+    endHour: 23
+    startMinute: 0
+    endMinute: 0
+    arrivalLeadMinutes: 120
+    departureMinutes: 120
+    announcementLeadMinutes: 30
+    attendanceScale: 1
+    trafficMultiplier: 1.6
+    crowdMultiplier: 2
+    fareMultiplier: 1.75
+    rideFrequencyMultiplier: 1.7
+    showOnMap: 1
+  - id: taxi.event.thunder-bowl-race
+    venueId: taxi.speedway
+    displayName: Thunder Bowl Stock Car Night
+    type: 3
+    recurrence: 4
+    firstDate: 2020-01-01
+    lastDate: 2099-12-31
+    weekday: 0
+    startHour: 17
+    endHour: 20
+    startMinute: 0
+    endMinute: 0
+    arrivalLeadMinutes: 120
+    departureMinutes: 120
+    announcementLeadMinutes: 30
+    attendanceScale: 1
+    trafficMultiplier: 1.7
+    crowdMultiplier: 1.7
+    fareMultiplier: 1.5
+    rideFrequencyMultiplier: 1.7
+    showOnMap: 1

@@ -60,6 +60,7 @@ MonoBehaviour:
     neighborChunkIds:
     - taxi.town01outskirts
     - taxi.riverbridge
+    - taxi.stadium
     roadIds: []
     trafficContent: Validation traffic lane presentation
     weatheradeContent: Weatherade-compatible road/environment presentation
@@ -132,6 +133,7 @@ MonoBehaviour:
     neighborChunkIds:
     - taxi.servicearea
     - taxi.town02
+    - taxi.concert
     roadIds: []
     trafficContent: Validation traffic lane presentation
     weatheradeContent: Weatherade-compatible road/environment presentation
@@ -171,6 +173,58 @@ MonoBehaviour:
     weatheradeContent: Weatherade-compatible road/environment presentation
     preloadPriority: 0
     containsRoadGeometry: 0
+    containsTrafficPresentation: 0
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.stadium
+    displayName: Union Field Stadium
+    sceneName: Taxi_SportsStadium
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_SportsStadium.unity
+    boundsCenter: {x: 1080, y: 0, z: -720}
+    boundsSize: {x: 580, y: 160, z: 720}
+    neighborChunkIds:
+    - taxi.highway
+    - taxi.mountainpass
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 0
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.concert
+    displayName: Neon Yard Concert Venue
+    sceneName: Taxi_ConcertVenue
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_ConcertVenue.unity
+    boundsCenter: {x: 3720, y: 0, z: -720}
+    boundsSize: {x: 620, y: 160, z: 720}
+    neighborChunkIds:
+    - taxi.town02outskirts
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 0
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.mountainpass
+    displayName: Pinecrest Mountain Pass
+    sceneName: Taxi_MountainPass
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_MountainPass.unity
+    boundsCenter: {x: 1180, y: 12, z: -1450}
+    boundsSize: {x: 680, y: 220, z: 800}
+    neighborChunkIds:
+    - taxi.stadium
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
     containsTrafficPresentation: 0
     containsWeatheradePresentation: 1
     containsGlobalServices: 0
