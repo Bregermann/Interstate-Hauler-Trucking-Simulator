@@ -38,6 +38,10 @@ namespace LWS.TruckTaxi
         private readonly LwsTrafficSpawnPolicy policy = new LwsTrafficSpawnPolicy {
             densityTier = LwsTrafficDensityTier.Off, targetCruiseSpeedScale = .65f, maximumTrafficSpeedMetersPerSecond = 11 };
         private RouteState[] states;
+        private Func<Vector3,float> venueFlow;
+        public void SetVenueFlow(Func<Vector3,float> sampler) => venueFlow=sampler;
+        private int PassengerExchange(Vector3 stop,int normal)
+        { float flow=venueFlow?.Invoke(stop) ?? 0; return flow>.1f ? -Mathf.CeilToInt(flow*3) : flow<-.1f ? Mathf.CeilToInt(-flow*3) : normal; }
 
         private sealed class RouteState
         {
@@ -148,6 +152,10 @@ namespace LWS.TruckTaxi
                 state.AiBehaviour = state.Ai as Behaviour;
                 state.StopField = state.Ai.GetType().GetField("tempStop", BindingFlags.Public | BindingFlags.Instance);
                 state.Wheels = state.Ai.GetComponentsInChildren<WheelCollider>(true);
+                FitPhysicalBody(state.Body);
+                var target=state.Actor.GetComponent<TruckTaxiImpactTarget>() ?? state.Actor.AddComponent<TruckTaxiImpactTarget>();
+                target.kind=TaxiImpactKind.Traffic;
+                target.targetId="bus:"+route.id;
             }
             else
             {
@@ -194,6 +202,36 @@ namespace LWS.TruckTaxi
             if (state.BoardingVisual != null) { Destroy(state.BoardingVisual); state.BoardingVisual = null; }
         }
 
+        private static void FitPhysicalBody(Rigidbody body)
+        {
+            if(body==null) return;
+            Vector3 low=new Vector3(float.PositiveInfinity,float.PositiveInfinity,float.PositiveInfinity);
+            Vector3 high=new Vector3(float.NegativeInfinity,float.NegativeInfinity,float.NegativeInfinity);
+            bool found=false;
+            foreach(var renderer in body.GetComponentsInChildren<Renderer>(true))
+            {
+                if(!renderer.gameObject.activeInHierarchy || renderer.name.Contains("Wheel") ||
+                    renderer.name.Contains("Mirror") || renderer.name.Contains("Antenna")) continue;
+                var mesh=renderer.GetComponent<MeshFilter>()?.sharedMesh;
+                Bounds bounds=mesh!=null ? mesh.bounds : renderer is SkinnedMeshRenderer skinned ?
+                    skinned.localBounds : renderer.bounds;
+                Transform source=mesh!=null || renderer is SkinnedMeshRenderer ? renderer.transform : null;
+                Vector3 min=bounds.min, max=bounds.max;
+                for(int x=0;x<2;x++) for(int y=0;y<2;y++) for(int z=0;z<2;z++)
+                {
+                    Vector3 corner=new Vector3(x==0 ? min.x : max.x,y==0 ? min.y : max.y,z==0 ? min.z : max.z);
+                    Vector3 point=body.transform.InverseTransformPoint(source!=null ? source.TransformPoint(corner) : corner);
+                    low=Vector3.Min(low,point); high=Vector3.Max(high,point);
+                }
+                found=true;
+            }
+            if(!found) { Debug.LogWarning("UTS bus has no visible body renderer for collider fitting.",body); return; }
+            var collider=body.gameObject.AddComponent<BoxCollider>();
+            collider.center=(low+high)*.5f;
+            collider.size=new Vector3((high.x-low.x)*.96f,(high.y-low.y)*.94f,(high.z-low.z)*.97f);
+            collider.isTrigger=false;
+        }
+
         private void OnDisable()
         {
             if (states == null) return;
@@ -227,14 +265,15 @@ namespace LWS.TruckTaxi
                 float stop = ProjectDistance(route.points, route.stops[i]);
                 if (!(previous <= state.Progress ? stop > previous && stop <= state.Progress : stop > previous || stop <= state.Progress)) continue;
                 state.Progress = stop; state.NextStopUntil = Time.time + stopSeconds;
-                state.Passengers = Mathf.Clamp(state.Passengers + ((i & 1) == 0 ? 2 : -1), 0, route.capacity);
+                state.Passengers = Mathf.Clamp(state.Passengers + PassengerExchange(route.stops[i],(i & 1) == 0 ? 2 : -1), 0, route.capacity);
                 break;
             }
         }
 
         private void ExchangePassengers(RouteState state, TruckTaxiBusRoute route)
         {
-            state.Passengers = Mathf.Clamp(state.Passengers + ((state.LastStop & 1) == 0 ? 2 : -1), 0, route.capacity);
+            int exchanged=PassengerExchange(route.stops[state.LastStop],(state.LastStop & 1) == 0 ? 2 : -1);
+            state.Passengers = Mathf.Clamp(state.Passengers + exchanged, 0, route.capacity);
             if (state.BoardingVisual != null) Destroy(state.BoardingVisual);
             state.BoardingVisual = new GameObject("Taxi bus boarding passenger");
             var renderer = state.Actor.GetComponentInChildren<Renderer>();
@@ -242,8 +281,7 @@ namespace LWS.TruckTaxi
             TruckTaxiWobbleVisual.Create(state.BoardingVisual.transform, 1.5f, 1, material, material);
             Vector3 curb = route.stops[state.LastStop] + state.Actor.transform.right * 3;
             Vector3 door = state.Actor.transform.position + state.Actor.transform.right * 1.2f;
-            StartCoroutine(MoveBoarder(state.BoardingVisual, (state.LastStop & 1) == 0 ? curb : door,
-                (state.LastStop & 1) == 0 ? door : curb));
+            StartCoroutine(MoveBoarder(state.BoardingVisual, exchanged>0 ? curb : door,exchanged>0 ? door : curb));
         }
 
         private static IEnumerator MoveBoarder(GameObject actor, Vector3 from, Vector3 to)

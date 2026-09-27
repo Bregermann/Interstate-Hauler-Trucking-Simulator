@@ -86,6 +86,7 @@ namespace LWS.TruckTaxi
         }
         // Called by the completed adult interaction, never by ordinary drinks.
         public void SatisfyThirst() { Thirst = 0; }
+        public void RelieveThirst(float fraction) { if(float.IsFinite(fraction)) Thirst=Mathf.Clamp01(Thirst-Mathf.Max(0,fraction)); }
         public void EatMeal(float hungerRelief)
         { if (float.IsFinite(hungerRelief)) Hunger = Mathf.Clamp01(Hunger - Mathf.Max(0, hungerRelief)); }
         public void DebugSetThirst(float value)

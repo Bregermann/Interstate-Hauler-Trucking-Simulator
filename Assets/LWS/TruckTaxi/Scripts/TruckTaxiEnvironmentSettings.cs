@@ -29,6 +29,11 @@ namespace LWS.TruckTaxi
     {
         [Header("LWS game clock (not Unity simulation speed)")]
         [Range(0, 23.99f)] public float startingTime = 16;
+        [Header("In-game calendar")]
+        [Range(1, 9999)] public int startYear = 2026;
+        [Range(1, 12)] public int startMonth = 6;
+        [Range(1, 31)] public int startDay = 1;
+        public int forecastSeed = 71923;
         [Tooltip("30 game seconds per real second: a day takes 48 minutes; 6 game hours take 12 minutes.")]
         [Min(0)] public float timeScale = 30;
         public bool timeProgressionEnabled = true;
@@ -40,6 +45,8 @@ namespace LWS.TruckTaxi
         [Min(5)] public float weatherTransitionSeconds = 25;
         [Tooltip("Weather holds for this range of IN-GAME hours, excluding pause/frozen time.")]
         public Vector2 weatherDurationGameHours = new Vector2(2, 5);
+        [Min(0)] public float winterSnowWeightMultiplier = 4;
+        [Min(0)] public float summerStormWeightMultiplier = 2;
         public TruckTaxiWeatherWeight[] weatherWeights =
         {
             new TruckTaxiWeatherWeight(LwsWeatherPresetCatalog.ClearId, 4),

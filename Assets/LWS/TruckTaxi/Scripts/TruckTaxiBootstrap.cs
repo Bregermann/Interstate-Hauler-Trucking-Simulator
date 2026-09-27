@@ -27,6 +27,11 @@ namespace LWS.TruckTaxi
         public TruckTaxiAudioController Audio { get; private set; }
         public TruckTaxiSteeringWheelVisual SteeringVisual { get; private set; }
         public TruckTaxiEnvironmentCoordinator Environment { get; private set; }
+        public TruckTaxiCalendarWeatherService CalendarWeather => Environment?.CalendarWeather;
+        public TruckTaxiWorldCoordinator WorldCoordinator { get; private set; }
+        public TruckTaxiVenueRuntime Venues { get; private set; }
+        public TruckTaxiExtremeEventDirector Extremes { get; private set; }
+        public TruckTaxiRivalPopulation Rivals { get; private set; }
         public TruckTaxiDriverNeedsCoordinator DriverNeeds { get; private set; }
         public TruckTaxiFuelController Fuel { get; private set; }
         public TruckTaxiRoadsideAssistance Roadside { get; private set; }
@@ -69,7 +74,7 @@ namespace LWS.TruckTaxi
             resetTargets = FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None);
             RouteDistances = new TruckTaxiRouteDistanceService(roadGraph.Graph);
             Session = new TruckTaxiSession(configuration,locations,Random.Range(1,int.MaxValue),RouteDistances,()=>body.position);
-            if (regional != null) Session.RegionResolver = regional.ResolveRegion;
+            if (regional != null) Session.RegionResolver = regional.ResolveRideTown;
             if (regional != null)
             {
                 traffic.SetRegionAvailability(regional.IsPositionAvailable);
@@ -129,7 +134,8 @@ namespace LWS.TruckTaxi
                 Environment.WeatherAudioRootAvailable+=Audio.RouteWorldTree;
                 if(Environment.WeatherAudioRoot!=null) Audio.RouteWorldTree(Environment.WeatherAudioRoot);
                 DriverNeeds=GetComponent<TruckTaxiDriverNeedsCoordinator>() ?? gameObject.AddComponent<TruckTaxiDriverNeedsCoordinator>();
-                if(DriverNeeds.Initialize(this,Environment)) hud.InitializeEnvironment(Environment,DriverNeeds);
+                if(DriverNeeds.Initialize(this,Environment))
+                { hud.InitializeEnvironment(Environment,DriverNeeds); OptionalStops.ConfigureScenicThirstRelief(DriverNeeds.State.RelieveThirst); }
             }
             Roadside = GetComponent<TruckTaxiRoadsideAssistance>() ?? gameObject.AddComponent<TruckTaxiRoadsideAssistance>();
             Roadside.Initialize(this);
@@ -141,6 +147,14 @@ namespace LWS.TruckTaxi
                 Companions.Initialize(this,Player.transform,adult!=null ? adult.seatProfile : null);
             }
             hud.InitializeIntegratedControls();
+            if(CalendarWeather!=null)
+            {
+                Venues=GetComponent<TruckTaxiVenueRuntime>() ?? gameObject.AddComponent<TruckTaxiVenueRuntime>();
+                Extremes=GetComponent<TruckTaxiExtremeEventDirector>() ?? gameObject.AddComponent<TruckTaxiExtremeEventDirector>();
+                Rivals=traffic.GetComponent<TruckTaxiRivalPopulation>() ?? traffic.gameObject.AddComponent<TruckTaxiRivalPopulation>();
+                WorldCoordinator=GetComponent<TruckTaxiWorldCoordinator>() ?? gameObject.AddComponent<TruckTaxiWorldCoordinator>();
+                WorldCoordinator.Initialize(this);
+            }
             SetPaused(true);
             OnSessionChanged();
         }
@@ -207,7 +221,7 @@ namespace LWS.TruckTaxi
             var d=r.Definition;
             if(d.rewardItemCount>0) DriverNeeds.State.AddItem(d.rewardItem,d.rewardItemCount);
             if(d.secondRewardItemCount>0) DriverNeeds.State.AddItem(d.secondRewardItem,d.secondRewardItemCount);
-            if(d.rewardThirstRelief && Session.Passenger.explicitlyAdult && Session.Passenger.minimumAdultAge>=21)
+            if(d.requestType!=TaxiRequestType.ScenicRoute && d.rewardThirstRelief && Session.Passenger.explicitlyAdult && Session.Passenger.minimumAdultAge>=21)
                 DriverNeeds.State.SatisfyThirst();
         }
         private void OnBehaviorReaction(TruckTaxiDialogueCategory category) =>

@@ -32,8 +32,8 @@ namespace LWS.TruckTaxi
             int count = Physics.OverlapSphereNonAlloc(transform.position, host.Configuration.nearMissRadius, hits, ~0, QueryTriggerInteraction.Ignore);
             for (int i=0;i<count;i++)
             {
-                var target = hits[i].GetComponentInParent<TruckTaxiImpactTarget>();
-                if (target == null || target.kind != TaxiImpactKind.Traffic) continue;
+                var target = TruckTaxiImpactTarget.FromCollider(hits[i]);
+                if (target == null || !target.IsTrafficVehicle) continue;
                 current.Add(target);
                 var other=hits[i].attachedRigidbody;
                 Vector3 relative=incomingVelocity-(other!=null ? other.linearVelocity : Vector3.zero);
@@ -57,7 +57,7 @@ namespace LWS.TruckTaxi
         private void OnCollisionEnter(Collision collision)
         {
             if (host == null || host.Session == null) return;
-            var target = collision.collider.GetComponentInParent<TruckTaxiImpactTarget>();
+            var target = TruckTaxiImpactTarget.FromCollider(collision.collider);
             // Even a gentle touch invalidates a near miss; scoring impact thresholds are separate.
             if(target!=null) lastContact[target.GetInstanceID()]=Time.time;
             if(target!=null && target.kind==TaxiImpactKind.Pedestrian)
@@ -94,7 +94,7 @@ namespace LWS.TruckTaxi
             if (!playerCaused) return;
             TaxiEventType type = TaxiEventType.Collision;
             if (target != null && playerCaused && target.Hit())
-                type = target.kind == TaxiImpactKind.Traffic ? TaxiEventType.TrafficRam :
+                type = target.IsTrafficVehicle ? TaxiEventType.TrafficRam :
                     target.kind == TaxiImpactKind.Pedestrian ? TaxiEventType.PedestrianHit : TaxiEventType.PropDamage;
             host.Session.RecordEvent(type, LastTarget, LastImpactSpeed);
         }

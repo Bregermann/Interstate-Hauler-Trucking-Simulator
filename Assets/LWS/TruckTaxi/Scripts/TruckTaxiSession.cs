@@ -48,7 +48,7 @@ namespace LWS.TruckTaxi
                 {
                     case TaxiRequestType.FastDelivery: return $"Arrive within {TargetText} seconds";
                     case TaxiRequestType.Shortcut: return Target<=1 ? "Use a shortcut" : $"Use {TargetText} different shortcuts";
-                    case TaxiRequestType.RamTraffic: return $"Ram {TargetText} traffic "+(Target<=1 ? "car" : "cars");
+                    case TaxiRequestType.RamTraffic: return $"Ram {TargetText} traffic "+(Target<=1 ? "vehicle" : "vehicles");
                     case TaxiRequestType.HitPedestrian: return Target<=1 ? "Hit a pedestrian" : $"Hit {TargetText} pedestrians";
                     case TaxiRequestType.PropertyDamage: return $"Damage {TargetText} roadside "+(Target<=1 ? "prop" : "props");
                     case TaxiRequestType.Offroad: return $"Drive offroad for {TargetText} seconds";
@@ -75,9 +75,9 @@ namespace LWS.TruckTaxi
 
     public sealed class TaxiFare
     {
-        public long Base, Distance, Time, Requests, Diversions, Chaos, Tip, Penalties;
+        public long Base, Distance, Time, Requests, Diversions, Chaos, Tip, Penalties, EventBonus, WeatherBonus, OtherBonus, IntercityBonus;
         public bool IsCancellation;
-        public long Total => Math.Max(0, Base + Distance + Time + Requests + Diversions + Chaos + Tip - Penalties);
+        public long Total => Math.Max(0, Base + Distance + Time + Requests + Diversions + Chaos + Tip + EventBonus + WeatherBonus + OtherBonus + IntercityBonus - Penalties);
         public int Rating;
         public int ChaosScore;
         public int Score;
@@ -92,7 +92,8 @@ namespace LWS.TruckTaxi
         private readonly HashSet<object> offerSuppressors = new HashSet<object>();
         public bool OffersSuppressed => offerSuppressors.Count > 0;
         public void AcquireOfferSuppression(object owner) { if(owner!=null) { offerSuppressors.Add(owner); CancelOfferGeneration(); } }
-        public void ReleaseOfferSuppression(object owner) { if(owner!=null) offerSuppressors.Remove(owner); }
+        public void ReleaseOfferSuppression(object owner)
+        { if(owner!=null && offerSuppressors.Remove(owner) && !OffersSuppressed && State==TruckTaxiState.Available) ScheduleDispatch(); }
         public PassengerProfile Passenger { get; private set; }
         public TruckTaxiRideLocation Pickup { get; private set; }
         public TruckTaxiRideLocation Destination { get; private set; }
@@ -265,13 +266,16 @@ namespace LWS.TruckTaxi
         }
         private void SetState(TruckTaxiState value)
         {
-            State = value; StateAge = 0; Changed?.Invoke();
+            State = value; StateAge = 0;
+            if(value==TruckTaxiState.Available) ScheduleDispatch();
+            Changed?.Invoke();
         }
         public void SetRideRequestsEnabled(bool enabled)
         {
             if (RideRequestsEnabled == enabled) return;
             RideRequestsEnabled = enabled;
             if(!enabled) CancelOfferGeneration();
+            else if(State==TruckTaxiState.Available) ScheduleDispatch();
             PlayerPrefs.SetInt(RideRequestsPreferenceKey, enabled ? 1 : 0);
             PlayerPrefs.Save();
             Changed?.Invoke();
@@ -307,12 +311,11 @@ namespace LWS.TruckTaxi
             }
             Offer = new TruckTaxiRideOffer(Passenger, Pickup, Destination, origin,
                 toPickup, trip, config);
-            if (!IsIntercityRide && localOffersRemaining > 0) localOffersRemaining--;
             OfferDuration=Mathf.Max(.1f,config.offerDuration);
             OfferTimerPaused=false;
             requests.Clear(); chaos = 0; TrackedCollisions = 0; ElapsedRide = DistanceDriven = 0;
             Satisfaction = Passenger.baseSatisfaction; MechanicFareAdjustment=0;
-            DemandFareMultiplier=FareMultiplier()*(IsIntercityRide ? Mathf.Max(1,config.intercityFareMultiplier) : 1);
+            CaptureFareModifiers();
             PickupElapsed=PickupDuration=0;
             ridePedestriansHit=rideSpecialStopsCompleted=rideJugsSucceeded=rideJugsSpilled=rideContainersThrown=0;
             rideTrafficHits=0;
@@ -486,6 +489,7 @@ namespace LWS.TruckTaxi
             if(State!=TruckTaxiState.DrivingToDestination) lastPosition=playerPosition;
             if(!externalClock) gameMinutes+=deltaTime/60.0;
             StateAge += deltaTime; ReactionAge += deltaTime;
+            if(State==TruckTaxiState.Available) TickDispatch(deltaTime);
             if(State==TruckTaxiState.DrivingToPickup || State==TruckTaxiState.PassengerBoarding)
             {
                 if(!PickupPatienceSuspended) PickupElapsed+=deltaTime;
@@ -494,7 +498,7 @@ namespace LWS.TruckTaxi
             }
             if (State == TruckTaxiState.PassengerEjected && StateAge >= 3) { ContinueShift(); return; }
             if (State == TruckTaxiState.Available && RideRequestsEnabled && !OffersSuppressed &&
-                (IsGeneratingOffer || StateAge >= config.rideFrequency*FrequencyMultiplier()))
+                (IsGeneratingOffer || DispatchRemaining<=0))
             {
                 if (!IsGeneratingOffer) RequestRideOffer();
                 AdvanceOfferGeneration();
@@ -543,7 +547,7 @@ namespace LWS.TruckTaxi
                     if (request.State != TaxiRequestState.Active) continue;
                     if (!IsArrivalRequest(request.Definition.requestType) && request.Progress >= request.Target &&
                         (!request.Definition.IsStop || StopPresentationReady==null || StopPresentationReady(request))) Resolve(request,true);
-                    else if (request.Remaining<=0) { request.Expired=true; Resolve(request,false); }
+                    else if (TruckTaxiRequestPolicy.IsTimed(request.Definition) && request.Remaining<=0) { request.Expired=true; Resolve(request,false); }
                 }
                 requestClock += deltaTime;
                 if (requestClock >= Passenger.requestFrequency) { GenerateRequest(); requestClock = 0; }
@@ -604,11 +608,10 @@ namespace LWS.TruckTaxi
             {
                 if (CanAssign(definition,out _)) eligible.Add(definition);
             }
-            if (eligible.Count == 0) return false;
+            if (eligible.Count == 0) { CaptureSketchySelection(null); return false; }
             var chosen = eligible[random.Next(eligible.Count)];
-            float difficulty = Mathf.Lerp(Passenger.requestDifficultyRange.x, Passenger.requestDifficultyRange.y, (float)random.NextDouble());
-            var progress = new TaxiRequestProgress(chosen, difficulty,chosen.IsStop ? Capabilities.FindStop(chosen,Passenger,playerPosition()) : null,
-                Capabilities.TargetLimit(chosen.requestType));
+            CaptureSketchySelection(chosen);
+            var progress = CreatePolicyProgress(chosen);
             if(chosen.IsStop)
             {
                 PendingDiversion=progress; DiversionOffered?.Invoke(progress);
@@ -730,29 +733,30 @@ namespace LWS.TruckTaxi
             if(request.Definition.IsStop) stopStarted=false;
             request.ResolvedAt = ElapsedRide;
             React((success ? "REQUEST COMPLETE: " : "REQUEST FAILED: ") + request.Description);
-            Satisfaction = Mathf.Clamp(Satisfaction + (success ? request.Definition.ratingModifier : -0.2f),1,5);
+            Satisfaction = Mathf.Clamp(Satisfaction + (success ? request.Definition.ratingModifier * TruckTaxiRequestPolicy.RewardMultiplier(request) : -0.2f),1,5);
             RequestResolved?.Invoke(request);
         }
         public TaxiFare EstimateFare()
         {
             var fare = new TaxiFare
             {
-                Base = (long)Math.Round(config.baseFareCents*DemandFareMultiplier),
-                Distance = (long)Math.Round(DistanceDriven * config.centsPerMeter*DemandFareMultiplier),
-                Time = (long)Math.Round(ElapsedRide * config.centsPerSecond*DemandFareMultiplier),
+                Base = config.baseFareCents,
+                Distance = (long)Math.Round(DistanceDriven * config.centsPerMeter),
+                Time = (long)Math.Round(ElapsedRide * config.centsPerSecond),
                 Rating = StarsForSatisfaction(Satisfaction), ChaosScore = ChaosScore, Score = ChaosScore
             };
             foreach (var r in requests) if (r.State == TaxiRequestState.Succeeded)
             {
-                if(r.Definition.IsStop) fare.Diversions+=r.Definition.bonusMoneyCents;
-                else fare.Requests += r.Definition.bonusMoneyCents;
-                fare.Score += r.Definition.bonusScore;
+                if(r.Definition.IsStop) fare.Diversions+=TruckTaxiRequestPolicy.RewardCents(r);
+                else fare.Requests += TruckTaxiRequestPolicy.RewardCents(r);
+                fare.Score += TruckTaxiRequestPolicy.RewardScore(r);
             }
             if (Passenger != null && Passenger.chaosAffinity > 0)
                 fare.Chaos = (long)Math.Round(ChaosScore * config.chaosCentsPerPoint * Passenger.chaosAffinity);
             if (Passenger != null && Passenger.chaosAffinity < 0) fare.Penalties = config.impactPenaltyCents * TrackedCollisions;
             if(MechanicFareAdjustment>=0) fare.Requests+=MechanicFareAdjustment;
             else fare.Penalties-=MechanicFareAdjustment;
+            ApplyFareBonuses(fare);
             return fare;
         }
         private void FinishRide()
@@ -762,7 +766,7 @@ namespace LWS.TruckTaxi
             PendingDiversion=null;
             foreach (var r in requests)
                 if (r.State == TaxiRequestState.Active)
-                    Resolve(r,r.IsArrivalGoal && r.Remaining>0,
+                    Resolve(r,r.IsArrivalGoal && (!TruckTaxiRequestPolicy.IsTimed(r.Definition) || r.Remaining>0),
                         r.IsArrivalGoal ? "EXPIRED" : "DESTINATION REACHED");
             if(Passenger.CanOfferAppreciation && Satisfaction>=Passenger.appreciationMinimumSatisfaction &&
                 StarsForSatisfaction(Satisfaction)==5 && random.NextDouble()<Mathf.Clamp01(
@@ -783,7 +787,8 @@ namespace LWS.TruckTaxi
         { if(State==TruckTaxiState.AppreciationSequence) AwardFare(); }
         private void AwardFare()
         {
-            if (IsIntercityRide) localOffersRemaining = Mathf.Clamp(config.localOffersAfterIntercity, 0, 10);
+            IntercityPolicy.CompleteRide(IsIntercityRide);
+            if(IsIntercityRide) LastIntercityJourney=$"{Pickup?.locationName} -> {Destination?.locationName}";
             LastFare = EstimateFare();
             bool neverTips = Array.IndexOf(Passenger.uniqueMechanics ?? Array.Empty<TruckTaxiMechanic>(),TruckTaxiMechanic.NeverTips)>=0;
             if (!neverTips && random.NextDouble() <= Passenger.baseTipChance * Mathf.Clamp01((Satisfaction-1)/4))

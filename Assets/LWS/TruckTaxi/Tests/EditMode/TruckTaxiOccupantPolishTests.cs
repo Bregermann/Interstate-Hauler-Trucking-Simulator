@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi.Tests
 {
-    [Category("TaxiPolish")]
+    [Category("TaxiPolish"), Category("TaxiMegaPass")]
     public sealed class TruckTaxiOccupantPolishTests
     {
         [Test]
@@ -76,6 +76,36 @@ namespace LWS.TruckTaxi.Tests
             {
                 Object.DestroyImmediate(owner);
                 Object.DestroyImmediate(definition);
+            }
+        }
+
+        [Test]
+        public void WaitingSensorFitsVisibleBodyAndDisarmsForBoarding()
+        {
+            var truck=new GameObject("Truck");
+            var passenger=new GameObject("Passenger");
+            var visual=GameObject.CreatePrimitive(PrimitiveType.Cube);
+            try
+            {
+                var body=truck.AddComponent<Rigidbody>();
+                visual.transform.SetParent(passenger.transform,false);
+                visual.transform.localPosition=Vector3.up*.9f;
+                visual.transform.localScale=new Vector3(.7f,1.8f,.6f);
+                var actor=passenger.AddComponent<TruckTaxiPassengerActor>();
+                actor.Bind(null);
+                actor.ArmWaitingTruckHit(body);
+                var sensor=passenger.GetComponent<CapsuleCollider>();
+                Assert.IsTrue(sensor.enabled && sensor.isTrigger);
+                Assert.AreEqual(.9f,sensor.center.y,.05f);
+                Assert.Greater(sensor.height,1.6f);
+                Assert.That(actor.MinimumWaitingImpactMetersPerSecond,Is.InRange(.9f,1.8f));
+                actor.DisarmWaitingTruckHit();
+                Assert.IsFalse(sensor.enabled);
+            }
+            finally
+            {
+                Object.DestroyImmediate(passenger);
+                Object.DestroyImmediate(truck);
             }
         }
     }

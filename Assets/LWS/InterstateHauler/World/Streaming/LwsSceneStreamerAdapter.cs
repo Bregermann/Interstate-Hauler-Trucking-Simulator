@@ -144,21 +144,9 @@ namespace LWS.InterstateHauler
                 return true;
             }
 
-            Type type = ResolveSceneStreamerType();
-            MethodInfo method = type?.GetMethod("IsSceneLoaded", BindingFlags.Static | BindingFlags.Public);
-            if (method == null)
-            {
-                return false;
-            }
-
-            try
-            {
-                return method.Invoke(null, new object[] { sceneName }) is bool loaded && loaded;
-            }
-            catch
-            {
-                return false;
-            }
+            // A Single scene load can unload streamed scenes without clearing the vendor's
+            // persistent registry. Only Unity can confirm that their roads/colliders exist.
+            return false;
         }
 
         public bool ClearAll()
@@ -223,6 +211,7 @@ namespace LWS.InterstateHauler
             // also runs a competing neighbour-unload policy. Use the vendor's exact explicit-load
             // overload until that bug is fixed upstream; do not copy its loader or edit vendor code.
             var type = ResolveSceneStreamerType();
+            ReconcileUnloadedWorld(type);
             if (_explicitVendorLoad == null)
             {
                 var handler = type?.GetNestedType("InternalLoadedHandler", BindingFlags.NonPublic);
@@ -234,6 +223,31 @@ namespace LWS.InterstateHauler
             if (_explicitVendorLoad == null || _vendorInstance == null)
                 throw new MissingMethodException("Installed Scene Streamer explicit-load compatibility signature changed; review adapter before loading.");
             _explicitVendorLoad.Invoke(_vendorInstance.GetValue(null), new object[] { sceneName, null, 0 });
+        }
+
+        private void ReconcileUnloadedWorld(Type type)
+        {
+            // Reset only a completely unloaded world, never a live or in-flight region set.
+            // Empty ApplyState/UnloadAll use vendor APIs without loading or unloading a scene.
+            if (_pendingOperationCount > 1) return;
+            var record = type?.GetMethod("RecordState", BindingFlags.Public | BindingFlags.Static);
+            var apply = type?.GetMethod("ApplyState", BindingFlags.Public | BindingFlags.Static);
+            var clear = type?.GetMethod("UnloadAll", BindingFlags.Public | BindingFlags.Static);
+            if (record == null || apply == null || clear == null) return;
+            object state = record.Invoke(null, null);
+            var loadedField = state?.GetType().GetField("loaded");
+            var loaded = loadedField?.GetValue(state) as List<string>;
+            if (loaded == null || loaded.Count == 0) return;
+            foreach (string name in loaded)
+                if (IsSceneLoaded(name)) return;
+
+            loaded.Clear();
+            state.GetType().GetField("near")?.SetValue(state, new List<string>());
+            state.GetType().GetField("current")?.SetValue(state, string.Empty);
+            apply.Invoke(null, new[] { state });
+            clear.Invoke(null, null);
+            if (logDiagnostics)
+                Debug.Log("LWS Scene Streamer cleared stale registry after a full world unload.", this);
         }
 
         private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)

@@ -69,6 +69,7 @@ namespace LWS.TruckTaxi
         public void PutAway()
         {
             Generation++;
+            GetComponent<TruckTaxiRivalVehicleVisual>()?.ResetForPool();
             taxi?.ResetForPool();
             gameObject.SetActive(false);
             if (rage != null)

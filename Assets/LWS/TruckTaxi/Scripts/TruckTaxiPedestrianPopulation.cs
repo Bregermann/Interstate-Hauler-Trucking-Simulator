@@ -61,6 +61,9 @@ namespace LWS.TruckTaxi
         private int pathCursor;
         private int serial;
         private int walkerCursor;
+        private Func<Vector3, float> venueFlow;
+        private Vector3 hazardCenter;
+        private float hazardRadius, hazardUntil;
         public int BaselineActiveCount { get; private set; }
         public bool IsBaselineValidation => baselineValidation;
         public int TargetCount => DensityEnabled ? (baselineValidation ?
@@ -86,6 +89,25 @@ namespace LWS.TruckTaxi
             intersection != null && activeCrossings.TryGetValue(intersection, out int count) ? count : 0;
         public int ReducedShadowCount { get; private set; }
         public IReadOnlyList<TruckTaxiPedestrian> People => people;
+        // Signed demand: positive arrivals seek stronger demand, negative departures move away.
+        public void SetVenueFlow(Func<Vector3, float> sampler) => venueFlow = sampler;
+
+        public int ReactToHazard(Vector3 center, float radius, int maximumActors = 24)
+        {
+            hazardCenter = center; hazardRadius = Mathf.Max(0, radius);
+            hazardUntil = Time.time + 6;
+            int reacted = 0;
+            for (int i = 0; i < walkerSchedule.Count && reacted < Mathf.Max(0, maximumActors); i++)
+            {
+                var walker = walkerSchedule[i];
+                if (walker.Pedestrian == null || walker.Pedestrian.IsRagdoll ||
+                    (walker.Pedestrian.transform.position - center).sqrMagnitude > radius * radius) continue;
+                walker.IdleUntil = 0;
+                PlanNextWalk(walker);
+                reacted++;
+            }
+            return reacted;
+        }
         public void PinForInteraction(TruckTaxiPedestrian pedestrian, float seconds = 10)
         {
             if (pedestrian != null && people.Contains(pedestrian))
@@ -308,9 +330,10 @@ namespace LWS.TruckTaxi
                     logical.RegionAvailable(candidate, regionAvailable)) { record = candidate; break; }
             }
             if (record == null) return false;
+            int preferredNode = PickVenueSpawnNode(record);
             for (int attempt = 0; attempt < Mathf.Min(walkGraph.WalkableSpawnCount, 256); attempt++)
             {
-                int node = walkGraph.NextSpawnNode();
+                int node = attempt == 0 && preferredNode >= 0 ? preferredNode : walkGraph.NextSpawnNode();
                 if (node < 0 || !logical.Contains(record, walkGraph[node]) || !CanSpawnAt(walkGraph[node]))
                 { RejectedSpawnAttempts++; continue; }
                 var source = activePaths[pathCursor++ % activePaths.Count];
@@ -340,6 +363,21 @@ namespace LWS.TruckTaxi
                 }
             }
             return false;
+        }
+
+        private int PickVenueSpawnNode(TruckTaxiPedestrianLogicalPopulation.Record record)
+        {
+            if (venueFlow == null || Mathf.Abs(venueFlow(PresentationObserver())) < .05f) return -1;
+            int bestNode = -1;
+            float best = .05f;
+            for (int i = 0; i < Mathf.Min(16, walkGraph.WalkableSpawnCount); i++)
+            {
+                int node = walkGraph.NextSpawnNode();
+                if (node < 0 || !logical.Contains(record, walkGraph[node])) continue;
+                float score = Mathf.Abs(venueFlow(walkGraph[node]));
+                if (score > best) { best = score; bestNode = node; }
+            }
+            return bestNode;
         }
         private void RegisterGraphActor(TruckTaxiPedestrian ped, Component source, int node,
             TruckTaxiPedestrianLogicalPopulation.Record record)
@@ -387,8 +425,11 @@ namespace LWS.TruckTaxi
         }
         private void PlanNextWalk(WalkAgent walker)
         {
-            bool plannedCrossing = Random.value < .35f && walkGraph.PickCrossingJourney(walker.CurrentNode, walker.Route);
-            int destination = plannedCrossing ? -1 : walkGraph.PickDestination(walker.CurrentNode, Random.value < .4f ? 45 : 180);
+            int preferred = PickFlowDestination(walker.CurrentNode);
+            bool plannedCrossing = preferred < 0 && Random.value < .35f &&
+                walkGraph.PickCrossingJourney(walker.CurrentNode, walker.Route);
+            int destination = plannedCrossing ? -1 : preferred >= 0 ? preferred :
+                walkGraph.PickDestination(walker.CurrentNode, Random.value < .4f ? 45 : 180);
             if ((!plannedCrossing && (destination < 0 || !walkGraph.Route(walker.CurrentNode, destination, walker.Route))) || walker.Route.Count == 0)
             {
                 walker.IdleUntil = Time.time + Random.Range(1f, 3f);
@@ -411,6 +452,27 @@ namespace LWS.TruckTaxi
                 BeginCrossing(walker, crossing);
             }
             SetWaypoint(walker, first);
+        }
+
+        private int PickFlowDestination(int start)
+        {
+            Vector3 origin = walkGraph[start];
+            bool hazard = Time.time < hazardUntil &&
+                (origin - hazardCenter).sqrMagnitude < hazardRadius * hazardRadius;
+            float flow = venueFlow != null ? venueFlow(origin) : 0;
+            if (!hazard && Mathf.Abs(flow) < .05f) return -1;
+            int best = -1;
+            float bestScore = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                int candidate = walkGraph.PickDestination(start, 180);
+                if (candidate < 0) continue;
+                float score = hazard ?
+                    (walkGraph[candidate] - hazardCenter).sqrMagnitude - (origin - hazardCenter).sqrMagnitude :
+                    Mathf.Sign(flow) * (Mathf.Abs(venueFlow(walkGraph[candidate])) - Mathf.Abs(flow));
+                if (score > bestScore) { bestScore = score; best = candidate; }
+            }
+            return best;
         }
         private void UpdateWalker(WalkAgent walker)
         {

@@ -35,6 +35,7 @@ namespace LWS.TruckTaxi
         private TruckTaxiRoadRage rage;
         private float nextSense, desiredSpeed, brake, blockedSeconds, nextHorn, nextLaneChange, changeUntil;
         private float reversingUntil, nextRecovery;
+        private float presentationStopUntil;
         private readonly RaycastHit[] hits = new RaycastHit[32];
         private readonly Collider[] gaps = new Collider[48];
         private WheelCollider frontWheel;
@@ -97,7 +98,14 @@ namespace LWS.TruckTaxi
         {
             uint hash = 2166136261;
             foreach (char c in stableId) hash = (hash ^ c) * 16777619;
-            Personality = TruckTaxiTrafficPopulation.PersonalityForId(stableId);
+            if (stableId.StartsWith("taxi.rival.", StringComparison.Ordinal))
+            {
+                int roll = (int)(hash % 100);
+                Personality = roll < 58 ? TruckTaxiDriverPersonality.Impatient :
+                    roll < 91 ? TruckTaxiDriverPersonality.Aggressive :
+                    TruckTaxiDriverPersonality.Reckless;
+            }
+            else Personality = TruckTaxiTrafficPopulation.PersonalityForId(stableId);
             float factor = Personality == TruckTaxiDriverPersonality.Cautious ? .78f : Personality == TruckTaxiDriverPersonality.Normal ? .95f :
                 Personality == TruckTaxiDriverPersonality.Impatient ? 1.05f : Personality == TruckTaxiDriverPersonality.Aggressive ? 1.12f : 1.18f;
             PreferredSpeed = owner.LaneSpeed(LaneIndex) * factor * Mathf.Lerp(.95f, 1.05f, (hash % 103) / 102f);
@@ -117,6 +125,18 @@ namespace LWS.TruckTaxi
             EmergencyBraking = ownsBrakeHold = false;
             FollowingDistance = ObstacleDistance = 0;
             LaneChanges = HornsPlayed = 0;
+            presentationStopUntil = 0;
+        }
+
+        public void HoldForPresentation(float seconds)
+        {
+            presentationStopUntil = Mathf.Max(presentationStopUntil, Time.time + Mathf.Clamp(seconds, 0, 8));
+        }
+
+        public void ReactToHazard(float seconds)
+        {
+            HoldForPresentation(seconds);
+            Honk();
         }
 
         private Action<float> Setter(string name) => (Action<float>)Delegate.CreateDelegate(typeof(Action<float>), ai, ai.GetType().GetProperty(name).GetSetMethod());
@@ -142,6 +162,11 @@ namespace LWS.TruckTaxi
             {
                 float interval = range < 100 ? .1f : range < 220 ? .3f : .8f;
                 Sense(interval, range < 160); nextSense = Time.time + interval;
+            }
+            if (Time.time < presentationStopUntil)
+            {
+                desiredSpeed = 0;
+                brake = 1;
             }
             // Vendor PushRay runs in Update; preserve its red-light stop, then apply the stricter Taxi envelope.
             bool vendorStop = getStopped();

@@ -121,10 +121,10 @@ namespace LWS.TruckTaxi
             PendingDiversion=null;
             foreach(var request in requests) if(request.State==TaxiRequestState.Active) Resolve(request,false,"PASSENGER CANCELLED");
             LastFare=EstimateFare(); LastFare.IsCancellation=true; LastFare.Base=Math.Max(0,config.cancellationFeeCents); LastFare.Tip=0;
+            ApplyFareBonuses(LastFare);
             // Already-earned goals and diversions cannot be erased by the abort penalty.
             LastFare.Penalties=Math.Min(LastFare.Penalties,LastFare.Base+LastFare.Distance+LastFare.Time+LastFare.Chaos);
             ShiftEarnings+=LastFare.Total; ShiftScore+=LastFare.Score; FailedRides++;
-            if(IsIntercityRide && DistanceDriven>1000) localOffersRemaining=Mathf.Clamp(config.localOffersAfterIntercity,0,10);
             var drop=CurrentDesiredDestination;
             if(Passenger!=null && drop!=null && !string.IsNullOrWhiteSpace(Passenger.passengerId))
                 continuity[Passenger.passengerId]=new PassengerContinuity { LastRideLocationId=drop.Contains(playerPosition()) ? drop.locationId : null,

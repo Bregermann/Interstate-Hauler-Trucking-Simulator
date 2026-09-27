@@ -23,8 +23,6 @@ namespace LWS.TruckTaxi
         public event Action<Transform> WeatherAudioRootAvailable;
         public event Action<TruckTaxiDialogueCategory> EnvironmentEvent;
         private TruckTaxiBootstrap host;
-        private System.Random random;
-        private double nextWeatherAt;
         private LwsGameClockSnapshot previousClock;
         private LwsWeatherState previousWeather;
         private float previousWeatherScale;
@@ -37,6 +35,7 @@ namespace LWS.TruckTaxi
         public bool IsInitialized => initialized;
         public string CurrentTaxiWeatherId { get; private set; } = LwsWeatherPresetCatalog.ClearId;
         public TruckTaxiSnow Snow { get; private set; }
+        public TruckTaxiCalendarWeatherService CalendarWeather { get; private set; }
 
         public bool Initialize(TruckTaxiBootstrap owner)
         {
@@ -59,10 +58,11 @@ namespace LWS.TruckTaxi
             // alone. Taxi uses Weather Maker's generated sky, including at night.
             RenderSettings.skybox = null;
             adapterWasEnabled = weatherAdapter.enabled; weatherAdapter.enabled = true;
-            random = new System.Random(71923); AutomaticWeather = settings.automaticWeather;
+            AutomaticWeather = settings.automaticWeather;
             Frozen = !settings.timeProgressionEnabled;
             clock.SetTimeScale(Mathf.Max(0, settings.timeScale));
-            clock.SetTimeOfDayHours(settings.startingTime);
+            var startDate = TruckTaxiCalendarWeatherService.SafeStartDate(settings);
+            clock.SetDateTime(LwsGameClockUtility.CreateDateTime(startDate.Year, startDate.Month, startDate.Day, settings.startingTime));
             clock.SetPaused(Frozen || owner.Paused);
             // Existing adapter drives the sole clock if no LwsGameClockCoordinator is present.
             weather.SetTimeScale(0);
@@ -72,7 +72,8 @@ namespace LWS.TruckTaxi
             lightStates = new bool[nightLights.Length];
             for (int i = 0; i < nightLights.Length; i++) if (nightLights[i] != null) lightStates[i] = nightLights[i].enabled;
             initialized = true;
-            ForceWeather(settings.startingWeather, false);
+            CalendarWeather = new TruckTaxiCalendarWeatherService();
+            CalendarWeather.Initialize(this, settings);
             Snow = GetComponent<TruckTaxiSnow>() ?? gameObject.AddComponent<TruckTaxiSnow>();
             Snow.Initialize(owner, this, settings);
             RefreshNightLights();
@@ -97,33 +98,56 @@ namespace LWS.TruckTaxi
                 // The existing audio controller keeps this registered subtree current for dynamic rain/thunder sources.
                 TruckTaxiAudioController.Instance.RouteWorldTree(WeatherAudioRoot); audioRoutingRegistered = true;
             }
-            if (AutomaticWeather && !Clock.CurrentSnapshot.paused && Clock.CurrentSnapshot.totalGameSeconds >= nextWeatherAt) NextWeather();
             if (!Clock.CurrentSnapshot.paused) Snow?.Tick(Time.deltaTime, CurrentTaxiWeatherId);
         }
         public void SetSessionPaused(bool paused) { if (initialized) Clock.SetPaused(paused || Frozen); }
         public void SetFrozen(bool frozen) { Frozen = frozen; SetSessionPaused(host != null && host.Paused); }
-        public void SetTime(float hours) { Clock?.SetTimeOfDayHours(hours); }
+        public void SetTime(float hours) { CalendarWeather?.SetTime(hours); }
         public void SetTimeScale(float scale) { if (float.IsFinite(scale)) Clock?.SetTimeScale(Mathf.Clamp(scale, 0, 600)); }
         public void AdvanceHour() { Clock?.AddHours(1); }
-        public void SetAutomaticWeather(bool automatic) { AutomaticWeather = automatic; if (initialized) ScheduleNext(); }
+        public void SetAutomaticWeather(bool automatic)
+        {
+            AutomaticWeather = automatic;
+            CalendarWeather?.SetAutomaticWeather(automatic);
+        }
         public bool ForceWeather(string presetId, bool turnOffAutomatic = true)
         {
             if (!initialized || !IsSupportedWeather(presetId)) return false;
-            if (turnOffAutomatic) AutomaticWeather = false;
+            if (turnOffAutomatic) SetAutomaticWeather(false);
+            return CalendarWeather != null && CalendarWeather.ForceForecast(TruckTaxiCalendarWeatherService.ConditionFor(presetId));
+        }
+        internal bool ApplyScheduledWeather(string presetId)
+        {
+            if (!initialized || !IsSupportedWeather(presetId)) return false;
             var result = presetId == TruckTaxiSnow.BlizzardId
                 ? Weather.RequestWeather(CreateBlizzardPreset(), Mathf.Max(5, settings.weatherTransitionSeconds))
                 : Weather.RequestWeather(presetId, Mathf.Max(5, settings.weatherTransitionSeconds));
             LastDiagnostic = result.Message;
             if (result.Succeeded) CurrentTaxiWeatherId = presetId;
-            ScheduleNext();
             if (!result.Succeeded) Debug.LogWarning("Taxi weather request: " + LastDiagnostic, this);
+            return result.Succeeded;
+        }
+        internal bool ApplySevereWeather(TruckTaxiExtremeWeatherProfile profile)
+        {
+            if(!initialized || !LwsWeatherPresetCatalog.TryGetBuiltInPreset(LwsWeatherPresetCatalog.ThunderstormId,out var preset)) return false;
+            preset.windSpeedMetersPerSecond=profile.WindMetersPerSecond;
+            preset.visibilityMeters=profile.VisibilityMeters;
+            preset.precipitationIntensity01=profile.RainIntensity01;
+            preset.fogIntensity01=.75f;
+            var result=Weather.RequestWeather(preset,Mathf.Max(5,settings.weatherTransitionSeconds));
+            LastDiagnostic=result.Message;
+            if(result.Succeeded) CurrentTaxiWeatherId=preset.presetId;
             return result.Succeeded;
         }
         public void NextWeather()
         {
-            if (!initialized) return;
-            string target = PickNextWeather(settings.weatherWeights, CurrentTaxiWeatherId, (float)random.NextDouble());
-            ForceWeather(target, false);
+            if (!initialized || CalendarWeather == null) return;
+            var forecast = CalendarWeather.Forecast;
+            DateTime now = CalendarWeather.CurrentDateTime;
+            foreach (var entry in forecast)
+                if (entry.Start > now && entry.Condition != CalendarWeather.Current.Condition)
+                { CalendarWeather.ForceForecast(entry.Condition); return; }
+            CalendarWeather.ForceForecast((TruckTaxiWeatherCondition)(((int)CalendarWeather.CurrentCondition + 1) % 10));
         }
         public static bool IsSupportedWeather(string id) => id == LwsWeatherPresetCatalog.ClearId || id == LwsWeatherPresetCatalog.PartlyCloudyId ||
             id == LwsWeatherPresetCatalog.CloudyId || id == LwsWeatherPresetCatalog.OvercastId || id == LwsWeatherPresetCatalog.LightRainId ||
@@ -156,12 +180,6 @@ namespace LWS.TruckTaxi
                 if (remaining <= 0) return last;
             }
             return last;
-        }
-        private void ScheduleNext()
-        {
-            float minimum = Mathf.Max(.25f, settings.weatherDurationGameHours.x);
-            float duration = Mathf.Lerp(minimum, Mathf.Max(minimum, settings.weatherDurationGameHours.y), (float)random.NextDouble());
-            nextWeatherAt = Clock.CurrentSnapshot.totalGameSeconds + duration * 3600;
         }
         private void OnClockChanged(LwsGameClockSnapshot snapshot)
         {
@@ -197,6 +215,7 @@ namespace LWS.TruckTaxi
         private void OnDestroy()
         {
             if (!initialized) return;
+            CalendarWeather?.Dispose();
             Clock.ClockChanged -= OnClockChanged; Weather.WeatherTransitionCompleted -= OnWeatherCompleted;
             Clock.SetDateTime(new LwsGameDateTime(previousClock.year, previousClock.month, previousClock.day, previousClock.hour, previousClock.minute, previousClock.second));
             Clock.SetTimeScale(previousClock.timeScale); Clock.SetPaused(previousClock.paused);

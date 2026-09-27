@@ -31,9 +31,10 @@ namespace LWS.TruckTaxi
         private GameObject routeButton,stopButton,restoreButton,legendPanel;
         private bool wasPaused;
         private int page,selected=-1,legendPage;
+        public TruckTaxiWorkAreaMapPanel WorkArea { get; private set; }
         private const int PageSize=8;
         public bool IsOpen => root!=null && root.gameObject.activeSelf;
-        public Transform FocusRoot => IsOpen ? root : null;
+        public Transform FocusRoot => IsOpen ? WorkArea?.IsOpen==true ? WorkArea.FocusRoot : root : null;
 
         // Call once after Hud.Initialize, GPS.ConfigureDemoPresentation and UIInput creation.
         public void Initialize(TruckTaxiBootstrap taxi,TruckTaxiHud view)
@@ -77,6 +78,8 @@ namespace LWS.TruckTaxi
             legendPageText.alignment=TextAlignmentOptions.Center;
             hud.Button(legendPanel.transform,">",new Vector2(.71f,.04f),new Vector2(.96f,.10f),()=>ShowLegendPage(legendPage+1));
             legendPanel.SetActive(false);
+            WorkArea=gameObject.AddComponent<TruckTaxiWorkAreaMapPanel>(); WorkArea.Initialize(host,hud,root);
+            hud.Button(root,"SET RIDE AREA",new Vector2(.02f,.04f),new Vector2(.30f,.105f),WorkArea.Toggle);
             root.gameObject.SetActive(false);
             var miniRoot=gps.HudCompass?.transform.Find("MiniMap Root") as RectTransform;
             if(miniRoot!=null)
@@ -111,6 +114,7 @@ namespace LWS.TruckTaxi
         public void Close()
         {
             if(!IsOpen) return;
+            WorkArea.CancelSelection();
             root.gameObject.SetActive(false);
             gps.SetFullMapOpen(false);
             if(!wasPaused) host.SetPaused(false);
@@ -123,8 +127,9 @@ namespace LWS.TruckTaxi
             if(input==null) return false;
             if(input.FullMap.WasPressedThisFrame()) return Toggle();
             if(!IsOpen) return false;
-            if(input.Cancel.WasPressedThisFrame() || input.Pause.WasPressedThisFrame()) { Close(); return true; }
+            if(input.Cancel.WasPressedThisFrame() || input.Pause.WasPressedThisFrame()) { if(WorkArea.IsOpen) WorkArea.CancelSelection(); else Close(); return true; }
             if(input.Submit.WasPressedThisFrame()) { input.SubmitSelected(); return true; }
+            if(WorkArea.IsOpen) return true;
             var keyboard=Keyboard.current;
             Vector2 direction=Vector2.zero;
             if(keyboard!=null)
@@ -174,7 +179,8 @@ namespace LWS.TruckTaxi
             type==TruckTaxiMapMarkerType.Store || type==TruckTaxiMapMarkerType.Gas ||
             type==TruckTaxiMapMarkerType.Repair || type==TruckTaxiMapMarkerType.TrainStation ||
             type==TruckTaxiMapMarkerType.BusTerminal || type==TruckTaxiMapMarkerType.Racetrack ||
-            type==TruckTaxiMapMarkerType.ServiceArea;
+            type==TruckTaxiMapMarkerType.ServiceArea || type==TruckTaxiMapMarkerType.SportsStadium ||
+            type==TruckTaxiMapMarkerType.ConcertVenue;
         private void ShowPage(int next)
         {
             foreach(var row in rows) { row.SetActive(false); Destroy(row); }

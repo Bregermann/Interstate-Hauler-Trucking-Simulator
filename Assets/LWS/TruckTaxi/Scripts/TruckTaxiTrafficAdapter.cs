@@ -43,6 +43,9 @@ namespace LWS.TruckTaxi
         private readonly Dictionary<GameObject, TruckTaxiPopulationPresentation> presentations = new Dictionary<GameObject, TruckTaxiPopulationPresentation>();
         private readonly List<TruckTaxiTrafficPooledActor> pool = new List<TruckTaxiTrafficPooledActor>();
         private readonly List<TruckTaxiTrafficPopulation.Car> candidates = new List<TruckTaxiTrafficPopulation.Car>();
+        private readonly List<Vector3> demandSamples = new List<Vector3>(256);
+        private readonly Dictionary<TruckTaxiTrafficPopulation.Car, float> demandPriorities =
+            new Dictionary<TruckTaxiTrafficPopulation.Car, float>();
         private readonly HashSet<TruckTaxiTrafficPopulation.Car> selectedFull = new HashSet<TruckTaxiTrafficPopulation.Car>();
         private readonly HashSet<TruckTaxiTrafficPopulation.Car> selectedVisible = new HashSet<TruckTaxiTrafficPopulation.Car>();
         private TruckTaxiTrafficPopulation population;
@@ -51,6 +54,9 @@ namespace LWS.TruckTaxi
         private readonly LwsTrafficSpawnPolicy policy = new LwsTrafficSpawnPolicy {
             targetCruiseSpeedScale = 0.7f, maximumTrafficSpeedMetersPerSecond = 12, autoResolveEditorPrefabs = false };
         private float nextMaintenance;
+        private float nextDemandConvergence;
+        private int demandCursor;
+        private Func<Vector3, float> demandSampler;
         private int serial;
         private int spawnCursor;
         private bool initialized;
@@ -67,6 +73,8 @@ namespace LWS.TruckTaxi
             nextMaintenance = 0;
             if (initialized) EvictUnavailable();
         }
+        // Venue multiplier: 1 is ordinary demand; null restores ordinary population selection.
+        public void SetDemandSampler(Func<Vector3, float> sampler) => demandSampler = sampler;
         public int BaselineActiveCount { get; private set; }
         public int TargetCount => DensityEnabled ? (baselineValidation ?
             TruckTaxiPopulationProfile.ScaleTarget(densityProfile.measuredTrafficBaseline > 0 ? densityProfile.measuredTrafficBaseline : BaselineActiveCount, 1, densityProfile.maximumActiveTraffic)
@@ -176,7 +184,9 @@ namespace LWS.TruckTaxi
             for (int i = vehicles.Count - 1; i >= 0; i--) PoolVehicle(vehicles[i]);
             population = new TruckTaxiTrafficPopulation(validLanes, TargetCount, trafficPrefabs?.Length ?? 0, serial);
             serial += population.Count;
+            BuildDemandSamples();
             nextMaintenance = 0;
+            nextDemandConvergence = 0;
             if (DensityEnabled) Debug.Log($"TAXI TRAFFIC: original cap {maximumVehicles}, observed startup {BaselineActiveCount}, multiplier {(baselineValidation ? 1 : densityProfile.trafficDensityMultiplier)}, target/cap {TargetCount}/{densityProfile.maximumActiveTraffic}.", this);
         }
         public bool SpawnTraffic()
@@ -388,11 +398,13 @@ namespace LWS.TruckTaxi
             float speed = player != null ? player.GetComponent<Rigidbody>()?.linearVelocity.magnitude ?? 0 : 0;
             float preload = speed * forwardPreloadSeconds;
             Camera camera = Camera.main;
+            ConvergeDistantTraffic(observer, camera);
             candidates.Clear(); selectedFull.Clear(); selectedVisible.Clear();
+            demandPriorities.Clear();
             for (int i = 0; i < population.Count; i++)
             {
                 var car = population.Cars[i];
-                if (car.Actor == null) { car.Actor = null; car.FullPhysics = false; }
+                if (car.Actor == null) { car.Actor = null; car.FullPhysics = false; car.MissionReserved = false; }
                 else
                 {
                     var pooled = car.Actor.GetComponent<TruckTaxiTrafficPooledActor>();
@@ -407,9 +419,15 @@ namespace LWS.TruckTaxi
                 Vector3 position = car.FullPhysics && car.Actor != null ? car.Actor.transform.position : population.Position(car);
                 if (!RegionAvailable(position) && !car.MissionReserved) continue;
                 candidates.Add(car);
+                if (demandSampler != null)
+                    demandPriorities.Add(car, VenuePriorityScore(
+                        Priority(car, observer, forward, preload, camera), DemandAt(position)));
             }
-            candidates.Sort((a, b) => Priority(a, observer, forward, preload, camera)
-                .CompareTo(Priority(b, observer, forward, preload, camera)));
+            if (demandSampler == null)
+                candidates.Sort((a, b) => Priority(a, observer, forward, preload, camera)
+                    .CompareTo(Priority(b, observer, forward, preload, camera)));
+            else
+                candidates.Sort((a, b) => demandPriorities[a].CompareTo(demandPriorities[b]));
             int fullBudget = Mathf.Max(0, maxFullTraffic - dedicatedVehicles.Count);
             int visibleBudget = Mathf.Max(0, maxVisibleTraffic);
             foreach (var car in candidates)
@@ -487,6 +505,89 @@ namespace LWS.TruckTaxi
                     viewport.y >= -.1f && viewport.y <= 1.1f) score *= .65f;
             }
             return score;
+        }
+
+        public static float VenuePriorityScore(float ordinaryScore, float demand) =>
+            ordinaryScore - 90f * Mathf.Clamp01(demand);
+
+        public static float VenuePressureFromMultiplier(float multiplier) =>
+            float.IsNaN(multiplier) || float.IsInfinity(multiplier) ? 0 :
+            Mathf.Clamp01(multiplier - 1f);
+
+        private float DemandAt(Vector3 position)
+        {
+            return VenuePressureFromMultiplier(demandSampler(position));
+        }
+
+        private void BuildDemandSamples()
+        {
+            demandSamples.Clear();
+            foreach (var lane in validLanes)
+                if (lane.spawnEnabled && lane.centerline != null && lane.centerline.Length >= 5 &&
+                    demandSamples.Count < 256)
+                    demandSamples.Add(lane.centerline[Mathf.Clamp(lane.centerline.Length / 2, 2,
+                        lane.centerline.Length - 3)]);
+            int pointCount = 0;
+            foreach (var lane in validLanes)
+                if (lane.spawnEnabled && lane.centerline != null)
+                    pointCount += Mathf.Max(0, lane.centerline.Length - 4);
+            int stride = Mathf.Max(1, Mathf.CeilToInt(pointCount / 256f));
+            int cursor = 0;
+            foreach (var lane in validLanes)
+            {
+                if (!lane.spawnEnabled || lane.centerline == null) continue;
+                for (int point = 2; point < lane.centerline.Length - 2; point++)
+                {
+                    if (cursor++ % stride == 0 && demandSamples.Count < 256)
+                        demandSamples.Add(lane.centerline[point]);
+                }
+            }
+        }
+
+        private void ConvergeDistantTraffic(Vector3 observer, Camera camera)
+        {
+            if (demandSampler == null || population == null || population.Count == 0 ||
+                Time.time < nextDemandConvergence) return;
+            nextDemandConvergence = Time.time + 8;
+            Vector3 previousTarget = default;
+            bool hasPreviousTarget = false;
+            for (int moved = 0; moved < 2; moved++)
+            {
+                Vector3 target = default;
+                float strongest = .2f;
+                for (int i = 0; i < demandSamples.Count; i++)
+                {
+                    Vector3 point = demandSamples[i];
+                    float distance = Vector3.Distance(point, observer);
+                    if (distance < 90 || distance > visibleTrafficRadius ||
+                        (hasPreviousTarget && (point - previousTarget).sqrMagnitude < 20 * 20) ||
+                        !RegionAvailable(point)) continue;
+                    if (camera != null)
+                    {
+                        Vector3 viewport = camera.WorldToViewportPoint(point);
+                        if (viewport.z > 0 && viewport.x > -.1f && viewport.x < 1.1f &&
+                            viewport.y > -.1f && viewport.y < 1.1f) continue;
+                    }
+                    float demand = DemandAt(point);
+                    if (demand <= strongest) continue;
+                    strongest = demand; target = point;
+                }
+                if (strongest <= .2f) break;
+                TruckTaxiTrafficPopulation.Car chosen = null;
+                for (int i = 0; i < population.Count; i++)
+                {
+                    var car = population.Cars[(demandCursor + i) % population.Count];
+                    if (car.Actor != null || car.MissionReserved ||
+                        (population.Position(car) - observer).sqrMagnitude <=
+                            (visibleTrafficRadius + trafficHysteresis) *
+                            (visibleTrafficRadius + trafficHysteresis)) continue;
+                    chosen = car;
+                    demandCursor = (demandCursor + i + 1) % population.Count;
+                    break;
+                }
+                if (chosen == null || !population.RetargetUnmaterialized(chosen, target)) break;
+                previousTarget = target; hasPreviousTarget = true;
+            }
         }
 
         private bool Materialize(TruckTaxiTrafficPopulation.Car car, bool full)
@@ -577,6 +678,7 @@ namespace LWS.TruckTaxi
             serial += population.Count;
             FullPhysicsCount = 0;
             nextMaintenance = 0;
+            nextDemandConvergence = 0;
         }
         private Vector3 PresentationObserver()
         {

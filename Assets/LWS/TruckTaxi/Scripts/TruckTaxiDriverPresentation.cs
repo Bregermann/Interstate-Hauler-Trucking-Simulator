@@ -7,7 +7,7 @@ namespace LWS.TruckTaxi
     [DisallowMultipleComponent]
     public sealed class TruckTaxiDriverPresentation : MonoBehaviour
     {
-        private const int HeadOnlyLayer = 29;
+        private const int InteriorHiddenLayer = 29;
         private readonly Dictionary<Camera,int> cameraMasks = new Dictionary<Camera,int>();
         private readonly List<Material> materials = new List<Material>();
         private GameObject driver;
@@ -45,15 +45,15 @@ namespace LWS.TruckTaxi
             Pose(visual.transform,"Left hand",new Vector3(-.25f,.48f,.3f),Vector3.zero);
             Pose(visual.transform,"Right hand",new Vector3(.25f,.48f,.3f),Vector3.zero);
             foreach(var collider in driver.GetComponentsInChildren<Collider>(true)) collider.enabled=false;
-            foreach(var part in visual.GetComponentsInChildren<Transform>(true))
-                if(part.name.Contains("Head") || part.name.Contains("eye") || part.name.Contains("Cap") ||
-                    part.name.Contains("Brim") || part.name.Contains("Hair")) part.gameObject.layer=HeadOnlyLayer;
+            foreach(var part in driver.GetComponentsInChildren<Transform>(true))
+                part.gameObject.layer=InteriorHiddenLayer;
             foreach(var inside in truck.GetComponentsInChildren<CameraInsideVehicle>(true))
             {
-                var camera=inside.GetComponent<Camera>();
-                if(camera==null) continue;
+                if(!inside.isInsideVehicle) continue;
+                var camera=inside.GetComponent<Camera>() ?? inside.GetComponentInChildren<Camera>(true);
+                if(camera==null || cameraMasks.ContainsKey(camera)) continue;
                 cameraMasks[camera]=camera.cullingMask;
-                camera.cullingMask &= ~(1<<HeadOnlyLayer);
+                camera.cullingMask &= ~(1<<InteriorHiddenLayer);
             }
         }
 

@@ -8,9 +8,8 @@ namespace LWS.TruckTaxi
     public sealed partial class TruckTaxiSession
     {
         private IEnumerator<bool> offerGeneration;
-        private int localOffersRemaining;
         public bool IsGeneratingOffer => offerGeneration != null;
-        public int LocalOffersBeforeIntercity => localOffersRemaining;
+        public int LocalOffersBeforeIntercity => IntercityPolicy.LocalCooldownRemaining;
         public int LastOfferRouteQueries { get; private set; }
         public double LastOfferMaximumStepMs { get; private set; }
         public string LastOfferDiagnostics { get; private set; } = "No offer attempted.";
@@ -66,7 +65,7 @@ namespace LWS.TruckTaxi
             if (config.logOfferTimings) UnityEngine.Debug.Log("TAXI OFFER: " + LastOfferDiagnostics);
 #endif
             CancelOfferGeneration();
-            if (State == TruckTaxiState.Available) StateAge = 0;
+            if (State == TruckTaxiState.Available) { StateAge = 0; ScheduleDispatch(); }
         }
 
         private void RecordOfferStage(string stage, Stopwatch clock)
@@ -82,7 +81,7 @@ namespace LWS.TruckTaxi
             float hardMeters = Mathf.Max(1, config.pickupHardMaximumSeconds) * Mathf.Max(1, config.pickupReasonableSpeedMetersPerSecond);
             var nearby = new List<TruckTaxiRideLocation>();
             foreach (var stop in locations)
-                if (stop != null && stop.isActiveAndEnabled && stop.pickupAllowed &&
+                if (stop != null && stop.isActiveAndEnabled && stop.pickupAllowed && workArea.Contains(stop.StopPosition) &&
                     (stop.StopPosition - origin).sqrMagnitude <= hardMeters * hardMeters) nearby.Add(stop);
             nearby.Sort((a, b) => CompareNear(a, b, origin));
             int limit = Mathf.Clamp(config.offerPickupCandidateLimit, 1, 12);
@@ -130,10 +129,15 @@ namespace LWS.TruckTaxi
             var preferred = pickups.FindAll(p => p.leg.Meters / Mathf.Max(1, config.pickupReasonableSpeedMetersPerSecond) >= config.pickupTargetMinimumSeconds &&
                 p.leg.Meters / Mathf.Max(1, config.pickupReasonableSpeedMetersPerSecond) <= config.pickupTargetMaximumSeconds);
             if (preferred.Count > 0) pickups = preferred;
-            var pickup = pickups[random.Next(pickups.Count)];
-            bool wantIntercity = localOffersRemaining == 0 && random.NextDouble() < Mathf.Clamp01(config.intercityRideChance);
+            double pickupTotal=0;
+            foreach(var candidate in pickups) pickupTotal+=ValidOfferWeight(PickupWeight?.Invoke(candidate.stop.StopPosition) ?? 1);
+            double pickupRoll=random.NextDouble()*pickupTotal;
+            var pickup=pickups[pickups.Count-1];
+            foreach(var candidate in pickups) { pickupRoll-=ValidOfferWeight(PickupWeight?.Invoke(candidate.stop.StopPosition) ?? 1); if(pickupRoll<0) { pickup=candidate; break; } }
+            bool wantIntercity = IntercityPolicy.WantsIntercity(random,out bool guaranteed);
+            LastIntercitySelection=guaranteed ? "GUARANTEE" : wantIntercity ? "RANDOM" : "LOCAL";
             // One pickup, bounded destinations. A local-only attempt never becomes an intercity fallback.
-            for (int pass = 0; pass < (wantIntercity ? 2 : 1); pass++)
+            for (int pass = 0; pass < (wantIntercity && !guaranteed ? 2 : 1); pass++)
             {
                 bool across = wantIntercity && pass == 0;
                 timer.Restart();
@@ -149,6 +153,15 @@ namespace LWS.TruckTaxi
                 // Shuffle only cheap metadata. Routed validation stops at the first valid bounded candidate.
                 for (int i = destinations.Count - 1; i > 0; i--)
                 { int j = random.Next(i + 1); var temp = destinations[i]; destinations[i] = destinations[j]; destinations[j] = temp; }
+                if(DestinationWeight!=null)
+                {
+                    // Weighted random order, not highest-weight-first: quiet destinations remain possible.
+                    var priorities=new Dictionary<TruckTaxiRideLocation,double>();
+                    foreach(var destination in destinations)
+                        priorities[destination]=-Math.Log(Math.Max(double.Epsilon,random.NextDouble())) /
+                            ValidOfferWeight(DestinationWeight(destination.StopPosition));
+                    destinations.Sort((a,b)=>priorities[a].CompareTo(priorities[b]));
+                }
                 if(PrefersSpeedway(passenger) && random.NextDouble()<config.racingSpeedwayDestinationChance)
                     destinations.Sort((a,b)=>IsSpeedwayStop(b).CompareTo(IsSpeedwayStop(a)));
                 RecordOfferStage("destination discovery", timer);

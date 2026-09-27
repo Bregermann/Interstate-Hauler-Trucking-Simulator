@@ -9,7 +9,7 @@ namespace LWS.TruckTaxi
     // HUD-only projection. Request instances and ride history remain owned by TruckTaxiSession.
     public sealed class TruckTaxiGoalBarPresenter : MonoBehaviour
     {
-        private const float RowHeight=58;
+        private const float RowHeight=64;
         private const float RowSpacing=7;
         private const float SuccessHold=1.2f;
         private const float SuccessFade=.7f;
@@ -32,6 +32,7 @@ namespace LWS.TruckTaxi
             public Image Fill;
             public TextMeshProUGUI Label;
             public TextMeshProUGUI Value;
+            public TextMeshProUGUI Timer;
             public float ResolvedAt=-1;
             public float Y;
         }
@@ -74,18 +75,20 @@ namespace LWS.TruckTaxi
             root.offsetMin=new Vector2(0,-RowHeight);
             root.offsetMax=Vector2.zero;
             var track=MakeImage(root,"Track",new Color(.08f,.12f,.16f,.92f));
-            Stretch(track.rectTransform,0,4,30,4);
+            Stretch(track.rectTransform,0,4,52,4);
             var fill=MakeImage(track.rectTransform,"Progress",new Color(.1f,.8f,.67f,1));
             fill.type=Image.Type.Filled; fill.fillMethod=Image.FillMethod.Horizontal;
             Stretch(fill.rectTransform,0,0,0,0);
             var label=MakeText(root,"Goal",18,TextAlignmentOptions.Left);
-            Stretch(label.rectTransform,8,0,4,30);
+            Stretch(label.rectTransform,8,0,4,35);
             label.rectTransform.anchorMax=new Vector2(.57f,1);
             var value=MakeText(root,"Progress",16,TextAlignmentOptions.Right);
-            Stretch(value.rectTransform,8,8,4,30);
+            Stretch(value.rectTransform,8,8,4,35);
             value.rectTransform.anchorMin=new Vector2(.58f,0);
+            var timer=MakeText(root,"Deadline",14,TextAlignmentOptions.Right);
+            Stretch(timer.rectTransform,8,8,30,15);
             var rowView=new Row { Goal=goal,Root=root,Group=root.GetComponent<CanvasGroup>(),
-                Fill=fill,Label=label,Value=value,Y=rows.Count*(RowHeight+RowSpacing),
+                Fill=fill,Label=label,Value=value,Timer=timer,Y=rows.Count*(RowHeight+RowSpacing),
                 ResolvedAt=goal.State==TaxiRequestState.Active ? -1 : Time.unscaledTime };
             rows.Add(rowView);
             Refresh(rowView);
@@ -124,10 +127,11 @@ namespace LWS.TruckTaxi
             {
                 Refresh(row);
                 float age=row.ResolvedAt<0 ? 0 : Time.unscaledTime-row.ResolvedAt;
-                bool hide=row.Goal.State==TaxiRequestState.Succeeded && age>=SuccessHold+SuccessFade;
+                bool resolved=row.Goal.State!=TaxiRequestState.Active;
+                bool hide=resolved && age>=SuccessHold+SuccessFade;
                 if(hide) { row.Root.gameObject.SetActive(false); continue; }
                 row.Root.gameObject.SetActive(true);
-                row.Group.alpha=row.Goal.State==TaxiRequestState.Succeeded && age>SuccessHold
+                row.Group.alpha=resolved && age>SuccessHold
                     ? 1-Mathf.Clamp01((age-SuccessHold)/SuccessFade) : 1;
                 float targetY=visibleIndex++*(RowHeight+RowSpacing);
                 row.Y=Mathf.Lerp(row.Y,targetY,1-Mathf.Exp(-12*Time.unscaledDeltaTime));
@@ -144,7 +148,12 @@ namespace LWS.TruckTaxi
                 goal.State==TaxiRequestState.Succeeded ? new Color(.18f,.95f,.58f) : new Color(.1f,.8f,.67f);
             row.Label.text=goal.Description.ToUpperInvariant();
             row.Value.text=goal.State==TaxiRequestState.Succeeded ? "SUCCESS" :
-                goal.State==TaxiRequestState.Failed ? goal.FailureReason : goal.ProgressText;
+                goal.State==TaxiRequestState.Failed ? "FAILED " + goal.ProgressText : goal.ProgressText;
+            bool timed=TruckTaxiRequestPolicy.IsTimed(goal.Definition);
+            row.Timer.text=goal.State==TaxiRequestState.Failed ? goal.FailureReason :
+                goal.State==TaxiRequestState.Active && timed ? Mathf.CeilToInt(goal.Remaining)+"s LEFT" : "";
+            row.Timer.color=goal.State==TaxiRequestState.Failed || timed && goal.Remaining<=10
+                ? new Color(1,.43f,.38f) : Color.white;
         }
 
         private Image MakeImage(Transform parent,string name,Color color)

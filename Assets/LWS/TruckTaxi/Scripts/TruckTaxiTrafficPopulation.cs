@@ -108,6 +108,31 @@ namespace LWS.TruckTaxi
             car.Speed = Mathf.Clamp(speed, 2, car.DesiredSpeed * 1.5f);
         }
 
+        // Reassign only distant records; a live UTS actor remains authoritative.
+        public bool RetargetUnmaterialized(Car car, Vector3 destination)
+        {
+            if (car == null || car.Actor != null) return false;
+            int bestLane = -1, bestPoint = -1;
+            float best = float.PositiveInfinity;
+            for (int laneIndex = 0; laneIndex < lanes.Length; laneIndex++)
+            {
+                var lane = lanes[laneIndex];
+                if (lane == null || !lane.spawnEnabled || lane.centerline == null) continue;
+                for (int point = 2; point < lane.centerline.Length - 2; point++)
+                {
+                    float sqr = (lane.centerline[point] - destination).sqrMagnitude;
+                    if (sqr >= best) continue;
+                    best = sqr; bestLane = laneIndex; bestPoint = point;
+                }
+            }
+            if (bestLane < 0) return false;
+            car.Lane = bestLane; car.Point = bestPoint; car.SegmentProgress = 0;
+            car.RoadId = lanes[bestLane].roadId; car.LaneId = lanes[bestLane].laneId;
+            car.Speed = Mathf.Max(2, lanes[bestLane].speedLimitMph * .44704f * .6f);
+            car.DesiredSpeed = Mathf.Max(car.Speed, lanes[bestLane].speedLimitMph * .44704f * .8f);
+            return true;
+        }
+
         public static bool WantFull(float distance, bool alreadyFull, float radius, float hysteresis) =>
             distance <= radius + (alreadyFull ? hysteresis : 0);
 

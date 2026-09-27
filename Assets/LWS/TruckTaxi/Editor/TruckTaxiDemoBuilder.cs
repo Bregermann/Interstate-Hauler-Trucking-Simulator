@@ -507,7 +507,8 @@ namespace LWS.TruckTaxi.Editor
             Directory.CreateDirectory("Builds/TruckTaxiDemo");
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions {
                 scenes=new[]{EditorTruckTaxiMainMenuSetup.ScenePath,ScenePath}.Concat(TruckTaxiRegionalAuthoring.RegionScenePaths)
-                    .Concat(File.Exists(TruckTaxiSpeedwayAuthoring.ScenePath) ? new[]{TruckTaxiSpeedwayAuthoring.ScenePath} : Array.Empty<string>()).Distinct().ToArray(), locationPathName="Builds/TruckTaxiDemo/TruckTaxi.exe",
+                    .Concat(File.Exists(TruckTaxiSpeedwayAuthoring.ScenePath) ? new[]{TruckTaxiSpeedwayAuthoring.ScenePath} : Array.Empty<string>())
+                    .Concat(TruckTaxiMegaWorldAuthoring.NewScenePaths.Where(File.Exists)).Distinct().ToArray(), locationPathName="Builds/TruckTaxiDemo/TruckTaxi.exe",
                 target=BuildTarget.StandaloneWindows64, options=BuildOptions.Development
             });
             Debug.Log("TRUCK TAXI BUILD: "+report.summary.result+" / "+report.summary.totalSize+" bytes / "+report.summary.totalErrors+" errors");

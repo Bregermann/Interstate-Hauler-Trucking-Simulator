@@ -59,7 +59,12 @@ namespace LWS.TruckTaxi
                     PrimaryActor.transform.position=Ground(point);
                     PrimaryActor.WaitingTruckHit+=OnWaitingTruckHit;
                     PrimaryActor.ArmWaitingTruckHit(host.Player.GetComponent<Rigidbody>());
-                    if(SecondaryActor!=null) SecondaryActor.transform.position=Ground(point+Vector3.right*1.2f);
+                    if(SecondaryActor!=null)
+                    {
+                        SecondaryActor.transform.position=Ground(point+Vector3.right*1.2f);
+                        SecondaryActor.WaitingTruckHit+=OnWaitingTruckHit;
+                        SecondaryActor.ArmWaitingTruckHit(host.Player.GetComponent<Rigidbody>());
+                    }
                     arrived=false; destinationNotified=false; revengeUsed=revengeActive=false; Dialogue.ResetRide(); break;
                 case TruckTaxiState.DrivingToPickup:
                     modifiers.Begin(host,passenger,SayMechanic);
@@ -68,6 +73,7 @@ namespace LWS.TruckTaxi
                     if(PrimaryActor!=null) PrimaryActor.Animate(TruckTaxiPassengerAnimation.Wave_Taxi); break;
                 case TruckTaxiState.PassengerBoarding:
                     PrimaryActor?.DisarmWaitingTruckHit();
+                    SecondaryActor?.DisarmWaitingTruckHit();
                     if(PrimaryActor!=null) { approachFrom=PrimaryActor.transform.position; PrimaryActor.Animate(TruckTaxiPassengerAnimation.ApproachVehicle); }
                     break;
                 case TruckTaxiState.DrivingToDestination:
@@ -176,35 +182,43 @@ namespace LWS.TruckTaxi
             Dialogue.Speak(passenger,category,host.Session,host.Session.Reaction,60);
         }
         public void SayMechanic(string text) => Dialogue.Speak(passenger,TruckTaxiDialogueCategory.UniqueMechanicReaction,host.Session,text,45);
-        private void OnWaitingTruckHit(Vector3 velocity)
+        private void OnWaitingTruckHit(TruckTaxiPassengerActor struck,Vector3 velocity)
         {
-            if(revengeUsed || PrimaryActor==null || host.Session.State!=TruckTaxiState.DrivingToPickup) return;
-            revengeUsed=revengeActive=true;
-            host.Session.SetPickupPatienceSuspended(this,true);
-            revengeRoutine=StartCoroutine(WaitingRevenge(velocity));
+            if(revengeActive || struck==null || host.Session.State!=TruckTaxiState.DrivingToPickup) return;
+            bool throwJug=!revengeUsed;
+            revengeUsed=true;
+            revengeActive=true;
+            if(throwJug) host.Session.SetPickupPatienceSuspended(this,true);
+            revengeRoutine=StartCoroutine(WaitingRevenge(struck,struck==SecondaryActor ? second : passenger,velocity,throwJug));
         }
-        private IEnumerator WaitingRevenge(Vector3 velocity)
+        private IEnumerator WaitingRevenge(TruckTaxiPassengerActor actor,PassengerProfile speaker,Vector3 velocity,bool throwJug)
         {
-            var actor=PrimaryActor;
             Vector3 standing=actor.transform.position;
             actor.BeginLightTumble(velocity);
             yield return new WaitForSeconds(.8f);
             if(actor==null) yield break;
             actor.EndLightTumble(Ground(standing));
-            Dialogue.Speak(passenger,TruckTaxiDialogueCategory.PickupRevenge,host.Session,
-                passenger.passengerName+": You hit me before I even got in. Catch this!",95);
-            yield return new WaitForSeconds(.5f);
-            if(actor!=null && host.Player!=null)
+            if(throwJug)
             {
-                Vector3 origin=actor.transform.position+Vector3.up*1.3f;
-                TruckTaxiNpcProjectileLauncher.LaunchNpcProjectile(origin,
-                    host.Player.transform.position+Vector3.up*1.2f,null,TruckTaxiNpcProjectileStyle.FilledJug);
+                Dialogue.Speak(speaker,TruckTaxiDialogueCategory.PickupRevenge,host.Session,
+                    speaker.passengerName+": You hit me before I even got in. Catch this!",95);
+                yield return new WaitForSeconds(.5f);
+                if(actor!=null && host.Player!=null)
+                {
+                    Vector3 origin=actor.transform.position+Vector3.up*1.3f;
+                    TruckTaxiNpcProjectileLauncher.LaunchNpcProjectile(origin,
+                        host.Player.transform.position+Vector3.up*1.2f,null,TruckTaxiNpcProjectileStyle.FilledJug);
+                    actor.Animate(TruckTaxiPassengerAnimation.Wave_Taxi);
+                }
+                yield return new WaitForSeconds(.75f);
+            }
+            revengeActive=false; revengeRoutine=null;
+            if(throwJug) host.Session.SetPickupPatienceSuspended(this,false);
+            if(actor!=null && host.Session.State==TruckTaxiState.DrivingToPickup)
+            {
+                actor.ArmWaitingTruckHit(host.Player.GetComponent<Rigidbody>());
                 actor.Animate(TruckTaxiPassengerAnimation.Wave_Taxi);
             }
-            yield return new WaitForSeconds(.75f);
-            revengeActive=false; revengeRoutine=null;
-            host.Session.SetPickupPatienceSuspended(this,false);
-            if(actor!=null) actor.Animate(TruckTaxiPassengerAnimation.ApproachVehicle);
         }
         public void BeginSketchyPresentation(TaxiRequestProgress request)
         {
@@ -305,6 +319,10 @@ namespace LWS.TruckTaxi
         private void EndPresentations()
         {
             if(revengeRoutine!=null) { StopCoroutine(revengeRoutine); revengeRoutine=null; }
+            if(PrimaryActor!=null && PrimaryActor.IsTumbling) PrimaryActor.EndLightTumble(Ground(PrimaryActor.transform.position));
+            if(SecondaryActor!=null && SecondaryActor.IsTumbling) SecondaryActor.EndLightTumble(Ground(SecondaryActor.transform.position));
+            PrimaryActor?.DisarmWaitingTruckHit();
+            SecondaryActor?.DisarmWaitingTruckHit();
             if(sketchyRoutine!=null) { StopCoroutine(sketchyRoutine); sketchyRoutine=null; }
             RestoreSketchyActor();
             if(host?.Session!=null) host.Session.SetPickupPatienceSuspended(this,false);
@@ -359,7 +377,7 @@ namespace LWS.TruckTaxi
             float threshold=passenger.seatProfile!=null ? passenger.seatProfile.boardingDistance : 2;
             return Vector3.ProjectOnPlane(PrimaryActor.transform.position-near,Vector3.up).magnitude<=threshold;
         }
-        private void DestroyActors() { if(PrimaryActor!=null) { PrimaryActor.WaitingTruckHit-=OnWaitingTruckHit; Destroy(PrimaryActor.gameObject); } if(SecondaryActor!=null) Destroy(SecondaryActor.gameObject); PrimaryActor=SecondaryActor=null; }
+        private void DestroyActors() { if(PrimaryActor!=null) { PrimaryActor.WaitingTruckHit-=OnWaitingTruckHit; Destroy(PrimaryActor.gameObject); } if(SecondaryActor!=null) { SecondaryActor.WaitingTruckHit-=OnWaitingTruckHit; Destroy(SecondaryActor.gameObject); } PrimaryActor=SecondaryActor=null; }
         private void Cleanup() { EndPresentations(); modifiers.Cleanup(); Oversized?.Restore(); Dialogue?.ResetRide(); DestroyActors(); passenger=second=null; pendingRequest=null; uiEjectHeld=false; EjectionHoldProgress=0; }
         private void OnDestroy()
         {

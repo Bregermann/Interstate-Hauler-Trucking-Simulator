@@ -8,7 +8,8 @@ namespace LWS.TruckTaxi
         Player, PassengerPickup, Destination, ActiveRoute, ActiveObjective, ScenicStop,
         IllicitStop, PrivateEventStop, Shortcut, DiscoveredShortcut, TargetVehicle,
         Collectible, Dropoff, SpecialEvent, Danger, Debug, FoodStop, PhotoStop, Bathroom,
-        Store, Gas, Repair, TrainStation, BusTerminal, Racetrack, ServiceArea
+        Store, Gas, Repair, TrainStation, BusTerminal, Racetrack, ServiceArea,
+        SportsStadium, ConcertVenue, Surge, Hazard, RoadClosure, WorkArea
     }
     public enum TruckTaxiMapMarkerState { Hidden, Known, Optional, Active, Completed }
 

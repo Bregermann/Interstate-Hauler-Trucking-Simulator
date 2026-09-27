@@ -77,6 +77,8 @@ namespace LWS.TruckTaxi
             }
             pages[5].gameObject.SetActive(false);
             regionalDiagnostics=ui.Text(pages[6],"Regional diagnostics",new Vector2(.04f,.03f),new Vector2(.96f,.97f),20);
+            if(TruckTaxiMegaDebugPanel.IsAvailable)
+                ui.Button(pages[6],"WORLD / CALENDAR TOOLS",new Vector2(.54f,.01f),new Vector2(.97f,.13f),()=>hud.MegaDebug?.Open());
             pages[6].gameObject.SetActive(false);
             host.Session.RequestResolved+=RecordTestedObjective;
             ui.Button(panel,"NEXT TOOL PAGE",new Vector2(.03f,.01f),new Vector2(.48f,.065f),()=>{

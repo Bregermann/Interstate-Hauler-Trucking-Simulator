@@ -48,6 +48,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiGPSDisplaySettings DisplaySettings { get; private set; }
         public Component CabCompass => cabCompass;
         public Component HudCompass => previewCompass;
+        public RectTransform MapScreenRect => hudMapRect;
         public bool HudVisible => DisplaySettings != null && DisplaySettings.showHud;
         public bool FullMapOpen => fullMapOpen;
         public float FullMapZoomLevel => previewCompass?.GetType().GetProperty("miniMapFullScreenZoomLevel")?.GetValue(previewCompass) is float value ? value : 0;

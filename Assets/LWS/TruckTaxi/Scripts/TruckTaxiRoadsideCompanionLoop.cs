@@ -21,6 +21,8 @@ namespace LWS.TruckTaxi
             public float returnAt;
             public bool returnPending;
             public int variant;
+            public float nextImpactAt;
+            public Coroutine impactRoutine;
         }
 
         private readonly List<Companion> companions = new List<Companion>();
@@ -135,7 +137,10 @@ namespace LWS.TruckTaxi
                 visual.AddComponent<TruckTaxiWobbleWalkSway>();
                 // CreateThemed schedules primitive collider destruction in play mode.
                 foreach (var collider in actor.GetComponentsInChildren<Collider>(true)) collider.enabled = false;
-                actor.AddComponent<TruckTaxiPassengerActor>().Bind(null);
+                var passengerActor=actor.AddComponent<TruckTaxiPassengerActor>();
+                passengerActor.Bind(null);
+                passengerActor.WaitingTruckHit+=OnCompanionHit;
+                passengerActor.ArmWaitingTruckHit(truckBody);
                 companions.Add(new Companion { actor = actor, pickup = pickup, destination = destination, variant=variant });
                 variant++;
             }
@@ -257,6 +262,7 @@ namespace LWS.TruckTaxi
                     truckBody.position)) return false;
                 companion.actor.transform.SetPositionAndRotation(standing, Quaternion.identity);
                 companion.actor.SetActive(true);
+                companion.actor.GetComponent<TruckTaxiPassengerActor>().ArmWaitingTruckHit(truckBody);
                 companion.availableAt = 0;
                 companion.returnPending = false;
                 nearby = companion;
@@ -304,7 +310,8 @@ namespace LWS.TruckTaxi
 
         public bool TryHornPickup()
         {
-            if (phase != Phase.Waiting || !CanInteract || nearby?.actor == null || controls==null ||
+            if (phase != Phase.Waiting || !CanInteract || nearby?.actor == null ||
+                nearby.actor.GetComponent<TruckTaxiPassengerActor>().IsTumbling || controls==null ||
                 !(controls.CurrentState.hornActive || controls.CurrentState.airHornActive)) return false;
             {
                 if (!string.IsNullOrEmpty(host.GPS.TargetId)) return false;
@@ -314,6 +321,7 @@ namespace LWS.TruckTaxi
                 if(active.destination==null)
                 { active=null; return false; }
                 phase = Phase.ToPrivateStop;
+                active.actor.GetComponent<TruckTaxiPassengerActor>().DisarmWaitingTruckHit();
                 host.Session.AcquireOfferSuppression(this);
                 offerLeaseHeld = true;
                 boarding=true;
@@ -398,6 +406,7 @@ namespace LWS.TruckTaxi
                         if (!TryRoadsidePosition(companion.pickup.Position, companion.pickup.transform.right,
                             out Vector3 returnPosition)) continue;
                         companion.actor.transform.SetPositionAndRotation(returnPosition, Quaternion.identity);
+                        companion.actor.GetComponent<TruckTaxiPassengerActor>().ArmWaitingTruckHit(truckBody);
                         companion.returnAt = 0;
                         companion.returnPending = false;
                         companion.availableAt = Time.time + 15f;
@@ -470,6 +479,7 @@ namespace LWS.TruckTaxi
                 var exitSway=active.actor.GetComponentInChildren<TruckTaxiWobbleWalkSway>(true);
                 if(exitSway!=null) exitSway.enabled=true;
                 active.actor.SetActive(safeExit);
+                if(safeExit) active.actor.GetComponent<TruckTaxiPassengerActor>().ArmWaitingTruckHit(truckBody);
                 active.availableAt = completed ? float.PositiveInfinity : Time.time + 30f;
                 active.returnAt = completed ? Time.time + 15f : 0;
                 active.returnPending = completed;
@@ -479,7 +489,51 @@ namespace LWS.TruckTaxi
             nearby = null;
         }
 
-        private void OnDisable() => Cancel();
+        private void OnEnable()
+        {
+            if(host==null || phase!=Phase.Waiting) return;
+            foreach(var companion in companions)
+                if(companion.actor!=null && companion.actor.activeInHierarchy)
+                    companion.actor.GetComponent<TruckTaxiPassengerActor>().ArmWaitingTruckHit(truckBody);
+        }
+
+        private void OnDisable()
+        {
+            Cancel();
+            foreach(var companion in companions)
+            {
+                if(companion.impactRoutine!=null) { StopCoroutine(companion.impactRoutine); companion.impactRoutine=null; }
+                if(companion.actor==null) continue;
+                var actor=companion.actor.GetComponent<TruckTaxiPassengerActor>();
+                if(actor.IsTumbling) actor.EndLightTumble(companion.actor.transform.position);
+                actor.DisarmWaitingTruckHit();
+            }
+        }
+
+        private void OnCompanionHit(TruckTaxiPassengerActor actor,Vector3 velocity)
+        {
+            if(actor==null || phase!=Phase.Waiting) return;
+            foreach(var companion in companions)
+            {
+                if(companion.actor!=actor.gameObject || companion.impactRoutine!=null || Time.time<companion.nextImpactAt) continue;
+                companion.nextImpactAt=Time.time+1.5f;
+                companion.impactRoutine=StartCoroutine(TumbleCompanion(companion,actor,velocity));
+                break;
+            }
+        }
+
+        private IEnumerator TumbleCompanion(Companion companion,TruckTaxiPassengerActor actor,Vector3 velocity)
+        {
+            Vector3 standing=actor.transform.position;
+            actor.BeginLightTumble(velocity);
+            yield return new WaitForSeconds(.8f);
+            if(actor!=null)
+            {
+                actor.EndLightTumble(standing);
+                if(companion.actor.activeInHierarchy && phase==Phase.Waiting) actor.ArmWaitingTruckHit(truckBody);
+            }
+            companion.impactRoutine=null;
+        }
 
         private string BindingLabel(ref TruckTaxiControlsCatalog.Entry entry,string name,string fallback)
         {
@@ -518,7 +572,12 @@ namespace LWS.TruckTaxi
         private void OnDestroy()
         {
             Cancel();
-            foreach (var companion in companions) if (companion.actor != null) Destroy(companion.actor);
+            foreach (var companion in companions) if (companion.actor != null)
+            {
+                var actor=companion.actor.GetComponent<TruckTaxiPassengerActor>();
+                if(actor!=null) actor.WaitingTruckHit-=OnCompanionHit;
+                Destroy(companion.actor);
+            }
             foreach (var material in materials) if (material != null) Destroy(material);
             companions.Clear(); materials.Clear();
         }

@@ -97,6 +97,14 @@ namespace LWS.TruckTaxi
                 if (region.population && region.Distance(position) <= .01f) return region.id;
             return string.Empty;
         }
+        public string ResolveRideTown(Vector3 position)
+        {
+            string region=ResolveRegion(position);
+            // Stream chunks describe loading, not city boundaries for fare selection.
+            if(region=="taxi.town01" || region=="taxi.town01outskirts" || region==TruckTaxiVenueLayout.StadiumId) return "taxi.town01";
+            if(region=="taxi.town02" || region=="taxi.town02outskirts" || region==TruckTaxiVenueLayout.ConcertId) return "taxi.town02";
+            return region;
+        }
         public bool IsPositionAvailable(Vector3 position)
         {
             foreach (var region in regions)

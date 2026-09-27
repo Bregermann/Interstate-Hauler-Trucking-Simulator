@@ -7,6 +7,10 @@ namespace LWS.TruckTaxi
     {
         public TaxiImpactKind kind;
         public string targetId;
+        public bool IsTrafficVehicle => kind == TaxiImpactKind.Traffic;
+        public static TruckTaxiImpactTarget FromCollider(Collider collider) => collider != null ?
+            collider.GetComponentInParent<TruckTaxiImpactTarget>() ??
+            collider.attachedRigidbody?.GetComponent<TruckTaxiImpactTarget>() : null;
         private Vector3 home;
         private Quaternion rotation;
         private Rigidbody body;

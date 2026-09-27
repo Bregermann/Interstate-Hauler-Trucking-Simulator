@@ -24,8 +24,8 @@ namespace LWS.TruckTaxi
             Progress=request.Progress; Target=request.Target; StopId=request.StopPoint?.stableId;
             Expired=request.Expired;
             FailureReason=request.FailureReason;
-            RewardCents=State==TaxiRequestState.Succeeded ? request.Definition.bonusMoneyCents : 0;
-            RewardScore=State==TaxiRequestState.Succeeded ? request.Definition.bonusScore : 0;
+            RewardCents=State==TaxiRequestState.Succeeded ? TruckTaxiRequestPolicy.RewardCents(request) : 0;
+            RewardScore=State==TaxiRequestState.Succeeded ? TruckTaxiRequestPolicy.RewardScore(request) : 0;
         }
     }
 
@@ -41,6 +41,10 @@ namespace LWS.TruckTaxi
         public long Tip { get; }
         public long Penalties { get; }
         public long Total { get; }
+        public long EventBonus { get; }
+        public long WeatherBonus { get; }
+        public long OtherBonus { get; }
+        public long IntercityBonus { get; }
         public int Rating { get; }
         public int Score { get; }
         public TruckTaxiFareResult(TaxiFare fare)
@@ -49,6 +53,7 @@ namespace LWS.TruckTaxi
             Base=fare.Base; Distance=fare.Distance; Time=fare.Time; Requests=fare.Requests;
             Diversions=fare.Diversions; IsCancellation=fare.IsCancellation;
             Chaos=fare.Chaos; Tip=fare.Tip; Penalties=fare.Penalties; Total=fare.Total;
+            EventBonus=fare.EventBonus; WeatherBonus=fare.WeatherBonus; OtherBonus=fare.OtherBonus; IntercityBonus=fare.IntercityBonus;
             Rating=fare.Rating; Score=fare.Score;
         }
     }

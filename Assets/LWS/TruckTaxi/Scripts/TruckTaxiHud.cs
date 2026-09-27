@@ -35,6 +35,9 @@ namespace LWS.TruckTaxi
         public TruckTaxiEnvironmentNeedsPanel EnvironmentNeeds { get; private set; }
         public TruckTaxiControlsPanel Controls { get; private set; }
         public TruckTaxiFullMapPresenter FullMap { get; private set; }
+        public TruckTaxiPlanningPanel Planning { get; private set; }
+        public TruckTaxiMegaDebugPanel MegaDebug { get; private set; }
+        private TextMeshProUGUI worldNotice;
         public TruckTaxiCabLook CabLook { get; private set; }
         public TruckTaxiCabLookSettingsPanel CabLookSettings { get; private set; }
         private UnityEngine.UI.Image offerPortrait;
@@ -51,13 +54,13 @@ namespace LWS.TruckTaxi
         private string displayedRideId;
         private UnityEngine.UI.Image fuelFade;
         public RectTransform Root => root;
-        public bool DebugOverlayOpen => debug?.IsOpen == true;
-        public bool NormalHudSuppressed => DebugOverlayOpen || FullMap?.IsOpen == true;
+        public bool DebugOverlayOpen => debug?.IsOpen == true || MegaDebug?.IsOpen==true;
+        public bool NormalHudSuppressed => DebugOverlayOpen || FullMap?.IsOpen == true || Planning?.IsOpen==true;
         public bool CanOpenFullMap => host?.Ready == true && !host.Paused && !DebugOverlayOpen && !appreciationRunning &&
             modal != null && !modal.gameObject.activeSelf && !pausePanel.gameObject.activeSelf &&
             GPSSettings?.IsOpen != true && AudioSettings?.IsOpen != true && EnvironmentNeeds?.IsOpen != true &&
             Controls?.IsOpen != true && CabLookSettings?.IsOpen != true && host.Fuel?.IsRescuing != true &&
-            host.Roadside?.IsRecovering != true;
+            host.Roadside?.IsRecovering != true && Planning?.IsOpen!=true;
         // Lets the menu reuse the same Heat factories without creating a gameplay HUD.
         public void InitializeViewRoot(RectTransform value) => root = value;
         public void Initialize(TruckTaxiBootstrap value)
@@ -80,6 +83,9 @@ namespace LWS.TruckTaxi
             var goalContainer = Rect(ridePanel,"Goal bars",new Vector2(.05f,.25f),new Vector2(.95f,.81f));
             gameObject.AddComponent<TruckTaxiGoalBarPresenter>().Initialize(host.Session,goalContainer,font,host.Configuration.requestSuccessSound,host.Play);
             reaction = Text(root,"Passenger reaction",new Vector2(0.025f,0.112f),new Vector2(0.71f,0.185f),28);
+            worldNotice=Text(root,"Regional notice",new Vector2(.28f,.90f),new Vector2(.72f,.99f),24);
+            worldNotice.alignment=TextAlignmentOptions.Center;
+            Button(root,"PLANNING",new Vector2(.73f,.91f),new Vector2(.99f,.97f),()=>Planning?.Open());
             modal = Panel(root,"Ride dispatch",new Vector2(.12f,.17f),new Vector2(.88f,.92f));
             title = Text(modal,"Title",new Vector2(.04f,.86f),new Vector2(.96f,.98f),38);
             details = Text(modal,"Ride details",new Vector2(0.06f,0.23f),new Vector2(0.94f,0.80f),27);
@@ -146,6 +152,14 @@ namespace LWS.TruckTaxi
             companionFade.color=Color.clear; companionFade.raycastTarget=false; companionFade.gameObject.SetActive(false);
             UIInput=new TruckTaxiUIInput();
             FullMap=gameObject.AddComponent<TruckTaxiFullMapPresenter>(); FullMap.Initialize(host,this);
+            Planning=gameObject.AddComponent<TruckTaxiPlanningPanel>(); Planning.Initialize(host,this);
+            MegaDebug=gameObject.AddComponent<TruckTaxiMegaDebugPanel>(); MegaDebug.Initialize(host,this);
+            MegaDebug.OpenWorkAreaMap=()=>{MegaDebug.Close(); if(debug.IsOpen) debug.Toggle(); FullMap.Open(); FullMap.WorkArea.Toggle();};
+            MegaDebug.ToggleSurgeZones=()=>{MegaDebug.Close(); if(debug.IsOpen) debug.Toggle(); FullMap.Open();};
+            MegaDebug.TogglePassengerImpactColliders=()=>GetColliderDiagnostics().TogglePassengers();
+            MegaDebug.ToggleBusColliders=()=>GetColliderDiagnostics().ToggleBuses();
+            MegaDebug.ToggleTrafficColliders=()=>GetColliderDiagnostics().ToggleTraffic();
+            MegaDebug.ToggleObjectiveTimers=()=>Debug.Log(TruckTaxiColliderDiagnostics.ObjectiveTimers(host.Session));
             host.Session.Changed+=Refresh;
             Canvas.ForceUpdateCanvases();
             Refresh();
@@ -200,7 +214,9 @@ namespace LWS.TruckTaxi
             { CabLookSettings=gameObject.AddComponent<TruckTaxiCabLookSettingsPanel>(); CabLookSettings.Initialize(host,this,CabLook); }
             gameObject.AddComponent<TruckTaxiStatusBars>().Initialize(host,this);
         }
-        private void RefreshFocus() => UIInput?.Focus(appreciationRunning ? null : FullMap?.IsOpen==true ? FullMap.FocusRoot : DebugOverlayOpen ? debug.FocusRoot : Controls?.IsOpen==true ? Controls.FocusRoot : CabLookSettings?.IsOpen==true ? CabLookSettings.FocusRoot : EnvironmentNeeds?.IsOpen==true ? EnvironmentNeeds.FocusRoot : AudioSettings?.IsOpen==true ? AudioSettings.FocusRoot : GPSSettings?.IsOpen==true ? GPSSettings.FocusRoot :
+        private TruckTaxiColliderDiagnostics GetColliderDiagnostics()
+        {var tool=GetComponent<TruckTaxiColliderDiagnostics>() ?? gameObject.AddComponent<TruckTaxiColliderDiagnostics>(); tool.Initialize(host); return tool;}
+        private void RefreshFocus() => UIInput?.Focus(appreciationRunning ? null : MegaDebug?.IsOpen==true ? MegaDebug.FocusRoot : Planning?.IsOpen==true ? Planning.FocusRoot : FullMap?.IsOpen==true ? FullMap.FocusRoot : DebugOverlayOpen ? debug.FocusRoot : Controls?.IsOpen==true ? Controls.FocusRoot : CabLookSettings?.IsOpen==true ? CabLookSettings.FocusRoot : EnvironmentNeeds?.IsOpen==true ? EnvironmentNeeds.FocusRoot : AudioSettings?.IsOpen==true ? AudioSettings.FocusRoot : GPSSettings?.IsOpen==true ? GPSSettings.FocusRoot :
             modal.gameObject.activeSelf ? modal : pausePanel.gameObject.activeSelf ? pausePanel : null);
         public void OnDebugVisibilityChanged()
         {
@@ -243,7 +259,9 @@ namespace LWS.TruckTaxi
         private void HandlePause()
         {
             if(host.Fuel?.IsRescuing==true || host.Roadside?.IsRecovering==true) return;
-            if(DebugOverlayOpen) debug.Toggle();
+            if(MegaDebug?.IsOpen==true) MegaDebug.Close();
+            else if(Planning?.IsOpen==true) Planning.Close();
+            else if(DebugOverlayOpen) debug.Toggle();
             else if(Controls?.IsOpen==true) Controls.Close();
             else if(CabLookSettings?.IsOpen==true) CabLookSettings.Close();
             else if(EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) EnvironmentNeeds.Close();
@@ -258,6 +276,8 @@ namespace LWS.TruckTaxi
         {
             var s = host.Session;
             bool hideNormalHud=NormalHudSuppressed;
+            worldNotice.gameObject.SetActive(!hideNormalHud);
+            worldNotice.text=host.WorldCoordinator?.Notification ?? "";
             telemetryBand.gameObject.SetActive(!hideNormalHud);
             companionPickup.SetActive(!hideNormalHud && host.Companions?.CanInteract==true && !host.Companions.HasOnboardCompanion);
             if(companionPickup.activeSelf) companionPickup.GetComponent<TMP_Text>().text="HONK TO PICK UP ["+host.Companions.HornBinding+"]";
@@ -292,6 +312,7 @@ namespace LWS.TruckTaxi
             details.rectTransform.anchorMax=new Vector2(offered || ended ? .49f : .94f,.83f);
             status.text = "TRUCK TAXI   |   " + s.State.ToString().ToUpperInvariant() + "\nCASH " + Money(s.WalletBalanceCents) + "   /   " + s.CompletedRides+" RIDES";
             status.text += "\n" + (host.Roadside?.Condition ?? "VEHICLE INITIALIZING");
+            if(s.State==TruckTaxiState.Available) status.text+="  |  "+s.DispatchDemandLabel+" / "+s.WorkArea.label;
             float mph=host.Player!=null ? host.Player.GetComponent<Rigidbody>().linearVelocity.magnitude*2.236936f : 0;
             speed.text=$"{mph:0} MPH\nFUEL {(host.Fuel!=null ? host.Fuel.Fraction*100 : 100):0}%";
             title.text=inactive ? "TRUCK TAXI" : offered ? "RIDE REQUEST" : s.State==TruckTaxiState.RideComplete ? "FARE COMPLETE" : "RIDE ENDED";
@@ -312,7 +333,9 @@ namespace LWS.TruckTaxi
             else if(offered)
             {
                 var offer=s.Offer;
-                details.text=$"{offer.Passenger.passengerName}\nPASSENGER RATING: {offer.Passenger.passengerRating:0.0}\n{offer.Passenger.personality}\n\nA  PICKUP\n{offer.Pickup.locationName}\nDISTANCE TO PICKUP  {offer.ToPickup.Meters/1609.344f:0.00} mi\n\nB  DESTINATION\n{offer.Destination.locationName}\nTRIP DISTANCE  {offer.Trip.Meters/1609.344f:0.00} mi\n\nESTIMATED FARE  {Money(s.DemandEstimatedFareCents)}\n[{UIInput.Hint(UIInput.Submit)}] ACCEPT   [{UIInput.Hint(UIInput.Cancel)}] DECLINE";
+                details.fontSizeMin=18;
+                var modifiers=s.AcceptedFareModifiers; long basis=offer.EstimatedFareCents;
+                details.text=$"{offer.Passenger.passengerName}  /  {offer.Passenger.passengerRating:0.0} STARS\n{offer.Passenger.personality}\nA  {offer.Pickup.locationName}  ({offer.ToPickup.Meters/1609.344f:0.00} mi away)\nB  {offer.Destination.locationName}\nTRIP {offer.Trip.Meters/1609.344f:0.00} mi\n\nBASE ESTIMATE {Money(basis)}\nEVENT +{Money((long)Math.Round(basis*(modifiers.EventMultiplier-1)))}\nWEATHER +{Money((long)Math.Round(basis*(modifiers.WeatherMultiplier-1)))}\nOTHER +{Money((long)Math.Round(basis*(modifiers.OtherMultiplier-1)))}\nINTERCITY +{Money((long)Math.Round(basis*(s.IntercityFareBonusMultiplier-1)))}\nTIP: AFTER RIDE\nESTIMATED TOTAL {Money(s.DemandEstimatedFareCents)}\n{modifiers.EventLabel}\n[{UIInput.Hint(UIInput.Submit)}] ACCEPT   [{UIInput.Hint(UIInput.Cancel)}] DECLINE";
                 if(!offer.ToPickup.Navigable || !offer.Trip.Navigable) details.text+="\nSTRAIGHT-LINE FALLBACK";
             }
             else if(s.LastFare!=null)
@@ -320,7 +343,7 @@ namespace LWS.TruckTaxi
                 var f=s.LastFare;
                 details.text=$"THIS RIDE: {f.Rating} STARS\nDRIVER AVERAGE: {s.DriverAverageText} STARS\n\n"+
                     (f.IsCancellation ? "CANCELLATION FEE " : "BASE ")+Money(f.Base)+
-                    $"\nDISTANCE PAY {Money(f.Distance)} / TIME PAY {Money(f.Time)}\nCOMPLETED GOALS {Money(f.Requests)}\nDIVERSION REWARDS {Money(f.Diversions)}\nCHAOS +{f.ChaosScore} / TIP {Money(f.Tip)}\nPENALTIES -{Money(f.Penalties)}\nTOTAL PAID {Money(f.Total)}"+
+                    $"\nDISTANCE PAY {Money(f.Distance)} / TIME PAY {Money(f.Time)}\nEVENT +{Money(f.EventBonus)} / WEATHER +{Money(f.WeatherBonus)}\nOTHER +{Money(f.OtherBonus)} / INTERCITY +{Money(f.IntercityBonus)}\nCOMPLETED GOALS {Money(f.Requests)}\nDIVERSION REWARDS {Money(f.Diversions)}\nCHAOS +{f.ChaosScore} / TIP {Money(f.Tip)}\nPENALTIES -{Money(f.Penalties)}\nTOTAL PAID {Money(f.Total)}"+
                     (s.SpecialAppreciationAccepted ? "\nSPECIAL APPRECIATION" : "");
             }
             else if(ended) details.text=s.Reaction;

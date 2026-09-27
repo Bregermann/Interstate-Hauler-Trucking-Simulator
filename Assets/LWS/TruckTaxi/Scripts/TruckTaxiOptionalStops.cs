@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -14,11 +15,16 @@ namespace LWS.TruckTaxi
         private Transform head;
         private Quaternion headRest;
         private readonly TruckTaxiSpeedwayLapTracker lap=new TruckTaxiSpeedwayLapTracker();
+        private TruckTaxiScenicCompletion scenicCompletion;
+        private TruckTaxiPrivateEventVehicleMotion scenicMotion;
         public bool MarkerVisible => ring!=null && ring.enabled;
         public bool showAllPoints;
         public void Initialize(TruckTaxiBootstrap value)
         {
             host=value;
+            scenicMotion=gameObject.AddComponent<TruckTaxiPrivateEventVehicleMotion>();
+            scenicMotion.Initialize(host.Player.transform);
+            scenicCompletion=new TruckTaxiScenicCompletion(host.Session,scenicMotion);
             material=new Material(Shader.Find("Sprites/Default"));
             ring=new GameObject("Optional stop ground marker",typeof(LineRenderer)).GetComponent<LineRenderer>();
             ring.transform.SetParent(transform,false); ring.sharedMaterial=material; ring.positionCount=65; ring.widthMultiplier=.22f;
@@ -32,6 +38,9 @@ namespace LWS.TruckTaxi
         }
         private void Refresh(TaxiRequestProgress request)
         {
+            if(request==null) return;
+            if(request.Definition.requestType==TaxiRequestType.ScenicRoute)
+                scenicCompletion?.TryComplete(request);
             if(request.StopPoint!=null && request.State==TaxiRequestState.Succeeded)
                 host.Passengers.Dialogue.Speak(host.Session.Passenger,
                     StopDialogueCategory(request.StopPoint.category, true),
@@ -39,6 +48,7 @@ namespace LWS.TruckTaxi
                     request.StopPoint.completionDialogue,100);
             RefreshDestination();
         }
+        public void ConfigureScenicThirstRelief(Action<float> relieve) => scenicCompletion?.SetThirstRelief(relieve);
         public void RefreshDestination()
         {
             var next=host.Session.State==TruckTaxiState.DrivingToDestination ? host.Session.ActiveStop : null;

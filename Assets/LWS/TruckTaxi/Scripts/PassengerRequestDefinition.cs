@@ -8,6 +8,7 @@ namespace LWS.TruckTaxi
         DestroyVehicle, CollectDroppedObjects, DinerStop, TakeALap }
     public enum TaxiEventType { Collision, TrafficRam, PedestrianHit, PropDamage, Shortcut, ScenicPoint, NearMiss, HardLanding }
     public enum TaxiRequestState { Active, Succeeded, Failed }
+    public enum TaxiRequestCountBand { Common, Medium, Chaotic }
     [System.Flags]
     public enum TaxiRequestBehavior { None=0, Impact=1, Offroad=2, HardAcceleration=4, HighSpeed=8, TimedStop=16, Chaos=32 }
 
@@ -25,6 +26,14 @@ namespace LWS.TruckTaxi
         [TextArea] public string description;
         [Min(1)] public float timer = 90;
         [Min(0.1f)] public float target = 1;
+        [Header("Count objective tuning")]
+        public TaxiRequestCountBand countBand = TaxiRequestCountBand.Common;
+        [Tooltip("Zero uses the selected count band. Applies only to repeatable count objectives.")]
+        [Min(0)] public int minimumCount;
+        [Tooltip("Zero uses the selected count band. Applies only to repeatable count objectives.")]
+        [Min(0)] public int maximumCount;
+        [Tooltip("A deadline begins only when the goal becomes active and visible. Fast delivery is always timed.")]
+        public bool hasDeadline;
         public string targetId;
         [Tooltip("For vehicle races, the shared authored Truck Taxi ride-location ID.")]
         public string goalLocationId;
@@ -37,6 +46,8 @@ namespace LWS.TruckTaxi
         [Range(1,3)] public float rewardTipMultiplier = 1;
         [Tooltip("Only use on explicitly consenting adult 21+ content.")]
         public bool rewardThirstRelief;
+        [Range(0,1),Tooltip("Scenic completion reduces Thirst by this fraction; 0.25 means 25 percentage points.")]
+        public float scenicThirstRelief = .25f;
         public int bonusScore = 100;
         public float ratingModifier = 0.2f;
         [TextArea] public string dialogue;

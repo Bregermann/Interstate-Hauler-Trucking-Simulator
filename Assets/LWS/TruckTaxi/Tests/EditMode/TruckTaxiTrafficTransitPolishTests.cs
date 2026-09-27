@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 
 namespace LWS.TruckTaxi.Tests
 {
-    [Category("TaxiPolish")]
+    [Category("TaxiPolish"), Category("TaxiMegaPass")]
     public sealed class TruckTaxiTrafficTransitPolishTests
     {
         [Test]
@@ -33,6 +34,35 @@ namespace LWS.TruckTaxi.Tests
             float progress = TruckTaxiBusService.ProjectDistance(points, new Vector3(10, 0, 6));
             Assert.AreEqual(16, progress, .001f);
             Assert.AreEqual(new Vector3(10, 0, 6), TruckTaxiBusService.Sample(points, progress));
+        }
+
+        [Test]
+        public void BusPhysicalBoxFitsVisibleBodyAndUsesTrafficIdentity()
+        {
+            var bus=new GameObject("Bus");
+            var visual=GameObject.CreatePrimitive(PrimitiveType.Cube);
+            try
+            {
+                var body=bus.AddComponent<Rigidbody>();
+                visual.name="Big_Bus_LOD0";
+                visual.transform.SetParent(bus.transform,false);
+                visual.transform.localPosition=Vector3.up*2f;
+                visual.transform.localScale=new Vector3(2.5f,3f,12f);
+                bus.transform.rotation=Quaternion.Euler(0,37,0);
+                typeof(TruckTaxiBusService).GetMethod("FitPhysicalBody",BindingFlags.NonPublic | BindingFlags.Static)
+                    .Invoke(null,new object[]{body});
+                var fitted=bus.GetComponent<BoxCollider>();
+                Assert.IsNotNull(fitted);
+                Assert.Greater(fitted.bounds.size.z,11f);
+                Assert.Greater(fitted.bounds.size.x,2.3f);
+                Assert.Less(fitted.size.x,3f);
+                Assert.Less(fitted.size.z,13f);
+                Assert.IsFalse(fitted.isTrigger);
+                var target=bus.AddComponent<TruckTaxiImpactTarget>();
+                target.kind=TaxiImpactKind.Traffic;
+                Assert.IsTrue(TruckTaxiImpactTarget.FromCollider(fitted).IsTrafficVehicle);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(bus); }
         }
 
         [Test]

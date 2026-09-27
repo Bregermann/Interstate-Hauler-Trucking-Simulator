@@ -80,6 +80,11 @@ namespace LWS.TruckTaxi.Editor
                 case TruckTaxiMapMarkerType.Gas: return new Color(.95f,.78f,.28f);
                 case TruckTaxiMapMarkerType.Repair: return new Color(.55f,.85f,.95f);
                 case TruckTaxiMapMarkerType.Racetrack: return new Color(1,.42f,.25f);
+                case TruckTaxiMapMarkerType.SportsStadium: return new Color(.45f,.9f,.7f);
+                case TruckTaxiMapMarkerType.ConcertVenue: return new Color(.95f,.5f,.75f);
+                case TruckTaxiMapMarkerType.Surge: return new Color(1,.75f,.2f);
+                case TruckTaxiMapMarkerType.Hazard: case TruckTaxiMapMarkerType.RoadClosure: return new Color(1,.3f,.2f);
+                case TruckTaxiMapMarkerType.WorkArea: return new Color(.25f,.83f,.65f);
                 case TruckTaxiMapMarkerType.TargetVehicle: case TruckTaxiMapMarkerType.Danger: return new Color(1,.38f,.38f);
                 case TruckTaxiMapMarkerType.Shortcut: return new Color(.66f,.82f,1);
                 case TruckTaxiMapMarkerType.DiscoveredShortcut: return new Color(.35f,1,.95f);
@@ -102,6 +107,11 @@ namespace LWS.TruckTaxi.Editor
                 case TruckTaxiMapMarkerType.TrainStation: return "Train station";
                 case TruckTaxiMapMarkerType.BusTerminal: return "Bus terminal";
                 case TruckTaxiMapMarkerType.ServiceArea: return "Service area";
+                case TruckTaxiMapMarkerType.SportsStadium: return "Sports stadium";
+                case TruckTaxiMapMarkerType.ConcertVenue: return "Concert venue";
+                case TruckTaxiMapMarkerType.Surge: return "Event surge";
+                case TruckTaxiMapMarkerType.RoadClosure: return "Road closure";
+                case TruckTaxiMapMarkerType.WorkArea: return "Ride Work Area";
                 default: return type.ToString();
             }
         }
@@ -127,6 +137,12 @@ namespace LWS.TruckTaxi.Editor
                 case TruckTaxiMapMarkerType.BusTerminal: return "Bus passenger stop";
                 case TruckTaxiMapMarkerType.ServiceArea: return "Highway services";
                 case TruckTaxiMapMarkerType.Danger: return "Hazard ahead";
+                case TruckTaxiMapMarkerType.SportsStadium: return "Sports events and taxi bays";
+                case TruckTaxiMapMarkerType.ConcertVenue: return "Shows and taxi pickup queues";
+                case TruckTaxiMapMarkerType.Surge: return "Increased regional ride demand";
+                case TruckTaxiMapMarkerType.Hazard: return "Active hazard; GPS may not reroute";
+                case TruckTaxiMapMarkerType.RoadClosure: return "Explicitly closed road";
+                case TruckTaxiMapMarkerType.WorkArea: return "Your pickup-only dispatch boundary";
                 default: return "Point of interest";
             }
         }
@@ -195,6 +211,7 @@ namespace LWS.TruckTaxi.Editor
                 case TruckTaxiMapMarkerType.PhotoStop:
                     return (Box(p,.15f,.25f,.85f,.69f) && !Circle(p,.5f,.47f,.14f)) || Box(p,.32f,.69f,.58f,.79f);
                 case TruckTaxiMapMarkerType.Danger:
+                case TruckTaxiMapMarkerType.Hazard:
                     return Line(p,.13f,.2f,.5f,.85f,.05f) || Line(p,.5f,.85f,.87f,.2f,.05f) || Line(p,.13f,.2f,.87f,.2f,.05f) ||
                         Box(p,.46f,.4f,.54f,.64f) || Circle(p,.5f,.3f,.04f);
                 case TruckTaxiMapMarkerType.Bathroom:
@@ -221,6 +238,19 @@ namespace LWS.TruckTaxi.Editor
                 case TruckTaxiMapMarkerType.ServiceArea:
                     return Box(p,.18f,.19f,.26f,.81f) || Box(p,.74f,.19f,.82f,.81f) ||
                         Box(p,.25f,.46f,.75f,.54f);
+                case TruckTaxiMapMarkerType.SportsStadium:
+                    return (Box(p,.15f,.25f,.85f,.75f) && !Box(p,.23f,.33f,.77f,.67f)) ||
+                        Line(p,.5f,.3f,.5f,.7f,.025f) || Circle(p,.5f,.5f,.09f);
+                case TruckTaxiMapMarkerType.ConcertVenue:
+                    return Line(p,.38f,.25f,.38f,.77f,.05f) || Line(p,.74f,.35f,.74f,.86f,.05f) ||
+                        Line(p,.38f,.77f,.74f,.86f,.05f) || Circle(p,.29f,.25f,.11f) || Circle(p,.65f,.35f,.11f);
+                case TruckTaxiMapMarkerType.Surge:
+                    return Line(p,.62f,.88f,.35f,.49f,.08f) || Line(p,.35f,.49f,.65f,.49f,.07f) ||
+                        Line(p,.65f,.49f,.37f,.12f,.08f);
+                case TruckTaxiMapMarkerType.RoadClosure:
+                    return Box(p,.15f,.36f,.85f,.65f) || Box(p,.23f,.18f,.31f,.75f) || Box(p,.69f,.18f,.77f,.75f);
+                case TruckTaxiMapMarkerType.WorkArea:
+                    return (Circle(p,.5f,.5f,.35f) && !Circle(p,.5f,.5f,.28f)) || Circle(p,.5f,.5f,.07f);
                 default: throw new ArgumentOutOfRangeException(nameof(type),type,"Expected an installed Heat icon for this type.");
             }
         }
