@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace LWS.TruckTaxi
 {
@@ -12,6 +14,12 @@ namespace LWS.TruckTaxi
         public TruckTaxiIntersection[] signalIntersections;
         public LWS.InterstateHauler.LwsTrafficLaneDefinition[] roadLanes;
         public int maximumPeople = 24;
+        [Min(1)] public int maxFullPedestrians = 100;
+        [Min(1)] public int maxVisiblePedestrians = 180;
+        [Min(1)] public float fullPhysicsRadius = 85;
+        [Min(1)] public float visibleRadius = 170;
+        [Min(0)] public float populationHysteresis = 20;
+        [Min(25)] public float graphRebuildDistance = 120;
         [Tooltip("Use clothed WobblePeople visuals; disable for the original UTS pedestrian models.")]
         public bool useWobblePeople = true;
         [Tooltip("Optional Taxi-only override. Disable before Initialize/ResetPopulation to measure the unmodified UTS baseline.")]
@@ -29,6 +37,16 @@ namespace LWS.TruckTaxi
         private readonly List<WalkAgent> walkerSchedule = new List<WalkAgent>();
         private readonly Dictionary<TruckTaxiIntersection, int> activeCrossings = new Dictionary<TruckTaxiIntersection, int>();
         private readonly Stack<int> freeRows = new Stack<int>();
+        private readonly TruckTaxiPedestrianPool pool = new TruckTaxiPedestrianPool();
+        private readonly TruckTaxiPedestrianLogicalPopulation logical = new TruckTaxiPedestrianLogicalPopulation();
+        private readonly Dictionary<TruckTaxiPedestrian, TruckTaxiPedestrianLogicalPopulation.Record> assigned =
+            new Dictionary<TruckTaxiPedestrian, TruckTaxiPedestrianLogicalPopulation.Record>();
+        private Func<Vector3, bool> regionAvailable = _ => true;
+        private bool graphDirty;
+        private Vector3 graphOrigin;
+        private int logicalCursor;
+        private int spawnedInWindow, despawnedInWindow;
+        private float rateWindowStart;
         private TruckTaxiPedestrianWalkGraph walkGraph;
         private Component runtimePath;
         private Vector3[,] runtimePoints;
@@ -51,6 +69,11 @@ namespace LWS.TruckTaxi
         public int RejectedSpawnAttempts { get; private set; }
         public bool Ready => initialized && bindings.Count > 0;
         public int ActiveCount => people.Count;
+        public int LogicalCount => logical.Count > 0 ? logical.Count : TargetCount;
+        public int PooledCount => pool.Count;
+        public int FullPhysicsCount { get { int count = 0; foreach (var ped in people) if (ped != null && (ped.IsRagdoll || ped.IsFullPhysics)) count++; return count; } }
+        public float SpawnsPerSecond { get; private set; }
+        public float DespawnsPerSecond { get; private set; }
         public int PresentationCount => presentations.Count;
         public int GraphNodeCount => walkGraph?.Count ?? 0;
         public int GraphWalkableSpawnCount => walkGraph?.WalkableSpawnCount ?? 0;
@@ -61,6 +84,20 @@ namespace LWS.TruckTaxi
         public int ReducedShadowCount { get; private set; }
         public IReadOnlyList<TruckTaxiPedestrian> People => people;
         public bool ShowColliders { get; set; }
+        public void SetRegionAvailability(Func<Vector3, bool> availability)
+        { regionAvailable = availability ?? (_ => true); if (initialized) NotifyRegionChanged(); }
+        public void RegisterLogicalRegion(string id, Bounds bounds)
+        {
+            logical.RegisterRegion(id, bounds);
+            if (initialized) NotifyRegionChanged();
+        }
+        public void NotifyRegionChanged()
+        {
+            for (int i = people.Count - 1; i >= 0; i--)
+                if (people[i] != null && !regionAvailable(people[i].transform.position)) Retire(people[i]);
+            graphDirty = true;
+            nextMaintenance = Mathf.Min(nextMaintenance, Time.time + .1f);
+        }
         public void SetWobblePeopleVisible(bool visible)
         {
             useWobblePeople = visible;
@@ -106,43 +143,48 @@ namespace LWS.TruckTaxi
                 if (pathAreas.TryGetValue(path, out var area) && !access.AllPointsAllowed(area, roadLanes))
                 { Debug.LogError("TAXI PEDESTRIANS: unsafe walk path rejected: " + path.name, path); continue; }
                 bindings.Add(path, access);
-                access.SpawnBatch(1);
+                access.EnsureParent();
+                if (regionAvailable(path.transform.position) && regionAvailable(access.StartPosition))
+                    access.SpawnBatch(1);
                 Bind(path, int.MaxValue, false);
             }
             BaselineActiveCount = ActiveCount;
             appliedWobbleStyle = useWobblePeople;
             initialized = true;
+            logical.Resize(TargetCount, transform.position);
             if (DensityEnabled)
             {
                 ClearPeople();
-                walkGraph = new TruckTaxiPedestrianWalkGraph(roadLanes, pedestrianAreas, peoplePaths,
-                    signalIntersections, TruckTaxiBootstrap.Instance?.roadGraph?.Graph,
-                    System.Array.FindAll(FindObjectsByType<TruckTaxiWorldAnchor>(FindObjectsSortMode.None),
-                        anchor => anchor != null && anchor.gameObject.scene == gameObject.scene),
-                    System.Array.FindAll(FindObjectsByType<TruckTaxiSurface>(FindObjectsSortMode.None),
-                        surface => surface != null && surface.gameObject.scene == gameObject.scene),
-                    densityProfile.spawnRadius, transform.position);
+                BuildWalkGraph();
                 if (walkGraph != null && walkGraph.HasRoadBounds && walkGraph.WalkableSpawnCount > 0 && TargetCount > 0)
                 {
                     CreateRuntimePath();
-                    for (int i = 0; i < Mathf.Min(24, TargetCount); i++)
+                    for (int i = 0; i < Mathf.Min(24, Mathf.Min(TargetCount, maxVisiblePedestrians)); i++)
                         if (!SpawnGraphOne()) break;
                 }
                 else
                 {
-                    Debug.LogWarning("TAXI PEDESTRIANS: no grounded walk graph nodes; retaining authored UTS paths.", this);
+                    Debug.LogWarning("TAXI PEDESTRIANS: no grounded walk graph nodes; retaining only authored UTS baseline.", this);
                     walkGraph = null;
-                    float ratio = BaselineActiveCount > 0 ? (float)TargetCount / BaselineActiveCount : 0;
-                    if (ratio > 0)
-                        foreach (var entry in bindings)
-                        {
-                            entry.Value.SpawnBatch(ratio);
-                            Bind(entry.Key, TargetCount, true);
-                        }
                 }
                 Debug.Log($"TAXI PEDESTRIANS: UTS baseline {BaselineActiveCount}, graph nodes {GraphNodeCount}, target {TargetCount}, initial {ActiveCount}.", this);
             }
             nextMaintenance = Time.time + .5f;
+            rateWindowStart = Time.time;
+        }
+        private void BuildWalkGraph()
+        {
+            Vector3 observer = PresentationObserver();
+            graphOrigin = observer;
+            walkGraph = new TruckTaxiPedestrianWalkGraph(roadLanes, pedestrianAreas, peoplePaths,
+                signalIntersections, TruckTaxiBootstrap.Instance?.roadGraph?.Graph,
+                Array.FindAll(FindObjectsByType<TruckTaxiWorldAnchor>(FindObjectsSortMode.None),
+                    anchor => anchor != null && anchor.gameObject.scene.isLoaded),
+                Array.FindAll(FindObjectsByType<TruckTaxiSurface>(FindObjectsSortMode.None),
+                    surface => surface != null && surface.gameObject.scene.isLoaded),
+                densityProfile.spawnRadius > 0 ? Mathf.Min(densityProfile.spawnRadius,
+                    visibleRadius + populationHysteresis + 50) : visibleRadius + populationHysteresis + 50, observer);
+            graphDirty = false;
         }
         private void Bind(Component path, int limit, bool dense, int graphNode = -1, Transform newChild = null)
         {
@@ -155,7 +197,8 @@ namespace LWS.TruckTaxi
         {
             if(child.GetComponent<TruckTaxiPedestrian>()!=null) return;
             Vector3 spawnPosition = graphNode >= 0 ? walkGraph[graphNode] : child.position;
-            if (people.Count >= limit || (graphNode < 0 && pathAreas.TryGetValue(path, out var area) && !area.Allows(spawnPosition, roadLanes)) ||
+            if (people.Count >= limit || !regionAvailable(spawnPosition) ||
+                (graphNode < 0 && pathAreas.TryGetValue(path, out var area) && !area.Allows(spawnPosition, roadLanes)) ||
                 (dense && !CanSpawnAt(spawnPosition)))
             { child.gameObject.SetActive(false); Destroy(child.gameObject); RejectedSpawnAttempts++; return; }
             if (graphNode >= 0) child.position = spawnPosition;
@@ -170,11 +213,15 @@ namespace LWS.TruckTaxi
             var target=child.gameObject.AddComponent<TruckTaxiImpactTarget>();
             target.kind=TaxiImpactKind.Pedestrian; target.targetId="taxi.pedestrian."+serial++;
             people.Add(ped);
-            origins.Add(ped,path); ped.Expired+=Retire;
+            origins.Add(ped,path); ped.Expired+=Retire; ped.Ragdolled+=OnRagdolled;
             var presentation = new TruckTaxiPopulationPresentation(ped.gameObject, true);
             presentations.Add(ped, presentation);
             presentation.Refresh(DensityEnabled ? densityProfile : null, PresentationObserver());
             if (graphNode >= 0) BindGraphWalker(ped, graphNode);
+            if (graphNode >= 0) ped.transform.SetParent(transform, true);
+            if (DensityEnabled && (FullPhysicsCount > maxFullPedestrians ||
+                (ped.transform.position - PresentationObserver()).sqrMagnitude > fullPhysicsRadius * fullPhysicsRadius))
+                ped.SetFullPhysics(false);
         }
         public void SpawnOne()
         {
@@ -183,7 +230,8 @@ namespace LWS.TruckTaxi
         private bool TrySpawnOne()
         {
             if (walkGraph != null) return SpawnGraphOne();
-            if (!Ready || people.Count >= TargetCount || activePaths.Count == 0) return false;
+            if (DensityEnabled) return false;
+            if (!Ready || people.Count >= Mathf.Min(TargetCount, maxVisiblePedestrians) || activePaths.Count == 0) return false;
             for (int attempt = 0; attempt < activePaths.Count; attempt++)
             {
                 var path = activePaths[pathCursor++ % activePaths.Count];
@@ -198,7 +246,9 @@ namespace LWS.TruckTaxi
         }
         private bool CanSpawnAt(Vector3 position)
         {
-            if (!densityProfile.AllowsSpawn(position, transform.position)) return false;
+            if (!regionAvailable(position) || !densityProfile.AllowsSpawn(position, PresentationObserver())) return false;
+            Vector3 delta = position - PresentationObserver(); delta.y = 0;
+            if (delta.sqrMagnitude > visibleRadius * visibleRadius) return false;
             if (Physics.CheckCapsule(position + Vector3.up * .65f, position + Vector3.up * 1.55f,
                 .35f, ~0, QueryTriggerInteraction.Ignore)) return false;
             float clearance = Mathf.Max(.25f, densityProfile.pedestrianSpawnClearance);
@@ -232,24 +282,64 @@ namespace LWS.TruckTaxi
         }
         private bool SpawnGraphOne()
         {
-            if (walkGraph == null || runtimePath == null || people.Count >= TargetCount || bindings.Count == 0) return false;
-            for (int attempt = 0; attempt < Mathf.Min(walkGraph.Count, 32); attempt++)
+            if (walkGraph == null || runtimePath == null || people.Count >= Mathf.Min(TargetCount, maxVisiblePedestrians) || bindings.Count == 0) return false;
+            TruckTaxiPedestrianLogicalPopulation.Record record = null;
+            for (int i = 0; i < logical.Count; i++)
+            {
+                var candidate = logical.Records[logicalCursor++ % logical.Count];
+                if (candidate.Actor == null && logical.RegionNear(candidate, PresentationObserver(), visibleRadius) &&
+                    logical.RegionAvailable(candidate, regionAvailable)) { record = candidate; break; }
+            }
+            if (record == null) return false;
+            for (int attempt = 0; attempt < Mathf.Min(walkGraph.WalkableSpawnCount, 256); attempt++)
             {
                 int node = walkGraph.NextSpawnNode();
-                if (node < 0 || !CanSpawnAt(walkGraph[node])) { RejectedSpawnAttempts++; continue; }
+                if (node < 0 || !logical.Contains(record, walkGraph[node]) || !CanSpawnAt(walkGraph[node]))
+                { RejectedSpawnAttempts++; continue; }
                 var source = activePaths[pathCursor++ % activePaths.Count];
-                if (source == null || !bindings.TryGetValue(source, out var access)) continue;
-                int before = people.Count;
+                if (source == null || !bindings.TryGetValue(source, out var access) ||
+                    !regionAvailable(access.StartPosition)) continue;
                 var parent = access.Parent;
                 if (parent == null) continue;
+                string id = "taxi.pedestrian." + record.Id;
+                var reused = pool.Acquire(walkGraph[node], Quaternion.identity, id, false);
+                if (reused != null)
+                {
+                    RegisterGraphActor(reused, source, node, record);
+                    return true;
+                }
+                int before = people.Count;
                 int childCount = parent.transform.childCount;
                 access.SpawnSingle();
                 if (parent.transform.childCount > childCount)
                     Bind(source, TargetCount, true, node, parent.transform.GetChild(parent.transform.childCount - 1));
-                if (people.Count > before) return true;
+                if (people.Count > before)
+                {
+                    var ped = people[people.Count - 1];
+                    var target = ped.GetComponent<TruckTaxiImpactTarget>(); if (target != null) target.targetId = id;
+                    record.Actor = ped; record.Position = walkGraph[node]; assigned[ped] = record;
+                    spawnedInWindow++;
+                    return true;
+                }
             }
             return false;
         }
+        private void RegisterGraphActor(TruckTaxiPedestrian ped, Component source, int node,
+            TruckTaxiPedestrianLogicalPopulation.Record record)
+        {
+            ped.settings = settings;
+            ped.Expired += Retire; ped.Ragdolled += OnRagdolled;
+            ped.SetWobbleVisible(useWobblePeople);
+            people.Add(ped); origins[ped] = source;
+            record.Actor = ped; record.Position = walkGraph[node]; assigned[ped] = record;
+            var presentation = new TruckTaxiPopulationPresentation(ped.gameObject, true);
+            presentations[ped] = presentation;
+            presentation.Refresh(densityProfile, PresentationObserver());
+            BindGraphWalker(ped, node);
+            UpdatePhysicsBudget(PresentationObserver());
+            spawnedInWindow++;
+        }
+        private void OnRagdolled(TruckTaxiPedestrian pedestrian) => UpdatePhysicsBudget(PresentationObserver());
         private void BindGraphWalker(TruckTaxiPedestrian ped, int node)
         {
             int row = freeRows.Count > 0 ? freeRows.Pop() : nextRow++;
@@ -408,6 +498,7 @@ namespace LWS.TruckTaxi
         public void ResetPopulation()
         {
             ClearPeople();
+            pool.Clear();
             if (runtimePath != null) Destroy(runtimePath.gameObject);
             runtimePath = null; runtimePoints = null; walkGraph = null;
             initialized = false; pathCursor = 0; Initialize();
@@ -415,33 +506,62 @@ namespace LWS.TruckTaxi
         private void ClearPeople()
         {
             foreach(var ped in people)
-                if(ped!=null) { ped.Expired-=Retire; ped.gameObject.SetActive(false); Destroy(ped.gameObject); }
+                if(ped!=null) { ped.Expired-=Retire; ped.Ragdolled-=OnRagdolled; ped.gameObject.SetActive(false); Destroy(ped.gameObject); }
+            foreach (var record in logical.Records) record.Actor = null;
+            assigned.Clear();
             people.Clear(); origins.Clear(); fallen.Clear(); presentations.Clear(); walkers.Clear();
             walkerSchedule.Clear(); activeCrossings.Clear(); walkerCursor = 0; freeRows.Clear(); nextRow = 0;
         }
         private void Retire(TruckTaxiPedestrian ped)
         {
             if(!origins.TryGetValue(ped,out var path)) return;
-            ped.Expired-=Retire; people.Remove(ped); origins.Remove(ped);
+            ped.Expired-=Retire; ped.Ragdolled-=OnRagdolled; people.Remove(ped); origins.Remove(ped);
+            if (presentations.TryGetValue(ped, out var presentation)) presentation.Restore();
             presentations.Remove(ped);
+            if (assigned.TryGetValue(ped, out var record))
+            { record.Position = ped.transform.position; record.Actor = null; assigned.Remove(ped); }
             if (walkers.TryGetValue(ped, out var walker))
             { EndCrossing(walker); freeRows.Push(walker.Row); walkers.Remove(ped); walkerSchedule.Remove(walker); }
             fallen.Remove(ped); RetiredCount++;
-            ped.gameObject.SetActive(false); Destroy(ped.gameObject);
+            if (DensityEnabled) { ped.transform.SetParent(transform, true); pool.Release(ped); }
+            else { ped.gameObject.SetActive(false); Destroy(ped.gameObject); }
+            despawnedInWindow++;
             // Dense replacement is deferred to the bounded maintenance pass, including simultaneous mass impacts.
             if(!isActiveAndEnabled || path==null || people.Count>=TargetCount || DensityEnabled) return;
             bindings[path].SpawnSingle(); Bind(path, TargetCount, false);
         }
         private void Update()
         {
+            if (DensityEnabled)
+                foreach (var ped in people)
+                    if (ped != null && !ped.IsFullPhysics && !ped.IsRagdoll)
+                        ped.TickReducedMovement(((Time.frameCount + ped.GetInstanceID()) & 1) == 0);
             if (Ready && walkGraph != null) TickWalkers();
             if (!Ready || Time.time < nextMaintenance) return;
+            float elapsed = Time.time - rateWindowStart;
+            if (elapsed >= 1f)
+            {
+                SpawnsPerSecond = spawnedInWindow / elapsed;
+                DespawnsPerSecond = despawnedInWindow / elapsed;
+                spawnedInWindow = despawnedInWindow = 0; rateWindowStart = Time.time;
+            }
             if (appliedWobbleStyle != useWobblePeople) SetWobblePeopleVisible(useWobblePeople);
             nextMaintenance = Time.time + (DensityEnabled ? Mathf.Max(.1f, densityProfile.maintenanceInterval) : .5f);
             if (!DensityEnabled)
             {
                 foreach (var presentation in presentations.Values) presentation.Restore();
                 ReducedShadowCount = 0; return;
+            }
+            Vector3 graphOffset = PresentationObserver() - graphOrigin; graphOffset.y = 0;
+            if (graphOffset.sqrMagnitude >= graphRebuildDistance * graphRebuildDistance) graphDirty = true;
+            if (graphDirty)
+            {
+                for (int i = people.Count - 1; i >= 0; i--)
+                    if (people[i] != null && !people[i].IsRagdoll) Retire(people[i]);
+                foreach (var walker in walkerSchedule) if (walker.Crossing != null) EndCrossing(walker);
+                walkers.Clear(); walkerSchedule.Clear(); activeCrossings.Clear(); freeRows.Clear(); nextRow = 0;
+                BuildWalkGraph();
+                if (runtimePath == null && walkGraph.WalkableSpawnCount > 0) CreateRuntimePath();
             }
             Vector3 observer = PresentationObserver(); ReducedShadowCount = 0;
             for (int i = people.Count - 1; i >= 0; i--)
@@ -452,7 +572,10 @@ namespace LWS.TruckTaxi
                     if (!ReferenceEquals(ped, null)) { origins.Remove(ped); presentations.Remove(ped); }
                     people.RemoveAt(i); continue;
                 }
-                if (people.Count > TargetCount || ped.transform.position.y < -5 || !densityProfile.AllowsPresence(ped.transform.position, transform.position))
+                Vector3 offset = ped.transform.position - observer; offset.y = 0;
+                if (!ped.IsRagdoll && (people.Count > maxVisiblePedestrians || ped.transform.position.y < -5 ||
+                    offset.sqrMagnitude > Mathf.Pow(visibleRadius + populationHysteresis, 2) || !regionAvailable(ped.transform.position) ||
+                    (assigned.TryGetValue(ped, out var slot) && !logical.Contains(slot, ped.transform.position))))
                 { Retire(ped); continue; }
                 if (ped.IsRagdoll && !fallen.Contains(ped)) fallen.Add(ped);
                 if (presentations.TryGetValue(ped, out var presentation))
@@ -462,10 +585,28 @@ namespace LWS.TruckTaxi
                 }
             }
             fallen.RemoveAll(p => p == null || !p.IsRagdoll);
-            while (fallen.Count > Mathf.Max(1, densityProfile.maximumActiveRagdolls))
+            while (fallen.Count > Mathf.Min(Mathf.Max(1, maxFullPedestrians),
+                Mathf.Max(1, densityProfile.maximumActiveRagdolls)))
                 Retire(fallen[0]);
-            for (int i = 0; i < Mathf.Max(1, densityProfile.maximumSpawnsPerPass) && people.Count < TargetCount; i++)
+            UpdatePhysicsBudget(observer);
+            for (int i = 0; i < Mathf.Max(1, densityProfile.maximumSpawnsPerPass) && people.Count < Mathf.Min(TargetCount, maxVisiblePedestrians); i++)
                 if (!TrySpawnOne()) break;
+        }
+        private void UpdatePhysicsBudget(Vector3 observer)
+        {
+            int full = 0;
+            foreach (var ped in people) if (ped != null && ped.IsRagdoll) full++;
+            var candidates = new List<TruckTaxiPedestrian>(people.Count);
+            foreach (var ped in people) if (ped != null && !ped.IsRagdoll) candidates.Add(ped);
+            candidates.Sort((a, b) => (a.transform.position - observer).sqrMagnitude.CompareTo(
+                (b.transform.position - observer).sqrMagnitude));
+            foreach (var ped in candidates)
+            {
+                Vector3 delta = ped.transform.position - observer; delta.y = 0;
+                bool shouldBeFull = full < maxFullPedestrians && delta.sqrMagnitude <= fullPhysicsRadius * fullPhysicsRadius;
+                ped.SetFullPhysics(shouldBeFull);
+                if (shouldBeFull) full++;
+            }
         }
         private void TickWalkers()
         {
@@ -502,6 +643,13 @@ namespace LWS.TruckTaxi
             private readonly object[] singleArgs = { 0, true };
             public bool Valid => batch != null && single != null && parent != null && density != null && points != null;
             public GameObject Parent => parent.GetValue(path) as GameObject;
+            public void EnsureParent()
+            {
+                if (Parent != null) return;
+                var container = new GameObject("walkingObjects");
+                container.transform.SetParent(path.transform, false);
+                parent.SetValue(path, container);
+            }
             public Vector3 StartPosition => points.GetValue(path) is Vector3[,] value && value.GetLength(1) > 1 ? value[0, 1] : path.transform.position;
             public bool AllPointsAllowed(TruckTaxiPedestrianArea area, LWS.InterstateHauler.LwsTrafficLaneDefinition[] lanes)
             {

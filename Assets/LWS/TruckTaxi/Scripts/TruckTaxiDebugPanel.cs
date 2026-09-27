@@ -7,8 +7,10 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiDebugPanel : MonoBehaviour
     {
         private TruckTaxiBootstrap host;
+        private TruckTaxiHud hud;
+        private TruckTaxiRegionalWorld regional;
         private RectTransform panel;
-        private TextMeshProUGUI diagnostics;
+        private TextMeshProUGUI diagnostics, regionalDiagnostics;
         private RectTransform[] pages;
         private int page;
         private int passengerIndex;
@@ -19,14 +21,16 @@ namespace LWS.TruckTaxi
         public Transform FocusRoot => panel;
         public void Initialize(TruckTaxiBootstrap value,TruckTaxiHud ui)
         {
-            host=value;
+            host=value; hud=ui; regional=value.GetComponent<TruckTaxiRegionalWorld>();
             panel=ui.Panel(ui.Root,"Truck Taxi Debug",new Vector2(.02f,.17f),new Vector2(.72f,.89f));
             diagnostics=ui.Text(panel,"Session diagnostics",new Vector2(.03f,.70f),new Vector2(.97f,.98f),23);
             pages=new[]{TruckTaxiHud.Rect(panel,"Ride tools",new Vector2(0,.07f),new Vector2(1,.70f)),
                 TruckTaxiHud.Rect(panel,"Presentation tools",new Vector2(0,.07f),new Vector2(1,.70f)),
                 TruckTaxiHud.Rect(panel,"Passenger tools",new Vector2(0,.07f),new Vector2(1,.70f)),
                 TruckTaxiHud.Rect(panel,"Pedestrian tools",new Vector2(0,.07f),new Vector2(1,.70f)),
-                TruckTaxiHud.Rect(panel,"Objective browser",new Vector2(0,.07f),new Vector2(1,.70f))};
+                TruckTaxiHud.Rect(panel,"Objective browser",new Vector2(0,.07f),new Vector2(1,.70f)),
+                TruckTaxiHud.Rect(panel,"Needs and effects",new Vector2(0,.07f),new Vector2(1,.70f)),
+                TruckTaxiHud.Rect(panel,"Regional performance",new Vector2(0,.07f),new Vector2(1,.70f))};
             string[] actions={"Start Shift","End Shift","Force Ride Offer","Auto Accept","Teleport Near Pickup","Force Passenger Boarding",
                 "Teleport Near Destination","Complete Ride","Fail Ride","Generate Request","Complete Current Request","Fail Current Request",
                 "Add Chaos Score","Spawn Traffic","Spawn Pedestrian","Reset Demo City"};
@@ -65,13 +69,29 @@ namespace LWS.TruckTaxi
                 ui.Button(pages[4],action.ToUpperInvariant(),new Vector2(left,top-.16f),new Vector2(left+.46f,top),()=>Execute(action));
             }
             pages[4].gameObject.SetActive(false);
+            string[] needsActions={"Use Mushroom","Mushroom Peak","Set Thirst 100%","Spawn Thirst NPC Near Player","Force Nearby Private Stop"};
+            for(int i=0;i<needsActions.Length;i++)
+            {
+                string action=needsActions[i]; float top=.98f-(i/2)*.24f,left=.03f+(i%2)*.49f;
+                ui.Button(pages[5],action.ToUpperInvariant(),new Vector2(left,top-.18f),new Vector2(left+.46f,top),()=>Execute(action));
+            }
+            pages[5].gameObject.SetActive(false);
+            regionalDiagnostics=ui.Text(pages[6],"Regional diagnostics",new Vector2(.04f,.03f),new Vector2(.96f,.97f),20);
+            pages[6].gameObject.SetActive(false);
             host.Session.RequestResolved+=RecordTestedObjective;
-            ui.Button(panel,"NEXT TOOL PAGE",new Vector2(.25f,.01f),new Vector2(.75f,.065f),()=>{
+            ui.Button(panel,"NEXT TOOL PAGE",new Vector2(.03f,.01f),new Vector2(.48f,.065f),()=>{
                 pages[page].gameObject.SetActive(false); page=(page+1)%pages.Length; pages[page].gameObject.SetActive(true);
             });
+            ui.Button(panel,"CLOSE",new Vector2(.52f,.01f),new Vector2(.97f,.065f),Toggle);
             panel.gameObject.SetActive(false);
         }
-        public void Toggle() { if(panel!=null) panel.gameObject.SetActive(!panel.gameObject.activeSelf); }
+        public void Toggle()
+        {
+            if(panel==null || (!IsOpen && host.Paused)) return;
+            panel.gameObject.SetActive(!IsOpen);
+            if(IsOpen) panel.SetAsLastSibling();
+            hud.OnDebugVisibilityChanged();
+        }
         public void Execute(string action)
         {
             if(host==null || !host.Ready) return;
@@ -90,6 +110,11 @@ namespace LWS.TruckTaxi
                 case "Show Objective Points": host.OptionalStops.showAllPoints=!host.OptionalStops.showAllPoints; objectiveMessage="Scene gizmos toggled for registered stop points"; break;
                 case "Rebuild Capabilities": host.RebuildObjectiveCapabilities(); objectiveMessage="Rebuilt from actual scene support"; break;
                 case "End Shift": s.EndShift(); break;
+                case "Use Mushroom": host.DriverNeeds?.State?.Effects.Activate(TruckTaxiTemporaryEffectKind.MysteryMushroom); break;
+                case "Mushroom Peak": host.DriverNeeds?.State?.Effects.DebugMushroomPeak(); break;
+                case "Set Thirst 100%": host.DriverNeeds?.State?.DebugSetThirst(1f); break;
+                case "Spawn Thirst NPC Near Player": host.Companions?.DebugSpawnNearPlayer(); break;
+                case "Force Nearby Private Stop": host.Companions?.DebugForceNearbyPrivateStop(); break;
                 case "Force Ride Offer": s.OfferRide(); break;
                 case "Offer Timer 3 Sec": s.DebugSetOfferDuration(3); break;
                 case "Offer Timer 10 Sec": s.DebugSetOfferDuration(10); break;
@@ -155,6 +180,24 @@ namespace LWS.TruckTaxi
                     if(Array.Exists(p.possibleRequests??Array.Empty<PassengerRequestDefinition>(),r=>r!=null && r.StableId==d.StableId)) passengers++;
                 diagnostics.text=$"OBJECTIVE BROWSER / {d.requestType}\n{ObjectiveAvailability()} | {(testedObjectives.Contains(d.StableId) ? "TESTED IN THIS SESSION" : "UNTESTED THIS SESSION")}\n"+
                     $"NEEDS {d.RequiredCapabilities} | REQUIRED {d.RequiredBehavior} / FORBIDDEN {d.ForbiddenBehavior}\nELIGIBLE PASSENGERS {passengers} | SUPPORT "+SupportCounts(d)+"\n"+objectiveMessage;
+            }
+            if(page==5)
+            {
+                var state=host.DriverNeeds?.State;
+                float mushroom=state!=null ? state.Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.MysteryMushroom).RemainingSeconds : 0;
+                diagnostics.text=$"NEEDS / EFFECTS\nBLADDER {state?.Pressure*100:0}%  HUNGER {state?.Hunger*100:0}%  THIRST {state?.Thirst*100:0}%\n"+
+                    $"MUSHROOM {mushroom:0}s\n"+
+                    $"COMPANION {host.Companions?.Prompt ?? "NONE"} | {host.Companions?.Feedback ?? ""}";
+            }
+            if(page==6)
+            {
+                diagnostics.text="REGIONAL / PERFORMANCE";
+                var cars=host.traffic; var people=host.pedestrians;
+                regionalDiagnostics.text=(regional?.Diagnostics ?? "Regional world initializing")+
+                    $"\nTRAFFIC  LOGICAL {cars?.LogicalCount ?? 0}  LIVE {cars?.ActiveCount ?? 0}  FULL {cars?.FullPhysicsCount ?? 0}  POOLED {cars?.PooledCount ?? 0}"+
+                    $"\nPEDESTRIANS  LOGICAL {people?.LogicalCount ?? 0}  LIVE {people?.ActiveCount ?? 0}  FULL {people?.FullPhysicsCount ?? 0}  POOLED {people?.PooledCount ?? 0}"+
+                    $"\nSPAWNS / SEC  CARS {cars?.SpawnsPerSecond ?? 0}  PEOPLE {people?.SpawnsPerSecond ?? 0:0.0}"+
+                    $"\nDESPAWNS / SEC  CARS {cars?.DespawnsPerSecond ?? 0}  PEOPLE {people?.DespawnsPerSecond ?? 0:0.0}";
             }
         }
         private PassengerRequestDefinition SelectedObjective() => host.configuration.requests[objectiveIndex%host.configuration.requests.Length];

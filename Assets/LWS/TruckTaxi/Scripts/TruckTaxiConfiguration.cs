@@ -13,6 +13,13 @@ namespace LWS.TruckTaxi
         public float maximumTripDistance = 950;
         public float rideFrequency = 6;
         public float offerDuration = 30;
+        [Header("Regional rides")]
+        [Min(1)] public float pickupTargetMinimumSeconds = 20;
+        [Min(1)] public float pickupTargetMaximumSeconds = 90;
+        [Min(1)] public float pickupHardMaximumSeconds = 180;
+        [Range(0, 1)] public float intercityRideChance = 0.2f;
+        [Min(0)] public float intercityMaximumTripDistance = 20000;
+        [Min(1)] public float intercityFareMultiplier = 1.2f;
         [Header("Passenger continuity")]
         [Range(1, 20)] public int recentOfferCount = 10;
         [Range(0.01f, 1)] public float recentOfferWeight = 0.2f;

@@ -104,6 +104,13 @@ namespace LWS.TruckTaxi
                 { FadeAlpha = Mathf.Clamp01(t / .35f); yield return null; }
                 FadeAlpha = 1;
                 if (service == null) { Feedback = "Recovery destination is no longer available."; yield break; }
+                var regional = host.GetComponent<TruckTaxiRegionalWorld>();
+                if (regional != null && !regional.IsPositionAvailable(service.RecoveryPosition))
+                {
+                    yield return regional.PrepareInitialWorld(service.RecoveryPosition);
+                    if (!regional.IsPositionAvailable(service.RecoveryPosition))
+                    { Feedback = "Recovery region could not be prepared. No charge."; yield break; }
+                }
                 Vector3 delta = service.RecoveryPosition + Vector3.up * 1.6f - body.position;
                 Vector3 originalPosition = body.position;
                 Vector3 trailerPosition = trailer != null ? trailer.position : Vector3.zero;

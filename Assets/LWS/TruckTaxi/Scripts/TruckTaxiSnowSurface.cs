@@ -107,6 +107,23 @@ namespace LWS.TruckTaxi
         public void ConfigureDepthRenderer(int rendererIndex) { depthRendererIndex = rendererIndex; }
         public void MarkDirty() { }
 
+        public void RefreshStreamedSurfaces()
+        {
+            targetsCached = false;
+            roadTargets.Clear(); groundTargets.Clear();
+            foreach (var proxy in roadDepthProxies.Values) if (proxy != null) Destroy(proxy.gameObject);
+            roadDepthProxies.Clear(); tracedMaterials.Clear();
+            RestoreGround(); lastAppliedCoverage = -1;
+        }
+
+        private bool IsTaxiScene(UnityEngine.SceneManagement.Scene scene)
+        {
+            if (scene == gameObject.scene) return true;
+            var regions = TruckTaxiBootstrap.Instance?.GetComponent<TruckTaxiRegionalWorld>()?.regions;
+            if (regions != null) foreach (var region in regions) if (region.sceneName == scene.name) return true;
+            return false;
+        }
+
         public void Refresh()
         {
             Component current = GetCoverageSingleton();
@@ -388,14 +405,14 @@ namespace LWS.TruckTaxi
             targetsCached = true;
             foreach (LwsRoadSurface road in FindObjectsByType<LwsRoadSurface>(FindObjectsSortMode.None))
             {
-                if (road == null || road.gameObject.scene != gameObject.scene) continue;
+                if (road == null || !IsTaxiScene(road.gameObject.scene)) continue;
                 foreach (MeshRenderer renderer in road.GetComponentsInChildren<MeshRenderer>(true))
                     if (renderer.gameObject.layer != SurfaceLayer && renderer.gameObject.layer != TraceLayer && !roadTargets.Contains(renderer))
                         roadTargets.Add(renderer);
             }
             foreach (TruckTaxiSurface surface in FindObjectsByType<TruckTaxiSurface>(FindObjectsSortMode.None))
             {
-                if (surface == null || surface.isRoad || surface.gameObject.scene != gameObject.scene) continue;
+                if (surface == null || surface.isRoad || !IsTaxiScene(surface.gameObject.scene)) continue;
                 MeshRenderer renderer = surface.GetComponent<MeshRenderer>();
                 if (renderer != null)
                 {

@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2f5572cea6947a8bff926563dd51ac3, type: 3}
+  m_Name: Taxi_StreamingManifest
+  m_EditorClassIdentifier: LWS.InterstateHauler.Runtime::LWS.InterstateHauler.LwsWorldStreamingManifest
+  worldId: taxi.regional
+  policy: {fileID: 11400000, guid: 6810ee90ec3fc6c4895e9726d667d374, type: 2}
+  chunks:
+  - chunkId: taxi.town01
+    displayName: Town01
+    sceneName: Taxi_Town01
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_Town01.unity
+    boundsCenter: {x: -75, y: 0, z: 0}
+    boundsSize: {x: 950, y: 200, z: 1000}
+    neighborChunkIds:
+    - taxi.town01outskirts
+    - taxi.railcorridor
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.town01outskirts
+    displayName: Town01Outskirts
+    sceneName: Taxi_Town01Outskirts
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_Town01Outskirts.unity
+    boundsCenter: {x: 680, y: 0, z: 0}
+    boundsSize: {x: 640, y: 200, z: 1000}
+    neighborChunkIds:
+    - taxi.town01
+    - taxi.highway
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.highway
+    displayName: Highway
+    sceneName: Taxi_Highway
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_Highway.unity
+    boundsCenter: {x: 1230, y: 0, z: 0}
+    boundsSize: {x: 540, y: 200, z: 1000}
+    neighborChunkIds:
+    - taxi.town01outskirts
+    - taxi.riverbridge
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.riverbridge
+    displayName: RiverBridge
+    sceneName: Taxi_RiverBridge
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_RiverBridge.unity
+    boundsCenter: {x: 2000, y: 0, z: 0}
+    boundsSize: {x: 1080, y: 200, z: 1000}
+    neighborChunkIds:
+    - taxi.highway
+    - taxi.servicearea
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.servicearea
+    displayName: ServiceArea
+    sceneName: Taxi_ServiceArea
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_ServiceArea.unity
+    boundsCenter: {x: 2800, y: 0, z: 0}
+    boundsSize: {x: 600, y: 200, z: 1000}
+    neighborChunkIds:
+    - taxi.riverbridge
+    - taxi.town02outskirts
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.town02outskirts
+    displayName: Town02Outskirts
+    sceneName: Taxi_Town02Outskirts
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_Town02Outskirts.unity
+    boundsCenter: {x: 3350, y: 0, z: 0}
+    boundsSize: {x: 580, y: 200, z: 1000}
+    neighborChunkIds:
+    - taxi.servicearea
+    - taxi.town02
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.town02
+    displayName: Town02
+    sceneName: Taxi_Town02
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_Town02.unity
+    boundsCenter: {x: 4075, y: 0, z: 0}
+    boundsSize: {x: 950, y: 200, z: 1000}
+    neighborChunkIds:
+    - taxi.town02outskirts
+    - taxi.railcorridor
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 1
+    containsTrafficPresentation: 1
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0
+  - chunkId: taxi.railcorridor
+    displayName: RailCorridor
+    sceneName: Taxi_RailCorridor
+    scenePath: Assets/LWS/TruckTaxi/Regional/Scenes/Taxi_RailCorridor.unity
+    boundsCenter: {x: 2000, y: 0, z: 510}
+    boundsSize: {x: 4900, y: 200, z: 100}
+    neighborChunkIds: []
+    roadIds: []
+    trafficContent: Validation traffic lane presentation
+    weatheradeContent: Weatherade-compatible road/environment presentation
+    preloadPriority: 0
+    containsRoadGeometry: 0
+    containsTrafficPresentation: 0
+    containsWeatheradePresentation: 1
+    containsGlobalServices: 0
+    containsPlayerContent: 0

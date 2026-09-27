@@ -44,7 +44,13 @@ namespace LWS.TruckTaxi
 
         public bool Initialize(TruckTaxiTrafficAdapter traffic, int lane, string stableId, AudioClip hornClip)
         {
-            if (ready) return true;
+            if (ready)
+            {
+                owner = traffic; LaneIndex = lane;
+                ResetForPool();
+                SetIdentity(stableId);
+                return true;
+            }
             owner = traffic; LaneIndex = lane;
             foreach (var component in GetComponentsInChildren<MonoBehaviour>(true))
             {
@@ -61,22 +67,12 @@ namespace LWS.TruckTaxi
             getStopped = (Func<bool>)Delegate.CreateDelegate(typeof(Func<bool>), ai, ai.GetType().GetProperty("TEMP_STOP").GetGetMethod());
             pathField = movePath.GetType().GetField("walkPath");
             initializePath = movePath.GetType().GetMethod("InitStartPosition");
-            uint hash = 2166136261;
-            foreach (char c in stableId) hash = (hash ^ c) * 16777619;
-            int pick = (int)(hash % 100);
-            Personality = pick < 20 ? TruckTaxiDriverPersonality.Cautious : pick < 65 ? TruckTaxiDriverPersonality.Normal :
-                pick < 84 ? TruckTaxiDriverPersonality.Impatient : pick < 96 ? TruckTaxiDriverPersonality.Aggressive : TruckTaxiDriverPersonality.Reckless;
-            float factor = Personality == TruckTaxiDriverPersonality.Cautious ? .78f : Personality == TruckTaxiDriverPersonality.Normal ? .95f :
-                Personality == TruckTaxiDriverPersonality.Impatient ? 1.05f : Personality == TruckTaxiDriverPersonality.Aggressive ? 1.12f : 1.18f;
-            PreferredSpeed = traffic.LaneSpeed(lane) * factor * Mathf.Lerp(.95f, 1.05f, (hash % 103) / 102f);
-            desiredSpeed = PreferredSpeed;
             var box = ai.GetComponent<BoxCollider>();
             if (box != null) VehicleLength = Mathf.Clamp(box.size.z * Mathf.Abs(ai.transform.lossyScale.z), 3, 18);
             wheels=ai.GetComponentsInChildren<WheelCollider>();
             foreach (var wheel in wheels)
                 if (ai.transform.InverseTransformPoint(wheel.transform.position).z > 0) { frontWheel = wheel; break; }
             rage = GetComponent<TruckTaxiRoadRage>();
-            if (rage != null) rage.collisionTriggerChance = Personality >= TruckTaxiDriverPersonality.Aggressive ? .2f : .02f;
             if (hornClip != null)
             {
                 var sound = new GameObject("Taxi Traffic Horn"); sound.transform.SetParent(ai.transform, false);
@@ -84,10 +80,34 @@ namespace LWS.TruckTaxi
                 horn.clip = hornClip; horn.volume = .35f; horn.minDistance = 6; horn.maxDistance = 65;
                 TruckTaxiAudioController.Instance?.Route(horn, TruckTaxiAudioCategory.World);
             }
+            SetIdentity(stableId);
+            ready = true; return true;
+        }
+
+        private void SetIdentity(string stableId)
+        {
+            uint hash = 2166136261;
+            foreach (char c in stableId) hash = (hash ^ c) * 16777619;
+            Personality = TruckTaxiTrafficPopulation.PersonalityForId(stableId);
+            float factor = Personality == TruckTaxiDriverPersonality.Cautious ? .78f : Personality == TruckTaxiDriverPersonality.Normal ? .95f :
+                Personality == TruckTaxiDriverPersonality.Impatient ? 1.05f : Personality == TruckTaxiDriverPersonality.Aggressive ? 1.12f : 1.18f;
+            PreferredSpeed = owner.LaneSpeed(LaneIndex) * factor * Mathf.Lerp(.95f, 1.05f, (hash % 103) / 102f);
+            desiredSpeed = PreferredSpeed;
+            if (rage != null) rage.collisionTriggerChance = Personality >= TruckTaxiDriverPersonality.Aggressive ? .2f : .02f;
             nextSense = Time.time + (hash % 100) * .003f;
             nextHorn = Time.time + 2 + hash % 7;
             nextLaneChange = Time.time + 3 + hash % 9;
-            ready = true; return true;
+        }
+
+        public void ResetForPool()
+        {
+            ReleaseBrakeHold();
+            if (horn != null) horn.Stop();
+            if (reversingUntil > 0 && aiBehaviour != null) aiBehaviour.enabled = true;
+            reversingUntil = nextRecovery = blockedSeconds = brake = changeUntil = 0;
+            EmergencyBraking = ownsBrakeHold = false;
+            FollowingDistance = ObstacleDistance = 0;
+            LaneChanges = HornsPlayed = 0;
         }
 
         private Action<float> Setter(string name) => (Action<float>)Delegate.CreateDelegate(typeof(Action<float>), ai, ai.GetType().GetProperty(name).GetSetMethod());

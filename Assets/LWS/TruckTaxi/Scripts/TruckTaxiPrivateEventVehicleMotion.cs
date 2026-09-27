@@ -8,10 +8,10 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiPrivateEventVehicleMotion : MonoBehaviour
     {
         [Header("Render-only exaggerated hydraulics")]
-        [Range(0,.5f)] public float bounceHeight=.24f;
-        [Range(0,25)] public float rollDegrees=14;
-        [Range(0,20)] public float pitchDegrees=9;
-        [Range(0,.8f)] public float finalBounceHeight=.45f;
+        [Range(0,1.2f)] public float bounceHeight=.65f;
+        [Range(0,40)] public float rollDegrees=29;
+        [Range(0,30)] public float pitchDegrees=19;
+        [Range(0,1.5f)] public float finalBounceHeight=1.1f;
         private readonly Dictionary<Transform, Transform> proxyTransforms = new Dictionary<Transform, Transform>();
         private readonly List<Renderer> originals = new List<Renderer>();
         private readonly List<bool> originalEnabled = new List<bool>();
@@ -103,11 +103,11 @@ namespace LWS.TruckTaxi
         {
             if (!IsActive || proxyRoot == null || deltaTime <= 0 || !float.IsFinite(deltaTime)) return;
             elapsed += deltaTime;
-            float pulse = Mathf.Sin(elapsed * 11f) * .7f + Mathf.Sin(elapsed * 16.7f) * .3f;
-            float sway = Mathf.Sin(elapsed * 8.5f) + .28f * Mathf.Sin(elapsed * 19.3f);
-            float finalBounce = Mathf.Exp(-Mathf.Pow((elapsed - 6.4f) * 3f, 2f)) * finalBounceHeight;
-            proxyRoot.transform.localPosition = new Vector3(.075f * sway, bounceHeight * pulse + finalBounce, 0);
-            proxyRoot.transform.localRotation = Quaternion.Euler(pitchDegrees * pulse, 0, rollDegrees * sway);
+            float pulse = Mathf.Sin(elapsed * 10.5f) * .75f + Mathf.Sin(elapsed * 16.3f) * .25f;
+            float sway = Mathf.Sin(elapsed * 7.2f) + .25f * Mathf.Sin(elapsed * 13.7f);
+            float finalBounce = Mathf.Exp(-Mathf.Pow((elapsed - 6.3f) * 3f, 2f)) * finalBounceHeight;
+            proxyRoot.transform.localPosition = new Vector3(.28f * sway, bounceHeight * pulse + finalBounce, .12f * Mathf.Sin(elapsed * 5.7f));
+            proxyRoot.transform.localRotation = Quaternion.Euler(pitchDegrees * pulse, 2f * sway, rollDegrees * sway);
         }
 
         private void LateUpdate() => Step(Time.deltaTime);

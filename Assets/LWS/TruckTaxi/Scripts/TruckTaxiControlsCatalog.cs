@@ -134,6 +134,12 @@ namespace LWS.TruckTaxi
             Screen("GPS / NAVIGATION","Cab map range / route width / color","MENU");
             Screen("GPS / NAVIGATION","Restore GPS defaults","MENU");
             Add("GPS / NAVIGATION","Services / tow","End","",true,"CONFLICT: End also decreases retarder",ui?.Services);
+            Bound("GPS / NAVIGATION","Full regional map",true,ui?.FullMap,"M remains engine brake; map opens with F3 or left trigger + right stick press");
+            Screen("GPS / NAVIGATION","Expand minimap","HUD");
+            Add("GPS / NAVIGATION","Pan full map","W A S D / Arrows","Right stick",false);
+            Add("GPS / NAVIGATION","Zoom full map","Wheel / Page Up / Page Down","Shoulders",false);
+            Add("GPS / NAVIGATION","Center map on player","Home","MAP button",false,"Home is a driving control outside map mode");
+            Screen("GPS / NAVIGATION","Set GPS destination","MAP");
             Screen("DRIVER NEEDS / SERVICES","Open driver needs","MENU");
             Screen("DRIVER NEEDS / SERVICES","Open services page","MENU");
             Screen("DRIVER NEEDS / SERVICES","Open store page","MENU");

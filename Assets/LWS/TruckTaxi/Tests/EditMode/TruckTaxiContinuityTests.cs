@@ -77,18 +77,16 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual(TruckTaxiState.Available,session.State);
         }
 
-        [Test] public void LongElapsedGameTimeAllowsCitywideRelocation()
+        [Test] public void LongElapsedGameTimeDoesNotTeleportRepeatPassenger()
         {
             CompleteRide(); string destination=session.Destination.locationId;
             session.ContinueShift(); session.SetWorldConditions(1000,12,TruckTaxiDemandWeather.Neutral);
-            bool moved=false;
             for(int i=0;i<30;i++)
             {
                 Assert.IsTrue(session.OfferRide(passenger));
-                if(session.Pickup.locationId!=destination) moved=true;
+                Assert.AreEqual(destination,session.Pickup.locationId);
                 session.DeclineRide();
             }
-            Assert.IsTrue(moved);
         }
 
         [Test] public void PostAcceptRouteTimerCancelsAndDoesNotPay()

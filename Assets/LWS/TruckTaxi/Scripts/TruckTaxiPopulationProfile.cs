@@ -9,14 +9,14 @@ namespace LWS.TruckTaxi
         [Min(0), Tooltip("Scales the actual initial UTS pedestrian count, not the old maximumPeople cap.")]
         public float pedestrianDensityMultiplier = 60;
         [Min(0), Tooltip("Scales the actual initial traffic count, not the theoretical lane capacity.")]
-        public float trafficDensityMultiplier = 25;
+        public float trafficDensityMultiplier = 12.5f;
         [Min(0), Tooltip("0 measures the native startup batch. Set only after recording a verified runtime baseline.")]
         public int measuredPedestrianBaseline;
         [Min(0), Tooltip("0 measures the original startup attempts. Set after recording a verified runtime baseline.")]
         public int measuredTrafficBaseline;
-        [Min(0), Tooltip("Explicit live-instance safety cap. Lowering this can reduce the requested multiplier; diagnostics report that.")]
+        [Min(0), Tooltip("Logical world population cap. The population managers separately budget live actors.")]
         public int maximumActivePedestrians = 720;
-        [Min(0)] public int maximumActiveTraffic = 300;
+        [Min(0)] public int maximumActiveTraffic = 150;
         [Header("Authored city footprint (metres from population host)")]
         [Min(0), Tooltip("0 allows every authored spawn point. This is not a new navigation or spawning system.")]
         public float spawnRadius = 600;

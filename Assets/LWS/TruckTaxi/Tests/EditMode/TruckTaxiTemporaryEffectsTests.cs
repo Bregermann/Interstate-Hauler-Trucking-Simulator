@@ -61,7 +61,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual(0, start.Intensity01);
             Assert.Greater(start.Profile.Saturation, 50);
             Assert.Greater(start.Profile.Contrast, 0);
-            Assert.Less(start.Profile.ChromaticAberration, .1f);
+            Assert.Greater(start.Profile.ChromaticAberration, .1f);
             effects.Tick(1);
             Assert.AreEqual(.5f, effects.GetSnapshot(TruckTaxiTemporaryEffectKind.MysteryMushroom).Intensity01, .001f);
             effects.Tick(3);

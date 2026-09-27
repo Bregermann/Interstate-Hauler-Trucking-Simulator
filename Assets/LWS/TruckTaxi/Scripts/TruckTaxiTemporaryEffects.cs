@@ -70,8 +70,8 @@ namespace LWS.TruckTaxi
         private static readonly TruckTaxiTemporaryEffect[] profiles =
         {
             new TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind.MysteryMushroom, "Mystery mushroom",
-                18, 2, 4, saturation: 75, contrast: 18, bloomIntensity: .35f,
-                chromaticAberration: .08f, chaosBonus: 2, dialogueHook: "MysteryMushroom"),
+                18, 2, 4, saturation: 100, contrast: 32, bloomIntensity: 1.2f,
+                chromaticAberration: .2f, chaosBonus: 2, dialogueHook: "MysteryMushroom"),
             new TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind.HighOctaneBoost, "High-octane boost",
                 12, .35f, 1.5f, vehiclePowerMultiplier: 1.7f,
                 chaosBonus: 2, dialogueHook: "HighOctaneBoost"),
@@ -133,6 +133,18 @@ namespace LWS.TruckTaxi
             remaining[(int)kind] = profile.DurationSeconds;
             if (!wasActive) Started?.Invoke(kind);
             return true;
+        }
+        public bool DebugMushroomPeak()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            var kind = TruckTaxiTemporaryEffectKind.MysteryMushroom;
+            bool wasActive = remaining[(int)kind] > 0;
+            remaining[(int)kind] = profiles[(int)kind].DurationSeconds - profiles[(int)kind].FadeInSeconds;
+            if (!wasActive) Started?.Invoke(kind);
+            return true;
+#else
+            return false;
+#endif
         }
         public void Tick(float seconds)
         {

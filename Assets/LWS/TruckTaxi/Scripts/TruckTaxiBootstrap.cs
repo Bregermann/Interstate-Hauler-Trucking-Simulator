@@ -53,14 +53,30 @@ namespace LWS.TruckTaxi
             if (LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsSaveService careerSave))
             { Debug.LogError("Truck Taxi requires the drivingSandbox bootstrap to protect career saves.",this); yield break; }
             LwsApplicationBootstrap.Instance.Registry.TryGet(out gameplay);
+            var regional = GetComponent<TruckTaxiRegionalWorld>();
+            if (regional != null)
+            {
+                yield return regional.PrepareInitialWorld(playerSpawn.position);
+                if (!regional.InitialWorldReady) yield break;
+            }
             Player = spawner.SpawnValidationRig();
             if (Player == null) yield break;
             body = Player.GetComponent<Rigidbody>();
+            regional?.BindPlayer(Player.transform);
             locations = FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None);
             System.Array.Sort(locations,(a,b)=>string.CompareOrdinal(a.locationId,b.locationId));
             resetTargets = FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None);
             RouteDistances = new TruckTaxiRouteDistanceService(roadGraph.Graph);
             Session = new TruckTaxiSession(configuration,locations,Random.Range(1,int.MaxValue),RouteDistances,()=>body.position);
+            if (regional != null) Session.RegionResolver = regional.ResolveRegion;
+            if (regional != null)
+            {
+                traffic.SetRegionAvailability(regional.IsPositionAvailable);
+                pedestrians.SetRegionAvailability(regional.IsPositionAvailable);
+                pedestrians.RegisterLogicalRegion("taxi.town01", new Bounds(Vector3.zero,new Vector3(700,20,700)));
+                pedestrians.RegisterLogicalRegion("taxi.town02", new Bounds(new Vector3(4000,0,0),new Vector3(700,20,700)));
+                regional.AvailabilityChanged += OnRegionalAvailabilityChanged;
+            }
             GPS = gameObject.AddComponent<TruckTaxiGPSAdapter>(); GPS.Initialize(Player.transform,roadGraph);
             var sensor = Player.GetComponent<TruckTaxiCollisionObserver>() ?? Player.gameObject.AddComponent<TruckTaxiCollisionObserver>();
             sensor.Initialize(this);
@@ -92,6 +108,7 @@ namespace LWS.TruckTaxi
             Fuel=GetComponent<TruckTaxiFuelController>() ?? gameObject.AddComponent<TruckTaxiFuelController>();
             Fuel.Initialize(this);
             GPS.ConfigureDemoPresentation();
+            regional?.RegisterMapMetadata(GPS.MapMarkers);
             Passengers=gameObject.AddComponent<TruckTaxiPassengerRuntime>(); Passengers.Initialize(this);
             PickupZone=gameObject.AddComponent<TruckTaxiPickupZoneVisualizer>(); PickupZone.Initialize(this);
             OptionalStops=gameObject.AddComponent<TruckTaxiOptionalStops>(); OptionalStops.Initialize(this);
@@ -279,6 +296,15 @@ namespace LWS.TruckTaxi
                 if(target!=null && target.isActiveAndEnabled && target.kind==TaxiImpactKind.Property && !target.Damaged) props++;
             caps.Register(TruckTaxiObjectiveCapability.DestructibleProps,props);
         }
+        private void OnRegionalAvailabilityChanged()
+        {
+            pedestrians.NotifyRegionChanged();
+            if (!Ready) return;
+            resetTargets = FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None);
+            RebuildObjectiveCapabilities();
+            GetComponent<TruckTaxiSnowSurface>()?.RefreshStreamedSurfaces();
+            GPS?.MapMarkers?.RefreshStreamedContent();
+        }
         private int AvailablePedestrians()
         {
             int count=0;
@@ -289,6 +315,8 @@ namespace LWS.TruckTaxi
         private void OnDestroy()
         {
             if(Instance != this) return;
+            var regional = GetComponent<TruckTaxiRegionalWorld>();
+            if (regional != null) regional.AvailabilityChanged -= OnRegionalAvailabilityChanged;
             Time.timeScale = 1;
             if(Session!=null) { Session.Changed-=OnSessionChanged; Session.RequestResolved-=OnRequestResolved; Session.RequestCreated-=OnRequestCreated; Session.DrivingEvent-=OnDrivingEvent; }
             Instance = null;

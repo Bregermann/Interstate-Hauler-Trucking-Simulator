@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using LWS.InterstateHauler;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace LWS.TruckTaxi
 {
@@ -18,6 +19,18 @@ namespace LWS.TruckTaxi
         }
         public TruckTaxiMapIconRegistry Registry => registry;
         private readonly Dictionary<string,TruckTaxiMapMarker> byId=new Dictionary<string,TruckTaxiMapMarker>(StringComparer.Ordinal);
+        public readonly struct RegionalPoint
+        {
+            public readonly string Id,Label,Kind;
+            public readonly Vector3 Position;
+            public readonly TruckTaxiMapMarkerType IconType;
+            public readonly bool Routeable;
+            public RegionalPoint(string id,string label,string kind,Vector3 position,TruckTaxiMapMarkerType iconType,bool routeable)
+            { Id=id; Label=label; Kind=kind; Position=position; IconType=iconType; Routeable=routeable; }
+        }
+        private readonly Dictionary<string,RegionalPoint> regionalPoints=new Dictionary<string,RegionalPoint>(StringComparer.Ordinal);
+        private readonly HashSet<string> syntheticRegionalIds=new HashSet<string>(StringComparer.Ordinal);
+        public IReadOnlyCollection<RegionalPoint> RegionalPoints => regionalPoints.Values;
         private readonly HashSet<string> completed=new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> discovered=new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> warnedDuplicates=new HashSet<string>(StringComparer.Ordinal);
@@ -25,6 +38,7 @@ namespace LWS.TruckTaxi
         private readonly List<TruckTaxiMapMarker> stops=new List<TruckTaxiMapMarker>(),shortcuts=new List<TruckTaxiMapMarker>(),impacts=new List<TruckTaxiMapMarker>();
         private readonly List<TruckTaxiImpactTarget> propertyTargets=new List<TruckTaxiImpactTarget>();
         private TruckTaxiBootstrap host;
+        private TruckTaxiRegionalWorld regionalWorld;
         private TruckTaxiGPSAdapter gps;
         private CompassApi api;
         private Transform markerRoot,legacyRoot;
@@ -32,6 +46,8 @@ namespace LWS.TruckTaxi
         private bool dirty;
         private Component endpoint;
         private TruckTaxiMapMarker serviceTarget;
+        private TruckTaxiMapMarkerState serviceTargetOriginalState;
+        private bool serviceTargetReused;
         private string presentationRide;
         private const string DiscoveryPrefix="TruckTaxi.Map.Shortcut.v1.";
 
@@ -40,7 +56,7 @@ namespace LWS.TruckTaxi
             if(host!=null || value?.Session==null || value.Player==null) return;
             registry=registry!=null ? registry : Resources.Load<TruckTaxiMapIconRegistry>(TruckTaxiMapIconRegistry.ResourcePath);
             if(registry==null) { Debug.LogError("Truck Taxi map icons missing. Run TruckTaxiMapIconSetup.EnsureAssets before building.",this); return; }
-            host=value; gps=adapter;
+            host=value; gps=adapter; regionalWorld=host.GetComponent<TruckTaxiRegionalWorld>();
             api=new CompassApi(gps.CabCompass ?? gps.HudCompass);
             if(!api.Available) { Debug.LogError("Truck Taxi markers require the existing CompassProPOI public API.",this); return; }
             markerRoot=new GameObject("Truck Taxi typed Compass POIs").transform; markerRoot.SetParent(transform,false);
@@ -49,18 +65,11 @@ namespace LWS.TruckTaxi
             // One initialization inventory. Moving markers follow cached transforms; no scene scans in Update.
             foreach(var authored in FindObjectsByType<TruckTaxiMapMarker>(FindObjectsSortMode.None))
                 if(authored.gameObject.scene==host.gameObject.scene) Register(authored);
+            foreach(var point in regionalPoints.Values) EnsureRegionalPoint(point);
             foreach(var stop in FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None))
                 if(stop.gameObject.scene==host.gameObject.scene && stop.isActiveAndEnabled)
                     stops.Add(Ensure(stop.stableId,stop.displayName,TruckTaxiMapIconRegistry.ForStop(stop.category),stop.transform,stop.Position));
-            foreach(var shortcut in FindObjectsByType<ShortcutTrigger>(FindObjectsSortMode.None))
-            {
-                if(shortcut.gameObject.scene!=host.gameObject.scene || !shortcut.isActiveAndEnabled || shortcut.scenicPoint || string.IsNullOrEmpty(shortcut.shortcutId)) continue;
-                shortcuts.Add(Ensure(shortcut.shortcutId,shortcut.displayName,TruckTaxiMapMarkerType.Shortcut,shortcut.transform,shortcut.transform.position));
-                if(PlayerPrefs.GetInt(DiscoveryPrefix+shortcut.shortcutId,0)!=0) discovered.Add(shortcut.shortcutId);
-                (shortcut.GetComponent<TruckTaxiShortcutMapDiscovery>() ?? shortcut.gameObject.AddComponent<TruckTaxiShortcutMapDiscovery>()).Initialize(shortcut,this);
-            }
-            foreach(var target in FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None))
-                if(target.gameObject.scene==host.gameObject.scene && target.kind==TaxiImpactKind.Property) propertyTargets.Add(target);
+            RefreshStreamedContent();
             host.Session.Changed+=RequestRefresh; host.Session.DestinationChanged+=RequestRefresh;
             host.Session.RequestCreated+=OnRequest; host.Session.RequestResolved+=OnRequest;
             ConfigureCompass(gps.CabCompass); ConfigureCompass(gps.HudCompass);
@@ -80,6 +89,83 @@ namespace LWS.TruckTaxi
                 }
             }
             byId.Add(marker.stableId,marker); markers.Add(marker); marker.Owner=this; dirty=true; return true;
+        }
+        // Parent calls on regional AvailabilityChanged. Only known additive scenes and the host
+        // are inventoried; this method never requests a scene load or scans every frame.
+        public void RefreshStreamedContent()
+        {
+            if(host==null || markerRoot==null) return;
+            for(int i=shortcuts.Count-1;i>=0;i--)
+            {
+                var marker=shortcuts[i];
+                if(marker!=null && marker.source!=null && AllowedScene(marker.source.gameObject.scene)) continue;
+                shortcuts.RemoveAt(i);
+                if(marker==null) continue;
+                Unregister(marker);
+                if(Application.isPlaying) Destroy(marker.gameObject); else DestroyImmediate(marker.gameObject);
+            }
+            propertyTargets.RemoveAll(target=>target==null || !AllowedScene(target.gameObject.scene));
+            foreach(var scene in AllowedScenes()) foreach(var root in scene.GetRootGameObjects())
+            {
+                foreach(var shortcut in root.GetComponentsInChildren<ShortcutTrigger>(true))
+                {
+                    if(!shortcut.isActiveAndEnabled || shortcut.scenicPoint || string.IsNullOrEmpty(shortcut.shortcutId)) continue;
+                    var marker=Ensure(shortcut.shortcutId,shortcut.displayName,TruckTaxiMapMarkerType.Shortcut,shortcut.transform,shortcut.transform.position);
+                    if(marker==null) continue;
+                    if(PlayerPrefs.GetInt(DiscoveryPrefix+shortcut.shortcutId,0)!=0) discovered.Add(shortcut.shortcutId);
+                    marker.markerType=discovered.Contains(shortcut.shortcutId) ? TruckTaxiMapMarkerType.DiscoveredShortcut : TruckTaxiMapMarkerType.Shortcut;
+                    if(!shortcuts.Contains(marker)) shortcuts.Add(marker);
+                    (shortcut.GetComponent<TruckTaxiShortcutMapDiscovery>() ?? shortcut.gameObject.AddComponent<TruckTaxiShortcutMapDiscovery>()).Initialize(shortcut,this);
+                }
+                foreach(var target in root.GetComponentsInChildren<TruckTaxiImpactTarget>(true))
+                    if(target.isActiveAndEnabled && target.kind==TaxiImpactKind.Property && !propertyTargets.Contains(target)) propertyTargets.Add(target);
+            }
+            dirty=true; nextTrafficRefresh=0;
+        }
+        private IEnumerable<Scene> AllowedScenes()
+        {
+            var home=host.gameObject.scene;
+            if(home.IsValid() && home.isLoaded) yield return home;
+            if(regionalWorld==null) yield break;
+            foreach(var region in regionalWorld.regions)
+            {
+                if(region==null || string.IsNullOrEmpty(region.sceneName)) continue;
+                var scene=SceneManager.GetSceneByName(region.sceneName);
+                if(scene.IsValid() && scene.isLoaded && scene!=home) yield return scene;
+            }
+        }
+        private bool AllowedScene(Scene scene)
+        {
+            if(!scene.IsValid() || !scene.isLoaded) return false;
+            if(scene==host.gameObject.scene) return true;
+            if(regionalWorld==null) return false;
+            foreach(var region in regionalWorld.regions)
+                if(region!=null && region.sceneName==scene.name) return true;
+            return false;
+        }
+        // Registration is metadata-only until initialization; it never asks Scene Streamer to load a chunk.
+        public bool RegisterRegionalPoint(string id,string label,string kind,Vector3 position,TruckTaxiMapMarkerType iconType,bool routeable=false)
+        {
+            if(string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(label) || regionalPoints.ContainsKey(id)) return false;
+            var point=new RegionalPoint(id,label,kind,position,iconType,routeable);
+            regionalPoints.Add(id,point);
+            if(markerRoot!=null) EnsureRegionalPoint(point);
+            dirty=true;
+            return true;
+        }
+        public bool UnregisterRegionalPoint(string id)
+        {
+            if(!regionalPoints.Remove(id)) return false;
+            if(syntheticRegionalIds.Remove(id) && byId.TryGetValue(id,out var marker) && marker!=null)
+            { Unregister(marker); if(Application.isPlaying) Destroy(marker.gameObject); else DestroyImmediate(marker.gameObject); }
+            dirty=true;
+            return true;
+        }
+        private void EnsureRegionalPoint(RegionalPoint point)
+        {
+            if(byId.ContainsKey(point.Id)) return;
+            var marker=Ensure(point.Id,point.Label,point.IconType,null,point.Position);
+            if(marker!=null) { marker.state=TruckTaxiMapMarkerState.Known; syntheticRegionalIds.Add(point.Id); }
         }
         public bool Unregister(TruckTaxiMapMarker marker)
         {
@@ -157,12 +243,21 @@ namespace LWS.TruckTaxi
         {
             ClearServiceTarget();
             if(markerRoot==null) return;
-            serviceTarget=Ensure(id,label,TruckTaxiMapMarkerType.Bathroom,null,position);
+            serviceTargetReused=byId.TryGetValue(id,out var previous) && previous!=null;
+            if(serviceTargetReused)
+                serviceTargetOriginalState=previous.state;
+            serviceTarget=serviceTargetReused ? previous : Ensure(id,label,TruckTaxiMapMarkerType.Bathroom,null,position);
             if(serviceTarget!=null) serviceTarget.state=TruckTaxiMapMarkerState.Active;
             dirty=true;
         }
         public void ClearServiceTarget()
-        { if(serviceTarget!=null) serviceTarget.state=TruckTaxiMapMarkerState.Hidden; serviceTarget=null; dirty=true; }
+        {
+            if(serviceTarget!=null)
+            {
+                serviceTarget.state=serviceTargetReused ? serviceTargetOriginalState : TruckTaxiMapMarkerState.Hidden;
+            }
+            serviceTarget=null; serviceTargetReused=false; dirty=true;
+        }
         private void LateUpdate()
         {
             if(host==null || api==null || !api.Available) return;
@@ -226,7 +321,7 @@ namespace LWS.TruckTaxi
                 bool visible=marker.state!=TruckTaxiMapMarkerState.Hidden && marker.isActiveAndEnabled &&
                     (marker.source==null || marker.source.gameObject.activeInHierarchy) &&
                     (marker.markerType!=TruckTaxiMapMarkerType.Debug || registry.showDebugPoints) &&
-                    (important || (nearby.IndexOf(marker)<registry.maximumNearbyPoints &&
+                    (important || gps.FullMapOpen || (nearby.IndexOf(marker)<registry.maximumNearbyPoints &&
                         (marker.Position-host.Player.transform.position).sqrMagnitude<=registry.nearbyPointRange*registry.nearbyPointRange));
                 bool borrowed=endpoint!=null && marker.stableId==gps.TargetId;
                 var poi=marker.CompassPoi;

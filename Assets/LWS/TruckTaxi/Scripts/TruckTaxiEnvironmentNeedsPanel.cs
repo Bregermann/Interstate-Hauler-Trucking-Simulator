@@ -15,10 +15,13 @@ namespace LWS.TruckTaxi
         private TruckTaxiHud hud;
         private TruckTaxiEnvironmentCoordinator environment;
         private TruckTaxiDriverNeedsCoordinator needs;
-        private RectTransform panel, driverPage, environmentPage, storePage, inventoryPage, servicesPage, towPage, jugPanel, jugFill, bladderFill;
+        private RectTransform panel, driverPage, environmentPage, storePage, inventoryPage, servicesPage, towPage, jugPanel, jugFill;
         private TextMeshProUGUI serviceStatus, towText;
         private TextMeshProUGUI[] rideRequestsLabels;
-        private TextMeshProUGUI clockText, meterText, needText, jugText, debugText, environmentText, inventoryText, storeText, storeFeedback;
+        private TextMeshProUGUI clockText, needText, jugText, debugText, environmentText, inventoryText, storeText, storeFeedback;
+        private readonly UnityEngine.UI.Image[] needFills = new UnityEngine.UI.Image[3];
+        private readonly TextMeshProUGUI[] needLabels = new TextMeshProUGUI[3];
+        private static readonly string[] NeedNames = { "BLADDER", "HUNGER", "THIRST" };
         private CanvasGroup bandGroup;
         private readonly List<Action> refreshControls = new List<Action>();
         private readonly List<UnityEngine.UI.Selectable> startJugControls = new List<UnityEngine.UI.Selectable>();
@@ -36,15 +39,21 @@ namespace LWS.TruckTaxi
         {
             if (panel != null || view.Root == null || driver.State == null) return;
             host = owner; hud = view; environment = weather; needs = driver;
-            var band = hud.Panel(hud.Root, "Taxi time and driver needs", new Vector2(.36f, .932f), new Vector2(.72f, .994f));
+            var band = hud.Panel(hud.Root, "Taxi time and driver needs", new Vector2(.32f, .932f), new Vector2(.76f, .994f));
             bandGroup = band.gameObject.AddComponent<CanvasGroup>();
-            clockText = hud.Text(band, "Game time", new Vector2(.025f, .12f), new Vector2(.29f, .95f), 20);
-            meterText = hud.Text(band, "Driver needs", new Vector2(.30f, .23f), new Vector2(.75f, .98f), 17);
-            var bladderTrack = TruckTaxiHud.Rect(band, "Bladder track", new Vector2(.30f, .10f), new Vector2(.74f, .18f));
-            bladderTrack.gameObject.AddComponent<UnityEngine.UI.Image>().color = new Color(.25f, .28f, .29f);
-            bladderFill = TruckTaxiHud.Rect(bladderTrack, "Bladder fill", Vector2.zero, new Vector2(.01f, 1));
-            bladderFill.gameObject.AddComponent<UnityEngine.UI.Image>().color = new Color(.33f, .8f, .62f);
-            hud.Button(band, "NEEDS", new Vector2(.77f, .12f), new Vector2(.985f, .88f), Open);
+            clockText = hud.Text(band, "Game time", new Vector2(.025f, .12f), new Vector2(.22f, .95f), 18);
+            for (int i = 0; i < NeedNames.Length; i++)
+            {
+                float left = .235f + i * .19f;
+                var cell = TruckTaxiHud.Rect(band, NeedNames[i], new Vector2(left, .08f), new Vector2(left + .18f, .92f));
+                needLabels[i] = hud.Text(cell, NeedNames[i] + " label", new Vector2(0, .45f), Vector2.one, 16);
+                var needTrack = TruckTaxiHud.Rect(cell, NeedNames[i] + " track", new Vector2(0, .12f), new Vector2(1, .36f));
+                needTrack.gameObject.AddComponent<UnityEngine.UI.Image>().color = new Color(.25f, .28f, .29f);
+                needFills[i] = TruckTaxiHud.Rect(needTrack, NeedNames[i] + " fill", Vector2.zero, new Vector2(.01f, 1))
+                    .gameObject.AddComponent<UnityEngine.UI.Image>();
+                needFills[i].raycastTarget = false;
+            }
+            hud.Button(band, "NEEDS", new Vector2(.82f, .12f), new Vector2(.985f, .88f), Open);
             panel = hud.Panel(hud.Root, "Driver needs and environment", new Vector2(.14f, .19f), new Vector2(.72f, .91f));
             driverPage = TruckTaxiHud.Rect(panel, "Driver needs page", Vector2.zero, Vector2.one);
             environmentPage = TruckTaxiHud.Rect(panel, "Development environment page", Vector2.zero, Vector2.one);
@@ -253,8 +262,7 @@ namespace LWS.TruckTaxi
         private void Update()
         {
             if (panel == null) return;
-            bandGroup.interactable = bandGroup.blocksRaycasts = !host.Paused;
-            jugPanel.gameObject.SetActive(needs.JugActive && !host.Paused);
+            RefreshDebugVisibility();
             if (needs.JugActive)
             {
                 jugFill.anchorMax = new Vector2(Mathf.Max(.001f, needs.State.JugProgress), 1);
@@ -264,17 +272,25 @@ namespace LWS.TruckTaxi
             if (Time.unscaledTime < nextRefresh) return;
             nextRefresh = Time.unscaledTime + .15f; Refresh();
         }
+        public void RefreshDebugVisibility()
+        {
+            if (bandGroup == null) return;
+            bandGroup.alpha = hud.NormalHudSuppressed ? 0 : 1;
+            bandGroup.interactable = bandGroup.blocksRaycasts = !host.Paused && !hud.NormalHudSuppressed;
+            jugPanel.gameObject.SetActive(needs.JugActive && !host.Paused && !hud.NormalHudSuppressed);
+        }
         private void Refresh()
         {
             if (panel == null) return;
             var state = needs.State; var clock = environment.Clock.CurrentSnapshot;
             clockText.text = clock.ClockText + "\n" + environment.Period.ToString().ToUpperInvariant();
-            meterText.color = state.StrangeUiSeconds > 0 ? new Color(.95f, .4f, .85f) :
-                state.ArcadeRushSeconds > 0 ? new Color(1f, .86f, .25f) : new Color(.96f, .96f, .91f);
-            meterText.text = "BLADDER " + (state.Pressure * 100).ToString("0") + "%\nHUNGER " +
-                (state.Hunger * 100).ToString("0") + "%   THIRST " + (state.Thirst * 100).ToString("0") + "%";
-            bladderFill.anchorMax = new Vector2(Mathf.Max(.005f, state.Pressure), 1);
-            bladderFill.GetComponent<UnityEngine.UI.Image>().color = state.Pressure >= .85f ? new Color(1, .35f, .25f) : new Color(.3f, .8f, .6f);
+            for (int i = 0; i < needFills.Length; i++)
+            {
+                float value = Mathf.Clamp01(i == 0 ? state.Pressure : i == 1 ? state.Hunger : state.Thirst);
+                needLabels[i].text = NeedNames[i] + " " + (value * 100).ToString("0") + "%";
+                needFills[i].rectTransform.anchorMax = new Vector2(Mathf.Max(.005f, value), 1);
+                needFills[i].color = value >= .85f ? new Color(1, .35f, .25f) : new Color(.3f, .8f, .6f);
+            }
             if (!IsOpen) return;
             serviceStatus.text = (host.Roadside?.Diagnostics ?? "Vehicle initializing") + "\n" + needs.Feedback;
             if (rideRequestsLabels != null)

@@ -31,6 +31,8 @@ namespace LWS.TruckTaxi
         private System.Reflection.PropertyInfo followOffsetProperty;
         private Vector3 previewCenter;
         private bool previewing;
+        private bool fullMapOpen, transientHudHidden;
+        private int regularCanvasOrder;
         private RectTransform cabMapRect,hudMapRect;
         private Vector2 lastCabMapSize,lastHudMapSize;
         // Vendor "pixel" widths are local UI units, not final display pixels. A 240-unit
@@ -40,6 +42,7 @@ namespace LWS.TruckTaxi
         public Component CabCompass => cabCompass;
         public Component HudCompass => previewCompass;
         public bool HudVisible => DisplaySettings != null && DisplaySettings.showHud;
+        public bool FullMapOpen => fullMapOpen;
         public event System.Action DisplaySettingsChanged;
         public RectTransform DashboardScreen { get; private set; }
         public TruckTaxiMapMarkers MapMarkers { get; private set; }
@@ -92,10 +95,13 @@ namespace LWS.TruckTaxi
                 if (canvas.renderMode == RenderMode.ScreenSpaceOverlay)
                 {
                     previewCompass=component; previewCanvas=canvas;
+                    // Compass gates its parent CanvasGroup through this public interaction setting.
+                    Set(component,"miniMapIconEvents",true);
                     previewCameraField=type.GetField("miniMapCamera");
                     followOffsetProperty=type.GetProperty("miniMapFollowOffset");
                     // Below the existing taxi menus, but visible in every driving camera.
                     canvas.sortingOrder=850;
+                    regularCanvasOrder=canvas.sortingOrder;
                     SetEnum(component,"miniMapLocation","BottomLeft");
                     Set(component,"miniMapLocationOffset",new Vector2(28,220));
                 }
@@ -126,7 +132,13 @@ namespace LWS.TruckTaxi
             rect.sizeDelta=dashboardScreenPixels;
             if(rect!=DashboardScreen) { rect.anchoredPosition3D=Vector3.zero; rect.localScale=Vector3.one; }
         }
-        internal static void Set(Component component,string property,object value) => component.GetType().GetProperty(property)?.SetValue(component,value);
+        internal static void Set(Component component,string property,object value)
+        {
+            var type=component.GetType();
+            var member=type.GetProperty(property);
+            if(member!=null) member.SetValue(component,value);
+            else type.GetField(property)?.SetValue(component,value);
+        }
         private static void SetEnum(Component component,string property,string value)
         {
             var info=component.GetType().GetProperty(property);
@@ -164,12 +176,12 @@ namespace LWS.TruckTaxi
             if(previewCompass!=null)
             {
                 Set(previewCompass,"miniMapSize",DisplaySettings.hudSize);
-                if(!previewing) followOffsetProperty?.SetValue(previewCompass,Vector3.zero);
+                if(!previewing && !fullMapOpen) followOffsetProperty?.SetValue(previewCompass,Vector3.zero);
                 // Offer preview keeps using this camera even when the player's HUD is off.
                 // Only suppress the duplicate canvas while that modal map owns the texture.
-                previewCanvas.enabled=!previewing;
+                previewCanvas.enabled=fullMapOpen || (!previewing && !transientHudHidden);
             }
-            cameraPresentation?.SetGpsPresentationPolicy(previewing || DisplaySettings.showHud
+            cameraPresentation?.SetGpsPresentationPolicy(fullMapOpen || previewing || (DisplaySettings.showHud && !transientHudHidden)
                 ? LwsGpsPresentationPolicy.ForceHudMinimapOn : LwsGpsPresentationPolicy.ForceHudMinimapOff);
             RefreshMapElementSizing(true);
             if(save) DisplaySettings.Save();
@@ -181,7 +193,7 @@ namespace LWS.TruckTaxi
             if(!offer) Set(compass,"miniMapCaptureSize",range);
             Set(compass,"miniMapKeepStraight",offer || DisplaySettings.northUp);
             Set(compass,"miniMapShowPlayerIcon",!offer);
-            Set(compass,"miniMapShowPOIs",!offer && DisplaySettings.showPois);
+            Set(compass,"miniMapShowPOIs",!offer && (fullMapOpen || DisplaySettings.showPois));
             Set(compass,"showRoute",true);
             Set(compass,"routeShowOnMiniMap",true);
             Set(compass,"routeColor",DisplaySettings.RouteColor);
@@ -206,6 +218,14 @@ namespace LWS.TruckTaxi
             if(scale<=0) return;
             priorSize=size;
             Set(compass,"routeWidth",DisplaySettings.routeWidth*scale);
+            if(compass==previewCompass && fullMapOpen)
+            {
+                // Regional markers stay legible without occupying 8% of the enlarged map each.
+                Set(compass,"routeWidth",Mathf.Clamp(DisplaySettings.routeWidth,2,8));
+                Set(compass,"miniMapIconSize",1f);
+                Set(compass,"miniMapPlayerIconSize",2f);
+                return;
+            }
             // Vendor POI rects are 24 units; its player arrow is 12. Match their base size.
             Set(compass,"miniMapIconSize",.8f*scale);
             Set(compass,"miniMapPlayerIconSize",1.6f*scale);
@@ -222,6 +242,66 @@ namespace LWS.TruckTaxi
             // Compare cached rects only; reapply after vendor layout/resolution changes, not every frame.
             RefreshMapElementSizing();
             if(HasReachedServiceDestination) ClearDestination();
+        }
+        // Temporary overlay ownership, deliberately independent of the persisted GPS preference.
+        public void SetHudTemporarilyHidden(bool hidden)
+        { transientHudHidden=hidden; ApplyDisplaySettings(false); }
+        public bool SetFullMapOpen(bool open,float regionSpan=1500f,Vector3? center=null)
+        {
+            if(previewCompass==null || previewCanvas==null || player==null || (open && previewing)) return false;
+            if(fullMapOpen==open) return true;
+            if(open)
+            {
+                Set(previewCompass,"miniMapFullScreenWorldCenter",center ?? player.position);
+                Set(previewCompass,"miniMapFullScreenWorldSize",new Vector3(Mathf.Max(500,regionSpan),0,Mathf.Max(500,regionSpan)));
+                Set(previewCompass,"miniMapFollowOffset",Vector3.zero);
+                Set(previewCompass,"miniMapFullScreenAllowUserDrag",true);
+                Set(previewCompass,"miniMapFullScreenAutoResetDrag",false);
+                Set(previewCompass,"miniMapFullScreenClampToWorldEdges",false);
+                Set(previewCompass,"miniMapFullScreenDragMaxDistance",100000f);
+                Set(previewCompass,"miniMapFullScreenFreezeCamera",false);
+                Set(previewCompass,"miniMapFullScreenWorldCenterFollows",false);
+                Set(previewCompass,"miniMapFullScreenSize",1f);
+                Set(previewCompass,"miniMapKeepAspectRatio",false);
+                SetEnum(previewCompass,"miniMapFullScreenContents","TopDownWorldView");
+                Set(previewCompass,"miniMapFullScreenZoomLevel",1f);
+            }
+            Set(previewCompass,"miniMapFullScreenState",open);
+            fullMapOpen=open;
+            previewCanvas.sortingOrder=open ? 910 : regularCanvasOrder;
+            ApplyDisplaySettings(false);
+            MapMarkers?.RequestRefresh();
+            return true;
+        }
+        public void CenterFullMapOnPlayer()
+        {
+            if(!fullMapOpen || previewCompass==null || player==null) return;
+            Set(previewCompass,"miniMapFullScreenWorldCenter",player.position);
+            Set(previewCompass,"miniMapFollowOffset",Vector3.zero);
+        }
+        public void PanFullMap(Vector2 direction,float unscaledSeconds)
+        {
+            if(!fullMapOpen || previewCompass==null) return;
+            var offset=followOffsetProperty?.GetValue(previewCompass) is Vector3 value ? value : Vector3.zero;
+            offset+=new Vector3(direction.x,0,direction.y)*Mathf.Max(1,FullMapSpan)*.45f*unscaledSeconds;
+            followOffsetProperty?.SetValue(previewCompass,offset);
+        }
+        public void ZoomFullMap(float steps)
+        {
+            if(!fullMapOpen || previewCompass==null || Mathf.Approximately(steps,0)) return;
+            var property=previewCompass.GetType().GetProperty("miniMapFullScreenZoomLevel");
+            if(property==null) return;
+            var zoom=(float)property.GetValue(previewCompass);
+            property.SetValue(previewCompass,Mathf.Clamp(zoom*Mathf.Pow(1.2f,steps),.12f,1.5f));
+        }
+        public float FullMapSpan => previewCompass?.GetType().GetProperty("miniMapFullScreenWorldSize")?.GetValue(previewCompass) is Vector3 size ? size.x : 1500f;
+        public bool CanSetMapServiceDestination => target==null && stopTarget==null &&
+            string.IsNullOrEmpty(GetComponent<TruckTaxiBootstrap>()?.Session?.CurrentRideId);
+        public bool TrySetMapServiceDestination(string id,string label,Vector3 position)
+        {
+            if(!CanSetMapServiceDestination || string.IsNullOrWhiteSpace(id) || navigation==null || graph==null || player==null) return false;
+            SetServiceDestination(id,label,position);
+            return true;
         }
         private void OnDestroy()
         {

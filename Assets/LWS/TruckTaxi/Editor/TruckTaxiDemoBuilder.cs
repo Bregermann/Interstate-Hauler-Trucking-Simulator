@@ -239,23 +239,32 @@ namespace LWS.TruckTaxi.Editor
 
         private static void BakeEasyRoads(Transform parent)
         {
+            var lines = new List<Vector3[]>();
+            for (int i = 0; i < 5; i++)
+            {
+                float coordinate = -320 + i * 160;
+                foreach (bool vertical in new[] { false, true })
+                    lines.Add(Enumerable.Range(0, 5).Select(n => vertical ? new Vector3(coordinate, .12f, -360 + n * 180) : new Vector3(-360 + n * 180, .13f, coordinate)).ToArray());
+            }
+            BakeRegionalRoads(parent, lines, 20, "Road", asphalt, Root + "/DemoContent/Meshes");
+        }
+
+        public static void BakeRegionalRoads(Transform parent, List<Vector3[]> lines, float width, string key, Material roadMaterial, string folder)
+        {
             var before=new HashSet<int>(Object.FindObjectsByType<MeshFilter>(FindObjectsSortMode.None).Select(m=>m.GetInstanceID()));
             var rootsBefore=new HashSet<int>(SceneManager.GetActiveScene().GetRootGameObjects().Select(o=>o.GetInstanceID()));
             Type networkType=Resolve("EasyRoads3Dv3.ERRoadNetwork"), roadType=Resolve("EasyRoads3Dv3.ERRoadType");
             object network=Construct(networkType), type=Construct(roadType);
-            Member(type,"roadTypeName","Truck Taxi Streets"); Member(type,"roadWidth",20f); Member(type,"roadMaterial",asphalt);
+            var createdRoads = new List<object>();
+            Member(type,"roadTypeName","Truck Taxi Streets"); Member(type,"roadWidth",width); Member(type,"roadMaterial",roadMaterial);
             Member(type,"hasMeshCollider",true); Member(type,"layer",0); Member(type,"tag","Untagged");
-            for(int i=0;i<5;i++)
+            for(int i=0;i<lines.Count;i++)
             {
-                float coordinate=-320+i*160;
-                foreach(bool vertical in new[]{false,true})
-                {
-                    Vector3[] markers=Enumerable.Range(0,5).Select(n=>vertical?new Vector3(coordinate,.12f,-360+n*180):new Vector3(-360+n*180,.13f,coordinate)).ToArray();
-                    object road=Call(network,"CreateRoad","Taxi Street "+i+(vertical?" N":" E"),type,markers);
+                    object road=Call(network,"CreateRoad",key+" "+i,type,lines[i]);
+                    createdRoads.Add(road);
                     Call(road,"SetMeshCollider",true);
                     Call(road,"SetTerrainDeformation",false);
                     Call(road,"SnapToTerrain",false);
-                }
             }
             Call(network,"BuildRoadNetwork",false,false,false);
             var baked=new GameObject("EasyRoads Baked City Streets"); baked.transform.SetParent(parent,false);
@@ -264,14 +273,18 @@ namespace LWS.TruckTaxi.Editor
             {
                 if(before.Contains(source.GetInstanceID()) || source.sharedMesh==null || source.GetComponent<MeshCollider>()==null) continue;
                 var mesh=Object.Instantiate(source.sharedMesh); mesh.name="Taxi Road "+index;
-                string path=Root+"/DemoContent/Meshes/Road_"+index+".asset";
+                string path=folder+"/"+key+"_"+index+".asset";
                 var existing=AssetDatabase.LoadAssetAtPath<Mesh>(path);
                 if(existing!=null) { EditorUtility.CopySerialized(mesh,existing); Object.DestroyImmediate(mesh); mesh=existing; }
                 else AssetDatabase.CreateAsset(mesh,path);
                 var go=new GameObject(mesh.name,typeof(MeshFilter),typeof(MeshRenderer),typeof(MeshCollider));
                 go.transform.SetParent(baked.transform,false); go.transform.SetPositionAndRotation(source.transform.position,source.transform.rotation); go.transform.localScale=source.transform.lossyScale;
-                go.GetComponent<MeshFilter>().sharedMesh=mesh; go.GetComponent<MeshRenderer>().sharedMaterial=asphalt; go.GetComponent<MeshCollider>().sharedMesh=mesh; index++;
+                go.GetComponent<MeshFilter>().sharedMesh=mesh; go.GetComponent<MeshRenderer>().sharedMaterial=roadMaterial; go.GetComponent<MeshCollider>().sharedMesh=mesh;
+                go.AddComponent<TruckTaxiSurface>().isRoad=true; index++;
+                go.AddComponent<LwsRoadSurface>().Configure(key,key+"."+index,LwsRoadSurfaceType.AsphaltInterstate,key);
             }
+            // ERRoadNetwork can reuse an existing authored network. Remove only roads from this bake.
+            foreach(var road in createdRoads) Call(road,"Destroy");
             foreach(var go in SceneManager.GetActiveScene().GetRootGameObjects()) if(!rootsBefore.Contains(go.GetInstanceID()) && go!=baked) Object.DestroyImmediate(go);
             if(index==0) throw new InvalidOperationException("EasyRoads generated no collidable road meshes.");
             Debug.Log("Truck Taxi baked "+index+" EasyRoads meshes.");
@@ -493,7 +506,7 @@ namespace LWS.TruckTaxi.Editor
             if(!File.Exists(ScenePath)) throw new InvalidOperationException("Create the Truck Taxi scene first.");
             Directory.CreateDirectory("Builds/TruckTaxiDemo");
             var report=BuildPipeline.BuildPlayer(new BuildPlayerOptions {
-                scenes=new[]{EditorTruckTaxiMainMenuSetup.ScenePath,ScenePath}, locationPathName="Builds/TruckTaxiDemo/TruckTaxi.exe",
+                scenes=new[]{EditorTruckTaxiMainMenuSetup.ScenePath,ScenePath}.Concat(TruckTaxiRegionalAuthoring.RegionScenePaths).ToArray(), locationPathName="Builds/TruckTaxiDemo/TruckTaxi.exe",
                 target=BuildTarget.StandaloneWindows64, options=BuildOptions.Development
             });
             Debug.Log("TRUCK TAXI BUILD: "+report.summary.result+" / "+report.summary.totalSize+" bytes / "+report.summary.totalErrors+" errors");

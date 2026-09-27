@@ -18,7 +18,7 @@ namespace LWS.TruckTaxi
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void LaunchIfRequested()
         {
-            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke" || a=="-truck-taxi-objective-smoke" || a=="-truck-taxi-population-smoke" || a=="-truck-taxi-systems-smoke" || a=="-truck-taxi-steering-smoke" || a=="-truck-taxi-integrated-smoke")) return;
+            if(Application.isEditor || !Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-smoke" || a=="-truck-taxi-pedestrian-smoke" || a=="-truck-taxi-objective-smoke" || a=="-truck-taxi-population-smoke" || a=="-truck-taxi-systems-smoke" || a=="-truck-taxi-steering-smoke" || a=="-truck-taxi-integrated-smoke" || a=="-truck-taxi-regional-smoke")) return;
             new GameObject("Truck Taxi command-line smoke test").AddComponent<TruckTaxiPlayerSmokeTest>();
         }
         private void OnEnable() { Application.logMessageReceived+=TrackError; }
@@ -55,6 +55,14 @@ namespace LWS.TruckTaxi
             if(host==null || !host.Ready) { Debug.LogError("TRUCK TAXI PLAYER SMOKE: startup timed out."); Application.Quit(2); yield break; }
             string output=Path.GetFullPath(Path.Combine(Application.dataPath,"../Validation"));
             Directory.CreateDirectory(output);
+            if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-regional-smoke"))
+            {
+                bool companionOnly=Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-companion-only");
+                bool skipIntercity=Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-skip-regional-drive");
+                yield return TruckTaxiRegionalRuntimeProbe.Run(host,CheckSystem,name=>Capture(Path.Combine(output,"Windows_"+name+".png"),Screen.width,Screen.height),companionOnly,skipIntercity);
+                Debug.Log(failed ? "TRUCK TAXI REGIONAL STANDALONE FAIL" : "TRUCK TAXI REGIONAL STANDALONE PASS");
+                Application.Quit(failed?2:0); yield break;
+            }
             if(Array.Exists(Environment.GetCommandLineArgs(),a=>a=="-truck-taxi-integrated-smoke"))
             {
                 yield return TruckTaxiIntegratedRuntimeProbe.Run(host,CheckSystem,name=>Capture(Path.Combine(output,"Windows_"+name+".png")));
@@ -193,12 +201,12 @@ namespace LWS.TruckTaxi
         }
         // A hidden Windows launch has no usable swap-chain screenshot. Render the
         // actual player camera/UI into a target, just as the Editor capture does.
-        public static void Capture(string path)
+        public static void Capture(string path,int width=1920,int height=1080)
         {
             var camera=Camera.main;
             if(camera==null) { Debug.LogError("TRUCK TAXI PLAYER SMOKE: no capture camera."); return; }
             var overlays=new System.Collections.Generic.List<Canvas>();
-            var texture=new RenderTexture(1920,1080,24);
+            var texture=new RenderTexture(width,height,24);
             var prior=camera.targetTexture;
             var active=RenderTexture.active;
             Texture2D pixels=null;
@@ -211,8 +219,8 @@ namespace LWS.TruckTaxi
                     { overlays.Add(canvas); canvas.renderMode=RenderMode.ScreenSpaceCamera; canvas.worldCamera=camera; canvas.planeDistance=camera.nearClipPlane+.01f; }
                 camera.targetTexture=texture;
                 Canvas.ForceUpdateCanvases(); camera.Render(); RenderTexture.active=texture;
-                pixels=new Texture2D(1920,1080,TextureFormat.RGB24,false);
-                pixels.ReadPixels(new Rect(0,0,1920,1080),0,0); pixels.Apply();
+                pixels=new Texture2D(width,height,TextureFormat.RGB24,false);
+                pixels.ReadPixels(new Rect(0,0,width,height),0,0); pixels.Apply();
                 File.WriteAllBytes(path,pixels.EncodeToPNG());
             }
             finally

@@ -86,6 +86,12 @@ namespace LWS.TruckTaxi
         }
         // Called by the completed adult interaction, never by ordinary drinks.
         public void SatisfyThirst() { Thirst = 0; }
+        public void DebugSetThirst(float value)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (float.IsFinite(value)) Thirst = Mathf.Clamp01(value);
+#endif
+        }
         public bool StartJug()
         {
             if (!CanStartJug) return false;

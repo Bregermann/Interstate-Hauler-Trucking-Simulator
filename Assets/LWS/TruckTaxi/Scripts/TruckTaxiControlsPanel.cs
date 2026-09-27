@@ -11,6 +11,7 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiControlsPanel : MonoBehaviour
     {
         private TruckTaxiBootstrap host;
+        private TruckTaxiHud hud;
         private TruckTaxiUIInput input;
         private RectTransform page,overlay,content,viewport;
         private ScrollRect scroll;
@@ -27,7 +28,7 @@ namespace LWS.TruckTaxi
         public void Initialize(TruckTaxiBootstrap owner,TruckTaxiHud hud)
         {
             if(page!=null) return;
-            host=owner; input=hud.UIInput;
+            host=owner; this.hud=hud; input=hud.UIInput;
             wheel=owner.Player?.GetComponentInChildren<LwsWheelInputSource>(true);
             entries=TruckTaxiControlsCatalog.Build(input,owner.DriverNeeds,owner.Passengers);
             page=hud.Panel(hud.Root,"Controls",new Vector2(.16f,.07f),new Vector2(.84f,.94f));
@@ -44,9 +45,9 @@ namespace LWS.TruckTaxi
             hud.Button(page,"UP",new Vector2(.04f,.035f),new Vector2(.21f,.13f),()=>ScrollBy(.3f));
             hud.Button(page,"DOWN",new Vector2(.24f,.035f),new Vector2(.41f,.13f),()=>ScrollBy(-.3f));
             hud.Button(page,"CLOSE",new Vector2(.73f,.035f),new Vector2(.96f,.13f),Close);
-            overlay=hud.Panel(hud.Root,"Quick controls",new Vector2(.02f,.19f),new Vector2(.49f,.86f));
+            overlay=hud.Panel(hud.Root,"Quick controls",new Vector2(.02f,.28f),new Vector2(.39f,.83f));
             quickText=hud.Text(overlay,"Quick bindings",new Vector2(.035f,.03f),new Vector2(.965f,.97f),18);
-            quickText.enableAutoSizing=false; quickText.overflowMode=TextOverflowModes.Ellipsis;
+            quickText.fontSizeMin=12; quickText.overflowMode=TextOverflowModes.Ellipsis;
             overlay.gameObject.SetActive(false);
             requestStatus=hud.Text(hud.Root,"Ride request toggle status",new Vector2(.3f,.87f),new Vector2(.7f,.94f),27);
             requestStatus.alignment=TextAlignmentOptions.Center;
@@ -82,6 +83,7 @@ namespace LWS.TruckTaxi
                 requestStatus.transform.SetAsLastSibling();
             }
             if(requestStatus.gameObject.activeSelf && Time.unscaledTime>=requestStatusUntil) requestStatus.gameObject.SetActive(false);
+            if(hud.NormalHudSuppressed) requestStatus.gameObject.SetActive(false);
             if(input.UsingGamepad!=lastGamepad || wheelActive!=lastWheel) Rebuild();
             if(IsOpen)
             {
@@ -89,9 +91,15 @@ namespace LWS.TruckTaxi
                 input.Focus(page);
                 return;
             }
-            bool show=!host.Paused && input.ShowControls.IsPressed();
+            bool show=!host.Paused && !hud.NormalHudSuppressed && input.ShowControls.IsPressed();
             if(overlay.gameObject.activeSelf!=show) overlay.gameObject.SetActive(show);
             if(show) overlay.SetAsLastSibling();
+        }
+        public void RefreshDebugVisibility()
+        {
+            if(!hud.NormalHudSuppressed) return;
+            if(overlay!=null) overlay.gameObject.SetActive(false);
+            if(requestStatus!=null) requestStatus.gameObject.SetActive(false);
         }
         private void ScrollBy(float amount)
         { if(scroll!=null) scroll.verticalNormalizedPosition=Mathf.Clamp01(scroll.verticalNormalizedPosition+amount); }

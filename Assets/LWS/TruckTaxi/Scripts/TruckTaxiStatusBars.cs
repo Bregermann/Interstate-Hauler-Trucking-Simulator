@@ -8,25 +8,26 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiStatusBars : MonoBehaviour
     {
         private TruckTaxiBootstrap host;
+        private TruckTaxiHud hud;
         private RectTransform panel, effectPanel;
         private DamageHandler damage;
         private float nextRefresh;
-        private readonly Image[] fills = new Image[6];
-        private readonly TextMeshProUGUI[] labels = new TextMeshProUGUI[6];
+        private readonly Image[] fills = new Image[3];
+        private readonly TextMeshProUGUI[] labels = new TextMeshProUGUI[3];
         private Image[] effectFills;
         private TextMeshProUGUI[] effectLabels;
         private GameObject[] effectRows;
-        private static readonly string[] Names = { "FUEL", "DAMAGE", "BLADDER", "HUNGER", "THIRST", "PATIENCE" };
+        private static readonly string[] Names = { "FUEL", "DAMAGE", "PATIENCE" };
         public void Initialize(TruckTaxiBootstrap owner, TruckTaxiHud hud)
         {
-            host = owner; damage = host.Player.GetComponent<DamageHandler>();
-            panel = TruckTaxiHud.Rect(hud.Root, "Vehicle and needs bars", new Vector2(.37f,.19f), new Vector2(.71f,.34f));
+            host = owner; this.hud = hud; damage = host.Player.GetComponent<DamageHandler>();
+            panel = TruckTaxiHud.Rect(hud.Root, "Vehicle status bars", new Vector2(.37f,.19f), new Vector2(.71f,.27f));
             for(int i=0;i<fills.Length;i++)
             {
-                var row=TruckTaxiHud.Rect(panel,Names[i],new Vector2((i%2)*.51f, .67f-(i/2)*.33f),new Vector2((i%2)*.51f+.49f,1-(i/2)*.33f));
+                var row=TruckTaxiHud.Rect(panel,Names[i],new Vector2(i/3f,0),new Vector2((i+1)/3f-.015f,1));
                 CreateRow(hud,row,Names[i],out fills[i],out labels[i]);
             }
-            effectPanel=TruckTaxiHud.Rect(hud.Root,"Active item effects",new Vector2(.38f,.35f),new Vector2(.7f,.49f));
+            effectPanel=TruckTaxiHud.Rect(hud.Root,"Active item effects",new Vector2(.38f,.28f),new Vector2(.7f,.42f));
             int count=TruckTaxiTemporaryEffects.ProfileCount;
             effectFills=new Image[count]; effectLabels=new TextMeshProUGUI[count]; effectRows=new GameObject[count];
             for(int i=0;i<count;i++)
@@ -47,16 +48,15 @@ namespace LWS.TruckTaxi
         {
             if(host==null || Time.unscaledTime<nextRefresh) return;
             nextRefresh=Time.unscaledTime+.15f;
-            bool visible=!host.Paused && host.Ready && host.Session.State!=TruckTaxiState.Inactive;
-            panel.gameObject.SetActive(visible); effectPanel.gameObject.SetActive(visible);
+            bool visible=RefreshVisibility();
             if(!visible) return;
             var state=host.DriverNeeds?.State;
             Set(0,host.Fuel?.Fraction ?? 1); Set(1,damage!=null ? damage.Damage : 0);
-            Set(2,state?.Pressure ?? 0); Set(3,state?.Hunger ?? 0); Set(4,state?.Thirst ?? 0);
             bool riding=host.Session.HasPassenger;
+            labels[2].transform.parent.gameObject.SetActive(riding || host.Session.State==TruckTaxiState.DrivingToPickup);
             float patience=riding ? 1-host.Session.ElapsedRide/Mathf.Max(1,host.Session.Passenger.basePatience) :
                 host.Session.State==TruckTaxiState.DrivingToPickup ? host.Session.PickupRemaining/Mathf.Max(1,host.Session.PickupDuration) : 1;
-            Set(5,patience);
+            Set(2,patience);
             for(int i=0;i<effectRows.Length;i++)
             {
                 var snapshot=state?.Effects.GetSnapshot((TruckTaxiTemporaryEffectKind)i) ?? default;
@@ -65,10 +65,18 @@ namespace LWS.TruckTaxi
                 effectLabels[i].text=snapshot.Profile!=null ? snapshot.Profile.Label.ToUpperInvariant()+$"  {snapshot.RemainingSeconds:0}s" : "";
             }
         }
+        public bool RefreshVisibility()
+        {
+            bool visible=host!=null && !host.Paused && !hud.NormalHudSuppressed && host.Ready &&
+                host.Session!=null && host.Session.State!=TruckTaxiState.Inactive;
+            if(panel!=null) panel.gameObject.SetActive(visible);
+            if(effectPanel!=null) effectPanel.gameObject.SetActive(visible);
+            return visible;
+        }
         private void Set(int index,float value)
         {
             value=Mathf.Clamp01(value); fills[index].rectTransform.anchorMax=new Vector2(value,1);
-            bool danger=index==0 || index==5 ? value<.2f : value>.8f;
+            bool danger=index==0 || index==2 ? value<.2f : value>.8f;
             fills[index].color=danger ? new Color(.95f,.3f,.2f) : new Color(.22f,.8f,.68f);
             labels[index].text=Names[index]+$"  {value*100:0}%";
         }

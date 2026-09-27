@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using LWS.InterstateHauler;
 using UnityEngine;
 
@@ -18,6 +19,15 @@ namespace LWS.TruckTaxi
         [Header("Taxi traffic behaviour")]
         public bool useTaxiBoulevardLanes = true;
         public AudioClip trafficHorn;
+        [Header("Traffic simulation bubbles")]
+        [Min(1)] public int maxFullTraffic = 40;
+        [Min(0)] public int maxVisibleTraffic = 40;
+        [Min(10)] public float fullTrafficRadius = 175;
+        [Min(20)] public float visibleTrafficRadius = 350;
+        [Min(0)] public float trafficHysteresis = 35;
+        [Min(0)] public float forwardPreloadSeconds = 3;
+        [Min(1)] public int maximumPoolChangesPerPass = 8;
+        public Func<Vector3, bool> RegionAvailable { get; private set; } = _ => true;
         private readonly List<Vector3[]> runtimePathPoints = new List<Vector3[]>();
         private TruckTaxiIntersection[] intersections = System.Array.Empty<TruckTaxiIntersection>();
         public int RuntimeLaneCount => validLanes.Count;
@@ -31,6 +41,13 @@ namespace LWS.TruckTaxi
         private readonly Dictionary<string, GameObject> vehiclesById = new Dictionary<string, GameObject>();
         private readonly HashSet<GameObject> dedicatedVehicles = new HashSet<GameObject>();
         private readonly Dictionary<GameObject, TruckTaxiPopulationPresentation> presentations = new Dictionary<GameObject, TruckTaxiPopulationPresentation>();
+        private readonly List<TruckTaxiTrafficPooledActor> pool = new List<TruckTaxiTrafficPooledActor>();
+        private readonly List<TruckTaxiTrafficPopulation.Car> candidates = new List<TruckTaxiTrafficPopulation.Car>();
+        private readonly HashSet<TruckTaxiTrafficPopulation.Car> selectedFull = new HashSet<TruckTaxiTrafficPopulation.Car>();
+        private readonly HashSet<TruckTaxiTrafficPopulation.Car> selectedVisible = new HashSet<TruckTaxiTrafficPopulation.Car>();
+        private TruckTaxiTrafficPopulation population;
+        private int spawnedThisSecond, despawnedThisSecond;
+        private float rateWindow;
         private readonly LwsTrafficSpawnPolicy policy = new LwsTrafficSpawnPolicy {
             targetCruiseSpeedScale = 0.7f, maximumTrafficSpeedMetersPerSecond = 12, autoResolveEditorPrefabs = false };
         private float nextMaintenance;
@@ -39,6 +56,17 @@ namespace LWS.TruckTaxi
         private bool initialized;
         private bool baselineValidation;
         public bool IsBaselineValidation => baselineValidation;
+        public int LogicalCount => population?.Count ?? 0;
+        public int FullPhysicsCount { get; private set; }
+        public int PooledCount => pool.Count;
+        public int SpawnsPerSecond { get; private set; }
+        public int DespawnsPerSecond { get; private set; }
+        public void SetRegionAvailability(Func<Vector3, bool> predicate)
+        {
+            RegionAvailable = predicate ?? (_ => true);
+            nextMaintenance = 0;
+            if (initialized) EvictUnavailable();
+        }
         public int BaselineActiveCount { get; private set; }
         public int TargetCount => DensityEnabled ? (baselineValidation ?
             TruckTaxiPopulationProfile.ScaleTarget(densityProfile.measuredTrafficBaseline > 0 ? densityProfile.measuredTrafficBaseline : BaselineActiveCount, 1, densityProfile.maximumActiveTraffic)
@@ -65,7 +93,9 @@ namespace LWS.TruckTaxi
         }
         public bool ReleaseDedicatedVehicle(string stableId)
         {
-            return TryResolveVehicle(stableId, out var vehicle) && dedicatedVehicles.Remove(vehicle);
+            if (!TryResolveVehicle(stableId, out var vehicle) || !dedicatedVehicles.Contains(vehicle)) return false;
+            if (!PoolVehicle(vehicle)) return false;
+            return true;
         }
         public bool TrySpawnDedicatedVehicle(Vector3 near, out GameObject vehicle, out string stableId) =>
             TrySpawnDedicatedVehicle(null, near, out vehicle, out stableId);
@@ -80,7 +110,7 @@ namespace LWS.TruckTaxi
             vehicle = null; stableId = null;
             if (requestedId != null && vehiclesById.ContainsKey(requestedId)) return false;
             if (!initialized || !Ready || trafficPrefabs == null || trafficPrefabs.Length == 0 ||
-                dedicatedVehicles.Count >= maximumDedicatedVehicles || vehicles.Count >= TargetCount + maximumDedicatedVehicles) return false;
+                dedicatedVehicles.Count >= maximumDedicatedVehicles || FullPhysicsCount >= maxFullTraffic) return false;
             int bestLane = -1, bestPoint = -1;
             float bestDistance = maximumDedicatedSpawnDistance * maximumDedicatedSpawnDistance;
             for (int laneIndex = 0; laneIndex < validLanes.Count; laneIndex++)
@@ -91,17 +121,18 @@ namespace LWS.TruckTaxi
                 {
                     Vector3 position = lane.centerline[point];
                     float distance = (position - near).sqrMagnitude;
-                    if (distance >= bestDistance || !HasSpawnClearance(position, 14, 20)) continue;
+                    if (distance >= bestDistance || !RegionAvailable(position) || !HasSpawnClearance(position, 14, 20)) continue;
                     bestDistance = distance; bestLane = laneIndex; bestPoint = point;
                 }
             }
             if (bestLane < 0) return false;
             int prefabIndex = spawnCursor++ % trafficPrefabs.Length;
-            vehicle = api.SpawnVehicle(trafficPrefabs[prefabIndex], paths[bestLane], validLanes[bestLane],
-                bestPoint, transform, policy, out string message);
-            if (vehicle == null) { Debug.LogWarning(message, this); return false; }
-            stableId = RegisterVehicle(vehicle, bestLane, requestedId);
+            vehicle = AcquireVehicle(prefabIndex, bestLane, bestPoint, requestedId ?? "taxi.traffic." + (serial + 1),
+                true, validLanes[bestLane].centerline[bestPoint]);
+            if (vehicle == null) return false;
+            stableId = RegisterVehicle(vehicle, bestLane, requestedId, prefabIndex);
             dedicatedVehicles.Add(vehicle);
+            FullPhysicsCount++;
             return true;
         }
         public int ActiveCount => vehicles.Count;
@@ -142,9 +173,25 @@ namespace LWS.TruckTaxi
             // Measure the old startup behavior before enabling any density override.
             for (int i=0;i<maximumVehicles;i++) TrySpawnTraffic(maximumVehicles, false);
             BaselineActiveCount = ActiveCount; initialized = true;
+            for (int i = vehicles.Count - 1; i >= 0; i--) PoolVehicle(vehicles[i]);
+            population = new TruckTaxiTrafficPopulation(validLanes, TargetCount, trafficPrefabs?.Length ?? 0, serial);
+            serial += population.Count;
+            nextMaintenance = 0;
             if (DensityEnabled) Debug.Log($"TAXI TRAFFIC: original cap {maximumVehicles}, observed startup {BaselineActiveCount}, multiplier {(baselineValidation ? 1 : densityProfile.trafficDensityMultiplier)}, target/cap {TargetCount}/{densityProfile.maximumActiveTraffic}.", this);
         }
-        public bool SpawnTraffic() => TrySpawnTraffic(TargetCount, DensityEnabled);
+        public bool SpawnTraffic()
+        {
+            if (!initialized || population == null) return false;
+            var observer = PresentationObserver();
+            for (int i = 0; i < population.Count; i++)
+            {
+                var car = population.Cars[i];
+                if (car.Actor != null || !RegionAvailable(population.Position(car))) continue;
+                if ((population.Position(car) - observer).sqrMagnitude > visibleTrafficRadius * visibleTrafficRadius) continue;
+                if (Materialize(car, Vector3.Distance(population.Position(car), observer) <= fullTrafficRadius)) return true;
+            }
+            return false;
+        }
         private bool TrySpawnTraffic(int limit, bool dense)
         {
             for (int i = vehicles.Count - 1; i >= 0; i--)
@@ -158,17 +205,19 @@ namespace LWS.TruckTaxi
             int cursor = spawnCursor++;
             int index = cursor % paths.Count;
             var lane = validLanes[index];
+            if (!lane.spawnEnabled) { RejectedSpawnAttempts++; return false; }
             // Vary points within each lane, avoiding a common-factor cycle that never visits most road nodes.
             int point = dense ? DensePointIndex(cursor, paths.Count, lane.centerline.Length)
                 : 2 + (cursor * 23) % (lane.centerline.Length - 4);
             Vector3 position = lane.centerline[point];
+            if (!RegionAvailable(position)) { RejectedSpawnAttempts++; return false; }
             if (dense && !densityProfile.AllowsSpawn(position, transform.position)) { RejectedSpawnAttempts++; return false; }
             float clearance = dense ? Mathf.Max(1, densityProfile.trafficSpawnClearance) : 14;
             float playerClearance = dense ? Mathf.Max(1, densityProfile.playerTrafficSpawnClearance) : 20;
             if (!HasSpawnClearance(position, clearance, playerClearance)) { RejectedSpawnAttempts++; return false; }
             var vehicle = api.SpawnVehicle(trafficPrefabs[cursor % trafficPrefabs.Length],paths[index],lane,point,transform,policy,out string message);
             if (vehicle == null) { RejectedSpawnAttempts++; Debug.LogWarning(message,this); return false; }
-            RegisterVehicle(vehicle, index);
+            RegisterVehicle(vehicle, index, null, cursor % trafficPrefabs.Length);
             return true;
         }
         private bool HasSpawnClearance(Vector3 position, float vehicleClearance, float playerClearance)
@@ -178,19 +227,17 @@ namespace LWS.TruckTaxi
             var player = TruckTaxiBootstrap.Instance?.Player;
             return player == null || (player.transform.position-position).sqrMagnitude >= playerClearance*playerClearance;
         }
-        private string RegisterVehicle(GameObject vehicle, int lane, string requestedId = null)
+        private string RegisterVehicle(GameObject vehicle, int lane, string requestedId = null, int prefabIndex = 0)
         {
             // Runtime-added UTS components need their Start lifecycle before AI calls Move.
             foreach (var component in vehicle.GetComponentsInChildren<MonoBehaviour>(true))
             {
                 if (component.GetType().Name == "CarMove") component.enabled = true;
                 if (component.GetType().Name == "CarAIController")
-                {
                     component.enabled = false;
-                    StartCoroutine(EnableInitializedAi(component));
-                }
             }
-            var target = vehicle.AddComponent<TruckTaxiImpactTarget>(); target.kind = TaxiImpactKind.Traffic;
+            var target = vehicle.GetComponent<TruckTaxiImpactTarget>() ?? vehicle.AddComponent<TruckTaxiImpactTarget>();
+            target.kind = TaxiImpactKind.Traffic;
             if (requestedId == null)
             {
                 do { requestedId = "taxi.traffic."+(++serial); } while (vehiclesById.ContainsKey(requestedId));
@@ -198,17 +245,23 @@ namespace LWS.TruckTaxi
             target.targetId = requestedId;
             vehicles.Add(vehicle);
             vehiclesById.Add(target.targetId, vehicle);
-            vehicle.AddComponent<TruckTaxiRoadRage>();
-            vehicle.AddComponent<TruckTaxiTrafficBehaviour>().Initialize(this, lane, target.targetId, trafficHorn);
+            if (vehicle.GetComponent<TruckTaxiRoadRage>() == null) vehicle.AddComponent<TruckTaxiRoadRage>();
+            var behaviour = vehicle.GetComponent<TruckTaxiTrafficBehaviour>() ?? vehicle.AddComponent<TruckTaxiTrafficBehaviour>();
+            behaviour.Initialize(this, lane, target.targetId, trafficHorn);
+            var pooled = vehicle.GetComponent<TruckTaxiTrafficPooledActor>();
+            if (pooled == null) { pooled = vehicle.AddComponent<TruckTaxiTrafficPooledActor>(); pooled.Configure(prefabIndex); }
+            pooled.SetCruiseSpeed(api.ResolveTrafficSpeed(validLanes[lane], policy));
+            pooled.SetFullPhysics(true);
+            StartCoroutine(EnableInitializedAi(pooled, pooled.Generation));
             var presentation = new TruckTaxiPopulationPresentation(vehicle, false);
             presentations.Add(vehicle, presentation);
             presentation.Refresh(DensityEnabled ? densityProfile : null, PresentationObserver());
             return target.targetId;
         }
-        private IEnumerator EnableInitializedAi(Behaviour ai)
+        private IEnumerator EnableInitializedAi(TruckTaxiTrafficPooledActor actor, int generation)
         {
             yield return null;
-            if (ai != null) ai.enabled = true;
+            if (actor != null) actor.EnableAi(generation);
         }
         public float LaneSpeed(int lane) => lane >= 0 && lane < validLanes.Count ? validLanes[lane].speedLimitMph * .44704f : 10;
 
@@ -228,7 +281,14 @@ namespace LWS.TruckTaxi
             // No lateral manoeuvres on junction approaches, curves or unregistered lanes.
             var graph = TruckTaxiBootstrap.Instance?.roadGraph?.Graph;
             if(graph!=null)
-                foreach(var node in graph.nodes) if(Vector3.Distance(position,node.position)<28) return false;
+                foreach(var node in graph.nodes)
+                {
+                    if (node == null || (position-node.position).sqrMagnitude >= 28*28) continue;
+                    int degree = 0;
+                    foreach (var edge in graph.edges)
+                        if (edge != null && (edge.fromNodeId == node.nodeId || edge.toNodeId == node.nodeId)) degree++;
+                    if (degree > 2) return false;
+                }
             foreach (var intersection in intersections)
                 if (intersection != null && Vector3.Distance(position, intersection.transform.position) < 35) return false;
             for (int candidate = 0; candidate < validLanes.Count; candidate++)
@@ -281,35 +341,241 @@ namespace LWS.TruckTaxi
         }
         private void Update()
         {
-            if (!Ready || Time.time < nextMaintenance) return;
-            nextMaintenance = Time.time + (DensityEnabled ? Mathf.Max(.1f, densityProfile.maintenanceInterval) : 3);
-            Vector3 observer = PresentationObserver(); ReducedShadowCount = 0;
-            for (int i=vehicles.Count-1;i>=0;i--)
+            if (!Ready || population == null) return;
+            EvictUnavailable();
+            float delta = Mathf.Min(.5f, Time.deltaTime);
+            for (int i = 0; i < population.Count; i++)
             {
-                var car = vehicles[i];
-                if (car == null) { if (!ReferenceEquals(car, null)) ForgetVehicle(car); vehicles.RemoveAt(i); continue; }
-                bool outside = DensityEnabled && densityProfile.despawnRadius > 0
-                    ? !densityProfile.AllowsPresence(car.transform.position, transform.position)
-                    : Mathf.Abs(car.transform.position.x)>420 || Mathf.Abs(car.transform.position.z)>420;
-                if (car.transform.position.y < -5 || (!dedicatedVehicles.Contains(car) && (outside || vehicles.Count - dedicatedVehicles.Count > TargetCount)))
-                { car.SetActive(false); Destroy(car); vehicles.RemoveAt(i); ForgetVehicle(car); continue; }
-                if (presentations.TryGetValue(car, out var presentation))
+                var car = population.Cars[i];
+                population.Advance(car, delta);
+                if (car.Actor != null && !car.FullPhysics)
                 {
-                    presentation.Refresh(DensityEnabled ? densityProfile : null, observer);
-                    if (presentation.ShadowsReduced) ReducedShadowCount++;
+                    var actor = car.Actor.GetComponent<TruckTaxiTrafficPooledActor>();
+                    if (actor != null)
+                    {
+                        Vector3 destination = population.Position(car);
+                        Vector3 smooth = Vector3.MoveTowards(car.Actor.transform.position, destination, car.Speed * delta * 1.5f);
+                        actor.MoveReduced(smooth, population.Forward(car));
+                    }
                 }
             }
-            int budget = DensityEnabled ? Mathf.Max(1, densityProfile.maximumSpawnsPerPass) : 1;
-            int spawned = 0;
-            for (int attempt = 0; attempt < budget * (DensityEnabled ? 8 : 1) && spawned < budget && ActiveCount - dedicatedVehicles.Count < TargetCount; attempt++)
-                if (SpawnTraffic()) spawned++;
+            if (Time.time - rateWindow >= 1)
+            {
+                SpawnsPerSecond = spawnedThisSecond; DespawnsPerSecond = despawnedThisSecond;
+                spawnedThisSecond = despawnedThisSecond = 0; rateWindow = Time.time;
+            }
+            if (Time.time < nextMaintenance) return;
+            nextMaintenance = Time.time + (DensityEnabled ? Mathf.Max(.1f, densityProfile.maintenanceInterval) : .5f);
+            MaintainPopulation();
         }
+
+        private void MaintainPopulation()
+        {
+            for (int i = vehicles.Count - 1; i >= 0; i--)
+                if (vehicles[i] == null)
+                {
+                    if (!ReferenceEquals(vehicles[i], null)) ForgetVehicle(vehicles[i]);
+                    vehicles.RemoveAt(i);
+                }
+            dedicatedVehicles.RemoveWhere(vehicle => vehicle == null);
+            FullPhysicsCount = 0;
+            foreach (var vehicle in vehicles)
+                if (vehicle != null && vehicle.GetComponent<TruckTaxiTrafficPooledActor>()?.FullPhysics == true)
+                    FullPhysicsCount++;
+            Vector3 observer = PresentationObserver();
+            var player = TruckTaxiBootstrap.Instance?.Player;
+            Vector3 forward = player != null ? player.transform.forward : transform.forward;
+            float speed = player != null ? player.GetComponent<Rigidbody>()?.linearVelocity.magnitude ?? 0 : 0;
+            float preload = speed * forwardPreloadSeconds;
+            Camera camera = Camera.main;
+            candidates.Clear(); selectedFull.Clear(); selectedVisible.Clear();
+            for (int i = 0; i < population.Count; i++)
+            {
+                var car = population.Cars[i];
+                if (car.Actor == null) { car.Actor = null; car.FullPhysics = false; }
+                else
+                {
+                    var pooled = car.Actor.GetComponent<TruckTaxiTrafficPooledActor>();
+                    car.MissionReserved = pooled != null && pooled.MissionReserved;
+                    if (car.FullPhysics && pooled != null)
+                    {
+                        var behaviour = car.Actor.GetComponent<TruckTaxiTrafficBehaviour>();
+                        if (behaviour != null && behaviour.LaneIndex >= 0 && behaviour.LaneIndex < validLanes.Count)
+                            car.Lane = behaviour.LaneIndex;
+                    }
+                }
+                Vector3 position = car.FullPhysics && car.Actor != null ? car.Actor.transform.position : population.Position(car);
+                if (!RegionAvailable(position) && !car.MissionReserved) continue;
+                candidates.Add(car);
+            }
+            candidates.Sort((a, b) => Priority(a, observer, forward, preload, camera)
+                .CompareTo(Priority(b, observer, forward, preload, camera)));
+            int fullBudget = Mathf.Max(0, maxFullTraffic - dedicatedVehicles.Count);
+            int visibleBudget = Mathf.Max(0, maxVisibleTraffic);
+            foreach (var car in candidates)
+            {
+                Vector3 position = car.FullPhysics && car.Actor != null ? car.Actor.transform.position : population.Position(car);
+                Vector3 offset = position - observer;
+                float distance = offset.magnitude;
+                float ahead = Vector3.Dot(offset, forward);
+                float effective = ahead > 0 ? Mathf.Max(0, distance - preload) : distance;
+                if (car.MissionReserved)
+                {
+                    selectedFull.Add(car);
+                    fullBudget = Mathf.Max(0, fullBudget - 1);
+                }
+                else if (fullBudget > 0 && TruckTaxiTrafficPopulation.WantFull(effective, car.FullPhysics, fullTrafficRadius, trafficHysteresis))
+                {
+                    selectedFull.Add(car); fullBudget--;
+                }
+                else if (visibleBudget > 0 && TruckTaxiTrafficPopulation.WantVisible(effective, car.Actor != null, visibleTrafficRadius, trafficHysteresis))
+                {
+                    selectedVisible.Add(car); visibleBudget--;
+                }
+            }
+            int changes = 0;
+            for (int i = 0; i < population.Count; i++)
+            {
+                var car = population.Cars[i];
+                bool full = selectedFull.Contains(car), visible = selectedVisible.Contains(car);
+                if (car.Actor == null)
+                {
+                    if ((full || visible) && changes < maximumPoolChangesPerPass && Materialize(car, full)) changes++;
+                    continue;
+                }
+                var actor = car.Actor.GetComponent<TruckTaxiTrafficPooledActor>();
+                if (actor == null) continue;
+                if (!full && !visible && !car.MissionReserved)
+                {
+                    if (changes < maximumPoolChangesPerPass)
+                    {
+                        if (car.FullPhysics) population.Capture(car, car.Actor.transform.position, actor.Body != null ? actor.Body.linearVelocity.magnitude : car.Speed);
+                        if (PoolVehicle(car.Actor)) { car.Actor = null; car.FullPhysics = false; changes++; }
+                    }
+                }
+                else if (full && !car.FullPhysics)
+                {
+                    if (FullPhysicsCount >= maxFullTraffic) continue;
+                    population.Capture(car, car.Actor.transform.position, car.Speed);
+                    actor.SynchronizePath(paths[car.Lane], car.Point);
+                    actor.SetFullPhysics(true); car.FullPhysics = true; FullPhysicsCount++;
+                    StartCoroutine(EnableInitializedAi(actor, actor.Generation));
+                }
+                else if (!full && car.FullPhysics && !car.MissionReserved)
+                {
+                    population.Capture(car, car.Actor.transform.position, actor.Body != null ? actor.Body.linearVelocity.magnitude : car.Speed);
+                    actor.SetFullPhysics(false); car.FullPhysics = false; FullPhysicsCount = Mathf.Max(0, FullPhysicsCount - 1);
+                }
+                if (car.Actor != null && presentations.TryGetValue(car.Actor, out var presentation))
+                    presentation.Refresh(DensityEnabled ? densityProfile : null, observer);
+            }
+            ReducedShadowCount = 0;
+            foreach (var presentation in presentations.Values) if (presentation.ShadowsReduced) ReducedShadowCount++;
+        }
+
+        private float Priority(TruckTaxiTrafficPopulation.Car car, Vector3 observer, Vector3 forward, float preload, Camera camera)
+        {
+            Vector3 position = car.FullPhysics && car.Actor != null ? car.Actor.transform.position : population.Position(car);
+            Vector3 offset = position - observer;
+            float distance = offset.magnitude;
+            float ahead = Vector3.Dot(offset, forward);
+            float score = Mathf.Max(0, distance - (ahead > 0 ? preload : 0));
+            if (camera != null)
+            {
+                Vector3 viewport = camera.WorldToViewportPoint(position);
+                if (viewport.z > 0 && viewport.x >= -.1f && viewport.x <= 1.1f &&
+                    viewport.y >= -.1f && viewport.y <= 1.1f) score *= .65f;
+            }
+            return score;
+        }
+
+        private bool Materialize(TruckTaxiTrafficPopulation.Car car, bool full)
+        {
+            if (!TruckTaxiTrafficPopulation.CanMaterialize(vehicles.Count, FullPhysicsCount,
+                maxFullTraffic, maxVisibleTraffic, full)) return false;
+            Vector3 position = population.Position(car);
+            if (!RegionAvailable(position) || !HasSpawnClearance(position, 10, 16)) return false;
+            var vehicle = AcquireVehicle(car.VehicleType, car.Lane, car.Point, car.Id, full, position);
+            if (vehicle == null) return false;
+            RegisterVehicle(vehicle, car.Lane, car.Id, car.VehicleType);
+            var actor = vehicle.GetComponent<TruckTaxiTrafficPooledActor>();
+            actor.SetFullPhysics(full);
+            car.Actor = vehicle; car.FullPhysics = full;
+            if (full) FullPhysicsCount++;
+            spawnedThisSecond++;
+            return true;
+        }
+
+        private GameObject AcquireVehicle(int prefabIndex, int lane, int point, string stableId, bool full, Vector3 position)
+        {
+            if (!RegionAvailable(position)) return null;
+            for (int i = pool.Count - 1; i >= 0; i--)
+            {
+                var actor = pool[i];
+                if (actor == null) { pool.RemoveAt(i); continue; }
+                if (actor.PrefabIndex != prefabIndex) continue;
+                pool.RemoveAt(i);
+                actor.Place(paths[lane], point, position, stableId, full);
+                return actor.gameObject;
+            }
+            var vehicle = api.SpawnVehicle(trafficPrefabs[prefabIndex], paths[lane], validLanes[lane], point,
+                transform, policy, out string message);
+            if (vehicle == null) Debug.LogWarning(message, this);
+            else vehicle.transform.position = position;
+            return vehicle;
+        }
+
+        private void EvictUnavailable()
+        {
+            if (population != null)
+                for (int i = 0; i < population.Count; i++)
+                {
+                    var car = population.Cars[i];
+                    if (car.Actor == null) continue;
+                    var actor = car.Actor.GetComponent<TruckTaxiTrafficPooledActor>();
+                    if (actor == null || actor.MissionReserved || RegionAvailable(car.Actor.transform.position)) continue;
+                    if (car.FullPhysics)
+                    {
+                        var driver = car.Actor.GetComponent<TruckTaxiTrafficBehaviour>();
+                        if (driver != null && driver.LaneIndex >= 0 && driver.LaneIndex < validLanes.Count)
+                            car.Lane = driver.LaneIndex;
+                        population.Capture(car, car.Actor.transform.position,
+                            actor.Body != null ? actor.Body.linearVelocity.magnitude : car.Speed);
+                    }
+                    if (PoolVehicle(car.Actor)) { car.Actor = null; car.FullPhysics = false; }
+                }
+            for (int i = vehicles.Count - 1; i >= 0; i--)
+            {
+                var vehicle = vehicles[i];
+                if (vehicle == null || !dedicatedVehicles.Contains(vehicle) || RegionAvailable(vehicle.transform.position)) continue;
+                PoolVehicle(vehicle);
+            }
+        }
+
+        private bool PoolVehicle(GameObject vehicle)
+        {
+            if (vehicle == null) return false;
+            var actor = vehicle.GetComponent<TruckTaxiTrafficPooledActor>();
+            if (actor == null || actor.MissionReserved) return false;
+            if (presentations.TryGetValue(vehicle, out var presentation)) presentation.Restore();
+            ForgetVehicle(vehicle);
+            vehicles.Remove(vehicle);
+            if (actor.FullPhysics) FullPhysicsCount = Mathf.Max(0, FullPhysicsCount - 1);
+            actor.PutAway();
+            pool.Add(actor);
+            despawnedThisSecond++;
+            return true;
+        }
+
         public void ResetTraffic()
         {
-            foreach (var vehicle in vehicles) if (vehicle!=null) { vehicle.SetActive(false); Destroy(vehicle); }
-            vehicles.Clear(); presentations.Clear(); vehiclesById.Clear(); dedicatedVehicles.Clear(); spawnCursor = 0;
-            // Keep unique impact IDs across respawns. Dense refill is budgeted by the existing maintenance path.
-            for (int i=0;i<Mathf.Min(maximumVehicles, TargetCount);i++) SpawnTraffic();
+            foreach (var vehicle in vehicles)
+                if (vehicle != null && vehicle.GetComponent<TruckTaxiTrafficPooledActor>()?.MissionReserved == true)
+                { Debug.LogWarning("Traffic reset deferred while a mission target is assigned.", this); return; }
+            for (int i = vehicles.Count - 1; i >= 0; i--) PoolVehicle(vehicles[i]);
+            population = new TruckTaxiTrafficPopulation(validLanes, TargetCount, trafficPrefabs?.Length ?? 0, serial);
+            serial += population.Count;
+            FullPhysicsCount = 0;
             nextMaintenance = 0;
         }
         private Vector3 PresentationObserver()

@@ -31,6 +31,9 @@ namespace LWS.TruckTaxi
         private const float MaximumSpeed = .447f;
         private const float InteractionRadius = 12f;
         private const float EventSeconds = 7f;
+        private static readonly RaycastHit[] groundHits = new RaycastHit[24];
+        private static readonly Collider[] clearanceHits = new Collider[32];
+        private static readonly float[] roadsideOffsets = { 0f, 6f, -6f, 9f, -9f, 12f, -12f };
 
         public bool Ready => host != null && motion != null && motion.Ready && host.DriverNeeds?.State != null &&
             companions.Count > 0;
@@ -46,7 +49,8 @@ namespace LWS.TruckTaxi
             (phase == Phase.Waiting ? nearby?.actor != null && Time.time >= nearby.availableAt &&
                 FlatDistance(truckBody.position, nearby.actor.transform.position) <= InteractionRadius :
                 phase == Phase.ToPrivateStop && active?.destination != null &&
-                active.destination.IsValidStop(truckBody.position, truckBody.linearVelocity.magnitude));
+                active.destination.IsValidStop(truckBody.position, truckBody.linearVelocity.magnitude) &&
+                TruckTaxiSurface.TrySample(truckBody.position, host.Player.transform, out _));
 
         // Parent adds this after DriverNeeds.Initialize; the motion snapshots renderers on demand.
         public bool Initialize(TruckTaxiBootstrap owner, Transform playerTruckRoot, TruckTaxiSeatProfile companionSeat = null)
@@ -74,10 +78,11 @@ namespace LWS.TruckTaxi
                 if (companions.Count >= 8) break;
                 if (!Eligible(pickup) || pickup.category != TruckTaxiStopCategory.IllicitPickup &&
                     pickup.category != TruckTaxiStopCategory.PrivateMeeting) continue;
-                var destination = NearbyPrivateStop(pickup, stops);
-                if (destination == null) continue;
+                var destination = NearbyPrivateStop(pickup.Position, pickup, stops);
+                if (destination == null || !TryRoadsidePosition(pickup.Position, pickup.transform.right, out Vector3 standing))
+                    continue;
                 var actor = new GameObject("Roadside companion (21+ consenting adult)");
-                actor.transform.SetPositionAndRotation(pickup.Position, Quaternion.Euler(0, variant * 71f, 0));
+                actor.transform.SetPositionAndRotation(standing, Quaternion.Euler(0, variant * 71f, 0));
                 var red = CreateMaterial(new Color(variant % 2 == 0 ? .82f : .64f, .06f, .11f));
                 var dark = CreateMaterial(new Color(.13f, .10f, .14f));
                 var accent = CreateMaterial(new Color(.96f, .35f, .27f));
@@ -109,21 +114,21 @@ namespace LWS.TruckTaxi
         {
             if (point == null || !point.isActiveAndEnabled || point.gameObject.scene != host.gameObject.scene ||
                 string.IsNullOrWhiteSpace(point.stableId)) return false;
-            return TruckTaxiSurface.TrySample(point.Position, host.Player.transform, out bool onRoad) && !onRoad;
+            return TruckTaxiSurface.TrySample(point.Position, host.Player.transform, out _);
         }
 
-        private TruckTaxiStopObjectivePoint NearbyPrivateStop(TruckTaxiStopObjectivePoint pickup,
+        private TruckTaxiStopObjectivePoint NearbyPrivateStop(Vector3 origin, TruckTaxiStopObjectivePoint exclude,
             TruckTaxiStopObjectivePoint[] stops)
         {
             TruckTaxiStopObjectivePoint best = null;
             float bestDistance = float.PositiveInfinity;
             foreach (var candidate in stops)
             {
-                if (candidate == pickup || candidate.category != TruckTaxiStopCategory.PrivateMeeting || !Eligible(candidate)) continue;
-                float direct = FlatDistance(pickup.Position, candidate.Position);
-                if (direct < 25 || direct > 220 || direct >= bestDistance) continue;
-                var route = host.RouteDistances?.Measure(pickup.Position, candidate.Position);
-                if (route?.Navigable != true || route.Meters > 300) continue;
+                if (candidate == exclude || candidate.category != TruckTaxiStopCategory.PrivateMeeting || !Eligible(candidate)) continue;
+                float direct = FlatDistance(origin, candidate.Position);
+                if (direct < 25 || direct > 1200 || direct >= bestDistance) continue;
+                var route = host.RouteDistances?.Measure(origin, candidate.Position);
+                if (route?.Navigable != true || route.Meters > 1800) continue;
                 best = candidate;
                 bestDistance = direct;
             }
@@ -132,6 +137,93 @@ namespace LWS.TruckTaxi
 
         private static float FlatDistance(Vector3 a, Vector3 b) =>
             Vector3.ProjectOnPlane(a - b, Vector3.up).magnitude;
+
+        private bool TryRoadsidePosition(Vector3 origin, Vector3 right, out Vector3 position,
+            Vector3? interactionOrigin = null)
+        {
+            right.y = 0;
+            right = right.sqrMagnitude > .01f ? right.normalized : Vector3.right;
+            foreach (float distance in roadsideOffsets)
+            {
+                Vector3 candidate = origin + right * distance;
+                int count = Physics.RaycastNonAlloc(candidate + Vector3.up * 5f, Vector3.down,
+                    groundHits, 16f, ~0, QueryTriggerInteraction.Ignore);
+                float nearest = float.MaxValue;
+                bool offroad = false;
+                Vector3 ground = candidate;
+                for (int i = 0; i < count; i++)
+                {
+                    var hit = groundHits[i];
+                    if (hit.transform.IsChildOf(host.Player.transform) || hit.distance >= nearest) continue;
+                    var surface = hit.collider.GetComponentInParent<TruckTaxiSurface>();
+                    if (surface == null) continue;
+                    nearest = hit.distance;
+                    offroad = !surface.isRoad;
+                    ground = hit.point;
+                }
+                if (!offroad || !ClearOfTruck(ground) ||
+                    interactionOrigin.HasValue &&
+                    FlatDistance(interactionOrigin.Value, ground) > InteractionRadius) continue;
+                position = ground;
+                return true;
+            }
+            position = default;
+            return false;
+        }
+
+        private bool ClearOfTruck(Vector3 ground)
+        {
+            int count = Physics.OverlapCapsuleNonAlloc(ground + Vector3.up * .35f,
+                ground + Vector3.up * 1.8f, .55f, clearanceHits, ~0, QueryTriggerInteraction.Ignore);
+            if (count == clearanceHits.Length) return false;
+            for (int i = 0; i < count; i++)
+            {
+                var collider = clearanceHits[i];
+                if (collider.transform.IsChildOf(host.Player.transform) ||
+                    collider.GetComponentInParent<TruckTaxiSurface>() == null) return false;
+            }
+            return true;
+        }
+
+        public bool DebugSpawnNearPlayer()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (!Ready || IsBusy || truckBody == null) return false;
+            foreach (var companion in companions)
+            {
+                if (companion.actor == null || companion == active) continue;
+                Vector3 origin = truckBody.position + truckBody.rotation * Vector3.forward * 7f;
+                if (!TryRoadsidePosition(origin, truckBody.rotation * Vector3.right, out Vector3 standing,
+                    truckBody.position)) return false;
+                companion.actor.transform.SetPositionAndRotation(standing, Quaternion.identity);
+                companion.actor.SetActive(true);
+                companion.availableAt = 0;
+                companion.returnPending = false;
+                nearby = companion;
+                nextNearbyCheck = 0;
+                return true;
+            }
+#endif
+            return false;
+        }
+
+        public bool DebugForceNearbyPrivateStop()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (!Ready || phase != Phase.ToPrivateStop || active == null) return false;
+            var stops = FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None);
+            var destination = NearbyPrivateStop(truckBody.position, active.pickup, stops);
+            if (destination == null) return false;
+            if (host.GPS.TargetId == active.destination.stableId)
+                host.GPS.CompleteServiceDestination(active.destination.stableId);
+            else if (!string.IsNullOrEmpty(host.GPS.TargetId)) return false;
+            active.destination = destination;
+            host.GPS.SetServiceDestination(destination.stableId, destination.displayName, destination.Position);
+            return host.GPS.TargetId == destination.stableId;
+#else
+            return false;
+#endif
+        }
 
         public bool Interact()
         {
@@ -181,7 +273,9 @@ namespace LWS.TruckTaxi
                 {
                     if (companion.returnPending && Time.time >= companion.returnAt && CanReturnOffscreen(companion))
                     {
-                        companion.actor.transform.SetPositionAndRotation(companion.pickup.Position, Quaternion.identity);
+                        if (!TryRoadsidePosition(companion.pickup.Position, companion.pickup.transform.right,
+                            out Vector3 returnPosition)) continue;
+                        companion.actor.transform.SetPositionAndRotation(returnPosition, Quaternion.identity);
                         companion.returnAt = 0;
                         companion.returnPending = false;
                         companion.availableAt = Time.time + 15f;
@@ -227,14 +321,15 @@ namespace LWS.TruckTaxi
             if (active?.actor != null)
             {
                 active.actor.transform.SetParent(null, true);
-                Vector3 exit = completed && active.destination != null ?
-                    active.destination.Position + active.destination.transform.right * 4f : active.pickup.Position;
-                if (completed && active.destination != null &&
-                    (!TruckTaxiSurface.TrySample(exit, host.Player.transform, out bool onRoad) || onRoad))
-                    exit = active.destination.Position;
+                Vector3 exitOrigin = completed && active.destination != null ?
+                    active.destination.Position : active.pickup.Position;
+                Vector3 exitRight = completed && active.destination != null ?
+                    active.destination.transform.right : active.pickup.transform.right;
+                bool safeExit = TryRoadsidePosition(exitOrigin, exitRight, out Vector3 exit);
+                if (!safeExit) exit = active.pickup.Position;
                 active.actor.transform.SetPositionAndRotation(exit, Quaternion.identity);
                 active.actor.transform.localScale = Vector3.one;
-                active.actor.SetActive(true);
+                active.actor.SetActive(safeExit);
                 active.availableAt = completed ? float.PositiveInfinity : Time.time + 30f;
                 active.returnAt = completed ? Time.time + 15f : 0;
                 active.returnPending = completed;
