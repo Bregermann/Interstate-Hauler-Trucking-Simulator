@@ -33,11 +33,14 @@ namespace LWS.TruckTaxi
         private sealed class Rival
         {
             public TruckTaxiTrafficPopulation.Car Car;
+            public TruckTaxiRivalDepot Home;
+            public float ShiftStart, ShiftEnd, PreferredVenueBias;
             public PassengerProfile VisualIdentity;
             public GameObject Rider;
             public RiderStage Stage;
             public float StageUntil;
             public float NextPickup;
+            public float NextMaterialize;
             public Vector3 RiderFrom;
             public Vector3 RiderTo;
             public bool PickupQueued;
@@ -47,6 +50,7 @@ namespace LWS.TruckTaxi
         [Range(2, 5)] public int maximumLive = 3;
         [Min(40)] public float materializeRadius = 290;
         [Min(50)] public float releaseRadius = 410;
+        public TruckTaxiRivalDepot[] depots = Array.Empty<TruckTaxiRivalDepot>();
         private readonly List<Rival> rivals = new List<Rival>();
         private readonly List<Rival> candidates = new List<Rival>();
         private readonly List<TruckTaxiRivalDemandZone> zones = new List<TruckTaxiRivalDemandZone>();
@@ -62,6 +66,22 @@ namespace LWS.TruckTaxi
         public int LogicalCount => rivals.Count;
         public int LiveCount { get { int count = 0; foreach (var rival in rivals) if (rival.Car.Actor != null) count++; return count; } }
         public IReadOnlyList<TruckTaxiRivalDemandZone> DemandZones => zones;
+        public bool TryGetHome(string rivalId, out string depotId, out string townId,
+            out float shiftStart, out float shiftEnd, out float venueBias)
+        {
+            foreach (var rival in rivals)
+                if (rival.Car.Id == rivalId)
+                {
+                    depotId = rival.Home != null ? rival.Home.depotId : null;
+                    townId = rival.Home != null ? rival.Home.preferredTown : null;
+                    shiftStart = rival.ShiftStart; shiftEnd = rival.ShiftEnd;
+                    venueBias = rival.PreferredVenueBias;
+                    return true;
+                }
+            depotId = townId = null;
+            shiftStart = shiftEnd = venueBias = 0;
+            return false;
+        }
         public static int AllowedLiveCount(int requested, int dedicatedCapacity, int physicsCapacity) =>
             Mathf.Max(0, Mathf.Min(requested, dedicatedCapacity, physicsCapacity));
 
@@ -82,16 +102,21 @@ namespace LWS.TruckTaxi
                             if (demandSamples.Count < 256) demandSamples.Add(lane.centerline[p]);
                     }
             logical = new TruckTaxiTrafficPopulation(lanes, Mathf.Clamp(logicalTarget, 8, 16),
-                host.trafficPrefabs?.Length ?? 0, 700000);
+                host.trafficPrefabs?.Length ?? 0, 700000, host.Tuning);
             rivals.Clear();
             for (int i = 0; i < logical.Count; i++)
             {
                 var car = logical.Cars[i];
                 car.Id = "taxi.rival." + i;
-                car.Personality = i % 8 == 0 ? TruckTaxiDriverPersonality.Reckless :
-                    i % 3 == 0 ? TruckTaxiDriverPersonality.Aggressive : TruckTaxiDriverPersonality.Impatient;
-                car.DesiredSpeed *= car.Personality == TruckTaxiDriverPersonality.Reckless ? 1.18f : 1.08f;
-                rivals.Add(new Rival { Car = car, NextPickup = Time.time + 12 + i * 4 });
+                car.Personality = host.Tuning.Choose(TruckTaxiTrafficPopulation.HashId(car.Id), true);
+                car.DesiredSpeed *= car.Personality == TruckTaxiDriverPersonality.Reckless ? 1.12f : 1.03f;
+                TruckTaxiRivalDepot home = depots != null && depots.Length > 0 ? depots[i % depots.Length] : null;
+                rivals.Add(new Rival { Car = car, Home = home, NextPickup = Time.time + 12 + i * 4,
+                    ShiftStart = home != null ? home.shiftStartHour : 6,
+                    ShiftEnd = home != null ? home.shiftEndHour : 22,
+                    PreferredVenueBias = home != null ? home.venueBias : .25f });
+                if (home != null && i % 3 == 0)
+                    logical.RetargetUnmaterialized(car, home.StagingPosition);
             }
             nextMaintenance = nextConverge = 0;
         }
@@ -129,6 +154,25 @@ namespace LWS.TruckTaxi
             Rival rival = rivals.Find(item => item.Car.Id == rivalId);
             if (rival == null || rival.PickupQueued || rival.Stage != RiderStage.None) return false;
             rival.PickupQueued = true;
+            return true;
+        }
+
+        // A visual-only kaiju proxy already exists; retire the real rival through its usual owners.
+        public bool TryReleaseForKaiju(TruckTaxiTrafficAdapter owner, GameObject victim, int expectedGeneration)
+        {
+            if (owner == null || traffic != owner || logical == null || victim == null || !victim.activeInHierarchy ||
+                victim.GetComponentInChildren<NWH.VehiclePhysics2.VehicleController>(true) != null) return false;
+            var actor = victim.GetComponent<TruckTaxiTrafficPooledActor>();
+            var mission = victim.GetComponent<TruckTaxiMissionTarget>();
+            if (actor == null || actor.Generation != expectedGeneration || actor.MissionReserved ||
+                (mission != null && !string.IsNullOrEmpty(mission.StableId))) return false;
+            var rival = rivals.Find(item => item.Car.Actor == victim);
+            if (rival == null || rival.Car.MissionReserved ||
+                !traffic.TryResolveVehicle(rival.Car.Id, out var live) || live != victim) return false;
+            if (!Release(rival)) return false;
+            rival.StageUntil = 0;
+            rival.NextMaterialize = Time.time + 30;
+            rival.NextPickup = rival.NextMaterialize + 5;
             return true;
         }
 
@@ -225,37 +269,40 @@ namespace LWS.TruckTaxi
         private float Score(Rival rival, Vector3 observer)
         {
             Vector3 position = logical.Position(rival.Car);
-            return Vector3.Distance(position, observer) - 100 * DemandAt(position);
+            return Vector3.Distance(position, observer) - (100 + 40 * rival.PreferredVenueBias) * DemandAt(position);
         }
 
         private bool Materialize(Rival rival)
         {
-            if (rival.Car.Actor != null || traffic == null || !traffic.TrySpawnDedicatedVehicle(rival.Car.Id,
+            if (rival.Car.Actor != null || Time.time < rival.NextMaterialize || traffic == null || !traffic.TrySpawnDedicatedVehicle(rival.Car.Id,
                 logical.Position(rival.Car), out var vehicle)) return false;
             rival.Car.Actor = vehicle;
             rival.Car.FullPhysics = true;
             var visual = vehicle.GetComponent<TruckTaxiRivalVehicleVisual>() ??
                 vehicle.AddComponent<TruckTaxiRivalVehicleVisual>();
-            visual.Apply(rival.Car.AppearanceSeed);
+            visual.Apply(rival.Car.AppearanceSeed, int.Parse(rival.Car.Id.Substring("taxi.rival.".Length)) + 1);
             rival.NextPickup = Mathf.Max(rival.NextPickup, Time.time + 5);
             return true;
         }
 
-        private void Release(Rival rival)
+        private bool Release(Rival rival)
         {
             var vehicle = rival.Car.Actor;
-            if (vehicle == null) return;
+            if (vehicle == null) return false;
             Vector3 position = vehicle.transform.position;
             var body = vehicle.GetComponent<TruckTaxiTrafficPooledActor>()?.Body;
             float speed = body != null ? body.linearVelocity.magnitude : rival.Car.Speed;
+            if (traffic == null || !traffic.ReleaseDedicatedVehicle(rival.Car.Id)) return false;
             ReturnRider(rival);
-            if (traffic == null || !traffic.ReleaseDedicatedVehicle(rival.Car.Id)) return;
             rival.Car.Actor = null; rival.Car.FullPhysics = false;
             logical.RetargetUnmaterialized(rival.Car, position);
             logical.Capture(rival.Car, position, speed);
+            if (rival.Home != null && pickupCursor++ % 4 == 0)
+                logical.RetargetUnmaterialized(rival.Car, rival.Home.StagingPosition);
             rival.Stage = RiderStage.None;
             rival.PickupQueued = false;
             rival.NextPickup = Time.time + 12;
+            return true;
         }
 
         private void AdvanceRider(Rival rival, float dt)

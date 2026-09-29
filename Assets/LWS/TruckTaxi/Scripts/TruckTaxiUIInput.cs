@@ -22,6 +22,12 @@ namespace LWS.TruckTaxi
         public InputAction ToggleRideRequests { get; }
         public InputAction CenterView { get; }
         public InputAction FullMap { get; }
+        public InputAction RadioToggle { get; }
+        public InputAction RadioNext { get; }
+        public InputAction RadioPrevious { get; }
+        public InputAction RadioMute { get; }
+        public InputAction RadioVolumeUp { get; }
+        public InputAction RadioVolumeDown { get; }
         public InputAction CabMouseLook { get; }
         public InputAction CabMouseLookHold { get; }
         public InputAction CabGamepadLook { get; }
@@ -55,6 +61,12 @@ namespace LWS.TruckTaxi
             CenterView=Button("CenterView","<Keyboard>/backquote",null);
             // M is the truck's engine brake; keep this action separate from driving.
             FullMap=Button("FullMap","<Keyboard>/f3",null);
+            RadioToggle=Button("RadioToggle","<Keyboard>/f4",null);
+            RadioNext=Button("RadioNext","<Keyboard>/f10",null);
+            RadioPrevious=Button("RadioPrevious","<Keyboard>/f9",null);
+            RadioMute=Button("RadioMute","<Keyboard>/f11",null);
+            RadioVolumeUp=Button("RadioVolumeUp","<Keyboard>/numpadPlus",null);
+            RadioVolumeDown=Button("RadioVolumeDown","<Keyboard>/numpadMinus",null);
             FullMap.AddCompositeBinding("ButtonWithOneModifier")
                 .With("Modifier","<Gamepad>/leftTrigger").With("Button","<Gamepad>/rightStickPress");
             CabMouseLook=Actions.AddAction("CabMouseLook",InputActionType.PassThrough,"<Mouse>/delta");

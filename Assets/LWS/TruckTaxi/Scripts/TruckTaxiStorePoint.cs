@@ -8,6 +8,8 @@ namespace LWS.TruckTaxi
         public string stableId = "TT_STORE_";
         public string displayName = "Truck stop store";
         public TruckTaxiRideLocation location;
+        [Tooltip("Opt-in rare Road Pep stock. Ordinary stores leave this off.")]
+        public bool sellsRoadPep;
         [Min(2)] public float stopRadius = 18;
         [Min(.5f)] public float verticalTolerance = 3;
         public Vector3 Position => location != null ? location.StopPosition : transform.position;

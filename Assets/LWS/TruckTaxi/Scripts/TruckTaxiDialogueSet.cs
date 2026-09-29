@@ -19,7 +19,8 @@ namespace LWS.TruckTaxi
         ScenicStopComplete, IllicitStopArrival, IllicitStopComplete, SnowReaction, BlizzardReaction,
         StoppedTooLong, GoodProgress, DiversionOffered, DiversionAccepted, DiversionDeclined,
         SketchyExit, SketchyDance, SketchyReturn, RestaurantReaction, RepairReaction,
-        RoadRageReaction, PickupRevenge, RacetrackReaction, TransitReaction, CompanionNearby, PrivateStopReaction
+        RoadRageReaction, PickupRevenge, RacetrackReaction, TransitReaction, CompanionNearby, PrivateStopReaction,
+        RadioReaction
     }
 
     [Serializable]

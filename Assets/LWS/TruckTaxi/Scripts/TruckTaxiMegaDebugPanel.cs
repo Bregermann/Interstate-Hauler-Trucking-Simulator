@@ -11,9 +11,11 @@ namespace LWS.TruckTaxi
         private TruckTaxiBootstrap host;
         private TruckTaxiHud hud;
         private RectTransform panel;
-        private readonly RectTransform[] pages = new RectTransform[5];
+        private static readonly string[] Tabs = { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD", "KAIJU", "EXTRAS" };
+        private readonly RectTransform[] pages = new RectTransform[7];
         private TextMeshProUGUI heading, status, clockText, eventText, zoneText, countsText;
         private TextMeshProUGUI[] eventRows;
+        private TextMeshProUGUI kaijuText, extrasText;
         private GameObject[] eventSelectors;
         private int page, eventPage, selectedEvent, zoneIndex;
         private DateTime editDate;
@@ -48,17 +50,17 @@ namespace LWS.TruckTaxi
             panel = view.Panel(view.Root, "Mega debug", new Vector2(.08f, .07f), new Vector2(.92f, .94f));
             heading = view.Text(panel, "Mega debug heading", new Vector2(.035f, .875f), new Vector2(.72f, .975f), 32);
             view.Button(panel, "CLOSE", new Vector2(.78f, .89f), new Vector2(.97f, .97f), Close);
-            string[] tabs = { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD" };
+            var tabs = Tabs;
             for (int i = 0; i < tabs.Length; i++)
             {
                 int index = i;
-                float left = .03f + i * .19f;
-                view.Button(panel, tabs[i], new Vector2(left, .78f), new Vector2(left + .18f, .86f), () => ShowPage(index));
+                float left = .03f + i * .135f;
+                view.Button(panel, tabs[i], new Vector2(left, .78f), new Vector2(left + .127f, .86f), () => ShowPage(index));
                 pages[i] = TruckTaxiHud.Rect(panel, tabs[i] + " tools", new Vector2(.03f, .17f), new Vector2(.97f, .76f));
                 pages[i].gameObject.SetActive(i == 0);
             }
             status = view.Text(panel, "Mega debug status", new Vector2(.035f, .035f), new Vector2(.965f, .155f), 23);
-            BuildClock(); BuildEvents(); BuildWeather(); BuildExtremes(); BuildWorld();
+            BuildClock(); BuildEvents(); BuildWeather(); BuildExtremes(); BuildWorld(); BuildKaiju(); BuildExtras();
             panel.gameObject.SetActive(false);
         }
         public void Open()
@@ -225,22 +227,45 @@ namespace LWS.TruckTaxi
         }
         private void ForceExtreme(TruckTaxiExtremeKind kind)
         {
-            var zones = Zones;
-            if (zones == null || zones.Count == 0 || host.Extremes == null) { Message("No authored hazard zones"); return; }
-            TruckTaxiHazardZone chosen = zoneIndex < zones.Count && zones[zoneIndex] != null &&
-                zones[zoneIndex].kind == kind ? zones[zoneIndex] : null;
-            if (chosen == null)
+            Run(() => host.Extremes!=null && host.Extremes.StartEventHere(kind), kind+" started near player");
+        }
+        private void BuildKaiju()
+        {
+            var root=pages[5];
+            kaijuText=hud.Text(root,"Kaiju state",new Vector2(.02f,.70f),new Vector2(.98f,.99f),23);
+            string[] labels={"SIGHTING HERE","ATTACK HERE","GRAB CAR","THROW CAR","FIRE BREATH","GRAB PLAYER","END KAIJU"};
+            Action[] commands={()=>Run(()=>host.Kaiju?.ForceSightingHere()==true,"Sighting started"),
+                ()=>Run(()=>host.Kaiju?.ForceAttackHere()==true,"Attack started"),
+                ()=>Run(()=>host.Kaiju?.ForceGrabCar()==true,"Car grabbed; default action eats after hold"),
+                ()=>Run(()=>host.Kaiju?.ForceThrowCar()==true,"Held car thrown"),
+                ()=>Run(()=>host.Kaiju?.ForceFire()==true,"Fire warning started"),
+                ()=>Run(()=>host.Kaiju?.ForceGrabPlayer()==true,"Player capture warning started"),
+                ()=>{host.Kaiju?.EndKaiju(); Message("Kaiju cleared");}};
+            ToolGrid(root,labels,commands,.66f);
+        }
+        private void BuildExtras()
+        {
+            var root=pages[6];
+            extrasText=hud.Text(root,"Addendum state",new Vector2(.02f,.72f),new Vector2(.98f,.99f),22);
+            string[] labels={"START ROAD PEP","PERFECT","MESSY","BOTCHED","CLEAR ROAD PEP","WORLD COLLIDERS","RADIO BULLETIN","ALERT STACK TEST","RACE REGISTRATION"};
+            Action[] commands={()=>{Close(); host.SetPaused(false); host.DriverNeeds?.DebugStartRoadPep();},
+                ()=>host.DriverNeeds?.DebugForceRoadPep(100),()=>host.DriverNeeds?.DebugForceRoadPep(55),
+                ()=>host.DriverNeeds?.DebugForceRoadPep(10),()=>host.DriverNeeds?.DebugClearRoadPep(),
+                ()=> (host.GetComponent<TruckTaxiColliderDiagnostics>() ?? host.gameObject.AddComponent<TruckTaxiColliderDiagnostics>()).ToggleSolidWorld(),
+                ()=>host.Radio?.WeatherBulletin(),
+                ()=>{hud.Alerts.Publish("test-critical","EMERGENCY ALERT TEST",TruckTaxiAlertPriority.Critical);
+                    hud.Alerts.Publish("test-secondary","Secondary notification test");
+                    hud.Alerts.Publish("test-queued","Queued notification test"); Close();},
+                ()=>{Close(); host.Races?.OpenRegistration();}};
+            ToolGrid(root,labels,commands,.66f);
+        }
+        private void ToolGrid(Transform root,string[] labels,Action[] actions,float top)
+        {
+            for(int i=0;i<labels.Length;i++)
             {
-                float nearest = float.MaxValue;
-                foreach (var zone in zones)
-                    if (zone != null && zone.kind == kind)
-                    {
-                        float distance = host.Player != null ? (zone.transform.position - host.Player.transform.position).sqrMagnitude : 0;
-                        if (distance < nearest) { nearest = distance; chosen = zone; }
-                    }
+                int n=i; float left=.02f+(i%3)*.326f, y=top-(i/3)*.18f;
+                hud.Button(root,labels[i],new Vector2(left,y-.14f),new Vector2(left+.31f,y),()=>actions[n]());
             }
-            Run(() => chosen != null && host.Extremes.StartEvent(kind, chosen.zoneId),
-                kind + " started at " + (chosen != null ? chosen.displayName : "no zone"));
         }
         private void SpawnRival()
         {
@@ -262,8 +287,14 @@ namespace LWS.TruckTaxi
         public void Refresh()
         {
             if (panel == null || host == null) return;
-            heading.text = "MEGA DEBUG  /  " + new[] { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD" }[page];
+            heading.text = "MEGA DEBUG  /  " + Tabs[page];
             status.text = message;
+            if(kaijuText!=null) kaijuText.text="KAIJU  "+(host.Kaiju?.Kind.ToString() ?? "UNAVAILABLE")+
+                "\nNEXT SIGHTING  "+host.Kaiju?.NextNaturalSighting.ToString("ddd HH:mm")+
+                "   ATTACK  "+host.Kaiju?.NextNaturalAttack.ToString("ddd HH:mm");
+            if(extrasText!=null) extrasText.text="ROAD PEP  "+(host.DriverNeeds?.RoadPepChallenge?.Score.ToString("0") ?? "IDLE")+
+                "\nRADIO  "+(host.Radio?.Display ?? "UNAVAILABLE")+
+                "\nFAST TRAVEL  "+(host.FastTravel?.Feedback ?? "IDLE");
             var calendar = host.CalendarWeather;
             if (calendar != null)
                 clockText.text = "GAME CLOCK  " + calendar.CurrentDateTime.ToString("ddd, MMM d yyyy  h:mm tt") +
@@ -286,6 +317,11 @@ namespace LWS.TruckTaxi
             zoneText.text = zones == null || zones.Count == 0 ? "NO AUTHORED HAZARD ZONES" :
                 "ZONE " + (zoneIndex + 1) + "/" + zones.Count + "  " + zones[Mathf.Clamp(zoneIndex, 0, zones.Count - 1)]?.displayName +
                 "  /  " + zones[Mathf.Clamp(zoneIndex, 0, zones.Count - 1)]?.kind;
+            if(host.Extremes!=null && zones!=null && zones.Count>0)
+            {
+                var schedule=host.Extremes.GetScheduleStatus(zones[Mathf.Clamp(zoneIndex,0,zones.Count-1)].kind);
+                zoneText.text+=$"\nELIGIBLE {schedule.Eligible}  CHANCE {schedule.Probability:P0}  DRY DAYS {schedule.EligibleDryDays}  {schedule.RejectionReason}";
+            }
             var policy = host.Session?.IntercityPolicy;
             countsText.text = "TRAFFIC  LOGICAL " + (host.traffic?.LogicalCount ?? 0) + "  LIVE " + (host.traffic?.ActiveCount ?? 0) +
                 "     PEDESTRIANS  LOGICAL " + (host.pedestrians?.LogicalCount ?? 0) + "  LIVE " + (host.pedestrians?.ActiveCount ?? 0) +

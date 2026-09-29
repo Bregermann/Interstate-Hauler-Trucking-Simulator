@@ -30,6 +30,9 @@ namespace LWS.TruckTaxi
         public string Feedback { get; private set; } = "";
         public InputAction JugHoldAction { get; private set; }
         public InputAction JugCueAction { get; private set; }
+        public InputAction RoadPepAimAction { get; private set; }
+        public InputAction RoadPepTimingAction { get; private set; }
+        public TruckTaxiRoadPepChallenge RoadPepChallenge { get; private set; }
         public bool JugActive => State?.JugActive == true;
         public bool LoopAudioActive => JugActive && host?.Paused != true && liquidLoop?.IsPlaying == true;
         public bool UsingGeneratedLiquidAudio => liquidLoop?.UsesGeneratedClip == true;
@@ -48,6 +51,7 @@ namespace LWS.TruckTaxi
         private TruckTaxiCabDecorations decorations;
         private Transform throwAnchor;
         private TruckTaxiJugLiquidLoop liquidLoop;
+        private TruckTaxiRoadPepOverlay roadPepOverlay;
         private bool liquidWorldRouted;
         [SerializeField] private AudioClip jugLiquidClip;
         [SerializeField] private AudioClip containerImpactClip;
@@ -66,10 +70,14 @@ namespace LWS.TruckTaxi
             host = owner; environment = context; settings = context.settings;
             body = host.Player.GetComponent<Rigidbody>();
             if (body == null) return false;
+            (host.Player.GetComponent<TruckTaxiRoadPepCollisionRelay>() ??
+                host.Player.gameObject.AddComponent<TruckTaxiRoadPepCollisionRelay>()).Initialize(this);
             indicatorSources = owner.Player.GetComponentsInChildren<LwsKeyboardGamepadTruckInputSource>(true);
             State = new TruckTaxiDriverNeedsState(settings, 20925);
             host.Handling?.BindEffects(State.Effects);
             (GetComponent<TruckTaxiEffectPresentation>() ?? gameObject.AddComponent<TruckTaxiEffectPresentation>()).Initialize(State.Effects);
+            roadPepOverlay = GetComponent<TruckTaxiRoadPepOverlay>() ?? gameObject.AddComponent<TruckTaxiRoadPepOverlay>();
+            roadPepOverlay.Initialize(host.hud);
             TruckTaxiServicePoint.BindExistingPoints(owner.gameObject.scene);
             if (owner.gameObject.scene.name == TruckTaxiMainMenu.FreePlaySceneName) State.GrantFreePlayTestInventory();
             State.Event += OnJugInputEvent;
@@ -105,6 +113,10 @@ namespace LWS.TruckTaxi
             ThrowContainerAction = actions.FindAction("ThrowFilledContainer") ?? actions.AddAction("ThrowFilledContainer", InputActionType.Button, "<Keyboard>/home");
             ThrowContainerAction.AddCompositeBinding("ButtonWithOneModifier")
                 .With("Modifier", "<Gamepad>/select").With("Button", "<Gamepad>/rightShoulder");
+            RoadPepAimAction = actions.FindAction("RoadPepAim") ?? actions.AddAction("RoadPepAim", InputActionType.PassThrough, "<Mouse>/delta");
+            RoadPepAimAction.AddBinding("<Gamepad>/rightStick");
+            RoadPepTimingAction = actions.FindAction("RoadPepTiming") ?? actions.AddAction("RoadPepTiming", InputActionType.Button, "<Keyboard>/backslash");
+            RoadPepTimingAction.AddBinding("<Gamepad>/rightShoulder");
             if (wasEnabled) actions.Enable();
             previousVelocity = body.linearVelocity;
             RefreshProximity();
@@ -124,17 +136,30 @@ namespace LWS.TruckTaxi
             if (!host.Paused) State.TickArcadeEffects(Time.deltaTime);
             if (Time.unscaledTime >= nextProximityCheck) { nextProximityCheck = Time.unscaledTime + .2f; RefreshProximity(); }
             if (State.JugActive) liquidLoop?.SetPaused(host.Paused);
-            if (!CanInteract) { previousVelocity = body.linearVelocity; return; }
-            if (ThrowContainerAction.WasPressedThisFrame()) ThrowFilledContainer();
+            float acceleration = Time.deltaTime > 0 ? Mathf.Abs(Vector3.Dot((body.linearVelocity - previousVelocity) / Time.deltaTime, host.Player.transform.right)) : 0;
+            if (RoadPepChallenge != null && !host.Paused)
+            {
+                Vector3 worldAcceleration = Time.deltaTime > 0 ? (body.linearVelocity - previousVelocity) / Time.deltaTime : Vector3.zero;
+                float lateral = Vector3.Dot(worldAcceleration, host.Player.transform.right);
+                float longitudinal = Vector3.Dot(worldAcceleration, host.Player.transform.forward);
+                float roll = Vector3.Dot(host.Player.transform.right, Vector3.up);
+                float disturbance = Mathf.Clamp(lateral * .065f + longitudinal * .018f + roll * .55f, -1, 1);
+                Vector2 aim = RoadPepAimAction.ReadValue<Vector2>();
+                float aimDelta = RoadPepAimAction.activeControl?.device is Mouse ? aim.x * .006f : aim.x * Time.deltaTime * .8f;
+                RoadPepChallenge.Tick(Time.deltaTime, aimDelta, disturbance, RoadPepTimingAction.WasPressedThisFrame());
+                roadPepOverlay?.Show(RoadPepChallenge);
+                if (RoadPepChallenge.Finished) FinishRoadPep();
+            }
+            previousVelocity = body.linearVelocity;
+            if (!CanInteract) return;
+            if (RoadPepChallenge == null && ThrowContainerAction.WasPressedThisFrame()) ThrowFilledContainer();
             // Controller jug initiation is an explicit HUD command; normal indicator taps never start it.
             if (!JugActive && JugHoldAction.WasPressedThisFrame() && JugHoldAction.activeControl?.device is Keyboard) StartJug();
-            float acceleration = Time.deltaTime > 0 ? Mathf.Abs(Vector3.Dot((body.linearVelocity - previousVelocity) / Time.deltaTime, host.Player.transform.right)) : 0;
-            previousVelocity = body.linearVelocity;
             if (JugActive) State.TickJug(Time.deltaTime, JugHoldAction.IsPressed(), JugCueAction.WasPressedThisFrame(), IsMoving, acceleration);
         }
         public bool StartJug()
         {
-            if (!CanInteract) return false;
+            if (!CanInteract || RoadPepChallenge != null) return false;
             bool started = State.StartJug();
             if (!started) Feedback = !State.HasEmptyContainer ? "No empty container. Buy a jug or drink a bottle." : "No emergency needed yet.";
             return started;
@@ -180,6 +205,8 @@ namespace LWS.TruckTaxi
             if (State.JugActive) return "Finish Current Action";
             var service = NearestServiceAtPosition(TruckTaxiServiceCapability.Store);
             if (service == null) return "Not In Store Area";
+            if (item == TruckTaxiNeedsItem.RoadPep &&
+                service.GetComponent<TruckTaxiStorePoint>()?.sellsRoadPep != true) return "Road Pep Not Sold Here";
             if (!service.CanUse(body.position, body.linearVelocity.magnitude, settings.bathroomMaximumSpeed))
                 return "Vehicle Must Stop";
             if (entry.HungerRelief > 0 && !service.Supports(TruckTaxiServiceCapability.Food) ||
@@ -250,6 +277,7 @@ namespace LWS.TruckTaxi
         }
         public bool ConsumeItem(TruckTaxiNeedsItem item)
         {
+            if (item == TruckTaxiNeedsItem.RoadPep) return StartRoadPep();
             if (State == null || State.JugActive || !State.Consume(item)) { Feedback = "Item unavailable."; return false; }
             Feedback = item == TruckTaxiNeedsItem.MysteryMushrooms ? "Everything looks unusually vivid." :
                 item == TruckTaxiNeedsItem.HighOctaneSuppository ? "High-octane boost active." : "Used " + TruckTaxiNeedsItems.Find(item).Name + ".";
@@ -257,6 +285,65 @@ namespace LWS.TruckTaxi
                 host.Session.ApplyMechanicReward(2, 0);
             host.Session.React(Feedback);
             return true;
+        }
+        public bool StartRoadPep()
+        {
+            if (host == null || !host.Ready || host.Paused || host.Session.State == TruckTaxiState.Inactive ||
+                State == null || RoadPepChallenge != null || !State.BeginRoadPep())
+            { Feedback = "Road Pep unavailable."; return false; }
+            RoadPepChallenge = new TruckTaxiRoadPepChallenge();
+            SetJugIndicatorSuppression(true);
+            Feedback = "Road Pep: keep the indicator steady.";
+            host.hud?.Alerts?.Publish("road-pep", Feedback, TruckTaxiAlertPriority.Normal, 3);
+            host.Session.React(Feedback);
+            if (host.Session.HasPassenger && host.Session.Passenger != null)
+                host.Passengers?.Dialogue?.Speak(host.Session.Passenger,
+                    TruckTaxiDialogueCategory.UniqueMechanicReaction, host.Session,
+                    host.Session.Passenger.chaosAffinity > 0 ? "That looks like trouble." : "Please keep your eyes on the road.", 35);
+            return true;
+        }
+        public void ReportRoadPepCollision(float relativeSpeed) => RoadPepChallenge?.ReportCollision(relativeSpeed);
+        public bool AwardRoadPep() => State != null && State.AddItem(TruckTaxiNeedsItem.RoadPep);
+        private void FinishRoadPep()
+        {
+            if (RoadPepChallenge == null) return;
+            var result = RoadPepChallenge;
+            State.CompleteRoadPep(result.Score);
+            roadPepOverlay?.ShowResult(result);
+            Feedback = "Road Pep: " + result.Rating + " (" + result.Score + "%).";
+            host.hud?.Alerts?.Publish("road-pep-result", Feedback, TruckTaxiAlertPriority.Normal, 3);
+            host.Session.React(Feedback);
+            RoadPepChallenge = null;
+            SetJugIndicatorSuppression(false);
+        }
+        public void DebugForceRoadPep(int score)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (RoadPepChallenge == null && State != null && State.Count(TruckTaxiNeedsItem.RoadPep) == 0)
+                State.AddItem(TruckTaxiNeedsItem.RoadPep);
+            if (RoadPepChallenge == null && !StartRoadPep()) return;
+            RoadPepChallenge.ForceFinish(score);
+            FinishRoadPep();
+#endif
+        }
+        public bool DebugStartRoadPep()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (State == null) return false;
+            if (State.Count(TruckTaxiNeedsItem.RoadPep) == 0) State.AddItem(TruckTaxiNeedsItem.RoadPep);
+            return StartRoadPep();
+#else
+            return false;
+#endif
+        }
+        public void DebugClearRoadPep()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            RoadPepChallenge = null;
+            roadPepOverlay?.Hide();
+            SetJugIndicatorSuppression(false);
+            State?.Effects.ClearRoadPep();
+#endif
         }
         public bool MountDecoration(TruckTaxiNeedsItem item, TruckTaxiCabSlot slot)
         {
@@ -434,6 +521,10 @@ namespace LWS.TruckTaxi
         }
         private void OnDisable()
         {
+            if (RoadPepChallenge != null) State?.AddItem(TruckTaxiNeedsItem.RoadPep);
+            RoadPepChallenge = null;
+            roadPepOverlay?.Hide();
+            SetJugIndicatorSuppression(false);
             foreach (var source in indicatorSources) if (source != null) source.ReleaseGamepadIndicatorSuppression(ThrowContainerAction);
             if (State?.JugActive == true) State.CancelJug();
             liquidLoop?.Stop();
@@ -450,6 +541,8 @@ namespace LWS.TruckTaxi
         private void OnDestroy()
         {
             SetJugIndicatorSuppression(false);
+            if (host?.Player != null)
+                host.Player.GetComponent<TruckTaxiRoadPepCollisionRelay>()?.ClearOwner(this);
             liquidLoop?.Dispose();
             liquidLoop = null;
             if (State == null) return;

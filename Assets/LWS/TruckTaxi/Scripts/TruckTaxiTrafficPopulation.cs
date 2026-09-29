@@ -27,11 +27,14 @@ namespace LWS.TruckTaxi
 
         private readonly List<Car> cars = new List<Car>();
         private readonly LwsTrafficLaneDefinition[] lanes;
+        private readonly TruckTaxiTrafficTuning tuning;
         public IReadOnlyList<Car> Cars => cars;
         public int Count => cars.Count;
 
-        public TruckTaxiTrafficPopulation(IReadOnlyList<LwsTrafficLaneDefinition> laneDefinitions, int count, int prefabCount, int firstSerial)
+        public TruckTaxiTrafficPopulation(IReadOnlyList<LwsTrafficLaneDefinition> laneDefinitions, int count, int prefabCount, int firstSerial,
+            TruckTaxiTrafficTuning trafficTuning = null)
         {
+            tuning = trafficTuning ?? new TruckTaxiTrafficTuning();
             lanes = new LwsTrafficLaneDefinition[laneDefinitions.Count];
             for (int i = 0; i < lanes.Length; i++) lanes[i] = laneDefinitions[i];
             if (lanes.Length == 0 || prefabCount <= 0) return;
@@ -49,7 +52,7 @@ namespace LWS.TruckTaxi
                 int appearanceSeed = (int)(hash & 0x7fffffff);
                 cars.Add(new Car {
                     Id = id, VehicleType = appearanceSeed % prefabCount,
-                    AppearanceSeed = appearanceSeed, Personality = PersonalityForId(id),
+                    AppearanceSeed = appearanceSeed, Personality = tuning.Choose(HashId(id), false),
                     RoadId = lane.roadId, LaneId = lane.laneId, Lane = laneIndex,
                     Point = 2 + (int)((hash / 5) % (uint)(lane.centerline.Length - 4)),
                     Speed = Mathf.Max(2, lane.speedLimitMph * .44704f * .55f),
@@ -145,12 +148,14 @@ namespace LWS.TruckTaxi
 
         public static TruckTaxiDriverPersonality PersonalityForId(string id)
         {
+            return new TruckTaxiTrafficTuning().Choose(HashId(id), false);
+        }
+
+        public static uint HashId(string id)
+        {
             uint hash = 2166136261;
             foreach (char c in id) hash = (hash ^ c) * 16777619;
-            int pick = (int)(hash % 100);
-            return pick < 20 ? TruckTaxiDriverPersonality.Cautious : pick < 65 ? TruckTaxiDriverPersonality.Normal :
-                pick < 84 ? TruckTaxiDriverPersonality.Impatient : pick < 96 ? TruckTaxiDriverPersonality.Aggressive :
-                TruckTaxiDriverPersonality.Reckless;
+            return hash;
         }
 
         private static uint Hash(uint value)

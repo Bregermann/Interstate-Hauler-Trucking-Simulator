@@ -43,7 +43,7 @@ namespace LWS.TruckTaxi
         {
             if (panel != null || view.Root == null || driver.State == null) return;
             host = owner; hud = view; environment = weather; needs = driver;
-            var band = hud.Panel(hud.Root, "Taxi time and driver needs", new Vector2(.32f, .932f), new Vector2(.76f, .994f));
+            var band = hud.Panel(hud.Alerts.NeedsSlot, "Taxi time and driver needs", Vector2.zero, Vector2.one);
             bandGroup = band.gameObject.AddComponent<CanvasGroup>();
             clockText = hud.Text(band, "Game time", new Vector2(.025f, .12f), new Vector2(.22f, .95f), 18);
             for (int i = 0; i < NeedNames.Length; i++)
@@ -128,14 +128,18 @@ namespace LWS.TruckTaxi
             inventoryText = hud.Text(inventoryPage, "Item counts", new Vector2(.05f, .86f), new Vector2(.95f, .935f), 18);
             TruckTaxiNeedsItem[] usable = { TruckTaxiNeedsItem.WaterBottle, TruckTaxiNeedsItem.Soda, TruckTaxiNeedsItem.EnergyDrink,
                 TruckTaxiNeedsItem.Snack, TruckTaxiNeedsItem.Burger, TruckTaxiNeedsItem.Sandwich, TruckTaxiNeedsItem.Meal,
-                TruckTaxiNeedsItem.HighOctaneSuppository, TruckTaxiNeedsItem.MysteryMushrooms };
+                TruckTaxiNeedsItem.HighOctaneSuppository, TruckTaxiNeedsItem.MysteryMushrooms, TruckTaxiNeedsItem.RoadPep };
             for (int i = 0; i < usable.Length; i++)
             {
                 var item = usable[i]; int row = i / 2, column = i % 2;
                 float top = .85f - row * .1f;
                 hud.Button(inventoryPage, "USE " + TruckTaxiNeedsItems.Find(item).Name.ToUpperInvariant(),
                     new Vector2(.05f + column * .46f, top - .088f), new Vector2(.49f + column * .46f, top),
-                    () => { needs.ConsumeItem(item); Refresh(); });
+                    () => {
+                        if(item==TruckTaxiNeedsItem.RoadPep) { Close(); host.SetPaused(false); needs.StartRoadPep(); }
+                        else needs.ConsumeItem(item);
+                        Refresh();
+                    });
             }
             hud.Button(inventoryPage, "FRESHENER / MIRROR", new Vector2(.05f, .27f), new Vector2(.34f, .36f),
                 () => { needs.MountDecoration(TruckTaxiNeedsItem.AirFreshener, TruckTaxiCabSlot.Mirror); Refresh(); });

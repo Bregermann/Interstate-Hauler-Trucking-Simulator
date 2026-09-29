@@ -28,7 +28,9 @@ namespace LWS.TruckTaxi
         private TruckTaxiUIInput input;
         private RectTransform root,placeList,legendList;
         private TextMeshProUGUI pageText,selectionText,legendPageText;
-        private GameObject routeButton,stopButton,restoreButton,legendPanel;
+        private GameObject routeButton,stopButton,restoreButton,legendPanel,teleportButton;
+        private Vector3? selectedPoint;
+        private bool pickingTravel;
         private bool wasPaused;
         private int page,selected=-1,legendPage;
         public TruckTaxiWorkAreaMapPanel WorkArea { get; private set; }
@@ -57,13 +59,14 @@ namespace LWS.TruckTaxi
             var sidebar=hud.Panel(root,"Map places",new Vector2(.02f,.12f),new Vector2(.30f,.90f));
             hud.Text(sidebar,"PLACES",new Vector2(.04f,.93f),new Vector2(.52f,.99f),25).text="PLACES";
             hud.Button(sidebar,"LEGEND",new Vector2(.55f,.93f),new Vector2(.96f,.99f),ToggleLegend);
-            placeList=TruckTaxiHud.Rect(sidebar,"Place rows",new Vector2(.04f,.29f),new Vector2(.96f,.91f));
+            placeList=TruckTaxiHud.Rect(sidebar,"Place rows",new Vector2(.04f,.37f),new Vector2(.96f,.91f));
             pageText=hud.Text(sidebar,"Page",new Vector2(.31f,.11f),new Vector2(.69f,.18f),20);
             pageText.alignment=TextAlignmentOptions.Center;
             hud.Button(sidebar,"<",new Vector2(.04f,.1f),new Vector2(.29f,.17f),()=>ShowPage(page-1));
             hud.Button(sidebar,">",new Vector2(.71f,.1f),new Vector2(.96f,.17f),()=>ShowPage(page+1));
             selectionText=hud.Text(sidebar,"Selected place",new Vector2(.04f,.058f),new Vector2(.96f,.093f),18);
             routeButton=hud.Button(sidebar,"SET GPS DESTINATION",new Vector2(.04f,.005f),new Vector2(.96f,.055f),RouteSelected);
+            teleportButton=hud.Button(sidebar,"FAST TRAVEL HERE",new Vector2(.04f,.29f),new Vector2(.96f,.36f),TravelSelected);
             stopButton=hud.Button(sidebar,"STOP NAVIGATION",new Vector2(.04f,.23f),new Vector2(.96f,.28f),()=>{ gps.StopNavigation(); UpdateNavigationButtons(); });
             restoreButton=hud.Button(sidebar,"RESTORE ROUTE",new Vector2(.04f,.18f),new Vector2(.96f,.23f),()=>{
                 if(gps.IsServiceDestination) gps.RestoreServiceRoute(); else gps.RestoreRideRoute();
@@ -79,7 +82,11 @@ namespace LWS.TruckTaxi
             hud.Button(legendPanel.transform,">",new Vector2(.71f,.04f),new Vector2(.96f,.10f),()=>ShowLegendPage(legendPage+1));
             legendPanel.SetActive(false);
             WorkArea=gameObject.AddComponent<TruckTaxiWorkAreaMapPanel>(); WorkArea.Initialize(host,hud,root);
-            hud.Button(root,"SET RIDE AREA",new Vector2(.02f,.04f),new Vector2(.30f,.105f),WorkArea.Toggle);
+            hud.Button(root,"SET RIDE AREA",new Vector2(.02f,.04f),new Vector2(.30f,.105f),()=>{pickingTravel=false; WorkArea.Toggle();});
+            hud.Button(root,"PICK TRAVEL POINT",new Vector2(.34f,.005f),new Vector2(.55f,.055f),()=>{ WorkArea.CancelSelection(); pickingTravel=true; selectionText.text="SELECT A ROAD LOCATION"; });
+            hud.Button(root,"SELECT MAP CENTER",new Vector2(.57f,.005f),new Vector2(.79f,.055f),()=>{
+                if(TruckTaxiWorkAreaMapPanel.ProjectGround(gps.PreviewCamera,new Vector2(.5f,.5f),out var point)) SelectPoint(point);
+            });
             root.gameObject.SetActive(false);
             var miniRoot=gps.HudCompass?.transform.Find("MiniMap Root") as RectTransform;
             if(miniRoot!=null)
@@ -106,7 +113,7 @@ namespace LWS.TruckTaxi
             if(!gps.SetFullMapOpen(true,Mathf.Max(1500,bounds.size.x+600,bounds.size.z+600),bounds.center))
             { root.gameObject.SetActive(false); return false; }
             host.SetPaused(true);
-            page=0; selected=-1; ShowPage(0);
+            page=0; selected=-1; selectedPoint=null; pickingTravel=false; ShowPage(0);
             UpdateNavigationButtons();
             root.gameObject.SetActive(true); input.Focus(root); hud.OnFullMapVisibilityChanged();
             return true;
@@ -115,6 +122,7 @@ namespace LWS.TruckTaxi
         {
             if(!IsOpen) return;
             WorkArea.CancelSelection();
+            pickingTravel=false;
             root.gameObject.SetActive(false);
             gps.SetFullMapOpen(false);
             if(!wasPaused) host.SetPaused(false);
@@ -196,11 +204,21 @@ namespace LWS.TruckTaxi
             UpdateSelection();
             input?.Focus(root);
         }
-        private void Select(int index) { selected=index; UpdateSelection(); }
+        private void Select(int index) { selected=index; selectedPoint=null; pickingTravel=false; UpdateSelection(); }
+        private void SelectPoint(Vector3 point) { selected=-1; selectedPoint=point; pickingTravel=false; UpdateSelection(); }
+        private void Update()
+        {
+            if(!IsOpen || !pickingTravel || Mouse.current==null || !Mouse.current.leftButton.wasPressedThisFrame) return;
+            var map=gps.MapScreenRect;
+            if(map==null || !RectTransformUtility.ScreenPointToLocalPointInRectangle(map,Mouse.current.position.ReadValue(),null,out var p) || !map.rect.Contains(p)) return;
+            var uv=new Vector2((p.x-map.rect.xMin)/map.rect.width,(p.y-map.rect.yMin)/map.rect.height);
+            if(TruckTaxiWorkAreaMapPanel.ProjectGround(gps.PreviewCamera,uv,out var point)) SelectPoint(point);
+        }
         private void UpdateSelection()
         {
             bool valid=selected>=0 && selected<places.Count;
-            selectionText.text=valid ? places[selected].Kind+": "+places[selected].Label : "SELECT A PLACE";
+            selectionText.text=selectedPoint.HasValue ? "ROAD NEAR SELECTED POINT" : valid ? places[selected].Kind+": "+places[selected].Label : "SELECT A PLACE";
+            teleportButton.SetActive(valid || selectedPoint.HasValue);
             routeButton.SetActive(valid && places[selected].Routeable && gps.CanSetMapServiceDestination);
             UpdateNavigationButtons();
         }
@@ -244,6 +262,14 @@ namespace LWS.TruckTaxi
             var place=places[selected];
             if(place.Routeable && gps.TrySetMapServiceDestination(place.Id,place.Label,place.Position)) Close();
             else UpdateSelection();
+        }
+        private void TravelSelected()
+        {
+            bool valid=selected>=0 && selected<places.Count;
+            if(!valid && !selectedPoint.HasValue) return;
+            Vector3 point=selectedPoint ?? places[selected].Position;
+            string label=selectedPoint.HasValue ? "SELECTED ROAD POINT" : places[selected].Label;
+            Close(); host.FastTravel.TryTravel(point,label);
         }
         private void OnDestroy() { if(IsOpen) Close(); }
     }

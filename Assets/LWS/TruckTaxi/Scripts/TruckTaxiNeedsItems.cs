@@ -2,7 +2,7 @@ using System;
 
 namespace LWS.TruckTaxi
 {
-    public enum TruckTaxiNeedsItem { EmptyBottle, EmptyPissJug, FilledBottle, FilledJug, WaterBottle, Soda, EnergyDrink, Snack, Burger, Sandwich, Meal, HighOctaneSuppository, MysteryMushrooms, AirFreshener, HulaFigure, NoveltyDuck }
+    public enum TruckTaxiNeedsItem { EmptyBottle, EmptyPissJug, FilledBottle, FilledJug, WaterBottle, Soda, EnergyDrink, Snack, Burger, Sandwich, Meal, HighOctaneSuppository, MysteryMushrooms, AirFreshener, HulaFigure, NoveltyDuck, RoadPep }
     public enum TruckTaxiCabSlot { DashboardLeft, DashboardRight, Mirror }
 
     public sealed class TruckTaxiNeedsItemDefinition
@@ -36,7 +36,8 @@ namespace LWS.TruckTaxi
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.HulaFigure, "Dashboard dancer", 1250, slot: TruckTaxiCabSlot.DashboardLeft),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.NoveltyDuck, "Novelty duck", 800, slot: TruckTaxiCabSlot.DashboardRight),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.HighOctaneSuppository, "High-octane energy suppository", 999),
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.MysteryMushrooms, "Mystery mushrooms", 666)
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.MysteryMushrooms, "Mystery mushrooms", 666),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.RoadPep, "Road Pep (fictional stimulant)", 1800)
         };
         public static TruckTaxiNeedsItemDefinition Find(TruckTaxiNeedsItem item)
         { foreach (var entry in Store) if (entry.Item == item) return entry; return null; }

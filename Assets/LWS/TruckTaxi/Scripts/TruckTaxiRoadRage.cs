@@ -14,6 +14,7 @@ namespace LWS.TruckTaxi
         public AudioClip angryBark;
         public static int ActiveCount { get; private set; }
         public static int ExtremeCount { get; private set; }
+        public bool IsActive => active;
         private static float nextGlobalExtreme;
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetActiveCount() { ActiveCount = ExtremeCount = 0; nextGlobalExtreme = 0; }
@@ -58,8 +59,7 @@ namespace LWS.TruckTaxi
             nextAllowed = endsAt + Mathf.Max(1, cooldownSeconds);
             active = true;
             ActiveCount++;
-            foreach (var source in GetComponentsInChildren<AudioSource>(true))
-                if (source.clip != null && source.clip.name.ToLowerInvariant().Contains("horn")) { source.PlayOneShot(source.clip); break; }
+            GetComponent<TruckTaxiTrafficBehaviour>()?.Honk(TruckTaxiHonkPattern.Angry, true);
             int count = Physics.OverlapSphereNonAlloc(transform.position, 7, nearby, ~0, QueryTriggerInteraction.Ignore);
             for (int i=0;i<count;i++) nearby[i].GetComponentInParent<TruckTaxiPedestrianGesture>()?.ReactToBadDriver();
             if (offender != null && Random.value < extremeChance && Time.time >= nextGlobalExtreme &&

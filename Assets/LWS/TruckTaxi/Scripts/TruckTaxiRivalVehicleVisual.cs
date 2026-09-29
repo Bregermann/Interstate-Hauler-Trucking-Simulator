@@ -15,9 +15,12 @@ namespace LWS.TruckTaxi
         private Material driverClothes;
         private Material driverSkin;
         private MaterialPropertyBlock paint;
+        private TextMesh roofLabel, leftDoorLabel, rightDoorLabel;
         private bool active;
 
-        public void Apply(int variant)
+        public void Apply(int variant) => Apply(variant, Mathf.Abs(variant % 1000));
+
+        public void Apply(int variant, int fleetNumber)
         {
             paint ??= new MaterialPropertyBlock();
             if (active) ResetForPool();
@@ -63,6 +66,14 @@ namespace LWS.TruckTaxi
                 Destroy(signCollider);
                 signMaterial = NewMaterial(new Color(1f, .95f, .72f));
                 sign.GetComponent<Renderer>().sharedMaterial = signMaterial;
+                roofLabel = AddLabel(sign.transform, "Taxi roof lettering",
+                    new Vector3(0, .51f, -.52f), Quaternion.identity, .32f);
+                leftDoorLabel = AddLabel(transform, "Taxi left door",
+                    new Vector3(-1.3f, 1.9f, .4f),
+                    Quaternion.Euler(0, -90, 0), .24f);
+                rightDoorLabel = AddLabel(transform, "Taxi right door",
+                    new Vector3(1.3f, 1.9f, .4f),
+                    Quaternion.Euler(0, 90, 0), .24f);
                 driver = new GameObject("Rival Taxi Wobble driver");
                 driver.transform.SetParent(transform, false);
                 driver.transform.localPosition = roof + new Vector3(-.36f, -.82f, .08f);
@@ -80,7 +91,14 @@ namespace LWS.TruckTaxi
                 });
                 foreach (var collider in driver.GetComponentsInChildren<Collider>(true)) collider.enabled = false;
             }
+            string[] companies = { "CITY HAUL TAXI", "BIG RIG CAB CO.", "TRUCK TAXI", "NIGHT HAUL", "RAPID RIGS" };
+            string company = companies[Mathf.Abs(variant % companies.Length)];
+            roofLabel.text = "TAXI";
+            leftDoorLabel.text = company + "\n#" + fleetNumber.ToString("000");
+            rightDoorLabel.text = leftDoorLabel.text;
             sign.SetActive(true);
+            leftDoorLabel.gameObject.SetActive(true);
+            rightDoorLabel.gameObject.SetActive(true);
             driver.SetActive(true);
             active = true;
         }
@@ -91,6 +109,8 @@ namespace LWS.TruckTaxi
             for (int i = 0; i < bodyRenderers.Length; i++)
                 if (bodyRenderers[i] != null) bodyRenderers[i].SetPropertyBlock(originalBlocks[i]);
             if (sign != null) sign.SetActive(false);
+            if (leftDoorLabel != null) leftDoorLabel.gameObject.SetActive(false);
+            if (rightDoorLabel != null) rightDoorLabel.gameObject.SetActive(false);
             if (driver != null) driver.SetActive(false);
             active = false;
         }
@@ -99,6 +119,21 @@ namespace LWS.TruckTaxi
         {
             var shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
             return new Material(shader) { color = color, hideFlags = HideFlags.DontSave };
+        }
+
+        private static TextMesh AddLabel(Transform parent, string name, Vector3 position, Quaternion rotation, float size)
+        {
+            var go = new GameObject(name);
+            go.transform.SetParent(parent, false);
+            go.transform.localPosition = position;
+            go.transform.localRotation = rotation;
+            var label = go.AddComponent<TextMesh>();
+            label.anchor = TextAnchor.MiddleCenter;
+            label.alignment = TextAlignment.Center;
+            label.characterSize = size;
+            label.fontSize = 48;
+            label.color = Color.black;
+            return label;
         }
 
         private void OnDestroy()

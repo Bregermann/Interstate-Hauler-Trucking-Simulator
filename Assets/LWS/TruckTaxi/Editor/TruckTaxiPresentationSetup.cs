@@ -48,6 +48,7 @@ namespace LWS.TruckTaxi.Editor
             {
                 var group=groups.FirstOrDefault(g=>g.name==category.ToString());
                 string parameter=category+"Volume";
+                if(category==TruckTaxiAudioCategory.Radio && (group==null || !mixer.GetFloat(parameter,out _))) continue;
                 if(group==null || !mixer.GetFloat(parameter,out float db))
                     throw new InvalidOperationException("Missing AudioMixer group/exposed Volume: "+category+" / "+parameter);
                 buses.Add(new TruckTaxiAudioBus {category=category,label=category==TruckTaxiAudioCategory.Voices ? "PASSENGER VOICES" : category.ToString().ToUpperInvariant(),group=group,volumeParameter=parameter,defaultDecibels=db});

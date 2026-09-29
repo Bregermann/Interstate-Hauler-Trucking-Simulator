@@ -21,6 +21,11 @@ namespace LWS.TruckTaxi
         [Header("Identity and casting")]
         public string developmentReference, archetype;
         [TextArea] public string description;
+        [Header("Radio preferences (world-building only)")]
+        public string[] likedRadioStationIds = System.Array.Empty<string>();
+        public string[] dislikedRadioStationIds = System.Array.Empty<string>();
+        [TextArea] public string likedRadioReaction = "Keep this station on.";
+        [TextArea] public string dislikedRadioReaction = "Any chance we could change stations?";
         public TruckTaxiCastingProfile casting;
         public TruckTaxiAppearanceProfile appearance;
         public TruckTaxiAnimatorProfile animatorProfile;

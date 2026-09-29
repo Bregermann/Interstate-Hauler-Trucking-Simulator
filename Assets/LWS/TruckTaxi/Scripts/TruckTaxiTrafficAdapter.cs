@@ -18,7 +18,15 @@ namespace LWS.TruckTaxi
         public bool useDensityOverride = true;
         [Header("Taxi traffic behaviour")]
         public bool useTaxiBoulevardLanes = true;
+        public TruckTaxiTrafficTuning trafficTuning = new TruckTaxiTrafficTuning();
+        public TruckTaxiTrafficTuning Tuning => trafficTuning ??= new TruckTaxiTrafficTuning();
         public AudioClip trafficHorn;
+        public AudioClip longTrafficHorn;
+        public AudioClip angryTrafficHorn;
+        [Tooltip("UTS cab-only NPC truck prefab used only for rivals; ordinary traffic keeps its own fleet.")]
+        public GameObject rivalTruckPrefab;
+        public float WeatherCaution { get; private set; }
+        public void SetWeatherCaution(float caution) => WeatherCaution = Mathf.Clamp01(caution);
         [Header("Traffic simulation bubbles")]
         [Min(1)] public int maxFullTraffic = 40;
         [Min(0)] public int maxVisibleTraffic = 40;
@@ -54,6 +62,7 @@ namespace LWS.TruckTaxi
         private readonly LwsTrafficSpawnPolicy policy = new LwsTrafficSpawnPolicy {
             targetCruiseSpeedScale = 0.7f, maximumTrafficSpeedMetersPerSecond = 12, autoResolveEditorPrefabs = false };
         private float nextMaintenance;
+        private float nextWeatherSample;
         private float nextDemandConvergence;
         private int demandCursor;
         private Func<Vector3, float> demandSampler;
@@ -105,6 +114,45 @@ namespace LWS.TruckTaxi
             if (!PoolVehicle(vehicle)) return false;
             return true;
         }
+        // The caller snapshots visuals first. Only this adapter may retire a live UTS actor.
+        public bool TryReleaseKaijuVictim(GameObject victim, int expectedGeneration)
+        {
+            if (victim == null || !victim.activeInHierarchy || !vehicles.Contains(victim) ||
+                victim.GetComponentInChildren<NWH.VehiclePhysics2.VehicleController>(true) != null) return false;
+            var actor = victim.GetComponent<TruckTaxiTrafficPooledActor>();
+            var mission = victim.GetComponent<TruckTaxiMissionTarget>();
+            if (actor == null || actor.Generation != expectedGeneration || actor.MissionReserved ||
+                (mission != null && !string.IsNullOrEmpty(mission.StableId))) return false;
+            if (dedicatedVehicles.Contains(victim))
+            {
+                var rivals = GetComponent<TruckTaxiRivalPopulation>();
+                return rivals != null && rivals.TryReleaseForKaiju(this, victim, expectedGeneration);
+            }
+            TruckTaxiTrafficPopulation.Car record = null;
+            if (population != null)
+                foreach (var car in population.Cars)
+                    if (car.Actor == victim) { record = car; break; }
+            if (record == null || record.MissionReserved) return false;
+            Vector3 origin = victim.transform.position;
+            Vector3 observer = PresentationObserver();
+            Vector3 destination = origin;
+            float farthest = 0;
+            foreach (var lane in validLanes)
+                if (lane != null && lane.spawnEnabled && lane.centerline != null)
+                    for (int i = 2; i < lane.centerline.Length - 2; i++)
+                    {
+                        Vector3 point = lane.centerline[i];
+                        float distance = Mathf.Min((point - origin).sqrMagnitude, (point - observer).sqrMagnitude);
+                        if (distance > farthest) { farthest = distance; destination = point; }
+                    }
+            // No immediate replacement at the grab location in small test/isolated lane networks.
+            if (farthest < visibleTrafficRadius * visibleTrafficRadius) return false;
+            if (!PoolVehicle(victim)) return false;
+            record.Actor = null;
+            record.FullPhysics = false;
+            population.RetargetUnmaterialized(record, destination);
+            return true;
+        }
         public bool TrySpawnDedicatedVehicle(Vector3 near, out GameObject vehicle, out string stableId) =>
             TrySpawnDedicatedVehicle(null, near, out vehicle, out stableId);
         public bool TrySpawnDedicatedVehicle(string stableId, Vector3 near, out GameObject vehicle)
@@ -134,7 +182,9 @@ namespace LWS.TruckTaxi
                 }
             }
             if (bestLane < 0) return false;
-            int prefabIndex = spawnCursor++ % trafficPrefabs.Length;
+            bool isRival = requestedId != null && requestedId.StartsWith("taxi.rival.", StringComparison.Ordinal);
+            if (isRival && rivalTruckPrefab == null) return false;
+            int prefabIndex = isRival ? trafficPrefabs.Length : spawnCursor++ % trafficPrefabs.Length;
             vehicle = AcquireVehicle(prefabIndex, bestLane, bestPoint, requestedId ?? "taxi.traffic." + (serial + 1),
                 true, validLanes[bestLane].centerline[bestPoint]);
             if (vehicle == null) return false;
@@ -182,7 +232,7 @@ namespace LWS.TruckTaxi
             for (int i=0;i<maximumVehicles;i++) TrySpawnTraffic(maximumVehicles, false);
             BaselineActiveCount = ActiveCount; initialized = true;
             for (int i = vehicles.Count - 1; i >= 0; i--) PoolVehicle(vehicles[i]);
-            population = new TruckTaxiTrafficPopulation(validLanes, TargetCount, trafficPrefabs?.Length ?? 0, serial);
+            population = new TruckTaxiTrafficPopulation(validLanes, TargetCount, trafficPrefabs?.Length ?? 0, serial, Tuning);
             serial += population.Count;
             BuildDemandSamples();
             nextMaintenance = 0;
@@ -245,6 +295,12 @@ namespace LWS.TruckTaxi
                 if (component.GetType().Name == "CarMove") component.enabled = true;
                 if (component.GetType().Name == "CarAIController")
                     component.enabled = false;
+                if (requestedId != null && requestedId.StartsWith("taxi.rival.", StringComparison.Ordinal) &&
+                    component.GetType().Name == "AddTrailer")
+                {
+                    component.enabled = false;
+                    Destroy(component);
+                }
             }
             var target = vehicle.GetComponent<TruckTaxiImpactTarget>() ?? vehicle.AddComponent<TruckTaxiImpactTarget>();
             target.kind = TaxiImpactKind.Traffic;
@@ -352,6 +408,17 @@ namespace LWS.TruckTaxi
         private void Update()
         {
             if (!Ready || population == null) return;
+            if (Time.time >= nextWeatherSample)
+            {
+                nextWeatherSample = Time.time + .5f;
+                string weather = TruckTaxiBootstrap.Instance?.Environment?.CurrentTaxiWeatherId;
+                SetWeatherCaution(weather == TruckTaxiSnow.BlizzardId ? 1 :
+                    weather == LwsWeatherPresetCatalog.HeavySnowId ? .8f :
+                    weather == LwsWeatherPresetCatalog.LightSnowId ? .5f :
+                    weather == LwsWeatherPresetCatalog.ThunderstormId ? .7f :
+                    weather == LwsWeatherPresetCatalog.HeavyRainId ? .5f :
+                    weather == LwsWeatherPresetCatalog.LightRainId ? .25f : 0);
+            }
             EvictUnavailable();
             float delta = Mathf.Min(.5f, Time.deltaTime);
             for (int i = 0; i < population.Count; i++)
@@ -619,7 +686,9 @@ namespace LWS.TruckTaxi
                 actor.Place(paths[lane], point, position, stableId, full);
                 return actor.gameObject;
             }
-            var vehicle = api.SpawnVehicle(trafficPrefabs[prefabIndex], paths[lane], validLanes[lane], point,
+            var prefab = prefabIndex == trafficPrefabs.Length ? rivalTruckPrefab : trafficPrefabs[prefabIndex];
+            if (prefab == null) return null;
+            var vehicle = api.SpawnVehicle(prefab, paths[lane], validLanes[lane], point,
                 transform, policy, out string message);
             if (vehicle == null) Debug.LogWarning(message, this);
             else vehicle.transform.position = position;
@@ -674,7 +743,7 @@ namespace LWS.TruckTaxi
                 if (vehicle != null && vehicle.GetComponent<TruckTaxiTrafficPooledActor>()?.MissionReserved == true)
                 { Debug.LogWarning("Traffic reset deferred while a mission target is assigned.", this); return; }
             for (int i = vehicles.Count - 1; i >= 0; i--) PoolVehicle(vehicles[i]);
-            population = new TruckTaxiTrafficPopulation(validLanes, TargetCount, trafficPrefabs?.Length ?? 0, serial);
+            population = new TruckTaxiTrafficPopulation(validLanes, TargetCount, trafficPrefabs?.Length ?? 0, serial, Tuning);
             serial += population.Count;
             FullPhysicsCount = 0;
             nextMaintenance = 0;

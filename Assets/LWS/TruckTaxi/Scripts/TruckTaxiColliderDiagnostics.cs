@@ -8,16 +8,19 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiColliderDiagnostics : MonoBehaviour
     {
         private TruckTaxiBootstrap host;
-        private bool passengers,buses,traffic;
+        private bool passengers,buses,traffic,world;
         private readonly List<Collider> colliders=new List<Collider>();
         public void Initialize(TruckTaxiBootstrap value) => host=value;
         public void TogglePassengers() {passengers=!passengers; Rebuild();}
         public void ToggleBuses() {buses=!buses; Rebuild();}
         public void ToggleTraffic() {traffic=!traffic; Rebuild();}
+        public void ToggleSolidWorld() {world=!world; Rebuild();}
         private void Rebuild()
         {
             colliders.Clear();
             if(host==null) return;
+            if(world) foreach(var collider in FindObjectsByType<Collider>(FindObjectsSortMode.None))
+                if(collider.enabled && !collider.isTrigger && collider.attachedRigidbody==null) colliders.Add(collider);
             if(passengers)
             {
                 if(host.Passengers.PrimaryActor!=null) colliders.AddRange(host.Passengers.PrimaryActor.GetComponentsInChildren<Collider>());

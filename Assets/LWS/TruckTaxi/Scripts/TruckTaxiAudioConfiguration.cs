@@ -4,7 +4,7 @@ using UnityEngine.Audio;
 
 namespace LWS.TruckTaxi
 {
-    public enum TruckTaxiAudioCategory { Master, Voices, Vehicle, World, UI }
+    public enum TruckTaxiAudioCategory { Master, Voices, Vehicle, World, UI, Radio }
 
     [Serializable]
     public sealed class TruckTaxiAudioBus

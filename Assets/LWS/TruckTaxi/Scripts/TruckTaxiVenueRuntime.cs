@@ -61,6 +61,7 @@ namespace LWS.TruckTaxi
         {
             public TruckTaxiVenueWeatherImpact Impact;
             public DateTime PulseStart, PulseEnd;
+            public bool ExternalEmergency;
         }
         public TruckTaxiVenueCatalog catalog;
         public IReadOnlyList<TruckTaxiVenueDefinition> Venues => catalog != null ? catalog.venues : Array.Empty<TruckTaxiVenueDefinition>();
@@ -198,6 +199,7 @@ namespace LWS.TruckTaxi
                 DateTime? date = FindEligibleOccurrence(item, now);
                 if (!date.HasValue) continue;
                 string key = OccurrenceKey(item.id, date.Value);
+                if (weather.TryGetValue(key, out var locked) && locked.ExternalEmergency) continue;
                 if (impact == TruckTaxiVenueWeatherImpact.None)
                 {
                     changed |= weather.Remove(key);
@@ -215,6 +217,17 @@ namespace LWS.TruckTaxi
                 changed = true;
             }
             if (changed) Invalidate();
+        }
+        public bool EvacuateOccurrence(string eventId, DateTime occurrenceDate)
+        {
+            if (clock == null || FindEvent(eventId) == null) return false;
+            string key = OccurrenceKey(eventId, occurrenceDate);
+            if (weather.TryGetValue(key, out var existing) && existing.ExternalEmergency) return false;
+            DateTime now = clock();
+            weather[key] = new WeatherDecision { Impact = TruckTaxiVenueWeatherImpact.Cancel,
+                ExternalEmergency = true, PulseStart = now, PulseEnd = now.AddMinutes(60) };
+            Invalidate();
+            return true;
         }
         public bool TryDequeueAlert(out TruckTaxiVenueAlert alert)
         {

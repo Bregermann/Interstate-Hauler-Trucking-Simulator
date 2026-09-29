@@ -140,6 +140,16 @@ namespace LWS.TruckTaxi
             Add("GPS / NAVIGATION","Zoom full map","Wheel / Page Up / Page Down","Shoulders",false);
             Add("GPS / NAVIGATION","Center map on player","Home","MAP button",false,"Home is a driving control outside map mode");
             Screen("GPS / NAVIGATION","Set GPS destination","MAP");
+            Screen("GPS / NAVIGATION","Fast travel (active fare ends)","MAP");
+            Bound("RADIO","Radio on/off",true,ui.RadioToggle);
+            Bound("RADIO","Next station",false,ui.RadioNext);
+            Bound("RADIO","Previous station",false,ui.RadioPrevious);
+            Bound("RADIO","Mute",false,ui.RadioMute);
+            Bound("RADIO","Volume up",false,ui.RadioVolumeUp);
+            Bound("RADIO","Volume down",false,ui.RadioVolumeDown);
+            Bound("DRIVER NEEDS","Road Pep steady aim",false,needs?.RoadPepAimAction);
+            Bound("DRIVER NEEDS","Road Pep timing",false,needs?.RoadPepTimingAction);
+            Screen("DRIVER NEEDS","Use Road Pep","ITEMS");
             Screen("DRIVER NEEDS / SERVICES","Open driver needs","MENU");
             Screen("DRIVER NEEDS / SERVICES","Open services page","MENU");
             Screen("DRIVER NEEDS / SERVICES","Open store page","MENU");

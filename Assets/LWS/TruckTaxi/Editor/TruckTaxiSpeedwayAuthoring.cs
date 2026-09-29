@@ -17,27 +17,41 @@ namespace LWS.TruckTaxi.Editor
         private const string MeshFolder = TruckTaxiRegionalAuthoring.Root + "/Meshes/Speedway";
         private const string MaterialFolder = TruckTaxiRegionalAuthoring.Root + "/Materials";
 
-        [MenuItem("Truck Taxi/Regional/Hide Prototype Town Perimeter Walls")]
-        public static void HidePrototypeTownWalls()
+        [MenuItem("Truck Taxi/Regional/Remove Prototype Town Perimeter Blockers")]
+        public static void RemovePrototypeTownPerimeterBlockers()
         {
             RequireCleanScenes();
             foreach (string town in new[] { "Town01", "Town02" })
             {
                 var scene = EditorSceneManager.OpenScene(TruckTaxiRegionalAuthoring.Root + "/Scenes/Taxi_" + town + ".unity");
-                int hidden = 0;
+                int hidden = 0, retired = 0;
                 foreach (var root in scene.GetRootGameObjects())
+                {
                     foreach (var renderer in root.GetComponentsInChildren<MeshRenderer>(true))
                     {
                         if (!BelongsToPrototypePerimeter(renderer.transform) || !renderer.enabled) continue;
-                        // Keep existing collision as an invisible safety boundary until terrain/outskirts replace it.
+                        Undo.RecordObject(renderer,"Remove prototype town perimeter blocker");
                         renderer.enabled = false;
                         EditorUtility.SetDirty(renderer);
                         hidden++;
                     }
-                if (hidden > 0) { EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); }
-                Debug.Log("Truck Taxi " + town + ": hidden " + hidden + " prototype perimeter renderers; safety colliders retained.");
+                    foreach (var collider in root.GetComponentsInChildren<Collider>(true))
+                    {
+                        if (!BelongsToPrototypePerimeter(collider.transform) || !collider.enabled) continue;
+                        Undo.RecordObject(collider,"Remove prototype town perimeter blocker");
+                        collider.enabled = false;
+                        EditorUtility.SetDirty(collider);
+                        retired++;
+                    }
+                }
+                if (hidden > 0 || retired > 0)
+                { EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); }
+                Debug.Log("Truck Taxi " + town + ": removed " + hidden + " visible perimeter renderers and " + retired + " solid perimeter colliders.");
             }
         }
+
+        // Existing editor callers keep working; the migration now retires both halves of the blocker.
+        public static void HidePrototypeTownWalls() => RemovePrototypeTownPerimeterBlockers();
 
         public static bool IsPrototypePerimeter(string name)
         {

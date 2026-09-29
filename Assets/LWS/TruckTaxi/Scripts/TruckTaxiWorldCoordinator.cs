@@ -11,15 +11,16 @@ namespace LWS.TruckTaxi
     {
         private TruckTaxiBootstrap host;
         private TruckTaxiBusService[] buses;
-        private float nextRefresh,notificationUntil,nextNotification;
+        private float nextRefresh;
         private DateTime lastObserved,rainStarted;
         private TruckTaxiVenueWeatherImpact weatherImpact;
-        private readonly Queue<string> notifications=new Queue<string>();
+        private string lastWeatherWarning;
+        private TruckTaxiKaijuDirector kaiju;
         private readonly List<TruckTaxiRivalDemandZone> rivalZones=new List<TruckTaxiRivalDemandZone>();
         private readonly Dictionary<string,TruckTaxiMapMarker> markers=new Dictionary<string,TruckTaxiMapMarker>();
         private readonly HashSet<string> activeMarkerIds=new HashSet<string>();
         public TruckTaxiHazardZone[] HazardZones { get; private set; }=Array.Empty<TruckTaxiHazardZone>();
-        public string Notification { get; private set; }="";
+        public string Notification => host?.hud?.Alerts?.CurrentText ?? "";
         public int VenueCrowdActors { get; private set; }
         public int BusActors { get {int n=0; foreach(var bus in buses??Array.Empty<TruckTaxiBusService>()) if(bus!=null) n+=bus.LiveBuses; return n;} }
         public void Initialize(TruckTaxiBootstrap value)
@@ -62,7 +63,25 @@ namespace LWS.TruckTaxi
             else host.CalendarWeather.ClearSevereOverride();
         }
         private void OnWarning(TruckTaxiExtremeWarning warning)
-        { if(notifications.Count<12) notifications.Enqueue(warning.Text); }
+        { host.hud.Alerts.Publish("extreme:"+warning.Text, warning.Text, TruckTaxiAlertPriority.Critical, 12); }
+        public void BindKaiju(TruckTaxiKaijuDirector value)
+        {
+            if(kaiju!=null) kaiju.RegionalThreatRaised-=OnKaijuThreat;
+            kaiju=value;
+            if(kaiju!=null) kaiju.RegionalThreatRaised+=OnKaijuThreat;
+        }
+        private void OnKaijuThreat(TruckTaxiKaijuSnapshot threat)
+        {
+            if(threat.Kind!=TruckTaxiKaijuKind.Attack) return;
+            foreach(var item in host.Venues.GetNextSevenDays())
+                if((item.Position-threat.Position).sqrMagnitude<1200*1200 &&
+                    item.End>host.CalendarWeather.CurrentDateTime && item.Start<=host.CalendarWeather.CurrentDateTime.AddHours(2))
+                {
+                    host.Venues.EvacuateOccurrence(item.EventId,item.OccurrenceDate);
+                }
+            if(host.Races?.IsActive==true && (host.Player.transform.position-threat.Position).sqrMagnitude<1200*1200)
+                host.Races.CancelRace("THUNDER BOWL EVACUATED - KAIJU WARNING");
+        }
         private void Update()
         {
             if(host==null || Time.unscaledTime<nextRefresh) return;
@@ -77,14 +96,22 @@ namespace LWS.TruckTaxi
                 condition==TruckTaxiWeatherCondition.HeavySnow || condition==TruckTaxiWeatherCondition.Blizzard,
                 rainStarted==default ? 0 : (float)(now-rainStarted).TotalHours);
             var severity=host.CalendarWeather.CurrentSeverity;
+            string warning=host.CalendarWeather.CurrentWarning;
+            if(warning!=lastWeatherWarning)
+            {
+                lastWeatherWarning=warning;
+                if(!string.IsNullOrWhiteSpace(warning)) host.hud.Alerts.Publish("weather:"+warning,warning,
+                    severity==TruckTaxiWeatherSeverity.Emergency ? TruckTaxiAlertPriority.Critical : TruckTaxiAlertPriority.High,12);
+            }
             var nextImpact=severity==TruckTaxiWeatherSeverity.Emergency ? TruckTaxiVenueWeatherImpact.Cancel :
                 severity==TruckTaxiWeatherSeverity.Warning ? TruckTaxiVenueWeatherImpact.Delay : TruckTaxiVenueWeatherImpact.None;
             if(nextImpact!=weatherImpact || nextImpact!=TruckTaxiVenueWeatherImpact.None)
             {weatherImpact=nextImpact; host.Venues.SetSevereWeather(nextImpact);}
-            if(host.Venues.TryDequeueAlert(out var alert) && notifications.Count<12) notifications.Enqueue(alert.Title+"\n"+alert.Message);
-            if(Time.unscaledTime>=notificationUntil) Notification="";
-            if(!host.Paused && Time.unscaledTime>=nextNotification && notifications.Count>0)
-            {Notification=notifications.Dequeue(); notificationUntil=Time.unscaledTime+8; nextNotification=Time.unscaledTime+12;}
+            if(host.Venues.TryDequeueAlert(out var alert))
+            {
+                host.hud.Alerts.Publish("venue:"+alert.Title+alert.Message, alert.Title+"\n"+alert.Message);
+                host.Radio?.EnqueueBulletin(alert.Title+". "+alert.Message);
+            }
             RefreshWorldPresentation();
         }
         private void RefreshWorldPresentation()
@@ -132,6 +159,10 @@ namespace LWS.TruckTaxi
             }
             marker.transform.position=position; marker.state=TruckTaxiMapMarkerState.Active;
         }
-        private void OnDestroy() {if(host?.Extremes!=null) host.Extremes.WarningRaised-=OnWarning;}
+        private void OnDestroy()
+        {
+            if(host?.Extremes!=null) host.Extremes.WarningRaised-=OnWarning;
+            if(kaiju!=null) kaiju.RegionalThreatRaised-=OnKaijuThreat;
+        }
     }
 }

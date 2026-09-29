@@ -65,8 +65,9 @@ namespace LWS.TruckTaxi
         public void AdvanceGameSeconds(double seconds)
         {
             if (seconds <= 0 || double.IsNaN(seconds) || double.IsInfinity(seconds)) return;
-            double untilFull = (1 - Pressure) * cycleSeconds;
-            Pressure = Mathf.Clamp01(Pressure + (float)(seconds / cycleSeconds));
+            float bladderRate = Effects.BladderRateMultiplier;
+            double untilFull = (1 - Pressure) * cycleSeconds / Mathf.Max(.01f, bladderRate);
+            Pressure = Mathf.Clamp01(Pressure + (float)(seconds / cycleSeconds) * bladderRate);
             Hunger = Mathf.Clamp01(Hunger + (float)(seconds / (8 * 3600)) * Effects.HungerRateMultiplier);
             Thirst = Mathf.Clamp01(Thirst + (float)(seconds / (5 * 3600)) * Effects.ThirstRateMultiplier);
             if (Pressure >= .85f && !urgentEmitted) { urgentEmitted = true; Event?.Invoke(TruckTaxiDriverNeedEvent.BladderUrgent); }
@@ -162,6 +163,8 @@ namespace LWS.TruckTaxi
         }
         private bool RemoveItem(TruckTaxiNeedsItem item)
         { if (Count(item) <= 0) return false; items[(int)item]--; return true; }
+        public bool BeginRoadPep() => !JugActive && RemoveItem(TruckTaxiNeedsItem.RoadPep);
+        public void CompleteRoadPep(int score) => Effects.ActivateRoadPep(score);
         public bool Consume(TruckTaxiNeedsItem item)
         {
             var entry = TruckTaxiNeedsItems.Find(item);

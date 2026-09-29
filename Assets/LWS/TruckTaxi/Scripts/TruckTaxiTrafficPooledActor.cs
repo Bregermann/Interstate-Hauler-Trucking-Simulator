@@ -63,7 +63,7 @@ namespace LWS.TruckTaxi
             optionalBehaviours = GetComponentsInChildren<MonoBehaviour>(true);
             optionalDefaults = new bool[optionalBehaviours.Length];
             for (int i = 0; i < optionalBehaviours.Length; i++)
-                optionalDefaults[i] = optionalBehaviours[i] is Behaviour behaviour && behaviour.enabled;
+                optionalDefaults[i] = optionalBehaviours[i] is Behaviour behaviour && behaviour != null && behaviour.enabled;
         }
 
         public void PutAway()
@@ -127,7 +127,7 @@ namespace LWS.TruckTaxi
             {
                 taxi?.ResetForPool();
                 for (int i = 0; i < optionalBehaviours.Length; i++)
-                    if (optionalBehaviours[i] is Behaviour behaviour && behaviour != this) behaviour.enabled = false;
+                    if (optionalBehaviours[i] is Behaviour behaviour && behaviour != null && behaviour != this) behaviour.enabled = false;
                 if (!body.isKinematic) { body.linearVelocity = Vector3.zero; body.angularVelocity = Vector3.zero; }
                 body.isKinematic = true; body.useGravity = false;
                 foreach (var collider in colliders) if (collider != null) collider.enabled = false;
@@ -140,7 +140,7 @@ namespace LWS.TruckTaxi
                 body.isKinematic = bodyWasKinematic; body.useGravity = bodyUsedGravity; body.constraints = bodyConstraints;
                 for (int i = 0; i < colliders.Length; i++) if (colliders[i] != null) colliders[i].enabled = colliderDefaults[i];
                 for (int i = 0; i < optionalBehaviours.Length; i++)
-                    if (optionalBehaviours[i] is Behaviour behaviour && behaviour != this && behaviour != aiBehaviour)
+                    if (optionalBehaviours[i] is Behaviour behaviour && behaviour != null && behaviour != this && behaviour != aiBehaviour)
                         behaviour.enabled = optionalDefaults[i];
                 for (int i = 0; i < animators.Length; i++) if (animators[i] != null) animators[i].enabled = animatorDefaults[i];
                 if (moveBehaviour != null) moveBehaviour.enabled = true;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi
 {
-    public enum TruckTaxiTemporaryEffectKind { MysteryMushroom, HighOctaneBoost, EnergyDrink }
+    public enum TruckTaxiTemporaryEffectKind { MysteryMushroom, HighOctaneBoost, EnergyDrink, RoadPep, RoadPepComedown }
     public enum TruckTaxiEffectStacking { RefreshDuration }
 
     public sealed class TruckTaxiTemporaryEffect
@@ -16,6 +16,7 @@ namespace LWS.TruckTaxi
         public readonly float VehiclePowerMultiplier;
         public readonly float HungerRateMultiplier;
         public readonly float ThirstRateMultiplier;
+        public readonly float BladderRateMultiplier;
         public readonly float Saturation;
         public readonly float Contrast;
         public readonly float BloomIntensity;
@@ -26,7 +27,7 @@ namespace LWS.TruckTaxi
 
         public TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind kind, string label, float durationSeconds,
             float fadeInSeconds, float fadeOutSeconds, float vehiclePowerMultiplier = 1,
-            float hungerRateMultiplier = 1, float thirstRateMultiplier = 1,
+            float hungerRateMultiplier = 1, float thirstRateMultiplier = 1, float bladderRateMultiplier = 1,
             float saturation = 0, float contrast = 0, float bloomIntensity = 0,
             float chromaticAberration = 0, int chaosBonus = 0, string dialogueHook = null)
         {
@@ -37,6 +38,7 @@ namespace LWS.TruckTaxi
             VehiclePowerMultiplier = Mathf.Max(1, vehiclePowerMultiplier);
             HungerRateMultiplier = Mathf.Max(0, hungerRateMultiplier);
             ThirstRateMultiplier = Mathf.Max(0, thirstRateMultiplier);
+            BladderRateMultiplier = Mathf.Max(0, bladderRateMultiplier);
             Saturation = saturation; Contrast = contrast;
             BloomIntensity = bloomIntensity; ChromaticAberration = chromaticAberration;
             ChaosBonus = chaosBonus; DialogueHook = dialogueHook;
@@ -77,10 +79,18 @@ namespace LWS.TruckTaxi
                 chaosBonus: 2, dialogueHook: "HighOctaneBoost"),
             new TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind.EnergyDrink, "Energy drink",
                 420, .5f, 2, vehiclePowerMultiplier: 1.15f, hungerRateMultiplier: .9f,
-                dialogueHook: "EnergyDrink")
+                dialogueHook: "EnergyDrink"),
+            new TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind.RoadPep, "Road Pep",
+                600, 1, 3, hungerRateMultiplier: .35f, thirstRateMultiplier: 1.2f,
+                bladderRateMultiplier: 1.15f, dialogueHook: "RoadPep"),
+            new TruckTaxiTemporaryEffect(TruckTaxiTemporaryEffectKind.RoadPepComedown, "Road Pep comedown",
+                120, 2, 4, hungerRateMultiplier: 1.35f, thirstRateMultiplier: 1.15f,
+                dialogueHook: "RoadPepComedown")
         };
         private readonly float[] remaining = new float[profiles.Length];
         private readonly TruckTaxiTemporaryEffect[] activeProfiles = new TruckTaxiTemporaryEffect[profiles.Length];
+        public int RoadPepOveruse { get; private set; }
+        private float roadPepComedownQuality = 1;
         public bool ShortDebugDurations { get; private set; }
         public void SetShortDebugDurations(bool enabled)
         {
@@ -91,10 +101,12 @@ namespace LWS.TruckTaxi
         private static TruckTaxiTemporaryEffect DebugProfile(TruckTaxiTemporaryEffect profile)
         {
             float duration = profile.Kind == TruckTaxiTemporaryEffectKind.MysteryMushroom ? 18 :
-                profile.Kind == TruckTaxiTemporaryEffectKind.HighOctaneBoost ? 12 : 14;
+                profile.Kind == TruckTaxiTemporaryEffectKind.HighOctaneBoost ? 12 :
+                profile.Kind == TruckTaxiTemporaryEffectKind.RoadPep ? 20 :
+                profile.Kind == TruckTaxiTemporaryEffectKind.RoadPepComedown ? 8 : 14;
             return new TruckTaxiTemporaryEffect(profile.Kind, profile.Label, duration,
                 profile.FadeInSeconds, profile.FadeOutSeconds, profile.VehiclePowerMultiplier,
-                profile.HungerRateMultiplier, profile.ThirstRateMultiplier, profile.Saturation,
+                profile.HungerRateMultiplier, profile.ThirstRateMultiplier, profile.BladderRateMultiplier, profile.Saturation,
                 profile.Contrast, profile.BloomIntensity, profile.ChromaticAberration,
                 profile.ChaosBonus, profile.DialogueHook);
         }
@@ -112,7 +124,7 @@ namespace LWS.TruckTaxi
                 float value = 1;
                 for (int i = 0; i < remaining.Length; i++)
                     if (remaining[i] > 0)
-                        value = Mathf.Max(value, Mathf.Lerp(1, profiles[i].VehiclePowerMultiplier, GetSnapshot(profiles[i].Kind).Intensity01));
+                        value = Mathf.Max(value, Mathf.Lerp(1, (activeProfiles[i] ?? profiles[i]).VehiclePowerMultiplier, GetSnapshot(profiles[i].Kind).Intensity01));
                 return value;
             }
         }
@@ -122,7 +134,7 @@ namespace LWS.TruckTaxi
             {
                 float value = 1;
                 for (int i = 0; i < remaining.Length; i++)
-                    if (remaining[i] > 0) value = Mathf.Min(value, profiles[i].HungerRateMultiplier);
+                    if (remaining[i] > 0) value *= (activeProfiles[i] ?? profiles[i]).HungerRateMultiplier;
                 return value;
             }
         }
@@ -132,7 +144,17 @@ namespace LWS.TruckTaxi
             {
                 float value = 1;
                 for (int i = 0; i < remaining.Length; i++)
-                    if (remaining[i] > 0) value = Mathf.Min(value, profiles[i].ThirstRateMultiplier);
+                    if (remaining[i] > 0) value *= (activeProfiles[i] ?? profiles[i]).ThirstRateMultiplier;
+                return value;
+            }
+        }
+        public float BladderRateMultiplier
+        {
+            get
+            {
+                float value = 1;
+                for (int i = 0; i < remaining.Length; i++)
+                    if (remaining[i] > 0) value *= (activeProfiles[i] ?? profiles[i]).BladderRateMultiplier;
                 return value;
             }
         }
@@ -146,6 +168,7 @@ namespace LWS.TruckTaxi
         }
         public bool Activate(TruckTaxiTemporaryEffectKind kind)
         {
+            if (kind == TruckTaxiTemporaryEffectKind.RoadPep || kind == TruckTaxiTemporaryEffectKind.RoadPepComedown) return false;
             var profile = Profile(kind);
             if (profile == null) return false;
             bool wasActive = remaining[(int)kind] > 0;
@@ -153,6 +176,30 @@ namespace LWS.TruckTaxi
             remaining[(int)kind] = activeProfiles[(int)kind].DurationSeconds;
             if (!wasActive) Started?.Invoke(kind);
             return true;
+        }
+        public static float RoadPepQuality(int score) => score >= 90 ? 1 : score >= 70 ? .9f : score >= 40 ? .7f : .45f;
+        public void ActivateRoadPep(int score)
+        {
+            score = Mathf.Clamp(score, 0, 100);
+            int index = (int)TruckTaxiTemporaryEffectKind.RoadPep;
+            bool repeated = remaining[index] > 0 || remaining[(int)TruckTaxiTemporaryEffectKind.RoadPepComedown] > 0;
+            RoadPepOveruse = repeated ? Mathf.Min(3, RoadPepOveruse + 1) : 0;
+            float quality = RoadPepQuality(score);
+            roadPepComedownQuality = quality;
+            float benefit = Mathf.Lerp(.45f, 1, quality);
+            var baseProfile = profiles[index];
+            float duration = (ShortDebugDurations ? 20 : baseProfile.DurationSeconds) * quality;
+            activeProfiles[index] = new TruckTaxiTemporaryEffect(baseProfile.Kind, baseProfile.Label,
+                duration, baseProfile.FadeInSeconds, baseProfile.FadeOutSeconds,
+                hungerRateMultiplier: Mathf.Lerp(1, baseProfile.HungerRateMultiplier, benefit),
+                thirstRateMultiplier: baseProfile.ThirstRateMultiplier + RoadPepOveruse * .1f,
+                bladderRateMultiplier: baseProfile.BladderRateMultiplier + RoadPepOveruse * .05f,
+                dialogueHook: baseProfile.DialogueHook);
+            bool wasActive = remaining[index] > 0;
+            remaining[index] = duration;
+            int comedown = (int)TruckTaxiTemporaryEffectKind.RoadPepComedown;
+            if (remaining[comedown] > 0) { remaining[comedown] = 0; Expired?.Invoke(TruckTaxiTemporaryEffectKind.RoadPepComedown); }
+            if (!wasActive) Started?.Invoke(TruckTaxiTemporaryEffectKind.RoadPep);
         }
         public bool DebugMushroomPeak()
         {
@@ -170,15 +217,50 @@ namespace LWS.TruckTaxi
         public void Tick(float seconds)
         {
             if (!float.IsFinite(seconds) || seconds <= 0) return;
+            bool comedownCreated = false;
+            float comedownSeconds = 0;
             for (int i = 0; i < remaining.Length; i++)
             {
                 if (remaining[i] <= 0) continue;
-                remaining[i] = Mathf.Max(0, remaining[i] - seconds);
-                if (remaining[i] == 0) Expired?.Invoke(profiles[i].Kind);
+                float elapsed = comedownCreated && i == (int)TruckTaxiTemporaryEffectKind.RoadPepComedown ? comedownSeconds : seconds;
+                float before = remaining[i];
+                remaining[i] = Mathf.Max(0, remaining[i] - elapsed);
+                if (remaining[i] == 0)
+                {
+                    Expired?.Invoke(profiles[i].Kind);
+                    if (profiles[i].Kind == TruckTaxiTemporaryEffectKind.RoadPep)
+                    { comedownCreated = true; comedownSeconds = Mathf.Max(0, seconds - before); StartRoadPepComedown(); }
+                    else if (profiles[i].Kind == TruckTaxiTemporaryEffectKind.RoadPepComedown) RoadPepOveruse = 0;
+                }
             }
+        }
+        public void ClearRoadPep()
+        {
+            for (int i = (int)TruckTaxiTemporaryEffectKind.RoadPep; i <= (int)TruckTaxiTemporaryEffectKind.RoadPepComedown; i++)
+            {
+                if (remaining[i] <= 0) continue;
+                remaining[i] = 0;
+                Expired?.Invoke(profiles[i].Kind);
+            }
+            RoadPepOveruse = 0;
+        }
+        private void StartRoadPepComedown()
+        {
+            int index = (int)TruckTaxiTemporaryEffectKind.RoadPepComedown;
+            var baseProfile = profiles[index];
+            float severity = 1 + RoadPepOveruse * .2f + (1 - roadPepComedownQuality) * .5f;
+            float duration = ShortDebugDurations ? 8 : Mathf.Min(210, baseProfile.DurationSeconds * severity);
+            activeProfiles[index] = new TruckTaxiTemporaryEffect(baseProfile.Kind, baseProfile.Label,
+                duration, baseProfile.FadeInSeconds, baseProfile.FadeOutSeconds,
+                hungerRateMultiplier: 1 + (baseProfile.HungerRateMultiplier - 1) * severity,
+                thirstRateMultiplier: 1 + (baseProfile.ThirstRateMultiplier - 1) * severity,
+                dialogueHook: baseProfile.DialogueHook);
+            remaining[index] = duration;
+            Started?.Invoke(TruckTaxiTemporaryEffectKind.RoadPepComedown);
         }
         public void Clear()
         {
+            RoadPepOveruse = 0;
             for (int i = 0; i < remaining.Length; i++)
             {
                 if (remaining[i] <= 0) continue;

@@ -21,7 +21,12 @@ namespace LWS.TruckTaxi
         public bool ChangingLane => Time.time < changeUntil;
         public float Speed => body != null ? body.linearVelocity.magnitude : 0;
         public float VehicleLength { get; private set; } = 4.5f;
-        public float Headway => Personality == TruckTaxiDriverPersonality.Cautious ? 2.2f : Personality == TruckTaxiDriverPersonality.Normal ? 1.65f : 1.15f;
+        public float Headway => (Personality == TruckTaxiDriverPersonality.Cautious ? 2.4f :
+            Personality == TruckTaxiDriverPersonality.Normal ? 1.9f :
+            Personality == TruckTaxiDriverPersonality.Impatient ? 1.55f : 1.25f) *
+            (1 + (owner != null ? owner.WeatherCaution : 0) * .55f) *
+            (rage != null && rage.IsActive ? .8f : 1f) *
+            (VehicleLength > 6 ? 1.2f : 1f);
         private TruckTaxiTrafficAdapter owner;
         private Rigidbody body;
         private Component ai, movePath;
@@ -31,9 +36,11 @@ namespace LWS.TruckTaxi
         private Action<float, float, float, float> drive;
         private FieldInfo pathField;
         private MethodInfo initializePath;
-        private AudioSource horn;
+        private TruckTaxiTrafficHorn horn;
         private TruckTaxiRoadRage rage;
-        private float nextSense, desiredSpeed, brake, blockedSeconds, nextHorn, nextLaneChange, changeUntil;
+        private float nextSense, desiredSpeed, brake, blockedSeconds, nextLaneChange, changeUntil;
+        private bool honkedForBlock;
+        private uint identityHash;
         private float reversingUntil, nextRecovery;
         private float presentationStopUntil;
         private readonly RaycastHit[] hits = new RaycastHit[32];
@@ -49,6 +56,7 @@ namespace LWS.TruckTaxi
             {
                 owner = traffic; LaneIndex = lane;
                 ResetForPool();
+                horn?.Configure(hornClip, owner.longTrafficHorn, owner.angryTrafficHorn);
                 SetIdentity(stableId);
                 return true;
             }
@@ -68,8 +76,10 @@ namespace LWS.TruckTaxi
             getStopped = (Func<bool>)Delegate.CreateDelegate(typeof(Func<bool>), ai, ai.GetType().GetProperty("TEMP_STOP").GetGetMethod());
             pathField = movePath.GetType().GetField("walkPath");
             initializePath = movePath.GetType().GetMethod("InitStartPosition");
-            var box = ai.GetComponent<BoxCollider>();
-            if (box != null) VehicleLength = Mathf.Clamp(box.size.z * Mathf.Abs(ai.transform.lossyScale.z), 3, 18);
+            float longest = 0;
+            foreach (var box in ai.GetComponentsInChildren<BoxCollider>())
+                longest = Mathf.Max(longest, box.size.z * Mathf.Abs(box.transform.lossyScale.z));
+            if (longest > 0) VehicleLength = Mathf.Clamp(longest, 3, 18);
             wheels=ai.GetComponentsInChildren<WheelCollider>();
             foreach (var wheel in wheels)
                 if (ai.transform.InverseTransformPoint(wheel.transform.position).z > 0) { frontWheel = wheel; break; }
@@ -82,14 +92,8 @@ namespace LWS.TruckTaxi
                 source.maxDistance = Mathf.Min(source.maxDistance, 65);
                 TruckTaxiAudioController.Instance?.Route(source, TruckTaxiAudioCategory.World);
             }
-            if (hornClip != null)
-            {
-                var sound = new GameObject("Taxi Traffic Horn"); sound.transform.SetParent(ai.transform, false);
-                horn = sound.AddComponent<AudioSource>(); horn.playOnAwake = false; horn.spatialBlend = 1;
-                horn.clip = hornClip; horn.volume = .35f; horn.minDistance = 6; horn.maxDistance = 65;
-                horn.rolloffMode = AudioRolloffMode.Linear;
-                TruckTaxiAudioController.Instance?.Route(horn, TruckTaxiAudioCategory.World);
-            }
+            horn = GetComponent<TruckTaxiTrafficHorn>() ?? gameObject.AddComponent<TruckTaxiTrafficHorn>();
+            horn.Configure(hornClip, owner.longTrafficHorn, owner.angryTrafficHorn);
             SetIdentity(stableId);
             ready = true; return true;
         }
@@ -98,31 +102,24 @@ namespace LWS.TruckTaxi
         {
             uint hash = 2166136261;
             foreach (char c in stableId) hash = (hash ^ c) * 16777619;
-            if (stableId.StartsWith("taxi.rival.", StringComparison.Ordinal))
-            {
-                int roll = (int)(hash % 100);
-                Personality = roll < 58 ? TruckTaxiDriverPersonality.Impatient :
-                    roll < 91 ? TruckTaxiDriverPersonality.Aggressive :
-                    TruckTaxiDriverPersonality.Reckless;
-            }
-            else Personality = TruckTaxiTrafficPopulation.PersonalityForId(stableId);
+            identityHash = hash;
+            Personality = owner.Tuning.Choose(hash, stableId.StartsWith("taxi.rival.", StringComparison.Ordinal));
             float factor = Personality == TruckTaxiDriverPersonality.Cautious ? .78f : Personality == TruckTaxiDriverPersonality.Normal ? .95f :
                 Personality == TruckTaxiDriverPersonality.Impatient ? 1.05f : Personality == TruckTaxiDriverPersonality.Aggressive ? 1.12f : 1.18f;
             PreferredSpeed = owner.LaneSpeed(LaneIndex) * factor * Mathf.Lerp(.95f, 1.05f, (hash % 103) / 102f);
             desiredSpeed = PreferredSpeed;
             if (rage != null) rage.collisionTriggerChance = Personality >= TruckTaxiDriverPersonality.Aggressive ? .2f : .02f;
             nextSense = Time.time + (hash % 100) * .003f;
-            nextHorn = Time.time + 2 + hash % 7;
             nextLaneChange = Time.time + 3 + hash % 9;
         }
 
         public void ResetForPool()
         {
             ReleaseBrakeHold();
-            if (horn != null) horn.Stop();
+            if (horn != null) horn.ResetForPool();
             if (reversingUntil > 0 && aiBehaviour != null) aiBehaviour.enabled = true;
             reversingUntil = nextRecovery = blockedSeconds = brake = changeUntil = 0;
-            EmergencyBraking = ownsBrakeHold = false;
+            EmergencyBraking = ownsBrakeHold = honkedForBlock = false;
             FollowingDistance = ObstacleDistance = 0;
             LaneChanges = HornsPlayed = 0;
             presentationStopUntil = 0;
@@ -209,23 +206,27 @@ namespace LWS.TruckTaxi
             float stopLine = owner.SignalStoppingDistance(origin, forward, reach);
             bool signal = stopLine < ObstacleDistance;
             if (signal) { ObstacleDistance = stopLine; obstacleSpeed = 0; }
-            desiredSpeed = PreferredSpeed;
+            desiredSpeed = PreferredSpeed * (1 - (owner != null ? owner.WeatherCaution : 0) * .35f);
             brake = 0; EmergencyBraking = false;
             if (!float.IsPositiveInfinity(ObstacleDistance))
             {
                 float safe = SafeFollowingDistance(speed, obstacleSpeed, Headway, 6, VehicleLength);
                 float stopGap = pedestrian ? 5 : 3;
                 float permitted = Mathf.Sqrt(Mathf.Max(0, obstacleSpeed * obstacleSpeed + 2 * 4.5f * (ObstacleDistance - stopGap)));
-                desiredSpeed = Mathf.Min(PreferredSpeed, permitted, obstacleSpeed + Mathf.Max(0, ObstacleDistance - stopGap) / Headway);
+                desiredSpeed = Mathf.Min(desiredSpeed, permitted, obstacleSpeed + Mathf.Max(0, ObstacleDistance - stopGap) / Headway);
                 EmergencyBraking = ObstacleDistance < stopGap + speed * speed / 14f;
                 brake = EmergencyBraking ? 1 : Mathf.Clamp01((speed - desiredSpeed) / 3);
                 if (ObstacleDistance < stopGap) { desiredSpeed = 0; brake = 1; }
                 blockedSeconds = desiredSpeed < PreferredSpeed * .65f ? blockedSeconds + interval : 0;
-                if (!signal && (EmergencyBraking || blockedSeconds > 3)) Honk();
+                if (blockedSeconds == 0) honkedForBlock = false;
+                if (!signal && !pedestrian && !honkedForBlock && blockedSeconds > 3)
+                    honkedForBlock = Honk();
                 if (!signal && !pedestrian && allowLaneChanges && Time.time >= nextLaneChange &&
-                    (blockedSeconds > (Personality == TruckTaxiDriverPersonality.Cautious ? 7 : 2) || EmergencyBraking))
+                    (EmergencyBraking || (obstacleSpeed < PreferredSpeed * .7f &&
+                    blockedSeconds > (Personality == TruckTaxiDriverPersonality.Cautious ? 12 :
+                        Personality == TruckTaxiDriverPersonality.Normal ? 9 : 5))))
                 {
-                    nextLaneChange = Time.time + (Personality >= TruckTaxiDriverPersonality.Aggressive ? 6 : 12);
+                    nextLaneChange = Time.time + 2;
                     owner.TryChangeLane(this, EmergencyBraking);
                 }
                 FollowingDistance = safe;
@@ -237,7 +238,7 @@ namespace LWS.TruckTaxi
                     ReleaseBrakeHold();
                 }
             }
-            else blockedSeconds = 0;
+            else { blockedSeconds = 0; honkedForBlock = false; }
         }
 
         public bool GapClear(Vector3 position, Vector3 forward, float forwardGap, float rearGap)
@@ -261,14 +262,15 @@ namespace LWS.TruckTaxi
             pathField.SetValue(movePath, path);
             initializePath.Invoke(movePath, new object[] { 0, pointBeforeTarget, true, true });
             LaneIndex = newLane; LaneChanges++; changeUntil = Time.time + 4; blockedSeconds = 0;
+            nextLaneChange = Time.time + owner.Tuning.LaneChangeCooldown(Personality, identityHash + (uint)LaneChanges * 37);
             return true;
         }
 
-        public void Honk()
+        public bool Honk(TruckTaxiHonkPattern pattern = TruckTaxiHonkPattern.Short, bool highPriority = false)
         {
-            if (horn == null || horn.clip == null || Time.time < nextHorn) return;
-            nextHorn = Time.time + (Personality == TruckTaxiDriverPersonality.Cautious ? 25 : Personality == TruckTaxiDriverPersonality.Normal ? 16 : 9);
-            horn.PlayOneShot(horn.clip); HornsPlayed++;
+            if (horn == null || !horn.TryHonk(pattern, Personality, highPriority)) return false;
+            HornsPlayed++;
+            return true;
         }
         private void ReleaseBrakeHold()
         {

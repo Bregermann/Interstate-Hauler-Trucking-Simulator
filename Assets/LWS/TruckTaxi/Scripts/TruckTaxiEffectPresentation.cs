@@ -22,6 +22,8 @@ namespace LWS.TruckTaxi
         }
         private readonly Dictionary<UniversalAdditionalCameraData, CameraBaseline> cameraBaselines =
             new Dictionary<UniversalAdditionalCameraData, CameraBaseline>();
+        private readonly HashSet<Camera> waveCameras = new HashSet<Camera>();
+        private readonly HashSet<Camera> seenCameras = new HashSet<Camera>();
         private Vignette vignette;
         private LensDistortion lens;
         private CameraChanger cameraChanger;
@@ -48,14 +50,21 @@ namespace LWS.TruckTaxi
             var snapshot = effects.GetSnapshot(TruckTaxiTemporaryEffectKind.MysteryMushroom);
             volume.weight = snapshot.Intensity01;
             if (volume.weight <= 0) { RestoreCameras(); return; }
-            if (cameraChanger == null && TruckTaxiBootstrap.Instance?.Player != null)
-                cameraChanger = TruckTaxiBootstrap.Instance.Player.GetComponentInChildren<CameraChanger>(true);
+            var player = TruckTaxiBootstrap.Instance?.Player;
+            if (player == null) { RestoreCameras(); return; }
+            if (cameraChanger == null || !cameraChanger.transform.IsChildOf(player.transform))
+                cameraChanger = player.GetComponentInChildren<CameraChanger>(true);
+            seenCameras.Clear();
             if (cameraChanger != null && cameraChanger.cameras != null && cameraChanger.cameras.Count > 0)
             {
                 foreach (var cameraObject in cameraChanger.cameras)
                     if (cameraObject != null) BindCamera(cameraObject.GetComponent<Camera>());
             }
             else BindCamera(Camera.main);
+            foreach (var camera in waveCameras)
+                if (camera != null && !seenCameras.Contains(camera)) TruckTaxiMushroomWaveFeature.SetCameraStrength(camera, 0);
+            waveCameras.Clear();
+            foreach (var camera in seenCameras) waveCameras.Add(camera);
             color.hueShift.value = Mathf.Sin(Time.time * .48f) * 24f;
             lens.intensity.value = -.12f + Mathf.Sin(Time.time * 1.1f) * .025f;
             vignette.intensity.value = .22f + Mathf.Sin(Time.time * 1.4f) * .035f;
@@ -63,6 +72,8 @@ namespace LWS.TruckTaxi
         private void BindCamera(Camera camera)
         {
             if (camera == null) return;
+            seenCameras.Add(camera);
+            TruckTaxiMushroomWaveFeature.SetCameraStrength(camera, volume.weight);
             var data = camera.GetComponent<UniversalAdditionalCameraData>();
             bool created = data == null;
             if (created) data = camera.gameObject.AddComponent<UniversalAdditionalCameraData>();
@@ -74,6 +85,8 @@ namespace LWS.TruckTaxi
         }
         private void RestoreCameras()
         {
+            foreach (var camera in waveCameras) TruckTaxiMushroomWaveFeature.SetCameraStrength(camera, 0);
+            waveCameras.Clear(); seenCameras.Clear();
             foreach (var pair in cameraBaselines)
             {
                 if (pair.Key == null) continue;

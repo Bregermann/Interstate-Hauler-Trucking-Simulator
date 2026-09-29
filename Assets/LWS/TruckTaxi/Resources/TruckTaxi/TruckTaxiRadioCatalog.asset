@@ -1,0 +1,97 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00d325928931f5b4b92164280227c1b3, type: 3}
+  m_Name: TruckTaxiRadioCatalog
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiRadioCatalog
+  stations:
+  - stableId: taxi.radio.0
+    displayName: THE HAUL
+    frequency: 93.7
+    format: Driving
+    shuffle: 0
+    allowEmergencyInterrupt: 1
+    jingle: {fileID: 0}
+    playlist:
+    - title: Original prototype instrumental 1
+      clip: {fileID: 8300000, guid: c52245bd07210c94c82b2c96d8665e9a, type: 3}
+      transcript: 
+      fromHour: 0
+      untilHour: 24
+  - stableId: taxi.radio.1
+    displayName: NIGHT DRIVE
+    frequency: 101.1
+    format: Electronic
+    shuffle: 0
+    allowEmergencyInterrupt: 1
+    jingle: {fileID: 0}
+    playlist:
+    - title: Original prototype instrumental 2
+      clip: {fileID: 8300000, guid: 676925fa696335345b2c593391abc923, type: 3}
+      transcript: 
+      fromHour: 0
+      untilHour: 24
+  - stableId: taxi.radio.2
+    displayName: PUBLIC HAULING
+    frequency: 88.5
+    format: Talk / news
+    shuffle: 0
+    allowEmergencyInterrupt: 1
+    jingle: {fileID: 0}
+    playlist:
+    - title: Original prototype instrumental 3
+      clip: {fileID: 8300000, guid: e51f99cef9ffd54418d2c45dbc32d2a6, type: 3}
+      transcript: 
+      fromHour: 0
+      untilHour: 24
+  - stableId: taxi.radio.3
+    displayName: COUNTRY MILE
+    frequency: 104.9
+    format: Road
+    shuffle: 0
+    allowEmergencyInterrupt: 1
+    jingle: {fileID: 0}
+    playlist:
+    - title: Original prototype instrumental 4
+      clip: {fileID: 8300000, guid: fd35bf010217af243bba6c5a1000f387, type: 3}
+      transcript: 
+      fromHour: 0
+      untilHour: 24
+  - stableId: taxi.radio.4
+    displayName: CHAOS FM
+    frequency: 97.3
+    format: Heavy / weird
+    shuffle: 0
+    allowEmergencyInterrupt: 1
+    jingle: {fileID: 0}
+    playlist:
+    - title: Original prototype instrumental 5
+      clip: {fileID: 8300000, guid: 3454bd6a3b100d442a9bd39aecc528bc, type: 3}
+      transcript: 
+      fromHour: 0
+      untilHour: 24
+  - stableId: taxi.radio.5
+    displayName: ROAD REPORT
+    frequency: AM 740
+    format: Traffic / weather
+    shuffle: 0
+    allowEmergencyInterrupt: 1
+    jingle: {fileID: 0}
+    playlist:
+    - title: Original prototype instrumental 6
+      clip: {fileID: 8300000, guid: 5cf26c7b35e872541b9613853c69f8c5, type: 3}
+      transcript: 
+      fromHour: 0
+      untilHour: 24
+  alertTone: {fileID: 8300000, guid: 35a7b929e025d674898e2f6a2d87c68a, type: 3}
+  attribution: Original LWS prototype synthesized compositions; no sampled or streamed
+    music. Heat notification tone under installed asset license. News uses live-state
+    text; authored spoken programs may be assigned later.

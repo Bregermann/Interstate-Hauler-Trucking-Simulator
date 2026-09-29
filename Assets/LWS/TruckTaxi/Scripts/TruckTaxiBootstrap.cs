@@ -25,6 +25,9 @@ namespace LWS.TruckTaxi
         public TruckTaxiPickupZoneVisualizer PickupZone { get; private set; }
         public TruckTaxiOptionalStops OptionalStops { get; private set; }
         public TruckTaxiAudioController Audio { get; private set; }
+        public TruckTaxiRadio Radio { get; private set; }
+        public TruckTaxiRaceRuntime Races { get; private set; }
+        public TruckTaxiKaijuDirector Kaiju { get; private set; }
         public TruckTaxiSteeringWheelVisual SteeringVisual { get; private set; }
         public TruckTaxiEnvironmentCoordinator Environment { get; private set; }
         public TruckTaxiCalendarWeatherService CalendarWeather => Environment?.CalendarWeather;
@@ -35,6 +38,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiDriverNeedsCoordinator DriverNeeds { get; private set; }
         public TruckTaxiFuelController Fuel { get; private set; }
         public TruckTaxiRoadsideAssistance Roadside { get; private set; }
+        public TruckTaxiFastTravel FastTravel { get; private set; }
         public TruckTaxiRoadsideCompanionLoop Companions { get; private set; }
         public TruckTaxiVehicleObjectiveCoordinator VehicleObjectives { get; private set; }
         public bool Ready { get; private set; }
@@ -128,6 +132,7 @@ namespace LWS.TruckTaxi
             VehicleObjectives.Initialize(this);
             Ready = true;
             hud.Initialize(this);
+            Radio=GetComponent<TruckTaxiRadio>() ?? gameObject.AddComponent<TruckTaxiRadio>(); Radio.Initialize(this);
             Environment=GetComponent<TruckTaxiEnvironmentCoordinator>();
             if(Environment!=null && Environment.Initialize(this))
             {
@@ -139,6 +144,8 @@ namespace LWS.TruckTaxi
             }
             Roadside = GetComponent<TruckTaxiRoadsideAssistance>() ?? gameObject.AddComponent<TruckTaxiRoadsideAssistance>();
             Roadside.Initialize(this);
+            FastTravel = GetComponent<TruckTaxiFastTravel>() ?? gameObject.AddComponent<TruckTaxiFastTravel>();
+            FastTravel.Initialize(this);
             if(DriverNeeds?.State!=null)
             {
                 Companions=GetComponent<TruckTaxiRoadsideCompanionLoop>() ?? gameObject.AddComponent<TruckTaxiRoadsideCompanionLoop>();
@@ -154,6 +161,12 @@ namespace LWS.TruckTaxi
                 Rivals=traffic.GetComponent<TruckTaxiRivalPopulation>() ?? traffic.gameObject.AddComponent<TruckTaxiRivalPopulation>();
                 WorldCoordinator=GetComponent<TruckTaxiWorldCoordinator>() ?? gameObject.AddComponent<TruckTaxiWorldCoordinator>();
                 WorldCoordinator.Initialize(this);
+                Races=GetComponent<TruckTaxiRaceRuntime>() ?? gameObject.AddComponent<TruckTaxiRaceRuntime>();
+                Races.Initialize(this);
+                Kaiju=GetComponent<TruckTaxiKaijuDirector>() ?? gameObject.AddComponent<TruckTaxiKaijuDirector>();
+                Kaiju.Initialize(this);
+                WorldCoordinator.BindKaiju(Kaiju);
+                FastTravel.AdditionalBlockReason=()=>Kaiju.IsCapturingPlayer ? "Wait until vehicle recovery completes." : Races.BlockTravelReason;
             }
             SetPaused(true);
             OnSessionChanged();
@@ -161,7 +174,7 @@ namespace LWS.TruckTaxi
         private void Update()
         {
             if (!Ready || body == null) return;
-            if(Fuel?.IsRescuing==true || Roadside?.IsRecovering==true) { lastSpeed=0; return; }
+            if(Fuel?.IsRescuing==true || Roadside?.IsRecovering==true || FastTravel?.IsTravelling==true) { lastSpeed=0; return; }
             if(Environment?.Clock!=null)
             {
                 var clock=Environment.Clock.CurrentSnapshot;

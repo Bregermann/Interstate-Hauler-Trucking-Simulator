@@ -9,16 +9,24 @@ namespace LWS.TruckTaxi
     [DisallowMultipleComponent]
     public sealed class TruckTaxiExtremeEventDirector : MonoBehaviour
     {
+        private static readonly TruckTaxiExtremeKind[] naturallyScheduledKinds =
+        { TruckTaxiExtremeKind.Tornado, TruckTaxiExtremeKind.Earthquake,
+          TruckTaxiExtremeKind.Avalanche, TruckTaxiExtremeKind.Mudslide };
         [SerializeField] private TruckTaxiHazardZone[] authoredZones = Array.Empty<TruckTaxiHazardZone>();
         [SerializeField, Min(50)] private float visualDistanceMeters = 350;
         [SerializeField, Min(0)] private float maximumPlayerForceNewtons = 3500;
         [SerializeField, Min(0)] private float maximumQuakeAcceleration = 1.5f;
         [SerializeField, Range(0, 8)] private int maximumVisualActors = 3;
         [SerializeField, Range(0, 4)] private int maximumDebrisPiles = 2;
+        [SerializeField] private TruckTaxiExtremeFootprintSettings footprintSettings = new TruckTaxiExtremeFootprintSettings();
+        [SerializeField] private TruckTaxiExtremeScheduleSettings scheduleSettings = new TruckTaxiExtremeScheduleSettings();
+        [SerializeField] private AudioClip tornadoClip;
+        [SerializeField] private AudioClip earthquakeClip;
+        [SerializeField] private AudioClip slideClip;
 
         private sealed class ActiveEvent
         {
-            public TruckTaxiHazardZone Zone;
+            public TruckTaxiExtremeFootprint Footprint;
             public DateTime Started;
             public DateTime MovingEnds;
             public DateTime Ends;
@@ -28,6 +36,7 @@ namespace LWS.TruckTaxi
             public bool PhysicsRelevant;
             public Vector3 Position;
             public Vector3[] PreviousPropOffsets;
+            public float RealStarted;
         }
 
         private readonly Dictionary<string, TruckTaxiHazardZone> zones = new Dictionary<string, TruckTaxiHazardZone>();
@@ -35,6 +44,11 @@ namespace LWS.TruckTaxi
         private readonly List<TruckTaxiExtremeSnapshot> snapshots = new List<TruckTaxiExtremeSnapshot>();
         private readonly List<TruckTaxiExtremeWarning> warnings = new List<TruckTaxiExtremeWarning>();
         private readonly Dictionary<string, DateTime> lastNaturalAttempt = new Dictionary<string, DateTime>();
+        private readonly List<TruckTaxiExtremeAttempt> attempts = new List<TruckTaxiExtremeAttempt>();
+        private readonly string[] lastRejection = new string[5];
+        private TruckTaxiExtremeDaySchedule daySchedule;
+        private DateTime lastScheduledDay;
+        private int proceduralSequence;
         private readonly List<ScheduledEvent> scheduled = new List<ScheduledEvent>();
         private readonly struct ScheduledEvent
         {
@@ -66,6 +80,7 @@ namespace LWS.TruckTaxi
 
         public IReadOnlyList<TruckTaxiExtremeSnapshot> ActiveSnapshots => snapshots;
         public IReadOnlyList<TruckTaxiExtremeWarning> Warnings => warnings;
+        public IReadOnlyList<TruckTaxiExtremeAttempt> Attempts => attempts;
         public int LivePhysicsActorCount { get; private set; }
         public int LiveVisualActorCount { get; private set; }
         public TruckTaxiExtremeWeatherProfile? ActiveSevereProfile { get; private set; }
@@ -74,6 +89,26 @@ namespace LWS.TruckTaxi
         public event Action HazardChanged;
         public event Action<TruckTaxiExtremeSnapshot> LocalReactionRequested;
         public float CameraShakeIntensity01 { get; private set; }
+        public DateTime LastNaturalEvent { get; private set; }
+        public TruckTaxiExtremeKind? LastNaturalKind { get; private set; }
+        public TruckTaxiExtremeSnapshot? CurrentEvent => snapshots.Count > 0 ? snapshots[0] : (TruckTaxiExtremeSnapshot?)null;
+
+        public bool ForceTornadoHere() => StartEventHere(TruckTaxiExtremeKind.Tornado);
+        public bool ForceEarthquakeHere() => StartEventHere(TruckTaxiExtremeKind.Earthquake);
+        public bool ForceAvalancheHere() => StartEventHere(TruckTaxiExtremeKind.Avalanche);
+        public bool ForceMudslideHere() => StartEventHere(TruckTaxiExtremeKind.Mudslide);
+
+        public TruckTaxiExtremeScheduleStatus GetScheduleStatus(TruckTaxiExtremeKind kind)
+        {
+            bool eligible = TruckTaxiExtremeRules.NaturalEligible(kind, severeStorm, heavySnow, continuousHeavyRainHours);
+            DateTime last = daySchedule != null ? daySchedule.LastOccurrence(kind) : default;
+            return new TruckTaxiExtremeScheduleStatus(kind,
+                last,
+                daySchedule != null ? daySchedule.DryDays(kind) : 0,
+                last == default ? -1 : Math.Max(0, (int)(gameNow().Date - last.Date).TotalDays),
+                daySchedule != null ? daySchedule.CurrentProbability(kind, eligible) : 0,
+                eligible, lastRejection[(int)kind]);
+        }
 
         public void BindCamera(Transform camera)
         {
@@ -90,6 +125,8 @@ namespace LWS.TruckTaxi
             regional = owner.GetComponent<TruckTaxiRegionalWorld>();
             gameNow = now;
             lastGameNow = now();
+            lastScheduledDay = lastGameNow.Date.AddDays(-1);
+            daySchedule = new TruckTaxiExtremeDaySchedule(scheduleSettings);
             setWeather = weatherCallback;
             if (authoredZones != null)
                 foreach (var zone in authoredZones) RegisterZone(zone);
@@ -118,21 +155,75 @@ namespace LWS.TruckTaxi
 
         public bool StartEvent(TruckTaxiExtremeKind kind, string zoneId)
         {
-            if (!initialized || !TryZone(kind, zoneId, out var zone)) return false;
+            if (!initialized) return false;
+            if (!TryZone(kind, zoneId, out var zone)) return StartEventHere(kind);
+            return StartFootprint(TruckTaxiExtremeFootprint.FromZone(zone), false);
+        }
+
+        public bool StartEventHere(TruckTaxiExtremeKind kind)
+        {
+            if (!initialized) return false;
+            if (!TryPlayer(out var player))
+            {
+                lastRejection[(int)kind] = "PLAYER_UNAVAILABLE";
+                RecordAttempt(kind, gameNow(), true, "PLAYER_UNAVAILABLE", "none", null, null, 0, false);
+                return false;
+            }
+            TruckTaxiExtremeFootprint footprint = null;
+            float closest = float.PositiveInfinity;
+            foreach (var pair in zones)
+            {
+                var zone = pair.Value;
+                if (zone == null || zone.kind != kind || !zone.IsValid(out _)) continue;
+                float distance = Vector3.Distance(player, zone.PositionAt(0));
+                float authoredRange = kind == TruckTaxiExtremeKind.Tornado ? 1000 :
+                    kind == TruckTaxiExtremeKind.Hurricane ? 1500 :
+                    kind == TruckTaxiExtremeKind.Earthquake ? 350 : 600;
+                if (distance >= closest || distance > authoredRange ||
+                    (regional != null && !regional.IsPositionAvailable(zone.PositionAt(0)))) continue;
+                closest = distance;
+                footprint = TruckTaxiExtremeFootprint.FromZone(zone);
+            }
+            if (footprint == null)
+            {
+                string regionId = regional != null ? regional.ResolveRegion(player) : "taxi.current";
+                Vector3 forward = host.Player != null ? host.Player.transform.forward : Vector3.forward;
+                string id = "dynamic:" + kind + ":" + ++proceduralSequence;
+                if (!TruckTaxiExtremeFootprint.TryCreate(kind, id, regionId, player, forward,
+                    footprintSettings, p => regional == null || regional.IsPositionAvailable(p), GroundAt,
+                    out footprint, out string reason))
+                {
+                    lastRejection[(int)kind] = reason;
+                    RecordAttempt(kind, gameNow(), true, reason, "procedural", id, regionId, 0, false);
+                    return false;
+                }
+            }
+            return StartFootprint(footprint, true);
+        }
+
+        private bool StartFootprint(TruckTaxiExtremeFootprint footprint, bool natural)
+        {
+            if (footprint == null) return false;
             for (int i = 0; i < active.Count; i++)
-                if (active[i].Zone == zone) return false;
+                if (active[i].Footprint.Id == footprint.Id ||
+                    (natural && active[i].Footprint.Kind == footprint.Kind)) return false;
             DateTime now = gameNow();
-            var moving = now + TruckTaxiExtremeRules.Duration(kind);
-            var item = new ActiveEvent { Zone = zone, Started = now, MovingEnds = moving,
-                Ends = moving + TruckTaxiExtremeRules.Cleanup(kind), Position = zone.PositionAt(0),
-                PreviousPropOffsets = new Vector3[zone.shakeProps != null ? zone.shakeProps.Length : 0] };
+            var moving = now + TruckTaxiExtremeRules.Duration(footprint.Kind);
+            var props = footprint.ShakeProps;
+            var item = new ActiveEvent { Footprint = footprint, Started = now, MovingEnds = moving,
+                Ends = moving + TruckTaxiExtremeRules.Cleanup(footprint.Kind), Position = footprint.PositionAt(0),
+                PreviousPropOffsets = new Vector3[props != null ? props.Length : 0], RealStarted = Time.unscaledTime };
             active.Add(item);
-            if (kind == TruckTaxiExtremeKind.Hurricane)
+            if (footprint.Kind == TruckTaxiExtremeKind.Hurricane)
             {
                 ActiveSevereProfile = new TruckTaxiExtremeWeatherProfile("thunderstorm", 28, 160, 1);
-                setWeather?.Invoke(ActiveSevereProfile, TruckTaxiExtremeRules.Duration(kind));
+                setWeather?.Invoke(ActiveSevereProfile, TruckTaxiExtremeRules.Duration(footprint.Kind));
             }
-            RaiseWarning(zone, now, item.Ends);
+            RaiseWarning(footprint, now, item.Ends);
+            Vector3 player = playerBody != null ? playerBody.position : footprint.Path[0];
+            RecordAttempt(footprint.Kind, now, true, null,
+                footprint.IsProcedural ? "procedural" : "authored", footprint.Id, footprint.RegionId,
+                Vector3.Distance(player, footprint.Path[0]), true);
             Rebuild(now);
             HazardChanged?.Invoke();
             return true;
@@ -149,20 +240,33 @@ namespace LWS.TruckTaxi
             DateTime now = gameNow();
             TimeSpan lead = kind == TruckTaxiExtremeKind.Hurricane ? TimeSpan.FromHours(3) :
                 kind == TruckTaxiExtremeKind.Tornado ? TimeSpan.FromMinutes(10) : TimeSpan.FromHours(1);
-            if (startsAt - now <= lead) RaiseWarning(zone, now, startsAt + TruckTaxiExtremeRules.Duration(kind));
+            if (startsAt - now <= lead) RaiseWarning(TruckTaxiExtremeFootprint.FromZone(zone), now,
+                startsAt + TruckTaxiExtremeRules.Duration(kind));
             return true;
         }
 
         public bool TryStartNatural(TruckTaxiExtremeKind kind, string zoneId, bool severeStorm,
             bool heavySnow, float continuousHeavyRainHours, float dailyRoll)
         {
-            if (!initialized || !TryZone(kind, zoneId, out _) ||
-                !TruckTaxiExtremeRules.NaturalEligible(kind, severeStorm, heavySnow, continuousHeavyRainHours) ||
-                !float.IsFinite(dailyRoll)) return false;
+            if (!initialized || !TryZone(kind, zoneId, out _)) return false;
+            if (!TruckTaxiExtremeRules.NaturalEligible(kind, severeStorm, heavySnow, continuousHeavyRainHours))
+            { RecordAttempt(kind, gameNow(), false, "WRONG_WEATHER", "authored", zoneId, null, 0, false); return false; }
+            if (!float.IsFinite(dailyRoll)) return false;
             DateTime today = gameNow().Date;
-            if (lastNaturalAttempt.TryGetValue(zoneId, out var attempted) && attempted == today) return false;
+            if (lastNaturalAttempt.TryGetValue(zoneId, out var attempted) && attempted == today)
+            { RecordAttempt(kind, gameNow(), true, "COOLDOWN", "authored", zoneId, null, 0, false); return false; }
             lastNaturalAttempt[zoneId] = today;
-            return Mathf.Clamp01(dailyRoll) < TruckTaxiExtremeRules.DailyChance(kind) && StartEvent(kind, zoneId);
+            if (Mathf.Clamp01(dailyRoll) >= TruckTaxiExtremeRules.DailyChance(kind))
+            { RecordAttempt(kind, gameNow(), true, "ROLL_FAILED", "authored", zoneId, null, 0, false); return false; }
+            bool started = StartEvent(kind, zoneId);
+            if (!started) RecordAttempt(kind, gameNow(), true, "CONFLICT", "authored", zoneId, null, 0, false);
+            else
+            {
+                daySchedule.RecordStart(kind, today);
+                LastNaturalEvent = today;
+                LastNaturalKind = kind;
+            }
+            return started;
         }
 
         public void Clear() => ClearMatching(null, null);
@@ -188,6 +292,10 @@ namespace LWS.TruckTaxi
             {
                 ClearMatching(null, null);
                 lastNaturalAttempt.Clear();
+                daySchedule.Reset();
+                lastScheduledDay = now.Date.AddDays(-1);
+                LastNaturalEvent = default;
+                LastNaturalKind = null;
             }
             lastGameNow = now;
             for (int i = scheduled.Count - 1; i >= 0; i--)
@@ -198,7 +306,8 @@ namespace LWS.TruckTaxi
                     TimeSpan lead = item.Kind == TruckTaxiExtremeKind.Hurricane ? TimeSpan.FromHours(3) :
                         item.Kind == TruckTaxiExtremeKind.Tornado ? TimeSpan.FromMinutes(10) : TimeSpan.FromHours(1);
                     if (item.StartsAt - now <= lead && TryZone(item.Kind, item.ZoneId, out var zone))
-                        RaiseWarning(zone, now, item.StartsAt + TruckTaxiExtremeRules.Duration(item.Kind));
+                        RaiseWarning(TruckTaxiExtremeFootprint.FromZone(zone), now,
+                            item.StartsAt + TruckTaxiExtremeRules.Duration(item.Kind));
                 }
                 if (now < item.StartsAt) continue;
                 scheduled.RemoveAt(i);
@@ -206,9 +315,9 @@ namespace LWS.TruckTaxi
             }
             bool eventExpired = false;
             for (int i = active.Count - 1; i >= 0; i--)
-                if (now >= active[i].Ends)
+                if (now >= active[i].Ends && !IsMoving(active[i], now))
                 {
-                    RemoveAt(i);
+                    RemoveAt(i, "EXPIRED");
                     eventExpired = true;
                 }
             for (int i = warnings.Count - 1; i >= 0; i--)
@@ -216,13 +325,11 @@ namespace LWS.TruckTaxi
             if (host != null && !host.Paused && Time.unscaledTime >= nextNaturalTick)
             {
                 nextNaturalTick = Time.unscaledTime + 5;
+                ProcessNaturalDays(now);
                 foreach (var pair in zones)
-                {
-                    var zone = pair.Value;
-                    if (zone != null)
-                        TryStartNatural(zone.kind, zone.zoneId, severeStorm, heavySnow,
+                    if (pair.Value != null && pair.Value.kind == TruckTaxiExtremeKind.Hurricane)
+                        TryStartNatural(pair.Value.kind, pair.Value.zoneId, severeStorm, heavySnow,
                             continuousHeavyRainHours, (float)naturalRandom.NextDouble());
-                }
             }
             if (Time.unscaledTime < nextVisualTick)
             {
@@ -231,6 +338,54 @@ namespace LWS.TruckTaxi
             }
             nextVisualTick = Time.unscaledTime + .1f;
             Rebuild(now);
+        }
+
+        private void ProcessNaturalDays(DateTime now)
+        {
+            DateTime first = lastScheduledDay.AddDays(1);
+            if (first > now.Date) first = now.Date;
+            if (first < now.Date.AddDays(-31)) first = now.Date.AddDays(-31);
+            for (DateTime day = first; day <= now.Date; day = day.AddDays(1))
+            {
+                foreach (TruckTaxiExtremeKind kind in naturallyScheduledKinds)
+                {
+                    bool eligible = TruckTaxiExtremeRules.NaturalEligible(kind, severeStorm,
+                        heavySnow, continuousHeavyRainHours);
+                    if (!daySchedule.TryDay(kind, day, eligible, (float)naturalRandom.NextDouble(), out string reason))
+                    {
+                        bool changed = lastRejection[(int)kind] != reason;
+                        if (reason != "ALREADY_ATTEMPTED") lastRejection[(int)kind] = reason;
+                        if (reason != "ALREADY_ATTEMPTED" &&
+                            (reason != "WRONG_WEATHER" || changed))
+                            RecordAttempt(kind, day, eligible, reason, "none", null,
+                                regional != null ? regional.CurrentRegion : null, 0, false);
+                        continue;
+                    }
+                    if (HasActiveKind(kind))
+                    {
+                        lastRejection[(int)kind] = "CONFLICT";
+                        RecordAttempt(kind, day, true, "CONFLICT", "none", null,
+                            regional != null ? regional.CurrentRegion : null, 0, false);
+                        continue;
+                    }
+                    if (StartEventHere(kind))
+                    {
+                        daySchedule.RecordStart(kind, day);
+                        LastNaturalEvent = day;
+                        LastNaturalKind = kind;
+                        lastRejection[(int)kind] = null;
+                    }
+                    else if (string.IsNullOrEmpty(lastRejection[(int)kind]))
+                        lastRejection[(int)kind] = "NO_PROCEDURAL_CANDIDATE";
+                }
+            }
+            lastScheduledDay = now.Date;
+        }
+
+        private bool HasActiveKind(TruckTaxiExtremeKind kind)
+        {
+            foreach (var item in active) if (item.Footprint.Kind == kind) return true;
+            return false;
         }
 
         private bool HasWarning(string zoneId)
@@ -250,14 +405,14 @@ namespace LWS.TruckTaxi
             {
                 cameraPositionBeforeShake = shakeCamera.localPosition;
                 previousShakeOffset = new Vector3(Mathf.Sin(phase), Mathf.Sin(phase * 1.37f), 0) *
-                    (.035f * CameraShakeIntensity01);
+                    (.12f * CameraShakeIntensity01);
                 shakeCamera.localPosition += previousShakeOffset;
             }
             foreach (var item in active)
             {
-                if (item.Zone.kind != TruckTaxiExtremeKind.Earthquake || !item.PhysicsRelevant ||
-                    gameNow() >= item.MovingEnds) continue;
-                var props = item.Zone.shakeProps;
+                if (item.Footprint.Kind != TruckTaxiExtremeKind.Earthquake || !item.PhysicsRelevant ||
+                    !IsMoving(item, gameNow())) continue;
+                var props = item.Footprint.ShakeProps;
                 if (props == null) continue;
                 for (int i = 0; i < props.Length; i++)
                 {
@@ -271,7 +426,7 @@ namespace LWS.TruckTaxi
 
         private static void RestoreProps(ActiveEvent item)
         {
-            var props = item.Zone != null ? item.Zone.shakeProps : null;
+            var props = item.Footprint.ShakeProps;
             if (props == null) return;
             for (int i = 0; i < props.Length && i < item.PreviousPropOffsets.Length; i++)
             {
@@ -299,15 +454,15 @@ namespace LWS.TruckTaxi
             for (int i = 0; i < active.Count; i++)
             {
                 var item = active[i];
-                if (!item.PhysicsRelevant || now >= item.MovingEnds) continue;
+                if (!item.PhysicsRelevant || !IsMoving(item, now)) continue;
                 Vector3 delta = playerBody.position - item.Position;
                 delta.y = 0;
                 float distance = delta.magnitude;
-                float radius = item.Zone.radiusMeters;
+                float radius = item.Footprint.RadiusMeters;
                 if (distance > radius) continue;
                 float exposure = 1 - distance / radius;
                 Vector3 direction;
-                switch (item.Zone.kind)
+                switch (item.Footprint.Kind)
                 {
                     case TruckTaxiExtremeKind.Tornado:
                         direction = distance > .1f ? -delta.normalized + Vector3.Cross(Vector3.up, delta.normalized) * .4f : Vector3.right;
@@ -315,7 +470,7 @@ namespace LWS.TruckTaxi
                             maximumPlayerForceNewtons * exposure, maximumPlayerForceNewtons), ForceMode.Force);
                         break;
                     case TruckTaxiExtremeKind.Hurricane:
-                        playerBody.AddForce(item.Zone.transform.right * TruckTaxiExtremeRules.CappedForce(
+                        playerBody.AddForce(item.Footprint.WindDirection * TruckTaxiExtremeRules.CappedForce(
                             maximumPlayerForceNewtons * .55f * exposure, maximumPlayerForceNewtons), ForceMode.Force);
                         break;
                     case TruckTaxiExtremeKind.Earthquake:
@@ -323,7 +478,7 @@ namespace LWS.TruckTaxi
                         playerBody.AddForce(Vector3.up * acceleration * Mathf.Max(0, Mathf.Sin(Time.fixedTime * 17)), ForceMode.Acceleration);
                         break;
                     default:
-                        direction = item.Zone.path[item.Zone.path.Length - 1] - item.Zone.path[0];
+                        direction = item.Footprint.Path[item.Footprint.Path.Length - 1] - item.Footprint.Path[0];
                         direction.y = 0;
                         if (direction.sqrMagnitude > .01f)
                             playerBody.AddForce(direction.normalized * TruckTaxiExtremeRules.CappedForce(
@@ -347,17 +502,20 @@ namespace LWS.TruckTaxi
             for (int i = 0; i < active.Count; i++)
             {
                 var item = active[i];
-                bool cleanup = now >= item.MovingEnds;
+                bool cleanup = !IsMoving(item, now);
                 double duration = (item.MovingEnds - item.Started).TotalSeconds;
                 float progress = duration > 0 ? Mathf.Clamp01((float)((now - item.Started).TotalSeconds / duration)) : 1;
-                item.Position = item.Zone.PositionAt(cleanup ? 1 : progress);
-                bool roadHazard = item.Zone.kind == TruckTaxiExtremeKind.Avalanche ||
-                    item.Zone.kind == TruckTaxiExtremeKind.Mudslide;
-                Vector3 relevantPosition = roadHazard && cleanup ? RoadCrossing(item.Zone) : item.Position;
+                item.Position = item.Footprint.PositionAt(cleanup ? 1 : progress);
+                bool roadHazard = item.Footprint.Kind == TruckTaxiExtremeKind.Avalanche ||
+                    item.Footprint.Kind == TruckTaxiExtremeKind.Mudslide;
+                Vector3 relevantPosition = roadHazard && cleanup ? RoadCrossing(item.Footprint) : item.Position;
                 bool loaded = regional == null || regional.IsPositionAvailable(relevantPosition);
-                item.Nearby = loaded && (player - relevantPosition).sqrMagnitude <= visualDistanceMeters * visualDistanceMeters;
+                float visibleRange = item.Footprint.Kind == TruckTaxiExtremeKind.Tornado ?
+                    Mathf.Max(1000, visualDistanceMeters) : roadHazard ? Mathf.Max(600, visualDistanceMeters) :
+                    visualDistanceMeters;
+                item.Nearby = loaded && (player - relevantPosition).sqrMagnitude <= visibleRange * visibleRange;
                 item.PhysicsRelevant = loaded &&
-                    (player - item.Position).sqrMagnitude <= item.Zone.radiusMeters * item.Zone.radiusMeters;
+                    (player - item.Position).sqrMagnitude <= item.Footprint.RadiusMeters * item.Footprint.RadiusMeters;
                 bool show = item.Nearby && LiveVisualActorCount < maximumVisualActors;
                 if (show)
                 {
@@ -365,8 +523,9 @@ namespace LWS.TruckTaxi
                     if (item.Visual != null)
                     {
                         item.Visual.transform.position = item.Position;
-                        if (item.Zone.kind == TruckTaxiExtremeKind.Tornado)
+                        if (item.Footprint.Kind == TruckTaxiExtremeKind.Tornado)
                             item.Visual.transform.Rotate(Vector3.up, 35 * .1f, Space.World);
+                        MarkAttempt(item, true, null);
                         LiveVisualActorCount++;
                     }
                 }
@@ -377,39 +536,48 @@ namespace LWS.TruckTaxi
                     debrisPiles++;
                 }
                 else DestroyRoadDebris(item);
-                var snapshot = new TruckTaxiExtremeSnapshot(item.Zone.kind, item.Zone.zoneId,
-                    item.Zone.regionId, cleanup ? TruckTaxiExtremeStage.Cleanup : TruckTaxiExtremeStage.Moving,
+                var snapshot = new TruckTaxiExtremeSnapshot(item.Footprint.Kind, item.Footprint.Id,
+                    item.Footprint.RegionId, cleanup ? TruckTaxiExtremeStage.Cleanup : TruckTaxiExtremeStage.Moving,
                     item.Ends, relevantPosition,
-                    item.Zone.radiusMeters, item.Nearby, roadHazard);
+                    item.Footprint.RadiusMeters, item.Nearby, roadHazard);
                 snapshots.Add(snapshot);
                 if (item.PhysicsRelevant && !cleanup)
                 {
                     LocalReactionRequested?.Invoke(snapshot);
-                    if (item.Zone.kind == TruckTaxiExtremeKind.Earthquake)
-                        CameraShakeIntensity01 = Mathf.Max(CameraShakeIntensity01, .55f);
+                    if (item.Footprint.Kind == TruckTaxiExtremeKind.Earthquake &&
+                        Time.unscaledTime - item.RealStarted <= 20)
+                        CameraShakeIntensity01 = Mathf.Max(CameraShakeIntensity01, .85f);
                 }
             }
         }
 
         private GameObject CreateVisual(ActiveEvent item)
         {
-            GameObject visual = item.Zone.nearbyVisualPrefab != null
-                ? Instantiate(item.Zone.nearbyVisualPrefab, item.Position, Quaternion.identity, transform)
-                : CreateFallbackParticles(item.Zone.kind, item.Position);
-            if (item.Zone.nearbyVisualPrefab == null &&
-                (item.Zone.kind == TruckTaxiExtremeKind.Avalanche || item.Zone.kind == TruckTaxiExtremeKind.Mudslide))
+            var footprint = item.Footprint;
+            GameObject visual = footprint.VisualPrefab != null
+                ? Instantiate(footprint.VisualPrefab, item.Position, Quaternion.identity, transform)
+                : CreateFallbackParticles(footprint.Kind, item.Position);
+            if (footprint.VisualPrefab == null &&
+                (footprint.Kind == TruckTaxiExtremeKind.Avalanche || footprint.Kind == TruckTaxiExtremeKind.Mudslide))
             {
-                Vector3 slope = item.Zone.path[item.Zone.path.Length - 1] - item.Zone.path[0];
-                visual.transform.rotation = Quaternion.FromToRotation(Vector3.up, slope.normalized);
+                Vector3 flow = footprint.Path[footprint.Path.Length - 1] - footprint.Path[0];
+                visual.transform.rotation = Quaternion.LookRotation(new Vector3(flow.x, 0, flow.z));
             }
-            if (item.Zone.nearbyVisualPrefab == null && item.Zone.kind == TruckTaxiExtremeKind.Hurricane)
-                visual.transform.rotation = Quaternion.FromToRotation(Vector3.up, item.Zone.transform.right);
-            if (item.Zone.startClip != null)
+            if (footprint.VisualPrefab == null && footprint.Kind == TruckTaxiExtremeKind.Hurricane)
+                visual.transform.rotation = Quaternion.FromToRotation(Vector3.up, footprint.WindDirection);
+            AudioClip clip = footprint.StartClip != null ? footprint.StartClip :
+                footprint.Kind == TruckTaxiExtremeKind.Tornado ? tornadoClip :
+                footprint.Kind == TruckTaxiExtremeKind.Earthquake ? earthquakeClip :
+                footprint.Kind == TruckTaxiExtremeKind.Avalanche || footprint.Kind == TruckTaxiExtremeKind.Mudslide
+                    ? slideClip : null;
+            if (clip != null)
             {
                 var source = visual.AddComponent<AudioSource>();
                 source.spatialBlend = 1;
                 source.playOnAwake = false;
-                source.clip = item.Zone.startClip;
+                source.rolloffMode = AudioRolloffMode.Linear;
+                source.maxDistance = footprint.Kind == TruckTaxiExtremeKind.Tornado ? 1100 : 600;
+                source.clip = clip;
                 source.Play();
             }
             return visual;
@@ -427,25 +595,32 @@ namespace LWS.TruckTaxi
             var main = particles.main;
             main.loop = true;
             main.simulationSpace = ParticleSystemSimulationSpace.Local;
-            main.maxParticles = kind == TruckTaxiExtremeKind.Tornado ? 96 : 48;
+            main.maxParticles = kind == TruckTaxiExtremeKind.Tornado ? 256 :
+                kind == TruckTaxiExtremeKind.Hurricane ? 48 : 160;
             main.startLifetime = kind == TruckTaxiExtremeKind.Tornado ? 3 : 1.8f;
             main.startSpeed = kind == TruckTaxiExtremeKind.Tornado ? 8 :
                 kind == TruckTaxiExtremeKind.Hurricane ? 11 : 2.5f;
-            main.startSize = kind == TruckTaxiExtremeKind.Tornado ? 2 : .7f;
+            main.startSize = kind == TruckTaxiExtremeKind.Tornado ? 4 :
+                kind == TruckTaxiExtremeKind.Hurricane ? .7f :
+                kind == TruckTaxiExtremeKind.Earthquake ? 3 : 2.5f;
             main.startColor = kind == TruckTaxiExtremeKind.Hurricane
                 ? new Color(.65f, .74f, .78f, .55f) : kind == TruckTaxiExtremeKind.Avalanche
                 ? new Color(.85f, .9f, .94f, .7f) : kind == TruckTaxiExtremeKind.Mudslide
                     ? new Color(.34f, .27f, .2f, .8f) : new Color(.56f, .55f, .5f, .65f);
             var emission = particles.emission;
-            emission.rateOverTime = kind == TruckTaxiExtremeKind.Tornado ? 32 : 18;
+            emission.rateOverTime = kind == TruckTaxiExtremeKind.Tornado ? 90 :
+                kind == TruckTaxiExtremeKind.Hurricane ? 18 : 55;
             var shape = particles.shape;
             shape.shapeType = ParticleSystemShapeType.Cone;
-            shape.radius = kind == TruckTaxiExtremeKind.Tornado ? 3 : 5;
+            shape.radius = kind == TruckTaxiExtremeKind.Tornado ? 12 :
+                kind == TruckTaxiExtremeKind.Hurricane ? 5 :
+                kind == TruckTaxiExtremeKind.Earthquake ? 35 : 15;
             shape.angle = kind == TruckTaxiExtremeKind.Tornado ? 18 : 10;
             shape.rotation = new Vector3(-90, 0, 0);
             particles.Play();
             if (kind == TruckTaxiExtremeKind.Tornado)
             {
+                AddFunnel(visual.transform);
                 var debris = new GameObject("orbiting visible debris");
                 debris.transform.SetParent(visual.transform, false);
                 var flecks = debris.AddComponent<ParticleSystem>();
@@ -466,7 +641,52 @@ namespace LWS.TruckTaxi
                 fleckShape.radius = 5;
                 flecks.Play();
             }
+            else if (kind == TruckTaxiExtremeKind.Avalanche || kind == TruckTaxiExtremeKind.Mudslide)
+                AddSlideMass(visual.transform, kind);
             return visual;
+        }
+
+        private static void AddFunnel(Transform parent)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                float t = i / 8f;
+                var section = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                section.name = "Visible funnel section";
+                section.transform.SetParent(parent, false);
+                section.transform.localPosition = new Vector3(Mathf.Sin(t * 5) * 2, 4 + t * 56, 0);
+                float width = Mathf.Lerp(4, 42, t * t);
+                section.transform.localScale = new Vector3(width, 4.1f, width);
+                var collider = section.GetComponent<Collider>();
+                collider.enabled = false;
+                Destroy(collider);
+                var block = new MaterialPropertyBlock();
+                Color color = Color.Lerp(new Color(.34f, .36f, .38f), new Color(.48f, .5f, .52f), t);
+                block.SetColor("_BaseColor", color);
+                block.SetColor("_Color", color);
+                section.GetComponent<Renderer>().SetPropertyBlock(block);
+            }
+        }
+
+        private static void AddSlideMass(Transform parent, TruckTaxiExtremeKind kind)
+        {
+            var block = new MaterialPropertyBlock();
+            Color color = kind == TruckTaxiExtremeKind.Avalanche
+                ? new Color(.82f, .87f, .9f) : new Color(.32f, .23f, .16f);
+            block.SetColor("_BaseColor", color);
+            block.SetColor("_Color", color);
+            for (int i = 0; i < 7; i++)
+            {
+                var chunk = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                chunk.name = "Moving slide mass";
+                chunk.transform.SetParent(parent, false);
+                chunk.transform.localPosition = new Vector3((i - 3) * 5, 2.5f + i % 2, -(i % 3) * 5);
+                chunk.transform.localScale = new Vector3(9, 5 + i % 2 * 2, 12);
+                var collider = chunk.GetComponent<Collider>();
+                collider.enabled = false;
+                Destroy(collider);
+                chunk.GetComponent<Renderer>().SetPropertyBlock(block);
+            }
         }
 
         private Material GetFallbackParticleMaterial()
@@ -483,15 +703,21 @@ namespace LWS.TruckTaxi
             return fallbackParticleMaterial;
         }
 
-        private static Vector3 RoadCrossing(TruckTaxiHazardZone zone) => zone.path[zone.path.Length / 2];
+        private static Vector3 RoadCrossing(TruckTaxiExtremeFootprint footprint) =>
+            footprint.Path[footprint.Path.Length / 2];
+
+        private static bool IsMoving(ActiveEvent item, DateTime now) =>
+            now < item.MovingEnds ||
+            (item.Footprint.Kind == TruckTaxiExtremeKind.Earthquake &&
+             Time.unscaledTime - item.RealStarted < 20);
 
         private GameObject CreateRoadDebris(ActiveEvent item)
         {
             // Two visible shoulder rocks leave the center navigable; no unrepresented road closure.
             var root = new GameObject("Taxi visible partial road debris");
             root.transform.SetParent(transform, false);
-            root.transform.position = RoadCrossing(item.Zone);
-            Color color = item.Zone.kind == TruckTaxiExtremeKind.Avalanche
+            root.transform.position = RoadCrossing(item.Footprint);
+            Color color = item.Footprint.Kind == TruckTaxiExtremeKind.Avalanche
                 ? new Color(.78f, .83f, .85f) : new Color(.38f, .3f, .23f);
             var block = new MaterialPropertyBlock();
             block.SetColor("_Color", color);
@@ -509,15 +735,15 @@ namespace LWS.TruckTaxi
             return root;
         }
 
-        private void RaiseWarning(TruckTaxiHazardZone zone, DateTime now, DateTime expires)
+        private void RaiseWarning(TruckTaxiExtremeFootprint zone, DateTime now, DateTime expires)
         {
-            string place = string.IsNullOrWhiteSpace(zone.displayName) ? zone.regionId : zone.displayName;
-            string text = zone.kind == TruckTaxiExtremeKind.Earthquake ? "EARTHQUAKE - " + place + " - TAKE CARE" :
-                zone.kind == TruckTaxiExtremeKind.Hurricane ? "HURRICANE WARNING - " + place + " - HEAVY WIND AND RAIN" :
-                zone.kind == TruckTaxiExtremeKind.Tornado ? "TORNADO WARNING - " + place + " - DRIVE CAREFULLY" :
-                zone.kind == TruckTaxiExtremeKind.Avalanche ? "AVALANCHE HAZARD - " + place + " - ROUTE MAY BE UNSAFE" :
+            string place = string.IsNullOrWhiteSpace(zone.DisplayName) ? zone.RegionId : zone.DisplayName;
+            string text = zone.Kind == TruckTaxiExtremeKind.Earthquake ? "EARTHQUAKE - " + place + " - TAKE CARE" :
+                zone.Kind == TruckTaxiExtremeKind.Hurricane ? "HURRICANE WARNING - " + place + " - HEAVY WIND AND RAIN" :
+                zone.Kind == TruckTaxiExtremeKind.Tornado ? "TORNADO WARNING - " + place + " - DRIVE CAREFULLY" :
+                zone.Kind == TruckTaxiExtremeKind.Avalanche ? "AVALANCHE HAZARD - " + place + " - ROUTE MAY BE UNSAFE" :
                 "MUDSLIDE HAZARD - " + place + " - ROUTE MAY BE UNSAFE";
-            var warning = new TruckTaxiExtremeWarning(zone.kind, zone.zoneId, text, now, expires);
+            var warning = new TruckTaxiExtremeWarning(zone.Kind, zone.Id, text, now, expires);
             warnings.Add(warning);
             WarningRaised?.Invoke(warning);
         }
@@ -526,9 +752,9 @@ namespace LWS.TruckTaxi
         {
             for (int i = active.Count - 1; i >= 0; i--)
             {
-                if (kind.HasValue && active[i].Zone.kind != kind.Value) continue;
-                if (zoneId != null && active[i].Zone.zoneId != zoneId) continue;
-                RemoveAt(i);
+                if (kind.HasValue && active[i].Footprint.Kind != kind.Value) continue;
+                if (zoneId != null && active[i].Footprint.Id != zoneId) continue;
+                RemoveAt(i, "CLEARED");
             }
             for (int i = scheduled.Count - 1; i >= 0; i--)
                 if ((!kind.HasValue || scheduled[i].Kind == kind.Value) &&
@@ -546,13 +772,14 @@ namespace LWS.TruckTaxi
         private bool HasHurricane()
         {
             foreach (var item in active)
-                if (item.Zone.kind == TruckTaxiExtremeKind.Hurricane) return true;
+                if (item.Footprint.Kind == TruckTaxiExtremeKind.Hurricane) return true;
             return false;
         }
 
-        private void RemoveAt(int index)
+        private void RemoveAt(int index, string endReason)
         {
-            bool hurricane = active[index].Zone.kind == TruckTaxiExtremeKind.Hurricane;
+            bool hurricane = active[index].Footprint.Kind == TruckTaxiExtremeKind.Hurricane;
+            MarkAttempt(active[index], active[index].Visual != null, endReason);
             RestoreProps(active[index]);
             DestroyVisual(active[index]);
             DestroyRoadDebris(active[index]);
@@ -590,6 +817,49 @@ namespace LWS.TruckTaxi
             RestoreCamera();
             ClearMatching(null, null);
             initialized = false;
+        }
+
+        private bool TryPlayer(out Vector3 position)
+        {
+            if (playerBody == null && host != null && host.Player != null)
+                playerBody = host.Player.GetComponent<Rigidbody>();
+            if (playerBody != null) { position = playerBody.position; return true; }
+            if (host != null && host.Player != null)
+            { position = host.Player.transform.position; return true; }
+            position = default;
+            return false;
+        }
+
+        private static Vector3? GroundAt(Vector3 position)
+        {
+            if (Physics.Raycast(position + Vector3.up * 300, Vector3.down, out var hit, 650,
+                ~0, QueryTriggerInteraction.Ignore)) return hit.point;
+            return position;
+        }
+
+        private void RecordAttempt(TruckTaxiExtremeKind kind, DateTime time, bool eligible,
+            string reason, string source, string zoneId, string regionId, float distance, bool started)
+        {
+            if (attempts.Count == 64) attempts.RemoveAt(0);
+            attempts.Add(new TruckTaxiExtremeAttempt(kind, time, eligible, reason, source, zoneId,
+                regionId, distance, started, false, started, null));
+        }
+
+        private void MarkAttempt(ActiveEvent item, bool visual, string endReason)
+        {
+            for (int i = attempts.Count - 1; i >= 0; i--)
+            {
+                var attempt = attempts[i];
+                if (!attempt.Started || attempt.Kind != item.Footprint.Kind ||
+                    attempt.ZoneId != item.Footprint.Id || attempt.Time != item.Started) continue;
+                if (attempt.VisualMaterialized == visual && endReason == null) return;
+                attempts[i] = new TruckTaxiExtremeAttempt(attempt.Kind, attempt.Time,
+                    attempt.Eligible, attempt.Reason, attempt.Source, attempt.ZoneId,
+                    attempt.RegionId, attempt.PlayerDistanceMeters, true,
+                    attempt.VisualMaterialized || visual, attempt.AlertSent,
+                    endReason ?? attempt.EndReason);
+                return;
+            }
         }
     }
 }
