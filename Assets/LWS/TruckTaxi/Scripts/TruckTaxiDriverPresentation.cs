@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi
 {
+    public enum TruckTaxiDriverPresentationState { Driving, MovingToSleeper, SleeperOccupied, ReturningToDriver }
+
     [DisallowMultipleComponent]
     public sealed class TruckTaxiDriverPresentation : MonoBehaviour
     {
@@ -11,8 +13,12 @@ namespace LWS.TruckTaxi
         private readonly Dictionary<Camera,int> cameraMasks = new Dictionary<Camera,int>();
         private readonly List<Material> materials = new List<Material>();
         private GameObject driver;
+        private TruckTaxiCabOccupantRig eventRig;
 
         public bool Ready => driver != null;
+        public Transform Occupant => driver != null ? driver.transform : null;
+        public TruckTaxiDriverPresentationState State { get; private set; }
+        public bool SleeperTransitionValid => eventRig != null && eventRig.isActiveAndEnabled && eventRig.PrivateTransitionValid;
 
         public void Initialize(Transform truck)
         {
@@ -47,6 +53,10 @@ namespace LWS.TruckTaxi
             foreach(var collider in driver.GetComponentsInChildren<Collider>(true)) collider.enabled=false;
             foreach(var part in driver.GetComponentsInChildren<Transform>(true))
                 part.gameObject.layer=InteriorHiddenLayer;
+            var rig = truck.GetComponent<TruckTaxiCabOccupantRig>();
+            if (rig != null && rig.HasSleeperCapability && rig.TrySeat(driver.transform,
+                TruckTaxiCabOccupantKind.Driver, TruckTaxiCabAnchorId.DriverSeat,
+                TruckTaxiSeatType.StandardPassenger, driver.transform.lossyScale)) return;
             foreach(var inside in truck.GetComponentsInChildren<CameraInsideVehicle>(true))
             {
                 if(!inside.isInsideVehicle) continue;
@@ -55,6 +65,31 @@ namespace LWS.TruckTaxi
                 cameraMasks[camera]=camera.cullingMask;
                 camera.cullingMask &= ~(1<<InteriorHiddenLayer);
             }
+        }
+
+        public bool TryBeginSleeperTransition(TruckTaxiCabOccupantRig rig, Transform companion, TruckTaxiSeatType companionType)
+        {
+            if (!Ready || State != TruckTaxiDriverPresentationState.Driving || rig == null ||
+                !rig.TryBeginPrivateTransition(driver.transform, companion, companionType)) return false;
+            eventRig = rig;
+            State = TruckTaxiDriverPresentationState.MovingToSleeper;
+            return true;
+        }
+
+        public bool StepSleeperTransition(float seconds)
+        {
+            if (!SleeperTransitionValid || !eventRig.StepPrivateTransition(seconds)) return false;
+            State = TruckTaxiDriverPresentationState.SleeperOccupied;
+            return true;
+        }
+
+        public void RestoreDriving()
+        {
+            if (eventRig == null) { State = TruckTaxiDriverPresentationState.Driving; return; }
+            State = TruckTaxiDriverPresentationState.ReturningToDriver;
+            eventRig.EndPrivateTransition();
+            eventRig = null;
+            State = TruckTaxiDriverPresentationState.Driving;
         }
 
         private static void Pose(Transform visual,string name,Vector3 position,Vector3 euler)
@@ -75,9 +110,12 @@ namespace LWS.TruckTaxi
 
         private void OnDestroy()
         {
+            RestoreDriving();
             foreach(var entry in cameraMasks) if(entry.Key!=null) entry.Key.cullingMask=entry.Value;
             if(driver!=null) Destroy(driver);
             foreach(var material in materials) if(material!=null) Destroy(material);
         }
+
+        private void OnDisable() => RestoreDriving();
     }
 }

@@ -15,6 +15,10 @@ namespace LWS.TruckTaxi
         [Tooltip("Offset from the authored seat for the second rider's center perch.")]
         public Vector3 secondarySeatOffset = new Vector3(-.42f,.12f,-.02f);
         public Vector3 secondaryEulerOffset;
+        [Header("Optional authored sleeper rig")]
+        public TruckTaxiCabAnchorId primaryCabAnchor = TruckTaxiCabAnchorId.FrontPassengerSeat;
+        public TruckTaxiCabAnchorId secondaryCabAnchor = TruckTaxiCabAnchorId.SleeperLeft;
+        public bool secondaryRequiresSleeperAnchor = true;
         [Min(.1f)] public float approachSpeed = 2.5f;
         [Min(.1f)] public float boardingDistance = 2;
         [Header("Oversized boarding; restored on every exit path")]
@@ -26,7 +30,25 @@ namespace LWS.TruckTaxi
         public static void PlaceActor(Transform actor, Transform truck, TruckTaxiSeatProfile profile,
             bool secondary, Vector3 standingWorldScale)
         {
-            if (actor == null || truck == null) return;
+            if (!TryPlaceActor(actor, truck, profile, secondary, standingWorldScale) && actor != null)
+                Debug.LogWarning("Authored sleeper cab has no compatible free occupant anchor.", actor);
+        }
+
+        public static bool TryPlaceActor(Transform actor, Transform truck, TruckTaxiSeatProfile profile,
+            bool secondary, Vector3 standingWorldScale, TruckTaxiCabOccupantKind? occupantKind = null)
+        {
+            if (actor == null || truck == null) return false;
+            var rig = truck.GetComponent<TruckTaxiCabOccupantRig>();
+            if (rig != null && rig.HasSleeperCapability)
+            {
+                var type = profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger;
+                var kind = occupantKind ?? (type == TruckTaxiSeatType.CompanionPassenger ?
+                    TruckTaxiCabOccupantKind.Companion : TruckTaxiCabOccupantKind.Passenger);
+                var preferred = secondary ? profile != null ? profile.secondaryCabAnchor : TruckTaxiCabAnchorId.SleeperLeft :
+                    profile != null ? profile.primaryCabAnchor : TruckTaxiCabAnchorId.FrontPassengerSeat;
+                return rig.TrySeat(actor, kind, preferred, type, standingWorldScale,
+                    secondary && (profile == null || profile.secondaryRequiresSleeperAnchor));
+            }
             Transform mount = profile != null && !string.IsNullOrWhiteSpace(profile.mountPath)
                 ? truck.Find(profile.mountPath) : null;
             if (mount == null) mount = truck;
@@ -42,6 +64,7 @@ namespace LWS.TruckTaxi
                 standingWorldScale.x * ratio * Mathf.Clamp01(authoredScale.x) / Mathf.Max(Mathf.Abs(parentScale.x), .0001f),
                 standingWorldScale.y * ratio * Mathf.Clamp01(authoredScale.y) / Mathf.Max(Mathf.Abs(parentScale.y), .0001f),
                 standingWorldScale.z * ratio * Mathf.Clamp01(authoredScale.z) / Mathf.Max(Mathf.Abs(parentScale.z), .0001f));
+            return true;
         }
     }
 }

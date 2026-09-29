@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using LWS.InterstateHauler;
+using NWH.Common.Cameras;
+using NWH.VehiclePhysics2;
+using NWH.VehiclePhysics2.Input;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +14,7 @@ namespace LWS.TruckTaxi
     [DisallowMultipleComponent]
     public sealed class TruckTaxiRoadsideCompanionLoop : MonoBehaviour
     {
-        private enum Phase { Waiting, ToPrivateStop, PrivateEvent }
+        private enum Phase { Waiting, ToPrivateStop, MovingToSleeper, PrivateEvent }
         private sealed class Companion
         {
             public GameObject actor;
@@ -29,6 +32,16 @@ namespace LWS.TruckTaxi
         private readonly List<Material> materials = new List<Material>();
         private TruckTaxiBootstrap host;
         private TruckTaxiPrivateEventVehicleMotion motion;
+        private TruckTaxiCabOccupantRig cabRig;
+        private TruckTaxiDriverPresentation driverPresentation;
+        private VehicleController eventVehicle;
+        private CameraChanger eventCameraChanger;
+        private GameObject previousCamera, exteriorCamera;
+        private Lws18SpeedTransmissionController eventTransmission;
+        private VehicleInputStates previousInputStates;
+        private RigidbodyConstraints previousConstraints;
+        private bool sleeperHold, previousAutoInput, previousSwapInput, previousControlsEnabled;
+        private bool previousTransmissionEnabled, previousCameraChangerEnabled, previousCameraInside;
         private TruckTaxiSeatProfile seat;
         private Rigidbody truckBody;
         private LwsTruckControlController controls;
@@ -61,13 +74,15 @@ namespace LWS.TruckTaxi
         public bool IsBusy => phase != Phase.Waiting;
         public bool HasOnboardCompanion => active?.actor != null && phase != Phase.Waiting && !boarding;
         public bool CanEject => HasOnboardCompanion && host != null && !host.Paused;
+        public bool SleeperSequenceActive => sleeperHold;
+        public bool FrontSeatsVacated => sleeperHold && cabRig != null && cabRig.PrivateTransitionComplete;
         public TruckTaxiStopObjectivePoint ActivePrivateStop => phase == Phase.ToPrivateStop ? active?.destination : null;
         public float PrivateStopParkingRadius => ActivePrivateStop != null ? ActivePrivateStop.radius : 0f;
         public string HornBinding => BindingLabel(ref hornBinding,"Horn / air horn","H / B");
         public string ParkingBrakeBinding => BindingLabel(ref parkingBinding,"Parking brake","P");
         public float FadeAlpha { get; private set; }
         public string Feedback { get; private set; } = "";
-        public string Prompt => phase == Phase.PrivateEvent ? "" : phase == Phase.ToPrivateStop ?
+        public string Prompt => phase == Phase.PrivateEvent || phase == Phase.MovingToSleeper ? "" : phase == Phase.ToPrivateStop ?
             boarding ? "BOARDING" :
             (ActivePrivateStop == null ? "" : CanInteract ? "PARK" :
                 FlatDistance(truckBody.position,ActivePrivateStop.Position)<=ActivePrivateStop.radius ?
@@ -299,6 +314,28 @@ namespace LWS.TruckTaxi
             {
                 return false;
             }
+            cabRig = host.Player.GetComponent<TruckTaxiCabOccupantRig>();
+            if (cabRig != null && cabRig.HasSleeperCapability)
+            {
+                driverPresentation = host.Player.GetComponent<TruckTaxiDriverPresentation>();
+                if (driverPresentation == null || !driverPresentation.Ready || !TryAcquireSleeperHold())
+                {
+                    Feedback = "Sleeper event requires an available exterior camera and parked truck controls.";
+                    return false;
+                }
+                if (!driverPresentation.TryBeginSleeperTransition(cabRig, active.actor.transform,
+                    seat != null ? seat.seatType : TruckTaxiSeatType.CompanionPassenger))
+                {
+                    EndSleeperSequence();
+                    Feedback = "Sleeper event requires two compatible private occupant anchors.";
+                    return false;
+                }
+                phase = Phase.MovingToSleeper;
+                eventTime = 0;
+                Feedback = "";
+                host.PickupZone?.SetPrivateStop(null);
+                return true;
+            }
             active.actor.SetActive(false);
             if (!motion.Begin()) { active.actor.SetActive(true); return false; }
             phase = Phase.PrivateEvent;
@@ -306,6 +343,114 @@ namespace LWS.TruckTaxi
             Feedback = "";
             host.PickupZone?.SetPrivateStop(null);
             return true;
+        }
+
+        private bool TryAcquireSleeperHold()
+        {
+            eventVehicle = host.Player.GetComponent<VehicleController>();
+            eventCameraChanger = host.Player.GetComponentInChildren<CameraChanger>(true);
+            eventTransmission = host.Player.GetComponent<Lws18SpeedTransmissionController>();
+            if (eventVehicle == null || !eventVehicle.isActiveAndEnabled || eventVehicle.input == null || !eventVehicle.input.autoSetInput ||
+                controls == null || !controls.enabled || !controls.CurrentState.parkingBrakeOn || truckBody == null ||
+                truckBody.isKinematic || eventCameraChanger == null || !eventCameraChanger.isActiveAndEnabled ||
+                eventCameraChanger.cameras == null) return false;
+            exteriorCamera = null;
+            foreach (var candidate in eventCameraChanger.cameras)
+                if (candidate != null && candidate.GetComponentInChildren<Camera>(true) != null &&
+                    candidate.GetComponent<CameraInsideVehicle>()?.isInsideVehicle != true &&
+                    (candidate.transform.parent == null || candidate.transform.parent.gameObject.activeInHierarchy))
+                { exteriorCamera = candidate; break; }
+            if (exteriorCamera == null) return false;
+            int index = eventCameraChanger.currentCameraIndex;
+            if (index < 0 || index >= eventCameraChanger.cameras.Count) return false;
+            previousCamera = eventCameraChanger.cameras[index];
+            if (previousCamera == null || !previousCamera.activeInHierarchy) return false;
+            previousCameraChangerEnabled = eventCameraChanger.enabled;
+            previousCameraInside = eventVehicle.CameraInsideVehicle;
+            previousAutoInput = eventVehicle.input.autoSetInput;
+            previousSwapInput = eventVehicle.input.swapInputInReverse;
+            previousInputStates = eventVehicle.input.states;
+            previousControlsEnabled = controls.enabled;
+            previousTransmissionEnabled = eventTransmission != null && eventTransmission.enabled;
+            previousConstraints = truckBody.constraints;
+            sleeperHold = true;
+            controls.enabled = false;
+            if (eventTransmission != null) eventTransmission.enabled = false;
+            eventCameraChanger.enabled = false;
+            truckBody.linearVelocity = Vector3.zero;
+            truckBody.angularVelocity = Vector3.zero;
+            truckBody.constraints = RigidbodyConstraints.FreezeAll;
+            HoldSleeperInputs();
+            if (SelectEventCamera(exteriorCamera)) return true;
+            EndSleeperSequence();
+            return false;
+        }
+
+        private void HoldSleeperInputs()
+        {
+            if (!sleeperHold || eventVehicle == null) return;
+            // NWH manual input blocks every provider, including wheel input. Do not replay stale throttle on release.
+            eventVehicle.input.autoSetInput = false;
+            eventVehicle.input.swapInputInReverse = false;
+            var input = previousInputStates;
+            input.Reset();
+            input.brakes = input.brakesRaw = input.inputSwappedBrakes = input.inputSwappedBrakesRaw = 1;
+            input.handbrake = input.handbrakeRaw = 1;
+            input.clutch = input.clutchRaw = 1;
+            input.lowBeamLights = previousInputStates.lowBeamLights;
+            input.highBeamLights = previousInputStates.highBeamLights;
+            input.hazardLights = previousInputStates.hazardLights;
+            eventVehicle.input.states = input;
+        }
+
+        private bool SelectEventCamera(GameObject cameraObject)
+        {
+            if (eventCameraChanger == null || cameraObject == null || eventCameraChanger.cameras == null ||
+                !eventCameraChanger.cameras.Contains(cameraObject)) return false;
+            for (int i = 0; i <= eventCameraChanger.cameras.Count; i++)
+            {
+                int index = eventCameraChanger.currentCameraIndex;
+                if (index >= 0 && index < eventCameraChanger.cameras.Count &&
+                    eventCameraChanger.cameras[index] == cameraObject && cameraObject.activeInHierarchy)
+                {
+                    if (eventVehicle != null) eventVehicle.CameraInsideVehicle =
+                        cameraObject.GetComponent<CameraInsideVehicle>()?.isInsideVehicle == true;
+                    host?.Player?.GetComponentInChildren<LwsNwhCameraPresentationMonitor>(true)?.PublishCurrentCamera(false);
+                    return true;
+                }
+                eventCameraChanger.NextCamera();
+            }
+            return false;
+        }
+
+        private void EndSleeperSequence()
+        {
+            if (driverPresentation != null) driverPresentation.RestoreDriving();
+            if (cabRig != null) cabRig.EndPrivateTransition();
+            if (!sleeperHold) return;
+            sleeperHold = false;
+            if (truckBody != null) truckBody.constraints = previousConstraints;
+            if (eventVehicle != null)
+            {
+                var restored = previousInputStates;
+                restored.Reset();
+                restored.handbrake = restored.handbrakeRaw = controls != null && controls.CurrentState.parkingBrakeOn ? 1 : 0;
+                restored.lowBeamLights = previousInputStates.lowBeamLights;
+                restored.highBeamLights = previousInputStates.highBeamLights;
+                restored.hazardLights = previousInputStates.hazardLights;
+                eventVehicle.input.states = restored;
+                eventVehicle.input.swapInputInReverse = previousSwapInput;
+                eventVehicle.input.autoSetInput = previousAutoInput;
+            }
+            if (controls != null) controls.enabled = previousControlsEnabled;
+            if (eventTransmission != null) eventTransmission.enabled = previousTransmissionEnabled;
+            if (eventCameraChanger != null)
+            {
+                bool restoredCamera = SelectEventCamera(previousCamera);
+                if (restoredCamera && eventVehicle != null) eventVehicle.CameraInsideVehicle = previousCameraInside;
+                eventCameraChanger.enabled = previousCameraChangerEnabled;
+            }
+            previousCamera = exteriorCamera = null;
         }
 
         public bool TryHornPickup()
@@ -351,8 +496,9 @@ namespace LWS.TruckTaxi
             }
             if(companion==active && companion.actor!=null)
             {
-                TruckTaxiSeatProfile.PlaceActor(companion.actor.transform,host.Player.transform,seat,false,
-                    companion.actor.GetComponent<TruckTaxiPassengerActor>().StandingWorldScale);
+                if (!TruckTaxiSeatProfile.TryPlaceActor(companion.actor.transform,host.Player.transform,seat,false,
+                    companion.actor.GetComponent<TruckTaxiPassengerActor>().StandingWorldScale, TruckTaxiCabOccupantKind.Companion))
+                { boardingRoutine = null; Cancel(); yield break; }
                 var seatedSway=companion.actor.GetComponentInChildren<TruckTaxiWobbleWalkSway>();
                 if(seatedSway!=null) seatedSway.enabled=false;
                 boarding=false;
@@ -366,8 +512,10 @@ namespace LWS.TruckTaxi
             if (!CanEject) return false;
             var departing=active;
             var actor=departing.actor.GetComponent<TruckTaxiPassengerActor>();
-            departing.actor=null;
             motion?.StopMotion();
+            EndSleeperSequence();
+            if (cabRig != null) cabRig.Release(actor.transform);
+            departing.actor=null;
             actor.gameObject.SetActive(true);
             actor.transform.SetParent(null,true);
             actor.transform.localScale=actor.StandingWorldScale;
@@ -385,10 +533,18 @@ namespace LWS.TruckTaxi
 
         public void Tick(float deltaTime)
         {
-            if (!Ready) return;
+            if (!Ready) { if (sleeperHold) Cancel(); return; }
             if (phase != Phase.Waiting && (host.Session.State != TruckTaxiState.Available ||
                 host.Session.HasPassenger || host.Roadside?.IsRecovering == true || host.Fuel?.IsRescuing == true))
             { Cancel(); return; }
+            if (sleeperHold)
+            {
+                if (active?.actor == null || eventVehicle == null || !eventVehicle.isActiveAndEnabled ||
+                    driverPresentation == null || !driverPresentation.isActiveAndEnabled ||
+                    !driverPresentation.SleeperTransitionValid || !SelectEventCamera(exteriorCamera))
+                { Cancel(); return; }
+                HoldSleeperInputs();
+            }
             if (host.Paused) return;
             if (phase == Phase.Waiting)
             {
@@ -438,6 +594,14 @@ namespace LWS.TruckTaxi
                 return;
             }
             if (truckBody.linearVelocity.magnitude > MaximumSpeed) { Cancel(); return; }
+            if (phase == Phase.MovingToSleeper)
+            {
+                if (!driverPresentation.StepSleeperTransition(deltaTime)) return;
+                if (!FrontSeatsVacated || !motion.Begin()) { Cancel(); return; }
+                phase = Phase.PrivateEvent;
+                eventTime = 0;
+                return;
+            }
             eventTime += Mathf.Max(0, deltaTime);
             FadeAlpha = .65f * Mathf.Min(Mathf.Clamp01(eventTime / .6f),
                 Mathf.Clamp01((EventSeconds - eventTime) / .8f));
@@ -449,7 +613,7 @@ namespace LWS.TruckTaxi
 
         public void Cancel()
         {
-            if (phase == Phase.Waiting) return;
+            if (phase == Phase.Waiting) { EndSleeperSequence(); return; }
             Feedback = "Private stop cancelled.";
             Finish(false);
         }
@@ -459,6 +623,7 @@ namespace LWS.TruckTaxi
             if(boardingRoutine!=null) { StopCoroutine(boardingRoutine); boardingRoutine=null; }
             boarding=false;
             motion?.StopMotion();
+            EndSleeperSequence();
             FadeAlpha = 0;
             host?.PickupZone?.SetPrivateStop(null);
             if (host?.GPS != null && active?.destination != null)
@@ -467,12 +632,15 @@ namespace LWS.TruckTaxi
             offerLeaseHeld = false;
             if (active?.actor != null)
             {
+                if (cabRig != null) cabRig.Release(active.actor.transform);
                 active.actor.transform.SetParent(null, true);
                 Vector3 exitOrigin = completed && active.destination != null ?
                     active.destination.Position : active.pickup.Position;
                 Vector3 exitRight = completed && active.destination != null ?
                     active.destination.transform.right : active.pickup.transform.right;
-                bool safeExit = TryRoadsidePosition(exitOrigin, exitRight, out Vector3 exit);
+                Vector3 exit = exitOrigin;
+                bool safeExit = host != null && host.Player != null && truckBody != null &&
+                    TryRoadsidePosition(exitOrigin, exitRight, out exit);
                 if (!safeExit) exit = active.pickup.Position;
                 active.actor.transform.SetPositionAndRotation(exit, Quaternion.identity);
                 active.actor.transform.localScale = active.actor.GetComponent<TruckTaxiPassengerActor>().StandingWorldScale;
