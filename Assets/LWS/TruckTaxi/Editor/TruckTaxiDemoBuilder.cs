@@ -149,6 +149,16 @@ namespace LWS.TruckTaxi.Editor
             instance.name="Truck Taxi Interstate Tractor";
             if(PrefabUtility.IsPartOfPrefabInstance(instance))
                 PrefabUtility.UnpackPrefabInstance(instance,PrefabUnpackMode.Completely,InteractionMode.AutomatedAction);
+            var occupantRig=instance.GetComponent<TruckTaxiCabOccupantRig>() ?? instance.AddComponent<TruckTaxiCabOccupantRig>();
+            occupantRig.Configure(false,new[]{new TruckTaxiCabOccupantRig.Anchor {
+                id=TruckTaxiCabAnchorId.SleeperRight,
+                mountPath="Cab",
+                localPosition=new Vector3(.55f,.83f,-.95f),
+                localScale=Vector3.one*.6f,
+                allowedOccupants=TruckTaxiCabOccupantKind.Companion,
+                secondaryOccupantSeat=true,
+                occupantRadius=.35f
+            }});
             var result=PrefabUtility.SaveAsPrefabAsset(instance,Root+"/Prefabs/TruckTaxi_InterstateTractor.prefab");
             Object.DestroyImmediate(instance);
             return result;

@@ -5,7 +5,7 @@ namespace LWS.TruckTaxi
     public enum TaxiRequestType { FastDelivery, Shortcut, RamTraffic, HitPedestrian, PropertyDamage, Offroad,
         SmoothRide, NoCollisions, MaximumChaos, ScenicRoute, NearMiss, IllicitStop,
         FollowVehicle, RamTargetVehicle, LoseVehicle, BlockVehicle, ReachLocationBeforeVehicle,
-        DestroyVehicle, CollectDroppedObjects, DinerStop, TakeALap }
+        DestroyVehicle, CollectDroppedObjects, DinerStop, TakeALap, CustomItemAction, FillJug = 22 }
     public enum TaxiEventType { Collision, TrafficRam, PedestrianHit, PropDamage, Shortcut, ScenicPoint, NearMiss, HardLanding }
     public enum TaxiRequestState { Active, Succeeded, Failed }
     public enum TaxiRequestCountBand { Common, Medium, Chaotic }
@@ -17,6 +17,13 @@ namespace LWS.TruckTaxi
     {
         public TaxiRequestType requestType;
         public string objectiveId;
+        [Header("Optional authored custom item objective")]
+        public string requiredItemStableId;
+        public string requiredCustomEventId;
+        public bool HasValidCustomItemActionMetadata => requestType==TaxiRequestType.CustomItemAction &&
+            !string.IsNullOrWhiteSpace(objectiveId) &&
+            !string.IsNullOrWhiteSpace(requiredCustomEventId) && float.IsFinite(target) && target>0 &&
+            (!hasDeadline || float.IsFinite(timer) && timer>0);
         public bool enabledForSelection = true;
         public TruckTaxiObjectiveCapability additionalCapabilities;
         public string StableId => string.IsNullOrWhiteSpace(objectiveId) ? "taxi.objective."+requestType : objectiveId;

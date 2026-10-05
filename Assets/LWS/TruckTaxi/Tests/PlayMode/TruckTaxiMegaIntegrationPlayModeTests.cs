@@ -257,6 +257,8 @@ namespace LWS.TruckTaxi.Tests
                     extremes.Clear(kind, zone.zoneId);
                     yield return null;
                     Assert.IsFalse(extremes.ActiveSnapshots.Any(s => s.Kind == kind));
+                    extremes.Clear();
+                    yield return null;
                     Assert.AreEqual(0, extremes.LivePhysicsActorCount);
                 }
             }

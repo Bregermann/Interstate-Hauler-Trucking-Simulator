@@ -16,7 +16,7 @@ namespace LWS.TruckTaxi.Tests
             var status = (string[])typeof(TruckTaxiStatusBars).GetField("Names", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
             var needs = (string[])typeof(TruckTaxiEnvironmentNeedsPanel).GetField("NeedNames", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
             CollectionAssert.AreEquivalent(new[] { "FUEL", "DAMAGE", "PATIENCE" }, status);
-            CollectionAssert.AreEquivalent(new[] { "BLADDER", "HUNGER", "THIRST" }, needs);
+            CollectionAssert.AreEquivalent(new[] { "BLADDER", "HUNGER", "THIRST", "FATIGUE" }, needs);
             Assert.IsFalse(status.Intersect(needs).Any());
         }
 

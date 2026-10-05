@@ -37,6 +37,7 @@ namespace LWS.TruckTaxi
         public void Initialize(TruckTaxiBootstrap value)
         {
             host=value;
+            (GetComponent<TruckTaxiServiceRings>() ?? gameObject.AddComponent<TruckTaxiServiceRings>()).Initialize(value);
             regional=GetComponent<TruckTaxiRegionalWorld>();
             controls=host.Player.GetComponentInChildren<LwsTruckControlController>(true);
             playerBody=host.Player.GetComponent<Rigidbody>();
@@ -119,6 +120,9 @@ namespace LWS.TruckTaxi
         }
         public void SetPrivateStop(TruckTaxiStopObjectivePoint stop)
         {
+            var nearby=GetComponent<TruckTaxiServiceRings>();
+            if(privateTarget!=null) nearby?.SetSuppressed(privateTarget.stableId,false);
+            if(stop!=null) nearby?.SetSuppressed(stop.stableId,true);
             privateTarget=stop;
             if(stop==null) { SetPrivateVisible(false); return; }
             for(int i=0;i<Segments;i++)

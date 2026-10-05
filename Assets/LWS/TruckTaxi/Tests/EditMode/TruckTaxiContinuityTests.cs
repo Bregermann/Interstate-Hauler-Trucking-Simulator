@@ -11,9 +11,14 @@ namespace LWS.TruckTaxi.Tests
         private PassengerProfile passenger;
         private List<TruckTaxiRideLocation> stops;
         private TruckTaxiSession session;
+        private bool hadPreference;
+        private int previousPreference;
 
         [SetUp] public void SetUp()
         {
+            hadPreference=PlayerPrefs.HasKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            previousPreference=PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
+            PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
             config=ScriptableObject.CreateInstance<TruckTaxiConfiguration>(); created.Add(config);
             passenger=ScriptableObject.CreateInstance<PassengerProfile>(); created.Add(passenger);
             passenger.passengerId="test.person"; passenger.basePatience=1000;
@@ -31,7 +36,12 @@ namespace LWS.TruckTaxi.Tests
             session.StartShift();
         }
         [TearDown] public void TearDown()
-        { foreach(var item in created) Object.DestroyImmediate(item); created.Clear(); }
+        {
+            foreach(var item in created) Object.DestroyImmediate(item);
+            created.Clear();
+            if(hadPreference) PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,previousPreference);
+            else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
+        }
 
         private void CompleteRide()
         {
@@ -148,7 +158,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.Greater(eligible,50,"The full database, not the ten-profile demo fallback, is used.");
         }
 
-        [Test] public void RarityAndRecentPenaltyChangeWeightsWithoutForbiddingRepeats()
+        [Test] public void StableIdCoverageAndManualDeclinesTakePriorityOverRarityWeights()
         {
             var other=ScriptableObject.CreateInstance<PassengerProfile>(); created.Add(other);
             other.passengerId="test.other";
@@ -164,8 +174,7 @@ namespace LWS.TruckTaxi.Tests
                 previous=session.Passenger.passengerId;
                 session.DeclineRide();
             }
-            Assert.Greater(repeats,0,"The penalty must stay soft.");
-            Assert.Less(repeats,100,"Duplicate array entries must not dominate the roll.");
+            Assert.Zero(repeats,"Manual decline has another eligible passenger.");
             other.rarity=TruckTaxiRarity.Rare;
             config.rareWeight=.1f;
             config.recentOfferWeight=1;
@@ -176,8 +185,7 @@ namespace LWS.TruckTaxi.Tests
                 if(session.Passenger==other) rare++;
                 session.DeclineRide();
             }
-            Assert.Greater(rare,0);
-            Assert.Less(rare,100);
+            Assert.That(rare,Is.InRange(249,251),"Rarity affects order, not eventual fair coverage.");
         }
 
         [Test] public void AppreciationRequiresExplicitlyAuthoredAgeTwentyOne()
@@ -186,6 +194,7 @@ namespace LWS.TruckTaxi.Tests
             passenger.casting=casting; passenger.specialAppreciationEligible=true;
             passenger.explicitlyAdult=true; passenger.adultFemalePresentation=true;
             passenger.flirtatiousPresentation=true;
+            passenger.gender=TruckTaxiPassengerGender.Female;
             passenger.minimumAdultAge=20;
             Assert.IsFalse(passenger.CanOfferAppreciation);
             passenger.minimumAdultAge=21;
@@ -195,24 +204,37 @@ namespace LWS.TruckTaxi.Tests
 
         [Test] public void MorningStormChangesOfferCadenceAndFareFromNeutral()
         {
+            float neutralDelay=session.DispatchRemaining;
             session.SetWorldConditions(60,8,TruckTaxiDemandWeather.Storm);
-            float interval=config.rideFrequency*config.morningFrequencyMultiplier*config.stormFrequencyMultiplier;
-            session.Tick(interval-.1f,Vector3.zero,0,0,true);
+            session.Tick(1,Vector3.zero,0,0,true);
+            float demandScale=1/(config.morningFrequencyMultiplier*config.stormFrequencyMultiplier);
+            Assert.That(session.DispatchRemaining,Is.EqualTo(neutralDelay-demandScale).Within(.001f));
+            session.Tick((session.DispatchRemaining-.05f)/demandScale,Vector3.zero,0,0,true);
             Assert.AreEqual(TruckTaxiState.Available,session.State);
             session.Tick(.2f,Vector3.zero,0,0,true);
-            Assert.AreEqual(TruckTaxiState.RideOffered,session.State);
-            Assert.That(session.DemandFareMultiplier,Is.EqualTo(config.morningFareMultiplier*
-                config.stormFareMultiplier).Within(.001f));
+            Assert.IsTrue(session.IsGeneratingOffer || session.State==TruckTaxiState.RideOffered,
+                "Morning storm dispatch must start at the adjusted deadline.");
+            for(int i=0;i<64 && session.State==TruckTaxiState.Available;i++)
+                session.Tick(.1f,Vector3.zero,0,0,true);
+            Assert.AreEqual(TruckTaxiState.RideOffered,session.State,session.LastOfferDiagnostics);
+            float fare=config.morningFareMultiplier+(config.stormFareMultiplier-1);
+            Assert.That(session.DemandFareMultiplier,Is.EqualTo(fare).Within(.001f));
             Assert.Greater(session.DemandEstimatedFareCents,session.Offer.EstimatedFareCents);
             Assert.IsTrue(session.AcceptRide());
-            Assert.That(session.EstimateFare().Base,Is.EqualTo((long)System.Math.Round(config.baseFareCents*
-                session.DemandFareMultiplier)));
+            var estimated=session.EstimateFare();
+            Assert.AreEqual(config.baseFareCents,estimated.Base);
+            Assert.AreEqual((long)System.Math.Round(config.baseFareCents*(config.morningFareMultiplier-1)),estimated.OtherBonus);
+            Assert.AreEqual((long)System.Math.Round(config.baseFareCents*(config.stormFareMultiplier-1)),estimated.WeatherBonus);
         }
 
         [Test] public void ExternalObjectiveProgressRequiresOwnedActiveRideRequest()
         {
             var definition=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); created.Add(definition);
             definition.requestType=TaxiRequestType.Shortcut; definition.target=2; definition.timer=100;
+            definition.minimumCount=2; definition.maximumCount=2;
+            stops[1].transform.position=Vector3.right*600;
+            stops[2].transform.position=Vector3.right*1200;
+            config.maximumTripDistance=2000;
             passenger.possibleRequests=new[]{definition}; passenger.requestDifficultyRange=Vector2.one;
             session.Capabilities.Register(TruckTaxiObjectiveCapability.Shortcuts,10);
             Assert.IsTrue(session.OfferRide()); Assert.IsTrue(session.AcceptRide());
@@ -222,6 +244,7 @@ namespace LWS.TruckTaxi.Tests
             session.Tick(2,session.Pickup.StopPosition,0,0,true);
             Assert.AreEqual(1,session.Requests.Count);
             var request=session.Requests[0];
+            Assert.AreEqual(2,request.Target,"The fixture needs two reachable shortcut opportunities.");
             Assert.IsFalse(session.RecordObjectiveProgress(request,-1));
             Assert.IsTrue(session.RecordObjectiveProgress(request,1));
             Assert.AreEqual(1,request.Progress);

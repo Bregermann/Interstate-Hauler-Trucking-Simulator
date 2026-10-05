@@ -9,10 +9,16 @@ namespace LWS.TruckTaxi.Tests
         private readonly List<Object> owned=new List<Object>();
         private TruckTaxiConfiguration config;
         private TruckTaxiSession session;
+        private bool hadPreference;
+        private int previousPreference;
         [SetUp] public void Setup()
         {
+            hadPreference=PlayerPrefs.HasKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            previousPreference=PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
+            PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
             config=ScriptableObject.CreateInstance<TruckTaxiConfiguration>(); owned.Add(config);
             var passenger=ScriptableObject.CreateInstance<PassengerProfile>(); owned.Add(passenger);
+            passenger.passengerId="offer.audio.passenger";
             config.passengers=new[]{passenger}; config.minimumTripDistance=10; config.maximumTripDistance=1000; config.offerDuration=10;
             var locations=new List<TruckTaxiRideLocation>();
             for(int i=0;i<2;i++)
@@ -23,7 +29,13 @@ namespace LWS.TruckTaxi.Tests
             }
             session=new TruckTaxiSession(config,locations,31); session.StartShift(); Assert.IsTrue(session.OfferRide());
         }
-        [TearDown] public void Cleanup() { foreach(var o in owned) Object.DestroyImmediate(o); owned.Clear(); }
+        [TearDown] public void Cleanup()
+        {
+            foreach(var o in owned) Object.DestroyImmediate(o);
+            owned.Clear();
+            if(hadPreference) PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,previousPreference);
+            else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
+        }
         [Test] public void OneNotificationPerOfferAndNewOfferAfterExpiry()
         {
             var first=session.Offer; Assert.IsTrue(first.TryClaimNotification());

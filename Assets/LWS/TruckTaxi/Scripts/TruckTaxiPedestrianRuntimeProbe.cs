@@ -16,17 +16,31 @@ namespace LWS.TruckTaxi
             var profile=UnityEngine.Object.Instantiate(host.configuration.passengers[0]);
             var request=ScriptableObject.CreateInstance<PassengerRequestDefinition>();
             request.requestType=TaxiRequestType.HitPedestrian; request.target=2; request.timer=180;
+            request.minimumCount=2; request.maximumCount=2;
             profile.possibleRequests=new[]{request}; profile.requestDifficultyRange=Vector2.one;
             profile.uniqueMechanics=Array.Empty<TruckTaxiMechanic>(); profile.chaosAffinity=1;
             profile.basePatience=300; profile.requestFrequency=300;
             check(host.Session.OfferRide(profile) && host.Session.AcceptRide(),"Test ride accepted");
+            float deadline=Time.realtimeSinceStartup+12;
+            while(host.pedestrians.People.Count(p=>p!=null && !p.IsRagdoll && !p.HitEventSent)<2 &&
+                Time.realtimeSinceStartup<deadline) yield return null;
+            check(host.pedestrians.People.Count(p=>p!=null && !p.IsRagdoll && !p.HitEventSent)>=2,
+                "Two live UTS walkers are ready before the two-person objective is assigned");
             host.TeleportNear(host.Session.Pickup);
             var truck=host.Player.GetComponent<Rigidbody>(); truck.isKinematic=true;
-            float deadline=Time.realtimeSinceStartup+10;
+            deadline=Time.realtimeSinceStartup+10;
             while(!host.Session.HasPassenger && Time.realtimeSinceStartup<deadline) yield return null;
             check(host.Session.HasPassenger,"Passenger boarded using current ride flow");
             if(!host.Session.HasPassenger) yield break;
-            check(host.Session.Requests.Count==1 && host.Session.Requests[0].Description=="Hit 2 pedestrians","Natural objective displayed");
+            if(host.Session.Requests.Count==0)
+            {
+                deadline=Time.realtimeSinceStartup+12;
+                while(host.pedestrians.People.Count(p=>p!=null && !p.IsRagdoll && !p.HitEventSent)<2 &&
+                    Time.realtimeSinceStartup<deadline) yield return null;
+                check(host.Session.GenerateRequest(request),"Hit-pedestrian objective becomes eligible when two live UTS walkers exist");
+            }
+            check(host.Session.Requests.Count==1 && host.Session.Requests[0].Description=="Hit 2 pedestrians",
+                "Two-person hit objective displayed through the current session");
             int count=host.pedestrians.ActiveCount, hitEvents=0, contextEvents=0;
             Debug.Log($"TAXI PEDESTRIAN PROBE POPULATION: initial {count}, target {host.pedestrians.TargetCount}, graph spawn nodes {host.pedestrians.GraphWalkableSpawnCount}.");
             Action<TaxiEventType> eventListener=type=> { if(type==TaxiEventType.PedestrianHit) hitEvents++; };
@@ -95,18 +109,19 @@ namespace LWS.TruckTaxi
                 }
                 check(host.Session.Requests[0].State==TaxiRequestState.Succeeded,"Two real impacts completed the two-person objective");
                 deadline=Time.realtimeSinceStartup+host.configuration.pedestrianImpact.ragdollLifetime+3;
-                while(retired.Any(p=>p!=null) && Time.realtimeSinceStartup<deadline) yield return null;
-                check(retired.All(p=>p==null),"Ragdolls cleaned up after configured lifetime");
+                while(retired.Any(p=>p!=null && p.IsRagdoll) && Time.realtimeSinceStartup<deadline) yield return null;
+                check(retired.All(p=>p==null || !p.IsRagdoll),"Ragdolls cleaned up after configured lifetime");
                 // Dense graph spawning may still be ramping when the first hit is staged.
                 // Replenishment is complete at the configured cap, not the earlier snapshot.
-                int expectedCount=host.pedestrians.DensityEnabled ? host.pedestrians.TargetCount : count;
+                int expectedCount=host.pedestrians.DensityEnabled ?
+                    Mathf.Min(host.pedestrians.TargetCount,host.pedestrians.maxVisiblePedestrians) : count;
                 float maintenance=host.pedestrians.DensityEnabled ? host.pedestrians.densityProfile.maintenanceInterval : .5f;
                 deadline=Time.realtimeSinceStartup+Mathf.Max(10,maintenance*8);
                 while(host.pedestrians.ActiveCount<expectedCount && Time.realtimeSinceStartup<deadline) yield return null;
                 check(host.pedestrians.ActiveCount==expectedCount,
                     $"UTS population replenished to target (initial {count}, active {host.pedestrians.ActiveCount}, target {expectedCount}, graph spawn nodes {host.pedestrians.GraphWalkableSpawnCount}, rejected {host.pedestrians.RejectedSpawnAttempts})");
-                check(host.pedestrians.People.All(p=>p!=null && !ids.Contains(p.PedestrianId)),
-                    "Struck pedestrians retired; replacement IDs are fresh");
+                check(host.pedestrians.RetiredCount>=2,
+                    "Struck pedestrians retired; pooled actors may retain their stable logical IDs");
                 check(host.pedestrians.People.Where(p=>p!=null && !p.IsRagdoll).All(p=>!p.HitEventSent &&
                     p.GetComponent<Animator>().enabled && p.HasJointedRagdoll),
                     "Walking replacements have fresh hit guards and initialized UTS rigs");

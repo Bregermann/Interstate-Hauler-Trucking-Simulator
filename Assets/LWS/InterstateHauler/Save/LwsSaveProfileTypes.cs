@@ -87,6 +87,8 @@ namespace LWS.InterstateHauler
     [Serializable]
     public sealed class LwsSaveProfileMetadata
     {
+        // Empty is the original Interstate career scope, preserving existing directories.
+        public string profileScopeId;
         public string stableProfileId;
         public string displayName;
         public int profileIndex;

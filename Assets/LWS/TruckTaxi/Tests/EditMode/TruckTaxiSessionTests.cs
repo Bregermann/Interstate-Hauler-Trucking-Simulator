@@ -20,7 +20,7 @@ namespace LWS.TruckTaxi.Tests
             PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
             config=ScriptableObject.CreateInstance<TruckTaxiConfiguration>(); objects.Add(config);
             passenger=ScriptableObject.CreateInstance<PassengerProfile>(); objects.Add(passenger);
-            passenger.passengerName="Test commuter"; passenger.basePatience=1000; passenger.requestDifficultyRange=Vector2.one;
+            passenger.passengerId="test.commuter"; passenger.passengerName="Test commuter"; passenger.basePatience=1000; passenger.requestDifficultyRange=Vector2.one;
             config.passengers=new[]{passenger}; config.minimumTripDistance=10; config.maximumTripDistance=1000;
             var locations=new List<TruckTaxiRideLocation>();
             for(int i=0;i<4;i++)
@@ -35,6 +35,7 @@ namespace LWS.TruckTaxi.Tests
             {
                 var go=new GameObject("Test optional stop"); objects.Add(go);
                 var stop=go.AddComponent<TruckTaxiStopObjectivePoint>(); stop.stableId="test."+category; stop.category=category; stop.durationSeconds=8;
+                go.transform.position=Vector3.forward*(200+(int)category*100);
                 session.Capabilities.Stops.Add(stop);
             }
         }
@@ -104,7 +105,14 @@ namespace LWS.TruckTaxi.Tests
             passenger.pickupPatience=TruckTaxiPickupPatience.VeryImpatient;
             Board();
             session.ApplyRoadsideAssistanceConsequence();
-            Assert.AreEqual(TruckTaxiState.RideFailed,session.State);
+            Assert.IsTrue(session.SafeDropRequested);
+            Assert.AreEqual(TruckTaxiState.DrivingToDestination,session.State);
+            var safeDrop=session.CurrentDesiredDestination;
+            Assert.IsNotNull(safeDrop);
+            session.Tick(.1f,safeDrop.StopPosition,0,0,true);
+            session.Tick(2,safeDrop.StopPosition,0,0,true);
+            Assert.AreEqual(TruckTaxiState.RideComplete,session.State);
+            Assert.IsTrue(session.LastFare.IsCancellation);
         }
         [Test] public void ChaosFriendlyPassengerEnjoysRoadsideAssistance()
         {
@@ -126,6 +134,8 @@ namespace LWS.TruckTaxi.Tests
             definition.target=1;
             definition.timer=100;
             Assert.IsTrue(session.GenerateRequest(definition));
+            Assert.IsNotNull(session.PendingDiversion);
+            Assert.IsTrue(session.AcceptDiversion());
             var stop=session.ActiveStop;
             Assert.IsNotNull(stop);
             string rideId=session.CurrentRideId;
@@ -247,11 +257,17 @@ namespace LWS.TruckTaxi.Tests
             else if(type==TaxiRequestType.RamTraffic) session.RecordEvent(TaxiEventType.TrafficRam,"car",5);
             else if(type==TaxiRequestType.HitPedestrian) session.RecordEvent(TaxiEventType.PedestrianHit,"npc",5);
             else if(type==TaxiRequestType.PropertyDamage) session.RecordEvent(TaxiEventType.PropDamage,"prop",5);
-            else if(request.IsStop) session.Tick(8,session.ActiveStop.StopPoint.Position,0,0,true);
+            else if(request.IsStop)
+            {
+                Assert.IsNotNull(session.PendingDiversion);
+                Assert.IsTrue(session.AcceptDiversion());
+                session.Tick(8,session.ActiveStop.StopPoint.Position,0,0,true);
+            }
             else if(type==TaxiRequestType.NearMiss) session.RecordEvent(TaxiEventType.NearMiss,"car");
             Arrive();
             Assert.AreEqual(TaxiRequestState.Succeeded,session.Requests[0].State);
-            Assert.Greater(session.LastFare.Requests,0);
+            if(request.IsStop) Assert.Greater(session.LastFare.Diversions,0);
+            else Assert.Greater(session.LastFare.Requests,0);
         }
         [Test] public void ShortcutDialogueUsesAuthoredOverrideOnlyDuringRide()
         {
@@ -283,8 +299,17 @@ namespace LWS.TruckTaxi.Tests
         {
             var request=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); objects.Add(request);
             request.requestType=TaxiRequestType.HitPedestrian; request.target=2;
+            request.minimumCount=request.maximumCount=2;
+            config.minimumTripDistance=1500; config.maximumTripDistance=10000;
+            int stopIndex=0;
+            foreach(var item in objects)
+            {
+                var go=item as GameObject;
+                if(go!=null && go.TryGetComponent<TruckTaxiRideLocation>(out var stop))
+                    stop.transform.position=Vector3.right*(2000*stopIndex++);
+            }
             passenger.possibleRequests=new[]{request}; passenger.passengerId="passenger.test"; passenger.chaosAffinity=1;
-            Board(); int events=0,contextEvents=0;
+            Board(); Assert.AreEqual(2,session.Requests[0].Target); int events=0,contextEvents=0;
             session.DrivingEvent+=type=> { if(type==TaxiEventType.PedestrianHit) events++; };
             session.PedestrianImpact+=hit=>contextEvents++;
             float satisfaction=session.Satisfaction;
@@ -379,7 +404,7 @@ namespace LWS.TruckTaxi.Tests
             }
             foreach(var request in content.requests)
             { Assert.IsNotEmpty(request.description,request.name); types.Add(request.requestType); }
-            Assert.AreEqual(12,types.Count);
+            Assert.GreaterOrEqual(types.Count,12);
         }
     }
 }

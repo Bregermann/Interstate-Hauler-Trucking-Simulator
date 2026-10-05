@@ -8,16 +8,28 @@ namespace LWS.TruckTaxi
     {
         public string passengerId;
         public string passengerName;
+        public TruckTaxiPassengerGender gender;
+        public TruckTaxiCustomItemInteractionDefinition[] customItemInteractions = System.Array.Empty<TruckTaxiCustomItemInteractionDefinition>();
+        [Header("Optional ordinary companion pickup")]
+        [Tooltip("Explicit eligibility only; never inferred from identity, appearance, or personality text.")]
+        public bool companionPickupEligible;
+        [Range(0,1)] public float companionPickupChance = .15f;
+        [Tooltip("Broad dispatch category. Empty uses authored archetype/tags, never appearance or voice.")]
+        public string dispatchArchetype;
+        public TruckTaxiPassengerGender AuthoredGender => TruckTaxiPassengerEligibilityPolicy.ResolveGender(gender,casting?.sexPresentation);
+        public string DispatchArchetype => TruckTaxiPassengerEligibilityPolicy.BroadArchetype(dispatchArchetype,passengerId,archetype,specialTraits);
         [Header("Optional special appreciation - explicitly authored adults only")]
         public bool specialAppreciationEligible;
         public bool explicitlyAdult;
         [Min(0)] public int minimumAdultAge;
         public bool adultFemalePresentation;
         public bool flirtatiousPresentation;
-        [Range(0,1)] public float appreciationChance=.35f;
-        [Range(1,5)] public float appreciationMinimumSatisfaction=4.5f;
-        public bool CanOfferAppreciation => specialAppreciationEligible && explicitlyAdult && minimumAdultAge>=21 &&
-            adultFemalePresentation && flirtatiousPresentation && casting!=null && casting.human;
+        [Range(0,1), Tooltip("Legacy serialized field. Completed eligible rides use the central 33% offer rule.")]
+        public float appreciationChance=.33f;
+        [Range(1,5), Tooltip("Legacy serialized field; satisfaction is not an additional eligibility gate.")]
+        public float appreciationMinimumSatisfaction=4.5f;
+        public bool CanOfferAppreciation => TruckTaxiPassengerEligibilityPolicy.IsAppreciationEligible(
+            AuthoredGender,explicitlyAdult,minimumAdultAge,specialAppreciationEligible);
         [Header("Identity and casting")]
         public string developmentReference, archetype;
         [TextArea] public string description;

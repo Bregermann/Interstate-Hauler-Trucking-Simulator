@@ -86,7 +86,20 @@ namespace LWS.TruckTaxi
                     Release(keyboard);
                     float boardingDeadline=Time.realtimeSinceStartup+3;
                     while(!host.Companions.HasOnboardCompanion && Time.realtimeSinceStartup<boardingDeadline) yield return null;
-                    check(spawned && host.Companions.HasOnboardCompanion,$"Companion boards through normal H horn input (positioning fixture): spawned={spawned} eligible={eligible} horn={horn} busy={host.Companions.IsBusy} paused={host.Paused} state={host.Session.State} gps={host.GPS.TargetId} feedback={host.Companions.Feedback}");
+                    var rig=host.Player.GetComponent<TruckTaxiCabOccupantRig>();
+                    var anchor=rig!=null && rig.Anchors.Count>0 ? rig.Anchors[0] : null;
+                    var mount=anchor!=null ? host.Player.transform.Find(anchor.mountPath) : null;
+                    var seatPosition=mount!=null ? mount.TransformPoint(anchor.localPosition) : Vector3.zero;
+                    var driver=host.Player.GetComponent<TruckTaxiDriverPresentation>()?.Occupant;
+                    float driverDistance=driver!=null ? Vector3.Distance(seatPosition,driver.position) : -1;
+                    var authoredCompanion=Array.Find(host.configuration.passengerDatabase.passengers,p=>
+                        p!=null && p.explicitlyAdult && p.minimumAdultAge>=21 && p.adultFemalePresentation && p.seatProfile!=null);
+                    var seatType=authoredCompanion?.seatProfile.seatType ?? TruckTaxiSeatType.CompanionPassenger;
+                    var nearbyField=typeof(TruckTaxiRoadsideCompanionLoop).GetField("nearby",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic);
+                    var nearbyRecord=nearbyField?.GetValue(host.Companions);
+                    var nearbyObject=nearbyRecord?.GetType().GetField("actor",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.Public)?.GetValue(nearbyRecord) as GameObject;
+                    var nearbyRadius=nearbyObject?.GetComponent<TruckTaxiPassengerActor>()?.StandingRadius;
+                    check(spawned && host.Companions.HasOnboardCompanion,$"Companion boards through normal H horn input (positioning fixture): spawned={spawned} eligible={eligible} room={host.Companions.HasRoom} rig={rig!=null} anchors={rig?.Anchors.Count} type={seatType} allowedTypes={anchor?.allowedSeatTypes?.Length} seatScale={anchor?.localScale} actorRadius={nearbyRadius} noActorSeat={rig!=null&&rig.HasSecondarySeat(seatType)} cabActors={host.Player.GetComponentsInChildren<TruckTaxiPassengerActor>(true).Length} mount={mount!=null} seatPos={seatPosition} driverPos={driver?.position} driverDistance={driverDistance:F2} horn={horn} busy={host.Companions.IsBusy} paused={host.Paused} state={host.Session.State} gps={host.GPS.TargetId} feedback={host.Companions.Feedback}");
                     if(!host.Companions.HasOnboardCompanion) break;
                     host.Session.SetRideRequestsEnabled(attempt==1);
                     var stop=host.Companions.ActivePrivateStop;

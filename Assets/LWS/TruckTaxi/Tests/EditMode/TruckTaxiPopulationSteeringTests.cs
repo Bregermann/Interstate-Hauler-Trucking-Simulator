@@ -15,10 +15,12 @@ namespace LWS.TruckTaxi.Tests
             var profile = ScriptableObject.CreateInstance<TruckTaxiPopulationProfile>();
             try
             {
-                Assert.AreEqual(144, profile.PedestrianTarget(12));
-                Assert.AreEqual(60, profile.TrafficTarget(12));
+                Assert.AreEqual(720, profile.PedestrianTarget(12));
+                Assert.AreEqual(150, profile.TrafficTarget(12));
+                // Keep the logical cap above both candidates so it cannot mask measured-baseline selection.
+                profile.maximumActivePedestrians = 2000;
                 profile.measuredPedestrianBaseline = 12;
-                Assert.AreEqual(144, profile.PedestrianTarget(24));
+                Assert.AreEqual(720, profile.PedestrianTarget(24));
                 profile.maximumActivePedestrians = 100;
                 Assert.AreEqual(100, profile.PedestrianTarget(12));
                 Assert.AreEqual(12, TruckTaxiPopulationProfile.ScaleTarget(12, 1, 288));
@@ -64,9 +66,9 @@ namespace LWS.TruckTaxi.Tests
                 Assert.IsTrue(traffic.ConfigureBaselineForValidation(profile));
                 Assert.AreEqual(12, pedestrians.TargetCount); Assert.AreEqual(12, traffic.TargetCount);
                 Assert.AreEqual(24, pedestrians.maximumPeople); Assert.AreEqual(12, traffic.maximumVehicles);
-                Assert.AreEqual(12, profile.pedestrianDensityMultiplier); Assert.AreEqual(5, profile.trafficDensityMultiplier);
+                Assert.AreEqual(60, profile.pedestrianDensityMultiplier); Assert.AreEqual(12.5f, profile.trafficDensityMultiplier);
                 Assert.IsTrue(pedestrians.ConfigureDensity(profile)); Assert.IsTrue(traffic.ConfigureDensity(profile));
-                Assert.AreEqual(144, pedestrians.TargetCount); Assert.AreEqual(60, traffic.TargetCount);
+                Assert.AreEqual(720, pedestrians.TargetCount); Assert.AreEqual(150, traffic.TargetCount);
                 Assert.IsFalse(pedestrians.IsBaselineValidation); Assert.IsFalse(traffic.IsBaselineValidation);
                 Assert.IsTrue(pedestrians.ConfigureDensity(profile, false));
                 Assert.AreEqual(24, pedestrians.TargetCount, "Original manual spawn cap remains available with the override disabled.");

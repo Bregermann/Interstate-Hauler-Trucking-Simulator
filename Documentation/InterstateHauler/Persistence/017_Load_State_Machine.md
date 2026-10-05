@@ -15,7 +15,7 @@
 | `EstablishingOrigin` | Set floating-origin offset for the saved global location. |
 | `PreparingWorld` | Give current world/streaming services a chance to prepare the area. |
 | `WaitingForWorldReady` | Sync transforms and mark the immediate authored-scene world ready. |
-| `ApplyingVendorSave` | Invoke Pixel Crushers load application for the selected slot. |
+| `ApplyingVendorSave` | Retrieve the selected vendor `SavedGameData` and apply it through Pixel Crushers `SaveSystem.LoadGame(SavedGameData)`. |
 | `RestoringPlayerVehicle` | Finalize exactly one canonical player truck and stationary pose. |
 | `RestoringTrailer` | Finalize existing trailer pose/attachment state where supported. |
 | `RestoringWorldSemantics` | Sync restored LWS semantic state after vendor application. |
@@ -29,6 +29,8 @@
 ## Pre-Read Rule
 
 Pre-read may inspect Pixel Crushers `SavedGameData` and deserialize the LWS semantic snapshot for validation. It must not apply truck, weather, navigation, transmission, trailer, or world state. Gameplay application remains Pixel Crushers-owned and occurs only in `ApplyingVendorSave` after world preparation.
+
+The prepared path uses the installed synchronous `SaveSystem.LoadGame(SavedGameData)` API with vendor scene loading disabled. `LoadFromSlot` can defer application by a frame when load-start listeners are present; that would let this coordinator finalize and clear its transient context too early. The adapter requires the LWS semantic saver to report a successful restore before the coordinator advances. This is ordering only, not a second serializer or storage path.
 
 ## Application Order
 

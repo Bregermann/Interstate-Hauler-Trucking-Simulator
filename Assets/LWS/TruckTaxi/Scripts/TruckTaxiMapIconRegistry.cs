@@ -9,7 +9,7 @@ namespace LWS.TruckTaxi
         IllicitStop, PrivateEventStop, Shortcut, DiscoveredShortcut, TargetVehicle,
         Collectible, Dropoff, SpecialEvent, Danger, Debug, FoodStop, PhotoStop, Bathroom,
         Store, Gas, Repair, TrainStation, BusTerminal, Racetrack, ServiceArea,
-        SportsStadium, ConcertVenue, Surge, Hazard, RoadClosure, WorkArea
+        SportsStadium, ConcertVenue, Surge, Hazard, RoadClosure, WorkArea, Drink, Sleep, Place
     }
     public enum TruckTaxiMapMarkerState { Hidden, Known, Optional, Active, Completed }
 
@@ -36,6 +36,7 @@ namespace LWS.TruckTaxi
         [Tooltip("Undiscovered shortcut entries use the plain shortcut glyph. Discovery adds a check mark.")]
         public bool showUndiscoveredShortcuts=true;
         public bool showDebugPoints;
+        public TruckTaxiStopRingPalette stopRingPalette=new TruckTaxiStopRingPalette();
         public Entry Find(TruckTaxiMapMarkerType type)
         { foreach(var entry in entries) if(entry!=null && entry.type==type) return entry; return null; }
         public System.Collections.Generic.IEnumerable<Entry> PlayerLegend()

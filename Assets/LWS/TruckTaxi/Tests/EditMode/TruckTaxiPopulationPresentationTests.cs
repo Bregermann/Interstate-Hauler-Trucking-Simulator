@@ -13,11 +13,11 @@ namespace LWS.TruckTaxi.Tests
             try
             {
                 Assert.IsTrue(profile.optimizePresentation);
-                Assert.AreEqual(144, profile.PedestrianTarget(12));
-                Assert.AreEqual(60, profile.TrafficTarget(12));
+                Assert.AreEqual(720, profile.PedestrianTarget(12));
+                Assert.AreEqual(150, profile.TrafficTarget(12));
                 profile.optimizePresentation = false;
-                Assert.AreEqual(144, profile.PedestrianTarget(12));
-                Assert.AreEqual(60, profile.TrafficTarget(12));
+                Assert.AreEqual(720, profile.PedestrianTarget(12));
+                Assert.AreEqual(150, profile.TrafficTarget(12));
             }
             finally { Object.DestroyImmediate(profile); }
         }

@@ -36,12 +36,16 @@ namespace LWS.TruckTaxi
         public TruckTaxiWorkAreaMapPanel WorkArea { get; private set; }
         private const int PageSize=8;
         public bool IsOpen => root!=null && root.gameObject.activeSelf;
+        public string FocusedPlaceId => selected>=0 && selected<places.Count ? places[selected].Id : null;
+        public string ActiveDestinationId => gps?.TargetId;
         public Transform FocusRoot => IsOpen ? WorkArea?.IsOpen==true ? WorkArea.FocusRoot : root : null;
 
         // Call once after Hud.Initialize, GPS.ConfigureDemoPresentation and UIInput creation.
         public void Initialize(TruckTaxiBootstrap taxi,TruckTaxiHud view)
         {
             host=taxi; hud=view; gps=taxi.GPS; input=view.UIInput;
+            gps.NavigationChanged+=OnNavigationChanged;
+            if(gps.MapMarkers!=null) gps.MapMarkers.PlaceSubmitted+=SubmitPlace;
             var canvasObject=new GameObject("Truck Taxi full map controls",typeof(RectTransform),typeof(Canvas),typeof(CanvasScaler),typeof(GraphicRaycaster));
             canvasObject.transform.SetParent(transform,false);
             var canvas=canvasObject.GetComponent<Canvas>(); canvas.renderMode=RenderMode.ScreenSpaceOverlay; canvas.sortingOrder=920;
@@ -113,7 +117,8 @@ namespace LWS.TruckTaxi
             if(!gps.SetFullMapOpen(true,Mathf.Max(1500,bounds.size.x+600,bounds.size.z+600),bounds.center))
             { root.gameObject.SetActive(false); return false; }
             host.SetPaused(true);
-            page=0; selected=-1; selectedPoint=null; pickingTravel=false; ShowPage(0);
+            RestoreActiveSelection();
+            selectedPoint=null; pickingTravel=false; ShowPage(selected>=0 ? selected/PageSize : 0);
             UpdateNavigationButtons();
             root.gameObject.SetActive(true); input.Focus(root); hud.OnFullMapVisibilityChanged();
             return true;
@@ -188,7 +193,10 @@ namespace LWS.TruckTaxi
             type==TruckTaxiMapMarkerType.Repair || type==TruckTaxiMapMarkerType.TrainStation ||
             type==TruckTaxiMapMarkerType.BusTerminal || type==TruckTaxiMapMarkerType.Racetrack ||
             type==TruckTaxiMapMarkerType.ServiceArea || type==TruckTaxiMapMarkerType.SportsStadium ||
-            type==TruckTaxiMapMarkerType.ConcertVenue;
+            type==TruckTaxiMapMarkerType.ConcertVenue || type==TruckTaxiMapMarkerType.Drink ||
+            type==TruckTaxiMapMarkerType.Sleep || type==TruckTaxiMapMarkerType.Place ||
+            type==TruckTaxiMapMarkerType.Destination || type==TruckTaxiMapMarkerType.Dropoff ||
+            type==TruckTaxiMapMarkerType.PassengerPickup;
         private void ShowPage(int next)
         {
             foreach(var row in rows) { row.SetActive(false); Destroy(row); }
@@ -198,13 +206,35 @@ namespace LWS.TruckTaxi
             for(int i=page*PageSize;i<Mathf.Min(places.Count,(page+1)*PageSize);i++)
             {
                 int index=i,slot=i-page*PageSize;
-                var row=hud.Button(placeList,places[i].Label,new Vector2(0,1-(slot+1)/8f),new Vector2(1,1-slot/8f),()=>Select(index));
+                var row=hud.Button(placeList,places[i].Label,new Vector2(0,1-(slot+1)/8f),new Vector2(1,1-slot/8f),()=>Submit(index));
                 rows.Add(row);
             }
             UpdateSelection();
             input?.Focus(root);
         }
         private void Select(int index) { selected=index; selectedPoint=null; pickingTravel=false; UpdateSelection(); }
+        public bool FocusPlace(string stableId)
+        {
+            int index=places.FindIndex(place=>place.Id==stableId);
+            if(index<0) return false;
+            Select(index);
+            return true;
+        }
+        public void RestoreActiveSelection() => selected=places.FindIndex(place=>place.Id==gps.TargetId);
+        private void Submit(int index)
+        {
+            Select(index);
+            RouteSelected();
+        }
+        public void SubmitPlace(string stableId)
+        {
+            if(!IsOpen || pickingTravel || WorkArea?.IsOpen==true) return;
+            int index=places.FindIndex(place=>place.Id==stableId);
+            if(index<0) return;
+            ShowPage(index/PageSize);
+            Submit(index);
+        }
+        private void OnNavigationChanged() { if(IsOpen) UpdateSelection(); }
         private void SelectPoint(Vector3 point) { selected=-1; selectedPoint=point; pickingTravel=false; UpdateSelection(); }
         private void Update()
         {
@@ -216,8 +246,21 @@ namespace LWS.TruckTaxi
         }
         private void UpdateSelection()
         {
+            if(selectionText==null) return;
             bool valid=selected>=0 && selected<places.Count;
             selectionText.text=selectedPoint.HasValue ? "ROAD NEAR SELECTED POINT" : valid ? places[selected].Kind+": "+places[selected].Label : "SELECT A PLACE";
+            for(int i=0;i<rows.Count;i++)
+            {
+                int index=page*PageSize+i;
+                bool active=places[index].Id==gps.TargetId;
+                var text=rows[i].GetComponentInChildren<TextMeshProUGUI>();
+                if(text!=null)
+                {
+                    text.text=(active ? gps.GuidanceSuppressed ? "PAUSED: " : "ACTIVE: " : "")+places[index].Label;
+                    text.fontStyle=active ? FontStyles.Bold : FontStyles.Normal;
+                    text.color=active ? new Color(.4f,1,.85f) : Color.white;
+                }
+            }
             teleportButton.SetActive(valid || selectedPoint.HasValue);
             routeButton.SetActive(valid && places[selected].Routeable && gps.CanSetMapServiceDestination);
             UpdateNavigationButtons();
@@ -259,9 +302,18 @@ namespace LWS.TruckTaxi
         private void RouteSelected()
         {
             if(selected<0 || selected>=places.Count) return;
-            var place=places[selected];
-            if(place.Routeable && gps.TrySetMapServiceDestination(place.Id,place.Label,place.Position)) Close();
-            else UpdateSelection();
+            TryRoutePlace(places[selected].Id);
+        }
+        public bool TryRoutePlace(string stableId)
+        {
+            int index=places.FindIndex(place=>place.Id==stableId);
+            if(index<0) return false;
+            var place=places[index];
+            if(!place.Routeable || !gps.TrySetMapServiceDestination(place.Id,place.Label,place.Position)) return false;
+            selected=index; selectedPoint=null; pickingTravel=false;
+            gps.MapMarkers?.Refresh();
+            UpdateSelection();
+            return true;
         }
         private void TravelSelected()
         {
@@ -271,6 +323,14 @@ namespace LWS.TruckTaxi
             string label=selectedPoint.HasValue ? "SELECTED ROAD POINT" : places[selected].Label;
             Close(); host.FastTravel.TryTravel(point,label);
         }
-        private void OnDestroy() { if(IsOpen) Close(); }
+        private void OnDestroy()
+        {
+            if(IsOpen) Close();
+            if(gps!=null)
+            {
+                gps.NavigationChanged-=OnNavigationChanged;
+                if(gps.MapMarkers!=null) gps.MapMarkers.PlaceSubmitted-=SubmitPlace;
+            }
+        }
     }
 }

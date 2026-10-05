@@ -155,9 +155,12 @@ namespace LWS.InterstateHauler
         public const string TruckValidationWorldId = "world.truck-validation";
         public const string StreamingHighwayValidationWorldId = "world.streaming-highway-validation";
         public const string FiftyMileValidationWorldId = "world.fifty-mile-floating-origin-validation";
+        public const string TruckTaxiWorldId = "world.truck-taxi";
 
         private static readonly LwsWorldResumeSceneBinding[] KnownScenes =
         {
+            new LwsWorldResumeSceneBinding(TruckTaxiWorldId, "TruckTaxi_DemoCity",
+                "Assets/LWS/TruckTaxi/Scenes/TruckTaxi_DemoCity.unity", "Truck Taxi"),
             new LwsWorldResumeSceneBinding(
                 InterstateCorridorValidationWorldId,
                 "InterstateCorridorValidation",
@@ -244,6 +247,29 @@ namespace LWS.InterstateHauler
         public LwsLoadApplicationContext CurrentContext { get; private set; }
         public string LastFailure { get; private set; } = string.Empty;
         public LwsWorldResumeContextPayload LastResumeContext { get; private set; }
+        public Func<LwsSaveSnapshot, LwsSaveOperationResult> AdditionalSnapshotValidation { get; set; }
+        public Func<LwsLoadApplicationContext, LwsSaveOperationResult> AdditionalWorldReadiness { get; set; }
+        public Func<LwsWorldPositionD, LwsWorldPositionD> ResumeOriginOffset { get; set; }
+
+        // Read-only inspection for asynchronous world hosts. Actual application still uses Load/LoadAutosave.
+        public LwsSaveOperationResult InspectVendorSlot(LwsSaveProfileMetadata profile, int slot,
+            LwsSaveLoadSlotKind kind, out LwsLoadApplicationContext context)
+        {
+            context = null;
+            if (_saveService == null || profile == null || !_saveService.Profiles.Any(p =>
+                    p.stableProfileId == profile.stableProfileId && p.profileScopeId == profile.profileScopeId))
+                return LwsSaveOperationResult.Failure("A profile in the active gameplay scope is required for slot inspection.");
+            if (_saveService.Adapter == null)
+                return LwsSaveOperationResult.Failure("Pixel Crushers save adapter is not available for slot inspection.");
+            var read = _saveService.Adapter.TryReadSemanticSnapshot(slot, out var snapshot, out var version, out var scene);
+            if (!read.Succeeded) return read;
+            var valid = ValidatePreRead(profile, snapshot, slot, out var resume, out var binding);
+            if (!valid.Succeeded) return valid;
+            context = new LwsLoadApplicationContext { ProfileId = profile.stableProfileId, VendorSlotNumber = slot,
+                SlotKind = kind, Snapshot = snapshot, ResumeContext = resume, WorldBinding = binding,
+                VendorSavedGameVersion = version, VendorSavedGameSceneName = scene };
+            return LwsSaveOperationResult.Success();
+        }
 
         public LwsSaveOperationResult PreReadVendorSlot(
             LwsSaveProfileMetadata profile,
@@ -337,12 +363,15 @@ namespace LWS.InterstateHauler
                 SetPhase(LwsSaveLoadCoordinatorPhase.PreparingWorld);
                 PrepareWorldForGlobalPosition(context);
 
+                var readiness = AdditionalWorldReadiness?.Invoke(context) ?? LwsSaveOperationResult.Success();
+                if (!readiness.Succeeded) return Fail(readiness.Message);
+
                 SetPhase(LwsSaveLoadCoordinatorPhase.WaitingForWorldReady);
                 Physics.SyncTransforms();
                 context.WorldPrepared = true;
 
                 SetPhase(LwsSaveLoadCoordinatorPhase.ApplyingVendorSave);
-                LwsSaveOperationResult load = _saveService.Adapter.LoadFromSlot(context.VendorSlotNumber);
+                LwsSaveOperationResult load = _saveService.Adapter.LoadPreparedSlot(context.VendorSlotNumber);
                 context.AppliedVendorLoad = load.Succeeded;
                 if (!load.Succeeded)
                 {
@@ -412,6 +441,9 @@ namespace LWS.InterstateHauler
             {
                 return LwsSaveOperationResult.Failure($"Saved game schema {snapshot.schemaVersion} is not supported by runtime schema {LwsSaveSchema.CurrentVersion}.");
             }
+
+            var additional = AdditionalSnapshotValidation?.Invoke(snapshot) ?? LwsSaveOperationResult.Success();
+            if (!additional.Succeeded) return additional;
 
             if (profile != null && !string.Equals(profile.stableProfileId, snapshot.profileId, StringComparison.Ordinal))
             {
@@ -545,7 +577,7 @@ namespace LWS.InterstateHauler
             }
 
             LwsWorldPositionD savedGlobal = context.ResumeContext.SavedGlobalPosition;
-            LwsWorldPositionD targetOffset = CalculateResumeOriginOffset(savedGlobal, originService.ActiveTuning);
+            LwsWorldPositionD targetOffset = ResumeOriginOffset != null ? ResumeOriginOffset(savedGlobal) : CalculateResumeOriginOffset(savedGlobal, originService.ActiveTuning);
             if (!originService.SetOriginOffset(targetOffset, "Mid-route save resume origin preparation.", out LwsOriginShiftEvent shiftEvent))
             {
                 return LwsSaveOperationResult.Failure("Floating-origin service rejected the saved resume origin offset.");

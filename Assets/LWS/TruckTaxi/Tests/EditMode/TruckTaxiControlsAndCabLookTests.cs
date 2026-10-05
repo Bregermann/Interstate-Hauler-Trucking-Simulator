@@ -61,10 +61,15 @@ namespace LWS.TruckTaxi.Tests
                 Assert.AreEqual(input.CabGamepadLook.GetBindingDisplayString(0),look.Binding(true));
                 Assert.IsTrue(rows.Single(r=>r.Name=="GPS on / off").IsOnScreenOnly);
                 Assert.AreEqual("MENU BUTTON",rows.Single(r=>r.Name=="Use bathroom").Binding(true));
+                var horn=rows.Single(r=>r.Name=="Horn / air horn");
+                Assert.AreEqual("H",horn.Binding(false),"Companion prompts use this same catalog entry.");
+                Assert.AreEqual("A / South / Right stick press",horn.Binding(true));
+                Assert.IsTrue(horn.Note.Contains("Keyboard air horn: UNBOUND"));
                 foreach(var name in new[]{"GPS display settings","On-screen GPS / north up / place markers",
                     "On-screen size / range","Cab map range / route width / color","Restore GPS defaults",
                     "Open driver needs","Open services page","Open store page",
-                    "Open items page","Route to store","Throw filled from items page","Call tow truck","Ride requests on / off"})
+                    "Open items page","Route to store","Throw filled from items page","Call tow truck","Ride requests on / off",
+                    "Find a place to sleep","Sleep 2 / 4 / 8 hours","Reduced fatigue effects"})
                     Assert.IsTrue(rows.Single(r=>r.Name==name).IsOnScreenOnly,name);
                 Assert.IsTrue(rows.Any(r=>r.Note.Contains("CONFLICT")));
             }
@@ -91,6 +96,10 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual("UNBOUND",row.WheelBinding(profile));
             profile.steeringBinding=LwsWheelControlBinding.Create(LwsWheelLogicalControl.Steering,LwsWheelControlKind.Axis,"<Joystick>/stick/x","Wheel axis");
             Assert.AreEqual("Wheel axis",row.WheelBinding(profile));
+            var horn=new TruckTaxiControlsCatalog.Entry("VEHICLE","Horn / air horn","H","A / South / Right stick press");
+            profile.hornBinding=LwsWheelControlBinding.Create(LwsWheelLogicalControl.Horn,LwsWheelControlKind.Button,"<Joystick>/button1","Wheel horn");
+            profile.airHornBinding=LwsWheelControlBinding.Create(LwsWheelLogicalControl.AirHorn,LwsWheelControlKind.Button,"<Joystick>/button2","Wheel air horn");
+            Assert.AreEqual("Wheel horn / Wheel air horn",horn.WheelBinding(profile));
         }
     }
 }

@@ -27,6 +27,8 @@ namespace LWS.TruckTaxi
         private Vignette vignette;
         private LensDistortion lens;
         private CameraChanger cameraChanger;
+        private bool fatiguePresentationActive;
+        public void SetFatiguePresentationActive(bool active) => fatiguePresentationActive = active;
         private const int EffectLayer = 31; // Unassigned project layer; exclude map/preview cameras.
         public float Intensity => volume != null ? volume.weight : 0;
         public void Initialize(TruckTaxiTemporaryEffects state)
@@ -49,7 +51,7 @@ namespace LWS.TruckTaxi
             if (effects == null || volume == null) return;
             var snapshot = effects.GetSnapshot(TruckTaxiTemporaryEffectKind.MysteryMushroom);
             volume.weight = snapshot.Intensity01;
-            if (volume.weight <= 0) { RestoreCameras(); return; }
+            if (volume.weight <= 0 && !fatiguePresentationActive) { RestoreCameras(); return; }
             var player = TruckTaxiBootstrap.Instance?.Player;
             if (player == null) { RestoreCameras(); return; }
             if (cameraChanger == null || !cameraChanger.transform.IsChildOf(player.transform))

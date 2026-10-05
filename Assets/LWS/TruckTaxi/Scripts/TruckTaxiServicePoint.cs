@@ -10,7 +10,7 @@ namespace LWS.TruckTaxi
         None = 0, Refuel = 1, RepairEngine = 2, RepairTransmission = 4,
         RepairGeneralDamage = 8, RepairTires = 16, RecoverVehicle = 32,
         Restroom = 64, DisposeWaste = 128, CleanCab = 256,
-        Food = 512, Drink = 1024, PissJugs = 2048, Store = 4096
+        Food = 512, Drink = 1024, PissJugs = 2048, Store = 4096, Sleep = 8192
     }
 
     // Capabilities augment existing authored locations; they do not replace their identity.
@@ -28,6 +28,8 @@ namespace LWS.TruckTaxi
         [Min(2)] public float radius = 18;
         [Min(.5f)] public float verticalTolerance = 3;
         [Min(0)] public int assistanceBaseCostCents = 5000;
+        [Min(0)] public int sleepCostPerHourCents;
+        public long SleepCostCents(int hours) => TruckTaxiFatigueRules.IsSleepDuration(hours) ? (long)Mathf.Max(0, sleepCostPerHourCents) * hours : 0;
         public Vector3 Position => location != null ? location.StopPosition : transform.position;
         public Vector3 RecoveryPosition => recoveryAnchor != null ? recoveryAnchor.position : Position;
         public float InteractionRadius => Supports(TruckTaxiServiceCapability.Store) ? Mathf.Max(18, radius) : radius;
@@ -57,32 +59,72 @@ namespace LWS.TruckTaxi
         {
             foreach (var point in FindObjectsByType<TruckTaxiBathroomPoint>(FindObjectsSortMode.None))
             {
-                if (point.gameObject.scene != scene || point.GetComponent<TruckTaxiServicePoint>() != null) continue;
-                var service = point.gameObject.AddComponent<TruckTaxiServicePoint>();
-                service.stableId = point.stableId; service.displayName = point.displayName; service.location = point.location;
-                service.radius = point.stopRadius; service.verticalTolerance = point.verticalTolerance;
-                service.capabilities = TruckTaxiServiceCapability.Restroom |
+                if (point.gameObject.scene != scene) continue;
+                var service = BindLocationService(point.gameObject, point.stableId, point.displayName, point.location, point.stopRadius, point.verticalTolerance);
+                service.capabilities |= TruckTaxiServiceCapability.Restroom |
                     (point.allowsJugDisposal ? TruckTaxiServiceCapability.DisposeWaste : 0) |
                     (point.allowsCabCleanup ? TruckTaxiServiceCapability.CleanCab : 0);
             }
             foreach (var point in FindObjectsByType<TruckTaxiStorePoint>(FindObjectsSortMode.None))
             {
-                if (point.gameObject.scene != scene || point.GetComponent<TruckTaxiServicePoint>() != null) continue;
-                var service = point.gameObject.AddComponent<TruckTaxiServicePoint>();
-                service.stableId = point.stableId; service.displayName = point.displayName; service.location = point.location;
-                service.radius = point.stopRadius; service.verticalTolerance = point.verticalTolerance;
-                service.capabilities = TruckTaxiServiceCapability.Store | TruckTaxiServiceCapability.Food |
+                if (point.gameObject.scene != scene) continue;
+                var service = BindLocationService(point.gameObject, point.stableId, point.displayName, point.location, point.stopRadius, point.verticalTolerance);
+                service.capabilities |= TruckTaxiServiceCapability.Store | TruckTaxiServiceCapability.Food |
                     TruckTaxiServiceCapability.Drink | TruckTaxiServiceCapability.PissJugs | TruckTaxiServiceCapability.Restroom |
                     TruckTaxiServiceCapability.DisposeWaste | TruckTaxiServiceCapability.CleanCab;
             }
             foreach (var point in FindObjectsByType<TruckTaxiGasStationPoint>(FindObjectsSortMode.None))
             {
-                if (point == null || point.gameObject.scene != scene || point.GetComponent<TruckTaxiServicePoint>() != null) continue;
-                var service = point.gameObject.AddComponent<TruckTaxiServicePoint>();
-                service.stableId = point.stableId; service.displayName = point.displayName;
-                service.radius = point.stoppingRadius; service.verticalTolerance = point.verticalTolerance; service.recoveryAnchor = point.recoveryAnchor;
-                service.capabilities = TruckTaxiServiceCapability.Refuel | TruckTaxiServiceCapability.Restroom |
+                if (point == null || point.gameObject.scene != scene) continue;
+                var service = BindLocationService(point.gameObject, point.stableId, point.displayName, null, point.stoppingRadius, point.verticalTolerance);
+                if (service.recoveryAnchor == null) service.recoveryAnchor = point.recoveryAnchor;
+                service.capabilities |= TruckTaxiServiceCapability.Refuel | TruckTaxiServiceCapability.Restroom |
                     TruckTaxiServiceCapability.DisposeWaste | TruckTaxiServiceCapability.CleanCab;
+            }
+            BindSleepLocations(scene);
+        }
+        private static TruckTaxiServicePoint BindLocationService(GameObject owner, string id, string label,
+            TruckTaxiRideLocation location, float radius, float tolerance)
+        {
+            var service = owner.GetComponent<TruckTaxiServicePoint>();
+            if (service == null)
+            {
+                service = owner.AddComponent<TruckTaxiServicePoint>();
+                service.radius = radius; service.verticalTolerance = tolerance;
+            }
+            if (string.IsNullOrWhiteSpace(service.stableId)) service.stableId = id;
+            if (service.location == null) service.location = location;
+            if (string.IsNullOrWhiteSpace(service.displayName) || service.displayName == "Service stop") service.displayName = label;
+            return service;
+        }
+
+        public static bool IsAuthoredHotel(TruckTaxiRideLocation location)
+        {
+            if (location == null) return false;
+            string id = location.locationId ?? string.Empty;
+            // The original validation builder cycled locationType by index. Its stable IDs,
+            // not that legacy enum, identify the four actually authored hotels/inns.
+            if (id.StartsWith("taxi.stop.", System.StringComparison.Ordinal) ||
+                id.StartsWith("taxi.town02.stop.", System.StringComparison.Ordinal))
+                return id == "taxi.stop.08" || id == "taxi.stop.15" ||
+                    id == "taxi.town02.stop.08" || id == "taxi.town02.stop.15";
+            return location.locationType == TaxiLocationType.Hotel;
+        }
+
+        // Authored hotels with an explicit parking anchor get the coordinator sleep interaction.
+        // Call again after a streamed region loads; no duplicate components or competing identities.
+        public static void BindSleepLocations(UnityEngine.SceneManagement.Scene scene)
+        {
+            foreach (var location in FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None))
+            {
+                if (location.gameObject.scene != scene || !IsAuthoredHotel(location) ||
+                    location.truckStopPoint == null || string.IsNullOrWhiteSpace(location.locationId)) continue;
+                var point = location.GetComponent<TruckTaxiServicePoint>();
+                if (point == null) point = location.gameObject.AddComponent<TruckTaxiServicePoint>();
+                if (string.IsNullOrWhiteSpace(point.stableId)) point.stableId = "TT_SLEEP_" + location.locationId;
+                if (point.location == null) { point.location = location; point.radius = Mathf.Max(3, location.detectionRadius); }
+                if (string.IsNullOrWhiteSpace(point.displayName) || point.displayName == "Service stop") point.displayName = location.locationName;
+                point.capabilities |= TruckTaxiServiceCapability.Sleep;
             }
         }
     }

@@ -131,7 +131,8 @@ namespace LWS.TruckTaxi.Tests
             else travel.CancelTravel();
             travel.CancelTravel();
             Assert.That(travel.IsTravelling, Is.False);
-            Assert.That(host.Paused, Is.EqualTo(previouslyPaused));
+            Assert.That(host.Paused, Is.EqualTo(previouslyPaused || !host.CanResume),
+                "An inactive test host cannot resume until its profile and world are ready.");
             Assert.That(Vector3.Distance(tractor.position, origin), Is.LessThan(.001f));
             Assert.That(Vector3.Distance(trailer.position, origin + Vector3.back * 12), Is.LessThan(.001f));
             Assert.That(tractor.linearVelocity, Is.EqualTo(Vector3.right * 2));

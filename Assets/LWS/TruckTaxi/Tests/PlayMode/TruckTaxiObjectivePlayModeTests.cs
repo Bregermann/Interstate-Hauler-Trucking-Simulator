@@ -8,6 +8,19 @@ namespace LWS.TruckTaxi.Tests
 {
     public sealed class TruckTaxiObjectivePlayModeTests
     {
+        private bool hadRidePreference;
+        private int previousRidePreference;
+        [SetUp] public void EnableTestRideRequests()
+        {
+            hadRidePreference = PlayerPrefs.HasKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            previousRidePreference = PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey, 1);
+            PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey, 1);
+        }
+        [TearDown] public void RestoreRideRequests()
+        {
+            if (hadRidePreference) PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey, previousRidePreference);
+            else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
+        }
         [UnityTest] public IEnumerator NoMouseStopsRatingsAndOptionalAdultChoice()
         {
             yield return SceneManager.LoadSceneAsync("TruckTaxi_DemoCity");

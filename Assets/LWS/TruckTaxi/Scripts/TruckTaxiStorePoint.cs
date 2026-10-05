@@ -8,8 +8,9 @@ namespace LWS.TruckTaxi
         public string stableId = "TT_STORE_";
         public string displayName = "Truck stop store";
         public TruckTaxiRideLocation location;
-        [Tooltip("Opt-in rare Road Pep stock. Ordinary stores leave this off.")]
+        [Tooltip("Legacy stock metadata. All shops currently sell the complete shared catalog, including Road Pep.")]
         public bool sellsRoadPep;
+        public bool Sells(TruckTaxiNeedsItem item) => TruckTaxiNeedsItems.Find(item) is TruckTaxiNeedsItemDefinition entry && entry.PlayerOwnable && entry.Purchasable;
         [Min(2)] public float stopRadius = 18;
         [Min(.5f)] public float verticalTolerance = 3;
         public Vector3 Position => location != null ? location.StopPosition : transform.position;

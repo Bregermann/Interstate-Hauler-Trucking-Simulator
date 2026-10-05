@@ -115,7 +115,7 @@ namespace LWS.TruckTaxi
             Add("VEHICLE","Left / right indicator","Z / X","Left / Right shoulder",false,"CONFLICT: shoulders also serve jug controls");
             Add("VEHICLE","Hazard lights","J","Left stick press",false);
             Add("VEHICLE","Wipers","V","D-pad Up",false);
-            Add("VEHICLE","Horn / air horn","H / B","A / South / Right stick press",false,"CONFLICT: gamepad A also submits menus");
+            Add("VEHICLE","Horn / air horn","H","A / South / Right stick press",false,"Keyboard air horn: UNBOUND. CONFLICT: gamepad A also submits menus");
             Add("VEHICLE","Driver gesture","F","Both stick presses",false,"CONFLICT: F also ejects a passenger");
             Add("CAMERA","Look around","Hold Right mouse + move","Right stick",true,"",ui?.CabMouseLook,ui?.CabGamepadLook,ui?.CabMouseLookHold);
             Add("CAMERA","Center view","Backquote","",true,"",ui?.CenterView);
@@ -167,6 +167,9 @@ namespace LWS.TruckTaxi
             Screen("DRIVER NEEDS / SERVICES","Throw filled from items page","MENU");
             Screen("DRIVER NEEDS / SERVICES","Find store","MENU");
             Screen("DRIVER NEEDS / SERVICES","Find food / drink","MENU");
+            Screen("DRIVER NEEDS / SERVICES","Find a place to sleep","MENU");
+            Screen("DRIVER NEEDS / SERVICES","Sleep 2 / 4 / 8 hours","MENU");
+            Screen("DRIVER NEEDS / SERVICES","Reduced fatigue effects","MENU");
             Screen("DRIVER NEEDS / SERVICES","Find gas","MENU");
             Screen("DRIVER NEEDS / SERVICES","Find repair","MENU");
             Screen("DRIVER NEEDS / SERVICES","Call tow truck","MENU");

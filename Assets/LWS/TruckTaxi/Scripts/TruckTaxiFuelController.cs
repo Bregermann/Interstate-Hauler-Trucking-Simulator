@@ -77,6 +77,7 @@ namespace LWS.TruckTaxi
             if (!host.Session.TrySpend(charge)) { Feedback = "NOT ENOUGH CASH TO REFUEL"; return; }
             unbilledCents = price - charge; TotalFuelCharges += charge; Fuel.amount += liters;
             Feedback = "REFUELING  " + Mathf.RoundToInt(Fraction * 100) + "%";
+            if (liters > 0) host.GPS?.CompleteServiceDestination(station.stableId);
         }
         public static long RescueCost(float capacity, int centsPerLiter) =>
             (long)Math.Ceiling(Math.Max(0, capacity) * Math.Max(0, centsPerLiter) * 2d);

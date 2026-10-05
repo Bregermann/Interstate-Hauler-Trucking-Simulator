@@ -117,20 +117,29 @@ namespace LWS.TruckTaxi
             var actor=go.GetComponent<TruckTaxiPassengerActor>(); if(actor==null) actor=go.AddComponent<TruckTaxiPassengerActor>();
             actor.Bind(profile); return actor;
         }
-        private void Seat(TruckTaxiPassengerActor actor,PassengerProfile profile,bool secondary)
+        private bool Seat(TruckTaxiPassengerActor actor,PassengerProfile profile,bool secondary)
         {
-            if(actor==null) return;
-            TruckTaxiSeatProfile.PlaceActor(actor.transform,host.Player.transform,profile?.seatProfile,
+            if(actor==null) return false;
+            actor.PrepareForSeat();
+            bool seated = TruckTaxiSeatProfile.TryPlaceActor(actor.transform,host.Player.transform,profile?.seatProfile,
                 secondary,actor.StandingWorldScale);
-            actor.Animate(TruckTaxiPassengerAnimation.BoardAbstraction);
+            if (seated) actor.CompleteSeating();
+            else
+            {
+                actor.PrepareForWorld(host.Player.transform);
+                if (TruckTaxiActorWorldPlacement.TryExit(actor, host.Player.transform, out var exit))
+                    actor.ShowInWorld(exit, host.Player.transform);
+                Debug.LogWarning("No compatible passenger seat; actor remains outside the cab.", actor);
+            }
+            return seated;
         }
         private void ExitAtDestination()
         {
             if(PrimaryActor!=null)
             {
-                PrimaryActor.transform.SetParent(null,true); PrimaryActor.transform.localScale=PrimaryActor.StandingWorldScale;
-                var destination=host.Session.CurrentDesiredDestination ?? host.Session.Destination;
-                PrimaryActor.transform.position=Ground(destination.StopPosition+host.Player.transform.right*6);
+                PrimaryActor.PrepareForWorld(host.Player.transform);
+                if (TruckTaxiActorWorldPlacement.TryExit(PrimaryActor, host.Player.transform, out var exit))
+                    PrimaryActor.ShowInWorld(exit, host.Player.transform);
                 PrimaryActor.Animate(TruckTaxiPassengerAnimation.ExitAbstraction);
             }
             if(SecondaryActor!=null) SecondaryActor.gameObject.SetActive(false);
@@ -235,23 +244,31 @@ namespace LWS.TruckTaxi
         {
             var actor=PrimaryActor;
             Transform truck=host.Player.transform;
-            Vector3 exit=Ground(truck.position+truck.right*2.8f);
-            Vector3 contactPoint=Ground(request.StopPoint.Position+request.StopPoint.viewDirection.normalized*3f);
-            actor.transform.SetParent(null,true);
-            actor.transform.localScale=actor.StandingWorldScale;
-            actor.transform.position=exit;
+            actor.PrepareForWorld(truck);
+            yield return null;
+            if (actor == null || !StillAtSketchyStop(request) ||
+                !TruckTaxiActorWorldPlacement.TryExit(actor, truck, out var exit) ||
+                !TrySketchyStandingPoints(actor, exit, truck, out var standingPoint, out var contactPoint) ||
+                !actor.ShowInWorld(exit, truck))
+            {
+                RestoreSketchyActor(); sketchyReady = true; sketchyRoutine = null; yield break;
+            }
+            actor.DisarmWaitingTruckHit();
+            actor.SetLifecycle(TruckTaxiActorLifecycle.WalkingToContact);
             actor.Animate(TruckTaxiPassengerAnimation.Walk_Normal);
             Dialogue.Speak(passenger,TruckTaxiDialogueCategory.SketchyExit,host.Session,
                 "Give me a moment. This is a very normal errand.",90);
             sketchyContact=CreateSketchyContact(contactPoint);
-            while(actor!=null && Vector3.Distance(actor.transform.position,contactPoint)>1.3f)
+            while(actor!=null && Vector3.Distance(actor.GroundPosition,standingPoint)>.15f)
             {
                 if(!StillAtSketchyStop(request)) { RestoreSketchyActor(); sketchyRoutine=null; yield break; }
-                actor.transform.position=Vector3.MoveTowards(actor.transform.position,contactPoint,2f*Time.deltaTime);
-                actor.transform.rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(contactPoint-actor.transform.position,Vector3.up));
+                if (host.Paused) { yield return null; continue; }
+                if (!StepSketchyActor(actor, standingPoint, truck))
+                { RestoreSketchyActor(); sketchyReady=true; sketchyRoutine=null; yield break; }
                 yield return null;
             }
             if(actor==null) yield break;
+            actor.SetLifecycle(TruckTaxiActorLifecycle.SketchyInteraction);
             actor.Animate(TruckTaxiPassengerAnimation.Idle_Normal);
             sketchyContact.transform.rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(actor.transform.position-contactPoint,Vector3.up));
             sketchyBag=GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -263,6 +280,7 @@ namespace LWS.TruckTaxi
             for(float elapsed=0;elapsed<3f;elapsed+=Time.deltaTime)
             {
                 if(!StillAtSketchyStop(request)) { RestoreSketchyActor(); sketchyRoutine=null; yield break; }
+                if (host.Paused) { elapsed -= Time.deltaTime; yield return null; continue; }
                 float sway=Mathf.Sin(elapsed*6f)*12f;
                 actor.transform.rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(contactPoint-actor.transform.position,Vector3.up))*Quaternion.Euler(0,sway,0);
                 sketchyContact.transform.rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(actor.transform.position-contactPoint,Vector3.up))*Quaternion.Euler(0,-sway,0);
@@ -272,17 +290,52 @@ namespace LWS.TruckTaxi
             Destroy(sketchyBag); sketchyBag=null;
             Destroy(sketchyContact); sketchyContact=null;
             actor.Animate(TruckTaxiPassengerAnimation.Walk_Normal);
+            actor.SetLifecycle(TruckTaxiActorLifecycle.Returning);
             Dialogue.Speak(passenger,TruckTaxiDialogueCategory.SketchyReturn,host.Session,
                 "All done. Let's get out of here.",90);
-            while(actor!=null && Vector3.Distance(actor.transform.position,exit)>.25f)
+            while(actor!=null && Vector3.Distance(actor.GroundPosition,exit)>.25f)
             {
                 if(!StillAtSketchyStop(request)) { RestoreSketchyActor(); sketchyRoutine=null; yield break; }
-                actor.transform.position=Vector3.MoveTowards(actor.transform.position,exit,2f*Time.deltaTime);
-                actor.transform.rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(exit-actor.transform.position,Vector3.up));
+                if (host.Paused) { yield return null; continue; }
+                if (!StepSketchyActor(actor, exit, truck)) break;
                 yield return null;
             }
-            if(actor!=null) Seat(actor,passenger,false);
-            sketchyReady=true; sketchyRoutine=null;
+            if(actor!=null)
+            {
+                actor.PrepareForSeat();
+                yield return new WaitForSeconds(.12f);
+                sketchyReady = Seat(actor,passenger,false);
+            }
+            sketchyRoutine=null;
+        }
+
+        private static bool TrySketchyStandingPoints(TruckTaxiPassengerActor actor, Vector3 exit, Transform truck,
+            out Vector3 standing, out Vector3 contact)
+        {
+            standing = contact = default;
+            float separation = actor.StandingRadius + 1.6f;
+            for (int i = 0; i < 16; i++)
+            {
+                Vector3 direction = Quaternion.Euler(0, i * 22.5f, 0) * truck.forward;
+                if (!TruckTaxiActorWorldPlacement.TryGround(exit + direction * 3, truck, out standing) ||
+                    !TruckTaxiActorWorldPlacement.TryGround(standing + direction * separation, truck, out contact) ||
+                    !TruckTaxiActorWorldPlacement.Clear(contact, 1.2f, 2.5f, truck) ||
+                    !TruckTaxiActorWorldPlacement.ClearSegment(exit, standing, actor.StandingRadius,
+                        actor.StandingHeight, truck, actor.transform)) continue;
+                return true;
+            }
+            return false;
+        }
+
+        private static bool StepSketchyActor(TruckTaxiPassengerActor actor, Vector3 destination, Transform truck)
+        {
+            Vector3 next = Vector3.MoveTowards(actor.GroundPosition, destination, 2f * Time.deltaTime);
+            if (!TruckTaxiActorWorldPlacement.ClearSegment(actor.GroundPosition, next, actor.StandingRadius,
+                actor.StandingHeight, truck, actor.transform)) return false;
+            Vector3 direction = Vector3.ProjectOnPlane(next - actor.transform.position, Vector3.up);
+            if (direction.sqrMagnitude > .00001f) actor.transform.rotation = Quaternion.LookRotation(direction);
+            actor.transform.position = next + Vector3.up * actor.StandingGroundOffset;
+            return true;
         }
         private bool StillAtSketchyStop(TaxiRequestProgress request) =>
             host?.Player!=null && host.Session.State==TruckTaxiState.DrivingToDestination &&

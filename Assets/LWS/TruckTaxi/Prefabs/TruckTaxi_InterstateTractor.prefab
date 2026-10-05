@@ -10983,6 +10983,7 @@ GameObject:
   - component: {fileID: 884703117058741996}
   - component: {fileID: 3156921735478113559}
   - component: {fileID: 1644967249624673343}
+  - component: {fileID: 127743129521880073}
   m_Layer: 0
   m_Name: TruckTaxi_InterstateTractor
   m_TagString: Vehicle
@@ -11993,6 +11994,35 @@ MonoBehaviour:
   meshDeform: 1
   smokeParticleSystems: []
   visualOnly: 0
+--- !u!114 &127743129521880073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7368871050060613851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58df77ebbd1be30428dea4905c4b3f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiCabOccupantRig
+  hasSleeperCapability: 0
+  anchors:
+  - id: 4
+    mountPath: Cab
+    localPosition: {x: 0.55, y: 0.83, z: -0.95}
+    localEulerAngles: {x: 0, y: 0, z: 0}
+    localScale: {x: 0.6, y: 0.6, z: 0.6}
+    priority: 0
+    allowedOccupants: 4
+    allowedSeatTypes: 
+    firstPersonVisible: 1
+    privateEventEligible: 0
+    secondaryOccupantSeat: 1
+    occupantRadius: 0.35
+    pose: []
+  privateTransitionSeconds: 0.9
+  privacyDivider: {fileID: 0}
 --- !u!1 &7709429145585368335
 GameObject:
   m_ObjectHideFlags: 0

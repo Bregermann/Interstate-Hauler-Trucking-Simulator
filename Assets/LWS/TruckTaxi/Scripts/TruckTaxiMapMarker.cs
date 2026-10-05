@@ -11,6 +11,8 @@ namespace LWS.TruckTaxi
         public TruckTaxiMapMarkerState state=TruckTaxiMapMarkerState.Optional;
         public Transform source;
         public Vector3 sourceLocalOffset;
+        public TruckTaxiServicePoint service;
+        public bool serviceBound;
         [SerializeField] private Sprite assignedIcon;
         [SerializeField] private Component compassPoi;
         [SerializeField] private bool presented;
@@ -18,7 +20,7 @@ namespace LWS.TruckTaxi
         public Sprite AssignedIcon => assignedIcon;
         public Component CompassPoi => compassPoi;
         public bool Presented => presented;
-        public Vector3 Position => source!=null ? source.TransformPoint(sourceLocalOffset) : transform.position;
+        public Vector3 Position => service!=null ? service.Position : source!=null ? source.TransformPoint(sourceLocalOffset) : transform.position;
         public void BindPresentation(Sprite icon,Component poi,bool visible)
         { assignedIcon=icon; compassPoi=poi; presented=visible; }
         private void OnDestroy() { if(Owner!=null) Owner.Unregister(this); }

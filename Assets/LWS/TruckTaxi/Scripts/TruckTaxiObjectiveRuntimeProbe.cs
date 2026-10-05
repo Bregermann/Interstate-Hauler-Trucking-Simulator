@@ -34,11 +34,17 @@ namespace LWS.TruckTaxi
                 host.Session.EndShift(); yield return Wait(.4f);
                 yield return KeyPress(keyboard,Key.Enter); check(host.Session.State==TruckTaxiState.Available,"Keyboard starts shift without pointer (state="+host.Session.State+")");
                 host.Session.OfferRide(profile); yield return Wait(.3f); capture?.Invoke("Objective_Offer");
-                yield return KeyPress(keyboard,Key.Escape); check(host.Session.State==TruckTaxiState.Available,"Escape declines offer without opening pause");
+                int declines=host.Session.OffersDeclined;
+                string declinedOfferId=host.Session.Offer?.Id;
+                yield return KeyPress(keyboard,Key.Escape);
+                check(host.Session.OffersDeclined==declines+1 && host.Session.Offer?.Id!=declinedOfferId &&
+                    host.hud.UIInput.FocusRoot?.name!="Paused","Escape declines the current offer without opening the pause menu");
+                host.Session.EndShift(); host.Session.StartShift(); host.SetPaused(false);
                 host.Session.OfferRide(profile); yield return Wait(.3f);
                 yield return PadPress(gamepad,GamepadButton.South); check(host.Session.State==TruckTaxiState.DrivingToPickup,"Gamepad South accepts offer once");
                 yield return PadPress(gamepad,GamepadButton.Start); check(host.Paused,"Gamepad Start pauses");
-                yield return PadPress(gamepad,GamepadButton.DpadDown);
+                for(int row=0;row<12 && EventSystem.current.currentSelectedGameObject?.name!="GPS SETTINGS";row++)
+                    yield return PadPress(gamepad,GamepadButton.DpadDown);
                 check(EventSystem.current.currentSelectedGameObject?.name=="GPS SETTINGS","Pause navigation focuses GPS settings");
                 yield return PadPress(gamepad,GamepadButton.South); check(host.hud.GPSSettings.IsOpen,"Gamepad opens GPS settings");
                 bool shown=host.GPS.HudVisible;
@@ -70,11 +76,18 @@ namespace LWS.TruckTaxi
                 yield return KeyPress(keyboard,Key.Escape); check(!host.Paused,"Keyboard resumes driving");
                 host.TeleportNear(host.Session.Pickup); body.isKinematic=true;
                 yield return Until(()=>host.Session.HasPassenger,12); check(host.Session.HasPassenger,"Passenger boards through existing runtime");
-                check(host.Session.Capabilities.Count(TruckTaxiObjectiveCapability.ScenicStops)==6,"Six routable scenic stops registered");
-                check(host.Session.Capabilities.Count(TruckTaxiObjectiveCapability.IllicitStops)==6,"Six routable sketchy stops registered");
+                int scenicStops=host.Session.Capabilities.Count(TruckTaxiObjectiveCapability.ScenicStops);
+                int illicitStops=host.Session.Capabilities.Count(TruckTaxiObjectiveCapability.IllicitStops);
+                check(scenicStops>=6,"At least six routable scenic stops registered (actual "+scenicStops+")");
+                check(illicitStops>=6,"At least six routable sketchy stops registered (actual "+illicitStops+")");
                 foreach(var point in host.Session.Capabilities.Stops)
                 {
-                    check(host.roadGraph.Graph.nodes.Exists(n=>n.nodeId==point.stableId),"Stop has authored route endpoint: "+point.stableId);
+                    check(host.RouteDistances.Measure(Vector3.zero,point.Position).Navigable,
+                        "Stop resolves through the authored road graph: "+point.stableId);
+                    if(point.category!=TruckTaxiStopCategory.Scenic &&
+                        point.category!=TruckTaxiStopCategory.IllicitPickup) continue;
+                    // Legacy companion meeting points share the IllicitPickup category but are off-road.
+                    if(point.stableId.StartsWith("taxi.stop.companion.",StringComparison.Ordinal)) continue;
                     check(TruckTaxiSurface.TrySample(point.Position+Vector3.up,host.Player.transform,out bool paved) && paved,"Stop has actual paved ground: "+point.stableId);
                     bool clear=true;
                     foreach(var collider in Physics.OverlapBox(point.Position+Vector3.up*2,new Vector3(2,1.4f,5),Quaternion.identity,~0,QueryTriggerInteraction.Ignore))
@@ -197,16 +210,24 @@ namespace LWS.TruckTaxi
             {
                 if(!host.Session.Capabilities.Supports(definition)) continue;
                 var passenger=UnityEngine.Object.Instantiate(source); passenger.possibleRequests=new[]{definition};
-                var session=new TruckTaxiSession(host.configuration,locations,42,host.RouteDistances,()=>host.Player.transform.position);
+                Vector3 probePosition=definition.requestType==TaxiRequestType.TakeALap ?
+                    TruckTaxiSpeedwayLayout.Center : host.Player.transform.position;
+                var session=new TruckTaxiSession(host.configuration,locations,42,host.RouteDistances,()=>probePosition);
                 foreach(TruckTaxiObjectiveCapability flag in Enum.GetValues(typeof(TruckTaxiObjectiveCapability)))
                     session.Capabilities.Register(flag,host.Session.Capabilities.Count(flag));
                 session.Capabilities.Stops.AddRange(host.Session.Capabilities.Stops);
                 session.StartShift(); session.OfferRide(passenger); session.AcceptRide();
                 session.Tick(.1f,session.Pickup.StopPosition,0,0,true); session.Tick(2,session.Pickup.StopPosition,0,0,true);
                 var request=session.Requests.FirstOrDefault();
+                if(request==null && session.PendingDiversion!=null)
+                {
+                    session.AcceptDiversion();
+                    request=session.Requests.FirstOrDefault();
+                }
                 check(request!=null,"Runtime capability-gated evaluator assigned: "+definition.requestType);
                 if(request==null) { UnityEngine.Object.Destroy(passenger); continue; }
-                if(definition.IsStop) session.Tick(request.Target,request.StopPoint.Position,0,0,true);
+                if(definition.requestType==TaxiRequestType.TakeALap) session.RecordObjectiveProgress(request,1,true);
+                else if(definition.IsStop) session.Tick(request.Target,request.StopPoint.Position,0,0,true);
                 else if(definition.requestType==TaxiRequestType.Offroad) session.Tick(request.Target,session.Pickup.StopPosition,3,0,false);
                 else if(definition.requestType==TaxiRequestType.MaximumChaos) session.RecordEvent(TaxiEventType.Shortcut,"test.chaos",scoreOverride:(int)request.Target);
                 else

@@ -31,7 +31,8 @@ namespace LWS.TruckTaxi
         public float RandomChance { get; }
         public bool GuaranteePending => CompletedLocalStreak>=Threshold && LocalCooldownRemaining==0;
         public TruckTaxiIntercityPolicy(float chance,int spacing,int threshold)
-        { RandomChance=Mathf.Clamp01(chance); LocalSpacing=Mathf.Clamp(spacing,0,10); Threshold=Mathf.Max(LocalSpacing,Mathf.Max(1,threshold)); }
+        { RandomChance=float.IsNaN(chance) || float.IsInfinity(chance) ? 0 : Math.Max(0,Math.Min(1,chance));
+            LocalSpacing=Math.Max(0,Math.Min(10,spacing)); Threshold=Math.Max(LocalSpacing,Math.Max(1,threshold)); }
         public bool WantsIntercity(System.Random random,out bool guaranteed)
         {
             guaranteed=GuaranteePending;
@@ -40,8 +41,23 @@ namespace LWS.TruckTaxi
         public void CompleteRide(bool intercity)
         {
             if(intercity) { CompletedLocalStreak=0; LocalCooldownRemaining=LocalSpacing; }
-            else { CompletedLocalStreak++; LocalCooldownRemaining=Mathf.Max(0,LocalCooldownRemaining-1); }
+            else { if(CompletedLocalStreak<int.MaxValue) CompletedLocalStreak++; LocalCooldownRemaining=Math.Max(0,LocalCooldownRemaining-1); }
         }
+        public TruckTaxiIntercityState CaptureState() => new TruckTaxiIntercityState
+            { completedLocalStreak=CompletedLocalStreak,localCooldownRemaining=LocalCooldownRemaining };
+        public bool RestoreState(TruckTaxiIntercityState state)
+        {
+            if(state==null || state.version!=1 || state.completedLocalStreak<0 || state.localCooldownRemaining<0) return false;
+            CompletedLocalStreak=state.completedLocalStreak;
+            LocalCooldownRemaining=Math.Min(Math.Max(0,LocalSpacing-CompletedLocalStreak),state.localCooldownRemaining);
+            return true;
+        }
+    }
+
+    [Serializable]
+    public sealed class TruckTaxiIntercityState
+    {
+        public int version=1, completedLocalStreak, localCooldownRemaining;
     }
 
     public readonly struct TruckTaxiFareModifiers

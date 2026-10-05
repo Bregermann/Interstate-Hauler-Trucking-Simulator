@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LWS.TruckTaxi
@@ -6,7 +7,7 @@ namespace LWS.TruckTaxi
     public enum TruckTaxiBladderState { Fine, Building, NeedToGo, Urgent, Crisis }
     public enum TruckTaxiDriverNeedEvent { BladderUrgent, JugStarted, JugSucceeded, JugSpilled, BathroomStop, CrisisAccident, JugDisposed, CabCleaned, JugCancelled, JugThrownFromWindow, LitterThrown }
 
-    // Session semantics only. No clock, files, physics, or temporary QTE persistence.
+    // Needs authority only. Save orchestration stays with LwsSaveService / Pixel Crushers.
     public sealed class TruckTaxiDriverNeedsState
     {
         private readonly TruckTaxiEnvironmentSettings settings;
@@ -17,8 +18,23 @@ namespace LWS.TruckTaxi
         private readonly int[] items = new int[Enum.GetValues(typeof(TruckTaxiNeedsItem)).Length];
         private TruckTaxiNeedsItem reservedContainer;
         private bool freePlayInventoryGranted;
+        private bool persistentStateRestored;
+        public bool StarterInventoryGranted => freePlayInventoryGranted;
         public float Hunger { get; private set; }
         public float Thirst { get; private set; }
+        public float Fatigue { get; private set; }
+        public float FatigueGainMultiplier
+        {
+            get
+            {
+                float multiplier = Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.RoadPep).RemainingSeconds > 0 ?
+                    .25f + Effects.RoadPepOveruse * .2f : 1;
+                if (Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.RoadPepComedown).RemainingSeconds > 0)
+                    multiplier *= 1.2f + Effects.RoadPepOveruse * .1f;
+                if (Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.EnergyDrink).RemainingSeconds > 0) multiplier *= .8f;
+                return multiplier;
+            }
+        }
         public TruckTaxiTemporaryEffects Effects { get; } = new TruckTaxiTemporaryEffects();
         public float StrangeUiSeconds => Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.MysteryMushroom).RemainingSeconds;
         public float ArcadeRushSeconds => Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.HighOctaneBoost).RemainingSeconds;
@@ -52,17 +68,79 @@ namespace LWS.TruckTaxi
         }
         public void GrantFreePlayTestInventory()
         {
-            if (freePlayInventoryGranted) return;
-            freePlayInventoryGranted = true;
-            foreach (var entry in TruckTaxiNeedsItems.Store)
-                if (Count(entry.Item) == 0) AddItem(entry.Item);
+            CreateNewVibinInventory();
         }
+        // Explicit new-save creation only. Initialize and restore never call this.
+        public bool CreateNewVibinInventory()
+        {
+            if (freePlayInventoryGranted || persistentStateRestored || JugActive) return false;
+            foreach (var entry in TruckTaxiNeedsItems.All)
+                if (entry.PlayerOwnable) items[(int)entry.Item] = 10;
+            freePlayInventoryGranted = true;
+            return true;
+        }
+        public TruckTaxiDriverNeedsSnapshot CapturePersistentState()
+        {
+            var inventory = new List<TruckTaxiNeedsInventoryEntry>();
+            foreach (var entry in TruckTaxiNeedsItems.All)
+                if (entry.PlayerOwnable) inventory.Add(new TruckTaxiNeedsInventoryEntry {
+                    ItemId = entry.StableId, Count = Count(entry.Item) + (JugActive && reservedContainer == entry.Item ? 1 : 0) });
+            return new TruckTaxiDriverNeedsSnapshot {
+                Pressure = Pressure, Hunger = Hunger, Thirst = Thirst, Fatigue = Fatigue,
+                StarterInventoryGranted = freePlayInventoryGranted, CabMess = CabMess,
+                CycleGameSeconds = cycleSeconds, CrisisGameSeconds = crisisSeconds, Inventory = inventory.ToArray() };
+        }
+        public bool RestorePersistentState(TruckTaxiDriverNeedsSnapshot snapshot, out string error)
+        {
+            error = null;
+            if (snapshot == null || snapshot.Version != 1 || snapshot.Inventory == null)
+            { error = "Missing or unsupported needs snapshot."; return false; }
+            if (!Normalized(snapshot.Pressure) || !Normalized(snapshot.Hunger) || !Normalized(snapshot.Thirst) || !Normalized(snapshot.Fatigue) ||
+                !float.IsFinite(snapshot.CycleGameSeconds) || snapshot.CycleGameSeconds < 0 ||
+                !float.IsFinite(snapshot.CrisisGameSeconds) || snapshot.CrisisGameSeconds < 0)
+            { error = "Invalid needs values."; return false; }
+            var restored = new int[items.Length];
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var item in snapshot.Inventory)
+            {
+                var entry = item == null ? null : TruckTaxiNeedsItems.Find(item.ItemId);
+                if (entry == null || !entry.PlayerOwnable || !seen.Add(item.ItemId) || item.Count < 0 || item.Count > 99)
+                { error = "Invalid, duplicate, or unknown inventory item: " + item?.ItemId; return false; }
+                restored[(int)entry.Item] = item.Count;
+            }
+            // Validate everything first. An invalid payload cannot partially overwrite live state.
+            CancelJug(); Effects.Clear();
+            Array.Copy(restored, items, items.Length);
+            Pressure = snapshot.Pressure; Hunger = snapshot.Hunger; Thirst = snapshot.Thirst; Fatigue = snapshot.Fatigue;
+            CabMess = snapshot.CabMess; freePlayInventoryGranted = snapshot.StarterInventoryGranted;
+            if (snapshot.CycleGameSeconds > 0) cycleSeconds = snapshot.CycleGameSeconds;
+            crisisSeconds = snapshot.CrisisGameSeconds; urgentEmitted = Pressure >= .85f;
+            persistentStateRestored = true;
+            return true;
+        }
+        private static bool Normalized(float value) => float.IsFinite(value) && value >= 0 && value <= 1;
         private void SampleCycle()
         {
             float minimum = Mathf.Max(.1f, settings.bladderCycleGameHours.x);
             cycleSeconds = Mathf.Lerp(minimum, Mathf.Max(minimum, settings.bladderCycleGameHours.y), (float)random.NextDouble()) * 3600;
         }
         public void AdvanceGameSeconds(double seconds)
+        { AdvanceGameSeconds(seconds, TruckTaxiFatigueActivity.Parked, 12); }
+        public void AdvanceGameSeconds(double seconds, TruckTaxiFatigueActivity activity, float startHour)
+        {
+            Fatigue = Mathf.Clamp01(Fatigue + TruckTaxiFatigueRules.Gain(seconds, activity, startHour) * FatigueGainMultiplier);
+            AdvanceCoreNeeds(seconds);
+        }
+        public bool ApplySleep(int hours)
+        {
+            if (!TruckTaxiFatigueRules.IsSleepDuration(hours) || JugActive) return false;
+            // Sleep outlasts short stimulant effects; no indefinitely frozen timer across a time skip.
+            Effects.Clear();
+            for (int minute = 0; minute < hours * 60; minute++) AdvanceCoreNeeds(60);
+            Fatigue = Mathf.Clamp01(Fatigue - TruckTaxiFatigueRules.SleepRecovery(hours));
+            return true;
+        }
+        private void AdvanceCoreNeeds(double seconds)
         {
             if (seconds <= 0 || double.IsNaN(seconds) || double.IsInfinity(seconds)) return;
             float bladderRate = Effects.BladderRateMultiplier;
@@ -155,14 +233,24 @@ namespace LWS.TruckTaxi
             if (wasActive) Event?.Invoke(TruckTaxiDriverNeedEvent.JugCancelled);
         }
         public int Count(TruckTaxiNeedsItem item) => (int)item >= 0 && (int)item < items.Length ? items[(int)item] : 0;
-        public bool CanAdd(TruckTaxiNeedsItem item) => Enum.IsDefined(typeof(TruckTaxiNeedsItem), item) && Count(item) < 99;
+        public bool CanAdd(TruckTaxiNeedsItem item) => TruckTaxiNeedsItems.Find(item)?.PlayerOwnable == true &&
+            Count(item) < 99 - (JugActive && reservedContainer == item ? 1 : 0);
         public bool AddItem(TruckTaxiNeedsItem item, int count = 1)
         {
-            if (!Enum.IsDefined(typeof(TruckTaxiNeedsItem), item) || count <= 0 || items[(int)item] > 99 - count) return false;
+            if (TruckTaxiNeedsItems.Find(item)?.PlayerOwnable != true || count <= 0 || count > 99 ||
+                items[(int)item] > 99 - count - (JugActive && reservedContainer == item ? 1 : 0)) return false;
             items[(int)item] += count; return true;
         }
         private bool RemoveItem(TruckTaxiNeedsItem item)
         { if (Count(item) <= 0) return false; items[(int)item]--; return true; }
+        // Content-hook inventory debit only; ordinary drink/food effects use Consume.
+        public bool TryConsumeItem(string stableItemId, int quantity)
+        {
+            var entry = TruckTaxiNeedsItems.FindByStableId(stableItemId);
+            if (JugActive || quantity < 0 || entry == null || !entry.PlayerOwnable || Count(entry.Item) < quantity) return false;
+            items[(int)entry.Item] -= quantity;
+            return true;
+        }
         public bool BeginRoadPep() => !JugActive && RemoveItem(TruckTaxiNeedsItem.RoadPep);
         public void CompleteRoadPep(int score) => Effects.ActivateRoadPep(score);
         public bool Consume(TruckTaxiNeedsItem item)
@@ -172,6 +260,7 @@ namespace LWS.TruckTaxi
                 item != TruckTaxiNeedsItem.HighOctaneSuppository && item != TruckTaxiNeedsItem.MysteryMushrooms) ||
                 (entry.CreatesBottle && !CanAdd(TruckTaxiNeedsItem.EmptyBottle)) || !RemoveItem(item)) return false;
             Hunger = Mathf.Clamp01(Hunger - entry.HungerRelief);
+            if (entry.IsDrink) RelieveThirst(TruckTaxiNeedsItems.DrinkThirstRelief);
             if (entry.CreatesBottle) AddItem(TruckTaxiNeedsItem.EmptyBottle);
             if (item == TruckTaxiNeedsItem.MysteryMushrooms) Effects.Activate(TruckTaxiTemporaryEffectKind.MysteryMushroom);
             if (item == TruckTaxiNeedsItem.HighOctaneSuppository) Effects.Activate(TruckTaxiTemporaryEffectKind.HighOctaneBoost);

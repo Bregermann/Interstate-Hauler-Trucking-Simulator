@@ -6,6 +6,16 @@ namespace LWS.TruckTaxi
     public enum TruckTaxiRideOutcome { Completed, Failed, PickupCancelled, Ejected, PassengerCancelled }
     public enum TruckTaxiDemandWeather { Neutral, Rain, Storm, Snow, HeavySnow, Blizzard }
 
+    public sealed class TruckTaxiPassengerEligibilityRecord
+    {
+        public string PassengerId, DisplayName, Archetype, Reason;
+        public bool PickupMetadataEligible;
+        public float SpawnWeight, ContextWeight;
+        public TruckTaxiRarity Rarity;
+        public string[] Districts;
+        public TruckTaxiPassengerExposure Exposure;
+    }
+
     public sealed class TruckTaxiGoalResult
     {
         public TaxiRequestType Type { get; }

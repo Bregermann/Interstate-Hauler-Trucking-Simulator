@@ -19,9 +19,9 @@ namespace LWS.TruckTaxi.Tests
                 SetPrivate(navigation,"<CurrentRoute>k__BackingField",route);
                 SetPrivate(gps,"navigation",navigation);
                 SetPrivate(gps,"player",gameObject.transform);
-                SetPrivate(gps,"serviceTargetActive",true);
-                SetPrivate(gps,"serviceTargetPosition",new Vector3(100,0,0));
-                SetPrivate(gps,"<TargetId>k__BackingField","service.restroom");
+                Assert.IsTrue(gps.TrySetNavigationIntent(TruckTaxiNavigationLayer.PlayerService,"player-service",
+                    "service.restroom","Service",Vector3.zero,TruckTaxiMapMarkerType.Place));
+                SetPrivate(navigation,"<CurrentRoute>k__BackingField",route);
 
                 gps.FrameOffer(null);
                 gps.ClearRideDestination();

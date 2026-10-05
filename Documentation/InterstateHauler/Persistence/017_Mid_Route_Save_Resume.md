@@ -25,7 +25,7 @@ LWS does not own save files, a slot database, an independent serializer, or phys
 8. The target scene is loaded if required.
 9. `ILwsWorldOriginService.SetOriginOffset` establishes the floating-origin offset before player placement.
 10. Current world preparation runs for authored scenes and defers streaming-specific work to the existing world streaming service when a manifest is active.
-11. Only after the world is prepared does LWS invoke Pixel Crushers load application through `SaveSystem.LoadFromSlot`.
+11. Only after the world is prepared does the adapter retrieve the selected vendor `SavedGameData` and invoke Pixel Crushers `SaveSystem.LoadGame(SavedGameData)` synchronously. The semantic saver must acknowledge successful application before finalization.
 12. LWS finalizes the canonical truck, trailer, navigation presentation, physics sync, and camera/presentation rebinding.
 
 ## Current World Support

@@ -10,15 +10,31 @@ namespace LWS.TruckTaxi.Tests
     public sealed class TruckTaxiObjectiveTests
     {
         private readonly List<Object> allocated=new List<Object>();
+        private bool hadPreference;
+        private int previousPreference;
         private T Asset<T>() where T:ScriptableObject { var value=ScriptableObject.CreateInstance<T>(); allocated.Add(value); return value; }
-        [TearDown] public void Cleanup() { foreach(var value in allocated) Object.DestroyImmediate(value); allocated.Clear(); }
-        private TruckTaxiSession Session(out PassengerProfile passenger)
+        [SetUp] public void SetUp()
+        {
+            hadPreference=PlayerPrefs.HasKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            previousPreference=PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
+            PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
+        }
+        [TearDown] public void Cleanup()
+        {
+            foreach(var value in allocated) Object.DestroyImmediate(value);
+            allocated.Clear();
+            if(hadPreference) PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,previousPreference);
+            else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
+        }
+        private TruckTaxiSession Session(out PassengerProfile passenger,float stopSpacing=100)
         {
             passenger=Asset<PassengerProfile>(); passenger.basePatience=10000; passenger.requestFrequency=10000; passenger.requestDifficultyRange=Vector2.one;
-            var config=Asset<TruckTaxiConfiguration>(); config.minimumTripDistance=10; config.maximumTripDistance=1000; config.passengers=new[]{passenger};
+            passenger.passengerId="objective-test";
+            var config=Asset<TruckTaxiConfiguration>(); config.minimumTripDistance=10;
+            config.maximumTripDistance=stopSpacing>100 ? 10000 : 1000; config.passengers=new[]{passenger};
             var stops=new List<TruckTaxiRideLocation>();
             for(int i=0;i<3;i++) { var go=new GameObject("Test ride location"); allocated.Add(go); var point=go.AddComponent<TruckTaxiRideLocation>();
-                point.locationId="location."+i; go.transform.position=Vector3.right*i*100; stops.Add(point); }
+                point.locationId="location."+i; go.transform.position=Vector3.right*i*stopSpacing; stops.Add(point); }
             return new TruckTaxiSession(config,stops,31);
         }
         private void Board(TruckTaxiSession session)
@@ -99,7 +115,10 @@ namespace LWS.TruckTaxi.Tests
             var stop=go.AddComponent<TruckTaxiStopObjectivePoint>(); stop.stableId="scenic.test"; stop.durationSeconds=12;
             session.Capabilities.Stops.Add(stop); session.Capabilities.Register(TruckTaxiObjectiveCapability.ScenicStops,1);
             var d=Asset<PassengerRequestDefinition>(); d.requestType=TaxiRequestType.ScenicRoute;
-            Assert.IsTrue(session.GenerateRequest(d)); var request=session.ActiveStop;
+            Assert.IsTrue(session.GenerateRequest(d));
+            Assert.IsNotNull(session.PendingDiversion);
+            Assert.IsTrue(session.AcceptDiversion());
+            var request=session.ActiveStop;
             session.RecordEvent(TaxiEventType.ScenicPoint,stop.stableId); Assert.Zero(request.Progress);
             session.Tick(5,stop.Position,0,0,true); Assert.AreEqual(5,request.Progress);
             session.Tick(1,stop.Position,2,0,true); Assert.Zero(request.Progress);
@@ -141,6 +160,7 @@ namespace LWS.TruckTaxi.Tests
             {
                 var go=new GameObject("Stop"); allocated.Add(go); var point=go.AddComponent<TruckTaxiStopObjectivePoint>();
                 point.stableId="test."+category; point.category=category; point.durationSeconds=8;
+                go.transform.position=Vector3.forward*(200+(int)category*100);
                 session.Capabilities.Stops.Add(point);
             }
             session.Capabilities.Register(TruckTaxiObjectiveCapability.ScenicStops,1);
@@ -148,14 +168,17 @@ namespace LWS.TruckTaxi.Tests
             var scenic=Asset<PassengerRequestDefinition>(); scenic.requestType=TaxiRequestType.ScenicRoute;
             var illicit=Asset<PassengerRequestDefinition>(); illicit.requestType=TaxiRequestType.IllicitStop;
             Assert.IsTrue(session.GenerateRequest(scenic)); Assert.IsFalse(session.GenerateRequest(illicit));
+            Assert.IsTrue(session.AcceptDiversion());
             var request=session.ActiveStop; Assert.AreEqual(8,request.Target); Assert.AreEqual("0/8s",request.ProgressText);
             session.Tick(8,request.StopPoint.Position,0,0,true);
             Assert.AreEqual(TaxiRequestState.Succeeded,request.State); Assert.IsTrue(session.GenerateRequest(illicit));
+            Assert.IsTrue(session.AcceptDiversion()); Assert.AreSame(illicit,session.ActiveStop.Definition);
         }
         [Test] public void CountsCannotExceedAvailableWorldTargets()
         {
-            var session=Session(out _); Board(session);
+            var session=Session(out _,2000); Board(session);
             var definition=Asset<PassengerRequestDefinition>(); definition.requestType=TaxiRequestType.PropertyDamage; definition.target=20;
+            definition.minimumCount=definition.maximumCount=2;
             session.Capabilities.Register(TruckTaxiObjectiveCapability.DestructibleProps,2);
             Assert.IsTrue(session.GenerateRequest(definition)); Assert.AreEqual(2,session.Requests.Single().Target);
             StringAssert.Contains("2",session.Requests.Single().Description);
@@ -174,22 +197,29 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual("4.3",session.DriverAverageText);
             for(float s=1;s<=5;s+=.013f) Assert.That(TruckTaxiSession.StarsForSatisfaction(s),Is.InRange(1,5));
         }
-        [Test] public void AppreciationRequiresExplicitAdultFemaleFlirtatiousOptInAndChoice()
+        [Test] public void AppreciationRequiresExplicitAdultFemaleOptInAndDeclineIsPenaltyFree()
         {
             var session=Session(out var p); p.casting=Asset<TruckTaxiCastingProfile>(); p.baseSatisfaction=5;
             p.appreciationChance=1; p.specialAppreciationEligible=true; p.explicitlyAdult=true; p.minimumAdultAge=21;
             p.adultFemalePresentation=true; p.flirtatiousPresentation=true;
+            p.gender=TruckTaxiPassengerGender.Female;
             Assert.IsTrue(p.CanOfferAppreciation);
             p.minimumAdultAge=17; Assert.IsFalse(p.CanOfferAppreciation); p.minimumAdultAge=0; Assert.IsFalse(p.CanOfferAppreciation); p.minimumAdultAge=21;
             p.explicitlyAdult=false; Assert.IsFalse(p.CanOfferAppreciation); p.explicitlyAdult=true;
-            p.adultFemalePresentation=false; Assert.IsFalse(p.CanOfferAppreciation); p.adultFemalePresentation=true;
-            p.flirtatiousPresentation=false; Assert.IsFalse(p.CanOfferAppreciation); p.flirtatiousPresentation=true;
+            p.gender=TruckTaxiPassengerGender.Male; Assert.IsFalse(p.CanOfferAppreciation); p.gender=TruckTaxiPassengerGender.Female;
+            p.adultFemalePresentation=false; p.flirtatiousPresentation=false; Assert.IsTrue(p.CanOfferAppreciation);
             p.specialAppreciationEligible=false; Assert.IsFalse(p.CanOfferAppreciation); p.specialAppreciationEligible=true;
-            Board(session); session.DebugComplete(); Assert.AreEqual(TruckTaxiState.AppreciationOffer,session.State); Assert.AreEqual(0,session.CompletedRides);
+            for(int i=0;i<100;i++)
+            {
+                Board(session); session.DebugComplete();
+                if(session.State==TruckTaxiState.AppreciationOffer) break;
+                session.ContinueShift();
+            }
+            Assert.AreEqual(TruckTaxiState.AppreciationOffer,session.State);
+            int completed=session.CompletedRides;
             float satisfaction=session.Satisfaction; Assert.IsTrue(session.ChooseAppreciation(false)); Assert.AreEqual(satisfaction,session.Satisfaction);
-            Assert.AreEqual(5,session.LastFare.Rating); session.ContinueShift(); Board(session); session.DebugComplete();
-            session.ChooseAppreciation(true); Assert.AreEqual(TruckTaxiState.AppreciationSequence,session.State); Assert.AreEqual(1,session.CompletedRides);
-            session.CompleteAppreciation(); session.CompleteAppreciation(); Assert.AreEqual(2,session.CompletedRides);
+            Assert.AreEqual(5,session.LastFare.Rating); Assert.AreEqual(completed+1,session.CompletedRides);
+            session.CompleteAppreciation(); Assert.AreEqual(completed+1,session.CompletedRides);
         }
     }
 }

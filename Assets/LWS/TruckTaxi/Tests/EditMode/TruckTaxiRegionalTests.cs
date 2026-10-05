@@ -15,9 +15,14 @@ namespace LWS.TruckTaxi.Tests
         private TruckTaxiRideLocation start, near, across;
         private LwsRoadGraph graph;
         private Vector3 player;
+        private bool hadPreference;
+        private int previousPreference;
 
         [SetUp] public void SetUp()
         {
+            hadPreference=PlayerPrefs.HasKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            previousPreference=PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
+            PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
             config=ScriptableObject.CreateInstance<TruckTaxiConfiguration>(); created.Add(config);
             passenger=ScriptableObject.CreateInstance<PassengerProfile>(); created.Add(passenger);
             passenger.passengerId="regional.passenger";
@@ -40,6 +45,8 @@ namespace LWS.TruckTaxi.Tests
         {
             foreach(var item in created) UnityEngine.Object.DestroyImmediate(item);
             created.Clear();
+            if(hadPreference) PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,previousPreference);
+            else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
         }
 
         [Test] public void DetourBeyondHardEtaDoesNotBecomeAnOfferAndRetriesLater()
@@ -50,12 +57,12 @@ namespace LWS.TruckTaxi.Tests
             Assert.Less(Vector3.Distance(player,across.StopPosition),50);
             Assert.Greater(new TruckTaxiRouteDistanceService(graph).Measure(player,across.StopPosition).Meters,1000);
             Assert.IsFalse(session.OfferRide());
-            session.Tick(config.rideFrequency+.1f,player,0,0,true);
+            session.Tick(session.DispatchRemaining+.1f,player,0,0,true);
             Assert.AreEqual(TruckTaxiState.Available,session.State);
             Assert.IsNull(session.Offer);
             Assert.Less(session.StateAge,.01f);
             near.pickupAllowed=true;
-            session.Tick(config.rideFrequency+.1f,player,0,0,true);
+            session.Tick(session.DispatchRemaining+.1f,player,0,0,true);
             Assert.AreEqual(TruckTaxiState.RideOffered,session.State);
             Assert.AreSame(near,session.Pickup);
         }
@@ -75,7 +82,9 @@ namespace LWS.TruckTaxi.Tests
                 Is.InRange(config.pickupTargetMinimumSeconds,config.pickupTargetMaximumSeconds));
             Assert.That(session.DemandFareMultiplier,Is.EqualTo(1.25f).Within(.001f));
             Assert.IsTrue(session.AcceptRide());
-            Assert.AreEqual((long)Math.Round(config.baseFareCents*session.DemandFareMultiplier),session.EstimateFare().Base);
+            var fare=session.EstimateFare();
+            Assert.AreEqual(config.baseFareCents,fare.Base);
+            Assert.AreEqual((long)Math.Round(fare.Base*(config.intercityFareMultiplier-1)),fare.IntercityBonus);
         }
 
         [Test] public void ZeroIntercityChanceKeepsLocalDestinationWhenAvailable()

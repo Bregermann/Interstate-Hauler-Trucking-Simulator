@@ -26,19 +26,20 @@ namespace LWS.TruckTaxi.Tests
             else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
         }
 
-        private TruckTaxiSession Session(PassengerRequestDefinition goal)
+        private TruckTaxiSession Session(PassengerRequestDefinition goal,float stopSpacing=100)
         {
             var config=ScriptableObject.CreateInstance<TruckTaxiConfiguration>(); created.Add(config);
             var passenger=ScriptableObject.CreateInstance<PassengerProfile>(); created.Add(passenger);
-            passenger.passengerName="Passenger"; passenger.basePatience=1000;
+            passenger.passengerId="goal.passenger"; passenger.passengerName="Passenger"; passenger.basePatience=1000;
             passenger.requestDifficultyRange=Vector2.one; passenger.possibleRequests=new[]{goal};
-            config.passengers=new[]{passenger}; config.minimumTripDistance=10; config.maximumTripDistance=1000;
+            config.passengers=new[]{passenger}; config.minimumTripDistance=10;
+            config.maximumTripDistance=stopSpacing>100 ? 5000 : 1000;
             var stops=new List<TruckTaxiRideLocation>();
             for(int i=0;i<2;i++)
             {
                 var go=new GameObject("Stop"); created.Add(go);
                 var stop=go.AddComponent<TruckTaxiRideLocation>(); stop.locationId="stop."+i;
-                go.transform.position=Vector3.right*i*100; stops.Add(stop);
+                go.transform.position=Vector3.right*i*stopSpacing; stops.Add(stop);
             }
             var session=new TruckTaxiSession(config,stops,21);
             session.Capabilities.Register(TruckTaxiObjectiveCapability.Shortcuts,10);
@@ -61,7 +62,13 @@ namespace LWS.TruckTaxi.Tests
             session.FailRide("Passenger cancelled before arrival.");
             Assert.AreEqual(TaxiRequestState.Failed,progress.State);
             Assert.AreEqual(0,progress.NormalizedProgress);
-            Assert.AreEqual("Passenger cancelled before arrival.",progress.FailureReason);
+            Assert.AreEqual("SAFE DROP REQUESTED",progress.FailureReason);
+            Assert.IsTrue(session.SafeDropRequested);
+            Assert.IsTrue(TruckTaxiPickupZoneVisualizer.HasDropoffTarget(session));
+            var safeDrop=session.CurrentDesiredDestination;
+            session.Tick(.1f,safeDrop.StopPosition,0,0,true);
+            session.Tick(2,safeDrop.StopPosition,0,0,true);
+            Assert.IsTrue(session.LastFare.IsCancellation);
             Assert.AreEqual(TaxiRequestState.Failed,session.RideHistory[0].Goals[0].State);
             Assert.IsFalse(TruckTaxiPickupZoneVisualizer.HasDropoffTarget(session));
         }
@@ -86,8 +93,9 @@ namespace LWS.TruckTaxi.Tests
         {
             var goal=ScriptableObject.CreateInstance<PassengerRequestDefinition>(); created.Add(goal);
             goal.requestType=TaxiRequestType.Shortcut; goal.target=4;
-            var session=Session(goal);
+            var session=Session(goal,2000);
             var progress=session.Requests[0];
+            Assert.AreEqual(4,progress.Target);
             Assert.AreEqual(0,progress.NormalizedProgress);
             session.RecordEvent(TaxiEventType.Shortcut,"shortcut-a");
             session.RecordEvent(TaxiEventType.Shortcut,"shortcut-b");

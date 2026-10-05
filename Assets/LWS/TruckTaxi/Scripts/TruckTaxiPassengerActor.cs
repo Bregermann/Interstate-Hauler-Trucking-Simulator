@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi
 {
+    public enum TruckTaxiActorLifecycle { OutsideWaiting, Boarding, Seated, Exiting, WalkingToContact, SketchyInteraction, Returning }
+
     public sealed class TruckTaxiPassengerActor : MonoBehaviour
     {
         public bool fallbackModel;
@@ -21,6 +23,11 @@ namespace LWS.TruckTaxi
         public float MinimumWaitingImpactMetersPerSecond = 1.34f;
         public bool IsTumbling { get; private set; }
         public Vector3 StandingWorldScale { get; private set; }
+        public float StandingRadius { get; private set; } = .55f;
+        public float StandingHeight { get; private set; } = 1.8f;
+        public float StandingGroundOffset { get; private set; }
+        public Vector3 GroundPosition => transform.position - Vector3.up * StandingGroundOffset;
+        public TruckTaxiActorLifecycle Lifecycle { get; private set; } = TruckTaxiActorLifecycle.OutsideWaiting;
         public event Action<TruckTaxiPassengerActor,Vector3> WaitingTruckHit;
         public void Bind(PassengerProfile passenger)
         {
@@ -28,6 +35,7 @@ namespace LWS.TruckTaxi
             IsTumbling=false;
             pickupTruck=null;
             StandingWorldScale=transform.lossyScale;
+            CaptureStandingDimensions();
             animator=GetComponentInChildren<Animator>(); animationProfile=passenger?.animatorProfile;
             if(animator!=null) { animator.applyRootMotion=false; if(animationProfile?.controller!=null) animator.runtimeAnimatorController=animationProfile.controller; }
             foreach(var body in GetComponentsInChildren<Rigidbody>())
@@ -43,6 +51,82 @@ namespace LWS.TruckTaxi
             if(pickupSensor!=null) pickupSensor.isTrigger=true;
             if(animator!=null) animator.enabled=true;
             Animate(TruckTaxiPassengerAnimation.Idle_Normal);
+        }
+        private void CaptureStandingDimensions()
+        {
+            bool found = false;
+            Bounds bounds = default;
+            foreach (var renderer in GetComponentsInChildren<Renderer>(true))
+            {
+                if (!renderer.enabled) continue;
+                if (!found) { bounds = renderer.bounds; found = true; }
+                else bounds.Encapsulate(renderer.bounds);
+            }
+            if (!found) return;
+            Vector3 offset = bounds.center - transform.position;
+            StandingRadius = Mathf.Max(.35f, new Vector2(Mathf.Abs(offset.x) + bounds.extents.x,
+                Mathf.Abs(offset.z) + bounds.extents.z).magnitude + .05f);
+            StandingGroundOffset = Mathf.Max(0, transform.position.y - bounds.min.y);
+            StandingHeight = Mathf.Max(.7f, bounds.max.y - transform.position.y + StandingGroundOffset + .1f);
+        }
+
+        public void SetLifecycle(TruckTaxiActorLifecycle value) => Lifecycle = value;
+
+        public void PrepareForWorld(Transform truck)
+        {
+            gameObject.SetActive(false);
+            truck?.GetComponent<TruckTaxiCabOccupantRig>()?.Release(transform);
+            DisarmWaitingTruckHit();
+            EndLightTumble(transform.position);
+            transform.SetParent(null, true);
+            transform.localScale = StandingWorldScale;
+            ResetStandingPhysics();
+            Lifecycle = TruckTaxiActorLifecycle.Exiting;
+        }
+
+        public bool ShowInWorld(Vector3 ground, Transform truck)
+        {
+            if (!TruckTaxiActorWorldPlacement.Clear(ground, StandingRadius, StandingHeight, truck, transform)) return false;
+            transform.SetPositionAndRotation(ground + Vector3.up * StandingGroundOffset, Quaternion.identity);
+            var sway = GetComponentInChildren<TruckTaxiWobbleWalkSway>(true);
+            if (sway != null) sway.enabled = true;
+            Lifecycle = TruckTaxiActorLifecycle.OutsideWaiting;
+            gameObject.SetActive(true);
+            ArmWaitingTruckHit(truck.GetComponent<Rigidbody>());
+            Animate(TruckTaxiPassengerAnimation.Idle_Normal);
+            return true;
+        }
+
+        public void PrepareForSeat()
+        {
+            gameObject.SetActive(false);
+            DisarmWaitingTruckHit();
+            ResetStandingPhysics();
+            Lifecycle = TruckTaxiActorLifecycle.Boarding;
+        }
+
+        public void CompleteSeating()
+        {
+            var sway = GetComponentInChildren<TruckTaxiWobbleWalkSway>(true);
+            if (sway != null) sway.enabled = false;
+            Lifecycle = TruckTaxiActorLifecycle.Seated;
+            gameObject.SetActive(true);
+            Animate(TruckTaxiPassengerAnimation.BoardAbstraction);
+        }
+
+        private void ResetStandingPhysics()
+        {
+            RestoreTruckCollisions();
+            IsTumbling = false;
+            foreach (var body in GetComponentsInChildren<Rigidbody>(true))
+            {
+                if (!body.isKinematic) { body.linearVelocity = Vector3.zero; body.angularVelocity = Vector3.zero; }
+                body.isKinematic = true;
+            }
+            // Standing actors use the fitted trigger, never live ragdoll colliders.
+            foreach (var collider in GetComponentsInChildren<Collider>(true)) collider.enabled = false;
+            if (pickupSensor != null) pickupSensor.isTrigger = true;
+            if (animator != null) animator.enabled = true;
         }
         public void ArmWaitingTruckHit(Rigidbody truck)
         {
@@ -126,7 +210,11 @@ namespace LWS.TruckTaxi
         }
         public void EndLightTumble(Vector3 standingPosition)
         {
-            if(tumbleBody!=null) { tumbleBody.linearVelocity=Vector3.zero; tumbleBody.angularVelocity=Vector3.zero; tumbleBody.isKinematic=true; }
+            if(tumbleBody!=null)
+            {
+                if (!tumbleBody.isKinematic) { tumbleBody.linearVelocity=Vector3.zero; tumbleBody.angularVelocity=Vector3.zero; }
+                tumbleBody.isKinematic=true;
+            }
             RestoreTruckCollisions();
             if(pickupSensor!=null) pickupSensor.enabled=false;
             transform.SetPositionAndRotation(standingPosition,Quaternion.identity);

@@ -11,9 +11,14 @@ namespace LWS.TruckTaxi.Tests
         private TruckTaxiConfiguration config;
         private PassengerProfile ordinary;
         private TruckTaxiRideLocation[] stops;
+        private bool hadPreference;
+        private int previousPreference;
 
         [SetUp] public void SetUp()
         {
+            hadPreference=PlayerPrefs.HasKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            previousPreference=PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
+            PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
             config=ScriptableObject.CreateInstance<TruckTaxiConfiguration>(); created.Add(config);
             ordinary=NewPassenger("ordinary");
             config.passengers=new[]{ordinary};
@@ -34,6 +39,8 @@ namespace LWS.TruckTaxi.Tests
         {
             foreach(var item in created) UnityEngine.Object.DestroyImmediate(item);
             created.Clear();
+            if(hadPreference) PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,previousPreference);
+            else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
         }
 
         private PassengerProfile NewPassenger(string id)
@@ -51,40 +58,70 @@ namespace LWS.TruckTaxi.Tests
             return session;
         }
 
-        [TestCase(21f,0.85f,1.1f)]
-        [TestCase(22f,1.5f,1.25f)]
-        [TestCase(0f,1.5f,1.25f)]
-        [TestCase(2.99f,1.5f,1.25f)]
-        [TestCase(3f,2f,1.35f)]
-        [TestCase(5.99f,2f,1.35f)]
-        [TestCase(6f,0.75f,1.1f)]
-        [TestCase(12f,1f,1f)]
-        public void TimeWindowControlsOfferIntervalAndFare(float hour, float frequency, float fare)
+        [TestCase(21f,0.85f,1.1f,"NORMAL")]
+        [TestCase(22f,1.5f,1.25f,"LOW")]
+        [TestCase(0f,1.5f,1.25f,"LOW")]
+        [TestCase(2.99f,1.5f,1.25f,"LOW")]
+        [TestCase(3f,2f,1.35f,"LOW")]
+        [TestCase(5.99f,2f,1.35f,"LOW")]
+        [TestCase(6f,0.75f,1.1f,"NORMAL")]
+        [TestCase(12f,1f,1f,"NORMAL")]
+        public void TimeWindowControlsOfferIntervalAndFare(float hour, float frequency, float fare, string demandBand)
         {
             var session=NewSession(hour);
-            float interval=config.rideFrequency*frequency;
-            session.Tick(interval-.05f,Vector3.zero,0,0,true);
+            Assert.AreEqual(demandBand,session.DispatchDemandLabel);
+            Vector2 delayRange=demandBand=="LOW" ? config.lowDemandDelay : config.normalDemandDelay;
+            Assert.That(session.LastDispatchDelay,Is.InRange(delayRange.x,delayRange.y));
+
+            var changingConditions=NewSession(12);
+            float initialDelay=changingConditions.DispatchRemaining;
+            changingConditions.SetWorldConditions(0,hour,TruckTaxiDemandWeather.Neutral);
+            changingConditions.Tick(1,Vector3.zero,0,0,true);
+            Assert.That(changingConditions.DispatchRemaining,Is.EqualTo(initialDelay-1/frequency).Within(.001f),
+                "Time of day scales the remaining dispatch timer even after it was scheduled.");
+
+            session.Tick(session.DispatchRemaining-.05f,Vector3.zero,0,0,true);
             Assert.AreEqual(TruckTaxiState.Available,session.State);
+            Assert.Greater(session.DispatchRemaining,0);
             session.Tick(.1f,Vector3.zero,0,0,true);
-            Assert.AreEqual(TruckTaxiState.RideOffered,session.State);
+            Assert.IsTrue(session.IsGeneratingOffer || session.State==TruckTaxiState.RideOffered,
+                "Automatic offer generation must start when the scheduled delay expires.");
+            AdvanceAutomaticOffer(session);
             Assert.That(session.DemandFareMultiplier,Is.EqualTo(fare).Within(.001f));
             Assert.AreEqual((long)Math.Round(session.Offer.EstimatedFareCents*fare),session.DemandEstimatedFareCents);
             Assert.IsTrue(session.AcceptRide());
-            Assert.AreEqual((long)Math.Round(config.baseFareCents*fare),session.EstimateFare().Base);
+            var estimated=session.EstimateFare();
+            Assert.AreEqual(config.baseFareCents,estimated.Base);
+            Assert.AreEqual((long)Math.Round(config.baseFareCents*(fare-1)),estimated.OtherBonus);
         }
 
         [TestCase(23f,true)]
         [TestCase(4f,false)]
         public void WeatherStillMultipliesOvernightDemand(float hour, bool lateNight)
         {
-            var session=NewSession(hour,TruckTaxiDemandWeather.Storm);
-            float frequency=(lateNight ? config.lateNightFrequencyMultiplier : config.preDawnFrequencyMultiplier)*
-                config.stormFrequencyMultiplier;
-            session.Tick(config.rideFrequency*frequency+.01f,Vector3.zero,0,0,true);
-            Assert.AreEqual(TruckTaxiState.RideOffered,session.State);
-            float fare=(lateNight ? config.lateNightFareMultiplier : config.preDawnFareMultiplier)*
-                config.stormFareMultiplier;
+            var neutral=NewSession(hour);
+            var session=NewSession(hour);
+            Assert.That(session.LastDispatchDelay,Is.EqualTo(neutral.LastDispatchDelay).Within(.001f));
+            session.SetWorldConditions(0,hour,TruckTaxiDemandWeather.Storm);
+            neutral.Tick(1,Vector3.zero,0,0,true);
+            session.Tick(1,Vector3.zero,0,0,true);
+            Assert.That(session.DispatchRemaining,Is.EqualTo(session.LastDispatchDelay-1/config.stormFrequencyMultiplier).Within(.001f));
+            Assert.Less(session.DispatchRemaining,neutral.DispatchRemaining);
+            session.Tick(session.DispatchRemaining+.1f,Vector3.zero,0,0,true);
+            Assert.IsTrue(session.IsGeneratingOffer || session.State==TruckTaxiState.RideOffered,
+                "Storm-adjusted dispatch must start when its countdown expires.");
+            AdvanceAutomaticOffer(session);
+            float fare=(lateNight ? config.lateNightFareMultiplier : config.preDawnFareMultiplier)+
+                (config.stormFareMultiplier-1);
             Assert.That(session.DemandFareMultiplier,Is.EqualTo(fare).Within(.001f));
+            Assert.AreEqual((long)Math.Round(session.Offer.EstimatedFareCents*fare),session.DemandEstimatedFareCents);
+        }
+
+        private static void AdvanceAutomaticOffer(TruckTaxiSession session)
+        {
+            for(int i=0;i<64 && session.State==TruckTaxiState.Available;i++)
+                session.Tick(.1f,Vector3.zero,0,0,true);
+            Assert.AreEqual(TruckTaxiState.RideOffered,session.State,session.LastOfferDiagnostics);
         }
 
         [TestCase(23f,"rare")]
@@ -97,7 +134,7 @@ namespace LWS.TruckTaxi.Tests
         [TestCase(4f,"nightlife")]
         [TestCase(4f,"chaotic")]
         [TestCase(4f,"flirtatious")]
-        public void OvernightWeightsFavorAuthoredPassengerTypes(float hour, string kind)
+        public void OvernightWeightsCannotOverrideFairRosterCoverage(float hour, string kind)
         {
             var featured=NewPassenger(kind);
             if(kind=="rare") featured.rarity=TruckTaxiRarity.Rare;
@@ -110,7 +147,7 @@ namespace LWS.TruckTaxi.Tests
             int daytime=CountOffers(12,featured,120);
             SetWeight(late,kind,20);
             int boosted=CountOffers(hour,featured,120);
-            Assert.Greater(boosted,baseline+20,kind+" should be favored in its overnight window.");
+            Assert.AreEqual(baseline,boosted,"Context weights randomize order but cannot starve the other stable ID.");
             Assert.AreEqual(daytime,CountOffers(12,featured,120),"Overnight weights must not affect daytime.");
         }
 
@@ -141,10 +178,11 @@ namespace LWS.TruckTaxi.Tests
 
         [TestCase(23f,true)]
         [TestCase(4f,false)]
-        public void OvernightAppreciationMultiplierUsesAuthoredAdultGate(float hour, bool lateNight)
+        public void LegacyOvernightMultipliersCannotChangeTheThirtyThreePercentOfferRule(float hour, bool lateNight)
         {
             var casting=ScriptableObject.CreateInstance<TruckTaxiCastingProfile>(); created.Add(casting);
             ordinary.casting=casting;
+            ordinary.gender=TruckTaxiPassengerGender.Female;
             ordinary.specialAppreciationEligible=true;
             ordinary.explicitlyAdult=true;
             ordinary.minimumAdultAge=21;
@@ -160,7 +198,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsTrue(noOffer.AcceptRide());
             Board(noOffer);
             noOffer.DebugComplete();
-            Assert.AreEqual(TruckTaxiState.RideComplete,noOffer.State);
+            var baselineState=noOffer.State;
 
             if(lateNight) config.lateNightAppreciationMultiplier=2;
             else config.preDawnAppreciationMultiplier=2;
@@ -169,7 +207,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsTrue(offered.AcceptRide());
             Board(offered);
             offered.DebugComplete();
-            Assert.AreEqual(TruckTaxiState.AppreciationOffer,offered.State);
+            Assert.AreEqual(baselineState,offered.State,"Same seed and eligibility must have the same offer decision at either legacy multiplier.");
         }
 
         private static void Board(TruckTaxiSession session)

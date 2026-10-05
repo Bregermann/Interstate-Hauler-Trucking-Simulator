@@ -10,10 +10,20 @@ namespace LWS.TruckTaxi.Tests
 {
     public class TruckTaxiPresentationPlayModeTests
     {
+        private bool hadRidePreference;
+        private int previousRidePreference;
+        [SetUp] public void EnableTestRideRequests()
+        {
+            hadRidePreference = PlayerPrefs.HasKey(TruckTaxiSession.RideRequestsPreferenceKey);
+            previousRidePreference = PlayerPrefs.GetInt(TruckTaxiSession.RideRequestsPreferenceKey, 1);
+            PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey, 1);
+        }
         [TearDown]
         public void RestoreTimeScale()
         {
             Time.timeScale=1f;
+            if (hadRidePreference) PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey, previousRidePreference);
+            else PlayerPrefs.DeleteKey(TruckTaxiSession.RideRequestsPreferenceKey);
         }
 
         [UnityTest]
@@ -93,6 +103,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsNotNull(renderTarget);
             host.GPS.SetPickupDestination(renderTarget);
             yield return new WaitForSecondsRealtime(.4f);
+            host.hud.Root.gameObject.SetActive(false);
             host.GPS.CabCompass.GetType().GetProperty("showRoute").SetValue(host.GPS.CabCompass,false);
             // Let the vendor late update and the subsequent Canvas rebuild consume the toggle.
             yield return null;
@@ -103,6 +114,7 @@ namespace LWS.TruckTaxi.Tests
             yield return null;
             TruckTaxiDemoPlayModeTests.Capture("GpsCabRouteOn",1920,1080);
             Assert.Greater(CabCyanPixels("GpsCabRouteOn",screen),CabCyanPixels("GpsCabRouteOff",screen)+5,"The vendor route must actually render on the physical screen, not just have geometry.");
+            host.hud.Root.gameObject.SetActive(true);
             host.GPS.SetPickupDestination(offer.Pickup);
             try
             {

@@ -30,7 +30,26 @@ namespace LWS.TruckTaxi
         }
         private readonly Dictionary<string,RegionalPoint> regionalPoints=new Dictionary<string,RegionalPoint>(StringComparer.Ordinal);
         private readonly HashSet<string> syntheticRegionalIds=new HashSet<string>(StringComparer.Ordinal);
-        public IReadOnlyCollection<RegionalPoint> RegionalPoints => regionalPoints.Values;
+        public IReadOnlyCollection<RegionalPoint> RegionalPoints
+        {
+            get
+            {
+                var result=new List<RegionalPoint>(regionalPoints.Count);
+                foreach(var point in regionalPoints.Values)
+                {
+                    var service=TruckTaxiServicePresentation.Find(point.Id);
+                    if(service!=null)
+                        result.Add(new RegionalPoint(point.Id,service.displayName,TruckTaxiServicePresentation.Label(service.capabilities),
+                            service.Position,TruckTaxiServicePresentation.MarkerType(service.capabilities),TruckTaxiServicePresentation.IsUsable(service)));
+                    else
+                        result.Add(new RegionalPoint(point.Id,point.Label,
+                            TruckTaxiServicePresentation.RequiresCapability(point.IconType) ? "Place" : point.Kind,
+                            point.Position,TruckTaxiServicePresentation.RequiresCapability(point.IconType) ? TruckTaxiMapMarkerType.Place : point.IconType,
+                            point.Routeable && !TruckTaxiServicePresentation.RequiresCapability(point.IconType)));
+                }
+                return result;
+            }
+        }
         private readonly HashSet<string> completed=new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> discovered=new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> warnedDuplicates=new HashSet<string>(StringComparer.Ordinal);
@@ -68,11 +87,13 @@ namespace LWS.TruckTaxi
             foreach(var point in regionalPoints.Values) EnsureRegionalPoint(point);
             foreach(var stop in FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None))
                 if(stop.gameObject.scene==host.gameObject.scene && stop.isActiveAndEnabled)
-                    stops.Add(Ensure(stop.stableId,stop.displayName,TruckTaxiMapIconRegistry.ForStop(stop.category),stop.transform,stop.Position));
+                    stops.Add(Ensure(stop.stableId,stop.displayName,stop.category==TruckTaxiStopCategory.FoodStop ?
+                        TruckTaxiMapMarkerType.Place : TruckTaxiMapIconRegistry.ForStop(stop.category),stop.transform,stop.Position));
             RefreshStreamedContent();
             host.Session.Changed+=RequestRefresh; host.Session.DestinationChanged+=RequestRefresh;
             host.Session.RequestCreated+=OnRequest; host.Session.RequestResolved+=OnRequest;
             ConfigureCompass(gps.CabCompass); ConfigureCompass(gps.HudCompass);
+            BindClicks();
             Refresh();
         }
         public bool Register(TruckTaxiMapMarker marker)
@@ -107,6 +128,13 @@ namespace LWS.TruckTaxi
             propertyTargets.RemoveAll(target=>target==null || !AllowedScene(target.gameObject.scene));
             foreach(var scene in AllowedScenes()) foreach(var root in scene.GetRootGameObjects())
             {
+                foreach(var stop in root.GetComponentsInChildren<TruckTaxiStopObjectivePoint>(true))
+                {
+                    if(!stop.isActiveAndEnabled) continue;
+                    var marker=Ensure(stop.stableId,stop.displayName,stop.category==TruckTaxiStopCategory.FoodStop ?
+                        TruckTaxiMapMarkerType.Place : TruckTaxiMapIconRegistry.ForStop(stop.category),stop.transform,stop.Position);
+                    if(marker!=null && !stops.Contains(marker)) stops.Add(marker);
+                }
                 foreach(var shortcut in root.GetComponentsInChildren<ShortcutTrigger>(true))
                 {
                     if(!shortcut.isActiveAndEnabled || shortcut.scenicPoint || string.IsNullOrEmpty(shortcut.shortcutId)) continue;
@@ -120,7 +148,43 @@ namespace LWS.TruckTaxi
                 foreach(var target in root.GetComponentsInChildren<TruckTaxiImpactTarget>(true))
                     if(target.isActiveAndEnabled && target.kind==TaxiImpactKind.Property && !propertyTargets.Contains(target)) propertyTargets.Add(target);
             }
+            RefreshServices();
             dirty=true; nextTrafficRefresh=0;
+        }
+        public void RefreshServices()
+        {
+            if(markerRoot==null) return;
+            foreach(var service in TruckTaxiServicePoint.Points)
+            {
+                if(!TruckTaxiServicePresentation.IsUsable(service) || !AllowedScene(service.gameObject.scene)) continue;
+                if(!byId.TryGetValue(service.stableId,out var marker))
+                    marker=Ensure(service.stableId,service.displayName,TruckTaxiServicePresentation.MarkerType(service.capabilities),service.transform,service.Position);
+                if(marker==null) continue;
+                if(marker.service!=null && marker.service!=service)
+                {
+                    if(warnedDuplicates.Add(service.stableId)) Debug.LogWarning("Duplicate service map ID: "+service.stableId+". Keeping the first service.",service);
+                    continue;
+                }
+                syntheticRegionalIds.Remove(service.stableId);
+                marker.service=service; marker.serviceBound=true; marker.source=service.transform;
+                marker.markerType=TruckTaxiServicePresentation.MarkerType(service.capabilities);
+                marker.label=service.displayName+" ("+TruckTaxiServicePresentation.Label(service.capabilities)+")";
+                marker.state=TruckTaxiMapMarkerState.Known;
+            }
+            foreach(var marker in markers)
+            {
+                if(marker==null) continue;
+                if(marker.serviceBound)
+                {
+                    if(!TruckTaxiServicePresentation.IsUsable(marker.service)) marker.state=TruckTaxiMapMarkerState.Hidden;
+                }
+                else if(TruckTaxiServicePresentation.RequiresCapability(marker.markerType))
+                {
+                    var service=TruckTaxiServicePresentation.Find(marker.stableId);
+                    if(service!=null) { marker.service=service; marker.serviceBound=true; }
+                    else marker.markerType=TruckTaxiMapMarkerType.Place;
+                }
+            }
         }
         private IEnumerable<Scene> AllowedScenes()
         {
@@ -164,7 +228,10 @@ namespace LWS.TruckTaxi
         private void EnsureRegionalPoint(RegionalPoint point)
         {
             if(byId.ContainsKey(point.Id)) return;
-            var marker=Ensure(point.Id,point.Label,point.IconType,null,point.Position);
+            var service=TruckTaxiServicePresentation.Find(point.Id);
+            var type=service!=null ? TruckTaxiServicePresentation.MarkerType(service.capabilities) :
+                TruckTaxiServicePresentation.RequiresCapability(point.IconType) ? TruckTaxiMapMarkerType.Place : point.IconType;
+            var marker=Ensure(point.Id,point.Label,type,null,point.Position);
             if(marker!=null) { marker.state=TruckTaxiMapMarkerState.Known; syntheticRegionalIds.Add(point.Id); }
         }
         public bool Unregister(TruckTaxiMapMarker marker)
@@ -271,13 +338,14 @@ namespace LWS.TruckTaxi
         {
             PruneDestroyedMarkers();
             if(host?.Session==null || registry==null || api==null || !api.Available) return;
+            RefreshServices();
             dirty=false; nextRefresh=Time.unscaledTime+.4f;
             var session=host.Session;
             if(presentationRide!=session.CurrentRideId)
             {
                 presentationRide=session.CurrentRideId; completed.Clear();
             }
-            foreach(var marker in markers) if(marker!=null && marker.source!=null && marker.source.GetComponent<TruckTaxiRideLocation>()!=null)
+            foreach(var marker in markers) if(marker!=null && !marker.serviceBound && marker.source!=null && marker.source.GetComponent<TruckTaxiRideLocation>()!=null)
                 marker.state=TruckTaxiMapMarkerState.Hidden;
             bool ride=session.State==TruckTaxiState.RideOffered || session.State==TruckTaxiState.DrivingToPickup ||
                 session.State==TruckTaxiState.PassengerBoarding || session.HasPassenger || session.State==TruckTaxiState.RideComplete;
@@ -314,6 +382,14 @@ namespace LWS.TruckTaxi
             }
             RefreshImpactTargets();
             if(serviceTarget!=null) serviceTarget.state=TruckTaxiMapMarkerState.Active;
+            foreach(var marker in markers)
+            {
+                if(marker==null) continue;
+                if(marker.serviceBound && !TruckTaxiServicePresentation.IsUsable(marker.service))
+                    marker.state=TruckTaxiMapMarkerState.Hidden;
+                else if(marker.stableId==gps.TargetId && !gps.GuidanceSuppressed) marker.state=TruckTaxiMapMarkerState.Active;
+                else if(marker.state==TruckTaxiMapMarkerState.Active) marker.state=TruckTaxiMapMarkerState.Known;
+            }
             endpoint=FindAndStyleLegacyPois();
             nearby.Clear();
             foreach(var marker in markers) if(marker!=null && marker.state!=TruckTaxiMapMarkerState.Hidden && marker.state!=TruckTaxiMapMarkerState.Active &&
@@ -345,6 +421,8 @@ namespace LWS.TruckTaxi
         private void SetRideMarker(TruckTaxiRideLocation location,TruckTaxiMapMarkerType type,TruckTaxiMapMarkerState state)
         {
             if(location==null) return;
+            if(byId.TryGetValue(location.locationId,out var existing) && existing!=null && existing.serviceBound)
+            { existing.state=state; return; }
             var marker=Ensure(location.locationId,location.locationName,type,location.transform,location.StopPosition);
             if(marker!=null) marker.state=state;
         }
@@ -409,10 +487,39 @@ namespace LWS.TruckTaxi
         }
         private void OnDestroy()
         {
+            UnbindClicks();
             if(host?.Session!=null)
             { host.Session.Changed-=RequestRefresh; host.Session.DestinationChanged-=RequestRefresh;
                 host.Session.RequestCreated-=OnRequest; host.Session.RequestResolved-=OnRequest; }
             if(markerRoot!=null) Destroy(markerRoot.gameObject);
+        }
+
+        public event Action<string> PlaceSubmitted;
+        private object clickEvent;
+        private Delegate clickListener;
+        private MethodInfo removeClickListener;
+        private void BindClicks()
+        {
+            // Typed UnityEvent binding through the established Assembly-CSharp reflection boundary.
+            clickEvent=gps.HudCompass?.GetType().GetField("OnPOIMiniMapIconMouseClick")?.GetValue(gps.HudCompass);
+            if(clickEvent==null || api?.PoiType==null) return;
+            var add=clickEvent.GetType().GetMethod("AddListener");
+            removeClickListener=clickEvent.GetType().GetMethod("RemoveListener");
+            var handler=GetType().GetMethod(nameof(OnPoiSubmitted),BindingFlags.NonPublic|BindingFlags.Instance).MakeGenericMethod(api.PoiType);
+            clickListener=Delegate.CreateDelegate(add.GetParameters()[0].ParameterType,this,handler);
+            add.Invoke(clickEvent,new object[] { clickListener });
+        }
+        [UnityEngine.Scripting.Preserve]
+        private void OnPoiSubmitted<T>(T poi,int button) where T : Component
+        {
+            if(button!=0 || !gps.FullMapOpen) return;
+            foreach(var marker in markers)
+                if(marker!=null && RenderedPoi(marker)==poi) { PlaceSubmitted?.Invoke(marker.stableId); return; }
+        }
+        private void UnbindClicks()
+        {
+            if(clickEvent!=null && clickListener!=null) removeClickListener?.Invoke(clickEvent,new object[] { clickListener });
+            clickEvent=null; clickListener=null;
         }
 
         // Existing project assembly boundary: Compass ships in Assembly-CSharp, so cache its public members.

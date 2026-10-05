@@ -191,6 +191,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5171210}
   - component: {fileID: 5171209}
+  - component: {fileID: 5171211}
   m_Layer: 0
   m_Name: Demo daylight
   m_TagString: Untagged
@@ -278,6 +279,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5171211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5171208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &8666504
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,6 +656,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -3892,6 +3924,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -3918,6 +3952,59 @@ MonoBehaviour:
   detectionRadius: 18
   tags: []
   debugGizmos: 1
+--- !u!1 &157930502
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 157930503}
+  - component: {fileID: 157930504}
+  m_Layer: 0
+  m_Name: LWS Parked Cab Collision
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &157930503
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157930502}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1128865031}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &157930504
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157930502}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.9018106, y: 3.1624959, z: 2.576425}
+  m_Center: {x: -0.00013184547, y: 2.4268374, z: 1.7592704}
 --- !u!1 &164312695
 GameObject:
   m_ObjectHideFlags: 0
@@ -5240,6 +5327,8 @@ MonoBehaviour:
   state: 1
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -5470,6 +5559,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -5549,6 +5640,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -6213,6 +6306,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 247572998}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -7024,6 +7119,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 335098244}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -7105,6 +7202,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &336015486
 GameObject:
   m_ObjectHideFlags: 0
@@ -7202,6 +7300,7 @@ GameObject:
   m_Component:
   - component: {fileID: 336848638}
   - component: {fileID: 336848639}
+  - component: {fileID: 336848640}
   m_Layer: 0
   m_Name: Canal Inn
   m_TagString: Untagged
@@ -7249,6 +7348,27 @@ MonoBehaviour:
   detectionRadius: 11
   tags: []
   debugGizmos: 1
+--- !u!114 &336848640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 336848637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: TT_SLEEP_taxi.town02.stop.15
+  displayName: Canal Inn
+  capabilities: 8192
+  location: {fileID: 336848639}
+  recoveryAnchor: {fileID: 0}
+  radius: 11
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &339037333
 GameObject:
   m_ObjectHideFlags: 0
@@ -10505,6 +10625,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Parked UTS taxi truck 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1672345072957452, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4498211618753732, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6
@@ -10558,7 +10682,7 @@ PrefabInstance:
     - target: {fileID: 65109294934475136, guid: 149b71e9849c0444da1a36376caf8156,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 65915809515361770, guid: 149b71e9849c0444da1a36376caf8156,
         type: 3}
@@ -10597,7 +10721,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4498211618753732, guid: 149b71e9849c0444da1a36376caf8156,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 965208615}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
 --- !u!4 &417056590 stripped
@@ -11331,12 +11459,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
   stableId: taxi.town02.stop.08.service
   displayName: River View Hotel
-  capabilities: 8128
+  capabilities: 16320
   location: {fileID: 498969915}
   recoveryAnchor: {fileID: 0}
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!114 &498969915
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11617,6 +11746,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 520075377}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -12228,6 +12359,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -123760,6 +123893,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 636783078}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -123887,6 +124022,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -124832,6 +124969,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -125326,6 +125465,7 @@ GameObject:
   m_Component:
   - component: {fileID: 731939914}
   - component: {fileID: 731939915}
+  - component: {fileID: 731939916}
   m_Layer: 0
   m_Name: The Long Stay Hotel
   m_TagString: Untagged
@@ -125373,6 +125513,27 @@ MonoBehaviour:
   detectionRadius: 11
   tags: []
   debugGizmos: 1
+--- !u!114 &731939916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731939913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: TT_SLEEP_taxi.stop.08
+  displayName: The Long Stay Hotel
+  capabilities: 8192
+  location: {fileID: 731939915}
+  recoveryAnchor: {fileID: 0}
+  radius: 11
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &733804976
 GameObject:
   m_ObjectHideFlags: 0
@@ -125571,6 +125732,7 @@ GameObject:
   m_Component:
   - component: {fileID: 752401225}
   - component: {fileID: 752401226}
+  - component: {fileID: 752401227}
   m_Layer: 0
   m_Name: No Vacancy Inn
   m_TagString: Untagged
@@ -125618,6 +125780,27 @@ MonoBehaviour:
   detectionRadius: 11
   tags: []
   debugGizmos: 1
+--- !u!114 &752401227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752401224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b9e23f577d90ce47bea208fbdf89b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiServicePoint
+  stableId: TT_SLEEP_taxi.stop.15
+  displayName: No Vacancy Inn
+  capabilities: 8192
+  location: {fileID: 752401226}
+  recoveryAnchor: {fileID: 0}
+  radius: 11
+  verticalTolerance: 3
+  assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &753091693
 GameObject:
   m_ObjectHideFlags: 0
@@ -126169,6 +126352,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1021719444}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &821260909
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 821260910}
+  - component: {fileID: 821260911}
+  m_Layer: 0
+  m_Name: LWS Parked Cab Collision
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &821260910
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821260909}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1473826135}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &821260911
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821260909}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.9018106, y: 3.1624959, z: 2.576425}
+  m_Center: {x: 0.000020742416, y: 2.4268374, z: 1.7592717}
 --- !u!1 &827197254
 GameObject:
   m_ObjectHideFlags: 0
@@ -126222,6 +126458,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -127597,6 +127835,59 @@ Transform:
   m_Children: []
   m_Father: {fileID: 247221756}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &965208614
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 965208615}
+  - component: {fileID: 965208616}
+  m_Layer: 0
+  m_Name: LWS Parked Cab Collision
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &965208615
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965208614}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 417056590}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &965208616
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965208614}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.9018106, y: 3.1624959, z: 2.576425}
+  m_Center: {x: -0.0001373291, y: 2.4268374, z: 1.7592767}
 --- !u!1 &966278077
 GameObject:
   m_ObjectHideFlags: 0
@@ -128356,6 +128647,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -128477,6 +128770,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!114 &1011576201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128834,6 +129128,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 1034595320}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -129611,6 +129907,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -129854,6 +130152,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Parked UTS taxi truck 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1672345072957452, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4498211618753732, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6
@@ -129907,7 +130209,7 @@ PrefabInstance:
     - target: {fileID: 65109294934475136, guid: 149b71e9849c0444da1a36376caf8156,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 65915809515361770, guid: 149b71e9849c0444da1a36376caf8156,
         type: 3}
@@ -129946,7 +130248,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4498211618753732, guid: 149b71e9849c0444da1a36376caf8156,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 157930503}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
 --- !u!4 &1128865031 stripped
@@ -130345,6 +130651,59 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1152312019}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1153268791
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1153268792}
+  - component: {fileID: 1153268793}
+  m_Layer: 0
+  m_Name: LWS Parked Cab Collision
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1153268792
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153268791}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1174149200}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1153268793
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153268791}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.9018106, y: 3.1624959, z: 2.576425}
+  m_Center: {x: 0, y: 2.4268374, z: 1.7592767}
 --- !u!1 &1156979432
 GameObject:
   m_ObjectHideFlags: 0
@@ -130628,6 +130987,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Parked UTS taxi truck 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1672345072957452, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4498211618753732, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6
@@ -130681,7 +131044,7 @@ PrefabInstance:
     - target: {fileID: 65109294934475136, guid: 149b71e9849c0444da1a36376caf8156,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 65915809515361770, guid: 149b71e9849c0444da1a36376caf8156,
         type: 3}
@@ -130720,7 +131083,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4498211618753732, guid: 149b71e9849c0444da1a36376caf8156,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1153268792}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
 --- !u!4 &1174149200 stripped
@@ -131361,6 +131728,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 1226252177}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -131442,6 +131811,7 @@ MonoBehaviour:
   radius: 7
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &1227098714
 GameObject:
   m_ObjectHideFlags: 0
@@ -131794,6 +132164,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &1258639986
 GameObject:
   m_ObjectHideFlags: 0
@@ -131844,6 +132215,8 @@ MonoBehaviour:
   state: 1
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -132289,6 +132662,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!114 &1289795023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132661,6 +133035,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!114 &1341343733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132816,6 +133191,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!114 &1347605929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134286,6 +134662,8 @@ MonoBehaviour:
   state: 1
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -134946,6 +135324,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 1424947064}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -135137,6 +135517,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &1433567635
 GameObject:
   m_ObjectHideFlags: 0
@@ -135639,6 +136020,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Parked UTS taxi truck 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1672345072957452, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4498211618753732, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6
@@ -135692,7 +136077,7 @@ PrefabInstance:
     - target: {fileID: 65109294934475136, guid: 149b71e9849c0444da1a36376caf8156,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 65915809515361770, guid: 149b71e9849c0444da1a36376caf8156,
         type: 3}
@@ -135731,7 +136116,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4498211618753732, guid: 149b71e9849c0444da1a36376caf8156,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 821260910}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
 --- !u!4 &1473826135 stripped
@@ -136193,6 +136582,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 1500493909}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -136823,6 +137214,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -137860,6 +138253,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -138507,6 +138902,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -139411,6 +139808,8 @@ MonoBehaviour:
   state: 1
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -140751,6 +141150,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 1839113215}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -140831,6 +141232,7 @@ MonoBehaviour:
   radius: 12
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &1856606859
 GameObject:
   m_ObjectHideFlags: 0
@@ -142861,6 +143263,8 @@ MonoBehaviour:
   state: 2
   source: {fileID: 0}
   sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
   assignedIcon: {fileID: 0}
   compassPoi: {fileID: 0}
   presented: 0
@@ -143520,6 +143924,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!1 &2097476100
 GameObject:
   m_ObjectHideFlags: 0
@@ -146165,6 +146570,7 @@ MonoBehaviour:
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
+  sleepCostPerHourCents: 0
 --- !u!114 &2127612688
 MonoBehaviour:
   m_ObjectHideFlags: 0

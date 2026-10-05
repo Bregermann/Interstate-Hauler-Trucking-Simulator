@@ -128,9 +128,8 @@ namespace LWS.TruckTaxi.Tests.EditMode
         }
 
         [Test]
-        public void IntercityFareRequiresThreeLocalOffersBeforeAnotherIntercityOffer()
+        public void IntercityFareRequiresTwoCompletedLocalsNotTwoDeclines()
         {
-            passenger.passengerId = string.Empty;
             config.intercityRideChance = 1;
             config.localOffersAfterIntercity = 3;
             session.RegionResolver = position => position.x >= 200 ? "town.02" : "town.01";
@@ -143,20 +142,25 @@ namespace LWS.TruckTaxi.Tests.EditMode
             session.Tick(2, session.Pickup.StopPosition, 0, 0, true);
             session.DebugComplete();
             Assert.AreEqual(TruckTaxiState.RideComplete, session.State);
-            Assert.AreEqual(3, session.LocalOffersBeforeIntercity);
+            Assert.AreEqual(2, session.LocalOffersBeforeIntercity);
 
-            for (int remaining = 2; remaining >= 0; remaining--)
+            session.ContinueShift();
+            for (int remaining = 2; remaining > 0; remaining--)
             {
-                session.ContinueShift();
                 Assert.IsTrue(session.OfferRide(passenger));
                 Assert.IsFalse(session.IsIntercityRide, "Cooldown should force a local destination.");
                 Assert.AreEqual(remaining, session.LocalOffersBeforeIntercity);
-                if (remaining > 0) session.DeclineRide();
+                session.DeclineRide();
+                Assert.AreEqual(remaining,session.LocalOffersBeforeIntercity);
+                Assert.IsTrue(session.OfferRide(passenger)); Assert.IsTrue(session.AcceptRide());
+                session.Tick(.1f,session.Pickup.StopPosition,0,0,true);
+                session.Tick(2,session.Pickup.StopPosition,0,0,true); session.DebugComplete();
+                Assert.AreEqual(remaining-1,session.LocalOffersBeforeIntercity);
+                session.ContinueShift();
             }
 
-            session.DeclineRide();
             Assert.IsTrue(session.OfferRide(passenger));
-            Assert.IsTrue(session.IsIntercityRide, "Intercity offers become eligible after three local offers.");
+            Assert.IsTrue(session.IsIntercityRide, "Intercity becomes eligible after two completed local fares.");
         }
 
         [Test]

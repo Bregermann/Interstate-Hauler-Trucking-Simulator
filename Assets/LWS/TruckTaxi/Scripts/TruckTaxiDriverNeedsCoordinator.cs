@@ -25,6 +25,10 @@ namespace LWS.TruckTaxi
             }
         }
         public TruckTaxiServicePoint NearbyRepair => ServiceInReach(TruckTaxiServiceCapability.RepairGeneralDamage);
+        public TruckTaxiServicePoint NearbySleep => ServiceInReach(TruckTaxiServiceCapability.Sleep);
+        public TruckTaxiFatiguePresentation FatiguePresentation { get; private set; }
+        public bool IsSleeping { get; private set; }
+        public event Action<int> SleepCompleted;
         public InputAction ThrowContainerAction { get; private set; }
         public IReadOnlyList<TruckTaxiStorePoint> Stores => stores;
         public string Feedback { get; private set; } = "";
@@ -75,11 +79,13 @@ namespace LWS.TruckTaxi
             indicatorSources = owner.Player.GetComponentsInChildren<LwsKeyboardGamepadTruckInputSource>(true);
             State = new TruckTaxiDriverNeedsState(settings, 20925);
             host.Handling?.BindEffects(State.Effects);
-            (GetComponent<TruckTaxiEffectPresentation>() ?? gameObject.AddComponent<TruckTaxiEffectPresentation>()).Initialize(State.Effects);
+            var effectPresentation = GetComponent<TruckTaxiEffectPresentation>() ?? gameObject.AddComponent<TruckTaxiEffectPresentation>();
+            effectPresentation.Initialize(State.Effects);
+            FatiguePresentation = GetComponent<TruckTaxiFatiguePresentation>() ?? gameObject.AddComponent<TruckTaxiFatiguePresentation>();
+            FatiguePresentation.Initialize(host, State, effectPresentation);
             roadPepOverlay = GetComponent<TruckTaxiRoadPepOverlay>() ?? gameObject.AddComponent<TruckTaxiRoadPepOverlay>();
             roadPepOverlay.Initialize(host.hud);
             TruckTaxiServicePoint.BindExistingPoints(owner.gameObject.scene);
-            if (owner.gameObject.scene.name == TruckTaxiMainMenu.FreePlaySceneName) State.GrantFreePlayTestInventory();
             State.Event += OnJugInputEvent;
             State.Event += OnNeedEvent;
             var found = FindObjectsByType<TruckTaxiBathroomPoint>(FindObjectsSortMode.None);
@@ -125,7 +131,68 @@ namespace LWS.TruckTaxi
         private void OnClockChanged(LwsGameClockSnapshot snapshot)
         {
             double elapsed = snapshot.totalGameSeconds - lastGameSeconds; lastGameSeconds = snapshot.totalGameSeconds;
-            if (CanInteract && !snapshot.paused) State.AdvanceGameSeconds(elapsed);
+            if (IsSleeping || !isActiveAndEnabled || host?.Ready != true || host.Paused || snapshot.paused ||
+                host.Session.State == TruckTaxiState.Inactive || elapsed <= 0) return;
+            float speed = body.linearVelocity.magnitude;
+            var weather = environment.Weather.CurrentSnapshot;
+            bool stressful = speed >= 25 || weather.condition == LwsWeatherCondition.Thunderstorm ||
+                weather.precipitationIntensity01 >= .85f;
+            var activity = stressful ? TruckTaxiFatigueActivity.Stressful : speed > .44704f ?
+                TruckTaxiFatigueActivity.Driving : TruckTaxiFatigueActivity.Parked;
+            float startHour = (float)((snapshot.timeOfDayHours - elapsed / 3600) % 24);
+            State.AdvanceGameSeconds(elapsed, activity, startHour);
+        }
+        public bool CreateNewVibinInventory() => State?.CreateNewVibinInventory() == true;
+        public TruckTaxiDriverNeedsSnapshot CapturePersistentState() => State?.CapturePersistentState();
+        public bool RestorePersistentState(TruckTaxiDriverNeedsSnapshot snapshot, out string error)
+        {
+            error = "Needs are not initialized.";
+            if (State == null || IsSleeping || !State.RestorePersistentState(snapshot, out error)) return false;
+            RoadPepChallenge = null; roadPepOverlay?.Hide(); SetJugIndicatorSuppression(false);
+            liquidLoop?.Stop(); FatiguePresentation?.ClearPresentation();
+            lastGameSeconds = environment.Clock.CurrentSnapshot.totalGameSeconds;
+            Feedback = "Driver needs restored.";
+            return true;
+        }
+        public bool RouteToSleep() => RouteToService(TruckTaxiServiceCapability.Sleep);
+        public string SleepFailureReason(int hours)
+        {
+            if (State == null || host?.Ready != true || environment?.Clock == null || body == null || IsSleeping)
+                return "Sleep unavailable.";
+            if (!TruckTaxiFatigueRules.IsSleepDuration(hours)) return "Choose 2, 4 or 8 hours.";
+            if (!TruckTaxiFatigueRules.CanSleepInSession(host.Session.State)) return "FINISH CURRENT RIDE BEFORE SLEEPING.";
+            if (State.JugActive || RoadPepChallenge != null || host.Companions?.ActivePrivateStop != null || host.CustomContent?.IsPlaying == true)
+                return "Finish current action before sleeping.";
+            var point = NearestServiceAtPosition(TruckTaxiServiceCapability.Sleep);
+            if (point == null || string.IsNullOrWhiteSpace(point.stableId)) return "Park in a sleep service bay first.";
+            if (!point.CanUse(body.position, body.linearVelocity.magnitude, settings.bathroomMaximumSpeed)) return "Vehicle must stop before sleeping.";
+            if (point.SleepCostCents(hours) > 0 && host.Session.WalletBalanceCents < point.SleepCostCents(hours)) return "Not enough cash.";
+            var clock = environment.Clock.CurrentSnapshot;
+            try { new DateTime(clock.year, clock.month, clock.day, clock.hour, clock.minute, 0).AddHours(hours); }
+            catch (ArgumentOutOfRangeException) { return "Clock cannot advance beyond the supported date range."; }
+            return null;
+        }
+        public bool TrySleep(int hours)
+        {
+            string failure = SleepFailureReason(hours);
+            if (failure != null) { Feedback = failure; return false; }
+            var point = NearbySleep;
+            long cost = point.SleepCostCents(hours);
+            if (cost > 0 && !host.Session.TrySpend(cost)) { Feedback = "Not enough cash."; return false; }
+            IsSleeping = true;
+            try
+            {
+                // AddHours publishes even while the service menu is paused. Suppress that
+                // callback and apply sleeping needs once, never an additional awake tick.
+                environment.Clock.AddHours(hours);
+                State.ApplySleep(hours);
+                FatiguePresentation?.ClearPresentation();
+            }
+            finally { IsSleeping = false; lastGameSeconds = environment.Clock.CurrentSnapshot.totalGameSeconds; }
+            Feedback = "Rested " + hours + " hours. FATIGUE " + (State.Fatigue * 100).ToString("0") + "%";
+            SleepCompleted?.Invoke(hours);
+            host.GPS?.CompleteServiceDestination(point.stableId);
+            return true;
         }
         private void Update()
         {
@@ -201,25 +268,12 @@ namespace LWS.TruckTaxi
             if (host?.Session == null || State == null || !host.Ready ||
                 host.Session.State == TruckTaxiState.Inactive) return "Service Unavailable";
             var entry = TruckTaxiNeedsItems.Find(item);
-            if (entry == null) return "Item Unavailable";
-            if (State.JugActive) return "Finish Current Action";
+            if (entry == null || !entry.PlayerOwnable || !entry.Purchasable) return "Item Unavailable";
+            if (State.JugActive || RoadPepChallenge != null) return "Finish Current Action";
             var service = NearestServiceAtPosition(TruckTaxiServiceCapability.Store);
             if (service == null) return "Not In Store Area";
-            if (item == TruckTaxiNeedsItem.RoadPep &&
-                service.GetComponent<TruckTaxiStorePoint>()?.sellsRoadPep != true) return "Road Pep Not Sold Here";
             if (!service.CanUse(body.position, body.linearVelocity.magnitude, settings.bathroomMaximumSpeed))
                 return "Vehicle Must Stop";
-            if (entry.HungerRelief > 0 && !service.Supports(TruckTaxiServiceCapability.Food) ||
-                entry.ThirstRelief > 0 && !service.Supports(TruckTaxiServiceCapability.Drink) ||
-                item == TruckTaxiNeedsItem.EmptyPissJug && !service.Supports(TruckTaxiServiceCapability.PissJugs))
-                return "Item Not Sold Here";
-            if (entry.Slot.HasValue && decorations != null)
-            {
-                bool full = item == TruckTaxiNeedsItem.AirFreshener ? decorations.IsMounted(TruckTaxiCabSlot.Mirror) :
-                    decorations.IsMounted(TruckTaxiCabSlot.DashboardLeft) && decorations.IsMounted(TruckTaxiCabSlot.DashboardRight);
-                if (full) return "No Slot Available";
-                if (State.Count(item) > decorations.MountedCount(item)) return "Already Owned";
-            }
             if (!State.CanAdd(item)) return "Inventory Full";
             if (host.Session.WalletBalanceCents < entry.PriceCents) return "Not Enough Cash";
             return null;
@@ -230,7 +284,7 @@ namespace LWS.TruckTaxi
             TruckTaxiServicePoint best = null; float bestDistance = float.PositiveInfinity;
             foreach (var point in TruckTaxiServicePoint.Points)
             {
-                if (point == null || point.gameObject.scene != host.gameObject.scene || !point.Supports(capability)) continue;
+                if (point == null || point.gameObject.scene != host.gameObject.scene || !point.Supports(capability) || string.IsNullOrWhiteSpace(point.stableId)) continue;
                 Vector3 offset = body.position - point.Position;
                 float planar = Vector3.ProjectOnPlane(offset, Vector3.up).sqrMagnitude;
                 if (Mathf.Abs(offset.y) > point.verticalTolerance || planar > point.InteractionRadius * point.InteractionRadius || planar >= bestDistance) continue;
@@ -434,15 +488,8 @@ namespace LWS.TruckTaxi
                 host.GPS.SetPrivateStopDestination(privateStop);
                 return;
             }
-            host.GPS.ClearDestination();
-            if (host.Session.State == TruckTaxiState.DrivingToPickup) host.GPS.SetPickupDestination(host.Session.Pickup);
-            else if (host.Session.State == TruckTaxiState.DrivingToDestination)
-            {
-                if (host.Session.ActiveStop?.StopPoint != null) host.GPS.SetStopDestination(host.Session.ActiveStop.StopPoint);
-                else if(host.Session.SafeDropRequested) host.GPS.SetSafeDropDestination(host.Session.CurrentDesiredDestination);
-                else host.GPS.SetRideDestination(host.Session.CurrentDesiredDestination);
-            }
-            else host.GPS.ClearDestination();
+            host.GPS.ClearPlayerServiceDestination();
+            host.GPS.RestoreRideRoute();
         }
         private void OnNeedEvent(TruckTaxiDriverNeedEvent kind)
         {

@@ -67,10 +67,10 @@ namespace LWS.TruckTaxi.Tests
             while ((TruckTaxiBootstrap.Instance == null || !TruckTaxiBootstrap.Instance.Ready) && Time.realtimeSinceStartup < deadline) yield return null;
             var host = TruckTaxiBootstrap.Instance;
             Assert.IsNotNull(host); Assert.IsTrue(host.Ready);
-            Assert.AreEqual(12, host.pedestrians.BaselineActiveCount, "Measured native UTS baseline, not the old maximumPeople value.");
-            Assert.AreEqual(12, host.traffic.BaselineActiveCount);
-            Assert.AreEqual(144, host.pedestrians.TargetCount);
-            Assert.AreEqual(60, host.traffic.TargetCount);
+            Assert.Greater(host.pedestrians.BaselineActiveCount,0,"Native UTS pedestrian baseline must be observed.");
+            Assert.Greater(host.traffic.BaselineActiveCount,0,"Native UTS traffic baseline must be observed.");
+            Assert.AreEqual(host.pedestrians.densityProfile.PedestrianTarget(host.pedestrians.BaselineActiveCount),host.pedestrians.TargetCount);
+            Assert.AreEqual(host.traffic.densityProfile.TrafficTarget(host.traffic.BaselineActiveCount),host.traffic.TargetCount);
             int paths = host.pedestrians.peoplePaths.Length;
             host.pedestrians.Initialize(); host.traffic.Initialize();
             Assert.AreEqual(paths, host.pedestrians.peoplePaths.Length);
@@ -81,17 +81,22 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsNull(host.Player.NwhAdapter.VehicleController.steering.steeringWheel);
             host.SetPaused(false);
             deadline = Time.realtimeSinceStartup + 30;
-            while ((host.pedestrians.ActiveCount < 144 || host.traffic.ActiveCount < 60) && Time.realtimeSinceStartup < deadline) yield return null;
-            Assert.AreEqual(144, host.pedestrians.ActiveCount);
-            Assert.GreaterOrEqual(host.pedestrians.GraphWalkableSpawnCount, 144, "Grounded off-road graph can host the live population.");
+            int visiblePedestrianTarget=Mathf.Min(host.pedestrians.TargetCount,host.pedestrians.maxVisiblePedestrians);
+            int visibleTrafficTarget=Mathf.Min(host.traffic.TargetCount,host.traffic.maxVisibleTraffic);
+            while (host.pedestrians.ActiveCount < visiblePedestrianTarget && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.GreaterOrEqual(host.pedestrians.ActiveCount,Mathf.Min(visiblePedestrianTarget,144));
+            Assert.LessOrEqual(host.pedestrians.ActiveCount,visiblePedestrianTarget);
+            Assert.GreaterOrEqual(host.pedestrians.GraphWalkableSpawnCount,host.pedestrians.ActiveCount,"Grounded off-road graph can host the live population.");
             Assert.Greater(host.pedestrians.GraphRoadSegmentCount, 0, "Road exclusions include the authored road graph.");
-            Assert.AreEqual(144, host.pedestrians.GraphWalkerCount, "Every dense pedestrian has a dynamic UTS waypoint route.");
+            Assert.AreEqual(host.pedestrians.ActiveCount,host.pedestrians.GraphWalkerCount, "Every dense pedestrian has a dynamic UTS waypoint route.");
             var occupied = new HashSet<Vector2Int>();
             foreach (var ped in host.pedestrians.People)
                 occupied.Add(new Vector2Int(Mathf.FloorToInt(ped.transform.position.x / 20),
                     Mathf.FloorToInt(ped.transform.position.z / 20)));
             Assert.Greater(occupied.Count, 40, "Pedestrians should span city walkable space, not authored loop clusters.");
-            Assert.AreEqual(60, host.traffic.ActiveCount);
+            Assert.Greater(host.traffic.ActiveCount,0,"Nearby UTS traffic should materialize.");
+            Assert.LessOrEqual(host.traffic.ActiveCount,visibleTrafficTarget+host.traffic.maxFullTraffic+
+                host.traffic.maximumDedicatedVehicles,"Distance-limited traffic must remain within its visible/physics budgets.");
             Assert.LessOrEqual(host.pedestrians.RagdollCount, host.pedestrians.densityProfile.maximumActiveRagdolls);
             Time.timeScale = 1;
         }

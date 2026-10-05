@@ -75,7 +75,7 @@ namespace LWS.TruckTaxi.Tests
         }
 
         [Test]
-        public void DrinksDoNotChangeLibidoAndAdultHookSatisfiesIt()
+        public void DrinksRelieveFivePointsAndEnergyDrinkKeepsItsEffect()
         {
             var settings = ScriptableObject.CreateInstance<TruckTaxiEnvironmentSettings>();
             try
@@ -87,7 +87,8 @@ namespace LWS.TruckTaxi.Tests
                 {
                     Assert.IsTrue(state.AddItem(drink));
                     Assert.IsTrue(state.Consume(drink));
-                    Assert.AreEqual(thirst, state.Thirst);
+                    thirst = Mathf.Max(0, thirst - .05f);
+                    Assert.AreEqual(thirst, state.Thirst, .00001f);
                 }
                 Assert.Greater(state.Effects.GetSnapshot(TruckTaxiTemporaryEffectKind.EnergyDrink).RemainingSeconds, 0);
                 state.SatisfyThirst();

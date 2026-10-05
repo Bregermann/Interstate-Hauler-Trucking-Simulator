@@ -82,7 +82,7 @@ namespace LWS.TruckTaxi
         public bool Initialize(TruckTaxiBootstrap boot)
         {
             if (initialized) return host == boot;
-            if (boot == null || !boot.Ready || boot.Player == null || boot.CalendarWeather == null) return false;
+            if (boot == null || boot.Player == null || boot.CalendarWeather?.IsInitialized != true) return false;
             host = boot;
             regional = boot.GetComponent<TruckTaxiRegionalWorld>();
             if (configuration == null) runtimeDefaults = ScriptableObject.CreateInstance<TruckTaxiKaijuConfig>();

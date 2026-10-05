@@ -30,12 +30,12 @@ namespace LWS.TruckTaxi.Tests
         }
 
         [Test]
-        public void OnlyServiceLikeAuthoredMarkersOfferServiceRouting()
+        public void ServicesAndActiveRideTargetsOfferRouting()
         {
             Assert.IsTrue(TruckTaxiFullMapPresenter.IsRouteable(TruckTaxiMapMarkerType.Bathroom));
             Assert.IsTrue(TruckTaxiFullMapPresenter.IsRouteable(TruckTaxiMapMarkerType.FoodStop));
-            Assert.IsFalse(TruckTaxiFullMapPresenter.IsRouteable(TruckTaxiMapMarkerType.PassengerPickup));
-            Assert.IsFalse(TruckTaxiFullMapPresenter.IsRouteable(TruckTaxiMapMarkerType.Destination));
+            Assert.IsTrue(TruckTaxiFullMapPresenter.IsRouteable(TruckTaxiMapMarkerType.PassengerPickup));
+            Assert.IsTrue(TruckTaxiFullMapPresenter.IsRouteable(TruckTaxiMapMarkerType.Destination));
             Assert.IsFalse(TruckTaxiFullMapPresenter.IsRouteable(TruckTaxiMapMarkerType.Debug));
         }
 
@@ -47,7 +47,7 @@ namespace LWS.TruckTaxi.Tests
             {
                 var gps=owner.AddComponent<TruckTaxiGPSAdapter>();
                 Assert.IsFalse(gps.TrySetMapServiceDestination("town.02","Town 02",Vector3.one));
-                Assert.IsNull(gps.TargetId);
+                Assert.IsEmpty(gps.TargetId);
             }
             finally { Object.DestroyImmediate(owner); }
         }

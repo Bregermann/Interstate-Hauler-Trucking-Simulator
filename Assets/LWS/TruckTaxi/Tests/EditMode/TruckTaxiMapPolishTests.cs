@@ -55,9 +55,8 @@ namespace LWS.TruckTaxi.Tests
                 SetPrivate(navigation,"<CurrentRoute>k__BackingField",new LwsRouteResult { routeId="private.stop",succeeded=true });
                 SetPrivate(gps,"navigation",navigation);
                 SetPrivate(gps,"player",go.transform);
-                SetPrivate(gps,"serviceTargetActive",true);
-                SetPrivate(gps,"serviceTargetPosition",new Vector3(100,0,0));
-                SetPrivate(gps,"<TargetId>k__BackingField","private.stop");
+                Assert.IsTrue(gps.TrySetNavigationIntent(TruckTaxiNavigationLayer.PlayerService,"player-service",
+                    "private.stop","Private stop",Vector3.zero,TruckTaxiMapMarkerType.PrivateEventStop));
                 gps.StopNavigation();
                 Assert.IsTrue(gps.GuidanceSuppressed);
                 Assert.IsTrue(gps.IsServiceDestination);

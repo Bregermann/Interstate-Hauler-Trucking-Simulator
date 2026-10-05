@@ -20,7 +20,8 @@ namespace LWS.TruckTaxi.Tests
         public void RequestedPopulationIsNotSilentlyCappedToOldDefaults()
         {
             var profile=ScriptableObject.CreateInstance<TruckTaxiPopulationProfile>();
-            try { Assert.AreEqual(720,profile.PedestrianTarget(12)); Assert.AreEqual(300,profile.TrafficTarget(12)); }
+            // The later regional pass retained 720 logical pedestrians and halved traffic from 300 to 150.
+            try { Assert.AreEqual(720,profile.PedestrianTarget(12)); Assert.AreEqual(150,profile.TrafficTarget(12)); }
             finally { Object.DestroyImmediate(profile); }
         }
         [Test]

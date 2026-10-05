@@ -10,6 +10,7 @@ namespace LWS.InterstateHauler.Tests.EditMode
         private const string SaveArchitecturePath = "Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs";
         private const string SaveProfileTypesPath = "Assets/LWS/InterstateHauler/Save/LwsSaveProfileTypes.cs";
         private const string SaveLoadCoordinatorPath = "Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs";
+        private const string PlayerTruckPath = "Assets/LWS/InterstateHauler/Vehicles/LwsPlayerTruck.cs";
         private const string SemanticSaverBridgePath = "Assets/LWS/InterstateHaulerPixelCrushers/Save/LwsPixelCrushersSemanticSaver.cs";
         private const string PixelCrushersSaveSystemPath = "Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/SaveSystem.cs";
         private const string PixelCrushersSaverPath = "Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/Savers/Saver.cs";
@@ -49,7 +50,7 @@ namespace LWS.InterstateHauler.Tests.EditMode
         public void ProfileManualSlotMappingIsDeterministicAndIsolated()
         {
             var service = new LwsSaveService();
-            LwsServiceResult result = service.Initialize(new LwsServiceContext(new LwsServiceRegistry()));
+            LwsServiceResult result = service.Initialize(new LwsServiceContext(RegistryWithActiveJobs()));
             Assert.IsTrue(result.Succeeded, result.Message);
 
             string firstProfileId = service.ActiveProfileId;
@@ -73,7 +74,7 @@ namespace LWS.InterstateHauler.Tests.EditMode
         public void ProfileRenamePreservesStableProfileId()
         {
             var service = new LwsSaveService();
-            Assert.IsTrue(service.Initialize(new LwsServiceContext(new LwsServiceRegistry())).Succeeded);
+            Assert.IsTrue(service.Initialize(new LwsServiceContext(RegistryWithActiveJobs())).Succeeded);
             string profileId = service.ActiveProfileId;
 
             LwsSaveOperationResult rename = service.RenameProfile(profileId, "Renamed Driver");
@@ -87,7 +88,7 @@ namespace LWS.InterstateHauler.Tests.EditMode
         public void RegisteredSemanticParticipantsCoverCurrentSaveableSystems()
         {
             var service = new LwsSaveService();
-            LwsServiceResult result = service.Initialize(new LwsServiceContext(new LwsServiceRegistry()));
+            LwsServiceResult result = service.Initialize(new LwsServiceContext(RegistryWithActiveJobs()));
             Assert.IsTrue(result.Succeeded, result.Message);
 
             string[] ids = service.Participants.Select(p => p.ParticipantId).ToArray();
@@ -187,15 +188,31 @@ namespace LWS.InterstateHauler.Tests.EditMode
         }
 
         [Test]
+        public void Prompt017PreparedLoadUsesSynchronousVendorApplication()
+        {
+            string adapter = File.ReadAllText(SaveArchitecturePath);
+            string coordinator = File.ReadAllText(SaveLoadCoordinatorPath);
+            string vendor = File.ReadAllText(PixelCrushersSaveSystemPath);
+
+            StringAssert.Contains("public static void LoadGame(SavedGameData savedGameData)", vendor);
+            StringAssert.Contains("_loadGameMethod.Invoke", adapter);
+            StringAssert.Contains("_snapshotRestoreReported", adapter);
+            StringAssert.Contains("Adapter.LoadPreparedSlot", coordinator);
+            Assert.IsFalse(coordinator.Contains("Adapter.LoadFromSlot("),
+                "The coordinator must not finalize before Pixel Crushers' deferred slot coroutine applies savers.");
+        }
+
+        [Test]
         public void Prompt017TruckResumeKeepsSavedVelocityDiagnosticOnly()
         {
-            string source = File.ReadAllText(SaveArchitecturePath);
+            string capture = File.ReadAllText(PlayerTruckPath);
+            string restore = File.ReadAllText(SaveArchitecturePath);
 
-            StringAssert.Contains("linearVelocity = rb != null ? rb.linearVelocity : Vector3.zero", source);
-            StringAssert.Contains("rb.linearVelocity = Vector3.zero", source);
-            StringAssert.Contains("rb.angularVelocity = Vector3.zero", source);
-            Assert.IsFalse(source.Contains("rb.linearVelocity = restored.linearVelocity"));
-            Assert.IsFalse(source.Contains("rb.angularVelocity = restored.angularVelocity"));
+            StringAssert.Contains("linearVelocity = rb != null ? rb.linearVelocity : Vector3.zero", capture);
+            StringAssert.Contains("rb.linearVelocity = Vector3.zero", restore);
+            StringAssert.Contains("rb.angularVelocity = Vector3.zero", restore);
+            Assert.IsFalse(restore.Contains("rb.linearVelocity = restored.linearVelocity"));
+            Assert.IsFalse(restore.Contains("rb.angularVelocity = restored.angularVelocity"));
         }
         [Test]
         public void Prompt016DefinesFutureVersionedPayloadSeamsOnly()
@@ -211,6 +228,13 @@ namespace LWS.InterstateHauler.Tests.EditMode
                    File.ReadAllText(SaveProfileTypesPath) + "\n" +
                    File.ReadAllText(SaveLoadCoordinatorPath) + "\n" +
                    File.ReadAllText(SemanticSaverBridgePath);
+        }
+
+        private static LwsServiceRegistry RegistryWithActiveJobs()
+        {
+            var registry = new LwsServiceRegistry();
+            registry.Register<ILwsActiveJobService>(new LwsActiveJobService());
+            return registry;
         }
     }
 }

@@ -116,16 +116,18 @@ namespace LWS.TruckTaxi
         {
             if (markers == null) return;
             foreach (var region in regions)
-                markers.RegisterRegionalPoint(region.id, region.displayName, "Region", region.bounds.center, TruckTaxiMapMarkerType.ScenicStop);
-            markers.RegisterRegionalPoint("taxi.river", "Regional River", "River", new Vector3(2000,0,200), TruckTaxiMapMarkerType.ScenicStop);
-            markers.RegisterRegionalPoint("taxi.bridge", "River Highway Bridge", "Bridge", new Vector3(2000,8,0), TruckTaxiMapMarkerType.ScenicStop);
+                markers.RegisterRegionalPoint(region.id, region.displayName, "Region", region.bounds.center, TruckTaxiMapMarkerType.Place);
+            markers.RegisterRegionalPoint("taxi.river", "Regional River", "River", new Vector3(2000,0,200), TruckTaxiMapMarkerType.Place);
+            markers.RegisterRegionalPoint("taxi.bridge", "River Highway Bridge", "Bridge", new Vector3(2000,8,0), TruckTaxiMapMarkerType.Place);
             foreach (var stop in FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None))
                 if (stop.gameObject.scene == gameObject.scene)
                     markers.RegisterRegionalPoint(stop.locationId, stop.locationName, stop.locationType.ToString(), stop.StopPosition,
-                        stop.locationType == TaxiLocationType.Transit ? TruckTaxiMapMarkerType.SpecialEvent : TruckTaxiMapMarkerType.FoodStop, true);
+                        TruckTaxiMapMarkerType.Place, true);
             foreach (var service in TruckTaxiServicePoint.Points)
-                if (service != null && service.gameObject.scene == gameObject.scene)
-                    markers.RegisterRegionalPoint(service.stableId, service.displayName, service.capabilities.ToString(), service.Position, TruckTaxiMapMarkerType.FoodStop, true);
+                if (TruckTaxiServicePresentation.IsUsable(service) && service.gameObject.scene == gameObject.scene)
+                    markers.RegisterRegionalPoint(service.stableId, service.displayName, TruckTaxiServicePresentation.Label(service.capabilities),
+                        service.Position, TruckTaxiServicePresentation.MarkerType(service.capabilities), true);
+            markers.RefreshServices();
         }
         private void Update()
         {

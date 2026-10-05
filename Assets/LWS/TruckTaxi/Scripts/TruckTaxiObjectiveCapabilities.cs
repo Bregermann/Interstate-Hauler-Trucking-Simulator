@@ -11,7 +11,7 @@ namespace LWS.TruckTaxi
         DestructibleProps=32, Shortcuts=64, Offroad=128, NearMiss=256, ScenicStops=512,
         IllicitStops=1024, PrivateStops=2048, TargetVehicles=4096, Pursuit=8192,
         VehicleDestruction=16384, Collectibles=32768, DestinationChange=65536,
-        VehicleRaceRoute=131072, FoodStops=262144, Racetrack=524288
+        VehicleRaceRoute=131072, FoodStops=262144, Racetrack=524288, CustomItemActions=1048576, JugQte=2097152
     }
 
     // Runtime evidence, not a list of installed assets. Rebuilt at scene initialization or explicitly in debug.
@@ -20,6 +20,21 @@ namespace LWS.TruckTaxi
         public TruckTaxiObjectiveCapability Available { get; private set; }
         public readonly List<TruckTaxiStopObjectivePoint> Stops = new List<TruckTaxiStopObjectivePoint>();
         private readonly Dictionary<TruckTaxiObjectiveCapability,int> counts = new Dictionary<TruckTaxiObjectiveCapability,int>();
+        private readonly Dictionary<string,HashSet<string>> customItemActions = new Dictionary<string,HashSet<string>>(StringComparer.Ordinal);
+        // The active content runner registers exact event/item pairs; strings alone are not runtime support.
+        public bool RegisterCustomItemAction(string eventId,string itemId,bool active=true)
+        {
+            if(string.IsNullOrWhiteSpace(eventId)) return false;
+            itemId = itemId ?? string.Empty;
+            if(active)
+            {
+                if(!customItemActions.TryGetValue(eventId,out var registeredItems)) customItemActions.Add(eventId,registeredItems=new HashSet<string>(StringComparer.Ordinal));
+                registeredItems.Add(itemId);
+            }
+            else if(customItemActions.TryGetValue(eventId,out var removedItems))
+            { removedItems.Remove(itemId); if(removedItems.Count==0) customItemActions.Remove(eventId); }
+            Register(TruckTaxiObjectiveCapability.CustomItemActions,customItemActions.Count); return true;
+        }
         public int Count(TruckTaxiObjectiveCapability capability) => counts.TryGetValue(capability,out int count) ? count : 0;
         public void Register(TruckTaxiObjectiveCapability capability,int count)
         { counts[capability]=count; if(count>0) Available|=capability; else Available&=~capability; }
@@ -38,6 +53,8 @@ namespace LWS.TruckTaxi
                 case TaxiRequestType.IllicitStop: return TruckTaxiObjectiveCapability.IllicitStops;
                 case TaxiRequestType.DinerStop: return TruckTaxiObjectiveCapability.FoodStops;
                 case TaxiRequestType.TakeALap: return TruckTaxiObjectiveCapability.Racetrack;
+                case TaxiRequestType.CustomItemAction: return TruckTaxiObjectiveCapability.CustomItemActions;
+                case TaxiRequestType.FillJug: return TruckTaxiObjectiveCapability.JugQte;
                 case TaxiRequestType.NearMiss: return TruckTaxiObjectiveCapability.Traffic|TruckTaxiObjectiveCapability.NearMiss;
                 case TaxiRequestType.FollowVehicle: case TaxiRequestType.RamTargetVehicle:
                 case TaxiRequestType.BlockVehicle:
@@ -54,7 +71,10 @@ namespace LWS.TruckTaxi
             }
         }
         public bool Supports(PassengerRequestDefinition definition) => definition!=null && definition.enabledForSelection &&
-            (Available & definition.RequiredCapabilities)==definition.RequiredCapabilities;
+            (Available & definition.RequiredCapabilities)==definition.RequiredCapabilities &&
+            (definition.requestType!=TaxiRequestType.CustomItemAction || definition.HasValidCustomItemActionMetadata &&
+                customItemActions.TryGetValue(definition.requiredCustomEventId,out var items) &&
+                (string.IsNullOrEmpty(definition.requiredItemStableId) || items.Contains(definition.requiredItemStableId)));
         public int TargetLimit(TaxiRequestType type)
         {
             switch(type)
@@ -68,6 +88,7 @@ namespace LWS.TruckTaxi
                 case TaxiRequestType.HitPedestrian: return Count(TruckTaxiObjectiveCapability.Pedestrians);
                 case TaxiRequestType.PropertyDamage: return Count(TruckTaxiObjectiveCapability.DestructibleProps);
                 case TaxiRequestType.Shortcut: return Count(TruckTaxiObjectiveCapability.Shortcuts);
+                case TaxiRequestType.FillJug: return Count(TruckTaxiObjectiveCapability.JugQte)>0 ? 2 : 0;
                 default: return int.MaxValue;
             }
         }

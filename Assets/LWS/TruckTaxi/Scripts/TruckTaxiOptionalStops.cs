@@ -17,11 +17,13 @@ namespace LWS.TruckTaxi
         private readonly TruckTaxiSpeedwayLapTracker lap=new TruckTaxiSpeedwayLapTracker();
         private TruckTaxiScenicCompletion scenicCompletion;
         private TruckTaxiPrivateEventVehicleMotion scenicMotion;
+        private TruckTaxiServiceRings nearbyRings;
         public bool MarkerVisible => ring!=null && ring.enabled;
         public bool showAllPoints;
         public void Initialize(TruckTaxiBootstrap value)
         {
             host=value;
+            nearbyRings=GetComponent<TruckTaxiServiceRings>();
             scenicMotion=gameObject.AddComponent<TruckTaxiPrivateEventVehicleMotion>();
             scenicMotion.Initialize(host.Player.transform);
             scenicCompletion=new TruckTaxiScenicCompletion(host.Session,scenicMotion);
@@ -58,13 +60,14 @@ namespace LWS.TruckTaxi
             ring.enabled=label.enabled=current!=null;
             if(current==null)
             {
+                host.GPS.ClearStopDestination();
                 if(host.Session.State==TruckTaxiState.DrivingToDestination) host.GPS.SetRideDestination(host.Session.CurrentDesiredDestination);
                 return;
             }
             var point=current.StopPoint;
             if(current.Definition.requestType==TaxiRequestType.TakeALap) lap.Begin();
             host.GPS.SetStopDestination(point);
-            Color color=point.category==TruckTaxiStopCategory.Scenic ? Color.cyan : new Color(1,.4f,.65f);
+            Color color=(host.GPS.MapMarkers?.Registry?.stopRingPalette ?? new TruckTaxiStopRingPalette()).For(TruckTaxiMapIconRegistry.ForStop(point.category));
             ring.startColor=ring.endColor=label.color=color;
             for(int i=0;i<65;i++)
             {
@@ -85,6 +88,9 @@ namespace LWS.TruckTaxi
         private void LateUpdate()
         {
             if(current==null) return;
+            // The nearby presenter owns the bay ring; lap checkpoints remain this objective's presentation.
+            if(current.Definition.requestType!=TaxiRequestType.TakeALap)
+                ring.enabled=label.enabled=nearbyRings==null || !nearbyRings.Rings.ContainsKey(current.StopPoint.stableId);
             var p=current.StopPoint;
             if(current.Definition.requestType==TaxiRequestType.TakeALap)
             {

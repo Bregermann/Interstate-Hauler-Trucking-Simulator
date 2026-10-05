@@ -25,6 +25,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiPickupZoneVisualizer PickupZone { get; private set; }
         public TruckTaxiOptionalStops OptionalStops { get; private set; }
         public TruckTaxiAudioController Audio { get; private set; }
+        public TruckTaxiCustomContentRunner CustomContent { get; private set; }
         public TruckTaxiRadio Radio { get; private set; }
         public TruckTaxiRaceRuntime Races { get; private set; }
         public TruckTaxiKaijuDirector Kaiju { get; private set; }
@@ -36,13 +37,20 @@ namespace LWS.TruckTaxi
         public TruckTaxiExtremeEventDirector Extremes { get; private set; }
         public TruckTaxiRivalPopulation Rivals { get; private set; }
         public TruckTaxiDriverNeedsCoordinator DriverNeeds { get; private set; }
+        public TruckTaxiPassengerBathroomNeed PassengerBathroom { get; private set; }
+        public TruckTaxiCompanionPickupRequest CompanionPickup { get; private set; }
         public TruckTaxiFuelController Fuel { get; private set; }
         public TruckTaxiRoadsideAssistance Roadside { get; private set; }
         public TruckTaxiFastTravel FastTravel { get; private set; }
         public TruckTaxiRoadsideCompanionLoop Companions { get; private set; }
         public TruckTaxiVehicleObjectiveCoordinator VehicleObjectives { get; private set; }
+        public TruckTaxiVibinPersistence Persistence { get; private set; }
         public bool Ready { get; private set; }
         public bool Paused { get; private set; }
+        public bool CanResume => Ready && !startupPending && Persistence != null && !Persistence.ResumeBlocked;
+        public string ResumeBlockReason => !Ready || startupPending ? "Vibin startup is not ready." :
+            Persistence != null ? Persistence.ResumeBlockReason : "Vibin persistence is unavailable.";
+        private bool startupPending = true;
         private ILwsGameplayStateService gameplay;
         private Rigidbody body;
         private AudioSource audioSource;
@@ -58,10 +66,12 @@ namespace LWS.TruckTaxi
         }
         private IEnumerator Start()
         {
+            SetPaused(true);
             if (configuration == null || spawner == null || roadGraph == null || LwsApplicationBootstrap.Instance == null)
             { Debug.LogError("Truck Taxi scene configuration incomplete.",this); yield break; }
-            if (LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsSaveService careerSave))
-            { Debug.LogError("Truck Taxi requires the drivingSandbox bootstrap to protect career saves.",this); yield break; }
+            if (LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsSaveService careerSave) &&
+                !TruckTaxiVibinPersistence.IsVibinScope(careerSave))
+            { Debug.LogError("Truck Taxi rejects non-Vibin save scopes to protect career saves.",this); yield break; }
             LwsApplicationBootstrap.Instance.Registry.TryGet(out gameplay);
             var regional = GetComponent<TruckTaxiRegionalWorld>();
             if (regional != null)
@@ -91,6 +101,8 @@ namespace LWS.TruckTaxi
             var sensor = Player.GetComponent<TruckTaxiCollisionObserver>() ?? Player.gameObject.AddComponent<TruckTaxiCollisionObserver>();
             sensor.Initialize(this);
             Audio=gameObject.AddComponent<TruckTaxiAudioController>(); Audio.Initialize(configuration.audio);
+            CustomContent=GetComponent<TruckTaxiCustomContentRunner>() ?? gameObject.AddComponent<TruckTaxiCustomContentRunner>();
+            CustomContent.Initialize(this);
             audioSource = gameObject.AddComponent<AudioSource>(); audioSource.playOnAwake = false; audioSource.spatialBlend = 0;
             Audio.Route(audioSource,TruckTaxiAudioCategory.UI);
             Session.RequestResolved += OnRequestResolved;
@@ -130,7 +142,6 @@ namespace LWS.TruckTaxi
             Session.RefreshObjectiveSupport=RefreshDynamicObjectiveSupport;
             VehicleObjectives=GetComponent<TruckTaxiVehicleObjectiveCoordinator>() ?? gameObject.AddComponent<TruckTaxiVehicleObjectiveCoordinator>();
             VehicleObjectives.Initialize(this);
-            Ready = true;
             hud.Initialize(this);
             Radio=GetComponent<TruckTaxiRadio>() ?? gameObject.AddComponent<TruckTaxiRadio>(); Radio.Initialize(this);
             Environment=GetComponent<TruckTaxiEnvironmentCoordinator>();
@@ -152,6 +163,11 @@ namespace LWS.TruckTaxi
                 var adult=System.Array.Find(configuration.passengerDatabase.passengers,
                     p=>p!=null && p.explicitlyAdult && p.minimumAdultAge>=21 && p.adultFemalePresentation && p.seatProfile!=null);
                 Companions.Initialize(this,Player.transform,adult!=null ? adult.seatProfile : null);
+                PassengerBathroom=GetComponent<TruckTaxiPassengerBathroomNeed>() ?? gameObject.AddComponent<TruckTaxiPassengerBathroomNeed>();
+                PassengerBathroom.Initialize(this);
+                CompanionPickup=GetComponent<TruckTaxiCompanionPickupRequest>() ?? gameObject.AddComponent<TruckTaxiCompanionPickupRequest>();
+                CompanionPickup.Initialize(this);
+                Session.JugGoalContextProvider=CaptureJugGoalContext;
             }
             hud.InitializeIntegratedControls();
             if(CalendarWeather!=null)
@@ -169,11 +185,23 @@ namespace LWS.TruckTaxi
                 FastTravel.AdditionalBlockReason=()=>Kaiju.IsCapturingPlayer ? "Wait until vehicle recovery completes." : Races.BlockTravelReason;
             }
             SetPaused(true);
+            Ready = true;
+            var analytics = GetComponent<TruckTaxiAnalytics>() ?? gameObject.AddComponent<TruckTaxiAnalytics>();
+            analytics.Initialize(this);
+            Persistence = GetComponent<TruckTaxiVibinPersistence>() ?? gameObject.AddComponent<TruckTaxiVibinPersistence>();
+            var initialized = Persistence.Initialize(this);
+            bool continuing = TruckTaxiVibinPersistence.HasContinueRequest;
+            var startup = initialized.Succeeded
+                ? continuing ? Persistence.ConsumeContinueRequest() : Persistence.NewGame()
+                : initialized;
+            startupPending = false;
             OnSessionChanged();
+            SetPaused(continuing || !startup.Succeeded);
         }
         private void Update()
         {
             if (!Ready || body == null) return;
+            if (Persistence == null || Persistence.ResumeBlocked) { lastSpeed = 0; return; }
             if(Fuel?.IsRescuing==true || Roadside?.IsRecovering==true || FastTravel?.IsTravelling==true) { lastSpeed=0; return; }
             if(Environment?.Clock!=null)
             {
@@ -191,6 +219,28 @@ namespace LWS.TruckTaxi
             lastSpeed = speed;
             TruckTaxiSurface.TrySample(body.position,Player.transform,out bool onRoad);
             Session.Tick(Time.deltaTime,body.position,speed,acceleration,onRoad);
+            PassengerBathroom?.Tick(PassengerBathroom.CanOfferRequest);
+            CompanionPickup?.Tick();
+        }
+        private TruckTaxiJugGoalContext CaptureJugGoalContext()
+        {
+            bool runtime = DriverNeeds != null && DriverNeeds.isActiveAndEnabled && DriverNeeds.CanInteract &&
+                DriverNeeds.JugHoldAction?.enabled == true && DriverNeeds.JugCueAction?.enabled == true;
+            bool safe = runtime && body != null && Vector3.Dot(Player.transform.up,Vector3.up) > .7f &&
+                TruckTaxiSurface.TrySample(body.position,Player.transform,out _) &&
+                PassengerBathroom?.HasAcceptedDiversion != true && CompanionPickup?.IsActive != true &&
+                Fuel?.IsRescuing != true && Roadside?.IsRecovering != true && FastTravel?.IsTravelling != true &&
+                Kaiju?.IsCapturingPlayer != true && CustomContent?.IsPlaying != true && Companions?.IsBusy != true;
+            var clock = Environment?.Clock;
+            float rate = clock != null && !Paused && !clock.CurrentSnapshot.paused ? clock.CurrentSnapshot.timeScale : 0;
+            return TruckTaxiJugGoalPolicy.Capture(DriverNeeds?.State,Environment?.settings,rate,runtime,safe);
+        }
+
+        public bool CanEndPassengerDiversions(string reason)
+        {
+            if (PassengerBathroom != null && !PassengerBathroom.Cancel(reason)) return false;
+            CompanionPickup?.Cancel();
+            return true;
         }
         private static TruckTaxiDemandWeather DemandWeather(string id)
         {
@@ -251,6 +301,7 @@ namespace LWS.TruckTaxi
         }
         private bool IsLegitimateWait()
         {
+            if(PassengerBathroom?.IsLegitimateServiceDiversion==true || CompanionPickup?.IsLegitimateDiversion==true) return true;
             if(body==null || Player==null) return false;
             if(Fuel?.IsRescuing==true || Roadside?.IsRecovering==true) return true;
             if(body.linearVelocity.sqrMagnitude>9) return false;
@@ -270,11 +321,16 @@ namespace LWS.TruckTaxi
         private void OnRequestCreated(TaxiRequestProgress r) => Play(configuration.requestSound);
         private void OnDrivingEvent(TaxiEventType _) => Play(configuration.collisionSound);
         public void Play(AudioClip clip) { if(clip!=null && audioSource!=null) audioSource.PlayOneShot(clip); }
-        public void StartShift() { Session?.StartShift(); SetPaused(false); }
+        public void StartShift()
+        {
+            if (!CanResume) { SetPaused(true); return; }
+            Session?.StartShift(); SetPaused(false);
+        }
         public void ReturnToMainMenu()
         {
-            if(!UnityEngine.SceneManagement.SceneManager.GetActiveScene().IsValid() ||
+            if(Persistence?.IsBusy==true || !UnityEngine.SceneManagement.SceneManager.GetActiveScene().IsValid() ||
                 !Application.CanStreamedLevelBeLoaded(TruckTaxiMainMenu.SceneName)) return;
+            Persistence?.RequestAutosave("Return to main menu");
             Session.EndShift();
             int goals=0,chaos=0;
             foreach(var ride in Session.RideHistory)
@@ -284,11 +340,12 @@ namespace LWS.TruckTaxi
                 chaos=chaos, pedestriansHit=Session.PedestriansHit,trafficCollisions=Session.TrafficHits,
                 passengersEjected=Session.EjectedRides,jugEvents=Session.JugsSucceeded+Session.JugsSpilled,
                 bottlesThrown=Session.ContainersThrown,specialEvents=Session.SpecialStopsCompleted,objectivesCompleted=goals });
-            SetPaused(false);
+            SetPaused(true);
             UnityEngine.SceneManagement.SceneManager.LoadScene(TruckTaxiMainMenu.SceneName);
         }
         public void SetPaused(bool value)
         {
+            if (!value && !CanResume) value = true;
             Paused = value;
             Environment?.SetSessionPaused(value);
             if (value) gameplay?.Pause("Truck Taxi menu"); else if(gameplay?.CurrentState == LwsGameplayState.Paused) gameplay.Resume("Truck Taxi driving");
@@ -298,11 +355,13 @@ namespace LWS.TruckTaxi
         }
         public void TeleportNear(TruckTaxiRideLocation location)
         {
+            if (!CanResume) return;
             if(Player==null || body==null || location==null) return;
             Teleport(location.StopPosition + Vector3.up*1.6f, location.truckStopPoint != null ? location.truckStopPoint.rotation : Quaternion.identity);
         }
         private void Teleport(Vector3 position, Quaternion rotation)
         {
+            if(!CanEndPassengerDiversions("Player teleport requested.")) return;
             if (!body.isKinematic) { body.linearVelocity = Vector3.zero; body.angularVelocity = Vector3.zero; }
             body.position = position; body.rotation = rotation;
             Player.transform.SetPositionAndRotation(position,rotation);
@@ -310,7 +369,7 @@ namespace LWS.TruckTaxi
         }
         public void ResetCity()
         {
-            if(!Ready) return;
+            if(!CanResume) return;
             Session.EndShift();
             traffic.ResetTraffic();
             pedestrians.ResetPopulation();
@@ -363,7 +422,10 @@ namespace LWS.TruckTaxi
         }
         private void RefreshDynamicObjectiveSupport()
         {
+            CustomContent?.RefreshObjectiveCapabilities();
             var caps=Session.Capabilities;
+            caps.Register(TruckTaxiObjectiveCapability.JugQte,DriverNeeds?.isActiveAndEnabled==true &&
+                DriverNeeds.JugHoldAction?.enabled==true && DriverNeeds.JugCueAction?.enabled==true ? 1 : 0);
             caps.Register(TruckTaxiObjectiveCapability.Traffic,traffic.Ready ? traffic.ActiveCount : 0);
             caps.Register(TruckTaxiObjectiveCapability.Pedestrians,AvailablePedestrians());
             int props=0;
@@ -395,7 +457,7 @@ namespace LWS.TruckTaxi
             Time.timeScale = 1;
             if(Session!=null) { Session.Changed-=OnSessionChanged; Session.RequestResolved-=OnRequestResolved; Session.RequestCreated-=OnRequestCreated; Session.DrivingEvent-=OnDrivingEvent; }
             if(Session!=null) { Session.BehaviorReaction-=OnBehaviorReaction; Session.DiversionOffered-=OnDiversionOffered;
-                Session.DestinationChanged-=OnDesiredDestinationChanged; Session.IsLegitimateTrafficOrServiceStop=null; }
+                Session.DestinationChanged-=OnDesiredDestinationChanged; Session.IsLegitimateTrafficOrServiceStop=null; Session.JugGoalContextProvider=null; }
             Instance = null;
         }
     }

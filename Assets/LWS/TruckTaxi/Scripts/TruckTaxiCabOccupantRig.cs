@@ -39,6 +39,9 @@ namespace LWS.TruckTaxi
             public TruckTaxiSeatType[] allowedSeatTypes = Array.Empty<TruckTaxiSeatType>();
             public bool firstPersonVisible = true;
             public bool privateEventEligible;
+            [Tooltip("Explicitly validated extra travel seat; never the driver's or primary fare seat.")]
+            public bool secondaryOccupantSeat;
+            [Min(.3f)] public float occupantRadius = .65f;
             public PosePart[] pose = Array.Empty<PosePart>();
         }
         private sealed class PoseSnapshot
@@ -104,6 +107,67 @@ namespace LWS.TruckTaxi
             Release(actor);
             Place(actor, anchor, worldScale);
             return true;
+        }
+
+        public bool HasSecondarySeat(TruckTaxiSeatType type, Transform actor = null)
+        {
+            Prune();
+            return SelectSecondary(type, actor) != null;
+        }
+
+        public bool TrySeatSecondary(Transform actor, TruckTaxiSeatType type, Vector3 worldScale)
+        {
+            if (actor == null) return false;
+            Prune();
+            var anchor = SelectSecondary(type, actor);
+            if (anchor == null) return false;
+            Release(actor);
+            Place(actor, anchor, worldScale);
+            return true;
+        }
+
+        private Anchor SelectSecondary(TruckTaxiSeatType type, Transform actor)
+        {
+            if (!isActiveAndEnabled || PrivateTransitionActive) return null;
+            Anchor best = null;
+            foreach (var anchor in anchors)
+            {
+                if (anchor == null || !anchor.secondaryOccupantSeat ||
+                    anchor.id == TruckTaxiCabAnchorId.DriverSeat || anchor.id == TruckTaxiCabAnchorId.FrontPassengerSeat ||
+                    !Usable(anchor, TruckTaxiCabOccupantKind.Companion, type, actor, false, false)) continue;
+                Vector3 position = AnchorPosition(anchor);
+                float radius = anchor.occupantRadius;
+                var candidateActor = actor != null ? actor.GetComponent<TruckTaxiPassengerActor>() : null;
+                if (candidateActor != null)
+                    radius = Mathf.Max(radius, candidateActor.StandingRadius *
+                        Mathf.Max(Mathf.Abs(anchor.localScale.x), Mathf.Abs(anchor.localScale.z)));
+                bool overlaps = false;
+                // Primary anchors stay reserved while a fare is temporarily outside the cab.
+                foreach (var other in anchors)
+                    if (other != null && other != anchor &&
+                        (other.id == TruckTaxiCabAnchorId.DriverSeat || other.id == TruckTaxiCabAnchorId.FrontPassengerSeat) &&
+                        Vector3.Distance(position, AnchorPosition(other)) < radius + other.occupantRadius)
+                        overlaps = true;
+                foreach (var entry in placements)
+                    if (entry.Key != actor && entry.Key != null &&
+                        Vector3.Distance(position, AnchorPosition(entry.Value.anchor)) < radius + entry.Value.anchor.occupantRadius)
+                        overlaps = true;
+                // Legacy seats may not be registered in this rig.
+                foreach (var passenger in GetComponentsInChildren<TruckTaxiPassengerActor>(true))
+                    if (passenger.transform != actor && Vector3.Distance(position, passenger.transform.position) <
+                        radius + passenger.StandingRadius) overlaps = true;
+                var driver = GetComponent<TruckTaxiDriverPresentation>()?.Occupant;
+                if (driver != null && driver != actor && Vector3.Distance(position, driver.position) < radius + .65f)
+                    overlaps = true;
+                if (!overlaps && (best == null || anchor.priority > best.priority)) best = anchor;
+            }
+            return best;
+        }
+
+        private Vector3 AnchorPosition(Anchor anchor)
+        {
+            var mount = string.IsNullOrWhiteSpace(anchor.mountPath) ? transform : transform.Find(anchor.mountPath);
+            return mount != null ? mount.TransformPoint(anchor.localPosition) : transform.position;
         }
 
         public bool TryBeginPrivateTransition(Transform driver, Transform companion, TruckTaxiSeatType companionType)
@@ -303,7 +367,7 @@ namespace LWS.TruckTaxi
         {
             stale.Clear();
             foreach (var entry in placements)
-                if (entry.Key == null || !entry.Key.IsChildOf(transform) || !entry.Key.gameObject.activeInHierarchy)
+                if (entry.Key == null || !entry.Key.IsChildOf(transform))
                     stale.Add(entry.Key);
             foreach (var actor in stale) Release(actor);
         }

@@ -5,6 +5,10 @@ namespace LWS.TruckTaxi
     [CreateAssetMenu(menuName = "Truck Taxi/Demo Configuration")]
     public sealed class TruckTaxiConfiguration : ScriptableObject
     {
+        [Header("Optional designer-authored companion content")]
+        public TruckTaxiCustomInteractionProfile customCompanionInteraction;
+        [Tooltip("Optional companion visual-variant overrides, indexed from zero. Empty entries use the global companion interaction.")]
+        public TruckTaxiCustomInteractionProfile[] customCompanionVariantInteractions = System.Array.Empty<TruckTaxiCustomInteractionProfile>();
         public PassengerProfile[] passengers;
         public TruckTaxiPassengerDatabase passengerDatabase;
         public PassengerRequestDefinition[] requests;
@@ -17,10 +21,12 @@ namespace LWS.TruckTaxi
         [Min(1)] public float pickupTargetMinimumSeconds = 20;
         [Min(1)] public float pickupTargetMaximumSeconds = 90;
         [Min(1)] public float pickupHardMaximumSeconds = 180;
-        [Range(0, 1)] public float intercityRideChance = 0.1f;
-        [Range(0, 10)] public int localOffersAfterIntercity = 3;
-        [Min(1), Tooltip("After this many completed local fares, the next routable eligible offer must be intercity. Declines never consume the guarantee.")]
-        public int intercityDryStreakThreshold = 5;
+        [Range(0, 1), Tooltip("Conditional chance outside the completed-local cooldown. Guarantee after three locals makes effective share approximately 25%.")]
+        public float intercityRideChance = 0.02f;
+        [Range(0, 10), Tooltip("Legacy authoring field; session policy requires two COMPLETED locals.")]
+        public int localOffersAfterIntercity = 2;
+        [Min(1), Tooltip("Legacy authoring field; session policy guarantees the next eligible intercity after three COMPLETED locals. Declines never consume it.")]
+        public int intercityDryStreakThreshold = 3;
         [Header("Dispatch delay (real seconds)")]
         public Vector2 veryHighDemandDelay = new Vector2(5,20);
         public Vector2 highDemandDelay = new Vector2(10,35);
@@ -28,7 +34,8 @@ namespace LWS.TruckTaxi
         public Vector2 lowDemandDelay = new Vector2(60,150);
         public Vector2 veryLowDemandDelay = new Vector2(150,300);
         [Min(50)] public float defaultWorkAreaRadius = 500;
-        [Min(1)] public float speedwayPassengerWeight = 3;
+        [Min(1), Tooltip("Passenger selection caps this to 1.15 outside events and 1.5 during a race event.")]
+        public float speedwayPassengerWeight = 1.15f;
         [Range(0,1)] public float racingSpeedwayDestinationChance = .6f;
         [Header("Bounded offer generation")]
         [Range(1, 12)] public int offerPickupCandidateLimit = 6;

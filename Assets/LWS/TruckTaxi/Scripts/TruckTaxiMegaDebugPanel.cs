@@ -11,11 +11,12 @@ namespace LWS.TruckTaxi
         private TruckTaxiBootstrap host;
         private TruckTaxiHud hud;
         private RectTransform panel;
-        private static readonly string[] Tabs = { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD", "KAIJU", "EXTRAS" };
-        private readonly RectTransform[] pages = new RectTransform[7];
+        private static readonly string[] Tabs = { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD", "KAIJU", "EXTRAS", "ANALYTICS" };
+        private readonly RectTransform[] pages = new RectTransform[8];
         private TextMeshProUGUI heading, status, clockText, eventText, zoneText, countsText;
         private TextMeshProUGUI[] eventRows;
         private TextMeshProUGUI kaijuText, extrasText;
+        private TextMeshProUGUI analyticsText;
         private GameObject[] eventSelectors;
         private int page, eventPage, selectedEvent, zoneIndex;
         private DateTime editDate;
@@ -54,13 +55,15 @@ namespace LWS.TruckTaxi
             for (int i = 0; i < tabs.Length; i++)
             {
                 int index = i;
-                float left = .03f + i * .135f;
-                view.Button(panel, tabs[i], new Vector2(left, .78f), new Vector2(left + .127f, .86f), () => ShowPage(index));
+                float width = .94f / tabs.Length, left = .03f + i * width;
+                var tabButton = view.Button(panel, tabs[i], new Vector2(left, .78f), new Vector2(left + width - .008f, .86f), () => ShowPage(index));
+                var tabText = tabButton.GetComponentInChildren<TextMeshProUGUI>();
+                if (tabText != null) { tabText.enableAutoSizing = true; tabText.fontSizeMin = 10; tabText.fontSizeMax = 22; }
                 pages[i] = TruckTaxiHud.Rect(panel, tabs[i] + " tools", new Vector2(.03f, .17f), new Vector2(.97f, .76f));
                 pages[i].gameObject.SetActive(i == 0);
             }
             status = view.Text(panel, "Mega debug status", new Vector2(.035f, .035f), new Vector2(.965f, .155f), 23);
-            BuildClock(); BuildEvents(); BuildWeather(); BuildExtremes(); BuildWorld(); BuildKaiju(); BuildExtras();
+            BuildClock(); BuildEvents(); BuildWeather(); BuildExtremes(); BuildWorld(); BuildKaiju(); BuildExtras(); BuildAnalytics();
             panel.gameObject.SetActive(false);
         }
         public void Open()
@@ -247,6 +250,7 @@ namespace LWS.TruckTaxi
         {
             var root=pages[6];
             extrasText=hud.Text(root,"Addendum state",new Vector2(.02f,.72f),new Vector2(.98f,.99f),22);
+            extrasText.enableAutoSizing=true; extrasText.fontSizeMin=14; extrasText.fontSizeMax=22;
             string[] labels={"START ROAD PEP","PERFECT","MESSY","BOTCHED","CLEAR ROAD PEP","WORLD COLLIDERS","RADIO BULLETIN","ALERT STACK TEST","RACE REGISTRATION"};
             Action[] commands={()=>{Close(); host.SetPaused(false); host.DriverNeeds?.DebugStartRoadPep();},
                 ()=>host.DriverNeeds?.DebugForceRoadPep(100),()=>host.DriverNeeds?.DebugForceRoadPep(55),
@@ -266,6 +270,32 @@ namespace LWS.TruckTaxi
                 int n=i; float left=.02f+(i%3)*.326f, y=top-(i/3)*.18f;
                 hud.Button(root,labels[i],new Vector2(left,y-.14f),new Vector2(left+.31f,y),()=>actions[n]());
             }
+        }
+        private void BuildAnalytics()
+        {
+            var root = pages[7];
+            analyticsText = hud.Text(root, "Analytics state", new Vector2(.02f, .19f), new Vector2(.98f, .99f), 22);
+            analyticsText.enableAutoSizing = true; analyticsText.fontSizeMin = 14; analyticsText.fontSizeMax = 22;
+            hud.Button(root, "EXPORT CSV", new Vector2(.02f, .02f), new Vector2(.34f, .15f), () =>
+            {
+                var analytics = host.GetComponent<TruckTaxiAnalytics>();
+                if (analytics == null || !analytics.IsInitialized) { Message("Analytics not initialized"); return; }
+                analytics.ExportCsv(); Message("CSV export queued");
+            });
+        }
+        private void RefreshAnalytics()
+        {
+            if (analyticsText == null || page != 7) return;
+            var analytics = host.GetComponent<TruckTaxiAnalytics>();
+            if (analytics == null || !analytics.IsInitialized) { analyticsText.text = "ANALYTICS NOT INITIALIZED"; return; }
+            var m = analytics.Metrics;
+            analyticsText.text = $"PLAYTIME {m.PlaySeconds / 60:0.0} min   PAUSED {m.PauseSeconds / 60:0.0} min" +
+                $"\nRIDES {analytics.Rides}   UNIQUE PASSENGERS {analytics.UniquePassengers}" +
+                $"\nROSTER COVERAGE {analytics.RosterCoveragePercent:0.0}% ({analytics.RosterCount} authored IDs)" +
+                $"\nFPS {(analytics.Fps < 0 ? "N/A" : analytics.Fps.ToString("0.0"))}   AVG FPS {m.AverageFps:0.0}" +
+                $"\nDISTANCE {m.DistanceMeters / 1000:0.00} km   CRASHES {analytics.Crashes}   REGIONS {analytics.RegionsVisited}" +
+                $"\nPENDING UPLOAD EVENTS {analytics.PendingUploadEvents}   DROPPED {analytics.DroppedEvents}" +
+                $"\nUPLOAD {analytics.LastUploadResult}   LOCAL {analytics.LastLocalResult}";
         }
         private void SpawnRival()
         {
@@ -289,12 +319,14 @@ namespace LWS.TruckTaxi
             if (panel == null || host == null) return;
             heading.text = "MEGA DEBUG  /  " + Tabs[page];
             status.text = message;
+            RefreshAnalytics();
             if(kaijuText!=null) kaijuText.text="KAIJU  "+(host.Kaiju?.Kind.ToString() ?? "UNAVAILABLE")+
                 "\nNEXT SIGHTING  "+host.Kaiju?.NextNaturalSighting.ToString("ddd HH:mm")+
                 "   ATTACK  "+host.Kaiju?.NextNaturalAttack.ToString("ddd HH:mm");
             if(extrasText!=null) extrasText.text="ROAD PEP  "+(host.DriverNeeds?.RoadPepChallenge?.Score.ToString("0") ?? "IDLE")+
                 "\nRADIO  "+(host.Radio?.Display ?? "UNAVAILABLE")+
-                "\nFAST TRAVEL  "+(host.FastTravel?.Feedback ?? "IDLE");
+                "\nFAST TRAVEL  "+(host.FastTravel?.Feedback ?? "IDLE")+
+                "\nCUSTOM RUNNER  "+(host.CustomContent?.Status ?? "UNAVAILABLE");
             var calendar = host.CalendarWeather;
             if (calendar != null)
                 clockText.text = "GAME CLOCK  " + calendar.CurrentDateTime.ToString("ddd, MMM d yyyy  h:mm tt") +

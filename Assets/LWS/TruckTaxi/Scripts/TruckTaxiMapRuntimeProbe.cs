@@ -149,7 +149,7 @@ namespace LWS.TruckTaxi
                 // Fit inside the narrower cab viewport; equal-range, north-up HUD also contains it.
                 for(int i=0;i<forced.Count;i++)
                 {
-                    var uv=new Vector2(.15f+i%5*.175f,.18f+i/5*.19f)-shift;
+                    var uv=FixtureViewportPosition(i,forced.Count)-shift;
                     var point=(Vector3)fromUv.Invoke(gps.CabCompass,new object[]{uv}); point.y=body.position.y;
                     forced[i].transform.position=point;
                 }
@@ -181,7 +181,8 @@ namespace LWS.TruckTaxi
                     {
                         for(int i=0;i<forced.Count;i++)
                         {
-                            var p=camera.ViewportToWorldPoint(new Vector3(.15f+i%5*.175f,.18f+i/5*.19f,100)); p.y=position.y;
+                            var uv=FixtureViewportPosition(i,forced.Count);
+                            var p=camera.ViewportToWorldPoint(new Vector3(uv.x,uv.y,100)); p.y=position.y;
                             forced[i].transform.position=p;
                             forced[i].state=TruckTaxiMapMarkerState.Active;
                         }
@@ -297,18 +298,34 @@ namespace LWS.TruckTaxi
             check(changer.cameras[changer.currentCameraIndex].name.Contains("Driver"),"Existing cockpit camera selected for "+name);
             capture?.Invoke("Map_Cab_"+name);
         }
+        public static Vector2 FixtureViewportPosition(int index,int count)
+        {
+            if(count<1) throw new ArgumentOutOfRangeException(nameof(count));
+            if(index<0 || index>=count) throw new ArgumentOutOfRangeException(nameof(index));
+            int columns=Mathf.Min(5,count),rows=(count+columns-1)/columns;
+            return new Vector2(columns==1 ? .5f : Mathf.Lerp(.15f,.85f,(index%columns)/(float)(columns-1)),
+                rows==1 ? .5f : Mathf.Lerp(.18f,.82f,(index/columns)/(float)(rows-1)));
+        }
+        public static Rect LegendCellRect(int index,int count)
+        {
+            if(count<1) throw new ArgumentOutOfRangeException(nameof(count));
+            if(index<0 || index>=count) throw new ArgumentOutOfRangeException(nameof(index));
+            int columns=Mathf.Min(2,count),rows=(count+columns-1)/columns;
+            float pitch=Mathf.Min(.084f,.85f/rows);
+            return new Rect(.025f+(index%columns)*.5f,.89f-(index/columns+1)*pitch,.47f,Mathf.Min(.056f,pitch*.8f));
+        }
         private static GameObject BuildLegend(TruckTaxiBootstrap host,TruckTaxiMapIconRegistry registry)
         {
             var panel=host.hud.Panel(host.hud.Root,"Map probe legend (temporary)",new Vector2(.3f,.18f),new Vector2(.97f,.95f));
             host.hud.Text(panel,"Legend header",new Vector2(.03f,.91f),new Vector2(.97f,.98f),24).text="FORCED MAP ICON REFERENCE / NOT GAMEPLAY SOURCES";
-            int index=0;
-            foreach(TruckTaxiMapMarkerType type in Enum.GetValues(typeof(TruckTaxiMapMarkerType)))
+            int index=0; var types=Enum.GetValues(typeof(TruckTaxiMapMarkerType));
+            foreach(TruckTaxiMapMarkerType type in types)
             {
-                float x=.025f+(index%2)*.5f,y=.85f-(index/2)*.084f;
-                var rect=TruckTaxiHud.Rect(panel,type+" icon",new Vector2(x,y),new Vector2(x+.045f,y+.052f));
+                var cell=LegendCellRect(index,types.Length);
+                var rect=TruckTaxiHud.Rect(panel,type+" icon",cell.min,new Vector2(cell.xMin+.045f,cell.yMin+Mathf.Min(.052f,cell.height)));
                 var image=rect.gameObject.AddComponent<UnityEngine.UI.Image>(); image.sprite=registry.Find(type)?.icon;
                 image.color=registry.Tint(type,TruckTaxiMapMarkerState.Active); image.preserveAspect=true; image.raycastTarget=false;
-                host.hud.Text(panel,type+" label",new Vector2(x+.06f,y),new Vector2(x+.47f,y+.056f),22).text=type.ToString(); index++;
+                host.hud.Text(panel,type+" label",new Vector2(cell.xMin+.06f,cell.yMin),cell.max,22).text=type.ToString(); index++;
             }
             return panel.gameObject;
         }

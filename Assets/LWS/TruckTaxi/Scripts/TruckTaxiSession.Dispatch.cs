@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace LWS.TruckTaxi
@@ -7,9 +8,54 @@ namespace LWS.TruckTaxi
     {
         private TruckTaxiRideWorkArea workArea = new TruckTaxiRideWorkArea();
         private TruckTaxiIntercityPolicy intercityPolicy;
+        private readonly TruckTaxiPassengerDispatchPolicy passengerDispatch=new TruckTaxiPassengerDispatchPolicy();
+        public bool RaceEventActive { get; set; }
+        public int OffersGenerated => passengerDispatch.OfferIndex;
+        public int OffersDeclined { get; private set; }
+        public int OffersExpired { get; private set; }
+        // Eligibility is evaluated afresh; route validity remains the route service's authority.
+        public IReadOnlyList<TruckTaxiPassengerEligibilityRecord> CapturePassengerEligibility()
+        {
+            var result=new List<TruckTaxiPassengerEligibilityRecord>();
+            var source=config.passengerDatabase!=null ? config.passengerDatabase.passengers : config.passengers;
+            var ids=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var origin=playerPosition();
+            var nearby=locations.FindAll(stop=>stop!=null && stop.isActiveAndEnabled && stop.pickupAllowed && workArea.Contains(stop.StopPosition) &&
+                Vector3.Distance(stop.StopPosition,origin)<=Mathf.Max(1,config.pickupHardMaximumSeconds)*Mathf.Max(1,config.pickupReasonableSpeedMetersPerSecond));
+            nearby.Sort((a,b)=>CompareNear(a,b,origin));
+            int limit=Mathf.Clamp(config.offerPickupCandidateLimit,1,12);
+            if(nearby.Count>limit) nearby.RemoveRange(limit,nearby.Count-limit);
+            foreach(var profile in source ?? Array.Empty<PassengerProfile>())
+            {
+                if(profile==null) { result.Add(new TruckTaxiPassengerEligibilityRecord { Reason="Missing profile reference" }); continue; }
+                float weight=CandidateWeight(profile);
+                string reason=string.IsNullOrWhiteSpace(profile.passengerId) ? "Missing stable ID" : !ids.Add(profile.passengerId) ? "Duplicate stable ID" :
+                    !profile.available ? "Unavailable" : !float.IsFinite(weight) || weight<=0 ? "Nonpositive/invalid context weight" :
+                    !nearby.Exists(stop=>CanStartAt(profile,stop)) ? "No pickup in work area/range/district/continuity candidate set" : null;
+                result.Add(new TruckTaxiPassengerEligibilityRecord { PassengerId=profile.passengerId,DisplayName=profile.passengerName,
+                    Archetype=profile.DispatchArchetype,Reason=reason ?? "Pickup metadata eligible; route validation pending",
+                    PickupMetadataEligible=reason==null,SpawnWeight=profile.spawnWeight,ContextWeight=weight,Rarity=profile.rarity,
+                    Districts=(string[])(profile.districts ?? Array.Empty<string>()).Clone(),Exposure=passengerDispatch.Exposure(profile.passengerId) });
+            }
+            return result.AsReadOnly();
+        }
+        public TruckTaxiPassengerSelectionState CapturePassengerSelectionState() => passengerDispatch.CaptureState();
+        public bool RestorePassengerSelectionState(TruckTaxiPassengerSelectionState snapshot)
+        {
+            if(State!=TruckTaxiState.Inactive && State!=TruckTaxiState.Available || IsGeneratingOffer ||
+                !passengerDispatch.RestoreState(snapshot)) return false;
+            acceptedPassengerIds.Clear(); recentOfferIds.Clear();
+            foreach(var entry in snapshot.passengers) if(entry.timesAccepted>0) acceptedPassengerIds.Add(entry.passengerId);
+            var recent=new List<TruckTaxiPassengerExposure>(snapshot.passengers);
+            recent.Sort((a,b)=>a.lastOfferedRideIndex.CompareTo(b.lastOfferedRideIndex));
+            foreach(var entry in recent) if(entry.timesOffered>0) recentOfferIds.Add(entry.passengerId);
+            int limit=Mathf.Max(1,config.recentOfferCount);
+            if(recentOfferIds.Count>limit) recentOfferIds.RemoveRange(0,recentOfferIds.Count-limit);
+            return true;
+        }
         public TruckTaxiRideWorkArea WorkArea => workArea.Copy();
         public TruckTaxiIntercityPolicy IntercityPolicy => intercityPolicy ??
-            (intercityPolicy=new TruckTaxiIntercityPolicy(config.intercityRideChance,config.localOffersAfterIntercity,config.intercityDryStreakThreshold));
+            (intercityPolicy=new TruckTaxiIntercityPolicy(config.intercityRideChance,2,3));
         public Func<Vector3,float> RegionalDemandMultiplier { get; set; }
         public Func<Vector3,float> PickupWeight { get; set; }
         public Func<Vector3,float> DestinationWeight { get; set; }
@@ -28,7 +74,7 @@ namespace LWS.TruckTaxi
             if(area==null || !area.IsValid) return false;
             workArea=area.Copy();
             CancelOfferGeneration();
-            if(State==TruckTaxiState.RideOffered && Pickup!=null && !workArea.Contains(Pickup.StopPosition)) DeclineRide();
+            if(State==TruckTaxiState.RideOffered && Pickup!=null && !workArea.Contains(Pickup.StopPosition)) EndOffer(false,false);
             else if(State==TruckTaxiState.Available) ScheduleDispatch();
             Changed?.Invoke(); return true;
         }

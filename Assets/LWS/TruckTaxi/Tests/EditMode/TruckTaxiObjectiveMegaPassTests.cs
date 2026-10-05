@@ -19,6 +19,7 @@ namespace LWS.TruckTaxi.Tests
             PlayerPrefs.SetInt(TruckTaxiSession.RideRequestsPreferenceKey,1);
             definition = ScriptableObject.CreateInstance<PassengerRequestDefinition>();
             passenger = ScriptableObject.CreateInstance<PassengerProfile>();
+            passenger.passengerId = "mega.passenger";
             definition.requestType = TaxiRequestType.RamTraffic;
         }
 

@@ -213,7 +213,7 @@ namespace LWS.TruckTaxi.Tests
         [Test] public void CompletedLocalStreakGuaranteesNextValidIntercityDespiteDeclinesAndInvalidPath()
         {
             var session=Session();
-            for(int i=0;i<5;i++)
+            for(int i=0;i<3;i++)
             {
                 Assert.IsTrue(session.OfferRide(NewPassenger("local."+i)));
                 Assert.IsFalse(session.IsIntercityRide);
@@ -228,7 +228,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsFalse(session.OfferRide(NewPassenger("invalid")));
             Assert.AreEqual("GUARANTEE",session.LastIntercitySelection);
             Assert.IsTrue(session.IntercityPolicy.GuaranteePending);
-            Assert.AreEqual(5,session.IntercityPolicy.CompletedLocalStreak);
+            Assert.AreEqual(3,session.IntercityPolicy.CompletedLocalStreak);
             Assert.That(session.LastDispatchDelay,Is.EqualTo(11).Within(.001f),
                 "A failed offer resumes the normal demand delay.");
 
@@ -239,14 +239,14 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual("GUARANTEE",session.LastIntercitySelection);
             session.DeclineRide();
             Assert.IsTrue(session.IntercityPolicy.GuaranteePending);
-            Assert.AreEqual(5,session.IntercityPolicy.CompletedLocalStreak);
+            Assert.AreEqual(3,session.IntercityPolicy.CompletedLocalStreak);
 
             Assert.IsTrue(session.OfferRide(NewPassenger("completed")));
             Assert.AreSame(across,session.Destination);
             Assert.IsTrue(session.IsIntercityRide);
             CompleteOfferedRide(session);
             Assert.AreEqual(0,session.IntercityPolicy.CompletedLocalStreak);
-            Assert.AreEqual(3,session.LocalOffersBeforeIntercity);
+            Assert.AreEqual(2,session.LocalOffersBeforeIntercity);
             Assert.IsFalse(session.IntercityPolicy.GuaranteePending);
         }
 

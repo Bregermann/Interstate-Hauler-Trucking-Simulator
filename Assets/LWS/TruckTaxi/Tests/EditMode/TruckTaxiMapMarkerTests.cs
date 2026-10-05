@@ -11,6 +11,52 @@ namespace LWS.TruckTaxi.Tests
 {
     public sealed class TruckTaxiMapMarkerTests
     {
+        [Test]
+        public void ProbeFixturePositionsKeepTheCurrentMarkerCatalogInsideTheViewport()
+        {
+            int currentCount=Enum.GetValues(typeof(TruckTaxiMapMarkerType)).Cast<TruckTaxiMapMarkerType>()
+                .Count(t=>t!=TruckTaxiMapMarkerType.Player && t!=TruckTaxiMapMarkerType.ActiveRoute);
+            foreach(int count in new[]{1,5,6,currentCount})
+            {
+                var positions=new HashSet<Vector2>();
+                for(int i=0;i<count;i++)
+                {
+                    var uv=TruckTaxiMapRuntimeProbe.FixtureViewportPosition(i,count);
+                    Assert.That(uv.x,Is.InRange(.1499f,.8501f),$"Fixture {i}/{count} horizontal margin");
+                    Assert.That(uv.y,Is.InRange(.1799f,.8201f),$"Fixture {i}/{count} vertical margin");
+                    Assert.IsTrue(positions.Add(uv),$"Fixture {i}/{count} must not overlap another fixture center");
+                }
+            }
+        }
+
+        [Test]
+        public void ProbeLegendFitsTheCurrentMarkerCatalogWithoutOverlappingRowsOrHeading()
+        {
+            foreach(int count in new[]{1,2,17,Enum.GetValues(typeof(TruckTaxiMapMarkerType)).Length})
+            {
+                var cells=new List<Rect>();
+                for(int i=0;i<count;i++)
+                {
+                    var cell=TruckTaxiMapRuntimeProbe.LegendCellRect(i,count);
+                    Assert.Greater(cell.width,.06f,"Cell must accommodate both icon and label.");
+                    Assert.Greater(cell.height,0);
+                    Assert.GreaterOrEqual(cell.xMin,.02f); Assert.LessOrEqual(cell.xMax,1);
+                    Assert.GreaterOrEqual(cell.yMin,.0399f); Assert.Less(cell.yMax,.9f,"Heading starts at .91.");
+                    Assert.IsFalse(cells.Any(previous=>previous.Overlaps(cell)),$"Legend cell {i}/{count} overlaps another row.");
+                    cells.Add(cell);
+                }
+            }
+        }
+
+        [TestCase(-1,3)]
+        [TestCase(3,3)]
+        [TestCase(0,0)]
+        public void ProbeLayoutRejectsInvalidIndices(int index,int count)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(()=>TruckTaxiMapRuntimeProbe.FixtureViewportPosition(index,count));
+            Assert.Throws<ArgumentOutOfRangeException>(()=>TruckTaxiMapRuntimeProbe.LegendCellRect(index,count));
+        }
+
         [TestCase(640,340)]
         [TestCase(60,60)]
         [TestCase(240,240)]

@@ -96,6 +96,14 @@ The development-only `TruckTaxiMapRuntimeProbe` now places the showcase with pub
 
 The current physical screen is small; the 24px glyph sampling test is only a static readability guard, not proof of cockpit readability. The selected marker cap/range, tints and scales remain designer-tunable in the registry.
 
+### Expanded-Catalog Probe Layout (2026-10-04)
+
+The current enum contains 35 types, so the all-type fixture now needs 33 world markers. Its former fixed five-column row stride placed later rows above viewport Y = 1; the two-column reference legend also ran below its panel. This would recreate offscreen fixture failures without indicating missing production sprites.
+
+The development-only probe now derives its grid rows from the actual fixture count and fits their centers within X = 0.15..0.85 and Y = 0.18..0.82. Cab/HUD and offer-preview fixtures use the same helper. Legend cell spacing likewise derives from the actual enum count and stays below the header. Existing Compass UV conversion, icon-position-shift compensation, per-Image assertions, and offscreen/re-entry checks are unchanged. No production GPS, marker sizing, routing, save/load, vendor code, or authored assets changed in this follow-up.
+
+Added EditMode coverage checks unique bounded fixture centers, positive non-overlapping legend cells, header separation, and invalid layout indices, including the current enum count rather than an old hardcoded category count. **These new tests and the expanded Windows showcase still require main-agent Unity validation.** The 226-check Windows pass and preceding suite results above describe the earlier catalog, not this resumed revision.
+
 ## Vendor Report
 
 - VENDOR ASSETS AUDITED: installed Compass Pro POI/minimap/route public APIs and sprite collection; Heat HUD/navigation/misc icon collection.

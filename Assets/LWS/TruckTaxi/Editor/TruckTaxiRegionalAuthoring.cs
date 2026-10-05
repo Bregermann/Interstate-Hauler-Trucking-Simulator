@@ -184,10 +184,12 @@ namespace LWS.TruckTaxi.Editor
         private static void BuildCorridor(Transform root, int index)
         {
             float from = Starts[index], to = Ends[index];
-            if (index != 3) Box("Regional ground",root,new Vector3((from+to)*.5f,-.55f,0),new Vector3(to-from,1,1000),grass);
+            // Streaming bounds intentionally overlap. Solid ground must meet at one edge instead.
+            float groundFrom = index >= 2 && index <= 5 ? Mathf.Max(from, Ends[index-1]) : from;
+            if (index != 3) Box("Regional ground",root,new Vector3((groundFrom+to)*.5f,-.55f,0),new Vector3(to-groundFrom,1,1000),grass);
             else
             {
-                Box("West river bank",root,new Vector3(1620,-.55f,0),new Vector3(320,1,1000),grass);
+                Box("West river bank",root,new Vector3((groundFrom+1780)*.5f,-.55f,0),new Vector3(1780-groundFrom,1,1000),grass);
                 Box("East river bank",root,new Vector3(2380,-.55f,0),new Vector3(320,1,1000),grass);
             }
             var line = new List<Vector3>();

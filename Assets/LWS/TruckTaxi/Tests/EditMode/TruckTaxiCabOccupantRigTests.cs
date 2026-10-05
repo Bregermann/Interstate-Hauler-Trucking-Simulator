@@ -41,6 +41,26 @@ namespace LWS.TruckTaxi.Tests
         }
 
         [Test]
+        public void SecondarySeatClearanceUsesAuthoredSeatedScale()
+        {
+            var front = Rear(TruckTaxiCabAnchorId.DriverSeat, TruckTaxiCabOccupantKind.Driver, Vector3.zero);
+            var rear = Rear(TruckTaxiCabAnchorId.SleeperRight, TruckTaxiCabOccupantKind.Companion,
+                Vector3.right * 1.5f);
+            rear.secondaryOccupantSeat = true;
+            rear.localScale = Vector3.one * .6f;
+            rig.Configure(false, new[] { front, rear });
+            var visual = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            visual.transform.SetParent(companion.transform, false);
+            visual.transform.localScale = new Vector3(1.4f, 1.6f, 1.4f);
+            var actor = companion.AddComponent<TruckTaxiPassengerActor>();
+            actor.Bind(null);
+            Assert.Greater(actor.StandingRadius, .9f);
+            Assert.IsTrue(rig.HasSecondarySeat(TruckTaxiSeatType.StandardPassenger, companion.transform));
+            rear.localScale = Vector3.one;
+            Assert.IsFalse(rig.HasSecondarySeat(TruckTaxiSeatType.StandardPassenger, companion.transform));
+        }
+
+        [Test]
         public void DisabledSleeperCapabilityPreservesLegacySeatPlacement()
         {
             rig.Configure(false, new[] { Rear(TruckTaxiCabAnchorId.SleeperLeft,

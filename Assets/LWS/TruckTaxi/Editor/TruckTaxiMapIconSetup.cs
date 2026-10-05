@@ -69,6 +69,8 @@ namespace LWS.TruckTaxi.Editor
         }
         public static Color DefaultColor(TruckTaxiMapMarkerType type)
         {
+            if(type==TruckTaxiMapMarkerType.Drink || type==TruckTaxiMapMarkerType.Sleep || type==TruckTaxiMapMarkerType.Place)
+                return new TruckTaxiStopRingPalette().For(type);
             switch(type)
             {
                 case TruckTaxiMapMarkerType.Player: return new Color(.2f,.88f,1);
@@ -173,6 +175,8 @@ namespace LWS.TruckTaxi.Editor
         // Small, bold silhouettes rasterized only by editor setup, never at runtime.
         public static bool Glyph(TruckTaxiMapMarkerType type,Vector2 p)
         {
+            if(type==TruckTaxiMapMarkerType.Drink || type==TruckTaxiMapMarkerType.Sleep || type==TruckTaxiMapMarkerType.Place)
+                return TruckTaxiServiceMapValidator.Glyph(type,p);
             switch(type)
             {
                 case TruckTaxiMapMarkerType.PassengerPickup:

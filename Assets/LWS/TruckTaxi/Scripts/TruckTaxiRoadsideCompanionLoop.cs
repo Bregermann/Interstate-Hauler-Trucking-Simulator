@@ -14,7 +14,7 @@ namespace LWS.TruckTaxi
     [DisallowMultipleComponent]
     public sealed class TruckTaxiRoadsideCompanionLoop : MonoBehaviour
     {
-        private enum Phase { Waiting, ToPrivateStop, MovingToSleeper, PrivateEvent }
+        private enum Phase { Waiting, AuxiliaryRide, ToPrivateStop, MovingToSleeper, PrivateEvent, CompletingContent }
         private sealed class Companion
         {
             public GameObject actor;
@@ -26,10 +26,74 @@ namespace LWS.TruckTaxi
             public int variant;
             public float nextImpactAt;
             public Coroutine impactRoutine;
+            public TruckTaxiCompanionPopulationPolicy.Record population;
+            public bool materializedBefore;
+            public float nextMaterializationAttempt;
         }
 
         private readonly List<Companion> companions = new List<Companion>();
+        private readonly List<Companion> departingCompanions = new List<Companion>();
         private readonly List<Material> materials = new List<Material>();
+        private readonly TruckTaxiCompanionPopulationPolicy population = new TruckTaxiCompanionPopulationPolicy();
+        private readonly List<Companion> populationOrder = new List<Companion>();
+        private readonly Material[][] variantMaterials = new Material[TruckTaxiCompanionPopulationPolicy.VariantCount][];
+        private System.Func<Vector3, bool> regionAvailable;
+        private float nextPopulationRefresh, nextMaterialization;
+        public TruckTaxiCustomInteractionProfile[] variantInteractionProfiles = System.Array.Empty<TruckTaxiCustomInteractionProfile>();
+        private bool ownsCustomContent, contentCompleting;
+        private float nextContentBeat;
+        private readonly HashSet<Renderer> eventVehicleRenderers = new HashSet<Renderer>();
+        public TruckTaxiCustomInteractionProfile ActiveInteractionProfile
+        {
+            get
+            {
+                if (active != null && active.variant >= 0)
+                {
+                    if (variantInteractionProfiles != null && active.variant < variantInteractionProfiles.Length && variantInteractionProfiles[active.variant] != null)
+                        return variantInteractionProfiles[active.variant];
+                    var authored = host?.Configuration?.customCompanionVariantInteractions;
+                    if (authored != null && active.variant < authored.Length && authored[active.variant] != null)
+                        return authored[active.variant];
+                }
+                return host?.Configuration?.customCompanionInteraction;
+            }
+        }
+        [Min(8)] public int maximumMaterialized = 48;
+        [Min(40)] public float materializationRadius = 180;
+        public int LogicalPopulationCount => population.Count;
+        public int MaterializedCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (var c in companions) if (c.actor != null) count++;
+                foreach (var c in departingCompanions) if (c.actor != null) count++;
+                if (active?.actor != null && !companions.Contains(active)) count++;
+                return count;
+            }
+        }
+        public int RejectedPlacementCount { get; private set; }
+        public int MaterializationBudget => Mathf.Clamp(maximumMaterialized, 8, 128);
+        public int NearbyPopulationDeficit
+        {
+            get
+            {
+                if (truckBody == null) return 0;
+                int count = 0;
+                foreach (var c in companions)
+                    if (FlatDistance(truckBody.position, c.population.Origin) <= materializationRadius &&
+                        (regionAvailable == null || regionAvailable(c.population.Origin)) &&
+                        (c == active || c.actor == null || !c.actor.activeInHierarchy || Time.time < c.availableAt)) count++;
+                return count;
+            }
+        }
+        public Transform ActiveCompanionVisual => active?.actor != null ? active.actor.transform : null;
+        public TruckTaxiCabOccupantRig OccupantRig => cabRig;
+        public Transform PlayerTruckRoot => host?.Player != null ? host.Player.transform : null;
+        public void SetRegionAvailability(System.Func<Vector3, bool> availability) => regionAvailable = availability;
+        public void RegisterBlock(string id, Bounds bounds) { population.RegisterBlock(id, bounds); SyncPopulationRecords(); }
+        public void RegisterService(string id, Vector3 position, float radius, bool largeSite = false)
+        { population.RegisterService(id, position, radius, largeSite); SyncPopulationRecords(); }
         private TruckTaxiBootstrap host;
         private TruckTaxiPrivateEventVehicleMotion motion;
         private TruckTaxiCabOccupantRig cabRig;
@@ -52,14 +116,24 @@ namespace LWS.TruckTaxi
         private bool boarding;
         private Coroutine boardingRoutine;
         private Companion nearby, active;
+        public readonly struct PickupTarget
+        {
+            public readonly string Id;
+            public readonly Transform Actor;
+            public readonly int Variant;
+            internal PickupTarget(string id, Transform actor, int variant)
+            { Id = id; Actor = actor; Variant = variant; }
+        }
+        private object pickupReservationOwner;
+        private PickupTarget reservedPickup;
+        private System.Func<bool> reservedPickupCanBoard;
+        public event System.Action<PickupTarget> CompanionBoarded;
         private Phase phase;
         private bool offerLeaseHeld;
         private float eventTime, nextNearbyCheck;
         private const float MaximumSpeed = .447f;
         private const float InteractionRadius = 12f;
         private const float EventSeconds = 7f;
-        private static readonly RaycastHit[] groundHits = new RaycastHit[24];
-        private static readonly Collider[] clearanceHits = new Collider[32];
         private static readonly float[] roadsideOffsets = { 0f, 6f, -6f, 9f, -9f, 12f, -12f };
         private static readonly string[] ejectionReactions = {
             "Wow. Next time try a goodbye.", "That is the worst date exit I've ever had.",
@@ -68,8 +142,8 @@ namespace LWS.TruckTaxi
             "Rude, but admittedly dramatic.", "Fine. The private stop was overrated."
         };
 
-        public bool Ready => host != null && motion != null && motion.Ready && host.DriverNeeds?.State != null &&
-            companions.Count > 0;
+        public bool Ready => host != null && host.Player != null && host.Session != null && host.GPS != null &&
+            truckBody != null && motion != null && motion.Ready && host.DriverNeeds?.State != null;
         public int CompanionCount => companions.Count;
         public bool IsBusy => phase != Phase.Waiting;
         public bool HasOnboardCompanion => active?.actor != null && phase != Phase.Waiting && !boarding;
@@ -78,21 +152,100 @@ namespace LWS.TruckTaxi
         public bool FrontSeatsVacated => sleeperHold && cabRig != null && cabRig.PrivateTransitionComplete;
         public TruckTaxiStopObjectivePoint ActivePrivateStop => phase == Phase.ToPrivateStop ? active?.destination : null;
         public float PrivateStopParkingRadius => ActivePrivateStop != null ? ActivePrivateStop.radius : 0f;
-        public string HornBinding => BindingLabel(ref hornBinding,"Horn / air horn","H / B");
+        public string HornBinding => BindingLabel(ref hornBinding,"Horn / air horn","H");
         public string ParkingBrakeBinding => BindingLabel(ref parkingBinding,"Parking brake","P");
         public float FadeAlpha { get; private set; }
         public string Feedback { get; private set; } = "";
-        public string Prompt => phase == Phase.PrivateEvent || phase == Phase.MovingToSleeper ? "" : phase == Phase.ToPrivateStop ?
+        public string Prompt => phase == Phase.PrivateEvent || phase == Phase.MovingToSleeper || phase == Phase.CompletingContent ? "" :
+            phase == Phase.AuxiliaryRide ? (boarding ? "BOARDING" : "COMPANION ONBOARD") : phase == Phase.ToPrivateStop ?
             boarding ? "BOARDING" :
             (ActivePrivateStop == null ? "" : CanInteract ? "PARK" :
                 FlatDistance(truckBody.position,ActivePrivateStop.Position)<=ActivePrivateStop.radius ?
-                    "PARK & SET BRAKE" : "DRIVE TO PRIVATE STOP") : CanInteract ? "HONK TO PICK UP" : "";
-        public bool CanInteract => Ready && !host.Paused && host.Session?.State == TruckTaxiState.Available &&
-            !host.Session.HasPassenger && host.Roadside?.IsRecovering != true && host.Fuel?.IsRescuing != true &&
+                    "PARK & SET BRAKE" : "DRIVE TO PRIVATE STOP") : PickupInRange ?
+                        (HasRoom ? "HONK TO PICK UP" : "NO ROOM FOR ANOTHER PASSENGER") : "";
+        private TruckTaxiSeatType CompanionSeatType => seat != null ? seat.seatType : TruckTaxiSeatType.CompanionPassenger;
+        public bool HasRoom
+        {
+            get
+            {
+                if (cabRig == null && host?.Player != null) cabRig = host.Player.GetComponent<TruckTaxiCabOccupantRig>();
+                return cabRig != null && cabRig.HasSecondarySeat(CompanionSeatType, nearby?.actor?.transform);
+            }
+        }
+
+        public bool TryFindPickupTarget(float maximumDistance, out PickupTarget target)
+        {
+            target = default;
+            if (!Ready || IsBusy || pickupReservationOwner != null || !float.IsFinite(maximumDistance)) return false;
+            float best = Mathf.Min(Mathf.Max(0, maximumDistance), materializationRadius);
+            bool found = false;
+            foreach (var companion in companions)
+            {
+                if (!IsPickupAvailable(companion, best)) continue;
+                best = FlatDistance(truckBody.position, companion.actor.transform.position);
+                target = PickupSnapshot(companion); found = true;
+            }
+            return found;
+        }
+
+        public bool IsPickupTargetAvailable(PickupTarget target, float maximumDistance) =>
+            target.Actor != null && IsPickupAvailable(FindPickup(target), maximumDistance);
+
+        private bool IsPickupAvailable(Companion companion, float maximumDistance)
+        {
+            if (!Ready || IsBusy || !float.IsFinite(maximumDistance) || maximumDistance <= 0) return false;
+            if (companion == null || companion.actor == null || !companion.actor.activeInHierarchy ||
+                companion.returnPending || companion.impactRoutine != null || Time.time < companion.availableAt ||
+                regionAvailable != null && !regionAvailable(companion.actor.transform.position)) return false;
+            var actor = companion.actor.GetComponent<TruckTaxiPassengerActor>();
+            if (actor == null || actor.IsTumbling || actor.Lifecycle != TruckTaxiActorLifecycle.OutsideWaiting ||
+                actor.transform.IsChildOf(host.Player.transform) || FlatDistance(truckBody.position, actor.transform.position) >
+                Mathf.Min(maximumDistance, materializationRadius)) return false;
+            if (cabRig == null) cabRig = host.Player.GetComponent<TruckTaxiCabOccupantRig>();
+            return cabRig != null && cabRig.HasSecondarySeat(CompanionSeatType, actor.transform);
+        }
+
+        public bool TryReservePickupTarget(object owner, PickupTarget target, System.Func<bool> canBoard = null)
+        {
+            if (owner == null || pickupReservationOwner != null && !ReferenceEquals(owner, pickupReservationOwner) ||
+                !IsPickupTargetAvailable(target, materializationRadius)) return false;
+            pickupReservationOwner = owner; reservedPickup = target; reservedPickupCanBoard = canBoard;
+            nearby = FindPickup(target);
+            return true;
+        }
+
+        public bool ReleasePickupTarget(object owner)
+        {
+            if (owner == null || !ReferenceEquals(owner, pickupReservationOwner)) return false;
+            pickupReservationOwner = null; reservedPickup = default; reservedPickupCanBoard = null;
+            nearby = null;
+            return true;
+        }
+
+        public bool IsPickupTargetBoarding(PickupTarget target) => boarding && MatchesPickup(active, target);
+        public bool IsPickupTargetOnboard(PickupTarget target) => HasOnboardCompanion && MatchesPickup(active, target) &&
+            target.Actor.IsChildOf(host.Player.transform) &&
+            target.Actor.GetComponent<TruckTaxiPassengerActor>()?.Lifecycle == TruckTaxiActorLifecycle.Seated;
+        private static PickupTarget PickupSnapshot(Companion companion) => companion?.actor != null && companion.population != null ?
+            new PickupTarget(companion.population.Id + ".actor." + companion.actor.GetInstanceID(),
+                companion.actor.transform, companion.variant) : default;
+        private static bool MatchesPickup(Companion companion, PickupTarget target) => target.Actor != null &&
+            companion?.actor != null && companion.actor.transform == target.Actor && PickupSnapshot(companion).Id == target.Id;
+        private Companion FindPickup(PickupTarget target)
+        {
+            foreach (var companion in companions) if (MatchesPickup(companion, target)) return companion;
+            return null;
+        }
+        private bool SafeInteraction => Ready && !host.Paused && host.Session != null &&
+            (host.Session.State == TruckTaxiState.Available || host.Session.State == TruckTaxiState.DrivingToDestination) &&
+            host.Roadside?.IsRecovering != true && host.Fuel?.IsRescuing != true &&
+            truckBody != null && truckBody.linearVelocity.magnitude <= MaximumSpeed;
+        private bool PickupInRange => SafeInteraction && phase == Phase.Waiting && nearby?.actor != null &&
+            Time.time >= nearby.availableAt && FlatDistance(truckBody.position, nearby.actor.transform.position) <= InteractionRadius;
+        public bool CanInteract => SafeInteraction &&
             truckBody != null && truckBody.linearVelocity.magnitude <= MaximumSpeed &&
-            (phase == Phase.Waiting ? nearby?.actor != null && Time.time >= nearby.availableAt &&
-                FlatDistance(truckBody.position, nearby.actor.transform.position) <= InteractionRadius :
-                phase == Phase.ToPrivateStop && !boarding && active?.destination != null &&
+            (phase == Phase.Waiting ? PickupInRange && HasRoom :
+                phase == Phase.ToPrivateStop && !host.Session.HasPassenger && !boarding && active?.destination != null &&
                 active.destination.IsValidStop(truckBody.position, truckBody.linearVelocity.magnitude) &&
                 controls != null && controls.CurrentState.parkingBrakeOn &&
                 TruckTaxiSurface.TrySample(truckBody.position, host.Player.transform, out _));
@@ -111,6 +264,7 @@ namespace LWS.TruckTaxi
             if (!motion.Initialize(playerTruckRoot)) { Destroy(motion); motion = null; return false; }
             host = owner;
             seat = companionSeat;
+            cabRig = owner.Player.GetComponent<TruckTaxiCabOccupantRig>();
             identifier=new GameObject("Companion pickup identifier",typeof(TextMeshPro)).GetComponent<TextMeshPro>();
             identifier.transform.SetParent(transform,false);
             identifier.font=owner.hud.font;
@@ -124,28 +278,126 @@ namespace LWS.TruckTaxi
 
         private void SpawnAtAuthoredStops()
         {
-            var stops = FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None);
-            System.Array.Sort(stops, (a, b) => string.CompareOrdinal(a.stableId, b.stableId));
-            int variant = 0;
-            foreach (var pickup in stops)
+            foreach (var service in TruckTaxiServicePoint.Points)
+                if (service != null && service.isActiveAndEnabled && service.capabilities != TruckTaxiServiceCapability.None &&
+                    !string.IsNullOrWhiteSpace(service.stableId))
+                    population.RegisterService(service.stableId, service.Position, service.InteractionRadius, service.radius >= 30);
+            foreach (var location in FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None))
+                if (TruckTaxiCompanionPopulationPolicy.IsServiceLocation(location.locationType) &&
+                    !string.IsNullOrWhiteSpace(location.locationId) && location.GetComponent<TruckTaxiServicePoint>() == null)
+                    population.RegisterService(location.locationId, location.StopPosition, location.detectionRadius);
+            foreach (var depot in FindObjectsByType<TruckTaxiRivalDepot>(FindObjectsSortMode.None))
+                if (!string.IsNullOrWhiteSpace(depot.depotId))
+                    population.RegisterService(depot.depotId, depot.StagingPosition, 18, true);
+            foreach (var area in FindObjectsByType<TruckTaxiPedestrianArea>(FindObjectsSortMode.None))
+                if (!string.IsNullOrWhiteSpace(area.areaId))
+                    population.RegisterBlock(area.areaId, new Bounds(area.transform.position,
+                        new Vector3(area.localSize.x * Mathf.Abs(area.transform.lossyScale.x), 4,
+                            area.localSize.y * Mathf.Abs(area.transform.lossyScale.z))));
+            foreach (var pickup in FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None))
+                if (!string.IsNullOrWhiteSpace(pickup.stableId) &&
+                    (pickup.category == TruckTaxiStopCategory.IllicitPickup || pickup.category == TruckTaxiStopCategory.PrivateMeeting))
+                    population.RegisterBlock(pickup.stableId, new Bounds(pickup.Position, new Vector3(40, 4, 40)));
+            SyncPopulationRecords();
+        }
+
+        private void SyncPopulationRecords()
+        {
+            while (companions.Count < population.Count)
             {
-                if (companions.Count >= 8) break;
-                if (!Eligible(pickup) || pickup.category != TruckTaxiStopCategory.IllicitPickup &&
-                    pickup.category != TruckTaxiStopCategory.PrivateMeeting) continue;
-                var destination = NearbyPrivateStop(pickup.Position, pickup, stops);
-                if (destination == null || !TryRoadsidePosition(pickup.Position, pickup.transform.right, out Vector3 standing))
-                    continue;
+                var record = population.Records[companions.Count];
+                companions.Add(new Companion { population = record, variant = record.Variant });
+            }
+        }
+
+        private void MaterializeNearby()
+        {
+            if (Time.time < nextMaterialization) return;
+            nextMaterialization = Time.time + .5f;
+            for (int i = departingCompanions.Count - 1; i >= 0; i--)
+            {
+                var departure = departingCompanions[i];
+                if (departure.actor == null) { departingCompanions.RemoveAt(i); continue; }
+                if (Time.time >= departure.returnAt && FlatDistance(truckBody.position, departure.actor.transform.position) > 30 &&
+                    (Camera.main == null || Offscreen(Camera.main, departure.actor.transform.position)))
+                { RetireActor(departure); departingCompanions.RemoveAt(i); }
+            }
+            populationOrder.Clear();
+            foreach (var companion in companions)
+            {
+                if (companion == active || companion.impactRoutine != null) continue;
+                bool available = regionAvailable == null || regionAvailable(companion.population.Origin);
+                float distance = FlatDistance(truckBody.position, companion.population.Origin);
+                if (companion.actor != null && (!available || distance > materializationRadius + 60 &&
+                    (Camera.main == null || Offscreen(Camera.main, companion.actor.transform.position))))
+                    RetireActor(companion);
+                if (available && distance <= materializationRadius) populationOrder.Add(companion);
+            }
+            populationOrder.Sort((a, b) => FlatDistance(truckBody.position, a.population.Origin)
+                .CompareTo(FlatDistance(truckBody.position, b.population.Origin)));
+            int count = MaterializedCount, attempts = 0;
+            foreach (var companion in populationOrder)
+            {
+                if (companion.actor != null || Time.time < companion.availableAt ||
+                    Time.time < companion.nextMaterializationAttempt || count >= MaterializationBudget) continue;
+                if (++attempts > 8) break;
+                if (!TryPopulationPosition(companion, out var standing))
+                { RejectedPlacementCount++; companion.nextMaterializationAttempt = Time.time + 5; continue; }
+                if (companion.materializedBefore && (FlatDistance(truckBody.position, standing) < 30 ||
+                    Camera.main != null && !Offscreen(Camera.main, standing))) continue;
+                if (CreateActor(companion, standing)) count++;
+            }
+        }
+
+        private bool TryPopulationPosition(Companion companion, out Vector3 standing)
+        {
+            var record = companion.population;
+            for (int attempt = 0; attempt < 32; attempt++)
+            {
+                float angle = (record.Slot * 360f / record.Capacity + attempt * 137.5f) * Mathf.Deg2Rad;
+                float radius = record.IsService ? record.ExclusionRadius + 3 + attempt % 4 * 3 :
+                    Mathf.Min(record.Area.extents.x, record.Area.extents.z) * (.2f + attempt % 4 * .2f);
+                Vector3 candidate = record.Origin + new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * radius;
+                if (!TruckTaxiActorWorldPlacement.TryGround(candidate, host.Player.transform, out standing) ||
+                    !TruckTaxiActorWorldPlacement.ClearOfTrafficLanes(standing, host.pedestrians?.roadLanes, 1.2f) ||
+                    !TruckTaxiActorWorldPlacement.Clear(standing, 1.2f, 2.5f, host.Player.transform)) continue;
+                bool occupied = false;
+                foreach (var service in population.Records)
+                    if (service.IsService && FlatDistance(standing, service.Origin) < service.ExclusionRadius + 1.5f) { occupied = true; break; }
+                foreach (var other in companions)
+                    if (other.actor != null && FlatDistance(standing, other.actor.transform.position) < 3) { occupied = true; break; }
+                if (!occupied) return true;
+            }
+            standing = default;
+            return false;
+        }
+
+        private void RetireActor(Companion companion)
+        {
+            if (companion.actor == null) return;
+            var actor = companion.actor.GetComponent<TruckTaxiPassengerActor>();
+            actor.WaitingTruckHit -= OnCompanionHit;
+            actor.DisarmWaitingTruckHit();
+            companion.actor.SetActive(false);
+            Destroy(companion.actor);
+            companion.actor = null;
+        }
+
+        private bool CreateActor(Companion companion, Vector3 standing)
+        {
+                int variant = companion.variant;
                 var actor = new GameObject("Roadside companion (21+ consenting adult)");
                 actor.transform.SetPositionAndRotation(standing, Quaternion.Euler(0, variant * 71f, 0));
-                var red = CreateMaterial(new Color(variant % 2 == 0 ? .82f : .64f, .06f, .11f));
-                var dark = CreateMaterial(new Color(.13f, .10f, .14f));
-                var accent = CreateMaterial(new Color(.96f, .35f, .27f));
+                if (variantMaterials[variant] == null) variantMaterials[variant] = new[] {
+                    CreateMaterial(new Color(variant % 2 == 0 ? .82f : .64f, .06f, .11f)),
+                    CreateMaterial(new Color(.13f, .10f, .14f)), CreateMaterial(new Color(.96f, .35f, .27f)) };
+                var red = variantMaterials[variant][0]; var dark = variantMaterials[variant][1]; var accent = variantMaterials[variant][2];
                 var visual=TruckTaxiWobbleVisual.CreateThemed(actor.transform, new TruckTaxiWobbleVisual.Design {
                     silhouette = TruckTaxiWobbleVisual.Silhouette.Human,
                     headwear = variant % 3 == 0 ? TruckTaxiWobbleVisual.Headwear.WideHat :
                         variant % 3 == 1 ? TruckTaxiWobbleVisual.Headwear.Curls : TruckTaxiWobbleVisual.Headwear.Braid,
                     accessory = variant % 2 == 0 ? TruckTaxiWobbleVisual.Accessory.Scarf : TruckTaxiWobbleVisual.Accessory.Flower,
-                    height = 1.55f + .08f * (variant % 3), width = 1.1f + .12f * (variant % 3),
+                    height = 1.55f + .04f * (variant % 5), width = 1.1f + .06f * (variant % 4),
                     headScale = 1f, upperBodyScale = 1.35f, clothedAdult = true,
                     body = red, clothes = dark, accent = accent, skin = accent
                 });
@@ -154,11 +406,21 @@ namespace LWS.TruckTaxi
                 foreach (var collider in actor.GetComponentsInChildren<Collider>(true)) collider.enabled = false;
                 var passengerActor=actor.AddComponent<TruckTaxiPassengerActor>();
                 passengerActor.Bind(null);
+                actor.transform.position = standing + Vector3.up * passengerActor.StandingGroundOffset;
                 passengerActor.WaitingTruckHit+=OnCompanionHit;
                 passengerActor.ArmWaitingTruckHit(truckBody);
-                companions.Add(new Companion { actor = actor, pickup = pickup, destination = destination, variant=variant });
-                variant++;
-            }
+                companion.actor = actor;
+                if (!TruckTaxiActorWorldPlacement.Clear(standing, passengerActor.StandingRadius,
+                    passengerActor.StandingHeight, host.Player.transform, actor.transform))
+                {
+                    RetireActor(companion);
+                    companion.nextMaterializationAttempt = Time.time + 5;
+                    RejectedPlacementCount++;
+                    return false;
+                }
+                companion.materializedBefore = true;
+                companion.returnPending = false;
+                return true;
         }
 
         private Material CreateMaterial(Color color)
@@ -171,7 +433,7 @@ namespace LWS.TruckTaxi
 
         private bool Eligible(TruckTaxiStopObjectivePoint point)
         {
-            if (point == null || !point.isActiveAndEnabled || point.gameObject.scene != host.gameObject.scene ||
+            if (point == null || !point.isActiveAndEnabled || !point.gameObject.scene.isLoaded ||
                 string.IsNullOrWhiteSpace(point.stableId)) return false;
             return TruckTaxiSurface.TrySample(point.Position, host.Player.transform, out _);
         }
@@ -226,43 +488,21 @@ namespace LWS.TruckTaxi
             foreach (float distance in roadsideOffsets)
             {
                 Vector3 candidate = origin + right * distance;
-                int count = Physics.RaycastNonAlloc(candidate + Vector3.up * 5f, Vector3.down,
-                    groundHits, 16f, ~0, QueryTriggerInteraction.Ignore);
-                float nearest = float.MaxValue;
-                bool offroad = false;
-                Vector3 ground = candidate;
-                for (int i = 0; i < count; i++)
-                {
-                    var hit = groundHits[i];
-                    if (hit.transform.IsChildOf(host.Player.transform) || hit.distance >= nearest) continue;
-                    var surface = hit.collider.GetComponentInParent<TruckTaxiSurface>();
-                    if (surface == null) continue;
-                    nearest = hit.distance;
-                    offroad = !surface.isRoad;
-                    ground = hit.point;
-                }
-                if (!offroad || !ClearOfTruck(ground) ||
+                if (!TruckTaxiActorWorldPlacement.TryGround(candidate, host.Player.transform, out var ground) ||
+                    !TruckTaxiActorWorldPlacement.Clear(ground, 1.2f, 2.5f, host.Player.transform) ||
+                    !TruckTaxiActorWorldPlacement.ClearOfTrafficLanes(ground, host.pedestrians?.roadLanes, 1.2f) ||
                     interactionOrigin.HasValue &&
                     FlatDistance(interactionOrigin.Value, ground) > InteractionRadius) continue;
+                bool insideService = false;
+                foreach (var record in population.Records)
+                    if (record.IsService && FlatDistance(ground, record.Origin) < record.ExclusionRadius + 1.5f)
+                    { insideService = true; break; }
+                if (insideService) continue;
                 position = ground;
                 return true;
             }
             position = default;
             return false;
-        }
-
-        private bool ClearOfTruck(Vector3 ground)
-        {
-            int count = Physics.OverlapCapsuleNonAlloc(ground + Vector3.up * .35f,
-                ground + Vector3.up * 1.8f, .55f, clearanceHits, ~0, QueryTriggerInteraction.Ignore);
-            if (count == clearanceHits.Length) return false;
-            for (int i = 0; i < count; i++)
-            {
-                var collider = clearanceHits[i];
-                if (collider.transform.IsChildOf(host.Player.transform) ||
-                    collider.GetComponentInParent<TruckTaxiSurface>() == null) return false;
-            }
-            return true;
         }
 
         public bool DebugSpawnNearPlayer()
@@ -336,13 +576,47 @@ namespace LWS.TruckTaxi
                 host.PickupZone?.SetPrivateStop(null);
                 return true;
             }
-            active.actor.SetActive(false);
-            if (!motion.Begin()) { active.actor.SetActive(true); return false; }
+            // Keep the participant visibly seated in the existing non-graphic presentation.
             phase = Phase.PrivateEvent;
+            if (!BeginEventPresentation()) { phase = Phase.ToPrivateStop; return false; }
             eventTime = 0;
             Feedback = "";
             host.PickupZone?.SetPrivateStop(null);
             return true;
+        }
+
+        private bool BeginEventPresentation()
+        {
+            var profile = ActiveInteractionProfile;
+            if (profile == null || host.CustomContent == null) return motion.Begin();
+            driverPresentation = host.Player.GetComponent<TruckTaxiDriverPresentation>();
+            eventVehicleRenderers.Clear();
+            foreach (var renderer in host.Player.GetComponentsInChildren<Renderer>(true))
+                if (renderer.GetComponentInParent<TruckTaxiPassengerActor>() == null &&
+                    (driverPresentation?.Occupant == null || !renderer.transform.IsChildOf(driverPresentation.Occupant)))
+                    eventVehicleRenderers.Add(renderer);
+            host.CustomContent.Begin(profile, driverPresentation?.Occupant, active.actor.transform, inputHeldByEvent: true);
+            ownsCustomContent = true;
+            contentCompleting = false;
+            nextContentBeat = 1;
+            SyncContentMotion();
+            return true;
+        }
+
+        private void SyncContentMotion()
+        {
+            if (!ownsCustomContent || host.CustomContent == null) return;
+            FadeAlpha = host.CustomContent.FadeAlpha;
+            if (!host.CustomContent.RequestsTruckRocking) { motion.StopMotion(); return; }
+            if (motion.IsActive) return;
+            // Snapshot only the pre-event truck renderers, never participants or the runner's proxies.
+            // This is synchronous visibility isolation; no rendered frame or physics state changes.
+            var excluded = new Dictionary<Renderer, bool>();
+            foreach (var renderer in host.Player.GetComponentsInChildren<Renderer>(true))
+                if (!eventVehicleRenderers.Contains(renderer))
+                { excluded[renderer] = renderer.enabled; renderer.enabled = false; }
+            try { motion.Begin(); }
+            finally { foreach (var entry in excluded) if (entry.Key != null) entry.Key.enabled = entry.Value; }
         }
 
         private bool TryAcquireSleeperHold()
@@ -455,23 +729,39 @@ namespace LWS.TruckTaxi
 
         public bool TryHornPickup()
         {
+            if (pickupReservationOwner != null)
+            {
+                if (!IsPickupTargetAvailable(reservedPickup, InteractionRadius) ||
+                    reservedPickupCanBoard != null && !reservedPickupCanBoard()) return false;
+                nearby = FindPickup(reservedPickup);
+            }
+            if (PickupInRange && !HasRoom) { Feedback = "NO ROOM FOR ANOTHER PASSENGER"; return false; }
             if (phase != Phase.Waiting || !CanInteract || nearby?.actor == null ||
                 nearby.actor.GetComponent<TruckTaxiPassengerActor>().IsTumbling || controls==null ||
                 !(controls.CurrentState.hornActive || controls.CurrentState.airHornActive)) return false;
             {
-                if (!string.IsNullOrEmpty(host.GPS.TargetId)) return false;
                 active = nearby; nearby = null;
-                var stops=FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None);
-                active.destination=ClaimPrivateStop(truckBody.position,active.pickup,stops);
-                if(active.destination==null)
-                { active=null; return false; }
-                phase = Phase.ToPrivateStop;
+                int slot = companions.IndexOf(active);
+                if (slot >= 0)
+                    companions[slot] = new Companion { population = active.population, variant = active.variant,
+                        availableAt = Time.time + 30, materializedBefore = true };
+                bool auxiliary = host.Session.HasPassenger || !string.IsNullOrEmpty(host.GPS.TargetId);
+                active.destination = null;
+                if (!auxiliary)
+                {
+                    var stops=FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None);
+                    active.destination=ClaimPrivateStop(truckBody.position,active.pickup,stops);
+                }
+                phase = active.destination != null ? Phase.ToPrivateStop : Phase.AuxiliaryRide;
                 active.actor.GetComponent<TruckTaxiPassengerActor>().DisarmWaitingTruckHit();
-                host.Session.AcquireOfferSuppression(this);
-                offerLeaseHeld = true;
+                if (phase == Phase.ToPrivateStop)
+                {
+                    host.Session.AcquireOfferSuppression(this);
+                    offerLeaseHeld = true;
+                }
                 boarding=true;
                 boardingRoutine=StartCoroutine(BoardCompanion(active));
-                host.PickupZone?.SetPrivateStop(active.destination);
+                if (active.destination != null) host.PickupZone?.SetPrivateStop(active.destination);
                 Feedback = "Companion is boarding.";
                 return true;
             }
@@ -479,31 +769,41 @@ namespace LWS.TruckTaxi
 
         private IEnumerator BoardCompanion(Companion companion)
         {
-            float deadline=Time.time+1.5f;
-            while(companion?.actor!=null && Time.time<deadline)
+            var actor = companion.actor.GetComponent<TruckTaxiPassengerActor>();
+            actor.SetLifecycle(TruckTaxiActorLifecycle.Boarding);
+            bool canWalk = TruckTaxiActorWorldPlacement.TryExit(actor, host.Player.transform, out var door) &&
+                TruckTaxiActorWorldPlacement.ClearSegment(actor.GroundPosition, door, actor.StandingRadius,
+                    actor.StandingHeight, host.Player.transform, actor.transform);
+            float deadline=Time.time+4f;
+            while(canWalk && companion?.actor!=null && Time.time<deadline)
             {
+                if (host.Paused) { deadline += Time.deltaTime; yield return null; continue; }
                 if(truckBody.linearVelocity.magnitude>MaximumSpeed*2f) { Cancel(); yield break; }
-                Vector3 door=host.Player.transform.position+host.Player.transform.right*2.3f;
                 Vector3 delta=Vector3.ProjectOnPlane(door-companion.actor.transform.position,Vector3.up);
                 if(delta.sqrMagnitude>.02f)
                 {
+                    Vector3 next = Vector3.MoveTowards(actor.GroundPosition, door, 3f * Time.deltaTime);
+                    if (!TruckTaxiActorWorldPlacement.ClearSegment(actor.GroundPosition, next, actor.StandingRadius,
+                        actor.StandingHeight, host.Player.transform, actor.transform)) break;
                     companion.actor.transform.rotation=Quaternion.LookRotation(delta.normalized);
-                    companion.actor.transform.position=Vector3.MoveTowards(companion.actor.transform.position,
-                        new Vector3(door.x,companion.actor.transform.position.y,door.z),3f*Time.deltaTime);
+                    companion.actor.transform.position=next + Vector3.up * actor.StandingGroundOffset;
                 }
                 if(delta.sqrMagnitude<.4f) break;
                 yield return null;
             }
             if(companion==active && companion.actor!=null)
             {
-                if (!TruckTaxiSeatProfile.TryPlaceActor(companion.actor.transform,host.Player.transform,seat,false,
-                    companion.actor.GetComponent<TruckTaxiPassengerActor>().StandingWorldScale, TruckTaxiCabOccupantKind.Companion))
-                { boardingRoutine = null; Cancel(); yield break; }
-                var seatedSway=companion.actor.GetComponentInChildren<TruckTaxiWobbleWalkSway>();
-                if(seatedSway!=null) seatedSway.enabled=false;
+                actor.PrepareForSeat();
+                yield return new WaitForSeconds(.12f);
+                if (companion != active || actor == null) yield break;
+                if (truckBody.linearVelocity.magnitude > MaximumSpeed * 2 || cabRig == null ||
+                    !cabRig.TrySeatSecondary(actor.transform, CompanionSeatType, actor.StandingWorldScale))
+                { boardingRoutine = null; Cancel(); Feedback = "NO ROOM FOR ANOTHER PASSENGER"; yield break; }
+                actor.CompleteSeating();
                 boarding=false;
                 boardingRoutine=null;
-                Feedback="Park at the nearby private stop.";
+                Feedback=phase == Phase.AuxiliaryRide ? "Companion onboard. Fare destination unchanged." : "Park at the nearby private stop.";
+                CompanionBoarded?.Invoke(PickupSnapshot(companion));
             }
         }
 
@@ -516,6 +816,7 @@ namespace LWS.TruckTaxi
             EndSleeperSequence();
             if (cabRig != null) cabRig.Release(actor.transform);
             departing.actor=null;
+            departing.availableAt = Time.time + 30;
             actor.gameObject.SetActive(true);
             actor.transform.SetParent(null,true);
             actor.transform.localScale=actor.StandingWorldScale;
@@ -533,10 +834,19 @@ namespace LWS.TruckTaxi
 
         public void Tick(float deltaTime)
         {
-            if (!Ready) { if (sleeperHold) Cancel(); return; }
-            if (phase != Phase.Waiting && (host.Session.State != TruckTaxiState.Available ||
-                host.Session.HasPassenger || host.Roadside?.IsRecovering == true || host.Fuel?.IsRescuing == true))
+            if (!Ready) { if (IsBusy || ownsCustomContent || sleeperHold) Cancel(); return; }
+            if (IsBusy && active?.actor == null) { Cancel(); return; }
+            if (phase != Phase.Waiting && (host.Session.State == TruckTaxiState.Inactive ||
+                host.Roadside?.IsRecovering == true || host.Fuel?.IsRescuing == true))
             { Cancel(); return; }
+            if (host.Session.HasPassenger && phase == Phase.ToPrivateStop)
+            {
+                if (active?.destination != null) host.GPS.ClearPrivateStopDestination(active.destination.stableId);
+                if (offerLeaseHeld) host.Session.ReleaseOfferSuppression(this);
+                offerLeaseHeld = false;
+                active.destination = null;
+                phase = Phase.AuxiliaryRide;
+            }
             if (sleeperHold)
             {
                 if (active?.actor == null || eventVehicle == null || !eventVehicle.isActiveAndEnabled ||
@@ -546,6 +856,12 @@ namespace LWS.TruckTaxi
                 HoldSleeperInputs();
             }
             if (host.Paused) return;
+            if (Time.time >= nextPopulationRefresh)
+            {
+                nextPopulationRefresh = Time.time + 3;
+                SpawnAtAuthoredStops();
+            }
+            MaterializeNearby();
             if (phase == Phase.Waiting)
             {
                 bool horn=controls != null && (controls.CurrentState.hornActive || controls.CurrentState.airHornActive);
@@ -559,14 +875,12 @@ namespace LWS.TruckTaxi
                 {
                     if (companion.returnPending && Time.time >= companion.returnAt && CanReturnOffscreen(companion))
                     {
-                        if (!TryRoadsidePosition(companion.pickup.Position, companion.pickup.transform.right,
-                            out Vector3 returnPosition)) continue;
-                        companion.actor.transform.SetPositionAndRotation(returnPosition, Quaternion.identity);
-                        companion.actor.GetComponent<TruckTaxiPassengerActor>().ArmWaitingTruckHit(truckBody);
+                        RetireActor(companion);
                         companion.returnAt = 0;
                         companion.returnPending = false;
-                        companion.availableAt = Time.time + 15f;
+                        companion.availableAt = Time.time + 1f;
                     }
+                    if (pickupReservationOwner != null && !MatchesPickup(companion, reservedPickup)) continue;
                     if (companion.actor == null || !companion.actor.activeSelf || Time.time < companion.availableAt) continue;
                     float distance = FlatDistance(truckBody.position, companion.actor.transform.position);
                     if (distance < best) { nearby = companion; best = distance; }
@@ -574,10 +888,10 @@ namespace LWS.TruckTaxi
                 if(hornPressed) TryHornPickup();
                 if(identifier!=null)
                 {
-                    identifier.gameObject.SetActive(nearby?.actor!=null && CanInteract);
+                    identifier.gameObject.SetActive(nearby?.actor!=null && PickupInRange);
                     if(identifier.gameObject.activeSelf)
                     {
-                        identifier.text="THIRST  /  HONK TO PICK UP ("+HornBinding+")";
+                        identifier.text=HasRoom ? "COMPANION  /  HONK TO PICK UP ("+HornBinding+")" : "NO ROOM FOR ANOTHER PASSENGER";
                         identifier.transform.position=nearby.actor.transform.position+Vector3.up*2.7f;
                         if(Camera.main!=null) identifier.transform.rotation=Quaternion.LookRotation(
                             identifier.transform.position-Camera.main.transform.position);
@@ -586,24 +900,52 @@ namespace LWS.TruckTaxi
                 return;
             }
             if(identifier!=null) identifier.gameObject.SetActive(false);
+            if (phase == Phase.AuxiliaryRide) return;
+            if (phase == Phase.CompletingContent)
+            {
+                SyncContentMotion();
+                if (host.CustomContent == null || !host.CustomContent.IsPlaying) Finish(true);
+                return;
+            }
             if (phase == Phase.ToPrivateStop)
             {
+                if (active.destination == null)
+                {
+                    phase = Phase.AuxiliaryRide;
+                    if (offerLeaseHeld) host.Session.ReleaseOfferSuppression(this);
+                    offerLeaseHeld = false;
+                    return;
+                }
                 // GPS may auto-complete inside 3 m; another claimed destination is not ours to clear.
                 if (!string.IsNullOrEmpty(host.GPS.TargetId) && host.GPS.TargetId != active.destination.stableId)
-                    Cancel();
+                {
+                    active.destination = null;
+                    phase = Phase.AuxiliaryRide;
+                    if (offerLeaseHeld) host.Session.ReleaseOfferSuppression(this);
+                    offerLeaseHeld = false;
+                }
                 return;
             }
             if (truckBody.linearVelocity.magnitude > MaximumSpeed) { Cancel(); return; }
             if (phase == Phase.MovingToSleeper)
             {
                 if (!driverPresentation.StepSleeperTransition(deltaTime)) return;
-                if (!FrontSeatsVacated || !motion.Begin()) { Cancel(); return; }
+                if (!FrontSeatsVacated || !BeginEventPresentation()) { Cancel(); return; }
                 phase = Phase.PrivateEvent;
                 eventTime = 0;
                 return;
             }
             eventTime += Mathf.Max(0, deltaTime);
-            FadeAlpha = .65f * Mathf.Min(Mathf.Clamp01(eventTime / .6f),
+            if (ownsCustomContent)
+            {
+                SyncContentMotion();
+                if (eventTime >= nextContentBeat)
+                {
+                    host.CustomContent?.Beat();
+                    nextContentBeat = eventTime + 1;
+                }
+            }
+            else FadeAlpha = .65f * Mathf.Min(Mathf.Clamp01(eventTime / .6f),
                 Mathf.Clamp01((EventSeconds - eventTime) / .8f));
             if (eventTime < EventSeconds) return;
             host.DriverNeeds.State.SatisfyThirst();
@@ -613,6 +955,7 @@ namespace LWS.TruckTaxi
 
         public void Cancel()
         {
+            if (ownsCustomContent) { host?.CustomContent?.Cancel(); ownsCustomContent = false; contentCompleting = false; }
             if (phase == Phase.Waiting) { EndSleeperSequence(); return; }
             Feedback = "Private stop cancelled.";
             Finish(false);
@@ -620,37 +963,38 @@ namespace LWS.TruckTaxi
 
         private void Finish(bool completed)
         {
+            if (completed && ownsCustomContent && !contentCompleting && host?.CustomContent?.IsPlaying == true)
+            {
+                host.CustomContent.Complete();
+                contentCompleting = true;
+                phase = Phase.CompletingContent;
+                return;
+            }
+            if (!completed && ownsCustomContent) host?.CustomContent?.Cancel();
+            ownsCustomContent = false;
+            contentCompleting = false;
+            eventVehicleRenderers.Clear();
             if(boardingRoutine!=null) { StopCoroutine(boardingRoutine); boardingRoutine=null; }
             boarding=false;
             motion?.StopMotion();
             EndSleeperSequence();
             FadeAlpha = 0;
-            host?.PickupZone?.SetPrivateStop(null);
+            if (active?.destination != null) host?.PickupZone?.SetPrivateStop(null);
             if (host?.GPS != null && active?.destination != null)
                 host.GPS.ClearPrivateStopDestination(active.destination.stableId);
             if (host?.Session != null && offerLeaseHeld) host.Session.ReleaseOfferSuppression(this);
             offerLeaseHeld = false;
             if (active?.actor != null)
             {
-                if (cabRig != null) cabRig.Release(active.actor.transform);
-                active.actor.transform.SetParent(null, true);
-                Vector3 exitOrigin = completed && active.destination != null ?
-                    active.destination.Position : active.pickup.Position;
-                Vector3 exitRight = completed && active.destination != null ?
-                    active.destination.transform.right : active.pickup.transform.right;
-                Vector3 exit = exitOrigin;
-                bool safeExit = host != null && host.Player != null && truckBody != null &&
-                    TryRoadsidePosition(exitOrigin, exitRight, out exit);
-                if (!safeExit) exit = active.pickup.Position;
-                active.actor.transform.SetPositionAndRotation(exit, Quaternion.identity);
-                active.actor.transform.localScale = active.actor.GetComponent<TruckTaxiPassengerActor>().StandingWorldScale;
-                var exitSway=active.actor.GetComponentInChildren<TruckTaxiWobbleWalkSway>(true);
-                if(exitSway!=null) exitSway.enabled=true;
-                active.actor.SetActive(safeExit);
-                if(safeExit) active.actor.GetComponent<TruckTaxiPassengerActor>().ArmWaitingTruckHit(truckBody);
-                active.availableAt = completed ? float.PositiveInfinity : Time.time + 30f;
-                active.returnAt = completed ? Time.time + 15f : 0;
-                active.returnPending = completed;
+                var actor = active.actor.GetComponent<TruckTaxiPassengerActor>();
+                actor.PrepareForWorld(host?.Player != null ? host.Player.transform : null);
+                bool safeExit = host?.Player != null && TruckTaxiActorWorldPlacement.TryExit(actor, host.Player.transform, out var exit) &&
+                    actor.ShowInWorld(exit, host.Player.transform);
+                if (!safeExit) RetireActor(active);
+                active.availableAt = Time.time + 30f;
+                active.returnAt = Time.time + 30f;
+                active.returnPending = true;
+                if (!companions.Contains(active) && active.actor != null) departingCompanions.Add(active);
             }
             active = null;
             phase = Phase.Waiting;
@@ -668,6 +1012,7 @@ namespace LWS.TruckTaxi
         private void OnDisable()
         {
             Cancel();
+            pickupReservationOwner = null; reservedPickup = default; reservedPickupCanBoard = null;
             foreach(var companion in companions)
             {
                 if(companion.impactRoutine!=null) { StopCoroutine(companion.impactRoutine); companion.impactRoutine=null; }
@@ -676,6 +1021,8 @@ namespace LWS.TruckTaxi
                 if(actor.IsTumbling) actor.EndLightTumble(companion.actor.transform.position);
                 actor.DisarmWaitingTruckHit();
             }
+            foreach (var companion in departingCompanions)
+                if (companion.actor != null) companion.actor.GetComponent<TruckTaxiPassengerActor>().DisarmWaitingTruckHit();
         }
 
         private void OnCompanionHit(TruckTaxiPassengerActor actor,Vector3 velocity)
@@ -720,14 +1067,14 @@ namespace LWS.TruckTaxi
 
         private bool CanReturnOffscreen(Companion companion)
         {
-            if (companion.actor == null || companion.pickup == null ||
+            if (companion.actor == null ||
                 FlatDistance(truckBody.position, companion.actor.transform.position) < 150f ||
-                FlatDistance(truckBody.position, companion.pickup.Position) < 150f) return false;
+                FlatDistance(truckBody.position, companion.population.Origin) < 30f) return false;
             var camera = Camera.main;
             return camera != null ? Offscreen(camera, companion.actor.transform.position) &&
-                Offscreen(camera, companion.pickup.Position) :
+                Offscreen(camera, companion.population.Origin) :
                 FlatDistance(truckBody.position, companion.actor.transform.position) > 300f &&
-                FlatDistance(truckBody.position, companion.pickup.Position) > 300f;
+                FlatDistance(truckBody.position, companion.population.Origin) > 300f;
         }
 
         private static bool Offscreen(Camera camera, Vector3 position)
@@ -747,6 +1094,8 @@ namespace LWS.TruckTaxi
                 Destroy(companion.actor);
             }
             foreach (var material in materials) if (material != null) Destroy(material);
+            foreach (var companion in departingCompanions) RetireActor(companion);
+            departingCompanions.Clear();
             companions.Clear(); materials.Clear();
         }
     }
