@@ -85,6 +85,8 @@ namespace LWS.TruckTaxi
             lastImpact[key] = Time.time;
             LastImpactSpeed = collision.relativeVelocity.magnitude; LastRelativeVelocity = collision.relativeVelocity;
             LastImpulse = collision.impulse.magnitude; LastTarget = target != null ? target.targetId : collision.collider.name; LastCollisionTime = Time.time;
+            host.ComponentDamage?.ReceiveImpact(collision.contactCount > 0 ? collision.GetContact(0).point : collision.collider.ClosestPoint(body.worldCenterOfMass),
+                LastImpactSpeed, LastImpulse);
             if (target == null && incomingVelocity.y < -host.Configuration.hardLandingSpeed &&
                 collision.contactCount > 0 && collision.GetContact(0).normal.y > .7f)
             {

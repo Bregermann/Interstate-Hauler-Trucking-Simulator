@@ -45,6 +45,10 @@ namespace LWS.TruckTaxi
         public TruckTaxiRoadsideCompanionLoop Companions { get; private set; }
         public TruckTaxiVehicleObjectiveCoordinator VehicleObjectives { get; private set; }
         public TruckTaxiVibinPersistence Persistence { get; private set; }
+        public TruckTaxiWorldLifeController WorldLife { get; private set; }
+        public TruckTaxiPhysicalFacilities PhysicalFacilities { get; private set; }
+        public TruckTaxiFacilityAmbience FacilityAmbience { get; private set; }
+        public TruckTaxiComponentDamage ComponentDamage { get; private set; }
         public bool Ready { get; private set; }
         public bool Paused { get; private set; }
         public bool CanResume => Ready && !startupPending && Persistence != null && !Persistence.ResumeBlocked;
@@ -86,6 +90,7 @@ namespace LWS.TruckTaxi
             locations = FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None);
             System.Array.Sort(locations,(a,b)=>string.CompareOrdinal(a.locationId,b.locationId));
             resetTargets = FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None);
+            ConfigureBreakawayProps();
             RouteDistances = new TruckTaxiRouteDistanceService(roadGraph.Graph);
             Session = new TruckTaxiSession(configuration,locations,Random.Range(1,int.MaxValue),RouteDistances,()=>body.position);
             if (regional != null) Session.RegionResolver = regional.ResolveRideTown;
@@ -153,6 +158,8 @@ namespace LWS.TruckTaxi
                 if(DriverNeeds.Initialize(this,Environment))
                 { hud.InitializeEnvironment(Environment,DriverNeeds); OptionalStops.ConfigureScenicThirstRelief(DriverNeeds.State.RelieveThirst); }
             }
+            ComponentDamage = Player.GetComponent<TruckTaxiComponentDamage>() ?? Player.gameObject.AddComponent<TruckTaxiComponentDamage>();
+            ComponentDamage.Initialize(this);
             Roadside = GetComponent<TruckTaxiRoadsideAssistance>() ?? gameObject.AddComponent<TruckTaxiRoadsideAssistance>();
             Roadside.Initialize(this);
             FastTravel = GetComponent<TruckTaxiFastTravel>() ?? gameObject.AddComponent<TruckTaxiFastTravel>();
@@ -170,6 +177,12 @@ namespace LWS.TruckTaxi
                 Session.JugGoalContextProvider=CaptureJugGoalContext;
             }
             hud.InitializeIntegratedControls();
+            WorldLife = GetComponent<TruckTaxiWorldLifeController>() ?? gameObject.AddComponent<TruckTaxiWorldLifeController>();
+            WorldLife.Initialize(this, hud);
+            PhysicalFacilities = GetComponent<TruckTaxiPhysicalFacilities>() ?? gameObject.AddComponent<TruckTaxiPhysicalFacilities>();
+            PhysicalFacilities.Initialize(this);
+            FacilityAmbience = GetComponent<TruckTaxiFacilityAmbience>() ?? gameObject.AddComponent<TruckTaxiFacilityAmbience>();
+            FacilityAmbience.Initialize(this);
             if(CalendarWeather!=null)
             {
                 Venues=GetComponent<TruckTaxiVenueRuntime>() ?? gameObject.AddComponent<TruckTaxiVenueRuntime>();
@@ -438,9 +451,30 @@ namespace LWS.TruckTaxi
             pedestrians.NotifyRegionChanged();
             if (!Ready) return;
             resetTargets = FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None);
+            ConfigureBreakawayProps();
             RebuildObjectiveCapabilities();
             GetComponent<TruckTaxiSnowSurface>()?.RefreshStreamedSurfaces();
             GPS?.MapMarkers?.RefreshStreamedContent();
+            PhysicalFacilities?.Refresh();
+        }
+        private void ConfigureBreakawayProps()
+        {
+            if (resetTargets == null) return;
+            foreach (var target in resetTargets)
+            {
+                if (target == null || target.kind != TaxiImpactKind.Property ||
+                    target.GetComponent<TruckTaxiBreakawayProp>() != null) continue;
+                var collider = target.GetComponent<Collider>();
+                if (collider == null || collider.bounds.size.magnitude > 7f) continue;
+                string label = target.name.ToLowerInvariant();
+                if (label.Contains("concrete") || label.Contains("building") || label.Contains("wall") ||
+                    label.Contains("large tree") || label.Contains("guardrail")) continue;
+                var prop = target.gameObject.AddComponent<TruckTaxiBreakawayProp>();
+                var category = label.Contains("cone") || label.Contains("trash") || label.Contains("mailbox") ?
+                    TruckTaxiPropPhysicsCategory.Lightweight : label.Contains("sapling") || label.Contains("fence") ?
+                    TruckTaxiPropPhysicsCategory.Destructible : TruckTaxiPropPhysicsCategory.Breakaway;
+                prop.Configure(category, category == TruckTaxiPropPhysicsCategory.Lightweight ? 6f : 35f);
+            }
         }
         private int AvailablePedestrians()
         {

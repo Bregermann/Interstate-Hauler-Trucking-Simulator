@@ -31,6 +31,13 @@ namespace LWS.TruckTaxi
         public InputAction CabMouseLook { get; }
         public InputAction CabMouseLookHold { get; }
         public InputAction CabGamepadLook { get; }
+        public InputAction ExitTruck { get; }
+        public InputAction WorldInteract { get; }
+        public InputAction Inventory { get; }
+        public InputAction InspectTruck { get; }
+        public InputAction OnFootMove { get; }
+        public InputAction OnFootLook { get; }
+        public InputAction OnFootSprint { get; }
         public InputAction Navigate => navigate;
         public bool UsingGamepad => gamepad;
         public Transform FocusRoot => scope;
@@ -72,6 +79,18 @@ namespace LWS.TruckTaxi
             CabMouseLook=Actions.AddAction("CabMouseLook",InputActionType.PassThrough,"<Mouse>/delta");
             CabMouseLookHold=Actions.AddAction("CabMouseLookHold",InputActionType.Button,"<Mouse>/rightButton");
             CabGamepadLook=Actions.AddAction("CabGamepadLook",InputActionType.Value,"<Gamepad>/rightStick");
+            ExitTruck=Button("ExitEnterTruck","<Keyboard>/g","<Gamepad>/rightStickPress");
+            WorldInteract=Button("WorldInteract","<Keyboard>/e","<Gamepad>/buttonSouth");
+            Inventory=Button("Inventory","<Keyboard>/tab","<Gamepad>/select");
+            InspectTruck=Button("InspectTruck","<Keyboard>/i","<Gamepad>/buttonNorth");
+            OnFootSprint=Button("OnFootSprint","<Keyboard>/leftShift","<Gamepad>/leftStickPress");
+            OnFootMove=Actions.AddAction("OnFootMove",InputActionType.Value);
+            OnFootMove.expectedControlType="Vector2";
+            OnFootMove.AddCompositeBinding("2DVector").With("Up","<Keyboard>/w").With("Down","<Keyboard>/s")
+                .With("Left","<Keyboard>/a").With("Right","<Keyboard>/d");
+            OnFootMove.AddBinding("<Gamepad>/leftStick");
+            OnFootLook=Actions.AddAction("OnFootLook",InputActionType.PassThrough);
+            OnFootLook.AddBinding("<Mouse>/delta"); OnFootLook.AddBinding("<Gamepad>/rightStick");
             navigate=Actions.AddAction("Navigate",InputActionType.Value);
             navigate.expectedControlType="Vector2";
             navigate.AddCompositeBinding("2DVector").With("Up","<Keyboard>/upArrow").With("Down","<Keyboard>/downArrow").With("Left","<Keyboard>/leftArrow").With("Right","<Keyboard>/rightArrow");

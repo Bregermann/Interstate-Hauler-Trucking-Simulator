@@ -30,6 +30,7 @@ namespace LWS.TruckTaxi
         }
         public void ResetTarget()
         {
+            GetComponent<TruckTaxiBreakawayProp>()?.ResetProp();
             Damaged = false;
             if (body != null) { body.linearVelocity = Vector3.zero; body.angularVelocity = Vector3.zero; }
             transform.SetPositionAndRotation(home, rotation);

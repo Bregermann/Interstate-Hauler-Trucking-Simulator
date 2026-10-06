@@ -155,7 +155,7 @@ namespace LWS.TruckTaxi
             return true;
         }
         public bool RouteToSleep() => RouteToService(TruckTaxiServiceCapability.Sleep);
-        public string SleepFailureReason(int hours)
+        public string SleepFailureReason(int hours, bool prepaidMotel = false)
         {
             if (State == null || host?.Ready != true || environment?.Clock == null || body == null || IsSleeping)
                 return "Sleep unavailable.";
@@ -166,18 +166,20 @@ namespace LWS.TruckTaxi
             var point = NearestServiceAtPosition(TruckTaxiServiceCapability.Sleep);
             if (point == null || string.IsNullOrWhiteSpace(point.stableId)) return "Park in a sleep service bay first.";
             if (!point.CanUse(body.position, body.linearVelocity.magnitude, settings.bathroomMaximumSpeed)) return "Vehicle must stop before sleeping.";
-            if (point.SleepCostCents(hours) > 0 && host.Session.WalletBalanceCents < point.SleepCostCents(hours)) return "Not enough cash.";
+            if (!prepaidMotel && point.SleepCostCents(hours) > 0 && host.Session.WalletBalanceCents < point.SleepCostCents(hours)) return "Not enough cash.";
             var clock = environment.Clock.CurrentSnapshot;
             try { new DateTime(clock.year, clock.month, clock.day, clock.hour, clock.minute, 0).AddHours(hours); }
             catch (ArgumentOutOfRangeException) { return "Clock cannot advance beyond the supported date range."; }
             return null;
         }
-        public bool TrySleep(int hours)
+        public bool TrySleep(int hours, bool prepaidMotel = false)
         {
-            string failure = SleepFailureReason(hours);
+            string failure = SleepFailureReason(hours, prepaidMotel);
             if (failure != null) { Feedback = failure; return false; }
             var point = NearbySleep;
-            long cost = point.SleepCostCents(hours);
+            if (prepaidMotel && !State.HasMotelAccess(point.stableId, environment.Clock.CurrentSnapshot.totalGameSeconds))
+            { Feedback = "Check in at the motel desk first."; return false; }
+            long cost = prepaidMotel ? 0 : point.SleepCostCents(hours);
             if (cost > 0 && !host.Session.TrySpend(cost)) { Feedback = "Not enough cash."; return false; }
             IsSleeping = true;
             try
@@ -185,13 +187,36 @@ namespace LWS.TruckTaxi
                 // AddHours publishes even while the service menu is paused. Suppress that
                 // callback and apply sleeping needs once, never an additional awake tick.
                 environment.Clock.AddHours(hours);
-                State.ApplySleep(hours);
+                State.ApplySleep(hours, prepaidMotel ? 1.1f : 1f);
                 FatiguePresentation?.ClearPresentation();
             }
             finally { IsSleeping = false; lastGameSeconds = environment.Clock.CurrentSnapshot.totalGameSeconds; }
             Feedback = "Rested " + hours + " hours. FATIGUE " + (State.Fatigue * 100).ToString("0") + "%";
             SleepCompleted?.Invoke(hours);
             host.GPS?.CompleteServiceDestination(point.stableId);
+            return true;
+        }
+        public bool TryTruckSleep(int hours)
+        {
+            if (State == null || host?.Ready != true || environment?.Clock == null || body == null || IsSleeping ||
+                !TruckTaxiFatigueRules.IsSleepDuration(hours) ||
+                !TruckTaxiFatigueRules.CanSleepInSession(host.Session.State) || State.JugActive ||
+                body.linearVelocity.magnitude > TruckTaxiServicePoint.ServiceStopSpeedMetersPerSecond ||
+                host.Player?.TruckControlController?.CurrentState.parkingBrakeOn != true)
+            { Feedback = "Park, set the brake and finish the current ride before sleeping."; return false; }
+            var clock = environment.Clock.CurrentSnapshot;
+            try { new DateTime(clock.year, clock.month, clock.day, clock.hour, clock.minute, 0).AddHours(hours); }
+            catch (ArgumentOutOfRangeException) { Feedback = "Clock cannot advance further."; return false; }
+            IsSleeping = true;
+            try
+            {
+                environment.Clock.AddHours(hours);
+                State.ApplySleep(hours, .8f);
+                FatiguePresentation?.ClearPresentation();
+            }
+            finally { IsSleeping = false; lastGameSeconds = environment.Clock.CurrentSnapshot.totalGameSeconds; }
+            Feedback = "Slept in the cab for " + hours + " hours.";
+            SleepCompleted?.Invoke(hours);
             return true;
         }
         private void Update()

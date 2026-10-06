@@ -40,7 +40,9 @@ namespace LWS.TruckTaxi
         private ParticleSystem burst;
         private Material burstMaterial;
         private double unbilledCents;
-        private float refuelElapsed;
+        public bool IsManualFueling { get; private set; }
+        public float Gallons => Fuel == null ? 0 : Fuel.amount / (float)TruckTaxiUsUnits.LitersPerUsGallon;
+        public float CapacityGallons => Fuel == null ? 0 : Fuel.capacity / (float)TruckTaxiUsUnits.LitersPerUsGallon;
 
         public void Initialize(TruckTaxiBootstrap owner)
         {
@@ -65,20 +67,36 @@ namespace LWS.TruckTaxi
         {
             if (Fuel == null || host.Paused || IsRescuing) return;
             if (Fuel.amount <= 0) { BeginRescue(); return; }
-            var station = TruckTaxiGasStationPoint.Nearest(body.position);
-            if (station == null || !station.CanRefuel(body.position, body.linearVelocity.magnitude) || Fuel.amount >= Fuel.capacity)
-            { Feedback = ""; refuelElapsed=0; return; }
-            refuelElapsed+=Time.deltaTime;
-            if(refuelElapsed<.25f) return;
-            float liters = Mathf.Min(Fuel.capacity - Fuel.amount, station.litersPerSecond * refuelElapsed);
-            refuelElapsed=0;
-            double price = unbilledCents + liters * station.centsPerLiter;
-            long charge = (long)Math.Floor(price);
-            if (!host.Session.TrySpend(charge)) { Feedback = "NOT ENOUGH CASH TO REFUEL"; return; }
-            unbilledCents = price - charge; TotalFuelCharges += charge; Fuel.amount += liters;
-            Feedback = "REFUELING  " + Mathf.RoundToInt(Fraction * 100) + "%";
-            if (liters > 0) host.GPS?.CompleteServiceDestination(station.stableId);
+            if (!IsManualFueling) return;
+            if (host.WorldLife == null || !host.WorldLife.IsOnFoot) StopManualFueling();
         }
+        public bool PumpManual(TruckTaxiGasStationPoint station, float seconds)
+        {
+            if (host?.WorldLife?.IsOnFoot != true || host.Paused || IsRescuing || Fuel == null ||
+                station == null || !float.IsFinite(seconds) || seconds <= 0 ||
+                host.Player?.TruckControlController?.CurrentState.parkingBrakeOn != true ||
+                !station.CanRefuel(body.position, body.linearVelocity.magnitude))
+            { StopManualFueling(); return false; }
+            if (Fuel.amount >= Fuel.capacity) { Feedback = "TANK FULL"; StopManualFueling(); return false; }
+            long balance = host.Session.WalletBalanceCents;
+            if (balance <= 0) { Feedback = "NOT ENOUGH CASH TO REFUEL"; StopManualFueling(); return false; }
+            float liters = Mathf.Min(Fuel.capacity - Fuel.amount, station.litersPerSecond * seconds,
+                Mathf.Max(0, (float)((balance - unbilledCents) / Mathf.Max(1, station.centsPerLiter))));
+            if (liters <= 0) { Feedback = "NOT ENOUGH CASH TO REFUEL"; StopManualFueling(); return false; }
+            double due = unbilledCents + liters * station.centsPerLiter;
+            long charge = Math.Max(0, (long)Math.Ceiling(due));
+            if (!host.Session.TrySpend(charge)) { Feedback = "NOT ENOUGH CASH TO REFUEL"; StopManualFueling(); return false; }
+            bool firstDispense = !IsManualFueling;
+            unbilledCents = due - charge;
+            TotalFuelCharges += charge;
+            Fuel.amount += liters;
+            IsManualFueling = true;
+            Feedback = "DIESEL " + Gallons.ToString("0.0") + "/" + CapacityGallons.ToString("0.0") +
+                " GAL  " + TruckTaxiHud.Money(TotalFuelCharges);
+            if (firstDispense) host.GPS?.CompleteServiceDestination(station.stableId);
+            return true;
+        }
+        public void StopManualFueling() => IsManualFueling = false;
         public static long RescueCost(float capacity, int centsPerLiter) =>
             (long)Math.Ceiling(Math.Max(0, capacity) * Math.Max(0, centsPerLiter) * 2d);
         public bool RouteToGas()

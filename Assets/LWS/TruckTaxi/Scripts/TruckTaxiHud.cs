@@ -189,6 +189,8 @@ namespace LWS.TruckTaxi
                 if(Time.unscaledTime >= refreshAt) { refreshAt=Time.unscaledTime+.15f; Refresh(); }
                 RefreshFocus(); return;
             }
+            if(host.WorldLife?.HandleHudInput(UIInput)==true)
+            { RefreshFocus(); return; }
             if(GetComponent<TruckTaxiHudModalBridge>()?.HandleUiActions(UIInput)==true)
             {
                 if(Time.unscaledTime >= refreshAt) { refreshAt=Time.unscaledTime+.15f; Refresh(); }
@@ -239,7 +241,7 @@ namespace LWS.TruckTaxi
         private void RefreshFocus()
         {
             var bridge=GetComponent<TruckTaxiHudModalBridge>();
-            UIInput?.Focus(SaveLoad?.IsOpen==true ? SaveLoad.FocusRoot : appreciationRunning ? null : bridge?.IsOpen==true ? bridge.FocusRoot : host.Races?.MenuOpen==true ? host.Races.FocusRoot : RadioPanel?.IsOpen==true ? RadioPanel.FocusRoot : MegaDebug?.IsOpen==true ? MegaDebug.FocusRoot : Planning?.IsOpen==true ? Planning.FocusRoot : FullMap?.IsOpen==true ? FullMap.FocusRoot : DebugOverlayOpen ? debug.FocusRoot : Controls?.IsOpen==true ? Controls.FocusRoot : CabLookSettings?.IsOpen==true ? CabLookSettings.FocusRoot : EnvironmentNeeds?.IsOpen==true ? EnvironmentNeeds.FocusRoot : AudioSettings?.IsOpen==true ? AudioSettings.FocusRoot : GPSSettings?.IsOpen==true ? GPSSettings.FocusRoot :
+            UIInput?.Focus(SaveLoad?.IsOpen==true ? SaveLoad.FocusRoot : host.WorldLife?.InventoryOpen==true || host.WorldLife?.DamageOpen==true ? host.WorldLife.FocusRoot : appreciationRunning ? null : bridge?.IsOpen==true ? bridge.FocusRoot : host.Races?.MenuOpen==true ? host.Races.FocusRoot : RadioPanel?.IsOpen==true ? RadioPanel.FocusRoot : MegaDebug?.IsOpen==true ? MegaDebug.FocusRoot : Planning?.IsOpen==true ? Planning.FocusRoot : FullMap?.IsOpen==true ? FullMap.FocusRoot : DebugOverlayOpen ? debug.FocusRoot : Controls?.IsOpen==true ? Controls.FocusRoot : CabLookSettings?.IsOpen==true ? CabLookSettings.FocusRoot : EnvironmentNeeds?.IsOpen==true ? EnvironmentNeeds.FocusRoot : AudioSettings?.IsOpen==true ? AudioSettings.FocusRoot : GPSSettings?.IsOpen==true ? GPSSettings.FocusRoot :
                 modal.gameObject.activeSelf ? modal : pausePanel.gameObject.activeSelf ? pausePanel : null);
         }
         public void OnDebugVisibilityChanged()
@@ -344,7 +346,7 @@ namespace LWS.TruckTaxi
             status.text = "TRUCK TAXI   |   " + s.State.ToString().ToUpperInvariant() + "\nCASH " + Money(s.WalletBalanceCents) + "   /   " + s.CompletedRides+" RIDES";
             status.text += "\n" + (host.Roadside?.Condition ?? "VEHICLE INITIALIZING");
             if(s.State==TruckTaxiState.Available) status.text+="  |  "+s.DispatchDemandLabel+" / "+s.WorkArea.label;
-            float mph=host.Player!=null ? host.Player.GetComponent<Rigidbody>().linearVelocity.magnitude*2.236936f : 0;
+            float mph=host.Player!=null ? TruckTaxiUsUnits.Mph(host.Player.GetComponent<Rigidbody>().linearVelocity.magnitude) : 0;
             speed.text=$"{mph:0} MPH";
             title.text=inactive ? "TRUCK TAXI" : offered ? "RIDE REQUEST" : s.State==TruckTaxiState.RideComplete ? "FARE COMPLETE" : "RIDE ENDED";
             if(appreciation) title.text="SPECIAL APPRECIATION";
@@ -366,7 +368,7 @@ namespace LWS.TruckTaxi
                 var offer=s.Offer;
                 details.fontSizeMin=18;
                 var modifiers=s.AcceptedFareModifiers; long basis=offer.EstimatedFareCents;
-                details.text=$"{offer.Passenger.passengerName}  /  {offer.Passenger.passengerRating:0.0} STARS\n{offer.Passenger.personality}\nA  {offer.Pickup.locationName}  ({offer.ToPickup.Meters/1609.344f:0.00} mi away)\nB  {offer.Destination.locationName}\nTRIP {offer.Trip.Meters/1609.344f:0.00} mi\n\nBASE ESTIMATE {Money(basis)}\nEVENT +{Money((long)Math.Round(basis*(modifiers.EventMultiplier-1)))}\nWEATHER +{Money((long)Math.Round(basis*(modifiers.WeatherMultiplier-1)))}\nOTHER +{Money((long)Math.Round(basis*(modifiers.OtherMultiplier-1)))}\nINTERCITY +{Money((long)Math.Round(basis*(s.IntercityFareBonusMultiplier-1)))}\nTIP: AFTER RIDE\nESTIMATED TOTAL {Money(s.DemandEstimatedFareCents)}\n{modifiers.EventLabel}\n[{UIInput.Hint(UIInput.Submit)}] ACCEPT   [{UIInput.Hint(UIInput.Cancel)}] DECLINE";
+                details.text=$"{offer.Passenger.passengerName}  /  {offer.Passenger.passengerRating:0.0} STARS\n{offer.Passenger.personality}\nA  {offer.Pickup.locationName}  ({TruckTaxiUsUnits.Distance(offer.ToPickup.Meters)} away)\nB  {offer.Destination.locationName}\nTRIP {TruckTaxiUsUnits.Distance(offer.Trip.Meters)}\n\nBASE ESTIMATE {Money(basis)}\nEVENT +{Money((long)Math.Round(basis*(modifiers.EventMultiplier-1)))}\nWEATHER +{Money((long)Math.Round(basis*(modifiers.WeatherMultiplier-1)))}\nOTHER +{Money((long)Math.Round(basis*(modifiers.OtherMultiplier-1)))}\nINTERCITY +{Money((long)Math.Round(basis*(s.IntercityFareBonusMultiplier-1)))}\nTIP: AFTER RIDE\nESTIMATED TOTAL {Money(s.DemandEstimatedFareCents)}\n{modifiers.EventLabel}\n[{UIInput.Hint(UIInput.Submit)}] ACCEPT   [{UIInput.Hint(UIInput.Cancel)}] DECLINE";
                 if(!offer.ToPickup.Navigable || !offer.Trip.Navigable) details.text+="\nSTRAIGHT-LINE FALLBACK";
             }
             else if(s.LastFare!=null)

@@ -27,6 +27,7 @@ namespace LWS.InterstateHauler
 
         private readonly Dictionary<string, bool> _previous = new Dictionary<string, bool>();
         private readonly HashSet<object> _gamepadIndicatorSuppressors = new HashSet<object>();
+        private readonly HashSet<object> _drivingInputSuppressors = new HashSet<object>();
         private static readonly System.Predicate<object> DestroyedIndicatorOwner = owner =>
             owner is UnityEngine.Object unityOwner && unityOwner == null;
         private ILwsVehicleInputService _inputService;
@@ -50,7 +51,14 @@ namespace LWS.InterstateHauler
                 return suppressGamepadIndicators || _gamepadIndicatorSuppressors.Count > 0;
             }
         }
-        public bool DrivingInputSuppressed => suppressDrivingInput;
+        public bool DrivingInputSuppressed
+        {
+            get
+            {
+                _drivingInputSuppressors.RemoveWhere(DestroyedIndicatorOwner);
+                return suppressDrivingInput || _drivingInputSuppressors.Count > 0;
+            }
+        }
         public LwsVehicleCommandFrame LastCommands => _lastCommands;
         public bool KeyboardForwardHeld => _keyboardForwardHeld;
         public bool KeyboardReverseHeld => _keyboardReverseHeld;
@@ -113,6 +121,19 @@ namespace LWS.InterstateHauler
             }
         }
 
+        public void AcquireDrivingInputSuppression(object owner)
+        {
+            if (owner == null) return;
+            _drivingInputSuppressors.Add(owner);
+            _lastContinuous = default;
+            _lastCommands = default;
+        }
+
+        public void ReleaseDrivingInputSuppression(object owner)
+        {
+            if (owner != null) _drivingInputSuppressors.Remove(owner);
+        }
+
         public static LwsVehicleCommandFrame SuppressCameraCycle(LwsVehicleCommandFrame commands)
         {
             commands.cameraCycle = LwsMomentaryIntent.None;
@@ -169,7 +190,7 @@ namespace LWS.InterstateHauler
 
         private LwsVehicleContinuousInput ReadContinuousNow()
         {
-            if (suppressDrivingInput)
+            if (DrivingInputSuppressed)
             {
                 _keyboardForwardHeld = false;
                 _keyboardReverseHeld = false;
@@ -294,7 +315,7 @@ namespace LWS.InterstateHauler
 
         private LwsVehicleCommandFrame ReadCommandsNow()
         {
-            if (suppressDrivingInput)
+            if (DrivingInputSuppressed)
             {
                 return default;
             }

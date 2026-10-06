@@ -32,6 +32,8 @@ namespace LWS.TruckTaxi
         private bool originalRaw, originalReturn;
         private AnimationCurve originalCurve, originalSmoothing;
         private TruckTaxiTemporaryEffects effects;
+        public System.Func<float> MechanicalPowerMultiplier { get; set; }
+        private float damageSteeringMultiplier = 1f;
 
         public void Initialize(VehicleController controller)
         {
@@ -54,7 +56,12 @@ namespace LWS.TruckTaxi
         {
             if (!Applied || vehicle == null) return 1;
             float launch = LaunchMultiplier(SpeedMph, launchPowerAtRest, launchPowerAt15Mph);
-            return launch * (effects?.VehiclePowerMultiplier ?? 1);
+            return launch * (effects?.VehiclePowerMultiplier ?? 1) * Mathf.Clamp(MechanicalPowerMultiplier?.Invoke() ?? 1f, .1f, 1f);
+        }
+        public void SetDamageSteeringMultiplier(float multiplier)
+        {
+            damageSteeringMultiplier = Mathf.Clamp(multiplier, .45f, 1f);
+            if (Applied && vehicle != null) vehicle.steering.maximumSteerAngle = lowSpeedSteeringLock * damageSteeringMultiplier;
         }
         public void Apply()
         {
@@ -63,7 +70,7 @@ namespace LWS.TruckTaxi
             originalLock = steering.maximumSteerAngle; originalRate = steering.degreesPerSecondLimit;
             originalRaw = steering.useRawInput; originalReturn = steering.returnToCenter;
             originalCurve = steering.speedSensitiveSteeringCurve; originalSmoothing = steering.speedSensitiveSmoothingCurve;
-            steering.maximumSteerAngle = lowSpeedSteeringLock;
+            steering.maximumSteerAngle = lowSpeedSteeringLock * damageSteeringMultiplier;
             steering.degreesPerSecondLimit = steeringResponse;
             steering.useRawInput = false; steering.returnToCenter = true;
             // Installed NWH evaluates Speed / 50 m/s (not /100 as its older tooltip says).

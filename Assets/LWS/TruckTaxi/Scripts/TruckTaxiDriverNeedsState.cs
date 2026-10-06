@@ -5,7 +5,7 @@ using UnityEngine;
 namespace LWS.TruckTaxi
 {
     public enum TruckTaxiBladderState { Fine, Building, NeedToGo, Urgent, Crisis }
-    public enum TruckTaxiDriverNeedEvent { BladderUrgent, JugStarted, JugSucceeded, JugSpilled, BathroomStop, CrisisAccident, JugDisposed, CabCleaned, JugCancelled, JugThrownFromWindow, LitterThrown }
+    public enum TruckTaxiDriverNeedEvent { BladderUrgent, JugStarted, JugSucceeded, JugSpilled, BathroomStop, CrisisAccident, JugDisposed, CabCleaned, JugCancelled, JugThrownFromWindow, LitterThrown, BowelUrgent, BowelAccident }
 
     // Needs authority only. Save orchestration stays with LwsSaveService / Pixel Crushers.
     public sealed class TruckTaxiDriverNeedsState
@@ -13,9 +13,12 @@ namespace LWS.TruckTaxi
         private readonly TruckTaxiEnvironmentSettings settings;
         private readonly System.Random random;
         private float cycleSeconds, crisisSeconds, releasedSeconds, instability;
+        private float bowelCrisisSeconds;
+        private bool bowelUrgentEmitted;
         private bool urgentEmitted;
         private int nextCue;
         private readonly int[] items = new int[Enum.GetValues(typeof(TruckTaxiNeedsItem)).Length];
+        private readonly HashSet<string> usedToiletIds = new HashSet<string>(StringComparer.Ordinal);
         private TruckTaxiNeedsItem reservedContainer;
         private bool freePlayInventoryGranted;
         private bool persistentStateRestored;
@@ -41,6 +44,34 @@ namespace LWS.TruckTaxi
         public int BottlesThrown { get; private set; }
         public int JugsThrown { get; private set; }
         public float Pressure { get; private set; }
+        public float BowelPressure { get; private set; }
+        public int ToiletsDiscovered => usedToiletIds.Count;
+        private readonly HashSet<string> ambientChoiceIds = new HashSet<string>(StringComparer.Ordinal);
+        public IReadOnlyCollection<string> AmbientChoiceIds => ambientChoiceIds;
+        public bool RecordAmbientChoice(string stableChoiceId) => !string.IsNullOrWhiteSpace(stableChoiceId) &&
+            stableChoiceId.Length <= 128 && ambientChoiceIds.Add(stableChoiceId);
+        public string RentedMotelId { get; private set; }
+        public double MotelAccessExpiresAtGameSeconds { get; private set; }
+        public bool HasMotelAccess(string stableId, double now) => !string.IsNullOrWhiteSpace(stableId) &&
+            string.Equals(stableId, RentedMotelId, StringComparison.Ordinal) &&
+            double.IsFinite(now) && now < MotelAccessExpiresAtGameSeconds;
+        public bool RentMotel(string stableId, double now, double durationGameSeconds)
+        {
+            if (string.IsNullOrWhiteSpace(stableId) || stableId.Length > 128 || !double.IsFinite(now) ||
+                !double.IsFinite(durationGameSeconds) || durationGameSeconds <= 0) return false;
+            RentedMotelId = stableId;
+            MotelAccessExpiresAtGameSeconds = now + durationGameSeconds;
+            return true;
+        }
+        public bool HasUsedToilet(string stableId) => !string.IsNullOrWhiteSpace(stableId) && usedToiletIds.Contains(stableId);
+        public event Action<int> ToiletCollectionChanged;
+        public bool RecordToiletUse(string stableId)
+        {
+            if (string.IsNullOrWhiteSpace(stableId) || stableId.Length > 128 || !usedToiletIds.Add(stableId)) return false;
+            ToiletCollectionChanged?.Invoke(usedToiletIds.Count);
+            return true;
+        }
+        public void RelieveBowel() { BowelPressure = 0; bowelCrisisSeconds = 0; bowelUrgentEmitted = false; }
         public bool FilledJug => Count(TruckTaxiNeedsItem.FilledJug) + Count(TruckTaxiNeedsItem.FilledBottle) > 0;
         public bool HasEmptyContainer => Count(TruckTaxiNeedsItem.EmptyPissJug) + Count(TruckTaxiNeedsItem.EmptyBottle) > 0;
         public bool CanStartJug => !JugActive && Pressure > .02f &&
@@ -87,6 +118,10 @@ namespace LWS.TruckTaxi
                     ItemId = entry.StableId, Count = Count(entry.Item) + (JugActive && reservedContainer == entry.Item ? 1 : 0) });
             return new TruckTaxiDriverNeedsSnapshot {
                 Pressure = Pressure, Hunger = Hunger, Thirst = Thirst, Fatigue = Fatigue,
+                BowelPressure = BowelPressure, BowelCrisisGameSeconds = bowelCrisisSeconds,
+                UsedToiletIds = new List<string>(usedToiletIds).ToArray(),
+                AmbientChoiceIds = new List<string>(ambientChoiceIds).ToArray(),
+                RentedMotelId = RentedMotelId, MotelAccessExpiresAtGameSeconds = MotelAccessExpiresAtGameSeconds,
                 StarterInventoryGranted = freePlayInventoryGranted, CabMess = CabMess,
                 CycleGameSeconds = cycleSeconds, CrisisGameSeconds = crisisSeconds, Inventory = inventory.ToArray() };
         }
@@ -95,12 +130,27 @@ namespace LWS.TruckTaxi
             error = null;
             if (snapshot == null || snapshot.Version != 1 || snapshot.Inventory == null)
             { error = "Missing or unsupported needs snapshot."; return false; }
-            if (!Normalized(snapshot.Pressure) || !Normalized(snapshot.Hunger) || !Normalized(snapshot.Thirst) || !Normalized(snapshot.Fatigue) ||
+            if (!Normalized(snapshot.Pressure) || !Normalized(snapshot.Hunger) || !Normalized(snapshot.Thirst) || !Normalized(snapshot.Fatigue) || !Normalized(snapshot.BowelPressure) ||
                 !float.IsFinite(snapshot.CycleGameSeconds) || snapshot.CycleGameSeconds < 0 ||
-                !float.IsFinite(snapshot.CrisisGameSeconds) || snapshot.CrisisGameSeconds < 0)
+                !float.IsFinite(snapshot.CrisisGameSeconds) || snapshot.CrisisGameSeconds < 0 ||
+                !float.IsFinite(snapshot.BowelCrisisGameSeconds) || snapshot.BowelCrisisGameSeconds < 0)
             { error = "Invalid needs values."; return false; }
+            if ((!string.IsNullOrEmpty(snapshot.RentedMotelId) &&
+                    (string.IsNullOrWhiteSpace(snapshot.RentedMotelId) || snapshot.RentedMotelId.Length > 128)) ||
+                !double.IsFinite(snapshot.MotelAccessExpiresAtGameSeconds) || snapshot.MotelAccessExpiresAtGameSeconds < 0)
+            { error = "Invalid motel access."; return false; }
             var restored = new int[items.Length];
             var seen = new HashSet<string>(StringComparer.Ordinal);
+            var restoredToilets = new HashSet<string>(StringComparer.Ordinal);
+            if (snapshot.UsedToiletIds != null)
+                foreach (var id in snapshot.UsedToiletIds)
+                    if (string.IsNullOrWhiteSpace(id) || id.Length > 128 || !restoredToilets.Add(id))
+                    { error = "Invalid or duplicate toilet identity."; return false; }
+            var restoredChoices = new HashSet<string>(StringComparer.Ordinal);
+            if (snapshot.AmbientChoiceIds != null)
+                foreach (var id in snapshot.AmbientChoiceIds)
+                    if (string.IsNullOrWhiteSpace(id) || id.Length > 128 || !restoredChoices.Add(id))
+                    { error = "Invalid or duplicate ambient choice identity."; return false; }
             foreach (var item in snapshot.Inventory)
             {
                 var entry = item == null ? null : TruckTaxiNeedsItems.Find(item.ItemId);
@@ -112,6 +162,13 @@ namespace LWS.TruckTaxi
             CancelJug(); Effects.Clear();
             Array.Copy(restored, items, items.Length);
             Pressure = snapshot.Pressure; Hunger = snapshot.Hunger; Thirst = snapshot.Thirst; Fatigue = snapshot.Fatigue;
+            BowelPressure = snapshot.BowelPressure;
+            bowelCrisisSeconds = snapshot.BowelCrisisGameSeconds;
+            bowelUrgentEmitted = BowelPressure >= .85f;
+            usedToiletIds.Clear(); usedToiletIds.UnionWith(restoredToilets);
+            ambientChoiceIds.Clear(); ambientChoiceIds.UnionWith(restoredChoices);
+            RentedMotelId = snapshot.RentedMotelId;
+            MotelAccessExpiresAtGameSeconds = snapshot.MotelAccessExpiresAtGameSeconds;
             CabMess = snapshot.CabMess; freePlayInventoryGranted = snapshot.StarterInventoryGranted;
             if (snapshot.CycleGameSeconds > 0) cycleSeconds = snapshot.CycleGameSeconds;
             crisisSeconds = snapshot.CrisisGameSeconds; urgentEmitted = Pressure >= .85f;
@@ -131,13 +188,13 @@ namespace LWS.TruckTaxi
             Fatigue = Mathf.Clamp01(Fatigue + TruckTaxiFatigueRules.Gain(seconds, activity, startHour) * FatigueGainMultiplier);
             AdvanceCoreNeeds(seconds);
         }
-        public bool ApplySleep(int hours)
+        public bool ApplySleep(int hours, float recoveryQuality = 1f)
         {
             if (!TruckTaxiFatigueRules.IsSleepDuration(hours) || JugActive) return false;
             // Sleep outlasts short stimulant effects; no indefinitely frozen timer across a time skip.
             Effects.Clear();
             for (int minute = 0; minute < hours * 60; minute++) AdvanceCoreNeeds(60);
-            Fatigue = Mathf.Clamp01(Fatigue - TruckTaxiFatigueRules.SleepRecovery(hours));
+            Fatigue = Mathf.Clamp01(Fatigue - TruckTaxiFatigueRules.SleepRecovery(hours) * Mathf.Clamp(recoveryQuality, .5f, 1.25f));
             return true;
         }
         private void AdvanceCoreNeeds(double seconds)
@@ -148,6 +205,18 @@ namespace LWS.TruckTaxi
             Pressure = Mathf.Clamp01(Pressure + (float)(seconds / cycleSeconds) * bladderRate);
             Hunger = Mathf.Clamp01(Hunger + (float)(seconds / (8 * 3600)) * Effects.HungerRateMultiplier);
             Thirst = Mathf.Clamp01(Thirst + (float)(seconds / (5 * 3600)) * Effects.ThirstRateMultiplier);
+            BowelPressure = Mathf.Clamp01(BowelPressure + (float)(seconds / (12 * 3600)));
+            if (BowelPressure >= .85f && !bowelUrgentEmitted)
+            { bowelUrgentEmitted = true; Event?.Invoke(TruckTaxiDriverNeedEvent.BowelUrgent); }
+            if (BowelPressure >= 1f)
+            {
+                bowelCrisisSeconds += (float)seconds;
+                if (bowelCrisisSeconds >= Mathf.Max(1, settings.crisisGraceGameMinutes) * 60)
+                {
+                    CabMess = true; BowelPressure = .25f; bowelCrisisSeconds = 0;
+                    bowelUrgentEmitted = false; Event?.Invoke(TruckTaxiDriverNeedEvent.BowelAccident);
+                }
+            }
             if (Pressure >= .85f && !urgentEmitted) { urgentEmitted = true; Event?.Invoke(TruckTaxiDriverNeedEvent.BladderUrgent); }
             if (Pressure < 1) return;
             crisisSeconds += (float)Math.Max(0, seconds - untilFull);

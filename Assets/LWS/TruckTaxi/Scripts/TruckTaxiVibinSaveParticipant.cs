@@ -12,6 +12,7 @@ namespace LWS.TruckTaxi
         public string regionId;
         public TruckTaxiPersistentState session;
         public TruckTaxiDriverNeedsSnapshot needs;
+        public TruckTaxiDamageSnapshot damage;
     }
 
     // Embedded participant JSON follows the existing LWS providers. The facade/Pixel Crushers

@@ -108,7 +108,7 @@ namespace LWS.TruckTaxi
             hud.Text(driverPage, "Driver heading", new Vector2(.04f, .91f), new Vector2(.96f, .985f), 34).text = "DRIVER NEEDS";
             needText = hud.Text(driverPage, "Driver status", new Vector2(.05f, .68f), new Vector2(.95f, .90f), 24);
             hud.Button(driverPage, "ROUTE TO RESTROOM", new Vector2(.05f, .55f), new Vector2(.485f, .65f), () => { needs.RouteToBathroom(); Refresh(); });
-            hud.Button(driverPage, "USE BATHROOM", new Vector2(.515f, .55f), new Vector2(.95f, .65f), () => { needs.UseBathroom(); Refresh(); });
+            hud.Button(driverPage, "EXIT FOR TOILET", new Vector2(.515f, .55f), new Vector2(.95f, .65f), () => { needs.RouteToBathroom(); Close(); });
             var jug = hud.Button(driverPage, "USE PISS JUG", new Vector2(.05f, .42f), new Vector2(.485f, .52f), BeginJug);
             startJugControls.AddRange(jug.GetComponentsInChildren<UnityEngine.UI.Selectable>(true));
             hud.Button(driverPage, "DISPOSE OF FILLED JUG", new Vector2(.515f, .42f), new Vector2(.95f, .52f), () => { needs.DisposeJug(); Refresh(); });
@@ -129,9 +129,9 @@ namespace LWS.TruckTaxi
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                var button = hud.Button(content, entry.Name + "  " + TruckTaxiHud.Money(entry.PriceCents),
+                var button = hud.Button(content, "FIND " + entry.Name + "  " + TruckTaxiHud.Money(entry.PriceCents),
                     Vector2.zero, Vector2.one,
-                    () => { needs.BuyItem(entry.Item); Refresh(); });
+                    () => { needs.RouteToStore(); Close(); });
                 storeControls.AddRange(button.GetComponentsInChildren<UnityEngine.UI.Selectable>(true));
             }
             hud.Button(storePage, "ROUTE", new Vector2(.05f, .035f), new Vector2(.34f, .13f),
@@ -330,13 +330,8 @@ namespace LWS.TruckTaxi
         {
             hud.Text(sleepPage, "Sleep heading", new Vector2(.05f, .90f), new Vector2(.95f, .99f), 32).text = "PARK TO REST";
             sleepStatus = hud.Text(sleepPage, "Sleep status", new Vector2(.05f, .64f), new Vector2(.95f, .88f), 23);
-            int[] durations = { 2, 4, 8 };
-            for (int i = 0; i < durations.Length; i++)
-            {
-                int hours = durations[i]; float y = .52f - i * .115f;
-                hud.Button(sleepPage, (hours == 2 ? "NAP " : "SLEEP ") + hours + " HOURS",
-                    new Vector2(.05f, y), new Vector2(.95f, y + .095f), () => { needs.TrySleep(hours); Refresh(); });
-            }
+            hud.Button(sleepPage, "FIND BED / EXIT FOR REST", new Vector2(.05f, .35f),
+                new Vector2(.95f, .54f), () => { needs.RouteToSleep(); Close(); });
             var toggleRect = TruckTaxiHud.Rect(sleepPage, "Reduced fatigue effects", new Vector2(.05f, .19f), new Vector2(.95f, .265f));
             var box = TruckTaxiHud.Rect(toggleRect, "Toggle background", Vector2.zero, new Vector2(.07f, 1));
             var background = box.gameObject.AddComponent<UnityEngine.UI.Image>(); background.color = new Color(.2f, .24f, .25f);
@@ -359,15 +354,15 @@ namespace LWS.TruckTaxi
             contextTitle = hud.Text(contextPage, "Service heading", new Vector2(.05f, .88f), new Vector2(.95f, .98f), 32);
             contextStatus = hud.Text(contextPage, "Service details", new Vector2(.05f, .72f), new Vector2(.95f, .86f), 20);
             sleepButton = hud.Button(contextPage, "SLEEP HERE", new Vector2(.05f, .60f), new Vector2(.95f, .70f), ShowSleep);
-            eatButton = hud.Button(contextPage, "EAT HERE", new Vector2(.05f, .48f), new Vector2(.49f, .59f),
-                () => { needs.EatHere(); Refresh(); });
+            eatButton = hud.Button(contextPage, "GO INSIDE TO EAT", new Vector2(.05f, .48f), new Vector2(.49f, .59f),
+                () => { needs.RouteToService(TruckTaxiServiceCapability.Food); Close(); });
             buyFoodButton = hud.Button(contextPage, "BUY FOOD / TAKEOUT", new Vector2(.51f, .48f), new Vector2(.95f, .59f), ShowStore);
             repairButton = hud.Button(contextPage, "REPAIR VEHICLE", new Vector2(.05f, .35f), new Vector2(.49f, .46f),
                 () => { host.Roadside?.RepairAt(activeContext); Refresh(); });
-            refuelButton = hud.Button(contextPage, "REFUEL", new Vector2(.51f, .35f), new Vector2(.95f, .46f),
-                () => { Close(); });
-            restroomButton = hud.Button(contextPage, "USE RESTROOM", new Vector2(.05f, .22f), new Vector2(.49f, .33f),
-                () => { needs.UseBathroom(); Refresh(); });
+            refuelButton = hud.Button(contextPage, "EXIT FOR DIESEL", new Vector2(.51f, .35f), new Vector2(.95f, .46f),
+                () => { needs.RouteToService(TruckTaxiServiceCapability.Refuel); Close(); });
+            restroomButton = hud.Button(contextPage, "EXIT FOR TOILET", new Vector2(.05f, .22f), new Vector2(.49f, .33f),
+                () => { needs.RouteToBathroom(); Close(); });
             wasteButton = hud.Button(contextPage, "DISPOSE WASTE", new Vector2(.51f, .22f), new Vector2(.95f, .33f),
                 () => { needs.DisposeJug(); Refresh(); });
             hud.Button(contextPage, "LEAVE", new Vector2(.05f, .06f), new Vector2(.49f, .17f),

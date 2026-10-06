@@ -239,6 +239,8 @@ namespace LWS.TruckTaxi
         private float nextApply;
         public float CurrentGripMultiplier { get; private set; } = 1;
         public float CurrentRollingMultiplier { get; private set; } = 1;
+        public System.Func<int, float> TireGripMultiplier { get; set; }
+        public System.Func<int, float> TireRollingMultiplier { get; set; }
         private struct Wheel
         {
             public WheelUAPI api;
@@ -296,9 +298,14 @@ namespace LWS.TruckTaxi
                     float longitudinal = GripForDepth(depth, region.MaximumDepth, deepSnowLongitudinalGrip);
                     float lateral = GripForDepth(depth, region.MaximumDepth, deepSnowLateralGrip);
                     float rolling = RollingForDepth(depth, region.MaximumDepth, deepSnowRollingMultiplier);
+                    float tireGrip = Mathf.Clamp(TireGripMultiplier?.Invoke(i) ?? 1f, .2f, 1f);
+                    float tireRolling = Mathf.Clamp(TireRollingMultiplier?.Invoke(i) ?? 1f, 1f, 3f);
+                    longitudinal *= tireGrip;
+                    lateral *= tireGrip;
+                    rolling *= tireRolling;
                     CurrentGripMultiplier = Mathf.Min(CurrentGripMultiplier, lateral);
                     CurrentRollingMultiplier = Mathf.Max(CurrentRollingMultiplier, rolling);
-                    if (depth <= .001f) Restore(ref wheel);
+                    if (depth <= .001f && tireGrip >= .999f && tireRolling <= 1.001f) Restore(ref wheel);
                     else Apply(ref wheel, longitudinal, lateral, rolling);
                 }
                 wheels[i] = wheel;

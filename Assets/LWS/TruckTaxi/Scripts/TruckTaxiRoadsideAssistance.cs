@@ -20,8 +20,16 @@ namespace LWS.TruckTaxi
         public long QuotedCostCents { get; private set; }
         public long RepairCostCents => vehicle == null ? 0 : (long)System.Math.Ceiling(
             (Mathf.Clamp01(damage != null ? damage.Damage : 0) +
-             Mathf.Clamp01(vehicle.powertrain.engine.Damage) +
-             Mathf.Clamp01(vehicle.powertrain.transmission.Damage)) * 5000);
+             (host?.ComponentDamage == null ? Mathf.Clamp01(vehicle.powertrain.engine.Damage) +
+             Mathf.Clamp01(vehicle.powertrain.transmission.Damage) : 0)) * 5000) +
+             (host?.ComponentDamage?.TotalRepairCostCents ?? 0);
+        private long RepairCostFor(TruckTaxiServicePoint service)
+        {
+            if (service == null) return 0;
+            long vendorCost = service.Supports(TruckTaxiServiceCapability.RepairGeneralDamage) ?
+                RepairCostCents - (host?.ComponentDamage?.TotalRepairCostCents ?? 0) : 0;
+            return vendorCost + (host?.ComponentDamage?.RepairCostFor(service.capabilities) ?? 0);
+        }
         public bool NeedsRepair => RepairCostCents > 0;
         public bool CanRequest => host != null && host.Ready && !IsRecovering && host.Fuel?.IsRescuing != true &&
             (host.Session.State == TruckTaxiState.Available || host.Session.State == TruckTaxiState.DrivingToPickup ||
@@ -85,7 +93,8 @@ namespace LWS.TruckTaxi
             float missingFuel = host.Fuel?.Fuel != null ? Mathf.Max(0, host.Fuel.Fuel.capacity - host.Fuel.Fuel.amount) : 0;
             var gas = QuotedDestination.GetComponent<TruckTaxiGasStationPoint>();
             QuotedCostCents = QuotedDestination.assistanceBaseCostCents +
-                (QuotedDestination.Supports(TruckTaxiServiceCapability.Refuel) ? (long)System.Math.Ceiling(missingFuel * (gas != null ? gas.centsPerLiter : 150)) : 0);
+                (QuotedDestination.Supports(TruckTaxiServiceCapability.Refuel) ? (long)System.Math.Ceiling(missingFuel * (gas != null ? gas.centsPerLiter : 150)) : 0) +
+                RepairCostFor(QuotedDestination);
             Feedback = QuotedDestination.displayName + "\n" + TruckTaxiHud.Money(QuotedCostCents) +
                 "\n" + QuotedDestination.capabilities;
             return true;
@@ -101,7 +110,7 @@ namespace LWS.TruckTaxi
                 body == null || !service.CanUse(body.position, body.linearVelocity.magnitude,
                     TruckTaxiServicePoint.ServiceStopSpeedMetersPerSecond))
             { Feedback = "Stop inside a repair bay first."; return false; }
-            long cost = RepairCostCents;
+            long cost = RepairCostFor(service);
             if (cost <= 0) { Feedback = "Vehicle already repaired."; return false; }
             if (host.Session.WalletBalanceCents < cost || !host.Session.TrySpend(cost))
             { Feedback = "Not Enough Cash for Repair"; return false; }
@@ -110,6 +119,7 @@ namespace LWS.TruckTaxi
             vehicle.powertrain.transmission.Damage = 0;
             if (service.Supports(TruckTaxiServiceCapability.RepairTires))
                 foreach (var wheel in vehicle.powertrain.wheels) if (wheel.wheelUAPI != null) wheel.wheelUAPI.Damage = 0;
+            host.ComponentDamage?.RepairForCapabilities(service.capabilities);
             Feedback = "Vehicle repaired for " + TruckTaxiHud.Money(cost) + ".";
             RefreshCondition();
             if (host.Session.HasPassenger && host.Session.Passenger != null)
@@ -158,6 +168,7 @@ namespace LWS.TruckTaxi
                     if (service.Supports(TruckTaxiServiceCapability.RepairTires))
                         foreach (var wheel in vehicle.powertrain.wheels) if (wheel.wheelUAPI != null) wheel.wheelUAPI.Damage = 0;
                 }
+                host.ComponentDamage?.RepairForCapabilities(service.capabilities);
                 if (service.Supports(TruckTaxiServiceCapability.Refuel) && host.Fuel?.Fuel != null)
                     host.Fuel.Fuel.amount = host.Fuel.Fuel.capacity;
                 var controls = host.Player.GetComponent<LwsTruckControlController>();

@@ -309,6 +309,8 @@ namespace LWS.TruckTaxi
                 boundaryPending = false;
                 RememberCounters();
                 region = regional.ResolveRegion(host.Player.transform.position);
+                host.WorldLife?.ReturnToTruck();
+                host.ComponentDamage?.ReapplyPhysicalState();
                 CompleteContinueRequest(profileId, slot, autosave);
                 outcome = LwsSaveOperationResult.Success("Vibin save loaded. Resume when ready.");
             }
@@ -327,12 +329,16 @@ namespace LWS.TruckTaxi
         private TruckTaxiVibinSavePayload Capture() => new TruckTaxiVibinSavePayload
         {
             regionId = regional.ResolveRegion(host.Player.transform.position),
-            session = host.Session.CapturePersistentState(), needs = host.DriverNeeds.CapturePersistentState()
+            session = host.Session.CapturePersistentState(), needs = host.DriverNeeds.CapturePersistentState(),
+            damage = host.ComponentDamage?.Capture()
         };
         private LwsSaveOperationResult ValidatePayload(TruckTaxiVibinSavePayload payload)
         {
             var result = TruckTaxiVibinSaveParticipant.ValidatePayload(payload, host.Environment.settings);
             if (!result.Succeeded) return result;
+            if (host.ComponentDamage != null && !TruckTaxiComponentDamage.ValidSnapshot(payload.damage,
+                host.Player.VehicleId, host.ComponentDamage.Parts))
+                return LwsSaveOperationResult.Failure("Invalid component damage record or truck ownership.");
             foreach (var candidate in regional.regions) if (candidate != null && candidate.population && candidate.id == payload.regionId) return result;
             return LwsSaveOperationResult.Failure("Saved Vibin region is not in this world.");
         }
@@ -369,6 +375,8 @@ namespace LWS.TruckTaxi
                 return restoreResult = LwsSaveOperationResult.Failure("Saved work area cannot be rebased to this origin.");
             if (!host.DriverNeeds.RestorePersistentState(payload.needs, out _) || !host.Session.TryRestorePersistentState(session, out _))
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin semantic state could not be restored.");
+            if (host.ComponentDamage != null && !host.ComponentDamage.Restore(payload.damage))
+                return restoreResult = LwsSaveOperationResult.Failure("Vibin component damage could not be restored.");
             // The existing truck provider/load coordinator alone own final vehicle placement.
             host.Environment.Clock.SetPaused(true);
             return restoreResult = LwsSaveOperationResult.Success();

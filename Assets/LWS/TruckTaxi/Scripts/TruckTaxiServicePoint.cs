@@ -25,6 +25,8 @@ namespace LWS.TruckTaxi
         public TruckTaxiServiceCapability capabilities;
         public TruckTaxiRideLocation location;
         public Transform recoveryAnchor;
+        [Tooltip("Generate simple Truck Taxi validation geometry. Disable when this point has authored facility art/interactables.")]
+        public bool generateValidationFacility = true;
         [Min(2)] public float radius = 18;
         [Min(.5f)] public float verticalTolerance = 3;
         [Min(0)] public int assistanceBaseCostCents = 5000;
@@ -77,11 +79,29 @@ namespace LWS.TruckTaxi
             {
                 if (point == null || point.gameObject.scene != scene) continue;
                 var service = BindLocationService(point.gameObject, point.stableId, point.displayName, null, point.stoppingRadius, point.verticalTolerance);
+                var store = point.GetComponent<TruckTaxiStorePoint>();
+                if (store == null) store = point.gameObject.AddComponent<TruckTaxiStorePoint>();
+                if (store.stableId == "TT_STORE_") store.stableId = point.stableId + ".store";
+                if (store.displayName == "Truck stop store") store.displayName = point.displayName + " store";
+                store.stopRadius = Mathf.Max(store.stopRadius, point.stoppingRadius);
                 if (service.recoveryAnchor == null) service.recoveryAnchor = point.recoveryAnchor;
                 service.capabilities |= TruckTaxiServiceCapability.Refuel | TruckTaxiServiceCapability.Restroom |
-                    TruckTaxiServiceCapability.DisposeWaste | TruckTaxiServiceCapability.CleanCab;
+                    TruckTaxiServiceCapability.DisposeWaste | TruckTaxiServiceCapability.CleanCab |
+                    TruckTaxiServiceCapability.Store | TruckTaxiServiceCapability.Food | TruckTaxiServiceCapability.Drink;
             }
+            BindRestaurantLocations(scene);
             BindSleepLocations(scene);
+        }
+        private static void BindRestaurantLocations(UnityEngine.SceneManagement.Scene scene)
+        {
+            foreach (var location in FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None))
+            {
+                if (location.gameObject.scene != scene || location.locationType != TaxiLocationType.Restaurant ||
+                    location.truckStopPoint == null || string.IsNullOrWhiteSpace(location.locationId)) continue;
+                var service = BindLocationService(location.gameObject, "TT_FOOD_" + location.locationId,
+                    location.locationName, location, Mathf.Max(18, location.detectionRadius), 3);
+                service.capabilities |= TruckTaxiServiceCapability.Food | TruckTaxiServiceCapability.Restroom;
+            }
         }
         private static TruckTaxiServicePoint BindLocationService(GameObject owner, string id, string label,
             TruckTaxiRideLocation location, float radius, float tolerance)

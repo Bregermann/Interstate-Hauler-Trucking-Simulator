@@ -8,6 +8,12 @@ namespace LWS.TruckTaxi
     {
         public int Version = 1;
         public float Pressure, Hunger, Thirst, Fatigue;
+        public float BowelPressure;
+        public float BowelCrisisGameSeconds;
+        public string[] UsedToiletIds;
+        public string[] AmbientChoiceIds;
+        public string RentedMotelId;
+        public double MotelAccessExpiresAtGameSeconds;
         public bool StarterInventoryGranted, CabMess;
         public float CycleGameSeconds, CrisisGameSeconds;
         public TruckTaxiNeedsInventoryEntry[] Inventory;
