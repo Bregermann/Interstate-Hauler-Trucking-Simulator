@@ -30,13 +30,16 @@ namespace LWS.TruckTaxi
         }
         private readonly Dictionary<string,RegionalPoint> regionalPoints=new Dictionary<string,RegionalPoint>(StringComparer.Ordinal);
         private readonly HashSet<string> syntheticRegionalIds=new HashSet<string>(StringComparer.Ordinal);
+        private readonly Dictionary<string,string> serviceLocationIds=new Dictionary<string,string>(StringComparer.Ordinal);
         public IReadOnlyCollection<RegionalPoint> RegionalPoints
         {
             get
             {
+                RefreshPlaceAliases();
                 var result=new List<RegionalPoint>(regionalPoints.Count);
                 foreach(var point in regionalPoints.Values)
                 {
+                    if(CanonicalPlaceId(point.Id)!=point.Id) continue;
                     var service=TruckTaxiServicePresentation.Find(point.Id);
                     if(service!=null)
                         result.Add(new RegionalPoint(point.Id,service.displayName,TruckTaxiServicePresentation.Label(service.capabilities),
@@ -49,6 +52,36 @@ namespace LWS.TruckTaxi
                 }
                 return result;
             }
+        }
+        // Explicit location ownership, never label/proximity matching. Fare/save IDs remain unchanged.
+        private void RefreshPlaceAliases()
+        {
+            foreach(var service in TruckTaxiServicePoint.Points)
+            {
+                if(!TruckTaxiServicePresentation.IsUsable(service) || service.location==null ||
+                    string.IsNullOrWhiteSpace(service.location.locationId) || (host!=null && !AllowedScene(service.gameObject.scene))) continue;
+                string id=service.location.locationId;
+                if(!serviceLocationIds.TryGetValue(id,out var previous) || string.CompareOrdinal(service.stableId,previous)<0)
+                    serviceLocationIds[id]=service.stableId;
+            }
+        }
+        public string CanonicalPlaceId(string id)
+        {
+            if(id!=null && serviceLocationIds.TryGetValue(id,out var serviceId) &&
+                (regionalPoints.ContainsKey(serviceId) ||
+                (byId.TryGetValue(serviceId,out var marker) && marker!=null && TruckTaxiServicePresentation.IsUsable(marker.service))))
+                return serviceId;
+            return id;
+        }
+        private bool IsPrimaryPlaceMarker(TruckTaxiMapMarker marker)
+        {
+            string canonical=CanonicalPlaceId(marker.stableId),activeId=gps?.TargetId;
+            // An active fare keeps its pickup/destination treatment, without a second service icon.
+            if(!string.IsNullOrEmpty(activeId) && CanonicalPlaceId(activeId)==canonical &&
+                byId.TryGetValue(activeId,out var active) && active!=null && active.state!=TruckTaxiMapMarkerState.Hidden &&
+                active.isActiveAndEnabled && (active.source==null || active.source.gameObject.activeInHierarchy))
+                return marker.stableId==activeId;
+            return marker.stableId==canonical;
         }
         private readonly HashSet<string> completed=new HashSet<string>(StringComparer.Ordinal);
         private readonly HashSet<string> discovered=new HashSet<string>(StringComparer.Ordinal);
@@ -116,6 +149,7 @@ namespace LWS.TruckTaxi
         public void RefreshStreamedContent()
         {
             if(host==null || markerRoot==null) return;
+            PruneStreamedMarkers();
             for(int i=shortcuts.Count-1;i>=0;i--)
             {
                 var marker=shortcuts[i];
@@ -149,11 +183,38 @@ namespace LWS.TruckTaxi
                     if(target.isActiveAndEnabled && target.kind==TaxiImpactKind.Property && !propertyTargets.Contains(target)) propertyTargets.Add(target);
             }
             RefreshServices();
+            gps?.RequestPresentationRefresh();
             dirty=true; nextTrafficRefresh=0;
+        }
+        private void PruneStreamedMarkers()
+        {
+            PruneDestroyedMarkers();
+            for(int i=markers.Count-1;i>=0;i--)
+            {
+                var marker=markers[i];
+                if(marker==null || marker.transform.parent!=markerRoot || ReferenceEquals(marker.source,null) ||
+                    (marker.source!=null && AllowedScene(marker.source.gameObject.scene))) continue;
+                stops.Remove(marker); shortcuts.Remove(marker); impacts.Remove(marker);
+                if(regionalPoints.TryGetValue(marker.stableId,out var point))
+                {
+                    marker.source=null; marker.service=null; marker.serviceBound=false;
+                    marker.sourceLocalOffset=Vector3.zero; marker.transform.position=point.Position;
+                    marker.label=point.Label; marker.markerType=TruckTaxiServicePresentation.RequiresCapability(point.IconType)
+                        ? TruckTaxiMapMarkerType.Place : point.IconType;
+                    marker.state=TruckTaxiMapMarkerState.Known;
+                    syntheticRegionalIds.Add(point.Id);
+                }
+                else
+                {
+                    Unregister(marker);
+                    if(Application.isPlaying) Destroy(marker.gameObject); else DestroyImmediate(marker.gameObject);
+                }
+            }
         }
         public void RefreshServices()
         {
             if(markerRoot==null) return;
+            RefreshPlaceAliases();
             foreach(var service in TruckTaxiServicePoint.Points)
             {
                 if(!TruckTaxiServicePresentation.IsUsable(service) || !AllowedScene(service.gameObject.scene)) continue;
@@ -393,6 +454,7 @@ namespace LWS.TruckTaxi
             endpoint=FindAndStyleLegacyPois();
             nearby.Clear();
             foreach(var marker in markers) if(marker!=null && marker.state!=TruckTaxiMapMarkerState.Hidden && marker.state!=TruckTaxiMapMarkerState.Active &&
+                IsPrimaryPlaceMarker(marker) &&
                 marker.gameObject.activeInHierarchy && (marker.source==null || marker.source.gameObject.activeInHierarchy) &&
                 (marker.markerType!=TruckTaxiMapMarkerType.Debug || registry.showDebugPoints))
                 nearby.Add(marker);
@@ -402,6 +464,7 @@ namespace LWS.TruckTaxi
                 if(marker==null) continue;
                 bool important=marker.state==TruckTaxiMapMarkerState.Active || (ride && session.Destination!=null && marker.stableId==session.Destination.locationId);
                 bool visible=marker.state!=TruckTaxiMapMarkerState.Hidden && marker.isActiveAndEnabled &&
+                    IsPrimaryPlaceMarker(marker) &&
                     (marker.source==null || marker.source.gameObject.activeInHierarchy) &&
                     (marker.markerType!=TruckTaxiMapMarkerType.Debug || registry.showDebugPoints) &&
                     (important || gps.FullMapOpen || (nearby.IndexOf(marker)<registry.maximumNearbyPoints &&

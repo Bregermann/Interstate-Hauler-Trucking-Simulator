@@ -1,8 +1,11 @@
 using LWS.InterstateHauler;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace LWS.TruckTaxi
 {
+    // After all Update policy writes, before Compass's default-order LateUpdate capture.
+    [DefaultExecutionOrder(-50)]
     public sealed class TruckTaxiGPSAdapter : MonoBehaviour
     {
         private ILwsNavigationService navigation;
@@ -63,9 +66,15 @@ namespace LWS.TruckTaxi
         private RectTransform cabMapRect,hudMapRect;
         private TruckTaxiMapTileLayer tileLayer;
         private bool attemptedTileLoad;
-        private Camera tileCamera;
-        private int originalTileCameraMask;
+        private UnityEvent beforeMapCapture,afterMapCapture;
+        private TruckTaxiBootstrap host;
+        private bool presentationRefreshPending=true;
+        private float observedTimeScale,nextPresentationCheck;
+        private LwsRouteResult observedRoute;
+        private LwsGameClockSnapshot observedClock;
+        private CompassPresentation hudPresentation,cabPresentation;
         private Vector2 lastCabMapSize,lastHudMapSize;
+        private float regularPreviewDragDistance=-1;
         // Vendor "pixel" widths are local UI units, not final display pixels. A 240-unit
         // reference gives the default route 5% and a normal POI 8% of the map's short side.
         private const float MapStyleReferenceSize=240f;
@@ -77,8 +86,7 @@ namespace LWS.TruckTaxi
         public bool FullMapOpen => fullMapOpen;
         public float FullMapZoomLevel => previewCompass?.GetType().GetProperty("miniMapFullScreenZoomLevel")?.GetValue(previewCompass) is float value ? value : 0;
         public int BakedTileCount => tileLayer!=null ? tileLayer.transform.childCount : 0;
-        public bool BakedTilesVisible => fullMapOpen && tileCamera!=null &&
-            (tileCamera.cullingMask & (1<<TruckTaxiMapTileLayer.MapLayer))!=0 && BakedTileCount>0;
+        public bool BakedTilesVisible => fullMapOpen && tileLayer!=null && tileLayer.IsAssignedTo(PreviewCamera) && BakedTileCount>0;
         public event System.Action DisplaySettingsChanged;
         public RectTransform DashboardScreen { get; private set; }
         public TruckTaxiMapMarkers MapMarkers { get; private set; }
@@ -95,6 +103,7 @@ namespace LWS.TruckTaxi
         public void Initialize(Transform tractor, LwsRoadGraphProvider provider)
         {
             player = CanonicalTruck(tractor); graph = provider;
+            host=GetComponent<TruckTaxiBootstrap>();
             playerBody=player!=null ? player.GetComponent<Rigidbody>() : null;
             intents.Trace+=LogNavigation;
             DisplaySettings = TruckTaxiGPSDisplaySettings.Load();
@@ -126,6 +135,11 @@ namespace LWS.TruckTaxi
                 if(type.FullName!="CompassNavigatorPro.CompassPro") continue;
                 var canvas=component.GetComponent<Canvas>();
                 if(canvas==null) continue;
+                // Compass's shared truck setup uses continuous world-camera renders. The
+                // vendor's timed snapshots keep both real maps live without rendering twice
+                // on every driving frame; icons and route graphics still update normally.
+                SetEnum(component,"miniMapCameraSnapshotFrequency","TimeInterval");
+                Set(component,"miniMapSnapshotInterval",canvas.renderMode==RenderMode.WorldSpace ? .15f : .10f);
                 SetEnum(component,"miniMapStyle","SolidBox");
                 Set(component,"follow",player);
                 SetEnum(component,"miniMapOrientation","Follow");
@@ -174,6 +188,12 @@ namespace LWS.TruckTaxi
             hudMapRect=previewCompass!=null ? previewCompass.transform.Find("MiniMap Root/MiniMap/MiniMapMask") as RectTransform : null;
             hudFollow=previewCompass?.GetType().GetProperty("follow");
             cabFollow=cabCompass?.GetType().GetProperty("follow");
+            hudPresentation=new CompassPresentation(previewCompass);
+            cabPresentation=new CompassPresentation(cabCompass);
+            beforeMapCapture=previewCompass?.GetType().GetField("OnMiniMapBeforeCapture")?.GetValue(previewCompass) as UnityEvent;
+            afterMapCapture=previewCompass?.GetType().GetField("OnMiniMapAfterCapture")?.GetValue(previewCompass) as UnityEvent;
+            beforeMapCapture?.AddListener(BeginMapCapture);
+            afterMapCapture?.AddListener(EndMapCapture);
             ApplyDisplaySettings(false);
             MapMarkers=GetComponent<TruckTaxiMapMarkers>() ?? gameObject.AddComponent<TruckTaxiMapMarkers>();
             MapMarkers.Initialize(GetComponent<TruckTaxiBootstrap>(),this);
@@ -200,14 +220,32 @@ namespace LWS.TruckTaxi
         {
             previewing=offer!=null;
             if(previewCompass==null) return;
+            if(previewing && regularPreviewDragDistance<0)
+                regularPreviewDragDistance=(float)previewCompass.GetType().GetProperty("miniMapDragMaxDistance").GetValue(previewCompass);
             ApplyDisplaySettings(false);
-            if(offer==null) return;
+            if(offer==null)
+            {
+                if(regularPreviewDragDistance>=0)
+                {
+                    Set(previewCompass,"miniMapFollowOffset",Vector3.zero);
+                    Set(previewCompass,"miniMapDragMaxDistance",regularPreviewDragDistance);
+                    regularPreviewDragDistance=-1;
+                }
+                return;
+            }
             var bounds=new Bounds(offer.PlayerPosition,Vector3.zero);
+            // Road routing can terminate at the nearest node, outside the authored stop's bay.
+            bounds.Encapsulate(offer.Pickup.StopPosition);
+            bounds.Encapsulate(offer.Destination.StopPosition);
             foreach(var point in offer.ToPickup.Points) bounds.Encapsulate(point);
             foreach(var point in offer.Trip.Points) bounds.Encapsulate(point);
             previewCenter=bounds.center;
+            // Compass clamps follow offsets using its drag limit, including programmatic framing.
+            Set(previewCompass,"miniMapDragMaxDistance",Mathf.Max(regularPreviewDragDistance,
+                Vector3.ProjectOnPlane(previewCenter-player.position,Vector3.up).magnitude+1));
             Set(previewCompass,"miniMapCaptureSize",Mathf.Max(160,Mathf.Max(bounds.size.x,bounds.size.z)*1.3f));
             UpdatePreviewCenter();
+            RequestPresentationRefresh();
         }
         public void ToggleHud()
         {
@@ -227,6 +265,9 @@ namespace LWS.TruckTaxi
             ConfigureDisplay(previewCompass,DisplaySettings.hudRangeMeters,previewing);
             if(previewCompass!=null)
             {
+                // Panning and zooming the modal map must stay responsive even while
+                // gameplay time is paused. Only the ordinary driving HUD is throttled.
+                SetEnum(previewCompass,"miniMapCameraSnapshotFrequency",previewing || fullMapOpen ? "Continuous" : "TimeInterval");
                 Set(previewCompass,"miniMapSize",DisplaySettings.hudSize);
                 if(!previewing && !fullMapOpen) followOffsetProperty?.SetValue(previewCompass,Vector3.zero);
                 // Offer preview keeps using this camera even when the player's HUD is off.
@@ -236,6 +277,7 @@ namespace LWS.TruckTaxi
             cameraPresentation?.SetGpsPresentationPolicy(fullMapOpen || previewing || (DisplaySettings.showHud && !transientHudHidden)
                 ? LwsGpsPresentationPolicy.ForceHudMinimapOn : LwsGpsPresentationPolicy.ForceHudMinimapOff);
             RefreshMapElementSizing(true);
+            RequestPresentationRefresh();
             if(save) DisplaySettings.Save();
             DisplaySettingsChanged?.Invoke();
         }
@@ -248,6 +290,8 @@ namespace LWS.TruckTaxi
             Set(compass,"miniMapShowPOIs",!offer && (fullMapOpen || DisplaySettings.showPois));
             Set(compass,"showRoute",true);
             Set(compass,"routeShowOnMiniMap",true);
+            // LWS owns route completion, including suspended temporary destinations.
+            Set(compass,"routeClearOnComplete",false);
             Set(compass,"routeColor",DisplaySettings.RouteColor);
             SetEnum(compass,"routeWidthSpace","Pixels");
             // Retain antialiasing without feathering away the entire physical cab line.
@@ -269,6 +313,7 @@ namespace LWS.TruckTaxi
             float scale=MapElementScale(size);
             if(scale<=0) return;
             priorSize=size;
+            RequestPresentationRefresh();
             Set(compass,"routeWidth",DisplaySettings.routeWidth*scale);
             if(compass==previewCompass && fullMapOpen)
             {
@@ -299,6 +344,83 @@ namespace LWS.TruckTaxi
             RefreshMapElementSizing();
             if(!guidanceSuppressed && HasReachedServiceDestination && intents.Active?.Value.RequiresCompletion==false)
                 CompleteServiceDestination(TargetId,ActiveLeaseToken);
+            RefreshPresentationIfNeeded();
+        }
+        // Coalesce transitions into one public vendor refresh, independent of scaled time.
+        public void RequestPresentationRefresh() => presentationRefreshPending=true;
+        private void OnEnable() => RequestPresentationRefresh();
+        private void OnDisable() => tileLayer?.ShowOnlyFor(null);
+        private void OnApplicationFocus(bool focused) { if(focused) RequestPresentationRefresh(); }
+        private void OnApplicationPause(bool paused) { if(!paused) RequestPresentationRefresh(); }
+        private void RefreshPresentationIfNeeded()
+        {
+            var route=navigation?.CurrentRoute;
+            if(!ReferenceEquals(route,observedRoute) || observedTimeScale!=Time.timeScale)
+                RequestPresentationRefresh();
+            observedRoute=route; observedTimeScale=Time.timeScale;
+            var clock=host?.Environment?.Clock;
+            if(clock!=null)
+            {
+                var current=clock.CurrentSnapshot;
+                float expectedSeconds=Mathf.Max(60,Time.unscaledDeltaTime*Mathf.Max(current.timeScale,observedClock.timeScale)*2);
+                if(current.paused!=observedClock.paused || current.isNight!=observedClock.isNight ||
+                    System.Math.Abs(current.totalGameSeconds-observedClock.totalGameSeconds)>expectedSeconds ||
+                    Mathf.Abs(current.timeOfDayHours-observedClock.timeOfDayHours)*3600>expectedSeconds)
+                    RequestPresentationRefresh();
+                observedClock=current;
+            }
+            bool hudBecameVisible=hudPresentation?.BecameVisible()==true;
+            bool cabBecameVisible=cabPresentation?.BecameVisible()==true;
+            if(hudBecameVisible || cabBecameVisible)
+                RequestPresentationRefresh();
+            bool validRoute=!guidanceSuppressed && route?.succeeded==true && route.waypoints?.Count>=2;
+            if(Time.unscaledTime>=nextPresentationCheck)
+            {
+                nextPresentationCheck=Time.unscaledTime+.5f;
+                if(hudPresentation?.IsStale(validRoute)==true || cabPresentation?.IsStale(validRoute)==true)
+                    RequestPresentationRefresh();
+            }
+            if(!presentationRefreshPending) return;
+            presentationRefreshPending=false;
+            // Reuse the registered presenter so origin conversion and endpoint ownership stay in LWS.
+            if(validRoute) navigation.PresentCurrentRoute();
+            hudPresentation?.Refresh(); cabPresentation?.Refresh();
+        }
+        private sealed class CompassPresentation
+        {
+            private readonly Component compass;
+            private readonly System.Reflection.MethodInfo refresh;
+            private readonly System.Reflection.PropertyInfo showMap,hasRoute,showRoute;
+            private readonly System.Reflection.FieldInfo camera;
+            private bool wasVisible;
+            public CompassPresentation(Component value)
+            {
+                compass=value;
+                if(value==null) return;
+                var type=value.GetType();
+                refresh=type.GetMethod("UpdateMiniMapContents",new[] { typeof(int) });
+                showMap=type.GetProperty("showMiniMap"); hasRoute=type.GetProperty("hasRoute");
+                showRoute=type.GetProperty("showRoute"); camera=type.GetField("miniMapCamera");
+            }
+            private bool Visible => compass!=null && (!(compass is Behaviour behaviour) || behaviour.isActiveAndEnabled) &&
+                showMap?.GetValue(compass) is bool visible && visible;
+            public bool BecameVisible()
+            { bool visible=Visible,changed=visible && !wasVisible; wasVisible=visible; return changed; }
+            public bool IsStale(bool expectsRoute)
+            {
+                if(!Visible) return false;
+                var mapCamera=camera?.GetValue(compass) as Camera;
+                return (mapCamera!=null && mapCamera.targetTexture!=null && !mapCamera.targetTexture.IsCreated()) ||
+                    (expectsRoute && hasRoute?.GetValue(compass) is bool present && !present);
+            }
+            public void Refresh()
+            {
+                if(compass==null) return;
+                // A snapshot refresh does not invalidate Compass's separate UI route mesh.
+                if(showRoute?.GetValue(compass) is bool shown && shown)
+                { showRoute.SetValue(compass,false); showRoute.SetValue(compass,true); }
+                refresh?.Invoke(compass,new object[] { 1 });
+            }
         }
         // Temporary overlay ownership, deliberately independent of the persisted GPS preference.
         public void SetHudTemporarilyHidden(bool hidden)
@@ -327,8 +449,7 @@ namespace LWS.TruckTaxi
             Set(previewCompass,"miniMapFullScreenState",open);
             fullMapOpen=open;
             if(open) EnableMapTiles();
-            else if(tileCamera!=null)
-            { tileLayer?.ShowOnlyFor(null); tileCamera.cullingMask=originalTileCameraMask; tileCamera=null; }
+            else tileLayer?.ShowOnlyFor(null);
             previewCanvas.sortingOrder=open ? 910 : regularCanvasOrder;
             ApplyDisplaySettings(false);
             MapMarkers?.RequestRefresh();
@@ -347,21 +468,21 @@ namespace LWS.TruckTaxi
                 tileLayer=root.AddComponent<TruckTaxiMapTileLayer>();
                 if(!tileLayer.Initialize(catalog)) { Destroy(root); tileLayer=null; return; }
             }
-            var camera=PreviewCamera;
-            if(camera==null) return;
-            if(tileCamera!=camera)
-            {
-                if(tileCamera!=null) tileCamera.cullingMask=originalTileCameraMask;
-                tileCamera=camera; originalTileCameraMask=camera.cullingMask;
-            }
-            camera.cullingMask|=1<<TruckTaxiMapTileLayer.MapLayer;
-            tileLayer.ShowOnlyFor(camera);
+            tileLayer.ShowOnlyFor(PreviewCamera);
         }
+        private void BeginMapCapture()
+        {
+            if(!isActiveAndEnabled || !fullMapOpen) return;
+            EnableMapTiles();
+            tileLayer?.BeginCapture();
+        }
+        private void EndMapCapture() => tileLayer?.EndCapture();
         public void CenterFullMapOnPlayer()
         {
             if(!fullMapOpen || previewCompass==null || player==null) return;
             Set(previewCompass,"miniMapFullScreenWorldCenter",player.position);
             Set(previewCompass,"miniMapFollowOffset",Vector3.zero);
+            RequestPresentationRefresh();
         }
         public void PanFullMap(Vector2 direction,float unscaledSeconds)
         {
@@ -397,7 +518,9 @@ namespace LWS.TruckTaxi
         private void OnDestroy()
         {
             intents.Trace-=LogNavigation;
-            if(tileCamera!=null) tileCamera.cullingMask=originalTileCameraMask;
+            beforeMapCapture?.RemoveListener(BeginMapCapture);
+            afterMapCapture?.RemoveListener(EndMapCapture);
+            tileLayer?.ShowOnlyFor(null);
             if(cameraPresentation!=null) cameraPresentation.SetGpsPresentationPolicy(originalPolicy);
         }
         public void SetPickupDestination(TruckTaxiRideLocation location) => SetDestination(location,"pickup");
@@ -474,7 +597,7 @@ namespace LWS.TruckTaxi
             var existing=intents.Get(layer);
             if(existing!=null && existing.OwnerId==owner && existing.TargetId==destination.Id &&
                 existing.Value.Position==destination.Position)
-                return existing==intents.Active && guidanceSuppressed ? RestoreActiveRoute() : true;
+                return existing==intents.Active ? RestoreActiveRoute() : true;
             var prior=intents.Active;
             bool becomesActive=prior==null || layer>=prior.Layer;
             if(requireRoute && becomesActive && !PresentRoute(destination))
@@ -511,6 +634,7 @@ namespace LWS.TruckTaxi
                 if(requestRoute && !guidanceSuppressed && !PresentRoute(active.Value)) navigation?.ClearRoute();
             }
             MapMarkers?.RequestRefresh();
+            RequestPresentationRefresh();
             NavigationChanged?.Invoke();
         }
         private bool RequestTargetRoute(string id,Vector3 position,string purpose)
@@ -528,13 +652,16 @@ namespace LWS.TruckTaxi
             guidanceSuppressed=true;
             navigation?.ClearRoute();
             MapMarkers?.RequestRefresh();
+            RequestPresentationRefresh();
             NavigationChanged?.Invoke();
         }
         public bool RestoreRideRoute() => RestoreActiveRoute();
         public bool RestoreServiceRoute() => RestoreActiveRoute();
         private bool RestoreActiveRoute()
         {
-            if(!guidanceSuppressed || intents.Active==null || !PresentRoute(intents.Active.Value)) return false;
+            if(intents.Active==null) return false;
+            if((guidanceSuppressed || navigation?.CurrentRoute?.succeeded!=true ||
+                navigation.CurrentRoute.destinationId!=intents.Active.TargetId) && !PresentRoute(intents.Active.Value)) return false;
             guidanceSuppressed=false;
             ApplyActive(false);
             return true;

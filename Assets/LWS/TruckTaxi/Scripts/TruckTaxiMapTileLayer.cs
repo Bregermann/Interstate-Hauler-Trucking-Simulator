@@ -10,8 +10,16 @@ namespace LWS.TruckTaxi
         private Material material;
         private Camera mapCamera;
         private MeshRenderer[] renderers;
+        private bool capturing;
+        private int captureMask;
+        private float captureFarClip;
+        private bool captureOcclusion;
+        private CameraClearFlags captureClearFlags;
+        private Color captureBackground;
+        public bool IsAssignedTo(Camera camera) => camera!=null && camera==mapCamera && renderers?.Length>0;
         public bool Initialize(TruckTaxiMapTileCatalog catalog)
         {
+            if(renderers!=null) return renderers.Length>0;
             if(catalog==null || catalog.tiles==null || catalog.tiles.Length==0 || catalog.tileMaterial==null)
             {
                 Debug.LogError("Truck Taxi regional map requires baked tiles and their referenced material. Run Truck Taxi/Regional/Rebuild Map Tiles.",this);
@@ -36,38 +44,62 @@ namespace LWS.TruckTaxi
                 tileMaterial.mainTexture=tile.texture;
                 if(tileMaterial.HasProperty("_BaseMap")) tileMaterial.SetTexture("_BaseMap",tile.texture);
                 renderer.sharedMaterial=tileMaterial;
+                renderer.shadowCastingMode=ShadowCastingMode.Off;
+                renderer.receiveShadows=false;
                 renderer.enabled=false;
             }
             renderers=GetComponentsInChildren<MeshRenderer>();
-            RenderPipelineManager.beginCameraRendering+=BeginCamera;
-            RenderPipelineManager.endCameraRendering+=EndCamera;
-            return true;
+            return renderers.Length>0;
         }
         public void ShowOnlyFor(Camera camera)
         {
             if(mapCamera==camera) return;
+            EndCapture();
             mapCamera=camera;
-            if(renderers!=null) foreach(var renderer in renderers) if(renderer!=null) renderer.enabled=false;
         }
-        private void BeginCamera(ScriptableRenderContext context,Camera camera)
+        // Compass brackets its explicit Camera.Render with these public capture events.
+        // SRP callbacks alone are not a reliable ownership boundary for manual captures.
+        public void BeginCapture()
         {
-            if(renderers==null) return;
-            bool visible=mapCamera!=null && camera==mapCamera;
-            foreach(var renderer in renderers) if(renderer!=null) renderer.enabled=visible;
+            if(capturing || mapCamera==null || renderers==null || renderers.Length==0) return;
+            capturing=true;
+            captureMask=mapCamera.cullingMask; captureFarClip=mapCamera.farClipPlane;
+            captureOcclusion=mapCamera.useOcclusionCulling;
+            captureClearFlags=mapCamera.clearFlags; captureBackground=mapCamera.backgroundColor;
+            // Do not mix streamed world geometry with the complete baked regional atlas.
+            // Save AFTER vendor setup, which can reset these camera properties on each open.
+            mapCamera.cullingMask=1<<MapLayer;
+            mapCamera.useOcclusionCulling=false;
+            mapCamera.clearFlags=CameraClearFlags.SolidColor;
+            mapCamera.backgroundColor=new Color(.14f,.22f,.2f,1);
+            foreach(var renderer in renderers) if(renderer!=null)
+            {
+                renderer.enabled=true;
+                mapCamera.farClipPlane=Mathf.Max(mapCamera.farClipPlane,mapCamera.transform.position.y-renderer.bounds.min.y+1);
+            }
         }
-        private void EndCamera(ScriptableRenderContext context,Camera camera)
+        public void EndCapture()
         {
             if(renderers!=null) foreach(var renderer in renderers) if(renderer!=null) renderer.enabled=false;
+            if(capturing && mapCamera!=null)
+            {
+                mapCamera.cullingMask=captureMask; mapCamera.farClipPlane=captureFarClip;
+                mapCamera.useOcclusionCulling=captureOcclusion;
+                mapCamera.clearFlags=captureClearFlags; mapCamera.backgroundColor=captureBackground;
+            }
+            capturing=false;
         }
+        private void OnDisable() => EndCapture();
         private void OnDestroy()
         {
-            RenderPipelineManager.beginCameraRendering-=BeginCamera;
-            RenderPipelineManager.endCameraRendering-=EndCamera;
+            EndCapture();
             foreach(var filter in GetComponentsInChildren<MeshFilter>())
-                if(filter.sharedMesh!=null) Destroy(filter.sharedMesh);
+                if(filter.sharedMesh!=null) Release(filter.sharedMesh);
             foreach(var renderer in GetComponentsInChildren<MeshRenderer>())
-                if(renderer.sharedMaterial!=null) Destroy(renderer.sharedMaterial);
-            if(material!=null) Destroy(material);
+                if(renderer.sharedMaterial!=null) Release(renderer.sharedMaterial);
+            if(material!=null) Release(material);
         }
+        private static void Release(Object value)
+        { if(Application.isPlaying) Destroy(value); else DestroyImmediate(value); }
     }
 }

@@ -174,14 +174,18 @@ namespace LWS.TruckTaxi
             places.Clear();
             var markers=gps.MapMarkers;
             if(markers==null) return;
+            markers.Refresh();
             var metadata=new HashSet<string>(StringComparer.Ordinal);
             foreach(var point in markers.RegionalPoints)
             { places.Add(new Place(point.Id,point.Label,point.Kind,point.Position,point.Routeable)); metadata.Add(point.Id); }
             foreach(var marker in markers.Markers)
             {
-                if(marker==null || metadata.Contains(marker.stableId) || marker.state==TruckTaxiMapMarkerState.Hidden ||
+                if(marker==null || markers.CanonicalPlaceId(marker.stableId)!=marker.stableId ||
+                    metadata.Contains(marker.stableId) || marker.state==TruckTaxiMapMarkerState.Hidden || !marker.isActiveAndEnabled ||
+                    (marker.source!=null && !marker.source.gameObject.activeInHierarchy) ||
                     marker.markerType==TruckTaxiMapMarkerType.Debug) continue;
                 places.Add(new Place(marker.stableId,marker.label,marker.markerType.ToString(),marker.Position,IsRouteable(marker.markerType)));
+                metadata.Add(marker.stableId);
             }
             places.Sort((a,b)=>string.Compare(a.Label,b.Label,StringComparison.OrdinalIgnoreCase));
         }
@@ -215,12 +219,13 @@ namespace LWS.TruckTaxi
         private void Select(int index) { selected=index; selectedPoint=null; pickingTravel=false; UpdateSelection(); }
         public bool FocusPlace(string stableId)
         {
+            stableId=gps.MapMarkers?.CanonicalPlaceId(stableId) ?? stableId;
             int index=places.FindIndex(place=>place.Id==stableId);
             if(index<0) return false;
             Select(index);
             return true;
         }
-        public void RestoreActiveSelection() => selected=places.FindIndex(place=>place.Id==gps.TargetId);
+        public void RestoreActiveSelection() => selected=places.FindIndex(place=>place.Id==(gps.MapMarkers?.CanonicalPlaceId(gps.TargetId) ?? gps.TargetId));
         private void Submit(int index)
         {
             Select(index);
@@ -229,6 +234,7 @@ namespace LWS.TruckTaxi
         public void SubmitPlace(string stableId)
         {
             if(!IsOpen || pickingTravel || WorkArea?.IsOpen==true) return;
+            stableId=gps.MapMarkers?.CanonicalPlaceId(stableId) ?? stableId;
             int index=places.FindIndex(place=>place.Id==stableId);
             if(index<0) return;
             ShowPage(index/PageSize);
@@ -252,7 +258,7 @@ namespace LWS.TruckTaxi
             for(int i=0;i<rows.Count;i++)
             {
                 int index=page*PageSize+i;
-                bool active=places[index].Id==gps.TargetId;
+                bool active=places[index].Id==(gps.MapMarkers?.CanonicalPlaceId(gps.TargetId) ?? gps.TargetId);
                 var text=rows[i].GetComponentInChildren<TextMeshProUGUI>();
                 if(text!=null)
                 {
@@ -306,6 +312,7 @@ namespace LWS.TruckTaxi
         }
         public bool TryRoutePlace(string stableId)
         {
+            stableId=gps.MapMarkers?.CanonicalPlaceId(stableId) ?? stableId;
             int index=places.FindIndex(place=>place.Id==stableId);
             if(index<0) return false;
             var place=places[index];
