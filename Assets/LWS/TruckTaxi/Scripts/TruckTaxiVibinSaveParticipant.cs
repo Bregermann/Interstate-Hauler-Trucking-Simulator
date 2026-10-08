@@ -13,6 +13,8 @@ namespace LWS.TruckTaxi
         public TruckTaxiPersistentState session;
         public TruckTaxiDriverNeedsSnapshot needs;
         public TruckTaxiDamageSnapshot damage;
+        public bool hasFuelState;
+        public float fuelLiters, fuelCapacityLiters;
     }
 
     // Embedded participant JSON follows the existing LWS providers. The facade/Pixel Crushers
@@ -64,6 +66,9 @@ namespace LWS.TruckTaxi
         {
             if (payload == null || payload.version != 1 || string.IsNullOrWhiteSpace(payload.regionId) || settings == null)
                 return LwsSaveOperationResult.Failure("Missing Vibin region or semantic state.");
+            if (payload.hasFuelState && (!float.IsFinite(payload.fuelLiters) || !float.IsFinite(payload.fuelCapacityLiters) ||
+                payload.fuelCapacityLiters <= 0 || payload.fuelLiters < 0 || payload.fuelLiters > payload.fuelCapacityLiters))
+                return LwsSaveOperationResult.Failure("Invalid saved fuel quantity.");
             try
             {
                 if (!TruckTaxiSession.ValidatePersistentState(payload.session, out _))

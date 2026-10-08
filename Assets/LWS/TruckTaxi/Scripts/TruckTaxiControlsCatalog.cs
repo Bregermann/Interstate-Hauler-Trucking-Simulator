@@ -120,6 +120,12 @@ namespace LWS.TruckTaxi
             Add("CAMERA","Look around","Hold Right mouse + move","Right stick",true,"",ui?.CabMouseLook,ui?.CabGamepadLook,ui?.CabMouseLookHold);
             Add("CAMERA","Center view","Backquote","",true,"",ui?.CenterView);
             Add("CAMERA","Camera change","Tab","Select / View",true,"CONFLICT: Select also ejects a passenger");
+            Bound("ON FOOT","EXIT / ENTER TRUCK",true,ui.ExitTruck,"Stop safely; enter near the cab. Modified stick command opens the map.");
+            Bound("ON FOOT","Interact / hold to use",true,ui.WorldInteract);
+            Bound("ON FOOT","Inventory",false,ui.Inventory,"On foot only; Tab changes camera while driving");
+            Bound("ON FOOT","Inspect truck",false,ui.InspectTruck,"On foot only");
+            Bound("ON FOOT","Walk",false,ui.OnFootMove);
+            Bound("ON FOOT","Sprint",false,ui.OnFootSprint);
             Add("PASSENGERS","Accept ride","Enter","A / South",true,"",ui?.Submit);
             Add("PASSENGERS","Decline ride","Escape / Backspace","B / East",false,"CONFLICT: Escape also pauses",ui?.Cancel);
             Add("PASSENGERS","Toggle ride requests","F2","",true,"",ui?.ToggleRideRequests);

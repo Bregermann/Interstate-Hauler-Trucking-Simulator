@@ -130,6 +130,7 @@ namespace LWS.TruckTaxi
 
         private void ResetPersistentRideTransients()
         {
+            ResetRivalPassengerTheft();
             ResetRideBehavior(); offerSuppressors.Clear();
             Passenger=null; Pickup=Destination=null; Offer=null; CurrentRideId=null; LastFare=null;
             requests.Clear(); rideHistory.Clear(); continuity.Clear(); hitPedestrians.Clear(); LastPedestrianImpact=null;

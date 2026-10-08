@@ -36,17 +36,131 @@ namespace LWS.TruckTaxi.Editor
         [MenuItem("Truck Taxi/Map/Validate Services And World Rings")]
         public static void ValidateLoaded()
         {
-            var services=Object.FindObjectsByType<TruckTaxiServicePoint>(FindObjectsSortMode.None);
-            var markers=Object.FindObjectsByType<TruckTaxiMapMarker>(FindObjectsSortMode.None);
+            var roots = new List<GameObject>();
+            for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++)
+            {
+                var scene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i);
+                if (scene.isLoaded && !UnityEditor.SceneManagement.EditorSceneManager.IsPreviewScene(scene))
+                    roots.AddRange(scene.GetRootGameObjects());
+            }
+            var services=Collect<TruckTaxiServicePoint>(roots);
+            var markers=Collect<TruckTaxiMapMarker>(roots);
             var presenter=Object.FindFirstObjectByType<TruckTaxiServiceRings>();
             var host=Object.FindFirstObjectByType<TruckTaxiBootstrap>();
             var findings=TruckTaxiServiceMapValidation.Validate(services,markers,
                 Application.isPlaying ? presenter?.Rings ?? new Dictionary<string,TruckTaxiServiceRings.Ring>() : null,
-                host?.Player!=null ? host.Player.transform.position : (Vector3?)null,presenter!=null ? presenter.visibleDistance : 350);
+                host?.Player!=null ? host.Player.transform.position : (Vector3?)null,presenter!=null ? presenter.visibleDistance : 350,
+                includeInactiveServices: true);
+            findings.AddRange(TruckTaxiServiceMapValidation.ValidateAuthoringData(services, Collect<TruckTaxiWorldInteractable>(roots)));
+            findings.AddRange(ValidateGeometry(services, Collect<Collider>(roots), Collect<MeshRenderer>(roots)));
             foreach(var finding in findings) Debug.LogWarning("SERVICE MAP: "+finding);
-            Debug.Log("SERVICE MAP: "+services.Length+" loaded services; "+findings.Count+" findings. "+
+            Debug.Log("SERVICE MAP: "+services.Count+" loaded services; "+findings.Count+" findings. "+
                 (Application.isPlaying ? "Runtime ring geometry checked within presentation range." :
-                    "Read-only authoring audit. Live ring geometry requires Play Mode; no scenes opened or modified."));
+                    "Read-only authoring audit. Live ring geometry requires Play Mode; no scenes opened or modified.") +
+                " Geometry findings are candidates, not proof of the reported wall/flicker. No automatic repairs.");
+        }
+
+        [MenuItem("Truck Taxi/Map/Validate Selected Service Authoring")]
+        public static void ValidateSelectedAuthoring()
+        {
+            var findings = ValidateAuthoring(Selection.gameObjects);
+            foreach (var finding in findings) Debug.LogWarning("SERVICE AUTHORING: " + finding);
+            Debug.Log($"SERVICE AUTHORING: {findings.Count} findings under selection. Include adjacent ground/buildings " +
+                "in the selection to check their overlap. Candidates only; no objects changed or scenes saved.");
+        }
+
+        public static List<string> ValidateAuthoring(IEnumerable<GameObject> scope)
+        {
+            var roots = new List<GameObject>(scope);
+            var services = Collect<TruckTaxiServicePoint>(roots);
+            var findings = TruckTaxiServiceMapValidation.Validate(services, Collect<TruckTaxiMapMarker>(roots),
+                includeInactiveServices: true);
+            findings.AddRange(TruckTaxiServiceMapValidation.ValidateAuthoringData(services, Collect<TruckTaxiWorldInteractable>(roots)));
+            findings.AddRange(ValidateGeometry(services, Collect<Collider>(roots), Collect<MeshRenderer>(roots)));
+            findings.Sort(System.StringComparer.Ordinal);
+            return findings;
+        }
+
+        private static List<T> Collect<T>(IEnumerable<GameObject> roots) where T : Component
+        {
+            var seen = new HashSet<T>();
+            var result = new List<T>();
+            foreach (var root in roots)
+            {
+                if (root == null || EditorUtility.IsPersistent(root) || !root.scene.IsValid() || !root.scene.isLoaded) continue;
+                foreach (var item in root.GetComponentsInChildren<T>(true))
+                    if (seen.Add(item)) result.Add(item);
+            }
+            return result;
+        }
+
+        private static List<string> ValidateGeometry(List<TruckTaxiServicePoint> services,
+            List<Collider> colliders, List<MeshRenderer> renderers)
+        {
+            var findings = new List<string>();
+            var solids = new List<Collider>();
+            foreach (var collider in colliders)
+            {
+                if (!TruckTaxiWorldColliderReview.IsSolid(collider)) continue;
+                solids.Add(collider);
+                string suspicion = TruckTaxiWorldColliderReview.Suspicion(collider);
+                if (suspicion != null)
+                    findings.Add("SOLID REVIEW: " + suspicion + "\n" + TruckTaxiSignificantCollisionDiagnostic.DescribeCollider(collider));
+                var renderer = collider.GetComponent<Renderer>();
+                if (renderer != null && (!renderer.enabled || renderer.forceRenderingOff))
+                    findings.Add("DISABLED RENDERER / LIVE COLLIDER: " + TruckTaxiWorldColliderReview.Identity(collider.transform));
+            }
+
+            solids.Sort((a, b) => a.bounds.min.x.CompareTo(b.bounds.min.x));
+            for (int i = 0; i < solids.Count; i++)
+                for (int j = i + 1; j < solids.Count && solids[j].bounds.min.x < solids[i].bounds.max.x; j++)
+                {
+                    var a = solids[i]; var b = solids[j];
+                    if (a.GetType() != b.GetType() || (a.bounds.center - b.bounds.center).sqrMagnitude > .000001f ||
+                        (a.bounds.size - b.bounds.size).sqrMagnitude > .000001f) continue;
+                    findings.Add("COINCIDENT SOLID BOUNDS CANDIDATE (not shape equality): " +
+                        TruckTaxiWorldColliderReview.Identity(a.transform) + " [collider=" + a.GetInstanceID() + "] <-> " +
+                        TruckTaxiWorldColliderReview.Identity(b.transform) + " [collider=" + b.GetInstanceID() + "]");
+                }
+
+            var surfaces = new List<(MeshRenderer renderer, Bounds bounds)>();
+            foreach (var renderer in renderers)
+            {
+                if (!TruckTaxiWorldColliderReview.IsVisible(renderer) || renderer.GetComponent<MeshFilter>()?.sharedMesh == null) continue;
+                var bounds = TruckTaxiWorldGeometryAuthoring.WorldMeshBounds(renderer);
+                if (bounds.size.x * bounds.size.z >= 1) surfaces.Add((renderer, bounds));
+            }
+            surfaces.Sort((a, b) => a.bounds.min.x.CompareTo(b.bounds.min.x));
+            for (int i = 0; i < surfaces.Count; i++)
+                for (int j = i + 1; j < surfaces.Count && surfaces[j].bounds.min.x < surfaces[i].bounds.max.x; j++)
+                {
+                    var a = surfaces[i]; var b = surfaces[j];
+                    bool duplicate = TruckTaxiWorldGeometryAuthoring.ExactDuplicate(a.renderer, b.renderer);
+                    bool coplanar = TruckTaxiWorldGeometryAuthoring.CoplanarTopOverlap(a.bounds, b.bounds, out float area) &&
+                        a.bounds.size.y <= 2 && b.bounds.size.y <= 2;
+                    if (!duplicate && !coplanar) continue;
+                    findings.Add((duplicate ? "DUPLICATE MESH CANDIDATE" : "COPLANAR TOP-BOUNDS CANDIDATE") +
+                        $" overlap={area:0.###}m2; topY={a.bounds.max.y:0.####}/{b.bounds.max.y:0.####}; " +
+                        "confirm triangles and co-residency: " + TruckTaxiWorldColliderReview.Identity(a.renderer.transform) +
+                        " <-> " + TruckTaxiWorldColliderReview.Identity(b.renderer.transform));
+                }
+
+            foreach (var service in services)
+            {
+                if (!service.isActiveAndEnabled) continue;
+                var anchor = service.location != null ? service.location.truckStopPoint : service.transform;
+                if (anchor == null) continue;
+                // A conservative truck-sized bay sample. Ground below 0.3m is intentionally excluded.
+                var bay = TruckTaxiWorldColliderReview.TransformBounds(new Bounds(Vector3.zero, new Vector3(3, 3, 8)),
+                    Matrix4x4.TRS(service.Position + Vector3.up * 1.8f, anchor.rotation, Vector3.one));
+                foreach (var solid in solids)
+                {
+                    if (solid.attachedRigidbody != null && !solid.attachedRigidbody.isKinematic || !bay.Intersects(solid.bounds)) continue;
+                    findings.Add("PARKING BAY CLEARANCE CANDIDATE (3x3x8m oriented bay AABB, not a drive test): " +
+                        TruckTaxiWorldColliderReview.Identity(service.transform) + " <-> " + TruckTaxiWorldColliderReview.Identity(solid.transform));
+                }
+            }
+            return findings;
         }
 
         [MenuItem("Truck Taxi/Map/Ensure Service Marker Icons")]

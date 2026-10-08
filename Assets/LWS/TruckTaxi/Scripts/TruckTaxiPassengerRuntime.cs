@@ -103,8 +103,9 @@ namespace LWS.TruckTaxi
                 case TruckTaxiState.Inactive: Cleanup(); break;
             }
         }
-        private TruckTaxiPassengerActor Spawn(PassengerProfile profile)
+        public static TruckTaxiPassengerActor Spawn(PassengerProfile profile)
         {
+            if (profile == null) return null;
             GameObject go;
             if(profile.runtimePrefab!=null) go=Instantiate(profile.runtimePrefab);
             else
@@ -426,6 +427,10 @@ namespace LWS.TruckTaxi
         {
             if(revengeActive) return false;
             if(PrimaryActor==null) return true;
+            if (!TruckTaxiSeatProfile.CanPlaceActor(PrimaryActor.transform, host.Player.transform, passenger?.seatProfile, false) ||
+                SecondaryActor != null && !TruckTaxiSeatProfile.CanPlaceActor(SecondaryActor.transform,
+                    host.Player.transform, second?.seatProfile, true))
+            { host.Session.React("NO ROOM FOR ANOTHER PASSENGER"); return false; }
             Vector3 near=host.Player.transform.position+host.Player.transform.right*2.5f;
             float threshold=passenger.seatProfile!=null ? passenger.seatProfile.boardingDistance : 2;
             return Vector3.ProjectOnPlane(PrimaryActor.transform.position-near,Vector3.up).magnitude<=threshold;

@@ -61,7 +61,7 @@ namespace LWS.TruckTaxi.Tests
         }
 
         [Test]
-        public void DisabledSleeperCapabilityPreservesLegacySeatPlacement()
+        public void DisabledSleeperCapabilityPreservesPrimaryButRequiresCertifiedSecondarySeat()
         {
             rig.Configure(false, new[] { Rear(TruckTaxiCabAnchorId.SleeperLeft,
                 TruckTaxiCabOccupantKind.Passenger, Vector3.back * 3) });
@@ -70,9 +70,12 @@ namespace LWS.TruckTaxi.Tests
             {
                 profile.mountPath = "";
                 Assert.IsTrue(TruckTaxiSeatProfile.TryPlaceActor(companion.transform, truck.transform,
+                    profile, false, Vector3.one));
+                Assert.AreEqual(profile.localPosition, companion.transform.localPosition);
+                Assert.AreEqual(.88f, companion.transform.lossyScale.x, .001f);
+                Assert.IsFalse(TruckTaxiSeatProfile.TryPlaceActor(companion.transform, truck.transform,
                     profile, true, Vector3.one));
-                Assert.AreEqual(profile.localPosition + profile.secondarySeatOffset, companion.transform.localPosition);
-                Assert.AreEqual(.84f, companion.transform.lossyScale.x, .001f);
+                Assert.AreEqual(profile.localPosition, companion.transform.localPosition);
                 Assert.IsFalse(rig.TryBeginPrivateTransition(driver.transform, companion.transform,
                     TruckTaxiSeatType.CompanionPassenger));
             }

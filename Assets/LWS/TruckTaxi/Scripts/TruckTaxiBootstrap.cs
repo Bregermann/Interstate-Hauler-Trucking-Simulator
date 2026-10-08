@@ -36,6 +36,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiVenueRuntime Venues { get; private set; }
         public TruckTaxiExtremeEventDirector Extremes { get; private set; }
         public TruckTaxiRivalPopulation Rivals { get; private set; }
+        public TruckTaxiRivalTheft RivalTheft { get; private set; }
         public TruckTaxiDriverNeedsCoordinator DriverNeeds { get; private set; }
         public TruckTaxiPassengerBathroomNeed PassengerBathroom { get; private set; }
         public TruckTaxiCompanionPickupRequest CompanionPickup { get; private set; }
@@ -50,6 +51,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiFacilityAmbience FacilityAmbience { get; private set; }
         public TruckTaxiComponentDamage ComponentDamage { get; private set; }
         public bool Ready { get; private set; }
+        public bool StartupComplete => !startupPending;
         public bool Paused { get; private set; }
         public bool CanResume => Ready && !startupPending && Persistence != null && !Persistence.ResumeBlocked;
         public string ResumeBlockReason => !Ready || startupPending ? "Vibin startup is not ready." :
@@ -105,6 +107,7 @@ namespace LWS.TruckTaxi
             GPS = gameObject.AddComponent<TruckTaxiGPSAdapter>(); GPS.Initialize(Player.transform,roadGraph);
             var sensor = Player.GetComponent<TruckTaxiCollisionObserver>() ?? Player.gameObject.AddComponent<TruckTaxiCollisionObserver>();
             sensor.Initialize(this);
+            TruckTaxiSignificantCollisionDiagnostic.Attach(Player.gameObject);
             Audio=gameObject.AddComponent<TruckTaxiAudioController>(); Audio.Initialize(configuration.audio);
             CustomContent=GetComponent<TruckTaxiCustomContentRunner>() ?? gameObject.AddComponent<TruckTaxiCustomContentRunner>();
             CustomContent.Initialize(this);
@@ -190,6 +193,8 @@ namespace LWS.TruckTaxi
                 Rivals=traffic.GetComponent<TruckTaxiRivalPopulation>() ?? traffic.gameObject.AddComponent<TruckTaxiRivalPopulation>();
                 WorldCoordinator=GetComponent<TruckTaxiWorldCoordinator>() ?? gameObject.AddComponent<TruckTaxiWorldCoordinator>();
                 WorldCoordinator.Initialize(this);
+                RivalTheft=GetComponent<TruckTaxiRivalTheft>() ?? gameObject.AddComponent<TruckTaxiRivalTheft>();
+                RivalTheft.Initialize(this,Rivals);
                 Races=GetComponent<TruckTaxiRaceRuntime>() ?? gameObject.AddComponent<TruckTaxiRaceRuntime>();
                 Races.Initialize(this);
                 Kaiju=GetComponent<TruckTaxiKaijuDirector>() ?? gameObject.AddComponent<TruckTaxiKaijuDirector>();
@@ -208,6 +213,7 @@ namespace LWS.TruckTaxi
                 ? continuing ? Persistence.ConsumeContinueRequest() : Persistence.NewGame()
                 : initialized;
             startupPending = false;
+            if (!startup.Succeeded) Debug.LogWarning("Truck Taxi startup blocked: " + startup.Message, this);
             OnSessionChanged();
             SetPaused(continuing || !startup.Succeeded);
         }
@@ -231,6 +237,7 @@ namespace LWS.TruckTaxi
             float acceleration = Time.deltaTime > 0 ? (speed-lastSpeed)/Time.deltaTime : 0;
             lastSpeed = speed;
             TruckTaxiSurface.TrySample(body.position,Player.transform,out bool onRoad);
+            RivalTheft?.Tick(Time.deltaTime);
             Session.Tick(Time.deltaTime,body.position,speed,acceleration,onRoad);
             PassengerBathroom?.Tick(PassengerBathroom.CanOfferRequest);
             CompanionPickup?.Tick();
@@ -253,6 +260,7 @@ namespace LWS.TruckTaxi
         {
             if (PassengerBathroom != null && !PassengerBathroom.Cancel(reason)) return false;
             CompanionPickup?.Cancel();
+            RivalTheft?.Cancel();
             return true;
         }
         private static TruckTaxiDemandWeather DemandWeather(string id)
@@ -314,7 +322,8 @@ namespace LWS.TruckTaxi
         }
         private bool IsLegitimateWait()
         {
-            if(PassengerBathroom?.IsLegitimateServiceDiversion==true || CompanionPickup?.IsLegitimateDiversion==true) return true;
+            if(PassengerBathroom?.IsLegitimateServiceDiversion==true || CompanionPickup?.IsLegitimateDiversion==true ||
+                RivalTheft?.IsLegitimateDiversion==true) return true;
             if(body==null || Player==null) return false;
             if(Fuel?.IsRescuing==true || Roadside?.IsRecovering==true) return true;
             if(body.linearVelocity.sqrMagnitude>9) return false;
@@ -338,6 +347,14 @@ namespace LWS.TruckTaxi
         {
             if (!CanResume) { SetPaused(true); return; }
             Session?.StartShift(); SetPaused(false);
+        }
+        public void RetryStartup()
+        {
+            if (!Ready || startupPending || Persistence == null || Persistence.IsBusy) return;
+            if (TruckTaxiVibinPersistence.HasContinueRequest) Persistence.RetryContinueRequest();
+            else if (!Persistence.HasActiveRun) Persistence.NewGame();
+            else if (CanResume) StartShift();
+            else hud?.SaveLoad?.Open();
         }
         public void ReturnToMainMenu()
         {

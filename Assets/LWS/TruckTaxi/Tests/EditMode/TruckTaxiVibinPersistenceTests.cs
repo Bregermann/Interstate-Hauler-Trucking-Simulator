@@ -43,6 +43,27 @@ namespace LWS.TruckTaxi.Tests
         [Test] public void RequiredCanonicalProvidersAndTaxiPayloadPassDetachedValidation()
         { var result = Validate(Snapshot()); Assert.IsTrue(result.Succeeded, result.Message); }
 
+        [TestCase(-1f, 80f)]
+        [TestCase(81f, 80f)]
+        [TestCase(1f, 0f)]
+        [TestCase(float.NaN, 80f)]
+        public void InvalidSavedFuelIsRejected(float amount, float capacity)
+        {
+            var payload = Payload(); payload.hasFuelState = true;
+            payload.fuelLiters = amount; payload.fuelCapacityLiters = capacity;
+            Assert.IsFalse(TruckTaxiVibinSaveParticipant.ValidatePayload(payload, settings).Succeeded);
+        }
+
+        [Test] public void OptionalFuelPreservesOlderSavesAndExactNewQuantity()
+        {
+            var payload = Payload();
+            Assert.IsTrue(TruckTaxiVibinSaveParticipant.ValidatePayload(payload, settings).Succeeded);
+            payload.hasFuelState = true; payload.fuelLiters = 34.4f; payload.fuelCapacityLiters = 80;
+            Assert.IsTrue(TruckTaxiVibinSaveParticipant.Read(State(TruckTaxiVibinSaveParticipant.Id, payload), out var copy).Succeeded);
+            Assert.IsTrue(copy.hasFuelState); Assert.AreEqual(34.4f, copy.fuelLiters);
+            Assert.IsTrue(TruckTaxiVibinSaveParticipant.ValidatePayload(copy, settings).Succeeded);
+        }
+
         [Test] public void PayloadRoundTripPreservesExactInventoryAndDoesNotGrantOnRestore()
         {
             var payload = Payload();

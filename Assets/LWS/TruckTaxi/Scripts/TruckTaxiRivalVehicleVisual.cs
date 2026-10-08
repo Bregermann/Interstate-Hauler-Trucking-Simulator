@@ -17,6 +17,9 @@ namespace LWS.TruckTaxi
         private MaterialPropertyBlock paint;
         private TextMesh roofLabel, leftDoorLabel, rightDoorLabel;
         private bool active;
+        public Transform PassengerMount { get; private set; }
+        public bool Occupied { get; private set; }
+        public bool Angry { get; private set; }
 
         public void Apply(int variant) => Apply(variant, Mathf.Abs(variant % 1000));
 
@@ -78,6 +81,10 @@ namespace LWS.TruckTaxi
                 driver.transform.SetParent(transform, false);
                 driver.transform.localPosition = roof + new Vector3(-.36f, -.82f, .08f);
                 driver.transform.localScale = Vector3.one * .55f;
+                var passengerMount = new GameObject("Rival passenger seat");
+                passengerMount.transform.SetParent(transform, false);
+                passengerMount.transform.localPosition = roof + new Vector3(.36f, -.82f, .08f);
+                PassengerMount = passengerMount.transform;
                 driverBody = NewMaterial(new Color(.2f, .38f, .43f));
                 driverClothes = NewMaterial(new Color(.17f, .17f, .2f));
                 driverSkin = NewMaterial(new Color(.75f, .52f, .37f));
@@ -101,6 +108,14 @@ namespace LWS.TruckTaxi
             rightDoorLabel.gameObject.SetActive(true);
             driver.SetActive(true);
             active = true;
+            SetPassengerState(false, false);
+        }
+
+        public void SetPassengerState(bool occupied, bool angry)
+        {
+            if (!active || Occupied == occupied && Angry == angry && roofLabel.text != "TAXI") return;
+            Occupied = occupied; Angry = angry;
+            roofLabel.text = angry ? "TAXI\nANGRY" : occupied ? "TAXI\nOCCUPIED" : "TAXI\nFOR HIRE";
         }
 
         public void ResetForPool()
@@ -113,6 +128,7 @@ namespace LWS.TruckTaxi
             if (rightDoorLabel != null) rightDoorLabel.gameObject.SetActive(false);
             if (driver != null) driver.SetActive(false);
             active = false;
+            Occupied = Angry = false;
         }
 
         private static Material NewMaterial(Color color)

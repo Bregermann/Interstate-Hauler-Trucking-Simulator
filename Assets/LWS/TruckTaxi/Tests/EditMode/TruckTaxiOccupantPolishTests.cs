@@ -36,7 +36,7 @@ namespace LWS.TruckTaxi.Tests
         }
 
         [Test]
-        public void PairedSeatUsesSeparateCenterPerchAndSmallerScale()
+        public void PairedSeatCannotInventCapacityWithoutCertifiedSecondaryAnchor()
         {
             var truck=new GameObject("Truck");
             var first=new GameObject("Primary");
@@ -45,11 +45,11 @@ namespace LWS.TruckTaxi.Tests
             try
             {
                 profile.mountPath="";
-                TruckTaxiSeatProfile.PlaceActor(first.transform,truck.transform,profile,false,Vector3.one);
-                TruckTaxiSeatProfile.PlaceActor(second.transform,truck.transform,profile,true,Vector3.one);
-                Assert.AreNotEqual(first.transform.localPosition,second.transform.localPosition);
-                Assert.AreEqual(profile.localPosition+profile.secondarySeatOffset,second.transform.localPosition);
-                Assert.AreEqual(.84f,second.transform.lossyScale.x,.001f);
+                Assert.IsTrue(TruckTaxiSeatProfile.TryPlaceActor(first.transform,truck.transform,profile,false,Vector3.one));
+                Assert.IsFalse(TruckTaxiSeatProfile.TryPlaceActor(second.transform,truck.transform,profile,true,Vector3.one));
+                Assert.AreSame(truck.transform,first.transform.parent);
+                Assert.IsNull(second.transform.parent);
+                Assert.AreEqual(Vector3.one,second.transform.localScale);
             }
             finally
             {

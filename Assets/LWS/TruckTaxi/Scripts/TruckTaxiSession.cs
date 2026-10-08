@@ -290,6 +290,7 @@ namespace LWS.TruckTaxi
         }
         public void EndShift()
         {
+            ResetRivalPassengerTheft();
             CancelOfferGeneration();
             if(HasPassenger) CompleteCancellation("Shift ended.");
             else if(State==TruckTaxiState.DrivingToPickup || State==TruckTaxiState.PassengerBoarding)
@@ -567,7 +568,7 @@ namespace LWS.TruckTaxi
                 requestClock += deltaTime;
                 if (requestClock >= Passenger.requestFrequency) { GenerateRequest(); requestClock = 0; }
                 TickOnboardPatience(deltaTime,playerPosition,speed,acceleration,onRoad);
-                if (ActiveStop==null && CurrentDesiredDestination!=null && CurrentDesiredDestination.Contains(playerPosition) && speed <= config.stoppedSpeed)
+                if ((!HasStolenPassenger || SafeDropRequested) && ActiveStop==null && CurrentDesiredDestination!=null && CurrentDesiredDestination.Contains(playerPosition) && speed <= config.stoppedSpeed)
                     SetState(TruckTaxiState.PassengerExiting);
             }
             else if (State == TruckTaxiState.PassengerExiting)

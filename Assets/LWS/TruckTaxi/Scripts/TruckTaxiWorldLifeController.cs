@@ -151,7 +151,13 @@ namespace LWS.TruckTaxi
             }
             if (Mode == TruckTaxiPlayerControlMode.Driving)
             {
-                if (input.ExitTruck.WasPressedThisFrame()) TryExitTruck();
+                // The modified right-stick command belongs to the map, not cab exit.
+                if (input.ExitTruck.WasPressedThisFrame() && !input.FullMap.WasPressedThisFrame()) TryExitTruck();
+                bool show = !host.Paused && !hud.NormalHudSuppressed &&
+                    (Time.unscaledTime < feedbackUntil || ExitBlockReason == null);
+                prompt.gameObject.SetActive(show);
+                if (show) prompt.text = Time.unscaledTime < feedbackUntil ? Feedback :
+                    "[" + input.Hint(input.ExitTruck) + "] EXIT TRUCK";
                 return;
             }
             if (host.Paused) { SetCursor(false); return; }
@@ -203,11 +209,8 @@ namespace LWS.TruckTaxi
         }
         public bool TryExitTruck()
         {
-            if (Mode != TruckTaxiPlayerControlMode.Driving || host?.CanResume != true || host.Paused ||
-                host.Fuel?.IsRescuing == true || host.Roadside?.IsRecovering == true || host.FastTravel?.IsTravelling == true ||
-                host.Races?.MenuOpen == true || host.CustomContent?.IsPlaying == true ||
-                truckBody == null || truckBody.linearVelocity.magnitude > .45f)
-            { ShowFeedback("Stop safely before exiting the truck."); return false; }
+            string blocked = ExitBlockReason;
+            if (blocked != null) { ShowFeedback(blocked); return false; }
             Vector3 position = Vector3.zero;
             if (!FindSafeExit(out position)) { ShowFeedback("No clear ground beside the cab."); return false; }
             truckCamera = Camera.main;
@@ -224,6 +227,23 @@ namespace LWS.TruckTaxi
             SetCursor(true);
             ShowFeedback("ON FOOT");
             return true;
+        }
+        public string ExitBlockReason
+        {
+            get
+            {
+                if (Mode != TruckTaxiPlayerControlMode.Driving) return "Already outside the truck.";
+                if (host?.CanResume != true) return host?.ResumeBlockReason ?? "Truck is initializing.";
+                if (host.Paused || hud?.NormalHudSuppressed == true || host.Races?.MenuOpen == true)
+                    return "Close the current menu before exiting.";
+                if (host.Fuel?.IsRescuing == true || host.Roadside?.IsRecovering == true ||
+                    host.FastTravel?.IsTravelling == true || host.CustomContent?.IsPlaying == true ||
+                    host.Kaiju?.IsCapturingPlayer == true || host.DriverNeeds?.IsSleeping == true)
+                    return "Finish the current interaction before exiting.";
+                if (truckBody == null || truckBody.linearVelocity.magnitude > .45f)
+                    return "Stop safely before exiting the truck.";
+                return null;
+            }
         }
         private bool FindSafeExit(out Vector3 position)
         {

@@ -12,6 +12,7 @@ namespace LWS.TruckTaxi
         private readonly HashSet<string> toiletIds = new HashSet<string>(System.StringComparer.Ordinal);
         private TruckTaxiBootstrap host;
         private Material wall, floor, accent, fixture, glass;
+        private GameObject ownedFiller;
         public int BuiltCount => roots.Count;
         public int TotalToilets => toiletIds.Count;
 
@@ -34,6 +35,7 @@ namespace LWS.TruckTaxi
             {
                 var filler = Part(owner.Player.transform, "Diesel filler - hold E with nozzle",
                     new Vector3(-1.45f, 1.18f, -.6f), new Vector3(.22f, .28f, .3f), accent);
+                ownedFiller = filler;
                 filler.GetComponent<Collider>().isTrigger = true;
                 var interaction = filler.AddComponent<TruckTaxiFuelFiller>();
                 interaction.SetStableId("taxi.truck.diesel-filler"); interaction.interactionRange = 2.5f;
@@ -47,6 +49,7 @@ namespace LWS.TruckTaxi
         }
         public void Refresh()
         {
+            RetireDisabledValidationFacilities();
             if (host == null) return;
             TruckTaxiServicePoint.BindExistingPoints(host.gameObject.scene);
             foreach (var point in TruckTaxiServicePoint.Points)
@@ -68,6 +71,25 @@ namespace LWS.TruckTaxi
                 if (store || diner || motel || restroom) BuildInterior(root.transform, point, store, diner, motel, restroom);
                 if (gas || store) BuildPortaPotty(root.transform, point);
             }
+        }
+        private void RetireDisabledValidationFacilities()
+        {
+            var retired = new List<string>();
+            foreach (var entry in roots)
+            {
+                if (entry.Value == null) { retired.Add(entry.Key); continue; }
+                var point = entry.Value.transform.parent != null
+                    ? entry.Value.transform.parent.GetComponent<TruckTaxiServicePoint>() : null;
+                if (point != null && point.generateValidationFacility &&
+                    string.Equals(point.stableId, entry.Key, System.StringComparison.Ordinal)) continue;
+                // An authored replacement can turn validation art off after the first refresh.
+                // Remove only this generator's exact instance, never geometry found by name.
+                foreach (var fixture in entry.Value.GetComponentsInChildren<TruckTaxiRestroomFixture>(true))
+                    toiletIds.Remove(fixture.StableId);
+                RetireOwnedObject(entry.Value);
+                retired.Add(entry.Key);
+            }
+            foreach (string id in retired) roots.Remove(id);
         }
         private void BuildPump(Transform root, TruckTaxiServicePoint point)
         {
@@ -183,6 +205,27 @@ namespace LWS.TruckTaxi
             return float.IsNegativeInfinity(selected) ? serviceHeight : selected;
         }
         private void OnDestroy()
-        { foreach (var material in materials) if (material != null) Destroy(material); }
+        {
+            // These objects are parented to service points/the truck, not to this generator.
+            // Retire only instances we created before releasing their shared materials.
+            foreach (var root in roots.Values) RetireOwnedObject(root);
+            roots.Clear();
+            RetireOwnedObject(ownedFiller);
+            foreach (var material in materials)
+                if (material != null)
+                {
+                    if (Application.isPlaying) Destroy(material);
+                    else DestroyImmediate(material);
+                }
+            materials.Clear();
+            toiletIds.Clear();
+        }
+        private static void RetireOwnedObject(GameObject owned)
+        {
+            if (owned == null) return;
+            owned.SetActive(false);
+            if (Application.isPlaying) Destroy(owned);
+            else DestroyImmediate(owned);
+        }
     }
 }

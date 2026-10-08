@@ -3,11 +3,46 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 namespace LWS.TruckTaxi.Tests
 {
     public sealed class TruckTaxiWorldLifePlayModeTests
     {
+        [UnityTest]
+        public IEnumerator GeneratorDestructionRetiresOnlyItsTrackedChildrenAndFiller()
+        {
+            var owner = new GameObject("Facility lifecycle test");
+            var service = new GameObject("Authored service");
+            var filler = new GameObject("Owned filler");
+            var generated = new GameObject("Owned facility");
+            generated.transform.SetParent(service.transform);
+            var authored = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            authored.transform.SetParent(service.transform);
+            try
+            {
+                var generator = owner.AddComponent<TruckTaxiPhysicalFacilities>();
+                var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+                var ledger = (System.Collections.Generic.Dictionary<string, GameObject>)typeof(TruckTaxiPhysicalFacilities)
+                    .GetField("roots", flags).GetValue(generator);
+                ledger.Add("service", generated);
+                typeof(TruckTaxiPhysicalFacilities).GetField("ownedFiller", flags).SetValue(generator, filler);
+                yield return null;
+                Object.Destroy(generator);
+                yield return null; yield return null;
+                Assert.IsTrue(generated == null, "Generator teardown must retire its externally parented geometry.");
+                Assert.IsTrue(filler == null);
+                Assert.IsTrue(authored != null && authored.GetComponent<Collider>().enabled);
+                Assert.IsNotNull(service);
+            }
+            finally
+            {
+                Object.Destroy(owner); Object.Destroy(service);
+                if (filler != null) Object.Destroy(filler);
+            }
+        }
+
         [UnityTest]
         public IEnumerator BreakawayPropYieldsButStructuralPropKeepsItsCollider()
         {
@@ -36,11 +71,13 @@ namespace LWS.TruckTaxi.Tests
         {
             yield return SceneManager.LoadSceneAsync("TruckTaxi_DemoCity");
             float deadline = Time.realtimeSinceStartup + 60f;
-            while ((TruckTaxiBootstrap.Instance == null || !TruckTaxiBootstrap.Instance.Ready) &&
+            while ((TruckTaxiBootstrap.Instance == null || !TruckTaxiBootstrap.Instance.StartupComplete ||
+                    TruckTaxiBootstrap.Instance.Persistence?.IsBusy == true) &&
                    Time.realtimeSinceStartup < deadline) yield return null;
             var host = TruckTaxiBootstrap.Instance;
             Assert.IsNotNull(host);
             Assert.IsTrue(host.Ready);
+            Assert.IsTrue(host.CanResume, host.ResumeBlockReason);
             Assert.IsNotNull(host.WorldLife);
             Assert.IsNotNull(host.ComponentDamage);
             Assert.IsNotNull(host.PhysicalFacilities);
@@ -72,6 +109,39 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsTrue(host.WorldLife.TryEnterTruck());
             Assert.AreEqual(TruckTaxiPlayerControlMode.Driving, host.WorldLife.Mode);
             Assert.IsFalse(driving.DrivingInputSuppressed);
+            var previousInput = InputSystem.settings;
+            var testInput = Object.Instantiate(previousInput);
+            InputSystem.settings = testInput;
+            testInput.backgroundBehavior = InputSettings.BackgroundBehavior.IgnoreFocus;
+#if UNITY_EDITOR
+            testInput.editorInputBehaviorInPlayMode = InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
+#endif
+            var keyboard = InputSystem.AddDevice<Keyboard>("World-life G-key regression");
+            bool wasKinematic = body.isKinematic;
+            try
+            {
+                // This is input/UI coverage, not a suspension test; hold the newly spawned truck still.
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+                body.isKinematic = true;
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.G));
+                yield return null; yield return null;
+                Assert.IsTrue(host.WorldLife.IsOnFoot, host.WorldLife.Feedback);
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                yield return null;
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.G));
+                yield return null; yield return null;
+                Assert.AreEqual(TruckTaxiPlayerControlMode.Driving, host.WorldLife.Mode);
+                Assert.IsFalse(driving.DrivingInputSuppressed);
+            }
+            finally
+            {
+                InputSystem.RemoveDevice(keyboard);
+                InputSystem.settings = previousInput;
+                Object.Destroy(testInput);
+                host.WorldLife.ReturnToTruck();
+                body.isKinematic = wasKinematic;
+            }
         }
     }
 }

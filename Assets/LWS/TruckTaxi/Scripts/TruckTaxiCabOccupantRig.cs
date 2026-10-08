@@ -109,6 +109,14 @@ namespace LWS.TruckTaxi
             return true;
         }
 
+        public bool HasSeat(Transform actor, TruckTaxiCabOccupantKind kind, TruckTaxiCabAnchorId preferred,
+            TruckTaxiSeatType seatType)
+        {
+            if (!HasSleeperCapability || actor == null || PrivateTransitionActive) return false;
+            Prune();
+            return Select(kind, preferred, seatType, actor, false, false, null) != null;
+        }
+
         public bool HasSecondarySeat(TruckTaxiSeatType type, Transform actor = null)
         {
             Prune();
@@ -155,13 +163,22 @@ namespace LWS.TruckTaxi
                 // Legacy seats may not be registered in this rig.
                 foreach (var passenger in GetComponentsInChildren<TruckTaxiPassengerActor>(true))
                     if (passenger.transform != actor && Vector3.Distance(position, passenger.transform.position) <
-                        radius + passenger.StandingRadius) overlaps = true;
+                        radius + SeatedRadius(passenger)) overlaps = true;
                 var driver = GetComponent<TruckTaxiDriverPresentation>()?.Occupant;
                 if (driver != null && driver != actor && Vector3.Distance(position, driver.position) < radius + .65f)
                     overlaps = true;
                 if (!overlaps && (best == null || anchor.priority > best.priority)) best = anchor;
             }
             return best;
+        }
+
+        internal static float SeatedRadius(TruckTaxiPassengerActor actor)
+        {
+            Vector3 standing = actor.StandingWorldScale;
+            Vector3 seated = actor.transform.lossyScale;
+            float scale = Mathf.Max(Mathf.Abs(seated.x) / Mathf.Max(.0001f, Mathf.Abs(standing.x)),
+                Mathf.Abs(seated.z) / Mathf.Max(.0001f, Mathf.Abs(standing.z)));
+            return actor.StandingRadius * scale;
         }
 
         private Vector3 AnchorPosition(Anchor anchor)
@@ -271,6 +288,7 @@ namespace LWS.TruckTaxi
             foreach (var anchor in anchors)
             {
                 if (anchor == null || excluded != null && anchor.id == excluded.id ||
+                    !sleeperOnly && !privateOnly && kind == TruckTaxiCabOccupantKind.Passenger && anchor.secondaryOccupantSeat ||
                     !Usable(anchor, kind, type, actor, sleeperOnly, privateOnly)) continue;
                 if (best == null || anchor.id == preferred && best.id != preferred ||
                     (anchor.id == preferred) == (best.id == preferred) && anchor.priority > best.priority) best = anchor;

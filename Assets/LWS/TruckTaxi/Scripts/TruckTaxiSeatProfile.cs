@@ -37,13 +37,16 @@ namespace LWS.TruckTaxi
         public static bool TryPlaceActor(Transform actor, Transform truck, TruckTaxiSeatProfile profile,
             bool secondary, Vector3 standingWorldScale, TruckTaxiCabOccupantKind? occupantKind = null)
         {
-            if (actor == null || truck == null) return false;
+            if (!CanPlaceActor(actor, truck, profile, secondary, occupantKind)) return false;
             var rig = truck.GetComponent<TruckTaxiCabOccupantRig>();
+            // Every extra occupant uses certified capacity, including a fare's authored pair.
+            if (secondary)
+                return rig != null && rig.TrySeatSecondary(actor,
+                    profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger, standingWorldScale);
             if (rig != null && rig.HasSleeperCapability)
             {
                 var type = profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger;
-                var kind = occupantKind ?? (type == TruckTaxiSeatType.CompanionPassenger ?
-                    TruckTaxiCabOccupantKind.Companion : TruckTaxiCabOccupantKind.Passenger);
+                var kind = occupantKind ?? TruckTaxiCabOccupantKind.Passenger;
                 var preferred = secondary ? profile != null ? profile.secondaryCabAnchor : TruckTaxiCabAnchorId.SleeperLeft :
                     profile != null ? profile.primaryCabAnchor : TruckTaxiCabAnchorId.FrontPassengerSeat;
                 return rig.TrySeat(actor, kind, preferred, type, standingWorldScale,
@@ -64,6 +67,28 @@ namespace LWS.TruckTaxi
                 standingWorldScale.x * ratio * Mathf.Clamp01(authoredScale.x) / Mathf.Max(Mathf.Abs(parentScale.x), .0001f),
                 standingWorldScale.y * ratio * Mathf.Clamp01(authoredScale.y) / Mathf.Max(Mathf.Abs(parentScale.y), .0001f),
                 standingWorldScale.z * ratio * Mathf.Clamp01(authoredScale.z) / Mathf.Max(Mathf.Abs(parentScale.z), .0001f));
+            return true;
+        }
+
+        public static bool CanPlaceActor(Transform actor, Transform truck, TruckTaxiSeatProfile profile,
+            bool secondary, TruckTaxiCabOccupantKind? occupantKind = null)
+        {
+            if (actor == null || truck == null) return false;
+            var rig = truck.GetComponent<TruckTaxiCabOccupantRig>();
+            var type = profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger;
+            if (secondary) return rig != null && rig.HasSecondarySeat(type, actor);
+            if (rig != null && rig.HasSleeperCapability)
+                return rig.HasSeat(actor, occupantKind ?? TruckTaxiCabOccupantKind.Passenger,
+                    profile != null ? profile.primaryCabAnchor : TruckTaxiCabAnchorId.FrontPassengerSeat, type);
+            var mount = profile != null && !string.IsNullOrWhiteSpace(profile.mountPath) ? truck.Find(profile.mountPath) : null;
+            if (mount == null) mount = truck;
+            Vector3 position = mount.TransformPoint(profile != null ? profile.localPosition : new Vector3(.5f, 1, 0));
+            var incoming = actor.GetComponent<TruckTaxiPassengerActor>();
+            float radius = (incoming != null ? incoming.StandingRadius : .55f) * .88f;
+            if (profile != null) radius *= Mathf.Max(Mathf.Clamp01(profile.localScale.x), Mathf.Clamp01(profile.localScale.z));
+            foreach (var seated in truck.GetComponentsInChildren<TruckTaxiPassengerActor>(true))
+                if (seated.transform != actor && Vector3.Distance(position, seated.transform.position) <
+                    radius + TruckTaxiCabOccupantRig.SeatedRadius(seated)) return false;
             return true;
         }
     }

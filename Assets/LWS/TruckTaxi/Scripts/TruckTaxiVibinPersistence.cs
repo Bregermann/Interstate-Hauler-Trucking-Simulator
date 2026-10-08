@@ -311,6 +311,7 @@ namespace LWS.TruckTaxi
                 region = regional.ResolveRegion(host.Player.transform.position);
                 host.WorldLife?.ReturnToTruck();
                 host.ComponentDamage?.ReapplyPhysicalState();
+                host.GPS?.RequestPresentationRefresh();
                 CompleteContinueRequest(profileId, slot, autosave);
                 outcome = LwsSaveOperationResult.Success("Vibin save loaded. Resume when ready.");
             }
@@ -330,7 +331,10 @@ namespace LWS.TruckTaxi
         {
             regionId = regional.ResolveRegion(host.Player.transform.position),
             session = host.Session.CapturePersistentState(), needs = host.DriverNeeds.CapturePersistentState(),
-            damage = host.ComponentDamage?.Capture()
+            damage = host.ComponentDamage?.Capture(),
+            hasFuelState = host.Fuel?.Fuel != null,
+            fuelLiters = host.Fuel?.Fuel?.amount ?? 0,
+            fuelCapacityLiters = host.Fuel?.Fuel?.capacity ?? 0
         };
         private LwsSaveOperationResult ValidatePayload(TruckTaxiVibinSavePayload payload)
         {
@@ -377,6 +381,8 @@ namespace LWS.TruckTaxi
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin semantic state could not be restored.");
             if (host.ComponentDamage != null && !host.ComponentDamage.Restore(payload.damage))
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin component damage could not be restored.");
+            if (payload.hasFuelState && host.Fuel?.Fuel != null)
+                host.Fuel.Fuel.amount = Mathf.Min(payload.fuelLiters, host.Fuel.Fuel.capacity);
             // The existing truck provider/load coordinator alone own final vehicle placement.
             host.Environment.Clock.SetPaused(true);
             return restoreResult = LwsSaveOperationResult.Success();
@@ -435,6 +441,7 @@ namespace LWS.TruckTaxi
             if (host == null || !host.Ready || host.Player == null || host.DriverNeeds?.State == null || !loading && !regional.InitialWorldReady)
                 return "Vibin world is not ready.";
             bool freshInactive = !profileReady && host.Session.State == TruckTaxiState.Inactive;
+            if (host.Session.HasStolenPassenger) return "Deliver the stolen passenger before saving or loading.";
             if (HasUnsafeFare(host.Session.State) && !freshInactive || host.Session.HasPassenger) return FinishRideMessage;
             if (host.Kaiju?.IsCapturingPlayer == true || host.Races?.IsActive == true || host.Session.RaceEventActive ||
                 host.CustomContent?.IsPlaying == true || host.Companions?.IsBusy == true || host.Companions?.ActivePrivateStop != null ||

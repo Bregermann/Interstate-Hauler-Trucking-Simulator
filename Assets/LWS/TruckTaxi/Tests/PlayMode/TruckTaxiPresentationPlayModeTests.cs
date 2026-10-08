@@ -46,6 +46,12 @@ namespace LWS.TruckTaxi.Tests
             Assert.That(screen.rect.width*screen.lossyScale.x,Is.EqualTo(.1472f).Within(.001));
             Assert.That(screen.rect.height*screen.lossyScale.y,Is.EqualTo(.0782f).Within(.001));
             Assert.AreEqual(2,System.Array.FindAll(host.Player.GetComponentsInChildren<MonoBehaviour>(true),c=>c.GetType().FullName=="CompassNavigatorPro.CompassPro").Length);
+            foreach (var compass in new[] { host.GPS.CabCompass, host.GPS.HudCompass })
+            {
+                Assert.IsNotNull(compass);
+                Assert.AreEqual("TimeInterval",compass.GetType().GetProperty("miniMapCameraSnapshotFrequency")?.GetValue(compass)?.ToString());
+                Assert.Greater((float)compass.GetType().GetProperty("miniMapSnapshotInterval").GetValue(compass),0f);
+            }
             TruckTaxiDemoPlayModeTests.Capture("FactoryCockpit",1920,1080);
             host.hud.Root.gameObject.SetActive(true);
             host.SetPaused(false);
@@ -67,6 +73,9 @@ namespace LWS.TruckTaxi.Tests
             foreach(var point in new[]{offer.PlayerPosition,offer.Pickup.StopPosition,offer.Destination.StopPosition})
             {
                 var viewport=host.GPS.PreviewCamera.WorldToViewportPoint(point);
+                Debug.Log("OFFER FRAMING point="+point+" viewport="+viewport+" camera="+host.GPS.PreviewCamera.transform.position+
+                    " size="+host.GPS.PreviewCamera.orthographicSize+" aspect="+host.GPS.PreviewCamera.aspect+
+                    " offset="+host.GPS.HudCompass.GetType().GetProperty("miniMapFollowOffset").GetValue(host.GPS.HudCompass));
                 Assert.That(viewport.x,Is.InRange(.05f,.95f)); Assert.That(viewport.y,Is.InRange(.05f,.95f));
             }
             TruckTaxiDemoPlayModeTests.Capture("FactoryOffer1080",1920,1080);
@@ -149,6 +158,59 @@ namespace LWS.TruckTaxi.Tests
             }
             finally { priorSettings.Save(); PlayerPrefs.Save(); }
             Debug.Log($"TAXI PRESENTATION: pickup {offer.ToPickup.Meters:0.0}m [{offer.ToPickup.Source}], trip {offer.Trip.Meters:0.0}m [{offer.Trip.Source}]; exact offer accepted.");
+        }
+        [UnityTest]
+        public IEnumerator RegionalMapRepeatedCaptureRetainsRealRoadPixelsAndRestoresCamera()
+        {
+            yield return SceneManager.LoadSceneAsync("TruckTaxi_DemoCity");
+            float deadline = Time.realtimeSinceStartup + 60;
+            while ((TruckTaxiBootstrap.Instance == null || !TruckTaxiBootstrap.Instance.StartupComplete) &&
+                   Time.realtimeSinceStartup < deadline) yield return null;
+            var host = TruckTaxiBootstrap.Instance;
+            Assert.IsNotNull(host); Assert.IsTrue(host.CanResume, host.ResumeBlockReason);
+            host.Session.SetRideRequestsEnabled(false);
+            host.StartShift(); host.SetPaused(false);
+            yield return new WaitForSecondsRealtime(.4f);
+            for (int cycle = 0; cycle < 10; cycle++)
+            {
+                Assert.IsTrue(host.hud.FullMap.Open(), "Map open " + cycle);
+                yield return new WaitForSecondsRealtime(.25f);
+                Assert.IsTrue(host.GPS.BakedTilesVisible);
+                var camera = host.GPS.PreviewCamera;
+                var texture = camera.targetTexture;
+                Assert.IsNotNull(texture); Assert.IsTrue(texture.IsCreated());
+                Assert.Greater(CountMapColours(texture), 8, "Regional atlas must render more than a blank background, cycle " + cycle);
+                if (cycle == 0 || cycle == 9)
+                    TruckTaxiDemoPlayModeTests.Capture("RegionalMapRecovery" + cycle, 1920, 1080);
+                host.hud.FullMap.Close();
+                host.GPS.ToggleHud(); host.GPS.ToggleHud();
+                host.GPS.RequestPresentationRefresh();
+                yield return new WaitForSecondsRealtime(.2f);
+                Assert.IsFalse(host.GPS.BakedTilesVisible);
+                Assert.AreEqual("TimeInterval", host.GPS.HudCompass.GetType()
+                    .GetProperty("miniMapCameraSnapshotFrequency").GetValue(host.GPS.HudCompass).ToString());
+            }
+        }
+        private static int CountMapColours(RenderTexture source)
+        {
+            var previous = RenderTexture.active;
+            var readback = new Texture2D(source.width, source.height, TextureFormat.RGB24, false);
+            try
+            {
+                RenderTexture.active = source;
+                readback.ReadPixels(new Rect(0, 0, source.width, source.height), 0, 0);
+                readback.Apply();
+                var colours = new System.Collections.Generic.HashSet<int>();
+                var pixels = readback.GetPixels32();
+                for (int y = 0; y < source.height; y += 4)
+                    for (int x = 0; x < source.width; x += 4)
+                    {
+                        var c = pixels[y * source.width + x];
+                        colours.Add((c.r / 8) << 10 | (c.g / 8) << 5 | c.b / 8);
+                    }
+                return colours.Count;
+            }
+            finally { RenderTexture.active = previous; Object.Destroy(readback); }
         }
         private static int CabCyanPixels(string name,RectTransform screen)
         {

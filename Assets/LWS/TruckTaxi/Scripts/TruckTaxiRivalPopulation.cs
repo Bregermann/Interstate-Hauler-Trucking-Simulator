@@ -25,7 +25,7 @@ namespace LWS.TruckTaxi
         }
     }
 
-    // Rival fare state is deliberately local presentation state, never a TruckTaxiSession request.
+    // UTS retains driving; Session owns transferable fares, never the primary ride request list.
     [DisallowMultipleComponent]
     public sealed class TruckTaxiRivalPopulation : MonoBehaviour
     {
@@ -44,6 +44,9 @@ namespace LWS.TruckTaxi
             public Vector3 RiderFrom;
             public Vector3 RiderTo;
             public bool PickupQueued;
+            public TruckTaxiRivalFare Fare;
+            public TruckTaxiSession FareSession;
+            public float AngryUntil;
         }
 
         [Range(8, 16)] public int logicalTarget = 12;
@@ -63,9 +66,60 @@ namespace LWS.TruckTaxi
         private Material riderBody, riderClothes, riderSkin;
         private float nextMaintenance, nextConverge;
         private int pickupCursor;
+        private TruckTaxiSession session;
+        private TruckTaxiRivalTheft theft;
         public int LogicalCount => rivals.Count;
         public int LiveCount { get { int count = 0; foreach (var rival in rivals) if (rival.Car.Actor != null) count++; return count; } }
         public IReadOnlyList<TruckTaxiRivalDemandZone> DemandZones => zones;
+
+        public void ConfigureTheft(TruckTaxiSession owner, TruckTaxiRivalTheft receiver)
+        {
+            if (session != owner)
+                foreach (var rival in rivals)
+                { ReturnRider(rival); rival.Stage = RiderStage.None; rival.PickupQueued = false; }
+            session = owner; theft = receiver;
+        }
+
+        public bool TryGetOccupiedFare(string rivalId, int generation, out TruckTaxiRivalFare fare)
+        {
+            fare = null;
+            var rival = rivals.Find(item => item.Car.Id == rivalId);
+            if (rival?.Car.Actor == null || !rival.Car.Actor.activeInHierarchy || rival.Stage != RiderStage.Riding ||
+                rival.Car.Actor.GetComponent<TruckTaxiTrafficPooledActor>()?.Generation != generation ||
+                rival.Fare == null || session?.OwnsRivalFare(rivalId, rival.Fare.Id) != true) return false;
+            fare = rival.Fare; return true;
+        }
+
+        public bool IsAngry(string rivalId) => rivals.Exists(item => item.Car.Id == rivalId && Time.time < item.AngryUntil);
+
+        internal void OnRivalCollision(string rivalId, int generation, Collision collision)
+        {
+            if (theft == null || collision == null || collision.rigidbody != theft.PlayerBody ||
+                !TryGetOccupiedFare(rivalId, generation, out _)) return;
+            float normalSpeed = 0;
+            for (int i = 0; i < collision.contactCount; i++)
+                normalSpeed = Mathf.Max(normalSpeed, Mathf.Abs(Vector3.Dot(collision.relativeVelocity, collision.GetContact(i).normal)));
+            var rival = rivals.Find(item => item.Car.Id == rivalId);
+            Vector3 toward = (rival.Car.Actor.transform.position - theft.PlayerBody.position).normalized;
+            float approach = Vector3.Dot(theft.PlayerBody.linearVelocity, toward);
+            if (TruckTaxiRivalTheft.IsValidImpact(collision.relativeVelocity.magnitude, normalSpeed, approach,
+                theft.minimumImpactSpeed)) theft.TrySteal(rivalId, generation);
+        }
+
+        internal bool CommitTheft(string rivalId, int generation, TruckTaxiRivalFare fare, Rigidbody offender)
+        {
+            var rival = rivals.Find(item => item.Car.Id == rivalId);
+            if (rival?.Car.Actor == null || rival.Stage != RiderStage.Riding || rival.Fare != fare ||
+                rival.Car.Actor.GetComponent<TruckTaxiTrafficPooledActor>()?.Generation != generation ||
+                session?.StolenPassengerFare != fare) return false;
+            ReturnRider(rival);
+            rival.Stage = RiderStage.None; rival.PickupQueued = false;
+            rival.NextPickup = Time.time + 35; rival.AngryUntil = Time.time + 12;
+            rival.Car.Actor.GetComponent<TruckTaxiRivalVehicleVisual>()?.SetPassengerState(false, true);
+            rival.Car.Actor.GetComponent<TruckTaxiTrafficBehaviour>()?.Honk(TruckTaxiHonkPattern.Angry, true);
+            rival.Car.Actor.GetComponent<TruckTaxiRoadRage>()?.TryTrigger(offender);
+            return true;
+        }
         public bool TryGetHome(string rivalId, out string depotId, out string townId,
             out float shiftStart, out float shiftEnd, out float venueBias)
         {
@@ -194,7 +248,12 @@ namespace LWS.TruckTaxi
             foreach (var rival in rivals)
             {
                 if (rival.Car.Actor == null) logical.Advance(rival.Car, dt);
-                else AdvanceRider(rival, dt);
+                else
+                {
+                    AdvanceRider(rival, dt);
+                    rival.Car.Actor.GetComponent<TruckTaxiRivalVehicleVisual>()?.SetPassengerState(
+                        rival.Stage == RiderStage.Riding, Time.time < rival.AngryUntil);
+                }
             }
             if (Time.time < nextMaintenance || !traffic.Ready) return;
             nextMaintenance = Time.time + .5f;
@@ -281,6 +340,8 @@ namespace LWS.TruckTaxi
             var visual = vehicle.GetComponent<TruckTaxiRivalVehicleVisual>() ??
                 vehicle.AddComponent<TruckTaxiRivalVehicleVisual>();
             visual.Apply(rival.Car.AppearanceSeed, int.Parse(rival.Car.Id.Substring("taxi.rival.".Length)) + 1);
+            var relay = vehicle.GetComponent<TruckTaxiRivalCollisionRelay>() ?? vehicle.AddComponent<TruckTaxiRivalCollisionRelay>();
+            relay.Initialize(this, rival.Car.Id, vehicle.GetComponent<TruckTaxiTrafficPooledActor>().Generation);
             rival.NextPickup = Mathf.Max(rival.NextPickup, Time.time + 5);
             return true;
         }
@@ -309,11 +370,16 @@ namespace LWS.TruckTaxi
         {
             var vehicle = rival.Car.Actor;
             if (vehicle == null) return;
+            if (rival.Fare != null && session?.OwnsRivalFare(rival.Car.Id, rival.Fare.Id) != true)
+            { ReturnRider(rival); rival.Stage = RiderStage.None; rival.NextPickup = Time.time + 12; }
             if (rival.Stage == RiderStage.None)
             {
                 if (!rival.PickupQueued && Time.time < rival.NextPickup) return;
                 var profile = SelectIdentity();
                 if (profile == null) { rival.PickupQueued = false; rival.NextPickup = Time.time + 15; return; }
+                if (session != null && !session.TryCreateRivalFare(rival.Car.Id, profile, vehicle.transform.position, out rival.Fare))
+                { usedVisualIds.Remove(profile.passengerId); rival.PickupQueued = false; rival.NextPickup = Time.time + 15; return; }
+                rival.FareSession = session;
                 rival.VisualIdentity = profile;
                 rival.PickupQueued = false;
                 rival.Stage = RiderStage.Waiting;
@@ -339,11 +405,23 @@ namespace LWS.TruckTaxi
                 {
                     rival.Stage = RiderStage.Riding;
                     rival.StageUntil = Time.time + 25 + rival.Car.AppearanceSeed % 20;
-                    rival.Rider.SetActive(false);
+                    var mount = vehicle.GetComponent<TruckTaxiRivalVehicleVisual>()?.PassengerMount;
+                    if (mount != null)
+                    {
+                        rival.Rider.transform.SetParent(mount, false);
+                        rival.Rider.transform.localPosition = Vector3.zero;
+                        rival.Rider.transform.localRotation = Quaternion.identity;
+                        rival.Rider.transform.localScale = Vector3.one * .55f;
+                    }
+                    else rival.Rider.SetActive(false);
                 }
             }
-            else if (rival.Stage == RiderStage.Riding && Time.time >= rival.StageUntil)
+            else if (rival.Stage == RiderStage.Riding && Time.time >= rival.StageUntil &&
+                (rival.Fare == null || Vector3.ProjectOnPlane(vehicle.transform.position - rival.Fare.DestinationPosition,
+                    Vector3.up).sqrMagnitude <= rival.Fare.DestinationRadius * rival.Fare.DestinationRadius))
             {
+                rival.Rider.transform.SetParent(transform, true);
+                rival.Rider.transform.localScale = Vector3.one;
                 rival.Stage = RiderStage.Exiting; rival.StageUntil = Time.time + 3;
                 rival.RiderFrom = vehicle.transform.position + vehicle.transform.right * 1.1f;
                 rival.RiderTo = rival.RiderFrom + vehicle.transform.right * 3;
@@ -387,7 +465,9 @@ namespace LWS.TruckTaxi
             ISet<string> reserved)
         {
             if (candidate == null || !candidate.available || string.IsNullOrWhiteSpace(candidate.passengerId) ||
-                candidate == player || candidate == player?.pairPassenger || candidate == player?.companion)
+                candidate == player || candidate == player?.pairPassenger || candidate == player?.companion ||
+                candidate.passengerId == player?.passengerId || candidate.passengerId == player?.pairPassenger?.passengerId ||
+                candidate.passengerId == player?.companion?.passengerId)
                 return false;
             return reserved == null || !reserved.Contains(candidate.passengerId);
         }
@@ -435,7 +515,14 @@ namespace LWS.TruckTaxi
 
         private void ReturnRider(Rival rival)
         {
-            if (rival.Rider != null) { rival.Rider.SetActive(false); riderPool.Push(rival.Rider); rival.Rider = null; }
+            rival.FareSession?.ReleaseRivalFare(rival.Car.Id, rival.Fare?.Id);
+            rival.Fare = null; rival.FareSession = null;
+            if (rival.Rider != null)
+            {
+                rival.Rider.SetActive(false); rival.Rider.transform.SetParent(transform, false);
+                rival.Rider.transform.localScale = Vector3.one;
+                riderPool.Push(rival.Rider); rival.Rider = null;
+            }
             if (rival.VisualIdentity != null)
             {
                 usedVisualIds.Remove(rival.VisualIdentity.passengerId);

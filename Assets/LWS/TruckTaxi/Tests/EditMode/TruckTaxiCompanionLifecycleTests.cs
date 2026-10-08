@@ -105,6 +105,56 @@ namespace LWS.TruckTaxi.Tests
         }
 
         [Test]
+        public void FareAndOneCompanionCoexistInEitherBoardingOrder()
+        {
+            var truck = Make("two-seat truck"); var rig = truck.AddComponent<TruckTaxiCabOccupantRig>();
+            var fare = Make("primary fare"); var companion = Make("secondary companion");
+            var another = Make("another companion");
+            var front = Seat(TruckTaxiCabAnchorId.FrontPassengerSeat, Vector3.right * 2);
+            var extra = Seat(TruckTaxiCabAnchorId.SleeperRight, Vector3.left * 2, true);
+            rig.Configure(true, new[] { front, extra });
+            Assert.IsTrue(TruckTaxiSeatProfile.TryPlaceActor(fare.transform, truck.transform, null, false, Vector3.one));
+            Vector3 primaryPosition = fare.transform.position;
+            Assert.IsTrue(rig.TrySeatSecondary(companion.transform, TruckTaxiSeatType.CompanionPassenger, Vector3.one));
+            Assert.AreEqual(primaryPosition, fare.transform.position);
+            Assert.IsFalse(rig.TrySeatSecondary(another.transform, TruckTaxiSeatType.CompanionPassenger, Vector3.one));
+            rig.Release(fare.transform); fare.transform.SetParent(null);
+            Vector3 companionPosition = companion.transform.position;
+            Assert.IsTrue(TruckTaxiSeatProfile.TryPlaceActor(fare.transform, truck.transform, null, false, Vector3.one));
+            Assert.AreEqual(companionPosition, companion.transform.position);
+            Assert.AreEqual(primaryPosition, fare.transform.position);
+        }
+
+        [Test]
+        public void LegacySecondaryPerchIsRejectedWithoutMovingPrimaryTransform()
+        {
+            var truck = Make("legacy truck"); var fare = Make("fare"); var extra = Make("extra");
+            Assert.IsTrue(TruckTaxiSeatProfile.TryPlaceActor(fare.transform, truck.transform, null, false, Vector3.one));
+            Vector3 before = fare.transform.localPosition;
+            Assert.IsFalse(TruckTaxiSeatProfile.TryPlaceActor(extra.transform, truck.transform, null, true, Vector3.one));
+            Assert.AreEqual(before, fare.transform.localPosition);
+            Assert.IsNull(extra.transform.parent);
+        }
+
+        [Test]
+        public void LegacyFareClearanceUsesItsActualSeatedScaleEvenWhenHidden()
+        {
+            var truck = Make("truck"); var rig = truck.AddComponent<TruckTaxiCabOccupantRig>();
+            var extra = Seat(TruckTaxiCabAnchorId.SleeperRight, Vector3.right * 1.1f, true);
+            extra.occupantRadius = .35f;
+            rig.Configure(false, new[] { extra });
+            var fare = Make("large standing model");
+            var visual = Box("body", Vector3.zero, Vector3.one * 2);
+            visual.transform.SetParent(fare.transform, false);
+            var actor = fare.AddComponent<TruckTaxiPassengerActor>(); actor.Bind(null);
+            fare.transform.SetParent(truck.transform, false); fare.transform.localScale = Vector3.one * .3f;
+            fare.SetActive(false);
+            Assert.IsTrue(rig.HasSecondarySeat(TruckTaxiSeatType.CompanionPassenger));
+            fare.transform.localScale = Vector3.one;
+            Assert.IsFalse(rig.HasSecondarySeat(TruckTaxiSeatType.CompanionPassenger));
+        }
+
+        [Test]
         public void WorldExitRestoresScaleParentAndTriggerOnlyAfterClearingWideTruck()
         {
             var floor = Box("sidewalk", new Vector3(0, -.1f, 0), new Vector3(80, .2f, 80));

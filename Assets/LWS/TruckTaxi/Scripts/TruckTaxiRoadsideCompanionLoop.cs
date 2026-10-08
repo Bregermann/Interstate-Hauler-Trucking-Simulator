@@ -168,6 +168,7 @@ namespace LWS.TruckTaxi
         {
             get
             {
+                if (active != null || boarding) return false;
                 if (cabRig == null && host?.Player != null) cabRig = host.Player.GetComponent<TruckTaxiCabOccupantRig>();
                 return cabRig != null && cabRig.HasSecondarySeat(CompanionSeatType, nearby?.actor?.transform);
             }
