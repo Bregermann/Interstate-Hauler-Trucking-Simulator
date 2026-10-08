@@ -10,6 +10,35 @@ namespace LWS.TruckTaxi.Editor
 {
     public static class TruckTaxiEditorSnowSetup
     {
+        [MenuItem("Truck Taxi/Retain Snow Shader Variants")]
+        public static void RetainSnowShaderVariants()
+        {
+            const string root = "Assets/LWS/TruckTaxi/Resources/TruckTaxi";
+            const string folder = root + "/Snow";
+            if (!AssetDatabase.IsValidFolder(folder)) AssetDatabase.CreateFolder(root, "Snow");
+            Shader shader = Shader.Find(LwsWeatheradeMaterialFactory.SnowCoverageShaderName);
+            if (shader == null) throw new InvalidOperationException("Installed Weatherade snow shader is missing.");
+            foreach (bool traces in new[] { false, true })
+            {
+                string path = folder + (traces ? "/SnowCoverageTracks.mat" : "/SnowCoverage.mat");
+                Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
+                if (material == null)
+                {
+                    material = new Material(shader);
+                    AssetDatabase.CreateAsset(material, path);
+                }
+                // Runtime-created materials alone do not retain shader_feature variants in a player.
+                material.shader = shader;
+                material.shaderKeywords = traces ? new[] { "_COVERAGE_ON", "_TRACES_ON" } : new[] { "_COVERAGE_ON" };
+                material.SetFloat("_Coverage", 1);
+                material.SetFloat("_Traces", traces ? 1 : 0);
+                material.SetFloat("_TracesOverride", 1);
+                EditorUtility.SetDirty(material);
+            }
+            AssetDatabase.SaveAssets();
+            Debug.Log("TAXI SNOW: Resources materials retain coverage and coverage+tracks player shader variants.");
+        }
+
         [MenuItem("Truck Taxi/Migrate Snow Rates")]
         public static void MigrateSnowSettingsAsset()
         {
@@ -57,6 +86,7 @@ namespace LWS.TruckTaxi.Editor
         public static void ConfigureScene(TruckTaxiBootstrap host)
         {
             if (host == null) throw new InvalidOperationException("Taxi bootstrap is required.");
+            RetainSnowShaderVariants();
             var environment = host.GetComponent<TruckTaxiEnvironmentCoordinator>();
             if (environment == null) throw new InvalidOperationException("Configure the existing Taxi environment before adding snow.");
             var settings = environment.settings;

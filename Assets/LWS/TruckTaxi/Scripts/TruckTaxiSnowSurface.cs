@@ -7,9 +7,11 @@ using UnityEngine.Rendering;
 
 namespace LWS.TruckTaxi
 {
-    // Weatherade owns every visible snow pixel. These temporary, invisible volumes only feed its trace camera.
+    // Invisible contact volumes feed Weatherade's bounded snow coverage and indented tire-track mask.
     public sealed class TruckTaxiSnowSurface : MonoBehaviour
     {
+        private const float MinimumTrackDepthMeters = .04f;
+        private const float MinimumTrackCoverage = .06f;
         private const int SurfaceLayer = 30;
         private const int TraceLayer = 29;
         private const string SnowCoverageType = "NOT_Lonely.Weatherade.SnowCoverage";
@@ -61,6 +63,16 @@ namespace LWS.TruckTaxi
         public string Diagnostic { get; private set; } = "Weatherade snow not bound.";
         public int RoadDepthSourceCount => roadDepthProxies.Count;
         public int WheelTraceSourceCount => wheelTracers.Count;
+        public int WheelTraceStampCount { get; private set; }
+        public int ActiveWheelTraceSourceCount
+        {
+            get
+            {
+                int count = 0;
+                foreach (MeshRenderer tracer in wheelTracers.Values) if (tracer != null && tracer.enabled) count++;
+                return count;
+            }
+        }
         public int GroundSnowSurfaceCount => groundBindings.Count;
         public float Coverage01 => coverage01;
         public int BoundSnowMaterialCount => updatedSnowMaterials.Count;
@@ -98,7 +110,11 @@ namespace LWS.TruckTaxi
             else Diagnostic = "Weatherade depth-occluder shader is missing; traces disabled.";
         }
 
-        public void SetCoverage(float value) { coverage01 = Mathf.Clamp01(value); }
+        public void SetCoverage(float value)
+        {
+            coverage01 = Mathf.Clamp01(value);
+            weatherade?.SetExternalCoverageControl(coverage01 > .001f);
+        }
         public void ConfigureVendorTextures(Texture2D main, Texture2D detail, Texture2D sparkle)
         {
             snowTexture = main;
@@ -172,6 +188,7 @@ namespace LWS.TruckTaxi
                 lastAppliedCoverage = -1;
                 updatedSnowMaterials.Clear();
                 boundDepthCameras.Clear();
+                ConfigureTrackAppearance(current);
             }
             BindCoverageDepthCamera(current);
             BindVendorTextures(current);
@@ -348,16 +365,24 @@ namespace LWS.TruckTaxi
             if (plowTracer != null) plowTracer.enabled = false;
         }
 
-        public void TraceWheel(int index, Vector3 from, Vector3 to, float width)
+        public static float TrackStrength(float depthMeters, float coverage)
         {
-            if (generator == null || coverage01 <= .001f) return;
+            if (depthMeters < MinimumTrackDepthMeters || coverage < MinimumTrackCoverage) return 0;
+            return .22f + .78f * Mathf.InverseLerp(MinimumTrackDepthMeters, .4f, depthMeters);
+        }
+
+        public void TraceWheel(int index, Vector3 from, Vector3 to, float width, float depthMeters)
+        {
+            float strength = TrackStrength(depthMeters, coverage01);
+            if (generator == null || strength <= 0) { StopWheelTrace(index); return; }
             if (!wheelTracers.TryGetValue(index, out MeshRenderer tracer) || tracer == null)
             {
                 tracer = CreateTracer("Taxi wheel Weatherade trace " + index);
                 if (tracer == null) return;
                 wheelTracers[index] = tracer;
             }
-            PlaceTrace(tracer, from, to, width, .35f, .03f);
+            PlaceTrace(tracer, from, to, Mathf.Max(.34f, width * 1.15f), .18f + .36f * strength, .03f);
+            WheelTraceStampCount++;
         }
 
         public void StopWheelTrace(int index)
@@ -378,8 +403,24 @@ namespace LWS.TruckTaxi
             if (generator == null) return;
             SetField(generator, "traceSurfLayermask", new LayerMask { value = 1 << SurfaceLayer });
             SetField(generator, "traceObjsLayermask", new LayerMask { value = 1 << TraceLayer });
-            SetField(generator, "decaySpeed", .025f);
+            SetField(generator, "decaySpeed", .003f);
+            SetField(generator, "maskRes", 1024);
+            SetField(generator, "blurKernelSize", 2);
+            SetField(generator, "borderIntensity", .7f);
+            SetField(generator, "normalSpread", 1.3f);
             type.GetMethod("Init", BindingFlags.Instance | BindingFlags.Public)?.Invoke(generator, null);
+        }
+
+        private static void ConfigureTrackAppearance(Component snowCoverage)
+        {
+            SetField(snowCoverage, "traces", true);
+            Color compressedSnow = new Color(.40f, .46f, .52f, .65f);
+            foreach (string suffix in new[] { "", "1", "2" })
+            {
+                SetField(snowCoverage, "tracesBaseBlend" + (suffix == "" ? "0" : suffix), .45f);
+                SetField(snowCoverage, "tracesNormalScale" + suffix, 1.35f);
+                SetField(snowCoverage, "tracesColor" + suffix, compressedSnow);
+            }
         }
 
         private void EnableRoadTraces()
@@ -548,9 +589,14 @@ namespace LWS.TruckTaxi
             foreach (MeshRenderer proxy in roadDepthProxies.Values) if (proxy != null) proxy.enabled = false;
         }
 
-        private void OnDisable() { StopAllTraces(); RestoreGround(); RestoreCameraMasks(); }
+        private void OnDisable()
+        {
+            StopAllTraces(); RestoreGround(); RestoreCameraMasks();
+            weatherade?.SetExternalCoverageControl(false);
+        }
         private void OnDestroy()
         {
+            weatherade?.SetExternalCoverageControl(false);
             RestoreGround();
             RestoreCameraMasks();
             if (createdGenerator && generator != null) Destroy(generator);

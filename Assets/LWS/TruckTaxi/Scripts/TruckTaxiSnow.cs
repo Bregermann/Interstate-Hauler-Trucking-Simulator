@@ -188,14 +188,14 @@ namespace LWS.TruckTaxi
                 backgroundDepth = Mathf.Min(Region.MaximumDepth, backgroundDepth + amount);
                 Region.Accumulate(amount);
             }
-            else
+            else if (backgroundDepth > 0)
             {
                 float amount = step * settings.snowMeltMetersPerSecond;
                 backgroundDepth = Mathf.Max(0, backgroundDepth - amount);
                 Region.Melt(amount);
             }
             Plow.Tick(weatherId);
-            traction.Tick(surface, settings.tireCompressionMetersPerMeter);
+            traction.Tick(surface, settings.tireCompressionMetersPerMeter, backgroundDepth > 0, backgroundDepth);
             if (Time.time >= nextVisualUpdate)
             {
                 surface.SetCoverage(backgroundDepth / Region.MaximumDepth);
@@ -248,6 +248,11 @@ namespace LWS.TruckTaxi
             public float appliedLongitudinal, appliedLateral, appliedRolling;
             public Vector3 lastContact;
             public bool hasContact, modified;
+            public Vector3 lastTraceContact;
+            public float lastTraceTime;
+            public bool hasTraceContact;
+            public Collider contactCollider;
+            public bool snowCoveredGround;
         }
         public void Initialize(VehicleController vehicle, TruckTaxiSnowRegion snow)
         {
@@ -261,7 +266,8 @@ namespace LWS.TruckTaxi
             }
         }
         public void Tick() { Tick(null, 0); }
-        public void Tick(TruckTaxiSnowSurface surface, float compressionMetersPerMeter)
+        public void Tick(TruckTaxiSnowSurface surface, float compressionMetersPerMeter, bool snowDepthPresent = true,
+            float backgroundDepthMeters = 0)
         {
             if (region == null) return;
             bool apply = Time.time >= nextApply;
@@ -278,19 +284,49 @@ namespace LWS.TruckTaxi
                 if (api == null) continue;
                 bool grounded = api.IsGrounded;
                 Vector3 contact = grounded ? api.HitPoint : Vector3.zero;
-                float depth = grounded ? region.DepthAt(contact) : 0;
-                if (grounded && (depth > .001f || surface != null && surface.Coverage01 > .001f) && wheel.hasContact)
+                float depth = grounded && snowDepthPresent ? region.DepthAt(contact) : 0;
+                if (grounded && wheel.hasContact && snowDepthPresent)
                 {
+                    Collider hitCollider = api.HitCollider;
+                    if (hitCollider != wheel.contactCollider)
+                    {
+                        wheel.contactCollider = hitCollider;
+                        TruckTaxiSurface hitSurface = hitCollider != null ? hitCollider.GetComponentInParent<TruckTaxiSurface>() : null;
+                        wheel.snowCoveredGround = hitSurface != null && !hitSurface.isRoad;
+                    }
+                    // Shoulders use the same accumulated Weatherade snow; lane cells retain plow/compression semantics.
+                    float traceDepth = wheel.snowCoveredGround ? Mathf.Max(depth, backgroundDepthMeters) : depth;
                     float distance = Vector2.Distance(new Vector2(contact.x, contact.z), new Vector2(wheel.lastContact.x, wheel.lastContact.z));
                     if (distance >= .05f && distance <= 5f)
                     {
                         float width = Mathf.Max(.15f, api.Width);
                         if (depth > .001f) region.CompressSweep(wheel.lastContact, contact, width, distance * Mathf.Max(0, compressionMetersPerMeter));
-                        surface?.TraceWheel(i, wheel.lastContact, contact, width);
                     }
-                    else surface?.StopWheelTrace(i);
+                    if (surface != null && TruckTaxiSnowSurface.TrackStrength(traceDepth, surface.Coverage01) > 0)
+                    {
+                        if (!wheel.hasTraceContact)
+                        {
+                            wheel.lastTraceContact = wheel.lastContact;
+                            wheel.hasTraceContact = true;
+                        }
+                        float traceDistance = Vector2.Distance(new Vector2(contact.x, contact.z),
+                            new Vector2(wheel.lastTraceContact.x, wheel.lastTraceContact.z));
+                        if (traceDistance >= .05f && traceDistance <= 5f)
+                        {
+                            surface.TraceWheel(i, wheel.lastTraceContact, contact, Mathf.Max(.15f, api.Width), traceDepth);
+                            wheel.lastTraceContact = contact;
+                            wheel.lastTraceTime = Time.time;
+                        }
+                        else if (traceDistance > 5f)
+                        {
+                            wheel.lastTraceContact = contact;
+                            surface.StopWheelTrace(i);
+                        }
+                        else if (Time.time - wheel.lastTraceTime > .75f) surface.StopWheelTrace(i);
+                    }
+                    else { wheel.hasTraceContact = false; surface?.StopWheelTrace(i); }
                 }
-                else surface?.StopWheelTrace(i);
+                else { wheel.hasTraceContact = false; surface?.StopWheelTrace(i); }
                 wheel.hasContact = grounded;
                 if (grounded) wheel.lastContact = contact;
                 if (apply)

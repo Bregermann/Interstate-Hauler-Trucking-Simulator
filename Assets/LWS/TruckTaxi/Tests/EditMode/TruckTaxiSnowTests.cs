@@ -71,6 +71,31 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual(1, TruckTaxiSnowTraction.RollingForDepth(0, .6f), .001f);
         }
 
+        [Test] public void WheelTracksRequireLocalSnowAndGrowStrongerWithDepth()
+        {
+            Assert.AreEqual(0, TruckTaxiSnowSurface.TrackStrength(0, 1));
+            Assert.AreEqual(0, TruckTaxiSnowSurface.TrackStrength(.03f, 1));
+            Assert.AreEqual(0, TruckTaxiSnowSurface.TrackStrength(.2f, 0));
+            Assert.AreEqual(0, TruckTaxiSnowSurface.TrackStrength(.2f, .05f));
+            float shallow = TruckTaxiSnowSurface.TrackStrength(.06f, .1f);
+            float deep = TruckTaxiSnowSurface.TrackStrength(.4f, 1f);
+            Assert.Greater(shallow, 0);
+            Assert.Greater(deep, shallow);
+            Assert.AreEqual(1, deep, .001f);
+        }
+
+        [Test] public void PlayerBuildRetainsSnowAndTrackShaderFeatures()
+        {
+            foreach (string name in new[] { "SnowCoverage", "SnowCoverageTracks" })
+            {
+                Material retained = Resources.Load<Material>("TruckTaxi/Snow/" + name);
+                Assert.IsNotNull(retained, "A Resources material must retain each runtime Weatherade feature combination.");
+                Assert.AreEqual(LwsWeatheradeMaterialFactory.SnowCoverageShaderName, retained.shader.name);
+                Assert.IsTrue(retained.IsKeywordEnabled("_COVERAGE_ON"));
+                Assert.AreEqual(name == "SnowCoverageTracks", retained.IsKeywordEnabled("_TRACES_ON"));
+            }
+        }
+
         [Test] public void TiresCompressLessThanPlowAndSnowfallRefillsBoth()
         {
             var region = Region();

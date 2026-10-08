@@ -35,6 +35,7 @@ namespace LWS.InterstateHauler
         private float _nextRoadMaterialRefreshTime;
         private bool _createdCoverageObject;
         private bool _originEventsSubscribed;
+        private bool _externalCoverageControl;
         private LwsRoadConditionSnapshot _lastApplied;
 
         public string AdapterId => "weatherade.visuals";
@@ -67,10 +68,20 @@ namespace LWS.InterstateHauler
         {
             ResolveTypes();
             ResolveServices();
-            if (attachOnEnable)
+            if (attachOnEnable && !_externalCoverageControl)
             {
                 _roadConditionService?.AttachVisualAdapter(this);
             }
+        }
+
+        // A local visual system can temporarily own Weatherade coverage without replacing road physics semantics.
+        public void SetExternalCoverageControl(bool active)
+        {
+            if (_externalCoverageControl == active) return;
+            _externalCoverageControl = active;
+            ResolveServices();
+            if (active) _roadConditionService?.DetachVisualAdapter(this);
+            else if (attachOnEnable && isActiveAndEnabled) _roadConditionService?.AttachVisualAdapter(this);
         }
 
         private void OnDisable()
