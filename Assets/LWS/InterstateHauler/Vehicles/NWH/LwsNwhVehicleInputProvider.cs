@@ -166,7 +166,7 @@ namespace LWS.InterstateHauler
                 return false;
             }
 
-            return IsPressed(_inputSource?.ReadCommandFrame().ignition ?? LwsMomentaryIntent.None);
+            return IsPressed(ReadFallbackCommands().ignition);
         }
 
         public override bool Horn()
@@ -183,7 +183,7 @@ namespace LWS.InterstateHauler
                 return state.hornActive || state.airHornActive;
             }
 
-            return IsActive(_inputSource?.ReadCommandFrame().horn ?? LwsMomentaryIntent.None);
+            return IsActive(ReadFallbackCommands().horn);
         }
 
         public override bool LowBeamLights()
@@ -199,7 +199,7 @@ namespace LWS.InterstateHauler
                 return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.LowBeamLights);
             }
 
-            return IsPressed(_inputSource?.ReadCommandFrame().lowBeamLights ?? LwsMomentaryIntent.None);
+            return IsPressed(ReadFallbackCommands().lowBeamLights);
         }
 
         public override bool HighBeamLights()
@@ -215,7 +215,7 @@ namespace LWS.InterstateHauler
                 return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.HighBeamLights);
             }
 
-            return IsPressed(_inputSource?.ReadCommandFrame().highBeamLights ?? LwsMomentaryIntent.None);
+            return IsPressed(ReadFallbackCommands().highBeamLights);
         }
 
         public override bool HazardLights()
@@ -231,7 +231,7 @@ namespace LWS.InterstateHauler
                 return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.HazardLights);
             }
 
-            return IsPressed(_inputSource?.ReadCommandFrame().hazardLights ?? LwsMomentaryIntent.None);
+            return IsPressed(ReadFallbackCommands().hazardLights);
         }
 
         public override bool LeftBlinker()
@@ -247,7 +247,7 @@ namespace LWS.InterstateHauler
                 return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.LeftBlinker);
             }
 
-            return IsPressed(_inputSource?.ReadCommandFrame().leftIndicator ?? LwsMomentaryIntent.None);
+            return IsPressed(ReadFallbackCommands().leftIndicator);
         }
 
         public override bool RightBlinker()
@@ -263,7 +263,7 @@ namespace LWS.InterstateHauler
                 return truckControlController.ConsumeNativePulse(LwsTruckNativePulse.RightBlinker);
             }
 
-            return IsPressed(_inputSource?.ReadCommandFrame().rightIndicator ?? LwsMomentaryIntent.None);
+            return IsPressed(ReadFallbackCommands().rightIndicator);
         }
 
         public override bool CruiseControl()
@@ -279,7 +279,7 @@ namespace LWS.InterstateHauler
                 return false;
             }
 
-            return IsPressed(_inputSource?.ReadCommandFrame().cruiseControl ?? LwsMomentaryIntent.None);
+            return IsPressed(ReadFallbackCommands().cruiseControl);
         }
 
         public override bool TrailerAttachDetach()
@@ -295,8 +295,17 @@ namespace LWS.InterstateHauler
                 return false;
             }
 
-            return IsPressed(_inputSource?.ReadCommandFrame().trailerAttachDetach ?? LwsMomentaryIntent.None);
+            return IsPressed(ReadFallbackCommands().trailerAttachDetach);
         }
+
+        private bool FallbackInputAllowed()
+        {
+            ResolveInputService();
+            return _gameplayStateService == null || _gameplayStateService.AllowsDrivingInput;
+        }
+
+        private LwsVehicleCommandFrame ReadFallbackCommands() => FallbackInputAllowed()
+            ? _inputSource?.ReadCommandFrame() ?? default : default;
 
         public override int ShiftInto()
         {
@@ -306,7 +315,7 @@ namespace LWS.InterstateHauler
             }
 
             ResolveSource();
-            if (_inputSource == null || !validationGearMappingEnabled)
+            if (_inputSource == null || !validationGearMappingEnabled || !FallbackInputAllowed())
             {
                 return -999;
             }

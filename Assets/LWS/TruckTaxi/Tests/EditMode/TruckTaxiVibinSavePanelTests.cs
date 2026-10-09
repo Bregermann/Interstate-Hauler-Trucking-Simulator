@@ -113,6 +113,40 @@ namespace LWS.TruckTaxi.Tests
             finally { input?.Dispose(); Object.DestroyImmediate(root); Object.DestroyImmediate(events); }
         }
 
+        [TestCase(true)] [TestCase(false)]
+        public void LoadCompletionClosesOnlySuccessfulLoadWithoutRepausing(bool succeeded)
+        {
+            var root = new GameObject("Load completion panel test", typeof(RectTransform));
+            try
+            {
+                var hud = root.AddComponent<TruckTaxiHud>(); hud.InitializeViewRoot(root.GetComponent<RectTransform>());
+                var source = root.AddComponent<TruckTaxiVibinPersistence>();
+                var panel = root.AddComponent<TruckTaxiVibinSavePanel>();
+                int pauses = 0, visibilityChanges = 0;
+                panel.InitializeView(hud, () => source, () => pauses++);
+                panel.VisibilityChanged += () => visibilityChanges++;
+                panel.Open();
+                var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+                var operation = (Action<LwsSaveOperationResult>)typeof(TruckTaxiVibinPersistence).GetField("OperationCompleted", flags).GetValue(source);
+                operation(LwsSaveOperationResult.Success("Save finished"));
+                Assert.IsTrue(panel.IsOpen, "Saving must not close the panel or resume gameplay.");
+                var loaded = (Action<LwsSaveOperationResult>)typeof(TruckTaxiVibinPersistence).GetField("LoadCompleted", flags).GetValue(source);
+                loaded(succeeded ? LwsSaveOperationResult.Success() : LwsSaveOperationResult.Failure("Invalid save"));
+                Assert.AreEqual(!succeeded, panel.IsOpen, "Failed loads must retain recovery presentation.");
+                Assert.AreEqual(1, pauses, "Load completion must never reacquire the pause released by persistence.");
+                Assert.AreEqual(succeeded ? 2 : 1, visibilityChanges);
+                if (succeeded) Assert.IsNull(panel.FocusRoot);
+                panel.Open();
+                loaded = (Action<LwsSaveOperationResult>)typeof(TruckTaxiVibinPersistence).GetField("LoadCompleted", flags).GetValue(source);
+                Assert.AreEqual(1, loaded.GetInvocationList().Length, "Reopening must not duplicate load subscriptions.");
+                // This EditMode fixture never enters Play Mode/Awake, so invoke the lifecycle hook explicitly.
+                typeof(TruckTaxiVibinSavePanel).GetMethod("OnDestroy", flags).Invoke(panel, null);
+                Object.DestroyImmediate(panel);
+                Assert.IsNull(typeof(TruckTaxiVibinPersistence).GetField("LoadCompleted", flags).GetValue(source));
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
         [Test] public void BusyFacadePreventsClosingOrFocusingUnderlyingUi()
         {
             var root = new GameObject("Busy save panel test", typeof(RectTransform));

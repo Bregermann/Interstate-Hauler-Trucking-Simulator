@@ -227,7 +227,8 @@ namespace LWS.TruckTaxi
             startupPending = false;
             if (!startup.Succeeded) Debug.LogWarning("Truck Taxi startup blocked: " + startup.Message, this);
             OnSessionChanged();
-            SetPaused(continuing || !startup.Succeeded);
+            // Async loads own their pause until completion; an already completed load must stay drivable.
+            SetPaused(!startup.Succeeded || Persistence.IsBusy);
             if (!continuing && startup.Succeeded) hud.Career?.OpenFirstDay();
         }
         private void Update()

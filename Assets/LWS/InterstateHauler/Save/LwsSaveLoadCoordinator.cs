@@ -343,7 +343,7 @@ namespace LWS.InterstateHauler
             try
             {
                 SetPhase(LwsSaveLoadCoordinatorPhase.PreparingGameplaySuppression);
-                SuppressDrivingInput();
+                // LoadingWorld gates vehicle consumers without relinquishing the active device.
 
                 SetPhase(LwsSaveLoadCoordinatorPhase.ResolvingTargetWorld);
                 if (!context.WorldBinding.IsValid)
@@ -747,14 +747,6 @@ namespace LWS.InterstateHauler
             }
         }
 
-        private void SuppressDrivingInput()
-        {
-            if (TryGetService(out ILwsVehicleInputService inputService))
-            {
-                inputService.NeutralizeInput();
-            }
-        }
-
         private bool TryGetService<T>(out T service) where T : class, ILwsService
         {
             service = null;
@@ -771,7 +763,6 @@ namespace LWS.InterstateHauler
             {
                 CurrentContext.FailureMessage = LastFailure;
             }
-            SuppressDrivingInput();
             return LwsSaveOperationResult.Failure(LastFailure);
         }
 

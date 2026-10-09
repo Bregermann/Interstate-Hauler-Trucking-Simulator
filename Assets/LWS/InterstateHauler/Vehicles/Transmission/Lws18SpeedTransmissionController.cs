@@ -459,10 +459,24 @@ namespace LWS.InterstateHauler
 
         public void RestoreState(LwsTransmissionState state)
         {
+            if (!Enum.IsDefined(typeof(LwsTransmissionMode), state.mode))
+                throw new ArgumentOutOfRangeException(nameof(state), "Saved transmission mode is invalid.");
+            mode = state.mode;
             automaticSelector = NormalizeAutomaticSelector(state.automaticSelector);
             _state = state;
             _state.automaticSelector = automaticSelector;
-            _state.requiresShifterSynchronization = true;
+            _state.requiresShifterSynchronization = mode == LwsTransmissionMode.Truck18Speed;
+            _state.shiftState = _state.requiresShifterSynchronization ? LwsTransmissionShiftState.ShifterMismatch :
+                state.neutral ? LwsTransmissionShiftState.Idle : LwsTransmissionShiftState.Engaged;
+            _state.lastRejectionReason = LwsShiftRejectionReason.None;
+            // Input and automatic timing belong to the live run, not the saved shift operation.
+            _lastClutchInput = 0f;
+            _state.clutchInput = 0f;
+            _lastPhysicalGate = LwsTruckShifterGate.Neutral;
+            _nextAutomaticShiftTime = 0f;
+            _automaticTargetNwhGear = mode == LwsTransmissionMode.Automatic ? state.nwhGear : 0;
+            _automaticTargetLabel = GetAutomaticTargetLabel(ActiveDefinition, _automaticTargetNwhGear);
+            _lastModeSwitchMessage = string.Empty;
             _lastCommandedNwhGear = state.nwhGear;
             if (nwhAdapter != null && state.nwhGear > -100)
             {
@@ -512,6 +526,8 @@ namespace LWS.InterstateHauler
             {
                 return LwsSaveOperationResult.Failure("18-speed transmission payload is empty.");
             }
+            if (!Enum.IsDefined(typeof(LwsTransmissionMode), payload.mode))
+                return LwsSaveOperationResult.Failure("Saved transmission mode is invalid.");
 
             RestoreState(new LwsTransmissionState
             {
@@ -530,14 +546,16 @@ namespace LWS.InterstateHauler
                 shiftState = LwsTransmissionShiftState.ShifterMismatch,
                 requiresShifterSynchronization = true
             });
-            return LwsSaveOperationResult.Success("18-speed transmission state restored and awaiting shifter synchronization.");
+            return LwsSaveOperationResult.Success(_state.requiresShifterSynchronization
+                ? "18-speed transmission state restored and awaiting shifter synchronization."
+                : "Transmission mode and selector restored.");
         }
 
         public LwsSaveOperationResult ClearState()
         {
             RestoreState(new LwsTransmissionState
             {
-                mode = LwsTransmissionMode.Truck18Speed,
+                mode = mode,
                 logicalGear = Lws18SpeedGearId.Neutral,
                 displayLabel = "N",
                 physicalGate = LwsTruckShifterGate.Neutral,

@@ -8,17 +8,20 @@ namespace LWS.TruckTaxi
     {
         public const string ModeFlag = "-truck-taxi-restart-test";
         public const string RunFlag = "-truck-taxi-test-run";
+        public const string DriveFlag = "-truck-taxi-test-drive";
         public const string ProfileName = "ASTRA_SANDBOX_TEST";
         public string Mode { get; private set; }
         public string RunId { get; private set; }
         public string Root { get; private set; }
+        public bool Drive { get; private set; }
 
         public static bool IsRequested(string[] args)
         {
             if (args == null) return false;
             foreach (string arg in args)
                 if (arg != null && (arg.StartsWith(ModeFlag, StringComparison.OrdinalIgnoreCase) ||
-                    arg.StartsWith(RunFlag, StringComparison.OrdinalIgnoreCase))) return true;
+                    arg.StartsWith(RunFlag, StringComparison.OrdinalIgnoreCase) ||
+                    arg.StartsWith(DriveFlag, StringComparison.OrdinalIgnoreCase))) return true;
             return false;
         }
 
@@ -28,10 +31,12 @@ namespace LWS.TruckTaxi
             request = null; failure = null;
             if (!IsRequested(args)) return true;
             string mode = null, run = null;
+            bool drive = false;
             for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i] ?? "";
-                if (arg == ModeFlag || arg == RunFlag)
+                if (arg == DriveFlag && !drive) drive = true;
+                else if (arg == ModeFlag || arg == RunFlag)
                 {
                     if (++i >= args.Length || string.IsNullOrWhiteSpace(args[i]) || args[i].StartsWith("-", StringComparison.Ordinal))
                     { failure = "Missing restart-test argument value."; return false; }
@@ -44,6 +49,8 @@ namespace LWS.TruckTaxi
             }
             if (mode != "seed" && mode != "continue" && mode != "manual" && mode != "cleanup" && mode != "soak")
             { failure = "Mode must be seed, continue, manual, cleanup, or soak."; return false; }
+            if (drive && mode != "seed" && mode != "continue" && mode != "manual")
+            { failure = "Drive regression supports seed, continue, or manual only."; return false; }
             if (run == null || run.Length != 32 || !Guid.TryParseExact(run, "N", out var id) || id == Guid.Empty)
             { failure = "Run must be a nonzero 32-hex GUID, never a path."; return false; }
             try
@@ -54,7 +61,7 @@ namespace LWS.TruckTaxi
                 string root = Path.GetFullPath(Path.Combine(parent, id.ToString("N")));
                 if (!string.Equals(Path.GetDirectoryName(root), parent, StringComparison.Ordinal))
                     throw new ArgumentException("Test root escaped the fixed directory.");
-                request = new TruckTaxiRestartTestArguments { Mode = mode, RunId = id.ToString("N"), Root = root };
+                request = new TruckTaxiRestartTestArguments { Mode = mode, RunId = id.ToString("N"), Root = root, Drive = drive };
                 return true;
             }
             catch (Exception ex) { failure = "Invalid isolated root: " + ex.Message; return false; }

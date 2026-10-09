@@ -92,9 +92,25 @@ namespace LWS.TruckTaxi
         {
             var value = resolve?.Invoke();
             if (value == persistence) return;
-            if (persistence != null) persistence.OperationCompleted -= Completed;
+            if (persistence != null)
+            {
+                persistence.OperationCompleted -= Completed;
+                persistence.LoadCompleted -= Loaded;
+            }
             persistence = value;
-            if (persistence != null) persistence.OperationCompleted += Completed;
+            if (persistence != null)
+            {
+                persistence.OperationCompleted += Completed;
+                persistence.LoadCompleted += Loaded;
+            }
+        }
+        private void Loaded(LwsSaveOperationResult result)
+        {
+            if (!result.Succeeded || !IsOpen) return;
+            pending = null;
+            panel.gameObject.SetActive(false);
+            hud.UIInput?.Focus(null);
+            VisibilityChanged?.Invoke();
         }
         private void Completed(LwsSaveOperationResult result)
         {
@@ -180,7 +196,7 @@ namespace LWS.TruckTaxi
             executing = true; keepPaused?.Invoke(); Refresh();
             try { Completed(operation()); }
             catch (Exception exception) { Completed(LwsSaveOperationResult.Failure("Save/load failed: " + exception.Message)); Debug.LogException(exception, this); }
-            finally { executing = false; keepPaused?.Invoke(); Refresh(); }
+            finally { executing = false; if (IsOpen) keepPaused?.Invoke(); Refresh(); }
         }
         private void Message(string value) { feedback = value; failed = true; Refresh(); }
         private void Refresh()
@@ -239,7 +255,12 @@ namespace LWS.TruckTaxi
                 foreach (var control in controls) control.interactable = value;
             }
         }
-        private void OnDestroy() { if (persistence != null) persistence.OperationCompleted -= Completed; }
+        private void OnDestroy()
+        {
+            if (persistence == null) return;
+            persistence.OperationCompleted -= Completed;
+            persistence.LoadCompleted -= Loaded;
+        }
 
         // Immutable identities prevent a confirmation from approving a different slot or backup.
         public sealed class Confirmation

@@ -46,6 +46,7 @@ namespace LWS.TruckTaxi
         public string Status { get; private set; } = "Vibin persistence is not initialized.";
         public LwsSaveOperationResult LastResult { get; private set; }
         public event Action<LwsSaveOperationResult> OperationCompleted;
+        public event Action<LwsSaveOperationResult> LoadCompleted;
         public IReadOnlyList<LwsSaveProfileMetadata> Profiles => SaveService?.Profiles ?? Array.Empty<LwsSaveProfileMetadata>();
         public LwsSaveRecoveryOffer RecoveryOffer => SaveService?.RecoveryOffer;
         public LwsManualSaveSlotMetadata Latest => FindLatest(SaveService);
@@ -338,15 +339,18 @@ namespace LWS.TruckTaxi
                 host.ComponentDamage?.ReapplyPhysicalState();
                 host.GPS?.RequestPresentationRefresh();
                 CompleteContinueRequest(profileId, slot, autosave);
-                outcome = LwsSaveOperationResult.Success("Vibin save loaded. Resume when ready.");
+                outcome = LwsSaveOperationResult.Success("Vibin save loaded. Ready to drive.");
             }
             finally
             {
                 permitApply = false;
                 prepared = null;
                 IsBusy = false;
-                if (host != null) { host.SetPaused(true); host.Environment?.Clock?.SetPaused(true); }
+                // Release this transaction's pause only after the facade and world are ready.
+                // Failures deliberately keep the recovery UI and controls locked.
+                if (host != null) host.SetPaused(!outcome.Succeeded);
                 Complete(outcome);
+                LoadCompleted?.Invoke(outcome);
             }
         }
         private LwsSaveOperationResult InvokeFacade(string profileId, int slot, bool autosave, bool backup) => backup

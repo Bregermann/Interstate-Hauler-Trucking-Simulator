@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
+using LWS.InterstateHauler;
 
 namespace LWS.TruckTaxi.Tests.EditMode
 {
@@ -31,8 +32,133 @@ namespace LWS.TruckTaxi.Tests.EditMode
         {
             Assert.IsTrue(TruckTaxiRestartTestArguments.TryParse(Args(mode), Cache, out var request, out var failure), failure);
             Assert.AreEqual(mode, request.Mode);
+            Assert.IsFalse(request.Drive, "Legacy signature/soak behavior must remain opt-in unchanged.");
             Assert.AreEqual(Path.Combine(Cache, "TruckTaxiRestartTests", Run), request.Root);
         }
+
+        [TestCase("seed")]
+        [TestCase("continue")]
+        [TestCase("manual")]
+        public void DriveFlagUsesSameStrictDisposableRoot(string mode)
+        {
+            var args = new List<string>(Args(mode)) { TruckTaxiRestartTestArguments.DriveFlag };
+            Assert.IsTrue(TruckTaxiRestartTestArguments.TryParse(args.ToArray(), Cache, out var request, out var failure), failure);
+            Assert.IsTrue(request.Drive);
+            Assert.AreEqual(Path.Combine(Cache, "TruckTaxiRestartTests", Run), request.Root);
+        }
+
+        [TestCase("soak")]
+        [TestCase("cleanup")]
+        public void DriveCannotSilentlyChangeAnotherHarnessMode(string mode)
+        {
+            var args = new List<string>(Args(mode)) { TruckTaxiRestartTestArguments.DriveFlag };
+            Assert.IsFalse(TruckTaxiRestartTestArguments.TryParse(args.ToArray(), Cache, out _, out _));
+        }
+
+        [Test]
+        public void DriveAloneDuplicateAndValueSyntaxFailClosed()
+        {
+            var args = new[] { TruckTaxiRestartTestArguments.DriveFlag };
+            Assert.IsTrue(TruckTaxiRestartTestArguments.IsRequested(args));
+            Assert.IsFalse(TruckTaxiRestartTestArguments.TryParse(args, Cache, out _, out _));
+            var duplicate = new List<string>(Args()) { TruckTaxiRestartTestArguments.DriveFlag, TruckTaxiRestartTestArguments.DriveFlag };
+            Assert.IsFalse(TruckTaxiRestartTestArguments.TryParse(duplicate.ToArray(), Cache, out _, out _));
+            var malformed = new List<string>(Args()) { TruckTaxiRestartTestArguments.DriveFlag + "=true" };
+            Assert.IsFalse(TruckTaxiRestartTestArguments.TryParse(malformed.ToArray(), Cache, out _, out _));
+        }
+
+        [Test]
+        public void DriveRequiresUnpausedUnsuppressedDynamicSingleAuthority()
+        {
+            Assert.DoesNotThrow(() => TruckTaxiRestartHarness.ValidateDriveLifecycle(false, 1, false, true, true, false, 1, 1, 1));
+            for (int fault = 0; fault < 6; fault++)
+            {
+                int f = fault;
+                Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.ValidateDriveLifecycle(
+                    f == 0, f == 1 ? 0 : 1, f == 2, f != 3, f != 4, f == 5, 1, 1, 1), "fault=" + f);
+            }
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.ValidateDriveLifecycle(false, float.NaN, false, true, true, false, 1, 1, 1));
+        }
+
+        [TestCase(0)]
+        [TestCase(2)]
+        public void MissingOrDuplicateInputAuthoritiesNeverCountAsDrivable(int count)
+        {
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.ValidateDriveLifecycle(false, 1, false, true, true, false, count, 1, 1));
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.ValidateDriveLifecycle(false, 1, false, true, true, false, 1, count, 1));
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.ValidateDriveLifecycle(false, 1, false, true, true, false, 1, 1, count));
+        }
+
+        [Test]
+        public void ContinuousMotionAllowsFloatingOriginIndependentGlobalProgress()
+        {
+            Vector3 start = new Vector3(15000, 2, -14000), previous = start + Vector3.forward * 5;
+            Assert.DoesNotThrow(() => TruckTaxiRestartHarness.ValidateDriveMotion(previous, previous + Vector3.forward * .2f,
+                2, 2, .1f, start, Vector3.forward));
+        }
+
+        [TestCase(0, 0, 10, .02f)] // Teleport cannot prove motion.
+        [TestCase(2, 0, 0, 1)] // Outside the validated lane corridor.
+        [TestCase(0, 3, 0, 1)] // Airborne/drop evidence is not road driving.
+        [TestCase(0, 0, -2, 1)]
+        [TestCase(0, 0, 41, 1)]
+        [TestCase(0, 0, 0, 0)]
+        public void UnsafeOrDiscontinuousMotionFails(float x, float y, float z, float seconds)
+        {
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.ValidateDriveMotion(Vector3.zero,
+                new Vector3(x, y, z), 3, 3, seconds, Vector3.zero, Vector3.forward));
+        }
+
+        [Test]
+        public void ContinuousMotionStillCannotLeaveTheValidatedTwentyFiveMeterCorridor()
+        {
+            var previous = Vector3.forward * 24;
+            Assert.DoesNotThrow(() => TruckTaxiRestartHarness.ValidateDriveMotion(previous, Vector3.forward * 25,
+                2, 2, 1, Vector3.zero, Vector3.forward));
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.ValidateDriveMotion(previous, Vector3.forward * 26,
+                2, 2, 1, Vector3.zero, Vector3.forward));
+        }
+
+        [Test]
+        public void LongStartupFrameDoesNotCountAsADriveFailureOrPermitTeleportation()
+        {
+            Assert.DoesNotThrow(() => TruckTaxiRestartHarness.ValidateDriveMotion(Vector3.zero, Vector3.forward * .01f,
+                .05f, .02f, 1.2f, Vector3.zero, Vector3.forward));
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.ValidateDriveMotion(Vector3.zero, Vector3.forward * 10,
+                .05f, .02f, 1.2f, Vector3.zero, Vector3.forward));
+        }
+
+        [Test]
+        public void OtherRegionSeedUsesAuthoredSampleAndLaneOffset()
+        {
+            var edge = DriveEdge();
+            Assert.IsTrue(TruckTaxiRestartHarness.TryDriveEdgeSeed(edge, out var point, out var forward));
+            Assert.AreEqual(new Vector3(4030, .15f, -4.5f), point);
+            Assert.AreEqual(Vector3.right, forward);
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        public void OtherRegionSeedRejectsUnsupportedOrUnboundedGeometry(int fault)
+        {
+            var edge = DriveEdge();
+            if (fault == 0) edge.laneCenterOffsetsMeters.Clear();
+            if (fault == 1) edge.distanceMeters = 100;
+            if (fault == 2) edge.samples[0].forward = Vector3.zero;
+            if (fault == 3) edge.samples[0].position = new Vector3(float.NaN, 0, 0);
+            if (fault == 4) edge.restrictions.Add(new LwsRoadRestriction { truckAllowed = false });
+            Assert.IsFalse(TruckTaxiRestartHarness.TryDriveEdgeSeed(edge, out _, out _));
+        }
+
+        private static LwsRoadEdge DriveEdge() => new LwsRoadEdge {
+            oneWay = true, roadClass = LwsRoadClass.LocalRoad, surfaceType = LwsRoadSurfaceType.AsphaltInterstate,
+            laneCount = 1, laneWidthMeters = 5, distanceMeters = 160, laneCenterOffsetsMeters = new List<float> { 4.5f },
+            samples = new List<LwsRoadSample> { new LwsRoadSample { position = new Vector3(4030, .15f, 0),
+                forward = Vector3.right, distanceFromStartMeters = 30 } }
+        };
 
         [TestCase("../normal-saves")]
         [TestCase("C:\\normal-saves")]

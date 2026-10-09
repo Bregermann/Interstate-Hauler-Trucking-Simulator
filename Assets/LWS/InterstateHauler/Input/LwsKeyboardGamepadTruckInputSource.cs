@@ -156,6 +156,11 @@ namespace LWS.InterstateHauler
             }
         }
 
+        private void OnDestroy()
+        {
+            _inputService?.ReleaseInputSource(this);
+        }
+
         private void Update()
         {
             _lastContinuous = ReadContinuousNow();
