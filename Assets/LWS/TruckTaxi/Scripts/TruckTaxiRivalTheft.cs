@@ -56,7 +56,8 @@ namespace LWS.TruckTaxi
                 !population.TryGetOccupiedFare(rivalId, generation, out var candidate)) return false;
             if (rig == null || host.Companions?.IsBusy == true ||
                 !rig.HasSecondarySeat(candidate.Passenger.seatProfile != null ?
-                    candidate.Passenger.seatProfile.seatType : TruckTaxiSeatType.StandardPassenger))
+                    candidate.Passenger.seatProfile.seatType : TruckTaxiSeatType.StandardPassenger,
+                    kind: TruckTaxiCabOccupantKind.StolenPassenger))
                 return Reject("NO ROOM FOR ANOTHER PASSENGER");
             if (!session.CanStealRivalPassenger(rivalId, candidate.Id, true)) return false;
 
@@ -66,7 +67,7 @@ namespace LWS.TruckTaxi
             actor.PrepareForSeat();
             var type = candidate.Passenger.seatProfile != null ? candidate.Passenger.seatProfile.seatType :
                 TruckTaxiSeatType.StandardPassenger;
-            if (!rig.TrySeatSecondary(actor.transform, type, actor.StandingWorldScale))
+            if (!rig.TrySeatSecondary(actor.transform, type, actor.StandingWorldScale, TruckTaxiCabOccupantKind.StolenPassenger))
             { ReleasePresentation(false); return Reject("NO ROOM FOR ANOTHER PASSENGER"); }
             if (!host.GPS.TrySetNavigationIntent(TruckTaxiNavigationLayer.RivalPassenger, RouteOwnerId,
                 candidate.DestinationId, candidate.DestinationName, candidate.DestinationPosition,
@@ -127,6 +128,10 @@ namespace LWS.TruckTaxi
             long oldToken = routeToken;
             var oldActor = actor;
             fare = null; actor = null; routeToken = 0; stoppedSeconds = 0;
+            // Navigation ownership must end even if an actor's exit presentation fails.
+            if (oldFare != null && oldToken != 0)
+                host?.GPS?.ReleaseNavigationIntent(TruckTaxiNavigationLayer.RivalPassenger,
+                    "rival-theft." + oldFare.Id, oldFare.DestinationId, oldToken);
             if (oldActor != null)
             {
                 rig?.Release(oldActor.transform);
@@ -142,9 +147,6 @@ namespace LWS.TruckTaxi
                 if (!visibleExit) { oldActor.gameObject.SetActive(false); oldActor.transform.SetParent(null, true); }
                 Destroy(oldActor.gameObject, visibleExit ? 8 : 0);
             }
-            if (oldFare != null && oldToken != 0)
-                host?.GPS?.ReleaseNavigationIntent(TruckTaxiNavigationLayer.RivalPassenger,
-                    "rival-theft." + oldFare.Id, oldFare.DestinationId, oldToken);
         }
 
         private void OnFareChanged()

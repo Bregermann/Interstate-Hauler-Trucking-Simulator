@@ -69,6 +69,14 @@ namespace LWS.TruckTaxi
         [Range(0, .6f)] public float plowResidualDepthMeters = .04f;
         [Min(0)] public float tireCompressionMetersPerMeter = .002f;
         [Range(128, 8192)] public int maximumSnowCells = 4096;
+        [Header("Extreme hunger / thirst presentation")]
+        [Range(.8f, .99f)] public float cravingThreshold = .9f;
+        [Range(0, .5f)] public float cravingMaximumOpacity = .5f;
+        [Tooltip("Optional replacement images. Empty uses the project-owned food and water images.")]
+        public Texture2D hungerCravingImage, thirstCravingImage;
+        [Tooltip("Optional existing/licensed non-voice clips. No generated voice is required.")]
+        public AudioClip hungerCravingSound, thirstCravingSound;
+        [Range(10, 120)] public float cravingSoundInterval = 30;
         [Header("Driver bladder")]
         [Tooltip("Time from empty to full in IN-GAME hours. Sampled once after each relief.")]
         public Vector2 bladderCycleGameHours = new Vector2(4, 8);

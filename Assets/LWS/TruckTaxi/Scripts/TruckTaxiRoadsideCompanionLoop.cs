@@ -237,8 +237,13 @@ namespace LWS.TruckTaxi
             foreach (var companion in companions) if (MatchesPickup(companion, target)) return companion;
             return null;
         }
+        public static bool AllowsHornPickup(TruckTaxiState state) =>
+            state == TruckTaxiState.Available || state == TruckTaxiState.DrivingToPickup ||
+            state == TruckTaxiState.DrivingToDestination;
+
         private bool SafeInteraction => Ready && !host.Paused && host.Session != null &&
-            (host.Session.State == TruckTaxiState.Available || host.Session.State == TruckTaxiState.DrivingToDestination) &&
+            AllowsHornPickup(host.Session.State) &&
+            (host.WorldLife == null || host.WorldLife.Mode == TruckTaxiPlayerControlMode.Driving) &&
             host.Roadside?.IsRecovering != true && host.Fuel?.IsRescuing != true &&
             truckBody != null && truckBody.linearVelocity.magnitude <= MaximumSpeed;
         private bool PickupInRange => SafeInteraction && phase == Phase.Waiting && nearby?.actor != null &&
@@ -746,7 +751,8 @@ namespace LWS.TruckTaxi
                 if (slot >= 0)
                     companions[slot] = new Companion { population = active.population, variant = active.variant,
                         availableAt = Time.time + 30, materializedBefore = true };
-                bool auxiliary = host.Session.HasPassenger || !string.IsNullOrEmpty(host.GPS.TargetId);
+                bool auxiliary = host.Session.HasPassenger || host.Session.State == TruckTaxiState.DrivingToPickup ||
+                    !string.IsNullOrEmpty(host.GPS.TargetId);
                 active.destination = null;
                 if (!auxiliary)
                 {

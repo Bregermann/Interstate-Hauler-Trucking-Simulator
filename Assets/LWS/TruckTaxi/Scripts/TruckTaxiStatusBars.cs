@@ -17,10 +17,30 @@ namespace LWS.TruckTaxi
         private Image[] effectFills;
         private TextMeshProUGUI[] effectLabels;
         private GameObject[] effectRows;
+        private readonly RawImage[] cravings = new RawImage[2];
+        private AudioSource cravingAudio;
+        private float nextCravingSound;
+        private bool lastSoundWasHunger;
         private static readonly string[] Names = { "FUEL", "DAMAGE", "PATIENCE" };
         public void Initialize(TruckTaxiBootstrap owner, TruckTaxiHud hud)
         {
             host = owner; this.hud = hud; damage = host.Player.GetComponent<DamageHandler>();
+            var settings = owner.Environment?.settings;
+            Texture[] images = {
+                settings?.hungerCravingImage != null ? settings.hungerCravingImage : Resources.Load<Texture2D>("TruckTaxi/Needs/Hunger"),
+                settings?.thirstCravingImage != null ? settings.thirstCravingImage : Resources.Load<Texture2D>("TruckTaxi/Needs/Thirst") };
+            for (int i = 0; i < cravings.Length; i++)
+            {
+                var rect = TruckTaxiHud.Rect(hud.Root, i == 0 ? "Hunger craving" : "Thirst craving",
+                    new Vector2(i == 0 ? .25f : .64f, .63f), new Vector2(i == 0 ? .25f : .64f, .63f));
+                rect.sizeDelta = new Vector2(images[i] != null ? 260f * images[i].width / Mathf.Max(1, images[i].height) : 260, 260);
+                cravings[i] = rect.gameObject.AddComponent<RawImage>();
+                cravings[i].texture = images[i]; cravings[i].raycastTarget = false; cravings[i].color = Color.clear;
+                rect.gameObject.SetActive(false);
+            }
+            cravingAudio = gameObject.AddComponent<AudioSource>();
+            cravingAudio.playOnAwake = false; cravingAudio.spatialBlend = 0;
+            TruckTaxiAudioController.Instance?.Route(cravingAudio, TruckTaxiAudioCategory.UI);
             panel = TruckTaxiHud.Rect(hud.Root, "Vehicle status bars", new Vector2(.37f,.19f), new Vector2(.71f,.27f));
             for(int i=0;i<fills.Length;i++)
             {
@@ -56,6 +76,7 @@ namespace LWS.TruckTaxi
             bool visible=RefreshVisibility();
             if(!visible) return;
             var state=host.DriverNeeds?.State;
+            RefreshCravings(state);
             Set(0,host.Fuel?.Fraction ?? 1); Set(1,damage!=null ? damage.Damage : 0);
             bool riding=host.Session.HasPassenger;
             labels[2].transform.parent.gameObject.SetActive(riding || host.Session.State==TruckTaxiState.DrivingToPickup);
@@ -77,7 +98,39 @@ namespace LWS.TruckTaxi
                 host.Session!=null && host.Session.State!=TruckTaxiState.Inactive;
             if(panel!=null) panel.gameObject.SetActive(visible);
             if(effectPanel!=null) effectPanel.gameObject.SetActive(visible);
+            if(!visible) foreach(var image in cravings) if(image!=null)
+            { image.color=Color.clear; image.gameObject.SetActive(false); }
+            if(!visible && cravingAudio!=null && cravingAudio.isPlaying) cravingAudio.Stop();
             return visible;
+        }
+        public static float CravingOpacity(float need, float threshold, float maximum)
+        {
+            if (!float.IsFinite(need) || !float.IsFinite(threshold) || !float.IsFinite(maximum)) return 0;
+            return Mathf.InverseLerp(Mathf.Clamp(threshold, .8f, .99f), 1, need) * Mathf.Clamp(maximum, 0, .5f);
+        }
+        private void RefreshCravings(TruckTaxiDriverNeedsState state)
+        {
+            var settings = host.Environment?.settings;
+            float hunger = state?.Hunger ?? 0, thirst = state?.Thirst ?? 0;
+            float threshold = settings != null ? settings.cravingThreshold : .9f;
+            float maximum = settings != null ? settings.cravingMaximumOpacity : .5f;
+            for(int i=0;i<cravings.Length;i++)
+            {
+                var image=cravings[i];
+                float alpha=CravingOpacity(i==0 ? hunger : thirst,threshold,maximum);
+                image.color=new Color(1,1,1,Mathf.MoveTowards(image.color.a,alpha,.22f));
+                image.gameObject.SetActive(image.texture!=null && image.color.a>.001f);
+                float phase=Time.unscaledTime*.4f+i*2;
+                image.rectTransform.anchoredPosition=new Vector2(Mathf.Sin(phase)*35,Mathf.Cos(phase*.7f)*28);
+            }
+            if(hunger<threshold && thirst<threshold)
+            { if(cravingAudio.isPlaying) cravingAudio.Stop(); return; }
+            if(settings==null || Time.unscaledTime<nextCravingSound || cravingAudio.isPlaying) return;
+            bool playHunger=hunger>=threshold && (thirst<threshold || !lastSoundWasHunger);
+            var clip=playHunger ? settings.hungerCravingSound : settings.thirstCravingSound;
+            nextCravingSound=Time.unscaledTime+Mathf.Clamp(settings.cravingSoundInterval,10,120);
+            lastSoundWasHunger=playHunger;
+            if(clip!=null) cravingAudio.PlayOneShot(clip,.4f);
         }
         private void Set(int index,float value)
         {

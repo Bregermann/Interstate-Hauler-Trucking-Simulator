@@ -7199,6 +7199,7 @@ MonoBehaviour:
   capabilities: 448
   location: {fileID: 335098247}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -7365,6 +7366,7 @@ MonoBehaviour:
   capabilities: 8192
   location: {fileID: 336848639}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -11462,6 +11464,7 @@ MonoBehaviour:
   capabilities: 16320
   location: {fileID: 498969915}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -125530,6 +125533,7 @@ MonoBehaviour:
   capabilities: 8192
   location: {fileID: 731939915}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -125797,6 +125801,7 @@ MonoBehaviour:
   capabilities: 8192
   location: {fileID: 752401226}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -128767,6 +128772,7 @@ MonoBehaviour:
   capabilities: 511
   location: {fileID: 1011576201}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -131808,6 +131814,7 @@ MonoBehaviour:
   capabilities: 511
   location: {fileID: 0}
   recoveryAnchor: {fileID: 1226252177}
+  generateValidationFacility: 1
   radius: 7
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -132161,6 +132168,7 @@ MonoBehaviour:
   capabilities: 448
   location: {fileID: 1257548700}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -132659,6 +132667,7 @@ MonoBehaviour:
   capabilities: 8128
   location: {fileID: 1289795024}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -133032,6 +133041,7 @@ MonoBehaviour:
   capabilities: 8128
   location: {fileID: 1341343734}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -133188,6 +133198,7 @@ MonoBehaviour:
   capabilities: 8191
   location: {fileID: 1347605929}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -135514,6 +135525,7 @@ MonoBehaviour:
   capabilities: 448
   location: {fileID: 1432207597}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -141229,6 +141241,7 @@ MonoBehaviour:
   capabilities: 8128
   location: {fileID: 1839113218}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 12
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -143921,6 +143934,7 @@ MonoBehaviour:
   capabilities: 8128
   location: {fileID: 2096585881}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
@@ -144151,6 +144165,7 @@ GameObject:
   - component: {fileID: 2113431616}
   - component: {fileID: 2113431617}
   - component: {fileID: 2113431618}
+  - component: {fileID: 2113431619}
   m_Layer: 0
   m_Name: Truck Taxi Bootstrap
   m_TagString: Untagged
@@ -144447,6 +144462,19 @@ MonoBehaviour:
   utsTruckPrefabs:
   - {fileID: 1159880368498422, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
   - {fileID: 1225235605962860, guid: e2302543cb5f6ea49846f98993d95f01, type: 3}
+--- !u!114 &2113431619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2113431607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c58997686e974644a56f70979d81447, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMoralityTownBinding
+  regionalWorld: {fileID: 2113431616}
 --- !u!1 &2114072460
 GameObject:
   m_ObjectHideFlags: 0
@@ -146567,6 +146595,7 @@ MonoBehaviour:
   capabilities: 8128
   location: {fileID: 2127612690}
   recoveryAnchor: {fileID: 0}
+  generateValidationFacility: 1
   radius: 11
   verticalTolerance: 3
   assistanceBaseCostCents: 5000

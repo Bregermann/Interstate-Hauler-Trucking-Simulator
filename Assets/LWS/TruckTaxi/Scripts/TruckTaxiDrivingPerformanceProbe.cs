@@ -25,7 +25,8 @@ namespace LWS.TruckTaxi
             public int loadedRegionsStart, loadedRegionsEnd, activeRigidbodies, drawCalls;
             public float seconds, distanceMeters, pathMeters, meanSpeedMps, peakSpeedMps, meanMs, medianMs, p95Ms, p99Ms;
             public float meanMainMs, meanRenderMs, meanPhysicsMs, meanGpuMs, meanGcBytes, meanCompassMs;
-            public long managedHeapBytes;
+            public long managedHeapBytes, unityAllocatedBytes, unityReservedBytes;
+            public float orderedProgressMeters, stationarySeconds;
             public bool mainValid, renderValid, physicsValid, gpuValid, gcValid, drawCallsValid, compassValid;
         }
 
@@ -43,6 +44,247 @@ namespace LWS.TruckTaxi
         private Keyboard keyboard;
         private bool continuousMapBaseline;
         private readonly List<Sample> results = new List<Sample>(10);
+        private ILwsWorldOriginService soakOrigin;
+        private ILwsVehicleInputService soakInput;
+        private NWH.VehiclePhysics2.VehicleController soakVehicle;
+        private Report soakReport;
+        private float soakStoppedSeconds, soakAirborneSeconds;
+        private Vector3 soakLastPosition;
+        private float soakLastSpeed;
+        private double soakLastTime;
+        private bool soakFocusLost;
+
+        private void OnApplicationFocus(bool focused)
+        {
+            if (soakReport != null && !focused) soakFocusLost = true;
+        }
+
+        public void RecordSoakFailure(string reason)
+        {
+            if (soakReport != null)
+            {
+                soakReport.error = reason; soakReport.workloads = results.ToArray(); Write(soakReport);
+            }
+        }
+
+        // Ordered global geometry, independent of local origin shifts or nearest-point reselection.
+        public sealed class SoakCourse
+        {
+            private readonly Vector3[] points;
+            private readonly int loopStart;
+            private int target = 1;
+            private float completed, furthest;
+            public int Laps { get; private set; }
+            public bool OnLoop => target > loopStart;
+            public Vector3 Target => points[target];
+            public Vector3 Following => points[target == points.Length - 1 ? loopStart + 1 : target + 1];
+            public float ProgressMeters { get; private set; }
+
+            public SoakCourse(Vector3[] globalPoints, int firstLoopPoint)
+            {
+                if (globalPoints == null || globalPoints.Length < 4 || firstLoopPoint < 0 || firstLoopPoint >= globalPoints.Length - 2)
+                    throw new ArgumentException("Invalid bounded soak course.");
+                points = (Vector3[])globalPoints.Clone(); loopStart = firstLoopPoint;
+            }
+
+            public void Observe(Vector3 position)
+            {
+                Vector3 a = points[target - 1], span = points[target] - a;
+                span.y = 0; Vector3 offset = position - a; offset.y = 0;
+                float length = span.magnitude;
+                if (length < .01f) throw new InvalidOperationException("Degenerate soak segment.");
+                float along = Vector3.Dot(offset, span / length);
+                float lateral = (offset - span / length * Mathf.Clamp(along, 0, length)).magnitude;
+                if (!float.IsFinite(lateral) || lateral > 4 || Mathf.Abs(position.y - a.y) > 6)
+                    throw new InvalidOperationException("Soak left its ordered road corridor; no reanchor or teleport permitted.");
+                if (along < furthest - 4) throw new InvalidOperationException("Soak reversed ordered road progress.");
+                furthest = Mathf.Max(furthest, along);
+                ProgressMeters = completed + Mathf.Clamp(furthest, 0, length);
+                if (along < length - 2) return;
+                completed += length; furthest = 0;
+                if (++target == points.Length) { target = loopStart + 1; Laps++; }
+            }
+        }
+
+        public static void ValidateSoakMotion(Vector3 previous, Vector3 current, float previousSpeed, float speed, float seconds)
+        {
+            if (!float.IsFinite(seconds) || seconds <= 0 || seconds > 1 || !float.IsFinite(speed) || !float.IsFinite(previousSpeed) ||
+                !float.IsFinite(current.x) || !float.IsFinite(current.y) || !float.IsFinite(current.z) ||
+                !float.IsFinite(previous.x) || !float.IsFinite(previous.y) || !float.IsFinite(previous.z) ||
+                Vector3.Distance(previous, current) > 1 + Mathf.Max(previousSpeed, speed) * seconds * 1.5f)
+                throw new InvalidOperationException("Soak motion discontinuity or invalid frame timing; no teleport/recovery evidence accepted.");
+        }
+
+        private Vector3 SoakGlobalPosition => soakOrigin.LocalToGlobal(truck.position).ToVector3();
+
+        private void RequireSoakDriver(bool running)
+        {
+            if (!isActiveAndEnabled || !Application.isFocused || soakFocusLost) throw new InvalidOperationException("Soak requires continuous foreground focus and enabled probe.");
+            if (host.Player == null || host.Player.NwhAdapter?.VehicleController != soakVehicle || soakVehicle == null ||
+                !soakVehicle.IsInitialized || !soakVehicle.isActiveAndEnabled || soakVehicle.vehicleRigidbody != truck || truck == null ||
+                truck.isKinematic || !truck.detectCollisions || truck.constraints != RigidbodyConstraints.None ||
+                soakVehicle.input == null || !soakVehicle.input.autoSetInput)
+                throw new InvalidOperationException("Soak requires the canonical initialized, enabled NWH driver and unconstrained dynamic collision body.");
+            if (host.Paused || Time.timeScale != 1 || host.Environment.Clock.CurrentSnapshot.paused || !host.CanResume ||
+                host.WorldLife?.Mode != TruckTaxiPlayerControlMode.Driving || host.Races?.IsActive == true || host.Companions?.IsBusy == true ||
+                host.Kaiju?.IsCapturingPlayer == true || host.GetComponent<TruckTaxiKaijuPlayerRecovery>()?.Captured == true ||
+                host.Fuel?.IsRescuing == true || host.Roadside?.IsRecovering == true || host.FastTravel?.IsTravelling == true ||
+                host.DriverNeeds?.IsSleeping == true || host.Player.CouplingAdapter?.IsTrailerAttached == true ||
+                host.Session.State != TruckTaxiState.Available || !world.IsPositionAvailable(truck.position))
+                throw new InvalidOperationException("Soak lost normal driving, loaded road, or entered a competing recovery/event authority.");
+            if (Keyboard.current != keyboard || soakInput?.ActiveSourceId != "lws.input.keyboard-gamepad.truck")
+                throw new InvalidOperationException("Soak keyboard is not the authoritative driving input source.");
+            if (running && (!soakVehicle.powertrain.engine.IsRunning || !host.Player.TransmissionController.AutomaticModeActive ||
+                host.Player.TransmissionController.AutomaticSelector != LwsAutomaticTransmissionSelector.Drive ||
+                host.Player.TruckControlController.CurrentState.parkingBrakeOn || soakVehicle.input.Handbrake > .01f))
+                throw new InvalidOperationException("Soak lost running engine, automatic Drive, or released parking brake.");
+        }
+
+        private SoakCourse BuildSoakCourse(TruckTaxiFlagshipRoute loop)
+        {
+            Vector3 start = SoakGlobalPosition;
+            if (!LwsRoadGraphQuery.TryFindNearestRoad(host.roadGraph.Graph, start, 6, out var road) ||
+                Vector3.ProjectOnPlane(start - road.NearestPosition, Vector3.up).magnitude > 4)
+                throw new InvalidOperationException("Saved stop is not on a validated road approach. Drive to the loop manually and seed a suitable disposable fixture; soak will not teleport.");
+            start.y = road.NearestPosition.y;
+            int join = 0; float nearest = float.PositiveInfinity;
+            for (int i = 0; i < loop.Points.Length; i++)
+            {
+                float distance = (start - loop.Points[i]).sqrMagnitude;
+                if (distance < nearest) { nearest = distance; join = i; }
+            }
+            var leg = host.RouteDistances.Measure(start, loop.Points[join]); // Graph service uses global coordinates.
+            if (leg?.Navigable != true || leg.Points.Count < 2 || leg.Meters > 1500)
+                throw new InvalidOperationException("No bounded validated road connection from saved pose to soak loop.");
+            var points = new List<Vector3> { start };
+            foreach (var end in leg.Points)
+            {
+                Vector3 from = points[points.Count - 1];
+                if ((end - from).sqrMagnitude < .01f) continue;
+                float horizontal = Vector3.ProjectOnPlane(end - from, Vector3.up).magnitude;
+                if (horizontal < .01f || Mathf.Abs(end.y - from.y) > horizontal * .08f)
+                    throw new InvalidOperationException("Unsafe soak approach grade.");
+                int steps = Mathf.CeilToInt(Vector3.Distance(from, end) / 5);
+                if (steps > 300 || points.Count + steps > 2048) throw new InvalidOperationException("Soak approach exceeds geometry budget.");
+                for (int step = 1; step <= steps; step++)
+                {
+                    Vector3 point = Vector3.Lerp(from, end, (float)step / steps);
+                    if (!LwsRoadGraphQuery.TryFindNearestRoad(host.roadGraph.Graph, point, 4, out var support) ||
+                        Mathf.Abs(point.y - support.NearestPosition.y) > 1)
+                        throw new InvalidOperationException("Graph access leg leaves actual road geometry; unsafe approach cannot be automated.");
+                    points.Add(point);
+                }
+            }
+            int loopStart = points.Count - 1;
+            for (int i = 1; i <= loop.Points.Length; i++) points.Add(loop.Points[(join + i) % loop.Points.Length]);
+            Vector3 initial = points[1] - points[0]; initial.y = 0;
+            if (Vector3.Angle(truck.rotation * Vector3.forward, initial) > 45)
+                throw new InvalidOperationException("Saved heading requires an unsafe automatic turnaround; no relocation allowed.");
+            for (int i = 1; i < loopStart + 1; i++)
+                if (Vector3.Angle(points[i] - points[i - 1], points[i + 1] - points[i]) > 100)
+                    throw new InvalidOperationException("Soak approach requires an unsupported sharp turnaround.");
+            return new SoakCourse(points.ToArray(), loopStart);
+        }
+
+        private void SteerSoak(SoakCourse course)
+        {
+            Vector3 aim = soakOrigin.GlobalToLocal(LwsWorldPositionD.FromVector3(course.Target)) - truck.position; aim.y = 0;
+            float angle = Vector3.SignedAngle(truck.rotation * Vector3.forward, aim, Vector3.up);
+            float bend = Vector3.Angle(aim, course.Following - course.Target);
+            float desired = Mathf.Abs(angle) > 20 || bend > 20 ? 4 : 16;
+            Key pedal = truck.linearVelocity.magnitude > desired ? Key.S : Key.W;
+            Key steering = angle > 3 ? Key.D : angle < -3 ? Key.A : Key.None;
+            InputSystem.QueueStateEvent(keyboard, steering == Key.None ? new KeyboardState(pedal) : new KeyboardState(pedal, steering));
+        }
+
+        public IEnumerator RunIsolatedSoak(TruckTaxiBootstrap owner)
+        {
+            if(!TruckTaxiRestartHarness.Configured || owner?.Persistence?.HasActiveRun!=true)
+                throw new InvalidOperationException("Soak requires the isolated restart harness and its loaded profile.");
+            host=owner; world=host.GetComponent<TruckTaxiRegionalWorld>();
+            soakVehicle=host.Player?.NwhAdapter?.VehicleController; truck=soakVehicle?.vehicleRigidbody;
+            if (world == null || truck == null || host.RouteDistances == null) throw new InvalidOperationException("Soak world/driver/route authority missing.");
+            if(!TruckTaxiFlagshipRoute.TryCreate(host.roadGraph?.Graph,host.traffic?.cityLanes,out var route,out var reason))
+                throw new InvalidOperationException("No validated soak road loop: "+reason);
+            var registry=LwsApplicationBootstrap.Instance.Registry;
+            if (!registry.TryGet(out soakOrigin) || !registry.TryGet(out soakInput)) throw new InvalidOperationException("Soak origin/input authority missing.");
+            var originalSettings=InputSystem.settings;
+            var temporary=Instantiate(originalSettings); temporary.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
+            var report=new Report { scene=SceneManager.GetActiveScene().name,device=SystemInfo.graphicsDeviceName,
+                quality=QualitySettings.names[QualitySettings.GetQualityLevel()],width=Screen.width,height=Screen.height,
+                vSync=QualitySettings.vSyncCount,targetFrameRate=Application.targetFrameRate,
+                mapCaptureMode="Isolated continuous driving resource soak; not full sandbox acceptance" };
+            soakReport=report; soakFocusLost=false; results.Clear(); bool completed=false;
+            report.error="Soak interrupted before completing 60 valid continuous minutes.";
+            try
+            {
+                InputSystem.settings=temporary;
+                keyboard=InputSystem.AddDevice<Keyboard>("Truck Taxi isolated soak keyboard");
+                keyboard.MakeCurrent();
+                var course=BuildSoakCourse(route);
+                host.SetPaused(false); host.Environment.Clock.SetPaused(false);
+                yield return null; // Let the existing gameplay/input authorities process resume.
+                RequireSoakDriver(false);
+                var controls=host.Player.TruckControlController;
+                var transmission=host.Player.TransmissionController;
+                if (controls == null || transmission == null || !transmission.TrySetAutomaticMode(out reason) ||
+                    !transmission.TrySetAutomaticSelector(LwsAutomaticTransmissionSelector.Drive,out reason))
+                    throw new InvalidOperationException("Soak automatic drivetrain preparation failed: "+reason);
+                controls.ApplyCommandFrame(new LwsVehicleCommandFrame {
+                    engineStart=LwsMomentaryIntent.Pressed,
+                    parkingBrakeToggle=controls.CurrentState.parkingBrakeOn ? LwsMomentaryIntent.Pressed : LwsMomentaryIntent.None
+                },default);
+                double until=Time.realtimeSinceStartupAsDouble+15;
+                while (!soakVehicle.powertrain.engine.IsRunning || soakVehicle.input.Handbrake>.01f)
+                {
+                    RequireSoakDriver(false);
+                    if(Time.realtimeSinceStartupAsDouble>until) throw new InvalidOperationException("NWH ignition/parking-brake preflight timed out.");
+                    yield return null;
+                }
+                // Drive the validated approach and settle input/gear readback before timing; never relocate.
+                until=Time.realtimeSinceStartupAsDouble+300;
+                Vector3 previous=SoakGlobalPosition; float priorSpeed=truck.linearVelocity.magnitude;
+                double last=Time.realtimeSinceStartupAsDouble;
+                do
+                {
+                    RequireSoakDriver(true); course.Observe(SoakGlobalPosition); SteerSoak(course);
+                    yield return null;
+                    double now=Time.realtimeSinceStartupAsDouble;
+                    ValidateSoakMotion(previous,SoakGlobalPosition,priorSpeed,truck.linearVelocity.magnitude,(float)(now-last));
+                    previous=SoakGlobalPosition; priorSpeed=truck.linearVelocity.magnitude; last=now;
+                    if(now>until) throw new InvalidOperationException("Unable to drive validated approach/start NWH motion within 300 seconds.");
+                } while(!course.OnLoop || priorSpeed<3 || soakVehicle.powertrain.transmission.Gear<=0 || soakVehicle.input.Throttle<.1f);
+                soakStoppedSeconds=soakAirborneSeconds=0;
+                soakLastPosition=previous; soakLastSpeed=priorSpeed; soakLastTime=last;
+                int initialLaps=course.Laps;
+                for(int minute=0;minute<60;minute++)
+                {
+                    yield return Measure("SOAK minute "+(minute+1),route.Points,60,course);
+                    report.workloads=results.ToArray(); Write(report);
+                    if(results[results.Count-1].error!=null)
+                        throw new InvalidOperationException("Soak acceptance failed: "+results[results.Count-1].error);
+                }
+                long growth=results[results.Count-1].managedHeapBytes-results[0].managedHeapBytes;
+                if(growth>128L*1024*1024) throw new InvalidOperationException("Soak managed heap grew by more than 128 MiB.");
+                if(course.Laps<=initialLaps) throw new InvalidOperationException("Soak did not complete an ordered road loop.");
+                completed=true; report.error=null;
+                Debug.Log("TAXI ISOLATED SOAK PASS: 60 measured minutes, movement/focus valid; managed growth="+growth);
+            }
+            finally
+            {
+                try
+                {
+                    if(keyboard!=null) { InputSystem.QueueStateEvent(keyboard,new KeyboardState()); InputSystem.RemoveDevice(keyboard); keyboard=null; }
+                }
+                finally
+                {
+                    InputSystem.settings=originalSettings; Destroy(temporary);
+                    host.SetPaused(true); host.Environment.Clock.SetPaused(true);
+                    if(!completed && string.IsNullOrEmpty(report.error)) report.error="Soak aborted.";
+                    report.workloads=results.ToArray(); Write(report);
+                }
+            }
+        }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void StartIfRequested()
@@ -278,7 +520,7 @@ namespace LWS.TruckTaxi
             yield return Measure(name, route.Points, seconds);
         }
 
-        private IEnumerator Measure(string name, IReadOnlyList<Vector3> points, float seconds)
+        private IEnumerator Measure(string name, IReadOnlyList<Vector3> points, float seconds, SoakCourse course = null)
         {
             var sample = new Sample { workload = name, startRegion = world.CurrentRegion,
                 loadedRegionsStart = world.LoadedCount };
@@ -293,13 +535,16 @@ namespace LWS.TruckTaxi
                     property.SetValue(compass, Enum.Parse(property.PropertyType,
                         continuousMapBaseline ? "Continuous" : "TimeInterval"));
             }
-            yield return new WaitForSecondsRealtime(.5f);
+            if (course == null) yield return new WaitForSecondsRealtime(.5f);
             var times = new List<float>(8192);
             var gpuTiming = new FrameTiming[1];
             double main = 0, render = 0, physics = 0, gpu = 0, gc = 0, speedTotal = 0, drawTotal = 0, compassCpu = 0;
             int mainCount = 0, renderCount = 0, physicsCount = 0, gpuCount = 0, gcCount = 0, drawCount = 0, compassCount = 0;
-            Vector3 start = truck.position;
-            Vector3 previous = start;
+            Vector3 start = course != null ? SoakGlobalPosition : truck.position;
+            Vector3 previous = course != null ? soakLastPosition : start;
+            float previousSpeed = course != null ? soakLastSpeed : truck.linearVelocity.magnitude;
+            double previousTime = course != null ? soakLastTime : Time.realtimeSinceStartupAsDouble;
+            float startProgress = course?.ProgressMeters ?? 0;
             int waypoint = 1;
             bool triedEngine = false;
             var vehicle = truck.GetComponent<NWH.VehiclePhysics2.VehicleController>();
@@ -315,6 +560,12 @@ namespace LWS.TruckTaxi
                 sample.physicsValid = physicsRecorder.Valid; sample.gcValid = gcRecorder.Valid;
                 while (Time.realtimeSinceStartup - began < seconds)
                 {
+                    if (course != null)
+                    {
+                        RequireSoakDriver(true); course.Observe(SoakGlobalPosition); SteerSoak(course);
+                    }
+                    else
+                    {
                     Vector3 aim = points[waypoint] - truck.position; aim.y = 0;
                     while (waypoint < points.Count - 1 && aim.sqrMagnitude < 18 * 18)
                     { waypoint++; aim = points[waypoint] - truck.position; aim.y = 0; }
@@ -325,13 +576,29 @@ namespace LWS.TruckTaxi
                     Key steering = angle > 4 ? Key.D : angle < -4 ? Key.A : Key.None;
                     InputSystem.QueueStateEvent(keyboard, steering == Key.None ?
                         new KeyboardState(pedal) : new KeyboardState(pedal, steering));
+                    }
                     FrameTimingManager.CaptureFrameTimings();
                     yield return null;
                     times.Add(Time.unscaledDeltaTime * 1000);
                     float currentSpeed = truck.linearVelocity.magnitude;
                     speedTotal += currentSpeed;
                     sample.peakSpeedMps = Mathf.Max(sample.peakSpeedMps, currentSpeed);
-                    Vector3 current = truck.position;
+                    Vector3 current = course != null ? SoakGlobalPosition : truck.position;
+                    if (course != null)
+                    {
+                        RequireSoakDriver(true);
+                        double now = Time.realtimeSinceStartupAsDouble;
+                        float elapsed = (float)(now - previousTime);
+                        ValidateSoakMotion(previous, current, previousSpeed, currentSpeed, elapsed);
+                        previousTime = now; previousSpeed = currentSpeed;
+                        soakLastPosition=current; soakLastSpeed=currentSpeed; soakLastTime=now;
+                        course.Observe(current);
+                        soakStoppedSeconds = currentSpeed > 1 ? 0 : soakStoppedSeconds + elapsed;
+                        if (currentSpeed <= 1) sample.stationarySeconds += elapsed;
+                        soakAirborneSeconds = soakVehicle.IsGrounded() ? 0 : soakAirborneSeconds + elapsed;
+                        if (soakStoppedSeconds > 2 || sample.stationarySeconds > seconds * .01f || soakAirborneSeconds > .5f || truck.transform.up.y < .7f)
+                            throw new InvalidOperationException("Soak lost continuous grounded driving; stops, overturns and recovery are not accepted.");
+                    }
                     sample.pathMeters += Vector3.Distance(previous, current);
                     previous = current;
                     if (currentSpeed > 1) sample.movingFrames++;
@@ -346,7 +613,7 @@ namespace LWS.TruckTaxi
                     if (FrameTimingManager.GetLatestTimings(1, gpuTiming) > 0 &&
                         IsValidGpuDuration(gpuTiming[0].gpuFrameTime))
                     { gpu += gpuTiming[0].gpuFrameTime; gpuCount++; }
-                    if (!triedEngine && Time.realtimeSinceStartup - began > 8 &&
+                    if (course == null && !triedEngine && Time.realtimeSinceStartup - began > 8 &&
                         Vector3.Distance(start, truck.position) < 2)
                     {
                         if (vehicle?.powertrain?.engine != null && !vehicle.powertrain.engine.IsRunning)
@@ -358,10 +625,11 @@ namespace LWS.TruckTaxi
                     }
                 }
             }
-            InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+            if (course == null) InputSystem.QueueStateEvent(keyboard, new KeyboardState());
             sample.frames = times.Count;
             sample.seconds = Time.realtimeSinceStartup - began;
-            sample.distanceMeters = Vector3.Distance(start, truck.position);
+            sample.distanceMeters = Vector3.Distance(start, course != null ? SoakGlobalPosition : truck.position);
+            sample.orderedProgressMeters = course == null ? 0 : course.ProgressMeters - startProgress;
             sample.meanSpeedMps = (float)(speedTotal / Math.Max(1, sample.frames));
             sample.drawCalls = (int)(drawTotal / Math.Max(1, drawCount));
             sample.drawCallsValid = drawCount > 0;
@@ -381,11 +649,16 @@ namespace LWS.TruckTaxi
             sample.compassValid = compassCount > 0;
             sample.meanCompassMs = (float)(compassCpu / Math.Max(1, compassCount));
             sample.managedHeapBytes = GC.GetTotalMemory(false);
+            sample.unityAllocatedBytes = UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong();
+            sample.unityReservedBytes = UnityEngine.Profiling.Profiler.GetTotalReservedMemoryLong();
             sample.liveCars = host.traffic.ActiveCount; sample.livePedestrians = host.pedestrians.ActiveCount;
             sample.fullCars = host.traffic.FullPhysicsCount; sample.fullPedestrians = host.pedestrians.FullPhysicsCount;
             sample.loadedRegionsEnd = world.LoadedCount; sample.endRegion = world.CurrentRegion;
             sample.activeRigidbodies = world.ActiveBodies;
-            if (sample.focusedFrames < sample.frames * .9f)
+            if (course != null && (sample.frames == 0 || sample.focusedFrames != sample.frames || sample.orderedProgressMeters < seconds * 3 ||
+                sample.stationarySeconds > seconds * .01f || mainCount == 0 || gcCount == 0))
+                sample.error = "Soak lacks continuous focused ordered driving or required resource counters";
+            else if (sample.focusedFrames < sample.frames * .9f)
                 sample.error = "Player was not focused; graphics may have been throttled";
             else if (sample.pathMeters < seconds * 3 || sample.movingFrames < sample.frames / 4)
             {

@@ -41,6 +41,8 @@ namespace LWS.TruckTaxi
         private readonly List<Action> refreshControls = new List<Action>();
         private readonly List<UnityEngine.UI.Selectable> startJugControls = new List<UnityEngine.UI.Selectable>();
         private readonly List<UnityEngine.UI.Selectable> storeControls = new List<UnityEngine.UI.Selectable>();
+        private readonly List<GameObject> storeRows = new List<GameObject>();
+        private TextMeshProUGUI storeDetails;
         private bool wasPaused, syncing;
         private float nextRefresh;
         public bool IsOpen => panel != null && panel.gameObject.activeSelf;
@@ -117,7 +119,6 @@ namespace LWS.TruckTaxi
             debugText = hud.Text(driverPage, "Driver detail", new Vector2(.05f, .16f), new Vector2(.95f, .275f), 22);
             hud.Button(driverPage, "STORE", new Vector2(.05f, .035f), new Vector2(.27f, .13f), ShowStore);
             hud.Button(driverPage, "ITEMS", new Vector2(.29f, .035f), new Vector2(.51f, .13f), ShowInventory);
-            if (Debug.isDebugBuild) hud.Button(driverPage, "DEBUG", new Vector2(.53f, .035f), new Vector2(.74f, .13f), ShowEnvironment);
             hud.Button(driverPage, "CLOSE", new Vector2(.76f, .035f), new Vector2(.95f, .13f), Close);
         }
         private void BuildStorePage()
@@ -125,13 +126,27 @@ namespace LWS.TruckTaxi
             storeText = hud.Text(storePage, "Store heading", new Vector2(.04f, .94f), new Vector2(.96f, .99f), 32);
             storeFeedback = hud.Text(storePage, "Store status", new Vector2(.05f, .86f), new Vector2(.95f, .935f), 21);
             var entries = TruckTaxiNeedsItems.Store;
-            TruckTaxiStoreScrollView.Create(storePage, out var content);
+            var catalogScroll=TruckTaxiStoreScrollView.Create(storePage, out var content);
+            catalogScroll.viewport.anchorMin=new Vector2(.05f,.33f);
+            catalogScroll.viewport.anchorMax=new Vector2(.95f,.75f);
+            storeDetails=hud.Text(storePage,"Selected product",new Vector2(.05f,.17f),new Vector2(.95f,.31f),23);
+            storeDetails.text="SELECT A PRODUCT";
+            for(int i=0;i<6;i++)
+            {
+                var category=(TruckTaxiItemCategory)i; float x=.05f+i*.15f;
+                hud.Button(storePage,category.ToString().ToUpperInvariant(),new Vector2(x,.77f),new Vector2(x+.14f,.845f),()=>
+                {
+                    for(int row=0;row<storeRows.Count;row++) storeRows[row].SetActive(category==TruckTaxiItemCategory.All || entries[row].Category==category);
+                    catalogScroll.verticalNormalizedPosition=1;
+                });
+            }
             for (int i = 0; i < entries.Length; i++)
             {
                 var entry = entries[i];
-                var button = hud.Button(content, "FIND " + entry.Name + "  " + TruckTaxiHud.Money(entry.PriceCents),
+                var button = hud.Button(content, entry.Name + "  " + TruckTaxiHud.Money(entry.PriceCents),
                     Vector2.zero, Vector2.one,
-                    () => { needs.RouteToStore(); Close(); });
+                    () => { storeDetails.text=entry.Name+"\n"+entry.UseSummary+"  |  "+TruckTaxiHud.Money(entry.PriceCents)+"\nOWNED "+needs.State.Count(entry.Item); });
+                storeRows.Add(button);
                 storeControls.AddRange(button.GetComponentsInChildren<UnityEngine.UI.Selectable>(true));
             }
             hud.Button(storePage, "ROUTE", new Vector2(.05f, .035f), new Vector2(.34f, .13f),
@@ -444,6 +459,11 @@ namespace LWS.TruckTaxi
         { if (contextPage.gameObject.activeSelf) dismissedContext = activeContext; SelectPage(storePage); Refresh(); }
         private void ShowInventory()
         { SelectPage(inventoryPage); Refresh(); }
+        public void OpenDeveloperTools()
+        {
+            if(!TruckTaxiMegaDebugPanel.IsAvailable) return;
+            Open(); ShowEnvironment();
+        }
         private void ShowEnvironment()
         {
             if (!Debug.isDebugBuild) return;

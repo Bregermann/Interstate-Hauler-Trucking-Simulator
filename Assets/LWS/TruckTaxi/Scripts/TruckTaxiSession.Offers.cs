@@ -22,6 +22,8 @@ namespace LWS.TruckTaxi
 
         public bool RequestRideOffer(PassengerProfile forcedPassenger = null)
         {
+            RefreshManualDeclineCooldown();
+            if(ManualDeclineCooldownActive) return false;
             if (IsGeneratingOffer || State != TruckTaxiState.Available || !RideRequestsEnabled || OffersSuppressed) return false;
             LastOfferRouteQueries = 0; LastOfferMaximumStepMs = 0; offerStages.Clear();
             LastOfferCandidateCount=LastOfferRejectedPickupRoutes=LastOfferRejectedDestinationRoutes=0;
@@ -47,7 +49,7 @@ namespace LWS.TruckTaxi
         private void AdvanceOfferGeneration()
         {
             if (offerGeneration == null) return;
-            if (State != TruckTaxiState.Available || !RideRequestsEnabled || OffersSuppressed ||
+            if (State != TruckTaxiState.Available || !RideRequestsEnabled || OffersSuppressed || ManualDeclineCooldownActive ||
                 offerClock.Elapsed.TotalSeconds > Mathf.Clamp(config.offerTimeoutSeconds, 1, 10))
             { FinishOfferDiagnostics("cancelled/timeout"); return; }
             var frame = Stopwatch.StartNew();

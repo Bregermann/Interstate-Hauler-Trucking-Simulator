@@ -4,6 +4,7 @@ namespace LWS.TruckTaxi
 {
     public enum TruckTaxiNeedsItem { EmptyBottle, EmptyPissJug, FilledBottle, FilledJug, WaterBottle, Soda, EnergyDrink, Snack, Burger, Sandwich, Meal, HighOctaneSuppository, MysteryMushrooms, AirFreshener, HulaFigure, NoveltyDuck, RoadPep }
     public enum TruckTaxiCabSlot { DashboardLeft, DashboardRight, Mirror }
+    public enum TruckTaxiItemCategory { All, Food, Drinks, Cab, Supplies, Specials }
     [Flags]
     public enum TruckTaxiItemFlags { None = 0, NonInventory = 1, DebugOnly = 2, NotPlayerOwnable = 4 }
 
@@ -20,6 +21,14 @@ namespace LWS.TruckTaxi
         public readonly float HungerRelief, ThirstRelief;
         public readonly bool CreatesBottle;
         public readonly TruckTaxiCabSlot? Slot;
+        public TruckTaxiItemCategory Category => Slot.HasValue ? TruckTaxiItemCategory.Cab :
+            HungerRelief>0 ? TruckTaxiItemCategory.Food : IsDrink ? TruckTaxiItemCategory.Drinks :
+            Item==TruckTaxiNeedsItem.HighOctaneSuppository || Item==TruckTaxiNeedsItem.MysteryMushrooms || Item==TruckTaxiNeedsItem.RoadPep ?
+                TruckTaxiItemCategory.Specials : TruckTaxiItemCategory.Supplies;
+        public string UseSummary => HungerRelief>0 ? "Hunger relief: "+(HungerRelief*100).ToString("0")+"%" :
+            IsDrink ? "Thirst relief: "+(ThirstRelief*100).ToString("0")+"%" :
+            Slot.HasValue ? "Cab decoration" : Item==TruckTaxiNeedsItem.FilledBottle || Item==TruckTaxiNeedsItem.FilledJug ?
+                "Filled container" : Category==TruckTaxiItemCategory.Specials ? "Temporary special effect" : "Container";
         public TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem item, string name, long priceCents,
             float hungerRelief = 0, float thirstRelief = 0, bool createsBottle = false, TruckTaxiCabSlot? slot = null,
             string stableId = null, bool purchasable = true, TruckTaxiItemFlags flags = TruckTaxiItemFlags.None)
@@ -47,7 +56,7 @@ namespace LWS.TruckTaxi
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.NoveltyDuck, "Novelty duck", 800, slot: TruckTaxiCabSlot.DashboardRight, stableId: "novelty-duck"),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.HighOctaneSuppository, "High-octane energy suppository", 999, stableId: "high-octane"),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.MysteryMushrooms, "Mystery mushrooms", 666, stableId: "mystery-mushrooms"),
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.RoadPep, "Road Pep (fictional stimulant)", 1800, stableId: "road-pep"),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.RoadPep, "Road Pep", 1800, stableId: "road-pep"),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.FilledBottle, "Filled bottle", 0, stableId: "filled-bottle", purchasable: false),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.FilledJug, "Filled jug", 0, stableId: "filled-jug", purchasable: false)
         };

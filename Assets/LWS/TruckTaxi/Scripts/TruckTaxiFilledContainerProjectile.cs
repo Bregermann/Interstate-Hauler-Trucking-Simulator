@@ -37,11 +37,15 @@ namespace LWS.TruckTaxi
 
         [Header("Arcade blast")]
         [Min(15)] public float maximumLifetime = 20;
-        public bool detonateOnImpact;
+        public bool detonateOnImpact = true;
         [Range(.05f, 2)] public float postBounceFuse = .65f;
         [Range(1, 20)] public float blastRadius = 6;
         [Range(0, 600)] public float blastImpulse = 180;
         [Range(0, 6000)] public float vehicleBlastImpulse = 4500;
+        [Tooltip("Arcade traffic kick in meters/second before distance falloff. Applied as a bounded impulse, never a velocity override.")]
+        [Range(0, 6)] public float vehicleBlastSpeed = 3;
+        [Tooltip("Hard impulse ceiling for heavy vehicles; prevents mass scaling from becoming unbounded.")]
+        [Range(6000, 60000)] public float maximumVehicleBlastImpulse = 30000;
         [Range(0, 100)] public float upwardImpulse = 35;
         [Range(1, 30)] public float directImpactSpeed = 8;
         public AudioClip detonationClip;
@@ -52,6 +56,7 @@ namespace LWS.TruckTaxi
         public bool Detonated => detonated;
 
         private readonly HashSet<int> reportedActors = new HashSet<int>();
+        private readonly Collider[] blastContacts = new Collider[128];
         private AudioClip impactClip;
         private PhysicsMaterial bounceMaterial;
         private Rigidbody body;
@@ -114,12 +119,24 @@ namespace LWS.TruckTaxi
 
             Vector3 contact = collision.contactCount > 0 ? collision.GetContact(0).point : transform.position;
             float speed = collision.relativeVelocity.magnitude;
+            ProcessImpact(collision.collider, contact, speed);
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (detonated || body == null || body.isKinematic || other == null || IsLauncher(other) ||
+                other.GetComponentInParent<TruckTaxiBreakawayProp>() == null) return;
+            ProcessImpact(other, other.ClosestPoint(transform.position), body.linearVelocity.magnitude);
+        }
+
+        private void ProcessImpact(Collider collider, Vector3 contact, float speed)
+        {
             if (!impacted)
             {
                 impacted = true;
                 PlayWorldSound(impactClip, contact);
             }
-            if (speed >= 2) Affect(collision.collider, contact, speed, 1, HitPhase.Direct);
+            if (speed >= 2) Affect(collider, contact, speed, 1, HitPhase.Direct);
             if (detonateOnImpact) Detonate(contact);
             else if (!fuseStarted)
             {
@@ -137,9 +154,13 @@ namespace LWS.TruckTaxi
             CancelInvoke();
             float radius = Mathf.Clamp(blastRadius, 1, 20);
             var nearestActors = new Dictionary<int, BlastContact>();
-            foreach (var collider in Physics.OverlapSphere(position, radius, ~0, QueryTriggerInteraction.Ignore))
+            int count = Physics.OverlapSphereNonAlloc(position, radius, blastContacts, ~0, QueryTriggerInteraction.Collide);
+            for (int i = 0; i < count; i++)
             {
+                var collider = blastContacts[i];
+                blastContacts[i] = null;
                 if (collider == null || collider == projectileCollider || IsLauncher(collider)) continue;
+                if (collider.isTrigger && collider.GetComponentInParent<TruckTaxiBreakawayProp>() == null) continue;
                 Vector3 nearest = collider.ClosestPoint(position);
                 float strength = BlastFalloff(Vector3.Distance(position, nearest), radius);
                 if (strength < .1f) continue;
@@ -164,6 +185,13 @@ namespace LWS.TruckTaxi
             return normalized * normalized;
         }
 
+        public static float BoundedVehicleImpulse(float mass, float speed, float minimum, float maximum)
+        {
+            if (!float.IsFinite(mass) || !float.IsFinite(speed) || !float.IsFinite(minimum) || !float.IsFinite(maximum)) return 0;
+            float limit = Mathf.Clamp(maximum, 0, 60000);
+            return Mathf.Clamp(Mathf.Max(Mathf.Max(0, minimum), Mathf.Max(0, mass) * Mathf.Clamp(speed, 0, 6)), 0, limit);
+        }
+
         public static int ActorKey(Collider collider)
         {
             if (collider == null) return 0;
@@ -184,6 +212,7 @@ namespace LWS.TruckTaxi
             if (key == 0 || !reportedActors.Add(key)) return;
             var target = collider.GetComponentInParent<TruckTaxiImpactTarget>();
             var pedestrian = collider.GetComponentInParent<TruckTaxiPedestrian>();
+            bool managedProp = target != null && target.kind == TaxiImpactKind.Property && target.GetComponent<TruckTaxiBreakawayProp>() != null;
             if (pedestrian != null && !pedestrian.IsRagdoll)
             {
                 Vector3 away = (pedestrian.transform.position - transform.position).normalized;
@@ -203,7 +232,7 @@ namespace LWS.TruckTaxi
             else if (target != null && target.kind != TaxiImpactKind.Pedestrian)
             {
                 bool valid = speed >= (host?.Configuration != null ? host.Configuration.minimumImpactSpeed : 3) &&
-                    target.Hit();
+                    target.Hit(body, contact, speed);
                 if (valid && IsPlayerThrown && host?.Session != null)
                 {
                     if (target.kind == TaxiImpactKind.Traffic)
@@ -217,12 +246,12 @@ namespace LWS.TruckTaxi
             }
 
             var rigidbody = collider.attachedRigidbody;
-            if (pedestrian == null && rigidbody != null && rigidbody != body && !rigidbody.isKinematic)
+            if (!managedProp && pedestrian == null && rigidbody != null && rigidbody != body && !rigidbody.isKinematic)
             {
                 Vector3 direction = (rigidbody.worldCenterOfMass - contact).normalized;
                 if (direction.sqrMagnitude < .01f) direction = Vector3.up;
                 float impulse = target != null && target.kind == TaxiImpactKind.Traffic ?
-                    Mathf.Clamp(vehicleBlastImpulse, 0, 6000) : Mathf.Clamp(blastImpulse, 0, 600);
+                    BoundedVehicleImpulse(rigidbody.mass, vehicleBlastSpeed, vehicleBlastImpulse, maximumVehicleBlastImpulse) : Mathf.Clamp(blastImpulse, 0, 600);
                 rigidbody.AddForce((direction * impulse +
                     Vector3.up * Mathf.Clamp(upwardImpulse, 0, 100)) * strength, ForceMode.Impulse);
             }

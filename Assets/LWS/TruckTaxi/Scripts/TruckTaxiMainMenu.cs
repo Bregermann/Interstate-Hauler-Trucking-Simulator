@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace LWS.TruckTaxi
 {
-    // Last-session presentation only; persisted Vibin discovery comes from the scoped facade.
+    // Presentation projection only; the Session snapshot is the persistent statistics authority.
     public struct TruckTaxiMainMenuStats
     {
         public int rides, pedestriansHit, trafficCollisions, passengersEjected;
@@ -47,6 +47,8 @@ namespace LWS.TruckTaxi
         private TextMeshProUGUI saveStatus, loadStatus, profileText;
         private int profileIndex;
         private bool discoveryReady, enteringGame;
+        private TruckTaxiPersistentState savedStatistics;
+        private string statisticsStatus;
         public bool HasVibinSave { get; private set; }
         public string SaveStatus { get; private set; } = "VIBIN' SAVES UNAVAILABLE";
 
@@ -121,7 +123,10 @@ namespace LWS.TruckTaxi
 
             stats=Page("Stats");
             Label(stats,"STATS");
-            statsText=view.Text(stats,"Session stats",new Vector2(.08f,.24f),new Vector2(.92f,.80f),23);
+            view.Button(stats,"LAST SESSION",new Vector2(.08f,.74f),new Vector2(.49f,.81f),()=>DisplayStats(false));
+            view.Button(stats,"LIFETIME",new Vector2(.51f,.74f),new Vector2(.92f,.81f),()=>DisplayStats(true));
+            statsText=view.Text(stats,"Session stats",new Vector2(.08f,.24f),new Vector2(.92f,.72f),23);
+            statsText.enableAutoSizing=true; statsText.fontSizeMin=12; statsText.fontSizeMax=23;
             Button(stats,"BACK",.12f,()=>Show(main));
         }
 
@@ -164,8 +169,19 @@ namespace LWS.TruckTaxi
         }
         private void OpenStats()
         {
-            var s=LastSessionStats.GetValueOrDefault();
-            statsText.text=(LastSessionStats.HasValue ? "LAST SESSION\n" : "NO SESSION\n")+
+            string profileId=profiles.Count>0 ? profiles[Mathf.Clamp(profileIndex,0,profiles.Count-1)].stableProfileId : null;
+            TryReadLatestStatistics(saves,profileId,out savedStatistics,out statisticsStatus);
+            DisplayStats(false);
+            Show(stats);
+        }
+        private void DisplayStats(bool lifetime)
+        {
+            if(statsText==null) return;
+            if(savedStatistics==null) { statsText.text=statisticsStatus ?? "SAVED STATISTICS UNAVAILABLE"; return; }
+            var summary=lifetime ? LifetimeSummary(savedStatistics) : savedStatistics.lastSession;
+            if(summary==null) { statsText.text="NO RECORDED LAST SESSION"; return; }
+            var s=summary.ToMenuStats();
+            statsText.text=(lifetime ? "CAREER LIFETIME\n" : "LAST SESSION\n")+
                 "Rides  "+s.rides+"\nEarnings  "+TruckTaxiHud.Money(s.earningsCents)+
                 "\nAverage stars  "+s.averageStars.ToString("0.0")+
                 "\nChaos  "+s.chaos.ToString("0")+
@@ -175,8 +191,69 @@ namespace LWS.TruckTaxi
                 "\nJug events  "+s.jugEvents+
                 "\nBottles thrown  "+s.bottlesThrown+
                 "\nSpecial events  "+s.specialEvents+
-                "\nObjectives completed  "+s.objectivesCompleted;
-            Show(stats);
+                "\nObjectives completed  "+s.objectivesCompleted+
+                (lifetime && (savedStatistics.version==1 || savedStatistics.career.historicalDetailsIncomplete) ?
+                    "\nHistorical detail incomplete" : "");
+        }
+        public static TruckTaxiLastSessionStatistics LifetimeSummary(TruckTaxiPersistentState state)
+        {
+            var s=state.statistics;
+            var career=state.version>=2 ? state.career : null;
+            return new TruckTaxiLastSessionStatistics {
+                rides=s.completedRides,totalStars=s.totalStarsEarned,earningsCents=state.shiftEarningsCents,
+                chaos=(career?.chaosScore ?? 0)>long.MaxValue-s.raceChaosEarned ? long.MaxValue :
+                    (career?.chaosScore ?? 0)+s.raceChaosEarned,pedestriansHit=s.pedestriansHit,trafficCollisions=s.trafficHits,
+                passengersEjected=s.ejectedRides,jugEvents=(int)Math.Min(int.MaxValue-1L,(long)s.jugsSucceeded+s.jugsSpilled),
+                bottlesThrown=s.containersThrown,specialEvents=s.specialStopsCompleted,
+                objectivesCompleted=career?.GoalsCompleted ?? 0,playtimeSeconds=career?.playtimeSeconds ?? 0
+            };
+        }
+
+        // Metadata discovery + vendor pre-read only: never select a profile, apply participants, or load a scene.
+        public static bool TryReadLatestStatistics(ILwsSaveService service,string profileId,
+            out TruckTaxiPersistentState state,out string reason)
+        {
+            state=null; reason="SAVED STATISTICS UNAVAILABLE";
+            if(!TruckTaxiVibinPersistence.IsVibinScope(service) || service.Adapter?.ReadyForRuntimeSaves!=true) return false;
+            LwsManualSaveSlotMetadata latest=null;
+            foreach(var profile in service.Profiles)
+            {
+                if(!string.IsNullOrEmpty(profileId) && profile.stableProfileId!=profileId) continue;
+                foreach(var slot in service.GetManualSlots(profile.stableProfileId))
+                    if(TruckTaxiVibinPersistence.ExistsInVendorStore(service,slot) &&
+                        (latest==null || slot.savedUtcTicks>latest.savedUtcTicks)) latest=slot;
+                var automatic=service.GetAutosaveSlotMetadata(profile.stableProfileId);
+                if(TruckTaxiVibinPersistence.ExistsInVendorStore(service,automatic) &&
+                    (latest==null || automatic.savedUtcTicks>latest.savedUtcTicks)) latest=automatic;
+            }
+            if(latest==null) { reason="NO SAVED SESSION"; return false; }
+            var read=service.Adapter.TryReadSemanticSnapshot(latest.vendorSlotNumber,out var snapshot,out _,out _);
+            if(!read.Succeeded) { reason="SAVED STATISTICS COULD NOT BE READ"; return false; }
+            if(snapshot==null || snapshot.vendorSlotNumber!=latest.vendorSlotNumber)
+            { reason="SAVED STATISTICS SLOT MISMATCH"; return false; }
+            return TryExtractSavedStatistics(snapshot,latest.stableProfileId,out state,out reason);
+        }
+
+        public static bool TryExtractSavedStatistics(LwsSaveSnapshot snapshot,string expectedProfileId,
+            out TruckTaxiPersistentState state,out string reason)
+        {
+            state=null; reason="INVALID SAVED STATISTICS";
+            if(snapshot==null || snapshot.schemaVersion!=LwsSaveSchema.CurrentVersion || snapshot.participants==null ||
+                string.IsNullOrWhiteSpace(expectedProfileId) || snapshot.profileId!=expectedProfileId) return false;
+            LwsSaveParticipantState participant=null;
+            foreach(var entry in snapshot.participants)
+                if(entry?.participantId==TruckTaxiVibinSaveParticipant.Id)
+                { if(participant!=null) return false; participant=entry; }
+            try
+            {
+                if(!TruckTaxiVibinSaveParticipant.Read(participant,out var payload).Succeeded ||
+                    !TruckTaxiSession.ValidatePersistentState(payload.session,out reason)) return false;
+                state=payload.session.Copy();
+                // Version 1 never recorded separate last-session data.
+                if(state.version==1) state.lastSession=null;
+                reason=null; return true;
+            }
+            catch { state=null; reason="UNREADABLE SAVED STATISTICS"; return false; }
         }
         private void FocusCurrent()
         {

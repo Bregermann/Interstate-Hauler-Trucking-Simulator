@@ -5,7 +5,11 @@ namespace LWS.TruckTaxi
     [CreateAssetMenu(menuName = "Truck Taxi/Demo Configuration")]
     public sealed class TruckTaxiConfiguration : ScriptableObject
     {
+        [Header("Truck Taxi Career")]
+        public TruckTaxiCareerCatalog careerCatalog;
         [Header("Optional designer-authored companion content")]
+        [Tooltip("Text-only companion reactions for explicitly authored adult passengers and adult companions. No voice audio is assigned or generated.")]
+        public TruckTaxiOccupantReaction[] companionReactions = System.Array.Empty<TruckTaxiOccupantReaction>();
         public TruckTaxiCustomInteractionProfile customCompanionInteraction;
         [Tooltip("Optional companion visual-variant overrides, indexed from zero. Empty entries use the global companion interaction.")]
         public TruckTaxiCustomInteractionProfile[] customCompanionVariantInteractions = System.Array.Empty<TruckTaxiCustomInteractionProfile>();
@@ -21,8 +25,8 @@ namespace LWS.TruckTaxi
         [Min(1)] public float pickupTargetMinimumSeconds = 20;
         [Min(1)] public float pickupTargetMaximumSeconds = 90;
         [Min(1)] public float pickupHardMaximumSeconds = 180;
-        [Range(0, 1), Tooltip("Conditional chance outside the completed-local cooldown. Guarantee after three locals makes effective share approximately 25%.")]
-        public float intercityRideChance = 0.02f;
+        [Range(0, 1), Tooltip("Conditional chance outside the completed-local cooldown. Valid routes and the completed-local guarantee remain required.")]
+        public float intercityRideChance = 0.25f;
         [Range(0, 10), Tooltip("Legacy authoring field; session policy requires two COMPLETED locals.")]
         public int localOffersAfterIntercity = 2;
         [Min(1), Tooltip("Legacy authoring field; session policy guarantees the next eligible intercity after three COMPLETED locals. Declines never consume it.")]

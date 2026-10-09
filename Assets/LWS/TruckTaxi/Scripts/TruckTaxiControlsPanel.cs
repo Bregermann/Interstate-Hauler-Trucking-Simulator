@@ -21,7 +21,11 @@ namespace LWS.TruckTaxi
         private List<TruckTaxiControlsCatalog.Entry> entries;
         private bool wasPaused,lastGamepad;
         private bool wheelActive,lastWheel;
+        private string lastDeviceLabel;
         private LwsWheelInputSource wheel;
+        private LwsWheelAnalogState lastWheelAnalog;
+        private bool hasWheelSample;
+        private float wheelInputAt=float.NegativeInfinity;
         public bool IsOpen => page!=null && page.gameObject.activeSelf;
         public Transform FocusRoot => page;
 
@@ -70,10 +74,7 @@ namespace LWS.TruckTaxi
         {
             if(input==null || page==null) return;
             input.RefreshDeviceFromHardware();
-            if(wheel?.SelectedDevice!=null && wheel.SelectedDevice.wasUpdatedThisFrame) wheelActive=true;
-            else if(UnityEngine.InputSystem.Keyboard.current?.wasUpdatedThisFrame==true ||
-                UnityEngine.InputSystem.Mouse.current?.wasUpdatedThisFrame==true ||
-                UnityEngine.InputSystem.Gamepad.current?.wasUpdatedThisFrame==true) wheelActive=false;
+            RefreshWheelPrompt();
             if(!host.Paused && host.Session!=null && input.ToggleRideRequests.WasPressedThisFrame())
             {
                 input.ToggleRideRequestsFor(host.Session);
@@ -84,7 +85,7 @@ namespace LWS.TruckTaxi
             }
             if(requestStatus.gameObject.activeSelf && Time.unscaledTime>=requestStatusUntil) requestStatus.gameObject.SetActive(false);
             if(hud.NormalHudSuppressed) requestStatus.gameObject.SetActive(false);
-            if(input.UsingGamepad!=lastGamepad || wheelActive!=lastWheel) Rebuild();
+            if(input.UsingGamepad!=lastGamepad || wheelActive!=lastWheel || lastDeviceLabel!=input.ActiveDeviceLabel) Rebuild();
             if(IsOpen)
             {
                 overlay.gameObject.SetActive(false);
@@ -101,13 +102,36 @@ namespace LWS.TruckTaxi
             if(overlay!=null) overlay.gameObject.SetActive(false);
             if(requestStatus!=null) requestStatus.gameObject.SetActive(false);
         }
+        private void RefreshWheelPrompt()
+        {
+            var device=wheel?.SelectedDevice;
+            if(device==null) { wheelActive=false; hasWheelSample=false; wheelInputAt=float.NegativeInfinity; return; }
+            var analog=wheel.LastFrame.analog;
+            bool moved=hasWheelSample && MeaningfulWheelMotion(lastWheelAnalog,analog);
+            bool pressed=false;
+            foreach(var control in device.allControls)
+                if(control is UnityEngine.InputSystem.Controls.ButtonControl button && button.wasPressedThisFrame)
+                { pressed=true; break; }
+            if(moved || pressed) wheelInputAt=Time.unscaledTime;
+            // Keep the reference until meaningful movement accumulates; ignore idle HID updates.
+            if(!hasWheelSample || moved) lastWheelAnalog=analog;
+            hasWheelSample=true;
+            wheelActive=wheelInputAt>input.LastMeaningfulInputAt;
+        }
+        public static bool MeaningfulWheelMotion(LwsWheelAnalogState previous,LwsWheelAnalogState current) =>
+            Mathf.Abs(current.steering-previous.steering)>.035f ||
+            Mathf.Abs(current.throttle-previous.throttle)>.05f ||
+            Mathf.Abs(current.brake-previous.brake)>.05f ||
+            Mathf.Abs(current.clutch-previous.clutch)>.05f ||
+            Mathf.Abs(current.parkingBrake-previous.parkingBrake)>.05f;
         private void ScrollBy(float amount)
         { if(scroll!=null) scroll.verticalNormalizedPosition=Mathf.Clamp01(scroll.verticalNormalizedPosition+amount); }
         private void Rebuild()
         {
             lastGamepad=input.UsingGamepad;
             lastWheel=wheelActive;
-            string device=wheelActive?"WHEEL":lastGamepad?"GAMEPAD":"KEYBOARD / MOUSE";
+            lastDeviceLabel=input.ActiveDeviceLabel;
+            string device=wheelActive?"WHEEL":lastDeviceLabel;
             string source=wheelActive?"Calibrated wheel profile; UNBOUND where unmapped":"Live actions; FIXED DIRECT READ legacy; MENU BUTTON has no shortcut";
             var all=new StringBuilder("CURRENT DEVICE: ").Append(device).Append('\n').Append(source).Append('\n');
             var quick=new StringBuilder("CONTROLS - ").Append(device).Append('\n').Append(wheelActive?"WHEEL PROFILE":"LEGACY ROWS FIXED / ACTIONS LIVE").Append('\n');

@@ -13,6 +13,28 @@ namespace LWS.TruckTaxi
         public int OffersGenerated => passengerDispatch.OfferIndex;
         public int OffersDeclined { get; private set; }
         public int OffersExpired { get; private set; }
+        private int consecutiveManualDeclines;
+        private double manualDeclineCooldownUntilGameMinutes;
+        public int ConsecutiveManualDeclines { get { RefreshManualDeclineCooldown(); return consecutiveManualDeclines; } }
+        public double ManualDeclineCooldownRemainingGameMinutes =>
+            Math.Max(0,manualDeclineCooldownUntilGameMinutes-gameMinutes);
+        public bool ManualDeclineCooldownActive => ManualDeclineCooldownRemainingGameMinutes>0;
+
+        private void RefreshManualDeclineCooldown()
+        {
+            if(manualDeclineCooldownUntilGameMinutes<=0 || ManualDeclineCooldownActive) return;
+            manualDeclineCooldownUntilGameMinutes=0;
+            consecutiveManualDeclines=0;
+        }
+        private void RecordManualDecline()
+        {
+            RefreshManualDeclineCooldown();
+            consecutiveManualDeclines=Math.Min(5,consecutiveManualDeclines+1);
+            if(consecutiveManualDeclines<5) return;
+            manualDeclineCooldownUntilGameMinutes=gameMinutes+10;
+            CancelOfferGeneration();
+            DispatchDemandLabel="MANUAL DECLINE COOLDOWN";
+        }
         // Eligibility is evaluated afresh; route validity remains the route service's authority.
         public IReadOnlyList<TruckTaxiPassengerEligibilityRecord> CapturePassengerEligibility()
         {
@@ -125,6 +147,8 @@ namespace LWS.TruckTaxi
         }
         private void TickDispatch(float dt)
         {
+            RefreshManualDeclineCooldown();
+            if(ManualDeclineCooldownActive) { DispatchDemandLabel="MANUAL DECLINE COOLDOWN"; return; }
             if(!RideRequestsEnabled || OffersSuppressed) return;
             DispatchRemaining=Mathf.Max(0,DispatchRemaining-dt*Mathf.Clamp(CurrentDemand()/scheduledDemand,.25f,4));
         }
@@ -139,8 +163,9 @@ namespace LWS.TruckTaxi
             AcceptedFareModifiers=new TruckTaxiFareModifiers(external.EventMultiplier,Mathf.Max(weatherBonus,external.WeatherMultiplier),
                 Mathf.Max(timeBonus,external.OtherMultiplier),external.EventLabel,external.OtherLabel ?? "TIME OF DAY");
             IntercityFareBonusMultiplier=IsIntercityRide ? Mathf.Max(1,config.intercityFareMultiplier) : 1;
+            AcceptedTownFareMultiplier=TownFareMultiplier(TownIdAtPosition?.Invoke(Pickup.StopPosition));
             DemandFareMultiplier=1+(AcceptedFareModifiers.EventMultiplier-1)+(AcceptedFareModifiers.WeatherMultiplier-1)+
-                (AcceptedFareModifiers.OtherMultiplier-1)+(IntercityFareBonusMultiplier-1);
+                (AcceptedFareModifiers.OtherMultiplier-1)+(IntercityFareBonusMultiplier-1)+(AcceptedTownFareMultiplier-1);
         }
         private void ApplyFareBonuses(TaxiFare fare)
         {
@@ -149,6 +174,7 @@ namespace LWS.TruckTaxi
             fare.WeatherBonus=(long)Math.Round(basis*(AcceptedFareModifiers.WeatherMultiplier-1));
             fare.OtherBonus=(long)Math.Round(basis*(AcceptedFareModifiers.OtherMultiplier-1));
             fare.IntercityBonus=(long)Math.Round(basis*(IntercityFareBonusMultiplier-1));
+            fare.TownBonus=(long)Math.Round(basis*(AcceptedTownFareMultiplier-1));
         }
         private static float ValidOfferWeight(float value) => float.IsFinite(value) ? Mathf.Clamp(value,.01f,20) : 1;
     }

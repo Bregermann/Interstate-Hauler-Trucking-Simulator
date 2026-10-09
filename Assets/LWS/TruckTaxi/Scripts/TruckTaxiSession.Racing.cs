@@ -44,6 +44,7 @@ namespace LWS.TruckTaxi
             ShiftEarnings = checked(ShiftEarnings + prizeCents);
             RacePrizeEarningsCents = checked(RacePrizeEarningsCents + prizeCents);
             RaceChaosEarned = checked(RaceChaosEarned + chaosEarned);
+            RecordCareerRaceCompleted();
             Changed?.Invoke();
         }
     }

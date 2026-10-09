@@ -63,6 +63,8 @@ namespace LWS.TruckTaxi
         public static LwsSaveOperationResult GetOrRegisterSaveService(LwsServiceRegistry services, out LwsSaveService saves)
         {
             saves = null;
+            if (TruckTaxiRestartHarness.Requested && !TruckTaxiRestartHarness.Configured)
+                return LwsSaveOperationResult.Failure("Isolated restart validation is not configured: " + TruckTaxiRestartHarness.Failure);
             if (services == null) return LwsSaveOperationResult.Failure("LWS services are unavailable.");
             if (services.TryGet(out ILwsSaveService existing))
             {
@@ -212,6 +214,9 @@ namespace LWS.TruckTaxi
             var selected = SaveService.SelectProfile(profile.stableProfileId);
             if (!selected.Succeeded) return Complete(selected);
             RunProfileId = profile.stableProfileId;
+            if (!host.Session.BindCareerRun(RunProfileId, out string careerError) ||
+                !host.Session.TryInitializeCareer("Driver", host.Player.DefinitionId, out careerError))
+                return Fail("Career initialization failed: " + careerError);
             newGameStarted = profileReady = true;
             host.Session.StartShift();
             RememberCounters();
@@ -228,6 +233,26 @@ namespace LWS.TruckTaxi
         }
         public LwsSaveOperationResult RequestAutosave(string reason = "Vibin boundary") => Initialized && profileReady
             ? SaveService.RequestAutosave(reason) : LwsSaveOperationResult.Failure("No active Vibin run.");
+        public LwsSaveOperationResult SaveBeforeLeaving()
+        {
+            string blocked = SaveBlockReason();
+            if (blocked != null) return Fail(blocked);
+            // Scene teardown cannot leave a throttled autosave waiting for a later frame.
+            return Complete(SaveService.SaveAutosave(RunProfileId, "Return to main menu"));
+        }
+
+        private void OnApplicationPause(bool paused)
+        {
+            if (paused) SaveAtApplicationBoundary("Application suspended");
+        }
+        private void SaveAtApplicationBoundary(string reason)
+        {
+            if (!HasActiveRun || ResumeBlocked || IsBusy || SaveService == null) return;
+            if (SaveBlockReason() == null)
+                Complete(SaveService.SaveAutosave(RunProfileId, reason));
+            else RequestAutosave(reason);
+            // Unsupported in-flight semantics remain deferred, never force-written on suspend.
+        }
         public LwsSaveOperationResult Load(string profileId, int slot = 1) => BeginLoad(profileId, slot, false, false);
         public LwsSaveOperationResult LoadAutosave(string profileId = null) => BeginLoad(profileId ?? SaveService?.ActiveProfileId, 1, true, false);
         public LwsSaveOperationResult LoadLatest()
@@ -350,6 +375,8 @@ namespace LWS.TruckTaxi
         {
             var result = TruckTaxiVibinSaveParticipant.ValidateSnapshot(snapshot, host.Environment.settings, out var payload, out var resume);
             if (!result.Succeeded) return result;
+            if (payload.session.ownedProfile != null && payload.session.ownedProfile.runProfileId != snapshot.profileId)
+                return LwsSaveOperationResult.Failure("Saved Career belongs to another run profile.");
             result = ValidatePayload(payload);
             if (!result.Succeeded) return result;
             if (!string.Equals(SceneManager.GetActiveScene().name, resume.authoredSceneName, StringComparison.OrdinalIgnoreCase))
@@ -377,8 +404,12 @@ namespace LWS.TruckTaxi
             applied = true;
             if (!TryRebaseWorkArea(payload.session, prepared.ResumeContext, origin.GlobalToLocal, out var session))
                 return restoreResult = LwsSaveOperationResult.Failure("Saved work area cannot be rebased to this origin.");
-            if (!host.DriverNeeds.RestorePersistentState(payload.needs, out _) || !host.Session.TryRestorePersistentState(session, out _))
+            if (!host.DriverNeeds.RestorePersistentState(payload.needs, out _) ||
+                !host.Session.TryRestoreCareerRun(prepared.Snapshot.profileId, session, out _))
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin semantic state could not be restored.");
+            if (!host.Session.HasCareerIdentity &&
+                !host.Session.TryInitializeCareer("Driver", host.Player.DefinitionId, out _))
+                return restoreResult = LwsSaveOperationResult.Failure("Legacy Career identity could not be initialized.");
             if (host.ComponentDamage != null && !host.ComponentDamage.Restore(payload.damage))
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin component damage could not be restored.");
             if (payload.hasFuelState && host.Fuel?.Fuel != null)
@@ -415,7 +446,7 @@ namespace LWS.TruckTaxi
             return true;
         }
 
-        public static bool HasUnsafeFare(TruckTaxiState state) => state != TruckTaxiState.Available && state != TruckTaxiState.RideOffered &&
+        public static bool HasUnsafeFare(TruckTaxiState state) => state != TruckTaxiState.Inactive && state != TruckTaxiState.Available && state != TruckTaxiState.RideOffered &&
             state != TruckTaxiState.RideComplete && state != TruckTaxiState.RideFailed && state != TruckTaxiState.PassengerEjected;
         private string SaveBlockReason()
         {
@@ -440,9 +471,8 @@ namespace LWS.TruckTaxi
         {
             if (host == null || !host.Ready || host.Player == null || host.DriverNeeds?.State == null || !loading && !regional.InitialWorldReady)
                 return "Vibin world is not ready.";
-            bool freshInactive = !profileReady && host.Session.State == TruckTaxiState.Inactive;
             if (host.Session.HasStolenPassenger) return "Deliver the stolen passenger before saving or loading.";
-            if (HasUnsafeFare(host.Session.State) && !freshInactive || host.Session.HasPassenger) return FinishRideMessage;
+            if (HasUnsafeFare(host.Session.State) || host.Session.HasPassenger) return FinishRideMessage;
             if (host.Kaiju?.IsCapturingPlayer == true || host.Races?.IsActive == true || host.Session.RaceEventActive ||
                 host.CustomContent?.IsPlaying == true || host.Companions?.IsBusy == true || host.Companions?.ActivePrivateStop != null ||
                 host.DriverNeeds.JugActive || host.DriverNeeds.RoadPepChallenge != null || host.DriverNeeds.IsSleeping ||

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace LWS.TruckTaxi
@@ -7,6 +8,14 @@ namespace LWS.TruckTaxi
     [DisallowMultipleComponent]
     public sealed class TruckTaxiPhysicalFacilities : MonoBehaviour
     {
+        [System.Serializable]
+        public sealed class ProductVisual
+        {
+            public TruckTaxiNeedsItem item;
+            public GameObject prefab;
+        }
+        [Tooltip("Optional art replacements. Product identity, collision, price and interaction stay on the shelf root.")]
+        public ProductVisual[] productVisuals = System.Array.Empty<ProductVisual>();
         private readonly Dictionary<string, GameObject> roots = new Dictionary<string, GameObject>();
         private readonly List<Material> materials = new List<Material>();
         private readonly HashSet<string> toiletIds = new HashSet<string>(System.StringComparer.Ordinal);
@@ -143,18 +152,62 @@ namespace LWS.TruckTaxi
             if (store == null) return;
             TruckTaxiNeedsItem[] products = { TruckTaxiNeedsItem.WaterBottle, TruckTaxiNeedsItem.Snack,
                 TruckTaxiNeedsItem.Soda, TruckTaxiNeedsItem.Sandwich, TruckTaxiNeedsItem.EmptyPissJug, TruckTaxiNeedsItem.EnergyDrink };
+            for (int column = 0; column < 3; column++)
+            {
+                float x = -3.2f + column * 2.9f;
+                Part(room, "Shelf back", new Vector3(x, 1.1f, -2.65f), new Vector3(2.3f, 2.1f, .12f), wall);
+                for (int side = -1; side <= 1; side += 2)
+                    Part(room, "Shelf upright", new Vector3(x + side * 1.1f, 1.1f, -2.2f), new Vector3(.1f, 2.1f, .95f), wall);
+                for (int row = 0; row < 2; row++)
+                    Part(room, "Stock shelf", new Vector3(x, 1f + row * .65f, -2.2f), new Vector3(2.3f, .1f, .95f), fixture);
+            }
             for (int i = 0; i < products.Length; i++)
             {
                 var definition = TruckTaxiNeedsItems.Find(products[i]);
                 if (definition == null || !store.Sells(products[i])) continue;
                 int column = i % 3, row = i / 3;
-                var product = Part(room, "Shelf - " + definition.Name, new Vector3(-3.2f + column * 2.9f, 1f + row * .65f, -2.2f),
-                    new Vector3(.8f, .55f, .7f), row == 0 ? fixture : accent);
+                var product = new GameObject("Shelf - " + definition.Name);
+                product.transform.SetParent(room, false);
+                product.transform.localPosition = new Vector3(-3.2f + column * 2.9f, 1.33f + row * .65f, -2.2f);
+                product.AddComponent<BoxCollider>().size = new Vector3(1.6f, .55f, .6f);
                 var shelf = product.AddComponent<TruckTaxiProductShelf>(); shelf.store = store; shelf.item = products[i];
                 shelf.SetStableId(point.stableId + ".shelf." + definition.StableId);
+                for (int stock = -1; stock <= 1; stock++)
+                    BuildProductVisual(product.transform, products[i], new Vector3(stock * .5f, 0, 0));
+                var label = new GameObject("Product label").AddComponent<TextMeshPro>();
+                label.transform.SetParent(product.transform, false);
+                label.transform.localPosition = new Vector3(0, -.18f, .51f);
+                label.transform.localRotation = Quaternion.Euler(0, 180, 0);
+                label.rectTransform.sizeDelta = new Vector2(2f, .34f);
+                label.fontSize = 2.8f; label.enableAutoSizing = true; label.fontSizeMin = 1.8f; label.fontSizeMax = 2.8f;
+                label.alignment = TextAlignmentOptions.Center; label.color = Color.black;
+                label.text = definition.Name.ToUpperInvariant() + "\n" + TruckTaxiHud.Money(definition.PriceCents);
+                Part(product.transform, "Price card", new Vector3(0, -.18f, .48f), new Vector3(2.1f, .38f, .025f), fixture);
             }
             var register = Part(room, "Checkout register", new Vector3(3.1f, .8f, 2.2f), new Vector3(1.5f, 1.4f, .9f), accent);
             register.AddComponent<TruckTaxiCheckoutRegister>().SetStableId(point.stableId + ".checkout");
+        }
+        private void BuildProductVisual(Transform product, TruckTaxiNeedsItem item, Vector3 position)
+        {
+            GameObject replacement = null;
+            if (productVisuals != null)
+                foreach (var entry in productVisuals)
+                    if (entry != null && entry.item == item && entry.prefab != null) { replacement = entry.prefab; break; }
+            if (replacement != null)
+            {
+                var visual = Instantiate(replacement, product, false);
+                visual.transform.localPosition = position;
+                foreach (var collider in visual.GetComponentsInChildren<Collider>(true)) collider.enabled = false;
+                return;
+            }
+            bool drink = item == TruckTaxiNeedsItem.WaterBottle || item == TruckTaxiNeedsItem.Soda || item == TruckTaxiNeedsItem.EnergyDrink;
+            var placeholder = GameObject.CreatePrimitive(drink ? PrimitiveType.Cylinder : PrimitiveType.Cube);
+            placeholder.name = "Replaceable product visual";
+            placeholder.transform.SetParent(product, false); placeholder.transform.localPosition = position;
+            placeholder.transform.localScale = drink ? new Vector3(.22f, .25f, .22f) : new Vector3(.35f, .5f, .3f);
+            placeholder.GetComponent<Collider>().enabled = false;
+            placeholder.GetComponent<Renderer>().sharedMaterial = item == TruckTaxiNeedsItem.WaterBottle ? glass :
+                item == TruckTaxiNeedsItem.Soda || item == TruckTaxiNeedsItem.Snack ? accent : fixture;
         }
         private void BuildRestroom(Transform room, TruckTaxiServicePoint point)
         {

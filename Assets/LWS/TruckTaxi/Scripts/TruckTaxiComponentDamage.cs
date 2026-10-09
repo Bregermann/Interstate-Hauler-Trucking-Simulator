@@ -86,6 +86,12 @@ namespace LWS.TruckTaxi
         private Rigidbody body;
         private TruckTaxiSnowTraction snow;
         private float originalBrakeTorque, nextTick;
+        private float careerBrakeMultiplier = 1;
+        public void SetCareerBrakeMultiplier(float multiplier)
+        {
+            careerBrakeMultiplier = float.IsFinite(multiplier) ? Mathf.Clamp(multiplier,1,1.5f) : 1;
+            ApplyMechanical();
+        }
 
         public void Initialize(TruckTaxiBootstrap owner)
         {
@@ -213,7 +219,7 @@ namespace LWS.TruckTaxi
             {
                 Damage(tireIds[wheelIndex], severity * 1.35f);
                 Damage(rimIds[wheelIndex], severity * .6f);
-                Damage("suspension." + (front ? "front" : "rear") + "." + side, severity * .55f);
+                Damage(suspensionIds[wheelIndex], severity * .55f);
             }
             else if (front)
             {
@@ -224,6 +230,15 @@ namespace LWS.TruckTaxi
             }
             else if (local.z < -1 && severity > .25f) Damage("fuel.tank", severity * .3f);
         }
+        public string InspectPartAt(Vector3 contact)
+        {
+            if (vehicle == null || !float.IsFinite(contact.x) || !float.IsFinite(contact.y) || !float.IsFinite(contact.z)) return null;
+            int wheel = NearestWheel(contact, 1.15f);
+            if (wheel >= 0) return tireIds[wheel];
+            return BodyPartAtLocalPosition(vehicle.transform.InverseTransformPoint(contact));
+        }
+        public static string BodyPartAtLocalPosition(Vector3 local) => local.z > .4f ?
+            "body.front." + (local.x < 0 ? "left" : "right") : local.z < -1 ? "body.rear" : "body.cab";
         private int NearestWheel(Vector3 contact, float maximumDistance)
         {
             float best = maximumDistance * maximumDistance; int index = -1;
@@ -246,7 +261,7 @@ namespace LWS.TruckTaxi
             if (vehicle == null) return;
             vehicle.powertrain.engine.Damage = 1f - Condition("engine");
             vehicle.powertrain.transmission.Damage = 1f - Condition("transmission");
-            vehicle.brakes.maxTorque = originalBrakeTorque * Mathf.Lerp(.4f, 1f,
+            vehicle.brakes.maxTorque = originalBrakeTorque * careerBrakeMultiplier * Mathf.Lerp(.4f, 1f,
                 (Condition("brakes.front") + Condition("brakes.rear")) * .5f);
             host.Handling?.SetDamageSteeringMultiplier(Mathf.Lerp(.55f, 1f, Condition("steering")));
             for (int i = 0; i < wheels.Count; i++)

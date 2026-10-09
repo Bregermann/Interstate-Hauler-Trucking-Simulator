@@ -40,6 +40,9 @@ namespace LWS.TruckTaxi
         public InputAction OnFootSprint { get; }
         public InputAction Navigate => navigate;
         public bool UsingGamepad => gamepad;
+        public string ActiveDeviceLabel => !gamepad ? "KEYBOARD / MOUSE" : GamepadFamily(lastGamepadLayout);
+        public float LastMeaningfulInputAt { get; private set; } = float.NegativeInfinity;
+        private string lastGamepadLayout;
         public Transform FocusRoot => scope;
         private InputAction navigate;
         private Transform scope;
@@ -109,14 +112,44 @@ namespace LWS.TruckTaxi
         { var a=Actions.AddAction(name,InputActionType.Button,keyboard); if(pad!=null) a.AddBinding(pad); return a; }
         private void RememberDevice(InputAction.CallbackContext context)
         {
-            if(context.action==CabMouseLook && context.ReadValue<Vector2>().sqrMagnitude<.001f) return;
-            gamepad=context.control.device is Gamepad;
+            if(context.valueType==typeof(Vector2) && !MeaningfulDeviceMotion(context.ReadValue<Vector2>(),context.control.device is Gamepad)) return;
+            if(context.valueType==typeof(float) && Mathf.Abs(context.ReadValue<float>())<.2f) return;
+            RememberMeaningfulDevice(context.control.device);
         }
+        private void RememberMeaningfulDevice(InputDevice device)
+        {
+            gamepad=device is Gamepad;
+            if (gamepad) lastGamepadLayout=device.layout;
+            LastMeaningfulInputAt=Time.unscaledTime;
+        }
+        public static string GamepadFamily(string layout)
+        {
+            if (string.IsNullOrEmpty(layout)) return "GENERIC GAMEPAD";
+            if (layout.IndexOf("DualShock",System.StringComparison.OrdinalIgnoreCase)>=0 ||
+                layout.IndexOf("DualSense",System.StringComparison.OrdinalIgnoreCase)>=0) return "PLAYSTATION-STYLE CONTROLLER";
+            if (layout.IndexOf("Switch",System.StringComparison.OrdinalIgnoreCase)>=0 ||
+                layout.IndexOf("Nintendo",System.StringComparison.OrdinalIgnoreCase)>=0) return "NINTENDO-STYLE CONTROLLER";
+            if (layout.IndexOf("XInput",System.StringComparison.OrdinalIgnoreCase)>=0 ||
+                layout.IndexOf("Xbox",System.StringComparison.OrdinalIgnoreCase)>=0) return "XBOX-STYLE CONTROLLER";
+            return "GENERIC GAMEPAD";
+        }
+        public static bool MeaningfulDeviceMotion(Vector2 motion,bool isGamepad) =>
+            float.IsFinite(motion.x) && float.IsFinite(motion.y) && motion.sqrMagnitude >= (isGamepad ? .25f*.25f : 1f);
         public void RefreshDeviceFromHardware()
         {
-            if(Gamepad.current!=null && Gamepad.current.wasUpdatedThisFrame) gamepad=true;
-            if(Keyboard.current!=null && Keyboard.current.wasUpdatedThisFrame ||
-                Mouse.current!=null && Mouse.current.wasUpdatedThisFrame) gamepad=false;
+            var pad=Gamepad.current;
+            if(pad!=null && pad.wasUpdatedThisFrame &&
+                (MeaningfulDeviceMotion(pad.leftStick.ReadValue(),true) || MeaningfulDeviceMotion(pad.rightStick.ReadValue(),true) ||
+                pad.buttonSouth.wasPressedThisFrame || pad.buttonNorth.wasPressedThisFrame || pad.buttonEast.wasPressedThisFrame ||
+                pad.buttonWest.wasPressedThisFrame || pad.startButton.wasPressedThisFrame || pad.selectButton.wasPressedThisFrame ||
+                pad.leftShoulder.wasPressedThisFrame || pad.rightShoulder.wasPressedThisFrame ||
+                pad.leftStickButton.wasPressedThisFrame || pad.rightStickButton.wasPressedThisFrame ||
+                MeaningfulDeviceMotion(pad.dpad.ReadValue(),true) || pad.leftTrigger.wasPressedThisFrame || pad.rightTrigger.wasPressedThisFrame)) RememberMeaningfulDevice(pad);
+            var mouse=Mouse.current;
+            if(Keyboard.current?.anyKey.wasPressedThisFrame==true || mouse!=null &&
+                (MeaningfulDeviceMotion(mouse.delta.ReadValue(),false) || mouse.leftButton.wasPressedThisFrame ||
+                mouse.rightButton.wasPressedThisFrame || mouse.middleButton.wasPressedThisFrame || mouse.scroll.ReadValue().sqrMagnitude>1))
+                RememberMeaningfulDevice(Keyboard.current?.anyKey.wasPressedThisFrame==true ? (InputDevice)Keyboard.current : mouse);
         }
         public void ToggleRideRequestsFor(TruckTaxiSession session)
         {

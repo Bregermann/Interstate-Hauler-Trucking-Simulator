@@ -110,6 +110,7 @@ namespace LWS.TruckTaxi
             if (!rivalFares.Remove(fare.Id)) return false;
             StolenPassengerFare = null;
             ShiftEarnings += fare.PayoutCents;
+            RecordCareerStolenFareCompleted();
             React("STOLEN PASSENGER DELIVERED");
             PublishRivalPassengerChange(releaseSuppression: true);
             return true;

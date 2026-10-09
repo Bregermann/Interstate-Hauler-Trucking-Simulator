@@ -75,6 +75,19 @@ namespace LWS.TruckTaxi
             else { fallbackSubtitle=passenger.passengerName+": "+text; fallbackUntil=Time.time+Mathf.Clamp(text.Length/14f,3,12); }
             SpokenLines++; return true;
         }
+        public bool SpeakAuthoredText(string speaker, string text, int requestedPriority = 30)
+        {
+            if (string.IsNullOrWhiteSpace(text) || IsPlaying && requestedPriority < priority) return false;
+            Stop(); priority = requestedPriority; LastLine = null;
+            // Explicit text-only authoring must never select an unrelated generated voice clip.
+            if (output != null) output.Play(speaker ?? string.Empty, text, null);
+            else
+            {
+                fallbackSubtitle = string.IsNullOrWhiteSpace(speaker) ? text : speaker + ": " + text;
+                fallbackUntil = Time.time + Mathf.Clamp(text.Length / 14f, 3, 12);
+            }
+            SpokenLines++; return true;
+        }
         public void ResetRide() { Stop(); cooldowns.Clear(); used.Clear(); }
         public void Stop() { output?.Stop(); fallbackUntil=0; fallbackSubtitle=""; priority=0; }
         public void SetPaused(bool paused) => output?.SetPaused(paused);

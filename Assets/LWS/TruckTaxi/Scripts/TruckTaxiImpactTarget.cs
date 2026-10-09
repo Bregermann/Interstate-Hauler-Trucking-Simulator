@@ -22,15 +22,34 @@ namespace LWS.TruckTaxi
             if (kind == TaxiImpactKind.Pedestrian) return false;
             if (kind == TaxiImpactKind.Property)
             {
-                if (Damaged) return false;
-                Damaged = true;
+                var prop = GetComponent<TruckTaxiBreakawayProp>();
+                if (prop != null)
+                {
+                    if (!prop.TryReceiveHit()) return false;
+                    return MarkPropertyDamage();
+                }
+                if (!MarkPropertyDamage()) return false;
                 if (body != null) body.isKinematic = false;
             }
             return true;
         }
+        // The return value is scoring eligibility, not whether a previously damaged prop lost durability.
+        public bool Hit(Rigidbody source, Vector3 contact, float speed)
+        {
+            if (kind != TaxiImpactKind.Property) return Hit();
+            var prop = GetComponent<TruckTaxiBreakawayProp>();
+            if (prop == null) return Hit();
+            return prop.TryReceiveImpact(source, contact, speed) && MarkPropertyDamage();
+        }
+        internal bool MarkPropertyDamage()
+        {
+            if (kind != TaxiImpactKind.Property || Damaged) return false;
+            Damaged = true; return true;
+        }
         public void ResetTarget()
         {
-            GetComponent<TruckTaxiBreakawayProp>()?.ResetProp();
+            var prop = GetComponent<TruckTaxiBreakawayProp>();
+            if (prop != null) { prop.ResetProp(); Damaged = false; return; }
             Damaged = false;
             if (body != null) { body.linearVelocity = Vector3.zero; body.angularVelocity = Vector3.zero; }
             transform.SetPositionAndRotation(home, rotation);

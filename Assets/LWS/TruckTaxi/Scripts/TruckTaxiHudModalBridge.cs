@@ -45,7 +45,7 @@ namespace LWS.TruckTaxi
         private bool ForeignModalOpen => host == null || hud == null || host.Session == null ||
             hud.DebugOverlayOpen || hud.FullMap?.IsOpen == true || hud.Planning?.IsOpen == true || hud.RadioPanel?.IsOpen == true ||
             hud.GPSSettings?.IsOpen == true || hud.AudioSettings?.IsOpen == true || hud.EnvironmentNeeds?.IsOpen == true ||
-            hud.Controls?.IsOpen == true || hud.CabLookSettings?.IsOpen == true || host.Races?.MenuOpen == true ||
+            hud.Controls?.IsOpen == true || hud.Career?.IsOpen == true || hud.DriverAppearance?.IsOpen == true || hud.CabLookSettings?.IsOpen == true || host.Races?.MenuOpen == true ||
             host.Fuel?.IsRescuing == true || host.Roadside?.IsRecovering == true || host.FastTravel?.IsTravelling == true ||
             host.Kaiju?.IsCapturingPlayer == true || host.DriverNeeds?.IsSleeping == true ||
             host.CustomContent?.IsPlaying == true || host.CustomContent?.OwnsInputHold == true ||

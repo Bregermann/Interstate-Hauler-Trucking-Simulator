@@ -6,6 +6,7 @@ using UnityEngine.UI;
 namespace LWS.TruckTaxi
 {
     // A selection overlay on Compass's existing map, never another map renderer.
+    [DefaultExecutionOrder(100)]
     public sealed class TruckTaxiWorkAreaMapPanel : MonoBehaviour
     {
         private TruckTaxiBootstrap host;
@@ -90,14 +91,19 @@ namespace LWS.TruckTaxi
                 }
                 graphic.transform.SetAsLastSibling();
             }
-            if(graphic!=null) graphic.SetArea(host.Session.WorkArea,host.GPS.PreviewCamera);
-            RefreshZones();
             if(!picking || IsOpen || Mouse.current==null || !Mouse.current.leftButton.wasPressedThisFrame || map==null) return;
             if(RectTransformUtility.ScreenPointToLocalPointInRectangle(map,Mouse.current.position.ReadValue(),null,out var local) && map.rect.Contains(local))
             {
                 var uv=new Vector2((local.x-map.rect.xMin)/map.rect.width,(local.y-map.rect.yMin)/map.rect.height);
                 if(ProjectGround(host.GPS.PreviewCamera,uv,out var point)) SetCenter(point);
             }
+        }
+        private void LateUpdate()
+        {
+            // Compass moves its capture camera in LateUpdate. Project against that same frame's map.
+            if(host?.GPS?.FullMapOpen!=true || graphic==null) return;
+            graphic.SetArea(host.Session.WorkArea,host.GPS.PreviewCamera);
+            RefreshZones();
         }
         private void RefreshZones()
         {
@@ -138,13 +144,26 @@ namespace LWS.TruckTaxi
             Vector2 c=default,r=default;
             if(visible)
             {
-                var v=camera.WorldToViewportPoint(area.center);
-                var edge=camera.WorldToViewportPoint(area.center+camera.transform.right*area.radius);
-                var up=camera.WorldToViewportPoint(area.center+camera.transform.up*area.radius);
-                c=new Vector2(v.x,v.y); r=new Vector2(Mathf.Abs(edge.x-v.x),Mathf.Abs(up.y-v.y));
+                visible=ProjectFootprint(camera,area.center,area.radius,out c,out r);
             }
             if(show==visible && center==c && radii==r) return;
             show=visible; center=c; radii=r; SetVerticesDirty();
+        }
+        public static bool ProjectFootprint(Camera camera,Vector3 position,float radius,out Vector2 center,out Vector2 radii)
+        {
+            center=radii=default;
+            if(camera==null || !float.IsFinite(radius) || radius<=0) return false;
+            var v=camera.WorldToViewportPoint(position);
+            var edge=camera.WorldToViewportPoint(position+camera.transform.right*radius);
+            var up=camera.WorldToViewportPoint(position+camera.transform.up*radius);
+            center=new Vector2(v.x,v.y);
+            radii=new Vector2(Mathf.Abs(edge.x-v.x),Mathf.Abs(up.y-v.y));
+            if(v.z<=0 || !float.IsFinite(center.x) || !float.IsFinite(center.y) ||
+                !float.IsFinite(radii.x) || !float.IsFinite(radii.y) || radii.x<=0 || radii.y<=0) return false;
+            // Reject offscreen ellipses, never clamp their center. RectMask2D clips partial intersections.
+            float x=(Mathf.Clamp(center.x,0,1)-center.x)/radii.x;
+            float y=(Mathf.Clamp(center.y,0,1)-center.y)/radii.y;
+            return x*x+y*y<=1;
         }
         protected override void OnPopulateMesh(VertexHelper vh)
         {

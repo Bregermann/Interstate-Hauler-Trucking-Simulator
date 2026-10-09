@@ -155,13 +155,16 @@ namespace LWS.TruckTaxi
             return true;
         }
         public bool RouteToSleep() => RouteToService(TruckTaxiServiceCapability.Sleep);
+        private bool SleepActionInProgress => State?.JugActive == true || RoadPepChallenge != null ||
+            host?.Companions?.SleeperSequenceActive == true || host?.CustomContent?.IsPlaying == true ||
+            host?.CustomContent?.OwnsInputHold == true;
         public string SleepFailureReason(int hours, bool prepaidMotel = false)
         {
             if (State == null || host?.Ready != true || environment?.Clock == null || body == null || IsSleeping)
                 return "Sleep unavailable.";
             if (!TruckTaxiFatigueRules.IsSleepDuration(hours)) return "Choose 2, 4 or 8 hours.";
             if (!TruckTaxiFatigueRules.CanSleepInSession(host.Session.State)) return "FINISH CURRENT RIDE BEFORE SLEEPING.";
-            if (State.JugActive || RoadPepChallenge != null || host.Companions?.ActivePrivateStop != null || host.CustomContent?.IsPlaying == true)
+            if (SleepActionInProgress)
                 return "Finish current action before sleeping.";
             var point = NearestServiceAtPosition(TruckTaxiServiceCapability.Sleep);
             if (point == null || string.IsNullOrWhiteSpace(point.stableId)) return "Park in a sleep service bay first.";
@@ -200,7 +203,7 @@ namespace LWS.TruckTaxi
         {
             if (State == null || host?.Ready != true || environment?.Clock == null || body == null || IsSleeping ||
                 !TruckTaxiFatigueRules.IsSleepDuration(hours) ||
-                !TruckTaxiFatigueRules.CanSleepInSession(host.Session.State) || State.JugActive ||
+                !TruckTaxiFatigueRules.CanSleepInSession(host.Session.State) || SleepActionInProgress ||
                 body.linearVelocity.magnitude > TruckTaxiServicePoint.ServiceStopSpeedMetersPerSecond ||
                 host.Player?.TruckControlController?.CurrentState.parkingBrakeOn != true)
             { Feedback = "Park, set the brake and finish the current ride before sleeping."; return false; }
@@ -340,12 +343,12 @@ namespace LWS.TruckTaxi
         public bool RouteToService(TruckTaxiServiceCapability capability)
         {
             if (host?.GPS == null || body == null) return false;
-            if (host.Companions?.ActivePrivateStop != null)
-            { Feedback = "Complete the private stop before changing service routes."; return false; }
             var point = TruckTaxiServicePoint.Nearest(body.position, capability, host.gameObject.scene,
                 capability == (TruckTaxiServiceCapability.Food | TruckTaxiServiceCapability.Drink));
             if (point == null) { Feedback = "No compatible service is available in this level."; return false; }
-            host.GPS.SetServiceDestination(point.stableId, point.displayName, point.Position);
+            if (!host.GPS.TrySetServiceDestination(point.stableId, point.displayName, point.Position,
+                TruckTaxiServicePresentation.MarkerType(point.capabilities)))
+            { Feedback = "No valid route to this service is available."; return false; }
             Feedback = "Service route: " + point.displayName; return true;
         }
         public TruckTaxiServicePoint ServiceInReach(TruckTaxiServiceCapability capability)
@@ -503,16 +506,9 @@ namespace LWS.TruckTaxi
         public void RestoreRideRoute()
         {
             RoutedBathroom = null;
-            var privateStop = host.Companions?.ActivePrivateStop;
-            if (privateStop != null)
-            {
-                if (host.GPS.IsServiceDestination && host.GPS.TargetId == privateStop.stableId)
-                {
-                    if (!host.GPS.GuidanceSuppressed || host.GPS.RestoreServiceRoute()) return;
-                }
-                host.GPS.SetPrivateStopDestination(privateStop);
-                return;
-            }
+            if (host?.GPS == null) return;
+            // CompanionTask survives beneath PlayerService. Let GPS restore its existing lease
+            // (or a higher-priority ride intent), never replace another owner's token here.
             host.GPS.ClearPlayerServiceDestination();
             host.GPS.RestoreRideRoute();
         }

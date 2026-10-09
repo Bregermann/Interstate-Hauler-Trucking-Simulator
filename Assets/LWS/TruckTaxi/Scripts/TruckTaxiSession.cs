@@ -76,9 +76,9 @@ namespace LWS.TruckTaxi
 
     public sealed class TaxiFare
     {
-        public long Base, Distance, Time, Requests, Diversions, Chaos, Tip, Penalties, EventBonus, WeatherBonus, OtherBonus, IntercityBonus;
+        public long Base, Distance, Time, Requests, Diversions, Chaos, Tip, Penalties, EventBonus, WeatherBonus, OtherBonus, IntercityBonus, TownBonus;
         public bool IsCancellation;
-        public long Total => Math.Max(0, Base + Distance + Time + Requests + Diversions + Chaos + Tip + EventBonus + WeatherBonus + OtherBonus + IntercityBonus - Penalties);
+        public long Total => Math.Max(0, Base + Distance + Time + Requests + Diversions + Chaos + Tip + EventBonus + WeatherBonus + OtherBonus + IntercityBonus + TownBonus - Penalties);
         public int Rating;
         public int ChaosScore;
         public int Score;
@@ -265,6 +265,8 @@ namespace LWS.TruckTaxi
             RegionResolver = regionAtPosition;
             Capabilities.Register(TruckTaxiObjectiveCapability.Timer,1);
             Capabilities.Register(TruckTaxiObjectiveCapability.Chaos,1);
+            RequestCreated+=RecordCareerGoalAttempt;
+            DiversionOffered+=RecordCareerGoalOffer;
         }
         private void SetState(TruckTaxiState value, bool scheduleDispatch=true)
         {
@@ -302,7 +304,7 @@ namespace LWS.TruckTaxi
         private bool CompleteOffer(PassengerProfile passenger, TruckTaxiRideLocation pickup,
             TruckTaxiRideLocation destination, Vector3 origin, TruckTaxiRouteLeg toPickup, TruckTaxiRouteLeg trip)
         {
-            if (State != TruckTaxiState.Available || !RideRequestsEnabled || OffersSuppressed) return false;
+            if (State != TruckTaxiState.Available || !RideRequestsEnabled || OffersSuppressed || ManualDeclineCooldownActive) return false;
             Passenger = passenger; Pickup = pickup; Destination = destination;
             passengerDispatch.RecordOffered(passenger.passengerId,passenger.DispatchArchetype,gameMinutes);
             declinedPassengerId=declinedPickupId=declinedDestinationId=null;
@@ -318,6 +320,7 @@ namespace LWS.TruckTaxi
                 toPickup, trip, config);
             OfferDuration=Mathf.Max(.1f,config.offerDuration);
             OfferTimerPaused=false;
+            offeredCareerGoals.Clear();
             requests.Clear(); chaos = 0; TrackedCollisions = 0; ElapsedRide = DistanceDriven = 0;
             Satisfaction = Passenger.baseSatisfaction; MechanicFareAdjustment=0;
             CaptureFareModifiers();
@@ -426,6 +429,7 @@ namespace LWS.TruckTaxi
         {
             if (!CanRespondToOffer) return false;
             if (Offer == null) return false;
+            consecutiveManualDeclines=0; manualDeclineCooldownUntilGameMinutes=0;
             Passenger = Offer.Passenger; Pickup = Offer.Pickup; Destination = Offer.Destination;
             CurrentRideId=Guid.NewGuid().ToString("N");
             if(!string.IsNullOrWhiteSpace(Passenger.passengerId)) acceptedPassengerIds.Add(Passenger.passengerId);
@@ -450,13 +454,14 @@ namespace LWS.TruckTaxi
             if(manual)
             {
                 OffersDeclined++;
+                RecordManualDecline();
                 declinedPassengerId=Passenger?.passengerId; declinedPickupId=Pickup?.locationId; declinedDestinationId=Destination?.locationId;
                 DispatchRemaining=LastDispatchDelay=0;
             }
             if(expired) OffersExpired++;
             Passenger = null; Pickup = Destination = null; Offer = null; IsIntercityRide=false;
             SetState(TruckTaxiState.Available,!manual);
-            if(manual) { RequestRideOffer(); Changed?.Invoke(); }
+            if(manual && !ManualDeclineCooldownActive) { RequestRideOffer(); Changed?.Invoke(); }
         }
         public void ContinueShift()
         {
@@ -500,8 +505,9 @@ namespace LWS.TruckTaxi
         }
         public void Tick(float deltaTime, Vector3 playerPosition, float speed, float acceleration, bool onRoad)
         {
-            if (deltaTime <= 0 || State == TruckTaxiState.Inactive) return;
+            if (!float.IsFinite(deltaTime) || deltaTime <= 0 || State == TruckTaxiState.Inactive) return;
             if(State==TruckTaxiState.RideOffered && OfferTimerPaused) return;
+            careerStatistics.playtimeSeconds=Math.Min(double.MaxValue,careerStatistics.playtimeSeconds+deltaTime);
             if(State!=TruckTaxiState.DrivingToDestination) lastPosition=playerPosition;
             if(!externalClock) gameMinutes+=deltaTime/60.0;
             StateAge += deltaTime; ReactionAge += deltaTime;
@@ -678,6 +684,7 @@ namespace LWS.TruckTaxi
                 type == TaxiEventType.PedestrianHit || type == TaxiEventType.PropDamage;
             if (impact && type!=TaxiEventType.PedestrianHit && impactSpeed < config.minimumImpactSpeed) return;
             chaos += scoreOverride >= 0 ? scoreOverride : config.Score(type);
+            RecordCareerDrivingEvent(type);
             if (impact)
             {
                 TrackedCollisions++;
@@ -759,6 +766,9 @@ namespace LWS.TruckTaxi
         {
             if (request.State != TaxiRequestState.Active) return;
             request.State = success ? TaxiRequestState.Succeeded : TaxiRequestState.Failed;
+            var goalStats=CareerGoal(request.Definition.StableId);
+            if(success) goalStats.completed=IncrementCareerCount(goalStats.completed);
+            else goalStats.failed=IncrementCareerCount(goalStats.failed);
             request.FailureReason=success ? null : request.Expired ? "EXPIRED" : failureReason ?? "FAILED";
             if(success && request.IsArrivalGoal) request.Progress=request.Target;
             if(success && request.StopPoint!=null) chaos+=request.StopPoint.chaosReward;
@@ -832,20 +842,40 @@ namespace LWS.TruckTaxi
             ShiftEarnings += LastFare.Total; ShiftScore += LastFare.Score; CompletedRides++;
             passengerDispatch.RecordCompleted(Passenger.passengerId);
             TotalStarsEarned+=LastFare.Rating;
+            if(completedIntercity) careerStatistics.intercityRides=IncrementCareerCount(careerStatistics.intercityRides);
+            else careerStatistics.localRides=IncrementCareerCount(careerStatistics.localRides);
+            switch(LastFare.Rating)
+            {
+                case 1: careerStatistics.oneStar=IncrementCareerCount(careerStatistics.oneStar); break;
+                case 2: careerStatistics.twoStars=IncrementCareerCount(careerStatistics.twoStars); break;
+                case 3: careerStatistics.threeStars=IncrementCareerCount(careerStatistics.threeStars); break;
+                case 4: careerStatistics.fourStars=IncrementCareerCount(careerStatistics.fourStars); break;
+                case 5: careerStatistics.fiveStars=IncrementCareerCount(careerStatistics.fiveStars); break;
+            }
             if(Passenger!=null && Destination!=null && !string.IsNullOrWhiteSpace(Passenger.passengerId))
                 continuity[Passenger.passengerId]=new PassengerContinuity { LastRideLocationId=Destination.locationId,
                     LastDropoffPosition=Destination.StopPosition, LastKnownDistrict=Destination.district,LastDropoffMinutes=gameMinutes };
             RecordRide(TruckTaxiRideOutcome.Completed,null);
             SetState(TruckTaxiState.RideComplete);
         }
-        public void FailRide(string reason)
+        private bool cancellingPickup;
+        public bool CancelPickup()
         {
+            if(cancellingPickup || State!=TruckTaxiState.DrivingToPickup || HasPassenger) return false;
+            cancellingPickup=true;
+            try { FailRideCore("Pickup cancelled by driver.",true); return true; }
+            finally { cancellingPickup=false; }
+        }
+        public void FailRide(string reason) => FailRideCore(reason,false);
+        private void FailRideCore(string reason,bool driverCancelled)
+        {
+            if(cancellingPickup && !driverCancelled) return;
             if (State != TruckTaxiState.DrivingToPickup && State != TruckTaxiState.PassengerBoarding && !HasPassenger) return;
             if(HasPassenger) { RequestSafeDrop(reason); return; }
             PendingDiversion=null;
             foreach (var r in requests) Resolve(r,false,reason);
             React(reason);
-            bool cancelled=(State==TruckTaxiState.DrivingToPickup || State==TruckTaxiState.PassengerBoarding) &&
+            bool cancelled=driverCancelled || (State==TruckTaxiState.DrivingToPickup || State==TruckTaxiState.PassengerBoarding) &&
                 reason=="Passenger cancelled: pickup wait expired.";
             FailedRides++; if(cancelled) PickupCancellations++;
             if(cancelled && Passenger!=null && Pickup!=null && !string.IsNullOrWhiteSpace(Passenger.passengerId))
@@ -858,6 +888,9 @@ namespace LWS.TruckTaxi
         private void RecordRide(TruckTaxiRideOutcome outcome, string reason)
         {
             if(string.IsNullOrEmpty(CurrentRideId)) return;
+            careerStatistics.chaosScore=AddCareerCount(careerStatistics.chaosScore,Math.Max(0,ChaosScore));
+            if(outcome==TruckTaxiRideOutcome.PickupCancelled || outcome==TruckTaxiRideOutcome.PassengerCancelled)
+                careerStatistics.cancelledRides=IncrementCareerCount(careerStatistics.cancelledRides);
             rideHistory.Add(new TruckTaxiRideRecord(CurrentRideId,Passenger?.passengerId,Pickup?.locationId,
                 Destination?.locationId,outcome,reason,gameMinutes,IsRepeatPassenger,SpecialAppreciationAccepted,
                 ElapsedRide,DistanceDriven,ChaosScore,TrackedCollisions,ridePedestriansHit,rideSpecialStopsCompleted,rideJugsSucceeded,

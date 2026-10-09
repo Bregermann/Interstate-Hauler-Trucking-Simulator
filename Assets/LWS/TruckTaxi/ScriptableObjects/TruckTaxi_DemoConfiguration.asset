@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 681f95181c2614a4bb4162a668405f60, type: 3}
   m_Name: TruckTaxi_DemoConfiguration
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiConfiguration
+  companionReactions: []
+  customCompanionInteraction: {fileID: 0}
+  customCompanionVariantInteractions: []
   passengers:
   - {fileID: 11400000, guid: ca28f1b00a01d994599e0cab8cab0a5a, type: 2}
   - {fileID: 11400000, guid: 009ae3a402dabfb4494fd854c44eae28, type: 2}
@@ -46,8 +49,15 @@ MonoBehaviour:
   pickupTargetMinimumSeconds: 20
   pickupTargetMaximumSeconds: 90
   pickupHardMaximumSeconds: 180
-  intercityRideChance: 0.1
-  localOffersAfterIntercity: 3
+  intercityRideChance: 0.25
+  localOffersAfterIntercity: 2
+  intercityDryStreakThreshold: 3
+  veryHighDemandDelay: {x: 5, y: 20}
+  highDemandDelay: {x: 10, y: 35}
+  normalDemandDelay: {x: 25, y: 75}
+  lowDemandDelay: {x: 60, y: 150}
+  veryLowDemandDelay: {x: 150, y: 300}
+  defaultWorkAreaRadius: 500
   speedwayPassengerWeight: 3
   racingSpeedwayDestinationChance: 0.6
   offerPickupCandidateLimit: 6

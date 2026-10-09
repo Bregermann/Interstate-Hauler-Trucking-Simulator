@@ -11,8 +11,9 @@ namespace LWS.TruckTaxi
         private TruckTaxiBootstrap host;
         private TruckTaxiHud hud;
         private RectTransform panel;
-        private static readonly string[] Tabs = { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD", "KAIJU", "EXTRAS", "ANALYTICS" };
-        private readonly RectTransform[] pages = new RectTransform[8];
+        private static readonly string[] Tabs = { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD", "KAIJU", "EXTRAS", "ANALYTICS", "RACES", "GAMEPLAY" };
+        private readonly RectTransform[] pages = new RectTransform[10];
+        private TextMeshProUGUI raceText;
         private TextMeshProUGUI heading, status, clockText, eventText, zoneText, countsText;
         private TextMeshProUGUI[] eventRows;
         private TextMeshProUGUI kaijuText, extrasText;
@@ -55,15 +56,15 @@ namespace LWS.TruckTaxi
             for (int i = 0; i < tabs.Length; i++)
             {
                 int index = i;
-                float width = .94f / tabs.Length, left = .03f + i * width;
-                var tabButton = view.Button(panel, tabs[i], new Vector2(left, .78f), new Vector2(left + width - .008f, .86f), () => ShowPage(index));
+                float width = .94f / 5, left = .03f + (i%5) * width, bottom=.79f-(i/5)*.08f;
+                var tabButton = view.Button(panel, tabs[i], new Vector2(left, bottom), new Vector2(left + width - .008f, bottom+.07f), () => ShowPage(index));
                 var tabText = tabButton.GetComponentInChildren<TextMeshProUGUI>();
                 if (tabText != null) { tabText.enableAutoSizing = true; tabText.fontSizeMin = 10; tabText.fontSizeMax = 22; }
-                pages[i] = TruckTaxiHud.Rect(panel, tabs[i] + " tools", new Vector2(.03f, .17f), new Vector2(.97f, .76f));
+                pages[i] = TruckTaxiHud.Rect(panel, tabs[i] + " tools", new Vector2(.03f, .17f), new Vector2(.97f, .69f));
                 pages[i].gameObject.SetActive(i == 0);
             }
             status = view.Text(panel, "Mega debug status", new Vector2(.035f, .035f), new Vector2(.965f, .155f), 23);
-            BuildClock(); BuildEvents(); BuildWeather(); BuildExtremes(); BuildWorld(); BuildKaiju(); BuildExtras(); BuildAnalytics();
+            BuildClock(); BuildEvents(); BuildWeather(); BuildExtremes(); BuildWorld(); BuildKaiju(); BuildExtras(); BuildAnalytics(); BuildRaces();
             panel.gameObject.SetActive(false);
         }
         public void Open()
@@ -81,6 +82,8 @@ namespace LWS.TruckTaxi
             hud.UIInput?.Focus(null);
         }
         public void Toggle() { if (IsOpen) Close(); else Open(); }
+        public void AttachGameplay(TruckTaxiDebugPanel gameplay)
+        { if(IsAvailable && pages[9]!=null) gameplay?.AttachAsPage(pages[9],Close); }
         private void ShowPage(int index)
         {
             page = index;
@@ -249,9 +252,9 @@ namespace LWS.TruckTaxi
         private void BuildExtras()
         {
             var root=pages[6];
-            extrasText=hud.Text(root,"Addendum state",new Vector2(.02f,.72f),new Vector2(.98f,.99f),22);
+            extrasText=hud.Text(root,"Addendum state",new Vector2(.02f,.76f),new Vector2(.98f,.99f),22);
             extrasText.enableAutoSizing=true; extrasText.fontSizeMin=14; extrasText.fontSizeMax=22;
-            string[] labels={"START ROAD PEP","PERFECT","MESSY","BOTCHED","CLEAR ROAD PEP","WORLD COLLIDERS","RADIO BULLETIN","ALERT STACK TEST","RACE REGISTRATION"};
+            string[] labels={"START ROAD PEP","PERFECT","MESSY","BOTCHED","CLEAR ROAD PEP","WORLD COLLIDERS","RADIO BULLETIN","ALERT STACK TEST","RACE REGISTRATION","NEEDS / SERVICES"};
             Action[] commands={()=>{Close(); host.SetPaused(false); host.DriverNeeds?.DebugStartRoadPep();},
                 ()=>host.DriverNeeds?.DebugForceRoadPep(100),()=>host.DriverNeeds?.DebugForceRoadPep(55),
                 ()=>host.DriverNeeds?.DebugForceRoadPep(10),()=>host.DriverNeeds?.DebugClearRoadPep(),
@@ -260,8 +263,9 @@ namespace LWS.TruckTaxi
                 ()=>{hud.Alerts.Publish("test-critical","EMERGENCY ALERT TEST",TruckTaxiAlertPriority.Critical);
                     hud.Alerts.Publish("test-secondary","Secondary notification test");
                     hud.Alerts.Publish("test-queued","Queued notification test"); Close();},
-                ()=>{Close(); host.Races?.OpenRegistration();}};
-            ToolGrid(root,labels,commands,.66f);
+                ()=>{Close(); host.Races?.OpenRegistration();},
+                ()=>{Close(); hud.EnvironmentNeeds?.OpenDeveloperTools();}};
+            ToolGrid(root,labels,commands,.72f);
         }
         private void ToolGrid(Transform root,string[] labels,Action[] actions,float top)
         {
@@ -270,6 +274,28 @@ namespace LWS.TruckTaxi
                 int n=i; float left=.02f+(i%3)*.326f, y=top-(i/3)*.18f;
                 hud.Button(root,labels[i],new Vector2(left,y-.14f),new Vector2(left+.31f,y),()=>actions[n]());
             }
+        }
+        private void BuildRaces()
+        {
+            var root=pages[8];
+            raceText=hud.Text(root,"Race diagnostics",new Vector2(.02f,.76f),new Vector2(.98f,.99f),22);
+            raceText.enableAutoSizing=true; raceText.fontSizeMin=16;
+            string[] labels={"START FLAGSHIP","RESTART","RESET SESSION","0 RIVALS","10 RIVALS","20 RIVALS",
+                "PREV CHECKPOINT","NEXT CHECKPOINT","REMOVE RIVALS","SPAWN RIVALS","CRASH RIVAL 1","FORCE FINISH"};
+            Action[] actions={
+                ()=>Run(()=>host.Races?.DebugStartFlagship()==true,"Debug race started; no payout"),
+                ()=>Run(()=>host.Races?.DebugRestartFlagship()==true,"Debug race restarted"),
+                ()=>Run(()=>host.Races?.DebugResetRace()==true,"Race reset"),
+                ()=>Run(()=>host.Races?.DebugSetRivalCount(0)==true,"Next debug race: 0 rivals"),
+                ()=>Run(()=>host.Races?.DebugSetRivalCount(10)==true,"Next debug race: 10 rivals"),
+                ()=>Run(()=>host.Races?.DebugSetRivalCount(20)==true,"Next debug race: 20 rivals"),
+                ()=>Run(()=>host.Races?.DebugBackCheckpoint()==true,"Previous checkpoint"),
+                ()=>Run(()=>host.Races?.DebugAdvanceCheckpoint()==true,"Next checkpoint"),
+                ()=>Run(()=>host.Races?.DebugRemoveRivals()==true,"Rivals removed"),
+                ()=>Run(()=>host.Races?.DebugSpawnRivals()==true,"Rivals spawned"),
+                ()=>Run(()=>host.Races?.DebugCrashRival(0)==true,"Rival crash applied"),
+                ()=>Run(()=>host.Races?.DebugForceFinish()==true,"Debug finish; no payout")};
+            ToolGrid(root,labels,actions,.72f);
         }
         private void BuildAnalytics()
         {
@@ -320,6 +346,10 @@ namespace LWS.TruckTaxi
             heading.text = "MEGA DEBUG  /  " + Tabs[page];
             status.text = message;
             RefreshAnalytics();
+            if(page==8 && raceText!=null) raceText.text=host.Races==null ? "RACE SYSTEM UNAVAILABLE" :
+                "CHECKPOINT "+host.Races.NextCheckpoint+" / "+host.Races.CheckpointCount+
+                "   RIVALS "+host.Races.OpponentCount+"   DEBUG "+host.Races.DebugModified+
+                "\n"+(host.Races.FlagshipUnavailableReason ?? host.Races.Feedback);
             if(kaijuText!=null) kaijuText.text="KAIJU  "+(host.Kaiju?.Kind.ToString() ?? "UNAVAILABLE")+
                 "\nNEXT SIGHTING  "+host.Kaiju?.NextNaturalSighting.ToString("ddd HH:mm")+
                 "   ATTACK  "+host.Kaiju?.NextNaturalAttack.ToString("ddd HH:mm");

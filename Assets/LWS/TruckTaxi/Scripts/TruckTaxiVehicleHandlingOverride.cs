@@ -33,6 +33,7 @@ namespace LWS.TruckTaxi
         private AnimationCurve originalCurve, originalSmoothing;
         private TruckTaxiTemporaryEffects effects;
         public System.Func<float> MechanicalPowerMultiplier { get; set; }
+        public float CareerPowerMultiplier { get; set; } = 1;
         private float damageSteeringMultiplier = 1f;
 
         public void Initialize(VehicleController controller)
@@ -56,7 +57,7 @@ namespace LWS.TruckTaxi
         {
             if (!Applied || vehicle == null) return 1;
             float launch = LaunchMultiplier(SpeedMph, launchPowerAtRest, launchPowerAt15Mph);
-            return launch * (effects?.VehiclePowerMultiplier ?? 1) * Mathf.Clamp(MechanicalPowerMultiplier?.Invoke() ?? 1f, .1f, 1f);
+            return launch * (effects?.VehiclePowerMultiplier ?? 1) * Mathf.Clamp(MechanicalPowerMultiplier?.Invoke() ?? 1f, .1f, 1f) * Mathf.Clamp(CareerPowerMultiplier,1,1.5f);
         }
         public void SetDamageSteeringMultiplier(float multiplier)
         {

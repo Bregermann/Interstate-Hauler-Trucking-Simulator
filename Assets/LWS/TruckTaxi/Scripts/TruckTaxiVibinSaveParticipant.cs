@@ -56,7 +56,11 @@ namespace LWS.TruckTaxi
             payload = null;
             if (state == null || state.participantId != Id || state.payloadVersion != 1 || string.IsNullOrWhiteSpace(state.payloadJson))
                 return LwsSaveOperationResult.Failure("Missing or unsupported Vibin participant.");
-            try { payload = JsonUtility.FromJson<TruckTaxiVibinSavePayload>(state.payloadJson); }
+            try
+            {
+                payload = JsonUtility.FromJson<TruckTaxiVibinSavePayload>(state.payloadJson);
+                if (payload != null) payload.session = TruckTaxiSession.PrepareOptionalPersistentData(payload.session);
+            }
             catch { return LwsSaveOperationResult.Failure("Unreadable Vibin participant."); }
             return payload != null && payload.version == 1 ? LwsSaveOperationResult.Success()
                 : LwsSaveOperationResult.Failure("Unsupported Vibin payload version.");
@@ -71,8 +75,8 @@ namespace LWS.TruckTaxi
                 return LwsSaveOperationResult.Failure("Invalid saved fuel quantity.");
             try
             {
-                if (!TruckTaxiSession.ValidatePersistentState(payload.session, out _))
-                    return LwsSaveOperationResult.Failure("Invalid Vibin session state.");
+                if (!TruckTaxiSession.ValidatePersistentState(payload.session, out var sessionReason))
+                    return LwsSaveOperationResult.Failure("Invalid Vibin session state: " + sessionReason);
                 // Never validate by tentatively applying inventory/needs to the live coordinator.
                 if (!new TruckTaxiDriverNeedsState(settings, 17).RestorePersistentState(payload.needs, out _))
                     return LwsSaveOperationResult.Failure("Invalid Vibin needs or inventory state.");
@@ -114,10 +118,11 @@ namespace LWS.TruckTaxi
                 var truck = JsonUtility.FromJson<LwsPlayerTruckSavePayload>(states["lws.vehicle.player-truck"].payloadJson);
                 var global = JsonUtility.FromJson<LwsGlobalPositionSavePayload>(states["lws.world.global-position"].payloadJson);
                 var clock = JsonUtility.FromJson<LwsGameClockSavePayload>(states["lws.game-clock"].payloadJson);
-                if (resume == null || !resume.IsValid || resume.stableWorldId != LwsWorldResumeCatalog.TruckTaxiWorldId ||
+                if (resume == null || !resume.IsValid || !IsTaxiResumeWorld(resume.stableWorldId, resume.authoredSceneName) ||
                     !resume.hasGlobalPosition || !Finite(resume.savedGlobalX, resume.savedGlobalY, resume.savedGlobalZ) ||
                     !ValidRotation(new Quaternion(resume.rotationX, resume.rotationY, resume.rotationZ, resume.rotationW)))
-                    return LwsSaveOperationResult.Failure("Invalid Vibin world resume context.");
+                    return LwsSaveOperationResult.Failure("Invalid Vibin world resume context: world '" + resume?.stableWorldId +
+                        "', scene '" + resume?.authoredSceneName + "'.");
                 if (truck == null || truck.schemaVersion != LwsSaveSchema.CurrentVersion || !truck.hasGlobalPosition ||
                     !Finite(truck.globalX, truck.globalY, truck.globalZ) || !ValidRotation(truck.state.pose.rotation) ||
                     truck.state.trailerAttachment.attached)
@@ -138,6 +143,12 @@ namespace LWS.TruckTaxi
             catch { return LwsSaveOperationResult.Failure("Unreadable required save participant."); }
             return LwsSaveOperationResult.Success();
         }
+
+        // Read-only compatibility for saves captured before the streaming/resume ID fix.
+        // Do not accept arbitrary worlds merely because their scene text resembles Taxi.
+        public static bool IsTaxiResumeWorld(string worldId, string sceneName) =>
+            string.Equals(sceneName, TruckTaxiMainMenu.VibinSceneName, StringComparison.OrdinalIgnoreCase) &&
+            (worldId == LwsWorldResumeCatalog.TruckTaxiWorldId || worldId == LwsWorldResumeCatalog.TruckTaxiStreamingWorldId);
 
         private static bool Finite(double x, double y, double z) => double.IsFinite(x) && double.IsFinite(y) && double.IsFinite(z);
         private static bool ValidRotation(Quaternion q) => float.IsFinite(q.x) && float.IsFinite(q.y) && float.IsFinite(q.z) &&

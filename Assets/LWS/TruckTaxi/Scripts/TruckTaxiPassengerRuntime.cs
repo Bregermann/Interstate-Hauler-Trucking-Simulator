@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,12 +30,47 @@ namespace LWS.TruckTaxi
         private TaxiRequestProgress sketchyRequest;
         private bool sketchyReady;
         private GameObject sketchyContact, sketchyBag;
+        [SerializeField] private TruckTaxiOccupantReaction[] companionReactions = Array.Empty<TruckTaxiOccupantReaction>();
+        public event Action<TruckTaxiOccupantReaction> CompanionReactionRequested;
+        public void ConfigureCompanionReactions(TruckTaxiOccupantReaction[] authored) =>
+            companionReactions = authored != null ? (TruckTaxiOccupantReaction[])authored.Clone() : Array.Empty<TruckTaxiOccupantReaction>();
+        private readonly HashSet<(Transform, Transform)> reactedOccupants = new HashSet<(Transform, Transform)>();
+        private readonly TruckTaxiDriverVisualVisibility driverVisibility = new TruckTaxiDriverVisualVisibility();
+        private TruckTaxiDriverPresentation driverPresentation;
+
+        // Parent calls this on successful exit/return (and restores), not on failed exit attempts.
+        // Keep true through outside seated interactions, restroom and motel modes.
+        public void SetDriverOutsideCab(bool outside) =>
+            driverVisibility.SetOutsideCab(driverPresentation != null ? driverPresentation.Occupant : null, outside);
+
+        public bool TryGetCompanionReaction(PassengerProfile speaker, bool companionIsAdult,
+            out TruckTaxiOccupantReaction reaction)
+        {
+            foreach (var authored in companionReactions ?? Array.Empty<TruckTaxiOccupantReaction>())
+                if (authored != null && authored.Eligible(speaker, companionIsAdult))
+                { reaction = authored; return true; }
+            reaction = null;
+            return false;
+        }
+
+        private void RequestCompanionReaction(TruckTaxiPassengerActor actor, PassengerProfile speaker, Transform companion)
+        {
+            if (CompanionReactionRequested == null || actor == null || actor.Lifecycle != TruckTaxiActorLifecycle.Seated ||
+                !actor.transform.IsChildOf(host.Player.transform) ||
+                reactedOccupants.Contains((actor.transform, companion)) ||
+                !TryGetCompanionReaction(speaker, true, out var reaction)) return;
+            reactedOccupants.Add((actor.transform, companion));
+            // RoadsideCompanionLoop authors only 21+ adults. The parent feeds this text to its bark adapter
+            // with a null clip; do not route through an unrelated category that could select voice audio.
+            CompanionReactionRequested?.Invoke(reaction);
+        }
         public void Initialize(TruckTaxiBootstrap value)
         {
             host=value; Dialogue=gameObject.AddComponent<TruckTaxiDialoguePlayer>(); Oversized=gameObject.AddComponent<TruckTaxiOversizedPassengerEffect>();
             var driver=host.Player.GetComponent<TruckTaxiDriverPresentation>();
             if(driver==null) driver=host.Player.gameObject.AddComponent<TruckTaxiDriverPresentation>();
             driver.Initialize(host.Player.transform);
+            driverPresentation = driver;
             EjectAction=new InputAction("Taxi Eject Passenger",InputActionType.Button,"<Keyboard>/f");
             EjectAction.AddBinding("<Gamepad>/select"); EjectAction.Enable();
             host.Session.Changed+=OnChanged; host.Session.PassengerEjected+=OnEjected;
@@ -79,7 +115,16 @@ namespace LWS.TruckTaxi
                 case TruckTaxiState.DrivingToDestination:
                     if(!arrived)
                     {
-                        Seat(PrimaryActor,passenger,false); Seat(SecondaryActor,second,true);
+                        var rig = host.Player.GetComponent<TruckTaxiCabOccupantRig>();
+                        if (SecondaryActor != null && rig != null && rig.HasSleeperCapability)
+                        {
+                            if (!rig.TrySeatPassengerPair(PrimaryActor, passenger?.seatProfile, SecondaryActor, second?.seatProfile))
+                            {
+                                host.Session.React("NO ROOM FOR ANOTHER PASSENGER");
+                                return;
+                            }
+                        }
+                        else { Seat(PrimaryActor,passenger,false); Seat(SecondaryActor,second,true); }
                         Oversized.Apply(host.Player.GetComponent<Rigidbody>(),passenger?.seatProfile);
                         host.Play(passenger?.seatProfile?.boardingAudio);
                         modifiers.Invoke(m=>m.OnPassengerBoarded());
@@ -143,7 +188,10 @@ namespace LWS.TruckTaxi
                     PrimaryActor.ShowInWorld(exit, host.Player.transform);
                 PrimaryActor.Animate(TruckTaxiPassengerAnimation.ExitAbstraction);
             }
-            if(SecondaryActor!=null) SecondaryActor.gameObject.SetActive(false);
+            if(SecondaryActor!=null)
+            {
+                SecondaryActor.PrepareForWorld(host.Player.transform);
+            }
         }
         private void OnEjected()
         {
@@ -409,6 +457,12 @@ namespace LWS.TruckTaxi
                 if(SecondaryActor!=null) SecondaryActor.transform.position=Vector3.MoveTowards(SecondaryActor.transform.position,near+host.Player.transform.forward,speed*Time.deltaTime);
             }
             if(!host.Session.HasPassenger) return;
+            var companion = host.Companions?.HasOnboardCompanion == true ? host.Companions.ActiveCompanionVisual : null;
+            if (companion != null)
+            {
+                RequestCompanionReaction(PrimaryActor, passenger, companion);
+                RequestCompanionReaction(SecondaryActor, second, companion);
+            }
             modifiers.Invoke(m=>m.OnRideTick(Time.deltaTime));
             if(Dialogue.IsPlaying) return;
             if(!string.IsNullOrWhiteSpace(pendingRequest))
@@ -427,6 +481,11 @@ namespace LWS.TruckTaxi
         {
             if(revengeActive) return false;
             if(PrimaryActor==null) return true;
+            var rig = host.Player.GetComponent<TruckTaxiCabOccupantRig>();
+            if (SecondaryActor != null && rig != null && rig.HasSleeperCapability &&
+                !rig.CanSeatPassengerPair(PrimaryActor.transform, passenger?.seatProfile,
+                    SecondaryActor.transform, second?.seatProfile))
+            { host.Session.React("NO ROOM FOR ANOTHER PASSENGER"); return false; }
             if (!TruckTaxiSeatProfile.CanPlaceActor(PrimaryActor.transform, host.Player.transform, passenger?.seatProfile, false) ||
                 SecondaryActor != null && !TruckTaxiSeatProfile.CanPlaceActor(SecondaryActor.transform,
                     host.Player.transform, second?.seatProfile, true))
@@ -435,7 +494,14 @@ namespace LWS.TruckTaxi
             float threshold=passenger.seatProfile!=null ? passenger.seatProfile.boardingDistance : 2;
             return Vector3.ProjectOnPlane(PrimaryActor.transform.position-near,Vector3.up).magnitude<=threshold;
         }
-        private void DestroyActors() { if(PrimaryActor!=null) { PrimaryActor.WaitingTruckHit-=OnWaitingTruckHit; Destroy(PrimaryActor.gameObject); } if(SecondaryActor!=null) { SecondaryActor.WaitingTruckHit-=OnWaitingTruckHit; Destroy(SecondaryActor.gameObject); } PrimaryActor=SecondaryActor=null; }
+        private void DestroyActors()
+        {
+            var rig = host?.Player != null ? host.Player.GetComponent<TruckTaxiCabOccupantRig>() : null;
+            if (PrimaryActor != null) { rig?.Release(PrimaryActor.transform); PrimaryActor.WaitingTruckHit -= OnWaitingTruckHit; Destroy(PrimaryActor.gameObject); }
+            if (SecondaryActor != null) { rig?.Release(SecondaryActor.transform); SecondaryActor.WaitingTruckHit -= OnWaitingTruckHit; Destroy(SecondaryActor.gameObject); }
+            PrimaryActor = SecondaryActor = null;
+            reactedOccupants.Clear();
+        }
         private void Cleanup() { EndPresentations(); modifiers.Cleanup(); Oversized?.Restore(); Dialogue?.ResetRide(); DestroyActors(); passenger=second=null; pendingRequest=null; uiEjectHeld=false; EjectionHoldProgress=0; }
         private void OnDestroy()
         {
@@ -447,7 +513,8 @@ namespace LWS.TruckTaxi
                 if(host.Session.StopPresentationReady==StopPresentationReady) host.Session.StopPresentationReady=null;
                 host.Session.PassengerReadyToBoard=null;
             }
-            Cleanup(); EjectAction?.Dispose();
+            Cleanup(); driverVisibility.Dispose(); EjectAction?.Dispose();
         }
+        private void OnDisable() => driverVisibility.Dispose();
     }
 }

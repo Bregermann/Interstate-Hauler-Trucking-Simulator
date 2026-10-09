@@ -67,6 +67,12 @@ namespace LWS.TruckTaxi
         private TruckTaxiMapTileLayer tileLayer;
         private bool attemptedTileLoad;
         private UnityEvent beforeMapCapture,afterMapCapture;
+        private UnityEvent beforeCabCapture,afterCabCapture;
+        private Camera captureCamera;
+        private CameraType captureCameraType;
+        private UnityEngine.Rendering.Universal.UniversalAdditionalCameraData captureData;
+        private bool capturePostProcessing;
+        private float nextRouteCheck;
         private TruckTaxiBootstrap host;
         private bool presentationRefreshPending=true;
         private float observedTimeScale,nextPresentationCheck;
@@ -92,14 +98,27 @@ namespace LWS.TruckTaxi
         public TruckTaxiMapMarkers MapMarkers { get; private set; }
         public Camera PreviewCamera => previewCompass != null ? previewCameraField?.GetValue(previewCompass) as Camera : null;
         public string TargetId => intents.Active?.TargetId ?? "";
-        public bool IsServiceDestination => ActiveLayer==TruckTaxiNavigationLayer.PlayerService;
+        public string TargetLabel => intents.Active?.Value.Label ?? "";
+        public float TargetDistanceMeters => player!=null && intents.Active!=null
+            ? Vector3.Distance(player.position,intents.Active.Value.Position) : 0;
+        public string CompanionDestinationLabel => intents.Get(TruckTaxiNavigationLayer.CompanionTask)?.Value.Label ?? "";
+        public float CompanionDistanceMeters
+        {
+            get
+            {
+                var lease=intents.Get(TruckTaxiNavigationLayer.CompanionTask);
+                return player!=null && lease!=null ? Vector3.Distance(player.position,lease.Value.Position) : 0;
+            }
+        }
+        public bool IsServiceDestination => ActiveLayer==TruckTaxiNavigationLayer.PlayerService ||
+            ActiveLayer==TruckTaxiNavigationLayer.CompanionTask;
         public bool GuidanceSuppressed => guidanceSuppressed;
         public bool HasNavigationTarget => !string.IsNullOrEmpty(TargetId);
         public bool HasReachedServiceDestination => IsServiceDestination && player!=null &&
             (intents.Active?.Value.Contains(player.position,playerBody!=null ? playerBody.linearVelocity.magnitude : 0) ?? false);
         public bool RouteReady => !guidanceSuppressed && player!=null && intents.Active!=null &&
             (intents.Active.Value.Contains(player.position,playerBody!=null ? playerBody.linearVelocity.magnitude : 0) ||
-            (navigation?.CurrentRoute != null && navigation.CurrentRoute.succeeded));
+            (navigation?.CurrentRoute != null && navigation.CurrentRoute.succeeded && navigation.CurrentRoute.destinationId==TargetId));
         public void Initialize(Transform tractor, LwsRoadGraphProvider provider)
         {
             player = CanonicalTruck(tractor); graph = provider;
@@ -194,6 +213,10 @@ namespace LWS.TruckTaxi
             afterMapCapture=previewCompass?.GetType().GetField("OnMiniMapAfterCapture")?.GetValue(previewCompass) as UnityEvent;
             beforeMapCapture?.AddListener(BeginMapCapture);
             afterMapCapture?.AddListener(EndMapCapture);
+            beforeCabCapture=cabCompass?.GetType().GetField("OnMiniMapBeforeCapture")?.GetValue(cabCompass) as UnityEvent;
+            afterCabCapture=cabCompass?.GetType().GetField("OnMiniMapAfterCapture")?.GetValue(cabCompass) as UnityEvent;
+            beforeCabCapture?.AddListener(BeginCabCapture);
+            afterCabCapture?.AddListener(EndMapCapture);
             ApplyDisplaySettings(false);
             MapMarkers=GetComponent<TruckTaxiMapMarkers>() ?? gameObject.AddComponent<TruckTaxiMapMarkers>();
             MapMarkers.Initialize(GetComponent<TruckTaxiBootstrap>(),this);
@@ -342,6 +365,11 @@ namespace LWS.TruckTaxi
             if(fullMapOpen) EnableMapTiles();
             // Compare cached rects only; reapply after vendor layout/resolution changes, not every frame.
             RefreshMapElementSizing();
+            if(Time.unscaledTime>=nextRouteCheck)
+            {
+                nextRouteCheck=Time.unscaledTime+.5f;
+                ReconcileNavigation();
+            }
             if(!guidanceSuppressed && HasReachedServiceDestination && intents.Active?.Value.RequiresCompletion==false)
                 CompleteServiceDestination(TargetId,ActiveLeaseToken);
             RefreshPresentationIfNeeded();
@@ -349,7 +377,7 @@ namespace LWS.TruckTaxi
         // Coalesce transitions into one public vendor refresh, independent of scaled time.
         public void RequestPresentationRefresh() => presentationRefreshPending=true;
         private void OnEnable() => RequestPresentationRefresh();
-        private void OnDisable() => tileLayer?.ShowOnlyFor(null);
+        private void OnDisable() { EndMapCapture(); tileLayer?.ShowOnlyFor(null); }
         private void OnApplicationFocus(bool focused) { if(focused) RequestPresentationRefresh(); }
         private void OnApplicationPause(bool paused) { if(!paused) RequestPresentationRefresh(); }
         private void RefreshPresentationIfNeeded()
@@ -373,7 +401,8 @@ namespace LWS.TruckTaxi
             bool cabBecameVisible=cabPresentation?.BecameVisible()==true;
             if(hudBecameVisible || cabBecameVisible)
                 RequestPresentationRefresh();
-            bool validRoute=!guidanceSuppressed && route?.succeeded==true && route.waypoints?.Count>=2;
+            bool validRoute=!guidanceSuppressed && intents.Active!=null && route?.destinationId==TargetId &&
+                route.succeeded && route.waypoints?.Count>=2;
             if(Time.unscaledTime>=nextPresentationCheck)
             {
                 nextPresentationCheck=Time.unscaledTime+.5f;
@@ -472,11 +501,32 @@ namespace LWS.TruckTaxi
         }
         private void BeginMapCapture()
         {
-            if(!isActiveAndEnabled || !fullMapOpen) return;
+            BeginInstrumentCapture(PreviewCamera);
+        }
+        private void BeginCabCapture() => BeginInstrumentCapture(
+            cabCompass?.GetType().GetField("miniMapCamera")?.GetValue(cabCompass) as Camera);
+        private void BeginInstrumentCapture(Camera camera)
+        {
+            if(!isActiveAndEnabled || camera==null) return;
+            EndMapCapture();
+            captureCamera=camera; captureCameraType=camera.cameraType;
+            // Weather Maker's public ShouldIgnoreCamera contract excludes Preview cameras.
+            // Scope this to the instrument capture; never change world weather or its allow list.
+            camera.cameraType=CameraType.Preview;
+            captureData=camera.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();
+            if(captureData!=null) { capturePostProcessing=captureData.renderPostProcessing; captureData.renderPostProcessing=false; }
             EnableMapTiles();
+            tileLayer?.ShowOnlyFor(camera);
             tileLayer?.BeginCapture();
         }
-        private void EndMapCapture() => tileLayer?.EndCapture();
+        private void EndMapCapture()
+        {
+            tileLayer?.EndCapture();
+            if(captureData!=null) captureData.renderPostProcessing=capturePostProcessing;
+            if(captureCamera!=null) captureCamera.cameraType=captureCameraType;
+            captureData=null; captureCamera=null;
+            tileLayer?.ShowOnlyFor(PreviewCamera);
+        }
         public void CenterFullMapOnPlayer()
         {
             if(!fullMapOpen || previewCompass==null || player==null) return;
@@ -520,6 +570,9 @@ namespace LWS.TruckTaxi
             intents.Trace-=LogNavigation;
             beforeMapCapture?.RemoveListener(BeginMapCapture);
             afterMapCapture?.RemoveListener(EndMapCapture);
+            beforeCabCapture?.RemoveListener(BeginCabCapture);
+            afterCabCapture?.RemoveListener(EndMapCapture);
+            EndMapCapture();
             tileLayer?.ShowOnlyFor(null);
             if(cameraPresentation!=null) cameraPresentation.SetGpsPresentationPolicy(originalPolicy);
         }
@@ -538,12 +591,17 @@ namespace LWS.TruckTaxi
         private void SetDestination(TruckTaxiRideLocation location,string purpose)
         {
             if(location==null) return;
-            Claim(purpose=="safe-drop" ? TruckTaxiNavigationLayer.Emergency : TruckTaxiNavigationLayer.RideFinal,
+            bool removedActivePickup=purpose!="pickup" && ActiveLayer==TruckTaxiNavigationLayer.RidePickup;
+            if(purpose!="pickup") intents.Release(TruckTaxiNavigationLayer.RidePickup,"ride");
+            var layer=purpose=="safe-drop" ? TruckTaxiNavigationLayer.Emergency :
+                purpose=="pickup" ? TruckTaxiNavigationLayer.RidePickup : TruckTaxiNavigationLayer.RideFinal;
+            Claim(layer,
                 purpose=="safe-drop" ? "ride-safe-drop" : "ride",new Destination {
                     Id=location.locationId,Label=location.locationName,Point=location.StopPosition,Ride=location,
                     Type=purpose=="pickup" ? TruckTaxiMapMarkerType.PassengerPickup : TruckTaxiMapMarkerType.Dropoff,
                     RequiresCompletion=true
                 },false);
+            if(removedActivePickup && ActiveLayer!=layer) ApplyActive();
         }
         public void SetServiceDestination(string stableId,string displayName,Vector3 position) =>
             TrySetServiceDestination(stableId,displayName,position,
@@ -551,15 +609,14 @@ namespace LWS.TruckTaxi
         public bool SetPrivateStopDestination(TruckTaxiStopObjectivePoint point)
         {
             if(point==null || point.category!=TruckTaxiStopCategory.PrivateMeeting) return false;
-            return Claim(TruckTaxiNavigationLayer.PlayerService,"player-service",new Destination {
+            return Claim(TruckTaxiNavigationLayer.CompanionTask,"companion",new Destination {
                 Id=point.stableId,Label=point.displayName,Point=point.Position,Stop=point,
                 Type=TruckTaxiMapMarkerType.PrivateEventStop,RequiresCompletion=true
             },true);
         }
         public bool ClearPrivateStopDestination(string stableId)
         {
-            var lease=intents.Get(TruckTaxiNavigationLayer.PlayerService);
-            return lease?.Value.Type==TruckTaxiMapMarkerType.PrivateEventStop && CompleteServiceDestination(stableId);
+            return ReleaseNavigationIntent(TruckTaxiNavigationLayer.CompanionTask,"companion",stableId);
         }
         public bool TrySetServiceDestination(string stableId,string displayName,Vector3 position,TruckTaxiMapMarkerType type)
         {
@@ -596,7 +653,7 @@ namespace LWS.TruckTaxi
             if(string.IsNullOrWhiteSpace(destination.Id) || string.IsNullOrWhiteSpace(owner)) return false;
             var existing=intents.Get(layer);
             if(existing!=null && existing.OwnerId==owner && existing.TargetId==destination.Id &&
-                existing.Value.Position==destination.Position)
+                existing.Value.Position==destination.Position && existing.Value.Type==destination.Type)
                 return existing==intents.Active ? RestoreActiveRoute() : true;
             var prior=intents.Active;
             bool becomesActive=prior==null || layer>=prior.Layer;
@@ -657,6 +714,25 @@ namespace LWS.TruckTaxi
         }
         public bool RestoreRideRoute() => RestoreActiveRoute();
         public bool RestoreServiceRoute() => RestoreActiveRoute();
+        // Called periodically and available to the load coordinator after restoring semantic owners.
+        // Explicit Stop Navigation remains authoritative until a new intent or manual restore.
+        public void ReconcileNavigation()
+        {
+            if(guidanceSuppressed || navigation==null || player==null) return;
+            var active=intents.Active;
+            if(active==null)
+            {
+                if(navigation.CurrentRoute!=null) { navigation.ClearRoute(); RequestPresentationRefresh(); }
+                return;
+            }
+            bool arrived=active.Value.Contains(player.position,playerBody!=null ? playerBody.linearVelocity.magnitude : 0);
+            if(arrived)
+            {
+                if(navigation.CurrentRoute!=null) { navigation.ClearRoute(); RequestPresentationRefresh(); }
+            }
+            else if(navigation.CurrentRoute?.succeeded!=true || navigation.CurrentRoute.destinationId!=active.TargetId)
+                ApplyActive();
+        }
         private bool RestoreActiveRoute()
         {
             if(intents.Active==null) return false;
@@ -672,6 +748,7 @@ namespace LWS.TruckTaxi
         {
             var prior=intents.Active;
             intents.Release(TruckTaxiNavigationLayer.RideFinal,"ride");
+            intents.Release(TruckTaxiNavigationLayer.RidePickup,"ride");
             intents.Release(TruckTaxiNavigationLayer.PassengerDiversion,"passenger");
             intents.Release(TruckTaxiNavigationLayer.Emergency,"ride-safe-drop");
             if(prior!=intents.Active) ApplyActive();

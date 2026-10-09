@@ -3,7 +3,8 @@ using System.Collections.Generic;
 
 namespace LWS.TruckTaxi
 {
-    public enum TruckTaxiNavigationLayer { RideFinal, PassengerDiversion, PlayerService, RivalPassenger, Emergency }
+    // Runtime priorities, not persisted IDs. Accepted pickups cover companion tasks without deleting them.
+    public enum TruckTaxiNavigationLayer { RideFinal, CompanionTask, PassengerDiversion, RidePickup, PlayerService, RivalPassenger, Emergency }
 
     // One replaceable lease per responsibility. Tokens prevent late completions from popping replacements.
     public sealed class TruckTaxiNavigationIntents<T> where T : class
@@ -18,7 +19,7 @@ namespace LWS.TruckTaxi
             { Layer=layer; OwnerId=owner; TargetId=target; Token=token; Value=value; }
             public override string ToString() => Layer+" / "+OwnerId+" / "+TargetId;
         }
-        private readonly Lease[] layers=new Lease[5];
+        private readonly Lease[] layers=new Lease[7];
         private long sequence;
         public event Action<string> Trace;
         public Lease Active

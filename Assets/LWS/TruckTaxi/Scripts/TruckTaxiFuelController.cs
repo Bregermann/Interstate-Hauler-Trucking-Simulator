@@ -65,16 +65,19 @@ namespace LWS.TruckTaxi
         }
         private void Update()
         {
-            if (Fuel == null || host.Paused || IsRescuing) return;
+            if (Fuel == null || host == null) return;
+            if (host.Paused || IsRescuing) { StopManualFueling(); return; }
             if (Fuel.amount <= 0) { BeginRescue(); return; }
             if (!IsManualFueling) return;
-            if (host.WorldLife == null || !host.WorldLife.IsOnFoot) StopManualFueling();
+            var station = host.WorldLife?.ActiveNozzleStation;
+            if (station == null || !host.WorldLife.CanPumpAt(station) || body == null ||
+                !station.CanRefuel(body.position, body.linearVelocity.magnitude)) StopManualFueling();
         }
         public bool PumpManual(TruckTaxiGasStationPoint station, float seconds)
         {
             if (host?.WorldLife?.IsOnFoot != true || host.Paused || IsRescuing || Fuel == null ||
                 station == null || !float.IsFinite(seconds) || seconds <= 0 ||
-                host.Player?.TruckControlController?.CurrentState.parkingBrakeOn != true ||
+                body == null || !host.WorldLife.CanPumpAt(station) ||
                 !station.CanRefuel(body.position, body.linearVelocity.magnitude))
             { StopManualFueling(); return false; }
             if (Fuel.amount >= Fuel.capacity) { Feedback = "TANK FULL"; StopManualFueling(); return false; }

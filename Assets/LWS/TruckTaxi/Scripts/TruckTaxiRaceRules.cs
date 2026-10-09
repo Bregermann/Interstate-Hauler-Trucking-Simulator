@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace LWS.TruckTaxi
 {
-    public enum TruckTaxiRaceMode { Practice, TimeTrial, TruckRace, Elimination, ChaosRace, EventRace }
+    public enum TruckTaxiRaceMode { Practice, TimeTrial, TruckRace, Elimination, ChaosRace, EventRace, FlagshipRace }
     public enum TruckTaxiRacePersonality { Cautious, Normal, Aggressive, Reckless }
 
     public static class TruckTaxiRaceGrid
@@ -94,7 +94,7 @@ namespace LWS.TruckTaxi
         [Min(1)] public float maximumStepMeters = 35;
 
         public int Laps(TruckTaxiRaceMode mode, int timeTrialLaps) =>
-            mode == TruckTaxiRaceMode.Practice ? 0 : mode == TruckTaxiRaceMode.TimeTrial ?
+            mode == TruckTaxiRaceMode.FlagshipRace ? 1 : mode == TruckTaxiRaceMode.Practice ? 0 : mode == TruckTaxiRaceMode.TimeTrial ?
             Mathf.Clamp(timeTrialLaps, 1, 5) : mode == TruckTaxiRaceMode.EventRace ? 5 : 3;
 
         public long Prize(TruckTaxiRaceMode mode, int place, float bestLap)
@@ -128,6 +128,7 @@ namespace LWS.TruckTaxi
         private readonly Vector3[] gates;
         private readonly Vector3[] forwards;
         private readonly TruckTaxiRaceSettings settings;
+        private readonly bool preserveCheckpoints;
         private int next;
         private bool hasPrevious, lapArmed;
         private Vector3 previous;
@@ -139,17 +140,21 @@ namespace LWS.TruckTaxi
         public float LastLapSeconds { get; private set; }
         public float CurrentLapSeconds(float now) => hasPrevious ? Mathf.Max(0, now - lapStart) : 0;
 
-        public TruckTaxiRaceProgress(Vector3[] checkpoints, TruckTaxiRaceSettings settings)
+        public TruckTaxiRaceProgress(Vector3[] checkpoints, TruckTaxiRaceSettings settings,
+            Vector3[] directions = null, bool preserveCheckpoints = false)
         {
             if (checkpoints == null || checkpoints.Length < 3) throw new ArgumentException("At least three checkpoints are required.");
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
-            gates = checkpoints;
+            this.preserveCheckpoints = preserveCheckpoints;
+            if (directions != null && directions.Length != checkpoints.Length) throw new ArgumentException("Gate direction count mismatch.");
+            gates = (Vector3[])checkpoints.Clone();
             forwards = new Vector3[gates.Length];
             for (int i = 0; i < gates.Length; i++)
             {
                 Vector3 direction = gates[(i + 1) % gates.Length] - gates[(i + gates.Length - 1) % gates.Length];
                 direction.y = 0;
-                forwards[i] = direction.normalized;
+                forwards[i] = directions == null ? direction.normalized : Vector3.ProjectOnPlane(directions[i], Vector3.up).normalized;
+                if (forwards[i].sqrMagnitude < .5f) throw new ArgumentException("Gate direction is degenerate.");
             }
         }
 
@@ -161,8 +166,18 @@ namespace LWS.TruckTaxi
 
         public void Invalidate(Vector3 position, float now)
         {
+            if (preserveCheckpoints) { Reanchor(position); return; }
             next = 0; lapArmed = false; PassedCheckpoints = CompletedLaps * gates.Length;
             previous = position; hasPrevious = true; lapStart = lastGateTime = now;
+        }
+
+        // Recovery cannot award or skip a checkpoint, and does not restart the endurance clock.
+        public void Reanchor(Vector3 position) { previous = position; hasPrevious = true; }
+
+        public void DebugSelectCheckpoint(int index, Vector3 position, float now)
+        {
+            next = Mathf.Clamp(index, 0, gates.Length - 1); lapArmed = next == 0 && PassedCheckpoints > 0;
+            previous = position; hasPrevious = true; lastGateTime = now;
         }
 
         public bool Tick(Vector3 position, float now)

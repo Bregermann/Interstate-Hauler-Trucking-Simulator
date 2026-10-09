@@ -51,6 +51,11 @@ namespace LWS.TruckTaxi
         public TruckTaxiFacilityAmbience FacilityAmbience { get; private set; }
         public TruckTaxiComponentDamage ComponentDamage { get; private set; }
         public bool Ready { get; private set; }
+        public TruckTaxiCareerEquipment CareerEquipment { get; private set; }
+        public TruckTaxiMoralityWorldController Morality { get; private set; }
+        public ITruckTaxiPlatformCapabilities PlatformCapabilities { get; private set; } = new TruckTaxiOfflinePlatformCapabilities();
+        public void BindPlatformCapabilities(ITruckTaxiPlatformCapabilities capabilities) =>
+            PlatformCapabilities = capabilities ?? new TruckTaxiOfflinePlatformCapabilities();
         public bool StartupComplete => !startupPending;
         public bool Paused { get; private set; }
         public bool CanResume => Ready && !startupPending && Persistence != null && !Persistence.ResumeBlocked;
@@ -144,6 +149,9 @@ namespace LWS.TruckTaxi
             GPS.ConfigureDemoPresentation();
             regional?.RegisterMapMetadata(GPS.MapMarkers);
             Passengers=gameObject.AddComponent<TruckTaxiPassengerRuntime>(); Passengers.Initialize(this);
+            Passengers.ConfigureCompanionReactions(Configuration.companionReactions);
+            Passengers.CompanionReactionRequested += reaction =>
+                Passengers.Dialogue.SpeakAuthoredText(reaction.passenger.passengerName, reaction.subtitle);
             PickupZone=gameObject.AddComponent<TruckTaxiPickupZoneVisualizer>(); PickupZone.Initialize(this);
             OptionalStops=gameObject.AddComponent<TruckTaxiOptionalStops>(); OptionalStops.Initialize(this);
             RebuildObjectiveCapabilities();
@@ -204,6 +212,10 @@ namespace LWS.TruckTaxi
             }
             SetPaused(true);
             Ready = true;
+            CareerEquipment = GetComponent<TruckTaxiCareerEquipment>() ?? gameObject.AddComponent<TruckTaxiCareerEquipment>();
+            CareerEquipment.Initialize(this);
+            Morality = GetComponent<TruckTaxiMoralityWorldController>() ?? gameObject.AddComponent<TruckTaxiMoralityWorldController>();
+            if (!Morality.Initialize(this, hud)) Debug.LogWarning("Truck Taxi authored trailer events could not bind to the existing session/HUD.", this);
             var analytics = GetComponent<TruckTaxiAnalytics>() ?? gameObject.AddComponent<TruckTaxiAnalytics>();
             analytics.Initialize(this);
             Persistence = GetComponent<TruckTaxiVibinPersistence>() ?? gameObject.AddComponent<TruckTaxiVibinPersistence>();
@@ -216,6 +228,7 @@ namespace LWS.TruckTaxi
             if (!startup.Succeeded) Debug.LogWarning("Truck Taxi startup blocked: " + startup.Message, this);
             OnSessionChanged();
             SetPaused(continuing || !startup.Succeeded);
+            if (!continuing && startup.Succeeded) hud.Career?.OpenFirstDay();
         }
         private void Update()
         {
@@ -360,16 +373,13 @@ namespace LWS.TruckTaxi
         {
             if(Persistence?.IsBusy==true || !UnityEngine.SceneManagement.SceneManager.GetActiveScene().IsValid() ||
                 !Application.CanStreamedLevelBeLoaded(TruckTaxiMainMenu.SceneName)) return;
-            Persistence?.RequestAutosave("Return to main menu");
+            if (Persistence?.HasActiveRun == true && !Persistence.ResumeBlocked && !Persistence.SaveBeforeLeaving().Succeeded)
+            {
+                hud?.SaveLoad?.Open();
+                return;
+            }
             Session.EndShift();
-            int goals=0,chaos=0;
-            foreach(var ride in Session.RideHistory)
-            { chaos+=ride.ChaosScore; foreach(var goal in ride.Goals) if(goal.State==TaxiRequestState.Succeeded) goals++; }
-            TruckTaxiMainMenu.PublishSessionStats(new TruckTaxiMainMenuStats {
-                rides=Session.CompletedRides, earningsCents=Session.ShiftEarnings, averageStars=(float)Session.DriverAverageRating,
-                chaos=chaos, pedestriansHit=Session.PedestriansHit,trafficCollisions=Session.TrafficHits,
-                passengersEjected=Session.EjectedRides,jugEvents=Session.JugsSucceeded+Session.JugsSpilled,
-                bottlesThrown=Session.ContainersThrown,specialEvents=Session.SpecialStopsCompleted,objectivesCompleted=goals });
+            TruckTaxiMainMenu.PublishSessionStats(Session.CaptureMainMenuStats());
             SetPaused(true);
             UnityEngine.SceneManagement.SceneManager.LoadScene(TruckTaxiMainMenu.SceneName);
         }

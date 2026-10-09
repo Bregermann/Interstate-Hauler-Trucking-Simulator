@@ -42,7 +42,8 @@ namespace LWS.TruckTaxi
             // Every extra occupant uses certified capacity, including a fare's authored pair.
             if (secondary)
                 return rig != null && rig.TrySeatSecondary(actor,
-                    profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger, standingWorldScale);
+                    profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger, standingWorldScale,
+                    occupantKind ?? TruckTaxiCabOccupantKind.Passenger);
             if (rig != null && rig.HasSleeperCapability)
             {
                 var type = profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger;
@@ -52,6 +53,10 @@ namespace LWS.TruckTaxi
                 return rig.TrySeat(actor, kind, preferred, type, standingWorldScale,
                     secondary && (profile == null || profile.secondaryRequiresSleeperAnchor));
             }
+            if (!CanUseLegacySeat(actor, truck, profile))
+                return rig != null && rig.TrySeatSecondary(actor,
+                    profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger, standingWorldScale,
+                    occupantKind ?? TruckTaxiCabOccupantKind.Passenger);
             Transform mount = profile != null && !string.IsNullOrWhiteSpace(profile.mountPath)
                 ? truck.Find(profile.mountPath) : null;
             if (mount == null) mount = truck;
@@ -76,10 +81,17 @@ namespace LWS.TruckTaxi
             if (actor == null || truck == null) return false;
             var rig = truck.GetComponent<TruckTaxiCabOccupantRig>();
             var type = profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger;
-            if (secondary) return rig != null && rig.HasSecondarySeat(type, actor);
+            if (secondary) return rig != null && rig.HasSecondarySeat(type, actor,
+                occupantKind ?? TruckTaxiCabOccupantKind.Passenger);
             if (rig != null && rig.HasSleeperCapability)
                 return rig.HasSeat(actor, occupantKind ?? TruckTaxiCabOccupantKind.Passenger,
                     profile != null ? profile.primaryCabAnchor : TruckTaxiCabAnchorId.FrontPassengerSeat, type);
+            return CanUseLegacySeat(actor, truck, profile) ||
+                rig != null && rig.HasSecondarySeat(type, actor, occupantKind ?? TruckTaxiCabOccupantKind.Passenger);
+        }
+
+        private static bool CanUseLegacySeat(Transform actor, Transform truck, TruckTaxiSeatProfile profile)
+        {
             var mount = profile != null && !string.IsNullOrWhiteSpace(profile.mountPath) ? truck.Find(profile.mountPath) : null;
             if (mount == null) mount = truck;
             Vector3 position = mount.TransformPoint(profile != null ? profile.localPosition : new Vector3(.5f, 1, 0));

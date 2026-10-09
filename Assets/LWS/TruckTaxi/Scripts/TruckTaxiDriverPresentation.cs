@@ -20,6 +20,25 @@ namespace LWS.TruckTaxi
         public TruckTaxiDriverPresentationState State { get; private set; }
         public bool SleeperTransitionValid => eventRig != null && eventRig.isActiveAndEnabled && eventRig.PrivateTransitionValid;
 
+        public bool TryApplyAppearance(TruckTaxiDriverAppearanceData appearance, out string reason)
+        {
+            reason = "The existing driver visual is not ready.";
+            if (!Ready || materials.Count != 4 || materials.Exists(m => m == null)) return false;
+            if (appearance == null) { reason = "Missing driver appearance."; return false; }
+            if (!appearance.Validate(out reason)) return false;
+            var visual = driver.transform.Find(TruckTaxiWobbleVisual.VisualName);
+            var cap = visual != null ? visual.Find("Cap") : null;
+            var brim = visual != null ? visual.Find("Brim") : null;
+            if (cap == null || brim == null) { reason = "Existing cap parts are unavailable; no replacement art was generated."; return false; }
+            // These four materials belong exclusively to this presentation and are already disposed below.
+            materials[0].color = appearance.shirt;
+            materials[1].color = appearance.pantsAndCap;
+            materials[2].color = appearance.trim;
+            materials[3].color = appearance.skin;
+            cap.gameObject.SetActive(appearance.capVisible); brim.gameObject.SetActive(appearance.capVisible);
+            reason = null; return true;
+        }
+
         public void Initialize(Transform truck)
         {
             if(Ready || truck == null) return;

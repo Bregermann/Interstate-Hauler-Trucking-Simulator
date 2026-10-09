@@ -17,10 +17,12 @@ namespace LWS.TruckTaxi
         private int objectiveIndex;
         private string objectiveMessage="";
         private readonly System.Collections.Generic.HashSet<string> testedObjectives=new System.Collections.Generic.HashSet<string>();
-        public bool IsOpen => panel!=null && panel.gameObject.activeSelf;
+        private Action closeOwner;
+        public bool IsOpen => panel!=null && panel.gameObject.activeInHierarchy;
         public Transform FocusRoot => panel;
         public void Initialize(TruckTaxiBootstrap value,TruckTaxiHud ui)
         {
+            if(!TruckTaxiMegaDebugPanel.IsAvailable) return;
             host=value; hud=ui; regional=value.GetComponent<TruckTaxiRegionalWorld>();
             panel=ui.Panel(ui.Root,"Truck Taxi Debug",new Vector2(.02f,.17f),new Vector2(.72f,.89f));
             diagnostics=ui.Text(panel,"Session diagnostics",new Vector2(.03f,.70f),new Vector2(.97f,.98f),23);
@@ -77,8 +79,6 @@ namespace LWS.TruckTaxi
             }
             pages[5].gameObject.SetActive(false);
             regionalDiagnostics=ui.Text(pages[6],"Regional diagnostics",new Vector2(.04f,.03f),new Vector2(.96f,.97f),20);
-            if(TruckTaxiMegaDebugPanel.IsAvailable)
-                ui.Button(pages[6],"WORLD / CALENDAR TOOLS",new Vector2(.54f,.01f),new Vector2(.97f,.13f),()=>hud.MegaDebug?.Open());
             pages[6].gameObject.SetActive(false);
             host.Session.RequestResolved+=RecordTestedObjective;
             ui.Button(panel,"NEXT TOOL PAGE",new Vector2(.03f,.01f),new Vector2(.48f,.065f),()=>{
@@ -89,14 +89,23 @@ namespace LWS.TruckTaxi
         }
         public void Toggle()
         {
+            if(closeOwner!=null) { closeOwner(); return; }
             if(panel==null || (!IsOpen && host.Paused)) return;
             panel.gameObject.SetActive(!IsOpen);
             if(IsOpen) panel.SetAsLastSibling();
             hud.OnDebugVisibilityChanged();
         }
+        public void AttachAsPage(RectTransform parent,Action close)
+        {
+            if(panel==null || parent==null) return;
+            closeOwner=close; panel.SetParent(parent,false);
+            panel.anchorMin=Vector2.zero; panel.anchorMax=Vector2.one;
+            panel.offsetMin=panel.offsetMax=Vector2.zero;
+            panel.gameObject.SetActive(true);
+        }
         public void Execute(string action)
         {
-            if(host==null || !host.Ready) return;
+            if(!TruckTaxiMegaDebugPanel.IsAvailable || host==null || !host.Ready) return;
             var s=host.Session;
             switch(action)
             {
