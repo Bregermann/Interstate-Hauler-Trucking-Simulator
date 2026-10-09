@@ -156,6 +156,7 @@ namespace LWS.InterstateHauler
         public const string StreamingHighwayValidationWorldId = "world.streaming-highway-validation";
         public const string FiftyMileValidationWorldId = "world.fifty-mile-floating-origin-validation";
         public const string TruckTaxiWorldId = "world.truck-taxi";
+        public const string TruckTaxiStreamingWorldId = "taxi.regional";
 
         private static readonly LwsWorldResumeSceneBinding[] KnownScenes =
         {
@@ -187,6 +188,10 @@ namespace LWS.InterstateHauler
 
         public static string ResolveStableWorldId(string sceneName, string streamingWorldId)
         {
+            // The Taxi streaming manifest identifies a region set, not a second resume world.
+            if (string.Equals(sceneName, "TruckTaxi_DemoCity", StringComparison.OrdinalIgnoreCase) &&
+                string.Equals(streamingWorldId, TruckTaxiStreamingWorldId, StringComparison.Ordinal))
+                return TruckTaxiWorldId;
             if (!string.IsNullOrWhiteSpace(streamingWorldId))
             {
                 return streamingWorldId.Trim();

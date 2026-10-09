@@ -206,6 +206,8 @@ namespace LWS.InterstateHauler
             if (adapterValidation.Succeeded)
             {
                 LwsSaveOperationResult directoryLoad = Adapter.LoadProfileDirectory(out LwsSaveProfileDirectory loadedDirectory);
+                if (!directoryLoad.Succeeded)
+                    return LwsServiceResult.Failure(directoryLoad.Message);
                 if (directoryLoad.Succeeded && loadedDirectory != null)
                 {
                     _directory = loadedDirectory;
@@ -1633,7 +1635,16 @@ namespace LWS.InterstateHauler
 
             try
             {
-                _loadFromSlotMethod.Invoke(null, new object[] { vendorSlotNumber });
+                if ((bool)_hasSavedGameInSlotMethod.Invoke(null, new object[] { vendorSlotNumber }))
+                    _loadFromSlotMethod.Invoke(null, new object[] { vendorSlotNumber });
+                else
+                {
+                    // The disk storer's bounded index may omit a valid high-numbered slot.
+                    // Pixel Crushers still retrieves, deserializes and applies its SavedGameData.
+                    object data = _retrieveSavedGameDataMethod.Invoke(_activeStorer, new object[] { vendorSlotNumber });
+                    if (data == null || _loadGameMethod == null) return Fail("Saved game application is unavailable.");
+                    _loadGameMethod.Invoke(null, new[] { data });
+                }
                 return LwsSaveOperationResult.Success($"Loaded through Pixel Crushers slot {vendorSlotNumber}.");
             }
             catch (TargetInvocationException ex)
@@ -1695,7 +1706,12 @@ namespace LWS.InterstateHauler
 
             try
             {
-                return (bool)_hasSavedGameInSlotMethod.Invoke(null, new object[] { vendorSlotNumber });
+                if ((bool)_hasSavedGameInSlotMethod.Invoke(null, new object[] { vendorSlotNumber })) return true;
+                // Installed DiskSavedGameDataStorer reads at most 999 saveinfo rows at startup.
+                // Our existing 16000+ namespace must not rely on that auxiliary index. No files,
+                // serialization or alternate storage are owned here: ask the same storer.
+                return vendorSlotNumber >= 999 && _diskStorerType?.IsInstanceOfType(_activeStorer) == true &&
+                    _retrieveSavedGameDataMethod?.Invoke(_activeStorer, new object[] { vendorSlotNumber }) != null;
             }
             catch (Exception ex)
             {
@@ -1744,7 +1760,7 @@ namespace LWS.InterstateHauler
 
             try
             {
-                bool hasData = _hasDataInSlotMethod != null && (bool)_hasDataInSlotMethod.Invoke(_activeStorer, new object[] { vendorSlotNumber });
+                bool hasData = HasSaveInSlot(vendorSlotNumber);
                 if (!hasData)
                 {
                     return LwsSaveOperationResult.Failure($"Pixel Crushers slot {vendorSlotNumber} does not contain saved data.");
@@ -1789,10 +1805,10 @@ namespace LWS.InterstateHauler
 
             try
             {
-                bool hasData = _hasDataInSlotMethod != null && (bool)_hasDataInSlotMethod.Invoke(_activeStorer, new object[] { sourceVendorSlotNumber });
+                bool hasData = HasSaveInSlot(sourceVendorSlotNumber);
                 if (!hasData)
                 {
-                    return LwsSaveOperationResult.Success($"Pixel Crushers source slot {sourceVendorSlotNumber} is empty; no backup needed.");
+                    return LwsSaveOperationResult.Failure($"Pixel Crushers source slot {sourceVendorSlotNumber} cannot be read; primary overwrite was cancelled.");
                 }
 
                 object savedGameData = _retrieveSavedGameDataMethod.Invoke(_activeStorer, new object[] { sourceVendorSlotNumber });
@@ -1868,7 +1884,7 @@ namespace LWS.InterstateHauler
 
             try
             {
-                bool hasDirectory = (bool)_hasDataInSlotMethod.Invoke(_activeStorer, new object[] { LwsSaveSchema.ProfileDirectoryVendorSlot });
+                bool hasDirectory = HasSaveInSlot(LwsSaveSchema.ProfileDirectoryVendorSlot);
                 if (!hasDirectory)
                 {
                     return LwsSaveOperationResult.Success("No Pixel Crushers profile directory save exists yet.");
@@ -1877,16 +1893,18 @@ namespace LWS.InterstateHauler
                 object savedGameData = _retrieveSavedGameDataMethod.Invoke(_activeStorer, new object[] { LwsSaveSchema.ProfileDirectoryVendorSlot });
                 if (savedGameData == null)
                 {
-                    return LwsSaveOperationResult.Success("Pixel Crushers profile directory slot is empty.");
+                    return LwsSaveOperationResult.Failure("Pixel Crushers profile directory could not be retrieved; existing profiles were not replaced.");
                 }
 
                 string payload = _getDataMethod.Invoke(savedGameData, new object[] { LwsSaveSchema.ProfileDirectoryRecordKey }) as string;
                 if (string.IsNullOrWhiteSpace(payload))
                 {
-                    return LwsSaveOperationResult.Success("Pixel Crushers profile directory record is empty.");
+                    return LwsSaveOperationResult.Failure("Pixel Crushers profile directory record is empty; existing profiles were not replaced.");
                 }
 
                 directory = DeserializeWithPixelCrushers<LwsSaveProfileDirectory>(payload);
+                if (directory == null)
+                    return LwsSaveOperationResult.Failure("Pixel Crushers profile directory could not be deserialized; existing profiles were not replaced.");
                 directory?.EnsureValid();
                 return LwsSaveOperationResult.Success("Profile directory loaded through Pixel Crushers SavedGameDataStorer.");
             }
