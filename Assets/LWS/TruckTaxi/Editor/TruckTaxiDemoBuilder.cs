@@ -19,6 +19,19 @@ namespace LWS.TruckTaxi.Editor
         public const string Root = "Assets/LWS/TruckTaxi";
         public const string ScenePath = Root+"/Scenes/TruckTaxi_DemoCity.unity";
         private static Material asphalt, grass, concrete, yellow, teal, coral;
+        [MenuItem("Truck Taxi/Stabilization/Prepare Missing Content And Reports")]
+        public static void PrepareStabilizationContent()
+        {
+            if(Application.isPlaying) throw new InvalidOperationException("Stop Play Mode before authoring.");
+            for(int i=0;i<SceneManager.sceneCount;i++)
+                if(SceneManager.GetSceneAt(i).isDirty) throw new InvalidOperationException("Save scene edits before authoring.");
+            TruckTaxiCareerAuthoring.CreateMissingStarterCatalog();
+            TruckTaxiWorldGeometryAuthoring.CreateMissingDressingProfiles();
+            TruckTaxiPassengerFactoryBuilder.WriteUnresolvedMetadataReport();
+            TruckTaxiMoralityValidationAuthoring.Execute();
+            AssetDatabase.SaveAssets();
+            Debug.Log("Truck Taxi missing stabilization assets/reports prepared. Existing content retained; world and voice generators not invoked.");
+        }
         private static void AssignGPSControls(TruckTaxiHud hud)
         {
             hud.heatSliderPrefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Heat - Complete Modern UI/Prefabs/UI Elements/Slider/Slider.prefab");

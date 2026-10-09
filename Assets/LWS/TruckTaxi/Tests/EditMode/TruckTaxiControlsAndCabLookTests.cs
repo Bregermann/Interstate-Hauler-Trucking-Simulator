@@ -13,6 +13,33 @@ namespace LWS.TruckTaxi.Tests
     public sealed class TruckTaxiControlsAndCabLookTests
     {
         [Test]
+        public void WheelPromptsIgnoreIdleNoiseButRecognizeCalibratedMovement()
+        {
+            var baseline=new LwsWheelAnalogState { throttle=.3f };
+            Assert.IsFalse(TruckTaxiControlsPanel.MeaningfulWheelMotion(baseline,
+                new LwsWheelAnalogState { throttle=.31f,steering=.01f }));
+            Assert.IsTrue(TruckTaxiControlsPanel.MeaningfulWheelMotion(baseline,
+                new LwsWheelAnalogState { throttle=.4f }));
+            Assert.IsTrue(TruckTaxiControlsPanel.MeaningfulWheelMotion(baseline,
+                new LwsWheelAnalogState { throttle=.3f,steering=.1f }));
+        }
+        [Test]
+        public void PromptDeviceIgnoresStickDriftAndMouseJitter()
+        {
+            Assert.IsFalse(TruckTaxiUIInput.MeaningfulDeviceMotion(new Vector2(.04f,.08f),true));
+            Assert.IsTrue(TruckTaxiUIInput.MeaningfulDeviceMotion(new Vector2(.5f,0),true));
+            Assert.IsFalse(TruckTaxiUIInput.MeaningfulDeviceMotion(new Vector2(.1f,.1f),false));
+            Assert.IsTrue(TruckTaxiUIInput.MeaningfulDeviceMotion(new Vector2(2,0),false));
+            Assert.IsFalse(TruckTaxiUIInput.MeaningfulDeviceMotion(new Vector2(float.NaN,0),true));
+        }
+        [TestCase("DualShock4GamepadHID", "PLAYSTATION-STYLE CONTROLLER")]
+        [TestCase("DualSenseGamepadHID", "PLAYSTATION-STYLE CONTROLLER")]
+        [TestCase("SwitchProControllerHID", "NINTENDO-STYLE CONTROLLER")]
+        [TestCase("XInputControllerWindows", "XBOX-STYLE CONTROLLER")]
+        [TestCase("Gamepad", "GENERIC GAMEPAD")]
+        public void ControllerFamilyUsesReportedLayoutWithoutInventedGlyphs(string layout,string expected) =>
+            Assert.AreEqual(expected,TruckTaxiUIInput.GamepadFamily(layout));
+        [Test]
         public void NewActionsHaveNonConflictingPrimaryBindings()
         {
             var go=new GameObject("Controls input test",typeof(EventSystem),typeof(InputSystemUIInputModule));

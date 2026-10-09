@@ -9,6 +9,104 @@ namespace LWS.TruckTaxi.Tests
     public sealed class TruckTaxiNavigationIntentTests
     {
         [Test]
+        public void CompanionSurvivesNewPickupServiceAndStolenPassenger()
+        {
+            var root=new GameObject("GPS coexistence");
+            try
+            {
+                var gps=root.AddComponent<TruckTaxiGPSAdapter>();
+                Set(gps,"navigation",new LwsNavigationService()); Set(gps,"player",root.transform);
+                var companion=root.AddComponent<TruckTaxiStopObjectivePoint>();
+                companion.stableId="companion.stop"; companion.displayName="Motel";
+                companion.category=TruckTaxiStopCategory.PrivateMeeting;
+                var ride=root.AddComponent<TruckTaxiRideLocation>(); ride.locationId="fare";
+                gps.SetRideDestination(ride);
+                Assert.IsTrue(gps.SetPrivateStopDestination(companion));
+                Assert.AreEqual("companion.stop",gps.TargetId);
+                long companionToken=gps.ActiveLeaseToken;
+                gps.SetPickupDestination(ride);
+                Assert.AreEqual(TruckTaxiNavigationLayer.RidePickup,gps.ActiveLayer);
+                Assert.AreEqual("Motel",gps.CompanionDestinationLabel);
+                gps.SetRideDestination(ride);
+                Assert.AreEqual(companionToken,gps.ActiveLeaseToken);
+                Assert.IsTrue(gps.TrySetMapServiceDestination("service","Service",Vector3.zero));
+                Assert.IsTrue(gps.TrySetNavigationIntent(TruckTaxiNavigationLayer.RivalPassenger,"theft","stolen",
+                    "Stolen destination",Vector3.zero,TruckTaxiMapMarkerType.Destination));
+                long stolenToken=gps.ActiveLeaseToken;
+                Assert.IsFalse(gps.ReleaseNavigationIntent(TruckTaxiNavigationLayer.RivalPassenger,"theft","stolen",stolenToken+1));
+                Assert.IsTrue(gps.ReleaseNavigationIntent(TruckTaxiNavigationLayer.RivalPassenger,"theft","stolen",stolenToken));
+                Assert.AreEqual("service",gps.TargetId);
+                gps.CompleteServiceDestination("service");
+                Assert.AreEqual(companionToken,gps.ActiveLeaseToken);
+                Assert.IsTrue(gps.ClearPrivateStopDestination(companion.stableId));
+                Assert.AreEqual("fare",gps.TargetId);
+                gps.ClearRideDestination();
+                Assert.IsFalse(gps.HasNavigationTarget);
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        [Test]
+        public void LostOrWrongRouteRestoresButExplicitStopRemainsSuppressed()
+        {
+            var root=new GameObject("GPS reconciliation"); var stop=new GameObject("Destination");
+            try
+            {
+                var gps=root.AddComponent<TruckTaxiGPSAdapter>();
+                var navigation=new LwsNavigationService();
+                var registry=new LwsServiceRegistry();
+                registry.Register<ILwsNavigationService>(navigation); registry.InitializeAll();
+                var provider=root.AddComponent<LwsRoadGraphProvider>();
+                var graph=new LwsRoadGraph { graphId="gps.fixture" };
+                graph.nodes.Add(new LwsRoadNode { nodeId="A",position=Vector3.zero });
+                graph.nodes.Add(new LwsRoadNode { nodeId="B",position=Vector3.forward*100 });
+                var edge=new LwsRoadEdge { edgeId="AB",roadId="road",segmentId="segment",fromNodeId="A",toNodeId="B",
+                    distanceMeters=100,travelCost=100,speedLimitMph=45,laneCount=1,laneWidthMeters=3.7f,
+                    roadClass=LwsRoadClass.Interstate,surfaceType=LwsRoadSurfaceType.AsphaltInterstate };
+                edge.samples.Add(new LwsRoadSample { position=Vector3.zero,forward=Vector3.forward });
+                edge.samples.Add(new LwsRoadSample { position=Vector3.forward*100,forward=Vector3.forward,distanceFromStartMeters=100 });
+                graph.edges.Add(edge); provider.SetGraph(graph,false);
+                Set(gps,"navigation",navigation); Set(gps,"player",root.transform); Set(gps,"graph",provider);
+                stop.transform.position=Vector3.forward*100;
+                var ride=stop.AddComponent<TruckTaxiRideLocation>(); ride.locationId="fare.destination";
+                gps.SetRideDestination(ride);
+                Assert.IsTrue(gps.RouteReady);
+                long token=gps.ActiveLeaseToken;
+                navigation.ClearRoute(); gps.ReconcileNavigation();
+                Assert.AreEqual(ride.locationId,navigation.CurrentRoute?.destinationId);
+                Set(navigation,"<CurrentRoute>k__BackingField",new LwsRouteResult { succeeded=true,destinationId="stale.theft" });
+                Assert.IsFalse(gps.RouteReady);
+                gps.ReconcileNavigation();
+                Assert.AreEqual(ride.locationId,navigation.CurrentRoute?.destinationId);
+                Assert.AreEqual(token,gps.ActiveLeaseToken);
+                gps.StopNavigation(); gps.ReconcileNavigation();
+                Assert.IsNull(navigation.CurrentRoute);
+                Assert.IsTrue(gps.RestoreRideRoute());
+                gps.ClearRideDestination();
+                Assert.IsNull(navigation.CurrentRoute);
+            }
+            finally { Object.DestroyImmediate(stop); Object.DestroyImmediate(root); }
+        }
+
+        [Test]
+        public void StolenLeaseReleaseWithoutUnderlyingIntentClearsRoute()
+        {
+            var root=new GameObject("Stolen GPS cleanup");
+            try
+            {
+                var gps=root.AddComponent<TruckTaxiGPSAdapter>(); var navigation=new LwsNavigationService();
+                Set(gps,"navigation",navigation); Set(gps,"player",root.transform);
+                Assert.IsTrue(gps.TrySetNavigationIntent(TruckTaxiNavigationLayer.RivalPassenger,"rival-theft.fixture",
+                    "stolen","Stolen",Vector3.zero,TruckTaxiMapMarkerType.Destination));
+                long token=gps.ActiveLeaseToken;
+                Set(navigation,"<CurrentRoute>k__BackingField",new LwsRouteResult { succeeded=true,destinationId="stolen" });
+                Assert.IsTrue(gps.ReleaseNavigationIntent(TruckTaxiNavigationLayer.RivalPassenger,"rival-theft.fixture","stolen",token));
+                Assert.IsNull(navigation.CurrentRoute);
+                Assert.IsFalse(gps.HasNavigationTarget);
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+        [Test]
         public void FinalScenicRestroomCompletionRestoresEachSuspendedOwner()
         {
             var stack=new TruckTaxiNavigationIntents<string>();

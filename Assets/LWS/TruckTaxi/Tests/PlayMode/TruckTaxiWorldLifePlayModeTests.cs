@@ -78,6 +78,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsNotNull(host);
             Assert.IsTrue(host.Ready);
             Assert.IsTrue(host.CanResume, host.ResumeBlockReason);
+            yield return TruckTaxiPlayModeSaveIsolation.CompleteNewRunIntroduction(host);
             Assert.IsNotNull(host.WorldLife);
             Assert.IsNotNull(host.ComponentDamage);
             Assert.IsNotNull(host.PhysicalFacilities);

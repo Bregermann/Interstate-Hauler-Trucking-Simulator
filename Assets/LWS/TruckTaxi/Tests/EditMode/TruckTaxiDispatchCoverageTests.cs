@@ -98,6 +98,7 @@ namespace LWS.TruckTaxi.Tests
             int run=0,maxRun=0,raceCount=0;
             for(int i=0;i<1000;i++)
             {
+                TruckTaxiDispatchTestClock.ExpireManualDeclineCooldown(session,hour);
                 Assert.IsTrue(session.OfferRide(),session.LastOfferDiagnostics);
                 string id=session.Passenger.passengerId, nextCategory=session.Passenger.DispatchArchetype;
                 Assert.AreNotEqual(previous,id,"Manual decline has viable alternative passengers.");

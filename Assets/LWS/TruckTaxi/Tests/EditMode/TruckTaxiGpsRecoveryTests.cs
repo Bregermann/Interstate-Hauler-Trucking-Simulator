@@ -43,6 +43,12 @@ namespace LWS.TruckTaxi.Tests
         }
         private static LwsNavigationService Navigation(TruckTaxiGPSAdapter gps,Presenter presenter)
         {
+            var destination=new GameObject("Recovery destination").AddComponent<TruckTaxiRideLocation>();
+            destination.transform.SetParent(gps.transform);
+            destination.transform.position=Vector3.forward*100;
+            destination.locationId="ride";
+            Set(gps,"player",gps.transform);
+            gps.SetRideDestination(destination);
             var navigation=new LwsNavigationService();
             Set(navigation,"<CurrentRoute>k__BackingField",new LwsRouteResult {
                 succeeded=true,destinationId="ride",waypoints={Vector3.zero,Vector3.forward*100}
@@ -118,9 +124,37 @@ namespace LWS.TruckTaxi.Tests
                 compass.showMiniMap=true; Call(gps,"RefreshPresentationIfNeeded");
                 Assert.AreEqual(2,compass.Refreshes);
                 compass.hasRoute=false; Set(gps,"nextPresentationCheck",float.NegativeInfinity);
+                int presents=presenter.Presents;
                 Call(gps,"RefreshPresentationIfNeeded");
                 Assert.AreEqual(3,compass.Refreshes); Assert.IsTrue(compass.hasRoute);
+                Assert.AreEqual(presents+1,presenter.Presents);
                 Assert.AreSame(route,navigation.CurrentRoute,"Recovery must not compute or own another route.");
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void PresentationRecoveryDoesNotReplayUnownedOrMismatchedRoute(bool mismatched)
+        {
+            var root=new GameObject("Unowned GPS route");
+            try
+            {
+                var gps=root.AddComponent<TruckTaxiGPSAdapter>();
+                var compass=root.AddComponent<TruckTaxiCompassRecoveryProbe>(); Bind(gps,compass);
+                var presenter=new Presenter(compass); var navigation=Navigation(gps,presenter);
+                var route=navigation.CurrentRoute;
+                if(mismatched) route.destinationId="other-owner";
+                else
+                {
+                    gps.ClearDestination();
+                    Set(navigation,"<CurrentRoute>k__BackingField",route);
+                }
+                compass.hasRoute=false;
+                int presents=presenter.Presents;
+                gps.RequestPresentationRefresh(); Call(gps,"RefreshPresentationIfNeeded");
+                Assert.AreEqual(presents,presenter.Presents);
+                Assert.IsFalse(compass.hasRoute);
             }
             finally { Object.DestroyImmediate(root); }
         }

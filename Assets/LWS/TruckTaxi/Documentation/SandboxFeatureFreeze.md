@@ -1,10 +1,116 @@
 # Truck Taxi Foundation Acceptance Ledger
 
-Updated: 2026-10-08. Scope: Truck Taxi inside the Interstate: Hauler host project.
+Updated: 2026-10-09. Scope: Truck Taxi inside the Interstate: Hauler host project.
 
 ## Decision
 
 **NOT FEATURE-FROZEN. TASK INCOMPLETE.**
+
+## Final Checkpoint Of This Continuation
+
+- Runtime checkpoint: `002e28da` (local only). Deferred voice work and unrelated
+  robot art, shared-host and vendor changes are excluded.
+- Focused regression tests: 181/181 passed (`TaxiStabilization-Focused8.xml`).
+  Career tests: 35/35 passed (`TaxiStabilization-CareerTests.xml`).
+- Rendered scenarios passed across `TaxiStabilization-PlayMode3.xml` (four of
+  five), `TaxiStabilization-PlayMode4.xml` (remaining one), and
+  `TaxiStabilization-CareerVisibility.xml` (guide visibility plus on-foot flow).
+  The obsolete tests now acknowledge the actual guide and its input-release
+  guard. No production modal guard was disabled.
+- Final Windows build: `TaxiStabilization-WindowsBuild3.log`, 593865669 bytes,
+  zero errors. Runtime DLL SHA256:
+  `A3F0FB6A6EAA6FC85CB897AA55D491E056AA2A07886A63C9F3E2CCF1DD7FBF65`.
+- Final isolated run `ad426293787e413d9e5106ceac63d0ce`: seed PID 24208,
+  Continue PID 32876, manual-load PID 31152, second Continue PID 20104. All four
+  separate processes exited 0 with version-2 PASS. Logs:
+  `TaxiStabilization-FinalRestart-{seed,continue,manual,continue2}.log`.
+- Both this run and the earlier version-2 run were cleaned through the existing
+  profile-delete facade, exit 0/PASS. Normal saves were not accessed.
+- Fresh standalone Career screenshots were visually inspected at actual
+  1280x720, 1920x1080, 2560x1440, 3440x1440 and 3840x1440. The requested
+  3840x2160 window was OS-clamped to 1440 high: native 4K is NOT verified. Pause
+  controls and external HUD GPS no longer show behind Career. Other populated
+  categories, equipment and appearance still need full interactive acceptance.
+- One-hour soak ATTEMPTED, NOT PASSED. `TaxiStabilization-FinalSoak.log` exited
+  2 during preflight because the saved bus stop is outside the validated road
+  approach. No relocation or relaxed safety check was used. A safe road-start
+  fixture/manual approach and a complete new run are required.
+- The 49-step continuous gameplay checklist remains unexecuted. Empty dressing
+  pools, missing physical morality-trailer validation content, attached-trailer
+  save support, remaining Career content/installers and hardware/human
+  acceptance are not waived. See `StabilizationContinuousAcceptance.md`.
+
+Older sections below retain historical evidence; this checkpoint is authoritative
+for execution status, not a declaration that the whole request is complete.
+
+## Current Stabilization Pass
+
+### Latest Integration Checkpoint
+
+- `Logs/TaxiStabilization-IntegratedEditMode.xml`: 1186 tests, 1154 passed,
+  30 failed, two skipped. Unity compiled the integrated source. The affected
+  fixture rerun, `Logs/TaxiStabilization-Focused8.xml`, passed 181/181 with no
+  skips. The unrelated analytical-robot art failure remains; the integrated
+  suite is not claimed fully green.
+- Career identity, initial guide acknowledgement, three live NWH tuning
+  purchases, driver color/cap customization and morality coordination are now
+  implemented. They are not yet covered by a current standalone restart run.
+- `PrepareStabilizationContent` completed successfully. It created the Career
+  catalog/tuning assets, unresolved passenger metadata report and eight Spline
+  Spawner dressing profiles. Dressing pools remain empty. No suitable physical
+  trailer exists in the Taxi scenes, so no morality trailer event was fabricated.
+- The expanded restart harness includes damage, away-from-spawn pose and Career
+  checks. Its source compiled, but the older executable evidence below does not
+  prove these new assertions. Rendered PlayMode, a current Windows build and
+  fresh-process validation remain required.
+- `StabilizationContinuousAcceptance.md` contains the unexecuted continuous
+  acceptance checklist, companion regressions and one-hour soak requirements.
+  No feature-freeze or human acceptance is claimed.
+- Initial rendered rerun: two of five passed. Three stopped on an existing
+  starter prefab dependency's PPtr/PrefabInstance error exposed by loading the
+  new Resources catalog. The attempted Unity prefab round-trip changed root
+  identity and was fully reverted. Shared prefab assets remain unchanged.
+  The non-purchasable, already-owned starter catalog entry now stores definition
+  metadata only; actual purchasable content still requires a real matching
+  definition/prefab. `TaxiStabilization-CareerMetadata2.log` confirms the scoped
+  catalog migration succeeded. The underlying shared prefab serialization
+  defect remains for a deliberate reference-migration task, not a hidden fix.
+
+The following checkpoint and tables retain earlier evidence and planning. Where
+they say Career is unimplemented or restart authorization is pending, the latest
+checkpoint above supersedes them. They are not current completion claims.
+
+The latest request authorizes an isolated ASTRA_SANDBOX_TEST profile and vendor
+storage root. This supersedes the earlier missing-authorization gate. Normal
+player saves remain excluded from automated validation.
+
+- Focused Unity EditMode rerun: 170/170 passed, zero skipped. The initial run
+  passed 125/130; five new sleep/service fixtures required explicit EditMode
+  registration, not weaker runtime eligibility checks.
+- Persistence fixes address the Taxi regional/resume-world alias mismatch,
+  the installed disk storer's 999-row discovery limit versus 16000+ LWS slots,
+  and deferred autosaves lost during immediate menu unload.
+- Persistent lifetime and separate last-session statistics, manual-decline
+  cooldown, occupant compatibility, navigation ownership, service interactions,
+  fuel eligibility, and driver visibility changes are implemented. Runtime
+  acceptance is not implied by these unit tests.
+- Windows development build succeeded (593096209 bytes, zero errors). An isolated
+  seed/menu-load run and three fresh-process Continue/manual/Continue launches
+  passed; disposable-profile cleanup passed through the facade. Run ID:
+  08db3a120d9a4ef4937815935e09257d. Counters, cash, inventory, needs, fuel and
+  calendar were asserted. This first fixture did not move away from spawn or
+  change damage; strengthened coverage remains required. Detailed evidence is
+  tracked in RestartHarnessHandoff.md. No complete Career implementation or
+  full persistence acceptance is claimed by this ledger.
+- Remaining major work includes full Career identity/ownership/customization,
+  the first-run guide, morality/town progression and trailer event, final race
+  replacement, temptation presentation, global destruction/damage completion,
+  authoring/validator completion, resolution checks, continuous gameplay and
+  one-hour soak acceptance. Older rows below are historical baseline evidence,
+  not a declaration that newly requested features are complete.
+
+Current logs: Logs/TaxiStabilization-Focused.xml,
+Logs/TaxiStabilization-Focused2.xml, Logs/TaxiStabilization-DispatchAuthoring.log.
 
 The current request requires Phase 0 human-bug stabilization before follow-on
 feature completion. The implementation checkpoint below is useful and builds,

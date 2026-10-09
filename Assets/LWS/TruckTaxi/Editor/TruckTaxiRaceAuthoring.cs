@@ -13,6 +13,45 @@ namespace LWS.TruckTaxi.Editor
         private const string TruckTwo = "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Truck_2.prefab";
         private const string OfficeName = "Thunder Bowl Race Registration";
 
+        [MenuItem("Truck Taxi/Regional/Validate Flagship Road Race")]
+        public static void ValidateFlagship()
+        {
+            var host = SelectedHost();
+            if (!TruckTaxiFlagshipRoute.TryCreate(host.roadGraph?.Graph,
+                host.traffic?.cityLanes, out var route, out string reason))
+                throw new InvalidOperationException(reason);
+            Debug.Log($"Flagship geometry validated: {route.SourceLaneId}, {route.LengthMeters:0} m, {route.Gates.Length} gates. " +
+                "Grounded grid, streaming, UTS performance and a full drive still require Play Mode validation.", host);
+        }
+
+        [MenuItem("Truck Taxi/Regional/Configure Flagship Road Race On Selected Host")]
+        public static void ConfigureFlagship()
+        {
+            if (Application.isPlaying) throw new InvalidOperationException("Stop Play Mode before race authoring.");
+            var host = SelectedHost();
+            ValidateFlagship();
+            var first = AssetDatabase.LoadAssetAtPath<GameObject>(TruckOne);
+            var second = AssetDatabase.LoadAssetAtPath<GameObject>(TruckTwo);
+            var api = new LWS.InterstateHauler.LwsUtsTrafficApi();
+            if (!api.PrefabLooksLikeUtsVehicle(first) || !api.PrefabLooksLikeUtsVehicle(second))
+                throw new InvalidOperationException("Installed UTS truck prefabs are absent or incompatible.");
+            var race = host.GetComponent<TruckTaxiRaceRuntime>() ?? Undo.AddComponent<TruckTaxiRaceRuntime>(host.gameObject);
+            Undo.RecordObject(race, "Configure flagship road race");
+            race.utsTruckPrefabs = new[] { first, second };
+            EditorUtility.SetDirty(race);
+            EditorSceneManager.MarkSceneDirty(host.gameObject.scene);
+            Debug.Log("Flagship UTS references configured. No road/venue geometry changed and no scene saved. " +
+                "Bootstrap must retain its existing RaceRuntime.Initialize(host) call.", race);
+        }
+
+        private static TruckTaxiBootstrap SelectedHost()
+        {
+            var host = Selection.activeGameObject != null ? Selection.activeGameObject.GetComponent<TruckTaxiBootstrap>() : null;
+            if (host == null || !host.gameObject.scene.IsValid())
+                throw new InvalidOperationException("Select the existing Truck Taxi bootstrap scene object.");
+            return host;
+        }
+
         [MenuItem("Truck Taxi/Regional/Install Thunder Bowl Race Office")]
         public static void Install()
         {

@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 namespace LWS.TruckTaxi.Editor
 {
     // Explicit source-scene operations only. No world rebuild, asset save, or vendor mutation.
-    public static class TruckTaxiWorldGeometryAuthoring
+    public static partial class TruckTaxiWorldGeometryAuthoring
     {
         public const string UtsTruckPath = "Assets/UTS_FullPack/Models/Cars/Car_Prefabs/Day Cars/Truck_1.prefab";
         public const string CabColliderName = "LWS Parked Cab Collision";

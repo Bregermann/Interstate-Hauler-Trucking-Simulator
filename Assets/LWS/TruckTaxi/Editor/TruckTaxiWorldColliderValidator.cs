@@ -24,7 +24,7 @@ namespace LWS.TruckTaxi.Editor
             string.Join("\n", scenes.Select(s => "SCENE " + s)) + "\n\n" + string.Join("\n\n", findings);
     }
 
-    public static class TruckTaxiWorldColliderValidator
+    public static partial class TruckTaxiWorldColliderValidator
     {
         private sealed class Surface
         {
@@ -72,16 +72,18 @@ namespace LWS.TruckTaxi.Editor
             var report = new TruckTaxiWorldAuditReport { scope = "Serialized source scenes in isolated previews, including persistent DemoCity. Unsaved loaded edits are not included. Cross-region candidates do not imply simultaneous loading." };
             var surfaces = new List<Surface>();
             var player = CanonicalPlayerBodyColliders();
+            var semantics = new SemanticAudit();
             report.findings.Add("PLAYER REFERENCE: canonical NWH prefab body layers only; instance IgnoreCollision state must be checked with the live player.");
             foreach (var path in AuthoredScenePaths())
             {
                 if (AssetDatabase.LoadAssetAtPath<SceneAsset>(path) == null)
                 { report.findings.Add("MISSING SCENE: " + path); continue; }
                 var scene = EditorSceneManager.OpenPreviewScene(path);
-                try { CaptureScene(scene, path, player, report, surfaces); }
+                try { CaptureScene(scene, path, player, report, surfaces); semantics.Capture(scene.GetRootGameObjects(), report); }
                 finally { EditorSceneManager.ClosePreviewScene(scene); }
             }
             CompareSurfaces(surfaces, report);
+            semantics.Complete(report);
             return report;
         }
 
@@ -90,21 +92,30 @@ namespace LWS.TruckTaxi.Editor
             var report = new TruckTaxiWorldAuditReport { scope = "Loaded object observation including DontDestroyOnLoad renderers. Nothing repaired." };
             var surfaces = new List<Surface>();
             var scenes = new HashSet<int>();
+            var semantics = new SemanticAudit();
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
                 var scene = SceneManager.GetSceneAt(i);
                 if (scene.isLoaded && !EditorSceneManager.IsPreviewScene(scene) && scenes.Add(scene.handle))
+                {
                     CaptureScene(scene, scene.path, playerSolids, report, surfaces);
+                    semantics.Capture(scene.GetRootGameObjects(), report);
+                }
             }
             foreach (var renderer in Resources.FindObjectsOfTypeAll<Renderer>())
             {
                 var scene = renderer.gameObject.scene;
                 if (!scene.IsValid() || !scene.isLoaded || EditorUtility.IsPersistent(renderer) || EditorSceneManager.IsPreviewScene(scene)) continue;
-                if (scenes.Add(scene.handle)) CaptureScene(scene, scene.path, playerSolids, report, surfaces);
+                if (scenes.Add(scene.handle))
+                {
+                    CaptureScene(scene, scene.path, playerSolids, report, surfaces);
+                    semantics.Capture(scene.GetRootGameObjects(), report);
+                }
             }
             report.findings.Add(TruckTaxiColliderDiagnostics.WorldSceneSnapshot());
             AppendVendorRegistry(report);
             CompareSurfaces(surfaces, report);
+            semantics.Complete(report);
             return report;
         }
 

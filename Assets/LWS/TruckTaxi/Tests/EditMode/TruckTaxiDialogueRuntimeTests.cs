@@ -10,7 +10,8 @@ namespace LWS.TruckTaxi.Tests
             public bool IsPlaying { get; private set; }
             public bool AudioPlaying=>false;
             public string Subtitle { get; private set; }
-            public void Play(string speaker,string subtitle,AudioClip clip) { IsPlaying=true; Subtitle=subtitle; }
+            public AudioClip Clip { get; private set; }
+            public void Play(string speaker,string subtitle,AudioClip clip) { IsPlaying=true; Subtitle=subtitle; Clip=clip; }
             public void Stop() { IsPlaying=false; Subtitle=""; }
             public void SetPaused(bool paused) { }
         }
@@ -19,9 +20,10 @@ namespace LWS.TruckTaxi.Tests
         private PassengerProfile passenger;
         private TruckTaxiDialogueSet lines;
         private TruckTaxiDialoguePlayer player;
+        private Output output;
         [SetUp] public void Setup()
         {
-            prior=TruckTaxiBarkBridge.Create; TruckTaxiBarkBridge.Create=_=>new Output();
+            prior=TruckTaxiBarkBridge.Create; TruckTaxiBarkBridge.Create=_=>output=new Output();
             go=new GameObject("Taxi bark fixture"); player=go.AddComponent<TruckTaxiDialoguePlayer>();
             typeof(TruckTaxiDialoguePlayer).GetMethod("Awake",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).Invoke(player,null);
             passenger=ScriptableObject.CreateInstance<PassengerProfile>(); passenger.passengerId="test";
@@ -34,6 +36,16 @@ namespace LWS.TruckTaxi.Tests
             lines.lines=new[]{new TruckTaxiDialogueLine { lineId="hello",category=TruckTaxiDialogueCategory.PickupGreeting,text="Hello" }};
             Assert.IsTrue(player.Speak(passenger,TruckTaxiDialogueCategory.PickupGreeting,null));
             Assert.AreEqual("Hello",player.Subtitle); Assert.IsFalse(player.AudioPlaying);
+        }
+        [Test] public void ExplicitTextReactionUsesNullAudioAndPreservesHigherPriorityBark()
+        {
+            Assert.IsTrue(player.SpeakAuthoredText("Passenger", "That was unexpected."));
+            Assert.AreEqual("That was unexpected.", player.Subtitle);
+            Assert.IsNull(output.Clip);
+            Assert.IsNull(player.LastLine);
+            Assert.IsTrue(player.SpeakAuthoredText("Passenger", "Urgent", 100));
+            Assert.IsFalse(player.SpeakAuthoredText("Passenger", "Ordinary", 30));
+            Assert.AreEqual("Urgent", player.Subtitle);
         }
         [Test] public void OneShotAndCooldownCannotBeBypassedByFallback()
         {

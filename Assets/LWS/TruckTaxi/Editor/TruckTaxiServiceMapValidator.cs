@@ -6,6 +6,103 @@ namespace LWS.TruckTaxi.Editor
 {
     public static class TruckTaxiServiceMapValidator
     {
+        [MenuItem("Truck Taxi/Map/Compose Selected Service Location")]
+        public static void OpenComposition() => EditorWindow.GetWindow<TruckTaxiServiceCompositionWindow>("Service composition");
+
+        // Compose existing art and anchors, not a second world generator. Never move anchors or save a scene.
+        public static TruckTaxiServicePoint ComposeService(GameObject facility, TruckTaxiRideLocation location,
+            TruckTaxiServiceCapability capabilities)
+        {
+            TruckTaxiWorldGeometryAuthoring.RequireEditableSceneObject(facility);
+            TruckTaxiWorldGeometryAuthoring.RequireEditableSceneObject(location != null ? location.gameObject : null);
+            if (facility.scene != location.gameObject.scene || location.truckStopPoint == null ||
+                location.truckStopPoint.gameObject.scene != facility.scene || string.IsNullOrWhiteSpace(location.locationId) ||
+                capabilities == TruckTaxiServiceCapability.None)
+                throw new System.InvalidOperationException("Supply a same-scene authored location, stable ID, truck anchor and explicit capabilities.");
+            bool hasArt = false;
+            foreach (var renderer in facility.GetComponentsInChildren<Renderer>(true))
+            {
+                if (renderer is SkinnedMeshRenderer skin && skin.sharedMesh != null) hasArt = true;
+                if (!(renderer is MeshRenderer)) continue;
+                var filter = renderer.GetComponent<MeshFilter>();
+                if (filter != null && filter.sharedMesh != null) hasArt = true;
+            }
+            if (!hasArt)
+                throw new System.InvalidOperationException("Supply existing facility art; this entry does not invent building geometry.");
+            var current = facility.GetComponent<TruckTaxiServicePoint>();
+            string id = !string.IsNullOrWhiteSpace(current?.stableId) ? current.stableId : "service." + location.locationId;
+            if (current != null && current.location != null && current.location != location)
+                throw new System.InvalidOperationException("Existing service belongs to another location; author a distinct bay instead.");
+            foreach (var other in Resources.FindObjectsOfTypeAll<TruckTaxiServicePoint>())
+                if (other != current && !EditorUtility.IsPersistent(other) && other.gameObject.scene.IsValid() &&
+                    !UnityEditor.SceneManagement.EditorSceneManager.IsPreviewScene(other.gameObject.scene) && other.stableId == id)
+                    throw new System.InvalidOperationException("Duplicate service ID in loaded scenes: " + id);
+            var marker = facility.GetComponent<TruckTaxiMapMarker>();
+            foreach (var other in Resources.FindObjectsOfTypeAll<TruckTaxiMapMarker>())
+                if (other != marker && !EditorUtility.IsPersistent(other) && other.gameObject.scene.IsValid() &&
+                    !UnityEditor.SceneManagement.EditorSceneManager.IsPreviewScene(other.gameObject.scene) && other.stableId == id)
+                    throw new System.InvalidOperationException("Duplicate map ID in loaded scenes: " + id);
+            if (marker != null && (!string.IsNullOrWhiteSpace(marker.stableId) && marker.stableId != id ||
+                marker.service != null && marker.service != current))
+                throw new System.InvalidOperationException("Existing map marker has another authority; keep it and choose a separate service owner.");
+            // Refuse replacing existing interaction identities before making any changes.
+            foreach (var component in new Component[] { facility.GetComponent<TruckTaxiStorePoint>(),
+                facility.GetComponent<TruckTaxiGasStationPoint>(), facility.GetComponent<TruckTaxiBathroomPoint>() })
+            {
+                if (component == null) continue;
+                var property = new SerializedObject(component).FindProperty("stableId");
+                if (property != null && !string.IsNullOrWhiteSpace(property.stringValue) && property.stringValue != id)
+                    throw new System.InvalidOperationException("Existing interaction ID differs; reconcile explicitly: " + property.stringValue);
+                var linkedLocation = new SerializedObject(component).FindProperty("location");
+                if (linkedLocation != null && linkedLocation.objectReferenceValue != null && linkedLocation.objectReferenceValue != location)
+                    throw new System.InvalidOperationException("Existing interaction references another bay; reconcile explicitly.");
+            }
+            const string label = "Compose Truck Taxi service";
+            Undo.IncrementCurrentGroup(); int group = Undo.GetCurrentGroup(); Undo.SetCurrentGroupName(label);
+            try
+            {
+                T Ensure<T>() where T : Component => facility.GetComponent<T>() ?? Undo.AddComponent<T>(facility);
+                void Edit(Component component, System.Action assign)
+                {
+                    string before = EditorJsonUtility.ToJson(component);
+                    Undo.RecordObject(component, label); assign();
+                    if (before == EditorJsonUtility.ToJson(component)) return;
+                    EditorUtility.SetDirty(component); PrefabUtility.RecordPrefabInstancePropertyModifications(component);
+                    UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(facility.scene);
+                }
+                var service = Ensure<TruckTaxiServicePoint>();
+                Edit(service, () => { service.stableId = id; service.location = location;
+                    service.displayName = location.locationName; service.capabilities |= capabilities; service.generateValidationFacility = false; });
+                if ((service.capabilities & TruckTaxiServiceCapability.Store) != 0)
+                {
+                    var store = Ensure<TruckTaxiStorePoint>();
+                    Edit(store, () => { store.stableId = id; store.displayName = service.displayName; store.location = location;
+                        store.stopRadius = service.InteractionRadius; store.verticalTolerance = service.verticalTolerance; });
+                }
+                if ((service.capabilities & TruckTaxiServiceCapability.Refuel) != 0)
+                {
+                    var gas = Ensure<TruckTaxiGasStationPoint>();
+                    Edit(gas, () => { gas.stableId = id; gas.displayName = service.displayName;
+                        gas.stoppingRadius = service.InteractionRadius; gas.verticalTolerance = service.verticalTolerance; });
+                }
+                if ((service.capabilities & TruckTaxiServiceCapability.Restroom) != 0)
+                {
+                    var bathroom = Ensure<TruckTaxiBathroomPoint>();
+                    Edit(bathroom, () => { bathroom.stableId = id; bathroom.displayName = service.displayName; bathroom.location = location;
+                        bathroom.stopRadius = service.InteractionRadius; bathroom.verticalTolerance = service.verticalTolerance;
+                        bathroom.allowsJugDisposal = (service.capabilities & TruckTaxiServiceCapability.DisposeWaste) != 0;
+                        bathroom.allowsCabCleanup = (service.capabilities & TruckTaxiServiceCapability.CleanCab) != 0; });
+                }
+                marker = Ensure<TruckTaxiMapMarker>();
+                Edit(marker, () => { marker.stableId = id; marker.label = service.displayName; marker.service = service;
+                    marker.serviceBound = true; marker.source = location.truckStopPoint;
+                    marker.markerType = TruckTaxiServicePresentation.MarkerType(service.capabilities); });
+                Undo.CollapseUndoOperations(group);
+                return service;
+            }
+            catch { Undo.RevertAllDownToGroup(group); throw; }
+        }
+
         [MenuItem("Truck Taxi/Map/Align Selected Service Interactions")]
         public static void AlignSelectedServiceInteractions()
         {
@@ -208,5 +305,28 @@ namespace LWS.TruckTaxi.Editor
             return distance<.26f && distance>.15f || p.y<.5f && p.y>.15f && Mathf.Abs(p.x-.5f)<(p.y-.15f)*.5f;
         }
         private static bool Box(Vector2 p,float x0,float y0,float x1,float y1) => p.x>=x0 && p.x<=x1 && p.y>=y0 && p.y<=y1;
+    }
+
+    public sealed class TruckTaxiServiceCompositionWindow : EditorWindow
+    {
+        [SerializeField] private GameObject facility;
+        [SerializeField] private TruckTaxiRideLocation location;
+        [SerializeField] private TruckTaxiServiceCapability capabilities;
+        private string status;
+        private void OnEnable() { if (facility == null) facility = Selection.activeGameObject; }
+        private void OnGUI()
+        {
+            facility = (GameObject)EditorGUILayout.ObjectField("Existing facility art", facility, typeof(GameObject), true);
+            location = (TruckTaxiRideLocation)EditorGUILayout.ObjectField("Authored bay/location", location, typeof(TruckTaxiRideLocation), true);
+            capabilities = (TruckTaxiServiceCapability)EditorGUILayout.EnumFlagsField("Capabilities to add", capabilities);
+            if (GUILayout.Button("Compose referenced service"))
+            {
+                try { var point = TruckTaxiServiceMapValidator.ComposeService(facility, location, capabilities);
+                    status = "Composed " + point.stableId + ". Review/Undo; scene not saved."; }
+                catch (System.Exception error) { status = error.Message; }
+            }
+            if (GUILayout.Button("Validate selected scope")) TruckTaxiServiceMapValidator.ValidateSelectedAuthoring();
+            EditorGUILayout.HelpBox(status ?? "Uses existing art and explicit references. Existing unrelated components and content are retained.", MessageType.Info);
+        }
     }
 }

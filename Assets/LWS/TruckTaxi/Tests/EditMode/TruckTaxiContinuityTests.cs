@@ -93,6 +93,7 @@ namespace LWS.TruckTaxi.Tests
             session.ContinueShift(); session.SetWorldConditions(1000,12,TruckTaxiDemandWeather.Neutral);
             for(int i=0;i<30;i++)
             {
+                TruckTaxiDispatchTestClock.ExpireManualDeclineCooldown(session,12);
                 Assert.IsTrue(session.OfferRide(passenger));
                 Assert.AreEqual(destination,session.Pickup.locationId);
                 session.DeclineRide();
@@ -169,6 +170,7 @@ namespace LWS.TruckTaxi.Tests
             string previous=null;
             for(int i=0;i<500;i++)
             {
+                TruckTaxiDispatchTestClock.ExpireManualDeclineCooldown(session,12);
                 Assert.IsTrue(session.OfferRide());
                 if(session.Passenger.passengerId==previous) repeats++;
                 previous=session.Passenger.passengerId;
@@ -181,6 +183,7 @@ namespace LWS.TruckTaxi.Tests
             int rare=0;
             for(int i=0;i<500;i++)
             {
+                TruckTaxiDispatchTestClock.ExpireManualDeclineCooldown(session,12);
                 Assert.IsTrue(session.OfferRide());
                 if(session.Passenger==other) rare++;
                 session.DeclineRide();
@@ -252,6 +255,20 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual(TaxiRequestState.Succeeded,request.State);
             Assert.AreEqual(request.Target,request.Progress);
             Assert.IsFalse(session.RecordObjectiveProgress(request,1));
+        }
+    }
+
+    internal static class TruckTaxiDispatchTestClock
+    {
+        internal static void ExpireManualDeclineCooldown(TruckTaxiSession session, float hour)
+        {
+            double remaining=session.ManualDeclineCooldownRemainingGameMinutes;
+            if(remaining<=0) return;
+            Assert.IsFalse(session.OfferRide(),"Manual declines must block offers until the real cooldown expires.");
+            // Keep the demand-window variable fixed while advancing the authoritative elapsed game clock.
+            session.SetWorldConditions(session.GameMinutes+remaining,hour,TruckTaxiDemandWeather.Neutral);
+            Assert.IsFalse(session.ManualDeclineCooldownActive);
+            Assert.Zero(session.ConsecutiveManualDeclines);
         }
     }
 }

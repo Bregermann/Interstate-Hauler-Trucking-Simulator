@@ -27,7 +27,7 @@ namespace LWS.TruckTaxi.Tests
             snapshot.participants.Add(State(TruckTaxiVibinSaveParticipant.Id, Payload()));
             snapshot.participants.Add(State(LwsSaveSchema.WorldResumeContextParticipantId, new LwsWorldResumeContextPayload
             {
-                stableWorldId = LwsWorldResumeCatalog.TruckTaxiWorldId, authoredSceneName = "TruckTaxi",
+                stableWorldId = LwsWorldResumeCatalog.TruckTaxiWorldId, authoredSceneName = TruckTaxiMainMenu.VibinSceneName,
                 hasGlobalPosition = true, rotationW = 1
             }));
             snapshot.participants.Add(State("lws.world.global-position", new LwsGlobalPositionSavePayload { rotationW = 1 }));
@@ -42,6 +42,52 @@ namespace LWS.TruckTaxi.Tests
 
         [Test] public void RequiredCanonicalProvidersAndTaxiPayloadPassDetachedValidation()
         { var result = Validate(Snapshot()); Assert.IsTrue(result.Succeeded, result.Message); }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void OptionalNullSemanticDataSurvivesVendorParticipantJson(int version)
+        {
+            var payload=Payload(); payload.session.version=version;
+            if(version==1) payload.session.career=null;
+            var state=State(TruckTaxiVibinSaveParticipant.Id,payload);
+            string before=state.payloadJson;
+            var read=TruckTaxiVibinSaveParticipant.Read(state,out var restored);
+            Assert.IsTrue(read.Succeeded,read.Message);
+            Assert.IsNull(restored.session.ownedProfile,"Null inline Career data must not invent an identity.");
+            var validation=TruckTaxiVibinSaveParticipant.ValidatePayload(restored,settings);
+            Assert.IsTrue(validation.Succeeded,validation.Message);
+            Assert.AreEqual(before,state.payloadJson);
+        }
+
+        [Test] public void InvalidSessionDiagnosticRetainsSemanticReason()
+        {
+            var payload=Payload(); payload.session.shiftEarningsCents=-1;
+            var result=TruckTaxiVibinSaveParticipant.ValidatePayload(payload,settings);
+            Assert.IsFalse(result.Succeeded);
+            StringAssert.Contains("Negative cash component",result.Message);
+        }
+
+        [TestCase("world.truck-taxi", "TruckTaxi_DemoCity", true)]
+        [TestCase("taxi.regional", "TruckTaxi_DemoCity", true)]
+        [TestCase("taxi.regional", "InterstateCorridorValidation", false)]
+        [TestCase("world.truck-taxi", "UnknownScene", false)]
+        [TestCase("world.foreign", "TruckTaxi_DemoCity", false)]
+        public void ResumeWorldAcceptsOnlyKnownTaxiIdentityPairs(string world, string scene, bool valid)
+        {
+            var snapshot=Snapshot();
+            var resume=JsonUtility.FromJson<LwsWorldResumeContextPayload>(snapshot.participants[1].payloadJson);
+            resume.stableWorldId=world; resume.authoredSceneName=scene;
+            snapshot.participants[1]=State(LwsSaveSchema.WorldResumeContextParticipantId,resume);
+            Assert.AreEqual(valid,Validate(snapshot).Succeeded);
+        }
+
+        [Test] public void CanonicalCaptureNormalizesOnlyTheTaxiRegionalAlias()
+        {
+            Assert.AreEqual(LwsWorldResumeCatalog.TruckTaxiWorldId,
+                LwsWorldResumeCatalog.ResolveStableWorldId(TruckTaxiMainMenu.VibinSceneName,"taxi.regional"));
+            Assert.AreEqual("other.world",LwsWorldResumeCatalog.ResolveStableWorldId("InterstateCorridorValidation","other.world"));
+            Assert.AreEqual("taxi.regional",LwsWorldResumeCatalog.ResolveStableWorldId("OtherScene","taxi.regional"));
+        }
 
         [TestCase(-1f, 80f)]
         [TestCase(81f, 80f)]
@@ -145,6 +191,7 @@ namespace LWS.TruckTaxi.Tests
         { Assert.IsTrue(TruckTaxiVibinPersistence.HasUnsafeFare(state)); Assert.AreEqual("FINISH CURRENT RIDE BEFORE SAVING.", TruckTaxiVibinPersistence.FinishRideMessage); }
 
         [TestCase(TruckTaxiState.Available)]
+        [TestCase(TruckTaxiState.Inactive)]
         [TestCase(TruckTaxiState.RideOffered)]
         [TestCase(TruckTaxiState.RideComplete)]
         public void IdleAndCompletedFareMaySave(TruckTaxiState state)

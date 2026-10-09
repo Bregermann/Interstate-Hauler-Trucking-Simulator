@@ -1,10 +1,61 @@
 using NUnit.Framework;
+using System.Reflection;
 using UnityEngine;
 
 namespace LWS.TruckTaxi.Tests
 {
     public class TruckTaxiGPSDisplayTests
     {
+        [Test]
+        public void InstrumentCaptureRestoresCameraWithoutChangingWorldWeather()
+        {
+            var root=new GameObject("Instrument capture"); var map=new GameObject("Map camera"); var world=new GameObject("World camera");
+            try
+            {
+                var gps=root.AddComponent<TruckTaxiGPSAdapter>();
+                typeof(TruckTaxiGPSAdapter).GetField("attemptedTileLoad",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(gps,true);
+                var camera=map.AddComponent<Camera>(); var worldCamera=world.AddComponent<Camera>();
+                var original=camera.cameraType; var worldType=worldCamera.cameraType;
+                bool fog=RenderSettings.fog;
+                Invoke(gps,"BeginInstrumentCapture",camera);
+                Assert.AreEqual(CameraType.Preview,camera.cameraType);
+                Assert.AreEqual(worldType,worldCamera.cameraType);
+                Assert.AreEqual(fog,RenderSettings.fog);
+                Invoke(gps,"EndMapCapture");
+                Assert.AreEqual(original,camera.cameraType);
+                Invoke(gps,"BeginInstrumentCapture",camera);
+                Invoke(gps,"OnDisable");
+                Assert.AreEqual(original,camera.cameraType,"Interrupted capture restores state on disable.");
+            }
+            finally { Object.DestroyImmediate(root); Object.DestroyImmediate(map); Object.DestroyImmediate(world); }
+        }
+
+        [Test]
+        public void HazardFootprintNeverMovesToViewportEdgeDuringPanOrZoom()
+        {
+            var root=new GameObject("Hazard projection camera");
+            try
+            {
+                var camera=root.AddComponent<Camera>(); camera.orthographic=true; camera.aspect=1; camera.orthographicSize=50;
+                camera.transform.SetPositionAndRotation(new Vector3(0,100,0),Quaternion.Euler(90,0,0));
+                Assert.IsTrue(TruckTaxiWorkAreaGraphic.ProjectFootprint(camera,Vector3.zero,10,out var center,out var radii));
+                Assert.That(center.x,Is.EqualTo(.5f).Within(.001f));
+                camera.transform.position=new Vector3(55,100,0);
+                Assert.IsTrue(TruckTaxiWorkAreaGraphic.ProjectFootprint(camera,Vector3.zero,10,out center,out radii));
+                Assert.Less(center.x,0,"Partial footprint keeps its offscreen center; mask clips only its pixels.");
+                camera.transform.position=new Vector3(100,100,0);
+                Assert.IsFalse(TruckTaxiWorkAreaGraphic.ProjectFootprint(camera,Vector3.zero,10,out center,out radii));
+                Assert.Less(center.x,0);
+                camera.orthographicSize=150;
+                Assert.IsTrue(TruckTaxiWorkAreaGraphic.ProjectFootprint(camera,Vector3.zero,10,out center,out radii));
+                camera.transform.position=new Vector3(0,100,0);
+                Assert.IsTrue(TruckTaxiWorkAreaGraphic.ProjectFootprint(camera,Vector3.zero,10,out center,out radii));
+                Assert.That(center.x,Is.EqualTo(.5f).Within(.001f));
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
+        private static void Invoke(object target,string method,params object[] args) =>
+            target.GetType().GetMethod(method,BindingFlags.Instance|BindingFlags.NonPublic).Invoke(target,args);
         [Test]
         public void DefaultsKeepHudVisibleAndBothMapsReadable()
         {

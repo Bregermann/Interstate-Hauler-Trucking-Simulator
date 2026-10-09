@@ -321,6 +321,35 @@ namespace LWS.TruckTaxi.Editor
             { var config=AssetDatabase.LoadAssetAtPath<TruckTaxiConfiguration>(AssetDatabase.GUIDToAssetPath(guid)); config.passengerDatabase=db; EditorUtility.SetDirty(config); }
             AssetDatabase.SaveAssets();
         }
+        [MenuItem("Truck Taxi/Passenger Factory/Report Unresolved Metadata")]
+        public static void WriteUnresolvedMetadataReport()
+        {
+            var report=new StringBuilder("# Truck Taxi Unresolved Passenger Metadata\n\nGenerated from explicit authored fields only. No names, models or voices are used to infer identity. This report does not modify passenger assets or audio. Unassigned can be intentional; designers should review rather than force a binary classification.\n\n| Passenger ID | Passenger Name | Asset | Review Required |\n| --- | --- | --- | --- |\n");
+            int unresolved=0;
+            foreach(var passenger in TruckTaxiPassengerDialogueAuthoring.AllPassengers().Where(p=>p!=null).OrderBy(p=>p.passengerId,StringComparer.Ordinal))
+            {
+                var issues=new List<string>();
+                if(passenger.AuthoredGender==TruckTaxiPassengerGender.Unassigned) issues.Add("Gender unresolved by authored eligibility metadata");
+                if(passenger.casting==null) issues.Add("Casting profile missing");
+                else
+                {
+                    if(string.IsNullOrWhiteSpace(passenger.casting.species)) issues.Add("Species not authored");
+                    if(string.IsNullOrWhiteSpace(passenger.casting.approximateAge)) issues.Add("Casting age not authored");
+                    if(string.IsNullOrWhiteSpace(passenger.casting.sexPresentation)) issues.Add("Casting presentation not authored");
+                }
+                if(issues.Count==0) continue;
+                unresolved++;
+                report.AppendLine("| "+MetadataCell(passenger.passengerId)+" | "+MetadataCell(passenger.passengerName)+" | "+MetadataCell(AssetDatabase.GetAssetPath(passenger))+" | "+MetadataCell(string.Join("; ",issues))+" |");
+            }
+            report.AppendLine("\nPassengers requiring review: "+unresolved+". Existing adult/consent eligibility remains authoritative and unchanged.");
+            const string folder="Assets/LWS/TruckTaxi/Documentation";
+            Directory.CreateDirectory(folder);
+            WriteIfChanged(folder+"/TruckTaxi_UnresolvedPassengerMetadata.md",report.ToString());
+            AssetDatabase.ImportAsset(folder+"/TruckTaxi_UnresolvedPassengerMetadata.md");
+            Debug.Log("Truck Taxi passenger metadata report: "+unresolved+" passengers require authored review.");
+        }
+        private static string MetadataCell(string value) => (value ?? "").Replace("|","\\|").Replace("\r"," ").Replace("\n"," ");
+
         public static void WriteReports()
         {
             var report=new StringBuilder("# Truck Taxi Missing Models\n\nFallback art is playable, not final casting or a completed generated model.\n\n");

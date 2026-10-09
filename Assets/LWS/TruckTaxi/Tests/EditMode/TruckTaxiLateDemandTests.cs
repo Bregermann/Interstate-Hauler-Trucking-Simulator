@@ -157,6 +157,7 @@ namespace LWS.TruckTaxi.Tests
             int selected=0;
             for(int i=0;i<count;i++)
             {
+                TruckTaxiDispatchTestClock.ExpireManualDeclineCooldown(session,hour);
                 Assert.IsTrue(session.OfferRide());
                 if(session.Passenger==target) selected++;
                 session.DeclineRide();

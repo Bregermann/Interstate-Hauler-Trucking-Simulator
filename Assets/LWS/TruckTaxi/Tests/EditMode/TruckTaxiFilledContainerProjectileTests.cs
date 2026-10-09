@@ -32,6 +32,15 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual(0, TruckTaxiFilledContainerProjectile.BlastFalloff(1, 0));
         }
 
+        [TestCase(1500f, 4500f)]
+        [TestCase(10000f, 30000f)]
+        [TestCase(100000f, 30000f)]
+        public void TrafficKickScalesWithMassButNeverExceedsCeiling(float mass, float expected)
+        {
+            Assert.AreEqual(expected, TruckTaxiFilledContainerProjectile.BoundedVehicleImpulse(mass, 3, 4500, 30000));
+            Assert.AreEqual(0, TruckTaxiFilledContainerProjectile.BoundedVehicleImpulse(float.NaN, 3, 4500, 30000));
+        }
+
         [Test]
         public void ActorKeyCollapsesChildCollidersToOneImpactTarget()
         {

@@ -8,14 +8,28 @@ namespace LWS.TruckTaxi.Editor
 {
     public static class TruckTaxiPolishRideAuthoring
     {
+        [MenuItem("Truck Taxi/Regional/Apply Dispatch Mix Defaults")]
+        public static void ApplyDispatchDefaults()
+        {
+            const string path="Assets/LWS/TruckTaxi/ScriptableObjects/TruckTaxi_DemoConfiguration.asset";
+            var config=AssetDatabase.LoadAssetAtPath<TruckTaxiConfiguration>(path);
+            if(config==null) throw new InvalidOperationException("Truck Taxi configuration is missing: "+path);
+            Undo.RecordObject(config,"Apply Truck Taxi dispatch mix");
+            config.intercityRideChance=.25f;
+            config.localOffersAfterIntercity=2;
+            config.intercityDryStreakThreshold=3;
+            EditorUtility.SetDirty(config);
+            AssetDatabase.SaveAssetIfDirty(config);
+            Debug.Log("Truck Taxi dispatch mix: 25% conditional intercity chance; existing valid-route and completed-local spacing remain authoritative.");
+        }
         [MenuItem("Truck Taxi/Regional/Apply Ride Polish Content")]
         public static void Apply()
         {
             var host=UnityEngine.Object.FindFirstObjectByType<TruckTaxiBootstrap>();
             if(host==null || host.configuration==null) throw new InvalidOperationException("Open the persistent Truck Taxi scene first.");
             var config=host.configuration;
-            if(Mathf.Approximately(config.intercityRideChance,.2f)) config.intercityRideChance=.1f;
-            config.localOffersAfterIntercity=3;
+            config.intercityRideChance=.25f;
+            config.localOffersAfterIntercity=2;
             EditorUtility.SetDirty(config);
             foreach(var request in config.requests ?? Array.Empty<PassengerRequestDefinition>())
             {

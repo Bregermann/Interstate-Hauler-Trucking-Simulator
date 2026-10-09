@@ -15,6 +15,194 @@ namespace LWS.TruckTaxi.Tests
         [TearDown] public void Cleanup() => Object.DestroyImmediate(settings);
         private TruckTaxiDriverNeedsState State() => new TruckTaxiDriverNeedsState(settings, 29);
 
+        private sealed class ServiceSleepFixture : IDisposable
+        {
+            private const System.Reflection.BindingFlags Flags = System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public;
+            private readonly GameObject owner, world;
+            private readonly TruckTaxiConfiguration configuration;
+            public readonly TruckTaxiDriverNeedsCoordinator Needs;
+            public readonly TruckTaxiRoadsideCompanionLoop Companions;
+            public readonly TruckTaxiGPSAdapter Gps;
+            public readonly TruckTaxiServicePoint Motel;
+            public readonly TruckTaxiStopObjectivePoint PrivateStop;
+            public readonly TruckTaxiSession Session;
+            public readonly LwsGameClockService Clock;
+            public readonly Rigidbody Body;
+            private static void Field(object target, string name, object value) => target.GetType().GetField(name, Flags).SetValue(target, value);
+            public static void Property(object target, string name, object value) => target.GetType().GetProperty(name, Flags).SetValue(target, value);
+            private static void ServiceLifecycle(TruckTaxiServicePoint point, string method) =>
+                typeof(TruckTaxiServicePoint).GetMethod(method, Flags).Invoke(point, null);
+
+            public ServiceSleepFixture(TruckTaxiEnvironmentSettings settings)
+            {
+                // Keep scene startup inert; exercise the real coordinator and GPS with transient dependencies.
+                owner = new GameObject("Needs service fixture"); owner.SetActive(false);
+                world = new GameObject("Needs service world"); world.transform.position = new Vector3(10000, 0, 10000);
+                var truck = new GameObject("Parked truck"); truck.transform.SetParent(world.transform, false);
+                Body = truck.AddComponent<Rigidbody>(); Body.useGravity = false;
+                var host = owner.AddComponent<TruckTaxiBootstrap>(); host.enabled = false;
+                configuration = ScriptableObject.CreateInstance<TruckTaxiConfiguration>();
+                Session = new TruckTaxiSession(configuration, Array.Empty<TruckTaxiRideLocation>(), 29);
+                Property(Session, "State", TruckTaxiState.Available);
+                Property(host, "Session", Session); Property(host, "Ready", true);
+                Clock = new LwsGameClockService(); Clock.Initialize(new LwsServiceContext(new LwsServiceRegistry()));
+                Clock.SetDateTime(new LwsGameDateTime(2026, 10, 1, 12, 0, 0)); Clock.SetPaused(true);
+                var environment = owner.AddComponent<TruckTaxiEnvironmentCoordinator>();
+                environment.settings = settings; Property(environment, "Clock", Clock);
+                Gps = owner.AddComponent<TruckTaxiGPSAdapter>();
+                Field(Gps, "navigation", new LwsNavigationService()); Field(Gps, "player", truck.transform);
+                Field(Gps, "playerBody", Body); Property(host, "GPS", Gps);
+                var motel = new GameObject("Motel bay"); motel.transform.SetParent(world.transform, false);
+                Motel = motel.AddComponent<TruckTaxiServicePoint>(); Motel.stableId = "test.needs.motel";
+                Motel.capabilities = TruckTaxiServiceCapability.Sleep;
+                var stop = new GameObject("Private destination"); stop.transform.SetParent(world.transform, false);
+                PrivateStop = stop.AddComponent<TruckTaxiStopObjectivePoint>(); PrivateStop.stableId = "test.needs.private";
+                PrivateStop.category = TruckTaxiStopCategory.PrivateMeeting;
+                Companions = owner.AddComponent<TruckTaxiRoadsideCompanionLoop>();
+                var recordType = typeof(TruckTaxiRoadsideCompanionLoop).GetNestedType("Companion", System.Reflection.BindingFlags.NonPublic);
+                var record = Activator.CreateInstance(recordType, true); Field(record, "destination", PrivateStop);
+                Field(Companions, "active", record);
+                Field(Companions, "phase", Enum.Parse(typeof(TruckTaxiRoadsideCompanionLoop).GetNestedType("Phase", System.Reflection.BindingFlags.NonPublic), "ToPrivateStop"));
+                Property(host, "Companions", Companions);
+                Needs = owner.AddComponent<TruckTaxiDriverNeedsCoordinator>();
+                Field(Needs, "host", host); Field(Needs, "environment", environment);
+                Field(Needs, "settings", settings); Field(Needs, "body", Body);
+                Property(Needs, "State", new TruckTaxiDriverNeedsState(settings, 29));
+                Property(host, "DriverNeeds", Needs);
+                // Runtime-only MonoBehaviours do not receive OnEnable in EditMode.
+                // Exercise the real registration callback, paired with OnDisable in Dispose.
+                ServiceLifecycle(Motel, "OnEnable");
+            }
+            public void AssertServiceReady()
+            {
+                Assert.IsTrue(Motel.isActiveAndEnabled);
+                Assert.AreEqual(owner.scene, Motel.gameObject.scene);
+                Assert.IsTrue(Motel.gameObject.scene.isLoaded);
+                CollectionAssert.Contains(TruckTaxiServicePoint.Points, Motel);
+                Assert.AreSame(Motel, TruckTaxiServicePoint.Nearest(Body.position, TruckTaxiServiceCapability.Sleep, owner.scene));
+                Assert.AreSame(Motel, TruckTaxiServicePresentation.Find(Motel.stableId));
+                Assert.AreSame(Motel, Needs.NearbySleep);
+            }
+            public void SetSleeperHold(bool held) => Field(Companions, "sleeperHold", held);
+            public void Dispose()
+            {
+                ServiceLifecycle(Motel, "OnDisable");
+                SetSleeperHold(false); Field(Companions, "active", null);
+                Object.DestroyImmediate(Needs);
+                Object.DestroyImmediate(owner); Object.DestroyImmediate(world); Object.DestroyImmediate(configuration);
+            }
+        }
+
+        [Test]
+        public void ServiceDetourWithPendingPrivateStopRestoresSameCompanionLeaseRepeatedly()
+        {
+            using (var f = new ServiceSleepFixture(settings))
+            {
+                f.AssertServiceReady();
+                Assert.AreSame(f.PrivateStop, f.Companions.ActivePrivateStop);
+                Assert.IsTrue(f.Gps.SetPrivateStopDestination(f.PrivateStop));
+                long companionToken = f.Gps.ActiveLeaseToken;
+                for (int i = 0; i < 2; i++)
+                {
+                    Assert.IsTrue(f.Needs.RouteToSleep(), f.Needs.Feedback);
+                    Assert.AreEqual(TruckTaxiNavigationLayer.PlayerService, f.Gps.ActiveLayer);
+                    f.Gps.StopNavigation();
+                    f.Needs.RestoreRideRoute();
+                    Assert.AreEqual(TruckTaxiNavigationLayer.CompanionTask, f.Gps.ActiveLayer);
+                    Assert.AreEqual(f.PrivateStop.stableId, f.Gps.TargetId);
+                    Assert.AreEqual(companionToken, f.Gps.ActiveLeaseToken);
+                    Assert.IsFalse(f.Gps.GuidanceSuppressed);
+                    Assert.IsFalse(f.Gps.ClearPlayerServiceDestination(), "Restore must release the player detour first.");
+                }
+            }
+        }
+
+        [Test]
+        public void ServiceRestoreDefersToPickupPriorityWithoutReplacingHiddenCompanionLease()
+        {
+            using (var f = new ServiceSleepFixture(settings))
+            {
+                f.AssertServiceReady();
+                Assert.IsTrue(f.Gps.SetPrivateStopDestination(f.PrivateStop));
+                long companionToken = f.Gps.ActiveLeaseToken;
+                Assert.IsTrue(f.Gps.TrySetNavigationIntent(TruckTaxiNavigationLayer.RidePickup, "ride", "test.pickup",
+                    "Pickup", f.Body.position, TruckTaxiMapMarkerType.PassengerPickup));
+                long pickupToken = f.Gps.ActiveLeaseToken;
+                Assert.IsTrue(f.Needs.RouteToSleep()); f.Needs.RestoreRideRoute();
+                Assert.AreEqual(pickupToken, f.Gps.ActiveLeaseToken);
+                Assert.AreEqual(TruckTaxiNavigationLayer.RidePickup, f.Gps.ActiveLayer);
+                Assert.IsTrue(f.Gps.ReleaseNavigationIntent(TruckTaxiNavigationLayer.RidePickup, "ride", "test.pickup", pickupToken));
+                Assert.AreEqual(companionToken, f.Gps.ActiveLeaseToken);
+            }
+        }
+
+        [Test]
+        public void FailedServiceRouteDoesNotClaimSuccessOrReplaceCompanionIntent()
+        {
+            using (var f = new ServiceSleepFixture(settings))
+            {
+                f.AssertServiceReady();
+                Assert.IsTrue(f.Gps.SetPrivateStopDestination(f.PrivateStop));
+                long token = f.Gps.ActiveLeaseToken;
+                f.Motel.transform.position += Vector3.right * 100;
+                Assert.IsFalse(f.Needs.RouteToSleep(), "No graph exists to route to the now-distant motel.");
+                Assert.AreEqual("No valid route to this service is available.", f.Needs.Feedback);
+                Assert.AreEqual(token, f.Gps.ActiveLeaseToken);
+            }
+        }
+
+        [Test]
+        public void PrepaidMotelSleepIsIndependentOfPrivateRouteAndPreservesQualityTimeAndLease()
+        {
+            using (var f = new ServiceSleepFixture(settings))
+            {
+                f.AssertServiceReady();
+                f.Motel.sleepCostPerHourCents = 500;
+                double before = f.Clock.CurrentSnapshot.totalGameSeconds;
+                Assert.IsTrue(f.Needs.State.RentMotel(f.Motel.stableId, before, 12 * 3600));
+                var snapshot = f.Needs.State.CapturePersistentState(); snapshot.Fatigue = 1;
+                Assert.IsTrue(f.Needs.State.RestorePersistentState(snapshot, out _));
+                Assert.IsTrue(f.Gps.SetPrivateStopDestination(f.PrivateStop)); long token = f.Gps.ActiveLeaseToken;
+                Assert.IsTrue(f.Needs.RouteToSleep());
+                long wallet = f.Session.WalletBalanceCents;
+                Assert.IsNull(f.Needs.SleepFailureReason(4, true));
+                Assert.IsTrue(f.Needs.TrySleep(4, true), f.Needs.Feedback);
+                Assert.AreEqual(.395f, f.Needs.State.Fatigue, .0001f);
+                Assert.AreEqual(4 * 3600, f.Clock.CurrentSnapshot.totalGameSeconds - before);
+                Assert.IsTrue(f.Clock.CurrentSnapshot.paused);
+                Assert.AreEqual(wallet, f.Session.WalletBalanceCents);
+                Assert.AreEqual(token, f.Gps.ActiveLeaseToken);
+                Assert.AreSame(f.PrivateStop, f.Companions.ActivePrivateStop);
+                Assert.IsFalse(f.Needs.IsSleeping);
+            }
+        }
+
+        [Test]
+        public void SleepStillRejectsActiveSequenceFareMovementMissingKeyAndUnpaidRoom()
+        {
+            using (var f = new ServiceSleepFixture(settings))
+            {
+                f.AssertServiceReady();
+                double before = f.Clock.CurrentSnapshot.totalGameSeconds;
+                f.SetSleeperHold(true);
+                Assert.AreEqual("Finish current action before sleeping.", f.Needs.SleepFailureReason(8));
+                Assert.IsFalse(f.Needs.TrySleep(8)); f.SetSleeperHold(false);
+                ServiceSleepFixture.Property(f.Session, "State", TruckTaxiState.DrivingToDestination);
+                Assert.IsFalse(f.Needs.TrySleep(8));
+                ServiceSleepFixture.Property(f.Session, "State", TruckTaxiState.Available);
+                f.Body.linearVelocity = Vector3.forward;
+                Assert.IsFalse(f.Needs.TrySleep(8)); f.Body.linearVelocity = Vector3.zero;
+                Assert.IsFalse(f.Needs.TrySleep(3));
+                Assert.IsFalse(f.Needs.TrySleep(8, true), "Prepaid sleep must still require a valid room key.");
+                f.Motel.sleepCostPerHourCents = 500;
+                Assert.AreEqual("Not enough cash.", f.Needs.SleepFailureReason(8));
+                Assert.IsFalse(f.Needs.TrySleep(8));
+                Assert.AreEqual(before, f.Clock.CurrentSnapshot.totalGameSeconds);
+                Assert.AreEqual(0, f.Needs.State.Fatigue);
+            }
+        }
+
         [Test] public void RegistryHasStableUniqueIdsAndAllShopsShareEveryBuyableItem()
         {
             var ids = new HashSet<string>(StringComparer.Ordinal);

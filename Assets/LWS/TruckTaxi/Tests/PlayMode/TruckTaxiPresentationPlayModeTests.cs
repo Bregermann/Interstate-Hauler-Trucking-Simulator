@@ -34,6 +34,7 @@ namespace LWS.TruckTaxi.Tests
             while ((TruckTaxiBootstrap.Instance == null || !TruckTaxiBootstrap.Instance.Ready) && Time.realtimeSinceStartup < deadline) yield return null;
             var host = TruckTaxiBootstrap.Instance;
             Assert.IsNotNull(host); Assert.IsTrue(host.Ready);
+            yield return TruckTaxiPlayModeSaveIsolation.CompleteNewRunIntroduction(host);
             var changer = host.Player.GetComponentInChildren<CameraChanger>(true);
             Assert.IsNotNull(changer);
             for (int i = 0; i < changer.cameras.Count && !changer.cameras[changer.currentCameraIndex].name.Contains("Driver"); i++) changer.NextCamera();
@@ -168,6 +169,7 @@ namespace LWS.TruckTaxi.Tests
                    Time.realtimeSinceStartup < deadline) yield return null;
             var host = TruckTaxiBootstrap.Instance;
             Assert.IsNotNull(host); Assert.IsTrue(host.CanResume, host.ResumeBlockReason);
+            yield return TruckTaxiPlayModeSaveIsolation.CompleteNewRunIntroduction(host);
             host.Session.SetRideRequestsEnabled(false);
             host.StartShift(); host.SetPaused(false);
             yield return new WaitForSecondsRealtime(.4f);
