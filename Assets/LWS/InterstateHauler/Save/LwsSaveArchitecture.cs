@@ -2651,6 +2651,30 @@ namespace LWS.InterstateHauler
             _lastRestored = JsonUtility.FromJson<LwsWeatherSavePayload>(state.payloadJson);
             if (TryGetWeather(out ILwsWeatherService weatherService))
             {
+                if (!weatherService.TryGetPreset(_lastRestored.weatherPresetId, out LwsWeatherPreset preset))
+                {
+                    return LwsSaveOperationResult.Failure($"Unknown saved weather preset: {_lastRestored.weatherPresetId}");
+                }
+
+                // Keep the current catalog's vendor profile mapping, but restore the saved semantics.
+                preset.condition = _lastRestored.condition;
+                preset.precipitationType = _lastRestored.precipitationType;
+                preset.precipitationIntensity01 = _lastRestored.precipitationIntensity01;
+                preset.cloudCover01 = _lastRestored.cloudCover01;
+                preset.fogIntensity01 = _lastRestored.fogIntensity01;
+                preset.windSpeedMetersPerSecond = _lastRestored.windSpeedMetersPerSecond;
+                preset.windDirectionWorld = new Vector3(_lastRestored.windDirectionX, _lastRestored.windDirectionY, _lastRestored.windDirectionZ);
+                preset.lightningActive = _lastRestored.lightningActive;
+                preset.stormIntensity01 = _lastRestored.stormIntensity01;
+                preset.ambientTemperatureC = _lastRestored.ambientTemperatureC;
+                preset.visibilityMeters = _lastRestored.visibilityMeters;
+                LwsServiceResult request = weatherService.RequestWeather(preset, 0f, true);
+                if (!request.Succeeded)
+                {
+                    return LwsSaveOperationResult.Failure($"Saved weather could not be applied: {request.Message}");
+                }
+
+                // RequestWeather restores presentation; the legacy setter retains saved world ticks.
                 weatherService.SetState(new LwsWeatherState
                 {
                     weatherId = _lastRestored.weatherPresetId,
