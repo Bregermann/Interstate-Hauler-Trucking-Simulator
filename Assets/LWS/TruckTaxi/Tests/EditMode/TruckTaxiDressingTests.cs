@@ -9,6 +9,33 @@ namespace LWS.TruckTaxi.Tests
         [Test] public void AllEightContextsExist()
         { Assert.AreEqual(8, Enum.GetValues(typeof(TruckTaxiDressingContext)).Length); }
 
+        [Test]
+        public void AuthoredPoolsHaveReviewedBoundsAndSoftClutter()
+        {
+            foreach (TruckTaxiDressingContext context in Enum.GetValues(typeof(TruckTaxiDressingContext)))
+            {
+                var profile = UnityEditor.AssetDatabase.LoadAssetAtPath<TruckTaxiDressingProfile>(
+                    "Assets/LWS/TruckTaxi/Authoring/Dressing/" + context + ".asset");
+                Assert.IsNotNull(profile, context.ToString());
+                Assert.IsTrue(profile.Validate(out var reason), context + ": " + reason);
+                using var serialized = new UnityEditor.SerializedObject(profile);
+                var entries = serialized.FindProperty("prefabs");
+                for (int index = 0; index < entries.arraySize; index++)
+                {
+                    var prefab = (GameObject)entries.GetArrayElementAtIndex(index).FindPropertyRelative("prefab").objectReferenceValue;
+                    Assert.IsTrue(TruckTaxiDressingProfile.TryPrefabBounds(prefab, out var bounds));
+                    Assert.Greater(bounds.size.sqrMagnitude, 0);
+                    Assert.IsEmpty(prefab.GetComponentsInChildren<Light>(true));
+                    if (context == TruckTaxiDressingContext.Forest || context == TruckTaxiDressingContext.Suburb ||
+                        context == TruckTaxiDressingContext.Highway) continue;
+                    var soft = prefab.GetComponent<TruckTaxiBreakawayProp>();
+                    Assert.IsNotNull(soft, prefab.name);
+                    Assert.IsFalse(soft.PreservesAuthoredPhysics, prefab.name);
+                    Assert.IsTrue(soft.ValidateAuthoring(out reason), reason);
+                }
+            }
+        }
+
         [Test] public void StableSeedDoesNotConsumeUnityRandomState()
         {
             var state = UnityEngine.Random.state;

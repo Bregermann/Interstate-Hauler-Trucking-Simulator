@@ -10,6 +10,72 @@ namespace LWS.TruckTaxi.Editor
     public static partial class TruckTaxiWorldGeometryAuthoring
     {
         public const string DressingProfileFolder = "Assets/LWS/TruckTaxi/Authoring/Dressing";
+        [MenuItem("Truck Taxi/World Dressing/Populate Available Scenery Pools")]
+        public static void PopulateAvailableDressingPools()
+        {
+            CreateMissingDressingProfiles();
+            PopulateEmptyPool(TruckTaxiDressingContext.Forest,12,
+                "Assets/NWH/Common/Vegetation/Trees/FirTree1.prefab",
+                "Assets/NWH/Common/Vegetation/Trees/Tree4.prefab");
+            PopulateEmptyPool(TruckTaxiDressingContext.Suburb,24,"Assets/NWH/Common/Vegetation/Trees/Tree5.prefab");
+            PopulateEmptyPool(TruckTaxiDressingContext.Highway,32,"Assets/NWH/Common/Vegetation/Trees/Tree6.prefab");
+            string fenceA = PrepareBreakawayScenery("FenceA", 35);
+            string fenceB = PrepareBreakawayScenery("FenceB", 35);
+            string fenceC = PrepareBreakawayScenery("FenceC", 35);
+            string plank = PrepareBreakawayScenery("Plank", 12);
+            string broken1 = PrepareBreakawayScenery("PlankBroken1", 8);
+            string broken2 = PrepareBreakawayScenery("PlankBroken2", 8);
+            PopulateEmptyPool(TruckTaxiDressingContext.Urban, 16, fenceA, fenceB);
+            PopulateEmptyPool(TruckTaxiDressingContext.Industrial, 14, fenceC, plank);
+            PopulateEmptyPool(TruckTaxiDressingContext.MotelDistrict, 20, fenceA);
+            PopulateEmptyPool(TruckTaxiDressingContext.TruckStop, 20, fenceB, fenceC);
+            PopulateEmptyPool(TruckTaxiDressingContext.Construction, 12, plank, broken1, broken2);
+            Debug.Log("Available imported trees, fences and lumber assigned only to empty dressing pools. " +
+                "Project-owned fence/lumber prefabs reuse bounded breakaway physics. No scene generation. " +
+                "Bins, benches and work-zone signs remain unavailable; dynamic vendor props and unresolved materials were excluded.");
+        }
+
+        private static string PrepareBreakawayScenery(string name, float massKg)
+        {
+            string folder = DressingProfileFolder + "/Prefabs";
+            if (!AssetDatabase.IsValidFolder(folder)) AssetDatabase.CreateFolder(DressingProfileFolder, "Prefabs");
+            string output = folder + "/Taxi_" + name + ".prefab";
+            if (AssetDatabase.LoadMainAssetAtPath(output) != null) return output;
+            string source = "Packages/xyz.staggart-creations.spline-spawner/_Demo/Prefabs/" + name + ".prefab";
+            GameObject root = PrefabUtility.LoadPrefabContents(source);
+            try
+            {
+                if (root.GetComponentsInChildren<Rigidbody>(true).Length != 0 ||
+                    root.GetComponentsInChildren<Light>(true).Length != 0)
+                    throw new InvalidOperationException("Expected reviewed passive scenery: " + source);
+                var prop = root.AddComponent<TruckTaxiBreakawayProp>();
+                prop.category = TruckTaxiPropPhysicsCategory.Breakaway;
+                prop.massKg = massKg;
+                prop.debrisPieces = 0;
+                if (!prop.ValidateAuthoring(out string reason)) throw new InvalidOperationException(source + ": " + reason);
+                if (PrefabUtility.SaveAsPrefabAsset(root, output) == null)
+                    throw new InvalidOperationException("Could not author scenery wrapper: " + output);
+            }
+            finally { PrefabUtility.UnloadPrefabContents(root); }
+            return output;
+        }
+        private static void PopulateEmptyPool(TruckTaxiDressingContext context,float spacing,params string[] paths)
+        {
+            var profile=AssetDatabase.LoadAssetAtPath<TruckTaxiDressingProfile>(DressingProfileFolder+"/"+context+".asset");
+            if(profile.prefabs.Count>0) return;
+            var entries=new System.Collections.Generic.List<SplineSpawner.SpawnableObject>();
+            foreach(string path in paths)
+            {
+                var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if(prefab==null) throw new InvalidOperationException("Required imported scenery missing: "+path);
+                entries.Add(new SplineSpawner.SpawnableObject(prefab,100f/paths.Length));
+            }
+            var previous=profile.prefabs;float oldSpacing=profile.spacingMeters,oldClearance=profile.clearanceMeters;
+            profile.prefabs=entries;profile.spacingMeters=spacing;profile.clearanceMeters=3;
+            if(!profile.Validate(out string reason))
+            { profile.prefabs=previous;profile.spacingMeters=oldSpacing;profile.clearanceMeters=oldClearance;throw new InvalidOperationException(context+": "+reason); }
+            EditorUtility.SetDirty(profile);AssetDatabase.SaveAssetIfDirty(profile);
+        }
         [MenuItem("Truck Taxi/World Dressing/Create Missing Context Profiles")]
         public static void CreateMissingDressingProfiles()
         {

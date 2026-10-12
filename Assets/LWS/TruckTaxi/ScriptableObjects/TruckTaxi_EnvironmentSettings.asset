@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: TruckTaxi_EnvironmentSettings
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiEnvironmentSettings
   startingTime: 16
+  startYear: 2026
+  startMonth: 6
+  startDay: 1
+  forecastSeed: 71923
   timeScale: 30
   timeProgressionEnabled: 1
   automaticWeather: 1
@@ -21,6 +25,8 @@ MonoBehaviour:
   startingWeather: clear
   weatherTransitionSeconds: 25
   weatherDurationGameHours: {x: 2, y: 5}
+  winterSnowWeightMultiplier: 4
+  summerStormWeightMultiplier: 2
   weatherWeights:
   - presetId: clear
     weight: 4
@@ -50,6 +56,29 @@ MonoBehaviour:
   plowResidualDepthMeters: 0.04
   tireCompressionMetersPerMeter: 0.002
   maximumSnowCells: 4096
+  thirstGainPerGameHour: 0.05
+  bowelGainPerGameHour: 0.083333336
+  bowelGraceGameMinutes: 5
+  bowelModerateSound: {fileID: 0}
+  bowelUrgentSound: {fileID: 0}
+  bowelFailureSound: {fileID: 0}
+  bowelSoundVolume: 0.55
+  bowelMaximumEdgeOpacity: 0.5
+  hungerCravingPool:
+  - {fileID: 2800000, guid: bffd096a88401a244837ec86ce4e4da0, type: 3}
+  - {fileID: 2800000, guid: 236e78f498aec6747af6bf60de6a5ba6, type: 3}
+  thirstCravingPool:
+  - {fileID: 2800000, guid: afc356911312e3d4f9a271c62f52c607, type: 3}
+  - {fileID: 2800000, guid: c14a0f3c44dbd294b982961aecc423c1, type: 3}
+  cravingCapacityPerNeed: 3
+  cravingImageSize: 160
+  cravingThreshold: 0.9
+  cravingMaximumOpacity: 0.5
+  hungerCravingImage: {fileID: 0}
+  thirstCravingImage: {fileID: 0}
+  hungerCravingSound: {fileID: 0}
+  thirstCravingSound: {fileID: 0}
+  cravingSoundInterval: 30
   bladderCycleGameHours: {x: 4, y: 8}
   startingBladder: 0
   crisisGraceGameMinutes: 20

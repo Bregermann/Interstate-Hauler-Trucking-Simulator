@@ -125,9 +125,7 @@ namespace LWS.TruckTaxi.Editor
             var chunk = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Additive);
             SceneManager.SetActiveScene(chunk);
             var root = new GameObject(TruckTaxiSpeedwayLayout.SceneName).transform;
-            Box("Speedway outskirts", root, new Vector3(2800,-.55f,-605), new Vector3(750,1,1130), ground);
-            Box("Infield apron", root, new Vector3(2800,.05f,-780), new Vector3(200,.2f,155), concrete);
-            Box("Truck parking", root, new Vector3(2800,.06f,-525), new Vector3(330,.2f,150), asphalt);
+            BuildAccessSurfaces(root, ground, concrete, asphalt);
             var track = TruckTaxiSpeedwayLayout.TrackCenterline();
             var closed = new List<Vector3>(track) { track[0] };
             TruckTaxiDemoBuilder.BakeRegionalRoads(root, new List<Vector3[]> { closed.ToArray() },
@@ -136,12 +134,13 @@ namespace LWS.TruckTaxi.Editor
             BankEasyRoadsMeshes(bakedTrack, track);
             PaintTrackLanes(root, track, accent);
             var roads = new List<Vector3[]> {
-                new[] { new Vector3(2800,.15f,0), new Vector3(2800,.2f,-250), TruckTaxiSpeedwayLayout.Stops[0].Position, TruckTaxiSpeedwayLayout.Stops[4].Position, TruckTaxiSpeedwayLayout.Stops[1].Position, TruckTaxiSpeedwayLayout.Stops[3].Position },
+                new[] { new Vector3(2800,.15f,0), new Vector3(2800,.2f,-250), TruckTaxiSpeedwayLayout.Stops[0].Position, TruckTaxiSpeedwayLayout.Stops[4].Position, TruckTaxiSpeedwayLayout.Stops[1].Position },
                 new[] { TruckTaxiSpeedwayLayout.Stops[0].Position, TruckTaxiSpeedwayLayout.Stops[2].Position },
                 new[] { TruckTaxiSpeedwayLayout.Stops[4].Position, TruckTaxiSpeedwayLayout.Stops[5].Position },
                 new[] { TruckTaxiSpeedwayLayout.Stops[5].Position, track[43] }
             };
             TruckTaxiDemoBuilder.BakeRegionalRoads(root, roads, 10, "ThunderBowl_Access", asphalt, MeshFolder);
+            BuildAccessTunnel(root, concrete, asphalt);
             BuildBowl(root, track, concrete, seating, accent);
             Box("Pit garage", root, new Vector3(2630,6,-555), new Vector3(54,12,30), concrete);
             Box("VIP gate", root, new Vector3(2980,5,-470), new Vector3(34,10,12), accent);
@@ -188,6 +187,8 @@ namespace LWS.TruckTaxi.Editor
             var stop = go.AddComponent<TruckTaxiRideLocation>();
             stop.locationId = spec.Id; stop.locationName = spec.Name; stop.district = "Speedway";
             stop.locationType = TaxiLocationType.Transit; stop.detectionRadius = 17;
+            stop.pickupAllowed = stop.dropoffAllowed = TruckTaxiSpeedwayLayout.IsPublicFareStop(spec.Id);
+            stop.tags = new[] { "complex:" + TruckTaxiSpeedwayLayout.RegionId };
             var bay = new GameObject("Truck Stop").transform; bay.SetParent(go.transform,false); stop.truckStopPoint = bay;
             var passenger = new GameObject("Passenger Spawn").transform; passenger.SetParent(go.transform,false);
             passenger.localPosition = new Vector3(7,0,0); stop.passengerSpawnPoint = passenger;
@@ -246,6 +247,116 @@ namespace LWS.TruckTaxi.Editor
                 if (collider != null) { collider.sharedMesh = null; collider.sharedMesh = mesh; }
                 EditorUtility.SetDirty(mesh);
             }
+        }
+
+        private static void BuildAccessSurfaces(Transform root, Material ground, Material concrete, Material asphalt)
+        {
+            SlottedSurface("Speedway outskirts", root, new Vector3(2800,-.55f,-605), new Vector3(750,1,1130), ground);
+            SlottedSurface("Infield apron", root, new Vector3(2800,.05f,-780), new Vector3(200,.2f,155), concrete);
+            SlottedSurface("Truck parking", root, new Vector3(2800,.06f,-525), new Vector3(330,.2f,150), asphalt);
+        }
+
+        private static void SlottedSurface(string name, Transform root, Vector3 center, Vector3 size, Material material)
+        {
+            var bounds = new Bounds(center, size);
+            float half = TruckTaxiSpeedwayLayout.TunnelWidth * .5f + 1;
+            float north = Mathf.Min(bounds.max.z, TruckTaxiSpeedwayLayout.Stops[1].Position.z);
+            float south = Mathf.Max(bounds.min.z, TruckTaxiSpeedwayLayout.Stops[3].Position.z);
+            float left = 2800 - half, right = 2800 + half;
+            Add(bounds.min.x, left, bounds.min.z, bounds.max.z, " west");
+            Add(right, bounds.max.x, bounds.min.z, bounds.max.z, " east");
+            Add(left, right, north, bounds.max.z, " north");
+            Add(left, right, bounds.min.z, south, " south");
+            void Add(float x0, float x1, float z0, float z1, string suffix)
+            {
+                if (x1 <= x0 || z1 <= z0) return;
+                Box(name + suffix, root, new Vector3((x0+x1)*.5f, center.y, (z0+z1)*.5f),
+                    new Vector3(x1-x0, size.y, z1-z0), material);
+            }
+        }
+
+        public static void BuildAccessTunnel(Transform root, Material concrete, Material asphalt)
+        {
+            var points = TruckTaxiSpeedwayLayout.TunnelCenterline();
+            var tunnel = new GameObject("Thunder Bowl two-way tunnel").transform;
+            tunnel.SetParent(root, false);
+            TruckTaxiDemoBuilder.BakeRegionalRoads(tunnel, new List<Vector3[]> { points },
+                TruckTaxiSpeedwayLayout.TunnelWidth, "ThunderBowl_Tunnel", asphalt, MeshFolder);
+            for (int i = 0; i < points.Length - 1; i++)
+            {
+                Vector3 a = points[i], b = points[i+1], middle = (a+b)*.5f;
+                foreach (float side in new[] { -1f, 1f })
+                {
+                    var wall = Box("Tunnel retaining wall " + i, tunnel,
+                        middle + Vector3.right * side * (TruckTaxiSpeedwayLayout.TunnelWidth*.5f+.5f) +
+                        Vector3.up * (TruckTaxiSpeedwayLayout.TunnelClearHeight*.5f),
+                        new Vector3(1, TruckTaxiSpeedwayLayout.TunnelClearHeight, Vector3.Distance(a,b)+1), concrete);
+                    wall.transform.rotation = Quaternion.LookRotation(b-a, Vector3.up);
+                }
+            }
+            float length = TruckTaxiSpeedwayLayout.TunnelPortalNorth - TruckTaxiSpeedwayLayout.TunnelPortalSouth;
+            Box("Tunnel structural roof", tunnel,
+                new Vector3(2800, TruckTaxiSpeedwayLayout.TunnelRoadHeight + TruckTaxiSpeedwayLayout.TunnelClearHeight + .25f,
+                    (TruckTaxiSpeedwayLayout.TunnelPortalNorth+TruckTaxiSpeedwayLayout.TunnelPortalSouth)*.5f),
+                new Vector3(TruckTaxiSpeedwayLayout.TunnelWidth+2, .5f, length), concrete);
+            foreach (int end in new[] { 0, points.Length-1 })
+            {
+                var sign = new GameObject("Two-way truck access sign").AddComponent<TextMeshPro>();
+                sign.transform.SetParent(tunnel, false);
+                sign.transform.position = points[end] + Vector3.up * 7;
+                sign.transform.rotation = Quaternion.Euler(0, end == 0 ? 0 : 180, 0);
+                sign.text = "TWO-WAY TRUCK ACCESS\n19 FT 6 IN CLEARANCE"; sign.fontSize = 3;
+                sign.rectTransform.sizeDelta = new Vector2(22, 5); sign.alignment = TextAlignmentOptions.Center;
+            }
+        }
+
+        [MenuItem("Truck Taxi/Regional/Upgrade Thunder Bowl Two-Way Access")]
+        public static void UpgradeTwoWayAccess()
+        {
+            RequireCleanScenes();
+            var persistent = EditorSceneManager.OpenScene(TruckTaxiDemoBuilder.ScenePath);
+            var host = Object.FindFirstObjectByType<TruckTaxiBootstrap>();
+            if (host?.roadGraph?.Graph == null) throw new InvalidOperationException("Truck Taxi road graph missing.");
+            var scene = EditorSceneManager.OpenScene(ScenePath, OpenSceneMode.Additive);
+            SceneManager.SetActiveScene(scene);
+            var root = scene.GetRootGameObjects().FirstOrDefault(go => go.name == TruckTaxiSpeedwayLayout.SceneName)?.transform;
+            if (root == null) throw new InvalidOperationException("Authored Speedway root missing.");
+            if (root.Find("Thunder Bowl two-way tunnel") != null)
+                throw new InvalidOperationException("Tunnel already exists; inspect it before rebuilding.");
+            var ground = Material("Regional Ground", new Color(.24f,.38f,.2f));
+            var concrete = Material("Regional Concrete", new Color(.56f,.61f,.63f));
+            var asphalt = Material("Speedway Asphalt", new Color(.16f,.17f,.19f));
+            var oldAccess = AssetDatabase.LoadAssetAtPath<Mesh>(MeshFolder + "/ThunderBowl_Access_2.asset");
+            if (oldAccess == null) throw new InvalidOperationException("Original central access mesh missing; no scenery changed.");
+            // Retire only these authored slabs and the old at-grade central access mesh.
+            foreach (var item in root.GetComponentsInChildren<Transform>(true))
+            {
+                if(item==null) continue;
+                var filter=item.GetComponent<MeshFilter>();
+                if (item.name == "Speedway outskirts" || item.name == "Infield apron" ||
+                    item.name == "Truck parking" || filter!=null && filter.sharedMesh == oldAccess)
+                    Object.DestroyImmediate(item.gameObject);
+            }
+            BuildAccessSurfaces(root, ground, concrete, asphalt);
+            TruckTaxiDemoBuilder.BakeRegionalRoads(root, new List<Vector3[]> { new[] {
+                new Vector3(2800,.15f,0), new Vector3(2800,.2f,-250), TruckTaxiSpeedwayLayout.Stops[0].Position,
+                TruckTaxiSpeedwayLayout.Stops[4].Position, TruckTaxiSpeedwayLayout.Stops[1].Position } },
+                10, "ThunderBowl_PublicAccess", asphalt, MeshFolder);
+            BuildAccessTunnel(root, concrete, asphalt);
+            TruckTaxiSpeedwayLayout.AddToGraph(host.roadGraph.Graph);
+            host.roadGraph.SetGraph(host.roadGraph.Graph, false);
+            foreach (var stop in Object.FindObjectsByType<TruckTaxiRideLocation>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                foreach (var spec in TruckTaxiSpeedwayLayout.Stops)
+                    if (stop.locationId == spec.Id)
+                    {
+                        stop.transform.position = spec.Position;
+                        stop.pickupAllowed = stop.dropoffAllowed = TruckTaxiSpeedwayLayout.IsPublicFareStop(spec.Id);
+                        stop.tags = (stop.tags ?? Array.Empty<string>()).Concat(new[] { "complex:" + TruckTaxiSpeedwayLayout.RegionId }).Distinct().ToArray();
+                        EditorUtility.SetDirty(stop);
+                    }
+            EditorUtility.SetDirty(host.roadGraph);
+            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.MarkSceneDirty(persistent);
+            EditorSceneManager.SaveScene(scene); EditorSceneManager.SaveScene(persistent); AssetDatabase.SaveAssets();
         }
 
         private static void BuildBowl(Transform root, IReadOnlyList<Vector3> track, Material concrete, Material seating, Material accent)

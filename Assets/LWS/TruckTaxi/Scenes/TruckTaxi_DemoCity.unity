@@ -630,7 +630,7 @@ Transform:
   m_GameObject: {fileID: 78936857}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2800, y: 0.2, z: -610}
+  m_LocalPosition: {x: 2800, y: 0.2, z: -550}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -677,12 +677,13 @@ MonoBehaviour:
   locationId: taxi.speedway.pit-entrance
   district: Speedway
   locationType: 10
-  pickupAllowed: 1
-  dropoffAllowed: 1
+  pickupAllowed: 0
+  dropoffAllowed: 0
   passengerSpawnPoint: {fileID: 634567751}
   truckStopPoint: {fileID: 508649566}
   detectionRadius: 17
-  tags: []
+  tags:
+  - complex:taxi.speedway
   debugGizmos: 1
 --- !u!1 &80596755
 GameObject:
@@ -13490,7 +13491,7 @@ MonoBehaviour:
       regionId: taxi.speedway
       sceneChunkId: Taxi_ThunderBowlSpeedway
     - nodeId: taxi.speedway.pit
-      position: {x: 2800, y: 0.2, z: -610}
+      position: {x: 2800, y: 0.2, z: -550}
       regionId: taxi.speedway
       sceneChunkId: Taxi_ThunderBowlSpeedway
     - nodeId: taxi.speedway.vip
@@ -13502,7 +13503,7 @@ MonoBehaviour:
       regionId: taxi.speedway
       sceneChunkId: Taxi_ThunderBowlSpeedway
     - nodeId: taxi.speedway.infield
-      position: {x: 2800, y: 0.2, z: -780}
+      position: {x: 2800, y: 0.2, z: -810}
       regionId: taxi.speedway
       sceneChunkId: Taxi_ThunderBowlSpeedway
     - nodeId: taxi.speedway.approach
@@ -13789,6 +13790,14 @@ MonoBehaviour:
       position: {x: 1180, y: 16, z: -1660}
       regionId: taxi.mountainpass
       sceneChunkId: Taxi_MountainPass
+    - nodeId: taxi.speedway.tunnel.north
+      position: {x: 2800, y: -6, z: -642}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.speedway.tunnel.south
+      position: {x: 2800, y: -6, z: -725}
+      regionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
     edges:
     - roadId: taxi.0.0-1.0.road
       segmentId: taxi.0.0-1.0.segment
@@ -118982,6 +118991,1238 @@ MonoBehaviour:
         laneWidthMeters: 3.5
         laneCount: 0
         speedLimitMph: 15
+    - roadId: taxi.regional.1080>taxi.stadium.approach
+      segmentId: taxi.regional.1080>taxi.stadium.approach
+      edgeId: taxi.regional.1080>taxi.stadium.approach
+      fromNodeId: taxi.regional.1080
+      toNodeId: taxi.stadium.approach
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 330
+      travelCost: 330
+      speedLimitMph: 22
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.regional.1080>taxi.stadium.approach
+        segmentId: taxi.regional.1080>taxi.stadium.approach
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.14, z: 0}
+        forward: {x: 0, y: 0.00012121214, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+      - roadId: taxi.regional.1080>taxi.stadium.approach
+        segmentId: taxi.regional.1080>taxi.stadium.approach
+        distanceFromStartMeters: 330
+        position: {x: 1080, y: 0.18, z: -330}
+        forward: {x: 0, y: 0.00012121214, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+    - roadId: taxi.stadium.approach>taxi.regional.1080
+      segmentId: taxi.stadium.approach>taxi.regional.1080
+      edgeId: taxi.stadium.approach>taxi.regional.1080
+      fromNodeId: taxi.stadium.approach
+      toNodeId: taxi.regional.1080
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 330
+      travelCost: 330
+      speedLimitMph: 22
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.approach>taxi.regional.1080
+        segmentId: taxi.stadium.approach>taxi.regional.1080
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.18, z: -330}
+        forward: {x: 0, y: -0.00012121214, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+      - roadId: taxi.stadium.approach>taxi.regional.1080
+        segmentId: taxi.stadium.approach>taxi.regional.1080
+        distanceFromStartMeters: 330
+        position: {x: 1080, y: 0.14, z: 0}
+        forward: {x: 0, y: -0.00012121214, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+    - roadId: taxi.stadium.approach>taxi.stadium.gate
+      segmentId: taxi.stadium.approach>taxi.stadium.gate
+      edgeId: taxi.stadium.approach>taxi.stadium.gate
+      fromNodeId: taxi.stadium.approach
+      toNodeId: taxi.stadium.gate
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 220
+      travelCost: 220
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.approach>taxi.stadium.gate
+        segmentId: taxi.stadium.approach>taxi.stadium.gate
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.18, z: -330}
+        forward: {x: 0, y: 0.000090909074, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.stadium.approach>taxi.stadium.gate
+        segmentId: taxi.stadium.approach>taxi.stadium.gate
+        distanceFromStartMeters: 220
+        position: {x: 1080, y: 0.2, z: -550}
+        forward: {x: 0, y: 0.000090909074, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.stadium.gate>taxi.stadium.approach
+      segmentId: taxi.stadium.gate>taxi.stadium.approach
+      edgeId: taxi.stadium.gate>taxi.stadium.approach
+      fromNodeId: taxi.stadium.gate
+      toNodeId: taxi.stadium.approach
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 220
+      travelCost: 220
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.gate>taxi.stadium.approach
+        segmentId: taxi.stadium.gate>taxi.stadium.approach
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.2, z: -550}
+        forward: {x: 0, y: -0.000090909074, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.stadium.gate>taxi.stadium.approach
+        segmentId: taxi.stadium.gate>taxi.stadium.approach
+        distanceFromStartMeters: 220
+        position: {x: 1080, y: 0.18, z: -330}
+        forward: {x: 0, y: -0.000090909074, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.stadium.gate>taxi.stadium.inner
+      segmentId: taxi.stadium.gate>taxi.stadium.inner
+      edgeId: taxi.stadium.gate>taxi.stadium.inner
+      fromNodeId: taxi.stadium.gate
+      toNodeId: taxi.stadium.inner
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 180
+      travelCost: 180
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.gate>taxi.stadium.inner
+        segmentId: taxi.stadium.gate>taxi.stadium.inner
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.2, z: -550}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.stadium.gate>taxi.stadium.inner
+        segmentId: taxi.stadium.gate>taxi.stadium.inner
+        distanceFromStartMeters: 180
+        position: {x: 1080, y: 0.2, z: -730}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.stadium.inner>taxi.stadium.gate
+      segmentId: taxi.stadium.inner>taxi.stadium.gate
+      edgeId: taxi.stadium.inner>taxi.stadium.gate
+      fromNodeId: taxi.stadium.inner
+      toNodeId: taxi.stadium.gate
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 180
+      travelCost: 180
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.inner>taxi.stadium.gate
+        segmentId: taxi.stadium.inner>taxi.stadium.gate
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.2, z: -730}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.stadium.inner>taxi.stadium.gate
+        segmentId: taxi.stadium.inner>taxi.stadium.gate
+        distanceFromStartMeters: 180
+        position: {x: 1080, y: 0.2, z: -550}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.stadium.inner>taxi.stadium.west
+      segmentId: taxi.stadium.inner>taxi.stadium.west
+      edgeId: taxi.stadium.inner>taxi.stadium.west
+      fromNodeId: taxi.stadium.inner
+      toNodeId: taxi.stadium.west
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 160
+      travelCost: 160
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.inner>taxi.stadium.west
+        segmentId: taxi.stadium.inner>taxi.stadium.west
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.2, z: -730}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.stadium.inner>taxi.stadium.west
+        segmentId: taxi.stadium.inner>taxi.stadium.west
+        distanceFromStartMeters: 160
+        position: {x: 920, y: 0.2, z: -730}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.stadium.west>taxi.stadium.inner
+      segmentId: taxi.stadium.west>taxi.stadium.inner
+      edgeId: taxi.stadium.west>taxi.stadium.inner
+      fromNodeId: taxi.stadium.west
+      toNodeId: taxi.stadium.inner
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 160
+      travelCost: 160
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.west>taxi.stadium.inner
+        segmentId: taxi.stadium.west>taxi.stadium.inner
+        distanceFromStartMeters: 0
+        position: {x: 920, y: 0.2, z: -730}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.stadium.west>taxi.stadium.inner
+        segmentId: taxi.stadium.west>taxi.stadium.inner
+        distanceFromStartMeters: 160
+        position: {x: 1080, y: 0.2, z: -730}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.stadium.gate>taxi.stadium.parking
+      segmentId: taxi.stadium.gate>taxi.stadium.parking
+      edgeId: taxi.stadium.gate>taxi.stadium.parking
+      fromNodeId: taxi.stadium.gate
+      toNodeId: taxi.stadium.parking
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 147.64822
+      travelCost: 147.64822
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.gate>taxi.stadium.parking
+        segmentId: taxi.stadium.gate>taxi.stadium.parking
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.2, z: -550}
+        forward: {x: 0.8804711, y: 0, z: -0.47409984}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.stadium.gate>taxi.stadium.parking
+        segmentId: taxi.stadium.gate>taxi.stadium.parking
+        distanceFromStartMeters: 147.64822
+        position: {x: 1210, y: 0.2, z: -620}
+        forward: {x: 0.8804711, y: 0, z: -0.47409984}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.stadium.parking>taxi.stadium.gate
+      segmentId: taxi.stadium.parking>taxi.stadium.gate
+      edgeId: taxi.stadium.parking>taxi.stadium.gate
+      fromNodeId: taxi.stadium.parking
+      toNodeId: taxi.stadium.gate
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 147.64822
+      travelCost: 147.64822
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.stadium
+      sceneChunkId: Taxi_SportsStadium
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.parking>taxi.stadium.gate
+        segmentId: taxi.stadium.parking>taxi.stadium.gate
+        distanceFromStartMeters: 0
+        position: {x: 1210, y: 0.2, z: -620}
+        forward: {x: -0.8804711, y: 0, z: 0.47409984}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.stadium.parking>taxi.stadium.gate
+        segmentId: taxi.stadium.parking>taxi.stadium.gate
+        distanceFromStartMeters: 147.64822
+        position: {x: 1080, y: 0.2, z: -550}
+        forward: {x: -0.8804711, y: 0, z: 0.47409984}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.regional.3640>taxi.concert.approach
+      segmentId: taxi.regional.3640>taxi.concert.approach
+      edgeId: taxi.regional.3640>taxi.concert.approach
+      fromNodeId: taxi.regional.3640
+      toNodeId: taxi.concert.approach
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 320
+      travelCost: 320
+      speedLimitMph: 22
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.regional.3640>taxi.concert.approach
+        segmentId: taxi.regional.3640>taxi.concert.approach
+        distanceFromStartMeters: 0
+        position: {x: 3640, y: 0.14, z: 0}
+        forward: {x: 0, y: 0.00012500002, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+      - roadId: taxi.regional.3640>taxi.concert.approach
+        segmentId: taxi.regional.3640>taxi.concert.approach
+        distanceFromStartMeters: 320
+        position: {x: 3640, y: 0.18, z: -320}
+        forward: {x: 0, y: 0.00012500002, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+    - roadId: taxi.concert.approach>taxi.regional.3640
+      segmentId: taxi.concert.approach>taxi.regional.3640
+      edgeId: taxi.concert.approach>taxi.regional.3640
+      fromNodeId: taxi.concert.approach
+      toNodeId: taxi.regional.3640
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 320
+      travelCost: 320
+      speedLimitMph: 22
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.approach>taxi.regional.3640
+        segmentId: taxi.concert.approach>taxi.regional.3640
+        distanceFromStartMeters: 0
+        position: {x: 3640, y: 0.18, z: -320}
+        forward: {x: 0, y: -0.00012500002, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+      - roadId: taxi.concert.approach>taxi.regional.3640
+        segmentId: taxi.concert.approach>taxi.regional.3640
+        distanceFromStartMeters: 320
+        position: {x: 3640, y: 0.14, z: 0}
+        forward: {x: 0, y: -0.00012500002, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+    - roadId: taxi.concert.approach>taxi.concert.entry
+      segmentId: taxi.concert.approach>taxi.concert.entry
+      edgeId: taxi.concert.approach>taxi.concert.entry
+      fromNodeId: taxi.concert.approach
+      toNodeId: taxi.concert.entry
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 238.79907
+      travelCost: 238.79907
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.approach>taxi.concert.entry
+        segmentId: taxi.concert.approach>taxi.concert.entry
+        distanceFromStartMeters: 0
+        position: {x: 3640, y: 0.18, z: -320}
+        forward: {x: 0.33500966, y: 0.0000837524, z: -0.9422147}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.concert.approach>taxi.concert.entry
+        segmentId: taxi.concert.approach>taxi.concert.entry
+        distanceFromStartMeters: 238.79907
+        position: {x: 3720, y: 0.2, z: -545}
+        forward: {x: 0.33500966, y: 0.0000837524, z: -0.9422147}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.concert.entry>taxi.concert.approach
+      segmentId: taxi.concert.entry>taxi.concert.approach
+      edgeId: taxi.concert.entry>taxi.concert.approach
+      fromNodeId: taxi.concert.entry
+      toNodeId: taxi.concert.approach
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 238.79907
+      travelCost: 238.79907
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.entry>taxi.concert.approach
+        segmentId: taxi.concert.entry>taxi.concert.approach
+        distanceFromStartMeters: 0
+        position: {x: 3720, y: 0.2, z: -545}
+        forward: {x: -0.33500966, y: -0.0000837524, z: 0.9422147}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.concert.entry>taxi.concert.approach
+        segmentId: taxi.concert.entry>taxi.concert.approach
+        distanceFromStartMeters: 238.79907
+        position: {x: 3640, y: 0.18, z: -320}
+        forward: {x: -0.33500966, y: -0.0000837524, z: 0.9422147}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.concert.entry>taxi.concert.inner
+      segmentId: taxi.concert.entry>taxi.concert.inner
+      edgeId: taxi.concert.entry>taxi.concert.inner
+      fromNodeId: taxi.concert.entry
+      toNodeId: taxi.concert.inner
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 185
+      travelCost: 185
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.entry>taxi.concert.inner
+        segmentId: taxi.concert.entry>taxi.concert.inner
+        distanceFromStartMeters: 0
+        position: {x: 3720, y: 0.2, z: -545}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.concert.entry>taxi.concert.inner
+        segmentId: taxi.concert.entry>taxi.concert.inner
+        distanceFromStartMeters: 185
+        position: {x: 3720, y: 0.2, z: -730}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.concert.inner>taxi.concert.entry
+      segmentId: taxi.concert.inner>taxi.concert.entry
+      edgeId: taxi.concert.inner>taxi.concert.entry
+      fromNodeId: taxi.concert.inner
+      toNodeId: taxi.concert.entry
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 185
+      travelCost: 185
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.inner>taxi.concert.entry
+        segmentId: taxi.concert.inner>taxi.concert.entry
+        distanceFromStartMeters: 0
+        position: {x: 3720, y: 0.2, z: -730}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.concert.inner>taxi.concert.entry
+        segmentId: taxi.concert.inner>taxi.concert.entry
+        distanceFromStartMeters: 185
+        position: {x: 3720, y: 0.2, z: -545}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.concert.inner>taxi.concert.pickup
+      segmentId: taxi.concert.inner>taxi.concert.pickup
+      edgeId: taxi.concert.inner>taxi.concert.pickup
+      fromNodeId: taxi.concert.inner
+      toNodeId: taxi.concert.pickup
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 180
+      travelCost: 180
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.inner>taxi.concert.pickup
+        segmentId: taxi.concert.inner>taxi.concert.pickup
+        distanceFromStartMeters: 0
+        position: {x: 3720, y: 0.2, z: -730}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.concert.inner>taxi.concert.pickup
+        segmentId: taxi.concert.inner>taxi.concert.pickup
+        distanceFromStartMeters: 180
+        position: {x: 3540, y: 0.2, z: -730}
+        forward: {x: -1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.concert.pickup>taxi.concert.inner
+      segmentId: taxi.concert.pickup>taxi.concert.inner
+      edgeId: taxi.concert.pickup>taxi.concert.inner
+      fromNodeId: taxi.concert.pickup
+      toNodeId: taxi.concert.inner
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 180
+      travelCost: 180
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.pickup>taxi.concert.inner
+        segmentId: taxi.concert.pickup>taxi.concert.inner
+        distanceFromStartMeters: 0
+        position: {x: 3540, y: 0.2, z: -730}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.concert.pickup>taxi.concert.inner
+        segmentId: taxi.concert.pickup>taxi.concert.inner
+        distanceFromStartMeters: 180
+        position: {x: 3720, y: 0.2, z: -730}
+        forward: {x: 1, y: 0, z: 0}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.concert.entry>taxi.concert.parking
+      segmentId: taxi.concert.entry>taxi.concert.parking
+      edgeId: taxi.concert.entry>taxi.concert.parking
+      fromNodeId: taxi.concert.entry
+      toNodeId: taxi.concert.parking
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 191.04973
+      travelCost: 191.04973
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.entry>taxi.concert.parking
+        segmentId: taxi.concert.entry>taxi.concert.parking
+        distanceFromStartMeters: 0
+        position: {x: 3720, y: 0.2, z: -545}
+        forward: {x: 0.7327935, y: 0, z: -0.6804511}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.concert.entry>taxi.concert.parking
+        segmentId: taxi.concert.entry>taxi.concert.parking
+        distanceFromStartMeters: 191.04973
+        position: {x: 3860, y: 0.2, z: -675}
+        forward: {x: 0.7327935, y: 0, z: -0.6804511}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.concert.parking>taxi.concert.entry
+      segmentId: taxi.concert.parking>taxi.concert.entry
+      edgeId: taxi.concert.parking>taxi.concert.entry
+      fromNodeId: taxi.concert.parking
+      toNodeId: taxi.concert.entry
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 191.04973
+      travelCost: 191.04973
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.concert
+      sceneChunkId: Taxi_ConcertVenue
+      restrictions: []
+      samples:
+      - roadId: taxi.concert.parking>taxi.concert.entry
+        segmentId: taxi.concert.parking>taxi.concert.entry
+        distanceFromStartMeters: 0
+        position: {x: 3860, y: 0.2, z: -675}
+        forward: {x: -0.7327935, y: 0, z: 0.6804511}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.concert.parking>taxi.concert.entry
+        segmentId: taxi.concert.parking>taxi.concert.entry
+        distanceFromStartMeters: 191.04973
+        position: {x: 3720, y: 0.2, z: -545}
+        forward: {x: -0.7327935, y: 0, z: 0.6804511}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.stadium.inner>taxi.mountainpass.approach
+      segmentId: taxi.stadium.inner>taxi.mountainpass.approach
+      edgeId: taxi.stadium.inner>taxi.mountainpass.approach
+      fromNodeId: taxi.stadium.inner
+      toNodeId: taxi.mountainpass.approach
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 197.23083
+      travelCost: 197.23083
+      speedLimitMph: 22
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.mountainpass
+      sceneChunkId: Taxi_MountainPass
+      restrictions: []
+      samples:
+      - roadId: taxi.stadium.inner>taxi.mountainpass.approach
+        segmentId: taxi.stadium.inner>taxi.mountainpass.approach
+        distanceFromStartMeters: 0
+        position: {x: 1080, y: 0.2, z: -730}
+        forward: {x: 0.5070201, y: 0, z: -0.8619342}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+      - roadId: taxi.stadium.inner>taxi.mountainpass.approach
+        segmentId: taxi.stadium.inner>taxi.mountainpass.approach
+        distanceFromStartMeters: 197.23083
+        position: {x: 1180, y: 0.2, z: -900}
+        forward: {x: 0.5070201, y: 0, z: -0.8619342}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+    - roadId: taxi.mountainpass.approach>taxi.stadium.inner
+      segmentId: taxi.mountainpass.approach>taxi.stadium.inner
+      edgeId: taxi.mountainpass.approach>taxi.stadium.inner
+      fromNodeId: taxi.mountainpass.approach
+      toNodeId: taxi.stadium.inner
+      roadClass: 4
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 197.23083
+      travelCost: 197.23083
+      speedLimitMph: 22
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.mountainpass
+      sceneChunkId: Taxi_MountainPass
+      restrictions: []
+      samples:
+      - roadId: taxi.mountainpass.approach>taxi.stadium.inner
+        segmentId: taxi.mountainpass.approach>taxi.stadium.inner
+        distanceFromStartMeters: 0
+        position: {x: 1180, y: 0.2, z: -900}
+        forward: {x: -0.5070201, y: 0, z: 0.8619342}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+      - roadId: taxi.mountainpass.approach>taxi.stadium.inner
+        segmentId: taxi.mountainpass.approach>taxi.stadium.inner
+        distanceFromStartMeters: 197.23083
+        position: {x: 1080, y: 0.2, z: -730}
+        forward: {x: -0.5070201, y: 0, z: 0.8619342}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 22
+    - roadId: taxi.mountainpass.approach>taxi.mountainpass.lower
+      segmentId: taxi.mountainpass.approach>taxi.mountainpass.lower
+      edgeId: taxi.mountainpass.approach>taxi.mountainpass.lower
+      fromNodeId: taxi.mountainpass.approach
+      toNodeId: taxi.mountainpass.lower
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 410.00394
+      travelCost: 410.00394
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.mountainpass
+      sceneChunkId: Taxi_MountainPass
+      restrictions: []
+      samples:
+      - roadId: taxi.mountainpass.approach>taxi.mountainpass.lower
+        segmentId: taxi.mountainpass.approach>taxi.mountainpass.lower
+        distanceFromStartMeters: 0
+        position: {x: 1180, y: 0.2, z: -900}
+        forward: {x: 0, y: 0.0043902015, z: -0.9999904}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.mountainpass.approach>taxi.mountainpass.lower
+        segmentId: taxi.mountainpass.approach>taxi.mountainpass.lower
+        distanceFromStartMeters: 410.00394
+        position: {x: 1180, y: 2, z: -1310}
+        forward: {x: 0, y: 0.0043902015, z: -0.9999904}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.mountainpass.lower>taxi.mountainpass.approach
+      segmentId: taxi.mountainpass.lower>taxi.mountainpass.approach
+      edgeId: taxi.mountainpass.lower>taxi.mountainpass.approach
+      fromNodeId: taxi.mountainpass.lower
+      toNodeId: taxi.mountainpass.approach
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 410.00394
+      travelCost: 410.00394
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.mountainpass
+      sceneChunkId: Taxi_MountainPass
+      restrictions: []
+      samples:
+      - roadId: taxi.mountainpass.lower>taxi.mountainpass.approach
+        segmentId: taxi.mountainpass.lower>taxi.mountainpass.approach
+        distanceFromStartMeters: 0
+        position: {x: 1180, y: 2, z: -1310}
+        forward: {x: 0, y: -0.0043902015, z: 0.9999904}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.mountainpass.lower>taxi.mountainpass.approach
+        segmentId: taxi.mountainpass.lower>taxi.mountainpass.approach
+        distanceFromStartMeters: 410.00394
+        position: {x: 1180, y: 0.2, z: -900}
+        forward: {x: 0, y: -0.0043902015, z: 0.9999904}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.mountainpass.lower>taxi.mountainpass.crossing
+      segmentId: taxi.mountainpass.lower>taxi.mountainpass.crossing
+      edgeId: taxi.mountainpass.lower>taxi.mountainpass.crossing
+      fromNodeId: taxi.mountainpass.lower
+      toNodeId: taxi.mountainpass.crossing
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 230.07825
+      travelCost: 230.07825
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.mountainpass
+      sceneChunkId: Taxi_MountainPass
+      restrictions: []
+      samples:
+      - roadId: taxi.mountainpass.lower>taxi.mountainpass.crossing
+        segmentId: taxi.mountainpass.lower>taxi.mountainpass.crossing
+        distanceFromStartMeters: 0
+        position: {x: 1180, y: 2, z: -1310}
+        forward: {x: 0, y: 0.026078084, z: -0.9996599}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.mountainpass.lower>taxi.mountainpass.crossing
+        segmentId: taxi.mountainpass.lower>taxi.mountainpass.crossing
+        distanceFromStartMeters: 230.07825
+        position: {x: 1180, y: 8, z: -1540}
+        forward: {x: 0, y: 0.026078084, z: -0.9996599}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.mountainpass.crossing>taxi.mountainpass.lower
+      segmentId: taxi.mountainpass.crossing>taxi.mountainpass.lower
+      edgeId: taxi.mountainpass.crossing>taxi.mountainpass.lower
+      fromNodeId: taxi.mountainpass.crossing
+      toNodeId: taxi.mountainpass.lower
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 230.07825
+      travelCost: 230.07825
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.mountainpass
+      sceneChunkId: Taxi_MountainPass
+      restrictions: []
+      samples:
+      - roadId: taxi.mountainpass.crossing>taxi.mountainpass.lower
+        segmentId: taxi.mountainpass.crossing>taxi.mountainpass.lower
+        distanceFromStartMeters: 0
+        position: {x: 1180, y: 8, z: -1540}
+        forward: {x: 0, y: -0.026078084, z: 0.9996599}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.mountainpass.crossing>taxi.mountainpass.lower
+        segmentId: taxi.mountainpass.crossing>taxi.mountainpass.lower
+        distanceFromStartMeters: 230.07825
+        position: {x: 1180, y: 2, z: -1310}
+        forward: {x: 0, y: -0.026078084, z: 0.9996599}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.mountainpass.crossing>taxi.mountainpass.upper
+      segmentId: taxi.mountainpass.crossing>taxi.mountainpass.upper
+      edgeId: taxi.mountainpass.crossing>taxi.mountainpass.upper
+      fromNodeId: taxi.mountainpass.crossing
+      toNodeId: taxi.mountainpass.upper
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 120.26637
+      travelCost: 120.26637
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.mountainpass
+      sceneChunkId: Taxi_MountainPass
+      restrictions: []
+      samples:
+      - roadId: taxi.mountainpass.crossing>taxi.mountainpass.upper
+        segmentId: taxi.mountainpass.crossing>taxi.mountainpass.upper
+        distanceFromStartMeters: 0
+        position: {x: 1180, y: 8, z: -1540}
+        forward: {x: 0, y: 0.06651901, z: -0.99778515}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.mountainpass.crossing>taxi.mountainpass.upper
+        segmentId: taxi.mountainpass.crossing>taxi.mountainpass.upper
+        distanceFromStartMeters: 120.26637
+        position: {x: 1180, y: 16, z: -1660}
+        forward: {x: 0, y: 0.06651901, z: -0.99778515}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+    - roadId: taxi.mountainpass.upper>taxi.mountainpass.crossing
+      segmentId: taxi.mountainpass.upper>taxi.mountainpass.crossing
+      edgeId: taxi.mountainpass.upper>taxi.mountainpass.crossing
+      fromNodeId: taxi.mountainpass.upper
+      toNodeId: taxi.mountainpass.crossing
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 120.26637
+      travelCost: 120.26637
+      speedLimitMph: 16
+      laneCount: 2
+      laneWidthMeters: 5
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.mountainpass
+      sceneChunkId: Taxi_MountainPass
+      restrictions: []
+      samples:
+      - roadId: taxi.mountainpass.upper>taxi.mountainpass.crossing
+        segmentId: taxi.mountainpass.upper>taxi.mountainpass.crossing
+        distanceFromStartMeters: 0
+        position: {x: 1180, y: 16, z: -1660}
+        forward: {x: 0, y: -0.06651901, z: 0.99778515}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
+      - roadId: taxi.mountainpass.upper>taxi.mountainpass.crossing
+        segmentId: taxi.mountainpass.upper>taxi.mountainpass.crossing
+        distanceFromStartMeters: 120.26637
+        position: {x: 1180, y: 8, z: -1540}
+        forward: {x: 0, y: -0.06651901, z: 0.99778515}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 10
+        laneWidthMeters: 5
+        laneCount: 2
+        speedLimitMph: 16
     - roadId: taxi.regional.2800>taxi.speedway.approach
       segmentId: taxi.regional.2800>taxi.speedway.approach
       edgeId: taxi.regional.2800>taxi.speedway.approach
@@ -119343,8 +120584,8 @@ MonoBehaviour:
       direction: 5
       surfaceType: 1
       oneWay: 1
-      distanceMeters: 70
-      travelCost: 70
+      distanceMeters: 10
+      travelCost: 10
       speedLimitMph: 15
       laneCount: 2
       laneWidthMeters: 5
@@ -119369,8 +120610,8 @@ MonoBehaviour:
         speedLimitMph: 15
       - roadId: taxi.speedway.parking>taxi.speedway.pit
         segmentId: taxi.speedway.parking>taxi.speedway.pit
-        distanceFromStartMeters: 70
-        position: {x: 2800, y: 0.2, z: -610}
+        distanceFromStartMeters: 10
+        position: {x: 2800, y: 0.2, z: -550}
         forward: {x: 0, y: 0, z: -1}
         up: {x: 0, y: 1, z: 0}
         direction: 0
@@ -119387,8 +120628,8 @@ MonoBehaviour:
       direction: 5
       surfaceType: 1
       oneWay: 1
-      distanceMeters: 70
-      travelCost: 70
+      distanceMeters: 10
+      travelCost: 10
       speedLimitMph: 15
       laneCount: 2
       laneWidthMeters: 5
@@ -119403,7 +120644,7 @@ MonoBehaviour:
       - roadId: taxi.speedway.pit>taxi.speedway.parking
         segmentId: taxi.speedway.pit>taxi.speedway.parking
         distanceFromStartMeters: 0
-        position: {x: 2800, y: 0.2, z: -610}
+        position: {x: 2800, y: 0.2, z: -550}
         forward: {x: 0, y: 0, z: 1}
         up: {x: 0, y: 1, z: 0}
         direction: 0
@@ -119413,7 +120654,7 @@ MonoBehaviour:
         speedLimitMph: 15
       - roadId: taxi.speedway.pit>taxi.speedway.parking
         segmentId: taxi.speedway.pit>taxi.speedway.parking
-        distanceFromStartMeters: 70
+        distanceFromStartMeters: 10
         position: {x: 2800, y: 0.2, z: -540}
         forward: {x: 0, y: 0, z: 1}
         up: {x: 0, y: 1, z: 0}
@@ -119510,20 +120751,20 @@ MonoBehaviour:
         laneWidthMeters: 5
         laneCount: 2
         speedLimitMph: 15
-    - roadId: taxi.speedway.pit>taxi.speedway.infield
-      segmentId: taxi.speedway.pit>taxi.speedway.infield
-      edgeId: taxi.speedway.pit>taxi.speedway.infield
+    - roadId: taxi.speedway.pit>taxi.speedway.tunnel.north
+      segmentId: taxi.speedway.pit>taxi.speedway.tunnel.north
+      edgeId: taxi.speedway.pit>taxi.speedway.tunnel.north
       fromNodeId: taxi.speedway.pit
-      toNodeId: taxi.speedway.infield
+      toNodeId: taxi.speedway.tunnel.north
       roadClass: 5
       direction: 5
       surfaceType: 1
       oneWay: 1
-      distanceMeters: 170
-      travelCost: 170
+      distanceMeters: 92.20868
+      travelCost: 92.20868
       speedLimitMph: 12
       laneCount: 2
-      laneWidthMeters: 5
+      laneWidthMeters: 7
       leftShoulderWidthMeters: 0
       rightShoulderWidthMeters: 0
       medianWidthMeters: 0
@@ -119532,42 +120773,42 @@ MonoBehaviour:
       sceneChunkId: Taxi_ThunderBowlSpeedway
       restrictions: []
       samples:
-      - roadId: taxi.speedway.pit>taxi.speedway.infield
-        segmentId: taxi.speedway.pit>taxi.speedway.infield
+      - roadId: taxi.speedway.pit>taxi.speedway.tunnel.north
+        segmentId: taxi.speedway.pit>taxi.speedway.tunnel.north
         distanceFromStartMeters: 0
-        position: {x: 2800, y: 0.2, z: -610}
-        forward: {x: 0, y: 0, z: -1}
+        position: {x: 2800, y: 0.2, z: -550}
+        forward: {x: 0, y: -0.067238785, z: -0.9977369}
         up: {x: 0, y: 1, z: 0}
         direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
+        roadWidthMeters: 14
+        laneWidthMeters: 7
         laneCount: 2
         speedLimitMph: 12
-      - roadId: taxi.speedway.pit>taxi.speedway.infield
-        segmentId: taxi.speedway.pit>taxi.speedway.infield
-        distanceFromStartMeters: 170
-        position: {x: 2800, y: 0.2, z: -780}
-        forward: {x: 0, y: 0, z: -1}
+      - roadId: taxi.speedway.pit>taxi.speedway.tunnel.north
+        segmentId: taxi.speedway.pit>taxi.speedway.tunnel.north
+        distanceFromStartMeters: 92.20868
+        position: {x: 2800, y: -6, z: -642}
+        forward: {x: 0, y: -0.067238785, z: -0.9977369}
         up: {x: 0, y: 1, z: 0}
         direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
+        roadWidthMeters: 14
+        laneWidthMeters: 7
         laneCount: 2
         speedLimitMph: 12
-    - roadId: taxi.speedway.infield>taxi.speedway.pit
-      segmentId: taxi.speedway.infield>taxi.speedway.pit
-      edgeId: taxi.speedway.infield>taxi.speedway.pit
-      fromNodeId: taxi.speedway.infield
+    - roadId: taxi.speedway.tunnel.north>taxi.speedway.pit
+      segmentId: taxi.speedway.tunnel.north>taxi.speedway.pit
+      edgeId: taxi.speedway.tunnel.north>taxi.speedway.pit
+      fromNodeId: taxi.speedway.tunnel.north
       toNodeId: taxi.speedway.pit
       roadClass: 5
       direction: 5
       surfaceType: 1
       oneWay: 1
-      distanceMeters: 170
-      travelCost: 170
+      distanceMeters: 92.20868
+      travelCost: 92.20868
       speedLimitMph: 12
       laneCount: 2
-      laneWidthMeters: 5
+      laneWidthMeters: 7
       leftShoulderWidthMeters: 0
       rightShoulderWidthMeters: 0
       medianWidthMeters: 0
@@ -119576,26 +120817,202 @@ MonoBehaviour:
       sceneChunkId: Taxi_ThunderBowlSpeedway
       restrictions: []
       samples:
-      - roadId: taxi.speedway.infield>taxi.speedway.pit
-        segmentId: taxi.speedway.infield>taxi.speedway.pit
+      - roadId: taxi.speedway.tunnel.north>taxi.speedway.pit
+        segmentId: taxi.speedway.tunnel.north>taxi.speedway.pit
         distanceFromStartMeters: 0
-        position: {x: 2800, y: 0.2, z: -780}
-        forward: {x: 0, y: 0, z: 1}
+        position: {x: 2800, y: -6, z: -642}
+        forward: {x: 0, y: 0.067238785, z: 0.9977369}
         up: {x: 0, y: 1, z: 0}
         direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
+        roadWidthMeters: 14
+        laneWidthMeters: 7
         laneCount: 2
         speedLimitMph: 12
-      - roadId: taxi.speedway.infield>taxi.speedway.pit
-        segmentId: taxi.speedway.infield>taxi.speedway.pit
-        distanceFromStartMeters: 170
-        position: {x: 2800, y: 0.2, z: -610}
+      - roadId: taxi.speedway.tunnel.north>taxi.speedway.pit
+        segmentId: taxi.speedway.tunnel.north>taxi.speedway.pit
+        distanceFromStartMeters: 92.20868
+        position: {x: 2800, y: 0.2, z: -550}
+        forward: {x: 0, y: 0.067238785, z: 0.9977369}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 14
+        laneWidthMeters: 7
+        laneCount: 2
+        speedLimitMph: 12
+    - roadId: taxi.speedway.tunnel.north>taxi.speedway.tunnel.south
+      segmentId: taxi.speedway.tunnel.north>taxi.speedway.tunnel.south
+      edgeId: taxi.speedway.tunnel.north>taxi.speedway.tunnel.south
+      fromNodeId: taxi.speedway.tunnel.north
+      toNodeId: taxi.speedway.tunnel.south
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 83
+      travelCost: 83
+      speedLimitMph: 12
+      laneCount: 2
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.tunnel.north>taxi.speedway.tunnel.south
+        segmentId: taxi.speedway.tunnel.north>taxi.speedway.tunnel.south
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: -6, z: -642}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 14
+        laneWidthMeters: 7
+        laneCount: 2
+        speedLimitMph: 12
+      - roadId: taxi.speedway.tunnel.north>taxi.speedway.tunnel.south
+        segmentId: taxi.speedway.tunnel.north>taxi.speedway.tunnel.south
+        distanceFromStartMeters: 83
+        position: {x: 2800, y: -6, z: -725}
+        forward: {x: 0, y: 0, z: -1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 14
+        laneWidthMeters: 7
+        laneCount: 2
+        speedLimitMph: 12
+    - roadId: taxi.speedway.tunnel.south>taxi.speedway.tunnel.north
+      segmentId: taxi.speedway.tunnel.south>taxi.speedway.tunnel.north
+      edgeId: taxi.speedway.tunnel.south>taxi.speedway.tunnel.north
+      fromNodeId: taxi.speedway.tunnel.south
+      toNodeId: taxi.speedway.tunnel.north
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 83
+      travelCost: 83
+      speedLimitMph: 12
+      laneCount: 2
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.tunnel.south>taxi.speedway.tunnel.north
+        segmentId: taxi.speedway.tunnel.south>taxi.speedway.tunnel.north
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: -6, z: -725}
         forward: {x: 0, y: 0, z: 1}
         up: {x: 0, y: 1, z: 0}
         direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
+        roadWidthMeters: 14
+        laneWidthMeters: 7
+        laneCount: 2
+        speedLimitMph: 12
+      - roadId: taxi.speedway.tunnel.south>taxi.speedway.tunnel.north
+        segmentId: taxi.speedway.tunnel.south>taxi.speedway.tunnel.north
+        distanceFromStartMeters: 83
+        position: {x: 2800, y: -6, z: -642}
+        forward: {x: 0, y: 0, z: 1}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 14
+        laneWidthMeters: 7
+        laneCount: 2
+        speedLimitMph: 12
+    - roadId: taxi.speedway.tunnel.south>taxi.speedway.infield
+      segmentId: taxi.speedway.tunnel.south>taxi.speedway.infield
+      edgeId: taxi.speedway.tunnel.south>taxi.speedway.infield
+      fromNodeId: taxi.speedway.tunnel.south
+      toNodeId: taxi.speedway.infield
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 85.225815
+      travelCost: 85.225815
+      speedLimitMph: 12
+      laneCount: 2
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.tunnel.south>taxi.speedway.infield
+        segmentId: taxi.speedway.tunnel.south>taxi.speedway.infield
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: -6, z: -725}
+        forward: {x: 0, y: 0.07274791, z: -0.9973504}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 14
+        laneWidthMeters: 7
+        laneCount: 2
+        speedLimitMph: 12
+      - roadId: taxi.speedway.tunnel.south>taxi.speedway.infield
+        segmentId: taxi.speedway.tunnel.south>taxi.speedway.infield
+        distanceFromStartMeters: 85.225815
+        position: {x: 2800, y: 0.2, z: -810}
+        forward: {x: 0, y: 0.07274791, z: -0.9973504}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 14
+        laneWidthMeters: 7
+        laneCount: 2
+        speedLimitMph: 12
+    - roadId: taxi.speedway.infield>taxi.speedway.tunnel.south
+      segmentId: taxi.speedway.infield>taxi.speedway.tunnel.south
+      edgeId: taxi.speedway.infield>taxi.speedway.tunnel.south
+      fromNodeId: taxi.speedway.infield
+      toNodeId: taxi.speedway.tunnel.south
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 85.225815
+      travelCost: 85.225815
+      speedLimitMph: 12
+      laneCount: 2
+      laneWidthMeters: 7
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.speedway
+      sceneChunkId: Taxi_ThunderBowlSpeedway
+      restrictions: []
+      samples:
+      - roadId: taxi.speedway.infield>taxi.speedway.tunnel.south
+        segmentId: taxi.speedway.infield>taxi.speedway.tunnel.south
+        distanceFromStartMeters: 0
+        position: {x: 2800, y: 0.2, z: -810}
+        forward: {x: 0, y: -0.07274791, z: 0.9973504}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 14
+        laneWidthMeters: 7
+        laneCount: 2
+        speedLimitMph: 12
+      - roadId: taxi.speedway.infield>taxi.speedway.tunnel.south
+        segmentId: taxi.speedway.infield>taxi.speedway.tunnel.south
+        distanceFromStartMeters: 85.225815
+        position: {x: 2800, y: -6, z: -725}
+        forward: {x: 0, y: -0.07274791, z: 0.9973504}
+        up: {x: 0, y: 1, z: 0}
+        direction: 0
+        roadWidthMeters: 14
+        laneWidthMeters: 7
         laneCount: 2
         speedLimitMph: 12
     - roadId: taxi.speedway.track.00>taxi.speedway.track.01
@@ -122150,1238 +123567,6 @@ MonoBehaviour:
         laneWidthMeters: 5.5
         laneCount: 2
         speedLimitMph: 20
-    - roadId: taxi.regional.1080>taxi.stadium.approach
-      segmentId: taxi.regional.1080>taxi.stadium.approach
-      edgeId: taxi.regional.1080>taxi.stadium.approach
-      fromNodeId: taxi.regional.1080
-      toNodeId: taxi.stadium.approach
-      roadClass: 4
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 330
-      travelCost: 330
-      speedLimitMph: 22
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.regional.1080>taxi.stadium.approach
-        segmentId: taxi.regional.1080>taxi.stadium.approach
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.14, z: 0}
-        forward: {x: 0, y: 0.00012121214, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-      - roadId: taxi.regional.1080>taxi.stadium.approach
-        segmentId: taxi.regional.1080>taxi.stadium.approach
-        distanceFromStartMeters: 330
-        position: {x: 1080, y: 0.18, z: -330}
-        forward: {x: 0, y: 0.00012121214, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-    - roadId: taxi.stadium.approach>taxi.regional.1080
-      segmentId: taxi.stadium.approach>taxi.regional.1080
-      edgeId: taxi.stadium.approach>taxi.regional.1080
-      fromNodeId: taxi.stadium.approach
-      toNodeId: taxi.regional.1080
-      roadClass: 4
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 330
-      travelCost: 330
-      speedLimitMph: 22
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.approach>taxi.regional.1080
-        segmentId: taxi.stadium.approach>taxi.regional.1080
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.18, z: -330}
-        forward: {x: 0, y: -0.00012121214, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-      - roadId: taxi.stadium.approach>taxi.regional.1080
-        segmentId: taxi.stadium.approach>taxi.regional.1080
-        distanceFromStartMeters: 330
-        position: {x: 1080, y: 0.14, z: 0}
-        forward: {x: 0, y: -0.00012121214, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-    - roadId: taxi.stadium.approach>taxi.stadium.gate
-      segmentId: taxi.stadium.approach>taxi.stadium.gate
-      edgeId: taxi.stadium.approach>taxi.stadium.gate
-      fromNodeId: taxi.stadium.approach
-      toNodeId: taxi.stadium.gate
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 220
-      travelCost: 220
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.approach>taxi.stadium.gate
-        segmentId: taxi.stadium.approach>taxi.stadium.gate
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.18, z: -330}
-        forward: {x: 0, y: 0.000090909074, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.stadium.approach>taxi.stadium.gate
-        segmentId: taxi.stadium.approach>taxi.stadium.gate
-        distanceFromStartMeters: 220
-        position: {x: 1080, y: 0.2, z: -550}
-        forward: {x: 0, y: 0.000090909074, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.stadium.gate>taxi.stadium.approach
-      segmentId: taxi.stadium.gate>taxi.stadium.approach
-      edgeId: taxi.stadium.gate>taxi.stadium.approach
-      fromNodeId: taxi.stadium.gate
-      toNodeId: taxi.stadium.approach
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 220
-      travelCost: 220
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.gate>taxi.stadium.approach
-        segmentId: taxi.stadium.gate>taxi.stadium.approach
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.2, z: -550}
-        forward: {x: 0, y: -0.000090909074, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.stadium.gate>taxi.stadium.approach
-        segmentId: taxi.stadium.gate>taxi.stadium.approach
-        distanceFromStartMeters: 220
-        position: {x: 1080, y: 0.18, z: -330}
-        forward: {x: 0, y: -0.000090909074, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.stadium.gate>taxi.stadium.inner
-      segmentId: taxi.stadium.gate>taxi.stadium.inner
-      edgeId: taxi.stadium.gate>taxi.stadium.inner
-      fromNodeId: taxi.stadium.gate
-      toNodeId: taxi.stadium.inner
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 180
-      travelCost: 180
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.gate>taxi.stadium.inner
-        segmentId: taxi.stadium.gate>taxi.stadium.inner
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.2, z: -550}
-        forward: {x: 0, y: 0, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.stadium.gate>taxi.stadium.inner
-        segmentId: taxi.stadium.gate>taxi.stadium.inner
-        distanceFromStartMeters: 180
-        position: {x: 1080, y: 0.2, z: -730}
-        forward: {x: 0, y: 0, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.stadium.inner>taxi.stadium.gate
-      segmentId: taxi.stadium.inner>taxi.stadium.gate
-      edgeId: taxi.stadium.inner>taxi.stadium.gate
-      fromNodeId: taxi.stadium.inner
-      toNodeId: taxi.stadium.gate
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 180
-      travelCost: 180
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.inner>taxi.stadium.gate
-        segmentId: taxi.stadium.inner>taxi.stadium.gate
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.2, z: -730}
-        forward: {x: 0, y: 0, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.stadium.inner>taxi.stadium.gate
-        segmentId: taxi.stadium.inner>taxi.stadium.gate
-        distanceFromStartMeters: 180
-        position: {x: 1080, y: 0.2, z: -550}
-        forward: {x: 0, y: 0, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.stadium.inner>taxi.stadium.west
-      segmentId: taxi.stadium.inner>taxi.stadium.west
-      edgeId: taxi.stadium.inner>taxi.stadium.west
-      fromNodeId: taxi.stadium.inner
-      toNodeId: taxi.stadium.west
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 160
-      travelCost: 160
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.inner>taxi.stadium.west
-        segmentId: taxi.stadium.inner>taxi.stadium.west
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.2, z: -730}
-        forward: {x: -1, y: 0, z: 0}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.stadium.inner>taxi.stadium.west
-        segmentId: taxi.stadium.inner>taxi.stadium.west
-        distanceFromStartMeters: 160
-        position: {x: 920, y: 0.2, z: -730}
-        forward: {x: -1, y: 0, z: 0}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.stadium.west>taxi.stadium.inner
-      segmentId: taxi.stadium.west>taxi.stadium.inner
-      edgeId: taxi.stadium.west>taxi.stadium.inner
-      fromNodeId: taxi.stadium.west
-      toNodeId: taxi.stadium.inner
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 160
-      travelCost: 160
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.west>taxi.stadium.inner
-        segmentId: taxi.stadium.west>taxi.stadium.inner
-        distanceFromStartMeters: 0
-        position: {x: 920, y: 0.2, z: -730}
-        forward: {x: 1, y: 0, z: 0}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.stadium.west>taxi.stadium.inner
-        segmentId: taxi.stadium.west>taxi.stadium.inner
-        distanceFromStartMeters: 160
-        position: {x: 1080, y: 0.2, z: -730}
-        forward: {x: 1, y: 0, z: 0}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.stadium.gate>taxi.stadium.parking
-      segmentId: taxi.stadium.gate>taxi.stadium.parking
-      edgeId: taxi.stadium.gate>taxi.stadium.parking
-      fromNodeId: taxi.stadium.gate
-      toNodeId: taxi.stadium.parking
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 147.64822
-      travelCost: 147.64822
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.gate>taxi.stadium.parking
-        segmentId: taxi.stadium.gate>taxi.stadium.parking
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.2, z: -550}
-        forward: {x: 0.8804711, y: 0, z: -0.47409984}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.stadium.gate>taxi.stadium.parking
-        segmentId: taxi.stadium.gate>taxi.stadium.parking
-        distanceFromStartMeters: 147.64822
-        position: {x: 1210, y: 0.2, z: -620}
-        forward: {x: 0.8804711, y: 0, z: -0.47409984}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.stadium.parking>taxi.stadium.gate
-      segmentId: taxi.stadium.parking>taxi.stadium.gate
-      edgeId: taxi.stadium.parking>taxi.stadium.gate
-      fromNodeId: taxi.stadium.parking
-      toNodeId: taxi.stadium.gate
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 147.64822
-      travelCost: 147.64822
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.stadium
-      sceneChunkId: Taxi_SportsStadium
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.parking>taxi.stadium.gate
-        segmentId: taxi.stadium.parking>taxi.stadium.gate
-        distanceFromStartMeters: 0
-        position: {x: 1210, y: 0.2, z: -620}
-        forward: {x: -0.8804711, y: 0, z: 0.47409984}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.stadium.parking>taxi.stadium.gate
-        segmentId: taxi.stadium.parking>taxi.stadium.gate
-        distanceFromStartMeters: 147.64822
-        position: {x: 1080, y: 0.2, z: -550}
-        forward: {x: -0.8804711, y: 0, z: 0.47409984}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.regional.3640>taxi.concert.approach
-      segmentId: taxi.regional.3640>taxi.concert.approach
-      edgeId: taxi.regional.3640>taxi.concert.approach
-      fromNodeId: taxi.regional.3640
-      toNodeId: taxi.concert.approach
-      roadClass: 4
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 320
-      travelCost: 320
-      speedLimitMph: 22
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.regional.3640>taxi.concert.approach
-        segmentId: taxi.regional.3640>taxi.concert.approach
-        distanceFromStartMeters: 0
-        position: {x: 3640, y: 0.14, z: 0}
-        forward: {x: 0, y: 0.00012500002, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-      - roadId: taxi.regional.3640>taxi.concert.approach
-        segmentId: taxi.regional.3640>taxi.concert.approach
-        distanceFromStartMeters: 320
-        position: {x: 3640, y: 0.18, z: -320}
-        forward: {x: 0, y: 0.00012500002, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-    - roadId: taxi.concert.approach>taxi.regional.3640
-      segmentId: taxi.concert.approach>taxi.regional.3640
-      edgeId: taxi.concert.approach>taxi.regional.3640
-      fromNodeId: taxi.concert.approach
-      toNodeId: taxi.regional.3640
-      roadClass: 4
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 320
-      travelCost: 320
-      speedLimitMph: 22
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.approach>taxi.regional.3640
-        segmentId: taxi.concert.approach>taxi.regional.3640
-        distanceFromStartMeters: 0
-        position: {x: 3640, y: 0.18, z: -320}
-        forward: {x: 0, y: -0.00012500002, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-      - roadId: taxi.concert.approach>taxi.regional.3640
-        segmentId: taxi.concert.approach>taxi.regional.3640
-        distanceFromStartMeters: 320
-        position: {x: 3640, y: 0.14, z: 0}
-        forward: {x: 0, y: -0.00012500002, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-    - roadId: taxi.concert.approach>taxi.concert.entry
-      segmentId: taxi.concert.approach>taxi.concert.entry
-      edgeId: taxi.concert.approach>taxi.concert.entry
-      fromNodeId: taxi.concert.approach
-      toNodeId: taxi.concert.entry
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 238.79907
-      travelCost: 238.79907
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.approach>taxi.concert.entry
-        segmentId: taxi.concert.approach>taxi.concert.entry
-        distanceFromStartMeters: 0
-        position: {x: 3640, y: 0.18, z: -320}
-        forward: {x: 0.33500966, y: 0.0000837524, z: -0.9422147}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.concert.approach>taxi.concert.entry
-        segmentId: taxi.concert.approach>taxi.concert.entry
-        distanceFromStartMeters: 238.79907
-        position: {x: 3720, y: 0.2, z: -545}
-        forward: {x: 0.33500966, y: 0.0000837524, z: -0.9422147}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.concert.entry>taxi.concert.approach
-      segmentId: taxi.concert.entry>taxi.concert.approach
-      edgeId: taxi.concert.entry>taxi.concert.approach
-      fromNodeId: taxi.concert.entry
-      toNodeId: taxi.concert.approach
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 238.79907
-      travelCost: 238.79907
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.entry>taxi.concert.approach
-        segmentId: taxi.concert.entry>taxi.concert.approach
-        distanceFromStartMeters: 0
-        position: {x: 3720, y: 0.2, z: -545}
-        forward: {x: -0.33500966, y: -0.0000837524, z: 0.9422147}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.concert.entry>taxi.concert.approach
-        segmentId: taxi.concert.entry>taxi.concert.approach
-        distanceFromStartMeters: 238.79907
-        position: {x: 3640, y: 0.18, z: -320}
-        forward: {x: -0.33500966, y: -0.0000837524, z: 0.9422147}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.concert.entry>taxi.concert.inner
-      segmentId: taxi.concert.entry>taxi.concert.inner
-      edgeId: taxi.concert.entry>taxi.concert.inner
-      fromNodeId: taxi.concert.entry
-      toNodeId: taxi.concert.inner
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 185
-      travelCost: 185
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.entry>taxi.concert.inner
-        segmentId: taxi.concert.entry>taxi.concert.inner
-        distanceFromStartMeters: 0
-        position: {x: 3720, y: 0.2, z: -545}
-        forward: {x: 0, y: 0, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.concert.entry>taxi.concert.inner
-        segmentId: taxi.concert.entry>taxi.concert.inner
-        distanceFromStartMeters: 185
-        position: {x: 3720, y: 0.2, z: -730}
-        forward: {x: 0, y: 0, z: -1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.concert.inner>taxi.concert.entry
-      segmentId: taxi.concert.inner>taxi.concert.entry
-      edgeId: taxi.concert.inner>taxi.concert.entry
-      fromNodeId: taxi.concert.inner
-      toNodeId: taxi.concert.entry
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 185
-      travelCost: 185
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.inner>taxi.concert.entry
-        segmentId: taxi.concert.inner>taxi.concert.entry
-        distanceFromStartMeters: 0
-        position: {x: 3720, y: 0.2, z: -730}
-        forward: {x: 0, y: 0, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.concert.inner>taxi.concert.entry
-        segmentId: taxi.concert.inner>taxi.concert.entry
-        distanceFromStartMeters: 185
-        position: {x: 3720, y: 0.2, z: -545}
-        forward: {x: 0, y: 0, z: 1}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.concert.inner>taxi.concert.pickup
-      segmentId: taxi.concert.inner>taxi.concert.pickup
-      edgeId: taxi.concert.inner>taxi.concert.pickup
-      fromNodeId: taxi.concert.inner
-      toNodeId: taxi.concert.pickup
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 180
-      travelCost: 180
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.inner>taxi.concert.pickup
-        segmentId: taxi.concert.inner>taxi.concert.pickup
-        distanceFromStartMeters: 0
-        position: {x: 3720, y: 0.2, z: -730}
-        forward: {x: -1, y: 0, z: 0}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.concert.inner>taxi.concert.pickup
-        segmentId: taxi.concert.inner>taxi.concert.pickup
-        distanceFromStartMeters: 180
-        position: {x: 3540, y: 0.2, z: -730}
-        forward: {x: -1, y: 0, z: 0}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.concert.pickup>taxi.concert.inner
-      segmentId: taxi.concert.pickup>taxi.concert.inner
-      edgeId: taxi.concert.pickup>taxi.concert.inner
-      fromNodeId: taxi.concert.pickup
-      toNodeId: taxi.concert.inner
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 180
-      travelCost: 180
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.pickup>taxi.concert.inner
-        segmentId: taxi.concert.pickup>taxi.concert.inner
-        distanceFromStartMeters: 0
-        position: {x: 3540, y: 0.2, z: -730}
-        forward: {x: 1, y: 0, z: 0}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.concert.pickup>taxi.concert.inner
-        segmentId: taxi.concert.pickup>taxi.concert.inner
-        distanceFromStartMeters: 180
-        position: {x: 3720, y: 0.2, z: -730}
-        forward: {x: 1, y: 0, z: 0}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.concert.entry>taxi.concert.parking
-      segmentId: taxi.concert.entry>taxi.concert.parking
-      edgeId: taxi.concert.entry>taxi.concert.parking
-      fromNodeId: taxi.concert.entry
-      toNodeId: taxi.concert.parking
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 191.04973
-      travelCost: 191.04973
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.entry>taxi.concert.parking
-        segmentId: taxi.concert.entry>taxi.concert.parking
-        distanceFromStartMeters: 0
-        position: {x: 3720, y: 0.2, z: -545}
-        forward: {x: 0.7327935, y: 0, z: -0.6804511}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.concert.entry>taxi.concert.parking
-        segmentId: taxi.concert.entry>taxi.concert.parking
-        distanceFromStartMeters: 191.04973
-        position: {x: 3860, y: 0.2, z: -675}
-        forward: {x: 0.7327935, y: 0, z: -0.6804511}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.concert.parking>taxi.concert.entry
-      segmentId: taxi.concert.parking>taxi.concert.entry
-      edgeId: taxi.concert.parking>taxi.concert.entry
-      fromNodeId: taxi.concert.parking
-      toNodeId: taxi.concert.entry
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 191.04973
-      travelCost: 191.04973
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.concert
-      sceneChunkId: Taxi_ConcertVenue
-      restrictions: []
-      samples:
-      - roadId: taxi.concert.parking>taxi.concert.entry
-        segmentId: taxi.concert.parking>taxi.concert.entry
-        distanceFromStartMeters: 0
-        position: {x: 3860, y: 0.2, z: -675}
-        forward: {x: -0.7327935, y: 0, z: 0.6804511}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.concert.parking>taxi.concert.entry
-        segmentId: taxi.concert.parking>taxi.concert.entry
-        distanceFromStartMeters: 191.04973
-        position: {x: 3720, y: 0.2, z: -545}
-        forward: {x: -0.7327935, y: 0, z: 0.6804511}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.stadium.inner>taxi.mountainpass.approach
-      segmentId: taxi.stadium.inner>taxi.mountainpass.approach
-      edgeId: taxi.stadium.inner>taxi.mountainpass.approach
-      fromNodeId: taxi.stadium.inner
-      toNodeId: taxi.mountainpass.approach
-      roadClass: 4
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 197.23083
-      travelCost: 197.23083
-      speedLimitMph: 22
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.mountainpass
-      sceneChunkId: Taxi_MountainPass
-      restrictions: []
-      samples:
-      - roadId: taxi.stadium.inner>taxi.mountainpass.approach
-        segmentId: taxi.stadium.inner>taxi.mountainpass.approach
-        distanceFromStartMeters: 0
-        position: {x: 1080, y: 0.2, z: -730}
-        forward: {x: 0.5070201, y: 0, z: -0.8619342}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-      - roadId: taxi.stadium.inner>taxi.mountainpass.approach
-        segmentId: taxi.stadium.inner>taxi.mountainpass.approach
-        distanceFromStartMeters: 197.23083
-        position: {x: 1180, y: 0.2, z: -900}
-        forward: {x: 0.5070201, y: 0, z: -0.8619342}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-    - roadId: taxi.mountainpass.approach>taxi.stadium.inner
-      segmentId: taxi.mountainpass.approach>taxi.stadium.inner
-      edgeId: taxi.mountainpass.approach>taxi.stadium.inner
-      fromNodeId: taxi.mountainpass.approach
-      toNodeId: taxi.stadium.inner
-      roadClass: 4
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 197.23083
-      travelCost: 197.23083
-      speedLimitMph: 22
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.mountainpass
-      sceneChunkId: Taxi_MountainPass
-      restrictions: []
-      samples:
-      - roadId: taxi.mountainpass.approach>taxi.stadium.inner
-        segmentId: taxi.mountainpass.approach>taxi.stadium.inner
-        distanceFromStartMeters: 0
-        position: {x: 1180, y: 0.2, z: -900}
-        forward: {x: -0.5070201, y: 0, z: 0.8619342}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-      - roadId: taxi.mountainpass.approach>taxi.stadium.inner
-        segmentId: taxi.mountainpass.approach>taxi.stadium.inner
-        distanceFromStartMeters: 197.23083
-        position: {x: 1080, y: 0.2, z: -730}
-        forward: {x: -0.5070201, y: 0, z: 0.8619342}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 22
-    - roadId: taxi.mountainpass.approach>taxi.mountainpass.lower
-      segmentId: taxi.mountainpass.approach>taxi.mountainpass.lower
-      edgeId: taxi.mountainpass.approach>taxi.mountainpass.lower
-      fromNodeId: taxi.mountainpass.approach
-      toNodeId: taxi.mountainpass.lower
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 410.00394
-      travelCost: 410.00394
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.mountainpass
-      sceneChunkId: Taxi_MountainPass
-      restrictions: []
-      samples:
-      - roadId: taxi.mountainpass.approach>taxi.mountainpass.lower
-        segmentId: taxi.mountainpass.approach>taxi.mountainpass.lower
-        distanceFromStartMeters: 0
-        position: {x: 1180, y: 0.2, z: -900}
-        forward: {x: 0, y: 0.0043902015, z: -0.9999904}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.mountainpass.approach>taxi.mountainpass.lower
-        segmentId: taxi.mountainpass.approach>taxi.mountainpass.lower
-        distanceFromStartMeters: 410.00394
-        position: {x: 1180, y: 2, z: -1310}
-        forward: {x: 0, y: 0.0043902015, z: -0.9999904}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.mountainpass.lower>taxi.mountainpass.approach
-      segmentId: taxi.mountainpass.lower>taxi.mountainpass.approach
-      edgeId: taxi.mountainpass.lower>taxi.mountainpass.approach
-      fromNodeId: taxi.mountainpass.lower
-      toNodeId: taxi.mountainpass.approach
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 410.00394
-      travelCost: 410.00394
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.mountainpass
-      sceneChunkId: Taxi_MountainPass
-      restrictions: []
-      samples:
-      - roadId: taxi.mountainpass.lower>taxi.mountainpass.approach
-        segmentId: taxi.mountainpass.lower>taxi.mountainpass.approach
-        distanceFromStartMeters: 0
-        position: {x: 1180, y: 2, z: -1310}
-        forward: {x: 0, y: -0.0043902015, z: 0.9999904}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.mountainpass.lower>taxi.mountainpass.approach
-        segmentId: taxi.mountainpass.lower>taxi.mountainpass.approach
-        distanceFromStartMeters: 410.00394
-        position: {x: 1180, y: 0.2, z: -900}
-        forward: {x: 0, y: -0.0043902015, z: 0.9999904}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.mountainpass.lower>taxi.mountainpass.crossing
-      segmentId: taxi.mountainpass.lower>taxi.mountainpass.crossing
-      edgeId: taxi.mountainpass.lower>taxi.mountainpass.crossing
-      fromNodeId: taxi.mountainpass.lower
-      toNodeId: taxi.mountainpass.crossing
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 230.07825
-      travelCost: 230.07825
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.mountainpass
-      sceneChunkId: Taxi_MountainPass
-      restrictions: []
-      samples:
-      - roadId: taxi.mountainpass.lower>taxi.mountainpass.crossing
-        segmentId: taxi.mountainpass.lower>taxi.mountainpass.crossing
-        distanceFromStartMeters: 0
-        position: {x: 1180, y: 2, z: -1310}
-        forward: {x: 0, y: 0.026078084, z: -0.9996599}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.mountainpass.lower>taxi.mountainpass.crossing
-        segmentId: taxi.mountainpass.lower>taxi.mountainpass.crossing
-        distanceFromStartMeters: 230.07825
-        position: {x: 1180, y: 8, z: -1540}
-        forward: {x: 0, y: 0.026078084, z: -0.9996599}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.mountainpass.crossing>taxi.mountainpass.lower
-      segmentId: taxi.mountainpass.crossing>taxi.mountainpass.lower
-      edgeId: taxi.mountainpass.crossing>taxi.mountainpass.lower
-      fromNodeId: taxi.mountainpass.crossing
-      toNodeId: taxi.mountainpass.lower
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 230.07825
-      travelCost: 230.07825
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.mountainpass
-      sceneChunkId: Taxi_MountainPass
-      restrictions: []
-      samples:
-      - roadId: taxi.mountainpass.crossing>taxi.mountainpass.lower
-        segmentId: taxi.mountainpass.crossing>taxi.mountainpass.lower
-        distanceFromStartMeters: 0
-        position: {x: 1180, y: 8, z: -1540}
-        forward: {x: 0, y: -0.026078084, z: 0.9996599}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.mountainpass.crossing>taxi.mountainpass.lower
-        segmentId: taxi.mountainpass.crossing>taxi.mountainpass.lower
-        distanceFromStartMeters: 230.07825
-        position: {x: 1180, y: 2, z: -1310}
-        forward: {x: 0, y: -0.026078084, z: 0.9996599}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.mountainpass.crossing>taxi.mountainpass.upper
-      segmentId: taxi.mountainpass.crossing>taxi.mountainpass.upper
-      edgeId: taxi.mountainpass.crossing>taxi.mountainpass.upper
-      fromNodeId: taxi.mountainpass.crossing
-      toNodeId: taxi.mountainpass.upper
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 120.26637
-      travelCost: 120.26637
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.mountainpass
-      sceneChunkId: Taxi_MountainPass
-      restrictions: []
-      samples:
-      - roadId: taxi.mountainpass.crossing>taxi.mountainpass.upper
-        segmentId: taxi.mountainpass.crossing>taxi.mountainpass.upper
-        distanceFromStartMeters: 0
-        position: {x: 1180, y: 8, z: -1540}
-        forward: {x: 0, y: 0.06651901, z: -0.99778515}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.mountainpass.crossing>taxi.mountainpass.upper
-        segmentId: taxi.mountainpass.crossing>taxi.mountainpass.upper
-        distanceFromStartMeters: 120.26637
-        position: {x: 1180, y: 16, z: -1660}
-        forward: {x: 0, y: 0.06651901, z: -0.99778515}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-    - roadId: taxi.mountainpass.upper>taxi.mountainpass.crossing
-      segmentId: taxi.mountainpass.upper>taxi.mountainpass.crossing
-      edgeId: taxi.mountainpass.upper>taxi.mountainpass.crossing
-      fromNodeId: taxi.mountainpass.upper
-      toNodeId: taxi.mountainpass.crossing
-      roadClass: 5
-      direction: 5
-      surfaceType: 1
-      oneWay: 1
-      distanceMeters: 120.26637
-      travelCost: 120.26637
-      speedLimitMph: 16
-      laneCount: 2
-      laneWidthMeters: 5
-      leftShoulderWidthMeters: 0
-      rightShoulderWidthMeters: 0
-      medianWidthMeters: 0
-      laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.mountainpass
-      sceneChunkId: Taxi_MountainPass
-      restrictions: []
-      samples:
-      - roadId: taxi.mountainpass.upper>taxi.mountainpass.crossing
-        segmentId: taxi.mountainpass.upper>taxi.mountainpass.crossing
-        distanceFromStartMeters: 0
-        position: {x: 1180, y: 16, z: -1660}
-        forward: {x: 0, y: -0.06651901, z: 0.99778515}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
-      - roadId: taxi.mountainpass.upper>taxi.mountainpass.crossing
-        segmentId: taxi.mountainpass.upper>taxi.mountainpass.crossing
-        distanceFromStartMeters: 120.26637
-        position: {x: 1180, y: 8, z: -1540}
-        forward: {x: 0, y: -0.06651901, z: 0.99778515}
-        up: {x: 0, y: 1, z: 0}
-        direction: 0
-        roadWidthMeters: 10
-        laneWidthMeters: 5
-        laneCount: 2
-        speedLimitMph: 16
 --- !u!4 &590795209
 Transform:
   m_ObjectHideFlags: 0
@@ -124051,7 +124236,8 @@ MonoBehaviour:
   passengerSpawnPoint: {fileID: 532986560}
   truckStopPoint: {fileID: 1948018125}
   detectionRadius: 17
-  tags: []
+  tags:
+  - complex:taxi.speedway
   debugGizmos: 1
 --- !u!1 &640693756
 GameObject:
@@ -124998,7 +125184,8 @@ MonoBehaviour:
   passengerSpawnPoint: {fileID: 1224632514}
   truckStopPoint: {fileID: 452997098}
   detectionRadius: 17
-  tags: []
+  tags:
+  - complex:taxi.speedway
   debugGizmos: 1
 --- !u!1 &686588890
 GameObject:
@@ -126489,7 +126676,8 @@ MonoBehaviour:
   passengerSpawnPoint: {fileID: 336098890}
   truckStopPoint: {fileID: 612947971}
   detectionRadius: 17
-  tags: []
+  tags:
+  - complex:taxi.speedway
   debugGizmos: 1
 --- !u!1 &842851036
 GameObject:
@@ -138239,7 +138427,7 @@ Transform:
   m_GameObject: {fileID: 1614651557}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2800, y: 0.2, z: -780}
+  m_LocalPosition: {x: 2800, y: 0.2, z: -810}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -138286,12 +138474,13 @@ MonoBehaviour:
   locationId: taxi.speedway.infield
   district: Speedway
   locationType: 10
-  pickupAllowed: 1
-  dropoffAllowed: 1
+  pickupAllowed: 0
+  dropoffAllowed: 0
   passengerSpawnPoint: {fileID: 1295242181}
   truckStopPoint: {fileID: 2006489504}
   detectionRadius: 17
-  tags: []
+  tags:
+  - complex:taxi.speedway
   debugGizmos: 1
 --- !u!1 &1614944069
 GameObject:
@@ -138940,7 +139129,8 @@ MonoBehaviour:
   passengerSpawnPoint: {fileID: 700997493}
   truckStopPoint: {fileID: 2005183353}
   detectionRadius: 17
-  tags: []
+  tags:
+  - complex:taxi.speedway
   debugGizmos: 1
 --- !u!1 &1661540163
 GameObject:
@@ -144462,6 +144652,11 @@ MonoBehaviour:
   utsTruckPrefabs:
   - {fileID: 1159880368498422, guid: 149b71e9849c0444da1a36376caf8156, type: 3}
   - {fileID: 1225235605962860, guid: e2302543cb5f6ea49846f98993d95f01, type: 3}
+  countdownClip: {fileID: 0}
+  goClip: {fileID: 0}
+  checkpointClip: {fileID: 0}
+  wrongWayClip: {fileID: 0}
+  finishClip: {fileID: 0}
 --- !u!114 &2113431619
 MonoBehaviour:
   m_ObjectHideFlags: 0
