@@ -15,7 +15,7 @@ namespace LWS.TruckTaxi.Tests
                 foreach (var entry in TruckTaxiNeedsItems.All) if (entry.PlayerOwnable) Assert.AreEqual(10, state.Count(entry.Item), entry.Name);
                 state.Consume(TruckTaxiNeedsItem.WaterBottle); state.GrantFreePlayTestInventory();
                 Assert.AreEqual(9, state.Count(TruckTaxiNeedsItem.WaterBottle));
-                state.AdvanceGameSeconds(9 * 3600);
+                state.AdvanceGameSeconds(3600 / settings.thirstGainPerGameHour);
                 Assert.AreEqual(1, state.Hunger); Assert.AreEqual(1, state.Thirst);
                 Assert.AreEqual("VEHICLE OK", TruckTaxiRoadsideAssistance.Diagnose(1, true, true, 0, 0, 0, 0, 0, 1, 0));
             }

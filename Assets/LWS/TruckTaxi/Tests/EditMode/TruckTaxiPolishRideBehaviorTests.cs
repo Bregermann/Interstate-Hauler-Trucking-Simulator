@@ -128,7 +128,7 @@ namespace LWS.TruckTaxi.Tests.EditMode
         }
 
         [Test]
-        public void IntercityFareRequiresTwoCompletedLocalsNotTwoDeclines()
+        public void IntercityOfferMixDoesNotRequireCompletedLocalsAfterAnIntercityFare()
         {
             config.intercityRideChance = 1;
             config.localOffersAfterIntercity = 3;
@@ -145,28 +145,24 @@ namespace LWS.TruckTaxi.Tests.EditMode
             Assert.AreEqual(2, session.LocalOffersBeforeIntercity);
 
             session.ContinueShift();
-            for (int remaining = 2; remaining > 0; remaining--)
+            for (int declined = 0; declined < 2; declined++)
             {
                 Assert.IsTrue(session.OfferRide(passenger));
-                Assert.IsFalse(session.IsIntercityRide, "Cooldown should force a local destination.");
-                Assert.AreEqual(remaining, session.LocalOffersBeforeIntercity);
+                Assert.IsTrue(session.IsIntercityRide, "Offer mix uses the configured target, not completed-fare cooldown.");
+                Assert.Zero(session.LocalOfferStreak);
                 session.DeclineRide();
-                Assert.AreEqual(remaining,session.LocalOffersBeforeIntercity);
-                Assert.IsTrue(session.OfferRide(passenger)); Assert.IsTrue(session.AcceptRide());
-                session.Tick(.1f,session.Pickup.StopPosition,0,0,true);
-                session.Tick(2,session.Pickup.StopPosition,0,0,true); session.DebugComplete();
-                Assert.AreEqual(remaining-1,session.LocalOffersBeforeIntercity);
-                session.ContinueShift();
+                Assert.AreEqual(2, session.LocalOffersBeforeIntercity, "Legacy completed-fare statistics remain unchanged by declines.");
             }
 
             Assert.IsTrue(session.OfferRide(passenger));
-            Assert.IsTrue(session.IsIntercityRide, "Intercity becomes eligible after two completed local fares.");
+            Assert.IsTrue(session.IsIntercityRide);
+            Assert.AreEqual(1, session.CompletedRides);
+            Assert.AreEqual(2, session.OffersDeclined);
         }
 
         [Test]
         public void LocalOnlyOfferDoesNotFallBackToAnIntercityDestinationWhenNoLocalDropoffExists()
         {
-            passenger.passengerId = string.Empty;
             config.intercityRideChance = 0;
             session.RegionResolver = position => position.x >= 300 ? "town.02" : "town.01";
             foreach (TruckTaxiRideLocation location in locations)
@@ -177,6 +173,7 @@ namespace LWS.TruckTaxi.Tests.EditMode
             session.StartShift();
 
             Assert.IsFalse(session.OfferRide(passenger));
+            Assert.AreEqual(1, session.LastOfferCandidateCount, "A valid passenger must reach destination eligibility, not fail stable-ID validation.");
             Assert.AreEqual(TruckTaxiState.Available, session.State);
             Assert.IsNull(session.Offer);
             Assert.IsFalse(session.IsGeneratingOffer);
@@ -238,6 +235,41 @@ namespace LWS.TruckTaxi.Tests.EditMode
             }
             Assert.AreEqual(0, session.ShiftEarnings);
             Assert.AreEqual(0, session.EstimateFare().Penalties);
+        }
+
+        [TestCase(true)]
+        [TestCase(false)]
+        public void IgnoredOptionalStopCannotBlockNormalFinalFare(bool accepted)
+        {
+            Board();
+            var diversion=NewRequest(TaxiRequestType.ScenicRoute,900);
+            Assert.IsTrue(session.GenerateRequest(diversion));
+            if(accepted) Assert.IsTrue(session.AcceptDiversion());
+            session.StopPresentationReady=_=>false;
+            Vector3 destination=session.Destination.StopPosition;
+            session.Tick(.1f,destination,0,0,true);
+            Assert.AreEqual(TruckTaxiState.PassengerExiting,session.State);
+            Assert.IsNull(session.ActiveStop); Assert.IsNull(session.PendingDiversion);
+            session.Tick(config.exitingSeconds+.1f,destination,0,0,true);
+            Assert.AreEqual(TruckTaxiState.RideComplete,session.State);
+            Assert.AreEqual(0,session.LastFare.Diversions);
+            Assert.Greater(session.LastFare.Total,0);
+            Assert.AreEqual(1,session.CompletedRides);
+        }
+
+        [Test] public void DrivingTowardFinalFareDoesNotLosePatienceForIgnoringAcceptedDiversion()
+        {
+            Board(); passenger.basePatience=60;
+            Vector3 origin=session.Pickup.StopPosition;
+            session.Destination.transform.position=origin+Vector3.right*10000;
+            var diversion=NewRequest(TaxiRequestType.ScenicRoute,900);
+            diversion.timer=0;
+            Assert.IsTrue(session.GenerateRequest(diversion)); Assert.IsTrue(session.AcceptDiversion());
+            session.ActiveStop.StopPoint.transform.position=origin-Vector3.right*1000;
+            float patience=session.OnboardPatience;
+            for(int i=1;i<=30;i++) session.Tick(5,origin+Vector3.right*(i*25),5,0,true);
+            Assert.IsFalse(session.SafeDropRequested);
+            Assert.GreaterOrEqual(session.OnboardPatience,patience);
         }
 
         [Test]

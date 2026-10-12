@@ -91,6 +91,14 @@ namespace LWS.TruckTaxi.Tests
                 "Assets/LWS/TruckTaxi/Passengers/TruckTaxiPassengerDatabase.asset");
             Assert.IsNotNull(config.passengerDatabase);
             foreach(var stop in stops) stop.district=district;
+            if(district=="Speedway")
+            {
+                // Public venue pickups need a destination outside the same complex in each town.
+                stops[0].locationId="taxi.speedway.main-gate";
+                stops[2].locationId="taxi.speedway.vip-entrance";
+                foreach(int index in new[]{1,3})
+                { stops[index].district="Downtown"; stops[index].pickupAllowed=false; }
+            }
             var session=Session(); session.RaceEventActive=racing;
             session.SetWorldConditions(0,hour,TruckTaxiDemandWeather.Neutral);
             int eligible=session.CapturePassengerEligibility().Count(p=>p.PickupMetadataEligible);
@@ -100,6 +108,12 @@ namespace LWS.TruckTaxi.Tests
             {
                 TruckTaxiDispatchTestClock.ExpireManualDeclineCooldown(session,hour);
                 Assert.IsTrue(session.OfferRide(),session.LastOfferDiagnostics);
+                Assert.IsTrue(TruckTaxiOfferEligibility.Pair(session.Pickup,session.Destination));
+                if(district=="Speedway")
+                {
+                    Assert.AreEqual("Speedway",session.Pickup.district);
+                    Assert.AreNotEqual("Speedway",session.Destination.district);
+                }
                 string id=session.Passenger.passengerId, nextCategory=session.Passenger.DispatchArchetype;
                 Assert.AreNotEqual(previous,id,"Manual decline has viable alternative passengers.");
                 counts.TryGetValue(id,out int old); counts[id]=old+1;
@@ -162,21 +176,20 @@ namespace LWS.TruckTaxi.Tests
             Debug.Log($"Actual completed-ride appreciation offers: {offered}/10000");
         }
 
-        [Test] public void ThousandGraphGatedCompletedRidesRespectTwoLocalCooldownAndThreeLocalGuarantee()
+        [Test] public void ThousandGraphGatedOffersStayNearQuarterIntercityWithoutFixedFourthOffer()
         {
+            config.intercityRideChance=.25f;
             config.passengers=new[]{Passenger("intercity")}; var session=Session(130013); int across=0,maxLocal=0;
             for(int i=0;i<1000;i++)
             {
-                int cooldown=session.IntercityPolicy.LocalCooldownRemaining;
-                bool guarantee=session.IntercityPolicy.GuaranteePending;
+                bool guarantee=session.LocalOfferStreak>=7;
                 Assert.IsTrue(session.OfferRide(),session.LastOfferDiagnostics);
-                if(cooldown>0) Assert.IsFalse(session.IsIntercityRide);
                 if(guarantee) Assert.IsTrue(session.IsIntercityRide);
                 if(session.IsIntercityRide) across++;
-                Complete(session); maxLocal=Math.Max(maxLocal,session.IntercityPolicy.CompletedLocalStreak);
+                maxLocal=Math.Max(maxLocal,session.LocalOfferStreak); Complete(session);
                 session.ContinueShift();
             }
-            Assert.That(across,Is.InRange(240,270)); Assert.AreEqual(3,maxLocal);
+            Assert.That(across,Is.InRange(230,280)); Assert.That(maxLocal,Is.InRange(4,7));
             Debug.Log($"Actual routed offers: intercity={across}/1000, local streak={maxLocal}, {session.LastOfferDiagnostics}");
         }
 

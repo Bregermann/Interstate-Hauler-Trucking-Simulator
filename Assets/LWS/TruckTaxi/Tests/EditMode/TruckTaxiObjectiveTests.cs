@@ -112,6 +112,9 @@ namespace LWS.TruckTaxi.Tests
         [Test] public void StopProgressIsContinuousAndCannotCompleteByDriveThroughEvent()
         {
             var session=Session(out _); Board(session); var go=new GameObject("Scenic fixture"); allocated.Add(go);
+            // The optional dwell test must not also trigger final-fare arrival and skip the stop.
+            go.transform.position=session.Destination.StopPosition+Vector3.forward*100;
+            Assert.IsFalse(session.Destination.Contains(go.transform.position));
             var stop=go.AddComponent<TruckTaxiStopObjectivePoint>(); stop.stableId="scenic.test"; stop.durationSeconds=12;
             session.Capabilities.Stops.Add(stop); session.Capabilities.Register(TruckTaxiObjectiveCapability.ScenicStops,1);
             var d=Asset<PassengerRequestDefinition>(); d.requestType=TaxiRequestType.ScenicRoute;
@@ -121,6 +124,8 @@ namespace LWS.TruckTaxi.Tests
             var request=session.ActiveStop;
             session.RecordEvent(TaxiEventType.ScenicPoint,stop.stableId); Assert.Zero(request.Progress);
             session.Tick(5,stop.Position,0,0,true); Assert.AreEqual(5,request.Progress);
+            Assert.AreEqual(TaxiRequestState.Active,request.State);
+            Assert.AreEqual(TruckTaxiState.DrivingToDestination,session.State);
             session.Tick(1,stop.Position,2,0,true); Assert.Zero(request.Progress);
             session.Tick(12,stop.Position,0,0,true); Assert.AreEqual(TaxiRequestState.Succeeded,request.State);
         }

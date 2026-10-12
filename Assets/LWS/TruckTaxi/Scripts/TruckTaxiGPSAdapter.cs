@@ -33,6 +33,9 @@ namespace LWS.TruckTaxi
             }
         }
         private readonly TruckTaxiNavigationIntents<Destination> intents=new TruckTaxiNavigationIntents<Destination>();
+        private const string RaceRouteOwner="race-checkpoint";
+        private long raceRouteToken;
+        private string raceRouteTarget;
         private Rigidbody playerBody;
         private System.Reflection.PropertyInfo hudFollow,cabFollow;
         public event System.Action NavigationChanged;
@@ -102,6 +105,20 @@ namespace LWS.TruckTaxi
         public float TargetDistanceMeters => player!=null && intents.Active!=null
             ? Vector3.Distance(player.position,intents.Active.Value.Position) : 0;
         public string CompanionDestinationLabel => intents.Get(TruckTaxiNavigationLayer.CompanionTask)?.Value.Label ?? "";
+        public string CompanionDestinationId => intents.Get(TruckTaxiNavigationLayer.CompanionTask)?.TargetId ?? "";
+        public long CompanionLeaseToken => intents.Get(TruckTaxiNavigationLayer.CompanionTask)?.Token ?? 0;
+        public void CopyNavigationObjectives(System.Collections.Generic.List<TruckTaxiNavigationObjective> output)
+        {
+            if(output==null) throw new System.ArgumentNullException(nameof(output));
+            output.Clear();
+            for(int i=(int)TruckTaxiNavigationLayer.Emergency;i>=0;i--)
+            {
+                var lease=intents.Get((TruckTaxiNavigationLayer)i);
+                if(lease==null) continue;
+                output.Add(new TruckTaxiNavigationObjective(lease.Layer,lease.OwnerId,lease.TargetId,
+                    lease.Value.Label,lease.Value.Position,lease.Value.Type,lease.Token,lease==intents.Active));
+            }
+        }
         public float CompanionDistanceMeters
         {
             get
@@ -220,6 +237,7 @@ namespace LWS.TruckTaxi
             ApplyDisplaySettings(false);
             MapMarkers=GetComponent<TruckTaxiMapMarkers>() ?? gameObject.AddComponent<TruckTaxiMapMarkers>();
             MapMarkers.Initialize(GetComponent<TruckTaxiBootstrap>(),this);
+            (GetComponent<TruckTaxiObjectiveBeams>() ?? gameObject.AddComponent<TruckTaxiObjectiveBeams>()).Initialize(this);
         }
         private void FitScreen(RectTransform rect)
         {
@@ -358,6 +376,11 @@ namespace LWS.TruckTaxi
         }
         private void LateUpdate()
         {
+            var race=host!=null ? host.Races : null;
+            bool hasCheckpoint=race!=null && race.isActiveAndEnabled && race.HasCheckpointTarget &&
+                race.CheckpointCount>0 && race.NextCheckpoint>=0 && race.NextCheckpoint<race.CheckpointCount;
+            SyncRaceCheckpoint(hasCheckpoint,hasCheckpoint ? race.ActiveCheckpointPosition : Vector3.zero,
+                hasCheckpoint ? race.NextCheckpoint : 0,hasCheckpoint ? race.CheckpointCount : 0);
             // The base adapter updates camera policy in Update. Rebind both displays to the truck,
             // never the cab camera, player-arrow UI, or a steering-wheel visual.
             if(player!=null) { hudFollow?.SetValue(previewCompass,player); cabFollow?.SetValue(cabCompass,player); }
@@ -377,7 +400,8 @@ namespace LWS.TruckTaxi
         // Coalesce transitions into one public vendor refresh, independent of scaled time.
         public void RequestPresentationRefresh() => presentationRefreshPending=true;
         private void OnEnable() => RequestPresentationRefresh();
-        private void OnDisable() { EndMapCapture(); tileLayer?.ShowOnlyFor(null); }
+        private void OnDisable()
+        { SyncRaceCheckpoint(false,Vector3.zero,0,0); EndMapCapture(); tileLayer?.ShowOnlyFor(null); }
         private void OnApplicationFocus(bool focused) { if(focused) RequestPresentationRefresh(); }
         private void OnApplicationPause(bool paused) { if(!paused) RequestPresentationRefresh(); }
         private void RefreshPresentationIfNeeded()
@@ -614,9 +638,9 @@ namespace LWS.TruckTaxi
                 Type=TruckTaxiMapMarkerType.PrivateEventStop,RequiresCompletion=true
             },true);
         }
-        public bool ClearPrivateStopDestination(string stableId)
+        public bool ClearPrivateStopDestination(string stableId,long token=0)
         {
-            return ReleaseNavigationIntent(TruckTaxiNavigationLayer.CompanionTask,"companion",stableId);
+            return ReleaseNavigationIntent(TruckTaxiNavigationLayer.CompanionTask,"companion",stableId,token);
         }
         public bool TrySetServiceDestination(string stableId,string displayName,Vector3 position,TruckTaxiMapMarkerType type)
         {
@@ -638,6 +662,34 @@ namespace LWS.TruckTaxi
             },true);
         }
         // Passenger requests and short-lived emergencies may claim/release a named lease without touching other layers.
+        public void SyncRaceCheckpoint(bool hasTarget,Vector3 localWorldPosition,int nextCheckpoint,int checkpointCount)
+        {
+            if(!hasTarget || checkpointCount<=0 || nextCheckpoint<0 || nextCheckpoint>=checkpointCount ||
+                !float.IsFinite(localWorldPosition.x) || !float.IsFinite(localWorldPosition.y) || !float.IsFinite(localWorldPosition.z))
+            {
+                if(raceRouteToken!=0) ReleaseNavigationIntent(TruckTaxiNavigationLayer.RaceCheckpoint,
+                    RaceRouteOwner,raceRouteTarget,raceRouteToken);
+                if(raceRouteTarget!=null) MapMarkers?.HideTransientNavigationTarget(raceRouteTarget);
+                raceRouteToken=0; raceRouteTarget=null;
+                return;
+            }
+            const string target="race.checkpoint.active";
+            string label="RACE CHECKPOINT "+(nextCheckpoint+1)+" / "+checkpointCount;
+            var existing=intents.Get(TruckTaxiNavigationLayer.RaceCheckpoint);
+            if(existing!=null && existing.OwnerId==RaceRouteOwner && existing.Token==raceRouteToken &&
+                existing.TargetId==target && existing.Value.Label==label && existing.Value.Position==localWorldPosition) return;
+            // Gates are already local-world positions. No TransformPoint/global conversion or
+            // route-success gate: an off-road gate still needs its real point marker and beam.
+            if(Claim(TruckTaxiNavigationLayer.RaceCheckpoint,RaceRouteOwner,new Destination {
+                Id=target,Label=label,
+                Point=localWorldPosition,Type=TruckTaxiMapMarkerType.ActiveObjective,RequiresCompletion=true
+            },false))
+            {
+                var lease=intents.Get(TruckTaxiNavigationLayer.RaceCheckpoint);
+                raceRouteToken=lease.Token; raceRouteTarget=lease.TargetId;
+            }
+        }
+
         public bool TrySetNavigationIntent(TruckTaxiNavigationLayer layer,string ownerId,string stableId,
             string label,Vector3 position,TruckTaxiMapMarkerType type,float radius=3,bool requiresCompletion=true)
         {
@@ -653,7 +705,7 @@ namespace LWS.TruckTaxi
             if(string.IsNullOrWhiteSpace(destination.Id) || string.IsNullOrWhiteSpace(owner)) return false;
             var existing=intents.Get(layer);
             if(existing!=null && existing.OwnerId==owner && existing.TargetId==destination.Id &&
-                existing.Value.Position==destination.Position && existing.Value.Type==destination.Type)
+                existing.Value.Position==destination.Position && existing.Value.Type==destination.Type && existing.Value.Label==destination.Label)
                 return existing==intents.Active ? RestoreActiveRoute() : true;
             var prior=intents.Active;
             bool becomesActive=prior==null || layer>=prior.Layer;

@@ -28,6 +28,45 @@ namespace LWS.TruckTaxi
 
     public sealed class TruckTaxiFuelFiller : TruckTaxiWorldInteractable
     {
+        private Renderer[] renderers;
+        private Material[][] originals, highlights;
+        public bool Highlighted { get; private set; }
+        public void SetHighlighted(bool value)
+        {
+            if (Highlighted == value) return;
+            Highlighted = value;
+            if (value)
+            {
+                renderers = GetComponentsInChildren<Renderer>(true);
+                originals = new Material[renderers.Length][]; highlights = new Material[renderers.Length][];
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    originals[i] = renderers[i].sharedMaterials;
+                    highlights[i] = new Material[originals[i].Length];
+                    for (int m = 0; m < originals[i].Length; m++)
+                    {
+                        if (originals[i][m] == null) continue;
+                        var material = new Material(originals[i][m]) { name = "Carried nozzle filler highlight", hideFlags = HideFlags.DontSave };
+                        material.color = new Color(.15f, 1f, .55f);
+                        if (material.HasProperty("_EmissionColor"))
+                        { material.EnableKeyword("_EMISSION"); material.SetColor("_EmissionColor", new Color(.15f, 1f, .55f) * 3f); }
+                        highlights[i][m] = material;
+                    }
+                    renderers[i].sharedMaterials = highlights[i];
+                }
+            }
+            else if (renderers != null)
+            {
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    if (renderers[i] != null) renderers[i].sharedMaterials = originals[i];
+                    foreach (var material in highlights[i])
+                        if (material != null) { if (Application.isPlaying) Destroy(material); else DestroyImmediate(material); }
+                }
+                renderers = null; originals = highlights = null;
+            }
+        }
+        protected override void OnDisable() { SetHighlighted(false); base.OnDisable(); }
         public override bool HoldToUse => true;
         public override string Prompt => "HOLD TO FUEL TRUCK";
         public override bool CanUse(TruckTaxiWorldLifeController actor) => base.CanUse(actor) && actor.ActiveNozzleStation != null;

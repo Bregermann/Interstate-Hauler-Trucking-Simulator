@@ -67,6 +67,21 @@ namespace LWS.TruckTaxi
             return Vector3.Lerp(Path[index], Path[index + 1], scaled - index);
         }
 
+        public static TruckTaxiExtremeFootprint FromSaved(TruckTaxiSavedExtreme value, TruckTaxiHazardZone zone,
+            Func<LWS.InterstateHauler.LwsWorldPositionD, Vector3> toLocal)
+        {
+            if (!TruckTaxiSavedExtreme.Valid(value) || toLocal == null) return null;
+            var path = new Vector3[value.path.Length];
+            for (int i = 0; i < path.Length; i++)
+            {
+                var point = value.path[i];
+                path[i] = toLocal(new LWS.InterstateHauler.LwsWorldPositionD(point.x, point.y, point.z));
+            }
+            return new TruckTaxiExtremeFootprint { Zone = zone, Kind = value.kind, Id = value.id,
+                RegionId = value.regionId, DisplayName = value.displayName, Path = path,
+                RadiusMeters = value.radius, IsFlatFallback = value.flatFallback };
+        }
+
         public static bool TryCreate(TruckTaxiExtremeKind kind, string id, string regionId,
             Vector3 player, Vector3 forward, TruckTaxiExtremeFootprintSettings settings,
             Func<Vector3, bool> available, Func<Vector3, Vector3?> ground,

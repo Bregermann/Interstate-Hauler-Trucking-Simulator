@@ -13,6 +13,9 @@ namespace LWS.TruckTaxi
         public TruckTaxiPersistentState session;
         public TruckTaxiDriverNeedsSnapshot needs;
         public TruckTaxiDamageSnapshot damage;
+        public TruckTaxiEnvironmentSnapshot environment;
+        public TruckTaxiExtremeSaveState extremes;
+        public bool hasDamageState, hasEnvironmentState, hasExtremeState;
         public bool hasFuelState;
         public float fuelLiters, fuelCapacityLiters;
     }
@@ -36,6 +39,12 @@ namespace LWS.TruckTaxi
         public LwsSaveParticipantState CaptureState()
         {
             var payload = capture();
+            if (payload != null)
+            {
+                payload.hasDamageState = payload.damage != null;
+                payload.hasEnvironmentState = payload.environment != null;
+                payload.hasExtremeState = payload.extremes != null;
+            }
             var result = validate(payload);
             if (!result.Succeeded) throw new InvalidOperationException("Vibin semantic state is not ready to save.");
             return new LwsSaveParticipantState { participantId = Id, payloadVersion = 1, payloadJson = JsonUtility.ToJson(payload) };
@@ -59,7 +68,11 @@ namespace LWS.TruckTaxi
             try
             {
                 payload = JsonUtility.FromJson<TruckTaxiVibinSavePayload>(state.payloadJson);
-                if (payload != null) payload.session = TruckTaxiSession.PrepareOptionalPersistentData(payload.session);
+                if (payload != null)
+                {
+                    payload.session = TruckTaxiSession.PrepareOptionalPersistentData(payload.session);
+                    PrepareOptionalExtensions(payload);
+                }
             }
             catch { return LwsSaveOperationResult.Failure("Unreadable Vibin participant."); }
             return payload != null && payload.version == 1 ? LwsSaveOperationResult.Success()
@@ -70,9 +83,18 @@ namespace LWS.TruckTaxi
         {
             if (payload == null || payload.version != 1 || string.IsNullOrWhiteSpace(payload.regionId) || settings == null)
                 return LwsSaveOperationResult.Failure("Missing Vibin region or semantic state.");
+            if (payload.hasDamageState && payload.damage == null || payload.hasEnvironmentState && payload.environment == null ||
+                payload.hasExtremeState && payload.extremes == null)
+                return LwsSaveOperationResult.Failure("A declared save extension is missing.");
             if (payload.hasFuelState && (!float.IsFinite(payload.fuelLiters) || !float.IsFinite(payload.fuelCapacityLiters) ||
                 payload.fuelCapacityLiters <= 0 || payload.fuelLiters < 0 || payload.fuelLiters > payload.fuelCapacityLiters))
                 return LwsSaveOperationResult.Failure("Invalid saved fuel quantity.");
+            if (!TruckTaxiEnvironmentSnapshot.Valid(payload.environment))
+                return LwsSaveOperationResult.Failure("Invalid saved forecast or snow state.");
+            if (!TruckTaxiExtremeSaveState.Valid(payload.extremes))
+                return LwsSaveOperationResult.Failure("Invalid saved ambient event state.");
+            if (!TruckTaxiComponentDamage.ValidSnapshotData(payload.damage))
+                return LwsSaveOperationResult.Failure("Invalid saved component condition or heat.");
             try
             {
                 if (!TruckTaxiSession.ValidatePersistentState(payload.session, out var sessionReason))
@@ -83,6 +105,31 @@ namespace LWS.TruckTaxi
             }
             catch { return LwsSaveOperationResult.Failure("Malformed Vibin semantic state."); }
             return LwsSaveOperationResult.Success();
+        }
+
+        [Serializable]
+        private sealed class OptionalExtensions
+        {
+            public TruckTaxiDamageSnapshot damage = null;
+            public TruckTaxiEnvironmentSnapshot environment = null;
+            public TruckTaxiExtremeSaveState extremes = null;
+            public TruckTaxiSnowSnapshot snow = null;
+        }
+
+        private static bool IsInlineNull<T>(T value, T encodedNull) where T : class =>
+            value != null && encodedNull != null && JsonUtility.ToJson(value) == JsonUtility.ToJson(encodedNull);
+
+        private static void PrepareOptionalExtensions(TruckTaxiVibinSavePayload payload)
+        {
+            // Unity serializes null inline classes as default records. Match that exact encoding only,
+            // as Session does for optional Career data; never treat arbitrary invalid records as absent.
+            var absent = JsonUtility.FromJson<OptionalExtensions>(JsonUtility.ToJson(new OptionalExtensions()));
+            // Keep declaration flags intact: an encoded null is still missing when explicitly declared.
+            if (IsInlineNull(payload.damage, absent.damage)) payload.damage = null;
+            if (IsInlineNull(payload.environment, absent.environment)) payload.environment = null;
+            if (IsInlineNull(payload.extremes, absent.extremes)) payload.extremes = null;
+            if (payload.environment != null && IsInlineNull(payload.environment.snow, absent.snow))
+                payload.environment.snow = null;
         }
 
         public static LwsSaveOperationResult ValidateSnapshot(LwsSaveSnapshot snapshot, TruckTaxiEnvironmentSettings settings,
@@ -112,6 +159,8 @@ namespace LWS.TruckTaxi
             if (!read.Succeeded) return read;
             var semantic = ValidatePayload(payload, settings);
             if (!semantic.Succeeded) return semantic;
+            if (payload.environment != null && (!states.ContainsKey("lws.weather.semantic") || !states.ContainsKey("lws.road-condition.semantic")))
+                return LwsSaveOperationResult.Failure("Environment state requires the canonical weather and road-condition participants.");
             try
             {
                 resume = JsonUtility.FromJson<LwsWorldResumeContextPayload>(states[LwsSaveSchema.WorldResumeContextParticipantId].payloadJson);

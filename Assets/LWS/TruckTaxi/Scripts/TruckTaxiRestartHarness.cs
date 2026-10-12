@@ -78,7 +78,7 @@ namespace LWS.TruckTaxi
             request.VerifyFilesystemBoundary();
             if (request.Mode == "seed" && Directory.Exists(request.Root))
                 throw new InvalidOperationException("Seed requires a fresh GUID directory; no overwrite of an existing test root.");
-            if (request.Mode != "seed" && (!Directory.Exists(request.Root) || !File.Exists(Path.Combine(request.Root, "saveinfo.dat"))))
+            if (request.Mode != "seed" && request.Mode != "interactive" && (!Directory.Exists(request.Root) || !File.Exists(Path.Combine(request.Root, "saveinfo.dat"))))
                 throw new InvalidOperationException("Existing isolated vendor root/saveinfo.dat is required; no fallback root.");
             var saveType = FindType("PixelCrushers.SaveSystem");
             var diskType = FindType("PixelCrushers.DiskSavedGameDataStorer");
@@ -101,7 +101,7 @@ namespace LWS.TruckTaxi
             basePathField.SetValue(disk, customEnum);
             customPathField.SetValue(disk, request.Root);
             request.VerifyFilesystemBoundary();
-            if (request.Mode == "seed") Directory.CreateDirectory(request.Root);
+            if (request.Mode == "seed" || request.Mode == "interactive") Directory.CreateDirectory(request.Root);
             request.VerifyFilesystemBoundary();
             VerifyVendor();
             if (disk is Behaviour readyStorer) readyStorer.enabled = true;
@@ -183,6 +183,18 @@ namespace LWS.TruckTaxi
         private IEnumerator Start()
         {
             if (!Configured || finished) yield break;
+            if(request.Mode=="interactive")
+            {
+                // Only vendor-root isolation. No input injection, fixture setup, menu invocation,
+                // gameplay mutation or automatic PASS: the operator uses the normal player UI.
+                Debug.Log(Prefix+"INTERACTIVE ISOLATION READY; human-style checks require observation, not harness assertions.");
+                while(true)
+                {
+                    try { VerifyVendor(); }
+                    catch(Exception error) { Fail(error);yield break; }
+                    yield return new WaitForSecondsRealtime(2);
+                }
+            }
             deadline = Time.realtimeSinceStartup + (request.Mode=="soak" ? 4200 : 600);
             float nextIsolationCheck=0;
             var stack = activeIterators; stack.Push(Run());
@@ -293,6 +305,7 @@ namespace LWS.TruckTaxi
                 newGame.Invoke(menu, null);
                 yield return WaitForRun();
                 yield return AcknowledgeFirstDay();
+                yield return CapturePausedViews();
                 Result(saves.RenameProfile(host.Persistence.RunProfileId, TruckTaxiRestartTestArguments.ProfileName), "rename through facade");
                 string id = FindTestProfile(true).stableProfileId;
                 Check(host.Persistence.RunProfileId == id, "run owns isolated profile " + id);
@@ -667,6 +680,15 @@ namespace LWS.TruckTaxi
             if (registry != null) { registry.TryGet(out gameplay); registry.TryGet(out input); }
             var vehicle = host?.Player?.NwhAdapter?.VehicleController;
             var body = vehicle?.vehicleRigidbody;
+            string wheels = "";
+            if (vehicle?.powertrain?.wheels != null)
+                for (int i = 0; i < vehicle.powertrain.wheels.Count; i++)
+                {
+                    var wheel = vehicle.powertrain.wheels[i]?.wheelUAPI;
+                    wheels += " [" + i + ":active=" + wheel?.isActiveAndEnabled + " grounded=" + wheel?.IsGrounded +
+                        " motorTorque=" + wheel?.MotorTorque + " brakeTorque=" + wheel?.BrakeTorque + " rpm=" + wheel?.RPM +
+                        " load=" + wheel?.Load + " contact=" + wheel?.HitCollider?.name + "]";
+                }
             string keyboardSources = "";
             foreach (var source in FindObjectsByType<LwsKeyboardGamepadTruckInputSource>(FindObjectsSortMode.None))
                 keyboardSources += source.GetInstanceID() + ":enabled=" + source.isActiveAndEnabled + ",suppressed=" + source.DrivingInputSuppressed + ";";
@@ -682,6 +704,12 @@ namespace LWS.TruckTaxi
                 " sameService=" + ReferenceEquals(input, driveInputService) + " sameSource=" + sameSource +
                 " sameOwner=" + (input?.ActiveOwner == driveInputOwner) + " initialized=" + vehicle?.IsInitialized +
                 " autoInput=" + vehicle?.input?.autoSetInput + " kinematic=" + body?.isKinematic + " constraints=" + body?.constraints +
+                " vehicleEnabled=" + vehicle?.enabled + " vehicleActive=" + vehicle?.gameObject.activeInHierarchy +
+                " sleeping=" + body?.IsSleeping() + " fixedTime=" + Time.fixedTime +
+                " actualRatio=" + vehicle?.powertrain?.transmission?.currentGearRatio +
+                " isShifting=" + vehicle?.powertrain?.transmission?.isShifting + " shiftProgress=" + vehicle?.powertrain?.transmission?.shiftProgress +
+                " clutchType=" + vehicle?.powertrain?.clutch?.controlType + " clutchEngagement=" + vehicle?.powertrain?.clutch?.Engagement +
+                " clutchInput=" + vehicle?.powertrain?.clutch?.clutchInput + " wheels=" + wheels +
                 " worldLife=" + host?.WorldLife?.Mode + " busy=" + host?.Persistence?.IsBusy + " blocked=" + host?.Persistence?.ResumeBlocked +
                 " modal=" + host?.hud?.SaveLoad?.IsOpen + " keyboardSources=" + keyboardSources + " nativeProviders=" + nativeProviders +
                 " engine=" + vehicle?.powertrain?.engine?.IsRunning +
@@ -788,7 +816,9 @@ namespace LWS.TruckTaxi
                 // Only a normal P key may release it. No engine/shift/steering command precedes W motion proof.
                 if (controls.CurrentState.parkingBrakeOn) yield return DrivePulse("ParkingBrake", Key.P);
                 Check(!controls.CurrentState.parkingBrakeOn, "ordinary parking control released for W; no persistence assumption");
-                float until = Time.realtimeSinceStartup + 20;
+                float wRealtime = Time.realtimeSinceStartup, wTime = Time.time, wFixedTime = Time.fixedTime;
+                int wFrame = Time.frameCount;
+                float until = wRealtime + 20;
                 bool throttle = false, forwardGear = false;
                 Vector3 previous = driveOrigin.LocalToGlobal(body.position).ToVector3();
                 float previousTime = Time.realtimeSinceStartup, previousSpeed = body.linearVelocity.magnitude;
@@ -797,7 +827,9 @@ namespace LWS.TruckTaxi
                     if (Time.realtimeSinceStartup > until) throw new TimeoutException("W-first native motion failed without engine-command recovery: " + DriveDiagnostics() +
                         " progress=" + Vector3.Dot(driveOrigin.LocalToGlobal(body.position).ToVector3() - start, forward) +
                         " speed=" + body.linearVelocity.magnitude + " throttle=" + vehicle.input.Throttle + " brakes=" + vehicle.input.Brakes +
-                        " rpm=" + host.Player.NwhAdapter.ReadTelemetry().engineRpm + " starter=" + vehicle.powertrain.engine.starterActive);
+                        " rpm=" + host.Player.NwhAdapter.ReadTelemetry().engineRpm + " starter=" + vehicle.powertrain.engine.starterActive +
+                        " elapsedRealtime=" + (Time.realtimeSinceStartup - wRealtime) + " elapsedTime=" + (Time.time - wTime) +
+                        " elapsedFixedTime=" + (Time.fixedTime - wFixedTime) + " framesSinceW=" + (Time.frameCount - wFrame));
                     yield return DriveKeys(1, Key.W);
                     throttle |= vehicle.input.Throttle > .5f;
                     forwardGear |= vehicle.powertrain.transmission.Gear > 0;
@@ -912,6 +944,83 @@ namespace LWS.TruckTaxi
             yield return new WaitForSecondsRealtime(.5f);
         }
 
+        private IEnumerator CapturePausedViews()
+        {
+            ValidateStarterOccupancy();
+            // Automated render evidence through real view callbacks, not human input or usability proof.
+            var hud = host.hud;
+            Check(hud != null && hud.VideoSettings != null && hud.MegaDebug != null && host.WorldLife != null,
+                "actual pause/video/debug/condition views exist for automated capture");
+            host.SetPaused(true); host.Environment.Clock.SetPaused(true);
+            try
+            {
+                yield return CapturePausedView("Pause", hud.Root.Find("Paused"));
+                hud.VideoSettings.Open();
+                Check(hud.VideoSettings.IsOpen && !hud.VideoSettings.AwaitingConfirmation, "actual Video view opened without applying settings");
+                yield return CapturePausedView("Video", hud.VideoSettings.FocusRoot);
+                hud.VideoSettings.Close();
+
+                host.WorldLife.OpenDamage();
+                Check(host.WorldLife.DamageOpen, "actual Truck Condition view opened");
+                yield return CapturePausedView("TruckCondition", host.WorldLife.FocusRoot);
+                host.WorldLife.CloseDamage();
+
+                hud.MegaDebug.Open();
+                Check(hud.MegaDebug.IsOpen, "actual development debug view opened");
+                foreach (string tab in new[] { "SANDBOX", "OCCUPANCY" })
+                {
+                    var button = hud.MegaDebug.FocusRoot.Find(tab);
+                    Check(button != null && button.gameObject.activeInHierarchy, "actual debug tab available: " + tab);
+                    hud.UIInput.Focus(button); hud.UIInput.SubmitSelected();
+                    var page = hud.MegaDebug.FocusRoot.Find(tab + " tools");
+                    Check(page != null && page.gameObject.activeInHierarchy, "real debug tab callback selected: " + tab);
+                    if (tab == "SANDBOX")
+                    {
+                        var cashButton = page.Find("GIVE $10,000");
+                        Check(cashButton != null && cashButton.gameObject.activeInHierarchy, "actual GIVE $10,000 button exists");
+                        long before = host.Session.WalletBalanceCents;
+                        for (int press = 1; press <= 3; press++)
+                        {
+                            hud.UIInput.Focus(cashButton); hud.UIInput.SubmitSelected();
+                            Check(host.Session.WalletBalanceCents == before + press * 1000000L,
+                                "automated cash UI press=" + press + " wallet=" + host.Session.WalletBalanceCents + " before=" + before);
+                        }
+                        Debug.Log(Prefix + "AUTOMATED CASH UI VERIFIED +3000000 cents; Seed replaces fixture next (not human input/proof)");
+                    }
+                    hud.MegaDebug.Refresh();
+                    yield return CapturePausedView("Debug-" + tab, page);
+                }
+            }
+            finally
+            {
+                hud.MegaDebug.Close(); host.WorldLife.CloseDamage(); hud.VideoSettings.Close();
+                hud.UIInput?.Focus(null);
+                host.SetPaused(true); host.Environment.Clock.SetPaused(true);
+            }
+            Check(!hud.VideoSettings.IsOpen && !hud.MegaDebug.IsOpen && !host.WorldLife.DamageOpen &&
+                !hud.DebugOverlayOpen && hud.Career?.IsOpen != true && host.Paused && host.Environment.Clock.CurrentSnapshot.paused,
+                "automated render capture finished with child panels closed and host/clock paused before Seed");
+        }
+
+        private IEnumerator CapturePausedView(string label, Transform view)
+        {
+            yield return new WaitForSecondsRealtime(.35f);
+            Canvas.ForceUpdateCanvases();
+            Check(view != null && view.gameObject.activeInHierarchy && host.Paused && host.Environment.Clock.CurrentSnapshot.paused,
+                "automated capture view visible while paused: " + label);
+            string directory = Path.Combine(Path.GetDirectoryName(Application.dataPath), "ValidationScreenshots", request.RunId);
+            Directory.CreateDirectory(directory);
+            string file = Path.Combine(directory, "Automated-" + label + "-" + Screen.width + "x" + Screen.height + ".png");
+            Check(!File.Exists(file), "automated capture requires a fresh run image: " + file);
+            ScreenCapture.CaptureScreenshot(file);
+            float until = Time.realtimeSinceStartup + 10;
+            do { yield return new WaitForSecondsRealtime(.1f); }
+            while ((!File.Exists(file) || new FileInfo(file).Length < 8) && Time.realtimeSinceStartup < until);
+            Check(File.Exists(file) && new FileInfo(file).Length >= 8, "automated PNG written: " + label);
+            Debug.Log(Prefix + "AUTOMATED RENDER CAPTURE (not human input/proof) view=" + label +
+                " actual=" + Screen.width + "x" + Screen.height + " file=" + file);
+        }
+
         private void ValidateCareer()
         {
             var identity = host.Session.CaptureCareerProfile();
@@ -934,24 +1043,148 @@ namespace LWS.TruckTaxi
             var appearance=host.Session.CaptureDriverAppearance();
             appearance.shirt=new Color(.3f+signature*.1f,.4f,.5f,1);
             appearance.capVisible=signature%2==0;
+            appearance.chestShape = SignatureChestShape(signature);
             Check(host.Session.TrySetDriverAppearance(appearance,out var appearanceError),"seed driver appearance: "+appearanceError);
             SeedDamage(signature);
             RelocateToAuthoredPose(signature);
             var needs = host.DriverNeeds.CapturePersistentState();
             needs.Hunger = .2f + signature * .1f; needs.Thirst = .35f; needs.Fatigue = .25f;
             needs.Pressure = .4f; needs.BowelPressure = .3f;
+            needs.BowelAccidents = signature + 1; needs.BowelDiscomfortGameSeconds = 600 + signature * 60;
+            needs.BowelCrisisGameSeconds = 0; needs.CabMess = true;
             needs.AmbientChoiceIds = new[] { "astra.restart." + request.RunId };
             foreach (var item in needs.Inventory) if (item.ItemId == "snack") item.Count = 7 + signature;
             Check(host.DriverNeeds.RestorePersistentState(needs, out var needsError), "seed validated needs semantics: " + needsError);
             Check(host.Fuel?.Fuel != null && host.Fuel.Fuel.capacity > 43, "authored truck fuel capacity supports fixture");
             host.Fuel.Fuel.amount = 40 + signature;
+            SeedEnvironment(signature);
             Validate(signature);
+        }
+
+        public static float SignatureChestShape(int signature)
+        {
+            if (signature < 0 || signature > 3) throw new ArgumentOutOfRangeException(nameof(signature));
+            return -.6f + signature * .4f;
+        }
+
+        // Reuse current public save contracts; no parallel harness payload or storage.
+        public static TruckTaxiEnvironmentSnapshot CreateEnvironmentFixture(int signature, TruckTaxiSnowSnapshot topology)
+        {
+            SignatureChestShape(signature);
+            if (topology == null || !TruckTaxiSnowSnapshot.Valid(topology) || topology.depths.Length == 0)
+                throw new InvalidOperationException("Restart environment fixture requires initialized, nonempty authored snow cells.");
+            bool automatic = signature % 2 == 1;
+            var condition = automatic ? TruckTaxiWeatherCondition.HeavySnow : TruckTaxiWeatherCondition.Rain;
+            var depths = new float[topology.depths.Length];
+            for (int i = 0; i < depths.Length; i++) depths[i] = topology.maximumDepth * (.08f + signature * .03f + (i % 3) * .02f);
+            var start = new DateTime(2026, 8, 12, 13, 0, 0);
+            return new TruckTaxiEnvironmentSnapshot {
+                frozen = automatic, hasSnowState = true,
+                forecast = new TruckTaxiForecastSnapshot { automatic = automatic, manualCondition = condition,
+                    hasOverride = automatic, overrideCondition = condition,
+                    overrideStartTicks = automatic ? start.Ticks : 0,
+                    overrideEndTicks = automatic ? start.AddHours(12).Ticks : 0,
+                    severity = automatic ? TruckTaxiWeatherSeverity.Advisory : TruckTaxiWeatherSeverity.None,
+                    warning = automatic ? "ASTRA restart weather " + signature : null },
+                snow = new TruckTaxiSnowSnapshot { topology = topology.topology, maximumDepth = topology.maximumDepth,
+                    backgroundDepth = topology.maximumDepth * (.16f + signature * .03f), depths = depths }
+            };
+        }
+
+        public static LwsWeatherPreset CreateWeatherFixture(int signature)
+        {
+            SignatureChestShape(signature);
+            string id = signature % 2 == 1 ? LwsWeatherPresetCatalog.HeavySnowId : LwsWeatherPresetCatalog.LightRainId;
+            if (!LwsWeatherPresetCatalog.TryGetBuiltInPreset(id, out var preset))
+                throw new InvalidOperationException("Restart weather preset unavailable: " + id);
+            preset.precipitationIntensity01 = .35f + signature * .1f;
+            preset.windSpeedMetersPerSecond = 7 + signature;
+            preset.windDirectionWorld = new Vector3(1, 0, 2).normalized;
+            preset.visibilityMeters = 1600 + signature * 100;
+            preset.ambientTemperatureC = signature % 2 == 1 ? -4 - signature : 14 + signature;
+            return preset;
+        }
+
+        public static string EnvironmentSignatureError(int signature, TruckTaxiEnvironmentSnapshot actual,
+            LwsWeatherSnapshot weather, TruckTaxiSnowSnapshot authoredTopology)
+        {
+            var expected = CreateEnvironmentFixture(signature, authoredTopology);
+            var preset = CreateWeatherFixture(signature);
+            if (actual == null || !TruckTaxiEnvironmentSnapshot.Valid(actual)) return "environment payload missing/invalid";
+            if (actual.frozen != expected.frozen) return "frozen policy expected=" + expected.frozen + " actual=" + actual.frozen;
+            var a = actual.forecast; var e = expected.forecast;
+            if (a.automatic != e.automatic || a.manualCondition != e.manualCondition || a.hasOverride != e.hasOverride ||
+                a.overrideCondition != e.overrideCondition || a.overrideStartTicks != e.overrideStartTicks ||
+                a.overrideEndTicks != e.overrideEndTicks || a.severity != e.severity ||
+                (a.warning ?? string.Empty) != (e.warning ?? string.Empty) || a.severe)
+                return "forecast automatic/manual/override signature differs";
+            if (!actual.hasSnowState || actual.snow == null || actual.snow.topology != expected.snow.topology ||
+                actual.snow.depths.Length != expected.snow.depths.Length ||
+                Mathf.Abs(actual.snow.maximumDepth - expected.snow.maximumDepth) > .00001f ||
+                Mathf.Abs(actual.snow.backgroundDepth - expected.snow.backgroundDepth) > .00001f)
+                return "snow topology/maximum/background signature differs";
+            for (int i = 0; i < expected.snow.depths.Length; i++)
+                if (Mathf.Abs(actual.snow.depths[i] - expected.snow.depths[i]) > .00001f)
+                    return "snow cell " + i + " expected=" + expected.snow.depths[i] + " actual=" + actual.snow.depths[i];
+            if (weather.weatherPresetId != preset.presetId || weather.condition != preset.condition ||
+                weather.precipitationType != preset.precipitationType || weather.transitioning ||
+                !float.IsFinite(weather.precipitationIntensity01) || Mathf.Abs(weather.precipitationIntensity01 - preset.precipitationIntensity01) > .0001f ||
+                !float.IsFinite(weather.ambientTemperatureC) || Mathf.Abs(weather.ambientTemperatureC - preset.ambientTemperatureC) > .0001f ||
+                !float.IsFinite(weather.visibilityMeters) || Mathf.Abs(weather.visibilityMeters - preset.visibilityMeters) > .01f ||
+                !TruckTaxiPedestrianImpactSettings.Finite(weather.windVelocity) ||
+                Vector3.Distance(weather.windVelocity, preset.windDirectionWorld * preset.windSpeedMetersPerSecond) > .001f)
+                return "canonical weather differs (actual/expected): preset=" + weather.weatherPresetId + "/" + preset.presetId +
+                    " condition=" + weather.condition + "/" + preset.condition +
+                    " precipType=" + weather.precipitationType + "/" + preset.precipitationType +
+                    " intensity=" + WeatherPair(weather.precipitationIntensity01, preset.precipitationIntensity01) +
+                    " temperature=" + WeatherPair(weather.ambientTemperatureC, preset.ambientTemperatureC) +
+                    " visibility=" + WeatherPair(weather.visibilityMeters, preset.visibilityMeters) +
+                    " wind=" + WeatherVector(weather.windVelocity) + "/" + WeatherVector(preset.windDirectionWorld * preset.windSpeedMetersPerSecond) +
+                    " windDistance=" + WeatherNumber(Vector3.Distance(weather.windVelocity, preset.windDirectionWorld * preset.windSpeedMetersPerSecond)) +
+                    " transitioning=" + weather.transitioning + "/False tolerances(intensity,temp,visibility,wind)=0.0001,0.0001,0.01,0.001";
+            return null;
+        }
+
+        private static string WeatherNumber(float value) => value.ToString("R", System.Globalization.CultureInfo.InvariantCulture);
+        private static string WeatherPair(float actual, float expected) => WeatherNumber(actual) + "/" + WeatherNumber(expected) +
+            " delta=" + WeatherNumber(Mathf.Abs(actual - expected));
+        private static string WeatherVector(Vector3 value) => "(" + WeatherNumber(value.x) + "," + WeatherNumber(value.y) + "," + WeatherNumber(value.z) + ")";
+
+        private void SeedEnvironment(int signature)
+        {
+            var environment = host.Environment;
+            Check(environment?.Snow?.Region != null && environment.Weather != null, "existing environment authorities initialized");
+            var fixture = CreateEnvironmentFixture(signature, environment.Snow.Capture());
+            Check(environment.CanRestore(fixture) && environment.Restore(fixture), "seed existing forecast/frozen/snow snapshot");
+            var result = environment.Weather.RequestWeather(CreateWeatherFixture(signature), 0, true);
+            Check(result.Succeeded, "seed canonical instant weather: " + environment.Weather.LastError);
+        }
+
+        private void ValidateEnvironment(int signature)
+        {
+            var environment = host.Environment;
+            Check(environment?.Snow?.Region != null && environment.Weather != null, "loaded environment authorities initialized");
+            var actual = environment.Capture();
+            string error = EnvironmentSignatureError(signature, actual, environment.Weather.CurrentSnapshot, environment.Snow.Region.Capture(0));
+            Check(error == null, "environment signature=" + signature + " | " + (error ?? "matches"));
+            Check(environment.Frozen == actual.frozen && environment.AutomaticWeather == actual.forecast.automatic &&
+                environment.CalendarWeather.CurrentCondition == actual.forecast.manualCondition &&
+                environment.CurrentTaxiWeatherId == CreateWeatherFixture(signature).presetId, "live Taxi weather policy agrees with saved signature");
+            Debug.Log(Prefix + "ENVIRONMENT VERIFIED signature=" + signature + " frozen=" + actual.frozen +
+                " automatic=" + actual.forecast.automatic + " preset=" + environment.CurrentTaxiWeatherId +
+                " snowCells=" + actual.snow.depths.Length + " topology=" + actual.snow.topology + " background=" + actual.snow.backgroundDepth);
         }
 
         public static float DamageCondition(int signature)
         {
             if (signature < 0 || signature > 3) throw new ArgumentOutOfRangeException(nameof(signature));
             return .61f - signature * .07f;
+        }
+
+        public static float DamagePartCondition(int signature, string partId, string signatureBodyId)
+        {
+            float bodyCondition = DamageCondition(signature);
+            return string.Equals(partId, signatureBodyId, StringComparison.Ordinal) ? bodyCondition : .75f - signature * .02f;
         }
 
         public static string SelectBodyPart(IReadOnlyDictionary<string, TruckTaxiDamagePart> parts)
@@ -972,10 +1205,13 @@ namespace LWS.TruckTaxi
             var snapshot = damage.Capture();
             bool found = false;
             foreach (var part in snapshot.Parts)
-                if (part.Id == partId) { part.Condition = DamageCondition(signature); found = true; }
+            {
+                part.Condition = DamagePartCondition(signature, part.Id, partId);
+                if (part.Id == partId) found = true;
+            }
             Check(found && TruckTaxiComponentDamage.ValidSnapshot(snapshot, host.Player.VehicleId, damage.Parts),
                 "existing body part snapshot is valid: " + partId);
-            Check(damage.Restore(snapshot), "body damage applied through public snapshot Restore");
+            Check(damage.Restore(snapshot), "all-part damage applied through public snapshot Restore");
         }
 
         // Selection depends on authored IDs and the signature, never enumeration order or the saved truck pose.
@@ -1061,6 +1297,15 @@ namespace LWS.TruckTaxi
             float actualCondition = damage.Parts[partId].Condition;
             Check(Mathf.Abs(actualCondition - DamageCondition(signature)) < .0001f,
                 "damage signature=" + signature + " part=" + partId + " expected=" + DamageCondition(signature) + " actual=" + actualCondition);
+            foreach (var part in damage.Parts)
+            {
+                float expectedCondition = DamagePartCondition(signature, part.Key, partId);
+                Check(part.Value != null && Mathf.Abs(part.Value.Condition - expectedCondition) < .0001f,
+                    "all-part damage signature=" + signature + " part=" + part.Key + " expected=" + expectedCondition + " actual=" + part.Value?.Condition);
+            }
+            float summary = damage.SummaryDamage01;
+            Check(float.IsFinite(summary) && summary >= .2f && summary <= .5f,
+                "meaningful authoritative damage summary in [0.2,0.5]: " + summary);
             var location = ExpectedPose(signature, out var body, out var expected, out var rotation, out var origin, out var region);
             float localError = Vector3.Distance(body.position, expected);
             float headingError = Quaternion.Angle(body.rotation, rotation);
@@ -1095,6 +1340,8 @@ namespace LWS.TruckTaxi
             if (signature < 0 || signature > 3) throw new ArgumentOutOfRangeException(nameof(signature));
             session = session ?? new TruckTaxiPersistentState();
             session.shiftEarningsCents = 123400 + signature; session.purchaseChargesCents = 1200; session.serviceChargesCents = 300;
+            // Seed replaces lifetime statistics, so a preceding UI exercise cannot retain a larger last-session total.
+            session.lastSession = new TruckTaxiLastSessionStatistics();
             session.rideRequestsEnabled = false; session.gameMinutes = 120;
             session.statistics = new TruckTaxiPersistentStatistics { completedRides = 2, totalStarsEarned = 9,
                 shiftScore = 73, totalCollisions = 7, trafficHits = 4, pedestriansHit = 2,
@@ -1108,9 +1355,83 @@ namespace LWS.TruckTaxi
             return session;
         }
 
+        private void ValidateStarterOccupancy()
+        {
+            var rig = host.Player != null ? host.Player.GetComponent<TruckTaxiCabOccupantRig>() : null;
+            string error = StarterOccupancyError(rig);
+            Check(error == null, "actual starter eight compatible slots: " + (error ?? "verified"));
+        }
+
+        public static string StarterOccupancyError(TruckTaxiCabOccupantRig rig)
+        {
+            if (rig == null || !rig.isActiveAndEnabled) return "live rig missing or disabled";
+            var rows = new List<TruckTaxiOccupantSlotSnapshot>();
+            rig.CopyOccupancySnapshot(rows);
+            if (rig.AuthoredCapacity != 8 || rig.Anchors.Count != 8 || rows.Count != 8)
+                return "authored=" + rig.AuthoredCapacity + " anchors=" + rig.Anchors.Count + " registry=" + rows.Count +
+                    " slots=" + string.Join("; ", rows);
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            int drivers = 0, primary = 0, shared = 0, companionOnly = 0;
+            for (int i = 0; i < rig.Anchors.Count; i++)
+            {
+                var anchor = rig.Anchors[i];
+                if (anchor == null || !ids.Add(anchor.StableSlotId)) return "missing/duplicate slot";
+                var mount = string.IsNullOrWhiteSpace(anchor.mountPath) ? rig.transform : rig.transform.Find(anchor.mountPath);
+                if (mount == null) return "missing mount: " + anchor.StableSlotId;
+                if (anchor.id == TruckTaxiCabAnchorId.DriverSeat)
+                {
+                    drivers++;
+                    if (anchor.allowedOccupants != TruckTaxiCabOccupantKind.Driver) return "incompatible driver: " + anchor.StableSlotId;
+                }
+                else
+                {
+                    const TruckTaxiCabOccupantKind roles = TruckTaxiCabOccupantKind.Passenger | TruckTaxiCabOccupantKind.Companion |
+                        TruckTaxiCabOccupantKind.ExtraPassenger;
+                    bool exclusive = anchor.allowedOccupants == TruckTaxiCabOccupantKind.Companion;
+                    if (!anchor.secondaryOccupantSeat || (anchor.allowedOccupants & TruckTaxiCabOccupantKind.Driver) != 0)
+                        return "incompatible travel slot: " + anchor.StableSlotId;
+                    if (exclusive)
+                    {
+                        companionOnly++;
+                        if (anchor.id != TruckTaxiCabAnchorId.SleeperRight || anchor.privateEventEligible || anchor.sharedPrimarySeat)
+                            return "incompatible companion-only SleeperRight: " + anchor.StableSlotId;
+                    }
+                    else
+                    {
+                        shared++;
+                        if ((anchor.allowedOccupants & roles) != roles) return "incompatible shared travel slot: " + anchor.StableSlotId;
+                    }
+                    if (anchor.id == TruckTaxiCabAnchorId.FrontPassengerSeat)
+                    {
+                        primary++;
+                        if (!anchor.sharedPrimarySeat) return "primary cannot share travel slot";
+                    }
+                    foreach (var type in new[] { TruckTaxiSeatType.StandardPassenger, TruckTaxiSeatType.CompanionPassenger })
+                    {
+                        if (exclusive && type == TruckTaxiSeatType.StandardPassenger) continue;
+                        if (anchor.allowedSeatTypes != null && anchor.allowedSeatTypes.Length > 0 && Array.IndexOf(anchor.allowedSeatTypes, type) < 0)
+                            return "incompatible seat type " + type + ": " + anchor.StableSlotId;
+                    }
+                }
+                for (int j = 0; j < i; j++)
+                {
+                    var other = rig.Anchors[j];
+                    var otherMount = string.IsNullOrWhiteSpace(other.mountPath) ? rig.transform : rig.transform.Find(other.mountPath);
+                    if (Vector3.Distance(mount.TransformPoint(anchor.localPosition), otherMount.TransformPoint(other.localPosition)) <
+                        anchor.occupantRadius + other.occupantRadius) return "overlapping slots: " + anchor.StableSlotId + "/" + other.StableSlotId;
+                }
+            }
+            foreach (var row in rows)
+                if (!ids.Contains(row.SlotId) || row.SlotId.StartsWith("driver.legacy", StringComparison.Ordinal) ||
+                    row.SlotId.StartsWith("legacy.visual.", StringComparison.Ordinal)) return "legacy/unbound registry slot: " + row.SlotId;
+            return drivers == 1 && primary == 1 && shared == 6 && companionOnly == 1 ? null :
+                "driver/primary/shared/companion-only count=" + drivers + "/" + primary + "/" + shared + "/" + companionOnly;
+        }
+
         private void Validate(int signature)
         {
             VerifyVendor();
+            ValidateStarterOccupancy();
             var profile = FindTestProfile(true);
             Check(host.Persistence.RunProfileId == profile.stableProfileId && saves.ActiveProfileId == profile.stableProfileId, "active profile ownership agrees");
             var session = host.Session.CapturePersistentState(); var stats = session.statistics;
@@ -1118,7 +1439,8 @@ namespace LWS.TruckTaxi
             Check(host.Session.DriverName=="ASTRA Driver "+signature,"driver name signature retained");
             var appearance=host.Session.CaptureDriverAppearance();
             Check(appearance!=null && Mathf.Abs(appearance.shirt.r-(.3f+signature*.1f))<.0001f &&
-                appearance.capVisible==(signature%2==0),"driver appearance signature retained");
+                appearance.capVisible==(signature%2==0) && Mathf.Abs(appearance.chestShape-SignatureChestShape(signature))<.0001f,
+                "driver appearance signature retained including chestShape=" + appearance?.chestShape);
             Check(session.shiftEarningsCents == 123400 + signature && session.purchaseChargesCents == 1200 && session.serviceChargesCents == 300,
                 "cash signature=" + signature + " actual earnings=" + session.shiftEarningsCents);
             Check(stats.completedRides == 2 && stats.totalStarsEarned == 9 && stats.shiftScore == 73, "rides=2 stars=9 score=73 retained");
@@ -1130,6 +1452,8 @@ namespace LWS.TruckTaxi
             Check(Mathf.Abs(needs.Hunger - (.2f + signature * .1f)) < .001f && Mathf.Abs(needs.Thirst - .35f) < .001f &&
                 Mathf.Abs(needs.Fatigue - .25f) < .001f && Mathf.Abs(needs.Pressure - .4f) < .001f && Mathf.Abs(needs.BowelPressure - .3f) < .001f,
                 "needs signature=" + signature + " hunger=" + needs.Hunger);
+            Check(needs.BowelAccidents == signature + 1 && Mathf.Abs(needs.BowelDiscomfortGameSeconds - (600 + signature * 60)) < .001f && needs.CabMess,
+                "hidden bowel consequence retained: accidents=" + needs.BowelAccidents + " discomfortGameSeconds=" + needs.BowelDiscomfortGameSeconds + " cabMess=" + needs.CabMess);
             Check(needs.Count(TruckTaxiNeedsItem.Snack) == 7 + signature && needs.StarterInventoryGranted, "inventory retained without new starter grant");
             bool runMarker = false;
             foreach (string marker in needs.AmbientChoiceIds) if (marker == "astra.restart." + request.RunId) runMarker = true;
@@ -1141,6 +1465,7 @@ namespace LWS.TruckTaxi
                 "calendar retained: " + clock.DateText + " " + clock.ClockText);
             Check(Mathf.Abs(clock.second) < .05f, "calendar seconds retained: " + clock.second);
             ValidateDamageAndPose(signature);
+            ValidateEnvironment(signature);
             Check(host.CanResume && !host.Persistence.ResumeBlocked, "resume controls are not blocked");
             Debug.Log(Prefix + "STATE VERIFIED signature=" + signature + " profile=" + profile.stableProfileId);
         }

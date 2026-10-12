@@ -56,6 +56,7 @@ namespace LWS.TruckTaxi
         private Transform throwAnchor;
         private TruckTaxiJugLiquidLoop liquidLoop;
         private TruckTaxiRoadPepOverlay roadPepOverlay;
+        private TruckTaxiNeedsPresentation needsPresentation;
         private bool liquidWorldRouted;
         [SerializeField] private AudioClip jugLiquidClip;
         [SerializeField] private AudioClip containerImpactClip;
@@ -85,6 +86,8 @@ namespace LWS.TruckTaxi
             FatiguePresentation.Initialize(host, State, effectPresentation);
             roadPepOverlay = GetComponent<TruckTaxiRoadPepOverlay>() ?? gameObject.AddComponent<TruckTaxiRoadPepOverlay>();
             roadPepOverlay.Initialize(host.hud);
+            needsPresentation = GetComponent<TruckTaxiNeedsPresentation>() ?? gameObject.AddComponent<TruckTaxiNeedsPresentation>();
+            needsPresentation.Initialize(host, this, settings, State);
             TruckTaxiServicePoint.BindExistingPoints(owner.gameObject.scene);
             State.Event += OnJugInputEvent;
             State.Event += OnNeedEvent;
@@ -150,6 +153,7 @@ namespace LWS.TruckTaxi
             if (State == null || IsSleeping || !State.RestorePersistentState(snapshot, out error)) return false;
             RoadPepChallenge = null; roadPepOverlay?.Hide(); SetJugIndicatorSuppression(false);
             liquidLoop?.Stop(); FatiguePresentation?.ClearPresentation();
+            needsPresentation?.ClearPresentation(true);
             lastGameSeconds = environment.Clock.CurrentSnapshot.totalGameSeconds;
             Feedback = "Driver needs restored.";
             return true;
@@ -328,7 +332,7 @@ namespace LWS.TruckTaxi
             var meal = TruckTaxiNeedsItems.Find(TruckTaxiNeedsItem.Meal);
             if (host.Session.WalletBalanceCents < meal.PriceCents || !host.Session.TrySpend(meal.PriceCents))
             { Feedback = "Not Enough Cash"; return false; }
-            State.EatMeal(meal.HungerRelief);
+            State.EatMeal(meal.HungerRelief, meal.BowelLoad);
             Feedback = "Ate here for " + TruckTaxiHud.Money(meal.PriceCents) + ".";
             if (host.Session.HasPassenger && host.Session.Passenger != null)
                 host.Passengers?.Dialogue?.Speak(host.Session.Passenger,
@@ -520,6 +524,12 @@ namespace LWS.TruckTaxi
             TruckTaxiDialogueCategory? category = null;
             switch (kind)
             {
+                case TruckTaxiDriverNeedEvent.BowelUrgent:
+                    Feedback = "Find a toilet soon. Your stomach is not negotiating.";
+                    host.hud?.Alerts?.Publish("bowel-warning", Feedback, TruckTaxiAlertPriority.Normal, 4); break;
+                case TruckTaxiDriverNeedEvent.BowelAccident:
+                    Feedback = "SHIT YOUR PANTS";
+                    category = TruckTaxiDialogueCategory.JugSpilled; break;
                 case TruckTaxiDriverNeedEvent.BladderUrgent: Feedback = "Restroom break needed soon."; category = TruckTaxiDialogueCategory.BladderUrgent; break;
                 case TruckTaxiDriverNeedEvent.JugStarted: Feedback = "Steady hands. Three cues."; category = TruckTaxiDialogueCategory.JugStarted; break;
                 case TruckTaxiDriverNeedEvent.JugSucceeded: Feedback = "No spill. Dispose at a service stop. Or throw it out the window."; category = TruckTaxiDialogueCategory.JugSucceeded; break;
@@ -560,6 +570,8 @@ namespace LWS.TruckTaxi
             if (host.Session.State == TruckTaxiState.RideOffered) RoutedBathroom = null;
         }
         public void DebugSetBladder(float value) { if (Debug.isDebugBuild) State?.SetPressure(value); }
+        public void DebugSetBowelPercent(float percent) => State?.DebugSetBowelPercent(percent);
+        public void DebugForceBowelFailure() => State?.DebugForceBowelFailure();
         public void DebugFinishJug(bool success)
         {
             if (!Debug.isDebugBuild || State == null) return;
@@ -589,6 +601,7 @@ namespace LWS.TruckTaxi
         }
         private void OnDisable()
         {
+            needsPresentation?.ClearPresentation();
             if (RoadPepChallenge != null) State?.AddItem(TruckTaxiNeedsItem.RoadPep);
             RoadPepChallenge = null;
             roadPepOverlay?.Hide();

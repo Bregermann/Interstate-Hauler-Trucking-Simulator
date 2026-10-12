@@ -47,8 +47,8 @@ namespace LWS.TruckTaxi
                 else if (arg.StartsWith("-truck-taxi-", StringComparison.OrdinalIgnoreCase))
                 { failure = "Malformed or conflicting Truck Taxi test flag: " + arg; return false; }
             }
-            if (mode != "seed" && mode != "continue" && mode != "manual" && mode != "cleanup" && mode != "soak")
-            { failure = "Mode must be seed, continue, manual, cleanup, or soak."; return false; }
+            if (mode != "seed" && mode != "continue" && mode != "manual" && mode != "cleanup" && mode != "soak" && mode != "interactive")
+            { failure = "Mode must be seed, continue, manual, cleanup, soak, or interactive."; return false; }
             if (drive && mode != "seed" && mode != "continue" && mode != "manual")
             { failure = "Drive regression supports seed, continue, or manual only."; return false; }
             if (run == null || run.Length != 32 || !Guid.TryParseExact(run, "N", out var id) || id == Guid.Empty)

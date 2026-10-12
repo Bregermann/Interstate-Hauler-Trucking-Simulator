@@ -92,5 +92,21 @@ namespace LWS.TruckTaxi
             Array.Clear(lastOccurrence, 0, lastOccurrence.Length);
             Array.Clear(eligibleDryDays, 0, eligibleDryDays.Length);
         }
+
+        public TruckTaxiExtremeDayState Capture()
+        {
+            var value = new TruckTaxiExtremeDayState();
+            for (int i = 0; i < 5; i++)
+            { value.attempts[i] = lastAttempt[i].Ticks; value.occurrences[i] = lastOccurrence[i].Ticks; value.dryDays[i] = eligibleDryDays[i]; }
+            return value;
+        }
+        public bool Restore(TruckTaxiExtremeDayState value)
+        {
+            if (!TruckTaxiExtremeDayState.Valid(value)) return false;
+            Reset();
+            if (value != null) for (int i = 0; i < 5; i++)
+            { lastAttempt[i] = new DateTime(value.attempts[i]); lastOccurrence[i] = new DateTime(value.occurrences[i]); eligibleDryDays[i] = value.dryDays[i]; }
+            return true;
+        }
     }
 }

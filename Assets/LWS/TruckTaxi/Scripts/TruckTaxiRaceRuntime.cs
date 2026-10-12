@@ -50,6 +50,21 @@ namespace LWS.TruckTaxi
         public int NextCheckpoint => playerProgress?.NextCheckpoint ?? 0;
         public int CheckpointCount => gates.Length;
         public bool DebugModified { get; private set; }
+        public RectTransform PresentationRoot => raceHud;
+        public string PresentationText => raceStatus != null ? raceStatus.text : "";
+        public string CountdownText { get; private set; } = "";
+        public bool RegistrationAvailable { get; private set; }
+        public bool WrongWay { get; private set; }
+        public Vector3 ActiveCheckpointPosition => gates[NextCheckpoint];
+        public bool HasCheckpointTarget => IsActive && !countdown;
+        public event Action<string> PresentationCue;
+        public AudioClip countdownClip, goClip, checkpointClip, wrongWayClip, finishClip;
+        private AudioSource raceAudio;
+        private int lastCountdownNumber = -1;
+        private float goUntil, wrongWaySince = -1, confirmationUntil;
+        private string checkpointConfirmation = "";
+        public float Progress01 => playerProgress == null || targetLaps == 0 ? 0 :
+            Mathf.Clamp01((playerProgress.PassedCheckpoints - 1f) / (targetLaps * gates.Length));
         public IReadOnlyList<Vector3> FlagshipGlobalCheckpoints => flagshipRoute?.Gates ?? Array.Empty<Vector3>();
 
         private readonly LwsUtsTrafficApi uts = new LwsUtsTrafficApi();
@@ -103,6 +118,9 @@ namespace LWS.TruckTaxi
             playerProgress = new TruckTaxiRaceProgress(gates, settings);
             RefreshFlagshipRoute();
             BuildUi(owner.hud);
+            raceAudio = gameObject.AddComponent<AudioSource>();
+            raceAudio.playOnAwake = false; raceAudio.spatialBlend = 0;
+            TruckTaxiAudioController.Instance?.Route(raceAudio, TruckTaxiAudioCategory.World);
             initialized = true;
         }
 
@@ -127,15 +145,15 @@ namespace LWS.TruckTaxi
             menuFeedback = view.Text(menu, "Race feedback", new Vector2(.06f, .015f), new Vector2(.94f, .09f), 20);
             menu.gameObject.SetActive(false);
 
-            raceHud = view.Panel(view.Root, "Race timing", new Vector2(.73f, .43f), new Vector2(.99f, .70f));
-            raceStatus = view.Text(raceHud, "Timing", new Vector2(.05f, .22f), new Vector2(.95f, .97f), 23);
-            view.Button(raceHud, "RESET TO TRACK", new Vector2(.04f, .04f), new Vector2(.52f, .20f), () => ResetToTrack());
-            view.Button(raceHud, "LEAVE", new Vector2(.56f, .04f), new Vector2(.96f, .20f), LeaveRace);
+            raceHud = view.Panel(view.Root, "Race timing", new Vector2(.30f, .70f), new Vector2(.70f, .96f));
+            raceStatus = view.Text(raceHud, "Timing", new Vector2(.04f, .04f), new Vector2(.96f, .96f), 23);
+            raceStatus.enableAutoSizing = true; raceStatus.fontSizeMin = 14; raceStatus.fontSizeMax = 23;
             raceHud.gameObject.SetActive(false);
 
             results = view.Panel(view.Root, "Race results", new Vector2(.26f, .25f), new Vector2(.74f, .75f));
             resultText = view.Text(results, "Result", new Vector2(.06f, .19f), new Vector2(.94f, .94f), 28);
-            view.Button(results, "CLOSE", new Vector2(.66f, .04f), new Vector2(.95f, .16f), CloseRegistration);
+            resultText.enableAutoSizing = true; resultText.fontSizeMin = 16; resultText.fontSizeMax = 28;
+            view.Button(results, "CONTINUE DRIVING", new Vector2(.40f, .04f), new Vector2(.95f, .16f), CloseRegistration);
             results.gameObject.SetActive(false);
             registration.SetActive(false);
             RefreshMenu();
@@ -152,8 +170,10 @@ namespace LWS.TruckTaxi
                     bool nearby = host.Player != null && (host.Player.transform.position - pit).sqrMagnitude <= 40 * 40;
                     nearby |= flagshipRoute != null && host.Player != null &&
                         (host.Player.transform.position - ToLocal(flagshipRoute.Gates[0])).sqrMagnitude <= 100 * 100;
-                    registration.SetActive(nearby && !MenuOpen && !host.Paused && !host.hud.NormalHudSuppressed &&
-                        host.Session.State == TruckTaxiState.Available && host.Companions?.IsBusy != true);
+                    RegistrationAvailable = nearby && !MenuOpen &&
+                        host.Session.State == TruckTaxiState.Available && host.Companions?.IsBusy != true;
+                    // Main's pause menu owns commands; normal gameplay shows race status only.
+                    registration.SetActive(false);
                 }
                 return;
             }
@@ -164,13 +184,18 @@ namespace LWS.TruckTaxi
             if (!RequirePlayerEligibility()) return;
             if (Mode == TruckTaxiRaceMode.EventRace && Time.time >= nextUiRefresh && !EventActive())
             { CancelRace("Scheduled event interrupted. Race cancelled safely."); return; }
+            raceHud.gameObject.SetActive(!host.Paused && !host.hud.NormalHudSuppressed);
             if (host.Paused) return;
             if (IsFlagship && regionalWorld != null && !regionalWorld.IsPositionAvailable(playerBody.position))
             { CancelRace("Flagship road region became unavailable."); return; }
             if (countdown)
             {
                 int remaining = Mathf.CeilToInt(countdownEnd - Time.time);
-                raceStatus.text = (IsFlagship ? "HIGHWAY / CITY / HIGHWAY\n" : "THUNDER BOWL\n") + (remaining > 0 ? remaining.ToString() : "GO");
+                CountdownText = remaining > 0 ? remaining.ToString() : "GO";
+                raceStatus.text = RaceTitle + "\n" + opponents.Count + " RIVALS | " + gates.Length +
+                    " CHECKPOINTS\n" + (IsFlagship ? "HIGHWAY / CITY / RETURN\n" : targetLaps + " LAPS\n") + CountdownText;
+                if (remaining != lastCountdownNumber)
+                { lastCountdownNumber = remaining; Cue(CountdownText, remaining > 0 ? countdownClip : goClip); }
                 if (Time.time < countdownEnd) return;
                 foreach (var opponent in opponents)
                     if (opponent.Body == null || opponent.Driver == null)
@@ -178,6 +203,7 @@ namespace LWS.TruckTaxi
                 ReleaseCountdown();
                 if (entryReserved) { host.Session.CommitRaceEntry(); entryReserved = false; }
                 countdown = false; startTime = Time.time;
+                goUntil = Time.time + 1.25f;
                 playerProgress.Begin(playerBody.position, startTime);
                 foreach (var opponent in opponents)
                 {
@@ -188,9 +214,24 @@ namespace LWS.TruckTaxi
             }
             float now = Time.time;
             Vector3 playerPosition = playerBody.position;
+            int passedBefore = playerProgress.PassedCheckpoints;
             if (DistanceToTrack(playerPosition) > (IsFlagship ? 10 : TruckTaxiSpeedwayLayout.TrackWidth * .5f + 5f))
                 playerProgress.Invalidate(playerPosition, now);
             bool completed = playerProgress.Tick(playerPosition, now);
+            if (playerProgress.PassedCheckpoints > passedBefore)
+            {
+                checkpointConfirmation = "CHECKPOINT " + (passedBefore % gates.Length + 1) + " CLEARED";
+                confirmationUntil = now + 2; Cue(checkpointConfirmation, checkpointClip);
+            }
+            if (now >= nextUiRefresh)
+            {
+                bool reverse = TruckTaxiRaceProgress.IsWrongWay(playerBody.linearVelocity, CourseForward(playerPosition));
+                if (!reverse) wrongWaySince = -1;
+                else if (wrongWaySince < 0) wrongWaySince = now;
+                bool wrongWay = reverse && now - wrongWaySince >= 1;
+                if (wrongWay && !WrongWay) Cue("WRONG WAY", wrongWayClip);
+                WrongWay = wrongWay;
+            }
             for (int i = 0; i < opponents.Count; i++)
             {
                 var opponent = opponents[i];
@@ -224,15 +265,49 @@ namespace LWS.TruckTaxi
             if (Time.time >= nextUiRefresh)
             {
                 nextUiRefresh = Time.time + .1f;
-                raceStatus.text = $"{Mode.ToString().ToUpperInvariant()}  P{Position}/{opponents.Count + 1}\n" +
+                CountdownText = now < goUntil ? "GO" : "";
+                raceStatus.text = $"{RaceTitle}  P{Position}/{opponents.Count + 1}\n" +
                     $"LAP {playerProgress.CompletedLaps + 1}/{(targetLaps == 0 ? "OPEN" : targetLaps.ToString())}  " +
                     $"CP {playerProgress.NextCheckpoint + 1}/{gates.Length}\n" +
-                    $"CURRENT {Format(playerProgress.CurrentLapSeconds(now))}  BEST {Format(playerProgress.BestLapSeconds)}";
+                    $"PROGRESS {Progress01:P0} | NEXT {Vector3.Distance(playerPosition, ActiveCheckpointPosition) / 1609.344f:0.00} MI\n" +
+                    $"TIME {Format(now - startTime + penaltySeconds)} | {RouteSegment(playerPosition)}\n" +
+                    (WrongWay ? "WRONG WAY" : now < goUntil ? "GO" : now < confirmationUntil ? checkpointConfirmation : "");
             }
             if (completed && targetLaps > 0 && playerProgress.CompletedLaps >= targetLaps) FinishRace();
         }
 
         private void FixedUpdate() => HoldCountdown();
+        private string RaceTitle => IsFlagship ? "HIGHWAY / CITY / HIGHWAY" : "THUNDER BOWL";
+
+        private Vector3 CourseForward(Vector3 position)
+        {
+            float best = float.PositiveInfinity; Vector3 forward = playerProgress.NextDirection;
+            for (int i = 0; i < centerline.Length; i++)
+            {
+                Vector3 a = centerline[i], span = centerline[(i + 1) % centerline.Length] - a;
+                float t = span.sqrMagnitude > .01f ? Mathf.Clamp01(Vector3.Dot(position - a, span) / span.sqrMagnitude) : 0;
+                float distance = (position - a - span * t).sqrMagnitude;
+                if (distance < best) { best = distance; forward = span; }
+            }
+            return forward;
+        }
+
+        private string RouteSegment(Vector3 position)
+        {
+            if (!IsFlagship) return "OVAL";
+            if (LwsRoadGraphQuery.TryFindNearestRoad(host.roadGraph.Graph, position, 30, out var road))
+                return road.RoadClass == LwsRoadClass.Interstate ? "HIGHWAY" : "CITY";
+            return "RETURN TO ROUTE";
+        }
+
+        private void Cue(string message, AudioClip clip)
+        {
+            if (clip != null && raceAudio != null) raceAudio.PlayOneShot(clip);
+            // Optional presentation subscribers must not interrupt race cleanup/rewards.
+            if (PresentationCue == null) return;
+            foreach (Action<string> listener in PresentationCue.GetInvocationList())
+                try { listener(message); } catch (Exception error) { Debug.LogException(error, this); }
+        }
         private void LateUpdate() => HoldCountdown();
         private void HoldCountdown()
         {
@@ -274,7 +349,7 @@ namespace LWS.TruckTaxi
 
         public void OpenRegistration()
         {
-            if (!initialized || !isActiveAndEnabled || IsActive || MenuOpen || host.Paused || host.hud.NormalHudSuppressed) return;
+            if (!initialized || !isActiveAndEnabled || IsActive || MenuOpen) return;
             if (host.Session.State != TruckTaxiState.Available)
             { Publish("race-ride", "FINISH CURRENT RIDE BEFORE RACING", TruckTaxiAlertPriority.High, 5); return; }
             OpenModal(menu);
@@ -430,6 +505,9 @@ namespace LWS.TruckTaxi
                 var damage = host.Player.GetComponent<DamageHandler>();
                 startDamage = damage != null ? damage.Damage : 0;
                 countdown = true; countdownEnd = Time.time + 3;
+                lastCountdownNumber = -1; WrongWay = false; wrongWaySince = -1;
+                RegistrationAvailable = false;
+                confirmationUntil = goUntil = nextUiRefresh = 0;
                 menu.gameObject.SetActive(false); results.gameObject.SetActive(false); registration.SetActive(false);
                 host.Session.ReleaseOfferSuppression(modalSuppression);
                 raceHud.gameObject.SetActive(true); raceHud.SetAsLastSibling();
@@ -731,11 +809,13 @@ namespace LWS.TruckTaxi
             else host.Session.RecordRaceResult(Position, IsFlagship ? 0 : playerProgress.BestLapSeconds, prize, chaos);
             resultText.text = (DebugModified ? "DEBUG RACE - NO RESULT RECORDED\n" : IsFlagship ? "HIGHWAY / CITY / HIGHWAY RESULTS\n" : "THUNDER BOWL RESULTS\n") +
                 $"POSITION  {Position}/{opponents.Count + 1}\nTOTAL  {Format(total)}\nBEST LAP  {Format(playerProgress.BestLapSeconds)}\n" +
+                $"CHECKPOINTS  {Mathf.Max(0, playerProgress.PassedCheckpoints - 1)}/{targetLaps * gates.Length}\n" +
                 $"PRIZE  {TruckTaxiHud.Money(prize)}\nCHAOS  +{chaos}\nDAMAGE REPAIR EST.  {TruckTaxiHud.Money(damageCost)}\n" +
                 $"MEDAL  {(Mode == TruckTaxiRaceMode.TimeTrial ? settings.Medal(playerProgress.BestLapSeconds) : "--")}\n" +
                 $"RECORD  {host.Session.RaceWins} WINS / {host.Session.RacePodiums} PODIUMS";
             Publish("race-result", (IsFlagship ? "Flagship: P" : "Thunder Bowl: P") + Position + "  " + TruckTaxiHud.Money(prize), TruckTaxiAlertPriority.Normal, 7);
             EndRace();
+            Cue("FINISH - POSITION " + Position, finishClip);
             OpenModal(results);
         }
 
@@ -756,6 +836,7 @@ namespace LWS.TruckTaxi
             if (entryReserved) host?.Session?.RefundRaceEntry();
             entryReserved = false;
             countdown = false; IsActive = false;
+            CountdownText = ""; WrongWay = false; wrongWaySince = -1;
             host?.Session?.ReleaseOfferSuppression(this);
             host?.Session?.DiscardTeleportDistance();
             if (raceHud != null) raceHud.gameObject.SetActive(false);
@@ -891,6 +972,7 @@ namespace LWS.TruckTaxi
             if (menu != null) Destroy(menu.gameObject);
             if (results != null) Destroy(results.gameObject);
             if (raceHud != null) Destroy(raceHud.gameObject);
+            if (raceAudio != null) Destroy(raceAudio);
         }
 
         private void OnDisable()

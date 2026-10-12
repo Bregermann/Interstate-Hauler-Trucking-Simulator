@@ -20,7 +20,7 @@ namespace LWS.TruckTaxi.Tests
         }
         private static TruckTaxiDriverAppearanceData Custom() => new TruckTaxiDriverAppearanceData {
             shirt = new Color(.7f,.2f,.3f), pantsAndCap = new Color(.2f,.3f,.4f),
-            trim = new Color(.8f,.7f,.2f), skin = new Color(.4f,.25f,.16f), capVisible = false };
+            trim = new Color(.8f,.7f,.2f), skin = new Color(.4f,.25f,.16f), capVisible = false, chestShape = .75f };
 
         [Test]
         public void AppearanceRoundTripsInsideExistingSessionSnapshot()
@@ -58,6 +58,7 @@ namespace LWS.TruckTaxi.Tests
 
         [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)]
         [TestCase(4)] [TestCase(5)] [TestCase(6)] [TestCase(7)]
+        [TestCase(8)] [TestCase(9)] [TestCase(10)]
         public void InvalidAppearanceCannotMutateCareerOrEmitChange(int kind)
         {
             var session = Session(); var before = session.CaptureDriverAppearance();
@@ -72,6 +73,9 @@ namespace LWS.TruckTaxi.Tests
                 case 5: invalid.trim = new Color(0, 0, 0, float.NaN); break;
                 case 6: invalid.version = 2; break;
                 case 7: invalid = null; break;
+                case 8: invalid.chestShape = float.NaN; break;
+                case 9: invalid.chestShape = -1.01f; break;
+                case 10: invalid.chestShape = 1.01f; break;
             }
             int events = 0; session.CareerEquipmentChanged += () => events++;
             Assert.IsFalse(session.TrySetDriverAppearance(invalid, out var reason));
@@ -106,6 +110,61 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsNull(target.CaptureCareerProfile().driverAppearance, "Reading defaults must not silently rewrite a legacy save.");
             Assert.IsTrue(target.TrySetDriverAppearance(Custom(), out reason), reason);
             Assert.IsNotNull(target.CaptureCareerProfile().driverAppearance);
+        }
+
+        [Test]
+        public void LegacyMissingChestFieldPreservesOriginalShapeAndColors()
+        {
+            var legacy = JsonUtility.FromJson<TruckTaxiDriverAppearanceData>(
+                "{\"version\":1,\"shirt\":{\"r\":0.7,\"g\":0.2,\"b\":0.3,\"a\":1},\"capVisible\":false}");
+            Assert.AreEqual(0, legacy.chestShape);
+            Assert.AreEqual(new Color(.7f,.2f,.3f), legacy.shirt);
+            Assert.IsFalse(legacy.capVisible);
+            Assert.IsTrue(legacy.Validate(out var reason), reason);
+        }
+
+        [Test]
+        public void ShapeOnlyEditUsesExistingCareerEventAndCopies()
+        {
+            var session = Session(); var original = session.CaptureDriverAppearance(); var changed = original.Copy();
+            changed.chestShape = 1;
+            Assert.IsFalse(original.SameAs(changed));
+            int events = 0; session.CareerEquipmentChanged += () => events++;
+            Assert.IsTrue(session.TrySetDriverAppearance(changed, out var reason), reason);
+            changed.chestShape = -1;
+            Assert.AreEqual(1, session.CaptureDriverAppearance().chestShape);
+            Assert.AreEqual(original.shirt, session.CaptureDriverAppearance().shirt);
+            Assert.AreEqual(original.capVisible, session.CaptureDriverAppearance().capVisible);
+            Assert.AreEqual(1, events);
+        }
+
+        [Test]
+        public void AdultClothedShapeIsVisibleBoundedAndDoesNotAccumulate()
+        {
+            var root = new GameObject("Adult shape test");
+            var material = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard"));
+            try
+            {
+                var visual = TruckTaxiWobbleVisual.CreateThemed(root.transform, new TruckTaxiWobbleVisual.Design {
+                    silhouette = TruckTaxiWobbleVisual.Silhouette.Human, headwear = TruckTaxiWobbleVisual.Headwear.Cap,
+                    height = 1.5f, width = 1, headScale = 1, upperBodyScale = 1, clothedAdult = true,
+                    body = material, clothes = material, accent = material, skin = material
+                });
+                var part = visual.transform.Find("Left Clothed chest"); var original = part.localScale;
+                var appearance = new TruckTaxiDriverAppearanceData { chestShape = 1, capVisible = false };
+                Assert.IsTrue(TruckTaxiDriverPresentation.ApplyVisualAppearance(visual.transform, appearance));
+                Assert.Greater(part.localScale.z, original.z);
+                var large = part.localScale;
+                Assert.IsTrue(TruckTaxiDriverPresentation.ApplyVisualAppearance(visual.transform, appearance));
+                Assert.AreEqual(large, part.localScale);
+                Assert.IsFalse(visual.transform.Find("Cap").gameObject.activeSelf);
+                Assert.AreSame(material, part.GetComponent<Renderer>().sharedMaterial);
+                appearance.chestShape = 0;
+                Assert.IsTrue(TruckTaxiDriverPresentation.ApplyVisualAppearance(visual.transform, appearance));
+                Assert.Less(Vector3.Distance(original, part.localScale), .0001f);
+                Assert.IsFalse(TruckTaxiDriverPresentation.ApplyVisualAppearance(root.transform, appearance), "Unsupported rigs must not be fabricated.");
+            }
+            finally { UnityEngine.Object.DestroyImmediate(root); UnityEngine.Object.DestroyImmediate(material); }
         }
     }
 }

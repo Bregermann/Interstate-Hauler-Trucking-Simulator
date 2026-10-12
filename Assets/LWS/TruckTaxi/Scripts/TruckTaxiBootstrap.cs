@@ -92,6 +92,8 @@ namespace LWS.TruckTaxi
             }
             Player = spawner.SpawnValidationRig();
             if (Player == null) yield break;
+            if(!TruckTaxiEightOccupantLayout.TryApplyToConfiguredStarter(Player,out string layoutReason))
+                Debug.LogWarning("Truck Taxi starter occupant layout not applied: "+layoutReason,Player);
             body = Player.GetComponent<Rigidbody>();
             regional?.BindPlayer(Player.transform);
             locations = FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None);
@@ -171,6 +173,7 @@ namespace LWS.TruckTaxi
             }
             ComponentDamage = Player.GetComponent<TruckTaxiComponentDamage>() ?? Player.gameObject.AddComponent<TruckTaxiComponentDamage>();
             ComponentDamage.Initialize(this);
+            TruckTaxiVideoSettings.ApplyStartup(this);
             Roadside = GetComponent<TruckTaxiRoadsideAssistance>() ?? gameObject.AddComponent<TruckTaxiRoadsideAssistance>();
             Roadside.Initialize(this);
             FastTravel = GetComponent<TruckTaxiFastTravel>() ?? gameObject.AddComponent<TruckTaxiFastTravel>();
@@ -218,6 +221,10 @@ namespace LWS.TruckTaxi
             if (!Morality.Initialize(this, hud)) Debug.LogWarning("Truck Taxi authored trailer events could not bind to the existing session/HUD.", this);
             var analytics = GetComponent<TruckTaxiAnalytics>() ?? gameObject.AddComponent<TruckTaxiAnalytics>();
             analytics.Initialize(this);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            var spikes=GetComponent<TruckTaxiFrameSpikeDiagnostics>() ?? gameObject.AddComponent<TruckTaxiFrameSpikeDiagnostics>();
+            spikes.Initialize(this);
+#endif
             Persistence = GetComponent<TruckTaxiVibinPersistence>() ?? gameObject.AddComponent<TruckTaxiVibinPersistence>();
             var initialized = Persistence.Initialize(this);
             bool continuing = TruckTaxiVibinPersistence.HasContinueRequest;

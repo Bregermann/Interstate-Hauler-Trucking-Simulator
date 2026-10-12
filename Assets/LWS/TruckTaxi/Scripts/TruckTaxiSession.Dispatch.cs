@@ -8,6 +8,8 @@ namespace LWS.TruckTaxi
     {
         private TruckTaxiRideWorkArea workArea = new TruckTaxiRideWorkArea();
         private TruckTaxiIntercityPolicy intercityPolicy;
+        private readonly TruckTaxiOfferMix offerMix = new TruckTaxiOfferMix();
+        public int LocalOfferStreak => offerMix.LocalStreak;
         private readonly TruckTaxiPassengerDispatchPolicy passengerDispatch=new TruckTaxiPassengerDispatchPolicy();
         public bool RaceEventActive { get; set; }
         public int OffersGenerated => passengerDispatch.OfferIndex;
@@ -42,7 +44,7 @@ namespace LWS.TruckTaxi
             var source=config.passengerDatabase!=null ? config.passengerDatabase.passengers : config.passengers;
             var ids=new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             var origin=playerPosition();
-            var nearby=locations.FindAll(stop=>stop!=null && stop.isActiveAndEnabled && stop.pickupAllowed && workArea.Contains(stop.StopPosition) &&
+            var nearby=locations.FindAll(stop=>TruckTaxiOfferEligibility.PublicStop(stop) && stop.isActiveAndEnabled && stop.pickupAllowed && workArea.Contains(stop.StopPosition) &&
                 Vector3.Distance(stop.StopPosition,origin)<=Mathf.Max(1,config.pickupHardMaximumSeconds)*Mathf.Max(1,config.pickupReasonableSpeedMetersPerSecond));
             nearby.Sort((a,b)=>CompareNear(a,b,origin));
             int limit=Mathf.Clamp(config.offerPickupCandidateLimit,1,12);
@@ -177,5 +179,58 @@ namespace LWS.TruckTaxi
             fare.TownBonus=(long)Math.Round(basis*(AcceptedTownFareMultiplier-1));
         }
         private static float ValidOfferWeight(float value) => float.IsFinite(value) ? Mathf.Clamp(value,.01f,20) : 1;
+    }
+
+    // Offer fairness is intentionally session-local. Completed-fare persistence remains unchanged.
+    public sealed class TruckTaxiOfferMix
+    {
+        private float deficit;
+        public int LocalStreak { get; private set; }
+        public bool WantsIntercity(System.Random random, float target, out bool guaranteed)
+        {
+            target = float.IsFinite(target) ? Mathf.Clamp01(target) : .25f;
+            guaranteed = target > 0 && LocalStreak >= 7;
+            return guaranteed || random.NextDouble() < Mathf.Clamp01(target + deficit * .25f);
+        }
+        public void RecordOffer(bool intercity, float target)
+        {
+            target = float.IsFinite(target) ? Mathf.Clamp01(target) : .25f;
+            deficit = Mathf.Clamp(deficit + target - (intercity ? 1 : 0), -1, 2);
+            LocalStreak = intercity ? 0 : Math.Min(1000, LocalStreak + 1);
+        }
+    }
+
+    public static class TruckTaxiOfferEligibility
+    {
+        public static string ComplexId(TruckTaxiRideLocation stop)
+        {
+            if (stop == null) return null;
+            if ((stop.locationId ?? "").StartsWith("taxi.speedway.", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(stop.district, "Speedway", StringComparison.OrdinalIgnoreCase))
+                return TruckTaxiSpeedwayLayout.RegionId;
+            foreach (string tag in stop.tags ?? Array.Empty<string>())
+                if (tag != null && tag.StartsWith("complex:", StringComparison.OrdinalIgnoreCase) && tag.Length > 8)
+                    return tag.Substring(8);
+            return null;
+        }
+
+        public static bool PublicStop(TruckTaxiRideLocation stop)
+        {
+            if (stop == null) return false;
+            foreach (string tag in stop.tags ?? Array.Empty<string>())
+                if (string.Equals(tag, "race-surface", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(tag, "infield", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(tag, "restricted-venue", StringComparison.OrdinalIgnoreCase)) return false;
+            if (ComplexId(stop) != TruckTaxiSpeedwayLayout.RegionId) return true;
+            return TruckTaxiSpeedwayLayout.IsPublicFareStop(stop.locationId);
+        }
+
+        public static bool Pair(TruckTaxiRideLocation pickup, TruckTaxiRideLocation destination)
+        {
+            if (!PublicStop(pickup) || !PublicStop(destination) || pickup == destination ||
+                string.Equals(pickup.locationId, destination.locationId, StringComparison.OrdinalIgnoreCase)) return false;
+            string complex = ComplexId(pickup);
+            return complex == null || !string.Equals(complex, ComplexId(destination), StringComparison.OrdinalIgnoreCase);
+        }
     }
 }

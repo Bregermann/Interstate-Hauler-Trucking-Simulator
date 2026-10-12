@@ -10,6 +10,8 @@ namespace LWS.TruckTaxi
         public float Pressure, Hunger, Thirst, Fatigue;
         public float BowelPressure;
         public float BowelCrisisGameSeconds;
+        public int BowelAccidents;
+        public float BowelDiscomfortGameSeconds;
         public string[] UsedToiletIds;
         public string[] AmbientChoiceIds;
         public string RentedMotelId;

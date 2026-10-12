@@ -44,7 +44,7 @@ namespace LWS.TruckTaxi
                 return rig != null && rig.TrySeatSecondary(actor,
                     profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger, standingWorldScale,
                     occupantKind ?? TruckTaxiCabOccupantKind.Passenger);
-            if (rig != null && rig.HasSleeperCapability)
+            if (rig != null && (rig.HasSleeperCapability || rig.HasAuthoredPrimarySeat))
             {
                 var type = profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger;
                 var kind = occupantKind ?? TruckTaxiCabOccupantKind.Passenger;
@@ -83,7 +83,7 @@ namespace LWS.TruckTaxi
             var type = profile != null ? profile.seatType : TruckTaxiSeatType.StandardPassenger;
             if (secondary) return rig != null && rig.HasSecondarySeat(type, actor,
                 occupantKind ?? TruckTaxiCabOccupantKind.Passenger);
-            if (rig != null && rig.HasSleeperCapability)
+            if (rig != null && (rig.HasSleeperCapability || rig.HasAuthoredPrimarySeat))
                 return rig.HasSeat(actor, occupantKind ?? TruckTaxiCabOccupantKind.Passenger,
                     profile != null ? profile.primaryCabAnchor : TruckTaxiCabAnchorId.FrontPassengerSeat, type);
             return CanUseLegacySeat(actor, truck, profile) ||
@@ -99,7 +99,8 @@ namespace LWS.TruckTaxi
             float radius = (incoming != null ? incoming.StandingRadius : .55f) * .88f;
             if (profile != null) radius *= Mathf.Max(Mathf.Clamp01(profile.localScale.x), Mathf.Clamp01(profile.localScale.z));
             foreach (var seated in truck.GetComponentsInChildren<TruckTaxiPassengerActor>(true))
-                if (seated.transform != actor && Vector3.Distance(position, seated.transform.position) <
+                if (seated.gameObject.activeInHierarchy && seated.Lifecycle!=TruckTaxiActorLifecycle.Exiting &&
+                    seated.transform != actor && Vector3.Distance(position, seated.transform.position) <
                     radius + TruckTaxiCabOccupantRig.SeatedRadius(seated)) return false;
             return true;
         }

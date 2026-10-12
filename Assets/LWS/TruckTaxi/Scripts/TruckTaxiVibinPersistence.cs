@@ -361,6 +361,8 @@ namespace LWS.TruckTaxi
             regionId = regional.ResolveRegion(host.Player.transform.position),
             session = host.Session.CapturePersistentState(), needs = host.DriverNeeds.CapturePersistentState(),
             damage = host.ComponentDamage?.Capture(),
+            environment = host.Environment.Capture(),
+            extremes = host.Extremes?.Capture(origin.LocalToGlobal),
             hasFuelState = host.Fuel?.Fuel != null,
             fuelLiters = host.Fuel?.Fuel?.amount ?? 0,
             fuelCapacityLiters = host.Fuel?.Fuel?.capacity ?? 0
@@ -369,6 +371,10 @@ namespace LWS.TruckTaxi
         {
             var result = TruckTaxiVibinSaveParticipant.ValidatePayload(payload, host.Environment.settings);
             if (!result.Succeeded) return result;
+            if (!host.Environment.CanRestore(payload.environment))
+                return LwsSaveOperationResult.Failure("Saved environment does not match the authored snow layout.");
+            if (payload.extremes != null && (host.Extremes == null || !host.Extremes.CanRestore(payload.extremes)))
+                return LwsSaveOperationResult.Failure("Saved ambient events do not match the authored world.");
             if (host.ComponentDamage != null && !TruckTaxiComponentDamage.ValidSnapshot(payload.damage,
                 host.Player.VehicleId, host.ComponentDamage.Parts))
                 return LwsSaveOperationResult.Failure("Invalid component damage record or truck ownership.");
@@ -418,6 +424,10 @@ namespace LWS.TruckTaxi
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin component damage could not be restored.");
             if (payload.hasFuelState && host.Fuel?.Fuel != null)
                 host.Fuel.Fuel.amount = Mathf.Min(payload.fuelLiters, host.Fuel.Fuel.capacity);
+            if (host.Extremes != null && !host.Extremes.Restore(payload.extremes, origin.GlobalToLocal))
+                return restoreResult = LwsSaveOperationResult.Failure("Vibin ambient events could not be restored.");
+            if (!host.Environment.Restore(payload.environment))
+                return restoreResult = LwsSaveOperationResult.Failure("Vibin environment could not be restored.");
             // The existing truck provider/load coordinator alone own final vehicle placement.
             host.Environment.Clock.SetPaused(true);
             return restoreResult = LwsSaveOperationResult.Success();
@@ -477,11 +487,13 @@ namespace LWS.TruckTaxi
                 return "Vibin world is not ready.";
             if (host.Session.HasStolenPassenger) return "Deliver the stolen passenger before saving or loading.";
             if (HasUnsafeFare(host.Session.State) || host.Session.HasPassenger) return FinishRideMessage;
-            if (host.Kaiju?.IsCapturingPlayer == true || host.Races?.IsActive == true || host.Session.RaceEventActive ||
+            if (host.Kaiju?.IsCapturingPlayer == true) return "Vehicle capture/recovery is in progress. Try again after release.";
+            if (host.Fuel?.IsRescuing == true || host.Roadside?.IsRecovering == true || host.FastTravel?.IsTravelling == true)
+                return "Vehicle relocation is in progress. Try again when recovery/travel completes.";
+            if (host.Races?.IsActive == true || host.Session.RaceEventActive ||
                 host.CustomContent?.IsPlaying == true || host.Companions?.IsBusy == true || host.Companions?.ActivePrivateStop != null ||
-                host.DriverNeeds.JugActive || host.DriverNeeds.RoadPepChallenge != null || host.DriverNeeds.IsSleeping ||
-                host.Fuel?.IsRescuing == true || host.Roadside?.IsRecovering == true || host.FastTravel?.IsTravelling == true ||
-                host.Extremes?.LivePhysicsActorCount > 0) return "Finish the current event before saving or loading.";
+                host.DriverNeeds.JugActive || host.DriverNeeds.RoadPepChallenge != null || host.DriverNeeds.IsSleeping)
+                return "Finish the current interaction or vehicle transition before saving or loading.";
             if (origin.ShiftInProgress || !loading && (!regional.IsPositionAvailable(host.Player.transform.position) ||
                 string.IsNullOrEmpty(regional.ResolveRegion(host.Player.transform.position)))) return "Vibin region is not ready.";
             if (host.Player.CaptureState().trailerAttachment.attached) return "Detach the trailer before saving or loading Vibin.";

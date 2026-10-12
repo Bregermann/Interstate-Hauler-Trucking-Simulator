@@ -69,7 +69,18 @@ namespace LWS.TruckTaxi
         [Range(0, .6f)] public float plowResidualDepthMeters = .04f;
         [Min(0)] public float tireCompressionMetersPerMeter = .002f;
         [Range(128, 8192)] public int maximumSnowCells = 4096;
+        [Header("Needs balance (fractions per game hour)")]
+        [Range(0, 1)] public float thirstGainPerGameHour = .05f;
+        [Range(0, 1)] public float bowelGainPerGameHour = 1f / 12f;
+        [Min(1)] public float bowelGraceGameMinutes = 5;
+        [Header("Hidden bowel presentation (no meter)")]
+        public AudioClip bowelModerateSound, bowelUrgentSound, bowelFailureSound;
+        [Range(0, 1)] public float bowelSoundVolume = .55f;
+        [Range(0, .6f)] public float bowelMaximumEdgeOpacity = .5f;
         [Header("Extreme hunger / thirst presentation")]
+        public Texture2D[] hungerCravingPool, thirstCravingPool;
+        [Range(1, 4)] public int cravingCapacityPerNeed = 3;
+        [Range(80, 220)] public float cravingImageSize = 160;
         [Range(.8f, .99f)] public float cravingThreshold = .9f;
         [Range(0, .5f)] public float cravingMaximumOpacity = .5f;
         [Tooltip("Optional replacement images. Empty uses the project-owned food and water images.")]

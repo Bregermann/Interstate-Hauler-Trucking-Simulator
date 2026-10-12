@@ -7,13 +7,102 @@ using LWS.InterstateHauler;
 
 namespace LWS.TruckTaxi.Tests.EditMode
 {
-    // Pure tests: never initialize vendor storage, launch Unity, or create a directory.
+    // Isolated tests: never initialize vendor storage, launch a player, or create a directory.
     public sealed class TruckTaxiRestartHarnessTests
     {
         private const string Run = "1234567890abcdef1234567890abcdef";
         private static string Cache => Path.GetFullPath(Path.Combine(Path.GetTempPath(), "TaxiRestartArgumentFixture"));
         private static string[] Args(string mode = "seed", string run = Run) => new[] {
             "player.exe", TruckTaxiRestartTestArguments.ModeFlag, mode, TruckTaxiRestartTestArguments.RunFlag, run };
+
+        [TestCase("valid")]
+        [TestCase("legacy-only")]
+        [TestCase("duplicate")]
+        [TestCase("missing-mount")]
+        [TestCase("disabled")]
+        [TestCase("role")]
+        [TestCase("seat-type")]
+        [TestCase("non-travel")]
+        [TestCase("unshared-primary")]
+        [TestCase("overlap")]
+        [TestCase("missing-driver")]
+        [TestCase("all-shared")]
+        [TestCase("two-exclusive")]
+        [TestCase("private-exclusive")]
+        [TestCase("exclusive-seat-type")]
+        public void StarterCapacityRequiresEightActualCompatibleRegistrySlots(string fault)
+        {
+            var truck = new GameObject("Restart occupancy fixture");
+            try
+            {
+                var cab = new GameObject("Cab"); cab.transform.SetParent(truck.transform, false);
+                var rig = truck.AddComponent<TruckTaxiCabOccupantRig>();
+                var anchors = TruckTaxiEightOccupantLayout.CreateInterstateTractorAnchors();
+                anchors[4].allowedOccupants = TruckTaxiCabOccupantKind.Companion;
+                switch (fault)
+                {
+                    case "legacy-only": anchors = new[] { anchors[4] }; break;
+                    case "duplicate": anchors[3].slotId = anchors[2].slotId; break;
+                    case "missing-mount": anchors[2].mountPath = "Missing"; break;
+                    case "disabled": rig.enabled = false; break;
+                    case "role": anchors[2].allowedOccupants = TruckTaxiCabOccupantKind.Passenger; break;
+                    case "seat-type": anchors[2].allowedSeatTypes = new[] { TruckTaxiSeatType.TinyPassenger }; break;
+                    case "non-travel": anchors[2].secondaryOccupantSeat = false; break;
+                    case "unshared-primary": anchors[1].sharedPrimarySeat = false; break;
+                    case "overlap": anchors[3].localPosition = anchors[2].localPosition; break;
+                    case "missing-driver": anchors[0].id = TruckTaxiCabAnchorId.FloorPerch; break;
+                    case "all-shared": anchors[4].allowedOccupants = anchors[2].allowedOccupants; break;
+                    case "two-exclusive": anchors[2].allowedOccupants = TruckTaxiCabOccupantKind.Companion; break;
+                    case "private-exclusive": anchors[4].privateEventEligible = true; break;
+                    case "exclusive-seat-type": anchors[4].allowedSeatTypes = new[] { TruckTaxiSeatType.StandardPassenger }; break;
+                }
+                rig.Configure(true, anchors);
+                string error = TruckTaxiRestartHarness.StarterOccupancyError(rig);
+                if (fault == "valid") Assert.IsNull(error, error);
+                else Assert.IsNotNull(error, "Displayed maximum must not hide fault=" + fault);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(truck); }
+        }
+
+        [Test]
+        public void ActualTaxiPrefabRetainsMixedStarterContractAndIdentity()
+        {
+            var prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/LWS/TruckTaxi/Prefabs/TruckTaxi_InterstateTractor.prefab");
+            Assert.IsNotNull(prefab);
+            var authored = prefab.GetComponent<TruckTaxiCabOccupantRig>();
+            Assert.IsNotNull(authored);
+            var sourceCab = prefab.transform.Find("Cab"); Assert.IsNotNull(sourceCab);
+            var truck = new GameObject("Restart actual prefab occupancy fixture");
+            try
+            {
+                // Copy only real occupancy/mount data; never instantiate the NWH vehicle in EditMode.
+                var cab = new GameObject("Cab").transform; cab.SetParent(truck.transform, false);
+                cab.localPosition = sourceCab.localPosition; cab.localRotation = sourceCab.localRotation; cab.localScale = sourceCab.localScale;
+                var rig = truck.AddComponent<TruckTaxiCabOccupantRig>();
+                UnityEditor.EditorJsonUtility.FromJsonOverwrite(UnityEditor.EditorJsonUtility.ToJson(authored), rig);
+                Assert.AreEqual(1, rig.Anchors.Count, "Exercise the actual sparse authored fallback, not an invented eight-seat fixture.");
+                var original = rig.Anchors[0];
+                string originalId = original.StableSlotId;
+                Assert.AreEqual(TruckTaxiCabAnchorId.SleeperRight, original.id);
+                Assert.AreEqual(TruckTaxiCabOccupantKind.Companion, original.allowedOccupants);
+                Assert.IsTrue(original.secondaryOccupantSeat); Assert.IsFalse(original.privateEventEligible);
+                var identity = truck.AddComponent<LwsVehicleIdentity>();
+                identity.Configure("player.truck.starter", TruckTaxiEightOccupantLayout.FallbackDefinitionId,
+                    LwsVehicleRole.PlayerTractor, "Taxi fallback", true);
+                var player = truck.AddComponent<LwsPlayerTruck>(); player.Configure(null, "player.truck.starter");
+                Assert.IsTrue(TruckTaxiEightOccupantLayout.TryApplyToConfiguredStarter(player, out var reason), reason);
+                Assert.IsNull(TruckTaxiRestartHarness.StarterOccupancyError(rig));
+                Assert.AreSame(original, rig.Anchors[0]); Assert.AreEqual(originalId, original.StableSlotId);
+                Assert.AreEqual(TruckTaxiCabOccupantKind.Companion, original.allowedOccupants);
+                Assert.IsFalse(original.privateEventEligible);
+                Assert.AreEqual(authored.AuthoredSleeperCapability, rig.AuthoredSleeperCapability);
+                Assert.AreEqual("player.truck.starter", player.VehicleId);
+                Assert.AreEqual(TruckTaxiEightOccupantLayout.FallbackDefinitionId, player.DefinitionId);
+                Assert.AreEqual(TruckTaxiEightOccupantLayout.FallbackDefinitionId, identity.DefinitionId);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(truck); }
+        }
 
         [Test]
         public void NormalLaunchDoesNotRequestOrResolveStorage()
@@ -28,6 +117,7 @@ namespace LWS.TruckTaxi.Tests.EditMode
         [TestCase("manual")]
         [TestCase("cleanup")]
         [TestCase("soak")]
+        [TestCase("interactive")]
         public void ValidModeUsesOnlyFixedCacheChild(string mode)
         {
             Assert.IsTrue(TruckTaxiRestartTestArguments.TryParse(Args(mode), Cache, out var request, out var failure), failure);
@@ -49,6 +139,7 @@ namespace LWS.TruckTaxi.Tests.EditMode
 
         [TestCase("soak")]
         [TestCase("cleanup")]
+        [TestCase("interactive")]
         public void DriveCannotSilentlyChangeAnotherHarnessMode(string mode)
         {
             var args = new List<string>(Args(mode)) { TruckTaxiRestartTestArguments.DriveFlag };
@@ -236,9 +327,19 @@ namespace LWS.TruckTaxi.Tests.EditMode
             Assert.AreEqual("body.cab", id);
             float condition = TruckTaxiRestartHarness.DamageCondition(signature);
             Assert.That(condition, Is.GreaterThan(0).And.LessThan(1));
-            var snapshot = new TruckTaxiDamageSnapshot { VehicleId = "fixture.truck", Parts = new[] {
-                new TruckTaxiDamageEntry { Id = id, Condition = condition } } };
+            var entries = new List<TruckTaxiDamageEntry>();
+            foreach (var part in parts)
+            {
+                float expected = part.Key == id ? condition : .75f - signature * .02f;
+                float actual = TruckTaxiRestartHarness.DamagePartCondition(signature, part.Key, id);
+                Assert.AreEqual(expected, actual, .00001f, part.Key);
+                entries.Add(new TruckTaxiDamageEntry { Id = part.Key, Condition = actual });
+                typeof(TruckTaxiDamagePart).GetProperty(nameof(TruckTaxiDamagePart.Condition)).SetValue(part.Value, actual);
+            }
+            var snapshot = new TruckTaxiDamageSnapshot { VehicleId = "fixture.truck", Parts = entries.ToArray() };
+            Assert.AreEqual(parts.Count, snapshot.Parts.Length);
             Assert.IsTrue(TruckTaxiComponentDamage.ValidSnapshot(snapshot, "fixture.truck", parts));
+            Assert.That(TruckTaxiComponentDamage.CalculateSummary(parts.Values), Is.InRange(.2f, .5f));
             if (signature > 0) Assert.AreNotEqual(TruckTaxiRestartHarness.DamageCondition(signature - 1), condition);
         }
 
@@ -247,6 +348,7 @@ namespace LWS.TruckTaxi.Tests.EditMode
         {
             Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.SelectBodyPart(new Dictionary<string, TruckTaxiDamagePart>()));
             Assert.Throws<ArgumentOutOfRangeException>(() => TruckTaxiRestartHarness.DamageCondition(4));
+            Assert.Throws<ArgumentOutOfRangeException>(() => TruckTaxiRestartHarness.DamagePartCondition(4, "engine", "body.cab"));
         }
 
         [TestCase(0, "alpha")]
@@ -297,12 +399,79 @@ namespace LWS.TruckTaxi.Tests.EditMode
         {
             var identity = new TruckTaxiCareerProfileData { runProfileId = "fixture.profile",
                 driverName = "Fixture Driver", firstGuideEligible = true, firstGuideClaimed = true };
-            var captured = new TruckTaxiPersistentState { ownedProfile = identity };
+            var captured = new TruckTaxiPersistentState { ownedProfile = identity,
+                lastSession = new TruckTaxiLastSessionStatistics { earningsCents = 3000000, rides = 50, totalStars = 200 } };
             var fixture = TruckTaxiRestartHarness.CreateSessionFixture(signature, captured);
             Assert.AreSame(identity, fixture.ownedProfile);
+            Assert.AreEqual(0, fixture.lastSession.earningsCents, "Fixture lifetime replacement must not retain previous UI exercise totals.");
+            Assert.AreEqual(0, fixture.lastSession.rides);
+            Assert.AreEqual(0, fixture.lastSession.totalStars);
             Assert.AreEqual("fixture.profile", fixture.ownedProfile.runProfileId);
             Assert.AreEqual("Fixture Driver", fixture.ownedProfile.driverName);
             Assert.IsTrue(fixture.ownedProfile.firstGuideClaimed);
+        }
+
+        private static TruckTaxiSnowSnapshot SnowTopology() => new TruckTaxiSnowSnapshot {
+            topology = 719, maximumDepth = .6f, backgroundDepth = .01f, depths = new float[7] };
+
+        [TestCase(0)] [TestCase(1)] [TestCase(2)] [TestCase(3)]
+        public void EnvironmentSignatureUsesExistingContractsAndDoesNotMutateCapturedTopology(int signature)
+        {
+            var topology = SnowTopology();
+            var fixture = TruckTaxiRestartHarness.CreateEnvironmentFixture(signature, topology);
+            var preset = TruckTaxiRestartHarness.CreateWeatherFixture(signature);
+            Assert.IsTrue(TruckTaxiEnvironmentSnapshot.Valid(fixture));
+            Assert.IsTrue(preset.Validate(out var message), message);
+            Assert.AreEqual(topology.topology, fixture.snow.topology);
+            Assert.AreEqual(topology.maximumDepth, fixture.snow.maximumDepth);
+            Assert.AreEqual(topology.depths.Length, fixture.snow.depths.Length);
+            Assert.AreNotSame(topology.depths, fixture.snow.depths);
+            CollectionAssert.AreEqual(new float[7], topology.depths);
+            Assert.Greater(fixture.snow.depths[0], 0);
+            Assert.AreNotEqual(fixture.snow.depths[0], fixture.snow.depths[1]);
+            Assert.AreEqual(signature % 2 == 1, fixture.frozen);
+            Assert.AreEqual(signature % 2 == 1, fixture.forecast.automatic);
+            Assert.IsNull(TruckTaxiRestartHarness.EnvironmentSignatureError(signature, fixture, preset.ToSnapshot(14), topology));
+            Assert.That(TruckTaxiRestartHarness.SignatureChestShape(signature), Is.InRange(-1f, 1f));
+            if (signature > 0) Assert.AreNotEqual(TruckTaxiRestartHarness.SignatureChestShape(signature - 1), TruckTaxiRestartHarness.SignatureChestShape(signature));
+        }
+
+        [TestCase("frozen")] [TestCase("automatic")] [TestCase("override")] [TestCase("snow cell")]
+        [TestCase("snow background")] [TestCase("topology")] [TestCase("missing snow")]
+        [TestCase("weather")] [TestCase("intensity")] [TestCase("temperature")]
+        [TestCase("wind")] [TestCase("visibility")] [TestCase("transition")]
+        public void EnvironmentSignatureRejectsRestoredDefaultsAndIndividualFieldLoss(string corruption)
+        {
+            var topology = SnowTopology();
+            var fixture = TruckTaxiRestartHarness.CreateEnvironmentFixture(3, topology);
+            var weather = TruckTaxiRestartHarness.CreateWeatherFixture(3).ToSnapshot(14);
+            switch (corruption)
+            {
+                case "frozen": fixture.frozen = false; break;
+                case "automatic": fixture.forecast.automatic = false; break;
+                case "override": fixture.forecast.overrideEndTicks++; break;
+                case "snow cell": fixture.snow.depths[5] = 0; break;
+                case "snow background": fixture.snow.backgroundDepth = 0; break;
+                case "topology": fixture.snow.topology++; break;
+                case "missing snow": fixture.hasSnowState = false; fixture.snow = null; break;
+                case "weather": weather = LwsWeatherSnapshot.Clear; break;
+                case "intensity": weather.precipitationIntensity01 = .1f; break;
+                case "temperature": weather.ambientTemperatureC = 18; break;
+                case "wind": weather.windVelocity = Vector3.zero; break;
+                case "visibility": weather.visibilityMeters = float.NaN; break;
+                case "transition": weather.transitioning = true; break;
+            }
+            Assert.IsNotNull(TruckTaxiRestartHarness.EnvironmentSignatureError(3, fixture, weather, topology), corruption);
+        }
+
+        [Test] public void EnvironmentFixtureRequiresRealTopologyAndKnownSignature()
+        {
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.CreateEnvironmentFixture(0, null));
+            var empty = SnowTopology(); empty.depths = Array.Empty<float>();
+            Assert.Throws<InvalidOperationException>(() => TruckTaxiRestartHarness.CreateEnvironmentFixture(0, empty));
+            Assert.Throws<ArgumentOutOfRangeException>(() => TruckTaxiRestartHarness.CreateEnvironmentFixture(4, SnowTopology()));
+            Assert.Throws<ArgumentOutOfRangeException>(() => TruckTaxiRestartHarness.CreateWeatherFixture(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => TruckTaxiRestartHarness.SignatureChestShape(4));
         }
 
         private static TruckTaxiRideLocation Location(List<GameObject> roots, string id, float x)

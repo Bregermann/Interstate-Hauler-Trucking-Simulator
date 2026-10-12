@@ -42,9 +42,14 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual(0, rig.AuthoredCapacity);
             var slots = new TruckTaxiCabOccupantRig.Anchor[9];
             for (int i = 0; i < slots.Length; i++) slots[i] = Slot("seat-" + i, i * 3);
+            slots[0].id=TruckTaxiCabAnchorId.DriverSeat;
+            slots[0].allowedOccupants=TruckTaxiCabOccupantKind.Driver;
+            slots[0].secondaryOccupantSeat=false;
             rig.Configure(true, slots);
             Assert.AreEqual(8, rig.AuthoredCapacity);
-            for (int i = 0; i < 8; i++)
+            Assert.IsTrue(rig.TrySeat(Make("player").transform,TruckTaxiCabOccupantKind.Driver,
+                TruckTaxiCabAnchorId.DriverSeat,TruckTaxiSeatType.StandardPassenger,Vector3.one));
+            for (int i = 0; i < 7; i++)
                 Assert.IsTrue(rig.TrySeatSecondary(Make("rider").transform,
                     TruckTaxiSeatType.StandardPassenger, Vector3.one, TruckTaxiCabOccupantKind.Passenger));
             Assert.AreEqual(8, rig.OccupiedCount);

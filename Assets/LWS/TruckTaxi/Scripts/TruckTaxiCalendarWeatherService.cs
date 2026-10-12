@@ -214,6 +214,38 @@ namespace LWS.TruckTaxi
             RebuildWindow(); ApplyCurrent();
         }
 
+        public TruckTaxiForecastSnapshot Capture() => new TruckTaxiForecastSnapshot
+        {
+            automatic = automatic, manualCondition = manualCondition,
+            hasOverride = hasOverride, overrideStartTicks = overrideStart.Ticks, overrideEndTicks = overrideEnd.Ticks,
+            overrideCondition = overrideCondition, severity = overrideSeverity, warning = overrideWarning,
+            severe = severeProfile.HasValue, wind = severeProfile?.WindMetersPerSecond ?? 0,
+            visibility = severeProfile?.VisibilityMeters ?? 0, rain = severeProfile?.RainIntensity01 ?? 0
+        };
+
+        public bool Restore(TruckTaxiForecastSnapshot value, bool applyWeatherNow = true)
+        {
+            if (!initialized || value == null || !TruckTaxiForecastSnapshot.Valid(value)) return false;
+            automatic = value.automatic; manualCondition = value.manualCondition;
+            hasOverride = value.hasOverride;
+            overrideStart = hasOverride ? new DateTime(value.overrideStartTicks) : default;
+            overrideEnd = hasOverride ? new DateTime(value.overrideEndTicks) : default;
+            overrideCondition = value.overrideCondition; overrideSeverity = value.severity; overrideWarning = value.warning;
+            severeProfile = value.severe ? new TruckTaxiExtremeWeatherProfile("thunderstorm", value.wind, value.visibility, value.rain) :
+                (TruckTaxiExtremeWeatherProfile?)null;
+            // Clock participant restores first, including rewinds. Rebind only after that event has run.
+            lastSeen = CurrentDateTime; lastAppliedPreset = null;
+            RebuildWindow();
+            if (!applyWeatherNow)
+            {
+                if (current == null) return false;
+                bool severe = severeProfile.HasValue && hasOverride && CurrentDateTime >= overrideStart && CurrentDateTime < overrideEnd;
+                lastAppliedPreset = current.PresetId + (severe ? ":severe" : "");
+                return true;
+            }
+            return ApplyCurrent();
+        }
+
         public bool SetDate(int year, int month, int day)
         {
             if (clock == null || year < 1 || year > 9999 || month < 1 || month > 12 ||

@@ -13,10 +13,14 @@ namespace LWS.TruckTaxi
         private readonly Dictionary<Camera,int> cameraMasks = new Dictionary<Camera,int>();
         private readonly List<Material> materials = new List<Material>();
         private GameObject driver;
+        private GameObject footVisual;
+        private TruckTaxiDriverAppearanceData currentAppearance = new TruckTaxiDriverAppearanceData();
         private TruckTaxiCabOccupantRig eventRig;
 
         public bool Ready => driver != null;
         public Transform Occupant => driver != null ? driver.transform : null;
+        public Transform OnFootVisual => footVisual != null ? footVisual.transform : null;
+        public bool SupportsChestShape => Ready && SupportsAdultShape(driver.transform.Find(TruckTaxiWobbleVisual.VisualName));
         public TruckTaxiDriverPresentationState State { get; private set; }
         public bool SleeperTransitionValid => eventRig != null && eventRig.isActiveAndEnabled && eventRig.PrivateTransitionValid;
 
@@ -26,6 +30,7 @@ namespace LWS.TruckTaxi
             if (!Ready || materials.Count != 4 || materials.Exists(m => m == null)) return false;
             if (appearance == null) { reason = "Missing driver appearance."; return false; }
             if (!appearance.Validate(out reason)) return false;
+            if (!SupportsChestShape) { reason = "This driver has no editable clothed adult chest parts."; return false; }
             var visual = driver.transform.Find(TruckTaxiWobbleVisual.VisualName);
             var cap = visual != null ? visual.Find("Cap") : null;
             var brim = visual != null ? visual.Find("Brim") : null;
@@ -36,8 +41,52 @@ namespace LWS.TruckTaxi
             materials[2].color = appearance.trim;
             materials[3].color = appearance.skin;
             cap.gameObject.SetActive(appearance.capVisible); brim.gameObject.SetActive(appearance.capVisible);
+            ApplyVisualAppearance(visual, appearance);
+            if (footVisual != null) ApplyVisualAppearance(footVisual.transform, appearance);
+            currentAppearance = appearance.Copy();
             reason = null; return true;
         }
+        private static bool SupportsAdultShape(Transform visual) => visual != null &&
+            visual.Find("Left Clothed chest") != null && visual.Find("Right Clothed chest") != null;
+        public static bool ApplyVisualAppearance(Transform visual, TruckTaxiDriverAppearanceData appearance)
+        {
+            if (!SupportsAdultShape(visual) || appearance == null || !appearance.Validate(out _)) return false;
+            float shape = appearance.chestShape;
+            foreach (string side in new[] { "Left", "Right" })
+            {
+                var part = visual.Find(side + " Clothed chest");
+                part.localScale = new Vector3(.3f * (1 + .2f * shape), .27f * (1 + .15f * shape), .27f * (1 + .5f * shape));
+                part.localPosition = new Vector3(side == "Left" ? -.195f : .195f, .915f, .24f + .035f * shape);
+            }
+            visual.Find("Cap")?.gameObject.SetActive(appearance.capVisible);
+            visual.Find("Brim")?.gameObject.SetActive(appearance.capVisible);
+            return true;
+        }
+        public GameObject CreateAppearanceVisual(Transform parent)
+        {
+            if (!Ready || parent == null || materials.Count != 4) return null;
+            var visual = TruckTaxiWobbleVisual.CreateThemed(parent, new TruckTaxiWobbleVisual.Design {
+                silhouette = TruckTaxiWobbleVisual.Silhouette.Human, headwear = TruckTaxiWobbleVisual.Headwear.Cap,
+                height = 1.5f, width = 1, headScale = 1, upperBodyScale = 1, clothedAdult = true,
+                body = materials[0], clothes = materials[1], accent = materials[2], skin = materials[3]
+            });
+            ApplyVisualAppearance(visual.transform, currentAppearance);
+            foreach (var collider in visual.GetComponentsInChildren<Collider>(true)) collider.enabled = false;
+            return visual;
+        }
+        public void SetOnFoot(Transform parent, bool visible)
+        {
+            if (visible && footVisual == null)
+            {
+                footVisual = CreateAppearanceVisual(parent);
+                if (footVisual != null)
+                    foreach (Transform part in footVisual.transform)
+                        if (part.name == "Head" || part.name.Contains("eye") || part.name == "Cap" || part.name == "Brim")
+                            part.gameObject.layer = InteriorHiddenLayer;
+            }
+            SetFootVisualVisible(visible);
+        }
+        public void SetFootVisualVisible(bool visible) { if (footVisual != null) footVisual.SetActive(visible); }
 
         public void Initialize(Transform truck)
         {
@@ -132,6 +181,7 @@ namespace LWS.TruckTaxi
             RestoreDriving();
             foreach(var entry in cameraMasks) if(entry.Key!=null) entry.Key.cullingMask=entry.Value;
             if(driver!=null) Destroy(driver);
+            if(footVisual!=null) Destroy(footVisual);
             foreach(var material in materials) if(material!=null) Destroy(material);
         }
 

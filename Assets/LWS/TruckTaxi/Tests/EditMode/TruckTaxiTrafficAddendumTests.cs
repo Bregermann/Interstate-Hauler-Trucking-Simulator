@@ -6,6 +6,25 @@ namespace LWS.TruckTaxi.Tests
     [TestFixture, Category("TaxiTraffic")]
     public sealed class TruckTaxiTrafficAddendumTests
     {
+        [Test] public void RecoveryBudgetStopsAfterThreeAttemptsAndPoolResetRearmsIt()
+        {
+            var root=new GameObject("bounded recovery fixture");
+            try
+            {
+                var driver=root.AddComponent<TruckTaxiTrafficBehaviour>();
+                var attempt=typeof(TruckTaxiTrafficBehaviour).GetMethod("TryCountRecoveryAttempt",
+                    System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance);
+                for(int i=0;i<3;i++) Assert.IsTrue((bool)attempt.Invoke(driver,null));
+                for(int i=0;i<20;i++) Assert.IsFalse((bool)attempt.Invoke(driver,null));
+                Assert.AreEqual(3,driver.RecoveryAttempts);
+                driver.ResetForPool(); Assert.AreEqual(0,driver.RecoveryAttempts);
+                Assert.IsTrue((bool)attempt.Invoke(driver,null));
+                var adapter=root.AddComponent<TruckTaxiTrafficAdapter>();
+                Assert.IsFalse(adapter.TryRecycleStuckTraffic(driver),"Unregistered actors must never be retired.");
+                Assert.IsFalse(adapter.TryReacquireTrafficRoute(driver),"Missing route must fail without moving the actor.");
+            }
+            finally { Object.DestroyImmediate(root); }
+        }
         [Test]
         public void OrdinaryAndRivalPersonalityWeightsMatchConfiguredDefaults()
         {

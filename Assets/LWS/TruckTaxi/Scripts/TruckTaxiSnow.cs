@@ -51,6 +51,38 @@ namespace LWS.TruckTaxi
             }
         }
 
+        public int TopologySignature()
+        {
+            // Translation-independent: floating-origin changes must not invalidate the authored lane layout.
+            unchecked
+            {
+                int hash = 17;
+                Vector3 origin = cells.Count > 0 ? cells[0].a : Vector3.zero;
+                foreach (var cell in cells)
+                {
+                    Vector3 a = cell.a - origin, b = cell.b - origin;
+                    foreach (float value in new[] { a.x, a.y, a.z, b.x, b.y, b.z, cell.width })
+                        hash = hash * 31 + Mathf.RoundToInt(value * 100);
+                }
+                return hash;
+            }
+        }
+        public TruckTaxiSnowSnapshot Capture(float background)
+        {
+            var depths = new float[cells.Count];
+            for (int i = 0; i < cells.Count; i++) depths[i] = cells[i].depth;
+            return new TruckTaxiSnowSnapshot { topology = TopologySignature(), maximumDepth = MaximumDepth,
+                backgroundDepth = background, depths = depths };
+        }
+        public bool CanRestore(TruckTaxiSnowSnapshot value) => value != null && TruckTaxiSnowSnapshot.Valid(value) &&
+            value.depths.Length == cells.Count && value.topology == TopologySignature() && Mathf.Approximately(value.maximumDepth, MaximumDepth);
+        public bool Restore(TruckTaxiSnowSnapshot value)
+        {
+            if (!CanRestore(value)) return false;
+            for (int i = 0; i < cells.Count; i++) { var cell = cells[i]; cell.depth = value.depths[i]; cells[i] = cell; }
+            return true;
+        }
+
         public bool Accumulate(float metres)
         {
             if (!float.IsFinite(metres) || metres <= 0) return false;
@@ -211,6 +243,19 @@ namespace LWS.TruckTaxi
             traction.ClearModifiers();
             surface.SetCoverage(0);
             surface.Refresh();
+        }
+        public TruckTaxiSnowSnapshot Capture() => initialized ? Region.Capture(backgroundDepth) : null;
+        public bool CanRestore(TruckTaxiSnowSnapshot value) => value == null || initialized && Region.CanRestore(value);
+        public bool Restore(TruckTaxiSnowSnapshot value)
+        {
+            if (value == null) { ClearSnow(); return true; }
+            if (!CanRestore(value) || !Region.Restore(value)) return false;
+            backgroundDepth = value.backgroundDepth;
+            traction.ClearModifiers();
+            surface.SetCoverage(backgroundDepth / Region.MaximumDepth);
+            surface.Refresh();
+            nextVisualUpdate = 0;
+            return true;
         }
         private void OnEnable()
         {

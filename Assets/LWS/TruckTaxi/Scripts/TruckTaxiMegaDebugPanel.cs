@@ -11,8 +11,11 @@ namespace LWS.TruckTaxi
         private TruckTaxiBootstrap host;
         private TruckTaxiHud hud;
         private RectTransform panel;
-        private static readonly string[] Tabs = { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD", "KAIJU", "EXTRAS", "ANALYTICS", "RACES", "GAMEPLAY" };
-        private readonly RectTransform[] pages = new RectTransform[10];
+        private static readonly string[] Tabs = { "CLOCK", "EVENTS", "WEATHER", "EXTREMES", "WORLD", "KAIJU", "EXTRAS", "ANALYTICS", "RACES", "GAMEPLAY", "SANDBOX", "PERFORMANCE", "OCCUPANCY" };
+        private readonly RectTransform[] pages = new RectTransform[13];
+        private readonly List<TruckTaxiOccupantSlotSnapshot> occupantSlots=new List<TruckTaxiOccupantSlotSnapshot>(8);
+        private TextMeshProUGUI occupancyText;
+        private TextMeshProUGUI performanceText,sandboxText;
         private TextMeshProUGUI raceText;
         private TextMeshProUGUI heading, status, clockText, eventText, zoneText, countsText;
         private TextMeshProUGUI[] eventRows;
@@ -56,7 +59,7 @@ namespace LWS.TruckTaxi
             for (int i = 0; i < tabs.Length; i++)
             {
                 int index = i;
-                float width = .94f / 5, left = .03f + (i%5) * width, bottom=.79f-(i/5)*.08f;
+                float width = .94f / 7, left = .03f + (i%7) * width, bottom=.79f-(i/7)*.08f;
                 var tabButton = view.Button(panel, tabs[i], new Vector2(left, bottom), new Vector2(left + width - .008f, bottom+.07f), () => ShowPage(index));
                 var tabText = tabButton.GetComponentInChildren<TextMeshProUGUI>();
                 if (tabText != null) { tabText.enableAutoSizing = true; tabText.fontSizeMin = 10; tabText.fontSizeMax = 22; }
@@ -65,6 +68,9 @@ namespace LWS.TruckTaxi
             }
             status = view.Text(panel, "Mega debug status", new Vector2(.035f, .035f), new Vector2(.965f, .155f), 23);
             BuildClock(); BuildEvents(); BuildWeather(); BuildExtremes(); BuildWorld(); BuildKaiju(); BuildExtras(); BuildAnalytics(); BuildRaces();
+            BuildSandbox();BuildPerformance();
+            occupancyText=hud.Text(pages[12],"Occupancy slots",new Vector2(.02f,.02f),new Vector2(.98f,.98f),22);
+            occupancyText.richText=false;
             panel.gameObject.SetActive(false);
         }
         public void Open()
@@ -95,6 +101,31 @@ namespace LWS.TruckTaxi
             if (!IsOpen || Time.unscaledTime < nextRefresh) return;
             nextRefresh = Time.unscaledTime + 1f;
             Refresh();
+        }
+        private void BuildSandbox()
+        {
+            var root=pages[10];
+            sandboxText=hud.Text(root,"Sandbox status",new Vector2(.02f,.70f),new Vector2(.98f,.99f),23);
+            hud.Button(root,"GIVE $10,000",new Vector2(.02f,.51f),new Vector2(.48f,.66f),()=>
+                Run(()=>host.Session.DebugGiveCash(),"+$10,000 DEBUG CASH"));
+            int[] levels={0,25,50,75,90,99};
+            for(int i=0;i<levels.Length;i++)
+            {
+                int percent=levels[i];float x=.02f+(i%3)*.326f,y=.45f-(i/3)*.16f;
+                hud.Button(root,"POOPY PANTS "+percent+"%",new Vector2(x,y-.13f),new Vector2(x+.31f,y),()=>
+                {host.DriverNeeds?.DebugSetBowelPercent(percent);Message("POOPY PANTS test state: "+percent+"%");});
+            }
+            hud.Button(root,"FORCE POOPY PANTS FAILURE",new Vector2(.51f,.51f),new Vector2(.98f,.66f),()=>
+            {host.DriverNeeds?.DebugForceBowelFailure();Message("Failure requested; close debug to resume presentation.");});
+        }
+        private void BuildPerformance()
+        {
+            var root=pages[11];
+            performanceText=hud.Text(root,"Frame spikes",new Vector2(.02f,.23f),new Vector2(.98f,.99f),23);
+            hud.Button(root,"CLEAR CAPTURE",new Vector2(.02f,.02f),new Vector2(.46f,.17f),()=>
+            { host.GetComponent<TruckTaxiFrameSpikeDiagnostics>()?.Clear();Refresh(); });
+            hud.Button(root,"TOGGLE SPIKE LOG",new Vector2(.51f,.02f),new Vector2(.98f,.17f),()=>
+            { var probe=host.GetComponent<TruckTaxiFrameSpikeDiagnostics>();if(probe!=null) { probe.logSpikes=!probe.logSpikes;Message("Spike logging "+probe.logSpikes); } });
         }
         private void BuildClock()
         {
@@ -345,6 +376,21 @@ namespace LWS.TruckTaxi
             if (panel == null || host == null) return;
             heading.text = "MEGA DEBUG  /  " + Tabs[page];
             status.text = message;
+            if(page==10 && sandboxText!=null) sandboxText.text="CASH  "+TruckTaxiHud.Money(host.Session.WalletBalanceCents);
+            if(page==11 && performanceText!=null) performanceText.text=host.GetComponent<TruckTaxiFrameSpikeDiagnostics>()?.Summary ?? "FRAME CAPTURE UNAVAILABLE";
+            if(page==12 && occupancyText!=null)
+            {
+                var rig=host.Player!=null ? host.Player.GetComponent<TruckTaxiCabOccupantRig>() : null;
+                if(rig==null) occupancyText.text="CAB RIG UNAVAILABLE";
+                else
+                {
+                    rig.CopyOccupancySnapshot(occupantSlots);
+                    var text=new System.Text.StringBuilder("OCCUPIED / RESERVED ");
+                    text.Append(rig.UsedCapacity).Append(" / 8     AUTHORED POSITIONS ").Append(rig.AuthoredCapacity);
+                    foreach(var slot in occupantSlots) text.Append('\n').Append(slot.ToString());
+                    occupancyText.text=text.ToString();
+                }
+            }
             RefreshAnalytics();
             if(page==8 && raceText!=null) raceText.text=host.Races==null ? "RACE SYSTEM UNAVAILABLE" :
                 "CHECKPOINT "+host.Races.NextCheckpoint+" / "+host.Races.CheckpointCount+

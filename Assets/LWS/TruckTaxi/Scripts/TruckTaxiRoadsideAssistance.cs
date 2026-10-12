@@ -11,6 +11,12 @@ namespace LWS.TruckTaxi
     [DisallowMultipleComponent]
     public sealed class TruckTaxiRoadsideAssistance : MonoBehaviour
     {
+        [Header("Tow pricing (integer cents; fuel and repairs are separate)")]
+        [Min(0)] public int towCalloutCents=1500;
+        [Min(0)] public int towCentsPerMile=400;
+        [Min(0)] public int overturnedSurchargeCents=1000;
+        [Min(0)] public int minimumTowCents=1500;
+        [Min(0)] public int maximumTowCents=6000;
         public bool IsRecovering { get; private set; }
         public float FadeAlpha { get; private set; }
         public string Feedback { get; private set; } = "";
@@ -19,7 +25,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiServicePoint QuotedDestination { get; private set; }
         public long QuotedCostCents { get; private set; }
         public long RepairCostCents => vehicle == null ? 0 : (long)System.Math.Ceiling(
-            (Mathf.Clamp01(damage != null ? damage.Damage : 0) +
+            (Mathf.Clamp01(host?.ComponentDamage == null && damage != null ? damage.Damage : 0) +
              (host?.ComponentDamage == null ? Mathf.Clamp01(vehicle.powertrain.engine.Damage) +
              Mathf.Clamp01(vehicle.powertrain.transmission.Damage) : 0)) * 5000) +
              (host?.ComponentDamage?.TotalRepairCostCents ?? 0);
@@ -74,9 +80,9 @@ namespace LWS.TruckTaxi
             var engine = vehicle.powertrain.engine; var transmission = vehicle.powertrain.transmission;
             float depth = host.Environment?.Snow?.Region?.DepthAt(body.position) ?? 0;
             Condition = Diagnose(host.Fuel?.Fraction ?? 1, engine.state.isEnabled, engine.IsRunning, engine.Damage,
-                transmission.Damage, damage != null ? damage.Damage : 0, vehicle.input.Handbrake, vehicle.input.Brakes, transmission.Gear, depth);
+                transmission.Damage, host.ComponentDamage?.SummaryDamage01 ?? (damage != null ? damage.Damage : 0), vehicle.input.Handbrake, vehicle.input.Brakes, transmission.Gear, depth);
             Diagnostics = $"FUEL {(host.Fuel?.Fraction ?? 1):P0} | ENGINE RUNNING {engine.IsRunning} / ENABLED {engine.state.isEnabled}\n" +
-                $"DAMAGE {(damage != null ? damage.Damage : 0):P0} | ENGINE {engine.Damage:P0} / TRANS {transmission.Damage:P0} / GEAR {transmission.GearName}\n" +
+                $"DAMAGE {(host.ComponentDamage?.SummaryDamage01 ?? (damage != null ? damage.Damage : 0)):P0} | ENGINE {engine.Damage:P0} / TRANS {transmission.Damage:P0} / GEAR {transmission.GearName}\n" +
                 $"PARK {vehicle.input.Handbrake:0.00} / BRAKE {vehicle.input.Brakes:0.00} | SNOW {depth:0.00}m\n" +
                 $"GRIP {(traction != null ? traction.CurrentGripMultiplier : 1):0.00} / RESISTANCE {(traction != null ? traction.CurrentRollingMultiplier : 1):0.00}\n" +
                 Condition + " | TOW " + (CanRequest ? "AVAILABLE" : "UNAVAILABLE");
@@ -90,14 +96,17 @@ namespace LWS.TruckTaxi
             if (vehicle.powertrain.transmission.Damage >= .1f) required |= TruckTaxiServiceCapability.RepairTransmission;
             QuotedDestination = TruckTaxiServicePoint.Nearest(body.position, required, host.gameObject.scene);
             if (QuotedDestination == null) { Feedback = "No recovery service has been authored in this level."; return false; }
-            float missingFuel = host.Fuel?.Fuel != null ? Mathf.Max(0, host.Fuel.Fuel.capacity - host.Fuel.Fuel.amount) : 0;
-            var gas = QuotedDestination.GetComponent<TruckTaxiGasStationPoint>();
-            QuotedCostCents = QuotedDestination.assistanceBaseCostCents +
-                (QuotedDestination.Supports(TruckTaxiServiceCapability.Refuel) ? (long)System.Math.Ceiling(missingFuel * (gas != null ? gas.centsPerLiter : 150)) : 0) +
-                RepairCostFor(QuotedDestination);
+            QuotedCostCents = CalculateTowCost(Vector3.Distance(body.position,QuotedDestination.RecoveryPosition)/1609.344f,
+                Vector3.Dot(body.transform.up,Vector3.up)<.4f,towCalloutCents,towCentsPerMile,overturnedSurchargeCents,minimumTowCents,maximumTowCents);
             Feedback = QuotedDestination.displayName + "\n" + TruckTaxiHud.Money(QuotedCostCents) +
-                "\n" + QuotedDestination.capabilities;
+                "\nTOW ONLY - FUEL AND REPAIRS PURCHASED SEPARATELY";
             return true;
+        }
+        public static long CalculateTowCost(float miles,bool overturned,int callout=1500,int perMile=400,int severity=1000,int minimum=1500,int maximum=6000)
+        {
+            if(!float.IsFinite(miles) || miles<0) return System.Math.Max(0,maximum);
+            double quoted=System.Math.Max(0,callout)+(double)miles*System.Math.Max(0,perMile)+(overturned ? System.Math.Max(0,severity) : 0);
+            return (long)System.Math.Ceiling(System.Math.Clamp(quoted,System.Math.Max(0,minimum),System.Math.Max(System.Math.Max(0,minimum),maximum)));
         }
         public bool ConfirmTow()
         {
@@ -160,17 +169,7 @@ namespace LWS.TruckTaxi
                     Physics.SyncTransforms();
                     Feedback = "Upright recovery could not complete. No charge."; yield break;
                 }
-                if (service.Supports(TruckTaxiServiceCapability.RepairGeneralDamage) && damage != null) damage.Repair();
-                else
-                {
-                    if (service.Supports(TruckTaxiServiceCapability.RepairEngine)) vehicle.powertrain.engine.Damage = 0;
-                    if (service.Supports(TruckTaxiServiceCapability.RepairTransmission)) vehicle.powertrain.transmission.Damage = 0;
-                    if (service.Supports(TruckTaxiServiceCapability.RepairTires))
-                        foreach (var wheel in vehicle.powertrain.wheels) if (wheel.wheelUAPI != null) wheel.wheelUAPI.Damage = 0;
-                }
-                host.ComponentDamage?.RepairForCapabilities(service.capabilities);
-                if (service.Supports(TruckTaxiServiceCapability.Refuel) && host.Fuel?.Fuel != null)
-                    host.Fuel.Fuel.amount = host.Fuel.Fuel.capacity;
+                // Recovery sells relocation/uprighting, not an unrequested full tank and overhaul.
                 var controls = host.Player.GetComponent<LwsTruckControlController>();
                 if (controls != null) controls.ApplyCommandFrame(new LwsVehicleCommandFrame {
                     parkingBrakeToggle = controls.CurrentState.parkingBrakeOn ? LwsMomentaryIntent.Pressed : LwsMomentaryIntent.None,

@@ -11,11 +11,12 @@ namespace LWS.TruckTaxi.Tests
         private TruckTaxiDriverNeedsState NewState(float pressure = .9f)
         { settings.startingBladder = pressure; return new TruckTaxiDriverNeedsState(settings, 42); }
 
-        [Test] public void ThirstRisesFasterThanHungerAndInvalidTimeDoesNothing()
+        [Test] public void ThirstRisesFivePercentPerGameHourAndInvalidTimeDoesNothing()
         {
             var state = NewState(0);
             state.AdvanceGameSeconds(3600);
-            Assert.Greater(state.Thirst, state.Hunger);
+            Assert.AreEqual(.05f, state.Thirst, .00001f);
+            Assert.AreEqual(.125f, state.Hunger, .00001f);
             float hunger = state.Hunger, thirst = state.Thirst;
             state.AdvanceGameSeconds(double.NaN); state.AdvanceGameSeconds(-1);
             Assert.AreEqual(hunger, state.Hunger); Assert.AreEqual(thirst, state.Thirst);

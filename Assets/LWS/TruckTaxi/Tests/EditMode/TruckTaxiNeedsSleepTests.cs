@@ -169,6 +169,8 @@ namespace LWS.TruckTaxi.Tests
                 Assert.IsNull(f.Needs.SleepFailureReason(4, true));
                 Assert.IsTrue(f.Needs.TrySleep(4, true), f.Needs.Feedback);
                 Assert.AreEqual(.395f, f.Needs.State.Fatigue, .0001f);
+                Assert.AreEqual(4 * settings.thirstGainPerGameHour, f.Needs.State.Thirst, .00001f,
+                    "Clock.AddHours plus ApplySleep must charge thirst once, not twice.");
                 Assert.AreEqual(4 * 3600, f.Clock.CurrentSnapshot.totalGameSeconds - before);
                 Assert.IsTrue(f.Clock.CurrentSnapshot.paused);
                 Assert.AreEqual(wallet, f.Session.WalletBalanceCents);

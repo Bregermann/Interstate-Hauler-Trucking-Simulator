@@ -16,6 +16,20 @@ namespace LWS.TruckTaxi
         public const float BankingDegrees = 31f;
         public const string LapStopId = "taxi.speedway.lap";
         public const float LapOfferRadiusMeters = 1800f;
+        public const float TunnelWidth = 14f;
+        public const float TunnelClearHeight = 6f;
+        public const float TunnelRoadHeight = -6f;
+        public const float TunnelPortalNorth = -642f;
+        public const float TunnelPortalSouth = -725f;
+
+        public static bool IsPublicFareStop(string id) => id == "taxi.speedway.main-gate" ||
+            id == "taxi.speedway.vip-entrance" || id == "taxi.speedway.parking" || id == "taxi.speedway.garage";
+
+        // Long ramps fit a tractor and trailer, with a flat straight bore beneath the banking.
+        public static Vector3[] TunnelCenterline() => new[] {
+            Stops[1].Position, new Vector3(2800, TunnelRoadHeight, TunnelPortalNorth),
+            new Vector3(2800, TunnelRoadHeight, TunnelPortalSouth), Stops[3].Position
+        };
         public static readonly Vector3 Center = new Vector3(2800, 0, -780);
         public static readonly Bounds RegionBounds = new Bounds(new Vector3(2800, 0, -700), new Vector3(780, 120, 1000));
 
@@ -27,9 +41,9 @@ namespace LWS.TruckTaxi
         }
         public static readonly Stop[] Stops = {
             new Stop("taxi.speedway.main-gate", "Thunder Bowl Main Gate", new Vector3(2800,.2f,-470)),
-            new Stop("taxi.speedway.pit-entrance", "Thunder Bowl Pit Entrance", new Vector3(2800,.2f,-610)),
+            new Stop("taxi.speedway.pit-entrance", "Thunder Bowl Pit Entrance", new Vector3(2800,.2f,-550)),
             new Stop("taxi.speedway.vip-entrance", "Thunder Bowl VIP Entrance", new Vector3(2960,.2f,-480)),
-            new Stop("taxi.speedway.infield", "Thunder Bowl Infield", new Vector3(2800,.2f,-780)),
+            new Stop("taxi.speedway.infield", "Thunder Bowl Infield", new Vector3(2800,.2f,-810)),
             new Stop("taxi.speedway.parking", "Thunder Bowl Parking", new Vector3(2800,.2f,-540)),
             new Stop("taxi.speedway.garage", "Thunder Bowl Garage", new Vector3(2660,.2f,-570))
         };
@@ -81,6 +95,7 @@ namespace LWS.TruckTaxi
             var gate=Node(graph,"gate",Stops[0].Position); var parking=Node(graph,"parking",Stops[4].Position);
             var pit=Node(graph,"pit",Stops[1].Position); var vip=Node(graph,"vip",Stops[2].Position);
             var garage=Node(graph,"garage",Stops[5].Position); var infield=Node(graph,"infield",Stops[3].Position);
+            graph.edges.RemoveAll(edge => edge.edgeId == pit.nodeId+">"+infield.nodeId || edge.edgeId == infield.nodeId+">"+pit.nodeId);
             var approach=Node(graph,"approach",new Vector3(2800,.2f,-250));
             Both(graph,highway,approach,LwsRoadClass.Ramp,25,2,12);
             Both(graph,approach,gate,LwsRoadClass.LocalRoad,25,2,12);
@@ -88,7 +103,11 @@ namespace LWS.TruckTaxi
             Both(graph,gate,vip,LwsRoadClass.LocalRoad,15,2,10);
             Both(graph,parking,pit,LwsRoadClass.LocalRoad,15,2,10);
             Both(graph,parking,garage,LwsRoadClass.LocalRoad,15,2,10);
-            Both(graph,pit,infield,LwsRoadClass.LocalRoad,12,2,10);
+            var tunnelNorth=Node(graph,"tunnel.north",TunnelCenterline()[1]);
+            var tunnelSouth=Node(graph,"tunnel.south",TunnelCenterline()[2]);
+            Both(graph,pit,tunnelNorth,LwsRoadClass.LocalRoad,12,2,TunnelWidth);
+            Both(graph,tunnelNorth,tunnelSouth,LwsRoadClass.LocalRoad,12,2,TunnelWidth);
+            Both(graph,tunnelSouth,infield,LwsRoadClass.LocalRoad,12,2,TunnelWidth);
             var track=TrackCenterline(); var nodes=new LwsRoadNode[track.Count];
             for (int i=0;i<nodes.Length;i++) nodes[i]=Node(graph,"track."+i.ToString("00"),track[i]);
             for (int i=0;i<nodes.Length;i++) Edge(graph,nodes[i],nodes[(i+1)%nodes.Length],LwsRoadClass.LocalRoad,45,4,TrackWidth);
@@ -100,7 +119,7 @@ namespace LWS.TruckTaxi
         {
             string id="taxi.speedway."+suffix;
             var node=graph.nodes.Find(n=>n.nodeId==id);
-            if (node!=null) return node;
+            if (node!=null) { node.position=position; return node; }
             node=new LwsRoadNode { nodeId=id,position=position,regionId=RegionId,sceneChunkId=SceneName };
             graph.nodes.Add(node); return node;
         }
@@ -109,7 +128,7 @@ namespace LWS.TruckTaxi
         private static void Edge(LwsRoadGraph graph,LwsRoadNode a,LwsRoadNode b,LwsRoadClass kind,float speed,int lanes,float width)
         {
             string id=a.nodeId+">"+b.nodeId;
-            if (graph.edges.Exists(e=>e.edgeId==id)) return;
+            graph.edges.RemoveAll(e=>e.edgeId==id);
             float distance=Vector3.Distance(a.position,b.position); Vector3 forward=(b.position-a.position).normalized;
             graph.edges.Add(new LwsRoadEdge { edgeId=id,roadId=id,segmentId=id,fromNodeId=a.nodeId,toNodeId=b.nodeId,
                 roadClass=kind,direction=LwsRoadDirection.Bidirectional,surfaceType=LwsRoadSurfaceType.AsphaltInterstate,

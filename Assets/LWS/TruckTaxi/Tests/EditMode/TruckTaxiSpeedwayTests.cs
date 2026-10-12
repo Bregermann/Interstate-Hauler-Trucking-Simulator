@@ -56,6 +56,31 @@ namespace LWS.TruckTaxi.Tests
             Assert.That(TruckTaxiSpeedwayLayout.BankOffset(top, track), Is.EqualTo(0).Within(.1f));
         }
 
+        [Test] public void TunnelHasTwoTruckLanesTrailerHeadroomAndGentleRampsBelowBanking()
+        {
+            Assert.That(TruckTaxiSpeedwayLayout.TunnelWidth, Is.GreaterThanOrEqualTo(12));
+            Assert.That(TruckTaxiSpeedwayLayout.TunnelClearHeight, Is.GreaterThanOrEqualTo(6));
+            var points=TruckTaxiSpeedwayLayout.TunnelCenterline();
+            for(int i=1;i<points.Length;i++)
+                Assert.That(Mathf.Abs(points[i].y-points[i-1].y) /
+                    Vector3.ProjectOnPlane(points[i]-points[i-1],Vector3.up).magnitude, Is.LessThan(.08f));
+            float innerTrack=10-14*Mathf.Tan(TruckTaxiSpeedwayLayout.BankingDegrees*Mathf.Deg2Rad);
+            float roofTop=TruckTaxiSpeedwayLayout.TunnelRoadHeight+TruckTaxiSpeedwayLayout.TunnelClearHeight+.5f;
+            Assert.That(innerTrack-roofTop, Is.GreaterThan(1));
+        }
+
+        [Test] public void TunnelGraphRemovesOldAtGradeShortcutAndRoutesBothDirections()
+        {
+            var graph=new LwsRoadGraph { graphId="tunnel-test" };
+            graph.nodes.Add(new LwsRoadNode { nodeId="taxi.regional.2800",position=new Vector3(2800,0,0) });
+            TruckTaxiSpeedwayLayout.AddToGraph(graph);
+            Assert.IsFalse(graph.edges.Exists(e=>e.edgeId=="taxi.speedway.pit>taxi.speedway.infield"));
+            foreach(string pair in new[] { "pit>taxi.speedway.tunnel.north", "tunnel.north>taxi.speedway.pit",
+                "tunnel.north>taxi.speedway.tunnel.south", "tunnel.south>taxi.speedway.tunnel.north",
+                "tunnel.south>taxi.speedway.infield", "infield>taxi.speedway.tunnel.south" })
+                Assert.IsTrue(graph.edges.Exists(e=>e.edgeId=="taxi.speedway."+pair),pair);
+        }
+
         [Test]
         public void LapRequiresOrderedCheckpointsAndReturnToStart()
         {

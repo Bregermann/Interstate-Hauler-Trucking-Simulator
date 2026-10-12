@@ -35,7 +35,7 @@ namespace LWS.TruckTaxi.Tests
 
         [TestCase(true)]
         [TestCase(false)]
-        public void CountdownRestoresConstraintsAndNwhInputExactlyOnce(bool autoInput)
+        public void CountdownPreservesLiveInputOwnershipAndReleasesExactlyOnce(bool autoInput)
         {
             var go = new GameObject("Start grid body"); objects.Add(go);
             var body = go.AddComponent<Rigidbody>(); body.useGravity = false;
@@ -46,7 +46,10 @@ namespace LWS.TruckTaxi.Tests
             try
             {
                 Assert.That(body.constraints, Is.EqualTo(RigidbodyConstraints.FreezeAll));
-                Assert.That(input.autoSetInput, Is.False);
+                Assert.That(input.autoSetInput, Is.EqualTo(autoInput));
+                Assert.That(input.Steering, Is.EqualTo(.4f));
+                // Another owner can change modes while staged; release must not undo it.
+                input.autoSetInput = !autoInput;
                 input.Throttle = 1; body.position = Vector3.forward * 30;
                 restraint.Hold();
                 Assert.That(body.position, Is.EqualTo(Vector3.zero));
@@ -56,12 +59,22 @@ namespace LWS.TruckTaxi.Tests
             finally { restraint.Dispose(); }
             restraint.Dispose();
             Assert.That(body.constraints, Is.EqualTo(RigidbodyConstraints.FreezeRotationX));
-            Assert.That(input.autoSetInput, Is.EqualTo(autoInput));
-            Assert.That(input.Throttle, Is.EqualTo(.8f));
+            Assert.That(input.autoSetInput, Is.EqualTo(!autoInput));
+            Assert.That(input.Throttle, Is.Zero);
             Assert.That(input.Steering, Is.EqualTo(.4f));
-            Assert.That(input.Handbrake, Is.EqualTo(.2f));
+            input.Handbrake = .2f;
             input.Throttle = .6f; input.inputModifyCallback.Invoke();
             Assert.That(input.Throttle, Is.EqualTo(.6f));
+            Assert.That(input.Handbrake, Is.EqualTo(.2f));
+        }
+
+        [Test] public void WrongWayRequiresMeaningfulHorizontalReverseMotion()
+        {
+            Assert.IsTrue(TruckTaxiRaceProgress.IsWrongWay(Vector3.back*3, Vector3.forward));
+            Assert.IsFalse(TruckTaxiRaceProgress.IsWrongWay(Vector3.back, Vector3.forward));
+            Assert.IsFalse(TruckTaxiRaceProgress.IsWrongWay(Vector3.forward*8, Vector3.forward));
+            Assert.IsFalse(TruckTaxiRaceProgress.IsWrongWay(Vector3.up*20, Vector3.forward));
+            Assert.IsFalse(TruckTaxiRaceProgress.IsWrongWay(Vector3.right*8, Vector3.forward));
         }
 
         private TruckTaxiSession Session()

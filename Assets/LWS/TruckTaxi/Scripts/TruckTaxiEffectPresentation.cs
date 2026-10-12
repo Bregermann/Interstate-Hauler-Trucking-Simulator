@@ -16,9 +16,7 @@ namespace LWS.TruckTaxi
         private ColorAdjustments color;
         private struct CameraBaseline
         {
-            public bool postProcessing;
             public LayerMask volumeMask;
-            public bool created;
         }
         private readonly Dictionary<UniversalAdditionalCameraData, CameraBaseline> cameraBaselines =
             new Dictionary<UniversalAdditionalCameraData, CameraBaseline>();
@@ -51,6 +49,7 @@ namespace LWS.TruckTaxi
             if (effects == null || volume == null) return;
             var snapshot = effects.GetSnapshot(TruckTaxiTemporaryEffectKind.MysteryMushroom);
             volume.weight = snapshot.Intensity01;
+            if (!TruckTaxiVideoSettings.PostProcessingAllowed) { RestoreCameras(); return; }
             if (volume.weight <= 0 && !fatiguePresentationActive) { RestoreCameras(); return; }
             var player = TruckTaxiBootstrap.Instance?.Player;
             if (player == null) { RestoreCameras(); return; }
@@ -73,16 +72,20 @@ namespace LWS.TruckTaxi
         }
         private void BindCamera(Camera camera)
         {
-            if (camera == null) return;
+            if (camera == null || camera.targetTexture != null || camera.cameraType != CameraType.Game) return;
+            if (!TruckTaxiVideoSettings.PostProcessingAllowed)
+            {
+                TruckTaxiMushroomWaveFeature.SetCameraStrength(camera, 0);
+                TruckTaxiVideoSettings.ApplyCameraPreference(camera);
+                return;
+            }
             seenCameras.Add(camera);
             TruckTaxiMushroomWaveFeature.SetCameraStrength(camera, volume.weight);
+            TruckTaxiVideoSettings.ApplyCameraPreference(camera);
             var data = camera.GetComponent<UniversalAdditionalCameraData>();
-            bool created = data == null;
-            if (created) data = camera.gameObject.AddComponent<UniversalAdditionalCameraData>();
             if (!cameraBaselines.ContainsKey(data))
                 cameraBaselines.Add(data, new CameraBaseline {
-                    postProcessing = data.renderPostProcessing, volumeMask = data.volumeLayerMask, created = created });
-            data.renderPostProcessing = true;
+                    volumeMask = data.volumeLayerMask });
             data.volumeLayerMask |= 1 << EffectLayer;
         }
         private void RestoreCameras()
@@ -92,12 +95,10 @@ namespace LWS.TruckTaxi
             foreach (var pair in cameraBaselines)
             {
                 if (pair.Key == null) continue;
-                if (pair.Value.created) Destroy(pair.Key);
-                else
-                {
-                    pair.Key.renderPostProcessing = pair.Value.postProcessing;
-                    pair.Key.volumeLayerMask = pair.Value.volumeMask;
-                }
+                // Restore only our layer bit, not another owner's newer mask or video preference.
+                pair.Key.volumeLayerMask = (pair.Key.volumeLayerMask.value & ~(1 << EffectLayer)) |
+                    (pair.Value.volumeMask.value & (1 << EffectLayer));
+                TruckTaxiVideoSettings.ApplyCameraPreference(pair.Key.GetComponent<Camera>());
             }
             cameraBaselines.Clear();
         }
@@ -105,8 +106,10 @@ namespace LWS.TruckTaxi
         private void OnDestroy()
         {
             RestoreCameras();
-            if (volume != null) Destroy(volume.gameObject);
-            if (profile != null) { foreach (var component in profile.components) if (component != null) Destroy(component); Destroy(profile); }
+            if (volume != null) ReleaseOwned(volume.gameObject);
+            if (profile != null) { foreach (var component in profile.components) if (component != null) ReleaseOwned(component); ReleaseOwned(profile); }
         }
+        private static void ReleaseOwned(Object value)
+        { if (Application.isPlaying) Destroy(value); else DestroyImmediate(value); }
     }
 }

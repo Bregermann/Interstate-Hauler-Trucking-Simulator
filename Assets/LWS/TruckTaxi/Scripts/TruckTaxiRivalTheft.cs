@@ -54,7 +54,7 @@ namespace LWS.TruckTaxi
                 population == null || fare != null || host.GPS == null ||
                 host.GPS.ActiveLayer >= TruckTaxiNavigationLayer.RivalPassenger ||
                 !population.TryGetOccupiedFare(rivalId, generation, out var candidate)) return false;
-            if (rig == null || host.Companions?.IsBusy == true ||
+            if (rig == null ||
                 !rig.HasSecondarySeat(candidate.Passenger.seatProfile != null ?
                     candidate.Passenger.seatProfile.seatType : TruckTaxiSeatType.StandardPassenger,
                     kind: TruckTaxiCabOccupantKind.StolenPassenger))
@@ -78,6 +78,7 @@ namespace LWS.TruckTaxi
                 !population.CommitTheft(rivalId, generation, candidate, PlayerBody))
             { Cancel(); return false; }
             actor.CompleteSeating();
+            rig.SetOccupantIdentity(actor.transform,candidate.Id);
             Feedback = "PASSENGER STOLEN\nNEW STOP ADDED";
             stoppedSeconds = 0;
             return true;

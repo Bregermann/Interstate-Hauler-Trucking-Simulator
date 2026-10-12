@@ -116,13 +116,15 @@ namespace LWS.TruckTaxi
                     if(!arrived)
                     {
                         var rig = host.Player.GetComponent<TruckTaxiCabOccupantRig>();
-                        if (SecondaryActor != null && rig != null && rig.HasSleeperCapability)
+                        if (SecondaryActor != null && rig != null && (rig.HasSleeperCapability || rig.HasAuthoredPrimarySeat))
                         {
                             if (!rig.TrySeatPassengerPair(PrimaryActor, passenger?.seatProfile, SecondaryActor, second?.seatProfile))
                             {
                                 host.Session.React("NO ROOM FOR ANOTHER PASSENGER");
                                 return;
                             }
+                            BindFareIdentity(PrimaryActor,host.Player.transform,passenger);
+                            BindFareIdentity(SecondaryActor,host.Player.transform,second);
                         }
                         else { Seat(PrimaryActor,passenger,false); Seat(SecondaryActor,second,true); }
                         Oversized.Apply(host.Player.GetComponent<Rigidbody>(),passenger?.seatProfile);
@@ -169,7 +171,11 @@ namespace LWS.TruckTaxi
             actor.PrepareForSeat();
             bool seated = TruckTaxiSeatProfile.TryPlaceActor(actor.transform,host.Player.transform,profile?.seatProfile,
                 secondary,actor.StandingWorldScale);
-            if (seated) actor.CompleteSeating();
+            if (seated)
+            {
+                actor.CompleteSeating();
+                BindFareIdentity(actor,host.Player.transform,profile);
+            }
             else
             {
                 actor.PrepareForWorld(host.Player.transform);
@@ -178,6 +184,12 @@ namespace LWS.TruckTaxi
                 Debug.LogWarning("No compatible passenger seat; actor remains outside the cab.", actor);
             }
             return seated;
+        }
+        public static bool BindFareIdentity(TruckTaxiPassengerActor actor,Transform truck,PassengerProfile profile)
+        {
+            if(actor==null || truck==null || profile==null || string.IsNullOrWhiteSpace(profile.passengerId)) return false;
+            var rig=truck.GetComponent<TruckTaxiCabOccupantRig>();
+            return rig!=null && rig.SetOccupantIdentity(actor.transform,profile.passengerId);
         }
         private void ExitAtDestination()
         {
@@ -482,7 +494,7 @@ namespace LWS.TruckTaxi
             if(revengeActive) return false;
             if(PrimaryActor==null) return true;
             var rig = host.Player.GetComponent<TruckTaxiCabOccupantRig>();
-            if (SecondaryActor != null && rig != null && rig.HasSleeperCapability &&
+            if (SecondaryActor != null && rig != null && (rig.HasSleeperCapability || rig.HasAuthoredPrimarySeat) &&
                 !rig.CanSeatPassengerPair(PrimaryActor.transform, passenger?.seatProfile,
                     SecondaryActor.transform, second?.seatProfile))
             { host.Session.React("NO ROOM FOR ANOTHER PASSENGER"); return false; }

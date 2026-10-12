@@ -8,15 +8,15 @@ namespace LWS.TruckTaxi
     {
         [Header("Truck Taxi only / NWH steering")]
         [Tooltip("Wheel steering lock below 10 MPH. Does not change Interstate prefabs.")]
-        [Range(35, 70)] public float lowSpeedSteeringLock = 65;
+        [Range(35, 70)] public float lowSpeedSteeringLock = 70;
         [Tooltip("Maximum wheel angle at 20 MPH; tapers further at highway speeds.")]
         [Range(15, 60)] public float citySteeringLock = 40;
         [Tooltip("Maximum wheel angle at 70 MPH and above.")]
         [Range(3, 15)] public float highSpeedSteeringLock = 8;
         [Tooltip("NWH wheel angle change limit, degrees/second. Higher responds faster.")]
-        [Range(90, 500)] public float steeringResponse = 300;
+        [Range(90, 500)] public float steeringResponse = 400;
         [Tooltip("Seconds of input smoothing at low speed. Highway smoothing is 0.15 seconds.")]
-        [Range(.01f, .2f)] public float lowSpeedSmoothing = .045f;
+        [Range(.01f, .2f)] public float lowSpeedSmoothing = .025f;
         [Header("Truck Taxi only / NWH engine")]
         [Tooltip("Engine power multiplier at rest; fades to the normal drivetrain by 20 MPH.")]
         [Range(1, 5)] public float launchPowerAtRest = 3.4f;
@@ -34,7 +34,6 @@ namespace LWS.TruckTaxi
         private TruckTaxiTemporaryEffects effects;
         public System.Func<float> MechanicalPowerMultiplier { get; set; }
         public float CareerPowerMultiplier { get; set; } = 1;
-        private float damageSteeringMultiplier = 1f;
 
         public void Initialize(VehicleController controller)
         {
@@ -61,8 +60,8 @@ namespace LWS.TruckTaxi
         }
         public void SetDamageSteeringMultiplier(float multiplier)
         {
-            damageSteeringMultiplier = Mathf.Clamp(multiplier, .45f, 1f);
-            if (Applied && vehicle != null) vehicle.steering.maximumSteerAngle = lowSpeedSteeringLock * damageSteeringMultiplier;
+            // Compatibility entry point: component condition never limits steering authority.
+            if (Applied && vehicle != null) vehicle.steering.maximumSteerAngle = lowSpeedSteeringLock;
         }
         public void Apply()
         {
@@ -71,20 +70,31 @@ namespace LWS.TruckTaxi
             originalLock = steering.maximumSteerAngle; originalRate = steering.degreesPerSecondLimit;
             originalRaw = steering.useRawInput; originalReturn = steering.returnToCenter;
             originalCurve = steering.speedSensitiveSteeringCurve; originalSmoothing = steering.speedSensitiveSmoothingCurve;
-            steering.maximumSteerAngle = lowSpeedSteeringLock * damageSteeringMultiplier;
+            steering.maximumSteerAngle = lowSpeedSteeringLock;
             steering.degreesPerSecondLimit = steeringResponse;
             steering.useRawInput = false; steering.returnToCenter = true;
             // Installed NWH evaluates Speed / 50 m/s (not /100 as its older tooltip says).
-            steering.speedSensitiveSteeringCurve = new AnimationCurve(
-                new Keyframe(0, 1), new Keyframe(10 / 111.8468f, 1),
-                new Keyframe(20 / 111.8468f, citySteeringLock / lowSpeedSteeringLock),
-                new Keyframe(35 / 111.8468f, 20 / lowSpeedSteeringLock),
-                new Keyframe(70 / 111.8468f, highSpeedSteeringLock / lowSpeedSteeringLock),
-                new Keyframe(1, highSpeedSteeringLock / lowSpeedSteeringLock));
-            steering.speedSensitiveSmoothingCurve = AnimationCurve.Linear(0, lowSpeedSmoothing, 1, .15f);
+            steering.speedSensitiveSteeringCurve = CreateSteeringCurve(lowSpeedSteeringLock, citySteeringLock, highSpeedSteeringLock);
+            steering.speedSensitiveSmoothingCurve = CreateSmoothingCurve(lowSpeedSmoothing);
             Applied = true;
             if (!vehicle.powertrain.engine.powerModifiers.Contains(PowerModifier))
                 vehicle.powertrain.engine.powerModifiers.Add(PowerModifier);
+        }
+        public static AnimationCurve CreateSteeringCurve(float low, float city, float high) => new AnimationCurve(
+                new Keyframe(0, 1), new Keyframe(10 / 111.8468f, 1),
+                new Keyframe(20 / 111.8468f, city / low),
+                new Keyframe(35 / 111.8468f, 20 / low),
+                new Keyframe(70 / 111.8468f, high / low), new Keyframe(1, high / low));
+        public static AnimationCurve CreateSmoothingCurve(float low) => new AnimationCurve(
+                new Keyframe(0, low), new Keyframe(10 / 111.8468f, low),
+                new Keyframe(35 / 111.8468f, Mathf.Lerp(.045f, .15f, 35 / 111.8468f), .105f, .105f),
+                new Keyframe(1, .15f, .105f, .105f));
+        public static float ResponseForSpeed(float mph, float lowSpeedResponse) =>
+            Mathf.Lerp(lowSpeedResponse, Mathf.Min(300, lowSpeedResponse), Mathf.InverseLerp(10, 35, Mathf.Abs(mph)));
+        private void Update()
+        {
+            if (Applied && vehicle != null)
+                vehicle.steering.degreesPerSecondLimit = ResponseForSpeed(SpeedMph, steeringResponse);
         }
         public void Restore()
         {
@@ -99,8 +109,8 @@ namespace LWS.TruckTaxi
         public void Toggle() { if (Applied) Restore(); else Apply(); }
         public void ResetDefaults()
         {
-            Restore(); lowSpeedSteeringLock = 65; citySteeringLock = 40; highSpeedSteeringLock = 8;
-            steeringResponse = 300; lowSpeedSmoothing = .045f;
+            Restore(); lowSpeedSteeringLock = 70; citySteeringLock = 40; highSpeedSteeringLock = 8;
+            steeringResponse = 400; lowSpeedSmoothing = .025f;
             launchPowerAtRest = 3.4f; launchPowerAt15Mph = 2.2f; Apply();
         }
         private void OnEnable() { if (vehicle != null) Apply(); }

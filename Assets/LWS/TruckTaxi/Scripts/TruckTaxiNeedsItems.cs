@@ -18,7 +18,7 @@ namespace LWS.TruckTaxi
         public bool IsDrink => ThirstRelief > 0;
         public readonly string Name;
         public readonly long PriceCents;
-        public readonly float HungerRelief, ThirstRelief;
+        public readonly float HungerRelief, ThirstRelief, BowelLoad;
         public readonly bool CreatesBottle;
         public readonly TruckTaxiCabSlot? Slot;
         public TruckTaxiItemCategory Category => Slot.HasValue ? TruckTaxiItemCategory.Cab :
@@ -31,9 +31,10 @@ namespace LWS.TruckTaxi
                 "Filled container" : Category==TruckTaxiItemCategory.Specials ? "Temporary special effect" : "Container";
         public TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem item, string name, long priceCents,
             float hungerRelief = 0, float thirstRelief = 0, bool createsBottle = false, TruckTaxiCabSlot? slot = null,
-            string stableId = null, bool purchasable = true, TruckTaxiItemFlags flags = TruckTaxiItemFlags.None)
+            string stableId = null, bool purchasable = true, TruckTaxiItemFlags flags = TruckTaxiItemFlags.None, float bowelLoad = 0)
         { Item = item; Name = name; PriceCents = priceCents; HungerRelief = hungerRelief; ThirstRelief = thirstRelief; CreatesBottle = createsBottle; Slot = slot;
-            StableId = stableId; Purchasable = purchasable; Flags = flags; }
+            StableId = stableId; Purchasable = purchasable; Flags = flags;
+            BowelLoad = float.IsFinite(bowelLoad) ? UnityEngine.Mathf.Clamp01(bowelLoad) : 0; }
     }
 
     // One registry; store availability is derived from ownership and purchase metadata.
@@ -42,13 +43,13 @@ namespace LWS.TruckTaxi
         public const float DrinkThirstRelief = .05f;
         public static readonly TruckTaxiNeedsItemDefinition[] All =
         {
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.WaterBottle, "Water bottle", 225, thirstRelief: DrinkThirstRelief, createsBottle: true, stableId: "water-bottle"),
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Soda, "Soda", 275, thirstRelief: DrinkThirstRelief, createsBottle: true, stableId: "soda"),
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.EnergyDrink, "Energy drink", 425, thirstRelief: DrinkThirstRelief, createsBottle: true, stableId: "energy-drink"),
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Snack, "Snack", 250, hungerRelief: .24f, stableId: "snack"),
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Burger, "Burger", 700, hungerRelief: .55f, stableId: "burger"),
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Sandwich, "Sandwich", 550, hungerRelief: .43f, stableId: "sandwich"),
-            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Meal, "Hot meal", 1100, hungerRelief: .78f, stableId: "hot-meal"),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.WaterBottle, "Water bottle", 225, thirstRelief: DrinkThirstRelief, createsBottle: true, stableId: "water-bottle", bowelLoad: .015f),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Soda, "Soda", 275, thirstRelief: DrinkThirstRelief, createsBottle: true, stableId: "soda", bowelLoad: .04f),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.EnergyDrink, "Energy drink", 425, thirstRelief: DrinkThirstRelief, createsBottle: true, stableId: "energy-drink", bowelLoad: .08f),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Snack, "Snack", 250, hungerRelief: .24f, stableId: "snack", bowelLoad: .08f),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Burger, "Burger", 700, hungerRelief: .55f, stableId: "burger", bowelLoad: .18f),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Sandwich, "Sandwich", 550, hungerRelief: .43f, stableId: "sandwich", bowelLoad: .12f),
+            new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.Meal, "Hot meal", 1100, hungerRelief: .78f, stableId: "hot-meal", bowelLoad: .24f),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.EmptyPissJug, "Dedicated piss jug", 450, stableId: "empty-jug"),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.EmptyBottle, "Empty bottle", 100, stableId: "empty-bottle"),
             new TruckTaxiNeedsItemDefinition(TruckTaxiNeedsItem.AirFreshener, "Air freshener", 350, slot: TruckTaxiCabSlot.Mirror, stableId: "air-freshener"),

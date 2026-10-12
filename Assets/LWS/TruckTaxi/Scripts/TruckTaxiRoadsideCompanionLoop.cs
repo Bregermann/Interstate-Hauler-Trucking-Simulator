@@ -114,6 +114,7 @@ namespace LWS.TruckTaxi
         private TextMeshPro identifier;
         private bool hornWasActive;
         private bool boarding;
+        private long privateRouteToken;
         private Coroutine boardingRoutine;
         private Companion nearby, active;
         public readonly struct PickupTarget
@@ -478,7 +479,8 @@ namespace LWS.TruckTaxi
             {
                 var route=host.RouteDistances?.Measure(origin,point.Position);
                 if(route?.Navigable!=true || route.Meters>1800f) continue;
-                if(host.GPS.SetPrivateStopDestination(point)) return point;
+                if(host.GPS.SetPrivateStopDestination(point))
+                { privateRouteToken=host.GPS.CompanionLeaseToken; return point; }
             }
             return null;
         }
@@ -541,10 +543,8 @@ namespace LWS.TruckTaxi
             var stops = FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None);
             var destination = NearbyPrivateStop(truckBody.position, active.pickup, stops);
             if (destination == null) return false;
-            if (host.GPS.TargetId == active.destination.stableId)
-                host.GPS.ClearPrivateStopDestination(active.destination.stableId);
-            else if (!string.IsNullOrEmpty(host.GPS.TargetId)) return false;
             if(!host.GPS.SetPrivateStopDestination(destination)) return false;
+            privateRouteToken=host.GPS.CompanionLeaseToken;
             active.destination = destination;
             host.PickupZone?.SetPrivateStop(destination);
             return true;
@@ -751,14 +751,9 @@ namespace LWS.TruckTaxi
                 if (slot >= 0)
                     companions[slot] = new Companion { population = active.population, variant = active.variant,
                         availableAt = Time.time + 30, materializedBefore = true };
-                bool auxiliary = host.Session.HasPassenger || host.Session.State == TruckTaxiState.DrivingToPickup ||
-                    !string.IsNullOrEmpty(host.GPS.TargetId);
-                active.destination = null;
-                if (!auxiliary)
-                {
-                    var stops=FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None);
-                    active.destination=ClaimPrivateStop(truckBody.position,active.pickup,stops);
-                }
+                // CompanionTask is a lease: pickups/services cover it without deleting the fare below it.
+                var stops=FindObjectsByType<TruckTaxiStopObjectivePoint>(FindObjectsSortMode.None);
+                active.destination=ClaimPrivateStop(truckBody.position,active.pickup,stops);
                 phase = active.destination != null ? Phase.ToPrivateStop : Phase.AuxiliaryRide;
                 active.actor.GetComponent<TruckTaxiPassengerActor>().DisarmWaitingTruckHit();
                 if (phase == Phase.ToPrivateStop)
@@ -768,6 +763,7 @@ namespace LWS.TruckTaxi
                 }
                 boarding=true;
                 boardingRoutine=StartCoroutine(BoardCompanion(active));
+                if(active==null) { boardingRoutine=null; return false; }
                 if (active.destination != null) host.PickupZone?.SetPrivateStop(active.destination);
                 Feedback = "Companion is boarding.";
                 return true;
@@ -778,6 +774,9 @@ namespace LWS.TruckTaxi
         {
             var actor = companion.actor.GetComponent<TruckTaxiPassengerActor>();
             actor.SetLifecycle(TruckTaxiActorLifecycle.Boarding);
+            if(cabRig==null || !cabRig.TryReserveSecondary(actor.transform,CompanionSeatType,
+                TruckTaxiCabOccupantKind.Companion,PickupSnapshot(companion).Id))
+            { boardingRoutine=null; Cancel(); Feedback="NO ROOM FOR ANOTHER PASSENGER"; yield break; }
             bool canWalk = TruckTaxiActorWorldPlacement.TryExit(actor, host.Player.transform, out var door) &&
                 TruckTaxiActorWorldPlacement.ClearSegment(actor.GroundPosition, door, actor.StandingRadius,
                     actor.StandingHeight, host.Player.transform, actor.transform);
@@ -807,6 +806,7 @@ namespace LWS.TruckTaxi
                     !cabRig.TrySeatSecondary(actor.transform, CompanionSeatType, actor.StandingWorldScale))
                 { boardingRoutine = null; Cancel(); Feedback = "NO ROOM FOR ANOTHER PASSENGER"; yield break; }
                 actor.CompleteSeating();
+                cabRig.SetOccupantIdentity(actor.transform,PickupSnapshot(companion).Id);
                 boarding=false;
                 boardingRoutine=null;
                 Feedback=phase == Phase.AuxiliaryRide ? "Companion onboard. Fare destination unchanged." : "Park at the nearby private stop.";
@@ -846,14 +846,6 @@ namespace LWS.TruckTaxi
             if (phase != Phase.Waiting && (host.Session.State == TruckTaxiState.Inactive ||
                 host.Roadside?.IsRecovering == true || host.Fuel?.IsRescuing == true))
             { Cancel(); return; }
-            if (host.Session.HasPassenger && phase == Phase.ToPrivateStop)
-            {
-                if (active?.destination != null) host.GPS.ClearPrivateStopDestination(active.destination.stableId);
-                if (offerLeaseHeld) host.Session.ReleaseOfferSuppression(this);
-                offerLeaseHeld = false;
-                active.destination = null;
-                phase = Phase.AuxiliaryRide;
-            }
             if (sleeperHold)
             {
                 if (active?.actor == null || eventVehicle == null || !eventVehicle.isActiveAndEnabled ||
@@ -923,14 +915,7 @@ namespace LWS.TruckTaxi
                     offerLeaseHeld = false;
                     return;
                 }
-                // GPS may auto-complete inside 3 m; another claimed destination is not ours to clear.
-                if (!string.IsNullOrEmpty(host.GPS.TargetId) && host.GPS.TargetId != active.destination.stableId)
-                {
-                    active.destination = null;
-                    phase = Phase.AuxiliaryRide;
-                    if (offerLeaseHeld) host.Session.ReleaseOfferSuppression(this);
-                    offerLeaseHeld = false;
-                }
+                // A higher-priority intent suspends this task; only completion/cancellation releases it.
                 return;
             }
             if (truckBody.linearVelocity.magnitude > MaximumSpeed) { Cancel(); return; }
@@ -988,12 +973,13 @@ namespace LWS.TruckTaxi
             FadeAlpha = 0;
             if (active?.destination != null) host?.PickupZone?.SetPrivateStop(null);
             if (host?.GPS != null && active?.destination != null)
-                host.GPS.ClearPrivateStopDestination(active.destination.stableId);
+                host.GPS.ClearPrivateStopDestination(active.destination.stableId,privateRouteToken);
             if (host?.Session != null && offerLeaseHeld) host.Session.ReleaseOfferSuppression(this);
             offerLeaseHeld = false;
             if (active?.actor != null)
             {
                 var actor = active.actor.GetComponent<TruckTaxiPassengerActor>();
+                cabRig?.Release(actor.transform);
                 actor.PrepareForWorld(host?.Player != null ? host.Player.transform : null);
                 bool safeExit = host?.Player != null && TruckTaxiActorWorldPlacement.TryExit(actor, host.Player.transform, out var exit) &&
                     actor.ShowInWorld(exit, host.Player.transform);

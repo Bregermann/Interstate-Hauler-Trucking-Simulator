@@ -35,6 +35,7 @@ namespace LWS.TruckTaxi
         private TruckTaxiAudioController audio;
         private TruckTaxiAudioSettingsPanel audioPanel;
         private TruckTaxiGPSSettingsPanel gpsPanel;
+        private TruckTaxiVideoSettingsPanel videoPanel;
         private TruckTaxiUIInput input;
         private RectTransform main, modes, options, load, stats;
         private TextMeshProUGUI statsText;
@@ -70,6 +71,9 @@ namespace LWS.TruckTaxi
             audioPanel.InitializeView(audio,view);
             gpsPanel=gameObject.AddComponent<TruckTaxiGPSSettingsPanel>();
             gpsPanel.InitializeView(view);
+            videoPanel=gameObject.AddComponent<TruckTaxiVideoSettingsPanel>();
+            videoPanel.Initialize(view);
+            TruckTaxiVideoSettings.ApplyStartup();
             BuildPages();
             InitializeSaves();
             input=new TruckTaxiUIInput(EventSystem.current);
@@ -119,6 +123,7 @@ namespace LWS.TruckTaxi
             Label(options,"OPTIONS");
             Button(options,"AUDIO",.66f,()=> { audioPanel.Open(); FocusCurrent(); });
             Button(options,"GPS / DISPLAY",.51f,()=> { gpsPanel.Open(); FocusCurrent(); });
+            Button(options,"VIDEO / DISPLAY",.36f,()=> { videoPanel.Open(); FocusCurrent(); });
             Button(options,"BACK",.12f,()=>Show(main));
 
             stats=Page("Stats");
@@ -258,14 +263,15 @@ namespace LWS.TruckTaxi
         private void FocusCurrent()
         {
             if(input==null) return;
-            input.Focus(audioPanel!=null && audioPanel.IsOpen ? audioPanel.FocusRoot :
+            input.Focus(videoPanel!=null && videoPanel.IsOpen ? videoPanel.FocusRoot : audioPanel!=null && audioPanel.IsOpen ? audioPanel.FocusRoot :
                 gpsPanel!=null && gpsPanel.IsOpen ? gpsPanel.FocusRoot : page);
         }
         private void Update() => FocusCurrent();
         private void Submit(InputAction.CallbackContext _) => input?.SubmitSelected();
         private void Cancel(InputAction.CallbackContext _)
         {
-            if(audioPanel!=null && audioPanel.IsOpen) audioPanel.Close();
+            if(videoPanel!=null && videoPanel.IsOpen) videoPanel.Close();
+            else if(audioPanel!=null && audioPanel.IsOpen) audioPanel.Close();
             else if(gpsPanel!=null && gpsPanel.IsOpen) gpsPanel.Close();
             else if(page!=main) Show(main);
             FocusCurrent();

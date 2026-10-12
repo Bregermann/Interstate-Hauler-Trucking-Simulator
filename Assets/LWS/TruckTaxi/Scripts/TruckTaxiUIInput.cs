@@ -15,6 +15,7 @@ namespace LWS.TruckTaxi
         public InputActionMap Actions { get; } = new InputActionMap("Truck Taxi UI");
         public InputAction Submit { get; }
         public InputAction Cancel { get; }
+        public InputAction CancelPickup { get; }
         public InputAction Pause { get; }
         public InputAction Debug { get; }
         public InputAction Services { get; }
@@ -38,6 +39,7 @@ namespace LWS.TruckTaxi
         public InputAction OnFootMove { get; }
         public InputAction OnFootLook { get; }
         public InputAction OnFootSprint { get; }
+        public InputAction OnFootJump { get; }
         public InputAction Navigate => navigate;
         public bool UsingGamepad => gamepad;
         public string ActiveDeviceLabel => !gamepad ? "KEYBOARD / MOUSE" : GamepadFamily(lastGamepadLayout);
@@ -63,6 +65,8 @@ namespace LWS.TruckTaxi
             Submit=Button("SubmitAccept","<Keyboard>/enter","<Gamepad>/buttonSouth");
             Cancel=Button("CancelDecline","<Keyboard>/escape","<Gamepad>/buttonEast");
             Cancel.AddBinding("<Keyboard>/backspace");
+            // Backspace owns cruise cancel; LB + East also fires the raw indicator/parking-brake reads.
+            CancelPickup=Button("CancelPickup","<Keyboard>/f6",null);
             Pause=Button("Pause","<Keyboard>/escape","<Gamepad>/start");
             Debug=Button("Debug","<Keyboard>/f8",null);
             Services=Button("Services","<Keyboard>/end",null);
@@ -87,6 +91,7 @@ namespace LWS.TruckTaxi
             Inventory=Button("Inventory","<Keyboard>/tab","<Gamepad>/select");
             InspectTruck=Button("InspectTruck","<Keyboard>/i","<Gamepad>/buttonNorth");
             OnFootSprint=Button("OnFootSprint","<Keyboard>/leftShift","<Gamepad>/leftStickPress");
+            OnFootJump=Button("OnFootJump","<Keyboard>/space","<Gamepad>/buttonWest");
             OnFootMove=Actions.AddAction("OnFootMove",InputActionType.Value);
             OnFootMove.expectedControlType="Vector2";
             OnFootMove.AddCompositeBinding("2DVector").With("Up","<Keyboard>/w").With("Down","<Keyboard>/s")

@@ -21,6 +21,7 @@ namespace LWS.TruckTaxi
         private string progressTargetId,cancellationReason;
         private Vector3 progressSamplePosition;
         private bool hasProgressSample;
+        private float lastFinalRemaining = -1;
 
         public void SetPickupPatienceSuspended(object owner,bool suspended)
         {
@@ -32,6 +33,7 @@ namespace LWS.TruckTaxi
             OnboardPatience=1; SafeDropRequested=false; SafeDropDestination=null; PendingDiversion=null;
             pickupWaitSuppressors.Clear(); progressClock=wrongWaySeconds=unexplainedStopSeconds=0;
             lastRoutedRemaining=-1; progressTargetId=null; cancellationReason=null; hasProgressSample=false; lastBehaviorBark=-60;
+            lastFinalRemaining=-1;
         }
         public bool AcceptDiversion()
         {
@@ -55,6 +57,15 @@ namespace LWS.TruckTaxi
         private void TickOnboardPatience(float dt,Vector3 position,float speed,float acceleration,bool onRoad)
         {
             if(SafeDropRequested) return;
+            if(Destination!=null && Destination.Contains(position) && speed<=config.stoppedSpeed)
+            {
+                PendingDiversion=null;
+                foreach(var request in requests)
+                    if(request.State==TaxiRequestState.Active && request.Definition.IsStop)
+                        Resolve(request,false,"OPTIONAL STOP SKIPPED AT FINAL DESTINATION");
+                wrongWaySeconds=unexplainedStopSeconds=0;
+                return;
+            }
             progressClock+=dt;
             if(progressClock<Mathf.Max(1,config.patienceProgressSampleSeconds)) return;
             float sampleSeconds=progressClock; progressClock=0;
@@ -66,14 +77,23 @@ namespace LWS.TruckTaxi
             if(requireNavigableRoute && !leg.Navigable) { hasProgressSample=false; return; }
             bool changed=progressTargetId!=targetId || !hasProgressSample;
             float improvement=changed ? 0 : lastRoutedRemaining-leg.Meters;
+            bool finalProgress=false;
+            if(stop!=null)
+            {
+                var finalLeg=routeDistances.Measure(position,Destination.StopPosition);
+                bool valid=float.IsFinite(finalLeg.Meters) && (!requireNavigableRoute || finalLeg.Navigable);
+                finalProgress=valid && !changed && lastFinalRemaining>=0 && lastFinalRemaining-finalLeg.Meters>2;
+                lastFinalRemaining=valid ? finalLeg.Meters : -1;
+            }
+            else lastFinalRemaining=-1;
             float moved=hasProgressSample ? Vector3.Distance(position,progressSamplePosition) : 0;
             progressTargetId=targetId; lastRoutedRemaining=leg.Meters; progressSamplePosition=position; hasProgressSample=true;
             bool legitimate=(stop!=null && Vector3.Distance(position,stop.Position)<=stop.radius+15) ||
                 Destination.Contains(position) || IsLegitimateTrafficOrServiceStop?.Invoke()==true;
             if(changed || legitimate)
             { wrongWaySeconds=unexplainedStopSeconds=0; return; }
-            bool goodProgress=improvement>2 && speed>1;
-            bool away=improvement < -Mathf.Max(8,moved*.2f);
+            bool goodProgress=(improvement>2 || finalProgress) && speed>1;
+            bool away=!finalProgress && improvement < -Mathf.Max(8,moved*.2f);
             wrongWaySeconds=away ? wrongWaySeconds+sampleSeconds : Mathf.Max(0,wrongWaySeconds-sampleSeconds);
             unexplainedStopSeconds=speed<1 ? unexplainedStopSeconds+sampleSeconds : 0;
             float drain=0;

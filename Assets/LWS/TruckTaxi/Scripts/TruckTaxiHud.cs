@@ -19,10 +19,11 @@ namespace LWS.TruckTaxi
         public Sprite offerCountdownStroke;
         public TruckTaxiOfferCountdown OfferCountdown { get; private set; }
         private TruckTaxiBootstrap host;
-        private RectTransform root, modal, ridePanel, pausePanel, telemetryBand, settingsPanel;
+        private RectTransform root, modal, ridePanel, pausePanel, telemetryBand, settingsPanel, truckPanel, driverPanel;
         public TruckTaxiCareerPanel Career { get; private set; }
         public TruckTaxiDriverAppearancePanel DriverAppearance { get; private set; }
         private bool SettingsCategoryOpen => settingsPanel != null && settingsPanel.gameObject.activeSelf;
+        private bool UtilityCategoryOpen => SettingsCategoryOpen || truckPanel?.gameObject.activeSelf == true || driverPanel?.gameObject.activeSelf == true;
         private TextMeshProUGUI title, details, status, requestText, reaction, speed;
         private TextMeshProUGUI secondaryFareText;
         private UnityEngine.UI.Image portrait;
@@ -30,7 +31,6 @@ namespace LWS.TruckTaxi
         private GameObject startupRetry, startupLoad, startupMenu;
         private GameObject eject;
         private GameObject cancelPickup;
-        private GameObject throwContainer;
         private GameObject companionPickup, companionPark;
         private UnityEngine.UI.Image companionFade;
         private TextMeshProUGUI ejectProgress;
@@ -38,6 +38,7 @@ namespace LWS.TruckTaxi
         private TruckTaxiOfferMap offerMap;
         public TruckTaxiGPSSettingsPanel GPSSettings { get; private set; }
         public TruckTaxiAudioSettingsPanel AudioSettings { get; private set; }
+        public TruckTaxiVideoSettingsPanel VideoSettings { get; private set; }
         public TruckTaxiEnvironmentNeedsPanel EnvironmentNeeds { get; private set; }
         public TruckTaxiControlsPanel Controls { get; private set; }
         public TruckTaxiFullMapPresenter FullMap { get; private set; }
@@ -67,8 +68,8 @@ namespace LWS.TruckTaxi
         public bool CanOpenFullMap => host?.Ready == true && !host.Paused && !DebugOverlayOpen && !appreciationRunning && host.CustomContent?.IsPlaying != true &&
             host.WorldLife?.FocusRoot == null &&
             modal != null && !modal.gameObject.activeSelf && !pausePanel.gameObject.activeSelf &&
-            GPSSettings?.IsOpen != true && AudioSettings?.IsOpen != true && EnvironmentNeeds?.IsOpen != true &&
-            Controls?.IsOpen != true && Career?.IsOpen != true && !SettingsCategoryOpen && CabLookSettings?.IsOpen != true && SaveLoad?.IsOpen != true && host.Fuel?.IsRescuing != true &&
+            VideoSettings?.IsOpen != true && GPSSettings?.IsOpen != true && AudioSettings?.IsOpen != true && EnvironmentNeeds?.IsOpen != true &&
+            Controls?.IsOpen != true && Career?.IsOpen != true && RadioPanel?.IsOpen != true && !UtilityCategoryOpen && CabLookSettings?.IsOpen != true && SaveLoad?.IsOpen != true && host.Fuel?.IsRescuing != true &&
             host.Roadside?.IsRecovering != true && Planning?.IsOpen!=true && host.FastTravel?.IsTravelling!=true &&
             host.Kaiju?.IsCapturingPlayer!=true && host.Races?.MenuOpen!=true;
         // Lets the menu reuse the same Heat factories without creating a gameplay HUD.
@@ -96,8 +97,7 @@ namespace LWS.TruckTaxi
             secondaryFareText=Text(ridePanel,"Secondary fare",new Vector2(.05f,.025f),new Vector2(.95f,.23f),22);
             reaction = Text(root,"Passenger reaction",new Vector2(0.025f,0.112f),new Vector2(0.71f,0.185f),28);
             Alerts=gameObject.AddComponent<TruckTaxiHudAlerts>(); Alerts.Initialize(this);
-            Button(Alerts.CommandsSlot,"PLANNING",new Vector2(0,0),new Vector2(.48f,1),()=>Planning?.Open());
-            Button(Alerts.CommandsSlot,"RADIO",new Vector2(.52f,0),new Vector2(1,1),()=>RadioPanel?.Open());
+            Text(Alerts.CommandsSlot,"Pause access",Vector2.zero,Vector2.one,20).text="ESC / START  PAUSE";
             modal = Panel(root,"Ride dispatch",new Vector2(.12f,.17f),new Vector2(.88f,.92f));
             title = Text(modal,"Title",new Vector2(.04f,.86f),new Vector2(.96f,.98f),38);
             details = Text(modal,"Ride details",new Vector2(0.06f,0.23f),new Vector2(0.94f,0.80f),27);
@@ -119,15 +119,8 @@ namespace LWS.TruckTaxi
             accept = Button(modal,"ACCEPT",new Vector2(0.06f,0.06f),new Vector2(0.48f,0.19f),Accept);
             decline = Button(modal,"DECLINE",new Vector2(0.52f,0.06f),new Vector2(0.94f,0.19f),Decline);
             next = Button(modal,"NEXT FARE",new Vector2(0.18f,0.06f),new Vector2(0.82f,0.19f),()=>host.Session.ContinueShift());
-            Button(root,"RESET UPRIGHT",new Vector2(0.73f,0.03f),new Vector2(0.88f,0.09f),()=>host.Player.UprightRecoveryController.RequestResetUpright("Truck Taxi HUD"));
-            Button(root,"PAUSE",new Vector2(0.89f,0.03f),new Vector2(0.99f,0.09f),HandlePause);
-            Button(root,"DEBUG",new Vector2(0.89f,0.11f),new Vector2(0.99f,0.17f),()=>MegaDebug?.Toggle()).SetActive(TruckTaxiMegaDebugPanel.IsAvailable);
-            Button(root,"GPS ON / OFF",new Vector2(.73f,.11f),new Vector2(.88f,.17f),()=>host.GPS.ToggleHud());
-            Button(root,"GPS SETTINGS",new Vector2(.89f,.19f),new Vector2(.99f,.25f),()=>GPSSettings?.Toggle());
-            Button(root,"SERVICES / TOW",new Vector2(.73f,.19f),new Vector2(.88f,.25f),()=>EnvironmentNeeds?.OpenServices());
-            throwContainer=Button(root,"THROW FILLED CONTAINER",new Vector2(.73f,.265f),new Vector2(.99f,.325f),()=>host.DriverNeeds?.ThrowFilledContainer());
             companionPickup=Text(root,"Companion horn prompt",new Vector2(.35f,.52f),new Vector2(.65f,.59f),24).gameObject;
-            companionPark=Button(root,"PARK",new Vector2(.4f,.52f),new Vector2(.6f,.59f),()=>host.Companions?.Interact());
+            companionPark=Text(root,"Companion parking prompt",new Vector2(.35f,.52f),new Vector2(.65f,.59f),24).gameObject;
             eject=Button(ridePanel,"HOLD TO EJECT",new Vector2(.05f,.08f),new Vector2(.95f,.21f),()=>{});
             cancelPickup=Button(ridePanel,"CANCEL PICKUP",new Vector2(.05f,.08f),new Vector2(.95f,.21f),()=>
             { if (!host.Paused) host.Session.CancelPickup(); });
@@ -137,27 +130,40 @@ namespace LWS.TruckTaxi
             foreach(var eventId in new[]{EventTriggerType.PointerUp,EventTriggerType.PointerExit})
             { var up=new EventTrigger.Entry { eventID=eventId }; up.callback.AddListener(_=>host.Passengers.uiEjectHeld=false); ejectEvents.triggers.Add(up); }
             ejectProgress=Text(ridePanel,"Ejection hold progress",new Vector2(.05f,.01f),new Vector2(.95f,.075f),22);
-            pausePanel = Panel(root,"Paused",new Vector2(.31f,.07f),new Vector2(.68f,.93f));
+            pausePanel = Panel(root,"Paused",new Vector2(.2f,.10f),new Vector2(.8f,.90f));
             Text(pausePanel,"PAUSED",new Vector2(.08f,.9f),new Vector2(.92f,.98f),38).text="SHIFT PAUSED";
             resume = PauseButton("RESUME",0,()=>host.SetPaused(false));
-            PauseButton("SAVE / LOAD",1,()=>SaveLoad?.Open());
-            PauseButton("CONTROLS",2,()=>Controls?.Open());
-            PauseButton("SETTINGS",3,()=>{ settingsPanel.gameObject.SetActive(true); settingsPanel.SetAsLastSibling(); Refresh(); });
-            PauseButton("CAREER",4,()=>Career?.Open());
-            PauseButton("DRIVER NEEDS",5,()=>EnvironmentNeeds?.Open());
-            PauseButton("END SHIFT",6,()=>host.Session.EndShift());
-            PauseButton("MAIN MENU",7,()=>host.ReturnToMainMenu());
+            PauseButton("MAP / PLANNING",1,()=>Planning?.Open());
+            PauseButton("CAREER",2,()=>Career?.Open());
+            PauseButton("INVENTORY / DRIVER",3,()=>ShowUtility(driverPanel));
+            PauseButton("TRUCK",4,()=>ShowUtility(truckPanel));
+            PauseButton("SERVICES",5,()=>EnvironmentNeeds?.OpenServices());
+            PauseButton("RADIO",6,()=>RadioPanel?.Open());
+            PauseButton("OPTIONS",7,()=>ShowUtility(settingsPanel));
+            PauseButton("CONTROLS",8,()=>Controls?.Open());
+            PauseButton("SAVE / LOAD",9,()=>SaveLoad?.Open());
+            PauseButton("DEBUG",10,()=>MegaDebug?.Open()).SetActive(TruckTaxiMegaDebugPanel.IsAvailable);
+            PauseButton("MAIN MENU",11,()=>host.ReturnToMainMenu());
             settingsPanel = Panel(root,"Settings categories",new Vector2(.31f,.18f),new Vector2(.68f,.88f));
             Text(settingsPanel,"Settings heading",new Vector2(.08f,.88f),new Vector2(.92f,.98f),34).text="SETTINGS";
-            string[] settingsLabels={"CAB LOOK","GPS SETTINGS","AUDIO SETTINGS","CONTROLS","BACK"};
-            Action[] settingsActions={()=>CabLookSettings?.Open(),()=>GPSSettings?.Open(),()=>AudioSettings?.Open(),()=>Controls?.Open(),()=>{}};
+            string[] settingsLabels={"VIDEO / DISPLAY","CAB LOOK","GPS SETTINGS","GPS ON / OFF","AUDIO SETTINGS","BACK"};
+            Action[] settingsActions={()=>VideoSettings?.Open(),()=>CabLookSettings?.Open(),()=>GPSSettings?.Open(),()=>host.GPS.ToggleHud(),()=>AudioSettings?.Open(),()=>{}};
             for(int i=0;i<settingsLabels.Length;i++)
             {
-                int index=i; float top=.83f-i*.155f;
-                Button(settingsPanel,settingsLabels[i],new Vector2(.1f,top-.12f),new Vector2(.9f,top),()=>
+                int index=i; float top=.83f-i*.13f;
+                Button(settingsPanel,settingsLabels[i],new Vector2(.1f,top-.11f),new Vector2(.9f,top),()=>
                 { settingsPanel.gameObject.SetActive(false); settingsActions[index](); Refresh(); });
             }
             settingsPanel.gameObject.SetActive(false);
+            driverPanel = BuildUtility("INVENTORY / DRIVER",new[]{"DRIVER NEEDS","INVENTORY","APPEARANCE","THROW FILLED CONTAINER","BACK"},
+                new Action[]{()=>EnvironmentNeeds?.Open(),()=>EnvironmentNeeds?.OpenInventory(),()=>DriverAppearance?.Open(),
+                    ()=>{host.SetPaused(false);host.DriverNeeds?.ThrowFilledContainer();},()=>{}});
+            truckPanel = BuildUtility("TRUCK",new[]{"CONDITION / REPAIR","UPGRADES","RESET UPRIGHT","SERVICES / TOW","RACE REGISTRATION","RESET TO TRACK","LEAVE RACE","BACK"},
+                new Action[]{()=>host.WorldLife?.OpenDamage(),()=>Career?.OpenEquipment(),
+                    ()=>{host.SetPaused(false);host.Player.UprightRecoveryController.RequestResetUpright("Truck Taxi pause menu");},
+                    ()=>EnvironmentNeeds?.OpenServices(),()=>host.Races?.OpenRegistration(),
+                    ()=>{if(host.Races?.IsActive==true) {host.SetPaused(false);host.Races.ResetToTrack();}},
+                    ()=>host.Races?.LeaveRace(),()=>{}});
             Career=gameObject.AddComponent<TruckTaxiCareerPanel>(); Career.Initialize(host,this);
             DriverAppearance=gameObject.AddComponent<TruckTaxiDriverAppearancePanel>(); DriverAppearance.Initialize(host,this);
             DriverAppearance.BindCareer(host.Session.CaptureDriverAppearance,host.Session.TrySetDriverAppearance);
@@ -168,6 +174,8 @@ namespace LWS.TruckTaxi
                 GPSSettings.Initialize(host,this);
                 AudioSettings=gameObject.AddComponent<TruckTaxiAudioSettingsPanel>();
                 AudioSettings.Initialize(host,this);
+                VideoSettings=gameObject.AddComponent<TruckTaxiVideoSettingsPanel>();
+                VideoSettings.Initialize(this,host);
             }
             else Debug.LogError("Truck Taxi GPS settings need the Heat slider/switch prefab references on TruckTaxiHud.",this);
             appreciationFade=Rect(root,"Special appreciation fade",Vector2.zero,Vector2.one).gameObject.AddComponent<UnityEngine.UI.Image>();
@@ -218,6 +226,10 @@ namespace LWS.TruckTaxi
             }
             if(DriverAppearance?.HandleInput(UIInput)==true) { RefreshFocus(); return; }
             if(Career?.HandleInput(UIInput)==true) { RefreshFocus(); return; }
+            if(!host.Paused && !NormalHudSuppressed && host.WorldLife?.IsOnFoot!=true &&
+                host.Session.State==TruckTaxiState.DrivingToPickup && UIInput.CancelPickup.WasPressedThisFrame())
+            { host.Session.CancelPickup();Refresh();return; }
+            if(EnvironmentNeeds?.TryHandleServiceInteraction()==true) { RefreshFocus(); return; }
             if(host.WorldLife?.HandleHudInput(UIInput)==true)
             { RefreshFocus(); return; }
             if(GetComponent<TruckTaxiHudModalBridge>()?.HandleUiActions(UIInput)==true)
@@ -235,8 +247,8 @@ namespace LWS.TruckTaxi
                     return;
                 }
             }
-            if(UIInput.Debug.WasPressedThisFrame()) MegaDebug?.Toggle();
-            if(UIInput.Services.WasPressedThisFrame() && !appreciationRunning && host.Roadside?.CanRequest==true) EnvironmentNeeds?.OpenServices();
+            if(UIInput.Debug.WasPressedThisFrame() && (DebugOverlayOpen || CanOpenFullMap)) MegaDebug?.Toggle();
+            if(UIInput.Services.WasPressedThisFrame() && CanOpenFullMap && host.Roadside?.CanRequest==true) EnvironmentNeeds?.OpenServices();
             if(!appreciationRunning)
             {
                 if(UIInput.Cancel.WasPressedThisFrame() || UIInput.Pause.WasPressedThisFrame()) HandlePause();
@@ -255,7 +267,25 @@ namespace LWS.TruckTaxi
             EnvironmentNeeds=gameObject.AddComponent<TruckTaxiEnvironmentNeedsPanel>();
             EnvironmentNeeds.Initialize(host,this,environment,needs);
         }
-        private GameObject PauseButton(string label,int row,Action action) => Button(pausePanel,label,new Vector2(.1f,.79f-row*.105f),new Vector2(.9f,.88f-row*.105f),action);
+        private GameObject PauseButton(string label,int index,Action action)
+        {
+            int row=index/2,column=index%2;
+            return Button(pausePanel,label,new Vector2(.06f+column*.46f,.75f-row*.13f),new Vector2(.48f+column*.46f,.85f-row*.13f),action);
+        }
+        private void ShowUtility(RectTransform category)
+        { category.gameObject.SetActive(true); category.SetAsLastSibling(); Refresh(); RefreshFocus(); }
+        private RectTransform BuildUtility(string heading,string[] labels,Action[] commands)
+        {
+            var category=Panel(root,heading,new Vector2(.28f,.10f),new Vector2(.72f,.90f));
+            Text(category,"Heading",new Vector2(.06f,.88f),new Vector2(.94f,.98f),30).text=heading;
+            for(int i=0;i<labels.Length;i++)
+            {
+                int index=i; float step=.78f/labels.Length,top=.83f-i*step;
+                Button(category,labels[i],new Vector2(.08f,top-step+.012f),new Vector2(.92f,top),()=>
+                { category.gameObject.SetActive(false); commands[index](); Refresh(); RefreshFocus(); });
+            }
+            category.gameObject.SetActive(false); return category;
+        }
         public void InitializeIntegratedControls()
         {
             if(Controls!=null) return;
@@ -271,11 +301,11 @@ namespace LWS.TruckTaxi
         {
             var bridge=GetComponent<TruckTaxiHudModalBridge>();
             host?.WorldLife?.SetExternalModalFocus(NormalHudSuppressed || appreciationRunning || bridge?.IsOpen==true ||
-                RadioPanel?.IsOpen==true || Career?.IsOpen==true || DriverAppearance?.IsOpen==true || SettingsCategoryOpen || Controls?.IsOpen==true || CabLookSettings?.IsOpen==true ||
-                EnvironmentNeeds?.IsOpen==true || AudioSettings?.IsOpen==true || GPSSettings?.IsOpen==true ||
+                RadioPanel?.IsOpen==true || Career?.IsOpen==true || DriverAppearance?.IsOpen==true || UtilityCategoryOpen || Controls?.IsOpen==true || CabLookSettings?.IsOpen==true ||
+                VideoSettings?.IsOpen==true || EnvironmentNeeds?.IsOpen==true || AudioSettings?.IsOpen==true || GPSSettings?.IsOpen==true ||
                 modal?.gameObject.activeSelf==true || pausePanel?.gameObject.activeSelf==true);
-            UIInput?.Focus(SaveLoad?.IsOpen==true ? SaveLoad.FocusRoot : host.WorldLife?.FocusRoot!=null ? host.WorldLife.FocusRoot : appreciationRunning ? null : bridge?.IsOpen==true ? bridge.FocusRoot : host.Races?.MenuOpen==true ? host.Races.FocusRoot : RadioPanel?.IsOpen==true ? RadioPanel.FocusRoot : MegaDebug?.IsOpen==true ? MegaDebug.FocusRoot : Planning?.IsOpen==true ? Planning.FocusRoot : FullMap?.IsOpen==true ? FullMap.FocusRoot : DebugOverlayOpen ? debug.FocusRoot : Controls?.IsOpen==true ? Controls.FocusRoot : CabLookSettings?.IsOpen==true ? CabLookSettings.FocusRoot : EnvironmentNeeds?.IsOpen==true ? EnvironmentNeeds.FocusRoot : AudioSettings?.IsOpen==true ? AudioSettings.FocusRoot : GPSSettings?.IsOpen==true ? GPSSettings.FocusRoot :
-                DriverAppearance?.IsOpen==true ? DriverAppearance.FocusRoot : Career?.IsOpen==true ? Career.FocusRoot : SettingsCategoryOpen ? settingsPanel : modal.gameObject.activeSelf ? modal : pausePanel.gameObject.activeSelf ? pausePanel : null);
+            UIInput?.Focus(VideoSettings?.IsOpen==true ? VideoSettings.FocusRoot : SaveLoad?.IsOpen==true ? SaveLoad.FocusRoot : host.WorldLife?.FocusRoot!=null ? host.WorldLife.FocusRoot : appreciationRunning ? null : bridge?.IsOpen==true ? bridge.FocusRoot : host.Races?.MenuOpen==true ? host.Races.FocusRoot : RadioPanel?.IsOpen==true ? RadioPanel.FocusRoot : MegaDebug?.IsOpen==true ? MegaDebug.FocusRoot : Planning?.IsOpen==true ? Planning.FocusRoot : FullMap?.IsOpen==true ? FullMap.FocusRoot : DebugOverlayOpen ? debug.FocusRoot : Controls?.IsOpen==true ? Controls.FocusRoot : CabLookSettings?.IsOpen==true ? CabLookSettings.FocusRoot : EnvironmentNeeds?.IsOpen==true ? EnvironmentNeeds.FocusRoot : AudioSettings?.IsOpen==true ? AudioSettings.FocusRoot : GPSSettings?.IsOpen==true ? GPSSettings.FocusRoot :
+                DriverAppearance?.IsOpen==true ? DriverAppearance.FocusRoot : Career?.IsOpen==true ? Career.FocusRoot : SettingsCategoryOpen ? settingsPanel : truckPanel?.gameObject.activeSelf==true ? truckPanel : driverPanel?.gameObject.activeSelf==true ? driverPanel : modal.gameObject.activeSelf ? modal : pausePanel.gameObject.activeSelf ? pausePanel : null);
         }
         public void OnDebugVisibilityChanged()
         {
@@ -320,9 +350,10 @@ namespace LWS.TruckTaxi
         {
             if(DriverAppearance?.IsOpen==true) { DriverAppearance.Close(); Refresh(); return; }
             if(Career?.IsOpen==true) { Career.Close(); Refresh(); return; }
-            if(SettingsCategoryOpen) { settingsPanel.gameObject.SetActive(false); Refresh(); return; }
+            if(UtilityCategoryOpen) { settingsPanel.gameObject.SetActive(false); truckPanel.gameObject.SetActive(false); driverPanel.gameObject.SetActive(false); Refresh(); return; }
             if(SaveLoad?.IsOpen==true) { SaveLoad.Back(); Refresh(); return; }
-            if(host.Fuel?.IsRescuing==true || host.Roadside?.IsRecovering==true || host.FastTravel?.IsTravelling==true || host.Kaiju?.IsCapturingPlayer==true) return;
+            if(host.Fuel?.IsRescuing==true || host.Roadside?.IsRecovering==true || host.FastTravel?.IsTravelling==true || host.Kaiju?.IsCapturingPlayer==true)
+            { Alerts?.Publish("atomic-recovery","FINISHING VEHICLE RECOVERY - PLEASE WAIT",TruckTaxiAlertPriority.High,3);return; }
             if(host.CustomContent?.IsPlaying==true)
             {
                 if(host.CustomContent.UsesEventInputHold && host.Companions?.IsBusy==true) host.Companions.Cancel();
@@ -337,6 +368,7 @@ namespace LWS.TruckTaxi
             else if(Controls?.IsOpen==true) Controls.Close();
             else if(CabLookSettings?.IsOpen==true) CabLookSettings.Close();
             else if(EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) EnvironmentNeeds.Close();
+            else if(VideoSettings?.IsOpen==true) VideoSettings.Close();
             else if(AudioSettings!=null && AudioSettings.IsOpen) AudioSettings.Close();
             else if(GPSSettings!=null && GPSSettings.IsOpen) GPSSettings.Close();
             else if(host.Session.PendingDiversion!=null || host.Session.State==TruckTaxiState.RideOffered || host.Session.State==TruckTaxiState.AppreciationOffer) Decline();
@@ -352,15 +384,17 @@ namespace LWS.TruckTaxi
             companionPickup.SetActive(!hideNormalHud && host.Companions?.CanInteract==true && !host.Companions.HasOnboardCompanion);
             if(companionPickup.activeSelf) companionPickup.GetComponent<TMP_Text>().text="HONK TO PICK UP ["+host.Companions.HornBinding+"]";
             companionPark.SetActive(!hideNormalHud && host.Companions?.Prompt=="PARK");
+            if(companionPark.activeSelf) companionPark.GetComponent<TMP_Text>().text="["+UIInput.Hint(UIInput.Submit)+"] PARK";
             float privateFade=Mathf.Max(host.Companions?.FadeAlpha ?? 0, host.CustomContent?.FadeAlpha ?? 0);
             companionFade.gameObject.SetActive(privateFade>0 && (!host.Paused || host.CustomContent?.OwnsInputHold==true) && !hideNormalHud);
             companionFade.color=new Color(0,0,0,privateFade*.45f);
-            throwContainer.SetActive(!hideNormalHud && host.DriverNeeds?.State?.FilledJug==true && host.DriverNeeds.CanInteract);
             bool companion=host.Companions?.HasOnboardCompanion==true;
             bool canEject=!host.Paused && (host.Companions?.CanEject==true || s.HasPassenger && s.Passenger!=null && s.Passenger.canBeEjected);
             bool canCancel=!host.Paused && s.State==TruckTaxiState.DrivingToPickup;
             cancelPickup.SetActive(canCancel && !hideNormalHud);
             cancelPickup.GetComponent<RectTransform>().anchorMax=new Vector2(canEject ? .49f : .95f,.21f);
+            var cancelText=cancelPickup.GetComponentInChildren<TMP_Text>();
+            if(cancelText!=null) cancelText.text="["+UIInput.Hint(UIInput.CancelPickup)+"] CANCEL PICKUP";
             eject.GetComponent<RectTransform>().anchorMin=new Vector2(canCancel ? .51f : .05f,.08f);
             eject.SetActive(canEject && !hideNormalHud); ejectProgress.gameObject.SetActive(canEject && !hideNormalHud);
             ejectProgress.text=host.Passengers.EjectionHoldProgress>0 ? "EJECTING  "+(host.Passengers.EjectionHoldProgress*100).ToString("0")+"%" :
@@ -382,7 +416,7 @@ namespace LWS.TruckTaxi
             accept.SetActive(offered||appreciation||diversion); decline.SetActive(offered||appreciation||diversion); next.SetActive(ended);
             OfferCountdown.gameObject.SetActive(offered);
             OfferCountdown.Refresh();
-            bool gpsSettings=(GPSSettings!=null && GPSSettings.IsOpen) || (AudioSettings!=null && AudioSettings.IsOpen) || (EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) || Controls?.IsOpen==true || CabLookSettings?.IsOpen==true || RadioPanel?.IsOpen==true || SaveLoad?.IsOpen==true || Career?.IsOpen==true || SettingsCategoryOpen;
+            bool gpsSettings=VideoSettings?.IsOpen==true || (GPSSettings!=null && GPSSettings.IsOpen) || (AudioSettings!=null && AudioSettings.IsOpen) || (EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) || Controls?.IsOpen==true || CabLookSettings?.IsOpen==true || RadioPanel?.IsOpen==true || SaveLoad?.IsOpen==true || Career?.IsOpen==true || UtilityCategoryOpen || host.WorldLife?.FocusRoot!=null;
             pausePanel.gameObject.SetActive(!hideNormalHud && host.Paused && !inactive && !ended && !offered && !appreciation && !diversion && !appreciationRunning && !gpsSettings && host.CustomContent?.OwnsInputHold!=true && GetComponent<TruckTaxiHudModalBridge>()?.IsOpen!=true);
             if(pausePanel.gameObject.activeSelf) modal.gameObject.SetActive(false);
             if(gpsSettings) modal.gameObject.SetActive(false);

@@ -101,6 +101,35 @@ namespace LWS.TruckTaxi
             if (!Clock.CurrentSnapshot.paused) Snow?.Tick(Time.deltaTime, CurrentTaxiWeatherId);
         }
         public void SetSessionPaused(bool paused) { if (initialized) Clock.SetPaused(paused || Frozen); }
+        public TruckTaxiEnvironmentSnapshot Capture()
+        {
+            var snow = Snow?.Capture();
+            return new TruckTaxiEnvironmentSnapshot
+                { frozen = Frozen, forecast = CalendarWeather?.Capture(), snow = snow, hasSnowState = snow != null };
+        }
+        public bool CanRestore(TruckTaxiEnvironmentSnapshot value) => TruckTaxiEnvironmentSnapshot.Valid(value) &&
+            (value == null || initialized && (value.snow == null || Snow != null && Snow.CanRestore(value.snow)));
+        public bool Restore(TruckTaxiEnvironmentSnapshot value)
+        {
+            if (!CanRestore(value)) return false;
+            if (value == null)
+            {
+                // Legacy saves have no Taxi snow/override state; never retain a previous run's snow.
+                Snow?.ClearSnow();
+                SetFrozen(!settings.timeProgressionEnabled);
+                AutomaticWeather = settings.automaticWeather;
+                CurrentTaxiWeatherId = Weather.CurrentState.weatherId;
+                return CalendarWeather.Restore(new TruckTaxiForecastSnapshot { automatic = AutomaticWeather,
+                    manualCondition = TruckTaxiCalendarWeatherService.ConditionFor(CurrentTaxiWeatherId) }, false);
+            }
+            // The canonical weather provider already restored intensity/precipitation/transition state.
+            // Rebind Taxi policy without issuing a second vendor transition over that state.
+            if (!CalendarWeather.Restore(value.forecast, false) || Snow != null && !Snow.Restore(value.snow)) return false;
+            CurrentTaxiWeatherId = CalendarWeather.Current.PresetId;
+            AutomaticWeather = value.forecast.automatic;
+            SetFrozen(value.frozen);
+            return true;
+        }
         public void SetFrozen(bool frozen) { Frozen = frozen; SetSessionPaused(host != null && host.Paused); }
         public void SetTime(float hours) { CalendarWeather?.SetTime(hours); }
         public void SetTimeScale(float scale) { if (float.IsFinite(scale)) Clock?.SetTimeScale(Mathf.Clamp(scale, 0, 600)); }

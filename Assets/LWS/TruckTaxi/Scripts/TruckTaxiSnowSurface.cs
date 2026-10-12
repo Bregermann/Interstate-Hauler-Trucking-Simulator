@@ -24,6 +24,7 @@ namespace LWS.TruckTaxi
         private readonly Dictionary<MeshRenderer, MeshRenderer> roadDepthProxies = new Dictionary<MeshRenderer, MeshRenderer>();
         private readonly List<MeshRenderer> roadTargets = new List<MeshRenderer>();
         private readonly List<MeshRenderer> groundTargets = new List<MeshRenderer>();
+        private readonly HashSet<int> cachedGroundTargetIds = new HashSet<int>();
         private readonly Dictionary<MeshRenderer, Material> tracedMaterials = new Dictionary<MeshRenderer, Material>();
         private readonly HashSet<Material> updatedSnowMaterials = new HashSet<Material>();
         private readonly HashSet<int> warnedIncompatibleRoads = new HashSet<int>();
@@ -74,6 +75,10 @@ namespace LWS.TruckTaxi
             }
         }
         public int GroundSnowSurfaceCount => groundBindings.Count;
+        // Discovery-time ground-cache counts, not live renderer counts.
+        public int CacheTargetCount => groundTargets.Count;
+        public int UniqueCacheTargetCount => cachedGroundTargetIds.Count;
+        public int CacheRefreshCount { get; private set; }
         public float Coverage01 => coverage01;
         public int BoundSnowMaterialCount => updatedSnowMaterials.Count;
         public bool SnowTextureReady => snowTexture != null;
@@ -129,6 +134,7 @@ namespace LWS.TruckTaxi
         {
             targetsCached = false;
             roadTargets.Clear(); groundTargets.Clear();
+            cachedGroundTargetIds.Clear();
             foreach (var proxy in roadDepthProxies.Values) if (proxy != null) Destroy(proxy.gameObject);
             roadDepthProxies.Clear(); tracedMaterials.Clear();
             RestoreGround(); lastAppliedCoverage = -1;
@@ -462,6 +468,7 @@ namespace LWS.TruckTaxi
         {
             if (targetsCached) return;
             targetsCached = true;
+            CacheRefreshCount = Math.Min(int.MaxValue - 1, CacheRefreshCount) + 1;
             foreach (LwsRoadSurface road in FindObjectsByType<LwsRoadSurface>(FindObjectsSortMode.None))
             {
                 if (road == null || !IsTaxiScene(road.gameObject.scene)) continue;
@@ -475,7 +482,8 @@ namespace LWS.TruckTaxi
                 MeshRenderer renderer = surface.GetComponent<MeshRenderer>();
                 if (renderer != null)
                 {
-                    groundTargets.Add(renderer);
+                    if (!groundTargets.Contains(renderer)) groundTargets.Add(renderer);
+                    cachedGroundTargetIds.Add(renderer.GetInstanceID());
                     if (!roadTargets.Contains(renderer)) roadTargets.Add(renderer);
                 }
             }

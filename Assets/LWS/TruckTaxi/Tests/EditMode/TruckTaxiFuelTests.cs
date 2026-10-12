@@ -34,5 +34,44 @@ namespace LWS.TruckTaxi.Tests
             }
             finally { Object.DestroyImmediate(passenger); }
         }
+        [Test] public void ActualFillerHighlightRestoresMaterialsOnReturn()
+        {
+            var fillerObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var material = new Material(Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard")) { color = Color.red };
+            try
+            {
+                var renderer = fillerObject.GetComponent<Renderer>(); renderer.sharedMaterial = material;
+                var filler = fillerObject.AddComponent<TruckTaxiFuelFiller>();
+                filler.SetHighlighted(true);
+                Assert.IsTrue(filler.Highlighted);
+                Assert.AreNotSame(material, renderer.sharedMaterial);
+                var highlight = renderer.sharedMaterial;
+                filler.SetHighlighted(true);
+                Assert.AreSame(highlight, renderer.sharedMaterial, "Holding the nozzle must not churn materials.");
+                Assert.AreEqual(Color.red, material.color, "Never edit the authored/shared material.");
+                filler.SetHighlighted(false);
+                Assert.IsFalse(filler.Highlighted);
+                Assert.AreSame(material, renderer.sharedMaterial);
+                Assert.IsTrue(highlight == null, "EditMode return must immediately dispose the owned clone.");
+                // Automatic MonoBehaviour disable delivery is covered in PlayMode, not EditMode.
+                filler.SetHighlighted(true);
+                highlight = renderer.sharedMaterial;
+                filler.SetHighlighted(false);
+                filler.SetHighlighted(false);
+                Assert.IsFalse(filler.Highlighted);
+                Assert.AreSame(material, renderer.sharedMaterial);
+                Assert.IsTrue(highlight == null);
+                Assert.AreEqual(Color.red, material.color);
+            }
+            finally
+            {
+                if (fillerObject != null)
+                {
+                    fillerObject.GetComponent<TruckTaxiFuelFiller>()?.SetHighlighted(false);
+                    Object.DestroyImmediate(fillerObject);
+                }
+                Object.DestroyImmediate(material);
+            }
+        }
     }
 }

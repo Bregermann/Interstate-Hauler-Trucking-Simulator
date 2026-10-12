@@ -64,7 +64,7 @@ namespace LWS.TruckTaxi
             for(int i=0;i<3;i++)
             {
                 int index=i; float top=1-i*.33f;
-                upgradeLabels[i]=hud.Text(equipment,"Upgrade "+i,new Vector2(0,top-.3f),new Vector2(.62f,top),24);
+                upgradeLabels[i]=hud.Text(equipment,"Upgrade "+i,new Vector2(0,top-.3f),new Vector2(.67f,top),20);
                 upgradeLabels[i].richText=false;
                 upgradeButtons[i]=hud.Button(equipment,"PURCHASE / EQUIP",new Vector2(.66f,top-.26f),new Vector2(1,top-.04f),()=>
                 { host.CareerEquipment.PurchaseOrEquip(upgradeIds[index]); feedback.text=host.CareerEquipment.Feedback; RefreshEquipment(); hud.UIInput?.Focus(panel); });
@@ -136,6 +136,7 @@ namespace LWS.TruckTaxi
             statistics.gameObject.SetActive(!show); equipment.gameObject.SetActive(show);
             if(show) RefreshEquipment(); else RefreshStatistics();
         }
+        public void OpenEquipment() { Open(); if(IsOpen) ShowEquipment(true); }
         private void RefreshEquipment()
         {
             var owner=host.CareerEquipment;
@@ -150,15 +151,19 @@ namespace LWS.TruckTaxi
             pageCount=Math.Max(1,(items.Count+upgradeButtons.Length-1)/upgradeButtons.Length);
             page=Mathf.Clamp(page,0,pageCount-1);
             categoryHeading.text="EQUIPMENT";
-            historyNote.text=items.Count==0 ? "No compatible upgrades available." : "";
+            historyNote.text=items.Count==0 ? "No compatible upgrades available." : "CASH  "+TruckTaxiHud.Money(host.Session.WalletBalanceCents);
             UpdatePageLabel();
             int row=0;
             for(int i=page*upgradeButtons.Length;i<items.Count && row<upgradeButtons.Length;i++)
             {
                 var item=items[i];
                 upgradeIds[row]=item.stableId;
-                upgradeLabels[row].text=item.displayName+"\n"+(owner.IsEquipped(item.stableId) ? "EQUIPPED" :
-                    owner.IsOwned(item.stableId) ? "OWNED" : TruckTaxiHud.Money(item.priceCents));
+                var tuning=item.adapterConfiguration as TruckTaxiCareerUpgradeTuning;
+                string effect=tuning!=null ? " +"+((tuning.multiplier-1)*100).ToString("0")+"% "+item.category.ToString().ToUpperInvariant() : "";
+                bool equipped=owner.IsEquipped(item.stableId),owned=owner.IsOwned(item.stableId);
+                upgradeLabels[row].text=item.displayName+effect+"\n"+(equipped ? "LEVEL 1 / MAX - EQUIPPED" :
+                    owned ? "LEVEL 1 OWNED - EQUIP" : "LEVEL 0 > 1  "+TruckTaxiHud.Money(item.priceCents)+
+                    (host.Session.WalletBalanceCents<item.priceCents ? " - NEED CASH" : ""));
                 upgradeLabels[row].gameObject.SetActive(true); upgradeButtons[row].SetActive(!owner.IsEquipped(item.stableId));
                 row++;
             }

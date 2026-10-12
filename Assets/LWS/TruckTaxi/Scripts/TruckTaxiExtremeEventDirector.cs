@@ -7,7 +7,7 @@ namespace LWS.TruckTaxi
 {
     // Taxi event semantics only. The forecast owner applies Weather Maker profiles through LWS.
     [DisallowMultipleComponent]
-    public sealed class TruckTaxiExtremeEventDirector : MonoBehaviour
+    public sealed partial class TruckTaxiExtremeEventDirector : MonoBehaviour
     {
         private static readonly TruckTaxiExtremeKind[] naturallyScheduledKinds =
         { TruckTaxiExtremeKind.Tornado, TruckTaxiExtremeKind.Earthquake,
@@ -64,7 +64,9 @@ namespace LWS.TruckTaxi
         private Rigidbody playerBody;
         private Func<DateTime> gameNow;
         private Action<TruckTaxiExtremeWeatherProfile?, TimeSpan> setWeather;
-        private readonly System.Random naturalRandom = new System.Random(71629);
+        private System.Random naturalRandom = new System.Random(71629);
+        private int naturalRolls;
+        private float NextNaturalRoll() { naturalRolls++; return (float)naturalRandom.NextDouble(); }
         private bool severeStorm;
         private bool heavySnow;
         private float continuousHeavyRainHours;
@@ -329,7 +331,7 @@ namespace LWS.TruckTaxi
                 foreach (var pair in zones)
                     if (pair.Value != null && pair.Value.kind == TruckTaxiExtremeKind.Hurricane)
                         TryStartNatural(pair.Value.kind, pair.Value.zoneId, severeStorm, heavySnow,
-                            continuousHeavyRainHours, (float)naturalRandom.NextDouble());
+                            continuousHeavyRainHours, NextNaturalRoll());
             }
             if (Time.unscaledTime < nextVisualTick)
             {
@@ -351,7 +353,7 @@ namespace LWS.TruckTaxi
                 {
                     bool eligible = TruckTaxiExtremeRules.NaturalEligible(kind, severeStorm,
                         heavySnow, continuousHeavyRainHours);
-                    if (!daySchedule.TryDay(kind, day, eligible, (float)naturalRandom.NextDouble(), out string reason))
+                    if (!daySchedule.TryDay(kind, day, eligible, NextNaturalRoll(), out string reason))
                     {
                         bool changed = lastRejection[(int)kind] != reason;
                         if (reason != "ALREADY_ATTEMPTED") lastRejection[(int)kind] = reason;

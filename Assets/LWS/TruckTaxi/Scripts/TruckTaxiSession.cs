@@ -230,6 +230,17 @@ namespace LWS.TruckTaxi
             purchaseCharges=checked(purchaseCharges+cents); Changed?.Invoke(); return true;
         }
 
+        public bool DebugGiveCash()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            const long cents=1000000;
+            if(ShiftEarnings>long.MaxValue-cents) return false;
+            ShiftEarnings+=cents; Changed?.Invoke(); return true;
+#else
+            return false;
+#endif
+        }
+
         // Mandatory services incur debt rather than granting a free rescue at zero balance.
         public void ChargeService(long cents)
         {

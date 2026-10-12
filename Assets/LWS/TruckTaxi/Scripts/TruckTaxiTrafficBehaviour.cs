@@ -42,6 +42,10 @@ namespace LWS.TruckTaxi
         private bool honkedForBlock;
         private uint identityHash;
         private float reversingUntil, nextRecovery;
+        public int RecoveryAttempts { get; private set; }
+        private Vector3 progressAnchor;
+        private float lastProgressAt, recoverySteering;
+        private TruckTaxiTrafficPooledActor pooledActor;
         private float presentationStopUntil;
         private readonly RaycastHit[] hits = new RaycastHit[32];
         private readonly Collider[] gaps = new Collider[48];
@@ -61,6 +65,7 @@ namespace LWS.TruckTaxi
                 return true;
             }
             owner = traffic; LaneIndex = lane;
+            pooledActor = GetComponent<TruckTaxiTrafficPooledActor>();
             foreach (var component in GetComponentsInChildren<MonoBehaviour>(true))
             {
                 if (component.GetType().Name == "CarAIController") ai = component;
@@ -108,6 +113,7 @@ namespace LWS.TruckTaxi
                 Personality == TruckTaxiDriverPersonality.Impatient ? 1.05f : Personality == TruckTaxiDriverPersonality.Aggressive ? 1.12f : 1.18f;
             PreferredSpeed = owner.LaneSpeed(LaneIndex) * factor * Mathf.Lerp(.95f, 1.05f, (hash % 103) / 102f);
             desiredSpeed = PreferredSpeed;
+            progressAnchor = body.position; lastProgressAt = Time.time;
             if (rage != null) rage.collisionTriggerChance = Personality >= TruckTaxiDriverPersonality.Aggressive ? .2f : .02f;
             nextSense = Time.time + (hash % 100) * .003f;
             nextLaneChange = Time.time + 3 + hash % 9;
@@ -119,6 +125,9 @@ namespace LWS.TruckTaxi
             if (horn != null) horn.ResetForPool();
             if (reversingUntil > 0 && aiBehaviour != null) aiBehaviour.enabled = true;
             reversingUntil = nextRecovery = blockedSeconds = brake = changeUntil = 0;
+            RecoveryAttempts = 0;
+            if (body != null) progressAnchor = body.position;
+            lastProgressAt = Time.time;
             EmergencyBraking = ownsBrakeHold = honkedForBlock = false;
             FollowingDistance = ObstacleDistance = 0;
             LaneChanges = HornsPlayed = 0;
@@ -147,10 +156,16 @@ namespace LWS.TruckTaxi
         private void LateUpdate()
         {
             if (!ready || owner == null || body == null || aiBehaviour == null) return;
+            if (body.isKinematic) return;
+            if (pooledActor == null) pooledActor = GetComponent<TruckTaxiTrafficPooledActor>();
             if(reversingUntil>0)
             {
-                if(Time.time<reversingUntil && Speed<1.3f) { drive(0,-.35f,0,0); return; }
-                reversingUntil=0; drive(0,0,1,0); ownsBrakeHold=true; aiBehaviour.enabled=true; blockedSeconds=0;
+                bool clear = GapClear(body.position-ai.transform.forward*(VehicleLength*.5f+2),ai.transform.forward,1,3);
+                if(Time.time<reversingUntil && Speed<1.3f && clear)
+                { drive(0,-.35f,0,recoverySteering); return; }
+                reversingUntil=0; drive(0,0,1,0); ownsBrakeHold=true;
+                owner.TryReacquireTrafficRoute(this);
+                aiBehaviour.enabled=true; blockedSeconds=0;
             }
             if(!aiBehaviour.enabled) return;
             var player = TruckTaxiBootstrap.Instance?.Player;
@@ -159,6 +174,7 @@ namespace LWS.TruckTaxi
             {
                 float interval = range < 100 ? .1f : range < 220 ? .3f : .8f;
                 Sense(interval, range < 160); nextSense = Time.time + interval;
+                if (!gameObject.activeInHierarchy || !aiBehaviour.enabled) return;
             }
             if (Time.time < presentationStopUntil)
             {
@@ -230,15 +246,38 @@ namespace LWS.TruckTaxi
                     owner.TryChangeLane(this, EmergencyBraking);
                 }
                 FollowingDistance = safe;
-                if(!signal && !pedestrian && blockedSeconds>20 && Time.time>=nextRecovery && speed<.2f &&
-                    Personality>=TruckTaxiDriverPersonality.Impatient &&
-                    GapClear(body.position-ai.transform.forward*(VehicleLength+2),ai.transform.forward,1,3))
-                {
-                    nextRecovery=Time.time+45; reversingUntil=Time.time+.85f; aiBehaviour.enabled=false; Honk();
-                    ReleaseBrakeHold();
-                }
             }
             else { blockedSeconds = 0; honkedForBlock = false; }
+            bool legitimateWait = signal || pedestrian || Time.time < presentationStopUntil || rage?.IsActive == true ||
+                pooledActor?.MissionReserved == true;
+            if (legitimateWait || (body.position-progressAnchor).sqrMagnitude > 36)
+            { progressAnchor=body.position; lastProgressAt=Time.time; RecoveryAttempts=0; }
+            if (!legitimateWait && Time.time-lastProgressAt > 12 && Time.time>=nextRecovery && speed<.5f)
+            {
+                nextRecovery=Time.time+8;
+                if (!TryCountRecoveryAttempt()) { owner.TryRecycleStuckTraffic(this); return; }
+                if (!GapClear(body.position-ai.transform.forward*(VehicleLength*.5f+2),ai.transform.forward,1,3)) return;
+                recoverySteering = (identityHash + RecoveryAttempts) % 2 == 0 ? .45f : -.45f;
+                reversingUntil=Time.time+1.5f; aiBehaviour.enabled=false; Honk(); ReleaseBrakeHold();
+            }
+        }
+
+        public bool ReacquireRoute(Component path, int pointBeforeTarget)
+        {
+            if (!ready || path == null) return false;
+            try
+            {
+                pathField.SetValue(movePath, path);
+                initializePath.Invoke(movePath, new object[] { 0, pointBeforeTarget, true, true });
+                return true;
+            }
+            catch (Exception error) { Debug.LogWarning("UTS route reacquisition failed: " + error.Message, this); return false; }
+        }
+
+        private bool TryCountRecoveryAttempt()
+        {
+            if (RecoveryAttempts >= 3) return false;
+            RecoveryAttempts++; return true;
         }
 
         public bool GapClear(Vector3 position, Vector3 forward, float forwardGap, float rearGap)

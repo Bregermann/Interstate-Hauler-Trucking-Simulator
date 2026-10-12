@@ -41,6 +41,10 @@ namespace LWS.TruckTaxi
         private Material burstMaterial;
         private double unbilledCents;
         public bool IsManualFueling { get; private set; }
+        public float SessionGallonsDispensed { get; private set; }
+        public long SessionFuelCharges { get; private set; }
+        public void BeginNozzleSession()
+        { StopManualFueling(); SessionGallonsDispensed = 0; SessionFuelCharges = 0; }
         public float Gallons => Fuel == null ? 0 : Fuel.amount / (float)TruckTaxiUsUnits.LitersPerUsGallon;
         public float CapacityGallons => Fuel == null ? 0 : Fuel.capacity / (float)TruckTaxiUsUnits.LitersPerUsGallon;
 
@@ -75,7 +79,7 @@ namespace LWS.TruckTaxi
         }
         public bool PumpManual(TruckTaxiGasStationPoint station, float seconds)
         {
-            if (host?.WorldLife?.IsOnFoot != true || host.Paused || IsRescuing || Fuel == null ||
+            if (!isActiveAndEnabled || host?.WorldLife?.IsOnFoot != true || host.Paused || IsRescuing || Fuel == null ||
                 station == null || !float.IsFinite(seconds) || seconds <= 0 ||
                 body == null || !host.WorldLife.CanPumpAt(station) ||
                 !station.CanRefuel(body.position, body.linearVelocity.magnitude))
@@ -92,10 +96,12 @@ namespace LWS.TruckTaxi
             bool firstDispense = !IsManualFueling;
             unbilledCents = due - charge;
             TotalFuelCharges += charge;
+            SessionFuelCharges += charge;
+            SessionGallonsDispensed += liters / (float)TruckTaxiUsUnits.LitersPerUsGallon;
             Fuel.amount += liters;
             IsManualFueling = true;
-            Feedback = "DIESEL " + Gallons.ToString("0.0") + "/" + CapacityGallons.ToString("0.0") +
-                " GAL  " + TruckTaxiHud.Money(TotalFuelCharges);
+            Feedback = "ADDED " + SessionGallonsDispensed.ToString("0.00") + " GAL  " + TruckTaxiHud.Money(SessionFuelCharges) +
+                "  TANK " + Gallons.ToString("0.0") + "/" + CapacityGallons.ToString("0.0") + " GAL (" + (Fraction * 100).ToString("0") + "%)";
             if (firstDispense) host.GPS?.CompleteServiceDestination(station.stableId);
             return true;
         }
@@ -187,6 +193,11 @@ namespace LWS.TruckTaxi
                 samples[i] = envelope * .22f * (Mathf.Sin(phase) + .4f*Mathf.Sin(phase*2.03f));
             }
             var clip = AudioClip.Create("Taxi cartoon cackle (placeholder)", samples.Length, 1, rate, false); clip.SetData(samples, 0); return clip;
+        }
+        private void OnDisable()
+        {
+            StopManualFueling();
+            host?.WorldLife?.ReturnNozzle();
         }
         private void OnDestroy()
         {

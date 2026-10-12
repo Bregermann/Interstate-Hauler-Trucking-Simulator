@@ -89,7 +89,7 @@ namespace LWS.TruckTaxi
             float hardMeters = Mathf.Max(1, config.pickupHardMaximumSeconds) * Mathf.Max(1, config.pickupReasonableSpeedMetersPerSecond);
             var nearby = new List<TruckTaxiRideLocation>();
             foreach (var stop in locations)
-                if (stop != null && stop.isActiveAndEnabled && stop.pickupAllowed && workArea.Contains(stop.StopPosition) &&
+                if (TruckTaxiOfferEligibility.PublicStop(stop) && stop.isActiveAndEnabled && stop.pickupAllowed && workArea.Contains(stop.StopPosition) &&
                     (stop.StopPosition - origin).sqrMagnitude <= hardMeters * hardMeters) nearby.Add(stop);
             nearby.Sort((a, b) => CompareNear(a, b, origin));
             int limit = Mathf.Clamp(config.offerPickupCandidateLimit, 1, 12);
@@ -118,12 +118,12 @@ namespace LWS.TruckTaxi
             }
             if (eligible.Count == 0) yield break;
             LastOfferCandidateCount=eligible.Count;
-            bool wantIntercity = IntercityPolicy.WantsIntercity(random,out bool guaranteed);
+            bool wantIntercity = offerMix.WantsIntercity(random, config.intercityRideChance, out bool guaranteed);
             LastIntercitySelection=guaranteed ? "GUARANTEE" : wantIntercity ? "RANDOM" : "LOCAL";
-            if(wantIntercity && !nearby.Exists(p=>locations.Exists(d=>d!=null && d.isActiveAndEnabled && d.dropoffAllowed && IsAcrossRegions(p,d))))
+            if(wantIntercity && !nearby.Exists(p=>locations.Exists(d=>TruckTaxiOfferEligibility.Pair(p,d) && d.isActiveAndEnabled && d.dropoffAllowed && IsAcrossRegions(p,d))))
             {
                 wantIntercity=guaranteed=false;
-                LastIntercitySelection="INELIGIBLE: no cross-region destination; completed-local streak retained";
+                LastIntercitySelection="INELIGIBLE: no public cross-region destination; offer fairness retained";
             }
             while(eligible.Count>0)
             {
@@ -163,7 +163,7 @@ namespace LWS.TruckTaxi
                     return target!=0 ? target : pickupPriorities[a.stop].CompareTo(pickupPriorities[b.stop]);
                 });
                 // Try other legal pickups when a favored bay has no valid destination.
-                for (int pass = 0; pass < (wantIntercity && !guaranteed ? 2 : 1); pass++)
+                for (int pass = 0; pass < (wantIntercity ? 2 : 1); pass++)
                 foreach(var pickup in pickups)
                 {
                     bool across = wantIntercity && pass == 0;
@@ -172,7 +172,7 @@ namespace LWS.TruckTaxi
                     float maximum = across ? config.intercityMaximumTripDistance : config.maximumTripDistance;
                     foreach (var destination in locations)
                     {
-                        if (destination == null || !destination.isActiveAndEnabled || !destination.dropoffAllowed || destination == pickup.stop ||
+                        if (!TruckTaxiOfferEligibility.Pair(pickup.stop, destination) || !destination.isActiveAndEnabled || !destination.dropoffAllowed || destination == pickup.stop ||
                             destination.locationId == pickup.stop.locationId || IsAcrossRegions(pickup.stop, destination) != across ||
                             (destination.StopPosition - pickup.stop.StopPosition).sqrMagnitude > maximum * maximum) continue;
                         destinations.Add(destination);
@@ -209,7 +209,11 @@ namespace LWS.TruckTaxi
                         if (requireNavigableRoute && !trip.Navigable || !float.IsFinite(trip.Meters) || trip.Meters < config.minimumTripDistance || trip.Meters > maximum)
                         { LastOfferRejectedDestinationRoutes++; continue; }
                         timer.Restart();
-                        CompleteOffer(passenger, pickup.stop, destinations[i], origin, pickup.leg, trip);
+                        if (CompleteOffer(passenger, pickup.stop, destinations[i], origin, pickup.leg, trip))
+                        {
+                            offerMix.RecordOffer(IsIntercityRide, config.intercityRideChance);
+                            if (wantIntercity && !IsIntercityRide) LastIntercitySelection = "LOCAL FALLBACK: cross-region route unavailable; fairness retained";
+                        }
                         RecordOfferStage("fare/UI notification/map", timer);
                         yield break;
                     }

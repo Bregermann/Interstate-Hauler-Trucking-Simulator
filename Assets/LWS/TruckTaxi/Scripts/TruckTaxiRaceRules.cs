@@ -29,8 +29,6 @@ namespace LWS.TruckTaxi
         private Rigidbody body;
         private readonly RigidbodyConstraints constraints;
         private readonly VehicleInputHandler input;
-        private readonly VehicleInputStates states;
-        private readonly bool autoSetInput;
         private readonly Vector3 position;
         private readonly Quaternion rotation;
         private bool disposed;
@@ -43,8 +41,6 @@ namespace LWS.TruckTaxi
             position = body.position; rotation = body.rotation;
             if (input != null)
             {
-                states = input.states; autoSetInput = input.autoSetInput;
-                input.autoSetInput = false;
                 input.inputModifyCallback.AddListener(HoldInput);
             }
             body.constraints = RigidbodyConstraints.FreezeAll;
@@ -54,7 +50,9 @@ namespace LWS.TruckTaxi
         private void HoldInput()
         {
             if (input == null) return;
-            input.states.Reset();
+            // Keep NWH polling the existing provider and its pause/load gates.
+            // Never restore cached control ownership over a newer owner.
+            input.Throttle = 0;
             input.Brakes = input.Handbrake = 1;
         }
 
@@ -73,8 +71,6 @@ namespace LWS.TruckTaxi
             body = null;
             if (input == null) return;
             input.inputModifyCallback.RemoveListener(HoldInput);
-            input.autoSetInput = autoSetInput;
-            input.states = states;
         }
     }
 
@@ -139,6 +135,12 @@ namespace LWS.TruckTaxi
         public float BestLapSeconds { get; private set; }
         public float LastLapSeconds { get; private set; }
         public float CurrentLapSeconds(float now) => hasPrevious ? Mathf.Max(0, now - lapStart) : 0;
+        public Vector3 NextDirection => forwards[next];
+
+        public static bool IsWrongWay(Vector3 velocity, Vector3 courseDirection) =>
+            Vector3.ProjectOnPlane(velocity, Vector3.up).sqrMagnitude > 4 &&
+            Vector3.Dot(Vector3.ProjectOnPlane(velocity, Vector3.up).normalized,
+                Vector3.ProjectOnPlane(courseDirection, Vector3.up).normalized) < -.45f;
 
         public TruckTaxiRaceProgress(Vector3[] checkpoints, TruckTaxiRaceSettings settings,
             Vector3[] directions = null, bool preserveCheckpoints = false)

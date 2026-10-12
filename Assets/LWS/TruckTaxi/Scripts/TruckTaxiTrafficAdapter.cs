@@ -331,6 +331,39 @@ namespace LWS.TruckTaxi
         }
         public float LaneSpeed(int lane) => lane >= 0 && lane < validLanes.Count ? validLanes[lane].speedLimitMph * .44704f : 10;
 
+        public bool TryReacquireTrafficRoute(TruckTaxiTrafficBehaviour driver)
+        {
+            if (driver == null || driver.LaneIndex < 0 || driver.LaneIndex >= runtimePathPoints.Count) return false;
+            var points = runtimePathPoints[driver.LaneIndex];
+            int closest = -1; float distance = 30*30;
+            for (int i = 1; i < points.Length-2; i++)
+            {
+                float candidate = (points[i]-driver.transform.position).sqrMagnitude;
+                if (candidate < distance && RegionAvailable(points[i])) { closest=i; distance=candidate; }
+            }
+            return closest >= 0 && driver.ReacquireRoute(paths[driver.LaneIndex], closest);
+        }
+
+        public bool TryRecycleStuckTraffic(TruckTaxiTrafficBehaviour driver)
+        {
+            if (driver == null || driver.RecoveryAttempts < 3) return false;
+            var actor = driver.GetComponent<TruckTaxiTrafficPooledActor>();
+            if (actor == null || actor.MissionReserved || !actor.FullPhysics || !vehicles.Contains(driver.gameObject) ||
+                driver.GetComponentInChildren<NWH.VehiclePhysics2.VehicleController>(true) != null) return false;
+            // Never disappear underneath the player or during a close physical interaction.
+            if ((driver.transform.position-PresentationObserver()).sqrMagnitude < 25*25) return false;
+            if (dedicatedVehicles.Contains(driver.gameObject))
+                return GetComponent<TruckTaxiRivalPopulation>()?.TryReleaseForRecovery(this, driver.gameObject, actor.Generation) == true;
+            TruckTaxiTrafficPopulation.Car record = null;
+            if (population != null)
+                foreach (var car in population.Cars) if (car.Actor == driver.gameObject) { record=car; break; }
+            if (record == null || record.MissionReserved || !PoolVehicle(driver.gameObject)) return false;
+            record.Actor=null; record.FullPhysics=false;
+            // Advance the existing logical actor; respawn still requires the usual clearance checks.
+            population.Advance(record, 4);
+            return true;
+        }
+
         public float SignalStoppingDistance(Vector3 front, Vector3 forward, float reach)
         {
             float distance = float.PositiveInfinity;

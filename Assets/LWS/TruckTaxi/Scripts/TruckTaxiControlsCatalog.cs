@@ -126,9 +126,11 @@ namespace LWS.TruckTaxi
             Bound("ON FOOT","Inspect truck",false,ui.InspectTruck,"On foot only");
             Bound("ON FOOT","Walk",false,ui.OnFootMove);
             Bound("ON FOOT","Sprint",false,ui.OnFootSprint);
+            Bound("ON FOOT","Jump",true,ui.OnFootJump,"Grounded on-foot only");
             Add("PASSENGERS","Accept ride","Enter","A / South",true,"",ui?.Submit);
             Add("PASSENGERS","Decline ride","Escape / Backspace","B / East",false,"CONFLICT: Escape also pauses",ui?.Cancel);
             Add("PASSENGERS","Toggle ride requests","F2","",true,"",ui?.ToggleRideRequests);
+            Bound("PASSENGERS","Cancel pickup",true,ui.CancelPickup,"Driving to pickup only; controller binding unassigned");
             Bound("PASSENGERS","Hold to eject",false,passengers?.EjectAction,"CONFLICT: F is also driver gesture");
             Bound("DRIVER NEEDS","Hold jug",false,needs?.JugHoldAction,"CONFLICT: left shoulder is indicator");
             Bound("DRIVER NEEDS","Jug cue",false,needs?.JugCueAction,"CONFLICT: right shoulder is indicator");

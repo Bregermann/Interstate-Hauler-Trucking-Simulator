@@ -210,10 +210,12 @@ namespace LWS.TruckTaxi.Tests
             Assert.Greater(invalidPaths,0);
         }
 
-        [Test] public void CompletedLocalStreakGuaranteesNextValidIntercityDespiteDeclinesAndInvalidPath()
+        [Test] public void OfferFairnessSurvivesInvalidRoutesAndDoesNotDelayLocalFallback()
         {
+            config.intercityRideChance=.25f;
             var session=Session();
-            for(int i=0;i<3;i++)
+            across.dropoffAllowed=false;
+            for(int i=0;i<8;i++)
             {
                 Assert.IsTrue(session.OfferRide(NewPassenger("local."+i)));
                 Assert.IsFalse(session.IsIntercityRide);
@@ -221,14 +223,14 @@ namespace LWS.TruckTaxi.Tests
                 Assert.AreEqual(i+1,session.IntercityPolicy.CompletedLocalStreak);
                 session.ContinueShift();
             }
-            Assert.IsTrue(session.IntercityPolicy.GuaranteePending);
-            across.dropoffAllowed=false;
+            Assert.AreEqual(8,session.LocalOfferStreak);
             disconnected.dropoffAllowed=true;
             Assert.IsFalse(new TruckTaxiRouteDistanceService(graph).BetweenStops(start,disconnected).Navigable);
-            Assert.IsFalse(session.OfferRide(NewPassenger("invalid")));
-            Assert.AreEqual("GUARANTEE",session.LastIntercitySelection);
-            Assert.IsTrue(session.IntercityPolicy.GuaranteePending);
-            Assert.AreEqual(3,session.IntercityPolicy.CompletedLocalStreak);
+            Assert.IsTrue(session.OfferRide(NewPassenger("invalid")));
+            Assert.IsFalse(session.IsIntercityRide);
+            StringAssert.Contains("LOCAL FALLBACK",session.LastIntercitySelection);
+            Assert.AreEqual(9,session.LocalOfferStreak);
+            CompleteOfferedRide(session); session.ContinueShift();
             Assert.That(session.LastDispatchDelay,Is.EqualTo(11).Within(.001f),
                 "A failed offer resumes the normal demand delay.");
 
@@ -238,16 +240,40 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsTrue(session.IsIntercityRide);
             Assert.AreEqual("GUARANTEE",session.LastIntercitySelection);
             session.DeclineRide();
-            Assert.IsTrue(session.IntercityPolicy.GuaranteePending);
-            Assert.AreEqual(3,session.IntercityPolicy.CompletedLocalStreak);
+            Assert.AreEqual(0,session.LocalOfferStreak,"Displayed opportunities count even when declined.");
+        }
 
-            Assert.IsTrue(session.OfferRide(NewPassenger("completed")));
-            Assert.AreSame(across,session.Destination);
-            Assert.IsTrue(session.IsIntercityRide);
-            CompleteOfferedRide(session);
-            Assert.AreEqual(0,session.IntercityPolicy.CompletedLocalStreak);
-            Assert.AreEqual(2,session.LocalOffersBeforeIntercity);
-            Assert.IsFalse(session.IntercityPolicy.GuaranteePending);
+        [Test] public void SpeedwayRejectsInfieldAndAllSameComplexPairsBeforeRouting()
+        {
+            start.locationId="taxi.speedway.parking"; start.district="Speedway";
+            local.locationId="taxi.speedway.infield"; local.district="Speedway";
+            Assert.IsFalse(TruckTaxiOfferEligibility.PublicStop(local));
+            Assert.IsFalse(TruckTaxiOfferEligibility.Pair(start,local));
+            Assert.IsFalse(Session().OfferRide(NewPassenger("infield")));
+            local.locationId="taxi.speedway.main-gate";
+            Assert.IsTrue(TruckTaxiOfferEligibility.PublicStop(local));
+            Assert.IsFalse(TruckTaxiOfferEligibility.Pair(start,local));
+            Assert.IsFalse(Session().OfferRide(NewPassenger("microfare")));
+            start.locationId="arena.parking"; start.district="Downtown"; start.tags=new[]{"complex:arena"};
+            local.locationId="arena.entrance"; local.district="Downtown"; local.tags=new[]{"complex:arena"};
+            Assert.IsFalse(TruckTaxiOfferEligibility.Pair(start,local));
+            local.tags=new[]{"complex:other-arena"};
+            Assert.IsTrue(TruckTaxiOfferEligibility.Pair(start,local));
+        }
+
+        [Test] public void OfferMixTracksOpportunitiesAtQuarterShareWithBoundedDrought()
+        {
+            var mix=new TruckTaxiOfferMix(); var random=new System.Random(8812);
+            int across=0, previous=-1; var gaps=new HashSet<int>();
+            for(int i=0;i<10000;i++)
+            {
+                bool selected=mix.WantsIntercity(random,.25f,out _);
+                mix.RecordOffer(selected,.25f);
+                if(selected) { across++; if(previous>=0) gaps.Add(i-previous); previous=i; }
+                Assert.LessOrEqual(mix.LocalStreak,7);
+            }
+            Assert.That(across,Is.InRange(2400,2700));
+            Assert.Greater(gaps.Count,3,"Not a literal every-fourth-offer schedule.");
         }
 
         [Test] public void FareBonusComponentsAreAdditiveCapturedAndWeatherIsNotDoubled()

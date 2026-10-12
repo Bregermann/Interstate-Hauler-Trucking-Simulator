@@ -43,6 +43,8 @@ namespace LWS.TruckTaxi
         private readonly List<UnityEngine.UI.Selectable> storeControls = new List<UnityEngine.UI.Selectable>();
         private readonly List<GameObject> storeRows = new List<GameObject>();
         private TextMeshProUGUI storeDetails;
+        private TextMeshProUGUI servicePrompt;
+        private float serviceInteractionAfter;
         private bool wasPaused, syncing;
         private float nextRefresh;
         public bool IsOpen => panel != null && panel.gameObject.activeSelf;
@@ -65,8 +67,8 @@ namespace LWS.TruckTaxi
             clockText = hud.Text(band, "Game time", new Vector2(.02f, .12f), new Vector2(.17f, .95f), 16);
             for (int i = 0; i < NeedNames.Length; i++)
             {
-                float left = .18f + i * .157f;
-                var cell = TruckTaxiHud.Rect(band, NeedNames[i], new Vector2(left, .08f), new Vector2(left + .147f, .92f));
+                float left = .18f + i * .20f;
+                var cell = TruckTaxiHud.Rect(band, NeedNames[i], new Vector2(left, .08f), new Vector2(left + .19f, .92f));
                 needLabels[i] = hud.Text(cell, NeedNames[i] + " label", new Vector2(0, .45f), Vector2.one, 16);
                 needLabels[i].enableAutoSizing = true; needLabels[i].fontSizeMin = 11; needLabels[i].fontSizeMax = 16;
                 var needTrack = TruckTaxiHud.Rect(cell, NeedNames[i] + " track", new Vector2(0, .12f), new Vector2(1, .36f));
@@ -75,7 +77,9 @@ namespace LWS.TruckTaxi
                     .gameObject.AddComponent<UnityEngine.UI.Image>();
                 needFills[i].raycastTarget = false;
             }
-            hud.Button(band, "NEEDS", new Vector2(.82f, .12f), new Vector2(.985f, .88f), Open);
+            servicePrompt=hud.Text(hud.Root,"Nearby service interaction",new Vector2(.3f,.21f),new Vector2(.7f,.28f),25);
+            servicePrompt.alignment=TextAlignmentOptions.Center;
+            servicePrompt.gameObject.SetActive(false);
             panel = hud.Panel(hud.Root, "Driver needs and environment", new Vector2(.14f, .19f), new Vector2(.72f, .91f));
             driverPage = TruckTaxiHud.Rect(panel, "Driver needs page", Vector2.zero, Vector2.one);
             environmentPage = TruckTaxiHud.Rect(panel, "Development environment page", Vector2.zero, Vector2.one);
@@ -390,7 +394,7 @@ namespace LWS.TruckTaxi
             bool restaurant = point != null && point.location != null && point.location.locationType == TaxiLocationType.Restaurant;
             bool repair = point != null && point.Supports(TruckTaxiServiceCapability.RepairGeneralDamage);
             contextTitle.text = point?.displayName ?? "SERVICE";
-            eatButton.SetActive(restaurant); buyFoodButton.SetActive(restaurant && point.Supports(TruckTaxiServiceCapability.Store));
+            eatButton.SetActive(restaurant); buyFoodButton.SetActive(point != null && point.Supports(TruckTaxiServiceCapability.Store));
             repairButton.SetActive(repair); refuelButton.SetActive(point != null && point.Supports(TruckTaxiServiceCapability.Refuel));
             restroomButton.SetActive(point != null && point.Supports(TruckTaxiServiceCapability.Restroom));
             wasteButton.SetActive(point != null && point.Supports(TruckTaxiServiceCapability.DisposeWaste));
@@ -451,6 +455,7 @@ namespace LWS.TruckTaxi
             if (!IsOpen) return;
             if (contextPage.gameObject.activeSelf) dismissedContext = activeContext;
             panel.gameObject.SetActive(false); host.SetPaused(wasPaused);
+            serviceInteractionAfter=Time.unscaledTime+.4f;
         }
         public void Toggle() { if (IsOpen) Close(); else Open(); }
         private void ShowDriver()
@@ -459,6 +464,25 @@ namespace LWS.TruckTaxi
         { if (contextPage.gameObject.activeSelf) dismissedContext = activeContext; SelectPage(storePage); Refresh(); }
         private void ShowInventory()
         { SelectPage(inventoryPage); Refresh(); }
+        public void OpenInventory() { Open(); ShowInventory(); }
+        public bool ServiceInteractionEligible => !IsOpen && host!=null && !host.Paused && !hud.NormalHudSuppressed &&
+            (host.WorldLife==null || host.WorldLife.Mode==TruckTaxiPlayerControlMode.Driving) && needs.CanInteract && !needs.IsMoving && needs.NearbyService!=null &&
+            Time.unscaledTime>=serviceInteractionAfter && host.Companions?.CanInteract!=true;
+        public bool TryHandleServiceInteraction()
+        {
+            if(!ServiceInteractionEligible || hud.UIInput.WorldInteract.WasPressedThisFrame()!=true) return false;
+            Open(); ShowContext(needs.NearbyService); return true;
+        }
+        public static string ServicePromptLabel(TruckTaxiServicePoint point)
+        {
+            if(point==null) return string.Empty;
+            if(point.Supports(TruckTaxiServiceCapability.Sleep)) return "ENTER MOTEL";
+            if(point.Supports(TruckTaxiServiceCapability.RepairGeneralDamage)) return "OPEN GARAGE SERVICES";
+            if(point.Supports(TruckTaxiServiceCapability.Refuel)) return "OPEN FUEL SERVICES";
+            if(point.Supports(TruckTaxiServiceCapability.Food)) return "ENTER DINER";
+            if(point.Supports(TruckTaxiServiceCapability.Store)) return "ENTER STORE";
+            return "OPEN SERVICES";
+        }
         public void OpenDeveloperTools()
         {
             if(!TruckTaxiMegaDebugPanel.IsAvailable) return;
@@ -487,17 +511,15 @@ namespace LWS.TruckTaxi
             }
             if (Time.unscaledTime < nextRefresh) return;
             nextRefresh = Time.unscaledTime + .15f;
-            var context = needs.NearbyRestaurant ?? needs.NearbyRepair ?? needs.NearbySleep;
-            if (context == null) dismissedContext = null;
-            if (!IsOpen && !host.Paused && needs.CanInteract && context != null && context != dismissedContext)
-            { Open(); ShowContext(context); }
+            servicePrompt.gameObject.SetActive(ServiceInteractionEligible);
+            if(servicePrompt.gameObject.activeSelf) servicePrompt.text="["+hud.UIInput.Hint(hud.UIInput.WorldInteract)+"] "+ServicePromptLabel(needs.NearbyService);
             Refresh();
         }
         public void RefreshDebugVisibility()
         {
             if (bandGroup == null) return;
             bandGroup.alpha = hud.NormalHudSuppressed ? 0 : 1;
-            bandGroup.interactable = bandGroup.blocksRaycasts = !host.Paused && !hud.NormalHudSuppressed;
+            bandGroup.interactable = bandGroup.blocksRaycasts = false;
             jugPanel.gameObject.SetActive(needs.JugActive && !host.Paused && !hud.NormalHudSuppressed);
         }
         private void Refresh()

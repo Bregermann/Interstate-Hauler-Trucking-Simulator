@@ -101,6 +101,8 @@ namespace LWS.TruckTaxi
         private TruckTaxiMapMarkerState serviceTargetOriginalState;
         private bool serviceTargetReused;
         private string presentationRide;
+        private readonly List<TruckTaxiNavigationObjective> navigationObjectives=new List<TruckTaxiNavigationObjective>(8);
+        private readonly HashSet<string> objectiveIds=new HashSet<string>(StringComparer.Ordinal);
         private const string DiscoveryPrefix="TruckTaxi.Map.Shortcut.v1.";
 
         public void Initialize(TruckTaxiBootstrap value,TruckTaxiGPSAdapter adapter)
@@ -367,6 +369,12 @@ namespace LWS.TruckTaxi
             dirty=true; nextTrafficRefresh=0;
         }
         public void RequestRefresh() { dirty=true; }
+        internal void HideTransientNavigationTarget(string id)
+        {
+            if(id!=gps?.TargetId && byId.TryGetValue(id,out var marker) && marker!=null &&
+                marker.source==null && !marker.serviceBound)
+            { marker.state=TruckTaxiMapMarkerState.Hidden; dirty=true; }
+        }
         public void SetServiceTarget(string id,string label,Vector3 position,
             TruckTaxiMapMarkerType type=TruckTaxiMapMarkerType.Bathroom)
         {
@@ -443,14 +451,29 @@ namespace LWS.TruckTaxi
             }
             RefreshImpactTargets();
             if(serviceTarget!=null) serviceTarget.state=TruckTaxiMapMarkerState.Active;
+            objectiveIds.Clear();
+            gps.CopyNavigationObjectives(navigationObjectives);
+            foreach(var objective in navigationObjectives)
+            {
+                if(!TruckTaxiNavigationObjective.IsPointObjective(objective.Type)) continue;
+                objectiveIds.Add(objective.TargetId);
+                if(!byId.TryGetValue(objective.TargetId,out var marker) || marker==null)
+                    marker=Ensure(objective.TargetId,objective.Label,objective.Type,null,objective.Position);
+                else if(marker.source==null)
+                { marker.transform.position=objective.Position; marker.label=objective.Label; }
+                if(marker!=null) marker.state=TruckTaxiMapMarkerState.Active;
+            }
             foreach(var marker in markers)
             {
                 if(marker==null) continue;
                 if(marker.serviceBound && !TruckTaxiServicePresentation.IsUsable(marker.service))
                     marker.state=TruckTaxiMapMarkerState.Hidden;
-                else if(marker.stableId==gps.TargetId && !gps.GuidanceSuppressed) marker.state=TruckTaxiMapMarkerState.Active;
+                else if(objectiveIds.Contains(marker.stableId)) marker.state=TruckTaxiMapMarkerState.Active;
                 else if(marker.state==TruckTaxiMapMarkerState.Active) marker.state=TruckTaxiMapMarkerState.Known;
             }
+            if(endpoint!=null)
+                endpoint.GetComponent<TruckTaxiObjectivePointPresentation>()?.Configure(endpoint,gps.CabCompass,
+                    gps.HudCompass,null,1,false);
             endpoint=FindAndStyleLegacyPois();
             nearby.Clear();
             foreach(var marker in markers) if(marker!=null && marker.state!=TruckTaxiMapMarkerState.Hidden && marker.state!=TruckTaxiMapMarkerState.Active &&
@@ -472,7 +495,11 @@ namespace LWS.TruckTaxi
                 bool borrowed=endpoint!=null && marker.stableId==gps.TargetId;
                 var poi=marker.CompassPoi;
                 if(poi==null && visible && !borrowed) poi=api.Create(markerRoot,marker.stableId);
-                if(poi!=null) api.Apply(poi,marker,registry,visible && !borrowed);
+                if(poi!=null)
+                {
+                    api.Apply(poi,marker,registry,visible && !borrowed);
+                    StyleObjective(poi,marker,visible && !borrowed);
+                }
                 marker.BindPresentation(registry.Find(marker.markerType)?.icon,poi,visible);
             }
         }
@@ -480,6 +507,15 @@ namespace LWS.TruckTaxi
         {
             int result=(a.Position-host.Player.transform.position).sqrMagnitude.CompareTo((b.Position-host.Player.transform.position).sqrMagnitude);
             return result!=0 ? result : string.CompareOrdinal(a.stableId,b.stableId);
+        }
+        private void StyleObjective(Component poi,TruckTaxiMapMarker marker,bool visible)
+        {
+            bool active=visible && marker.state==TruckTaxiMapMarkerState.Active &&
+                TruckTaxiNavigationObjective.IsPointObjective(marker.markerType);
+            var presentation=poi.GetComponent<TruckTaxiObjectivePointPresentation>();
+            if(presentation==null && active) presentation=poi.gameObject.AddComponent<TruckTaxiObjectivePointPresentation>();
+            if(presentation!=null) presentation.Configure(poi,gps.CabCompass,gps.HudCompass,
+                registry.Find(TruckTaxiMapMarkerType.Player)?.icon,registry.Scale(marker.markerType,marker.state),active);
         }
         private void SetRideMarker(TruckTaxiRideLocation location,TruckTaxiMapMarkerType type,TruckTaxiMapMarkerState state)
         {
@@ -542,7 +578,7 @@ namespace LWS.TruckTaxi
             {
                 string id=api.StableId(poi);
                 if(id=="lws.destination.active" && byId.TryGetValue(gps.TargetId ?? "",out var target))
-                { active=poi; api.Apply(poi,target,registry,true); }
+                { active=poi; api.Apply(poi,target,registry,true); StyleObjective(poi,target,true); }
                 else if(id!=null && id.StartsWith("lws.road.",StringComparison.Ordinal))
                     api.ApplyDebug(poi,registry);
             }
@@ -614,6 +650,7 @@ namespace LWS.TruckTaxi
                 poi.transform.position=marker.Position;
                 Field(poi,"title",(active ? "ACTIVE: " : marker.state==TruckTaxiMapMarkerState.Completed ? "DONE: " : "")+marker.label);
                 Style(poi,entry,registry.Tint(marker.markerType,marker.state),registry.Scale(marker.markerType,marker.state),visible);
+                active &= TruckTaxiNavigationObjective.IsPointObjective(marker.markerType);
                 Field(poi,"miniMapClampPosition",active); Field(poi,"miniMapShowCircle",active);
                 Field(poi,"miniMapCircleRadius",8f); Field(poi,"miniMapCircleColor",new Color(1,1,1,.65f));
                 Field(poi,"miniMapCircleInnerColor",Color.clear); Field(poi,"miniMapCircleAnimationWhenAppears",false);

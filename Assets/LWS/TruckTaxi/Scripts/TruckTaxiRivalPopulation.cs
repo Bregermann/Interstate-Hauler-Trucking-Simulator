@@ -213,6 +213,9 @@ namespace LWS.TruckTaxi
 
         // A visual-only kaiju proxy already exists; retire the real rival through its usual owners.
         public bool TryReleaseForKaiju(TruckTaxiTrafficAdapter owner, GameObject victim, int expectedGeneration)
+            => TryReleaseForRecovery(owner, victim, expectedGeneration);
+
+        public bool TryReleaseForRecovery(TruckTaxiTrafficAdapter owner, GameObject victim, int expectedGeneration)
         {
             if (owner == null || traffic != owner || logical == null || victim == null || !victim.activeInHierarchy ||
                 victim.GetComponentInChildren<NWH.VehiclePhysics2.VehicleController>(true) != null) return false;

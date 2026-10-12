@@ -45,6 +45,8 @@ namespace LWS.TruckTaxi
         public int JugsThrown { get; private set; }
         public float Pressure { get; private set; }
         public float BowelPressure { get; private set; }
+        public int BowelAccidents { get; private set; }
+        public float BowelDiscomfortGameSeconds { get; private set; }
         public int ToiletsDiscovered => usedToiletIds.Count;
         private readonly HashSet<string> ambientChoiceIds = new HashSet<string>(StringComparer.Ordinal);
         public IReadOnlyCollection<string> AmbientChoiceIds => ambientChoiceIds;
@@ -71,7 +73,8 @@ namespace LWS.TruckTaxi
             ToiletCollectionChanged?.Invoke(usedToiletIds.Count);
             return true;
         }
-        public void RelieveBowel() { BowelPressure = 0; bowelCrisisSeconds = 0; bowelUrgentEmitted = false; }
+        public void RelieveBowel()
+        { BowelPressure = 0; bowelCrisisSeconds = 0; bowelUrgentEmitted = false; BowelDiscomfortGameSeconds = 0; }
         public bool FilledJug => Count(TruckTaxiNeedsItem.FilledJug) + Count(TruckTaxiNeedsItem.FilledBottle) > 0;
         public bool HasEmptyContainer => Count(TruckTaxiNeedsItem.EmptyPissJug) + Count(TruckTaxiNeedsItem.EmptyBottle) > 0;
         public bool CanStartJug => !JugActive && Pressure > .02f &&
@@ -119,6 +122,7 @@ namespace LWS.TruckTaxi
             return new TruckTaxiDriverNeedsSnapshot {
                 Pressure = Pressure, Hunger = Hunger, Thirst = Thirst, Fatigue = Fatigue,
                 BowelPressure = BowelPressure, BowelCrisisGameSeconds = bowelCrisisSeconds,
+                BowelAccidents = BowelAccidents, BowelDiscomfortGameSeconds = BowelDiscomfortGameSeconds,
                 UsedToiletIds = new List<string>(usedToiletIds).ToArray(),
                 AmbientChoiceIds = new List<string>(ambientChoiceIds).ToArray(),
                 RentedMotelId = RentedMotelId, MotelAccessExpiresAtGameSeconds = MotelAccessExpiresAtGameSeconds,
@@ -133,7 +137,8 @@ namespace LWS.TruckTaxi
             if (!Normalized(snapshot.Pressure) || !Normalized(snapshot.Hunger) || !Normalized(snapshot.Thirst) || !Normalized(snapshot.Fatigue) || !Normalized(snapshot.BowelPressure) ||
                 !float.IsFinite(snapshot.CycleGameSeconds) || snapshot.CycleGameSeconds < 0 ||
                 !float.IsFinite(snapshot.CrisisGameSeconds) || snapshot.CrisisGameSeconds < 0 ||
-                !float.IsFinite(snapshot.BowelCrisisGameSeconds) || snapshot.BowelCrisisGameSeconds < 0)
+                !float.IsFinite(snapshot.BowelCrisisGameSeconds) || snapshot.BowelCrisisGameSeconds < 0 ||
+                snapshot.BowelAccidents < 0 || !float.IsFinite(snapshot.BowelDiscomfortGameSeconds) || snapshot.BowelDiscomfortGameSeconds < 0)
             { error = "Invalid needs values."; return false; }
             if ((!string.IsNullOrEmpty(snapshot.RentedMotelId) &&
                     (string.IsNullOrWhiteSpace(snapshot.RentedMotelId) || snapshot.RentedMotelId.Length > 128)) ||
@@ -164,6 +169,8 @@ namespace LWS.TruckTaxi
             Pressure = snapshot.Pressure; Hunger = snapshot.Hunger; Thirst = snapshot.Thirst; Fatigue = snapshot.Fatigue;
             BowelPressure = snapshot.BowelPressure;
             bowelCrisisSeconds = snapshot.BowelCrisisGameSeconds;
+            BowelAccidents = snapshot.BowelAccidents;
+            BowelDiscomfortGameSeconds = snapshot.BowelDiscomfortGameSeconds;
             bowelUrgentEmitted = BowelPressure >= .85f;
             usedToiletIds.Clear(); usedToiletIds.UnionWith(restoredToilets);
             ambientChoiceIds.Clear(); ambientChoiceIds.UnionWith(restoredChoices);
@@ -204,18 +211,17 @@ namespace LWS.TruckTaxi
             double untilFull = (1 - Pressure) * cycleSeconds / Mathf.Max(.01f, bladderRate);
             Pressure = Mathf.Clamp01(Pressure + (float)(seconds / cycleSeconds) * bladderRate);
             Hunger = Mathf.Clamp01(Hunger + (float)(seconds / (8 * 3600)) * Effects.HungerRateMultiplier);
-            Thirst = Mathf.Clamp01(Thirst + (float)(seconds / (5 * 3600)) * Effects.ThirstRateMultiplier);
-            BowelPressure = Mathf.Clamp01(BowelPressure + (float)(seconds / (12 * 3600)));
+            Thirst = Mathf.Clamp01(Thirst + (float)(seconds / 3600) * SafeRate(settings.thirstGainPerGameHour, .05f) * Effects.ThirstRateMultiplier);
+            float bowelRate = SafeRate(settings.bowelGainPerGameHour, 1f / 12f);
+            double bowelUntilFull = BowelPressure >= 1 ? 0 : bowelRate > 0 ? (1 - BowelPressure) * 3600 / bowelRate : double.PositiveInfinity;
+            BowelDiscomfortGameSeconds = Mathf.Max(0, BowelDiscomfortGameSeconds - (float)seconds);
+            BowelPressure = Mathf.Clamp01(BowelPressure + (float)(seconds / 3600) * bowelRate);
             if (BowelPressure >= .85f && !bowelUrgentEmitted)
             { bowelUrgentEmitted = true; Event?.Invoke(TruckTaxiDriverNeedEvent.BowelUrgent); }
             if (BowelPressure >= 1f)
             {
-                bowelCrisisSeconds += (float)seconds;
-                if (bowelCrisisSeconds >= Mathf.Max(1, settings.crisisGraceGameMinutes) * 60)
-                {
-                    CabMess = true; BowelPressure = .25f; bowelCrisisSeconds = 0;
-                    bowelUrgentEmitted = false; Event?.Invoke(TruckTaxiDriverNeedEvent.BowelAccident);
-                }
+                bowelCrisisSeconds += (float)Math.Max(0, seconds - bowelUntilFull);
+                if (bowelCrisisSeconds >= Mathf.Max(1, settings.bowelGraceGameMinutes) * 60) FailBowel();
             }
             if (Pressure >= .85f && !urgentEmitted) { urgentEmitted = true; Event?.Invoke(TruckTaxiDriverNeedEvent.BladderUrgent); }
             if (Pressure < 1) return;
@@ -232,11 +238,40 @@ namespace LWS.TruckTaxi
             Pressure = float.IsFinite(value) ? Mathf.Clamp01(value) : 0;
             crisisSeconds = 0; urgentEmitted = Pressure < .85f ? false : urgentEmitted;
         }
+        private static float SafeRate(float value, float fallback) => float.IsFinite(value) ? Mathf.Clamp01(value) : fallback;
+        private void AddBowelLoad(float value)
+        {
+            if (float.IsFinite(value) && value > 0) BowelPressure = Mathf.Clamp01(BowelPressure + value);
+        }
+        private void FailBowel()
+        {
+            CabMess = true;
+            if (BowelAccidents < int.MaxValue) BowelAccidents++;
+            BowelPressure = .15f; bowelCrisisSeconds = 0; bowelUrgentEmitted = false;
+            BowelDiscomfortGameSeconds = 1800;
+            Event?.Invoke(TruckTaxiDriverNeedEvent.BowelAccident);
+        }
+        public void DebugSetBowelPercent(float percent)
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            if (!float.IsFinite(percent)) return;
+            BowelPressure = Mathf.Clamp01(percent / 100); bowelCrisisSeconds = 0; bowelUrgentEmitted = false;
+#endif
+        }
+        public void DebugForceBowelFailure()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            FailBowel();
+#endif
+        }
         // Called by the completed adult interaction, never by ordinary drinks.
         public void SatisfyThirst() { Thirst = 0; }
         public void RelieveThirst(float fraction) { if(float.IsFinite(fraction)) Thirst=Mathf.Clamp01(Thirst-Mathf.Max(0,fraction)); }
-        public void EatMeal(float hungerRelief)
-        { if (float.IsFinite(hungerRelief)) Hunger = Mathf.Clamp01(Hunger - Mathf.Max(0, hungerRelief)); }
+        public void EatMeal(float hungerRelief, float bowelLoad = .24f)
+        {
+            if (!float.IsFinite(hungerRelief) || hungerRelief <= 0) return;
+            Hunger = Mathf.Clamp01(Hunger - hungerRelief); AddBowelLoad(bowelLoad);
+        }
         public void DebugSetThirst(float value)
         {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -280,7 +315,7 @@ namespace LWS.TruckTaxi
         public bool UseBathroom(bool properlyStopped)
         {
             if (!properlyStopped || JugActive) return false;
-            Relieve(0); Event?.Invoke(TruckTaxiDriverNeedEvent.BathroomStop); return true;
+            Relieve(0); RelieveBowel(); Event?.Invoke(TruckTaxiDriverNeedEvent.BathroomStop); return true;
         }
         public bool DisposeJug(bool atDisposal)
         {
@@ -329,6 +364,7 @@ namespace LWS.TruckTaxi
                 item != TruckTaxiNeedsItem.HighOctaneSuppository && item != TruckTaxiNeedsItem.MysteryMushrooms) ||
                 (entry.CreatesBottle && !CanAdd(TruckTaxiNeedsItem.EmptyBottle)) || !RemoveItem(item)) return false;
             Hunger = Mathf.Clamp01(Hunger - entry.HungerRelief);
+            AddBowelLoad(entry.BowelLoad);
             if (entry.IsDrink) RelieveThirst(TruckTaxiNeedsItems.DrinkThirstRelief);
             if (entry.CreatesBottle) AddItem(TruckTaxiNeedsItem.EmptyBottle);
             if (item == TruckTaxiNeedsItem.MysteryMushrooms) Effects.Activate(TruckTaxiTemporaryEffectKind.MysteryMushroom);

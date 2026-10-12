@@ -46,8 +46,10 @@ namespace LWS.TruckTaxi
             public TruckTaxiSeatType[] allowedSeatTypes = Array.Empty<TruckTaxiSeatType>();
             public bool firstPersonVisible = true;
             public bool privateEventEligible;
-            [Tooltip("Explicitly validated extra travel seat; never the driver's or primary fare seat.")]
+            [Tooltip("Explicit extra travel seat. A shared front passenger seat must opt in; never the driver's seat.")]
             public bool secondaryOccupantSeat;
+            [Tooltip("Explicitly allows a secondary role to use the primary passenger seat while it is free.")]
+            public bool sharedPrimarySeat;
             [Min(.3f)] public float occupantRadius = .65f;
             public PosePart[] pose = Array.Empty<PosePart>();
         }
@@ -60,6 +62,8 @@ namespace LWS.TruckTaxi
         private sealed class Placement
         {
             public Anchor anchor;
+            public TruckTaxiCabOccupantKind kind;
+            public string stableId;
             public Vector3 worldScale;
             public Transform[] parts;
             public int[] layers;
@@ -79,12 +83,25 @@ namespace LWS.TruckTaxi
         [Tooltip("Optional existing divider. Its active state is restored on every exit.")]
         public GameObject privacyDivider;
         private readonly Dictionary<Transform, Placement> placements = new Dictionary<Transform, Placement>();
+        private readonly Dictionary<Transform, Placement> reservations = new Dictionary<Transform, Placement>();
+        private readonly HashSet<Transform> releasedVisuals = new HashSet<Transform>();
         private readonly Dictionary<Camera, int> cameraMasks = new Dictionary<Camera, int>();
         private readonly List<Transform> stale = new List<Transform>();
         private Transition driverTransition, companionTransition;
         private float transitionTime;
         private bool dividerWasActive;
         public bool HasSleeperCapability => hasSleeperCapability && isActiveAndEnabled;
+        public bool AuthoredSleeperCapability => hasSleeperCapability;
+        public bool HasAuthoredPrimarySeat
+        {
+            get
+            {
+                if(!isActiveAndEnabled) return false;
+                foreach(var anchor in anchors)
+                    if(ValidAnchor(anchor) && anchor.id==TruckTaxiCabAnchorId.FrontPassengerSeat) return true;
+                return false;
+            }
+        }
         public bool PrivateTransitionActive => driverTransition != null;
         public bool PrivateTransitionValid => HasSleeperCapability && PrivateTransitionActive && companionTransition != null &&
             driverTransition.actor != null && companionTransition.actor != null &&
@@ -105,12 +122,83 @@ namespace LWS.TruckTaxi
             }
         }
         public int OccupiedCount { get { Prune(); return placements.Count; } }
+        // The player always retains a place, including while walking. Legacy driver presentation
+        // does not call Place, so counting only placements incorrectly permits a ninth person.
+        public int UsedCapacity
+        {
+            get
+            {
+                Prune();
+                int count=placements.Count+reservations.Count;
+                bool driver=false;
+                foreach(var placement in placements.Values) driver |= placement.kind==TruckTaxiCabOccupantKind.Driver;
+                if(!driver) count++;
+                foreach(var actor in GetComponentsInChildren<TruckTaxiPassengerActor>(true))
+                    if(IsLegacyOccupant(actor)) count++;
+                return count;
+            }
+        }
+        public bool SetOccupantIdentity(Transform actor,string stableId)
+        {
+            if(actor==null || string.IsNullOrWhiteSpace(stableId) || !placements.TryGetValue(actor,out var placement)) return false;
+            placement.stableId=stableId.Trim();
+            return true;
+        }
+        public void CopyOccupancySnapshot(List<TruckTaxiOccupantSlotSnapshot> output)
+        {
+            if(output==null) throw new ArgumentNullException(nameof(output));
+            Prune(); output.Clear();
+            bool driverSlot=false;
+            foreach(var anchor in anchors)
+            {
+                if(!ValidAnchor(anchor)) continue;
+                Placement occupant=null;
+                Transform actor=null;
+                foreach(var entry in placements)
+                    if(entry.Value.anchor==anchor) { occupant=entry.Value; actor=entry.Key; break; }
+                bool reserved=false;
+                if(occupant==null) foreach(var entry in reservations)
+                    if(entry.Value.anchor==anchor) { occupant=entry.Value; actor=entry.Key; reserved=true; break; }
+                bool isDriver=anchor.id==TruckTaxiCabAnchorId.DriverSeat &&
+                    (anchor.allowedOccupants & TruckTaxiCabOccupantKind.Driver)!=0;
+                driverSlot |= isDriver;
+                var passenger=actor!=null ? actor.GetComponent<TruckTaxiPassengerActor>() : null;
+                var state=occupant==null ? (isDriver ? TruckTaxiOccupantSlotState.Reserved : TruckTaxiOccupantSlotState.Free) :
+                    reserved || passenger!=null && passenger.Lifecycle==TruckTaxiActorLifecycle.Boarding ? TruckTaxiOccupantSlotState.Reserved :
+                    TruckTaxiOccupantSlotState.Occupied;
+                output.Add(new TruckTaxiOccupantSlotSnapshot(anchor.StableSlotId,
+                    occupant?.kind ?? (isDriver ? TruckTaxiCabOccupantKind.Driver : 0),
+                    occupant?.stableId ?? (isDriver ? "player" : occupant!=null ? "<unbound>" : ""),state));
+            }
+            if(!driverSlot) output.Add(new TruckTaxiOccupantSlotSnapshot("driver.legacy",TruckTaxiCabOccupantKind.Driver,
+                "player",TruckTaxiOccupantSlotState.Reserved));
+            foreach(var actor in GetComponentsInChildren<TruckTaxiPassengerActor>(true))
+                if(IsLegacyOccupant(actor)) output.Add(new TruckTaxiOccupantSlotSnapshot("legacy.visual."+actor.GetInstanceID(),
+                    TruckTaxiCabOccupantKind.Passenger,"<unbound>",actor.Lifecycle==TruckTaxiActorLifecycle.Boarding ?
+                        TruckTaxiOccupantSlotState.Reserved : TruckTaxiOccupantSlotState.Occupied));
+        }
+        private bool IsLegacyOccupant(TruckTaxiPassengerActor actor) => actor!=null &&
+            !placements.ContainsKey(actor.transform) && !reservations.ContainsKey(actor.transform) &&
+            !releasedVisuals.Contains(actor.transform) &&
+            (actor.Lifecycle==TruckTaxiActorLifecycle.Seated || actor.Lifecycle==TruckTaxiActorLifecycle.Boarding);
         public bool IsOccupied(string slotId)
         {
             Prune();
             foreach (var placement in placements.Values)
                 if (placement.anchor.StableSlotId == slotId) return true;
             return false;
+        }
+        public bool TryReserveSecondary(Transform actor,TruckTaxiSeatType type,TruckTaxiCabOccupantKind kind,string stableId)
+        {
+            if(actor==null || string.IsNullOrWhiteSpace(stableId)) return false;
+            Prune();
+            if(placements.ContainsKey(actor)) return false;
+            if(reservations.TryGetValue(actor,out var existing))
+                return existing.kind==kind && existing.stableId==stableId;
+            var anchor=SelectSecondary(type,actor,kind);
+            if(anchor==null) return false;
+            reservations.Add(actor,new Placement { anchor=anchor,kind=kind,stableId=stableId });
+            return true;
         }
         public bool TryGetSlot(Transform actor, out string slotId)
         {
@@ -145,19 +233,19 @@ namespace LWS.TruckTaxi
         public bool TrySeat(Transform actor, TruckTaxiCabOccupantKind kind, TruckTaxiCabAnchorId preferred,
             TruckTaxiSeatType seatType, Vector3 worldScale, bool sleeperOnly = false)
         {
-            if (!HasSleeperCapability || actor == null || PrivateTransitionActive) return false;
+            if (!isActiveAndEnabled || sleeperOnly && !HasSleeperCapability || actor == null || PrivateTransitionActive) return false;
             Prune();
             Anchor anchor = Select(kind, preferred, seatType, actor, sleeperOnly, false, null);
             if (anchor == null) return false;
             Release(actor);
-            Place(actor, anchor, worldScale);
+            Place(actor, anchor, worldScale, kind);
             return true;
         }
 
         public bool HasSeat(Transform actor, TruckTaxiCabOccupantKind kind, TruckTaxiCabAnchorId preferred,
             TruckTaxiSeatType seatType)
         {
-            if (!HasSleeperCapability || actor == null || PrivateTransitionActive) return false;
+            if (!isActiveAndEnabled || actor == null || PrivateTransitionActive) return false;
             Prune();
             return Select(kind, preferred, seatType, actor, false, false, null) != null;
         }
@@ -182,8 +270,8 @@ namespace LWS.TruckTaxi
             second.PrepareForSeat();
             Release(first.transform);
             Release(second.transform);
-            Place(first.transform, a, first.StandingWorldScale);
-            Place(second.transform, b, second.StandingWorldScale);
+            Place(first.transform, a, first.StandingWorldScale, TruckTaxiCabOccupantKind.Passenger);
+            Place(second.transform, b, second.StandingWorldScale, TruckTaxiCabOccupantKind.Passenger);
             first.CompleteSeating();
             second.CompleteSeating();
             return true;
@@ -193,9 +281,12 @@ namespace LWS.TruckTaxi
             Transform second, TruckTaxiSeatProfile secondProfile, out Anchor a, out Anchor b)
         {
             a = b = null;
-            if (!HasSleeperCapability || PrivateTransitionActive || first == null || second == null || first == second)
+            if (!isActiveAndEnabled || PrivateTransitionActive || first == null || second == null || first == second)
                 return false;
             Prune();
+            if(UsedCapacity+(placements.ContainsKey(first) || reservations.ContainsKey(first) ? 0 : 1)+
+                (placements.ContainsKey(second) || reservations.ContainsKey(second) ? 0 : 1)>MaximumOccupants)
+                return false;
             var preferred = firstProfile != null ? firstProfile.primaryCabAnchor : TruckTaxiCabAnchorId.FrontPassengerSeat;
             foreach (var candidate in anchors)
             {
@@ -205,7 +296,8 @@ namespace LWS.TruckTaxi
                 foreach (var extra in anchors)
                 {
                     if (extra == null || extra == candidate || !extra.secondaryOccupantSeat ||
-                        extra.id == TruckTaxiCabAnchorId.DriverSeat || extra.id == TruckTaxiCabAnchorId.FrontPassengerSeat ||
+                        extra.id == TruckTaxiCabAnchorId.DriverSeat ||
+                        extra.id == TruckTaxiCabAnchorId.FrontPassengerSeat && !extra.sharedPrimarySeat ||
                         !Usable(extra, TruckTaxiCabOccupantKind.Passenger,
                             secondProfile != null ? secondProfile.seatType : TruckTaxiSeatType.StandardPassenger, second, false, false) ||
                         !HasTravelClearance(extra, second) ||
@@ -227,7 +319,7 @@ namespace LWS.TruckTaxi
             var anchor = SelectSecondary(type, actor, kind);
             if (anchor == null) return false;
             Release(actor);
-            Place(actor, anchor, worldScale);
+            Place(actor, anchor, worldScale, kind);
             return true;
         }
 
@@ -238,9 +330,18 @@ namespace LWS.TruckTaxi
             foreach (var anchor in anchors)
             {
                 if (anchor == null || !anchor.secondaryOccupantSeat ||
-                    anchor.id == TruckTaxiCabAnchorId.DriverSeat || anchor.id == TruckTaxiCabAnchorId.FrontPassengerSeat ||
+                    anchor.id == TruckTaxiCabAnchorId.DriverSeat ||
+                    anchor.id == TruckTaxiCabAnchorId.FrontPassengerSeat && !anchor.sharedPrimarySeat ||
                     !Usable(anchor, kind, type, actor, false, false)) continue;
-                if (HasTravelClearance(anchor, actor) && (best == null || anchor.priority > best.priority)) best = anchor;
+                if (!HasTravelClearance(anchor, actor)) continue;
+                // Keep shared seats available for fares when this companion has an
+                // authored exclusive travel seat. All compatibility/lease checks still apply.
+                bool exclusive = kind == TruckTaxiCabOccupantKind.Companion &&
+                    anchor.allowedOccupants == TruckTaxiCabOccupantKind.Companion;
+                bool bestExclusive = kind == TruckTaxiCabOccupantKind.Companion && best != null &&
+                    best.allowedOccupants == TruckTaxiCabOccupantKind.Companion;
+                if (best == null || exclusive && !bestExclusive ||
+                    exclusive == bestExclusive && anchor.priority > best.priority) best = anchor;
             }
             return best;
         }
@@ -265,10 +366,17 @@ namespace LWS.TruckTaxi
                 if (entry.Key != actor && entry.Key != null &&
                     Vector3.Distance(position, AnchorPosition(entry.Value.anchor)) <
                     radius + Radius(entry.Value.anchor, entry.Key)) return false;
+            foreach(var entry in reservations)
+                if(entry.Key!=actor && entry.Key!=null && Vector3.Distance(position,AnchorPosition(entry.Value.anchor))<
+                    radius+Radius(entry.Value.anchor,entry.Key)) return false;
             foreach (var passenger in GetComponentsInChildren<TruckTaxiPassengerActor>(true))
-                if (passenger.transform != actor && Vector3.Distance(position, passenger.transform.position) <
+                if (!HasLeftSeat(passenger) && !releasedVisuals.Contains(passenger.transform) &&
+                    passenger.transform != actor && !placements.ContainsKey(passenger.transform) &&
+                    Vector3.Distance(position, passenger.transform.position) <
                     radius + SeatedRadius(passenger)) return false;
             var driver = GetComponent<TruckTaxiDriverPresentation>()?.Occupant;
+            foreach(var authored in anchors)
+                if(ValidAnchor(authored) && authored.id==TruckTaxiCabAnchorId.DriverSeat) return true;
             return driver == null || driver == actor || Vector3.Distance(position, driver.position) >= radius + .65f;
         }
 
@@ -347,7 +455,9 @@ namespace LWS.TruckTaxi
             Vector3 worldScale = state.originalPlacement != null ? state.originalPlacement.worldScale : actor.lossyScale;
             Quaternion worldRotation = actor.rotation;
             Release(actor);
-            Place(actor, destination, worldScale);
+            Place(actor, destination, worldScale, state.originalPlacement?.kind ??
+                (driverTransition == null ? TruckTaxiCabOccupantKind.Driver : TruckTaxiCabOccupantKind.Companion));
+            placements[actor].stableId = state.originalPlacement?.stableId;
             state.destinationParent = actor.parent;
             state.destinationPosition = actor.localPosition;
             state.destinationRotation = actor.localRotation;
@@ -399,7 +509,11 @@ namespace LWS.TruckTaxi
         private bool Usable(Anchor anchor, TruckTaxiCabOccupantKind kind, TruckTaxiSeatType type,
             Transform actor, bool sleeperOnly, bool privateOnly)
         {
-            if (!ValidAnchor(anchor) || (anchor.allowedOccupants & kind) != kind || kind == 0 ||
+            if(kind!=TruckTaxiCabOccupantKind.Driver &&
+                (actor==null || !placements.ContainsKey(actor) && !reservations.ContainsKey(actor)) && UsedCapacity>=MaximumOccupants)
+                return false;
+            if (!ValidAnchor(anchor) || anchor.id==TruckTaxiCabAnchorId.DriverSeat && kind!=TruckTaxiCabOccupantKind.Driver ||
+                (anchor.allowedOccupants & kind) != kind || kind == 0 ||
                 sleeperOnly && !IsSleeper(anchor.id) || privateOnly && !anchor.privateEventEligible ||
                 !string.IsNullOrWhiteSpace(anchor.mountPath) && transform.Find(anchor.mountPath) == null ||
                 anchor.allowedSeatTypes != null && anchor.allowedSeatTypes.Length > 0 &&
@@ -407,13 +521,17 @@ namespace LWS.TruckTaxi
             foreach (var entry in placements)
                 if (entry.Key != actor && entry.Key != null && entry.Key.IsChildOf(transform) &&
                     entry.Value.anchor.StableSlotId == anchor.StableSlotId) return false;
+            foreach(var entry in reservations)
+                if(entry.Key!=actor && entry.Value.anchor.StableSlotId==anchor.StableSlotId) return false;
+            if(actor!=null && reservations.TryGetValue(actor,out var reservation) && reservation.anchor!=anchor) return false;
             return true;
         }
 
-        private void Place(Transform actor, Anchor anchor, Vector3 worldScale)
+        private void Place(Transform actor, Anchor anchor, Vector3 worldScale, TruckTaxiCabOccupantKind kind)
         {
+            releasedVisuals.Remove(actor);
             Transform mount = string.IsNullOrWhiteSpace(anchor.mountPath) ? transform : transform.Find(anchor.mountPath);
-            var state = new Placement { anchor = anchor, worldScale = worldScale,
+            var state = new Placement { anchor = anchor, kind = kind, worldScale = worldScale,
                 parts = actor.GetComponentsInChildren<Transform>(true) };
             state.layers = new int[state.parts.Length];
             for (int i = 0; i < state.parts.Length; i++) state.layers[i] = state.parts[i].gameObject.layer;
@@ -459,7 +577,9 @@ namespace LWS.TruckTaxi
 
         public void Release(Transform actor)
         {
+            if(!ReferenceEquals(actor,null)) reservations.Remove(actor);
             if (ReferenceEquals(actor, null) || !placements.TryGetValue(actor, out var state)) return;
+            if(actor!=null) releasedVisuals.Add(actor);
             for (int i = 0; i < state.parts.Length; i++)
                 if (state.parts[i] != null) state.parts[i].gameObject.layer = state.layers[i];
             foreach (var pose in state.poses)
@@ -481,22 +601,37 @@ namespace LWS.TruckTaxi
         }
 
         public static bool IsSleeper(TruckTaxiCabAnchorId id) => id >= TruckTaxiCabAnchorId.SleeperLeft;
+        private static bool HasLeftSeat(TruckTaxiPassengerActor actor) => actor != null &&
+            (actor.IsTumbling || actor.Lifecycle == TruckTaxiActorLifecycle.Exiting ||
+             actor.Lifecycle == TruckTaxiActorLifecycle.WalkingToContact ||
+             actor.Lifecycle == TruckTaxiActorLifecycle.SketchyInteraction ||
+             actor.Lifecycle == TruckTaxiActorLifecycle.Returning);
         private void Prune()
         {
             stale.Clear();
+            foreach(var entry in reservations)
+                if(entry.Key==null || !entry.Key.gameObject.activeSelf ||
+                    HasLeftSeat(entry.Key.GetComponent<TruckTaxiPassengerActor>())) stale.Add(entry.Key);
+            foreach(var actor in stale) reservations.Remove(actor);
+            stale.Clear();
             foreach (var entry in placements)
-                if (entry.Key == null || !entry.Key.IsChildOf(transform))
+                if (entry.Key == null || !entry.Key.IsChildOf(transform) ||
+                    HasLeftSeat(entry.Key.GetComponent<TruckTaxiPassengerActor>()))
                     stale.Add(entry.Key);
             foreach (var actor in stale) Release(actor);
+            releasedVisuals.RemoveWhere(IsDetachedVisual);
         }
+        private bool IsDetachedVisual(Transform actor) => actor==null || !actor.IsChildOf(transform);
         private void ClearPlacements()
         {
+            reservations.Clear();
             stale.Clear();
             foreach (var actor in placements.Keys) stale.Add(actor);
             foreach (var actor in stale) Release(actor);
+            releasedVisuals.Clear();
         }
         private void LateUpdate() => Prune();
-        private void OnDisable() => EndPrivateTransition();
+        private void OnDisable() { EndPrivateTransition(); reservations.Clear(); }
         private void OnDestroy()
         {
             EndPrivateTransition();

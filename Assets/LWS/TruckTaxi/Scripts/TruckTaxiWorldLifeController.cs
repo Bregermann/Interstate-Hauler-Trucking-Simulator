@@ -14,6 +14,12 @@ namespace LWS.TruckTaxi
         [Header("On-foot movement")]
         [Min(1f)] public float walkingSpeed = 4.2f;
         [Min(1f)] public float runningSpeed = 6.4f;
+        [Range(2f, 9f)] public float jumpSpeed = 5.5f;
+        [Header("On-foot traffic impacts")]
+        [Tooltip("Optional existing UTS jointed prefab. Defaults to the authored pedestrian paths.")]
+        public GameObject playerRagdollPrefab;
+        [Range(1f, 8f)] public float trafficKnockdownSpeed = 2.5f;
+        [Range(1f, 10f)] public float ragdollRecoverySeconds = 3.5f;
         [Range(0.1f, 1f)] public float mouseSensitivity = .15f;
         [Range(20f, 180f)] public float gamepadLookDegreesPerSecond = 110f;
         [Min(1f)] public float returnToTruckDistance = 4.5f;
@@ -29,14 +35,20 @@ namespace LWS.TruckTaxi
         public TruckTaxiPlayerControlMode Mode { get; private set; } = TruckTaxiPlayerControlMode.Driving;
         public bool IsOnFoot => Mode == TruckTaxiPlayerControlMode.OnFoot;
         public bool InventoryOpen => inventoryPanel != null && inventoryPanel.gameObject.activeSelf;
-        public bool DamageOpen => damagePanel != null && damagePanel.gameObject.activeSelf;
-        public Transform FocusRoot => ExternalModalOpen ? null : temporaryPanel != null && temporaryPanel.gameObject.activeSelf ? temporaryPanel :
-            DamageOpen ? damagePanel : InventoryOpen ? inventoryPanel : null;
+        public bool DamageOpen => conditionPanel != null && conditionPanel.IsOpen;
+        public Transform FocusRoot => DamageOpen ? conditionPanel.FocusRoot : pauseUtilityOpen && InventoryOpen ? inventoryPanel :
+            ExternalModalOpen ? null : temporaryPanel != null && temporaryPanel.gameObject.activeSelf ? temporaryPanel : InventoryOpen ? inventoryPanel : null;
+        public string InspectedPartId { get; private set; }
         public string Feedback { get; private set; } = string.Empty;
         public Camera FootCamera => footCamera;
         public Transform FootTransform => footBody != null ? footBody.transform : null;
         public TruckTaxiBootstrap Host => host;
         public TruckTaxiGasStationPoint ActiveNozzleStation { get; private set; }
+        public bool IsGrounded => controller != null && controller.enabled && controller.isGrounded && verticalSpeed <= 0;
+        public bool IsRagdoll => playerRagdoll != null && playerRagdoll.IsActive;
+        public bool RagdollAvailable => playerRagdoll != null && playerRagdoll.Ready;
+        public string RagdollStatus => playerRagdoll?.Status ?? "No compatible UTS ragdoll configured.";
+        public event System.Action Jumped;
 
         private TruckTaxiBootstrap host;
         private TruckTaxiHud hud;
@@ -47,10 +59,9 @@ namespace LWS.TruckTaxi
         private Camera truckCamera;
         private AudioListener footListener, truckListener;
         private readonly List<LwsKeyboardGamepadTruckInputSource> drivingSources = new List<LwsKeyboardGamepadTruckInputSource>();
-        private RectTransform inventoryPanel, damagePanel, temporaryPanel;
-        private TextMeshProUGUI prompt, inventoryDetails, basketText, damageHeading;
-        private int damagePage;
-        private string inspectedPartId;
+        private RectTransform inventoryPanel, temporaryPanel;
+        private TextMeshProUGUI prompt, inventoryDetails, basketText;
+        private TruckTaxiConditionPanel conditionPanel;
         private readonly Dictionary<TruckTaxiNeedsItem, int> basket = new Dictionary<TruckTaxiNeedsItem, int>();
         private TruckTaxiStorePoint basketStore;
         private TruckTaxiWorldInteractable aimed;
@@ -79,6 +90,12 @@ namespace LWS.TruckTaxi
         private bool seatedAtDiner;
         private TruckTaxiRoadPepChallenge ambientChallenge;
         private readonly Collider[] exitHits = new Collider[24];
+        private TruckTaxiPlayerRagdoll playerRagdoll;
+        private TruckTaxiDriverPresentation driverPresentation;
+        private bool pauseUtilityOpen;
+        private float ragdollUntil, nextTrafficHit;
+        private Vector3 lastSafeFootPosition;
+        private readonly List<TruckTaxiFuelFiller> highlightedFillers = new List<TruckTaxiFuelFiller>();
 
         public void Initialize(TruckTaxiBootstrap owner, TruckTaxiHud ownerHud)
         {
@@ -101,7 +118,15 @@ namespace LWS.TruckTaxi
             var eye = new GameObject("First-person view"); eye.transform.SetParent(footBody.transform, false);
             eye.transform.localPosition = new Vector3(0, 1.62f, 0);
             footCamera = eye.AddComponent<Camera>(); footCamera.depth = 100;
+            footCamera.cullingMask &= ~(1 << 29);
             footListener = eye.AddComponent<AudioListener>(); footListener.enabled = false;
+            var impact = new GameObject("On-foot traffic contact");
+            impact.transform.SetParent(footBody.transform, false);
+            var trigger = impact.AddComponent<CapsuleCollider>();
+            trigger.center = controller.center; trigger.height = controller.height; trigger.radius = .4f; trigger.isTrigger = true;
+            impact.AddComponent<TruckTaxiPlayerTrafficContact>().Initialize(this);
+            playerRagdoll = gameObject.AddComponent<TruckTaxiPlayerRagdoll>();
+            playerRagdoll.Initialize(playerRagdollPrefab, host.pedestrians?.peoplePaths);
             footCamera.enabled = false; footBody.SetActive(false);
         }
         private void BuildHud()
@@ -130,12 +155,9 @@ namespace LWS.TruckTaxi
             { basket.Clear(); basketStore = null; RefreshInventory(); });
             hud.Button(inventoryPanel, "CLOSE", new Vector2(.76f, .01f), new Vector2(.95f, .08f), CloseInventory);
             inventoryPanel.gameObject.SetActive(false);
-            damagePanel = hud.Panel(hud.Root, "Truck condition inspection", new Vector2(.18f, .1f), new Vector2(.82f, .9f));
-            damageHeading = hud.Text(damagePanel, "Condition heading", new Vector2(.05f, .89f), new Vector2(.95f, .98f), 30);
-            hud.Button(damagePanel, "PREVIOUS", new Vector2(.05f, .02f), new Vector2(.28f, .09f), () => { damagePage = Mathf.Max(0, damagePage - 1); RefreshDamage(); });
-            hud.Button(damagePanel, "NEXT", new Vector2(.38f, .02f), new Vector2(.61f, .09f), () => { damagePage++; RefreshDamage(); });
-            hud.Button(damagePanel, "CLOSE", new Vector2(.72f, .02f), new Vector2(.95f, .09f), CloseDamage);
-            damagePanel.gameObject.SetActive(false);
+            conditionPanel = hud.GetComponent<TruckTaxiConditionPanel>() ?? hud.gameObject.AddComponent<TruckTaxiConditionPanel>();
+            conditionPanel.Initialize(host, hud);
+            conditionPanel.VisibilityChanged += OnConditionVisibilityChanged;
             temporaryPanel = hud.Panel(hud.Root, "World interaction choices", new Vector2(.3f, .25f), new Vector2(.7f, .75f));
             temporaryPanel.gameObject.SetActive(false);
             prompt.gameObject.SetActive(false);
@@ -143,6 +165,7 @@ namespace LWS.TruckTaxi
         private void Update()
         {
             if (host?.Ready != true || hud?.UIInput == null) return;
+            UpdateNozzleLease();
             var input = hud.UIInput;
             if (ExternalModalOpen)
             {
@@ -152,6 +175,7 @@ namespace LWS.TruckTaxi
                 return;
             }
             if (Time.frameCount == inputReleasedFrame) return;
+            if (IsRagdoll) { UpdateRagdollRecovery(); return; }
             if (Mode == TruckTaxiPlayerControlMode.RestroomQte)
             {
                 if (!host.Paused)
@@ -249,8 +273,121 @@ namespace LWS.TruckTaxi
             Vector2 axis = Vector2.ClampMagnitude(input.OnFootMove.ReadValue<Vector2>(), 1);
             Vector3 horizontal = (footBody.transform.right * axis.x + footBody.transform.forward * axis.y) *
                 (input.OnFootSprint.IsPressed() ? runningSpeed : walkingSpeed);
-            verticalSpeed = controller.isGrounded ? -1.5f : Mathf.Max(-25, verticalSpeed - 20 * Time.deltaTime);
-            controller.Move((horizontal + Vector3.up * verticalSpeed) * Time.deltaTime);
+            if (input.OnFootJump.WasPressedThisFrame()) TryJump();
+            StepFootMovement(horizontal, Time.deltaTime);
+        }
+        private void StepFootMovement(Vector3 horizontal, float elapsed)
+        {
+            if (!float.IsFinite(elapsed) || elapsed <= 0 || controller == null) return;
+            // Bound catch-up work and sweep the capsule through the arc, even on a long render frame.
+            const float maximumStep = 1f / 60f;
+            const int maximumSteps = 20;
+            float duration = Mathf.Min(elapsed, maximumStep * maximumSteps);
+            int steps = Mathf.Clamp(Mathf.CeilToInt(duration / maximumStep), 1, maximumSteps);
+            float step = duration / steps;
+            for (int i = 0; i < steps; i++)
+            {
+                if (!controller.enabled || !IsOnFoot || IsRagdoll) break;
+                if (IsGrounded) { verticalSpeed = -1.5f; lastSafeFootPosition = footBody.transform.position; }
+                float previousSpeed = verticalSpeed;
+                verticalSpeed = Mathf.Max(-25, verticalSpeed - 20 * step);
+                float rise = (previousSpeed + verticalSpeed) * .5f * step;
+                var flags = controller.Move(horizontal * step + Vector3.up * rise);
+                if ((flags & CollisionFlags.Above) != 0 && verticalSpeed > 0) verticalSpeed = 0;
+                if ((flags & CollisionFlags.Below) != 0 && verticalSpeed < 0)
+                { verticalSpeed = -1.5f; lastSafeFootPosition = footBody.transform.position; }
+            }
+        }
+        public bool TryJump()
+        {
+            if (!IsOnFoot || PointerInputBlocked || IsRagdoll || !IsGrounded) return false;
+            verticalSpeed = float.IsFinite(jumpSpeed) ? Mathf.Clamp(jumpSpeed, 2f, 9f) : 5.5f;
+            Jumped?.Invoke();
+            return true;
+        }
+        public bool TryTrafficImpact(Collider other)
+        {
+            if (!IsOnFoot || IsRagdoll || PointerInputBlocked || Time.time < nextTrafficHit || other == null || other.isTrigger ||
+                !RagdollAvailable || controller == null || host?.Player == null || other.transform.IsChildOf(host.Player.transform)) return false;
+            var target = other.GetComponentInParent<TruckTaxiImpactTarget>();
+            var vehicleBody = other.attachedRigidbody;
+            if (target == null || target.kind != TaxiImpactKind.Traffic || vehicleBody == null) return false;
+            Vector3 velocity = vehicleBody.GetPointVelocity(footBody.transform.position);
+            if (!QualifiesTrafficImpact(velocity, controller.velocity, footBody.transform.position - vehicleBody.worldCenterOfMass, trafficKnockdownSpeed)) return false;
+            Vector3 relative = velocity - controller.velocity;
+            if (!playerRagdoll.Begin(footBody.transform.position, footBody.transform.rotation, relative,
+                other.ClosestPoint(footBody.transform.position + Vector3.up))) return false;
+            ReturnNozzle(); controller.enabled = false;
+            driverPresentation?.SetFootVisualVisible(false);
+            ragdollUntil = Time.time + (float.IsFinite(ragdollRecoverySeconds) ? Mathf.Clamp(ragdollRecoverySeconds, 1, 10) : 3.5f);
+            ShowFeedback("KNOCKED DOWN - RECOVERING");
+            return true;
+        }
+        public static bool QualifiesTrafficImpact(Vector3 vehicleVelocity, Vector3 playerVelocity, Vector3 towardPlayer, float threshold)
+        {
+            if (!TruckTaxiPedestrianImpactSettings.Finite(vehicleVelocity) || !TruckTaxiPedestrianImpactSettings.Finite(playerVelocity) ||
+                !TruckTaxiPedestrianImpactSettings.Finite(towardPlayer) || !float.IsFinite(threshold)) return false;
+            float minimum = Mathf.Clamp(threshold, 1, 8);
+            Vector3 relative = vehicleVelocity - playerVelocity;
+            return vehicleVelocity.magnitude >= minimum && relative.magnitude >= minimum &&
+                Vector3.Dot(relative, towardPlayer.normalized) > .5f;
+        }
+        private void UpdateRagdollRecovery()
+        {
+            Vector3 position = playerRagdoll.Position;
+            bool escaped = !TruckTaxiPedestrianImpactSettings.Finite(position) ||
+                (position - lastSafeFootPosition).sqrMagnitude > 40 * 40 || position.y < lastSafeFootPosition.y - 4;
+            if (!escaped && Time.time < ragdollUntil)
+            {
+                Vector3 focus = position + Vector3.up * .4f;
+                Vector3 offset = Vector3.up * 1.8f - footBody.transform.forward * 3;
+                int count = Physics.RaycastNonAlloc(focus, offset.normalized, sightHits, offset.magnitude, ~0, QueryTriggerInteraction.Ignore);
+                float distance = offset.magnitude;
+                for (int i = 0; i < count; i++)
+                    if (!playerRagdoll.Contains(sightHits[i].transform) && !sightHits[i].transform.IsChildOf(footBody.transform))
+                        distance = Mathf.Min(distance, Mathf.Max(.3f, sightHits[i].distance - .2f));
+                offset = offset.normalized * distance;
+                footCamera.transform.position = focus + offset;
+                footCamera.transform.LookAt(focus);
+                if (prompt != null) { prompt.gameObject.SetActive(true); prompt.text = "KNOCKED DOWN - RECOVERING"; }
+                return;
+            }
+            Vector3 recovered = default;
+            bool safe = !escaped && FindStandingPosition(position, out recovered);
+            if (!safe) safe = FindStandingPosition(lastSafeFootPosition, out recovered);
+            if (!safe) safe = FindSafeExit(out recovered);
+            if (!safe) { ReturnToTruck(); ShowFeedback("RECOVERED TO CAB - NO CLEAR STANDING SPACE"); return; }
+            playerRagdoll.ResetBody();
+            footBody.transform.position = recovered; lastSafeFootPosition = recovered;
+            controller.enabled = true; verticalSpeed = 0; nextTrafficHit = Time.time + 2;
+            footCamera.transform.localPosition = new Vector3(0, 1.62f, 0);
+            footCamera.transform.localRotation = Quaternion.Euler(pitch, 0, 0);
+            driverPresentation?.SetFootVisualVisible(true);
+            inputReleasedFrame = Time.frameCount;
+            ShowFeedback("BACK ON YOUR FEET"); RefreshPointerOwnership();
+        }
+        private bool FindStandingPosition(Vector3 near, out Vector3 position)
+        {
+            position = default;
+            int hits = Physics.RaycastNonAlloc(near + Vector3.up * 2, Vector3.down, sightHits, 7, ~0, QueryTriggerInteraction.Ignore);
+            if (hits == sightHits.Length) return false;
+            float nearest = float.PositiveInfinity; Collider floor = null;
+            for (int i = 0; i < hits; i++)
+            {
+                var hit = sightHits[i];
+                if (hit.collider == null || hit.distance >= nearest || hit.normal.y < .7f ||
+                    hit.transform.IsChildOf(footBody.transform) || hit.collider.GetComponentInParent<TruckTaxiPedestrian>() != null ||
+                    hit.collider.attachedRigidbody != null) continue;
+                nearest = hit.distance; floor = hit.collider; position = hit.point + Vector3.up * .06f;
+            }
+            if (floor == null) return false;
+            int count = Physics.OverlapCapsuleNonAlloc(position + Vector3.up * .36f, position + Vector3.up * 1.5f,
+                .32f, exitHits, ~0, QueryTriggerInteraction.Ignore);
+            if (count == exitHits.Length) return false;
+            for (int i = 0; i < count; i++)
+                if (exitHits[i] != floor && !exitHits[i].transform.IsChildOf(footBody.transform) &&
+                    !playerRagdoll.Contains(exitHits[i].transform)) return false;
+            return true;
         }
         private void AimAtInteractable()
         {
@@ -361,6 +498,9 @@ namespace LWS.TruckTaxi
             footBody.SetActive(true); controller.enabled = false;
             footBody.transform.SetPositionAndRotation(position, Quaternion.Euler(0, host.Player.transform.eulerAngles.y, 0));
             controller.enabled = true; verticalSpeed = pitch = 0;
+            lastSafeFootPosition = position;
+            driverPresentation = host.Player.GetComponent<TruckTaxiDriverPresentation>();
+            driverPresentation?.SetOnFoot(footBody.transform, true);
             foreach (var source in drivingSources) if (source != null) source.AcquireDrivingInputSuppression(this);
             if (truckCamera != null) truckCamera.enabled = false;
             footCamera.enabled = true;
@@ -411,15 +551,19 @@ namespace LWS.TruckTaxi
         }
         public bool TryEnterTruck()
         {
-            if (!IsOnFoot || PointerInputBlocked || footBody == null ||
+            if (!IsOnFoot || IsRagdoll || PointerInputBlocked || footBody == null ||
                 Vector3.Distance(footBody.transform.position, host.Player.transform.position) > returnToTruckDistance) return false;
             ReturnToTruck();
             return true;
         }
         public void ReturnToTruck()
         {
-            host?.Fuel?.StopManualFueling();
-            ActiveNozzleStation = null;
+            ReturnNozzle();
+            playerRagdoll?.ResetBody();
+            driverPresentation?.SetOnFoot(footBody != null ? footBody.transform : null, false);
+            if (controller != null) controller.enabled = true;
+            if (footCamera != null) { footCamera.transform.localPosition = new Vector3(0, 1.62f, 0); footCamera.transform.localRotation = Quaternion.identity; }
+            verticalSpeed = 0; pauseUtilityOpen = false;
             if (footCamera != null) footCamera.enabled = false;
             if (truckCamera != null) truckCamera.enabled = true;
             if (footListener != null) footListener.enabled = false;
@@ -427,7 +571,7 @@ namespace LWS.TruckTaxi
             foreach (var source in drivingSources) if (source != null) source.ReleaseDrivingInputSuppression(this);
             if (footBody != null) footBody.SetActive(false);
             if (inventoryPanel != null) inventoryPanel.gameObject.SetActive(false);
-            if (damagePanel != null) damagePanel.gameObject.SetActive(false);
+            conditionPanel?.Close();
             if (temporaryPanel != null) temporaryPanel.gameObject.SetActive(false);
             seatedAtDiner = false; ambientChallenge = null;
             aimed = null; interactionCandidates.Clear(); candidatePrompt = string.Empty;
@@ -445,7 +589,15 @@ namespace LWS.TruckTaxi
         { Feedback = message ?? string.Empty; feedbackUntil = Time.unscaledTime + 3f; }
         public bool HandleHudInput(TruckTaxiUIInput input)
         {
-            if (ExternalModalOpen) return false;
+            if (DamageOpen)
+            {
+                if (input.InspectTruck.WasPressedThisFrame()) { CloseDamage(); return true; }
+                return conditionPanel.HandleInput(input);
+            }
+            if (ExternalModalOpen && !pauseUtilityOpen) return false;
+            // Start yields to HUD pause without cancelling an activity. Escape keeps its Cancel behavior.
+            if ((Mode == TruckTaxiPlayerControlMode.RestroomQte || Mode == TruckTaxiPlayerControlMode.SpecialInteraction) &&
+                input.Pause.WasPressedThisFrame() && !input.Cancel.WasPressedThisFrame()) return false;
             if (Mode == TruckTaxiPlayerControlMode.RestroomQte)
             {
                 if (input.Cancel.WasPressedThisFrame()) FinishRestroom(false);
@@ -465,18 +617,12 @@ namespace LWS.TruckTaxi
             }
             if (temporaryPanel != null && temporaryPanel.gameObject.activeSelf)
             {
-                if (input.Cancel.WasPressedThisFrame()) CloseTemporaryInteraction();
-                else if (input.Submit.WasPressedThisFrame()) input.SubmitSelected();
-                return true;
-            }
-            if (DamageOpen)
-            {
-                if (input.Cancel.WasPressedThisFrame() || input.InspectTruck.WasPressedThisFrame()) CloseDamage();
+                if (input.Cancel.WasPressedThisFrame() || input.Pause.WasPressedThisFrame()) CloseTemporaryInteraction();
                 else if (input.Submit.WasPressedThisFrame()) input.SubmitSelected();
                 return true;
             }
             if (!InventoryOpen) return false;
-            if (input.Cancel.WasPressedThisFrame() || input.Inventory.WasPressedThisFrame()) CloseInventory();
+            if (input.Cancel.WasPressedThisFrame() || input.Pause.WasPressedThisFrame() || input.Inventory.WasPressedThisFrame()) CloseInventory();
             else if (input.Submit.WasPressedThisFrame()) input.SubmitSelected();
             return true;
         }
@@ -508,19 +654,30 @@ namespace LWS.TruckTaxi
         }
         public void OpenInventory()
         {
-            if (!IsOnFoot || ExternalModalOpen || inventoryPanel == null) return;
+            if (inventoryPanel == null || host?.Ready != true || IsRagdoll ||
+                (host.Paused ? Mode != TruckTaxiPlayerControlMode.Driving && !IsOnFoot : !IsOnFoot || ExternalModalOpen)) return;
+            if (DamageOpen) CloseDamage();
+            pauseUtilityOpen = host.Paused;
             host?.Fuel?.StopManualFueling();
             inventoryPanel.gameObject.SetActive(true); RefreshInventory(); SetCursor(false);
+            hud.UIInput?.Focus(inventoryPanel);
         }
         public void CloseInventory()
-        { if (inventoryPanel != null) inventoryPanel.gameObject.SetActive(false); inputReleasedFrame = Time.frameCount; RefreshPointerOwnership(); }
+        { if (inventoryPanel != null) inventoryPanel.gameObject.SetActive(false); pauseUtilityOpen = false; inputReleasedFrame = Time.frameCount; RefreshPointerOwnership(); }
         public void OpenDamage()
         {
-            if (!IsOnFoot || ExternalModalOpen || damagePanel == null || host?.ComponentDamage == null ||
+            if (host?.Paused == true && host.Ready && !IsRagdoll && conditionPanel != null && host.ComponentDamage != null)
+            {
+                InspectedPartId = null;
+                if (inventoryPanel != null) inventoryPanel.gameObject.SetActive(false);
+                conditionPanel.Open(); SetCursor(false);
+                return;
+            }
+            if (!IsOnFoot || IsRagdoll || ExternalModalOpen || conditionPanel == null || host?.ComponentDamage == null ||
                 Vector3.Distance(FootTransform.position, host.Player.transform.position) > inspectionRange ||
                 !HasInteractionSight(footCamera.transform.position, host.Player.transform.position + Vector3.up, host.Player.transform))
             { ShowFeedback("APPROACH THE TRUCK TO INSPECT IT"); return; }
-            inspectedPartId = null;
+            InspectedPartId = null;
             int count = Physics.RaycastNonAlloc(footCamera.transform.position, footCamera.transform.forward,
                 sightHits, inspectionRange, interactionOcclusionMask, QueryTriggerInteraction.Ignore);
             float nearest = float.PositiveInfinity;
@@ -529,13 +686,18 @@ namespace LWS.TruckTaxi
                 var hit = sightHits[i];
                 if (hit.collider == null || hit.collider.transform.IsChildOf(footBody.transform) || hit.distance >= nearest) continue;
                 nearest = hit.distance;
-                inspectedPartId = hit.collider.transform.IsChildOf(host.Player.transform) ?
+                InspectedPartId = hit.collider.transform.IsChildOf(host.Player.transform) ?
                     host.ComponentDamage.InspectPartAt(hit.point) : null;
             }
-            damagePanel.gameObject.SetActive(true); damagePage = 0; RefreshDamage(); SetCursor(false);
+            conditionPanel.Open(); SetCursor(false);
         }
-        public void CloseDamage()
-        { if (damagePanel != null) damagePanel.gameObject.SetActive(false); inputReleasedFrame = Time.frameCount; RefreshPointerOwnership(); }
+        public void CloseDamage() => conditionPanel?.Close();
+        private void OnConditionVisibilityChanged()
+        {
+            if (!DamageOpen) inputReleasedFrame = Time.frameCount;
+            else host?.Fuel?.StopManualFueling();
+            RefreshPointerOwnership();
+        }
         public void OpenDiner(Transform seat)
         {
             if (!IsOnFoot || seat == null) return;
@@ -661,36 +823,6 @@ namespace LWS.TruckTaxi
             ShowFeedback(rested ? "RESTED AT MOTEL" : host.DriverNeeds.Feedback);
             return rested;
         }
-        private void RefreshDamage()
-        {
-            if (damagePanel == null || host?.ComponentDamage == null) return;
-            var all = new List<TruckTaxiDamagePart>(host.ComponentDamage.Parts.Values);
-            all.Sort((a, b) => a.Id == inspectedPartId ? (b.Id == inspectedPartId ? 0 : -1) :
-                b.Id == inspectedPartId ? 1 : string.CompareOrdinal(a.Id, b.Id));
-            const int pageSize = 8;
-            damagePage = Mathf.Clamp(damagePage, 0, Mathf.Max(0, (all.Count - 1) / pageSize));
-            damageHeading.text = "TRUCK CONDITION  " + (damagePage + 1) + "/" + Mathf.Max(1, (all.Count + pageSize - 1) / pageSize);
-            var previous = damagePanel.Find("Condition rows"); if (previous != null) Destroy(previous.gameObject);
-            var rows = TruckTaxiHud.Rect(damagePanel, "Condition rows", new Vector2(.05f, .12f), new Vector2(.95f, .88f));
-            for (int i = damagePage * pageSize; i < Mathf.Min(all.Count, (damagePage + 1) * pageSize); i++)
-            {
-                int row = i - damagePage * pageSize;
-                var part = all[i];
-                float top = 1f - row / (float)pageSize;
-                float bottom = 1f - (row + .9f) / pageSize;
-                hud.Text(rows, part.Id, new Vector2(0, bottom), new Vector2(.72f, top), 21).text =
-                    (part.Id == inspectedPartId ? "LOOKING AT: " : string.Empty) +
-                    part.DisplayName + "  " + (part.Condition * 100).ToString("0") + "%  " + part.State;
-                if (part.RepairCostCents > 0)
-                    hud.Button(rows, "REPAIR " + TruckTaxiHud.Money(part.RepairCostCents),
-                        new Vector2(.74f, bottom), new Vector2(1f, top), () =>
-                        {
-                            ShowFeedback(host.ComponentDamage.TryRepair(part.Id) ? part.DisplayName + " REPAIRED" :
-                                "PARK AT A REPAIR SERVICE AND CHECK FUNDS");
-                            RefreshDamage();
-                        });
-            }
-        }
         public void AddToBasket(TruckTaxiStorePoint store, TruckTaxiNeedsItem item)
         {
             if (!IsOnFoot || store == null || !store.Sells(item)) return;
@@ -704,22 +836,50 @@ namespace LWS.TruckTaxi
         }
         public void ToggleNozzle(TruckTaxiGasStationPoint station)
         {
-            if (!IsOnFoot || station == null) return;
+            if (!IsOnFoot || PointerInputBlocked || IsRagdoll || station == null) return;
             if (ActiveNozzleStation == station)
-            { ActiveNozzleStation = null; host.Fuel?.StopManualFueling(); ShowFeedback("NOZZLE RETURNED"); }
-            else { ActiveNozzleStation = station; ShowFeedback("TAKE NOZZLE TO TRUCK FILLER"); }
+            { ReturnNozzle(); ShowFeedback("NOZZLE RETURNED"); }
+            else if (truckBody != null && station.CanRefuel(truckBody.position, truckBody.linearVelocity.magnitude))
+            {
+                ReturnNozzle(); ActiveNozzleStation = station; host.Fuel?.BeginNozzleSession();
+                RefreshFillerHighlights(); ShowFeedback("TAKE NOZZLE TO THE HIGHLIGHTED TRUCK FILLER");
+            }
+            else ShowFeedback("STOP THE TRUCK INSIDE THE FUEL BAY");
+        }
+        public void ReturnNozzle()
+        {
+            ActiveNozzleStation = null; host?.Fuel?.StopManualFueling(); RefreshFillerHighlights();
+        }
+        private void UpdateNozzleLease()
+        {
+            if (ActiveNozzleStation == null) { RefreshFillerHighlights(); return; }
+            if (!IsOnFoot || IsRagdoll || truckBody == null || FootTransform == null ||
+                !ActiveNozzleStation.CanRefuel(truckBody.position, truckBody.linearVelocity.magnitude) ||
+                Vector3.Distance(FootTransform.position, ActiveNozzleStation.Position) > nozzleHoseRange)
+            { ReturnNozzle(); ShowFeedback("NOZZLE DISCONNECTED - RETURN TO PUMP"); }
+        }
+        private void RefreshFillerHighlights()
+        {
+            if (ActiveNozzleStation == null)
+            {
+                foreach (var filler in highlightedFillers) if (filler != null) filler.SetHighlighted(false);
+                highlightedFillers.Clear(); return;
+            }
+            foreach (var interaction in TruckTaxiWorldInteractable.Active)
+                if (interaction is TruckTaxiFuelFiller filler && host?.Player != null && filler.transform.IsChildOf(host.Player.transform))
+                { filler.SetHighlighted(true); if (!highlightedFillers.Contains(filler)) highlightedFillers.Add(filler); }
         }
         public bool PumpFromNozzle(float seconds)
         {
             if (!CanPumpAt(ActiveNozzleStation))
             { host?.Fuel?.StopManualFueling(); ShowFeedback("APPROACH THE FILLER WITH THE NOZZLE"); return false; }
             bool success = host.Fuel != null && host.Fuel.PumpManual(ActiveNozzleStation, seconds);
-            if (!success) ShowFeedback(host.Fuel?.Feedback ?? "PUMP UNAVAILABLE");
+            ShowFeedback(host.Fuel?.Feedback ?? "PUMP UNAVAILABLE");
             return success;
         }
         public bool CanPumpAt(TruckTaxiGasStationPoint station)
         {
-            if (!IsOnFoot || PointerInputBlocked || station == null || ActiveNozzleStation != station || FootTransform == null ||
+            if (!IsOnFoot || IsRagdoll || PointerInputBlocked || station == null || ActiveNozzleStation != station || FootTransform == null ||
                 Vector3.Distance(FootTransform.position, station.Position) > nozzleHoseRange) return false;
             foreach (var interaction in TruckTaxiWorldInteractable.Active)
                 if (interaction is TruckTaxiFuelFiller && host?.Player != null &&
@@ -768,7 +928,7 @@ namespace LWS.TruckTaxi
         }
         public bool UseSelectedInventoryItem()
         {
-            if (!InventoryOpen || !IsOnFoot || ExternalModalOpen || !selectedInventoryItem.HasValue || host?.DriverNeeds == null) return false;
+            if (!InventoryOpen || (!pauseUtilityOpen && (!IsOnFoot || ExternalModalOpen)) || !selectedInventoryItem.HasValue || host?.DriverNeeds == null) return false;
             bool used = host.DriverNeeds.ConsumeItem(selectedInventoryItem.Value);
             ShowFeedback(used ? "USED " + TruckTaxiNeedsItems.Find(selectedInventoryItem.Value).Name : "CANNOT USE NOW");
             RefreshInventory();
@@ -832,6 +992,7 @@ namespace LWS.TruckTaxi
         private void OnEnable() => cycleInteraction?.Enable();
         private void OnDestroy()
         {
+            if (conditionPanel != null) conditionPanel.VisibilityChanged -= OnConditionVisibilityChanged;
             cycleInteraction?.Dispose(); cycleInteraction = null;
             foreach (var source in drivingSources) if (source != null) source.ReleaseDrivingInputSuppression(this);
             if (truckCamera != null) truckCamera.enabled = true;
