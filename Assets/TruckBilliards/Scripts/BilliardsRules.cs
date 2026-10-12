@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 namespace LWS.TruckBilliards {
-public enum MatchPhase { Menu, Aiming, Resolving, Placement, Ended }
+public enum MatchPhase { Menu, Aiming, Resolving, Placement, Ended, GroupSelection }
 public sealed class PocketRecord { public int Number, Step; }
 public sealed class BilliardsRules {
  public readonly HashSet<int> Pocketed=new HashSet<int>();
@@ -34,6 +34,7 @@ public sealed class BilliardsRules {
   bool foul=scratch||!valid, eight=records.Any(p=>p.Number==8);LastFoul=foul;LastScored=!foul&&records.Any(p=>BallGroup(p.Number)!=0&&(Group(Turn)==0||BallGroup(p.Number)==Group(Turn)));
   RespotEight=eight&&Opening;if(RespotEight)Pocketed.Remove(8);
   if(eight&&!Opening){Winner=EligibleAtStart&&!foul?Turn:1-Turn;Phase=MatchPhase.Ended;Notice=Winner==Turn?"Legal 8-ball — rack won!":"Illegal / early 8-ball — shooter loses.";return;}
+  if(PlayerGroup==0&&!foul&&records.Exists(p=>BallGroup(p.Number)==1)&&records.Exists(p=>BallGroup(p.Number)==2)){Opening=false;Phase=MatchPhase.GroupSelection;Notice="Both solids and stripes pocketed legally — shooter chooses their group.";return;}
   if(PlayerGroup==0&&!foul){var first=records.Where(p=>BallGroup(p.Number)!=0).OrderBy(p=>p.Step).ThenBy(p=>p.Number).FirstOrDefault();if(first!=null)PlayerGroup=Turn==0?BallGroup(first.Number):3-BallGroup(first.Number);}
   bool keep=!foul&&records.Any(p=>BallGroup(p.Number)!=0&&BallGroup(p.Number)==Group(Turn));
   if(!keep)Turn=1-Turn;Opening=false;Phase=scratch?MatchPhase.Placement:MatchPhase.Aiming;
@@ -42,8 +43,6 @@ public sealed class BilliardsRules {
  }
  public bool PracticePlacement(){if(!Practice||Phase!=MatchPhase.Aiming)return false;Phase=MatchPhase.Placement;Notice="Practice — reposition cue ball.";return true;}
  public void CompletePlacement(){if(Phase==MatchPhase.Placement){Pocketed.Remove(0);Phase=MatchPhase.Aiming;Notice="Cue ball placed. Release controls, then line up.";}}
- public void Forfeit(string reason){if(Phase==MatchPhase.Aiming){Turn=1-Turn;Notice="AI forfeits: "+reason;}}
+ public int RemainingGroup(int group){int remaining=0;for(int n=1;n<=15;n++)if(BallGroup(n)==group&&!Pocketed.Contains(n))remaining++;return remaining;}
+ public bool ChooseGroup(int side,int group){if(Phase!=MatchPhase.GroupSelection||side!=Turn||(group!=1&&group!=2))return false;PlayerGroup=Turn==0?group:3-group;Phase=MatchPhase.Aiming;Notice=(group==1?"SOLIDS":"STRIPES")+" selected — legal pot keeps the shooter's turn.";return true;}
 }}
-
-
-

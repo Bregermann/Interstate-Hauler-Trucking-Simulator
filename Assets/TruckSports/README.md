@@ -1,58 +1,66 @@
 # Truck Sports
 
-Windows x64 development collection inside Interstate: Hauler. Startup scene: Assets/TruckSports/Scenes/TruckSports.unity. Executable: Builds/TruckSports/TruckSports.exe. Keep all generated accompanying files together.
+Truck Sports is the existing local Windows collection in Interstate: Hauler. Start with Assets/TruckSports/Scenes/TruckSports.unity. The development executable is F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\Builds\TruckSports\TruckSports.exe; keep its entire build payload together.
 
-## Front end
-TRUCK SPORTS > Play > choose Billiards Match, Billiards Practice or Hockey. Billiards opens its retained setup and all existing series/difficulty/Practice/local control features. Hockey opens its own setup. How to Play, Settings and Quit are available from the title.
-Mouse, arrows/stick/D-pad, Enter/South submit, Tab/Shift+Tab, East/Esc back. Controller players can retain the default names. Returning from a sport loads the front end in Single scene mode; services are scene-owned, with one active EventSystem and AudioListener. Active navigation links are configured through Heat public fields and uGUI together, including Start becoming enabled after joining.
+TRUCK SPORTS > Play > Billiards Match, Billiards Practice or Hockey. Existing title, settings, navigation, scene transitions and DOTween results remain. Shared Master/SFX/steering/display/vibration preferences retain the TruckBilliards.Settings.* keys. Each sport saves its participant setup separately. UPDATE_3V3.md and VALIDATION.md record actual validation and hardware limitations.
 
-## Hockey setup and controls
-Player vs AI (keyboard or one assigned controller); Shared Keyboard; Separate Controllers; Keyboard vs Controller (keyboard P1, assigned pad P2). No hockey hot seat. Billiards retains hot seat.
-Choose names, distinct colors, Easy/Normal/Hard AI, and 2/3/5 minutes (default 3). North/Y/Triangle joins the first empty controller slot. One pad cannot occupy both slots. Solo assigned-pad and two-pad matches do not require a keyboard. Use Reassign for explicit replacement. A rematch waiting for a missing device retains its setup and swaps ends once the replacement joins and Start is submitted.
+## Hockey: three per team
 
-| Control | P1 keyboard | P2 shared keyboard | Assigned controller |
-|---|---|---|---|
-| Drive | WASD | Arrows | Left stick steer, RT gas, LT reverse |
-| Brake | Space | Right Shift | South/A/Cross |
-| Recover own truck | R | Enter | North/Y/Triangle |
-| Pause | Escape | Escape | Start/Menu |
+Six editable participants support every human/AI mixture, including six AI or six humans. Each has a name, source, independent AI difficulty, team color and B1–B3 / O1–O3 marker. Click a source to choose AI, Keyboard, WholeController, LeftStick or RightStick. Presets include Keyboard Chaos, six individual controllers, three shared controllers, AI-only and Custom. Default match is three minutes; two and five are available.
 
-Both trucks can hit the puck continuously and physically bump each other. There is no shooting button, possession, automatic dribbling or special ability. Recovery has a two-second cooldown and selects a separated safe position in the requesting truck's own half; puck, score and clock are unchanged. Truck teleports clear that truck's contact journal so an old pin cannot cause a false emergency faceoff.
-Disconnecting an assigned pad pauses and identifies its slot. Reconnect the same device, or Reassign and join a replacement, then Resume. Score/time/puck and prior live/countdown phase are retained. Release controls before a fresh movement/recover input.
+| Slot | Forward | Left | Brake / reverse | Right |
+|---|---|---|---|---|
+| B1 | W | A | S | D |
+| B2 | T | F | G | H |
+| B3 | I | J | K | L |
+| O1 | Up | Left | Down | Right |
+| O2 | Z | X | C | V |
+| O3 | Numpad 8 | Numpad 4 | Numpad 5 | Numpad 6 |
 
-## Hockey rules and flow
-Pregame 3–2–1–GO, live regulation, goal celebration, fair faceoff/reset/countdown, pause, sudden-death overtime, result. The clock advances only on completed live regulation simulation steps. A goal requires the entire flat puck to cross the line through the open mouth. Outside/side-net contact does not score. Net ownership determines the scoring team, including own goals; each goal is awarded once.
-A crossing at or before the regulation deadline within the physics step counts. A later crossing is discarded before regulation result/overtime reset. This is determined from the swept simulated puck segment and crossing fraction, never collision callback order.
-Goals stop interaction immediately, display the scoring team/score and reset separated trucks/puck with cleared velocities. Pauses, celebrations and countdowns use no regulation time. A regulation leader wins; a tie starts a fresh sudden-death faceoff. The first overtime goal ends immediately.
-Result: Rematch (preserves setup, swaps ends), Change Setup, Sport Selection. HUD goal ownership, spawn orientation, team crease colors and AI orientation swap together. Pause: Resume, Controls, Settings, Restart Match(confirm), Sport Selection(confirm). Restart retains current ends/setup and clears score/time.
-No offsides, icing, penalties or goalies. Rounded boards contain the puck; truck-only barriers keep trucks out of the goal nets without blocking scoring. A stationary accessible puck is left alone. Out-of-bounds/embedded puck or a prolonged two-truck contact deadlock announces an emergency fair faceoff, preserving score and remaining regulation time.
+Keyboard Bindings edits each cluster. Active duplicate gameplay keys and Escape are rejected. Input Check highlights the received controls for all six participants. Test simultaneous combinations on your physical keyboard: software routing does not remove hardware rollover/ghosting limits.
 
-## Physics and AI
-Hockey-owned constrained dynamic Rigidbody bodies use one coherent PhysX collision model. Hits receive no additional custom impulse. The puck and trucks are held upright on a plane; continuous collision detection, bounded depenetration and speed caps limit runaway contacts. Ice gives modest lateral slide while steering stays responsive.
-Serialized tuning: HockeyTruck acceleration/maxSpeed/reverseSpeed/turnDegrees/lateralGrip/rollingDrag/brakeDrag/recoverCooldown; puck radius/drag/maxSpeed; mode contact physics materials; match goal opening/corners/deadlock timeout.
-AI uses Defending, Intercepting, Approaching, Attacking and Recovering states. It predicts short travel with reflected board bounds, approaches from the attacking side, routes around the wrong side, defends its own net and backs away after blocked progress. It drives through exactly the same truck component/contact limits. No teleport, direct puck forces or hidden score changes.
-Easy reaction .40s/prediction .18s/position error ±.65/steering error ±6 degrees. Normal .18s/.45s/±.25/±2 degrees. Hard .08s/.75s/±.08/±.7 degrees, with earlier threat defense. Error is sampled per decision, not frame noise. Hockey difficulty uses TruckHockey.Difficulty; Billiards keeps its own persisted difficulty.
+Whole controller: left stick steers, RT drives forward, LT brakes/reverses. Shared controller: each stick owns a separate truck; stick X steers and Y supplies vehicle-relative forward/brake/reverse. A whole pad is exclusive; its left and right sticks may otherwise belong to different participants. Duplicate sticks are rejected. There is no artificial four-slot limit; actual USB/backend capabilities still require hardware testing. North joins vacant pad sources. Preset source changes clear incompatible assignments; explicit Reassign replaces an owner.
 
-## Shared settings and feedback
-SportsSettings adapts the existing TruckBilliards.Settings.* keys for Master/SFX, steering, display and vibration, so collection scenes use the same preferences. Existing BilliardsSettings remains intact. Hockey audio reuses Heat Click and original Billiards impact assets; original Faceoff, GoalHorn and FinalWhistle WAVs live under Assets/TruckHockey/Audio. Six pooled voices, threshold/cooldown/strength scaling and Master/SFX bound collision feedback.
-Assigned-pad strike/goal/win requests are restrained, expire in unscaled time, and stop on pause/disconnect/scene unload/disable/focus loss/quit. Unsupported device commands are optional and cannot fail gameplay. Short colored DOTween confetti differentiates goal and win; no wait is required for rematch.
+Opposite throttle first brakes longitudinal motion, then drives the other direction after stopping. The same controller applies this to keyboard, pads and AI. Neutral coasts. Hockey has no required dedicated brake, shooting, pass or boost button. Escape / assigned Start pauses; an AI-only spectator can use any pad's Start. Pause provides six individual recovery buttons; a whole-pad owner can also use North. Recovery selects an unoccupied own-half position, checks all five other trucks, clears that truck's stale contact record and preserves the puck, score, time and other trucks. Cooldown is two seconds.
 
-## Build and validation
-Truck Sports > Create Front End and Hockey Scenes authors and wires both new saved scenes. Truck Sports > Build Windows x64 Development validates the three scenes and builds using an explicit scene list. Product/window title is temporarily Truck Sports; a finally block restores the prior PlayerSettings property and exact ProjectSettings/EditorBuildSettings bytes, including failure paths. The existing Billiards-only build method remains usable.
-Opt-in development probes: -tsSmoke; -tsBilliardsFeature -tbFeatureSmoke; -tsBilliardsRegression -tbLocalSmoke. Probes clone background input settings and restore preferences/devices. Normal launches run no probes.
-Final build passed the retained Billiards feature (92 checks) and local regression (58 checks) suites. Read VALIDATION.md and CHECKPOINT.md for collection results, artifact hashes, observed performance and limitations. Injected device/haptic checks are software evidence. Physical goal tests reposition trucks/puck into reproducible layouts then require actual simulation/crossing; they never inject scoring events.
+Disconnect pauses without losing assignments. A shared-pad disconnect identifies both owners. Reconnect the same pad or explicitly reassign, then Resume; both stick owners must release and apply fresh input. Setup, names, difficulties and sources persist across rematches and menu returns in TruckHockey.Setup.v2.
 
-## Human playtest
-1. Play both sports through repeated returns to selection; check Billiards series/Practice and Hockey end swaps.
-2. Play native keyboard and two-person shared keyboard hockey, including goals, overtime, recovery and restart.
-3. Join real solo/two/mixed pads, unplug during live/countdown/pause, reassign, and check fresh input plus appropriate actual rumble.
-4. Listen to puck/board/truck contacts, horn/whistle/countdown, both mutes; check 720p/1080p, other aspect ratios and display settings.
-5. Try all AI difficulties for full matches, corners/banks/defensive blocks and repeated rematches.
+## Hockey rules, physics and AI
+
+The retained team rules handle completed-step full-puck goal crossing, own goals, exactly-once scores and deadline fractions. The live-only regulation clock stops during pause, goals and faceoffs. Ties enter sudden death; the first overtime goal wins. Rematch keeps all six slots and swaps team spawns, attack direction and crease ownership. Restart preserves setup/current ends and resets scores/time.
+
+All six upright truck bodies and the flat puck use one PhysX contact model. No additional custom collision impulse is applied. CCD, speed bounds and depenetration limits remain. Relative impact speed controls restrained audio, short pooled sparks and affected-pad rumble; settings and pause/unload stop motors. Rounded boards and truck-only goal barriers remain.
+
+AI roles change between challenger, support and defensive coverage, with a challenger preference/hysteresis and spaced targets. Each AI uses its own Easy/Normal/Hard reaction, prediction and error profile, and the same physical driving component. Blocked AI reverses and retries, without teleporting or applying remote puck forces.
+
+Recovery distinguishes an accessible stationary puck or ordinary blocks from invalid geometry or sustained trapping. A crowd pin requires prolonged stillness, multiple pushing contacts, and no sampled escape direction. Out-of-rink/embedded pucks announce a score/time-preserving faceoff. Contact journals contain six participants; 64-entry overlap queries fall back to a complete query on saturation.
+
+## Billiards update
+
+Both slots have editable names (including AI), independent source/difficulty and colors. Human/human, human/AI and AI/AI coexist with the retained Practice, hot seat, best-of-3/best-of-5, audio, rumble and celebrations. Setup persists in TruckBilliards.Setup.v2. AI-only placement and group choice are automatic; between-rack series results advance after 2.5 seconds, while the final series result stays visible.
+
+Human held driving and momentum continue across ordinary turns and shot settling. Bumpers remain eligible only for the active shooter, once per shot. Ghost trucks do not obstruct balls or players. Pause, placement, group choice, hot-seat handoff and reconnect deliberately require fresh input.
+
+AI no longer forfeits for navigation failure. It clears stale plans after placement/retained turns, reverses and repositions, then relaxes the desired contact direction after bounded failed maneuvers. It must drive its bumper into the cue, even for a poor or foul shot. Hard aim/power/quality parameters remain unchanged. Off-turn AI cruises the perimeter with restrained reactions; modal screens stop it and an active turn starts fresh planning.
+
+The actual opening bumper contact multiplies cue speed by configurable openingBreakBoost (1.65), capped at maxBreakShotSpeed (24), above the ordinary 15 limit. Both humans and AI use that rule. It is consumed once and resets for a new rack. Rack scattering comes from ball physics. Swept pocket detection complements CCD; break-8 respot is retained. A brief break sound/visual/rumble cue marks the strike.
+
+On an open table, one legally potted group assigns automatically. If the same legal shot pots both solids and stripes, the shooter chooses after settling; both pots stay down and the turn is retained. Scratches and illegal shots do not choose or assign. This simplified policy also applies on the opening break. F/G chooses for WASD, Right Ctrl/Right Shift for arrows; the owning controller selects and submits with South, or the human clicks. Opponent pads cannot confirm. Pause and disconnect preserve the choice.
+
+## Build and future authoring
+
+Final builds use LWS.TruckSports.Editor.SportsBuilder.Build from the saved scenes. It validates and supplies a build-specific explicit array: TruckSports, TruckBilliards, TruckHockey. Truck Sports branding is scoped, with exact host PlayerSettings and EditorBuildSettings restoration on success and failure. Original host/Truck Taxi configurations remain untouched.
+
+SportsUpdateAuthoring.UpgradeAll is the explicit owned-scene migration. SportsBuilder.CreateValidateBuild reauthors the front end and hockey scene; inspect it before use on hand-tuned scenes. Updated authoring defaults now produce six trucks and the current setup. BilliardsMenuBuilder's explicit recreation also applies the current Billiards upgrade. The existing Billiards-only builder remains.
+
+Opt-in development probes: -tsBilliardsUpdate, -tsBilliardsAI, -tsHockeyUpdate (also -tsSmoke), -tsSixAI; retained feature/local probes use -tsBilliardsFeature -tbFeatureSmoke and -tsBilliardsRegression -tbLocalSmoke. Normal launches run none. Probes distinguish initial layouts/rule fixtures from actual physical execution and restore injected devices/preferences.
+
+Future sports must provide editable named human/AI participants, per-slot AI difficulty, clear identity/input ownership, persisted rematches/menu returns and autonomous normal AI-only gameplay. No additional sport, playlist or speculative framework is implemented.
 
 ## Vendor report
 VENDOR ASSETS AUDITED: NWH Vehicle Physics 2 readme, VehicleController and ArcadeModule; NWH/GR3D SemiTruck prefab; UTS_FullPack CarAIController; Heat ButtonManager/SliderManager/InputFieldManager and audio; existing Billiards audio/input/settings; DOTween readme/APIs; installed Input System 1.19 and UI action asset.
 VENDOR ASSETS USED: Assets/NWH/Vehicle Physics 2/Vehicles/Euro Truck by GR3D/SemiTruck.prefab render geometry; Assets/Heat - Complete Modern UI controls and Audio/Click.wav; DOTween Assets/Plugins/Demigiant/DOTween/DOTween.dll (DOTween.To, DOScale, SetUpdate, Kill); Input System default UI bindings copied into Assets/TruckSports/Input/SportsUI.inputactions; uGUI/TMP/URP and retained Billiards control/visual/setting conventions.
-RELEVANT ASSETS NOT USED: NWH powertrain/wheel ArcadeModule needs grounded road-wheel dynamics, not the constrained planar two-body rink/puck model; UTS relies on road MovePath/CarMove and does not supply hockey interception/goal-side positioning. Wheel/DirectInput and world authoring systems do not supply these sports mechanics. Audited environment audio has no hockey horn/whistle set; three original procedural cues were authored.
-CUSTOM SYSTEMS CREATED: Hockey rules/simulation timing, planar contact/control adapter, sport-specific AI, recovery and device coordination; shared front end/settings/input/feedback adapters, scene authoring and focused validation. Existing Billiards rules are not reused by Hockey.
+RELEVANT ASSETS NOT USED: NWH powertrain/wheel ArcadeModule needs grounded road-wheel dynamics, not the constrained planar sports rink/puck model; UTS relies on road MovePath/CarMove and does not supply hockey interception/goal-side positioning. Wheel/DirectInput and world authoring systems do not supply these sports mechanics. Audited environment audio has no hockey horn/whistle set; three original procedural cues were authored.
+CUSTOM SYSTEMS CREATED: Hockey team rules/simulation timing, planar contact/control adapter, six-participant input ownership, coordinated roles, recovery and device coordination; shared front end/settings/input/feedback adapters, scene authoring and focused validation. Existing Billiards rules are not reused by Hockey.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

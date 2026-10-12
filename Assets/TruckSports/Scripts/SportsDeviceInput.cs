@@ -11,6 +11,7 @@ public sealed class SportsDeviceInput {
  Buttons Read(Gamepad pad){if(pad==null||!pad.added)return default;bool found=states.TryGetValue(pad,out var b);if(found&&b.frame==Time.frameCount)return b;uint mask=Mask(pad);b.previous=found?b.current:mask;b.current=mask;b.frame=Time.frameCount;states[pad]=b;return b;}
  public bool Down(Gamepad p,uint bit){var b=Read(p);return (b.current&bit)!=0&&(b.previous&bit)==0;}
  public bool Pressed(Gamepad p,uint bit)=>(Read(p).current&bit)!=0;
+ public void Forget(Gamepad pad){states.Remove(pad);}
  public void Sample(){foreach(var p in Gamepad.all)Read(p);}
  public static bool KeyHeld(Key key)=>Keyboard.current!=null&&Keyboard.current[key].isPressed;
  public static bool KeyDown(Key key)=>Keyboard.current!=null&&Keyboard.current[key].wasPressedThisFrame;

@@ -1,3 +1,5 @@
+> Superseded by the 2026-10-12 saved 3v3 collection update. See ../TruckSports/UPDATE_3V3.md and ../TruckSports/VALIDATION.md for current tests, build and Git delivery; the historical checkpoint below is not the current handoff.
+
 # Truck Billiards checkpoint — 2026-10-12
 
 All four requested additions implemented and wired. Updated Windows x64 development build COMPLETE.

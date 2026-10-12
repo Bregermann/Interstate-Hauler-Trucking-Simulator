@@ -11,13 +11,14 @@ namespace LWS.TruckBilliards
   public bool AreSettled{get;private set;} public bool InputReleased{get;private set;}
   public bool placementValid;public Vector3 placementPosition;public int strikeCount,resolutionCount,physicsStep;
   [System.NonSerialized] public bool smokeInput;
+  public float openingBreakBoost=1.65f,maxBreakShotSpeed=24;public float LastStrikeSpeed{get;private set;}public bool LastStrikeOpening{get;private set;}
   float settleTimer,aiPlacementTimer;
   public void FreshMatch(int breaker=0)
   {
    foreach(var b in balls)b.Restore(b.initial);
    player.ResetTruck(breaker==0?new Vector3(0,0,-8.3f):new Vector3(4.4f,0,9.5f),breaker==0?Quaternion.identity:Quaternion.Euler(0,180,0));
    ai.ResetTruck(breaker==1?new Vector3(0,0,-8.3f):new Vector3(4.4f,0,9.5f),breaker==1?Quaternion.identity:Quaternion.Euler(0,180,0));
-   rules.Reset(breaker,session!=null&&session.IsPractice);opponent.ResetPlan();HidePlacement();
+   rules.Reset(breaker,session!=null&&session.IsPractice);if(session!=null)session.ResetAIPlans();else opponent.ResetPlan();HidePlacement();
    settleTimer=aiPlacementTimer=0;AreSettled=false;InputReleased=false;strikeCount=resolutionCount=0;physicsStep=0;
    if(session!=null)session.input.GateAll();Debug.Log("TB_MATCH_RESET breaker="+breaker);
   }
@@ -44,15 +45,16 @@ namespace LWS.TruckBilliards
    }
    if(session!=null&&session.GameplayEnabled&&rules.Phase==MatchPhase.Placement&&session.IsAI(rules.Turn)){
     aiPlacementTimer+=Time.fixedDeltaTime;
-    if(aiPlacementTimer>=1)PlaceCue(FindPlacement(0));
+    if(aiPlacementTimer>=1)PlaceCue(session.agents[rules.Turn].FindCuePlacement());
    }
   }
   public void Strike(BilliardsTruck truck,Vector3 velocity)
   {
    if(session!=null&&!session.GameplayEnabled)return;
-   if(rules.Turn!=truck.side||!AreSettled||!rules.BeginShot())return;
+   if(rules.Turn!=truck.side||!AreSettled||rules.Phase!=MatchPhase.Aiming)return;
+   LastStrikeOpening=rules.Opening&&rules.ShotId==0;velocity=Vector3.ClampMagnitude(velocity*(LastStrikeOpening?openingBreakBoost:1),LastStrikeOpening?maxBreakShotSpeed:truck.maxShotSpeed);if(!rules.BeginShot())return;LastStrikeSpeed=velocity.magnitude;
    balls[0].body.WakeUp();balls[0].body.linearVelocity=velocity;settleTimer=0;AreSettled=false;strikeCount++;
-   if(session!=null&&session.feedback!=null){session.feedback.Impact(BilliardsSound.Strike,velocity.magnitude);session.feedback.Pulse(truck.side,.13f,.1f);}else if(impact!=null)audioSource.PlayOneShot(impact,.5f);
+   if(session!=null&&session.feedback!=null){if(LastStrikeOpening)session.feedback.BreakCue();else session.feedback.Impact(BilliardsSound.Strike,velocity.magnitude);session.feedback.Pulse(truck.side,LastStrikeOpening?.22f:.13f,LastStrikeOpening?.17f:.1f);if(LastStrikeOpening){session.celebration?.BreakBurst(session.players[truck.side].color);}}else if(impact!=null)audioSource.PlayOneShot(impact,.5f);
    Debug.Log("TB_STRIKE side="+truck.side+" shot="+rules.ShotId+" speed="+velocity.magnitude+" bumperDistance="+Vector3.Distance(truck.Bumper,balls[0].body.position));
   }
   public void Pocket(BilliardsBall ball)
@@ -78,7 +80,7 @@ namespace LWS.TruckBilliards
   {
    if(session!=null&&!session.GameplayEnabled)return;
    if(rules.Phase!=MatchPhase.Placement||!ValidPlacement(p,0))return;
-   balls[0].Restore(p);rules.CompletePlacement();HidePlacement();player.Stop();ai.Stop();InputReleased=false;opponent.ResetPlan();settleTimer=0;AreSettled=false;
+   balls[0].Restore(p);rules.CompletePlacement();HidePlacement();player.Stop();ai.Stop();InputReleased=false;if(session!=null)session.ResetAIPlans();else opponent.ResetPlan();settleTimer=0;AreSettled=false;
    if(session!=null)session.input.GateAll();Debug.Log("TB_CUE_PLACED side="+rules.Turn);
   }
  }

@@ -1,0 +1,11 @@
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
+namespace LWS.TruckHockey.Editor {
+public static class HockeyParticipantFixtures {
+ static int checks;static void Check(bool b,string name){checks++;if(!b)throw new Exception("TH_PARTICIPANT_FIXTURE_FAILED "+name);}
+ public static void Run(){checks=0;var root=new GameObject("Ownership fixture");var m=root.AddComponent<HockeyMatch>();var pads=new Gamepad[6];try{m.players=HockeyMatch.Defaults();for(int i=0;i<6;i++){m.players[i].source=HockeySource.Keyboard;pads[i]=InputSystem.AddDevice<Gamepad>("Hockey fixture "+i);}Check(m.ValidateOwnership(out _),"six keyboard clusters");var key=m.players[5].forward;m.players[5].forward=Key.W;Check(!m.ValidateOwnership(out _),"duplicate keyboard key");m.players[5].forward=Key.Escape;Check(!m.ValidateOwnership(out _),"Escape reserved");m.players[5].forward=key;
+ for(int i=0;i<6;i++){m.players[i].source=i%2==0?HockeySource.LeftStick:HockeySource.RightStick;m.players[i].pad=pads[i/2];}Check(m.ValidateOwnership(out _),"three controllers six exclusive sticks");m.players[1].source=HockeySource.LeftStick;Check(!m.ValidateOwnership(out _),"duplicate left stick");m.players[1].source=HockeySource.WholeController;Check(!m.ValidateOwnership(out _),"whole pad excludes sharing");m.players[1].source=HockeySource.RightStick;m.players[2].source=HockeySource.RightStick;m.players[2].pad=pads[0];Check(!m.ValidateOwnership(out _),"duplicate right stick");m.players[2].source=HockeySource.LeftStick;m.players[2].pad=pads[1];for(int i=0;i<6;i++){m.players[i].source=HockeySource.WholeController;m.players[i].pad=pads[i];}Check(m.ValidateOwnership(out _),"six distinct whole devices no four-device cap");m.players[5].pad=pads[0];Check(!m.ValidateOwnership(out _),"duplicate whole controller");m.players[5].pad=pads[5];for(int count=0;count<=6;count++){for(int i=0;i<6;i++)m.players[i].source=i<count?HockeySource.Keyboard:HockeySource.AI;Check(m.ValidateOwnership(out _),"human count "+count);}
+ }finally{foreach(var pad in pads)if(pad!=null&&pad.added)InputSystem.RemoveDevice(pad);UnityEngine.Object.DestroyImmediate(root);}Debug.Log("TH_PARTICIPANT_FIXTURES_PASS "+checks);}
+}
+}

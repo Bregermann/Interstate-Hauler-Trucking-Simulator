@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace LWS.TruckHockey {
 public enum HockeyPhase {Pregame,Live,Goal,Faceoff,Paused,Overtime,Finished}
-public enum HockeyMode {PlayerAI,SharedKeyboard,SeparateControllers,KeyboardController}
+public enum HockeyMode {PlayerAI,SharedKeyboard,SeparateControllers,KeyboardController,AIVsAI,SharedControllers,Custom}
 public enum HockeyDifficulty {Easy,Normal,Hard}
 // Single match authority; goals use a segment from the completed physics step, not trigger callback order.
 public sealed class HockeyRules {

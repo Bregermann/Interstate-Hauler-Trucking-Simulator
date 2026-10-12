@@ -1,3 +1,5 @@
+> Historical standalone validation. The current combined Truck Sports build, repaired defects, actual process exits and manual limitations are recorded in ../TruckSports/VALIDATION.md.
+
 # Truck Billiards validation — series / difficulty / Practice / feedback
 Date: 2026-10-12. Implementation and Windows x64 development build COMPLETE; hardware/native-input/listening gates remain before production release.
 
@@ -72,7 +74,7 @@ Normal final executable launched successfully (process 25212), exposed a targeta
 No failing assertion was disabled, no vendor source was patched, and no unrelated host tests/settings were changed to get a pass.
 
 ## Remaining release checks / known limitations
-No unresolved gameplay defect is known from the successful software runs. Required production gates:
+Subsequent player-reported AI forfeits and transition freezes supersede this historical result. See ../TruckSports/UPDATE_3V3.md for their reproduction and current validation. Required production gates:
 1. Native menus/name editing, sustained keyboard/mouse driving and cue placement; unassisted full single-player and multiplayer series at both supported sizes.
 2. Two physical pads and one-pad Practice/hot seat: device mapping, independent ownership, unplug/replug/replacement, fresh handoffs after scratches/between racks, and actual strike/score/win rumble with On/Off and pause/quit stopping motors.
 3. Listen on real speakers/headphones: break voice balance, gentle versus strong contacts, distinct clack/cushion/pocket/turn/foul/win cues and both mute settings.

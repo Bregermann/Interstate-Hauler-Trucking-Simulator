@@ -14,43 +14,29 @@ public sealed class BilliardsAI:MonoBehaviour {
  public ShotPlan LastPlan{get;private set;}public int Plans{get;private set;}
  public DifficultyTuning Tuning(BilliardsDifficulty level)=>level==BilliardsDifficulty.Easy?easy:level==BilliardsDifficulty.Hard?hard:normal;
  public int maxRecoveries=3;
- enum Stage{Wait,Staging,Align,Approach,Recover}
- Stage stage;Vector3 staging,direction;float timer,power;int tries;float wait;
- public void ResetPlan(){stage=Stage.Wait;timer=wait=0;tries=0;truck.deliberate=false;truck.Stop();}
+ enum Stage{Wait,Staging,Align,Approach,Recover,Roam}
+ static readonly Vector3[] roamPoints={new Vector3(-4.2f,0,-9.4f),new Vector3(4.2f,0,-9.4f),new Vector3(4.2f,0,9.4f),new Vector3(-4.2f,0,9.4f)};
+ Stage stage;Vector3 staging,direction;float timer,power,wait,progressTimer,bestProgress=float.PositiveInfinity;int tries,planningShot=-1,roamPoint;bool ownWasActive;
+ public string ExecutionState=>stage.ToString();public int RecoveryAttempts=>tries;public float ManeuverSeconds=>timer;public bool Roaming=>stage==Stage.Roam;
+ public void ResetPlan(){stage=Stage.Wait;timer=wait=progressTimer=0;bestProgress=float.PositiveInfinity;tries=0;planningShot=-1;ownWasActive=false;truck.deliberate=false;truck.Stop();}
  void FixedUpdate(){
-  if((match.session!=null&&(!match.session.GameplayEnabled||!match.session.IsAI(1)))||match.rules.Phase!=MatchPhase.Aiming||match.rules.Turn!=1||!match.AreSettled){truck.deliberate=false;truck.throttle=truck.steer=0;truck.brake=true;stage=Stage.Wait;wait=0;return;}
+  var session=match.session;int side=truck.side;
+  if(session==null||!session.GameplayEnabled||!session.IsAI(side)||!truck.gameObject.activeInHierarchy||(match.rules.Phase!=MatchPhase.Aiming&&match.rules.Phase!=MatchPhase.Resolving)){truck.deliberate=false;truck.throttle=truck.steer=0;truck.brake=true;ownWasActive=false;return;}
+  bool own=match.rules.Turn==side&&match.rules.Phase==MatchPhase.Aiming&&match.AreSettled;
+  if(!own){ownWasActive=false;Roam();return;}
+  if(!ownWasActive||planningShot!=match.rules.ShotId){ResetPlan();ownWasActive=true;planningShot=match.rules.ShotId;}
   truck.brake=false;timer+=Time.fixedDeltaTime;
-  if(stage==Stage.Wait){wait+=Time.fixedDeltaTime;if(wait<1)return;tries=0;Plan();return;}
-  if(timer>approachTimeout){FailApproach("approach timed out");return;}
-  if(stage==Stage.Recover){truck.throttle=-.4f;truck.steer=.7f;if(timer>1.2f)Plan();return;}
-  if(stage==Stage.Staging){
-   var delta=staging-truck.transform.position;delta.y=0;
-   if(delta.magnitude<.3f){truck.Stop();stage=Stage.Align;timer=0;return;}
-   DriveToward(staging,Mathf.Clamp(delta.magnitude*.5f,.15f,.55f));return;
-  }
-  if(stage==Stage.Align){
-   // Reposition with steering while moving, never rotate/teleport a truck into impact.
-   float angle=Vector3.SignedAngle(truck.transform.forward,direction,Vector3.up);
-   if(Mathf.Abs(angle)<4){truck.Stop();stage=Stage.Approach;timer=0;truck.deliberate=true;return;}
-   truck.steer=Mathf.Clamp(angle/25,-1,1);truck.throttle=.16f;
-   if(Vector3.Distance(truck.transform.position,staging)>.85f){stage=Stage.Staging;staging-=direction*.6f;}
-   return;
-  }
-  if(stage==Stage.Approach){
-   var cue=match.balls[0].body.position;cue.y=0;
-   var d=cue-truck.transform.position;d.y=0;
-   float angle=Vector3.SignedAngle(truck.transform.forward,d.normalized,Vector3.up);
-   truck.steer=Mathf.Clamp(angle/20,-.4f,.4f);truck.throttle=power;truck.deliberate=true;
-   if(Vector3.Dot(d,direction)<-.2f)FailApproach("bumper missed the cue ball");
-  }
+  if(stage==Stage.Wait){wait+=Time.fixedDeltaTime;if(wait>=.65f)Plan();return;}
+  if(stage==Stage.Recover){truck.deliberate=false;truck.throttle=-.42f;truck.steer=tries%2==0?.55f:-.55f;if(timer>=1.1f)Plan();return;}
+  if(timer>approachTimeout){FailApproach("maneuver timeout");return;}
+  if(stage==Stage.Staging){var delta=staging-truck.transform.position;delta.y=0;if(!Progress(delta.magnitude))return;if(delta.magnitude<.22f){truck.Stop();stage=Stage.Align;ResetManeuver();return;}DriveToward(staging,Mathf.Clamp(delta.magnitude*.55f,.12f,.65f));return;}
+  if(stage==Stage.Align){float angle=Vector3.SignedAngle(truck.transform.forward,direction,Vector3.up);if(!Progress(Mathf.Abs(angle)*.04f))return;if(Mathf.Abs(angle)<4){truck.Stop();stage=Stage.Approach;ResetManeuver();truck.deliberate=true;return;}truck.steer=Mathf.Clamp(angle/25,-1,1);truck.throttle=.16f;if(Vector3.Distance(truck.transform.position,staging)>.9f)FailApproach("alignment moved outside staging");return;}
+  if(stage==Stage.Approach){var d=match.balls[0].body.position-truck.transform.position;d.y=0;if(!Progress(d.magnitude))return;float angle=Vector3.SignedAngle(truck.transform.forward,d.normalized,Vector3.up);truck.steer=Mathf.Clamp(angle/20,-.4f,.4f);truck.throttle=power;truck.deliberate=true;if(Vector3.Dot(d,direction)<-.2f)FailApproach("bumper passed cue");}
  }
- void DriveToward(Vector3 p,float speed){
-  var d=p-truck.transform.position;d.y=0;float angle=Vector3.SignedAngle(truck.transform.forward,d,Vector3.up);
-  // Reverse when the staging point is behind; tighter low-speed turns remain bounded.
-  bool reverse=Mathf.Abs(angle)>100;if(reverse)angle=Mathf.DeltaAngle(0,angle-180);
-  truck.steer=Mathf.Clamp(angle/25,-1,1)*(reverse?-1:1);
-  truck.throttle=(reverse?-1:1)*speed;
- }
+ void ResetManeuver(){timer=progressTimer=0;bestProgress=float.PositiveInfinity;}
+ bool Progress(float distance){if(distance<bestProgress-.05f){bestProgress=distance;progressTimer=0;}else progressTimer+=Time.fixedDeltaTime;if(progressTimer>3.5f){FailApproach("no maneuver progress");return false;}return true;}
+ void Roam(){truck.deliberate=false;stage=Stage.Roam;var target=roamPoints[(roamPoint+truck.side*2)%4];if(Vector3.Distance(truck.transform.position,target)<.6f)roamPoint=(roamPoint+1)%4;truck.brake=false;DriveToward(target,match.rules.LastFoul?.2f:.3f);}
+ void DriveToward(Vector3 target,float speed){var d=target-truck.transform.position;d.y=0;float angle=Vector3.SignedAngle(truck.transform.forward,d,Vector3.up);bool reverse=Mathf.Abs(angle)>105;if(reverse)angle=Mathf.DeltaAngle(0,angle-180);truck.steer=Mathf.Clamp(angle/25,-1,1)*(reverse?-1:1);truck.throttle=(reverse?-1:1)*speed;}
  bool Clear(Vector3 a,Vector3 b,int ignore){
   var d=b-a;d.y=0;if(d.sqrMagnitude<.001f)return true;
   foreach(var ball in match.balls){if(ball.Pocketed||ball.number==0||ball.number==ignore)continue;
@@ -58,8 +44,9 @@ public sealed class BilliardsAI:MonoBehaviour {
    if(t>.05f&&t<.96f&&(v-d*t).magnitude<1.03f)return false;
   }return true;
  }
- public ShotPlan EvaluateLayout(BilliardsDifficulty level,int seed){
-  var tuning=Tuning(level);var cue=match.balls[0].body.position;cue.y=0;
+ public ShotPlan EvaluateLayout(BilliardsDifficulty level,int seed)=>EvaluateAt(level,seed,match.balls[0].body.position);
+ ShotPlan EvaluateAt(BilliardsDifficulty level,int seed,Vector3 cue){
+  var tuning=Tuning(level);cue.y=0;
   var plan=new ShotPlan{direction=Vector3.forward,power=tuning.fallbackThrottle,target=-1,pocket=-1,score=float.NegativeInfinity};
   foreach(var b in match.balls){
    if(b.Pocketed||!match.rules.LegalTarget(b.number))continue;
@@ -93,19 +80,16 @@ public sealed class BilliardsAI:MonoBehaviour {
   plan.valid=Inside(plan.staging);return plan;
  }
  void Plan(){
-  truck.deliberate=false;timer=0;
-  LastPlan=EvaluateLayout(match.session!=null?match.session.difficulty:BilliardsDifficulty.Normal,Random.Range(0,int.MaxValue));Plans++;
-  if(!LastPlan.valid){FailApproach("no reachable legal approach");return;}
-  direction=LastPlan.direction;staging=LastPlan.staging;power=LastPlan.power;
-  stage=Stage.Staging;Debug.Log("TB_AI_PLAN difficulty="+(match.session!=null?match.session.difficulty:BilliardsDifficulty.Normal)+" target="+LastPlan.target+" fallback="+LastPlan.fallback+" error="+LastPlan.aimError+" staging="+staging+" power="+power);
+  truck.deliberate=false;ResetManeuver();var level=match.session.DifficultyFor(truck.side);
+  LastPlan=EvaluateLayout(level,Random.Range(0,int.MaxValue));
+  if(tries>=maxRecoveries||!LastPlan.valid)LastPlan=ContactPlan(match.balls[0].body.position);
+  Plans++;direction=LastPlan.direction;staging=LastPlan.staging;power=LastPlan.power;
+  if(!LastPlan.valid){FailApproach("contact geometry needs separation");return;}
+  stage=Stage.Staging;
+  Debug.Log("TB_AI_PLAN side="+truck.side+" difficulty="+level+" target="+LastPlan.target+" fallback="+LastPlan.fallback+" attempts="+tries+" error="+LastPlan.aimError+" staging="+staging+" power="+power);
  }
- void FailApproach(string reason){
-  tries++;truck.deliberate=false;
-  if(tries>maxRecoveries){int previous=match.rules.Turn;match.rules.Forfeit(reason+" (recovery limit)");if(match.session!=null)match.session.ShotResolved(previous);Debug.Log("TB_AI_FORFEIT "+reason);ResetPlan();return;}
-  stage=Stage.Recover;timer=0;
- }
+ ShotPlan ContactPlan(Vector3 cue){cue.y=0;var best=new ShotPlan{target=-1,pocket=-1,fallback=true,score=float.NegativeInfinity};Vector3 from=cue-truck.transform.position;from.y=0;float baseAngle=Mathf.Atan2(from.x,from.z)*Mathf.Rad2Deg;for(int i=0;i<24;i++){var dir=Quaternion.Euler(0,baseAngle+i*15+tries*31,0)*Vector3.forward;var start=cue-dir*1.65f;if(!Inside(start))continue;float score=-Vector3.Distance(truck.transform.position,start)-Mathf.Abs(Vector3.SignedAngle(truck.transform.forward,dir,Vector3.up))*.005f;if(score<=best.score)continue;best.direction=dir;best.staging=start;best.power=.6f;best.score=score;best.valid=true;}return best;}
+ public Vector3 FindCuePlacement(){Vector3 best=match.FindPlacement(0);float cost=float.PositiveInfinity;for(float z=-9;z<=9;z+=1.5f)for(float x=-4.5f;x<=4.5f;x+=1.5f){var p=new Vector3(x,.5f,z);if(!match.ValidPlacement(p,0))continue;var plan=EvaluateAt(match.session.DifficultyFor(truck.side),0,p);if(!plan.valid)plan=ContactPlan(p);if(!plan.valid)continue;float candidate=Vector3.Distance(truck.transform.position,plan.staging)+Mathf.Abs(x)*.2f;if(candidate<cost){cost=candidate;best=p;}}return best;}
+ void FailApproach(string reason){tries++;truck.deliberate=false;stage=Stage.Recover;ResetManeuver();Debug.Log("TB_AI_RECOVERY side="+truck.side+" attempt="+tries+" reason="+reason+" cue="+match.balls[0].body.position+" truck="+truck.transform.position+" armed="+truck.Armed);}
  bool Inside(Vector3 p)=>Mathf.Abs(p.x)<match.halfWidth-.75f&&Mathf.Abs(p.z)<match.halfLength-.75f;
 }}
-
-
-

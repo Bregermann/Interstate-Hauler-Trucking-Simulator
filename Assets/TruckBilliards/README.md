@@ -1,12 +1,12 @@
-# Truck Billiards — series, difficulty and Practice
+# Truck Billiards — Truck Sports update
 Independent local arcade 8-ball game inside Interstate: Hauler.
 Scene: Assets/TruckBilliards/Scenes/TruckBilliards.unity
-Windows executable: Builds/TruckBilliards/TruckBilliards.exe
+Current combined Windows executable: Builds/TruckSports/TruckSports.exe (the prior Billiards-only artifact is historical)
 Keep every generated accompanying file with the executable.
 
 ## Menus and setup
 Main menu: Play, Practice, How to Play, Settings, Quit.
-Setup cycles modes, opening breaker (Player 1 / Player 2 / Random), and distinct truck colors. Edit names with the keyboard; AI is labeled AI in single player.
+Setup cycles modes, opening breaker (Player 1 / Player 2 / Random), and distinct truck colors. Both slots have editable display names, including AI. Human/AI sources and per-slot AI difficulties are independent; human/human, human/AI and AI/AI are supported. TruckBilliards.Setup.v2 persists setup across rematches and menu returns.
 Menus support mouse, arrow/stick/D-pad navigation and Enter/South face-button submit. Tab/Shift+Tab moves through fields and buttons; East/B/Circle backs out. Escape backs out or opens Pause during a match.
 Separate-controller join: press North/Y/Triangle on each device. Each device is locked to one slot. Two distinct controllers are required. Hot seat with a controller requires one joined shared device.
 A lost assigned controller pauses the match and identifies the slot. Reconnect or explicitly reassign, then Resume. The match is preserved.
@@ -35,25 +35,25 @@ Green means valid, red invalid. Ball overlaps, rails, pockets and outside positi
 
 ## Pause, settings and rematches
 Escape or assigned Start/Menu opens Pause: Resume, Controls, Settings, Restart Rack, Restart Series and Main Menu. The restart and abandonment actions require confirmation. Practice replaces competitive restart actions with Reset Rack and Reposition Cue Ball.
-Physics and AI freeze while menus, pause or handoff are active. Placement/handoff state survives pause.
+Physics and AI freeze while menus, pause or handoff are active. Placement, handoff and group-choice state survive pause and reconnect. Ordinary turn changes and settling preserve held human driving and momentum; only striking eligibility changes.
 Settings persist under TruckBilliards.Settings.* keys: master volume, SFX volume, supported display resolution, fullscreen/windowed, controller steering sensitivity and Vibration On/Off. AI difficulty persists separately. Audio previews immediately; Save/Apply stores and applies settings. All new effects use Master/SFX. There is no music track/category in this mode.
 At rack end, the winner, reason and running score are shown. Next Rack preserves player setup and alternates the breaker. The deciding rack opens Series Won with Rematch Series. Restart Rack preserves completed scores/current breaker; Restart Series clears scores and restores the original series opener. Rematch Series alternates that original opener.
 
 ## Competitive rack series
-Setup offers Single Rack (default), Best of 3 (first to 2 wins), and Best of 5 (first to 3). All four competitive control modes support every format.
+Setup offers Single Rack (default), Best of 3 (first to 2 wins), and Best of 5 (first to 3). All competitive control/participant configurations support every format. AI-only series automatically advance between racks after a 2.5-second result display, while final results stay visible.
 The HUD shows actual names, wins, rack number, target wins and single-player AI difficulty. BilliardsRules resolves each rack winner; BilliardsSession awards it once through BilliardsSeries. Early/illegal 8 and scratch-on-8 award the opponent normally.
 Next Rack clears balls/groups/shot/placement/trucks/AI, retains identity/devices/difficulty/score, and alternates the opener. Hot seat requests fresh readiness when the next breaker differs from the current device owner. Reconnecting from a result screen restores that screen.
 Restart Rack affects only the unfinished rack and preserves earlier wins/current breaker. Restart Series resets from the series' original opener. Rematch Series clears score and reverses that original opener. Deciding racks stop immediately.
 
 ## AI difficulty
 Single-player setup has Easy / Normal / Hard; Normal is the default. Selection persists under TruckBilliards.Settings.Difficulty.
-Every difficulty uses the same truck handling, physics, legal target checks and 15-unit shot-speed cap. Navigation remains competent; aiming/power error is sampled once per attempt. No teleportation, ball manipulation or injected outcomes are used by AI.
+Every difficulty uses the same truck handling, physics, legal target checks and 15-unit normal shot-speed cap. Opening contact uses the same configurable 1.65 boost and 24-unit break cap for humans and AI. Navigation remains competent; aiming/power error is sampled once per attempt. No teleportation, ball manipulation or injected outcomes are used by AI.
 | Profile | Aim error bound | Power error bound | Pot selection |
 |---|---:|---:|---|
 | Easy | ±5.5° | ±28% | Minimum alignment .8, object-to-pocket distance ≤8, first straightforward target; otherwise reachable legal contact |
 | Normal | ±1.7° | ±12% | Original balanced scoring; minimum alignment .25 |
 | Hard | ±.55° | ±4.5% | Minimum alignment .32; checks approach corridor/ghost position, scores rail space and approach distance, adjusts useful power for cut angle |
-Serialized tuning is in BilliardsAI.easy/normal/hard: aimErrorDegrees, powerErrorFraction, minimumPotAlignment, maxPotDistance, simpleSelection, checkApproach and fallbackThrottle. The shared approach timeout is 12 seconds, with three recoveries. A reachable legal fallback is preferred; bounded failure eventually passes the turn.
+Serialized tuning is in BilliardsAI.easy/normal/hard: aimErrorDegrees, powerErrorFraction, minimumPotAlignment, maxPotDistance, simpleSelection, checkApproach and fallbackThrottle. A maneuver timeout bounds each approach. After failed progress, AI reverses/repositions and eventually relaxes the contact direction. Navigation exhaustion never passes the turn; a physical bumper strike is still attempted, even for a poor shot. Hard shot-quality tuning is unchanged. Placement and retained turns discard stale plans. Off-turn AI cruises without ball interference; modal screens stop it.
 A reproducible three-layout/12-seed comparison is recorded in VALIDATION and FeatureSmokeTest/ai-comparison.csv. These are observed plans and real strike checks, not human win-rate estimates.
 
 ## Practice
@@ -71,7 +71,7 @@ Ball pairs report one clack via the lower-numbered ball only; floor/resting cont
 Vibration setting persists immediately. The assigned device gets a .13/.10s strike pulse, .16/.14s legal-score pulse and .23–.38/.30s win pulse. Hot seat uses the shared device. Pause, disconnect, handoff, Main, disable, lost focus and quit stop requests; an unscaled expiry also stops them. Unsupported devices never affect gameplay.
 Winner-colored UI confetti uses DOTween: 12 pieces for a rack and 24 with a stronger title/sting for a series. Buttons remain immediately usable; next rack/menu clears the effect. Practice never triggers competitive celebrations.
 ## Pool rules
-The first legal solid/stripe pot assigns groups; first physics-step event wins, with lower number breaking ties. Legal own-ball pots retain the turn; opponent pots stay pocketed.
+A legal open-table shot potting one group assigns it automatically. If it pots both groups, the shooter chooses after settling, with all pots retained. F/G chooses for WASD, Right Ctrl/Right Shift for arrows; the owning controller submits with South or the human clicks. Wrong-player controllers cannot confirm. Scratches/illegal shots keep the table open without a choice. This also applies to the simplified opening break. Legal own-ball pots retain the turn; opponent pots stay pocketed.
 Wrong/missing first contact passes the turn with the cue where it stopped. Only cue-ball pocketing enables placement.
 Your group must be clear at shot start to win with the 8. Early/illegal 8 or 8 plus scratch loses. Break 8 is safely respotted after settling.
 No called pocket, rail-after-contact or tournament legal-break rule.
@@ -82,7 +82,7 @@ BilliardsRules remains the single scoring authority. BilliardsMatch owns the reg
 BilliardsSession owns player slots, identity, control source, menu/pause/handoff state and rematch setup. Slot groups derive from the rules.
 BilliardsInputRouter reads each assigned device directly; it never routes both trucks through Gamepad.current. AI is enabled only for the AI slot.
 Heat ButtonManager, SliderManager and InputFieldManager provide menu controls/navigation; TextMeshPro renders labels. Existing NWH/GR3D mesh geometry remains the truck foundation. Truck paint is applied to local runtime material instances.
-Tuning: BilliardsMatch rollingResistance/settledSpeed/settledDuration/pocketRadius; BilliardsTruck speed/acceleration/steering/minStrikeSpeed/powerScale/maxShotSpeed; BilliardsAI error/recovery limits; mode physics materials restitution.
+Tuning: BilliardsMatch openingBreakBoost/maxBreakShotSpeed and rollingResistance/settledSpeed/settledDuration/pocketRadius; BilliardsTruck speed/acceleration/steering/minStrikeSpeed/powerScale/maxShotSpeed; BilliardsAI error/recovery limits; mode physics materials restitution.
 
 ## Build and focused tests
 Unity menu: Truck Billiards / Build Windows x64 Development.
@@ -120,8 +120,10 @@ DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
 
 # Truck Sports collection integration — 2026-10-12
 
-Truck Sports now hosts Billiards and Hockey. The Billiards scene, pool rules, physical controller, AI, series, Practice, audio and haptics remain in place. Two small existing source hooks open the retained setup on collection entry and return Main/Setup Back to sport selection. Direct Billiards-only launch still uses its original title/menu and builder.
+Truck Sports now hosts Billiards and Hockey. Existing Billiards series, Practice, audio, haptics and ghost-object-ball collision design are preserved and extended by the current update. The updated owned setup/rules/input/AI preserve existing collection entry and sport-selection returns. Direct Billiards-only launch still uses its original title/menu and builder.
 
 Collection startup: Assets/TruckSports/Scenes/TruckSports.unity. Collection artifact: Builds/TruckSports/TruckSports.exe. The dedicated builder supplies an explicit front-end/Billiards/Hockey scene list and temporarily scopes the product title. Host PlayerSettings and EditorBuildSettings are restored exactly, including deliberate build-failure validation.
 
 For the current collection validation and remaining native/hardware checks, read ../TruckSports/VALIDATION.md and CHECKPOINT.md. Earlier Billiards-only artifact title statements above describe that earlier artifact; the collection title is Truck Sports.
+
+Current build, regression evidence and Git delivery: ../TruckSports/UPDATE_3V3.md. Reported AI forfeits and held-input freezes were reproduced; the old historical defect-free handoff is superseded.

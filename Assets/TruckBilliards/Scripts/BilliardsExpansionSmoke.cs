@@ -78,7 +78,7 @@ namespace LWS.TruckBilliards
     }
    }File.WriteAllText(Path.Combine(folder,"ai-comparison.csv"),csv.ToString());
    session.format=BilliardsFormat.SingleRack;
-   for(int level=0;level<3;level++){session.difficulty=(BilliardsDifficulty)level;Setup(BilliardsMode.SinglePlayer,1);w=Wait(()=>match.strikeCount==1,65,"physical AI strike "+level);while(w.MoveNext())yield return null;Check(match.rules.Phase==MatchPhase.Resolving&&match.rules.Turn==1&&match.balls[0].body.linearVelocity.magnitude<=match.ai.maxShotSpeed+.1f,"genuine physical AI opening strike "+(BilliardsDifficulty)level);}
+   for(int level=0;level<3;level++){session.difficulty=(BilliardsDifficulty)level;Setup(BilliardsMode.SinglePlayer,1);w=Wait(()=>match.strikeCount==1,65,"physical AI strike "+level);while(w.MoveNext())yield return null;Check(match.rules.Phase==MatchPhase.Resolving&&match.rules.Turn==1&&match.balls[0].body.linearVelocity.magnitude<=match.maxBreakShotSpeed+.1f,"genuine physical AI opening strike "+(BilliardsDifficulty)level);}
    Check(!results.Exists(s=>s.StartsWith("RUNTIME ERROR")),"no runtime errors in feature smoke");session.MainMenu();Capture("06-final-main");w=Delay(.3f);while(w.MoveNext())yield return null;
    results.Add("Series outcomes use explicitly recorded authoritative rule facts; physical Practice pots/scratches and physical AI strikes require real motion. Input and haptics checks are injected-device/software requests, not hardware vibration proof. Mix listening and native desktop input remain manual.");
   }

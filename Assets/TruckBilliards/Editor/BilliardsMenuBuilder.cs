@@ -138,7 +138,7 @@ namespace LWS.TruckBilliards.Editor
    var eventSystem=match.GetComponent<BilliardsHostIsolation>().modeEventSystem;
    var oldInput=eventSystem.GetComponent<StandaloneInputModule>();if(oldInput!=null)oldInput.enabled=false;
    var uiInput=eventSystem.GetComponent<InputSystemUIInputModule>()??eventSystem.gameObject.AddComponent<InputSystemUIInputModule>();uiInput.AssignDefaultActions();
-   EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();
+   EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();LWS.TruckSports.Editor.SportsUpdateAuthoring.UpgradeBilliards();
    Debug.Log("TB_LOCAL_MENUS_UPGRADED existing scene preserved");
   }
   public static void UpgradeBuild(){Upgrade();BilliardsBuilder.Build();}

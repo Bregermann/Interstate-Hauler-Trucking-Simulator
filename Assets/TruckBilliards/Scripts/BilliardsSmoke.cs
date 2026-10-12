@@ -13,7 +13,7 @@ namespace LWS.TruckBilliards
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
   BilliardsMatch match;BilliardsSession session;BilliardsMenus menus;IEnumerator routine;
   InputSettings originalInputSettings,probeInputSettings;Keyboard keyboard;Mouse mouse;Gamepad pad1,pad2,pad3;readonly List<string> results=new List<string>();
-  string folder;bool finished;float oldMaster,oldSfx,oldSensitivity;bool oldFullscreen,oldVibration;BilliardsDifficulty oldDifficulty;int oldResolution;
+  string folder;bool finished,runtimeError;float oldMaster,oldSfx,oldSensitivity;bool oldFullscreen,oldVibration;BilliardsDifficulty oldDifficulty;int oldResolution;
   readonly Dictionary<string,string> oldPrefs=new Dictionary<string,string>();
   [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
   static void Launch(){var args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"-tbFeatureSmoke")>=0||Array.IndexOf(args,"-tbLocalSmoke")>=0||Array.IndexOf(args,"-tbSmoke")>=0||Array.IndexOf(args,"-tbHandoffProbe")>=0){var m=UnityEngine.Object.FindAnyObjectByType<BilliardsMatch>();if(m!=null)m.gameObject.AddComponent<BilliardsSmoke>();}}
@@ -27,13 +27,13 @@ namespace LWS.TruckBilliards
    Application.logMessageReceived+=Log;routine=Array.IndexOf(Environment.GetCommandLineArgs(),"-tbFeatureSmoke")>=0?RunExpansion():Array.IndexOf(Environment.GetCommandLineArgs(),"-tbHandoffProbe")>=0?HandoffOnly():Run();
   }
   void OnDestroy(){Application.logMessageReceived-=Log;}
-  void Log(string text,string trace,LogType type){if(!finished&&(type==LogType.Error||type==LogType.Exception))results.Add("RUNTIME ERROR "+text);}
+  void Log(string text,string trace,LogType type){if(!finished&&(type==LogType.Error||type==LogType.Exception)){runtimeError=true;results.Add("RUNTIME ERROR "+text);}}
   void Update(){
    if(finished||routine==null)return;
    try{if(!routine.MoveNext())Finish(0);}catch(Exception e){results.Add("FAIL "+e.Message);Debug.LogError("TB_LOCAL_FAIL "+e);Finish(2);}
   }
   void Finish(int code){
-   finished=true;File.WriteAllLines(Path.Combine(folder,"results.txt"),results);Debug.Log("TB_LOCAL_FINISHED code="+code);
+   if(runtimeError)code=2;finished=true;File.WriteAllLines(Path.Combine(folder,"results.txt"),results);Debug.Log("TB_LOCAL_FINISHED code="+code);
    session.MainMenu();if(keyboard!=null)InputSystem.RemoveDevice(keyboard);if(mouse!=null)InputSystem.RemoveDevice(mouse);if(pad1!=null)InputSystem.RemoveDevice(pad1);if(pad2!=null)InputSystem.RemoveDevice(pad2);if(pad3!=null)InputSystem.RemoveDevice(pad3);
    if(oldPrefs.Count>0)RestoreSettings();
    if(originalInputSettings!=null)InputSystem.settings=originalInputSettings;if(probeInputSettings!=null)UnityEngine.Object.Destroy(probeInputSettings);
@@ -67,14 +67,14 @@ namespace LWS.TruckBilliards
    if(!match.rules.BeginShot())throw new Exception("Scratch fixture shot not permitted");match.balls[0].body.linearVelocity=new Vector3(-2,0,0);
   }
   void Capture(string name){ScreenCapture.CaptureScreenshot(Path.Combine(folder,name+".png"));}
-  void SaveSettingsBaseline(){
+  string oldSetup;bool hadSetup; void SaveSettingsBaseline(){hadSetup=PlayerPrefs.HasKey(BilliardsSession.SetupKey);oldSetup=PlayerPrefs.GetString(BilliardsSession.SetupKey);
    oldVibration=session.settings.vibration;oldDifficulty=session.difficulty;oldMaster=session.settings.master;oldSfx=session.settings.sfx;oldSensitivity=session.settings.sensitivity;oldFullscreen=session.settings.fullscreen;oldResolution=session.settings.resolutionIndex;
    foreach(var key in new[]{"Master","SFX","Steering","Fullscreen","Width","Height","Vibration","Difficulty"}){
     string full="TruckBilliards.Settings."+key;
     oldPrefs[full]=!PlayerPrefs.HasKey(full)?null:(key=="Master"||key=="SFX"||key=="Steering")?"F:"+PlayerPrefs.GetFloat(full):"I:"+PlayerPrefs.GetInt(full);
    }
   }
-  void RestoreSettings(){
+  void RestoreSettings(){if(hadSetup)PlayerPrefs.SetString(BilliardsSession.SetupKey,oldSetup);else PlayerPrefs.DeleteKey(BilliardsSession.SetupKey);
    foreach(var pair in oldPrefs){if(pair.Value==null)PlayerPrefs.DeleteKey(pair.Key);else if(pair.Value.StartsWith("F:"))PlayerPrefs.SetFloat(pair.Key,float.Parse(pair.Value.Substring(2)));else PlayerPrefs.SetInt(pair.Key,int.Parse(pair.Value.Substring(2)));}
    PlayerPrefs.Save();session.settings.vibration=oldVibration;session.difficulty=oldDifficulty;session.settings.master=oldMaster;session.settings.sfx=oldSfx;session.settings.sensitivity=oldSensitivity;session.settings.fullscreen=oldFullscreen;session.settings.resolutionIndex=oldResolution;session.settings.ApplyAudio();
   }

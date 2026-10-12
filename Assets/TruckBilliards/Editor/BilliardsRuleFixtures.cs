@@ -9,8 +9,11 @@ public static class BilliardsRuleFixtures {
  public static void Run(){
   checks=0;
   var r=New();Shot(r,1,1);Check(r.PlayerGroup==1&&r.Turn==0,"legal assignment retains");Shot(r,2,9);Check(r.Turn==1&&r.Pocketed.Contains(9),"opponent pot stays");
-  r=New();r.BeginShot();r.Contact(9);r.Pocket(9,3);r.Pocket(1,3);r.Resolve();Check(r.PlayerGroup==1,"simultaneous lower number tie");
-  r=New();r.BeginShot();r.Contact(9);r.Pocket(9,2);r.Pocket(1,3);r.Resolve();Check(r.PlayerGroup==2,"first step assigns");
+  r=New();r.BeginShot();r.Contact(9);r.Pocket(9,3);r.Pocket(1,3);r.Resolve();Check(r.Phase==MatchPhase.GroupSelection&&r.PlayerGroup==0&&r.Turn==0,"mixed pots wait for shooter choice");Check(!r.ChooseGroup(1,1),"opponent cannot choose");Check(r.ChooseGroup(0,2)&&r.PlayerGroup==2&&r.Turn==0&&r.Pocketed.Contains(1)&&r.Pocketed.Contains(9),"choice retains turn and both pots");
+  r=New();r.BeginShot();r.Contact(9);r.Pocket(9,2);r.Pocket(1,3);r.Resolve();Check(r.Phase==MatchPhase.GroupSelection&&r.ChooseGroup(0,1)&&r.PlayerGroup==1,"mixed pots choice independent of callback ordering");
+  r=New();r.BeginShot();r.Contact(1);r.Pocket(1,1);r.Pocket(9,2);r.Pocket(0,3);r.Resolve();Check(r.PlayerGroup==0&&r.Phase==MatchPhase.Placement&&r.Turn==1,"mixed pots scratch never assigns or chooses");
+  r=New();r.BeginShot();r.Contact(8);r.Pocket(1,1);r.Pocket(9,2);r.Resolve();Check(r.PlayerGroup==0&&r.Phase==MatchPhase.Aiming&&r.Turn==1,"illegal mixed pots never choose");
+  r=New();r.BeginShot();r.Contact(1);r.Pocket(1,1);r.Pocket(9,2);r.Pocket(8,3);r.Resolve();Check(r.Phase==MatchPhase.GroupSelection&&r.RespotEight&&!r.Pocketed.Contains(8)&&r.RemainingGroup(1)==6&&r.RemainingGroup(2)==6,"opening mixed groups preserve break-eight respot and counts");Check(!r.ChooseGroup(0,0)&&r.ChooseGroup(0,1),"choice rejects invalid group");
   r=New();Shot(r,8,1);Check(r.PlayerGroup==0&&r.Turn==1&&r.Phase==MatchPhase.Aiming,"foul no assign and no placement");
   r=New();Shot(r,-1);Check(r.Turn==1&&r.Phase==MatchPhase.Aiming,"miss no placement");
   r=New();Shot(r,1,0,1);Check(r.PlayerGroup==0&&r.Turn==1&&r.Phase==MatchPhase.Placement,"human scratch");r.CompletePlacement();Check(!r.Pocketed.Contains(0)&&r.Phase==MatchPhase.Aiming,"cue registry restoration");Shot(r,2,0);Check(r.Turn==0&&r.Phase==MatchPhase.Placement,"AI scratch incoming human");

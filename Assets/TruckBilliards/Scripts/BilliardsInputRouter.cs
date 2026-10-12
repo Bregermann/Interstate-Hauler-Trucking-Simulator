@@ -8,7 +8,7 @@ namespace LWS.TruckBilliards
  {
   public BilliardsSession session;
   public bool HandoffReady=>handoffReleased;
-  public float placementSpeed=5; public bool placementReleased; bool handoffReleased;float mouseX,mouseY;
+  public float placementSpeed=5; public bool placementReleased; bool handoffReleased,groupReleased,disconnectReleased;float mouseX,mouseY;
 
   struct PadButtons{public uint previous,current;public int frame;}
   readonly System.Collections.Generic.Dictionary<Gamepad,PadButtons> buttons=new System.Collections.Generic.Dictionary<Gamepad,PadButtons>();
@@ -28,16 +28,16 @@ namespace LWS.TruckBilliards
   void DeviceChanged(InputDevice d,InputDeviceChange change)
   {
    if(session==null||!session.InMatch)return;
+   if(change==InputDeviceChange.Added||change==InputDeviceChange.Reconnected||change==InputDeviceChange.Enabled){for(int i=0;i<(session.IsPractice?1:2);i++)if(!session.IsAI(i)&&session.players[i].control==BilliardsControl.Gamepad&&Pad(i)==d){buttons.Remove((Gamepad)d);GateAll();break;}}
    if(change==InputDeviceChange.Disconnected||change==InputDeviceChange.Removed||change==InputDeviceChange.Disabled){
-    if((session.mode==BilliardsMode.SeparateControllers&&(session.players[0].pad==d||session.players[1].pad==d))||
-       (session.OnePadMode&&session.SharedPad==d))session.Disconnect();
+    for(int i=0;i<(session.IsPractice?1:2);i++)if(!session.IsAI(i)&&session.players[i].control==BilliardsControl.Gamepad&&Pad(i)==d){session.Disconnect();break;}
    }
   }
   public void GateAll()
   {
    if(session==null||session.players==null)return;
    foreach(var p in session.players){p.released=false;if(p.truck!=null){p.truck.throttle=p.truck.steer=0;p.truck.brake=false;p.truck.Disarm();}}
-   placementReleased=false;handoffReleased=false;
+   placementReleased=false;handoffReleased=false;groupReleased=false;disconnectReleased=false;
    if(Mouse.current!=null){var position=Mouse.current.position.ReadValue();mouseX=position.x;mouseY=position.y;}
   }
   bool Held(Key k)=>Keyboard.current!=null&&Keyboard.current[k].isPressed;
@@ -47,28 +47,29 @@ namespace LWS.TruckBilliards
   public bool Neutral(int side)
   {
    if(Controller(side)){var p=Pad(side);return p!=null&&p.added&&p.leftStick.ReadValue().magnitude<.15f&&p.rightTrigger.ReadValue()<.1f&&p.leftTrigger.ReadValue()<.1f&&!PadHeld(p,1)&&!PadHeld(p,2)&&!PadHeld(p,4);}
-   bool second=session.mode!=BilliardsMode.HotSeat&&!session.IsPractice&&side==1;
+   bool second=session.mode!=BilliardsMode.HotSeat&&!session.IsPractice&&session.players[side].control==BilliardsControl.KeyboardArrows;
    if(session.mode==BilliardsMode.SinglePlayer&&(Held(Key.UpArrow)||Held(Key.DownArrow)||Held(Key.LeftArrow)||Held(Key.RightArrow)))return false;
    return second?!Held(Key.UpArrow)&&!Held(Key.DownArrow)&&!Held(Key.LeftArrow)&&!Held(Key.RightArrow)&&!Held(Key.RightShift)&&!Held(Key.Enter)&&!Held(Key.RightCtrl):
-    !Held(Key.W)&&!Held(Key.S)&&!Held(Key.A)&&!Held(Key.D)&&!Held(Key.Space)&&!Held(Key.R)&&!Held(Key.F)&&!Held(Key.Enter)&&!(Mouse.current!=null&&Mouse.current.leftButton.isPressed);
+    !Held(Key.W)&&!Held(Key.S)&&!Held(Key.A)&&!Held(Key.D)&&!Held(Key.Space)&&!Held(Key.R)&&!Held(Key.F)&&!Held(Key.G)&&!Held(Key.Enter)&&!(Mouse.current!=null&&Mouse.current.leftButton.isPressed);
   }
   void Update()
   {
    if(session==null)return;
    foreach(var pad in Gamepad.all)Buttons(pad);
    var screen=session.Screen;
+   if(screen==BilliardsScreen.Disconnect&&!disconnectReleased){bool neutral=!Held(Key.Enter)&&!Held(Key.Space)&&(Mouse.current==null||(!Mouse.current.leftButton.isPressed&&!Mouse.current.leftButton.wasReleasedThisFrame));foreach(var pad in Gamepad.all)neutral&=!PadHeld(pad,1);if(neutral)disconnectReleased=true;}
    if(screen==BilliardsScreen.Join||screen==BilliardsScreen.Disconnect){
     foreach(var pad in Gamepad.all)if(PadDown(pad,2)){
-     int slot=!session.Ready(0)?0:session.mode==BilliardsMode.SeparateControllers&&!session.Ready(1)?1:-1;
+     int slot=-1;for(int i=0;i<(session.IsPractice?1:2);i++)if(!session.IsAI(i)&&session.players[i].control==BilliardsControl.Gamepad&&!session.Ready(i)){slot=i;break;}
      if(slot>=0)session.Assign(slot,pad);
     }
     if(screen==BilliardsScreen.Disconnect&&session.menus!=null)session.menus.RefreshJoin();
    }
-   bool pause=Down(Key.Escape);
+   bool pause=Down(Key.Escape);if(session.AIOnly)foreach(var spectator in Gamepad.all)if(PadDown(spectator,4))pause=true;
    if(session.InMatch)foreach(var p in session.players)if(p.control==BilliardsControl.Gamepad&&p.pad!=null&&p.pad.added&&PadDown(p.pad,4))pause=true;
    if(pause){
     if(screen==BilliardsScreen.Pause)session.Resume();
-    else if(screen==BilliardsScreen.Match||screen==BilliardsScreen.Handoff)session.Pause();
+    else if(screen==BilliardsScreen.Match||screen==BilliardsScreen.Handoff||screen==BilliardsScreen.GroupSelection)session.Pause();
     else session.menus.Back();
     return;
    }
@@ -79,6 +80,7 @@ namespace LWS.TruckBilliards
     bool pressed=Controller(incoming)?Pad(incoming)!=null&&PadDown(Pad(incoming),1):Down(Key.Enter)||Down(Key.Space);
     if(handoffReleased&&pressed)session.ConfirmHandoff();return;
    }
+   if(screen==BilliardsScreen.GroupSelection){GroupSelection();return;}
    if(!session.GameplayEnabled)return;
    if(session.match.rules.Phase==MatchPhase.Placement){Placement();return;}
    for(int i=0;i<2;i++){
@@ -96,7 +98,7 @@ namespace LWS.TruckBilliards
     truck.throttle=p.rightTrigger.ReadValue()-p.leftTrigger.ReadValue();truck.steer=Mathf.Clamp(p.leftStick.x.ReadValue()*session.settings.sensitivity,-1,1);
     truck.brake=PadHeld(p,1);if(PadDown(p,2))session.match.ResetTruck(side);
    }else{
-    bool second=session.mode!=BilliardsMode.HotSeat&&!session.IsPractice&&side==1;
+    bool second=session.mode!=BilliardsMode.HotSeat&&!session.IsPractice&&session.players[side].control==BilliardsControl.KeyboardArrows;
     truck.throttle=(Held(second?Key.UpArrow:Key.W)?1:0)-(Held(second?Key.DownArrow:Key.S)?1:0);
     truck.steer=(Held(second?Key.RightArrow:Key.D)?1:0)-(Held(second?Key.LeftArrow:Key.A)?1:0);
     if(session.mode==BilliardsMode.SinglePlayer){
@@ -106,6 +108,9 @@ namespace LWS.TruckBilliards
     truck.brake=Held(second?Key.RightShift:Key.Space);if(Down(second?Key.Enter:Key.R))session.match.ResetTruck(side);
    }
   }
+  void GroupSelection(){int owner=session.match.rules.Turn;if(session.IsAI(owner))return;if(!groupReleased){if(Neutral(owner)&&(Mouse.current==null||(!Mouse.current.leftButton.isPressed&&!Mouse.current.leftButton.wasReleasedThisFrame)))groupReleased=true;return;}if(Controller(owner)&&PadDown(Pad(owner),1)){var selected=UnityEngine.EventSystems.EventSystem.current!=null?UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject:null;var action=selected!=null?selected.GetComponent<BilliardsMenuAction>():null;if(action==null||action.action=="solids"||action.action=="stripes")session.ChooseGroup(owner,action!=null&&action.action=="stripes"?2:1);return;}if(!Controller(owner)){bool arrows=session.players[owner].control==BilliardsControl.KeyboardArrows;if(Down(arrows?Key.RightCtrl:Key.F))session.ChooseGroup(owner,1);else if(Down(arrows?Key.RightShift:Key.G))session.ChooseGroup(owner,2);}}
+  public bool DisconnectConfirm(){bool held=Held(Key.Enter)||Held(Key.Space)||(Mouse.current!=null&&Mouse.current.leftButton.isPressed);foreach(var pad in Gamepad.all)held|=PadHeld(pad,1);if(!disconnectReleased&&Mouse.current!=null&&Mouse.current.leftButton.wasReleasedThisFrame)return false;if(!held)return true;if(!disconnectReleased)return false;if(Down(Key.Enter)||Down(Key.Space)||(Mouse.current!=null&&Mouse.current.leftButton.wasReleasedThisFrame))return true;foreach(var pad in Gamepad.all)if(PadDown(pad,1))return true;return false;}
+  public bool GroupConfirm(){int owner=session.match.rules.Turn;if(!groupReleased||session.IsAI(owner))return false;if(Mouse.current!=null&&Mouse.current.leftButton.wasReleasedThisFrame)return true;return Controller(owner)&&PadDown(Pad(owner),1);}
   public void BeginPlacement()
   {
    GateAll();session.match.placementPosition=session.match.FindPlacement(0);session.match.placementPosition.y=.5f;
@@ -123,7 +128,7 @@ namespace LWS.TruckBilliards
     var p=Pad(owner);if(p==null||!p.added){session.Disconnect();return;}
     motion=p.leftStick.ReadValue();confirm=PadDown(p,1);
    }else{
-    bool second=session.mode!=BilliardsMode.HotSeat&&!session.IsPractice&&owner==1;
+    bool second=session.mode!=BilliardsMode.HotSeat&&!session.IsPractice&&session.players[owner].control==BilliardsControl.KeyboardArrows;
     motion=new Vector2((Held(second?Key.RightArrow:Key.D)?1:0)-(Held(second?Key.LeftArrow:Key.A)?1:0),(Held(second?Key.UpArrow:Key.W)?1:0)-(Held(second?Key.DownArrow:Key.S)?1:0));
     confirm=Down(second?Key.RightCtrl:Key.F);
     // In shared keyboard only Player 1 owns mouse placement; Player 2 uses their keys.

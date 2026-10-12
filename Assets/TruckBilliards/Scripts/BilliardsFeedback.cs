@@ -17,6 +17,7 @@ namespace LWS.TruckBilliards
   void Awake(){voices=new AudioSource[Mathf.Clamp(maxVoices,1,8)];for(int i=0;i<voices.Length;i++){var source=gameObject.AddComponent<AudioSource>();source.playOnAwake=false;source.spatialBlend=0;source.loop=false;voices[i]=source;}}
   public void ApplyVolume(){if(voices!=null)foreach(var v in voices)v.volume=session.settings.sfx;}
   public void Impact(BilliardsSound kind,float speed){if(speed<minimumImpact)return;Play(kind,(Mathf.Sqrt(Mathf.Clamp01((speed-minimumImpact)/12))*.7f+.015f)*(kind==BilliardsSound.Strike?.6f:kind==BilliardsSound.Cushion?.8f:1)*impactGain,true);}
+  public void BreakCue(){Play(BilliardsSound.Strike,.16f,false);if(voices!=null)foreach(var source in voices)if(source.isPlaying&&source.clip==clips[(int)BilliardsSound.Strike])source.pitch=.72f;}
   public void Cue(BilliardsSound kind){Play(kind,(kind==BilliardsSound.SeriesWin?.65f:kind==BilliardsSound.RackWin?.5f:.28f)*cueGain,false);}
   void Play(BilliardsSound kind,float volume,bool vary){
    if(session==null||voices==null||clips==null||(int)kind>=clips.Length||clips[(int)kind]==null)return;

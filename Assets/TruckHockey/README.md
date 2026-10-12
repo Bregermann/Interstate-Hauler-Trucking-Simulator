@@ -1,13 +1,17 @@
-# Truck Hockey
+# Truck Hockey — 3v3
 
-Playable 1v1 mode in Truck Sports. Scene: Assets/TruckHockey/Scenes/TruckHockey.unity. Start from Assets/TruckSports/Scenes/TruckSports.unity for the collection menu, or open this scene directly in Unity.
+Six saved trucks, three per team, inside Truck Sports. Scene: Assets/TruckHockey/Scenes/TruckHockey.unity. Start from Assets/TruckSports/Scenes/TruckSports.unity for the collection.
 
-Drive trucks into the puck continuously. Play keyboard or assigned-pad versus AI, shared keyboard, two assigned pads, or keyboard versus pad. Choose distinct team colors, names, Easy/Normal/Hard AI and 2/3/5-minute regulation. Default is three minutes. Hockey has simultaneous play; Billiards retains its separate hot-seat mode.
+Choose 0–6 humans; AI fills the other slots. Names are editable for everyone, with independent AI difficulty, team color and B1–B3/O1–O3 markers. Keyboard Chaos, six whole controllers, three shared controllers and Custom presets are available. Rematches/menu returns preserve all slots. Rematches swap ends.
 
-P1 WASD / Space brake / R recover; P2 arrows / Right Shift brake / Enter recover. Assigned pad: left stick, RT gas, LT reverse, South brake, North recover, Start pause. Esc pauses. Recovery resets only that truck in its own half, with a two-second cooldown. Release controls after a pause or reassignment before driving again.
+Keyboard clusters: W/A/S/D; T/F/G/H; I/J/K/L; arrows; Z/X/C/V; Numpad8/4/5/6. Keys are editable and active duplicates/Escape are rejected. Input Check shows all received sources; physical keyboard rollover still requires testing.
 
-A whole-puck crossing through the mouth counts once for the attacking team, including own goals. A crossing at or before the authoritative regulation deadline counts. Pauses, goals and faceoffs do not consume regulation time. A tie enters sudden-death overtime. Rematch preserves setup and swaps ends. Invalid puck recovery announces a faceoff and preserves score/time; an accessible stationary puck is left alone.
+Whole pad: left stick steer, RT forward, LT brake/reverse, North recover. Shared sticks: each stick X steers and Y drives its own truck relative to its forward direction. Opposite throttle brakes before reversing; no dedicated brake/shoot/pass/boost is required. Start/Escape pauses. Pause offers six separate recover actions. Shared-pad disconnect preserves and identifies both owners; Resume requires fresh controls for both.
 
-Rules: Scripts/HockeyRules.cs. Runtime authority: Scripts/HockeyMatch.cs. Physical driving: Scripts/HockeyTruck.cs. Contact/containment: Scripts/HockeyPuck.cs. Same-controller AI: Scripts/HockeyAI.cs. Saved-scene authoring: Editor/HockeyAuthoring.cs. Tuning is serialized on these components and Materials/* contact.asset. Vendor geometry is render-only; the dynamic rigidbody and one truck box collider provide hockey contact.
+Retained rules score complete puck crossings for the attacking TEAM, including own goals; the live-only clock, deadline handling, fair resets and sudden death remain. Physical impacts have strength-scaled sound, short pooled sparks and restrained assigned-pad rumble. PhysX owns the impact response; no second impulse is added.
 
-See ../TruckSports/README.md for settings, build commands and vendor audit; ../TruckSports/VALIDATION.md for actual evidence and limitations; ../TruckSports/CHECKPOINT.md for delivery status. Native input, physical controllers/rumble, listening and sustained unassisted matches need human playtesting.
+Coordinated AI switches challenger/support/defender roles with hysteresis. Recovery checks all five other trucks and clears stale contact history. Ordinary accessible blocks/crowds are left alone. Invalid geometry or sustained trapping without an escape announces a fair faceoff, preserving score/time.
+
+Runtime: HockeyMatch, HockeyTruck, HockeyPuck, HockeyAI, HockeyMenus and HockeyContactFeedback. Saved-scene migration: SportsUpdateAuthoring. Final build: LWS.TruckSports.Editor.SportsBuilder.Build. Authoring defaults also produce the current six-participant implementation.
+
+See ../TruckSports/README.md for full controls/vendor boundaries and ../TruckSports/UPDATE_3V3.md for actual tests, Git delivery and hardware limits.

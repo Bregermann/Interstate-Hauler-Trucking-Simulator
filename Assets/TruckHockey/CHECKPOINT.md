@@ -1,3 +1,5 @@
+> Superseded by the 2026-10-12 saved 3v3 collection update. See ../TruckSports/UPDATE_3V3.md and ../TruckSports/VALIDATION.md for current tests, build and Git delivery; the historical checkpoint below is not the current handoff.
+
 # Truck Hockey checkpoint
 
 Complete saved-scene 1v1 implementation, integrated with Truck Sports startup and scoped Windows x64 builder. Runtime scripts, original cue WAVs, PhysX contact materials and editor authoring are hockey-owned. Independent hockey rules do not inherit pool turns, scratches or groups.
