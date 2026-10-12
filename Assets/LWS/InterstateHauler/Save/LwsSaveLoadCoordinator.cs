@@ -237,6 +237,7 @@ namespace LWS.InterstateHauler
     {
         private readonly ILwsSaveService _saveService;
         private readonly Func<LwsServiceRegistry> _registryProvider;
+        private readonly HashSet<Rigidbody> _restoredRigidbodies = new HashSet<Rigidbody>();
         private bool _suppressGameplayStateMapping;
 
         public LwsSaveLoadCoordinator(ILwsSaveService saveService, Func<LwsServiceRegistry> registryProvider)
@@ -334,6 +335,7 @@ namespace LWS.InterstateHauler
         }
         public LwsSaveOperationResult LoadPreparedVendorSlot(LwsLoadApplicationContext context)
         {
+            _restoredRigidbodies.Clear();
             if (context == null)
             {
                 return Fail("Cannot load without a prepared load context.");
@@ -399,7 +401,7 @@ namespace LWS.InterstateHauler
                 // UTS ambient vehicles are intentionally not saved. Existing runtime traffic controllers repopulate normally.
 
                 SetPhase(LwsSaveLoadCoordinatorPhase.FinalizingPhysics);
-                Physics.SyncTransforms();
+                FinalizeRestoredPhysics();
 
                 SetPhase(LwsSaveLoadCoordinatorPhase.RebindingPresentation);
                 RebindRuntimePresentation();
@@ -414,6 +416,7 @@ namespace LWS.InterstateHauler
             }
             finally
             {
+                _restoredRigidbodies.Clear();
                 if (Phase != LwsSaveLoadCoordinatorPhase.Failed)
                 {
                     CurrentContext = null;
@@ -711,7 +714,7 @@ namespace LWS.InterstateHauler
             }
         }
 
-        private static void ZeroRigidbodies(GameObject root)
+        private void ZeroRigidbodies(GameObject root)
         {
             if (root == null)
             {
@@ -728,7 +731,22 @@ namespace LWS.InterstateHauler
                 rb.linearVelocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
                 rb.Sleep();
+                _restoredRigidbodies.Add(rb);
             }
+        }
+
+        private void FinalizeRestoredPhysics()
+        {
+            Physics.SyncTransforms();
+            // Placement sleeps the bodies; NWH's wheel wake flag does not wake the Rigidbody.
+            foreach (Rigidbody rb in _restoredRigidbodies)
+            {
+                if (rb != null && rb.gameObject.activeInHierarchy && !rb.isKinematic)
+                {
+                    rb.WakeUp();
+                }
+            }
+            _restoredRigidbodies.Clear();
         }
 
         private void RebindNavigationPresentation()
