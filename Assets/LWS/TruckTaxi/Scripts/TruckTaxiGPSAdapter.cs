@@ -68,6 +68,7 @@ namespace LWS.TruckTaxi
         private int regularCanvasOrder;
         private RectTransform cabMapRect,hudMapRect;
         private TruckTaxiMapTileLayer tileLayer;
+        private TruckTaxiMapTileCatalog sceneMapTiles;
         private bool attemptedTileLoad;
         private UnityEvent beforeMapCapture,afterMapCapture;
         private UnityEvent beforeCabCapture,afterCabCapture;
@@ -136,8 +137,9 @@ namespace LWS.TruckTaxi
         public bool RouteReady => !guidanceSuppressed && player!=null && intents.Active!=null &&
             (intents.Active.Value.Contains(player.position,playerBody!=null ? playerBody.linearVelocity.magnitude : 0) ||
             (navigation?.CurrentRoute != null && navigation.CurrentRoute.succeeded && navigation.CurrentRoute.destinationId==TargetId));
-        public void Initialize(Transform tractor, LwsRoadGraphProvider provider)
+        public void Initialize(Transform tractor, LwsRoadGraphProvider provider, TruckTaxiMapTileCatalog mapTiles = null)
         {
+            sceneMapTiles = mapTiles;
             player = CanonicalTruck(tractor); graph = provider;
             host=GetComponent<TruckTaxiBootstrap>();
             playerBody=player!=null ? player.GetComponent<Rigidbody>() : null;
@@ -514,7 +516,7 @@ namespace LWS.TruckTaxi
             {
                 if(attemptedTileLoad) return;
                 attemptedTileLoad=true;
-                var catalog=Resources.Load<TruckTaxiMapTileCatalog>(TruckTaxiMapTileCatalog.ResourcePath);
+                var catalog=sceneMapTiles ?? Resources.Load<TruckTaxiMapTileCatalog>(TruckTaxiMapTileCatalog.ResourcePath);
                 if(catalog==null) return;
                 var root=new GameObject("Persistent regional map tiles");
                 root.transform.SetParent(transform,false);

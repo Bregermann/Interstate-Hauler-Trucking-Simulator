@@ -89,7 +89,32 @@ namespace LWS.TruckTaxi.Editor
             EditorUtility.SetDirty(catalog);
         }
 
-        private static bool TryBake(Scene scene,string sceneName,out TruckTaxiMapTileCatalog.Tile tile)
+        public static TruckTaxiMapTileCatalog BakeEdenborough(Scene scene, string folder)
+        {
+            if (scene.name != TruckTaxiEdenboroughLayout.SceneName || !scene.isLoaded || Application.isPlaying)
+                throw new InvalidOperationException("Bake the loaded dedicated Edenborough scene in Edit Mode.");
+            Directory.CreateDirectory(folder);
+            AssetDatabase.Refresh();
+            var tiles = new List<TruckTaxiMapTileCatalog.Tile>();
+            var world = TruckTaxiEdenboroughLayout.WorldBounds;
+            for (int x = 0; x < 4; x++) for (int z = 0; z < 4; z++)
+            {
+                var bounds = new Bounds(new Vector3(world.min.x + (x + .5f) * 3000, 180,
+                    world.min.z + (z + .5f) * 2500), new Vector3(3000, 600, 2500));
+                if (TryBake(scene, scene.name + "_" + x + "_" + z, out var tile, folder, bounds, 2048)) tiles.Add(tile);
+            }
+            if (tiles.Count == 0) throw new InvalidOperationException("Edenborough has no static map geometry; catalog preserved.");
+            string path = folder + "/EdenboroughMapTiles.asset";
+            var catalog = AssetDatabase.LoadAssetAtPath<TruckTaxiMapTileCatalog>(path);
+            if (catalog == null)
+            { catalog = ScriptableObject.CreateInstance<TruckTaxiMapTileCatalog>(); AssetDatabase.CreateAsset(catalog, path); }
+            catalog.tiles = tiles.ToArray(); EnsureRuntimeMaterial(catalog);
+            EditorUtility.SetDirty(catalog); AssetDatabase.SaveAssets();
+            return catalog;
+        }
+
+        private static bool TryBake(Scene scene,string sceneName,out TruckTaxiMapTileCatalog.Tile tile,
+            string outputFolder = Folder, Bounds? authoredBounds = null, int resolution = Resolution)
         {
             tile=null;
             var sources=new List<MeshRenderer>();
@@ -101,13 +126,15 @@ namespace LWS.TruckTaxi.Editor
                        renderer.GetComponent<MeshFilter>()?.sharedMesh==null ||
                        renderer.GetComponentInParent<Rigidbody>()!=null ||
                        renderer.GetComponentInParent<Animator>()!=null) continue;
+                    if (authoredBounds.HasValue && !authoredBounds.Value.Intersects(renderer.bounds)) continue;
                     sources.Add(renderer);
                     if(!hasBounds) { bounds=renderer.bounds; hasBounds=true; }
                     else bounds.Encapsulate(renderer.bounds);
                 }
             if(!hasBounds) return false;
             var world=UnityEngine.Object.FindFirstObjectByType<TruckTaxiRegionalWorld>();
-            if(world!=null)
+            if (authoredBounds.HasValue) bounds = authoredBounds.Value;
+            else if(world!=null)
                 foreach(var region in world.regions)
                     if(region!=null && region.sceneName==sceneName)
                     {
@@ -153,8 +180,8 @@ namespace LWS.TruckTaxi.Editor
                     go.GetComponent<MeshRenderer>().sharedMaterials=flats;
                 }
                 float width=Mathf.Max(50,bounds.size.x+20),height=Mathf.Max(50,bounds.size.z+20);
-                int textureWidth=width>=height ? Resolution : Mathf.Max(64,Mathf.RoundToInt(Resolution*width/height));
-                int textureHeight=height>=width ? Resolution : Mathf.Max(64,Mathf.RoundToInt(Resolution*height/width));
+                int textureWidth=width>=height ? resolution : Mathf.Max(64,Mathf.RoundToInt(resolution*width/height));
+                int textureHeight=height>=width ? resolution : Mathf.Max(64,Mathf.RoundToInt(resolution*height/width));
                 var camera=cameraObject.GetComponent<Camera>();
                 camera.enabled=false; camera.orthographic=true; camera.aspect=(float)textureWidth/textureHeight;
                 camera.orthographicSize=height*.5f;
@@ -169,7 +196,7 @@ namespace LWS.TruckTaxi.Editor
                 capture=new Texture2D(textureWidth,textureHeight,TextureFormat.RGBA32,false);
                 capture.ReadPixels(new Rect(0,0,textureWidth,textureHeight),0,0);
                 capture.Apply();
-                string imagePath=Folder+"/"+sceneName+".png";
+                string imagePath=outputFolder+"/"+sceneName+".png";
                 File.WriteAllBytes(imagePath,capture.EncodeToPNG());
                 AssetDatabase.ImportAsset(imagePath,ImportAssetOptions.ForceSynchronousImport);
                 var importer=(TextureImporter)AssetImporter.GetAtPath(imagePath);

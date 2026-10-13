@@ -15,6 +15,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiHud hud;
         public Transform playerSpawn;
         public TruckTaxiPedestrianPopulation pedestrians;
+        public TruckTaxiMapTileCatalog mapTiles;
         public TruckTaxiSession Session { get; private set; }
         public TruckTaxiConfiguration Configuration => configuration;
         public LwsPlayerTruck Player { get; private set; }
@@ -107,11 +108,20 @@ namespace LWS.TruckTaxi
             {
                 traffic.SetRegionAvailability(regional.IsPositionAvailable);
                 pedestrians.SetRegionAvailability(regional.IsPositionAvailable);
-                pedestrians.RegisterLogicalRegion("taxi.town01", new Bounds(Vector3.zero,new Vector3(700,20,700)));
-                pedestrians.RegisterLogicalRegion("taxi.town02", new Bounds(new Vector3(4000,0,0),new Vector3(700,20,700)));
+                if (regional.authoredSingleScene)
+                {
+                    foreach (var district in regional.regions)
+                        if (district != null && district.population)
+                            pedestrians.RegisterLogicalRegion(district.id, district.bounds);
+                }
+                else
+                {
+                    pedestrians.RegisterLogicalRegion("taxi.town01", new Bounds(Vector3.zero,new Vector3(700,20,700)));
+                    pedestrians.RegisterLogicalRegion("taxi.town02", new Bounds(new Vector3(4000,0,0),new Vector3(700,20,700)));
+                }
                 regional.AvailabilityChanged += OnRegionalAvailabilityChanged;
             }
-            GPS = gameObject.AddComponent<TruckTaxiGPSAdapter>(); GPS.Initialize(Player.transform,roadGraph);
+            GPS = gameObject.AddComponent<TruckTaxiGPSAdapter>(); GPS.Initialize(Player.transform,roadGraph,mapTiles);
             var sensor = Player.GetComponent<TruckTaxiCollisionObserver>() ?? Player.gameObject.AddComponent<TruckTaxiCollisionObserver>();
             sensor.Initialize(this);
             TruckTaxiSignificantCollisionDiagnostic.Attach(Player.gameObject);

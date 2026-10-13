@@ -32,6 +32,15 @@ namespace LWS.TruckTaxi
         [SerializeField] private RectTransform viewRoot;
         [SerializeField] private TruckTaxiHud view;
         [SerializeField] private TruckTaxiAudioConfiguration audioConfiguration;
+        [SerializeField] private string primaryWorldScene = VibinSceneName;
+        public string PrimaryWorldScene => primaryWorldScene;
+        public static bool IsSupportedWorld(string scene) =>
+            scene == VibinSceneName || scene == TruckTaxiEdenboroughLayout.SceneName;
+        public void ConfigurePrimaryWorld(string scene)
+        {
+            if (!IsSupportedWorld(scene)) throw new ArgumentException("Unsupported Truck Taxi world.", nameof(scene));
+            primaryWorldScene = scene;
+        }
         private TruckTaxiAudioController audio;
         private TruckTaxiAudioSettingsPanel audioPanel;
         private TruckTaxiGPSSettingsPanel gpsPanel;
@@ -348,7 +357,7 @@ namespace LWS.TruckTaxi
         {
             if(!discoveryReady || enteringGame) return;
             TruckTaxiVibinPersistence.ClearContinueRequest();
-            EnterVibin();
+            EnterVibin(primaryWorldScene);
         }
         private void ContinueVibin()
         {
@@ -364,14 +373,16 @@ namespace LWS.TruckTaxi
         private void StartSaved(LwsManualSaveSlotMetadata slot)
         {
             if(!SlotExists(slot)) { RefreshSaveMetadata(); return; }
-            if(TruckTaxiVibinPersistence.SetContinueRequest(slot.stableProfileId,slot.slotNumber,slot.slotType==LwsSaveSlotType.Autosave)) EnterVibin();
+            string scene = string.IsNullOrEmpty(slot.sceneName) ? VibinSceneName : slot.sceneName;
+            if (!IsSupportedWorld(scene)) { ReportEntryFailure(); return; }
+            if(TruckTaxiVibinPersistence.SetContinueRequest(slot.stableProfileId,slot.slotNumber,slot.slotType==LwsSaveSlotType.Autosave)) EnterVibin(scene);
         }
-        private void EnterVibin()
+        private void EnterVibin(string scene)
         {
-            if(!Application.CanStreamedLevelBeLoaded(VibinSceneName))
+            if(!IsSupportedWorld(scene) || !Application.CanStreamedLevelBeLoaded(scene))
             { ReportEntryFailure(); return; }
             enteringGame=true;
-            try { SceneManager.LoadScene(VibinSceneName); }
+            try { SceneManager.LoadScene(scene); }
             catch { enteringGame=false; ReportEntryFailure(); }
         }
         private void ReportEntryFailure()

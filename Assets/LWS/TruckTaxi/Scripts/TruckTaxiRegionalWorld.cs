@@ -25,6 +25,9 @@ namespace LWS.TruckTaxi
     {
         public TruckTaxiRegion[] regions = Array.Empty<TruckTaxiRegion>();
         public LwsWorldStreamingManifest streamingManifest;
+        [Tooltip("Fully authored single-scene world; districts must identify the current loaded scene.")]
+        public bool authoredSingleScene;
+        public Bounds authoredWorldBounds;
         [Min(100)] public float preloadDistance = 450;
         [Min(1)] public float forwardPreloadSeconds = 14;
         [Min(100)] public float unloadDistance = 850;
@@ -93,6 +96,18 @@ namespace LWS.TruckTaxi
         { player = target; body = target != null ? target.GetComponent<Rigidbody>() : null; }
         public string ResolveRegion(Vector3 position)
         {
+            if (authoredSingleScene)
+            {
+                string nearest = string.Empty;
+                float distance = float.PositiveInfinity;
+                foreach (var region in regions)
+                {
+                    if (region == null || !region.population) continue;
+                    float candidate = region.Distance(position);
+                    if (candidate < distance) { distance = candidate; nearest = region.id; }
+                }
+                return nearest;
+            }
             foreach (var region in regions)
                 if (region.population && region.Distance(position) <= .01f) return region.id;
             return string.Empty;
@@ -107,6 +122,8 @@ namespace LWS.TruckTaxi
         }
         public bool IsPositionAvailable(Vector3 position)
         {
+            if (authoredSingleScene)
+                return gameObject.scene.isLoaded && authoredWorldBounds.Contains(position);
             foreach (var region in regions)
                 if (region.population && region.Distance(position) <= .01f && Loaded(region)) return true;
             return regions.Length == 0;
@@ -117,8 +134,11 @@ namespace LWS.TruckTaxi
             if (markers == null) return;
             foreach (var region in regions)
                 markers.RegisterRegionalPoint(region.id, region.displayName, "Region", region.bounds.center, TruckTaxiMapMarkerType.Place);
-            markers.RegisterRegionalPoint("taxi.river", "Regional River", "River", new Vector3(2000,0,200), TruckTaxiMapMarkerType.Place);
-            markers.RegisterRegionalPoint("taxi.bridge", "River Highway Bridge", "Bridge", new Vector3(2000,8,0), TruckTaxiMapMarkerType.Place);
+            if (!authoredSingleScene)
+            {
+                markers.RegisterRegionalPoint("taxi.river", "Regional River", "River", new Vector3(2000,0,200), TruckTaxiMapMarkerType.Place);
+                markers.RegisterRegionalPoint("taxi.bridge", "River Highway Bridge", "Bridge", new Vector3(2000,8,0), TruckTaxiMapMarkerType.Place);
+            }
             foreach (var stop in FindObjectsByType<TruckTaxiRideLocation>(FindObjectsSortMode.None))
                 if (stop.gameObject.scene == gameObject.scene)
                     markers.RegisterRegionalPoint(stop.locationId, stop.locationName, stop.locationType.ToString(), stop.StopPosition,
@@ -147,6 +167,7 @@ namespace LWS.TruckTaxi
         }
         public void Refresh(Vector3 position, Vector3 velocity)
         {
+            if (authoredSingleScene) { CurrentRegion = ResolveRegion(position); return; }
             if (streaming == null) return;
             CurrentRegion = ResolveRegion(position);
             runtimePolicy.loadAheadDistanceMeters = preloadDistance + Mathf.Min(1200, velocity.magnitude * forwardPreloadSeconds);
@@ -160,6 +181,14 @@ namespace LWS.TruckTaxi
         }
         private bool ConfigureStreaming()
         {
+            if (authoredSingleScene)
+            {
+                if (regions.Length == 0) { LastFailure = "Authored world has no district metadata."; return false; }
+                foreach (var region in regions)
+                    if (region == null || region.sceneName != gameObject.scene.name)
+                    { LastFailure = "Authored districts must identify the current scene."; return false; }
+                return true;
+            }
             if (streaming != null) return true;
             if (streamingManifest == null || LwsApplicationBootstrap.Instance == null ||
                 !LwsApplicationBootstrap.Instance.Registry.TryGet(out streaming))

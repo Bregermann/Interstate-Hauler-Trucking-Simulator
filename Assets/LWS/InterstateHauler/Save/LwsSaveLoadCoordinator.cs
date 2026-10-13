@@ -157,9 +157,12 @@ namespace LWS.InterstateHauler
         public const string FiftyMileValidationWorldId = "world.fifty-mile-floating-origin-validation";
         public const string TruckTaxiWorldId = "world.truck-taxi";
         public const string TruckTaxiStreamingWorldId = "taxi.regional";
+        public const string TruckTaxiEdenboroughWorldId = "world.truck-taxi.edenborough";
 
         private static readonly LwsWorldResumeSceneBinding[] KnownScenes =
         {
+            new LwsWorldResumeSceneBinding(TruckTaxiEdenboroughWorldId, "TruckTaxi_Edenborough",
+                "Assets/LWS/TruckTaxi/Scenes/TruckTaxi_Edenborough.unity", "Truck Taxi Edenborough"),
             new LwsWorldResumeSceneBinding(TruckTaxiWorldId, "TruckTaxi_DemoCity",
                 "Assets/LWS/TruckTaxi/Scenes/TruckTaxi_DemoCity.unity", "Truck Taxi"),
             new LwsWorldResumeSceneBinding(
@@ -188,6 +191,8 @@ namespace LWS.InterstateHauler
 
         public static string ResolveStableWorldId(string sceneName, string streamingWorldId)
         {
+            if (string.Equals(sceneName, "TruckTaxi_Edenborough", StringComparison.OrdinalIgnoreCase))
+                return TruckTaxiEdenboroughWorldId;
             // The Taxi streaming manifest identifies a region set, not a second resume world.
             if (string.Equals(sceneName, "TruckTaxi_DemoCity", StringComparison.OrdinalIgnoreCase) &&
                 string.Equals(streamingWorldId, TruckTaxiStreamingWorldId, StringComparison.Ordinal))
