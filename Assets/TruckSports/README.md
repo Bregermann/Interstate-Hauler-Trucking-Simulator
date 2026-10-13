@@ -2,8 +2,19 @@
 
 Truck Sports is the existing local Windows collection in Interstate: Hauler. Start with Assets/TruckSports/Scenes/TruckSports.unity. The development executable is F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\Builds\TruckSports\TruckSports.exe; keep its entire build payload together.
 
-TRUCK SPORTS > Play > Billiards Match, Billiards Practice or Hockey. Existing title, settings, navigation, scene transitions and DOTween results remain. Shared Master/SFX/steering/display/vibration preferences retain the TruckBilliards.Settings.* keys. Each sport saves its participant setup separately. UPDATE_3V3.md and VALIDATION.md record actual validation and hardware limitations.
+TRUCK SPORTS > Play > Billiards Match, Billiards Practice, Hockey or Bowling. Existing title, settings, navigation, scene transitions and DOTween results remain. Shared Master/SFX/steering/display/vibration preferences retain the TruckBilliards.Settings.* keys. Each sport saves its participant setup separately. UPDATE_3V3.md records the previous update. Current Bowling and combined-build evidence is in ../TruckBowling/VALIDATION.md; VALIDATION.md preserves the earlier three-scene evidence.
 
+## Bowling: the truck is the ball
+
+Bowling adds a saved fully 3D alley and first-person tiny-truck cab view. NWH WheelController 3D owns tire/suspension physics. The approach is grippy; increasing oil reduces lateral correction and post-commit power/braking so entry momentum dominates. A configurable lane-edge assist reads only position/velocity and allows genuine gutters. There is no ball, throw or shoot button.
+
+Simultaneous play uses 1–4 permanent participant/lane assignments and independent split-screen deliveries. Hot seat uses 1–8 on one lane, a whole frame per participant including tenth-frame bonuses. Any human/AI mix; named per-slot AI difficulty, shared/whole/stick/keyboard sources, explicit ownership, persisted setup/rematches and owner-only dialogs. AI drives physically through the same controls and advances all-AI matches without confirmations. Shared human hot seat announces and confirms the handoff.
+
+Ten frames, standard strike/spare/tenth bonuses, pending cumulative totals, maximum 300 and ties. Crossing the foul line is legal for the truck. Actual stable pinfall is locked before visible lifting/sweeping/setting. Survivors retain their positions for second deliveries; fresh racks follow bowling rules. Gutters cannot return to score, slow/overturned/stuck deliveries resolve, and all timers/machinery pause without consuming time. Final standings wait for all lanes and show final totals.
+
+Keyboard slots: W/A/S/D; arrows; T/F/G/H; I/J/K/L (simultaneous); remaining hot-seat presets Z/X/C/V, numpad, number row and navigation keys. Shared hot seat uses W/A/S/D. Whole pads use left stick/RT/LT; shared sticks use X steering and Y drive. Opposite throttle brakes before reversing. Escape/assigned Start pauses, Tab opens the full scorecard. Reduced Camera Motion is available. Shared Master/SFX/vibration and one AudioListener are retained.
+
+See ../TruckBowling/README.md for complete rules, controls, tuning and vendor paths; ../TruckBowling/VALIDATION.md for physical/injected-device evidence, sustained matches and manual limits. Offline only; no online services or powerups.
 ## Hockey: three per team
 
 Six editable participants support every human/AI mixture, including six AI or six humans. Each has a name, source, independent AI difficulty, team color and B1–B3 / O1–O3 marker. Click a source to choose AI, Keyboard, WholeController, LeftStick or RightStick. Presets include Keyboard Chaos, six individual controllers, three shared controllers, AI-only and Custom. Default match is three minutes; two and five are available.
@@ -49,13 +60,13 @@ On an open table, one legally potted group assigns automatically. If the same le
 
 ## Build and future authoring
 
-Final builds use LWS.TruckSports.Editor.SportsBuilder.Build from the saved scenes. It validates and supplies a build-specific explicit array: TruckSports, TruckBilliards, TruckHockey. Truck Sports branding is scoped, with exact host PlayerSettings and EditorBuildSettings restoration on success and failure. Original host/Truck Taxi configurations remain untouched.
+Final builds use LWS.TruckSports.Editor.SportsBuilder.Build from the saved scenes. It validates and supplies a build-specific explicit array: TruckSports, TruckBilliards, TruckHockey, TruckBowling. Truck Sports branding is scoped, with exact host PlayerSettings and EditorBuildSettings restoration on success and failure. Original host/Truck Taxi configurations remain untouched.
 
 SportsUpdateAuthoring.UpgradeAll is the explicit owned-scene migration. SportsBuilder.CreateValidateBuild reauthors the front end and hockey scene; inspect it before use on hand-tuned scenes. Updated authoring defaults now produce six trucks and the current setup. BilliardsMenuBuilder's explicit recreation also applies the current Billiards upgrade. The existing Billiards-only builder remains.
 
 Opt-in development probes: -tsBilliardsUpdate, -tsBilliardsAI, -tsHockeyUpdate (also -tsSmoke), -tsSixAI; retained feature/local probes use -tsBilliardsFeature -tbFeatureSmoke and -tsBilliardsRegression -tbLocalSmoke. Normal launches run none. Probes distinguish initial layouts/rule fixtures from actual physical execution and restore injected devices/preferences.
 
-Future sports must provide editable named human/AI participants, per-slot AI difficulty, clear identity/input ownership, persisted rematches/menu returns and autonomous normal AI-only gameplay. No additional sport, playlist or speculative framework is implemented.
+Future sports must provide editable named human/AI participants, per-slot AI difficulty, clear identity/input ownership, persisted rematches/menu returns and autonomous normal AI-only gameplay. Bowling is the only additional sport in this update; no playlist or speculative framework is implemented.
 
 ## Vendor report
 VENDOR ASSETS AUDITED: NWH Vehicle Physics 2 readme, VehicleController and ArcadeModule; NWH/GR3D SemiTruck prefab; UTS_FullPack CarAIController; Heat ButtonManager/SliderManager/InputFieldManager and audio; existing Billiards audio/input/settings; DOTween readme/APIs; installed Input System 1.19 and UI action asset.
