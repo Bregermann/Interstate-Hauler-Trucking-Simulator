@@ -1,3 +1,5 @@
+> Historical three-scene handoff (2026-10-12). The executable has since been rebuilt with Bowling as the third sport. Current four-scene build, physical match/regression evidence and limitations: ../TruckBowling/VALIDATION.md.
+
 # Truck Sports validation — 2026-10-12
 
 ## Build and settings
