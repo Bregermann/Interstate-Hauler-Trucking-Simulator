@@ -15,6 +15,14 @@ namespace LWS.TruckTaxi
             host=owner;
             Catalog=owner.Configuration.careerCatalog != null ? owner.Configuration.careerCatalog :
                 Resources.Load<TruckTaxiCareerCatalog>("TruckTaxi/Career/Catalog");
+            // Resolve only the existing canonical definition. Never mutate the shared catalog asset.
+            var current=Catalog?.FindTruck(owner.Player.DefinitionId);
+            if(current!=null && current.truck==null && owner.Player.Definition!=null && owner.Player.Definition.PlayerPrefab!=null)
+            {
+                Catalog=Instantiate(Catalog);
+                ownsCatalog=true;
+                Catalog.FindTruck(owner.Player.DefinitionId).truck=owner.Player.Definition;
+            }
             baseFuelCapacity=owner.Fuel?.Fuel?.capacity ?? 0;
             host.Session.CareerEquipmentChanged+=Apply;
             Apply();
@@ -76,6 +84,10 @@ namespace LWS.TruckTaxi
             }
         }
         private void OnDestroy()
-        { if(host?.Session!=null) host.Session.CareerEquipmentChanged-=Apply; }
+        {
+            if(host?.Session!=null) host.Session.CareerEquipmentChanged-=Apply;
+            if(ownsCatalog && Catalog!=null) Destroy(Catalog);
+        }
+        private bool ownsCatalog;
     }
 }

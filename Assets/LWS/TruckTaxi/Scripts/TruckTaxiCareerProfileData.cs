@@ -66,9 +66,11 @@ namespace LWS.TruckTaxi
             var ids=new HashSet<string>(StringComparer.Ordinal);
             foreach(var truck in trucks)
                 if(truck==null || !ValidId(truck.truckId) || !ids.Add(truck.truckId) ||
+                    truck.hasCustomPaint && (truck.paint==null || !truck.paint.Validate()) ||
                     !UniqueIds(truck.ownedUpgradeIds) || !UniqueIds(truck.ownedCosmeticIds) ||
                     !ValidSelections(truck.upgrades,truck.ownedUpgradeIds,true) ||
-                    !ValidSelections(truck.cosmetics,truck.ownedCosmeticIds,false)) return false;
+                    !ValidSelections(truck.cosmetics,truck.ownedCosmeticIds,false) ||
+                    truck.hasCustomPaint && truck.cosmetics.Exists(s=>s.slotId=="paint")) return false;
             if(!ids.Contains(equippedTruckId) || !string.IsNullOrEmpty(equippedHeadwearId) &&
                 !ownedHeadwearIds.Contains(equippedHeadwearId)) return false;
             reason=null; return true;
@@ -90,12 +92,16 @@ namespace LWS.TruckTaxi
     public sealed class TruckTaxiOwnedTruck
     {
         public string truckId;
+        // Optional: old saves keep the authored material/catalog paint.
+        public bool hasCustomPaint;
+        public TruckTaxiGaragePaintData paint;
         public List<string> ownedUpgradeIds=new List<string>();
         public List<string> ownedCosmeticIds=new List<string>();
         public List<TruckTaxiCareerSelection> upgrades=new List<TruckTaxiCareerSelection>();
         public List<TruckTaxiCareerSelection> cosmetics=new List<TruckTaxiCareerSelection>();
         internal TruckTaxiOwnedTruck Copy() => new TruckTaxiOwnedTruck {
-            truckId=truckId,ownedUpgradeIds=ownedUpgradeIds==null ? null : new List<string>(ownedUpgradeIds),
+            truckId=truckId,hasCustomPaint=hasCustomPaint,paint=hasCustomPaint ? paint?.Copy() : null,
+            ownedUpgradeIds=ownedUpgradeIds==null ? null : new List<string>(ownedUpgradeIds),
             ownedCosmeticIds=ownedCosmeticIds==null ? null : new List<string>(ownedCosmeticIds),
             upgrades=upgrades?.ConvertAll(s=>s?.Copy()),cosmetics=cosmetics?.ConvertAll(s=>s?.Copy())
         };

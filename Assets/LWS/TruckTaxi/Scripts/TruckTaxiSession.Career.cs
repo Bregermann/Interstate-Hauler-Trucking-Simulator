@@ -153,7 +153,12 @@ namespace LWS.TruckTaxi
             var owned=definition.IsHeadwear ? next.ownedHeadwearIds : SelectedTruck(next).ownedCosmeticIds;
             if(!owned.Contains(itemId)) { reason="Cosmetic is not owned."; return false; }
             if(definition.IsHeadwear) next.equippedHeadwearId=itemId;
-            else Select(SelectedTruck(next).cosmetics,definition.SlotId,itemId);
+            else
+            {
+                Select(SelectedTruck(next).cosmetics,definition.SlotId,itemId);
+                if(definition.category==TruckTaxiCosmeticCategory.Paint)
+                { SelectedTruck(next).hasCustomPaint=false; SelectedTruck(next).paint=null; }
+            }
             return CommitCareer(next,0,out reason);
         }
         private bool CosmeticAvailable(TruckTaxiCareerCosmeticDefinition definition) => definition!=null &&
@@ -169,6 +174,7 @@ namespace LWS.TruckTaxi
             if(!CanChangeCareer(out reason)) return false;
             if(slot==null) { reason="Unknown equipment category."; return false; }
             var next=ownedProfile.Copy();
+            if(!upgrade && slot=="paint") { SelectedTruck(next).hasCustomPaint=false; SelectedTruck(next).paint=null; }
             if(!upgrade && slot=="player-headwear") next.equippedHeadwearId=null;
             else (upgrade ? SelectedTruck(next).upgrades : SelectedTruck(next).cosmetics).RemoveAll(s=>s.slotId==slot);
             return CommitCareer(next,0,out reason);
