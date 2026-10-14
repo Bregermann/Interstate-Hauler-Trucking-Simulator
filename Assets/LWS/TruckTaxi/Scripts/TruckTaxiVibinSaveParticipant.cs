@@ -196,8 +196,10 @@ namespace LWS.TruckTaxi
         // Read-only compatibility for saves captured before the streaming/resume ID fix.
         // Do not accept arbitrary worlds merely because their scene text resembles Taxi.
         public static bool IsTaxiResumeWorld(string worldId, string sceneName) =>
-            string.Equals(sceneName, TruckTaxiMainMenu.VibinSceneName, StringComparison.OrdinalIgnoreCase) &&
-            (worldId == LwsWorldResumeCatalog.TruckTaxiWorldId || worldId == LwsWorldResumeCatalog.TruckTaxiStreamingWorldId);
+            (worldId == TruckTaxiEdenboroughLayout.WorldId &&
+                string.Equals(sceneName, TruckTaxiEdenboroughLayout.SceneName, StringComparison.OrdinalIgnoreCase)) ||
+            (string.Equals(sceneName, TruckTaxiMainMenu.VibinSceneName, StringComparison.OrdinalIgnoreCase) &&
+                (worldId == LwsWorldResumeCatalog.TruckTaxiWorldId || worldId == LwsWorldResumeCatalog.TruckTaxiStreamingWorldId));
 
         private static bool Finite(double x, double y, double z) => double.IsFinite(x) && double.IsFinite(y) && double.IsFinite(z);
         private static bool ValidRotation(Quaternion q) => float.IsFinite(q.x) && float.IsFinite(q.y) && float.IsFinite(q.z) &&

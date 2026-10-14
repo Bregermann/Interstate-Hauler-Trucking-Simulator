@@ -42,6 +42,7 @@ namespace LWS.TruckTaxi.Editor
             var previous = SceneManager.GetActiveScene(); SceneManager.SetActiveScene(scene);
             try
             {
+                TruckTaxiDemoBuilder.BuildLighting();
                 // Existing Weather Maker presents the sky; an inherited Unity skybox suppresses it.
                 RenderSettings.skybox = null;
                 var template = Find<TruckTaxiBootstrap>(source);

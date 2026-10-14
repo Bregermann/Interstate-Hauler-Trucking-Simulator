@@ -34,6 +34,17 @@ namespace LWS.TruckTaxi.Tests
         }
         private static TruckTaxiGaragePaintData Paint() => new TruckTaxiGaragePaintData { color = new Color(.137f, .521f, .983f, 1) };
 
+        [Test] public void PaintComponentConstructionAndUnconfiguredCleanupDoNotAllocateNativeConstructorState()
+        {
+            var go = new GameObject("Garage paint lifecycle regression"); objects.Add(go);
+            var paint = go.AddComponent<TruckTaxiGaragePaint>();
+            Assert.IsFalse(paint.Ready);
+            Assert.IsFalse(paint.TryGetBodyBounds(out _));
+            Assert.DoesNotThrow(paint.RestoreDefault);
+            go.SetActive(false);
+            UnityEngine.TestTools.LogAssert.NoUnexpectedReceived();
+        }
+
         [Test] public void CancelDiscardsDraftWithoutMutatingCareerOrPublishingEquipment()
         {
             var session = Career(); int events = 0; session.CareerEquipmentChanged += () => events++;

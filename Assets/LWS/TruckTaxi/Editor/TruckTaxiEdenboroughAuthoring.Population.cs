@@ -264,6 +264,7 @@ namespace LWS.TruckTaxi.Editor
             {
                 var population = root.AddComponent<TruckTaxiPedestrianPopulation>(); EditorUtility.CopySerialized(template, population);
                 population.roadLanes = lanes; population.densityProfile = profile; population.useDensityOverride = true;
+                population.useWobblePeople = false; // Edenborough uses the installed Citizens models, not the demo visual overlay.
                 population.maxFullPedestrians = 48; population.maxVisiblePedestrians = 96;
                 population.signalIntersections = Array.Empty<TruckTaxiIntersection>();
                 var areas = new List<TruckTaxiPedestrianArea>(); var paths = new List<Component>();

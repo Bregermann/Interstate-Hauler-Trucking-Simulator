@@ -284,20 +284,31 @@ namespace LWS.TruckTaxi
             previewTexture.Create(); image.texture = previewTexture;
             var eye = new GameObject("Garage preview camera", typeof(Camera)); eye.transform.SetParent(transform, false);
             previewCamera = eye.GetComponent<Camera>(); previewCamera.enabled = false; previewCamera.targetTexture = previewTexture;
+            previewCamera.cameraType = CameraType.Preview;
+            previewCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
             previewCamera.clearFlags = CameraClearFlags.SolidColor; previewCamera.backgroundColor = new Color(.10f,.12f,.11f);
             previewCamera.fieldOfView = 36; previewCamera.nearClipPlane = .1f; previewCamera.farClipPlane = 150;
         }
         private void RenderPreview()
         {
             if (previewCamera == null || host.Player == null) return;
-            var renderers = host.Player.GetComponentsInChildren<MeshRenderer>();
-            if (renderers.Length == 0) return;
-            Bounds bounds = renderers[0].bounds;
-            foreach (var renderer in renderers) bounds.Encapsulate(renderer.bounds);
+            if (paint == null || !paint.TryGetBodyBounds(out var bounds)) return;
             float distance = Mathf.Max(4, bounds.extents.magnitude / Mathf.Tan(previewCamera.fieldOfView * Mathf.Deg2Rad * .5f) * 1.1f);
             Vector3 direction = (host.Player.transform.forward + host.Player.transform.right + Vector3.up * .45f).normalized;
             previewCamera.transform.position = bounds.center + direction * distance;
-            previewCamera.transform.LookAt(bounds.center); previewCamera.Render();
+            previewCamera.transform.LookAt(bounds.center);
+            var originalLayers = new Dictionary<GameObject,int>();
+            try
+            {
+                // Scope the preview draw only. No physics tick or lasting truck-layer change.
+                foreach (var renderer in host.Player.GetComponentsInChildren<MeshRenderer>())
+                {
+                    if (!originalLayers.ContainsKey(renderer.gameObject)) originalLayers.Add(renderer.gameObject, renderer.gameObject.layer);
+                    renderer.gameObject.layer = LayerMask.NameToLayer("UI");
+                }
+                previewCamera.Render();
+            }
+            finally { foreach (var item in originalLayers) if (item.Key != null) item.Key.layer = item.Value; }
         }
     }
 }

@@ -42,13 +42,18 @@ namespace LWS.TruckTaxi.Editor
         public const string BedPrefabPath = "Assets/HQ_ResidentialHouse/Prefabs/Bed.prefab";
         private const string Toilet = "Assets/ToiletSet/URP/Prefabs/SM_Toilet Variant.prefab";
         private const string Sink = "Assets/ToiletSet/URP/Prefabs/SM_Sink Variant.prefab";
+        private const string Hammer = "Assets/HandToolsPack/URP/Prefabs/Hammer_GameReady_LODs.prefab";
+        private const string Wrench = "Assets/HandToolsPack/URP/Prefabs/Wrench_GameReady_LODs.prefab";
+        private const string Vice = "Assets/HandToolsPack/URP/Prefabs/Vice_GameReady_LODs.prefab";
+        private const string FreightCrate = "Assets/IndieKit/Crates and Barrels/Prefabs/Non-Destructible/crate_01.prefab";
+        private const string FreightBarrel = "Assets/IndieKit/Crates and Barrels/Prefabs/Non-Destructible/barrel_01.prefab";
 
         public static IReadOnlyList<string> RequiredPrefabPaths { get; } = Array.AsReadOnly(new[]
         {
             GarageFloor, GarageWall, GarageCeiling, ToolCabinet, WorkTable, MetalShelf, Crate,
             WarehouseFloor, WarehouseWall, WarehouseCeiling, Counter, Register, ShopShelf,
             RoomFloor, RoomWall, RoomHeader, RoomWindow, DiningTable, Chair, Reception, Oven,
-            HotelPrefabPath, BedPrefabPath, Toilet, Sink
+            HotelPrefabPath, BedPrefabPath, Toilet, Sink, Hammer, Wrench, Vice, FreightCrate, FreightBarrel
         });
 
         // Origin is floor height at bay center; travel is along local Z in either direction.
@@ -148,8 +153,13 @@ namespace LWS.TruckTaxi.Editor
                 Shell(root, GarageFloor, GarageCeiling, GarageWall, 4, 6, 4, 4, 4, 3, 2,
                     (column, north) => column == 1 || column == 2 ? null : GarageWall);
                 Prop(root, ToolCabinet, "Garage.ToolCabinet", new Vector3(-6, 0, -8), 90, new Vector2(3, 4));
-                Prop(root, WorkTable, "Garage.Workbench", new Vector3(-6, 0, 0), 90, new Vector2(3, 4));
+                var bench = Prop(root, WorkTable, "Garage.Workbench", new Vector3(-6, 0, 0), 90, new Vector2(3, 4));
+                float benchTop = GeometryBounds(bench).max.y + .01f;
+                Prop(root, Vice, "Garage.Workbench.Vice", new Vector3(-6, benchTop, -.6f), 90, new Vector2(1, 1));
+                Prop(root, Hammer, "Garage.Workbench.Hammer", new Vector3(-6, benchTop, .2f), 0, new Vector2(1, 1));
+                Prop(root, Wrench, "Garage.Workbench.Wrench", new Vector3(-6, benchTop, .8f), 90, new Vector2(1, 1));
                 Prop(root, MetalShelf, "Garage.PartsShelf", new Vector3(6, 0, 6), 90, new Vector2(3, 5));
+                Prop(root, FreightCrate, "Garage.PartsCrate", new Vector3(6, 0, -6), 0, new Vector2(3, 3));
                 Anchor(root, "Garage.Bay.Center", Vector3.zero);
                 Anchor(root, "Entrance.South", new Vector3(0, 0, -12));
                 Anchor(root, "Entrance.North", new Vector3(0, 0, 12));
@@ -167,6 +177,8 @@ namespace LWS.TruckTaxi.Editor
                 Prop(root, MetalShelf, "Warehouse.Storage.Left", new Vector3(-7, 0, 5), 90, new Vector2(3, 5));
                 Prop(root, MetalShelf, "Warehouse.Storage.Right", new Vector3(7, 0, 5), 90, new Vector2(3, 5));
                 Prop(root, Crate, "Warehouse.Freight", new Vector3(6, 0, -5), 0, new Vector2(3, 4));
+                Prop(root, FreightCrate, "Warehouse.FreightCrate", new Vector3(6, 0, -8), 0, new Vector2(3, 3));
+                Prop(root, FreightBarrel, "Warehouse.FreightBarrel", new Vector3(-6, 0, -5), 0, new Vector2(3, 3));
                 Anchor(root, "Entrance.South", new Vector3(0, 0, -12));
                 Anchor(root, "Warehouse.Loading", new Vector3(0, 0, -6));
                 Light(root, new Vector3(0, 5.5f, 0), 18);

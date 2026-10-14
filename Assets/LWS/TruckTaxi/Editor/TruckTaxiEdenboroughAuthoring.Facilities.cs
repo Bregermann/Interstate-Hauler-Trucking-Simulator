@@ -49,7 +49,7 @@ namespace LWS.TruckTaxi.Editor
                     var interactions = new List<TruckTaxiEdenboroughFacility.Binding>();
                     GameObject[] buildings = location.locationType == TaxiLocationType.Hotel ? palette.motelModules :
                         location.locationType == TaxiLocationType.Restaurant ? palette.dinerModules :
-                        location.locationType == TaxiLocationType.Store ? palette.storeModules :
+                        location.locationType == TaxiLocationType.Store || location.locationType == TaxiLocationType.GasStation ? palette.storeModules :
                         location.locationType == TaxiLocationType.Industrial ? palette.warehouseBuildings : palette.urbanBuildings;
                     GameObject building = key != "hillend" ? PlaceArt(buildings[i % buildings.Length], go.transform,
                         stop + right * 34, Quaternion.LookRotation(right)) : null;

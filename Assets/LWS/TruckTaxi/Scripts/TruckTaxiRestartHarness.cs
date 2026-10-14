@@ -382,9 +382,29 @@ namespace LWS.TruckTaxi
                 yield return AcknowledgeFirstDay();
                 Result(saves.RenameProfile(host.Persistence.RunProfileId, TruckTaxiRestartTestArguments.ProfileName), "name isolated drive fixture");
                 Check(LwsApplicationBootstrap.Instance.Registry.TryGet(out driveOrigin), "drive seed origin authority");
-                Check(TruckTaxiFlagshipRoute.TryCreate(host.roadGraph?.Graph, host.traffic?.cityLanes, out var road, out var reason),
-                    "drive seed uses validated authored lane: " + reason);
-                Check(TrySeedDriveRoad(road, null, out string firstRegion), "loaded safe straight road exists for slot 1");
+                string firstRegion;
+                if (host.gameObject.scene.name == TruckTaxiEdenboroughLayout.SceneName)
+                {
+                    yield return ValidateEdenboroughGarage();
+                    yield return ObserveEdenboroughWorld();
+                    firstRegion = null;
+                    var candidates = new List<LwsRoadEdge>(host.roadGraph.Graph.edges);
+                    candidates.Sort((a,b) => string.CompareOrdinal(a?.edgeId,b?.edgeId));
+                    foreach (var edge in candidates)
+                    {
+                        if (!TryDriveEdgeSeed(edge, out var global, out var forward)) continue;
+                        var local = driveOrigin.GlobalToLocal(LwsWorldPositionD.FromVector3(global));
+                        var region = host.GetComponent<TruckTaxiRegionalWorld>().ResolveRegion(local);
+                        if (TryPlaceDriveSeed(local, Quaternion.LookRotation(forward), region)) { firstRegion = region; break; }
+                    }
+                    Check(firstRegion != null, "Edenborough seed uses a grounded collision-clear authored road; no demo race substitute");
+                }
+                else
+                {
+                    Check(TruckTaxiFlagshipRoute.TryCreate(host.roadGraph?.Graph, host.traffic?.cityLanes, out var road, out var reason),
+                        "drive seed uses validated authored lane: " + reason);
+                    Check(TrySeedDriveRoad(road, null, out firstRegion), "loaded safe straight road exists for slot 1");
+                }
                 yield return PrepareDriveSeedEngine();
                 Result(host.Persistence.Save(1), "drive road slot 1");
                 Result(host.Persistence.SaveBeforeLeaving(), "drive road restart autosave");
@@ -439,6 +459,214 @@ namespace LWS.TruckTaxi
             yield return WaitForRun(false);
             Check(!ReferenceEquals(retiredSource, driveSourceBeforeLoad), "newly spawned truck owns its own live input source");
             yield return AssertPostLoadDrive("same-process menu-return Continue", profile.stableProfileId);
+        }
+
+        private static Color EdenboroughTestPaint => new Color(.12f, .63f, .91f, 1);
+        private IEnumerator ObserveEdenboroughWorld()
+        {
+            VerifyVendor();
+            Check(!host.Paused, "garage closes back to normal unpaused gameplay");
+            Check(host.traffic.RuntimeLaneCount == 24 && host.traffic.LogicalCount > 0,
+                "Edenborough actually initialized 24 UTS traffic circuits");
+            Check(host.pedestrians.Ready && host.pedestrians.GraphWalkableSpawnCount > 0,
+                "Edenborough actually initialized its Citizens walking graph");
+            var station = TruckTaxiGasStationPoint.Nearest(host.Player.transform.position);
+            Check(station != null && host.GPS.TrySetMapServiceDestination(station.stableId, station.displayName, station.Position),
+                "existing LWS/Compass navigation accepts the authored gas station");
+            float until = Time.realtimeSinceStartup + 10;
+            while (!host.GPS.RouteReady && Time.realtimeSinceStartup < until) yield return null;
+            Check(host.GPS.RouteReady, "actual truck-legal route to the gas station calculated");
+            var cars = new Dictionary<string, Tuple<GameObject,Vector3>>();
+            foreach (var entry in host.traffic.ActiveVehicles)
+                if (entry.Value != null && entry.Value.activeInHierarchy) cars[entry.Key] = Tuple.Create(entry.Value, entry.Value.transform.position);
+            var people = (List<TruckTaxiPedestrian>)typeof(TruckTaxiPedestrianPopulation)
+                .GetField("people", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(host.pedestrians);
+            var peds = new Dictionary<TruckTaxiPedestrian,Vector3>();
+            foreach (var ped in people) if (ped != null && ped.gameObject.activeInHierarchy) peds[ped] = ped.transform.position;
+            int nativePeople = 0;
+            foreach (var ped in peds.Keys)
+                foreach (var renderer in ped.GetComponentsInChildren<SkinnedMeshRenderer>())
+                    if (renderer.enabled && renderer.sharedMesh != null) { nativePeople++; break; }
+            Check(!host.pedestrians.useWobblePeople && nativePeople > 0, "Edenborough uses visible native Citizens skinned models, not hidden models behind the demo overlay");
+            var frameMs = new List<float>(); until = Time.realtimeSinceStartup + 10;
+            while (Time.realtimeSinceStartup < until) { frameMs.Add(Time.unscaledDeltaTime * 1000); yield return null; }
+            int movingCars = 0, movingPeds = 0;
+            foreach (var entry in cars)
+                if (host.traffic.TryResolveVehicle(entry.Key, out var car) && car == entry.Value.Item1 &&
+                    Vector3.Distance(car.transform.position, entry.Value.Item2) > .25f &&
+                    Vector3.Distance(car.transform.position, entry.Value.Item2) < 200) movingCars++;
+            foreach (var entry in peds)
+                if (entry.Key != null && entry.Key.gameObject.activeInHierarchy &&
+                    Vector3.Distance(entry.Key.transform.position, entry.Value) > .1f &&
+                    Vector3.Distance(entry.Key.transform.position, entry.Value) < 40) movingPeds++;
+            frameMs.Sort();
+            string evidence = "Scene=" + host.gameObject.scene.name + "\nTrafficCircuits=" + host.traffic.RuntimeLaneCount +
+                "\nLogicalTraffic=" + host.traffic.LogicalCount + "\nFullPhysicsTraffic=" + host.traffic.FullPhysicsCount +
+                "\nObservedMovingCarActors=" + movingCars + "\nActivePedestrians=" + host.pedestrians.ActiveCount +
+                "\nObservedMovingPedestrianActors=" + movingPeds + "\nWalkableNodes=" + host.pedestrians.GraphWalkableSpawnCount +
+                "\nNativeCitizensModelActors=" + nativePeople +
+                "\nResolution=" + Screen.width + "x" + Screen.height + "\nDevice=" + SystemInfo.graphicsDeviceName +
+                "\nMedianFrameMs=" + frameMs[frameMs.Count / 2] + "\nP95FrameMs=" + frameMs[(int)((frameMs.Count - 1) * .95f)] +
+                "\nVSync=" + QualitySettings.vSyncCount + "\nTargetFrameRate=" + Application.targetFrameRate +
+                "\nStationary garage observation, NOT cross-district driving performance or human acceptance.";
+            File.WriteAllText(Path.Combine(request.Root, "edenborough-world-observation.txt"), evidence);
+            Debug.Log(Prefix + "EDENBOROUGH WORLD OBSERVATION " + evidence.Replace('\n',' '));
+            yield return new WaitForEndOfFrame();
+            ScreenCapture.CaptureScreenshot(Path.Combine(request.Root, "edenborough-gas-route.png"));
+            yield return new WaitForSecondsRealtime(.5f);
+            host.GPS.ClearPlayerServiceDestination();
+            if (movingCars == 0)
+            {
+                // Garage is outside the traffic bubble. Observe an existing logical circuit,
+                // not a manufactured NPC or forced spawn. This placement is test-fixture-only.
+                var population = (TruckTaxiTrafficPopulation)typeof(TruckTaxiTrafficAdapter)
+                    .GetField("population", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(host.traffic);
+                bool placed = false;
+                foreach (var record in population.Cars)
+                {
+                    Vector3 candidate = population.Position(record) + population.Forward(record) * 30;
+                    string region = host.GetComponent<TruckTaxiRegionalWorld>().ResolveRegion(candidate);
+                    if (!TryPlaceDriveSeed(candidate, Quaternion.LookRotation(population.Forward(record)), region)) continue;
+                    placed = true; break;
+                }
+                Check(placed, "controlled observation finds a safe authored road near existing simulated traffic");
+                host.SetPaused(false); host.Environment.Clock.SetPaused(false);
+                yield return new WaitForSecondsRealtime(5);
+                cars.Clear();
+                foreach (var entry in host.traffic.ActiveVehicles)
+                    if (entry.Value != null && entry.Value.activeInHierarchy) cars[entry.Key] = Tuple.Create(entry.Value, entry.Value.transform.position);
+                yield return new WaitForSecondsRealtime(5);
+                movingCars = 0; int nativeAi = 0;
+                foreach (var entry in cars)
+                    if (host.traffic.TryResolveVehicle(entry.Key, out var car) && car == entry.Value.Item1 &&
+                        Vector3.Distance(car.transform.position, entry.Value.Item2) > .25f && Vector3.Distance(car.transform.position, entry.Value.Item2) < 200)
+                    { movingCars++; if (host.traffic.TryGetVehicleAi(entry.Key, out _)) nativeAi++; }
+                string traffic = "MovingActors=" + movingCars + " NativeUtsAi=" + nativeAi + " FullPhysics=" + host.traffic.FullPhysicsCount +
+                    " ActiveActors=" + host.traffic.ActiveVehicles.Count + "; controlled road placement, NOT driving travel proof.";
+                File.WriteAllText(Path.Combine(request.Root, "edenborough-traffic-observation.txt"), traffic);
+                Check(movingCars > 0 && nativeAi > 0 && host.traffic.FullPhysicsCount > 0, "real UTS traffic moves on the authored map | " + traffic);
+                yield return new WaitForEndOfFrame();
+                ScreenCapture.CaptureScreenshot(Path.Combine(request.Root, "edenborough-traffic.png"));
+                yield return new WaitForSecondsRealtime(.5f);
+            }
+            var stop = station.GetComponent<TruckTaxiRideLocation>();
+            var body = host.Player.GetComponent<Rigidbody>();
+            Quaternion facing = Quaternion.LookRotation(-stop.truckStopPoint.forward, Vector3.up);
+            Check(TruckTaxiRecoverySpace.TryGroundedPose(body, stop.StopPosition, facing, .3f, body, null, out var fuelPose),
+                "actual fuel bay has collision-clear truck ground; fixture placement is not driving-arrival proof");
+            var idle = CreateSessionFixture(0, host.Session.CapturePersistentState());
+            Check(host.Session.TryRestorePersistentState(idle, out var idleError), "isolated funded idle service fixture: " + idleError);
+            TruckTaxiRecoverySpace.Move(body, fuelPose, facing);
+            host.SetPaused(false); host.Environment.Clock.SetPaused(false);
+            yield return new WaitForSecondsRealtime(2);
+            Check(host.WorldLife.TryExitTruck(), "normal on-foot exit succeeds at the actual fuel bay: " + host.WorldLife.ExitBlockReason);
+            var pump = stop.GetComponentInChildren<TruckTaxiDieselPump>();
+            Check(pump != null && host.WorldLife.CanReachInteraction(pump) && pump.CanUse(host.WorldLife),
+                "authored imported diesel pump is physically reachable and usable from the normal exit");
+            pump.Use(host.WorldLife);
+            Check(host.WorldLife.ActiveNozzleStation == station, "actual pump leases the existing fuel nozzle");
+            float litersBefore = host.Fuel.Fuel.amount;
+            long cashBefore = host.Session.WalletBalanceCents;
+            Check(host.WorldLife.PumpFromNozzle(1), "actual filler/nozzle proximity dispenses fuel using the existing system");
+            Check(host.Fuel.Fuel.amount > litersBefore && host.Session.WalletBalanceCents < cashBefore,
+                "real refueling increases fuel and charges the existing wallet");
+            yield return new WaitForEndOfFrame();
+            ScreenCapture.CaptureScreenshot(Path.Combine(request.Root, "edenborough-refueling.png"));
+            yield return new WaitForSecondsRealtime(.5f);
+            host.WorldLife.ReturnNozzle();
+            var shelf = stop.GetComponentInChildren<TruckTaxiProductShelf>();
+            var register = stop.GetComponentInChildren<TruckTaxiCheckoutRegister>();
+            Check(shelf != null && register != null && TryPlaceFootServiceFixture(shelf),
+                "owned shop product has a collision-clear reachable foot position; fixture placement is not walking-arrival proof");
+            yield return null;
+            Check(shelf.CanUse(host.WorldLife) && host.WorldLife.CanReachInteraction(shelf), "actual authored shelf is usable with unobstructed sight");
+            int itemsBefore = host.DriverNeeds.State.Count(shelf.item);
+            shelf.Use(host.WorldLife);
+            Check(TryPlaceFootServiceFixture(register), "owned checkout has collision-clear reachable access");
+            yield return null;
+            cashBefore = host.Session.WalletBalanceCents;
+            Check(host.WorldLife.CanReachInteraction(register) && host.WorldLife.Checkout(), "existing shop register completes actual basket checkout");
+            Check(host.DriverNeeds.State.Count(shelf.item) == itemsBefore + 1 && host.Session.WalletBalanceCents < cashBefore,
+                "existing inventory receives the purchased authored item and wallet pays");
+            yield return new WaitForEndOfFrame();
+            ScreenCapture.CaptureScreenshot(Path.Combine(request.Root, "edenborough-shop.png"));
+            yield return new WaitForSecondsRealtime(.5f);
+            host.WorldLife.ReturnToTruck();
+            Check(!host.WorldLife.IsOnFoot && host.WorldLife.ActiveNozzleStation == null, "service test releases foot/nozzle ownership");
+        }
+
+        private bool TryPlaceFootServiceFixture(TruckTaxiWorldInteractable interaction)
+        {
+            // Opt-in disposable-player fixture only. Do not bypass production range/sight gates.
+            var foot = host.WorldLife.FootTransform;
+            var controller = foot.GetComponent<CharacterController>();
+            Vector3 original = foot.position;
+            foreach (float distance in new[] { 1f, 1.6f, 2.2f })
+                for (int direction = 0; direction < 8; direction++)
+                {
+                    float angle = direction * Mathf.PI / 4;
+                    Vector3 probe = interaction.transform.position + new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * distance;
+                    if (!Physics.Raycast(probe + Vector3.up * .4f, Vector3.down, out var ground, 4, ~0, QueryTriggerInteraction.Ignore) || ground.normal.y < .9f) continue;
+                    Vector3 candidate = ground.point + Vector3.up * .06f;
+                    bool blocked = false;
+                    foreach (var hit in Physics.OverlapCapsule(candidate + Vector3.up * .36f, candidate + Vector3.up * 1.5f,
+                        .31f, ~0, QueryTriggerInteraction.Ignore))
+                        if (hit != ground.collider && !hit.transform.IsChildOf(foot)) { blocked = true; break; }
+                    if (blocked) continue;
+                    controller.enabled = false;
+                    foot.SetPositionAndRotation(candidate, Quaternion.LookRotation(Vector3.ProjectOnPlane(interaction.transform.position - candidate, Vector3.up)));
+                    controller.enabled = true; Physics.SyncTransforms();
+                    if (host.WorldLife.CanReachInteraction(interaction)) return true;
+                }
+            controller.enabled = false; foot.position = original; controller.enabled = true;
+            return false;
+        }
+
+        private IEnumerator ValidateEdenboroughGarage()
+        {
+            Check(host.gameObject.scene.name == TruckTaxiEdenboroughLayout.SceneName, "actual Edenborough scene loaded");
+            var garage = FindFirstObjectByType<TruckTaxiGarage>();
+            Check(garage != null && garage.gameObject.scene == host.gameObject.scene, "actual scene garage exists");
+            var volume = garage.GetComponentInChildren<BoxCollider>();
+            var body = host.Player.GetComponent<Rigidbody>();
+            Vector3 pose = default;
+            Check(volume != null && volume.isTrigger && TruckTaxiRecoverySpace.TryGroundedPose(body,
+                volume.bounds.center, garage.transform.rotation, .3f, body, null, out pose), "garage bay has safe physical placement");
+            TruckTaxiRecoverySpace.Move(body, pose, garage.transform.rotation);
+            body.linearVelocity = body.angularVelocity = Vector3.zero;
+            host.SetPaused(false); host.Environment.Clock.SetPaused(false);
+            // Let the ordinary HUD dispatcher retire its pause panel before requesting a modal.
+            yield return new WaitForSecondsRealtime(.3f);
+            float until = Time.realtimeSinceStartup + 10;
+            while ((body.linearVelocity.sqrMagnitude > .01f || body.angularVelocity.sqrMagnitude > .01f) && Time.realtimeSinceStartup < until)
+                yield return new WaitForFixedUpdate();
+            Check(garage.TryOpen(), "real garage eligibility opens the existing modal and preview | state=" + host.Session.State +
+                " paused=" + host.Paused + " mapEligible=" + host.hud.CanOpenFullMap + " busy=" + host.Persistence.IsBusy +
+                " blocked=" + host.Persistence.ResumeBlocked + " equipped=" + host.Session.EquippedTruckId + " physical=" + host.Player.DefinitionId +
+                " paint=" + host.Player.GetComponent<TruckTaxiGaragePaint>()?.Ready + " speed=" + body.linearVelocity.magnitude +
+                " angular=" + body.angularVelocity.magnitude + " local=" + volume.transform.InverseTransformPoint(body.position));
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var sliders = (UnityEngine.UI.Slider[])typeof(TruckTaxiGarage).GetField("sliders", flags).GetValue(garage);
+            void SetPaint()
+            {
+                Color.RGBToHSV(EdenboroughTestPaint, out float h, out float s, out float v);
+                sliders[0].value = h; sliders[1].value = s; sliders[2].value = v;
+            }
+            SetPaint();
+            yield return new WaitForEndOfFrame();
+            ScreenCapture.CaptureScreenshot(Path.Combine(request.Root, "edenborough-garage-preview.png"));
+            yield return null;
+            garage.Cancel();
+            Check(!host.Session.CaptureCareerProfile().trucks.Find(t => t.truckId == host.Player.DefinitionId).hasCustomPaint,
+                "garage Cancel leaves persistent Career paint unchanged");
+            Check(garage.TryOpen(), "garage reopens after Cancel");
+            garage.RestoreDefault(); SetPaint(); garage.Apply();
+            var owned = host.Session.CaptureCareerProfile().trucks.Find(t => t.truckId == host.Player.DefinitionId);
+            Check(!garage.IsOpen && owned.hasCustomPaint && Vector4.Distance(owned.paint.color, EdenboroughTestPaint) < .001f,
+                "garage HSV Apply stores selected Career paint and releases the modal");
+            yield return new WaitForEndOfFrame();
+            ScreenCapture.CaptureScreenshot(Path.Combine(request.Root, "edenborough-garage-applied.png"));
+            yield return null;
         }
 
         private IEnumerator LoadDriveSlotThroughPanel(string profileId, int slot)
@@ -790,6 +1018,15 @@ namespace LWS.TruckTaxi
             VerifyVendor();
             Check(driveSourceBeforeLoad != null, label + " registered input source object and owner unchanged; one canonical native provider");
             Check(host.Persistence.RunProfileId == profileId && saves.ActiveProfileId == profileId, label + " profile ownership");
+            if (host.gameObject.scene.name == TruckTaxiEdenboroughLayout.SceneName)
+            {
+                var owned = host.Session.CaptureCareerProfile().trucks.Find(t => t.truckId == host.Player.DefinitionId);
+                Check(owned != null && owned.hasCustomPaint && owned.paint != null &&
+                    Vector4.Distance(owned.paint.color, EdenboroughTestPaint) < .001f, label + " garage paint survives vendor save/quit/relaunch/load");
+                yield return new WaitForEndOfFrame();
+                ScreenCapture.CaptureScreenshot(Path.Combine(request.Root, "edenborough-load-" + request.Mode + ".png"));
+                yield return null;
+            }
             bool marker = false;
             var world = host.GetComponent<TruckTaxiRegionalWorld>();
             string region = world.ResolveRegion(host.Player.transform.position);

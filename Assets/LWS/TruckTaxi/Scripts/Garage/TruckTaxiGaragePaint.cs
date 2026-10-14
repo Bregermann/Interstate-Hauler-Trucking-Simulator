@@ -15,19 +15,31 @@ namespace LWS.TruckTaxi
             public Color defaultColor;
         }
         private readonly List<Slot> slots = new List<Slot>();
-        private readonly MaterialPropertyBlock block = new MaterialPropertyBlock();
+        private MaterialPropertyBlock block;
         private TruckTaxiSession session;
         private TruckTaxiCareerCatalog catalog;
         private LwsPlayerTruck truck;
         private bool subscribed;
         public bool Ready => isActiveAndEnabled && slots.Count > 0;
         public Color DefaultColor => slots.Count > 0 ? slots[0].defaultColor : Color.white;
+        private void Awake() => block = new MaterialPropertyBlock();
+        public bool TryGetBodyBounds(out Bounds bounds)
+        {
+            bounds = default; bool found = false;
+            foreach (var slot in slots)
+            {
+                if (slot.renderer == null || !slot.renderer.enabled || !slot.renderer.gameObject.activeInHierarchy) continue;
+                if (!found) { bounds = slot.renderer.bounds; found = true; } else bounds.Encapsulate(slot.renderer.bounds);
+            }
+            return found && bounds.size.sqrMagnitude > .01f;
+        }
 
         // Explicit source material identity prevents tinting glass, rubber, occupants, or vendor assets.
         public void Configure(LwsPlayerTruck player, Material[] bodyMaterials, TruckTaxiSession career, TruckTaxiCareerCatalog content)
         {
             if (player == null || player.gameObject != gameObject || bodyMaterials == null || career == null)
                 throw new ArgumentException("Paint requires the canonical truck, explicit body materials and Career session.");
+            block ??= new MaterialPropertyBlock();
             Unsubscribe(); RestoreDefault(); slots.Clear(); truck = player; session = career; catalog = content;
             foreach (var renderer in player.GetComponentsInChildren<Renderer>(true))
             {
@@ -78,6 +90,7 @@ namespace LWS.TruckTaxi
         }
         public void RestoreDefault()
         {
+            if (block == null) return;
             foreach (var slot in slots)
                 if (slot.renderer != null)
                 {

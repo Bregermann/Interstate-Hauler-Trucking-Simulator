@@ -8,6 +8,14 @@ namespace LWS.TruckTaxi.Tests
 {
     public sealed class TruckTaxiEdenboroughLayoutTests
     {
+        [Test] public void ResumeValidationAcceptsOnlyTheExactEdenboroughWorldScenePair()
+        {
+            Assert.IsTrue(TruckTaxiVibinSaveParticipant.IsTaxiResumeWorld(TruckTaxiEdenboroughLayout.WorldId, TruckTaxiEdenboroughLayout.SceneName));
+            Assert.IsFalse(TruckTaxiVibinSaveParticipant.IsTaxiResumeWorld("world.unknown", TruckTaxiEdenboroughLayout.SceneName));
+            Assert.IsFalse(TruckTaxiVibinSaveParticipant.IsTaxiResumeWorld(TruckTaxiEdenboroughLayout.WorldId, TruckTaxiMainMenu.VibinSceneName));
+            Assert.IsFalse(TruckTaxiVibinSaveParticipant.IsTaxiResumeWorld(TruckTaxiEdenboroughLayout.WorldId, "../TruckTaxi_Edenborough"));
+            Assert.IsTrue(TruckTaxiVibinSaveParticipant.IsTaxiResumeWorld(LWS.InterstateHauler.LwsWorldResumeCatalog.TruckTaxiWorldId, TruckTaxiMainMenu.VibinSceneName));
+        }
         [Test] public void AllDistrictsArePresentAndInsideTheAuthoredWorld()
         {
             Assert.That(TruckTaxiEdenboroughLayout.Districts.Length, Is.EqualTo(9));

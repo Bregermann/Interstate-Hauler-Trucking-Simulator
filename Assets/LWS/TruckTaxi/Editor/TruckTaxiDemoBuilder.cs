@@ -471,7 +471,7 @@ namespace LWS.TruckTaxi.Editor
             EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
             Debug.Log("TRUCK TAXI PEDESTRIANS: existing four UTS paths now use project-owned UTS ragdoll variants; request wording updated.");
         }
-        private static void BuildLighting()
+        internal static void BuildLighting()
         {
             RenderSettings.ambientMode=UnityEngine.Rendering.AmbientMode.Trilight;
             RenderSettings.ambientSkyColor=new Color(.65f,.75f,.9f); RenderSettings.ambientEquatorColor=new Color(.5f,.52f,.5f); RenderSettings.ambientGroundColor=new Color(.22f,.22f,.2f);
