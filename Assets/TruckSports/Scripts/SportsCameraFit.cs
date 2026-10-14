@@ -1,5 +1,9 @@
 using UnityEngine;
 namespace LWS.TruckSports {
-public sealed class SportsCameraFit:MonoBehaviour {public Camera cameraTarget;public float worldWidth=30,worldHeight=20;float aspect;
- void LateUpdate(){if(Mathf.Abs(cameraTarget.aspect-aspect)<.0001f)return;aspect=cameraTarget.aspect;cameraTarget.orthographicSize=Mathf.Max(worldHeight*.5f,worldWidth/(2*aspect));}}
+public sealed class SportsCameraFit:MonoBehaviour {
+ public Camera cameraTarget;public float worldWidth=30,worldHeight=20;public bool arenaFit;public Bounds arenaBounds;public float topInset=.05f,bottomInset=.05f,sideInset=.012f;float aspect;Quaternion rotation;
+ public void Apply(){if(cameraTarget==null)return;aspect=cameraTarget.aspect;rotation=cameraTarget.transform.rotation;if(!arenaFit){cameraTarget.orthographicSize=Mathf.Max(worldHeight*.5f,worldWidth/(2*aspect));return;}var min=Vector3.one*float.MaxValue;var max=Vector3.one*float.MinValue;for(int i=0;i<8;i++){var corner=arenaBounds.center+Vector3.Scale(arenaBounds.extents,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1));var local=cameraTarget.transform.InverseTransformPoint(corner);min=Vector3.Min(min,local);max=Vector3.Max(max,local);}cameraTarget.orthographicSize=Mathf.Max((max.y-min.y)/(2*Mathf.Max(.1f,1-topInset-bottomInset)),(max.x-min.x)/(2*aspect*Mathf.Max(.1f,1-sideInset*2)));var center=(min+max)*.5f;cameraTarget.transform.position+=cameraTarget.transform.right*center.x+cameraTarget.transform.up*(center.y-(bottomInset-topInset)*cameraTarget.orthographicSize);}
+ void LateUpdate(){if(cameraTarget==null)return;if(Mathf.Abs(cameraTarget.aspect-aspect)<.0001f&&Quaternion.Angle(rotation,cameraTarget.transform.rotation)<.001f)return;Apply();}
+ public static Rect Projected(Camera camera,Bounds bounds){Vector2 min=Vector2.one*float.MaxValue,max=Vector2.one*float.MinValue;for(int i=0;i<8;i++){var point=bounds.center+Vector3.Scale(bounds.extents,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1));var p=camera.WorldToViewportPoint(point);min=Vector2.Min(min,new Vector2(p.x,p.y));max=Vector2.Max(max,new Vector2(p.x,p.y));}return Rect.MinMaxRect(min.x,min.y,max.x,max.y);}
+ }
 }
