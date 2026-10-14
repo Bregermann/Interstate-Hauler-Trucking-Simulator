@@ -9,11 +9,13 @@ namespace LWS.TruckTaxi
         public const string ModeFlag = "-truck-taxi-restart-test";
         public const string RunFlag = "-truck-taxi-test-run";
         public const string DriveFlag = "-truck-taxi-test-drive";
+        public const string DualWorldFlag = "-truck-taxi-test-dual-world";
         public const string ProfileName = "ASTRA_SANDBOX_TEST";
         public string Mode { get; private set; }
         public string RunId { get; private set; }
         public string Root { get; private set; }
         public bool Drive { get; private set; }
+        public bool DualWorld { get; private set; }
 
         public static bool IsRequested(string[] args)
         {
@@ -21,7 +23,8 @@ namespace LWS.TruckTaxi
             foreach (string arg in args)
                 if (arg != null && (arg.StartsWith(ModeFlag, StringComparison.OrdinalIgnoreCase) ||
                     arg.StartsWith(RunFlag, StringComparison.OrdinalIgnoreCase) ||
-                    arg.StartsWith(DriveFlag, StringComparison.OrdinalIgnoreCase))) return true;
+                    arg.StartsWith(DriveFlag, StringComparison.OrdinalIgnoreCase) ||
+                    arg.StartsWith(DualWorldFlag, StringComparison.OrdinalIgnoreCase))) return true;
             return false;
         }
 
@@ -31,11 +34,12 @@ namespace LWS.TruckTaxi
             request = null; failure = null;
             if (!IsRequested(args)) return true;
             string mode = null, run = null;
-            bool drive = false;
+            bool drive = false, dualWorld = false;
             for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i] ?? "";
                 if (arg == DriveFlag && !drive) drive = true;
+                else if (arg == DualWorldFlag && !dualWorld) dualWorld = true;
                 else if (arg == ModeFlag || arg == RunFlag)
                 {
                     if (++i >= args.Length || string.IsNullOrWhiteSpace(args[i]) || args[i].StartsWith("-", StringComparison.Ordinal))
@@ -51,6 +55,8 @@ namespace LWS.TruckTaxi
             { failure = "Mode must be seed, continue, manual, cleanup, soak, or interactive."; return false; }
             if (drive && mode != "seed" && mode != "continue" && mode != "manual")
             { failure = "Drive regression supports seed, continue, or manual only."; return false; }
+            if (dualWorld && (drive || mode != "seed" && mode != "continue" && mode != "manual"))
+            { failure = "Dual-world validation supports seed, continue, or manual without the drive flag."; return false; }
             if (run == null || run.Length != 32 || !Guid.TryParseExact(run, "N", out var id) || id == Guid.Empty)
             { failure = "Run must be a nonzero 32-hex GUID, never a path."; return false; }
             try
@@ -61,7 +67,7 @@ namespace LWS.TruckTaxi
                 string root = Path.GetFullPath(Path.Combine(parent, id.ToString("N")));
                 if (!string.Equals(Path.GetDirectoryName(root), parent, StringComparison.Ordinal))
                     throw new ArgumentException("Test root escaped the fixed directory.");
-                request = new TruckTaxiRestartTestArguments { Mode = mode, RunId = id.ToString("N"), Root = root, Drive = drive };
+                request = new TruckTaxiRestartTestArguments { Mode = mode, RunId = id.ToString("N"), Root = root, Drive = drive, DualWorld = dualWorld };
                 return true;
             }
             catch (Exception ex) { failure = "Invalid isolated root: " + ex.Message; return false; }

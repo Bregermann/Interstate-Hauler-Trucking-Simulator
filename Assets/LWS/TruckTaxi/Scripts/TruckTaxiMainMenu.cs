@@ -46,7 +46,7 @@ namespace LWS.TruckTaxi
         private TruckTaxiGPSSettingsPanel gpsPanel;
         private TruckTaxiVideoSettingsPanel videoPanel;
         private TruckTaxiUIInput input;
-        private RectTransform main, modes, options, load, stats;
+        private RectTransform main, modes, options, load, stats, worldSelection;
         private TextMeshProUGUI statsText;
         private RectTransform page;
         private LwsSaveService saves;
@@ -107,8 +107,15 @@ namespace LWS.TruckTaxi
             Label(modes,"NEW GAME");
             Disabled(modes,"STORY MODE - COMING SOON",.70f);
             Disabled(modes,"ARCADE MODE - COMING SOON",.55f);
-            vibinButton=Button(modes,"VIBIN'",.40f,NewVibin);
+            vibinButton=Button(modes,"VIBIN'",.40f,()=>Show(worldSelection));
             Button(modes,"BACK",.12f,()=>Show(main));
+            worldSelection=Page("Choose starting map");
+            Label(worldSelection,"STARTING REGION");
+            Button(worldSelection,"DEMO CITY",.62f,()=>NewVibinInWorld(TruckTaxiWorldCatalog.Demo));
+            view.Text(worldSelection,"Demo description",new Vector2(.08f,.47f),new Vector2(.92f,.59f),21).text="Original sandbox, highway, Thunder Bowl and established venues.";
+            Button(worldSelection,"EDENBOROUGH",.33f,()=>NewVibinInWorld(TruckTaxiWorldCatalog.Edenborough));
+            view.Text(worldSelection,"Edenborough description",new Vector2(.08f,.18f),new Vector2(.92f,.30f),21).text="Nine districts, hilly outskirts, waterfront and drive-in garage.";
+            Button(worldSelection,"BACK",.035f,()=>Show(modes));
 
             load=Page("Load game");
             Label(load,"VIBIN' SAVES");
@@ -358,6 +365,12 @@ namespace LWS.TruckTaxi
             if(!discoveryReady || enteringGame) return;
             TruckTaxiVibinPersistence.ClearContinueRequest();
             EnterVibin(primaryWorldScene);
+        }
+        public void NewVibinInWorld(string scene)
+        {
+            if (!discoveryReady || enteringGame || !TruckTaxiWorldCatalog.Contains(scene)) return;
+            TruckTaxiVibinPersistence.ClearContinueRequest();
+            EnterVibin(scene);
         }
         private void ContinueVibin()
         {

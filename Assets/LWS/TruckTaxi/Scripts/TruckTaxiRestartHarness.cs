@@ -12,7 +12,7 @@ using UnityEngine.InputSystem.LowLevel;
 namespace LWS.TruckTaxi
 {
     // No production backend. This only configures the existing vendor and drives real menu callbacks.
-    public sealed class TruckTaxiRestartHarness : MonoBehaviour
+    public sealed partial class TruckTaxiRestartHarness : MonoBehaviour
     {
         private static bool argumentsRead, requested, configured;
         private static string failure;
@@ -195,7 +195,7 @@ namespace LWS.TruckTaxi
                     yield return new WaitForSecondsRealtime(2);
                 }
             }
-            deadline = Time.realtimeSinceStartup + (request.Mode=="soak" ? 4200 : 600);
+            deadline = Time.realtimeSinceStartup + (request.Mode=="soak" || request.DualWorld ? 4200 : 600);
             float nextIsolationCheck=0;
             var stack = activeIterators; stack.Push(Run());
             while (stack.Count > 0 && !finished)
@@ -293,6 +293,7 @@ namespace LWS.TruckTaxi
         {
             Check(SceneManager.GetActiveScene().name == TruckTaxiMainMenu.SceneName, "player boots into the actual main menu");
             yield return WaitForMenu();
+            if (request.DualWorld) { yield return RunDualWorld(); yield break; }
             if (request.Drive)
             {
                 Check(Application.platform == RuntimePlatform.WindowsPlayer, "drive regression requires an actual Windows player");

@@ -339,6 +339,13 @@ namespace LWS.InterstateHauler
             }
         }
         public LwsSaveOperationResult LoadPreparedVendorSlot(LwsLoadApplicationContext context)
+            => ApplyPreparedContext(context, false);
+
+        // Live handoff reuses semantic ordering/finalization; Pixel Crushers owns all durable persistence.
+        public LwsSaveOperationResult ApplyPreparedWorldTransfer(LwsLoadApplicationContext context)
+            => ApplyPreparedContext(context, true);
+
+        private LwsSaveOperationResult ApplyPreparedContext(LwsLoadApplicationContext context, bool worldTransfer)
         {
             _restoredRigidbodies.Clear();
             if (context == null)
@@ -383,8 +390,9 @@ namespace LWS.InterstateHauler
                 context.WorldPrepared = true;
 
                 SetPhase(LwsSaveLoadCoordinatorPhase.ApplyingVendorSave);
-                LwsSaveOperationResult load = _saveService.Adapter.LoadPreparedSlot(context.VendorSlotNumber);
-                context.AppliedVendorLoad = load.Succeeded;
+                LwsSaveOperationResult load = worldTransfer ? _saveService.RestoreSnapshot(context.Snapshot) :
+                    _saveService.Adapter.LoadPreparedSlot(context.VendorSlotNumber);
+                context.AppliedVendorLoad = !worldTransfer && load.Succeeded;
                 if (!load.Succeeded)
                 {
                     return Fail(load.Message);

@@ -17,7 +17,7 @@ namespace LWS.TruckTaxi
     }
 
     [DisallowMultipleComponent]
-    public sealed class TruckTaxiVibinPersistence : MonoBehaviour
+    public sealed partial class TruckTaxiVibinPersistence : MonoBehaviour
     {
         public const string ScopeId = "truck-taxi";
         public const string FinishRideMessage = "FINISH CURRENT RIDE BEFORE SAVING.";
@@ -365,7 +365,8 @@ namespace LWS.TruckTaxi
             extremes = host.Extremes?.Capture(origin.LocalToGlobal),
             hasFuelState = host.Fuel?.Fuel != null,
             fuelLiters = host.Fuel?.Fuel?.amount ?? 0,
-            fuelCapacityLiters = host.Fuel?.Fuel?.capacity ?? 0
+            fuelCapacityLiters = host.Fuel?.Fuel?.capacity ?? 0,
+            worldVisits = worldVisits.ToArray()
         };
         private LwsSaveOperationResult ValidatePayload(TruckTaxiVibinSavePayload payload)
         {
@@ -428,6 +429,8 @@ namespace LWS.TruckTaxi
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin ambient events could not be restored.");
             if (!host.Environment.Restore(payload.environment))
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin environment could not be restored.");
+            worldVisits.Clear();
+            if (payload.worldVisits != null) worldVisits.AddRange(payload.worldVisits);
             // The existing truck provider/load coordinator alone own final vehicle placement.
             host.Environment.Clock.SetPaused(true);
             return restoreResult = LwsSaveOperationResult.Success();
@@ -468,6 +471,7 @@ namespace LWS.TruckTaxi
             if (ownership != null) return ownership;
             if (!Initialized || !profileReady) return "No active Vibin run.";
             if (IsBusy) return "Vibin load preparation is active.";
+            if (TruckTaxiWorldTravel.IsBusy) return "Regional travel is active.";
             if (loadFailed) return "Resolve the failed load before saving over any slot.";
             string blocked = UnsafeGameplayReason();
             if (blocked != null) return blocked;

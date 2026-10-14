@@ -18,6 +18,7 @@ namespace LWS.TruckTaxi
         public bool hasDamageState, hasEnvironmentState, hasExtremeState;
         public bool hasFuelState;
         public float fuelLiters, fuelCapacityLiters;
+        public TruckTaxiWorldVisit[] worldVisits;
     }
 
     // Embedded participant JSON follows the existing LWS providers. The facade/Pixel Crushers
@@ -83,6 +84,8 @@ namespace LWS.TruckTaxi
         {
             if (payload == null || payload.version != 1 || string.IsNullOrWhiteSpace(payload.regionId) || settings == null)
                 return LwsSaveOperationResult.Failure("Missing Vibin region or semantic state.");
+            if (!TruckTaxiWorldVisit.ValidVisits(payload.worldVisits))
+                return LwsSaveOperationResult.Failure("Invalid or duplicate Truck Taxi world history.");
             if (payload.hasDamageState && payload.damage == null || payload.hasEnvironmentState && payload.environment == null ||
                 payload.hasExtremeState && payload.extremes == null)
                 return LwsSaveOperationResult.Failure("A declared save extension is missing.");

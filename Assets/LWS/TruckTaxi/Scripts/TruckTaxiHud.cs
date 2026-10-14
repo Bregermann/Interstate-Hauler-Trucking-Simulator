@@ -46,6 +46,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiRadioPanel RadioPanel { get; private set; }
         public TruckTaxiMegaDebugPanel MegaDebug { get; private set; }
         public TruckTaxiVibinSavePanel SaveLoad { get; private set; }
+        public TruckTaxiWorldTravelPanel WorldTravel { get; private set; }
         public TruckTaxiHudAlerts Alerts { get; private set; }
         public TruckTaxiCabLook CabLook { get; private set; }
         public TruckTaxiCabLookSettingsPanel CabLookSettings { get; private set; }
@@ -142,8 +143,10 @@ namespace LWS.TruckTaxi
             PauseButton("OPTIONS",7,()=>ShowUtility(settingsPanel));
             PauseButton("CONTROLS",8,()=>Controls?.Open());
             PauseButton("SAVE / LOAD",9,()=>SaveLoad?.Open());
-            PauseButton("DEBUG",10,()=>MegaDebug?.Open()).SetActive(TruckTaxiMegaDebugPanel.IsAvailable);
-            PauseButton("MAIN MENU",11,()=>host.ReturnToMainMenu());
+            PauseButton("TRAVEL TO ANOTHER MAP",10,()=>WorldTravel?.Open());
+            PauseButton("DEBUG",11,()=>MegaDebug?.Open()).SetActive(TruckTaxiMegaDebugPanel.IsAvailable);
+            PauseButton("MAIN MENU",12,()=>host.ReturnToMainMenu());
+            WorldTravel=gameObject.AddComponent<TruckTaxiWorldTravelPanel>(); WorldTravel.Initialize(host,this);
             settingsPanel = Panel(root,"Settings categories",new Vector2(.31f,.18f),new Vector2(.68f,.88f));
             Text(settingsPanel,"Settings heading",new Vector2(.08f,.88f),new Vector2(.92f,.98f),34).text="SETTINGS";
             string[] settingsLabels={"VIDEO / DISPLAY","CAB LOOK","GPS SETTINGS","GPS ON / OFF","AUDIO SETTINGS","BACK"};
@@ -210,6 +213,12 @@ namespace LWS.TruckTaxi
         private void Update()
         {
             if(host == null || host.Session == null) return;
+            if (TruckTaxiWorldTravel.IsBusy) { UIInput?.Focus(null); return; }
+            if (WorldTravel?.HandleInput(UIInput) == true)
+            {
+                if(Time.unscaledTime >= refreshAt) { refreshAt=Time.unscaledTime+.15f; Refresh(); }
+                RefreshFocus(); return;
+            }
             bool rescuing=host.Fuel?.IsRescuing==true || host.Roadside?.IsRecovering==true || host.FastTravel?.IsTravelling==true;
             fuelFade.gameObject.SetActive(rescuing);
             if(rescuing)
@@ -270,7 +279,7 @@ namespace LWS.TruckTaxi
         private GameObject PauseButton(string label,int index,Action action)
         {
             int row=index/2,column=index%2;
-            return Button(pausePanel,label,new Vector2(.06f+column*.46f,.75f-row*.13f),new Vector2(.48f+column*.46f,.85f-row*.13f),action);
+            return Button(pausePanel,label,new Vector2(.06f+column*.46f,.76f-row*.112f),new Vector2(.48f+column*.46f,.855f-row*.112f),action);
         }
         private void ShowUtility(RectTransform category)
         { category.gameObject.SetActive(true); category.SetAsLastSibling(); Refresh(); RefreshFocus(); }
@@ -304,7 +313,7 @@ namespace LWS.TruckTaxi
                 RadioPanel?.IsOpen==true || Career?.IsOpen==true || DriverAppearance?.IsOpen==true || UtilityCategoryOpen || Controls?.IsOpen==true || CabLookSettings?.IsOpen==true ||
                 VideoSettings?.IsOpen==true || EnvironmentNeeds?.IsOpen==true || AudioSettings?.IsOpen==true || GPSSettings?.IsOpen==true ||
                 modal?.gameObject.activeSelf==true || pausePanel?.gameObject.activeSelf==true);
-            UIInput?.Focus(VideoSettings?.IsOpen==true ? VideoSettings.FocusRoot : SaveLoad?.IsOpen==true ? SaveLoad.FocusRoot : host.WorldLife?.FocusRoot!=null ? host.WorldLife.FocusRoot : appreciationRunning ? null : bridge?.IsOpen==true ? bridge.FocusRoot : host.Races?.MenuOpen==true ? host.Races.FocusRoot : RadioPanel?.IsOpen==true ? RadioPanel.FocusRoot : MegaDebug?.IsOpen==true ? MegaDebug.FocusRoot : Planning?.IsOpen==true ? Planning.FocusRoot : FullMap?.IsOpen==true ? FullMap.FocusRoot : DebugOverlayOpen ? debug.FocusRoot : Controls?.IsOpen==true ? Controls.FocusRoot : CabLookSettings?.IsOpen==true ? CabLookSettings.FocusRoot : EnvironmentNeeds?.IsOpen==true ? EnvironmentNeeds.FocusRoot : AudioSettings?.IsOpen==true ? AudioSettings.FocusRoot : GPSSettings?.IsOpen==true ? GPSSettings.FocusRoot :
+            UIInput?.Focus(WorldTravel?.IsOpen==true ? WorldTravel.FocusRoot : VideoSettings?.IsOpen==true ? VideoSettings.FocusRoot : SaveLoad?.IsOpen==true ? SaveLoad.FocusRoot : host.WorldLife?.FocusRoot!=null ? host.WorldLife.FocusRoot : appreciationRunning ? null : bridge?.IsOpen==true ? bridge.FocusRoot : host.Races?.MenuOpen==true ? host.Races.FocusRoot : RadioPanel?.IsOpen==true ? RadioPanel.FocusRoot : MegaDebug?.IsOpen==true ? MegaDebug.FocusRoot : Planning?.IsOpen==true ? Planning.FocusRoot : FullMap?.IsOpen==true ? FullMap.FocusRoot : DebugOverlayOpen ? debug.FocusRoot : Controls?.IsOpen==true ? Controls.FocusRoot : CabLookSettings?.IsOpen==true ? CabLookSettings.FocusRoot : EnvironmentNeeds?.IsOpen==true ? EnvironmentNeeds.FocusRoot : AudioSettings?.IsOpen==true ? AudioSettings.FocusRoot : GPSSettings?.IsOpen==true ? GPSSettings.FocusRoot :
                 DriverAppearance?.IsOpen==true ? DriverAppearance.FocusRoot : Career?.IsOpen==true ? Career.FocusRoot : SettingsCategoryOpen ? settingsPanel : truckPanel?.gameObject.activeSelf==true ? truckPanel : driverPanel?.gameObject.activeSelf==true ? driverPanel : modal.gameObject.activeSelf ? modal : pausePanel.gameObject.activeSelf ? pausePanel : null);
         }
         public void OnDebugVisibilityChanged()
@@ -416,7 +425,7 @@ namespace LWS.TruckTaxi
             accept.SetActive(offered||appreciation||diversion); decline.SetActive(offered||appreciation||diversion); next.SetActive(ended);
             OfferCountdown.gameObject.SetActive(offered);
             OfferCountdown.Refresh();
-            bool gpsSettings=VideoSettings?.IsOpen==true || (GPSSettings!=null && GPSSettings.IsOpen) || (AudioSettings!=null && AudioSettings.IsOpen) || (EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) || Controls?.IsOpen==true || CabLookSettings?.IsOpen==true || RadioPanel?.IsOpen==true || SaveLoad?.IsOpen==true || Career?.IsOpen==true || UtilityCategoryOpen || host.WorldLife?.FocusRoot!=null;
+            bool gpsSettings=WorldTravel?.IsOpen==true || VideoSettings?.IsOpen==true || (GPSSettings!=null && GPSSettings.IsOpen) || (AudioSettings!=null && AudioSettings.IsOpen) || (EnvironmentNeeds!=null && EnvironmentNeeds.IsOpen) || Controls?.IsOpen==true || CabLookSettings?.IsOpen==true || RadioPanel?.IsOpen==true || SaveLoad?.IsOpen==true || Career?.IsOpen==true || UtilityCategoryOpen || host.WorldLife?.FocusRoot!=null;
             pausePanel.gameObject.SetActive(!hideNormalHud && host.Paused && !inactive && !ended && !offered && !appreciation && !diversion && !appreciationRunning && !gpsSettings && host.CustomContent?.OwnsInputHold!=true && GetComponent<TruckTaxiHudModalBridge>()?.IsOpen!=true);
             if(pausePanel.gameObject.activeSelf) modal.gameObject.SetActive(false);
             if(gpsSettings) modal.gameObject.SetActive(false);

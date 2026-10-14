@@ -237,6 +237,14 @@ namespace LWS.TruckTaxi
 #endif
             Persistence = GetComponent<TruckTaxiVibinPersistence>() ?? gameObject.AddComponent<TruckTaxiVibinPersistence>();
             var initialized = Persistence.Initialize(this);
+            if (initialized.Succeeded && TruckTaxiWorldTravel.HasPendingArrival(gameObject.scene.name))
+            {
+                // The persistent loading transaction restores the existing career after this scene is ready.
+                // Never create a new profile, grant starter inventory, or show first-day UI on world travel.
+                startupPending = false;
+                SetPaused(true);
+                yield break;
+            }
             bool continuing = TruckTaxiVibinPersistence.HasContinueRequest;
             var startup = initialized.Succeeded
                 ? continuing ? Persistence.ConsumeContinueRequest() : Persistence.NewGame()
