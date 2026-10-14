@@ -11,6 +11,25 @@ namespace LWS.TruckTaxi.Editor
 {
     public static partial class TruckTaxiEdenboroughAuthoring
     {
+        [MenuItem("Truck Taxi/Edenborough/Regrade Saved Scene Against Baked Roads")]
+        public static void RegradeLoadedScene()
+        {
+            EnsureEditMode();
+            var scene = SceneManager.GetSceneByPath(TruckTaxiEdenboroughLayout.ScenePath);
+            if (!scene.IsValid() || !scene.isLoaded) throw new InvalidOperationException("Open the dedicated Edenborough scene first.");
+            var host = Find<TruckTaxiBootstrap>(scene);
+            var world = scene.GetRootGameObjects().Single(r => r.name == "Authored Edenborough World").transform;
+            var stops = world.GetComponentsInChildren<TruckTaxiRideLocation>(true);
+            var pads = stops.Select(FacilityPad).ToList();
+            pads.Add(new Bounds(TruckTaxiEdenboroughLayout.Garage - Vector3.up * .06f, new Vector3(40, 2, 50)));
+            Physics.SyncTransforms();
+            var roads = world.GetComponentsInChildren<TruckTaxiSurface>(true).Where(s => s.isRoad)
+                .Select(s => s.GetComponent<Collider>()).Where(c => c != null).ToArray();
+            TruckTaxiEdenboroughTerrainAuthoring.Build(world, Folder + "/Terrain", pads, roads);
+            foreach (var dressing in world.GetComponentsInChildren<TruckTaxiDressingBinding>(true)) GroundDressing(dressing.gameObject);
+            host.mapTiles = TruckTaxiMapTileBaker.BakeEdenborough(scene, Folder + "/MapTiles");
+            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
+        }
         [MenuItem("Truck Taxi/Edenborough/Validate Loaded Dedicated Scene")]
         public static void ValidateLoadedScene()
         {

@@ -51,7 +51,8 @@ namespace LWS.TruckTaxi.Editor
                         location.locationType == TaxiLocationType.Restaurant ? palette.dinerModules :
                         location.locationType == TaxiLocationType.Store ? palette.storeModules :
                         location.locationType == TaxiLocationType.Industrial ? palette.warehouseBuildings : palette.urbanBuildings;
-                    if (key != "hillend") PlaceArt(buildings[i % buildings.Length], go.transform, stop + right * 34, go.transform.rotation);
+                    GameObject building = key != "hillend" ? PlaceArt(buildings[i % buildings.Length], go.transform,
+                        stop + right * 34, Quaternion.LookRotation(right)) : null;
                     if (location.locationType == TaxiLocationType.GasStation)
                     {
                         var station = go.AddComponent<TruckTaxiGasStationPoint>(); station.stableId = location.locationId + ".diesel";
@@ -65,34 +66,42 @@ namespace LWS.TruckTaxi.Editor
                         var store = go.AddComponent<TruckTaxiStorePoint>(); store.stableId = location.locationId + ".store";
                         store.location = location; store.displayName = names[i]; binding.store = store;
                         service.capabilities |= TruckTaxiServiceCapability.Store | TruckTaxiServiceCapability.Food | TruckTaxiServiceCapability.Drink;
-                        var counter = PlaceArt(palette.shopCounters[0], go.transform, stop + right * 19, go.transform.rotation);
+                        var counter = FindArt(building, "Store.Checkout.Register") ??
+                            PlaceArt(palette.shopCounters[0], go.transform, stop + right * 19, go.transform.rotation);
                         interactions.Add(new TruckTaxiEdenboroughFacility.Binding { art = counter, role = TruckTaxiEdenboroughFacility.Role.Checkout });
                         var products = TruckTaxiNeedsItems.Store;
                         for (int product = 0; product < products.Length; product++)
                         {
+                            Vector3 productPosition = building != null && FindArt(building, "Store.Shelf.Right") != null ?
+                                building.transform.TransformPoint(new Vector3(3.05f, 1.0f + product / 5 * .35f, -1.6f + product % 5 * .75f)) :
+                                stop + right * (19 + product % 5 * 1.4f) + direction * (3 + product / 5 * 1.8f);
                             var art = PlaceArt(palette.shopProducts[product % palette.shopProducts.Length], go.transform,
-                                stop + right * (19 + product % 5 * 1.4f) + direction * (3 + product / 5 * 1.8f), go.transform.rotation);
+                                productPosition, building != null ? building.transform.rotation : go.transform.rotation);
                             interactions.Add(new TruckTaxiEdenboroughFacility.Binding { art = art, role = TruckTaxiEdenboroughFacility.Role.ProductShelf, product = products[product].Item });
                         }
                     }
                     if (location.locationType == TaxiLocationType.Restaurant)
                     {
                         service.capabilities |= TruckTaxiServiceCapability.Food | TruckTaxiServiceCapability.Drink;
-                        var seat = PlaceArt(palette.dinerSeats[0], go.transform, stop + right * 19, go.transform.rotation);
+                        var seat = FindArt(building, "Diner.Seat.Left.South") ??
+                            PlaceArt(palette.dinerSeats[0], go.transform, stop + right * 19, go.transform.rotation);
                         interactions.Add(new TruckTaxiEdenboroughFacility.Binding { art = seat, role = TruckTaxiEdenboroughFacility.Role.DinerSeat });
                     }
                     if (location.locationType == TaxiLocationType.Hotel)
                     {
                         service.capabilities |= TruckTaxiServiceCapability.Sleep; service.sleepCostPerHourCents = 900;
-                        var desk = PlaceArt(palette.shopCounters[0], go.transform, stop + right * 19, go.transform.rotation);
-                        var bed = PlaceArt(palette.motelBeds[0], go.transform, stop + right * 23 + direction * 5, go.transform.rotation);
+                        var desk = FindArt(building, "Motel.Desk") ?? PlaceArt(palette.shopCounters[0], go.transform, stop + right * 19, go.transform.rotation);
+                        var bed = FindArt(building, "Motel.Bed.0") ?? PlaceArt(palette.motelBeds[0], go.transform, stop + right * 23 + direction * 5, go.transform.rotation);
                         interactions.Add(new TruckTaxiEdenboroughFacility.Binding { art = desk, role = TruckTaxiEdenboroughFacility.Role.MotelDesk });
                         interactions.Add(new TruckTaxiEdenboroughFacility.Binding { art = bed, role = TruckTaxiEdenboroughFacility.Role.MotelBed });
                     }
                     if (key != "hillend")
                     {
                         service.capabilities |= TruckTaxiServiceCapability.Restroom | TruckTaxiServiceCapability.DisposeWaste | TruckTaxiServiceCapability.CleanCab;
-                        var toilet = PlaceArt(palette.bathroomFixtures[0], go.transform, stop + right * 20 - direction * 7, go.transform.rotation);
+                        GameObject room = palette.restroomModules.Length > 0 ? PlaceArt(palette.restroomModules[0], go.transform,
+                            stop + right * 25 - direction * 12, Quaternion.LookRotation(right)) : null;
+                        var toilet = FindArt(room, "Restroom.Toilet") ??
+                            PlaceArt(palette.bathroomFixtures[0], go.transform, stop + right * 20 - direction * 7, go.transform.rotation);
                         interactions.Add(new TruckTaxiEdenboroughFacility.Binding { art = toilet, role = TruckTaxiEdenboroughFacility.Role.Toilet });
                     }
                     if (names[i].Contains("Repair")) service.capabilities |= TruckTaxiServiceCapability.RepairEngine | TruckTaxiServiceCapability.RepairTransmission |
@@ -130,5 +139,7 @@ namespace LWS.TruckTaxi.Editor
                     throw new InvalidOperationException("Unresolved material/shader on reviewed art: " + AssetDatabase.GetAssetPath(prefab));
             return go;
         }
+        private static GameObject FindArt(GameObject building, string name) => building == null ? null :
+            building.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == name)?.gameObject;
     }
 }

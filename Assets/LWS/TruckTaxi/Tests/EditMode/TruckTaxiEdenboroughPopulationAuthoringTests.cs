@@ -47,25 +47,62 @@ namespace LWS.TruckTaxi.Tests
             foreach (var lane in Lanes())
             {
                 var points = lane.centerline;
+                var roads = CircuitRoads(lane);
                 for (int i = 2; i < points.Length - 2; i += 32)
                 {
                     Vector3 p = points[i], tangent = points[i + 1] - points[i - 1]; tangent.y = 0; tangent.Normalize();
                     if (TruckTaxiEdenboroughLayout.Nodes.Values.Any(n => XzSquared(n - p) < 400)) continue;
-                    float best = float.PositiveInfinity; Vector3 nearest = default;
-                    foreach (var road in TruckTaxiEdenboroughLayout.Roads)
-                        for (int s = 1; s < road.Points.Length; s++)
-                        {
-                            Vector3 a = road.Points[s - 1], ab = road.Points[s] - a; ab.y = 0;
-                            if (ab.sqrMagnitude < .001f || Mathf.Abs(Vector3.Dot(ab.normalized, tangent)) < .95f) continue;
-                            Vector3 delta = p - a; delta.y = 0;
-                            float t = Mathf.Clamp01(Vector3.Dot(delta, ab) / ab.sqrMagnitude);
-                            Vector3 candidate = a + ab * t; float distance = XzSquared(p - candidate);
-                            if (distance < best) { best = distance; nearest = candidate; }
-                        }
+                    // Nearby intersecting streets are not the road that authored this circuit.
+                    var road = ClosestRoad(roads, p, tangent, out Vector3 nearest, out float best);
                     Assert.Less(best, 16, "Circuit leaves its real road corridor: " + lane.laneId);
-                    Assert.Greater(Vector3.Dot(p - nearest, Vector3.Cross(Vector3.up, tangent)), .2f, lane.laneId);
+                    Assert.Greater(Vector3.Dot(p - nearest, Vector3.Cross(Vector3.up, tangent)), .2f,
+                        lane.laneId + " point=" + i + " source=" + road.Id);
                 }
             }
+        }
+        [Test] public void SouthernReverseKeepsRegionalRoadOffsetBesideLoanheadLocalStreet()
+        {
+            var lane = Lanes().Single(l => l.laneId == "taxi.edenborough.traffic.southern.reverse");
+            var target = new Vector3(-870.0794f, 0, -3700.963f);
+            int i = Enumerable.Range(2, lane.centerline.Length - 4)
+                .OrderBy(index => XzSquared(lane.centerline[index] - target)).First();
+            var p = lane.centerline[i];
+            Assert.Less(XzSquared(p - target), .0001f, "Reproduce the reported sample near Loanhead.");
+            var tangent = lane.centerline[i + 1] - lane.centerline[i - 1]; tangent.y = 0; tangent.Normalize();
+            var actual = ClosestRoad(CircuitRoads(lane), p, tangent, out Vector3 nearest, out float actualDistance);
+            var unrelated = ClosestRoad(TruckTaxiEdenboroughLayout.Roads, p, tangent, out Vector3 wrongNearest, out float wrongDistance);
+            Assert.AreEqual("taxi.edenborough.road.bonnyrigg-loanhead", actual.Id);
+            Assert.AreEqual("taxi.edenborough.road.loanhead.x.0.0", unrelated.Id);
+            Assert.Less(wrongDistance, actualDistance, "Whole-network proximity selects the wrong street here.");
+            var right = Vector3.Cross(Vector3.up, tangent);
+            Assert.Less(Vector3.Dot(p - wrongNearest, right), -.9f);
+            Assert.That(Vector3.Dot(p - nearest, right), Is.EqualTo(actual.LaneWidth * .5f).Within(.002f));
+        }
+
+        private static TruckTaxiEdenboroughLayout.Road[] CircuitRoads(LwsTrafficLaneDefinition lane)
+        {
+            var circuits = Invoke<KeyValuePair<string, string[]>[]>("PopulationCircuits");
+            var nodes = circuits.Single(c => lane.roadId == "taxi.edenborough.circuit." + c.Key).Value;
+            return Enumerable.Range(0, nodes.Length).Select(i => TruckTaxiEdenboroughLayout.Roads.Single(r =>
+                r.From == nodes[i] && r.To == nodes[(i + 1) % nodes.Length] ||
+                r.To == nodes[i] && r.From == nodes[(i + 1) % nodes.Length])).ToArray();
+        }
+
+        private static TruckTaxiEdenboroughLayout.Road ClosestRoad(IEnumerable<TruckTaxiEdenboroughLayout.Road> roads,
+            Vector3 p, Vector3 tangent, out Vector3 nearest, out float best)
+        {
+            best = float.PositiveInfinity; nearest = default; TruckTaxiEdenboroughLayout.Road closest = default;
+            foreach (var road in roads)
+                for (int s = 1; s < road.Points.Length; s++)
+                {
+                    Vector3 a = road.Points[s - 1], ab = road.Points[s] - a; ab.y = 0;
+                    if (ab.sqrMagnitude < .001f || Mathf.Abs(Vector3.Dot(ab.normalized, tangent)) < .95f) continue;
+                    Vector3 delta = p - a; delta.y = 0;
+                    float t = Mathf.Clamp01(Vector3.Dot(delta, ab) / ab.sqrMagnitude);
+                    Vector3 candidate = a + ab * t; float distance = XzSquared(p - candidate);
+                    if (distance < best) { best = distance; nearest = candidate; closest = road; }
+                }
+            return closest;
         }
         [Test] public void AllDistrictsAndEveryBypassSectionHaveConnectedCircuitCoverage()
         {

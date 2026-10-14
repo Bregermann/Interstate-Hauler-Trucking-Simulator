@@ -84,10 +84,14 @@ namespace LWS.TruckTaxi.Editor
                 var asphalt = RoadMaterial();
                 var stops = CreateDestinations(world, palette, asphalt);
                 var garage = CreateGarage(world, palette, asphalt, out var volume);
-                var pads = stops.Select(s => new Bounds(s.StopPosition + s.transform.right * 18 - Vector3.up * .12f, new Vector3(84, 2, 84))).ToList();
+                var pads = stops.Select(FacilityPad).ToList();
                 pads.Add(new Bounds(TruckTaxiEdenboroughLayout.Garage - Vector3.up * .06f, new Vector3(40, 2, 50)));
                 TruckTaxiEdenboroughTerrainAuthoring.Build(world, Folder + "/Terrain", pads);
                 TruckTaxiEdenboroughRoadAuthoring.Bake(world, Folder + "/RoadMeshes", asphalt);
+                Physics.SyncTransforms();
+                var bakedRoads = world.GetComponentsInChildren<TruckTaxiSurface>(true).Where(s => s.isRoad)
+                    .Select(s => s.GetComponent<Collider>()).Where(c => c != null).ToArray();
+                TruckTaxiEdenboroughTerrainAuthoring.Build(world, Folder + "/Terrain", pads, bakedRoads);
                 CreateDressing(world, host.roadGraph, stops, volume, palette);
                 var binding = host.GetComponent<TruckTaxiEdenboroughSceneBinding>() ?? host.gameObject.AddComponent<TruckTaxiEdenboroughSceneBinding>();
                 binding.host = host; binding.palette = palette; binding.garage = garage; binding.garageVolume = volume;
@@ -163,6 +167,13 @@ namespace LWS.TruckTaxi.Editor
             var material = AssetDatabase.LoadAssetAtPath<Material>(path); if (material != null) return material;
             material = new Material(Shader.Find("Universal Render Pipeline/Lit")) { color = new Color(.15f,.17f,.18f) };
             material.enableInstancing = true; AssetDatabase.CreateAsset(material, path); return material;
+        }
+        private static Bounds FacilityPad(TruckTaxiRideLocation stop)
+        {
+            var bounds = new Bounds(stop.StopPosition, new Vector3(18, 2, 34));
+            foreach (var renderer in stop.GetComponentsInChildren<Renderer>(true)) bounds.Encapsulate(renderer.bounds);
+            var center = bounds.center; center.y = stop.StopPosition.y - .12f;
+            return new Bounds(center, new Vector3(bounds.size.x + 6, 2, bounds.size.z + 6));
         }
         private static void ConfigureCanonicalTruck(TruckTaxiBootstrap host)
         {

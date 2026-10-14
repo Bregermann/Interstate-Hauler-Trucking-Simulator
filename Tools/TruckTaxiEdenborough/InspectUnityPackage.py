@@ -5,7 +5,10 @@ import hashlib
 import json
 from pathlib import Path, PurePosixPath
 import re
+import struct
+import subprocess
 import tarfile
+import tempfile
 
 GUID=re.compile(rb'guid:\s*([0-9a-f]{32})',re.I)
 FORBIDDEN={'.cs','.dll','.asmdef','.asmref','.unity','.inputactions','.rsp','.exe','.bat','.ps1'}
@@ -29,7 +32,35 @@ def inspect(package):
                 entry['bytes']=item.size
                 if item.size<=8*1024*1024:
                     data=archive.extractfile(item).read()
+                    data=data.removeprefix(b'\xef\xbb\xbf')
                     if data.startswith((b'%YAML',b'---')):entry['references']+=list({m.decode().lower() for m in GUID.findall(data)})
+                    elif data.lstrip().startswith(b'{'):
+                        # Shader Graph stores asset references inside serialized JSON values.
+                        def collect(value):
+                            if isinstance(value,dict):
+                                for key,child in value.items():
+                                    if key=='guid' and isinstance(child,str) and re.fullmatch('[0-9a-f]{32}',child,re.I):
+                                        entry['references'].append(child.lower())
+                                    else:collect(child)
+                            elif isinstance(value,list):
+                                for child in value:collect(child)
+                            elif isinstance(value,str) and value.lstrip().startswith('{'):
+                                try:collect(json.loads(value))
+                                except (ValueError,TypeError):pass
+                        decoder=json.JSONDecoder();text=data.decode('utf-8-sig');offset=0
+                        while offset<len(text):
+                            offset+=len(text[offset:])-len(text[offset:].lstrip())
+                            try:value,end=decoder.raw_decode(text,offset)
+                            except ValueError:break
+                            collect(value);offset=end
+                    elif len(data)>=20 and 9<=struct.unpack('>I',data[8:12])[0]<22 and struct.unpack('>I',data[4:8])[0]==len(data) and 0<struct.unpack('>I',data[:4])[0]<len(data):
+                        reader=Path(r'C:\Program Files\Unity\Hub\Editor\6000.4.10f1\Editor\Data\Tools\binary2text.exe')
+                        if not reader.exists():raise ValueError('Unity binary2text is required to inspect binary serialized art dependencies.')
+                        with tempfile.TemporaryDirectory(prefix='edenborough-art-') as directory:
+                            source=Path(directory)/'asset';dump=Path(directory)/'asset.txt';source.write_bytes(data)
+                            subprocess.run([str(reader),str(source),str(dump),'-largebinaryhashonly'],check=True,capture_output=True)
+                            references=dump.read_text(encoding='utf-8-sig').split('\nID:',1)[0]
+                            entry['references']+=re.findall(r'GUID:\s*([0-9a-f]{32})',references,re.I)
             elif kind=='asset.meta':
                 entry['references']+=list({m.decode().lower() for m in GUID.findall(archive.extractfile(item).read()) if m.decode().lower()!=ident})
     entries=[]
@@ -63,7 +94,9 @@ def select(index,selection,output):
     with gzip.open(package,'rb') as compressed,tarfile.open(fileobj=compressed,mode='r|') as source,tarfile.open(output,'w:gz') as target:
         for member in source:
             parts=PurePosixPath(member.name).parts
-            if len(parts)==2 and parts[0].lower() in chosen and parts[1] in ('pathname','asset','asset.meta') and member.isfile():
+            if len(parts)==1 and parts[0].lower() in chosen and member.isdir():
+                target.addfile(member)
+            elif len(parts)==2 and parts[0].lower() in chosen and parts[1] in ('pathname','asset','asset.meta') and member.isfile():
                 target.addfile(member,source.extractfile(member))
     with output.open('rb') as stream:digest=hashlib.file_digest(stream,'sha256').hexdigest()
     manifest={'source_package':str(package),'staging_package':str(output.resolve()),'selected_roots':selection['paths'],'import_paths':[entries[g]['path'] for g in sorted(chosen)],'bytes':output.stat().st_size,'sha256':digest,'status':'STAGED - NOT IMPORTED'}

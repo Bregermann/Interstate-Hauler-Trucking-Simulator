@@ -62,7 +62,12 @@ namespace LWS.TruckTaxi.Editor
                     binding.roadGraph = graph; binding.parkingBays = stops; binding.entranceApproaches = stops.Select(s => s.truckStopPoint).ToArray();
                     binding.protectedVolumes = new[] { garage }; binding.exclusionScopeReviewed = true;
                     if (!binding.GenerateExplicitly(out var reason)) throw new InvalidOperationException("Dressing rejected: " + binding.stableId + ": " + reason);
+                    GroundDressing(go);
                 }
+                if (context == TruckTaxiDressingContext.Forest || context == TruckTaxiDressingContext.Suburb)
+                    CreateNaturalBand(parent, graph, stops, garage, road, palette.undergrowth, "Undergrowth", 9, road.Width / 2 + 9);
+                if (context == TruckTaxiDressingContext.Forest)
+                    CreateNaturalBand(parent, graph, stops, garage, road, palette.rocks, "RockOutcrops", 85, road.Width / 2 + 32);
             }
             foreach (var district in TruckTaxiEdenboroughLayout.Districts)
             {
@@ -86,6 +91,52 @@ namespace LWS.TruckTaxi.Editor
                 }
             }
             AssetDatabase.SaveAssets();
+        }
+        private static void CreateNaturalBand(Transform parent, LwsRoadGraphProvider graph, TruckTaxiRideLocation[] stops,
+            BoxCollider garage, TruckTaxiEdenboroughLayout.Road road, GameObject[] prefabs, string kind, float spacing, float offset)
+        {
+            if (prefabs == null || prefabs.Length == 0) return;
+            string path = Folder + "/Dressing/" + kind + ".asset";
+            var profile = AssetDatabase.LoadAssetAtPath<TruckTaxiDressingProfile>(path);
+            if (profile == null)
+            {
+                profile = ScriptableObject.CreateInstance<TruckTaxiDressingProfile>(); profile.context = TruckTaxiDressingContext.Forest;
+                profile.spacingMeters = spacing; profile.clearanceMeters = 1; profile.seed = 21691;
+                foreach (var prefab in prefabs) profile.prefabs.Add(new SplineSpawner.SpawnableObject(prefab, 100f / prefabs.Length));
+                AssetDatabase.CreateAsset(profile, path);
+            }
+            for (int side = -1; side <= 1; side += 2)
+            {
+                var go = New("Edenborough " + kind + " " + road.Id + "/" + side, parent, Vector3.zero);
+                var container = go.AddComponent<SplineContainer>(); var spline = new Spline();
+                for (int i = 0; i < road.Points.Length; i += 3)
+                {
+                    var direction = i + 1 < road.Points.Length ? road.Points[i + 1] - road.Points[i] : road.Points[i] - road.Points[i - 1];
+                    var point = road.Points[i] + Vector3.Cross(Vector3.up, direction.normalized) * offset * side;
+                    point.y = TruckTaxiEdenboroughLayout.Height(point.x, point.z); spline.Add(new BezierKnot(point), TangentMode.Linear);
+                }
+                container.Spline = spline;
+                var spawner = go.AddComponent<SplineSpawner>(); spawner.SplineContainer = container; spawner.root = go.transform;
+                var binding = go.AddComponent<TruckTaxiDressingBinding>(); binding.stableId = road.Id + "." + kind + "." + side;
+                binding.spawner = spawner; binding.profile = profile; binding.roadGraph = graph; binding.parkingBays = stops;
+                binding.entranceApproaches = stops.Select(s => s.truckStopPoint).ToArray(); binding.protectedVolumes = new[] { garage };
+                binding.exclusionScopeReviewed = true;
+                if (!binding.GenerateExplicitly(out var reason)) throw new InvalidOperationException(kind + ": " + reason);
+                GroundDressing(go);
+            }
+        }
+        private static void GroundDressing(GameObject root)
+        {
+            Physics.SyncTransforms();
+            foreach (var container in root.GetComponentsInChildren<SplineInstanceContainer>(true))
+                foreach (Transform instance in container.transform)
+                {
+                    var position = instance.position;
+                    var terrain = Physics.RaycastAll(position + Vector3.up * 200, Vector3.down, 600, ~0, QueryTriggerInteraction.Ignore)
+                        .Where(h => h.collider is TerrainCollider).OrderBy(h => h.distance).FirstOrDefault();
+                    if (terrain.collider == null) throw new InvalidOperationException("Dressing has no authored terrain beneath it: " + instance.name);
+                    position.y = terrain.point.y; instance.position = position;
+                }
         }
     }
 }

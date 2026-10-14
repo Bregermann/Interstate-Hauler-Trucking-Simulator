@@ -48,6 +48,22 @@ namespace LWS.TruckTaxi.Tests
             Assert.That(sample.Height, Is.EqualTo(25 - Authoring.RoadInset).Within(.0001f));
             Assert.AreEqual(1, sample.RoadBlend);
         }
+        [Test] public void ActualBakedRoadSurfaceOverridesHigherPlannedGradeWithoutChangingRoad()
+        {
+            var go = new GameObject("Baked road grading fixture");
+            try
+            {
+                go.transform.position = new Vector3(50, 17.9f, 0);
+                var collider = go.AddComponent<BoxCollider>(); collider.size = new Vector3(120, .2f, 20);
+                Physics.SyncTransforms();
+                var field = new Authoring.RoadHeightfield(new[] { Road(new Vector3(0, 20, 0), new Vector3(100, 20, 0)) },
+                    null, new Collider[] { collider });
+                Assert.That(field.Sample(25, 0).Height, Is.EqualTo(18 - Authoring.RoadInset).Within(.0001f));
+                Assert.That(field.Sample(25, 4).Height, Is.EqualTo(18 - Authoring.RoadInset).Within(.0001f));
+                Assert.AreEqual(new Vector3(50, 17.9f, 0), go.transform.position);
+            }
+            finally { Object.DestroyImmediate(go); }
+        }
         [Test] public void ShoulderAndEmbankmentBlendBackIntoAuthoredTerrain()
         {
             var road = Road(new Vector3(0, 20, 0), new Vector3(100, 20, 0));

@@ -4,6 +4,8 @@ from pathlib import Path
 import tarfile
 import tempfile
 import unittest
+from unittest import mock
+import struct
 import InspectUnityPackage as api
 
 ROOT='a'*32
@@ -21,6 +23,26 @@ def archive(path,script=False):
         bad=tarfile.TarInfo(ROOT+'/../../outside.txt');bad.size=3;target.addfile(bad,io.BytesIO(b'bad'))
 
 class PackageInspectorTests(unittest.TestCase):
+    def test_shader_graph_nested_json_references_are_collected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/'source.unitypackage'
+            data=json.dumps({'m_ObjectId':ROOT,'m_Value':{'m_SerializedTexture':json.dumps({'texture':{'guid':MATERIAL,'fileID':2800000}})}}).encode()
+            with tarfile.open(source,'w:gz') as target:
+                for name,value in [('pathname',b'Assets/Reviewed/Foliage.shadergraph'),('asset',data)]:
+                    item=tarfile.TarInfo(ROOT+'/'+name);item.size=len(value);target.addfile(item,io.BytesIO(value))
+            self.assertEqual([MATERIAL],api.inspect(source)['entries'][0]['references'])
+    def test_binary_reader_keeps_guid_labels_before_object_ids(self):
+        reader=Path(r'C:\Program Files\Unity\Hub\Editor\6000.4.10f1\Editor\Data\Tools\binary2text.exe')
+        if not reader.exists():self.skipTest('Unity binary2text is not installed on this test host.')
+        with tempfile.TemporaryDirectory() as folder:
+            source=Path(folder)/'source.unitypackage';data=struct.pack('>IIII',20,80,15,20)+bytes(64)
+            with tarfile.open(source,'w:gz') as target:
+                for name,value in [('pathname',b'Assets/Reviewed/Legacy.prefab'),('asset',data)]:
+                    item=tarfile.TarInfo(ROOT+'/'+name);item.size=len(value);target.addfile(item,io.BytesIO(value))
+            def dump(args,**kwargs):
+                Path(args[2]).write_text('External References\npath(1): "" GUID: '+MATERIAL+' Type: 3\n\nID: 1141\n')
+            with mock.patch.object(api.subprocess,'run',side_effect=dump):
+                self.assertEqual([MATERIAL],api.inspect(source)['entries'][0]['references'])
     def test_unsafe_asset_path_is_excluded(self):
         with tempfile.TemporaryDirectory() as folder:
             source=Path(folder)/'source.unitypackage'

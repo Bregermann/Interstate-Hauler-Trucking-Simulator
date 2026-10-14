@@ -57,7 +57,8 @@ namespace LWS.TruckTaxi.Editor
         /// Their padded cores blend over 24m; overlapping road cores retain collider clearance.
         /// Pass service/garage bounds explicitly every bake. No pads or stop positions are inferred.
         /// </summary>
-        public static Terrain[] Build(Transform parent, string assetFolder, IReadOnlyList<Bounds> pads = null)
+        public static Terrain[] Build(Transform parent, string assetFolder, IReadOnlyList<Bounds> pads = null,
+            IReadOnlyList<Collider> bakedRoads = null)
         {
             ValidateParent(parent);
             assetFolder = NormalizeAssetFolder(assetFolder);
@@ -66,7 +67,7 @@ namespace LWS.TruckTaxi.Editor
             var shader = Shader.Find(TerrainShader);
             if (shader == null) throw new InvalidOperationException("Installed URP Terrain/Lit shader is unavailable.");
             var sources = LoadSources();
-            var heightfield = new RoadHeightfield(TruckTaxiEdenboroughLayout.Roads, pads);
+            var heightfield = new RoadHeightfield(TruckTaxiEdenboroughLayout.Roads, pads, bakedRoads);
             EnsureFolder(assetFolder);
             if (AssetDatabase.LoadMainAssetAtPath(assetFolder + "/" + OwnerFile) == null)
                 AssetDatabase.CreateAsset(new TextAsset(OwnerSignature), assetFolder + "/" + OwnerFile);
@@ -155,11 +156,26 @@ namespace LWS.TruckTaxi.Editor
             private readonly Dictionary<Vector2Int, List<int>> cells = new Dictionary<Vector2Int, List<int>>();
             private readonly List<Bounds> padBounds = new List<Bounds>();
             private readonly Dictionary<Vector2Int, List<int>> padCells = new Dictionary<Vector2Int, List<int>>();
+            private readonly Dictionary<Vector2Int, List<Collider>> bakedCells = new Dictionary<Vector2Int, List<Collider>>();
             public int SegmentCount => segments.Count;
 
-            public RoadHeightfield(IEnumerable<TruckTaxiEdenboroughLayout.Road> roads, IReadOnlyList<Bounds> pads = null)
+            public RoadHeightfield(IEnumerable<TruckTaxiEdenboroughLayout.Road> roads, IReadOnlyList<Bounds> pads = null,
+                IReadOnlyList<Collider> bakedRoads = null)
             {
                 if (roads == null) throw new ArgumentNullException(nameof(roads));
+                if (bakedRoads != null)
+                    foreach (var collider in bakedRoads)
+                    {
+                        if (collider == null || !collider.enabled || !collider.gameObject.activeInHierarchy) continue;
+                        var bounds = collider.bounds;
+                        var min = Cell(bounds.min.x, bounds.min.z); var max = Cell(bounds.max.x, bounds.max.z);
+                        for (int z = min.y; z <= max.y; z++) for (int x = min.x; x <= max.x; x++)
+                        {
+                            var key = new Vector2Int(x, z);
+                            if (!bakedCells.TryGetValue(key, out var bucket)) bakedCells.Add(key, bucket = new List<Collider>());
+                            bucket.Add(collider);
+                        }
+                    }
                 if (pads != null)
                     foreach (var pad in pads)
                     {
@@ -210,6 +226,20 @@ namespace LWS.TruckTaxi.Editor
                     float target = Mathf.LerpUnclamped(segment.A.y, segment.B.y, gradeT) - RoadInset;
                     if (distanceSquared <= segment.Core * segment.Core)
                     {
+                        float px = segment.A.x + t * segment.Dx, pz = segment.A.z + t * segment.Dz;
+                        if (bakedCells.TryGetValue(Cell(px, pz), out var surfaces))
+                            foreach (var collider in surfaces)
+                            {
+                                var bounds = collider.bounds;
+                                if (px < bounds.min.x || px > bounds.max.x || pz < bounds.min.z || pz > bounds.max.z) continue;
+                                if (collider.Raycast(new Ray(new Vector3(px, bounds.max.y + 4, pz), Vector3.down),
+                                    out var hit, bounds.size.y + 8) && hit.normal.y > .5f)
+                                {
+                                    // Extend the actual spline surface's grade into adjacent heightmap vertices.
+                                    float grade = hit.point.y - (hit.normal.x * (x - px) + hit.normal.z * (z - pz)) / hit.normal.y;
+                                    target = Mathf.Min(target, grade - RoadInset);
+                                }
+                            }
                         // At junctions keep the terrain below every overlapping road collider, not an average above one.
                         coreHeight = Mathf.Min(coreHeight, target); bestBlend = 1; continue;
                     }

@@ -15,7 +15,7 @@ namespace LWS.TruckTaxi.Editor
         private const float PopulationRoadSpacing = 8;
         private const float PopulationTurnTrim = 6;
 
-        private static LwsTrafficLaneDefinition[] CreateTrafficLoops()
+        private static KeyValuePair<string, string[]>[] PopulationCircuits()
         {
             var circuits = new List<KeyValuePair<string, string[]>>();
             foreach (var district in TruckTaxiEdenboroughLayout.Districts)
@@ -42,8 +42,13 @@ namespace LWS.TruckTaxi.Editor
                 "city.-1.2", "city.-2.2", "city.-2.1", "city.-2.0" }));
             circuits.Add(new KeyValuePair<string, string[]>("southern", new[] { "straiton", "loanhead", "bonnyrigg",
                 "dalkeith", "sheriffhall", "gilmerton" }));
+            return circuits.ToArray();
+        }
+
+        private static LwsTrafficLaneDefinition[] CreateTrafficLoops()
+        {
             var lanes = new List<LwsTrafficLaneDefinition>();
-            foreach (var circuit in circuits)
+            foreach (var circuit in PopulationCircuits())
             {
                 lanes.Add(PopulationLane(circuit.Key, circuit.Value, false));
                 lanes.Add(PopulationLane(circuit.Key, circuit.Value.Reverse().ToArray(), true));

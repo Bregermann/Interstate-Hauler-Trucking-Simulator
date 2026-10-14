@@ -8,6 +8,8 @@ namespace LWS.TruckTaxi
     {
         [Tooltip("Exact inspected prefab references. Scene builders never substitute guessed Asset Store names.")]
         public GameObject[] trees=Array.Empty<GameObject>();
+        public GameObject[] undergrowth=Array.Empty<GameObject>();
+        public GameObject[] rocks=Array.Empty<GameObject>();
         public GameObject[] roadside=Array.Empty<GameObject>();
         public GameObject[] industrial=Array.Empty<GameObject>();
         public GameObject[] construction=Array.Empty<GameObject>();
@@ -19,6 +21,7 @@ namespace LWS.TruckTaxi
         public GameObject[] storeModules=Array.Empty<GameObject>();
         public GameObject[] garageModules=Array.Empty<GameObject>();
         public GameObject[] bathroomFixtures=Array.Empty<GameObject>();
+        public GameObject[] restroomModules=Array.Empty<GameObject>();
         public GameObject[] pumps=Array.Empty<GameObject>();
         public GameObject[] signs=Array.Empty<GameObject>();
         public GameObject[] dinerSeats=Array.Empty<GameObject>();
