@@ -1,0 +1,170 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 681f95181c2614a4bb4162a668405f60, type: 3}
+  m_Name: Configuration
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiConfiguration
+  careerCatalog: {fileID: 11400000, guid: c5eb9e6065c74624f85d2efb97b60205, type: 2}
+  companionReactions: []
+  customCompanionInteraction: {fileID: 0}
+  customCompanionVariantInteractions: []
+  passengers:
+  - {fileID: 11400000, guid: ca28f1b00a01d994599e0cab8cab0a5a, type: 2}
+  - {fileID: 11400000, guid: 009ae3a402dabfb4494fd854c44eae28, type: 2}
+  - {fileID: 11400000, guid: a492d1d13dabada4ab1855675a7fad44, type: 2}
+  - {fileID: 11400000, guid: 488bd780fe51c0b4e91338f317e7b430, type: 2}
+  - {fileID: 11400000, guid: 3c18da10302b9794b904827d5e560958, type: 2}
+  - {fileID: 11400000, guid: 0dc6acff58d99f548b48b0e6193e0390, type: 2}
+  - {fileID: 11400000, guid: d9f5d0d1a6a665640aa3d9be4c979903, type: 2}
+  - {fileID: 11400000, guid: 419497acb1af0de41a5b56608ca09c24, type: 2}
+  - {fileID: 11400000, guid: e85cc6083da92c848adcb3a45745e4b5, type: 2}
+  - {fileID: 11400000, guid: 6571dd82a0e18e242ac0497ce2792171, type: 2}
+  passengerDatabase: {fileID: 11400000, guid: 53f3a5238365b0648b6c26b9a0a9f12c, type: 2}
+  requests:
+  - {fileID: 11400000, guid: 4d63d3f9e6ff7c848a0950778aa4e5c0, type: 2}
+  - {fileID: 11400000, guid: 8c38c454f61f70149b4f5bcc4e330256, type: 2}
+  - {fileID: 11400000, guid: f3ea2391d4a800646afe10ea285eff22, type: 2}
+  - {fileID: 11400000, guid: b31ecc97c9efe704e955bcc82a25f062, type: 2}
+  - {fileID: 11400000, guid: a4734cce16fd11e4abe881e6f90153a0, type: 2}
+  - {fileID: 11400000, guid: ce4530b11ddfbc2459225d20aac63b20, type: 2}
+  - {fileID: 11400000, guid: 9a3a9071b8668c243a7ee3653e6e24bd, type: 2}
+  - {fileID: 11400000, guid: c17d8ccba39e62046aae399b386c8341, type: 2}
+  - {fileID: 11400000, guid: be473475d5bff6d4db958023e3beae44, type: 2}
+  - {fileID: 11400000, guid: 1115259c503f2d248832de6540e54c6b, type: 2}
+  - {fileID: 11400000, guid: 596c21af7df4ed54fba36e1517c4357e, type: 2}
+  - {fileID: 11400000, guid: 97e0e287ef51ef14bac5a34a7df4c213, type: 2}
+  - {fileID: 11400000, guid: 269071d3fa4fa264588ea90fb6f3b13f, type: 2}
+  - {fileID: 11400000, guid: 1d278191e201c3940a7a59a800c554f0, type: 2}
+  minimumTripDistance: 150
+  maximumTripDistance: 950
+  rideFrequency: 6
+  offerDuration: 30
+  pickupTargetMinimumSeconds: 20
+  pickupTargetMaximumSeconds: 90
+  pickupHardMaximumSeconds: 180
+  intercityRideChance: 0.25
+  localOffersAfterIntercity: 2
+  intercityDryStreakThreshold: 3
+  veryHighDemandDelay: {x: 5, y: 20}
+  highDemandDelay: {x: 10, y: 35}
+  normalDemandDelay: {x: 25, y: 75}
+  lowDemandDelay: {x: 60, y: 150}
+  veryLowDemandDelay: {x: 150, y: 300}
+  defaultWorkAreaRadius: 500
+  speedwayPassengerWeight: 3
+  racingSpeedwayDestinationChance: 0.6
+  offerPickupCandidateLimit: 6
+  offerDestinationCandidateLimit: 12
+  offerFrameBudgetMilliseconds: 3
+  offerTimeoutSeconds: 3
+  logOfferTimings: 0
+  intercityMaximumTripDistance: 20000
+  intercityFareMultiplier: 1.2
+  recentOfferCount: 10
+  recentOfferWeight: 0.2
+  recentLocationMinutes: 60
+  repeatPickupAccessRadiusMeters: 40
+  citywideRelocationMinutes: 360
+  moderateSameLocationChance: 0.65
+  commonWeight: 1
+  uncommonWeight: 0.65
+  rareWeight: 0.3
+  legendaryWeight: 0.1
+  pickupBaseGraceSeconds: 25
+  pickupMinimumSeconds: 45
+  pickupReasonableSpeedMetersPerSecond: 12
+  pickupPatienceMultiplier: 2
+  timeObsessedPickupMultiplier: 0.6
+  pickupMaximumSeconds: 300
+  patienceProgressSampleSeconds: 4
+  wrongWayGraceSeconds: 20
+  unexplainedStopGraceSeconds: 60
+  patienceRecoveryPerSecond: 0.001
+  cancellationFeeCents: 300
+  morningFrequencyMultiplier: 0.75
+  eveningFrequencyMultiplier: 0.85
+  lateNightFrequencyMultiplier: 1.5
+  preDawnFrequencyMultiplier: 2
+  rainFrequencyMultiplier: 0.8
+  stormFrequencyMultiplier: 0.7
+  snowFrequencyMultiplier: 0.7
+  heavySnowFrequencyMultiplier: 0.65
+  blizzardFrequencyMultiplier: 0.6
+  morningCommuterWeight: 1.5
+  eveningSocialWeight: 1.5
+  eveningRareWeight: 1.25
+  lateNightRareWeight: 1.5
+  lateNightWeirdWeight: 1.5
+  lateNightNightlifeWeight: 1.5
+  lateNightChaoticWeight: 1.35
+  lateNightFlirtatiousWeight: 1.25
+  preDawnRareWeight: 1.75
+  preDawnWeirdWeight: 1.75
+  preDawnNightlifeWeight: 1.25
+  preDawnChaoticWeight: 1.5
+  preDawnFlirtatiousWeight: 1.1
+  morningFareMultiplier: 1.1
+  eveningFareMultiplier: 1.1
+  lateNightFareMultiplier: 1.25
+  preDawnFareMultiplier: 1.35
+  rainFareMultiplier: 1.08
+  stormFareMultiplier: 1.15
+  snowFareMultiplier: 1.2
+  heavySnowFareMultiplier: 1.25
+  blizzardFareMultiplier: 1.3
+  eveningAppreciationMultiplier: 1.2
+  lateNightAppreciationMultiplier: 1.25
+  preDawnAppreciationMultiplier: 1.4
+  appreciationBaseChance: 0.35
+  badWeatherPickupTimeMultiplier: 1.25
+  stoppedSpeed: 0.5
+  boardingSeconds: 1.5
+  exitingSeconds: 1
+  baseFareCents: 500
+  centsPerMeter: 1.5
+  centsPerSecond: 2
+  tipFraction: 0.2
+  impactPenaltyCents: 100
+  chaosCentsPerPoint: 0.1
+  trafficRamScore: 100
+  pedestrianHitScore: 250
+  propertyDamageScore: 50
+  shortcutScore: 300
+  nearMissScore: 75
+  hardLandingScore: 200
+  offroadScorePerSecond: 5
+  minimumImpactSpeed: 3
+  collisionCooldown: 3
+  nearMissSpeed: 8
+  nearMissRadius: 5
+  nearMissCooldown: 12
+  pedestrianImpact:
+    minimumRagdollImpactSpeed: 2
+    impactForceMultiplier: 40
+    maximumRagdollImpulse: 900
+    upwardImpulse: 70
+    angularImpulse: 2
+    ragdollLifetime: 15
+  fastDrivingSpeed: 18
+  speedReactionCooldown: 15
+  gentleAcceleration: 2
+  smoothRatingPerSecond: 0.003
+  hardLandingSpeed: 6
+  audio: {fileID: 11400000, guid: 3ce12cd4af600ff428cf0a5a9e797e82, type: 2}
+  offerSound: {fileID: 8300000, guid: 35a7b929e025d674898e2f6a2d87c68a, type: 3}
+  acceptSound: {fileID: 0}
+  boardingSound: {fileID: 0}
+  exitSound: {fileID: 0}
+  requestSound: {fileID: 0}
+  requestSuccessSound: {fileID: 0}
+  requestFailureSound: {fileID: 0}
+  collisionSound: {fileID: 0}
+  fareSound: {fileID: 0}

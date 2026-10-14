@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7616a816f4cfd6840afd0677e92020f5, type: 3}
+  m_Name: CareerCatalog
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiCareerCatalog
+  trucks:
+  - stableId: ih.truck.nwh.euro.semi
+    displayName: NWH Euro Semi Validation Tractor
+    truck: {fileID: 11400000, guid: 0cc4e19407827f542be5923366c1db32, type: 2}
+    description: Current starter tractor
+    icon: {fileID: 0}
+    priceCents: 0
+    availableForPurchase: 0
+  upgrades:
+  - stableId: taxi.upgrade.engine-calibration
+    displayName: Engine Calibration
+    description: NWH Engine multiplier 1.10
+    icon: {fileID: 0}
+    priceCents: 150000
+    category: 0
+    compatibleTruckIds:
+    - ih.truck.nwh.euro.semi
+    adapterId: taxi.nwh.tuning
+    adapterConfiguration: {fileID: 11400000, guid: 5c1f55dba94f0e842b096a1151d0fdfa,
+      type: 2}
+    availableForPurchase: 1
+  - stableId: taxi.upgrade.brake-hardware
+    displayName: Brake Hardware
+    description: NWH Brakes multiplier 1.15
+    icon: {fileID: 0}
+    priceCents: 100000
+    category: 2
+    compatibleTruckIds:
+    - ih.truck.nwh.euro.semi
+    adapterId: taxi.nwh.tuning
+    adapterConfiguration: {fileID: 11400000, guid: 38159fb9f8ba2a340bcee2123160327c,
+      type: 2}
+    availableForPurchase: 1
+  - stableId: taxi.upgrade.auxiliary-tank
+    displayName: Auxiliary Fuel Tank
+    description: NWH Fuel multiplier 1.25
+    icon: {fileID: 0}
+    priceCents: 75000
+    category: 3
+    compatibleTruckIds:
+    - ih.truck.nwh.euro.semi
+    adapterId: taxi.nwh.tuning
+    adapterConfiguration: {fileID: 11400000, guid: 3e137f1eae1b2d84a8bc411d2a099dd8,
+      type: 2}
+    availableForPurchase: 1
+  cosmetics: []
