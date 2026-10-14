@@ -173,6 +173,14 @@ namespace LWS.TruckTaxi
         [SerializeField, HideInInspector] private Texture2D weatheradeSnowSparkleTexture;
         [SerializeField, HideInInspector] private int weatheradeDepthRendererIndex = -1;
         public const string BlizzardId = "blizzard";
+        public static float MeltRateMultiplier(float temperatureC, bool raining)
+        {
+            if (!float.IsFinite(temperatureC)) return 1;
+            // Keep slow cold-weather loss; warm rain accelerates melt without clearing snow instantly.
+            float thermal = temperatureC <= 0 ? Mathf.Lerp(.15f, 1, Mathf.InverseLerp(-10, 0, temperatureC)) :
+                1 + Mathf.Clamp(temperatureC / 15, 0, 2);
+            return thermal * (raining && temperatureC > 0 ? 1.5f : 1);
+        }
         public TruckTaxiSnowRegion Region { get; private set; }
         public TruckTaxiSnowplow Plow { get; private set; }
         public string Diagnostic { get; private set; } = "Not initialized";
@@ -222,7 +230,10 @@ namespace LWS.TruckTaxi
             }
             else if (backgroundDepth > 0)
             {
-                float amount = step * settings.snowMeltMetersPerSecond;
+                bool raining = weatherId == LwsWeatherPresetCatalog.LightRainId || weatherId == LwsWeatherPresetCatalog.HeavyRainId ||
+                    weatherId == LwsWeatherPresetCatalog.ThunderstormId;
+                float amount = step * settings.snowMeltMetersPerSecond * MeltRateMultiplier(
+                    owner.Environment.Weather.CurrentSnapshot.ambientTemperatureC, raining);
                 backgroundDepth = Mathf.Max(0, backgroundDepth - amount);
                 Region.Melt(amount);
             }

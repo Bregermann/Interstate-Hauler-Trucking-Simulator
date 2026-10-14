@@ -127,8 +127,9 @@ namespace LWS.TruckTaxi
                 {
                     TruckTaxiWeatherCondition? observed = visit.weather == null ? null :
                         (TruckTaxiWeatherCondition?)TruckTaxiCalendarWeatherService.ConditionFor(JsonUtility.FromJson<LwsWeatherSavePayload>(visit.weather.payloadJson).weatherPresetId);
+                    float temperature = visit.weather == null ? 0 : JsonUtility.FromJson<LwsWeatherSavePayload>(visit.weather.payloadJson).ambientTemperatureC;
                     TruckTaxiWorldVisit.AdvanceSnow(payload.environment, CalendarSeconds(host.Environment.Clock.CurrentSnapshot) - visit.gameSeconds,
-                        visit.clockRate, host.Environment.settings, observed);
+                        visit.clockRate, host.Environment.settings, observed, temperature);
                     host.Environment.Snow.Restore(payload.environment.snow);
                 }
                 if (!host.Environment.CalendarWeather.Restore(payload.environment.forecast, false))

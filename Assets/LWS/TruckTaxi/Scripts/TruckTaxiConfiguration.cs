@@ -7,6 +7,8 @@ namespace LWS.TruckTaxi
     {
         [Header("Truck Taxi Career")]
         public TruckTaxiCareerCatalog careerCatalog;
+        [Tooltip("Explicit existing truck body materials only. Shared paint follows the career in every region; never tint glass or tires.")]
+        public Material[] truckBodyMaterials = System.Array.Empty<Material>();
         [Header("Optional designer-authored companion content")]
         [Tooltip("Text-only companion reactions for explicitly authored adult passengers and adult companions. No voice audio is assigned or generated.")]
         public TruckTaxiOccupantReaction[] companionReactions = System.Array.Empty<TruckTaxiOccupantReaction>();

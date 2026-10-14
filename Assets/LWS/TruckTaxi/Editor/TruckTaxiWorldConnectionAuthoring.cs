@@ -38,6 +38,15 @@ namespace LWS.TruckTaxi.Editor
                 spawner.FindProperty("truckDefinition").objectReferenceValue = definition; spawner.ApplyModifiedPropertiesWithoutUndo();
                 var config = new SerializedObject(host.configuration); config.FindProperty("careerCatalog").objectReferenceValue = catalog;
                 config.ApplyModifiedPropertiesWithoutUndo(); EditorUtility.SetDirty(host.configuration);
+                var palette = AssetDatabase.LoadAssetAtPath<TruckTaxiEdenboroughPalette>(TruckTaxiEdenboroughAuthoring.PalettePath);
+                var edenConfig = AssetDatabase.LoadAssetAtPath<TruckTaxiConfiguration>("Assets/LWS/TruckTaxi/Edenborough/Configuration.asset");
+                if (palette == null || palette.truckPaintMaterials.Length == 0 || edenConfig == null)
+                    throw new InvalidOperationException("Existing reviewed truck paint material references are missing.");
+                foreach (var configuration in new[] { host.configuration, edenConfig })
+                {
+                    configuration.truckBodyMaterials = (Material[])palette.truckPaintMaterials.Clone();
+                    EditorUtility.SetDirty(configuration);
+                }
                 EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
             }
             finally { if (opened) EditorSceneManager.CloseScene(scene,true); }
@@ -90,10 +99,7 @@ namespace LWS.TruckTaxi.Editor
             string region = eden ? "taxi.edenborough.hillend" : "taxi.region.highway";
             string chunk = eden ? scene.name : "Taxi_Highway";
             var node = provider.Graph.nodes.Single(n => n.nodeId == nodeId);
-            var points = eden ? new[] { node.position, new Vector3(-4900, 0, -2430), new Vector3(-5050, 0, -2490), new Vector3(-5250, 0, -2550) } :
-                new[] { node.position, new Vector3(1260, .14f, -40), new Vector3(1340, .14f, -130), new Vector3(1400, .14f, -240) };
-            if (eden)
-                for (int i = 1; i < points.Length; i++) points[i].y = TruckTaxiEdenboroughLayout.At(points[i].x, points[i].z).y;
+            var points = ConnectionPoints(node.position, eden);
             var old = scene.GetRootGameObjects().FirstOrDefault(g => g.name == RootName);
             if (old != null) Object.DestroyImmediate(old);
             var root = new GameObject(RootName);
@@ -124,17 +130,7 @@ namespace LWS.TruckTaxi.Editor
             if (eden) GradeConnection(scene, root, points);
 
             string exitId = "taxi.world-exit." + (eden ? "demo-city" : "edenborough");
-            provider.Graph.nodes.RemoveAll(n => n.nodeId == exitId);
-            provider.Graph.edges.RemoveAll(e => e.fromNodeId == exitId || e.toNodeId == exitId);
-            provider.Graph.nodes.Add(new LwsRoadNode { nodeId = exitId, position = points[points.Length - 1], regionId = region, sceneChunkId = chunk });
-            int first = provider.Graph.edges.Count;
-            TruckTaxiDemoBuilder.BayEdge(provider.Graph, nodeId, exitId, points);
-            TruckTaxiDemoBuilder.BayEdge(provider.Graph, exitId, nodeId, points.Reverse().ToArray());
-            foreach (var edge in provider.Graph.edges.Skip(first))
-            {
-                edge.laneWidthMeters = 3.45f; edge.speedLimitMph = 30; edge.stateOrRegionId = region; edge.sceneChunkId = chunk;
-                foreach (var sample in edge.samples) { sample.roadWidthMeters = 7.4f; sample.laneWidthMeters = 3.45f; sample.speedLimitMph = 30; }
-            }
+            ConnectGraph(provider, exitId, nodeId, points, region, chunk);
             EditorUtility.SetDirty(provider);
             Vector3 end = points[points.Length - 1], forward = (end - points[points.Length - 2]).normalized;
             forward.y = 0; forward.Normalize();
@@ -162,6 +158,71 @@ namespace LWS.TruckTaxi.Editor
                 }
             }
             EditorSceneManager.MarkSceneDirty(scene);
+        }
+
+        private static Vector3[] ConnectionPoints(Vector3 junction, bool eden)
+        {
+            var points = eden ? new[] { junction, new Vector3(-4900,0,-2430), new Vector3(-5050,0,-2490), new Vector3(-5250,0,-2550) } :
+                new[] { junction, new Vector3(1260,.14f,-40), new Vector3(1340,.14f,-130), new Vector3(1400,.14f,-240) };
+            if (eden) for (int i=1;i<points.Length;i++) points[i].y=TruckTaxiEdenboroughLayout.At(points[i].x,points[i].z).y;
+            return points;
+        }
+
+        private static void ConnectGraph(LwsRoadGraphProvider provider, string exitId, string junction, Vector3[] controls, string region, string chunk)
+        {
+            var graph=provider.Graph;
+            graph.nodes.RemoveAll(n=>n.nodeId.StartsWith(exitId,StringComparison.Ordinal));
+            graph.edges.RemoveAll(e=>e.fromNodeId.StartsWith(exitId,StringComparison.Ordinal)||e.toNodeId.StartsWith(exitId,StringComparison.Ordinal));
+            var points=new List<Vector3>{controls[0]};
+            for(int i=1;i<controls.Length;i++)
+            {
+                int steps=Mathf.CeilToInt(Vector3.Distance(controls[i-1],controls[i])/25);
+                for(int n=1;n<=steps;n++)points.Add(Vector3.Lerp(controls[i-1],controls[i],n/(float)steps));
+            }
+            string previous=junction; int first=graph.edges.Count;
+            for(int i=1;i<points.Count;i++)
+            {
+                string id=i==points.Count-1 ? exitId : exitId+".node."+i;
+                graph.nodes.Add(new LwsRoadNode{nodeId=id,position=points[i],regionId=region,sceneChunkId=chunk});
+                TruckTaxiDemoBuilder.BayEdge(graph,previous,id,new[]{points[i-1],points[i]});
+                TruckTaxiDemoBuilder.BayEdge(graph,id,previous,new[]{points[i],points[i-1]}); previous=id;
+            }
+            foreach(var edge in graph.edges.Skip(first))
+            {
+                edge.laneWidthMeters=3.45f; edge.speedLimitMph=30; edge.stateOrRegionId=region; edge.sceneChunkId=chunk;
+                foreach(var sample in edge.samples){sample.roadWidthMeters=7.4f;sample.laneWidthMeters=3.45f;sample.speedLimitMph=30;}
+            }
+            EditorUtility.SetDirty(provider);
+        }
+
+        [MenuItem("Truck Taxi/Regional/Refresh Connection Graphs Only")]
+        public static void RefreshConnectionGraphs()
+        {
+            if(Application.isPlaying)throw new InvalidOperationException("Exit Play Mode first.");
+            foreach(string path in new[]{TruckTaxiDemoBuilder.ScenePath,TruckTaxiEdenboroughLayout.ScenePath})
+            {
+                Scene scene=SceneManager.GetSceneByPath(path); bool opened=!scene.IsValid()||!scene.isLoaded;
+                if(opened)scene=EditorSceneManager.OpenScene(path,OpenSceneMode.Additive);
+                try
+                {
+                    var host=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<TruckTaxiBootstrap>(true)).Single();
+                    var exit=scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<TruckTaxiWorldExit>(true)).Single();
+                    bool eden=scene.name==TruckTaxiWorldCatalog.Edenborough;
+                    string junction=eden?"bypass.west":"taxi.regional.1200";
+                    ConnectGraph(host.roadGraph,exit.GetComponent<TruckTaxiMapMarker>().stableId,junction,
+                        ConnectionPoints(host.roadGraph.Graph.nodes.Single(n=>n.nodeId==junction).position,eden),
+                        eden?"taxi.edenborough.hillend":"taxi.regional",eden?scene.name:"Taxi_Highway");
+                    var planner=new LwsRoutePlanner(LwsNavigationTuning.Default());
+                    foreach(var origin in new[]{exit.arrival.position,host.playerSpawn.position})
+                    {
+                        var route=planner.PlanRoute(new LwsRouteRequest{useOriginWorldPosition=true,originWorldPosition=origin,
+                            useDestinationWorldPosition=true,destinationWorldPosition=exit.transform.position,truckRouteRequired=true},host.roadGraph.Graph);
+                        if(!route.succeeded)throw new InvalidOperationException(scene.name+" exit route: "+route.message);
+                    }
+                    EditorSceneManager.SaveScene(scene);
+                }
+                finally{if(opened)EditorSceneManager.CloseScene(scene,true);}
+            }
         }
 
         private static void GradeConnection(Scene scene, GameObject root, Vector3[] points)

@@ -41,9 +41,11 @@ namespace LWS.TruckTaxi
                 yield return DualNativeDrive("Demo City initial drive");
                 Result(host.Persistence.Save(1,true),"dual-world Demo City manual checkpoint");
                 yield return DualSnowViews("DemoCity");
+                yield return DualOffroadTracks("DemoCity");
                 yield return DualTransfer(true);
                 yield return DualNativeDrive("Edenborough physical arrival");
                 yield return DualSnowViews("Edenborough");
+                yield return DualOffroadTracks("Edenborough");
                 yield return DualTransfer(true);
                 yield return DualNativeDrive("Demo City physical return");
                 // Ten transfers in the same real player process; first two use native trigger contacts.
@@ -94,7 +96,7 @@ namespace LWS.TruckTaxi
             var body = host.Player.GetComponent<Rigidbody>(); Physics.SyncTransforms();
             Check(TruckTaxiRecoverySpace.TryGroundedPose(body,point,rotation,.35f,body,null,out var grounded),"test-only approach fixture has valid drivable collision");
             TruckTaxiRecoverySpace.Move(body,grounded,rotation); body.linearVelocity=body.angularVelocity=Vector3.zero;
-            host.Session.DiscardTeleportDistance(); Physics.SyncTransforms(); yield return new WaitForFixedUpdate();
+            host.Session.DiscardTeleportDistance(); Physics.SyncTransforms(); yield return null;
             Check(host.GPS.TrySetServiceDestination(exit.GetComponent<TruckTaxiMapMarker>().stableId,
                 exit.GetComponent<TruckTaxiMapMarker>().label,exit.transform.position,TruckTaxiMapMarkerType.Place),"local exit accepted by existing GPS");
             float until=Time.realtimeSinceStartup+8;
@@ -159,12 +161,13 @@ namespace LWS.TruckTaxi
             Check(career.driverName=="Dual World Driver","driver name retained");
             var owned=career.trucks.Find(t=>t.truckId==host.Player.DefinitionId);
             Check(owned!=null && owned.hasCustomPaint && Vector4.Distance(owned.paint.color,EdenboroughTestPaint)<.001f,"paint and truck ownership retained");
+            Check(host.Player.GetComponent<TruckTaxiGaragePaint>()?.Ready == true,"existing paint presentation bound in current world");
             Check(host.DriverNeeds.State.Count(TruckTaxiNeedsItem.Snack)==9,"inventory retained without starter grants");
             Check(host.DriverNeeds.State.AmbientChoiceIds.Contains("astra.dualworld."+request.RunId),"needs/progression marker retained");
             Check(host.Session.CapturePersistentState().statistics.completedRides==2,"completed fares retained");
         }
 
-        private IEnumerator DualNativeDrive(string label)
+        private IEnumerator DualNativeDrive(string label, bool curve = false)
         {
             var registry=LwsApplicationBootstrap.Instance.Registry; registry.TryGet(out ILwsVehicleInputService input); CaptureDriveInput(input);
             var keyboard=InputSystem.AddDevice<Keyboard>("Dual-world post-arrival keyboard"); var previous=Keyboard.current; driveKeyboard=keyboard; keyboard.MakeCurrent();
@@ -173,7 +176,8 @@ namespace LWS.TruckTaxi
                 RequireDriveReady(); var body=host.Player.GetComponent<Rigidbody>(); Vector3 start=body.position;
                 if(host.Player.TruckControlController.CurrentState.parkingBrakeOn) yield return DrivePulse("ParkingBrake",Key.P);
                 float until=Time.realtimeSinceStartup+18;
-                while(Vector3.Distance(start,body.position)<3 && Time.realtimeSinceStartup<until) yield return DriveKeys(1,Key.W);
+                while(Vector3.Distance(start,body.position)<3 && Time.realtimeSinceStartup<until)
+                    yield return curve ? DriveKeys(1,Key.W,Key.D) : DriveKeys(1,Key.W);
                 Check(Vector3.Distance(start,body.position)>=3 && host.Player.NwhAdapter.VehicleController.input.Throttle>.5f,label+" native throttle/forward motion without recovery");
                 yield return DriveKeys(2,Key.W,Key.S);
                 Check(host.Player.NwhAdapter.VehicleController.input.Brakes>.5f,label+" native brake input");
@@ -193,6 +197,9 @@ namespace LWS.TruckTaxi
             host.Environment.SetFrozen(true); host.SetPaused(false);
             foreach(float depth in new[]{0f,.2f,.85f})
             {
+                string preset=depth==0 ? LwsWeatherPresetCatalog.ClearId : depth<.5f ? LwsWeatherPresetCatalog.LightSnowId : LwsWeatherPresetCatalog.HeavySnowId;
+                Check(host.Environment.ForceWeather(preset),"existing weather controls apply actual snow atmosphere "+preset);
+                yield return new WaitForSecondsRealtime(6);
                 var snow=host.Environment.Snow.Capture(); snow.backgroundDepth=snow.maximumDepth*depth;
                 for(int i=0;i<snow.depths.Length;i++)snow.depths[i]=snow.backgroundDepth;
                 Check(host.Environment.Snow.Restore(snow),"controlled actual snow presentation fixture "+depth);
@@ -209,6 +216,55 @@ namespace LWS.TruckTaxi
                 File.WriteAllLines(Path.Combine(request.Root,"dual-world-"+request.Mode+".txt"),dualEvidence);
             }
             host.Environment.SetFrozen(frozen);
+            float before=host.Environment.Snow.Capture().backgroundDepth;
+            yield return new WaitForSecondsRealtime(3);
+            float accumulated=host.Environment.Snow.Capture().backgroundDepth;
+            Check(accumulated>before,"live snowfall gradually increases depth");
+            Check(host.Environment.ForceWeather(LwsWeatherPresetCatalog.LightRainId),"rain requested through existing weather control");
+            yield return new WaitForSecondsRealtime(6);
+            float melted=host.Environment.Snow.Capture().backgroundDepth;
+            Check(melted>0 && melted<accumulated,"rain reduces snow gradually rather than instantly clearing it");
+            dualEvidence.Add("SNOW_EVOLUTION "+label+" before="+before+" snowfall="+accumulated+" rain="+melted);
+            if(label=="Edenborough")
+            {
+                Check(host.Environment.ForceWeather(LwsWeatherPresetCatalog.HeavySnowId),"Edenborough keeps its own snowy weather");
+                yield return new WaitForSecondsRealtime(6);
+            }
+        }
+
+        private IEnumerator DualOffroadTracks(string label)
+        {
+            var body=host.Player.GetComponent<Rigidbody>(); Vector3 roadPoint=body.position; Quaternion roadRotation=body.rotation;
+            var surface=host.GetComponent<TruckTaxiSnowSurface>();
+            var snow=host.Environment.Snow.Capture();
+            Check(host.Environment.Snow.Restore(snow),"off-road trace fixture resets only transient trace history");
+            bool placed=false;
+            foreach(float offset in new[]{14f,-14f,25f,-25f})
+            {
+                Vector3 candidate=roadPoint+body.transform.right*offset;
+                if(!TruckTaxiRecoverySpace.TryGroundedPose(body,candidate,roadRotation,.35f,body,null,out var grounded))continue;
+                if(!Physics.Raycast(grounded+Vector3.up*4,Vector3.down,out var hit,12,~0,QueryTriggerInteraction.Ignore) ||
+                    hit.collider.GetComponentInParent<Rigidbody>()!=null || !surface.IsSnowCoveredOffRoad(hit.collider,hit.point,body.transform))continue;
+                TruckTaxiRecoverySpace.Move(body,grounded,roadRotation); body.linearVelocity=body.angularVelocity=Vector3.zero;
+                host.Session.DiscardTeleportDistance(); Physics.SyncTransforms(); placed=true;break;
+            }
+            Check(placed,"supported snow-covered off-road fixture exists beside the real connector");
+            yield return new WaitForFixedUpdate();
+            int stamps=surface.WheelTraceStampCount; Quaternion before=body.rotation;
+            yield return DualNativeDrive(label+" curved off-road snow",true);
+            int contacts=0;
+            foreach(var wheel in host.Player.NwhAdapter.VehicleController.powertrain.wheels)
+                if(wheel.wheelUAPI.IsGrounded && surface.IsSnowCoveredOffRoad(wheel.wheelUAPI.HitCollider,
+                    wheel.wheelUAPI.HitPoint,body.transform))contacts++;
+            Check(contacts>=2 && surface.WheelTraceStampCount>stamps,"actual off-road wheel contacts generated Weatherade trace stamps");
+            Check(Quaternion.Angle(before,body.rotation)>2,"native steering produced a curved snow path");
+            surface.RequestTracePixelDiagnostic(); float until=Time.realtimeSinceStartup+6;
+            while(surface.TracePixelDiagnostic.Contains("pending") && Time.realtimeSinceStartup<until)yield return null;
+            Check(surface.TraceActivePixelCount>0,"actual GPU Weatherade off-road trace mask contains tire marks: "+surface.TracePixelDiagnostic);
+            dualEvidence.Add("OFFROAD "+label+" wheelContacts="+contacts+" newStamps="+(surface.WheelTraceStampCount-stamps)+" "+surface.TracePixelDiagnostic);
+            yield return DualScreenshot(label+"-offroad-snow-tracks");
+            TruckTaxiRecoverySpace.Move(body,roadPoint,roadRotation); body.linearVelocity=body.angularVelocity=Vector3.zero;
+            host.Session.DiscardTeleportDistance(); Physics.SyncTransforms(); yield return new WaitForFixedUpdate();
         }
         private IEnumerator DualScreenshot(string name)
         {

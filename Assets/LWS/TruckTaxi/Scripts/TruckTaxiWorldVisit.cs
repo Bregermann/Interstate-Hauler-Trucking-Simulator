@@ -12,7 +12,8 @@ namespace LWS.TruckTaxi
         public static bool Contains(string scene) => scene == Demo || scene == Edenborough;
         public static string Label(string scene) => scene == Demo ? "Demo City" : scene == Edenborough ? "Edenborough" : "Unknown region";
         public static string Other(string scene) => scene == Demo ? Edenborough : scene == Edenborough ? Demo : null;
-        public static string WorldId(string scene) => scene == Edenborough ? TruckTaxiEdenboroughLayout.WorldId : LwsWorldResumeCatalog.TruckTaxiStreamingWorldId;
+        public static string WorldId(string scene) => scene == Edenborough ? TruckTaxiEdenboroughLayout.WorldId :
+            scene == Demo ? LwsWorldResumeCatalog.TruckTaxiWorldId : null;
     }
 
     // Bounded optional career semantics in the existing Vibin participant, not a storage system.
@@ -48,7 +49,7 @@ namespace LWS.TruckTaxi
             return true;
         }
         public static void AdvanceSnow(TruckTaxiEnvironmentSnapshot environment, double elapsedGameSeconds, float clockRate,
-            TruckTaxiEnvironmentSettings settings, TruckTaxiWeatherCondition? observedCondition = null)
+            TruckTaxiEnvironmentSettings settings, TruckTaxiWeatherCondition? observedCondition = null, float temperatureC = 0)
         {
             var snow = environment?.snow;
             if (snow == null || settings == null || environment.frozen || !double.IsFinite(elapsedGameSeconds) ||
@@ -56,7 +57,8 @@ namespace LWS.TruckTaxi
             float seconds = (float)Math.Min(86400, elapsedGameSeconds / clockRate);
             string name = observedCondition?.ToString() ?? environment.forecast?.manualCondition.ToString() ?? "Clear";
             float rate = name == "Blizzard" ? settings.blizzardMetersPerSecond : name == "HeavySnow" ? settings.heavySnowMetersPerSecond :
-                name == "LightSnow" || name == "Snow" ? settings.lightSnowMetersPerSecond : -settings.snowMeltMetersPerSecond;
+                name == "LightSnow" || name == "Snow" ? settings.lightSnowMetersPerSecond : -settings.snowMeltMetersPerSecond *
+                TruckTaxiSnow.MeltRateMultiplier(temperatureC, name == "Rain" || name == "HeavyRain" || name == "Thunderstorm");
             float amount = rate * seconds;
             snow.backgroundDepth = Mathf.Clamp(snow.backgroundDepth + amount, 0, snow.maximumDepth);
             for (int i = 0; i < snow.depths.Length; i++) snow.depths[i] = Mathf.Clamp(snow.depths[i] + amount, 0, snow.maximumDepth);

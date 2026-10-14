@@ -15,6 +15,14 @@ namespace LWS.TruckTaxi.Tests
         private LwsRoadConditionCoordinator roads;
         private TruckTaxiEnvironmentSettings settings;
 
+        [TestCase(-10f, false, .15f)]
+        [TestCase(0f, false, 1f)]
+        [TestCase(15f, false, 2f)]
+        [TestCase(15f, true, 3f)]
+        [TestCase(30f, true, 4.5f)]
+        public void WarmRainAcceleratesGradualMelt(float temperature, bool rain, float expected) =>
+            Assert.AreEqual(expected, TruckTaxiSnow.MeltRateMultiplier(temperature, rain), .0001f);
+
         [SetUp]
         public void SetUp()
         {

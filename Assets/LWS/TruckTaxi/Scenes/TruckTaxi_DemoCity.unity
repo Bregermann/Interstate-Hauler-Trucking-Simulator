@@ -14338,9 +14338,61 @@ MonoBehaviour:
       position: {x: 2800, y: -6, z: -725}
       regionId: taxi.speedway
       sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.world-exit.edenborough.node.1
+      position: {x: 1220, y: 0.14, z: -13.333334}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.2
+      position: {x: 1240, y: 0.14, z: -26.666668}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.3
+      position: {x: 1260, y: 0.14, z: -40}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.4
+      position: {x: 1276, y: 0.14, z: -58}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.5
+      position: {x: 1292, y: 0.14, z: -76}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.6
+      position: {x: 1308, y: 0.14, z: -94}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.7
+      position: {x: 1324, y: 0.14, z: -112}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.8
+      position: {x: 1340, y: 0.14, z: -130}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.9
+      position: {x: 1350, y: 0.14, z: -148.33333}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.10
+      position: {x: 1360, y: 0.14, z: -166.66667}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.11
+      position: {x: 1370, y: 0.14, z: -185}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.12
+      position: {x: 1380, y: 0.14, z: -203.33333}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+    - nodeId: taxi.world-exit.edenborough.node.13
+      position: {x: 1390, y: 0.14, z: -221.66667}
+      regionId: taxi.regional
+      sceneChunkId: Taxi_Highway
     - nodeId: taxi.world-exit.edenborough
       position: {x: 1400, y: 0.14, z: -240}
-      regionId: taxi.region.highway
+      regionId: taxi.regional
       sceneChunkId: Taxi_Highway
     edges:
     - roadId: taxi.0.0-1.0.road
@@ -124111,17 +124163,17 @@ MonoBehaviour:
         laneWidthMeters: 5.5
         laneCount: 2
         speedLimitMph: 20
-    - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-      segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-      edgeId: taxi.regional.1200-taxi.world-exit.edenborough
+    - roadId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
+      segmentId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
+      edgeId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
       fromNodeId: taxi.regional.1200
-      toNodeId: taxi.world-exit.edenborough
+      toNodeId: taxi.world-exit.edenborough.node.1
       roadClass: 5
       direction: 5
       surfaceType: 1
       oneWay: 1
-      distanceMeters: 317.82663
-      travelCost: 317.82663
+      distanceMeters: 24.037008
+      travelCost: 24.037008
       speedLimitMph: 30
       laneCount: 1
       laneWidthMeters: 3.45
@@ -124129,758 +124181,87 @@ MonoBehaviour:
       rightShoulderWidthMeters: 0
       medianWidthMeters: 0
       laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.region.highway
+      stateOrRegionId: taxi.regional
       sceneChunkId: Taxi_Highway
       restrictions: []
       samples:
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
         distanceFromStartMeters: 0
         position: {x: 1200, y: 0.14, z: 0}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
         distanceFromStartMeters: 4.8074017
         position: {x: 1204, y: 0.14, z: -2.6666667}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
         distanceFromStartMeters: 9.614803
         position: {x: 1208, y: 0.14, z: -5.3333335}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
         distanceFromStartMeters: 14.422205
-        position: {x: 1212, y: 0.14, z: -8}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        position: {x: 1212, y: 0.14, z: -8.000001}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
         distanceFromStartMeters: 19.229607
         position: {x: 1216, y: 0.14, z: -10.666667}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough.node.1
         distanceFromStartMeters: 24.037008
         position: {x: 1220, y: 0.14, z: -13.333334}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 28.84441
-        position: {x: 1224, y: 0.14, z: -16}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 33.65181
-        position: {x: 1228, y: 0.14, z: -18.666666}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 38.459213
-        position: {x: 1232, y: 0.14, z: -21.333334}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 43.266613
-        position: {x: 1236, y: 0.14, z: -24}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 48.074017
-        position: {x: 1240, y: 0.14, z: -26.666668}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 52.881416
-        position: {x: 1244, y: 0.14, z: -29.333334}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 57.68882
-        position: {x: 1248, y: 0.14, z: -32}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 62.49622
-        position: {x: 1252, y: 0.14, z: -34.666668}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 67.30362
-        position: {x: 1256, y: 0.14, z: -37.333332}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 72.11102
-        position: {x: 1260, y: 0.14, z: -40}
-        forward: {x: 0.8320503, y: 0, z: -0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 76.92766
-        position: {x: 1263.2, y: 0.14, z: -43.6}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 81.7443
-        position: {x: 1266.4, y: 0.14, z: -47.2}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 86.560936
-        position: {x: 1269.6, y: 0.14, z: -50.8}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 91.37757
-        position: {x: 1272.8, y: 0.14, z: -54.4}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 96.194214
-        position: {x: 1276, y: 0.14, z: -58}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 101.01085
-        position: {x: 1279.2, y: 0.14, z: -61.6}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 105.82749
-        position: {x: 1282.4, y: 0.14, z: -65.2}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 110.64413
-        position: {x: 1285.6, y: 0.14, z: -68.8}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 115.46076
-        position: {x: 1288.8, y: 0.14, z: -72.4}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 120.277405
-        position: {x: 1292, y: 0.14, z: -76}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 125.09404
-        position: {x: 1295.2, y: 0.14, z: -79.6}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 129.91068
-        position: {x: 1298.4, y: 0.14, z: -83.2}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 134.72731
-        position: {x: 1301.6, y: 0.14, z: -86.799995}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 139.54396
-        position: {x: 1304.8, y: 0.14, z: -90.4}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 144.3606
-        position: {x: 1308, y: 0.14, z: -94}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 149.17723
-        position: {x: 1311.2, y: 0.14, z: -97.6}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 153.99387
-        position: {x: 1314.4, y: 0.14, z: -101.2}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 158.8105
-        position: {x: 1317.6, y: 0.14, z: -104.8}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 163.62714
-        position: {x: 1320.8, y: 0.14, z: -108.4}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 168.44379
-        position: {x: 1324, y: 0.14, z: -112}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 173.26042
-        position: {x: 1327.2, y: 0.14, z: -115.6}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 178.07706
-        position: {x: 1330.4, y: 0.14, z: -119.2}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 182.89369
-        position: {x: 1333.6, y: 0.14, z: -122.8}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 187.71033
-        position: {x: 1336.8, y: 0.14, z: -126.4}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 192.52698
-        position: {x: 1340, y: 0.14, z: -130}
-        forward: {x: 0.66436386, y: 0, z: -0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 197.34619
-        position: {x: 1342.3077, y: 0.14, z: -134.23077}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 202.1654
-        position: {x: 1344.6154, y: 0.14, z: -138.46153}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 206.98463
-        position: {x: 1346.9231, y: 0.14, z: -142.6923}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 211.80385
-        position: {x: 1349.2307, y: 0.14, z: -146.92308}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 216.62306
-        position: {x: 1351.5385, y: 0.14, z: -151.15384}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 221.44228
-        position: {x: 1353.8462, y: 0.14, z: -155.38461}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 226.26149
-        position: {x: 1356.1538, y: 0.14, z: -159.61539}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 231.08072
-        position: {x: 1358.4615, y: 0.14, z: -163.84616}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 235.89993
-        position: {x: 1360.7693, y: 0.14, z: -168.07692}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 240.71915
-        position: {x: 1363.0769, y: 0.14, z: -172.3077}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 245.53836
-        position: {x: 1365.3846, y: 0.14, z: -176.53847}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 250.35759
-        position: {x: 1367.6923, y: 0.14, z: -180.76923}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 255.1768
-        position: {x: 1370, y: 0.14, z: -185}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 259.996
-        position: {x: 1372.3077, y: 0.14, z: -189.23077}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 264.81525
-        position: {x: 1374.6154, y: 0.14, z: -193.46153}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 269.63446
-        position: {x: 1376.9231, y: 0.14, z: -197.6923}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 274.45367
-        position: {x: 1379.2307, y: 0.14, z: -201.92308}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 279.2729
-        position: {x: 1381.5385, y: 0.14, z: -206.15385}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 284.0921
-        position: {x: 1383.8462, y: 0.14, z: -210.38461}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 288.91132
-        position: {x: 1386.1538, y: 0.14, z: -214.61539}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 293.73053
-        position: {x: 1388.4615, y: 0.14, z: -218.84615}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 298.54974
-        position: {x: 1390.7693, y: 0.14, z: -223.07692}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 303.36896
-        position: {x: 1393.0769, y: 0.14, z: -227.3077}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 308.1882
-        position: {x: 1395.3846, y: 0.14, z: -231.53847}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 313.00742
-        position: {x: 1397.6923, y: 0.14, z: -235.76923}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
-        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
-        distanceFromStartMeters: 317.82663
-        position: {x: 1400, y: 0.14, z: -240}
-        forward: {x: 0.47885212, y: 0, z: -0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-    - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-      segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-      edgeId: taxi.world-exit.edenborough-taxi.regional.1200
-      fromNodeId: taxi.world-exit.edenborough
+    - roadId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+      segmentId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+      edgeId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+      fromNodeId: taxi.world-exit.edenborough.node.1
       toNodeId: taxi.regional.1200
       roadClass: 5
       direction: 5
       surfaceType: 1
       oneWay: 1
-      distanceMeters: 317.8266
-      travelCost: 317.8266
+      distanceMeters: 24.037008
+      travelCost: 24.037008
       speedLimitMph: 30
       laneCount: 1
       laneWidthMeters: 3.45
@@ -124888,741 +124269,2358 @@ MonoBehaviour:
       rightShoulderWidthMeters: 0
       medianWidthMeters: 0
       laneCenterOffsetsMeters: []
-      stateOrRegionId: taxi.region.highway
+      stateOrRegionId: taxi.regional
       sceneChunkId: Taxi_Highway
       restrictions: []
       samples:
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        distanceFromStartMeters: 0
+        position: {x: 1220, y: 0.14, z: -13.333334}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        distanceFromStartMeters: 4.8074017
+        position: {x: 1216, y: 0.14, z: -10.666667}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        distanceFromStartMeters: 9.614803
+        position: {x: 1212, y: 0.14, z: -8}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        distanceFromStartMeters: 14.422205
+        position: {x: 1208, y: 0.14, z: -5.3333335}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        distanceFromStartMeters: 19.229607
+        position: {x: 1204, y: 0.14, z: -2.6666667}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.regional.1200
+        distanceFromStartMeters: 24.037008
+        position: {x: 1200, y: 0.14, z: 0}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+      segmentId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+      edgeId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+      fromNodeId: taxi.world-exit.edenborough.node.1
+      toNodeId: taxi.world-exit.edenborough.node.2
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.037008
+      travelCost: 24.037008
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 0
+        position: {x: 1220, y: 0.14, z: -13.333334}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 4.8074017
+        position: {x: 1224, y: 0.14, z: -16}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 9.614803
+        position: {x: 1228, y: 0.14, z: -18.666668}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 14.422205
+        position: {x: 1232, y: 0.14, z: -21.333334}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 19.229607
+        position: {x: 1236, y: 0.14, z: -24.000002}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.1-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 24.037008
+        position: {x: 1240, y: 0.14, z: -26.666668}
+        forward: {x: 0.8320503, y: 0, z: -0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+      segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+      edgeId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+      fromNodeId: taxi.world-exit.edenborough.node.2
+      toNodeId: taxi.world-exit.edenborough.node.1
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.037008
+      travelCost: 24.037008
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        distanceFromStartMeters: 0
+        position: {x: 1240, y: 0.14, z: -26.666668}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        distanceFromStartMeters: 4.8074017
+        position: {x: 1236, y: 0.14, z: -24.000002}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        distanceFromStartMeters: 9.614803
+        position: {x: 1232, y: 0.14, z: -21.333334}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        distanceFromStartMeters: 14.422205
+        position: {x: 1228, y: 0.14, z: -18.666668}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        distanceFromStartMeters: 19.229607
+        position: {x: 1224, y: 0.14, z: -16}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.1
+        distanceFromStartMeters: 24.037008
+        position: {x: 1220, y: 0.14, z: -13.333334}
+        forward: {x: -0.8320503, y: 0, z: 0.55470026}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+      segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+      edgeId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+      fromNodeId: taxi.world-exit.edenborough.node.2
+      toNodeId: taxi.world-exit.edenborough.node.3
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.037008
+      travelCost: 24.037008
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 0
+        position: {x: 1240, y: 0.14, z: -26.666668}
+        forward: {x: 0.8320503, y: 0, z: -0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 4.8074017
+        position: {x: 1244, y: 0.14, z: -29.333334}
+        forward: {x: 0.8320503, y: 0, z: -0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 9.614803
+        position: {x: 1248, y: 0.14, z: -32}
+        forward: {x: 0.8320503, y: 0, z: -0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 14.422205
+        position: {x: 1252, y: 0.14, z: -34.666668}
+        forward: {x: 0.8320503, y: 0, z: -0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 19.229607
+        position: {x: 1256, y: 0.14, z: -37.333332}
+        forward: {x: 0.8320503, y: 0, z: -0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.2-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 24.037008
+        position: {x: 1260, y: 0.14, z: -40}
+        forward: {x: 0.8320503, y: 0, z: -0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+      segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+      edgeId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+      fromNodeId: taxi.world-exit.edenborough.node.3
+      toNodeId: taxi.world-exit.edenborough.node.2
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.037008
+      travelCost: 24.037008
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 0
+        position: {x: 1260, y: 0.14, z: -40}
+        forward: {x: -0.8320503, y: 0, z: 0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 4.8074017
+        position: {x: 1256, y: 0.14, z: -37.333332}
+        forward: {x: -0.8320503, y: 0, z: 0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 9.614803
+        position: {x: 1252, y: 0.14, z: -34.666668}
+        forward: {x: -0.8320503, y: 0, z: 0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 14.422205
+        position: {x: 1248, y: 0.14, z: -32}
+        forward: {x: -0.8320503, y: 0, z: 0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 19.229607
+        position: {x: 1244, y: 0.14, z: -29.333334}
+        forward: {x: -0.8320503, y: 0, z: 0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.2
+        distanceFromStartMeters: 24.037008
+        position: {x: 1240, y: 0.14, z: -26.666668}
+        forward: {x: -0.8320503, y: 0, z: 0.55470014}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+      segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+      edgeId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+      fromNodeId: taxi.world-exit.edenborough.node.3
+      toNodeId: taxi.world-exit.edenborough.node.4
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 0
+        position: {x: 1260, y: 0.14, z: -40}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 4.816638
+        position: {x: 1263.2, y: 0.14, z: -43.6}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 9.633276
+        position: {x: 1266.4, y: 0.14, z: -47.2}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 14.449913
+        position: {x: 1269.6, y: 0.14, z: -50.8}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 19.266552
+        position: {x: 1272.8, y: 0.14, z: -54.4}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.3-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 24.083189
+        position: {x: 1276, y: 0.14, z: -58}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+      segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+      edgeId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+      fromNodeId: taxi.world-exit.edenborough.node.4
+      toNodeId: taxi.world-exit.edenborough.node.3
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 0
+        position: {x: 1276, y: 0.14, z: -58}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 4.816638
+        position: {x: 1272.8, y: 0.14, z: -54.4}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 9.633276
+        position: {x: 1269.6, y: 0.14, z: -50.8}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 14.449913
+        position: {x: 1266.4, y: 0.14, z: -47.2}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 19.266552
+        position: {x: 1263.2, y: 0.14, z: -43.6}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.3
+        distanceFromStartMeters: 24.083189
+        position: {x: 1260, y: 0.14, z: -40}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+      segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+      edgeId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+      fromNodeId: taxi.world-exit.edenborough.node.4
+      toNodeId: taxi.world-exit.edenborough.node.5
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 0
+        position: {x: 1276, y: 0.14, z: -58}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 4.816638
+        position: {x: 1279.2, y: 0.14, z: -61.6}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 9.633276
+        position: {x: 1282.4, y: 0.14, z: -65.2}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 14.449913
+        position: {x: 1285.6, y: 0.14, z: -68.8}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 19.266552
+        position: {x: 1288.8, y: 0.14, z: -72.4}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.4-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 24.083189
+        position: {x: 1292, y: 0.14, z: -76}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+      segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+      edgeId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+      fromNodeId: taxi.world-exit.edenborough.node.5
+      toNodeId: taxi.world-exit.edenborough.node.4
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 0
+        position: {x: 1292, y: 0.14, z: -76}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 4.816638
+        position: {x: 1288.8, y: 0.14, z: -72.4}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 9.633276
+        position: {x: 1285.6, y: 0.14, z: -68.8}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 14.449913
+        position: {x: 1282.4, y: 0.14, z: -65.2}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 19.266552
+        position: {x: 1279.2, y: 0.14, z: -61.6}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.4
+        distanceFromStartMeters: 24.083189
+        position: {x: 1276, y: 0.14, z: -58}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+      segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+      edgeId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+      fromNodeId: taxi.world-exit.edenborough.node.5
+      toNodeId: taxi.world-exit.edenborough.node.6
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 0
+        position: {x: 1292, y: 0.14, z: -76}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 4.816638
+        position: {x: 1295.2, y: 0.14, z: -79.6}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 9.633276
+        position: {x: 1298.4, y: 0.14, z: -83.2}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 14.449913
+        position: {x: 1301.6, y: 0.14, z: -86.8}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 19.266552
+        position: {x: 1304.8, y: 0.14, z: -90.4}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.5-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 24.083189
+        position: {x: 1308, y: 0.14, z: -94}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+      segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+      edgeId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+      fromNodeId: taxi.world-exit.edenborough.node.6
+      toNodeId: taxi.world-exit.edenborough.node.5
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 0
+        position: {x: 1308, y: 0.14, z: -94}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 4.816638
+        position: {x: 1304.8, y: 0.14, z: -90.4}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 9.633276
+        position: {x: 1301.6, y: 0.14, z: -86.8}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 14.449913
+        position: {x: 1298.4, y: 0.14, z: -83.2}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 19.266552
+        position: {x: 1295.2, y: 0.14, z: -79.6}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.5
+        distanceFromStartMeters: 24.083189
+        position: {x: 1292, y: 0.14, z: -76}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+      segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+      edgeId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+      fromNodeId: taxi.world-exit.edenborough.node.6
+      toNodeId: taxi.world-exit.edenborough.node.7
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 0
+        position: {x: 1308, y: 0.14, z: -94}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 4.816638
+        position: {x: 1311.2, y: 0.14, z: -97.6}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 9.633276
+        position: {x: 1314.4, y: 0.14, z: -101.2}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 14.449913
+        position: {x: 1317.6, y: 0.14, z: -104.8}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 19.266552
+        position: {x: 1320.8, y: 0.14, z: -108.4}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.6-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 24.083189
+        position: {x: 1324, y: 0.14, z: -112}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+      segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+      edgeId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+      fromNodeId: taxi.world-exit.edenborough.node.7
+      toNodeId: taxi.world-exit.edenborough.node.6
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 0
+        position: {x: 1324, y: 0.14, z: -112}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 4.816638
+        position: {x: 1320.8, y: 0.14, z: -108.4}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 9.633276
+        position: {x: 1317.6, y: 0.14, z: -104.8}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 14.449913
+        position: {x: 1314.4, y: 0.14, z: -101.2}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 19.266552
+        position: {x: 1311.2, y: 0.14, z: -97.6}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.6
+        distanceFromStartMeters: 24.083189
+        position: {x: 1308, y: 0.14, z: -94}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+      segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+      edgeId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+      fromNodeId: taxi.world-exit.edenborough.node.7
+      toNodeId: taxi.world-exit.edenborough.node.8
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 0
+        position: {x: 1324, y: 0.14, z: -112}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 4.816638
+        position: {x: 1327.2, y: 0.14, z: -115.6}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 9.633276
+        position: {x: 1330.4, y: 0.14, z: -119.2}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 14.449913
+        position: {x: 1333.6, y: 0.14, z: -122.8}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 19.266552
+        position: {x: 1336.8, y: 0.14, z: -126.4}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.7-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 24.083189
+        position: {x: 1340, y: 0.14, z: -130}
+        forward: {x: 0.66436386, y: 0, z: -0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+      segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+      edgeId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+      fromNodeId: taxi.world-exit.edenborough.node.8
+      toNodeId: taxi.world-exit.edenborough.node.7
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 24.083189
+      travelCost: 24.083189
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 0
+        position: {x: 1340, y: 0.14, z: -130}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 4.816638
+        position: {x: 1336.8, y: 0.14, z: -126.4}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 9.633276
+        position: {x: 1333.6, y: 0.14, z: -122.8}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 14.449913
+        position: {x: 1330.4, y: 0.14, z: -119.2}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 19.266552
+        position: {x: 1327.2, y: 0.14, z: -115.6}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.7
+        distanceFromStartMeters: 24.083189
+        position: {x: 1324, y: 0.14, z: -112}
+        forward: {x: -0.66436386, y: 0, z: 0.74740934}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+      segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+      edgeId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+      fromNodeId: taxi.world-exit.edenborough.node.8
+      toNodeId: taxi.world-exit.edenborough.node.9
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883268
+      travelCost: 20.883268
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 0
+        position: {x: 1340, y: 0.14, z: -130}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 4.176654
+        position: {x: 1342, y: 0.14, z: -133.66667}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 8.353308
+        position: {x: 1344, y: 0.14, z: -137.33333}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 12.529961
+        position: {x: 1346, y: 0.14, z: -141}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 16.706615
+        position: {x: 1348, y: 0.14, z: -144.66666}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.8-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 20.883268
+        position: {x: 1350, y: 0.14, z: -148.33333}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+      segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+      edgeId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+      fromNodeId: taxi.world-exit.edenborough.node.9
+      toNodeId: taxi.world-exit.edenborough.node.8
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883268
+      travelCost: 20.883268
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 0
+        position: {x: 1350, y: 0.14, z: -148.33333}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 4.176654
+        position: {x: 1348, y: 0.14, z: -144.66666}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 8.353308
+        position: {x: 1346, y: 0.14, z: -141}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 12.529961
+        position: {x: 1344, y: 0.14, z: -137.33333}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 16.706615
+        position: {x: 1342, y: 0.14, z: -133.66667}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.8
+        distanceFromStartMeters: 20.883268
+        position: {x: 1340, y: 0.14, z: -130}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+      segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+      edgeId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+      fromNodeId: taxi.world-exit.edenborough.node.9
+      toNodeId: taxi.world-exit.edenborough.node.10
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883282
+      travelCost: 20.883282
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 0
+        position: {x: 1350, y: 0.14, z: -148.33333}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 4.1766562
+        position: {x: 1352, y: 0.14, z: -152}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 8.3533125
+        position: {x: 1354, y: 0.14, z: -155.66667}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 12.529969
+        position: {x: 1356, y: 0.14, z: -159.33333}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 16.706625
+        position: {x: 1358, y: 0.14, z: -163}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.9-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 20.883282
+        position: {x: 1360, y: 0.14, z: -166.66667}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+      segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+      edgeId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+      fromNodeId: taxi.world-exit.edenborough.node.10
+      toNodeId: taxi.world-exit.edenborough.node.9
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883282
+      travelCost: 20.883282
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 0
+        position: {x: 1360, y: 0.14, z: -166.66667}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 4.1766562
+        position: {x: 1358, y: 0.14, z: -163}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 8.3533125
+        position: {x: 1356, y: 0.14, z: -159.33333}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 12.529969
+        position: {x: 1354, y: 0.14, z: -155.66667}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 16.706625
+        position: {x: 1352, y: 0.14, z: -152}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.9
+        distanceFromStartMeters: 20.883282
+        position: {x: 1350, y: 0.14, z: -148.33333}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+      segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+      edgeId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+      fromNodeId: taxi.world-exit.edenborough.node.10
+      toNodeId: taxi.world-exit.edenborough.node.11
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883268
+      travelCost: 20.883268
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 0
+        position: {x: 1360, y: 0.14, z: -166.66667}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 4.176654
+        position: {x: 1362, y: 0.14, z: -170.33334}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 8.353308
+        position: {x: 1364, y: 0.14, z: -174}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 12.529961
+        position: {x: 1366, y: 0.14, z: -177.66667}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 16.706615
+        position: {x: 1368, y: 0.14, z: -181.33333}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.10-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 20.883268
+        position: {x: 1370, y: 0.14, z: -185}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+      segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+      edgeId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+      fromNodeId: taxi.world-exit.edenborough.node.11
+      toNodeId: taxi.world-exit.edenborough.node.10
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883268
+      travelCost: 20.883268
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 0
+        position: {x: 1370, y: 0.14, z: -185}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 4.176654
+        position: {x: 1368, y: 0.14, z: -181.33333}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 8.353308
+        position: {x: 1366, y: 0.14, z: -177.66667}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 12.529961
+        position: {x: 1364, y: 0.14, z: -174}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 16.706615
+        position: {x: 1362, y: 0.14, z: -170.33334}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.10
+        distanceFromStartMeters: 20.883268
+        position: {x: 1360, y: 0.14, z: -166.66667}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+      segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+      edgeId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+      fromNodeId: taxi.world-exit.edenborough.node.11
+      toNodeId: taxi.world-exit.edenborough.node.12
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883268
+      travelCost: 20.883268
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 0
+        position: {x: 1370, y: 0.14, z: -185}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 4.176654
+        position: {x: 1372, y: 0.14, z: -188.66667}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 8.353308
+        position: {x: 1374, y: 0.14, z: -192.33333}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 12.529961
+        position: {x: 1376, y: 0.14, z: -196}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 16.706615
+        position: {x: 1378, y: 0.14, z: -199.66666}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.11-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 20.883268
+        position: {x: 1380, y: 0.14, z: -203.33333}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+      segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+      edgeId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+      fromNodeId: taxi.world-exit.edenborough.node.12
+      toNodeId: taxi.world-exit.edenborough.node.11
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883268
+      travelCost: 20.883268
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 0
+        position: {x: 1380, y: 0.14, z: -203.33333}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 4.176654
+        position: {x: 1378, y: 0.14, z: -199.66666}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 8.353308
+        position: {x: 1376, y: 0.14, z: -196}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 12.529961
+        position: {x: 1374, y: 0.14, z: -192.33333}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 16.706615
+        position: {x: 1372, y: 0.14, z: -188.66667}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.11
+        distanceFromStartMeters: 20.883268
+        position: {x: 1370, y: 0.14, z: -185}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+      segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+      edgeId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+      fromNodeId: taxi.world-exit.edenborough.node.12
+      toNodeId: taxi.world-exit.edenborough.node.13
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883282
+      travelCost: 20.883282
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 0
+        position: {x: 1380, y: 0.14, z: -203.33333}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 4.1766562
+        position: {x: 1382, y: 0.14, z: -207}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 8.3533125
+        position: {x: 1384, y: 0.14, z: -210.66667}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 12.529969
+        position: {x: 1386, y: 0.14, z: -214.33333}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 16.706625
+        position: {x: 1388, y: 0.14, z: -218}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough.node.12-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 20.883282
+        position: {x: 1390, y: 0.14, z: -221.66667}
+        forward: {x: 0.47885194, y: 0, z: -0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+      segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+      edgeId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+      fromNodeId: taxi.world-exit.edenborough.node.13
+      toNodeId: taxi.world-exit.edenborough.node.12
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883282
+      travelCost: 20.883282
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 0
+        position: {x: 1390, y: 0.14, z: -221.66667}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 4.1766562
+        position: {x: 1388, y: 0.14, z: -218}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 8.3533125
+        position: {x: 1386, y: 0.14, z: -214.33333}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 12.529969
+        position: {x: 1384, y: 0.14, z: -210.66667}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 16.706625
+        position: {x: 1382, y: 0.14, z: -207}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough.node.12
+        distanceFromStartMeters: 20.883282
+        position: {x: 1380, y: 0.14, z: -203.33333}
+        forward: {x: -0.47885194, y: 0, z: 0.8778957}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+      segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+      edgeId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+      fromNodeId: taxi.world-exit.edenborough.node.13
+      toNodeId: taxi.world-exit.edenborough
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883268
+      travelCost: 20.883268
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        distanceFromStartMeters: 0
+        position: {x: 1390, y: 0.14, z: -221.66667}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        distanceFromStartMeters: 4.176654
+        position: {x: 1392, y: 0.14, z: -225.33334}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        distanceFromStartMeters: 8.353308
+        position: {x: 1394, y: 0.14, z: -229}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        distanceFromStartMeters: 12.529961
+        position: {x: 1396, y: 0.14, z: -232.66667}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        distanceFromStartMeters: 16.706615
+        position: {x: 1398, y: 0.14, z: -236.33333}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        segmentId: taxi.world-exit.edenborough.node.13-taxi.world-exit.edenborough
+        distanceFromStartMeters: 20.883268
+        position: {x: 1400, y: 0.14, z: -240}
+        forward: {x: 0.47885224, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+      segmentId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+      edgeId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+      fromNodeId: taxi.world-exit.edenborough
+      toNodeId: taxi.world-exit.edenborough.node.13
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 20.883268
+      travelCost: 20.883268
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.regional
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
         distanceFromStartMeters: 0
         position: {x: 1400, y: 0.14, z: -240}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 4.819217
-        position: {x: 1397.6923, y: 0.14, z: -235.76923}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+      - roadId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 4.176654
+        position: {x: 1398, y: 0.14, z: -236.33333}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 9.638434
-        position: {x: 1395.3846, y: 0.14, z: -231.53847}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+      - roadId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 8.353308
+        position: {x: 1396, y: 0.14, z: -232.66667}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 14.457651
-        position: {x: 1393.0769, y: 0.14, z: -227.3077}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+      - roadId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 12.529961
+        position: {x: 1394, y: 0.14, z: -229}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 19.276869
-        position: {x: 1390.7693, y: 0.14, z: -223.07692}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+      - roadId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 16.706615
+        position: {x: 1392, y: 0.14, z: -225.33334}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4
         laneWidthMeters: 3.45
         laneCount: 1
         speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 24.096085
-        position: {x: 1388.4615, y: 0.14, z: -218.84616}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 28.915302
-        position: {x: 1386.1538, y: 0.14, z: -214.61539}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 33.73452
-        position: {x: 1383.8462, y: 0.14, z: -210.38461}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 38.553738
-        position: {x: 1381.5385, y: 0.14, z: -206.15384}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 43.372955
-        position: {x: 1379.2307, y: 0.14, z: -201.92308}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 48.19217
-        position: {x: 1376.9231, y: 0.14, z: -197.6923}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 53.011387
-        position: {x: 1374.6154, y: 0.14, z: -193.46153}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 57.830605
-        position: {x: 1372.3077, y: 0.14, z: -189.23077}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 62.649822
-        position: {x: 1370, y: 0.14, z: -185}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 67.46904
-        position: {x: 1367.6923, y: 0.14, z: -180.76923}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 72.28825
-        position: {x: 1365.3846, y: 0.14, z: -176.53847}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 77.107475
-        position: {x: 1363.0769, y: 0.14, z: -172.3077}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 81.92669
-        position: {x: 1360.7693, y: 0.14, z: -168.07692}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 86.74591
-        position: {x: 1358.4615, y: 0.14, z: -163.84615}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 91.565125
-        position: {x: 1356.1538, y: 0.14, z: -159.61539}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 96.38434
-        position: {x: 1353.8462, y: 0.14, z: -155.38461}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 101.20356
-        position: {x: 1351.5385, y: 0.14, z: -151.15385}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 106.02277
-        position: {x: 1349.2307, y: 0.14, z: -146.92308}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 110.841995
-        position: {x: 1346.9231, y: 0.14, z: -142.6923}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 115.66121
-        position: {x: 1344.6154, y: 0.14, z: -138.46153}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 120.48043
-        position: {x: 1342.3077, y: 0.14, z: -134.23077}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 125.299644
-        position: {x: 1340, y: 0.14, z: -130}
-        forward: {x: -0.47885212, y: 0, z: 0.87789553}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 130.11629
-        position: {x: 1336.8, y: 0.14, z: -126.4}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 134.93292
-        position: {x: 1333.6, y: 0.14, z: -122.8}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 139.74956
-        position: {x: 1330.4, y: 0.14, z: -119.2}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 144.5662
-        position: {x: 1327.2, y: 0.14, z: -115.6}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 149.38283
-        position: {x: 1324, y: 0.14, z: -112}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 154.19948
-        position: {x: 1320.8, y: 0.14, z: -108.4}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 159.01611
-        position: {x: 1317.6, y: 0.14, z: -104.8}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 163.83275
-        position: {x: 1314.4, y: 0.14, z: -101.2}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 168.64938
-        position: {x: 1311.2, y: 0.14, z: -97.6}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 173.46602
-        position: {x: 1308, y: 0.14, z: -94}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 178.28265
-        position: {x: 1304.8, y: 0.14, z: -90.4}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 183.0993
-        position: {x: 1301.6, y: 0.14, z: -86.8}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 187.91594
-        position: {x: 1298.4, y: 0.14, z: -83.200005}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 192.73257
-        position: {x: 1295.2, y: 0.14, z: -79.6}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 197.54921
-        position: {x: 1292, y: 0.14, z: -76}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 202.36584
-        position: {x: 1288.8, y: 0.14, z: -72.4}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 207.1825
-        position: {x: 1285.6, y: 0.14, z: -68.8}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 211.99913
-        position: {x: 1282.4, y: 0.14, z: -65.2}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 216.81577
-        position: {x: 1279.2, y: 0.14, z: -61.600002}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 221.6324
-        position: {x: 1276, y: 0.14, z: -58}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 226.44904
-        position: {x: 1272.8, y: 0.14, z: -54.4}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 231.26567
-        position: {x: 1269.6, y: 0.14, z: -50.8}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 236.08232
-        position: {x: 1266.4, y: 0.14, z: -47.199997}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 240.89896
-        position: {x: 1263.2, y: 0.14, z: -43.600002}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 245.71559
-        position: {x: 1260, y: 0.14, z: -40}
-        forward: {x: -0.66436386, y: 0, z: 0.7474093}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 250.523
-        position: {x: 1256, y: 0.14, z: -37.333332}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 255.3304
-        position: {x: 1252, y: 0.14, z: -34.666668}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 260.1378
-        position: {x: 1248, y: 0.14, z: -32}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 264.9452
-        position: {x: 1244, y: 0.14, z: -29.333332}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 269.7526
-        position: {x: 1240, y: 0.14, z: -26.666666}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 274.56
-        position: {x: 1236, y: 0.14, z: -24}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 279.3674
-        position: {x: 1232, y: 0.14, z: -21.333334}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 284.1748
-        position: {x: 1228, y: 0.14, z: -18.666666}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 288.9822
-        position: {x: 1224, y: 0.14, z: -15.999999}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 293.7896
-        position: {x: 1220, y: 0.14, z: -13.333332}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 298.59702
-        position: {x: 1216, y: 0.14, z: -10.666666}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 303.40442
-        position: {x: 1212, y: 0.14, z: -7.9999995}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 308.21182
-        position: {x: 1208, y: 0.14, z: -5.333333}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 313.01923
-        position: {x: 1204, y: 0.14, z: -2.6666665}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
-        up: {x: 0, y: 1, z: 0}
-        direction: 5
-        roadWidthMeters: 7.4
-        laneWidthMeters: 3.45
-        laneCount: 1
-        speedLimitMph: 30
-      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
-        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
-        distanceFromStartMeters: 317.8266
-        position: {x: 1200, y: 0.14, z: 0}
-        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+      - roadId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        segmentId: taxi.world-exit.edenborough-taxi.world-exit.edenborough.node.13
+        distanceFromStartMeters: 20.883268
+        position: {x: 1390, y: 0.14, z: -221.66667}
+        forward: {x: -0.47885224, y: 0, z: 0.87789553}
         up: {x: 0, y: 1, z: 0}
         direction: 5
         roadWidthMeters: 7.4

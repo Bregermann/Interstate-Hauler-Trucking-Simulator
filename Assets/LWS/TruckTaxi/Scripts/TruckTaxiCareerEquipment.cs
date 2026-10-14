@@ -24,6 +24,11 @@ namespace LWS.TruckTaxi
                 Catalog.FindTruck(owner.Player.DefinitionId).truck=owner.Player.Definition;
             }
             baseFuelCapacity=owner.Fuel?.Fuel?.capacity ?? 0;
+            if (owner.Configuration.truckBodyMaterials?.Length > 0)
+            {
+                var paint = owner.Player.GetComponent<TruckTaxiGaragePaint>() ?? owner.Player.gameObject.AddComponent<TruckTaxiGaragePaint>();
+                paint.Configure(owner.Player, owner.Configuration.truckBodyMaterials, owner.Session, Catalog);
+            }
             host.Session.CareerEquipmentChanged+=Apply;
             Apply();
         }

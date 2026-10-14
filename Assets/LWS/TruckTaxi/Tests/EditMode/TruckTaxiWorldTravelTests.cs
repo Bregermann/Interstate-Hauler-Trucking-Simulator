@@ -342,7 +342,7 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual(TruckTaxiMainMenu.VibinSceneName, TruckTaxiMainMenu.FreePlaySceneName);
             Assert.IsTrue(TruckTaxiMainMenu.IsSupportedWorld("TruckTaxi_DemoCity"));
             Assert.IsTrue(TruckTaxiMainMenu.IsSupportedWorld(TruckTaxiEdenboroughLayout.SceneName));
-            Assert.AreEqual(LwsWorldResumeCatalog.TruckTaxiStreamingWorldId, TruckTaxiWorldCatalog.WorldId(TruckTaxiWorldCatalog.Demo));
+            Assert.AreEqual(LwsWorldResumeCatalog.TruckTaxiWorldId, TruckTaxiWorldCatalog.WorldId(TruckTaxiWorldCatalog.Demo));
             Assert.AreEqual(TruckTaxiEdenboroughLayout.WorldId, TruckTaxiWorldCatalog.WorldId(TruckTaxiWorldCatalog.Edenborough));
         }
 
