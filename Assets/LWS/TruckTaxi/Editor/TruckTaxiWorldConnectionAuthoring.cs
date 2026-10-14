@@ -18,6 +18,31 @@ namespace LWS.TruckTaxi.Editor
         private const string Folder = "Assets/LWS/TruckTaxi/WorldConnections";
         private const string RootName = "Truck Taxi Regional Connection";
 
+        [MenuItem("Truck Taxi/Regional/Bind Shared Canonical Career Truck")]
+        public static void BindSharedCareerTruck()
+        {
+            if (Application.isPlaying) throw new InvalidOperationException("Exit Play Mode first.");
+            var definition = AssetDatabase.LoadAssetAtPath<LwsTruckDefinition>("Assets/LWS/TruckTaxi/Edenborough/CanonicalTaxiTruck.asset");
+            var catalog = AssetDatabase.LoadAssetAtPath<TruckTaxiCareerCatalog>("Assets/LWS/TruckTaxi/Edenborough/CareerCatalog.asset");
+            if (definition == null || catalog == null || !catalog.FindTruck(definition.StableId).HasContent)
+                throw new InvalidOperationException("The existing canonical Taxi truck/catalog must be available.");
+            Scene scene = SceneManager.GetSceneByPath(TruckTaxiDemoBuilder.ScenePath);
+            bool opened = !scene.IsValid() || !scene.isLoaded;
+            if (opened) scene = EditorSceneManager.OpenScene(TruckTaxiDemoBuilder.ScenePath, OpenSceneMode.Additive);
+            try
+            {
+                var host = scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<TruckTaxiBootstrap>(true)).Single();
+                var spawner = new SerializedObject(host.spawner);
+                if (spawner.FindProperty("fallbackPlayerTruckPrefab").objectReferenceValue != definition.PlayerPrefab)
+                    throw new InvalidOperationException("Demo City's authored player prefab differs; refusing a truck replacement.");
+                spawner.FindProperty("truckDefinition").objectReferenceValue = definition; spawner.ApplyModifiedPropertiesWithoutUndo();
+                var config = new SerializedObject(host.configuration); config.FindProperty("careerCatalog").objectReferenceValue = catalog;
+                config.ApplyModifiedPropertiesWithoutUndo(); EditorUtility.SetDirty(host.configuration);
+                EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
+            }
+            finally { if (opened) EditorSceneManager.CloseScene(scene,true); }
+        }
+
         [MenuItem("Truck Taxi/Regional/Add Or Refresh World Connections")]
         public static void Build()
         {
@@ -74,8 +99,28 @@ namespace LWS.TruckTaxi.Editor
             var root = new GameObject(RootName);
             Material asphalt = AssetDatabase.LoadAssetAtPath<Material>(TruckTaxiDemoBuilder.Root + "/Materials/Asphalt.mat");
             if (asphalt == null) throw new InvalidOperationException("Existing Truck Taxi asphalt material is missing.");
-            TruckTaxiDemoBuilder.BakeRegionalRoads(root.transform, new List<Vector3[]> { points }, 7.4f,
-                eden ? "Edenborough_Connection" : "DemoCity_Connection", asphalt, Folder);
+            var queues = new List<(Object target, int value)>();
+            foreach (var component in scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<MonoBehaviour>(true)))
+            {
+                if (component == null) continue;
+                var field = new SerializedObject(component).FindProperty("updateQueue");
+                if (field != null && field.propertyType == SerializedPropertyType.Integer) queues.Add((component,field.intValue));
+            }
+            try
+            {
+                TruckTaxiDemoBuilder.BakeRegionalRoads(root.transform, new List<Vector3[]> { points }, 7.4f,
+                    eden ? "Edenborough_Connection" : "DemoCity_Connection", asphalt, Folder);
+            }
+            finally
+            {
+                // EasyRoads may reuse the authored network. Preserve its pre-existing editor queue metadata.
+                foreach (var queue in queues)
+                {
+                    if (queue.target == null) continue;
+                    var serialized = new SerializedObject(queue.target); serialized.FindProperty("updateQueue").intValue = queue.value;
+                    serialized.ApplyModifiedPropertiesWithoutUndo();
+                }
+            }
             if (eden) GradeConnection(scene, root, points);
 
             string exitId = "taxi.world-exit." + (eden ? "demo-city" : "edenborough");

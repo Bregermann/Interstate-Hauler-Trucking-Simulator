@@ -31,7 +31,7 @@ namespace LWS.TruckTaxi
         public static bool Valid(TruckTaxiWorldVisit value) => value != null && TruckTaxiWorldCatalog.Contains(value.scene) &&
             float.IsFinite(value.position.x) && float.IsFinite(value.position.y) && float.IsFinite(value.position.z) &&
             float.IsFinite(value.rotation.x) && float.IsFinite(value.rotation.y) && float.IsFinite(value.rotation.z) && float.IsFinite(value.rotation.w) &&
-            Quaternion.Dot(value.rotation, value.rotation) > .5f && double.IsFinite(value.gameSeconds) && value.gameSeconds >= 0 &&
+            Mathf.Abs(Quaternion.Dot(value.rotation, value.rotation) - 1) < .01f && double.IsFinite(value.gameSeconds) && value.gameSeconds >= 0 &&
             float.IsFinite(value.clockRate) && value.clockRate >= 0 && TruckTaxiEnvironmentSnapshot.Valid(value.environment) &&
             TruckTaxiExtremeSaveState.Valid(value.extremes) &&
             (value.weather == null || value.weather.participantId == "lws.weather.semantic") &&
@@ -48,13 +48,13 @@ namespace LWS.TruckTaxi
             return true;
         }
         public static void AdvanceSnow(TruckTaxiEnvironmentSnapshot environment, double elapsedGameSeconds, float clockRate,
-            TruckTaxiEnvironmentSettings settings)
+            TruckTaxiEnvironmentSettings settings, TruckTaxiWeatherCondition? observedCondition = null)
         {
             var snow = environment?.snow;
             if (snow == null || settings == null || environment.frozen || !double.IsFinite(elapsedGameSeconds) ||
                 !float.IsFinite(clockRate) || elapsedGameSeconds <= 0 || clockRate <= 0) return;
             float seconds = (float)Math.Min(86400, elapsedGameSeconds / clockRate);
-            string name = environment.forecast?.manualCondition.ToString() ?? "Clear";
+            string name = observedCondition?.ToString() ?? environment.forecast?.manualCondition.ToString() ?? "Clear";
             float rate = name == "Blizzard" ? settings.blizzardMetersPerSecond : name == "HeavySnow" ? settings.heavySnowMetersPerSecond :
                 name == "LightSnow" || name == "Snow" ? settings.lightSnowMetersPerSecond : -settings.snowMeltMetersPerSecond;
             float amount = rate * seconds;

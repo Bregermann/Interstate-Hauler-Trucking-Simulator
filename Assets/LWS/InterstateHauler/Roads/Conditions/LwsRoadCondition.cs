@@ -838,6 +838,21 @@ namespace LWS.InterstateHauler
             PublishAndApply(previous, _current, true);
         }
 
+        // Explicit world-boundary seam. Existing road intent/physics authority remains unchanged.
+        public void RestoreWorldAccumulation(LwsRoadConditionSnapshot snapshot)
+        {
+            var previous = _current;
+            snapshot.roadId = previous.roadId; snapshot.segmentId = previous.segmentId; snapshot.edgeId = previous.edgeId;
+            snapshot.baseSurfaceType = previous.baseSurfaceType; snapshot.vehicleSpeedMetersPerSecond = 0;
+            snapshot.forced = Mode != LwsRoadConditionOverrideMode.AutoFromWeather;
+            snapshot.Clamp();
+            _roadStates.Clear();
+            _current = LwsRoadConditionSimulation.ApplyGripProfile(snapshot, Profile);
+            _roadStates[_current.StateKey] = _current;
+            CurrentRoadKey = _current.StateKey;
+            PublishAndApply(previous, _current, true);
+        }
+
         public void SetAccumulationSpeedMultiplier(float multiplier)
         {
             AccumulationSpeedMultiplier = Mathf.Clamp(multiplier, 0.01f, 120f);

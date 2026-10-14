@@ -50,6 +50,8 @@ namespace LWS.TruckTaxi
                 Debug.LogError(LastDiagnostic, this); return false;
             }
             Clock = clock; Weather = weather; previousClock = clock.CurrentSnapshot;
+            // Register Taxi's authored extension before any canonical saved weather can be restored.
+            if (weather is LwsWeatherCoordinator catalog) catalog.RegisterPreset(CreateBlizzardPreset());
             previousWeather = weather.CurrentState; previousWeatherScale = weather.TimeScale;
             previousRenderPipeline = QualitySettings.renderPipeline;
             if (settings.weatherRenderPipeline != null) QualitySettings.renderPipeline = settings.weatherRenderPipeline;

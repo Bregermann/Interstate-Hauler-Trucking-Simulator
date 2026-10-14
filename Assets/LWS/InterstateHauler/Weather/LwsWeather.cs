@@ -634,14 +634,16 @@ namespace LWS.InterstateHauler
             WeatherChanged?.Invoke(_current);
         }
 
-        private void RegisterPreset(LwsWeatherPreset preset)
+        public void RegisterPreset(LwsWeatherPreset preset)
         {
             if (!preset.Validate(out _))
             {
                 return;
             }
 
-            _presets.Add(preset);
+            int existing = _presets.FindIndex(p => string.Equals(p.presetId, preset.presetId, StringComparison.OrdinalIgnoreCase));
+            if (existing >= 0) _presets[existing] = preset;
+            else _presets.Add(preset);
             _byId[preset.presetId] = preset;
         }
 

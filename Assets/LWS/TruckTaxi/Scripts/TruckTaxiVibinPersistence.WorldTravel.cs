@@ -24,7 +24,7 @@ namespace LWS.TruckTaxi
             var clock = host.Environment.Clock.CurrentSnapshot;
             var global = origin.LocalToGlobal(body.position);
             var visit = new TruckTaxiWorldVisit { scene = scene, position = global.ToVector3(), rotation = body.rotation,
-                gameSeconds = clock.totalGameSeconds, clockRate = clock.timeScale, environment = payload.environment,
+                gameSeconds = CalendarSeconds(clock), clockRate = clock.timeScale, environment = payload.environment,
                 extremes = payload.extremes, workArea = payload.session.workArea,
                 weather = snapshot.participants.Find(p => p.participantId == "lws.weather.semantic"),
                 roadCondition = snapshot.participants.Find(p => p.participantId == "lws.road-condition.semantic") };
@@ -33,6 +33,9 @@ namespace LWS.TruckTaxi
             WriteTravelPayload(snapshot, payload);
             return snapshot;
         }
+
+        private static double CalendarSeconds(LwsGameClockSnapshot clock) =>
+            TruckTaxiCalendarWeatherService.SnapshotDateTime(clock).Ticks / (double)TimeSpan.TicksPerSecond;
 
         public static TruckTaxiVibinSavePayload ReadTravelPayload(LwsSaveSnapshot snapshot)
         {
@@ -86,7 +89,7 @@ namespace LWS.TruckTaxi
             snapshot.sceneName = scene;
             snapshot.participants.Find(p => p.participantId == LwsSaveSchema.WorldResumeContextParticipantId).payloadJson = JsonUtility.ToJson(resume);
             snapshot.participants.Find(p => p.participantId == "lws.world.global-position").payloadJson = JsonUtility.ToJson(position);
-            snapshot.participants.Find(p => p.participantId == "lws.navigation.destination-intent").payloadJson = JsonUtility.ToJson(new LwsNavigationSavePayload());
+            if (!rollback) snapshot.participants.Find(p => p.participantId == "lws.navigation.destination-intent").payloadJson = JsonUtility.ToJson(new LwsNavigationSavePayload());
             // Global clock/driver/truck state travels. World-specific weather, snow and events do not.
             foreach (string id in new[] { "lws.weather.semantic", "lws.road-condition.semantic" })
             {
@@ -94,6 +97,14 @@ namespace LWS.TruckTaxi
                 var fresh = record ?? SaveService.Participants.Single(p => p.ParticipantId == id).CaptureState();
                 var target = snapshot.participants.Find(p => p.participantId == id);
                 target.payloadJson = fresh.payloadJson;
+                if (record == null && id == "lws.road-condition.semantic")
+                {
+                    var road = JsonUtility.FromJson<LwsRoadConditionSavePayload>(target.payloadJson);
+                    road.mode = LwsRoadConditionOverrideMode.AutoFromWeather;
+                    road.snapshot = LwsRoadConditionSnapshot.CreateDry("offroad.default", "", "offroad.default",
+                        LwsRoadSurfaceType.AsphaltInterstate, host.Environment.Weather.CurrentSnapshot.ambientTemperatureC, LwsRoadConditionProfile.Default());
+                    target.payloadJson = JsonUtility.ToJson(road);
+                }
             }
             payload.regionId = regional.ResolveRegion(preparedPosition);
             payload.environment = visit?.environment ?? host.Environment.Capture();
@@ -114,11 +125,19 @@ namespace LWS.TruckTaxi
                 RunProfileId = snapshot.profileId; profileReady = true; loadFailed = false;
                 if (!rollback && visit != null)
                 {
-                    TruckTaxiWorldVisit.AdvanceSnow(payload.environment, host.Environment.Clock.CurrentSnapshot.totalGameSeconds - visit.gameSeconds,
-                        visit.clockRate, host.Environment.settings);
+                    TruckTaxiWeatherCondition? observed = visit.weather == null ? null :
+                        (TruckTaxiWeatherCondition?)TruckTaxiCalendarWeatherService.ConditionFor(JsonUtility.FromJson<LwsWeatherSavePayload>(visit.weather.payloadJson).weatherPresetId);
+                    TruckTaxiWorldVisit.AdvanceSnow(payload.environment, CalendarSeconds(host.Environment.Clock.CurrentSnapshot) - visit.gameSeconds,
+                        visit.clockRate, host.Environment.settings, observed);
                     host.Environment.Snow.Restore(payload.environment.snow);
                 }
-                host.Environment.CalendarWeather.Restore(payload.environment.forecast, true);
+                if (!host.Environment.CalendarWeather.Restore(payload.environment.forecast, false))
+                    return LwsSaveOperationResult.Failure("Regional forecast could not be restored.");
+                if (LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsRoadConditionService roads) && roads is LwsRoadConditionCoordinator roadAuthority)
+                {
+                    var roadState = JsonUtility.FromJson<LwsRoadConditionSavePayload>(snapshot.participants.Find(p => p.participantId == "lws.road-condition.semantic").payloadJson);
+                    roadAuthority.RestoreWorldAccumulation(roadState.snapshot);
+                }
                 host.WorldLife.ReturnToTruck(); host.ComponentDamage?.ReapplyPhysicalState();
                 host.Session.DiscardTeleportDistance(); host.GPS.RequestPresentationRefresh();
                 RememberCounters(); boundaryPending = false;

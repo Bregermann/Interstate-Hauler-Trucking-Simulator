@@ -65,9 +65,11 @@ namespace LWS.TruckTaxi
             else
             {
                 dualProfile = FindTestProfile(true).stableProfileId;
-                continueGame.Invoke(menu,null); yield return WaitForRun(false);
+                if (request.Mode == "manual") { openLoad.Invoke(menu,null); loadSlot.Invoke(menu,new object[] { 0 }); }
+                else continueGame.Invoke(menu,null);
+                yield return WaitForRun(false);
                 string expected = request.Mode == "continue" ? TruckTaxiWorldCatalog.Edenborough : TruckTaxiWorldCatalog.Demo;
-                Check(host.gameObject.scene.name == expected,"fresh process Continue restored saved world "+expected);
+                Check(host.gameObject.scene.name == expected,"fresh process " + request.Mode + " restored saved world "+expected);
                 DualCareerAssertions();
                 yield return DualNativeDrive("fresh process " + expected);
                 if (request.Mode == "continue")
@@ -164,7 +166,6 @@ namespace LWS.TruckTaxi
 
         private IEnumerator DualNativeDrive(string label)
         {
-            host.SetPaused(false);
             var registry=LwsApplicationBootstrap.Instance.Registry; registry.TryGet(out ILwsVehicleInputService input); CaptureDriveInput(input);
             var keyboard=InputSystem.AddDevice<Keyboard>("Dual-world post-arrival keyboard"); var previous=Keyboard.current; driveKeyboard=keyboard; keyboard.MakeCurrent();
             try
@@ -188,7 +189,8 @@ namespace LWS.TruckTaxi
 
         private IEnumerator DualSnowViews(string label)
         {
-            host.SetPaused(true);
+            bool frozen = host.Environment.Frozen;
+            host.Environment.SetFrozen(true); host.SetPaused(false);
             foreach(float depth in new[]{0f,.2f,.85f})
             {
                 var snow=host.Environment.Snow.Capture(); snow.backgroundDepth=snow.maximumDepth*depth;
@@ -206,7 +208,7 @@ namespace LWS.TruckTaxi
                     " screen="+Screen.width+"x"+Screen.height+" GPU="+SystemInfo.graphicsDeviceName+" paused stationary, not driving/human acceptance");
                 File.WriteAllLines(Path.Combine(request.Root,"dual-world-"+request.Mode+".txt"),dualEvidence);
             }
-            host.SetPaused(false);
+            host.Environment.SetFrozen(frozen);
         }
         private IEnumerator DualScreenshot(string name)
         {
