@@ -1,4 +1,4 @@
-# Truck Hockey — 3v3
+# Truck Hockey — larger slippery 3v3
 
 Six saved trucks, three per team, inside Truck Sports. Scene: Assets/TruckHockey/Scenes/TruckHockey.unity. Start from Assets/TruckSports/Scenes/TruckSports.unity for the collection.
 
@@ -15,3 +15,13 @@ Coordinated AI switches challenger/support/defender roles with hysteresis. Recov
 Runtime: HockeyMatch, HockeyTruck, HockeyPuck, HockeyAI, HockeyMenus and HockeyContactFeedback. Saved-scene migration: SportsUpdateAuthoring. Final build: LWS.TruckSports.Editor.SportsBuilder.Build. Authoring defaults also produce the current six-participant implementation.
 
 See ../TruckSports/README.md for full controls/vendor boundaries and ../TruckSports/UPDATE_3V3.md for actual tests, Git delivery and hardware limits.
+
+## Arena / handling update — 2026-10-14
+
+Playable dimensions are 34.8 × 17.4, enlarged 1.45 times in each direction from 24 × 12 while preserving truck/puck sizes. Boards, rounded corners, goal geometry, faceoff/recovery spacing and camera framing are updated. AI support/defense positions scale with the rink; steering compensates lateral drift and uses stopping distance to brake.
+
+Mode-local HockeyTruck tuning: acceleration 18, drive cap 11, reverse cap 6, turn 145 degrees/sec, lateral grip .75, coasting drag .12, brake drag 8, impact safety cap 14. Truck mass 3/restitution .9/friction .01. Higher restitution and lower grip produce strong physical displacement; no supplemental collision impulse is applied. Relative normal closing speed scales feedback, so matching-speed touches do not become large hits. Frozen height/rotation keep trucks upright; the normal physical boards contain them. Accessible crowds remain playable; existing six-participant contact tracking and saturated-query fallback are retained.
+
+SportsPlanarDrive extracts the existing planar control/brake convention for both Hockey and Air Hockey; their tuning and rules remain independent. Saved-scene upgrade: SportsArenaAuthoring.UpgradeHockey. Legacy authoring also applies the current tuning. Air Hockey uses a separate original-size table and half confinement; it does not inherit this ice grip.
+
+Current validation and exact build/Git handoff are in ../TruckAirHockey/VALIDATION.md and the collection checkpoint. Previous UPDATE_3V3 evidence remains historical.
