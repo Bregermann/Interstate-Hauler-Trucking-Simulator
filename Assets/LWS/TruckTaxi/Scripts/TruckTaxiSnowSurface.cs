@@ -21,6 +21,7 @@ namespace LWS.TruckTaxi
         private static Type coverageBaseType;
         private static Type traceGeneratorType;
         private static FieldInfo coverageSingleton;
+        private static FieldInfo depthTargetsField;
         private readonly Dictionary<int, MeshRenderer> wheelTracers = new Dictionary<int, MeshRenderer>();
         private readonly Dictionary<MeshRenderer, MeshRenderer> roadDepthProxies = new Dictionary<MeshRenderer, MeshRenderer>();
         private readonly List<MeshRenderer> roadTargets = new List<MeshRenderer>();
@@ -45,6 +46,7 @@ namespace LWS.TruckTaxi
         private static readonly int EnvironmentTracesId = Shader.PropertyToID("_TaxiSnowTracesReady");
         private readonly Dictionary<Camera, CameraMask> cameraMasks = new Dictionary<Camera, CameraMask>();
         private readonly HashSet<Camera> boundDepthCameras = new HashSet<Camera>();
+        private readonly Dictionary<Camera, RTHandle> ownedDepthTargets = new Dictionary<Camera, RTHandle>();
         private bool targetsCached;
         private LwsWeatheradeAdapter weatherade;
         private Component coverage;
@@ -210,6 +212,7 @@ namespace LWS.TruckTaxi
                 Shader.SetGlobalFloat(EnvironmentTracesId, 0);
                 coverage = null;
                 generator = null;
+                ReleaseDepthTargets();
                 StopAllTraces();
                 RestoreGround();
                 RestoreCameraMasks();
@@ -217,6 +220,7 @@ namespace LWS.TruckTaxi
             }
             if (coverage != current)
             {
+                ReleaseDepthTargets();
                 coverage = current;
                 generator = null;
                 createdGenerator = false;
@@ -291,6 +295,7 @@ namespace LWS.TruckTaxi
 
         private bool BindDepthCameraRenderer(Camera camera)
         {
+            BindDepthTarget(camera);
             if (boundDepthCameras.Contains(camera)) return false;
             Type dataType = ResolveType("UnityEngine.Rendering.Universal.UniversalAdditionalCameraData");
             Component data = dataType == null ? null : camera.GetComponent(dataType);
@@ -299,6 +304,48 @@ namespace LWS.TruckTaxi
             setRenderer.Invoke(data, new object[] { depthRendererIndex });
             boundDepthCameras.Add(camera);
             return true;
+        }
+
+        private static IDictionary<Camera, RTHandle> DepthTargets()
+        {
+            depthTargetsField ??= ResolveType("SRS_RenderDepthWithReplacement")?.GetField("rtHandles", BindingFlags.Static | BindingFlags.Public);
+            return depthTargetsField?.GetValue(null) as IDictionary<Camera, RTHandle>;
+        }
+
+        private void BindDepthTarget(Camera camera)
+        {
+            RenderTexture texture = camera.targetTexture;
+            var targets = DepthTargets();
+            if (texture == null || targets == null) return;
+            if (targets.TryGetValue(camera, out RTHandle registered) && registered != null && registered.rt == texture) return;
+            // Weatherade reuses named cameras, but AddCameraRTHandlePair cannot replace their old textures.
+            // Repair the public renderer input, not the vendor's private registration lists or trace pixels.
+            if (ownedDepthTargets.TryGetValue(camera, out RTHandle handle) && handle.rt != texture)
+            {
+                ReleaseDepthTarget(camera);
+                handle = null;
+            }
+            if (handle == null)
+            {
+                handle = RTHandles.Alloc(texture, transferOwnership: false);
+                ownedDepthTargets[camera] = handle;
+            }
+            targets[camera] = handle;
+        }
+
+        private void ReleaseDepthTarget(Camera camera)
+        {
+            RTHandle handle = ownedDepthTargets[camera];
+            var targets = DepthTargets();
+            if (targets != null && targets.TryGetValue(camera, out RTHandle registered) && ReferenceEquals(registered, handle))
+                targets.Remove(camera);
+            handle.Release(); // Non-owning wrapper: the vendor still owns the RenderTexture.
+            ownedDepthTargets.Remove(camera);
+        }
+
+        private void ReleaseDepthTargets()
+        {
+            foreach (Camera camera in new List<Camera>(ownedDepthTargets.Keys)) ReleaseDepthTarget(camera);
         }
 
         public void RequestTracePixelDiagnostic()
@@ -892,6 +939,9 @@ namespace LWS.TruckTaxi
             }
             updatedSnowMaterials.IntersectWith(liveMaterials);
             warnedIncompatibleRoads.IntersectWith(liveRoadIds);
+            foreach (Camera camera in new List<Camera>(ownedDepthTargets.Keys))
+                if (HasDepartedScene(camera, scene)) ReleaseDepthTarget(camera);
+            boundDepthCameras.RemoveWhere(camera => HasDepartedScene(camera, scene));
             MarkDirty();
         }
 
@@ -933,6 +983,7 @@ namespace LWS.TruckTaxi
             Shader.SetGlobalFloat(EnvironmentCoverageId, 0);
             Shader.SetGlobalFloat(EnvironmentTracesId, 0);
             StopAllTraces(); RestoreGround(); RestoreCameraMasks();
+            ReleaseDepthTargets();
             weatherade?.SetExternalCoverageControl(false);
         }
         private void OnDestroy()
@@ -940,6 +991,7 @@ namespace LWS.TruckTaxi
             weatherade?.SetExternalCoverageControl(false);
             RestoreGround();
             RestoreCameraMasks();
+            ReleaseDepthTargets();
             if (createdGenerator && generator != null) Destroy(generator);
             if (traceMaterial != null) DestroyOwned(traceMaterial);
         }

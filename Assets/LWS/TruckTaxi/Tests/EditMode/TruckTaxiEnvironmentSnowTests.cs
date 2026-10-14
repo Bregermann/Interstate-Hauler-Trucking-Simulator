@@ -306,6 +306,97 @@ namespace LWS.TruckTaxi.Tests
         }
 
         [Test]
+        public void ReusedDepthCameraTargetsAreReboundEvenWhenItsRendererWasAlreadyBound()
+        {
+            System.Type feature = VendorType("SRS_RenderDepthWithReplacement");
+            FieldInfo field = feature.GetField("rtHandles", BindingFlags.Static | BindingFlags.Public);
+            object previous = field.GetValue(null);
+            var targets = (System.Collections.IDictionary)System.Activator.CreateInstance(field.FieldType);
+            field.SetValue(null, targets);
+            var cameraObject = new GameObject("SRS_TraceObjsCam", typeof(Camera));
+            cameraObject.transform.SetParent(root.transform);
+            Camera camera = cameraObject.GetComponent<Camera>();
+            camera.enabled = false;
+            var stale = new RenderTexture(16, 16, 16, RenderTextureFormat.Depth);
+            var current = new RenderTexture(16, 16, 16, RenderTextureFormat.Depth);
+            var replacement = new RenderTexture(16, 16, 16, RenderTextureFormat.Depth);
+            owned.Add(stale); owned.Add(current); owned.Add(replacement);
+            object staleHandle = AllocateDepthHandle(stale);
+            targets[camera] = staleHandle;
+            camera.targetTexture = current;
+            Field<HashSet<Camera>>("boundDepthCameras").Add(camera);
+            MethodInfo bind = typeof(TruckTaxiSnowSurface).GetMethod("BindDepthCameraRenderer", BindingFlags.Instance | BindingFlags.NonPublic);
+            try
+            {
+                bind.Invoke(surface, new object[] { camera });
+                object repaired = targets[camera];
+                Assert.AreNotSame(staleHandle, repaired);
+                Assert.AreSame(current, HandleTexture(repaired));
+                Assert.AreSame(stale, HandleTexture(staleHandle), "Do not release vendor-owned handles.");
+                bind.Invoke(surface, new object[] { camera });
+                Assert.AreSame(repaired, targets[camera]);
+
+                // Vendor UpdateCameraRTHandlePairs can republish its old camera-keyed registration.
+                targets[camera] = staleHandle;
+                bind.Invoke(surface, new object[] { camera });
+                Assert.AreSame(repaired, targets[camera]);
+                Assert.AreEqual(1, Field<System.Collections.IDictionary>("ownedDepthTargets").Count);
+
+                camera.targetTexture = replacement;
+                bind.Invoke(surface, new object[] { camera });
+                Assert.AreSame(replacement, HandleTexture(targets[camera]));
+                Assert.IsNull(HandleTexture(repaired));
+                Assert.AreEqual(1, Field<System.Collections.IDictionary>("ownedDepthTargets").Count);
+                typeof(TruckTaxiSnowSurface).GetMethod("OnDisable", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(surface, null);
+                Assert.IsFalse(targets.Contains(camera));
+                Assert.Zero(Field<System.Collections.IDictionary>("ownedDepthTargets").Count);
+                Assert.IsTrue(current != null && replacement != null, "Handle cleanup must not destroy vendor RTs.");
+            }
+            finally
+            {
+                typeof(TruckTaxiSnowSurface).GetMethod("ReleaseDepthTargets", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(surface, null);
+                staleHandle.GetType().GetMethod("Release").Invoke(staleHandle, null);
+                field.SetValue(null, previous);
+            }
+        }
+
+        [Test]
+        public void DepthTargetCleanupLeavesAReplacementVendorBindingUntouched()
+        {
+            System.Type feature = VendorType("SRS_RenderDepthWithReplacement");
+            FieldInfo field = feature.GetField("rtHandles", BindingFlags.Static | BindingFlags.Public);
+            object previous = field.GetValue(null);
+            var targets = (System.Collections.IDictionary)System.Activator.CreateInstance(field.FieldType);
+            field.SetValue(null, targets);
+            var cameraObject = new GameObject("SRS_TraceSurfCam", typeof(Camera));
+            cameraObject.transform.SetParent(root.transform);
+            Camera camera = cameraObject.GetComponent<Camera>();
+            camera.enabled = false;
+            var texture = new RenderTexture(16, 16, 16, RenderTextureFormat.Depth);
+            owned.Add(texture);
+            camera.targetTexture = texture;
+            object vendorHandle = AllocateDepthHandle(texture);
+            try
+            {
+                typeof(TruckTaxiSnowSurface).GetMethod("BindDepthTarget", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(surface, new object[] { camera });
+                object repaired = targets[camera];
+                targets[camera] = vendorHandle;
+                typeof(TruckTaxiSnowSurface).GetMethod("ReleaseDepthTargets", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(surface, null);
+                Assert.AreSame(vendorHandle, targets[camera]);
+                Assert.AreSame(texture, HandleTexture(vendorHandle));
+                Assert.IsNull(HandleTexture(repaired));
+                Assert.Zero(Field<System.Collections.IDictionary>("ownedDepthTargets").Count);
+            }
+            finally
+            {
+                typeof(TruckTaxiSnowSurface).GetMethod("ReleaseDepthTargets", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(surface, null);
+                vendorHandle.GetType().GetMethod("Release").Invoke(vendorHandle, null);
+                field.SetValue(null, previous);
+            }
+        }
+
+        [Test]
         public void ContactVolumeFollowsSlopeRatherThanFlatteningWheelSegment()
         {
             MeshRenderer tracer = Renderer("Contact", Material("Universal Render Pipeline/Lit", "Trace"));
@@ -336,6 +427,14 @@ namespace LWS.TruckTaxi.Tests
 
         private void Bind() => typeof(TruckTaxiSnowSurface).GetMethod("BindGround",
             BindingFlags.Instance | BindingFlags.NonPublic).Invoke(surface, null);
+
+        private static System.Type VendorType(string name) => (System.Type)typeof(TruckTaxiSnowSurface)
+            .GetMethod("ResolveType", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { name });
+
+        private static object AllocateDepthHandle(RenderTexture texture) => VendorType("UnityEngine.Rendering.RTHandles")
+            .GetMethod("Alloc", new[] { typeof(RenderTexture), typeof(bool) }).Invoke(null, new object[] { texture, false });
+
+        private static RenderTexture HandleTexture(object handle) => (RenderTexture)handle.GetType().GetProperty("rt").GetValue(handle);
 
         private void NotifySceneUnloaded(Scene unloaded) => typeof(TruckTaxiSnowSurface).GetMethod("OnSceneUnloaded",
             BindingFlags.Instance | BindingFlags.NonPublic).Invoke(surface, new object[] { unloaded });
