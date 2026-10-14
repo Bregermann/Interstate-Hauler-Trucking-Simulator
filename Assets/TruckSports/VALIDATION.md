@@ -1,3 +1,66 @@
+# Focused polish validation — 2026-10-14
+
+This section is the current evidence for attachment a0079752-f75d-4987-85ef-10c63af421fc. Reports below it describe earlier updates. All native evidence and before/after PNGs are local under `Logs/TruckSports/Polish`; generated builds/logs are excluded from Git.
+
+## Build and preservation
+
+Final `final-build-14`: native Windows exit 0, BuildReport Succeeded, 0 errors, 4 nonfatal build warnings, 306,422,013 bytes, 33.75 seconds. Unity 6000.4.10f1, Mono, Windows x64 Development, PE machine 0x8664. Builder: `LWS.TruckSports.Editor.SportsBuilder.Build`, with no validation company/output overrides. Saved startup TruckSports, then Billiards, Hockey, Bowling, Air Hockey and Wallball. `CreateValidateBuild` was not used. Creation/legacy upgrade hooks retain the new presentation.
+
+Exact host settings restoration passed both successful build and deliberate failure. All 1,536 baseline ProjectSettings/Packages file hashes and 20 protected gameplay-source hashes match. Native before/after audits show identical collider and Rigidbody facts in all five sports (including physical sizes, poses, masses, drag, constraints, CCD, material friction/restitution). Bowling changes delivery policy/NWH tuning, not geometry or score authority. Wallball rules, match, truck/jump, AI, ball and flight sources are unchanged. Unrelated Git status matches the initial baseline.
+
+All 176 managed DLLs and level0–level5 in the final build match validation build 13 byte-for-byte. Only the validation build's company/preference metadata is scoped to `LWS Truck Sports Validation`; final retains the normal namespace. Automated probes mute native input and inject devices only within their own process. The user's copied testing executable was left running and untouched. The actual final executable was also launched without test flags, with a live window titled `Truck Sports`; automated gameplay evidence comes from the matching isolated-preference player, not a claim of human playtesting in that normal window.
+
+Native saved-scene/reference validation passes. Pure logic checks: Hockey rules 20 and ownership 16; Billiards rules 50 and feature/series 72; Bowling scoring/rack/tenth-frame 32; Air rules 26; Wallball rules 30. These fixtures are distinct from physical full-game evidence.
+
+## Bowling root cause and physical validation
+
+Old EndDelivery called Clear on gutter, overturn, retreat and short timers: linear/angular velocities became zero, the body kinematic, and contacts disabled. Sideways tire scrub and opposite-throttle braking compounded the stop. No orientation-relative velocity clamp was present. Settling time was counted in both FixedUpdate and Update, effectively shortening its cap.
+
+Baseline seeded physical poses at z=22 and +Z velocity 10, with software W held: normal reached z49.23 after three seconds; sideways scrubbed to z26.40 and -0.14 down-lane speed; backward froze kinematic at z38.67; gutter immediately froze at z22. Final motion-10 keeps all four dynamic through ordinary sliding and reaches the end pit: normal maxZ68.23, sideways68.23, backward68.48, gutter68.27. Maximum shared carry acceleration 0.55. Normal scored four physically contacted pins; the committed gutter scored zero and never returned to the lane. A late gutter after a genuine hit retains the existing legitimate pin-credit rule. Result locks occur once after pit/recovery and pin quiet checks; no arbitrary overturn/retreat stop remains.
+
+Bowling-13-720 passes 80 retained physical/software-input/lifecycle assertions, native exit 0: actual NWH approach and physical pin contact, progressive oil, sticky gutter, genuine stopped recovery, survivor seating/sweep/result once, pause/disconnect/reconnect ownership and fresh confirmation, shared-source handoff/hot-seat frame progression, ties/rematch/scorecard and scene returns. The stopped fixture now synchronizes both poses and zeros wheel spin as well as chassis motion; residual spinning tires previously made its claimed 'stopped' body legitimately start rolling again. Pinsetter/score implementation was preserved.
+
+## Matched full AI games
+
+Baseline and final ai-13 use seeds900–902, four simultaneous lanes, Easy/Normal/Hard/Hard, all ordinary controls and pin physics. Every positive delivery is checked for chassis/tire contact provenance. No injected pinfall/scores or live-delivery teleports. These run at timeScale 3 for scoring/progression, not a performance benchmark. Profiles overlap and this is a small sample, not a guarantee of difficulty ordering or universal balance.
+
+| Difficulty | Before scores | Final scores | Before mean | Final mean | Before / final spare conversion | Before / final gutters |
+|---|---|---|---:|---:|---|---:|
+| Easy | 83,69,80 | 77,86,68 | 77.3 | 77.0 | 2/30 → 3/30 | 2 → 6 |
+| Normal | 71,64,71 | 83,91,77 | 68.7 | 83.7 | 0/30 → 3/30 | 4 → 0 |
+| Hard | 77,80,77,80,78,78 | 73,89,88,87,83,100 | 78.3 | 86.7 | 0/60 → 8/60 | 0 → 0 |
+
+Overall: 14 final spares versus2; six gutter-flagged deliveries in both samples; no strikes in either. Easy's six final gutter flags include five deliveries with earlier legitimate contact; only one is a no-contact gutter, compared with two before. Its target/reaction errors remain deliberately larger. Normal initially had overly wide spare approaches; the final reachable clamp, lower heading noise and 0.09s reaction removed that regression. Hard gains about10.6% in mean score; Normal gains about21.8%, with mistakes and widely imperfect games retained.
+
+The separate timeScale 1 four-lane full match `bowling-four-ai-13` completes in 287.6s, scores 88/83/98/76, 80 deliveries/sweeps, 779 chassis/tire contact observations and319 actual pinfall. Lanes progress independently and finished lanes do not stop others. Final standings/full scorecard/rematch reset with all four identities pass. All positive deliveries retain physical provenance.
+
+## Billiards and camera/UI
+
+Visual-10 at1080p passes 53 checks, exit 0: straight roll angle follows distance/radius, stopped rotation stops, real cushion reversal, no physical angular double rotation, all 16 rack visuals reset, actual injected mouse maps/confirms cue placement, cue teleport does not roll across the table, real pocket crossing awards once and disables contact before the visible downward drop, drop/reset cleanup, group choice and pause.
+
+The authoritative oracle loads a fresh local physics scene for each shot and invokes the existing ball/match FixedUpdate with .02s physics. Three reference shots are repeated with presentation disabled, then enabled: all nine runs match positions to four decimals, pocket flags, settle-step counts, turns and notices. Reusing a physics world/contact cache and Update-timed full-rack breaks was not a repeatable oracle; those early differing captures are retained, not presented as changed gameplay. The original physical methods/settings and AI sources remain unchanged.
+
+Retained standalone suites also pass: Billiards54 (actual opening bumper contact, scratch/near-rail AI strikes, retained-turn contact and held driving through ordinary changes); Hockey118 (six slots, ownership/reconnect, physical goals/recovery/restart); Arena77 (Ice/Air, truck-as-mallet, rounded corners and modal/lifecycle cases); Wallball70 (actual serve/wall rebound, jump/volley, ghost/eligibility contacts, pause/reconnect and five-sport returns). Group-10-1080 adds seven actual mouse/software-controller group-choice checks. Each native exit 0, no captured managed errors/exceptions.
+
+Final layout-13 passes471 assertions over all four affected sports at1280×720,1920×1080,1600×1000,1280×960 and2560×1080: full arena volumes, HUD plate bounds, untruncated long names/state, pause captures and clean menu returns. All 20 arena images and representative modals/high-ball poses were visually inspected. Ice/Air brief notices sit above the score, clear of board-adjacent puck paths. Wallball's preserved camera angle fits the complete legal height/depth envelope; its high-flight position fixture is explicitly injected, not autonomous-flight evidence. Colored HUD names replace labels over its truck roofs. No physical stretching, boundary cropping or Wallball handling/rule redesign. Bowling cab/split cameras are unchanged.
+
+## Sustained performance and manual boundaries
+
+GTX 1660 Ti, Direct3D11,1920×1080, vSync1. Rendering fixture:30s with sphere/shadow rendering off:4800 frames, mean6.25ms,p95 6.29,p99 6.33,GC0=0;30s visible:4797 frames,mean6.25,p95 6.29,p99 6.32,GC0=1. Off removes new rendering only; it is not an old-flat-label build benchmark. The equal observed means are refresh-limited and do not prove zero GPU cost.
+
+Four-lane real-time match:45,879 sampled frames,mean 6.27 ms,p95 6.28,p99 6.31,worst81.29,managed delta3,678,208 bytes,one Gen0 collection. No owned Editor/build job overlapped this sustained run. Concurrent user applications/testing builds were left alone; this is observed development-player performance, not an isolated hardware benchmark.
+
+Manual checks remaining: subjective slide/AI balance, real keyboard rollover, physical controllers/shared sticks/reconnect, vibration/audio, and human Wallball play. No human playtest or real-controller validation is claimed. Performance on other GPUs/displays remains unmeasured. Early failed fixtures/UI layouts/scoring experiments were fixed and retained in ignored evidence; final listed suites pass.
+
+VENDOR ASSETS AUDITED: NWH WheelController/VehiclePhysics APIs and audio, GR3D, Heat/uGUI/TMP, DOTween, existing Sports cameras/input, installed Cinemachine GroupComposer.
+VENDOR ASSETS USED: NWH tire/suspension/torque/grip and truck audio, GR3D geometry, Heat/TMP menus/font atlas, Unity smooth sphere/URP Lit, DOTween visual drop and retained pinsetter.
+RELEVANT ASSETS NOT USED: Cinemachine tracked-group framing is unnecessary for the existing fixed arena-envelope camera authority; road VehicleController/UTS/world/weather/online systems do not supply these offline semantics. No billiard-specific installed ball artwork was found.
+CUSTOM SYSTEMS CREATED: collider-free ball presentation/UV authoring, arena-edge UI docking, focused motion/AI/render/viewport probes; existing LWS bowling delivery/AI and camera adapters extended.
+VENDOR SOURCE MODIFIED: NO by this update; unrelated existing vendor work preserved.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO new vendor subsystem; NWH remains the tire/suspension authority and existing camera/UI adapters remain the presentation authority.
+
+---
+
 # Five-sport Wallball validation — 2026-10-14
 
 Current saved-scene build 07 and final physical/software-input probes passed. See ../TruckWallball/VALIDATION.md for native exits, 720p/1080p checks, complete autonomous match, preservation hashes, performance under concurrent desktop load and manual hardware/handling limits. All four older sport folders and host settings are preserved. The prior reports below are historical.

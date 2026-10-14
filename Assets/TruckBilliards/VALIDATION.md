@@ -1,3 +1,13 @@
+# Current sphere / camera presentation validation — 2026-10-14
+
+Focused polish is complete. See ../TruckSports/VALIDATION.md for full current evidence under Logs/TruckSports/Polish. Existing rules/shot power/AI/input and every saved body/collider fact are unchanged. Separate collider-free smooth spheres/curved UV numbers/stripes, gloss/contact shadows, actual displacement/radius roll and immediate noncolliding pocket drops are validated.
+
+Visual-10 at1080p passes 53 checks: straight roll rate, stop, cushion reversal/no double physical rotation, rack/cue reset, actual software mouse mapping/confirmation, exactly-once pocket/noncollision/downward drop and group/pause. Three shot fixtures repeat in fresh local physics scenes with presentation off, repeat off, then on: all nine positions to four decimals, pocket flags, settle steps, turns and notices agree. Old reused-world/Update-timed break captures were not a deterministic oracle.
+
+Billiards54 physical/input regressions pass at720p: actual human-input bumper contact/opening power, scratch and near-rail AI execution, retained turn and held driving. Seven owning/wrong-controller/actual mouse group-choice checks also pass at1080p. The final 471-check four-sport/five-aspect matrix includes the entire table/pockets, untruncated long names/groups/progress, readable pause and clean returns. Final combined build 14 and isolated13 match all 176 managed DLLs and six levels. No captured managed errors; real controllers/rollover/rumble/audio and subjective visual/handling evaluation remain manual.
+
+The earlier Billiards report below is historical.
+
 > Historical standalone validation. The current combined Truck Sports build, repaired defects, actual process exits and manual limitations are recorded in ../TruckSports/VALIDATION.md.
 
 # Truck Billiards validation — series / difficulty / Practice / feedback

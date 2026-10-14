@@ -1,3 +1,11 @@
+# Billiards presentation completed — 2026-10-14
+
+Saved balls have collider-free smooth UV-numbered/striped rolling spheres and soft contact shadows. Displacement/radius drives visual rotation only; existing frozen physical rotation/planar constraints/collider sizes/materials/rules/power/AI are preserved. Pocket scoring retires physical contact immediately, with a.38s downward visual drop and no extra turn delay. Rack/cue placement kills stale drops and avoids teleport rotation jumps.
+
+Full safe-fit table and compact rail HUD retain names/colors, groups/remaining balls, turn/armed/power and rack/series progress. Existing placement/group/pause/reconnect gates are preserved; ordinary held movement continues.53 visual/physical/mouse/oracle checks,54 physical input/AI/held-turn regressions,7 group ownership/mouse checks and five-aspect layouts pass. Fresh local-physics A/B produces identical authoritative outcomes across nine trials; do not use contact-cache reuse as a deterministic oracle. See TruckSports/VALIDATION.md/CHECKPOINT.md for final build 14 and pushed codex/truck-sports-polish feature d637e67042a2acdf74d9b3c62c981f4369237ae7. Human hardware/rumble/audio checks remain. Preserve this physical model in later visual work.
+
+Earlier Billiards checkpoints below are historical.
+
 > Superseded by the 2026-10-12 saved 3v3 collection update. See ../TruckSports/UPDATE_3V3.md and ../TruckSports/VALIDATION.md for current tests, build and Git delivery; the historical checkpoint below is not the current handoff.
 
 # Truck Billiards checkpoint — 2026-10-12

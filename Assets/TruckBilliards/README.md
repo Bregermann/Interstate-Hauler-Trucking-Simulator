@@ -77,6 +77,14 @@ Your group must be clear at shot start to win with the 8. Early/illegal 8 or 8 p
 No called pocket, rail-after-contact or tournament legal-break rule.
 One capped forward bumper strike per shot; genuine contact and separation are required. Ball-settled checks use a sustained below-threshold period.
 
+## Ball and arena presentation — 2026-10-14
+
+Smooth spherical meshes now carry curved UV number/stripe textures made from the existing TMP glyph atlas. URP Lit highlights and soft contact shadows distinguish solids, stripes, cue and 8. `BilliardsBallPresentation` rotates only its collider-free sphere by displacement/radius, changes axis smoothly on cushions, stops with the ball and skips reset/placement teleport jumps. The authoritative body keeps its existing planar constraints and frozen angular motion; no second physical spin is applied.
+
+Pocket awards and collision retirement remain immediate and exactly once. A 0.38-second DOTween visual drop goes below the felt, then hides the sphere; it neither delays settling/turns nor collides with live balls. Reset/placement restores visuals and kills stale drops. Ball physics, shot power, rules, AI accuracy and ordinary held-drive transitions are unchanged.
+
+The full table and six pockets fit the aspect ratio. Compact rail panels retain names/colors, groups/remaining balls, turn, power/armed state, rack/series progress and brief messages. Full controls remain in pause/help. Five aspect layouts, pointer mapping, group/placement modals, rolling/rebounds/drop and deterministic presentation-off/on shot comparisons are documented in TruckSports/VALIDATION.md.
+
 ## Architecture and tuning
 BilliardsRules remains the single scoring authority. BilliardsMatch owns the registry, settling and physical outcomes.
 BilliardsSession owns player slots, identity, control source, menu/pause/handoff state and rematch setup. Slot groups derive from the rules.
