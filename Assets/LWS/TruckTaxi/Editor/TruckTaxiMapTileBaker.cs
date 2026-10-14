@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -113,6 +114,48 @@ namespace LWS.TruckTaxi.Editor
             return catalog;
         }
 
+        public static void BakeConnectionSupplement(Scene scene, Bounds bounds)
+        {
+            string folder = "Assets/LWS/TruckTaxi/WorldConnections/MapTiles";
+            Directory.CreateDirectory(folder); AssetDatabase.Refresh();
+            var host = scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<TruckTaxiBootstrap>(true)).Single();
+            var catalog = host.mapTiles ?? AssetDatabase.LoadAssetAtPath<TruckTaxiMapTileCatalog>(CatalogPath);
+            if (catalog == null) throw new InvalidOperationException("Existing regional map atlas is missing.");
+            Scene extra = default; bool opened = false;
+            if (scene.name == TruckTaxiWorldCatalog.Demo)
+            {
+                string path = TruckTaxiRegionalAuthoring.Root + "/Scenes/Taxi_Highway.unity";
+                extra = SceneManager.GetSceneByPath(path); opened = !extra.IsValid() || !extra.isLoaded;
+                if (opened) extra = EditorSceneManager.OpenScene(path, OpenSceneMode.Additive);
+            }
+            Scene previous = SceneManager.GetActiveScene();
+            Scene preview = EditorSceneManager.NewPreviewScene();
+            try
+            {
+                foreach (Scene source in extra.IsValid() ? new[] { scene, extra } : new[] { scene })
+                    foreach (var renderer in source.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<MeshRenderer>()))
+                    {
+                        var filter = renderer.GetComponent<MeshFilter>();
+                        if (!renderer.enabled || filter == null || filter.sharedMesh == null || !renderer.bounds.Intersects(bounds) ||
+                            renderer.GetComponentInParent<Rigidbody>() != null || renderer.GetComponentInParent<Animator>() != null) continue;
+                        var copy = new GameObject(renderer.name, typeof(MeshFilter), typeof(MeshRenderer));
+                        SceneManager.MoveGameObjectToScene(copy, preview);
+                        copy.transform.SetPositionAndRotation(renderer.transform.position, renderer.transform.rotation); copy.transform.localScale = renderer.transform.lossyScale;
+                        copy.GetComponent<MeshFilter>().sharedMesh = filter.sharedMesh; copy.GetComponent<MeshRenderer>().sharedMaterials = renderer.sharedMaterials;
+                    }
+                string id = scene.name + "_WorldConnection";
+                if (!TryBake(preview, id, out var tile, folder, bounds, 1024)) throw new InvalidOperationException("Connection map bake has no geometry.");
+                var tiles = new List<TruckTaxiMapTileCatalog.Tile>(catalog.tiles); tiles.RemoveAll(t => t.sceneName == id); tiles.Add(tile);
+                catalog.tiles = tiles.ToArray(); EditorUtility.SetDirty(catalog); AssetDatabase.SaveAssets();
+            }
+            finally
+            {
+                EditorSceneManager.ClosePreviewScene(preview);
+                if (opened) EditorSceneManager.CloseScene(extra, true);
+                if (previous.IsValid() && previous.isLoaded) SceneManager.SetActiveScene(previous);
+            }
+        }
+
         private static bool TryBake(Scene scene,string sceneName,out TruckTaxiMapTileCatalog.Tile tile,
             string outputFolder = Folder, Bounds? authoredBounds = null, int resolution = Resolution)
         {
@@ -122,8 +165,9 @@ namespace LWS.TruckTaxi.Editor
             foreach(var root in scene.GetRootGameObjects())
                 foreach(var renderer in root.GetComponentsInChildren<MeshRenderer>(true))
                 {
-                    if(!renderer.enabled || !renderer.gameObject.activeInHierarchy ||
-                       renderer.GetComponent<MeshFilter>()?.sharedMesh==null ||
+                    var sourceMesh = renderer.GetComponent<MeshFilter>();
+                    if(!renderer.enabled || !renderer.gameObject.activeInHierarchy || sourceMesh == null ||
+                       sourceMesh.sharedMesh==null ||
                        renderer.GetComponentInParent<Rigidbody>()!=null ||
                        renderer.GetComponentInParent<Animator>()!=null) continue;
                     if (authoredBounds.HasValue && !authoredBounds.Value.Intersects(renderer.bounds)) continue;

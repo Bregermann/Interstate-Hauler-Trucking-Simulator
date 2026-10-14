@@ -5803,6 +5803,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2115350693}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &202743111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 202743112}
+  - component: {fileID: 202743114}
+  - component: {fileID: 202743113}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &202743112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202743111}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1382.6178, y: 0.165, z: -208.1327}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &202743113
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202743111}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &202743114
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 202743111}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &204752907
 GameObject:
   m_ObjectHideFlags: 0
@@ -7205,6 +7295,96 @@ MonoBehaviour:
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
   sleepCostPerHourCents: 0
+--- !u!1 &335914736
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 335914737}
+  - component: {fileID: 335914739}
+  - component: {fileID: 335914738}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &335914737
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335914736}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9347217, z: -0, w: 0.35538056}
+  m_LocalPosition: {x: 1319.1284, y: 0.165, z: -106.51943}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &335914738
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335914736}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &335914739
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 335914736}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &336015486
 GameObject:
   m_ObjectHideFlags: 0
@@ -7372,6 +7552,96 @@ MonoBehaviour:
   verticalTolerance: 3
   assistanceBaseCostCents: 5000
   sleepCostPerHourCents: 0
+--- !u!1 &338374632
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 338374633}
+  - component: {fileID: 338374635}
+  - component: {fileID: 338374634}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &338374633
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338374632}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1355.8021, y: 0.165, z: -158.97055}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &338374634
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338374632}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &338374635
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338374632}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &339037333
 GameObject:
   m_ObjectHideFlags: 0
@@ -10498,6 +10768,96 @@ MonoBehaviour:
   obstacleMask:
     serializedVersion: 2
     m_Bits: 0
+--- !u!1 &402663960
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 402663961}
+  - component: {fileID: 402663963}
+  - component: {fileID: 402663962}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &402663961
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402663960}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.8816746, z: -0, w: 0.47185796}
+  m_LocalPosition: {x: 1215.809, y: 0.165, z: -10.539304}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &402663962
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402663960}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &402663963
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 402663960}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &403655945
 GameObject:
   m_ObjectHideFlags: 0
@@ -10585,6 +10945,96 @@ MonoBehaviour:
   arrivalDialogue: 
   completionDialogue: 
   chaosReward: 0
+--- !u!1 &408999313
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 408999314}
+  - component: {fileID: 408999316}
+  - component: {fileID: 408999315}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &408999314
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408999313}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.8816746, z: -0, w: 0.47185796}
+  m_LocalPosition: {x: 1227.4576, y: 0.165, z: -18.305107}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &408999315
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408999313}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &408999316
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408999313}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &412777651
 GameObject:
   m_ObjectHideFlags: 0
@@ -12623,6 +13073,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2115350693}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &583287945
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 583287946}
+  - component: {fileID: 583287948}
+  - component: {fileID: 583287947}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &583287946
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583287945}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9347217, z: -0, w: 0.35538056}
+  m_LocalPosition: {x: 1263.3218, y: 0.165, z: -43.737045}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &583287947
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583287945}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &583287948
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583287945}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &590795207
 GameObject:
   m_ObjectHideFlags: 0
@@ -13798,6 +14338,10 @@ MonoBehaviour:
       position: {x: 2800, y: -6, z: -725}
       regionId: taxi.speedway
       sceneChunkId: Taxi_ThunderBowlSpeedway
+    - nodeId: taxi.world-exit.edenborough
+      position: {x: 1400, y: 0.14, z: -240}
+      regionId: taxi.region.highway
+      sceneChunkId: Taxi_Highway
     edges:
     - roadId: taxi.0.0-1.0.road
       segmentId: taxi.0.0-1.0.segment
@@ -123567,6 +124111,1524 @@ MonoBehaviour:
         laneWidthMeters: 5.5
         laneCount: 2
         speedLimitMph: 20
+    - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+      segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+      edgeId: taxi.regional.1200-taxi.world-exit.edenborough
+      fromNodeId: taxi.regional.1200
+      toNodeId: taxi.world-exit.edenborough
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 317.82663
+      travelCost: 317.82663
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.region.highway
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 0
+        position: {x: 1200, y: 0.14, z: 0}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 4.8074017
+        position: {x: 1204, y: 0.14, z: -2.6666667}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 9.614803
+        position: {x: 1208, y: 0.14, z: -5.3333335}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 14.422205
+        position: {x: 1212, y: 0.14, z: -8}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 19.229607
+        position: {x: 1216, y: 0.14, z: -10.666667}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 24.037008
+        position: {x: 1220, y: 0.14, z: -13.333334}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 28.84441
+        position: {x: 1224, y: 0.14, z: -16}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 33.65181
+        position: {x: 1228, y: 0.14, z: -18.666666}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 38.459213
+        position: {x: 1232, y: 0.14, z: -21.333334}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 43.266613
+        position: {x: 1236, y: 0.14, z: -24}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 48.074017
+        position: {x: 1240, y: 0.14, z: -26.666668}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 52.881416
+        position: {x: 1244, y: 0.14, z: -29.333334}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 57.68882
+        position: {x: 1248, y: 0.14, z: -32}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 62.49622
+        position: {x: 1252, y: 0.14, z: -34.666668}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 67.30362
+        position: {x: 1256, y: 0.14, z: -37.333332}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 72.11102
+        position: {x: 1260, y: 0.14, z: -40}
+        forward: {x: 0.8320503, y: 0, z: -0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 76.92766
+        position: {x: 1263.2, y: 0.14, z: -43.6}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 81.7443
+        position: {x: 1266.4, y: 0.14, z: -47.2}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 86.560936
+        position: {x: 1269.6, y: 0.14, z: -50.8}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 91.37757
+        position: {x: 1272.8, y: 0.14, z: -54.4}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 96.194214
+        position: {x: 1276, y: 0.14, z: -58}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 101.01085
+        position: {x: 1279.2, y: 0.14, z: -61.6}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 105.82749
+        position: {x: 1282.4, y: 0.14, z: -65.2}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 110.64413
+        position: {x: 1285.6, y: 0.14, z: -68.8}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 115.46076
+        position: {x: 1288.8, y: 0.14, z: -72.4}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 120.277405
+        position: {x: 1292, y: 0.14, z: -76}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 125.09404
+        position: {x: 1295.2, y: 0.14, z: -79.6}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 129.91068
+        position: {x: 1298.4, y: 0.14, z: -83.2}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 134.72731
+        position: {x: 1301.6, y: 0.14, z: -86.799995}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 139.54396
+        position: {x: 1304.8, y: 0.14, z: -90.4}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 144.3606
+        position: {x: 1308, y: 0.14, z: -94}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 149.17723
+        position: {x: 1311.2, y: 0.14, z: -97.6}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 153.99387
+        position: {x: 1314.4, y: 0.14, z: -101.2}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 158.8105
+        position: {x: 1317.6, y: 0.14, z: -104.8}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 163.62714
+        position: {x: 1320.8, y: 0.14, z: -108.4}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 168.44379
+        position: {x: 1324, y: 0.14, z: -112}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 173.26042
+        position: {x: 1327.2, y: 0.14, z: -115.6}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 178.07706
+        position: {x: 1330.4, y: 0.14, z: -119.2}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 182.89369
+        position: {x: 1333.6, y: 0.14, z: -122.8}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 187.71033
+        position: {x: 1336.8, y: 0.14, z: -126.4}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 192.52698
+        position: {x: 1340, y: 0.14, z: -130}
+        forward: {x: 0.66436386, y: 0, z: -0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 197.34619
+        position: {x: 1342.3077, y: 0.14, z: -134.23077}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 202.1654
+        position: {x: 1344.6154, y: 0.14, z: -138.46153}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 206.98463
+        position: {x: 1346.9231, y: 0.14, z: -142.6923}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 211.80385
+        position: {x: 1349.2307, y: 0.14, z: -146.92308}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 216.62306
+        position: {x: 1351.5385, y: 0.14, z: -151.15384}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 221.44228
+        position: {x: 1353.8462, y: 0.14, z: -155.38461}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 226.26149
+        position: {x: 1356.1538, y: 0.14, z: -159.61539}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 231.08072
+        position: {x: 1358.4615, y: 0.14, z: -163.84616}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 235.89993
+        position: {x: 1360.7693, y: 0.14, z: -168.07692}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 240.71915
+        position: {x: 1363.0769, y: 0.14, z: -172.3077}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 245.53836
+        position: {x: 1365.3846, y: 0.14, z: -176.53847}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 250.35759
+        position: {x: 1367.6923, y: 0.14, z: -180.76923}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 255.1768
+        position: {x: 1370, y: 0.14, z: -185}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 259.996
+        position: {x: 1372.3077, y: 0.14, z: -189.23077}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 264.81525
+        position: {x: 1374.6154, y: 0.14, z: -193.46153}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 269.63446
+        position: {x: 1376.9231, y: 0.14, z: -197.6923}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 274.45367
+        position: {x: 1379.2307, y: 0.14, z: -201.92308}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 279.2729
+        position: {x: 1381.5385, y: 0.14, z: -206.15385}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 284.0921
+        position: {x: 1383.8462, y: 0.14, z: -210.38461}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 288.91132
+        position: {x: 1386.1538, y: 0.14, z: -214.61539}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 293.73053
+        position: {x: 1388.4615, y: 0.14, z: -218.84615}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 298.54974
+        position: {x: 1390.7693, y: 0.14, z: -223.07692}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 303.36896
+        position: {x: 1393.0769, y: 0.14, z: -227.3077}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 308.1882
+        position: {x: 1395.3846, y: 0.14, z: -231.53847}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 313.00742
+        position: {x: 1397.6923, y: 0.14, z: -235.76923}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.regional.1200-taxi.world-exit.edenborough
+        segmentId: taxi.regional.1200-taxi.world-exit.edenborough
+        distanceFromStartMeters: 317.82663
+        position: {x: 1400, y: 0.14, z: -240}
+        forward: {x: 0.47885212, y: 0, z: -0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+    - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+      segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+      edgeId: taxi.world-exit.edenborough-taxi.regional.1200
+      fromNodeId: taxi.world-exit.edenborough
+      toNodeId: taxi.regional.1200
+      roadClass: 5
+      direction: 5
+      surfaceType: 1
+      oneWay: 1
+      distanceMeters: 317.8266
+      travelCost: 317.8266
+      speedLimitMph: 30
+      laneCount: 1
+      laneWidthMeters: 3.45
+      leftShoulderWidthMeters: 0
+      rightShoulderWidthMeters: 0
+      medianWidthMeters: 0
+      laneCenterOffsetsMeters: []
+      stateOrRegionId: taxi.region.highway
+      sceneChunkId: Taxi_Highway
+      restrictions: []
+      samples:
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 0
+        position: {x: 1400, y: 0.14, z: -240}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 4.819217
+        position: {x: 1397.6923, y: 0.14, z: -235.76923}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 9.638434
+        position: {x: 1395.3846, y: 0.14, z: -231.53847}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 14.457651
+        position: {x: 1393.0769, y: 0.14, z: -227.3077}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 19.276869
+        position: {x: 1390.7693, y: 0.14, z: -223.07692}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 24.096085
+        position: {x: 1388.4615, y: 0.14, z: -218.84616}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 28.915302
+        position: {x: 1386.1538, y: 0.14, z: -214.61539}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 33.73452
+        position: {x: 1383.8462, y: 0.14, z: -210.38461}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 38.553738
+        position: {x: 1381.5385, y: 0.14, z: -206.15384}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 43.372955
+        position: {x: 1379.2307, y: 0.14, z: -201.92308}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 48.19217
+        position: {x: 1376.9231, y: 0.14, z: -197.6923}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 53.011387
+        position: {x: 1374.6154, y: 0.14, z: -193.46153}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 57.830605
+        position: {x: 1372.3077, y: 0.14, z: -189.23077}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 62.649822
+        position: {x: 1370, y: 0.14, z: -185}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 67.46904
+        position: {x: 1367.6923, y: 0.14, z: -180.76923}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 72.28825
+        position: {x: 1365.3846, y: 0.14, z: -176.53847}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 77.107475
+        position: {x: 1363.0769, y: 0.14, z: -172.3077}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 81.92669
+        position: {x: 1360.7693, y: 0.14, z: -168.07692}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 86.74591
+        position: {x: 1358.4615, y: 0.14, z: -163.84615}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 91.565125
+        position: {x: 1356.1538, y: 0.14, z: -159.61539}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 96.38434
+        position: {x: 1353.8462, y: 0.14, z: -155.38461}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 101.20356
+        position: {x: 1351.5385, y: 0.14, z: -151.15385}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 106.02277
+        position: {x: 1349.2307, y: 0.14, z: -146.92308}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 110.841995
+        position: {x: 1346.9231, y: 0.14, z: -142.6923}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 115.66121
+        position: {x: 1344.6154, y: 0.14, z: -138.46153}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 120.48043
+        position: {x: 1342.3077, y: 0.14, z: -134.23077}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 125.299644
+        position: {x: 1340, y: 0.14, z: -130}
+        forward: {x: -0.47885212, y: 0, z: 0.87789553}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 130.11629
+        position: {x: 1336.8, y: 0.14, z: -126.4}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 134.93292
+        position: {x: 1333.6, y: 0.14, z: -122.8}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 139.74956
+        position: {x: 1330.4, y: 0.14, z: -119.2}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 144.5662
+        position: {x: 1327.2, y: 0.14, z: -115.6}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 149.38283
+        position: {x: 1324, y: 0.14, z: -112}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 154.19948
+        position: {x: 1320.8, y: 0.14, z: -108.4}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 159.01611
+        position: {x: 1317.6, y: 0.14, z: -104.8}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 163.83275
+        position: {x: 1314.4, y: 0.14, z: -101.2}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 168.64938
+        position: {x: 1311.2, y: 0.14, z: -97.6}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 173.46602
+        position: {x: 1308, y: 0.14, z: -94}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 178.28265
+        position: {x: 1304.8, y: 0.14, z: -90.4}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 183.0993
+        position: {x: 1301.6, y: 0.14, z: -86.8}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 187.91594
+        position: {x: 1298.4, y: 0.14, z: -83.200005}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 192.73257
+        position: {x: 1295.2, y: 0.14, z: -79.6}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 197.54921
+        position: {x: 1292, y: 0.14, z: -76}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 202.36584
+        position: {x: 1288.8, y: 0.14, z: -72.4}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 207.1825
+        position: {x: 1285.6, y: 0.14, z: -68.8}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 211.99913
+        position: {x: 1282.4, y: 0.14, z: -65.2}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 216.81577
+        position: {x: 1279.2, y: 0.14, z: -61.600002}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 221.6324
+        position: {x: 1276, y: 0.14, z: -58}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 226.44904
+        position: {x: 1272.8, y: 0.14, z: -54.4}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 231.26567
+        position: {x: 1269.6, y: 0.14, z: -50.8}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 236.08232
+        position: {x: 1266.4, y: 0.14, z: -47.199997}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 240.89896
+        position: {x: 1263.2, y: 0.14, z: -43.600002}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 245.71559
+        position: {x: 1260, y: 0.14, z: -40}
+        forward: {x: -0.66436386, y: 0, z: 0.7474093}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 250.523
+        position: {x: 1256, y: 0.14, z: -37.333332}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 255.3304
+        position: {x: 1252, y: 0.14, z: -34.666668}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 260.1378
+        position: {x: 1248, y: 0.14, z: -32}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 264.9452
+        position: {x: 1244, y: 0.14, z: -29.333332}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 269.7526
+        position: {x: 1240, y: 0.14, z: -26.666666}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 274.56
+        position: {x: 1236, y: 0.14, z: -24}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 279.3674
+        position: {x: 1232, y: 0.14, z: -21.333334}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 284.1748
+        position: {x: 1228, y: 0.14, z: -18.666666}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 288.9822
+        position: {x: 1224, y: 0.14, z: -15.999999}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 293.7896
+        position: {x: 1220, y: 0.14, z: -13.333332}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 298.59702
+        position: {x: 1216, y: 0.14, z: -10.666666}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 303.40442
+        position: {x: 1212, y: 0.14, z: -7.9999995}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 308.21182
+        position: {x: 1208, y: 0.14, z: -5.333333}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 313.01923
+        position: {x: 1204, y: 0.14, z: -2.6666665}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
+      - roadId: taxi.world-exit.edenborough-taxi.regional.1200
+        segmentId: taxi.world-exit.edenborough-taxi.regional.1200
+        distanceFromStartMeters: 317.8266
+        position: {x: 1200, y: 0.14, z: 0}
+        forward: {x: -0.8320503, y: 0, z: 0.5547002}
+        up: {x: 0, y: 1, z: 0}
+        direction: 5
+        roadWidthMeters: 7.4
+        laneWidthMeters: 3.45
+        laneCount: 1
+        speedLimitMph: 30
 --- !u!4 &590795209
 Transform:
   m_ObjectHideFlags: 0
@@ -123613,6 +125675,118 @@ Transform:
   m_Children: []
   m_Father: {fileID: 932797857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &600839752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 600839753}
+  - component: {fileID: 600839756}
+  - component: {fileID: 600839755}
+  - component: {fileID: 600839754}
+  m_Layer: 0
+  m_Name: Sign support
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &600839753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600839752}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalScale: {x: 0.18, y: 4, z: 0.18}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1284248030}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &600839754
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600839752}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 7ab461b348cb32c45a262882b822ea7e, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &600839755
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600839752}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &600839756
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 600839752}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &606578962
 GameObject:
   m_ObjectHideFlags: 0
@@ -123762,6 +125936,189 @@ MonoBehaviour:
   arrivalDialogue: Let's take a lap.
   completionDialogue: That was a proper lap!
   chaosReward: 0
+--- !u!1 &617295548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 617295549}
+  - component: {fileID: 617295551}
+  - component: {fileID: 617295550}
+  m_Layer: 0
+  m_Name: Destination lettering
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &617295549
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617295548}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1284248030}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 4.8}
+  m_SizeDelta: {x: 7.5, y: 2.5}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &617295550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617295548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9541d86e2fd84c1d9990edf0852d74ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshPro
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 'EDENBOROUGH
+
+    REGIONAL CONNECTION'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: 0
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 2.1
+  m_fontSizeBase: 2.1
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 0
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  _SortingLayer: 0
+  _SortingLayerID: 0
+  _SortingOrder: 0
+  m_hasFontAssetChanged: 0
+  m_renderer: {fileID: 617295551}
+  m_maskType: 0
+--- !u!23 &617295551
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617295548}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &619601339
 GameObject:
   m_ObjectHideFlags: 0
@@ -124737,6 +127094,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1681127001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &668931834
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 668931835}
+  - component: {fileID: 668931837}
+  - component: {fileID: 668931836}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &668931835
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668931834}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1389.3218, y: 0.165, z: -220.42325}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &668931836
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668931834}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &668931837
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668931834}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &669631061
 GameObject:
   m_ObjectHideFlags: 0
@@ -126679,6 +129126,37 @@ MonoBehaviour:
   tags:
   - complex:taxi.speedway
   debugGizmos: 1
+--- !u!1 &827291710
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 827291711}
+  m_Layer: 0
+  m_Name: Safe inbound arrival
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &827291711
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827291710}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0.24708746, z: -0, w: 0.9689932}
+  m_LocalPosition: {x: 1370.389, y: 1.4399999, z: -182.11076}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &842851036
 GameObject:
   m_ObjectHideFlags: 0
@@ -126856,6 +129334,96 @@ MonoBehaviour:
   arrivalDialogue: 
   completionDialogue: 
   chaosReward: 0
+--- !u!1 &851564763
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 851564764}
+  - component: {fileID: 851564766}
+  - component: {fileID: 851564765}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &851564764
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851564763}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9347217, z: -0, w: 0.35538056}
+  m_LocalPosition: {x: 1309.8273, y: 0.165, z: -96.055695}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &851564765
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851564763}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &851564766
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851564763}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &852996597
 GameObject:
   m_ObjectHideFlags: 0
@@ -127279,6 +129847,186 @@ Transform:
   m_Children: []
   m_Father: {fileID: 165135087}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &880042884
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 880042885}
+  - component: {fileID: 880042887}
+  - component: {fileID: 880042886}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &880042885
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880042884}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1362.5061, y: 0.165, z: -171.2611}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &880042886
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880042884}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &880042887
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880042884}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &884178068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 884178069}
+  - component: {fileID: 884178071}
+  - component: {fileID: 884178070}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &884178069
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884178068}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1375.914, y: 0.165, z: -195.84216}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &884178070
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884178068}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &884178071
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 884178068}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &885076196
 GameObject:
   m_ObjectHideFlags: 0
@@ -128418,6 +131166,118 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1523321894}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &983153641
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 983153642}
+  - component: {fileID: 983153645}
+  - component: {fileID: 983153644}
+  - component: {fileID: 983153643}
+  m_Layer: 0
+  m_Name: Destination sign
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &983153642
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983153641}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 4.8, z: 0}
+  m_LocalScale: {x: 8, y: 2.8, z: 0.12}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1284248030}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &983153643
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983153641}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 029fdab498ce3c845a4d5f564d0ba6ed, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &983153644
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983153641}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!33 &983153645
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983153641}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &985520278
 GameObject:
   m_ObjectHideFlags: 0
@@ -128756,6 +131616,96 @@ MonoBehaviour:
   arrivalDialogue: Now that's a view. Let me enjoy it a moment.
   completionDialogue: Worth the detour. Back to the ride!
   chaosReward: 0
+--- !u!1 &1003726373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1003726374}
+  - component: {fileID: 1003726376}
+  - component: {fileID: 1003726375}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1003726374
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003726373}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1349.0981, y: 0.165, z: -146.68001}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1003726375
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003726373}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1003726376
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003726373}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1004129205
 GameObject:
   m_ObjectHideFlags: 0
@@ -129958,6 +132908,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1149377169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1085212207
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1085212208}
+  m_Layer: 0
+  m_Name: Truck Taxi Regional Connection
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1085212208
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085212207}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1234243680}
+  - {fileID: 1182718734}
+  - {fileID: 827291711}
+  - {fileID: 1284248030}
+  - {fileID: 1173706960}
+  - {fileID: 402663961}
+  - {fileID: 408999314}
+  - {fileID: 1129599357}
+  - {fileID: 2086939023}
+  - {fileID: 583287946}
+  - {fileID: 1508918245}
+  - {fileID: 1699436695}
+  - {fileID: 1556105177}
+  - {fileID: 1641235345}
+  - {fileID: 851564764}
+  - {fileID: 335914737}
+  - {fileID: 1495041621}
+  - {fileID: 1315157088}
+  - {fileID: 1003726374}
+  - {fileID: 338374633}
+  - {fileID: 880042885}
+  - {fileID: 1807990977}
+  - {fileID: 884178069}
+  - {fileID: 202743112}
+  - {fileID: 668931835}
+  - {fileID: 1984245080}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1100743471
 GameObject:
   m_ObjectHideFlags: 0
@@ -130455,6 +133462,96 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1128865030}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1129599356
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1129599357}
+  - component: {fileID: 1129599359}
+  - component: {fileID: 1129599358}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1129599357
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129599356}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.8816746, z: -0, w: 0.47185796}
+  m_LocalPosition: {x: 1239.1063, y: 0.165, z: -26.07091}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1129599358
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129599356}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1129599359
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129599356}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1141385216
 GameObject:
   m_ObjectHideFlags: 0
@@ -131169,6 +134266,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 247221756}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1173706959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1173706960}
+  - component: {fileID: 1173706962}
+  - component: {fileID: 1173706961}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1173706960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173706959}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.8816746, z: -0, w: 0.47185796}
+  m_LocalPosition: {x: 1204.1603, y: 0.165, z: -2.7735012}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1173706961
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173706959}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1173706962
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173706959}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &1174149199
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -131523,6 +134710,98 @@ Transform:
   m_Children: []
   m_Father: {fileID: 752401225}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1182718733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1182718734}
+  - component: {fileID: 1182718737}
+  - component: {fileID: 1182718736}
+  - component: {fileID: 1182718735}
+  m_Layer: 0
+  m_Name: Outbound regional boundary
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1182718734
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182718733}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1392.7394, y: 3.14, z: -230.29128}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1182718735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182718733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58b7b9c413bfd0447806762e1a932a0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiMapMarker
+  stableId: taxi.world-exit.edenborough
+  label: Regional Travel - Edenborough
+  markerType: 34
+  state: 2
+  source: {fileID: 0}
+  sourceLocalOffset: {x: 0, y: 0, z: 0}
+  service: {fileID: 0}
+  serviceBound: 0
+  assignedIcon: {fileID: 0}
+  compassPoi: {fileID: 0}
+  presented: 0
+--- !u!114 &1182718736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182718733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95173aed1b47603488fae0aaa7a7bd0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiWorldExit
+  destinationScene: TruckTaxi_Edenborough
+  arrival: {fileID: 827291711}
+--- !u!65 &1182718737
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182718733}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.4, y: 8, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1186787032
 GameObject:
   m_ObjectHideFlags: 0
@@ -132037,6 +135316,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1013918244}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1234243679
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1234243680}
+  m_Layer: 0
+  m_Name: EasyRoads Baked City Streets
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1234243680
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1234243679}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1698691037}
+  m_Father: {fileID: 1085212208}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1238330431
 MonoBehaviour:
@@ -132783,6 +136094,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2137778188}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1284248029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1284248030}
+  m_Layer: 0
+  m_Name: Regional highway sign
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1284248030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1284248029}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1345.0916, y: 0.14, z: -156.04126}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 600839753}
+  - {fileID: 983153642}
+  - {fileID: 617295549}
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1289795019
 GameObject:
   m_ObjectHideFlags: 0
@@ -133057,6 +136402,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1950817508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1315157087
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1315157088}
+  - component: {fileID: 1315157090}
+  - component: {fileID: 1315157089}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1315157088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315157087}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1342.3943, y: 0.165, z: -134.38948}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1315157089
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315157087}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1315157090
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315157087}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1323528405
 GameObject:
   m_ObjectHideFlags: 0
@@ -136699,6 +140134,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1371054508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1495041620
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1495041621}
+  - component: {fileID: 1495041623}
+  - component: {fileID: 1495041622}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1495041621
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495041620}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9347217, z: -0, w: 0.35538056}
+  m_LocalPosition: {x: 1328.4294, y: 0.165, z: -116.98316}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1495041622
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495041620}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1495041623
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495041620}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1496821668
 GameObject:
   m_ObjectHideFlags: 0
@@ -136919,6 +140444,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1461361599}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1508918244
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1508918245}
+  - component: {fileID: 1508918247}
+  - component: {fileID: 1508918246}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1508918245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508918244}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9347217, z: -0, w: 0.35538056}
+  m_LocalPosition: {x: 1272.6229, y: 0.165, z: -54.200775}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1508918246
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508918244}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1508918247
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1508918244}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1511042475
 GameObject:
   m_ObjectHideFlags: 0
@@ -137531,6 +141146,96 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1553352923}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1556105176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1556105177}
+  - component: {fileID: 1556105179}
+  - component: {fileID: 1556105178}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1556105177
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556105176}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9347217, z: -0, w: 0.35538056}
+  m_LocalPosition: {x: 1291.2251, y: 0.165, z: -75.128235}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1556105178
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556105176}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1556105179
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556105176}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1565780285
 GameObject:
@@ -138741,6 +142446,96 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1641235344
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1641235345}
+  - component: {fileID: 1641235347}
+  - component: {fileID: 1641235346}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1641235345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641235344}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9347217, z: -0, w: 0.35538056}
+  m_LocalPosition: {x: 1300.5262, y: 0.165, z: -85.591965}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1641235346
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641235344}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1641235347
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1641235344}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1647653428
 GameObject:
   m_ObjectHideFlags: 0
@@ -139811,6 +143606,240 @@ MonoBehaviour:
   detectionRadius: 11
   tags: []
   debugGizmos: 1
+--- !u!1 &1698691036
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1698691037}
+  - component: {fileID: 1698691042}
+  - component: {fileID: 1698691041}
+  - component: {fileID: 1698691040}
+  - component: {fileID: 1698691039}
+  - component: {fileID: 1698691038}
+  m_Layer: 0
+  m_Name: DemoCity_Connection_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1698691037
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698691036}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1234243680}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1698691038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698691036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c07c4e98b9dc493bb3622f56dbfd4f3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.InterstateHauler.Runtime::LWS.InterstateHauler.LwsRoadSurface
+  roadId: DemoCity_Connection
+  segmentId: DemoCity_Connection.1
+  surfaceType: 1
+  displayName: DemoCity_Connection
+--- !u!114 &1698691039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698691036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fc01d649b399764a8245055c99f7407, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiSurface
+  isRoad: 1
+--- !u!64 &1698691040
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698691036}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 4ee8ad14980b00d448fa339d1caca3f7, type: 2}
+--- !u!23 &1698691041
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698691036}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 6c9d6c78a04127e408a3628043787c63, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1698691042
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698691036}
+  m_Mesh: {fileID: 4300000, guid: 4ee8ad14980b00d448fa339d1caca3f7, type: 2}
+--- !u!1 &1699436694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1699436695}
+  - component: {fileID: 1699436697}
+  - component: {fileID: 1699436696}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1699436695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699436694}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9347217, z: -0, w: 0.35538056}
+  m_LocalPosition: {x: 1281.924, y: 0.165, z: -64.664505}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1699436696
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699436694}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1699436697
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1699436694}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1700820709
 GameObject:
   m_ObjectHideFlags: 0
@@ -140622,6 +144651,96 @@ MonoBehaviour:
   arrivalDialogue: 
   completionDialogue: 
   chaosReward: 0
+--- !u!1 &1807990976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1807990977}
+  - component: {fileID: 1807990979}
+  - component: {fileID: 1807990978}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1807990977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807990976}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1369.21, y: 0.165, z: -183.55164}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1807990978
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807990976}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1807990979
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807990976}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1810882577
 GameObject:
   m_ObjectHideFlags: 0
@@ -143000,6 +147119,96 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2119090019}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1984245079
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1984245080}
+  - component: {fileID: 1984245082}
+  - component: {fileID: 1984245081}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1984245080
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984245079}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9689932, z: -0, w: 0.24708746}
+  m_LocalPosition: {x: 1396.0258, y: 0.165, z: -232.71378}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &1984245081
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984245079}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1984245082
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1984245079}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1988171819
 GameObject:
   m_ObjectHideFlags: 0
@@ -143940,6 +148149,96 @@ MonoBehaviour:
   detectionRadius: 11
   tags: []
   debugGizmos: 1
+--- !u!1 &2086939022
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2086939023}
+  - component: {fileID: 2086939025}
+  - component: {fileID: 2086939024}
+  m_Layer: 0
+  m_Name: Connection centerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2086939023
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086939022}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.8816746, z: -0, w: 0.47185796}
+  m_LocalPosition: {x: 1250.7551, y: 0.165, z: -33.83671}
+  m_LocalScale: {x: 0.14, y: 0.015, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1085212208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &2086939024
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086939022}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: d50ae7d6b4e334a4ea43e9192289ae0d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 1
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &2086939025
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2086939022}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &2087356656
 GameObject:
   m_ObjectHideFlags: 0
@@ -144403,6 +148702,7 @@ MonoBehaviour:
   hud: {fileID: 2113431608}
   playerSpawn: {fileID: 339037334}
   pedestrians: {fileID: 99779186}
+  mapTiles: {fileID: 0}
 --- !u!4 &2113431610
 Transform:
   m_ObjectHideFlags: 0
@@ -144608,6 +148908,10 @@ MonoBehaviour:
       m_Extent: {x: 340, y: 110, z: 400}
     population: 1
   streamingManifest: {fileID: 11400000, guid: 4fa254712156cca4293fcb3c8a8c98ab, type: 2}
+  authoredSingleScene: 0
+  authoredWorldBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
   preloadDistance: 450
   forwardPreloadSeconds: 14
   unloadDistance: 850
@@ -147302,3 +151606,4 @@ SceneRoots:
   - {fileID: 496305326}
   - {fileID: 940360647}
   - {fileID: 292590407}
+  - {fileID: 1085212208}

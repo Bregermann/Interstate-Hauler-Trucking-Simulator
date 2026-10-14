@@ -223,14 +223,21 @@ namespace LWS.TruckTaxi.Editor
         }
         [MenuItem("Truck Taxi/Edenborough/Build Windows")]
         public static void BuildWindows()
+        { BuildWindowsAt(BuildPath); }
+
+        [MenuItem("Truck Taxi/Regional/Build Dual World Windows")]
+        public static void BuildDualWorldWindows()
+        { BuildWindowsAt("Builds/TruckTaxiDualWorld/TruckTaxi.exe"); }
+
+        private static void BuildWindowsAt(string output)
         {
             EnsureEditMode();
             if (!File.Exists(TruckTaxiEdenboroughLayout.ScenePath)) throw new InvalidOperationException("Author and validate Edenborough first.");
-            Directory.CreateDirectory(Path.GetDirectoryName(BuildPath));
+            Directory.CreateDirectory(Path.GetDirectoryName(output));
             var scenes = new[] { EditorTruckTaxiMainMenuSetup.ScenePath, TruckTaxiEdenboroughLayout.ScenePath, TruckTaxiDemoBuilder.ScenePath }
                 .Concat(TruckTaxiRegionalAuthoring.RegionScenePaths).Concat(TruckTaxiMegaWorldAuthoring.NewScenePaths.Where(File.Exists))
                 .Concat(File.Exists(TruckTaxiSpeedwayAuthoring.ScenePath) ? new[] { TruckTaxiSpeedwayAuthoring.ScenePath } : Array.Empty<string>()).Distinct().ToArray();
-            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = scenes, locationPathName = BuildPath,
+            var report = BuildPipeline.BuildPlayer(new BuildPlayerOptions { scenes = scenes, locationPathName = output,
                 target = BuildTarget.StandaloneWindows64, options = BuildOptions.Development });
             Debug.Log("EDENBOROUGH WINDOWS: " + report.summary.result + "; errors=" + report.summary.totalErrors + "; bytes=" + report.summary.totalSize);
             if (report.summary.result != BuildResult.Succeeded) throw new InvalidOperationException("Edenborough Windows build failed.");
