@@ -16,9 +16,11 @@ namespace LWS.TruckTaxi
             if(player==null) return false;
             var rig=player.GetComponent<TruckTaxiCabOccupantRig>();
             bool explicitStarter=player.DefinitionId==StarterDefinitionId;
-            // The Taxi scene deliberately uses the spawner's fallback prefab, without a
-            // definition asset. Its generic identity alone is not a cabin-layout contract.
-            bool taxiFallback=player.Definition==null && player.DefinitionId==FallbackDefinitionId &&
+            // Both regions now bind the same canonical definition to the existing Taxi prefab.
+            // Require its original authored cab contract, not just a generic truck identity.
+            bool matchingPrefab=player.Definition==null || player.Definition.PlayerPrefab!=null &&
+                HasTaxiFallbackAnchor(player.Definition.PlayerPrefab.GetComponent<TruckTaxiCabOccupantRig>());
+            bool taxiFallback=matchingPrefab && player.DefinitionId==FallbackDefinitionId &&
                 player.VehicleId=="player.truck.starter" && HasTaxiFallbackAnchor(rig);
             if(!explicitStarter && !taxiFallback)
             {

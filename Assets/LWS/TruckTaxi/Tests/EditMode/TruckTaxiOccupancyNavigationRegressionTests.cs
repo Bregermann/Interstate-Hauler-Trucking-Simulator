@@ -51,9 +51,11 @@ namespace LWS.TruckTaxi.Tests
             callback.Invoke(component,null);
         }
 
-        [TestCase(0)]
-        [TestCase(6)]
-        public void DemoSceneConfiguredFallbackGetsEightRealSlotsBeforePassengerInitialization(int companionIndex)
+        [TestCase(0, false)]
+        [TestCase(6, false)]
+        [TestCase(0, true)]
+        [TestCase(6, true)]
+        public void DemoSceneConfiguredTruckGetsEightRealSlotsBeforePassengerInitialization(int companionIndex, bool useExplicitDefinition)
         {
             var scene=EditorSceneManager.OpenPreviewScene("Assets/LWS/TruckTaxi/Scenes/TruckTaxi_DemoCity.unity");
             try
@@ -66,8 +68,9 @@ namespace LWS.TruckTaxi.Tests
                 }
                 Assert.IsNotNull(host); Assert.IsNotNull(host.spawner);
                 var config=new SerializedObject(host.spawner);
-                Assert.IsNull(config.FindProperty("truckDefinition").objectReferenceValue,
-                    "This regression covers the actual Taxi fallback path, not the separate starter definition asset.");
+                var definition = (LwsTruckDefinition)config.FindProperty("truckDefinition").objectReferenceValue;
+                Assert.IsNotNull(definition, "Both regions explicitly share the canonical existing Taxi truck.");
+                Assert.AreEqual(TruckTaxiEightOccupantLayout.FallbackDefinitionId, definition.StableId);
                 var resolve=typeof(LwsPlayerTruckSpawner).GetMethod("ResolveTruckPrefab",BindingFlags.Instance|BindingFlags.NonPublic);
                 var prefab=(GameObject)resolve.Invoke(host.spawner,null);
                 Assert.AreEqual("Assets/LWS/TruckTaxi/Prefabs/TruckTaxi_InterstateTractor.prefab",AssetDatabase.GetAssetPath(prefab));
@@ -87,7 +90,7 @@ namespace LWS.TruckTaxi.Tests
                 var identity=truck.AddComponent<LwsVehicleIdentity>();
                 var vehicleId=config.FindProperty("spawnedVehicleId").stringValue;
                 identity.Configure(vehicleId,TruckTaxiEightOccupantLayout.FallbackDefinitionId,LwsVehicleRole.PlayerTractor,"Taxi fallback",true);
-                var player=truck.AddComponent<LwsPlayerTruck>(); player.Configure(null,vehicleId);
+                var player=truck.AddComponent<LwsPlayerTruck>(); player.Configure(useExplicitDefinition ? definition : null,vehicleId);
                 Assert.AreEqual("ih.truck.nwh.euro.semi",player.DefinitionId);
                 Assert.IsTrue(TruckTaxiEightOccupantLayout.TryApplyToConfiguredStarter(player,out var reason),reason);
                 Assert.AreEqual(8,rig.AuthoredCapacity); Assert.AreEqual(8,rig.Anchors.Count);
