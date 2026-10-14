@@ -1,11 +1,11 @@
 using UnityEngine;
 namespace LWS.TruckBilliards {
 public sealed class BilliardsBall:MonoBehaviour {
- public int number; public BilliardsMatch match; public Rigidbody body; public SphereCollider sphere; public Vector3 initial;
+ public int number; public BilliardsMatch match; public Rigidbody body; public SphereCollider sphere; public Vector3 initial;public BilliardsBallPresentation presentation;
  Vector3 previous;bool havePrevious;
  public bool Pocketed {get;private set;}
- public void SetPocketed(bool value){Pocketed=value;if(!body.isKinematic){body.linearVelocity=Vector3.zero;body.angularVelocity=Vector3.zero;}body.isKinematic=value;if(!value){body.linearVelocity=Vector3.zero;body.angularVelocity=Vector3.zero;}sphere.enabled=!value;foreach(var r in GetComponentsInChildren<Renderer>())r.enabled=!value;}
- public void Restore(Vector3 p){SetPocketed(false);body.position=p;body.rotation=Quaternion.identity;body.Sleep();previous=p;havePrevious=true;}
+ public void SetPocketed(bool value){Pocketed=value;if(!body.isKinematic){body.linearVelocity=Vector3.zero;body.angularVelocity=Vector3.zero;}body.isKinematic=value;if(!value){body.linearVelocity=Vector3.zero;body.angularVelocity=Vector3.zero;}sphere.enabled=!value;if(presentation!=null)presentation.Pocket(value);else foreach(var r in GetComponentsInChildren<Renderer>())r.enabled=!value;}
+ public void Restore(Vector3 p){SetPocketed(false);body.position=p;body.rotation=Quaternion.identity;body.Sleep();previous=p;havePrevious=true;presentation?.Restore();}
  void FixedUpdate(){
   if(Pocketed)return;var v=body.linearVelocity;v.y=0;body.linearVelocity=Vector3.MoveTowards(v,Vector3.zero,match.rollingResistance*Time.fixedDeltaTime);
   if(v.magnitude<match.settledSpeed*.6f){body.linearVelocity=Vector3.zero;body.angularVelocity=Vector3.zero;}

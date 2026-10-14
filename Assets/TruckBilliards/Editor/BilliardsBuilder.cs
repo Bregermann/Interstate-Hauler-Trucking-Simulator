@@ -67,7 +67,7 @@ public static class BilliardsBuilder {
   match.preview=Shape("Cue placement preview",PrimitiveType.Sphere,new Vector3(0,.5f,-6),Vector3.one,previewMat,false).transform;match.preview.gameObject.SetActive(false);
   UI(match);
   EditorSceneManager.SaveScene(scene,ScenePath);AssetDatabase.SaveAssets();
-  BilliardsMenuBuilder.Upgrade();ValidateSavedScene();Debug.Log("TB_SCENE_CREATED "+ScenePath);
+  BilliardsMenuBuilder.Upgrade();LWS.TruckSports.Editor.SportsPolishAuthoring.UpgradeScene(ScenePath);ValidateSavedScene();Debug.Log("TB_SCENE_CREATED "+ScenePath);
  }
  static PhysicsMaterial PersistPhysics(PhysicsMaterial value,string path){
   var existing=AssetDatabase.LoadAssetAtPath<PhysicsMaterial>(path);

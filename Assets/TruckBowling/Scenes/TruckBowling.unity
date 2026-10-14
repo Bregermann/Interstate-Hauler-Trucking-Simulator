@@ -552,6 +552,9 @@ MonoBehaviour:
     edgeAssist: 0.75
     edgeBand: 0.6
     outwardDamping: 0.6
+    spinGripScale: 0.12
+    carryAcceleration: 0.55
+    carrySpeed: 13
   exterior: {fileID: 1491832925}
   engine: {fileID: 12038758}
   skid: {fileID: 12038757}
@@ -19528,6 +19531,9 @@ MonoBehaviour:
     edgeAssist: 0.75
     edgeBand: 0.6
     outwardDamping: 0.6
+    spinGripScale: 0.12
+    carryAcceleration: 0.55
+    carrySpeed: 13
   exterior: {fileID: 561392704}
   engine: {fileID: 345518530}
   skid: {fileID: 345518529}
@@ -44724,8 +44730,10 @@ MonoBehaviour:
   halfWidth: 2.1
   pinLine: 60
   approachLimit: 40
-  rollingLimit: 14
-  settleLimit: 4
+  rollingLimit: 40
+  settleLimit: 8
+  stoppedSpeed: 0.45
+  stoppedSeconds: 4
   truck: {fileID: 1726284894}
   ai: {fileID: 1726284893}
   cab: {fileID: 696485560}
@@ -47607,8 +47615,10 @@ MonoBehaviour:
   halfWidth: 2.1
   pinLine: 60
   approachLimit: 40
-  rollingLimit: 14
-  settleLimit: 4
+  rollingLimit: 40
+  settleLimit: 8
+  stoppedSpeed: 0.45
+  stoppedSeconds: 4
   truck: {fileID: 1628881617}
   ai: {fileID: 1628881616}
   cab: {fileID: 1050552036}
@@ -62937,8 +62947,10 @@ MonoBehaviour:
   halfWidth: 2.1
   pinLine: 60
   approachLimit: 40
-  rollingLimit: 14
-  settleLimit: 4
+  rollingLimit: 40
+  settleLimit: 8
+  stoppedSpeed: 0.45
+  stoppedSeconds: 4
   truck: {fileID: 345518528}
   ai: {fileID: 345518527}
   cab: {fileID: 1412529354}
@@ -70640,8 +70652,10 @@ MonoBehaviour:
   halfWidth: 2.1
   pinLine: 60
   approachLimit: 40
-  rollingLimit: 14
-  settleLimit: 4
+  rollingLimit: 40
+  settleLimit: 8
+  stoppedSpeed: 0.45
+  stoppedSeconds: 4
   truck: {fileID: 12038756}
   ai: {fileID: 12038755}
   cab: {fileID: 901000289}
@@ -88347,6 +88361,9 @@ MonoBehaviour:
     edgeAssist: 0.75
     edgeBand: 0.6
     outwardDamping: 0.6
+    spinGripScale: 0.12
+    carryAcceleration: 0.55
+    carrySpeed: 13
   exterior: {fileID: 480566602}
   engine: {fileID: 1628881619}
   skid: {fileID: 1628881618}
@@ -93389,6 +93406,9 @@ MonoBehaviour:
     edgeAssist: 0.75
     edgeBand: 0.6
     outwardDamping: 0.6
+    spinGripScale: 0.12
+    carryAcceleration: 0.55
+    carrySpeed: 13
   exterior: {fileID: 1926708179}
   engine: {fileID: 1726284896}
   skid: {fileID: 1726284895}
