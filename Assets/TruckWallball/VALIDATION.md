@@ -1,0 +1,32 @@
+# Wallball validation — 2026-10-14
+
+Final build/runtime validation passed. Native Unity 6000.4.10f1 Windows x64 Mono Development build 07 succeeds through SportsBuilder.Build, native exit 0, with six saved scenes, TruckSports startup, zero errors and 25 inherited vendor/package warnings. Exact host title/build settings restore on success and deliberate failure. All 345 files in the four existing sport folders and all 27 ProjectSettings/Packages files match their captured SHA256 baselines. Unrelated Git status matches the pre-update snapshot.
+
+Evidence is retained under ignored `Logs/TruckSports/Wallball`; build outputs are not committed. Native `.exit` files record actual Windows exits, independently of test requests. The executable and complete companion payload are at `Builds/TruckSports`.
+
+## Evidence boundaries
+
+- Pure fixtures: 30 rule/prediction checks, including wrong owner, volley, one/second bounce, outgoing-floor fault, invalid wall, post-wall out attributed to hitter, award-once, timeout/pause/replay, 10–10 through 13–11 and rematch opener.
+- Focused physical run `focused-06-720`: 70 checks, native exit 0, zero captured managed errors. Actual NWH driving, human physical serve/wall rebound, held driving on eligibility transfer, ineligible body/wheel-cast ghosting, truck ghosting, overlap separation, actual jumping volley, midair repeat rejection, upright landing, brake/reverse, pause velocity/timer preservation, physical fault/replay cases, shared/whole/mixed input routing and reconnect without confirmation leaking into a jump. Existing sports entered/exited twice, with one EventSystem/AudioListener after each transition.
+- Software input: Unity keyboards/gamepads are injected inside the tested player. Native devices are muted only in that process for the explicit development flags. This is not real controller, keyboard-rollover, USB reconnection or rumble testing. The Wallball setup preference is restored; existing sport participant setups are not rewritten by the probes.
+- Full AI runs use ordinary physical controls, with no injected scores, remote ball forces or live-return actor repositioning. `ai-05-720` completed 19–21 in 270.8 seconds, native exit 0, zero replays/managed errors, and verified results/rematch opener/names. Its lift/arming predate the final tuning. Return-contact counts include failed shots; final telemetry separately records returns that actually reach the valid wall.
+- Final focused runs `focused-07-720` and `focused-07-1080`: 70 checks each, actual exits 0, zero captured managed errors. Repeated five-sport entry/exit, physical jumping volley, upright landing, held driving, shared-trigger jump isolation, reconnect and arming assertions pass on the final player. Inspected five-card menu, setup with actual controls, live HUD/landing marker, jumping volley and pause captures at both resolutions.
+- Final autonomous `ai-07-1080`: 8–11 in 113.2 seconds, 19 points, 48 actual strikes, 32 legal wall contacts, 29 return contacts, **13 returns that reached the valid wall**, 8/6 jumps, zero neutral replays and captured errors, actual exit 0. No injected scores or live-return repositioning. Results, alternate rematch opener and retained names pass. The final telemetry/test explicitly separates mere contact attempts from successful legal wall returns.
+
+## Failures and corrections
+
+Build 01 failed CS0246 for the NWH FrictionPreset namespace; fixed by importing NWH.Common.Vehicles. The hidden first player run produced black captures and is excluded from rendering/performance evidence. A normal-window reproduction confirmed AI components cleared human input; the AI now leaves human controls alone, verified by physical driving and held-input checks.
+
+Receiver start position and outgoing forecast selection were corrected after AI runs 03/04 completed with inadequate returns. The receiver starts behind the service lane, waits during serving, and plans for the post-wall trajectory. AI also evaluates whether an incoming flight will go out before its second bounce and can drive aside rather than turning an opponent's out ball into its own risky return.
+
+Overlap failures 03–05 exposed Collider.ClosestPoint reading interpolated Transform poses even after fixture synchronization. Explicit physical Rigidbody poses now drive the query; run 06 passes overlapping receiver/contact arming without a movement gate. User feedback that the ball passed above trucks prompted lower bounded lift (6.2–8.5 before the shared speed cap), with a real grounded physical jump retained. The Taxi companion render-only bounce was inspected; Taxi files are unchanged. Run 06 verifies a physical jumping volley and landing.
+
+## Performance and manual checks
+
+Measurements include development/probe overhead and concurrent desktop load, including the user's separate testing build, which is left untouched. They are observed frame-time samples, not an isolated benchmark. Final full-match 1080p sample: 8,691 active frames, mean 6.25 ms, p95 6.27, p99 6.29, worst 12.56; managed delta 2,555,904 bytes, two generation-0 collections, GTX 1660 Ti / D3D11. Focused 720p mean/p95/p99/worst: 6.29/6.29/6.34/25.01 ms; 1080p: 6.31/6.28/6.30/50.00. Historical run 05 at 720p measured 23,179 active frames: mean 6.28 ms, p95 6.29, p99 6.33, worst 368.76; managed delta 3,506,176 bytes, three generation-0 collections. Spikes are retained rather than hidden by percentile reporting.
+
+Still manual: real keyboards/controllers and shared-pad ergonomics, actual USB unplug/replug/replacement, audible mix and perceived vibration, jump timing/handling feel, and Easy/Normal/Hard human balance. Programmatic audio/feedback wiring and software routing do not verify perception or hardware.
+
+## Git delivery
+
+Previous completed sports work is already published on codex/truck-air-hockey at 1fb5d0b987bca2bf410b187e991bc36bc4bf1859 with the earlier Bowling/Hockey/Billiards ancestry. The Wallball delta will be reviewed and committed locally, replayed onto that published baseline in the clean delivery worktree, and pushed normally as codex/truck-wallball. Root codex/truck-sports-3v3 includes unrelated unpublished Taxi/world history and must not be pushed. Final hashes and remote verification belong in the build's GIT-DELIVERY.txt and handoff.
