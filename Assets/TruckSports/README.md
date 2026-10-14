@@ -1,5 +1,18 @@
 # Truck Sports — five offline sports
 
+## Focused polish — 2026-10-14
+
+Bowling now separates steering/braking authority from a live delivery's Rigidbody motion. Sideways, backward and gutter slides continue toward the pit. NWH remains the tire/suspension authority; the shared bounded forward carry reads the world lane, grounded wheels and a clear obstacle query, never pin targets. AI uses earlier alignment, pocket-side rack lines, reachable spare clusters and smaller late corrections with distinct difficulty errors/reactions. The retained score/rack and cab/split-screen systems remain authoritative.
+
+Billiards uses smooth Unity spheres with curved UV numbers/stripes, URP Lit gloss and soft contact shadows. A collider-free visual child rolls by actual interpolated displacement/radius. Existing frozen physical rotation, radii, materials, shot power, rules and AI remain intact. Pocket scoring disables physical contact immediately; DOTween lowers only the visual, with no turn delay. Rack and cue placement reset the presentation.
+
+Billiards, Ice Hockey, Air Hockey and Wallball fit their complete fixed arena envelopes to the current aspect ratio. Compact screen-aligned panels follow rails/boards/court edges. Six hockey trucks use B1–B3/O1–O3 identifiers and two named roster columns. Full controls remain in pause/help; clocks, turn, groups, remaining balls, server/eligibility, bounce/foul messages and series progress stay visible. Wallball changes are presentation only. Its colored names stay in the HUD rather than covering truck roofs. Bowling cameras are unchanged.
+
+Use `LWS.TruckSports.Editor.SportsBuilder.Build` for the combined Windows development build, from saved scenes. `CreateValidateBuild` regenerates scenes; do not use it for ordinary validation. Creation and legacy upgrade defaults call the focused presentation authoring so regeneration retains this update. The explicit six-scene build does not change the host scene list. Product/company overrides restore exact host bytes on success and failure.
+
+Development probes can use `-tsValidationPrefs` and `-tsBuildOutput` inside this project's Builds directory. This keeps automated setup/preferences separate from a user's running copied build. Final builds omit both flags and retain the normal preference namespace. See VALIDATION.md for physical, software-device, full-game, camera and performance evidence and remaining human checks.
+
+
 Wallball adds a physical 1v1 front-wall court with grounded jumping, eligible-only contacts, first-to-11/win-by-two scoring, named human/AI slots and full local input setup. Space / Right Shift / controller South jumps; shared pads use LT and RT independently. See ../TruckWallball/README.md and VALIDATION.md for controls, vendor ownership and current evidence. Billiards, Bowling, Ice Hockey and Air Hockey gameplay/tuning remain unchanged. Final Windows builder is LWS.TruckSports.Editor.SportsBuilder.Build with six explicit saved scenes and exact host-setting restoration.
 
 The four-sport and earlier reports below are historical; the Wallball validation report identifies the current build and delivery.

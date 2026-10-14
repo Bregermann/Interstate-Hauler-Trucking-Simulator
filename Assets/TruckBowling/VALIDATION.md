@@ -1,3 +1,13 @@
+# Current carry-through / AI validation — 2026-10-14
+
+Focused polish is complete. See ../TruckSports/VALIDATION.md for the authoritative detailed report/evidence under Logs/TruckSports/Polish. Native final combined build 14 succeeds; isolated-preference build 13 has the same176 managed DLLs and six level hashes.
+
+Bowling-13-720 passes 80 physical/software-input/lifecycle checks, including genuine stopped recovery with coherent chassis/wheel state, gutters remaining dynamic, preserved survivor seating, once-only result/sweep, hot-seat frame handoff, disconnect/reconnect, scorecard/ties/rematch and scene returns.32 native scoring/rack/tenth-frame fixtures pass. Four seeded physical normal/sideways/backward/gutter spinouts reach the pit without premature freeze; carry is at most.55 and gutter remains outside/zero-contact score0. These injected pose/velocity cases are not autonomous full-game evidence.
+
+12 matched-seed autonomous games at timeScale 3 complete with positive-pinfall physical provenance: final Easy/Normal/Hard means77.0/83.7/86.7 against77.3/68.7/78.3; spares14vs2; gutter flags6vs6. Profiles overlap. A separate timeScale 1 four-lane game completes in 287.6s, scores 88/83/98/76,319 physical pinfall/80 sweeps; independent progress and rematch identities/reset pass.45,879 frames mean 6.27 ms,p95 6.28,p99 6.31 onGTX 1660 Ti with other user apps left running. No score/pin injection or live-delivery teleport in autonomous games. Real hardware/rumble/audio and subjective balance remain human checks.
+
+The earlier Bowling report below is historical.
+
 # Truck Bowling validation — 2026-10-13
 
 Status: Ready with limitations. Required software scoring, physical gameplay, both offline modes, display/input/lifecycle, combined Windows build and retained-sport regression checks passed. Physical hardware, audio listening and human comfort/balance remain manual; inherited native engine limitation is below. Historical failed diagnostic runs are not clean evidence.

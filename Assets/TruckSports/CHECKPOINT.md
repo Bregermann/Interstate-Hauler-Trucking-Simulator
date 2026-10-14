@@ -1,3 +1,26 @@
+# Focused polish completed — 2026-10-14
+
+Current request a0079752-f75d-4987-85ef-10c63af421fc is implemented and validated. Bowling now retains live world momentum through normal/sideways/backward/gutter spinouts, separates reduced authority from motion, reaches the pit, uses bounded clear-path carry and one settling clock, and keeps existing pin credit/rack/tenth-frame/cab systems. AI uses earlier alignment, reachable spare clusters and restrained oil-aware corrections. Billiards has curved numbered/striped smooth spheres, displacement-driven visual roll, gloss/shadows and noncolliding pocket drops; physical/rules/power/AI sources are preserved. Four arenas have full-volume aspect fits and compact rail/board/court HUDs, including named six-player hockey roster columns. Wallball changes are presentation only. No new sport/online system.
+
+This narrow authorization supersedes older 'do not edit four sport folders' notes only for these requested changes. All 20 protected gameplay-source and1536 ProjectSettings/Packages baseline hashes match; all five collider/Rigidbody audits match. Unrelated Git status is preserved. Continue to leave the user's copied testing builds alone; never ask to close them. Avoid native UI Automation due the earlier Editor shutdown accessibility crash. No concurrent agents/Editors; do not edit imported scripts during an owned Editor job.
+
+Final saved-scene build 14 uses LWS.TruckSports.Editor.SportsBuilder.Build, original company/preferences, no CreateValidateBuild, six scenes/startup TruckSports. Native exit 0,BuildReport Succeeded, 0 errors, 4 nonfatal warnings, 306,422,013 bytes. Exact host restoration succeeds on success/failure. Required output Builds/TruckSports/TruckSports.exe plus full payload; actual normal window launched as Truck Sports. Validation13 and final14 share all 176 managed DLL hashes and level0–5 hashes; validation company/preferences are isolated so gameplay probes do not race the user's running build.
+
+Passed: Bowling80; Billiards54; Hockey118; Arena77; Wallball70; group-choice7; sphere/placement/drop/fresh-physics A/B53; final five-aspect layout471. Native rule/ownership fixtures total 246. All final native exits 0. Four spinout fixtures reach z68.23–68.48 without premature freeze, shared assist max .55. Twelve matched AI games complete at timeScale 3: Easy mean77.0/Normal83.7/Hard86.7 vs77.3/68.7/78.3 before; spares14vs2; total gutter flags6vs6. Real-time four-lane game 287.6s scores 88/83/98/76,319 physical pinfall,80 sweeps; independent progression/scorecard/rematch pass. Sustained45,879 frames mean 6.27 ms,p95 6.28ms onGTX 1660 Ti with user apps left running. Detailed limitations/evidence in VALIDATION.md.
+
+Still human checks: subjective handling/AI balance, real keyboard rollover/controllers/shared sticks/reconnect/rumble/audio, and human Wallball play. Injected devices/poses and accelerated AI comparison are explicitly distinguished from hardware/performance testing. Do not reauthor scenes for routine builds; creation/legacy upgrade hooks now retain this polish.
+
+Git: root codex/truck-sports-3v3 retains unrelated unpublished history and must not be pushed. Sports-only implementation root475fe81db37deb91b52c2184cba47985fa32266f was replayed onto clean codex/truck-sports-polish from published badb883a0bf59e3b1f86c7f8d51d097c8184a96e as d637e67042a2acdf74d9b3c62c981f4369237ae7. Implementation push succeeded, remote hash matched and upstream0/0. Both previous completed sports work and this update's implementation are committed and pushed. This documentation follow-up records delivery; its final commit/hash/push result is in Builds/TruckSports/GIT-DELIVERY.txt and the final handoff. Keep builds/logs/caches/secrets/unrelated work excluded. All owned Unity assets include native .meta files.
+
+VENDOR ASSETS AUDITED: NWH,GR3D,Heat/TMP,DOTween,Cinemachine,existing Sports adapters.
+VENDOR ASSETS USED: NWH/GR3D/Heat/TMP/DOTween,Unity sphere/URP Lit.
+RELEVANT ASSETS NOT USED: tracked-group camera/world/road/online systems; fixed sports envelope retains existing camera authority.
+CUSTOM SYSTEMS CREATED: ball presentation/UV authoring, arena docking and focused validation; bowling/camera adapters extended.
+VENDOR SOURCE MODIFIED: NO by this update.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO new vendor subsystem.
+
+The earlier Wallball handoff below is historical.
+
 # Truck Sports five-sport checkpoint — 2026-10-14
 
 BUILD, RUNTIME AND FEATURE PUBLICATION COMPLETE. Five-sport collection with saved Wallball scene, physical NWH driving/jumps, eligible-only ball contact, ghost trucks, first-to-11/win-by-two rules, named local inputs/AI, Heat menus, forecast/shadow and feedback. Space / Right Shift / whole-pad South jumps; shared-pad LT/RT jump independently. Lower bounded contact lift 6.2–8.5 answers the reported high-ball issue. Taxi bounce was inspected but Taxi files are unchanged.
