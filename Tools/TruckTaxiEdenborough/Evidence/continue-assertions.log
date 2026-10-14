@@ -1,0 +1,78 @@
+Final Windows player assertion excerpt. First occurrence of each identical success line retained in chronological order. Raw full log remains under Temp/TruckTaxiEdenborough.
+Original selected lines: 174; unique lines: 76.
+TRUCK TAXI RESTART CONFIGURED mode=continue run=45f22675fbaa41fcb2584c0878838f7f vendorRoot=C:\Users\Jeremy\AppData\Local\Temp\Jeremy Bregermann\Interstate Hauler\TruckTaxiRestartTests\45f22675fbaa41fcb2584c0878838f7f evidenceVersion=2
+TRUCK TAXI RESTART ASSERT PASS: player boots into the actual main menu
+TRUCK TAXI RESTART ASSERT PASS: actual menu discovered scoped vendor facade
+TRUCK TAXI RESTART ASSERT PASS: drive regression requires an actual Windows player
+TRUCK TAXI RESTART ASSERT PASS: no unexpected profile in isolated directory: profile.truck-taxi
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no manual save
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no autosave
+TRUCK TAXI RESTART ASSERT PASS: test profile name is unique
+TRUCK TAXI RESTART ASSERT PASS: ASTRA_SANDBOX_TEST discovered through vendor directory
+TRUCK TAXI RESTART ASSERT PASS: vendor manual slot 1 exists
+TRUCK TAXI RESTART ASSERT PASS: vendor manual slot 2 exists
+TRUCK TAXI RESTART ASSERT PASS: vendor autosave exists
+TRUCK TAXI RESTART DRIVE SOURCE OBSERVED before completion: lws.input.keyboard-gamepad.truck owner=KeyboardMouse
+TRUCK TAXI RESTART ASSERT PASS: one active Truck Taxi host
+TRUCK TAXI RESTART DRIVE UNTOUCHED fresh-process continue focus=True resume=True paused=False scale=1 clockPaused=False gameplay=FreeDrive allows=True owner=KeyboardMouse source=lws.input.keyboard-gamepad.truck active=True sameService=True sameSource=True sameOwner=True initialized=True autoInput=True kinematic=False constraints=None vehicleEnabled=True vehicleActive=True sleeping=False fixedTime=0.9399996 actualRatio=0 isShifting=False shiftProgress=1 clutchType=Automatic clutchEngagement=0 clutchInput=0 wheels= [0:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=-1.340906 load=19972.24 contact=Edenborough_700_14] [1:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=-1.375944 load=19778.9 contact=Edenborough_700_14] [2:active=True grounded=True motorTorque=-0.8814149 brakeTorque=0 rpm=-1.493052 load=17213.61 contact=Edenborough_700_14] [3:active=True grounded=True motorTorque=0.8814149 brakeTorque=0 rpm=-1.520676 load=16926.46 contact=Edenborough_700_14] worldLife=Driving busy=False blocked=False modal=False keyboardSources=-81792:enabled=True,suppressed=False; nativeProviders=1 engine=False gear=0 PB=False locks[race/capture/recovery/fuel/travel/sleep]=False/False/False/False/False/False saveEvents[race/custom/companion/private/jug/roadPep/extreme]=False/False/False/False/False/False/0
+TRUCK TAXI RESTART ASSERT PASS: fresh-process continue registered input source object and owner unchanged; one canonical native provider
+TRUCK TAXI RESTART ASSERT PASS: fresh-process continue profile ownership
+TRUCK TAXI RESTART ASSERT PASS: fresh-process continue garage paint survives vendor save/quit/relaunch/load
+TRUCK TAXI RESTART ASSERT PASS: fresh-process continue loaded isolated drive fixture; live region=taxi.edenborough.central
+TRUCK TAXI RESTART ASSERT PASS: saved automatic transmission retained
+TRUCK TAXI RESTART ASSERT PASS: loaded pose has actual clear 25m test corridor; no relocation
+TRUCK TAXI RESTART ASSERT PASS: ordinary parking control released for W; no persistence assumption
+TRUCK TAXI RESTART ASSERT PASS: W reaches native throttle, positive NWH gear and actual forward displacement
+TRUCK TAXI RESTART W-FIRST VERIFIED fresh-process continue; no engine/shift/steering commands issued before motion
+TRUCK TAXI RESTART ASSERT PASS: W+S reaches native service brake without reverse
+TRUCK TAXI RESTART ASSERT PASS: command evidence service
+TRUCK TAXI RESTART ASSERT PASS: ParkingBrake delivered exactly once across held/released frames; actual=1
+TRUCK TAXI RESTART ASSERT PASS: P engages parking brake after native stop
+TRUCK TAXI RESTART ASSERT PASS: A reaches NWH left steering
+TRUCK TAXI RESTART ASSERT PASS: D reaches NWH right steering
+TRUCK TAXI RESTART ASSERT PASS: TransmissionShiftUp delivered exactly once across held/released frames; actual=1
+TRUCK TAXI RESTART ASSERT PASS: TransmissionShiftDown delivered exactly once across held/released frames; actual=1
+TRUCK TAXI RESTART ASSERT PASS: manual keys do not silently change automatic mode
+TRUCK TAXI RESTART ASSERT PASS: EngineStop delivered exactly once across held/released frames; actual=1
+TRUCK TAXI RESTART ASSERT PASS: Shift+E stops native engine
+TRUCK TAXI RESTART ASSERT PASS: native engine finishes spinning down before restart
+TRUCK TAXI RESTART ASSERT PASS: IgnitionToggle delivered exactly once across held/released frames; actual=1
+TRUCK TAXI RESTART ASSERT PASS: EngineStart delivered exactly once across held/released frames; actual=1
+TRUCK TAXI RESTART ASSERT PASS: E restarts native engine and finishes starter after W-first proof
+TRUCK TAXI RESTART ASSERT PASS: native truck parked with running engine for subsequent drive-save-load regression
+TRUCK TAXI RESTART DRIVE VERIFIED fresh-process continue region=taxi.edenborough.central meters=10.83305 normal keyboard only; automatic mode, not manual 18-speed or full sandbox proof
+TRUCK TAXI RESTART ASSERT PASS: actual driven pose remains stopped, parked, engine-running on validated road before save | focus=True resume=True paused=False scale=1 clockPaused=False gameplay=FreeDrive allows=True owner=KeyboardMouse source=lws.input.keyboard-gamepad.truck active=True sameService=True sameSource=True sameOwner=True initialized=True autoInput=True kinematic=False constraints=None vehicleEnabled=True vehicleActive=True sleeping=False fixedTime=9.639997 actualRatio=0 isShifting=False shiftProgress=1 clutchType=Automatic clutchEngagement=0 clutchInput=0 wheels= [0:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=0 load=28219.89 contact=Edenborough_700_14] [1:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=0 load=28034.71 contact=Edenborough_700_14] [2:active=True grounded=True motorTorque=0 brakeTorque=29600 rpm=0 load=15705.17 contact=Edenborough_700_14] [3:active=True grounded=True motorTorque=0 brakeTorque=29600 rpm=0 load=15357.5 contact=Edenborough_700_14] worldLife=Driving busy=False blocked=False modal=False keyboardSources=-81792:enabled=True,suppressed=False; nativeProviders=1 engine=True gear=0 PB=True locks[race/capture/recovery/fuel/travel/sleep]=False/False/False/False/False/False saveEvents[race/custom/companion/private/jug/roadPep/extreme]=False/False/False/False/False/False/0 speed=0.0003907673 road=True
+TRUCK TAXI RESTART ASSERT PASS: save actual post-drive state, not the original seed pose | Saved through Pixel Crushers slot 16123.
+TRUCK TAXI RESTART ASSERT PASS: actual save/load panel exists and starts closed
+TRUCK TAXI RESTART ASSERT PASS: actual panel callback contract available
+TRUCK TAXI RESTART ASSERT PASS: actual in-session load panel opened
+TRUCK TAXI RESTART ASSERT PASS: actual slot confirmation opened
+TRUCK TAXI RESTART ASSERT PASS: panel load completed within deadline
+TRUCK TAXI RESTART ASSERT PASS: actual panel load succeeded | Vibin save loaded. Ready to drive.
+TRUCK TAXI RESTART ASSERT PASS: successful load closed panel and cleared its focus without harness dismissal
+TRUCK TAXI RESTART ASSERT PASS: post-drive save restored measured global position before driving again
+TRUCK TAXI RESTART DRIVE UNTOUCHED in-session slot 3 focus=True resume=True paused=False scale=1 clockPaused=False gameplay=FreeDrive allows=True owner=KeyboardMouse source=lws.input.keyboard-gamepad.truck active=True sameService=True sameSource=True sameOwner=True initialized=True autoInput=True kinematic=False constraints=None vehicleEnabled=True vehicleActive=True sleeping=False fixedTime=10.04 actualRatio=0 isShifting=False shiftProgress=1 clutchType=Automatic clutchEngagement=0 clutchInput=0 wheels= [0:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=3.675478 load=54800.43 contact=Edenborough_700_14] [1:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=3.677562 load=54612.69 contact=Edenborough_700_14] [2:active=True grounded=True motorTorque=0 brakeTorque=29600 rpm=0 load=85636.17 contact=Edenborough_700_14] [3:active=True grounded=True motorTorque=0 brakeTorque=29600 rpm=0 load=84771.11 contact=Edenborough_700_14] worldLife=Driving busy=False blocked=False modal=False keyboardSources=-81792:enabled=True,suppressed=False; nativeProviders=1 engine=True gear=0 PB=True locks[race/capture/recovery/fuel/travel/sleep]=False/False/False/False/False/False saveEvents[race/custom/companion/private/jug/roadPep/extreme]=False/False/False/False/False/False/0
+TRUCK TAXI RESTART ASSERT PASS: in-session slot 3 registered input source object and owner unchanged; one canonical native provider
+TRUCK TAXI RESTART ASSERT PASS: in-session slot 3 profile ownership
+TRUCK TAXI RESTART ASSERT PASS: in-session slot 3 garage paint survives vendor save/quit/relaunch/load
+TRUCK TAXI RESTART ASSERT PASS: in-session slot 3 loaded isolated drive fixture; live region=taxi.edenborough.central
+TRUCK TAXI RESTART W-FIRST VERIFIED in-session slot 3; no engine/shift/steering commands issued before motion
+TRUCK TAXI RESTART DRIVE VERIFIED in-session slot 3 region=taxi.edenborough.central meters=10.1168 normal keyboard only; automatic mode, not manual 18-speed or full sandbox proof
+TRUCK TAXI RESTART ASSERT PASS: second load really changes region; regional seed slots were not overwritten
+TRUCK TAXI RESTART DRIVE UNTOUCHED in-session slot 1 focus=True resume=True paused=False scale=1 clockPaused=False gameplay=FreeDrive allows=True owner=KeyboardMouse source=lws.input.keyboard-gamepad.truck active=True sameService=True sameSource=True sameOwner=True initialized=True autoInput=True kinematic=False constraints=None vehicleEnabled=True vehicleActive=True sleeping=False fixedTime=17.33999 actualRatio=0 isShifting=False shiftProgress=1 clutchType=Automatic clutchEngagement=0 clutchInput=0 wheels= [0:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=-1.117818 load=13072.39 contact=Edenborough_640_110] [1:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=-1.117622 load=12862.52 contact=Edenborough_640_110] [2:active=True grounded=True motorTorque=0 brakeTorque=29600 rpm=0 load=0 contact=Edenborough_640_110] [3:active=True grounded=True motorTorque=0 brakeTorque=29600 rpm=0 load=0 contact=Edenborough_640_110] worldLife=Driving busy=False blocked=False modal=False keyboardSources=-81792:enabled=True,suppressed=False; nativeProviders=1 engine=True gear=0 PB=True locks[race/capture/recovery/fuel/travel/sleep]=False/False/False/False/False/False saveEvents[race/custom/companion/private/jug/roadPep/extreme]=False/False/False/False/False/False/0
+TRUCK TAXI RESTART ASSERT PASS: in-session slot 1 registered input source object and owner unchanged; one canonical native provider
+TRUCK TAXI RESTART ASSERT PASS: in-session slot 1 profile ownership
+TRUCK TAXI RESTART ASSERT PASS: in-session slot 1 garage paint survives vendor save/quit/relaunch/load
+TRUCK TAXI RESTART ASSERT PASS: in-session slot 1 loaded isolated drive fixture; live region=taxi.edenborough.bonnyrigg
+TRUCK TAXI RESTART W-FIRST VERIFIED in-session slot 1; no engine/shift/steering commands issued before motion
+TRUCK TAXI RESTART DRIVE VERIFIED in-session slot 1 region=taxi.edenborough.bonnyrigg meters=10.52026 normal keyboard only; automatic mode, not manual 18-speed or full sandbox proof
+TRUCK TAXI RESTART ASSERT PASS: destroyed truck released its input registration on menu return
+TRUCK TAXI RESTART ASSERT PASS: newly spawned truck owns its own live input source
+TRUCK TAXI RESTART DRIVE UNTOUCHED same-process menu-return Continue focus=True resume=True paused=False scale=1 clockPaused=False gameplay=FreeDrive allows=True owner=KeyboardMouse source=lws.input.keyboard-gamepad.truck active=True sameService=True sameSource=True sameOwner=True initialized=True autoInput=True kinematic=False constraints=None vehicleEnabled=True vehicleActive=True sleeping=False fixedTime=24.75999 actualRatio=0 isShifting=False shiftProgress=1 clutchType=Automatic clutchEngagement=0 clutchInput=0 wheels= [0:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=3.135866 load=42008.79 contact=Edenborough_640_110] [1:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=3.135064 load=41822.53 contact=Edenborough_640_110] [2:active=True grounded=True motorTorque=-0.2800822 brakeTorque=0 rpm=3.227778 load=9425.895 contact=Edenborough_640_110] [3:active=True grounded=True motorTorque=0.2800822 brakeTorque=0 rpm=3.226403 load=9078.646 contact=Edenborough_640_110] worldLife=Driving busy=False blocked=False modal=False keyboardSources=-516120:enabled=True,suppressed=False; nativeProviders=1 engine=False gear=0 PB=False locks[race/capture/recovery/fuel/travel/sleep]=False/False/False/False/False/False saveEvents[race/custom/companion/private/jug/roadPep/extreme]=False/False/False/False/False/False/0
+TRUCK TAXI RESTART ASSERT PASS: same-process menu-return Continue registered input source object and owner unchanged; one canonical native provider
+TRUCK TAXI RESTART ASSERT PASS: same-process menu-return Continue profile ownership
+TRUCK TAXI RESTART ASSERT PASS: same-process menu-return Continue garage paint survives vendor save/quit/relaunch/load
+TRUCK TAXI RESTART ASSERT PASS: same-process menu-return Continue loaded isolated drive fixture; live region=taxi.edenborough.bonnyrigg
+TRUCK TAXI RESTART W-FIRST VERIFIED same-process menu-return Continue; no engine/shift/steering commands issued before motion
+TRUCK TAXI RESTART DRIVE VERIFIED same-process menu-return Continue region=taxi.edenborough.bonnyrigg meters=10.82967 normal keyboard only; automatic mode, not manual 18-speed or full sandbox proof
+TRUCK TAXI RESTART PASS mode=continue run=45f22675fbaa41fcb2584c0878838f7f evidenceVersion=2 (this process only)

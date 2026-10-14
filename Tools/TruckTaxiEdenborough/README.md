@@ -1,6 +1,6 @@
 # Edenborough authoring tools
 
-Project-owned coordination for the new Truck Taxi Edenborough scene. Current acceptance state is in Checkpoint.md; source diagnostics are not a completed playable world.
+Project-owned coordination for the saved Truck Taxi Edenborough scene and actual Windows player at Builds/TruckTaxiEdenborough/TruckTaxi.exe. Current requirement-by-requirement acceptance state and remaining manual coverage are in Checkpoint.md. Evidence contains native player screenshots, isolated restart assertions, build hashes, source-prefab placements and imported mesh usage. Source diagnostics alone are not runtime proof.
 
 Editor commands: Truck Taxi/Edenborough/Create Reviewed Art Palette; Build Fresh Dedicated Scene; Validate Loaded Dedicated Scene; Use Validated Edenborough As Primary World; Build Windows.
 
