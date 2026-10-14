@@ -850,7 +850,81 @@ namespace LWS.TruckTaxi
             MarkDirty();
         }
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode) { MarkDirty(); }
-        private void OnSceneUnloaded(Scene scene) { RefreshStreamedSurfaces(); }
+        private void OnSceneUnloaded(Scene scene)
+        {
+            // A streamed chunk is not a world restore: keep surviving adapters and the bounded trace mask.
+            nextEnvironmentTarget = PruneSceneTargets(environmentTargets, scene, nextEnvironmentTarget);
+            PruneSceneTargets(groundTargets, scene);
+            PruneSceneTargets(roadTargets, scene);
+            environmentTargetIds.Clear();
+            foreach (MeshRenderer renderer in environmentTargets) environmentTargetIds.Add(renderer.GetInstanceID());
+            cachedGroundTargetIds.Clear();
+            foreach (MeshRenderer renderer in groundTargets) cachedGroundTargetIds.Add(renderer.GetInstanceID());
+
+            foreach (MeshRenderer renderer in new List<MeshRenderer>(groundBindings.Keys))
+                if (HasDepartedScene(renderer, scene)) groundBindings.Remove(renderer);
+            foreach (Terrain terrain in new List<Terrain>(terrainBindings.Keys))
+                if (HasDepartedScene(terrain, scene)) terrainBindings.Remove(terrain);
+            foreach (MeshRenderer renderer in new List<MeshRenderer>(tracedMaterials.Keys))
+                if (HasDepartedScene(renderer, scene)) tracedMaterials.Remove(renderer);
+            foreach (MeshRenderer renderer in new List<MeshRenderer>(roadDepthProxies.Keys))
+            {
+                if (!HasDepartedScene(renderer, scene)) continue;
+                MeshRenderer proxy = roadDepthProxies[renderer];
+                if (proxy != null) DestroyOwned(proxy.gameObject);
+                roadDepthProxies.Remove(renderer);
+            }
+
+            var liveMaterials = new HashSet<Material>();
+            foreach (GroundBinding binding in groundBindings.Values)
+                foreach (Material material in binding.snow) liveMaterials.Add(material);
+            foreach (TerrainBinding binding in terrainBindings.Values) liveMaterials.Add(binding.snow);
+            PruneUnusedAdapters(environmentMaterials, liveMaterials);
+            PruneUnusedAdapters(exteriorMaterials, liveMaterials);
+            PruneUnusedAdapters(trackMaterials, liveMaterials);
+
+            liveMaterials.Clear();
+            var liveRoadIds = new HashSet<int>();
+            foreach (MeshRenderer renderer in roadTargets)
+            {
+                liveMaterials.Add(renderer.sharedMaterial);
+                liveRoadIds.Add(renderer.GetInstanceID());
+            }
+            updatedSnowMaterials.IntersectWith(liveMaterials);
+            warnedIncompatibleRoads.IntersectWith(liveRoadIds);
+            MarkDirty();
+        }
+
+        private static bool HasDepartedScene(Component target, Scene scene)
+        {
+            return target == null || target.gameObject.scene == scene || !target.gameObject.scene.isLoaded;
+        }
+
+        private static int PruneSceneTargets(List<MeshRenderer> targets, Scene scene, int nextTarget = 0)
+        {
+            int count = 0, next = 0;
+            for (int i = 0; i < targets.Count; i++)
+            {
+                MeshRenderer renderer = targets[i];
+                if (HasDepartedScene(renderer, scene)) continue;
+                targets[count++] = renderer;
+                // Preserve the processed/pending boundary when entries on either side disappear.
+                if (i < nextTarget) next++;
+            }
+            targets.RemoveRange(count, targets.Count - count);
+            return next;
+        }
+
+        private static void PruneUnusedAdapters(Dictionary<Material, Material> adapters, HashSet<Material> liveMaterials)
+        {
+            foreach (Material source in new List<Material>(adapters.Keys))
+            {
+                Material adapted = adapters[source];
+                if (liveMaterials.Contains(adapted)) continue;
+                adapters.Remove(source);
+                if (adapted != null) DestroyOwned(adapted);
+            }
+        }
 
         private void OnDisable()
         {

@@ -158,6 +158,125 @@ namespace LWS.TruckTaxi.Tests
         }
 
         [Test]
+        public void SceneUnloadPrunesDeadTargetsWithoutResettingLiveSnowOrTraces()
+        {
+            Material source = Material("Universal Render Pipeline/Lit", "Grass");
+            Material terrainSource = Material("Universal Render Pipeline/Terrain/Lit", "Terrain source");
+            MeshRenderer live = Renderer("Live ground", source);
+            live.gameObject.AddComponent<TruckTaxiSurface>();
+            MeshRenderer dead = Renderer("Dead ground", Material("Universal Render Pipeline/Lit", "Departing grass"));
+            dead.gameObject.AddComponent<TruckTaxiSurface>();
+            MeshRenderer departing = Renderer("Departing ground", source);
+            departing.gameObject.AddComponent<TruckTaxiSurface>();
+            Terrain liveTerrain = CreateTerrain("Live terrain", terrainSource);
+            Terrain deadTerrain = CreateTerrain("Departing terrain",
+                Material("Universal Render Pipeline/Terrain/Lit", "Departing terrain source"));
+            surface.SetCoverage(.7f);
+            Bind();
+            Material liveSnow = live.sharedMaterial;
+            Material liveTerrainSnow = liveTerrain.materialTemplate;
+            Material deadSnow = dead.sharedMaterial;
+            Material deadTerrainSnow = deadTerrain.materialTemplate;
+            float liveDensity = liveTerrain.detailObjectDensity;
+            Assert.AreSame(liveSnow, departing.sharedMaterial);
+            Assert.AreEqual(3, surface.GroundSnowSurfaceCount);
+            Assert.AreEqual(2, surface.TerrainSnowSurfaceCount);
+            Assert.AreEqual(4, surface.SharedEnvironmentMaterialCount);
+
+            MeshRenderer tracer = Renderer("Wheel trace", source);
+            tracer.gameObject.layer = 29;
+            Field<Dictionary<int, MeshRenderer>>("wheelTracers")[0] = tracer;
+            Scene unloaded = EditorSceneManager.NewPreviewScene();
+            try
+            {
+                departing.transform.SetParent(null);
+                SceneManager.MoveGameObjectToScene(departing.gameObject, unloaded);
+                deadTerrain.transform.SetParent(null);
+                SceneManager.MoveGameObjectToScene(deadTerrain.gameObject, unloaded);
+                Object.DestroyImmediate(dead.gameObject);
+                EditorSceneManager.ClosePreviewScene(unloaded);
+                // EditMode does not dispatch this non-ExecuteAlways behaviour's runtime callbacks.
+                NotifySceneUnloaded(unloaded);
+                NotifySceneUnloaded(unloaded);
+
+                Assert.AreSame(liveSnow, live.sharedMaterial);
+                Assert.IsTrue(liveSnow != null);
+                Assert.AreSame(liveTerrainSnow, liveTerrain.materialTemplate);
+                Assert.AreEqual(liveDensity, liveTerrain.detailObjectDensity);
+                Assert.AreEqual(.7f, surface.Coverage01);
+                Assert.AreEqual(.7f, Shader.GetGlobalFloat("_TaxiSnowCoverage"));
+                Assert.AreEqual(1, surface.ActiveWheelTraceSourceCount);
+                Assert.AreEqual(1, surface.GroundSnowSurfaceCount);
+                Assert.AreEqual(1, surface.TerrainSnowSurfaceCount);
+                Assert.AreEqual(1, surface.CacheTargetCount);
+                Assert.AreEqual(1, surface.UniqueCacheTargetCount);
+                Assert.AreEqual(1, Field<List<MeshRenderer>>("environmentTargets").Count);
+                Assert.AreEqual(2, surface.SharedEnvironmentMaterialCount);
+                Assert.IsTrue(deadSnow == null);
+                Assert.IsTrue(deadTerrainSnow == null);
+                Assert.IsFalse(surface.EnvironmentBindingsReady, "Discovery must be invalidated without removing live bindings.");
+                Bind();
+                Assert.IsTrue(surface.EnvironmentBindingsReady);
+                Assert.AreSame(liveSnow, live.sharedMaterial);
+                Assert.AreEqual(1, surface.ActiveWheelTraceSourceCount);
+
+                surface.RefreshStreamedSurfaces();
+                Assert.AreSame(source, live.sharedMaterial);
+                Assert.AreSame(terrainSource, liveTerrain.materialTemplate);
+                Assert.AreEqual(.75f, liveTerrain.detailObjectDensity);
+                Assert.Zero(surface.ActiveWheelTraceSourceCount);
+                Assert.Zero(surface.SharedEnvironmentMaterialCount);
+            }
+            finally
+            {
+                if (unloaded.IsValid()) EditorSceneManager.ClosePreviewScene(unloaded);
+            }
+        }
+
+        [Test]
+        public void SceneUnloadCompactsPendingBindingsWithoutSkippingOrRebindingLiveTargets()
+        {
+            Material source = Material("Universal Render Pipeline/Lit", "Grass");
+            for (int i = 0; i < 70; i++) Renderer("Grass " + i, source);
+            surface.SetCoverage(.6f);
+            Bind();
+            List<MeshRenderer> targets = Field<List<MeshRenderer>>("environmentTargets");
+            MeshRenderer live = targets[1];
+            Material liveSnow = live.sharedMaterial;
+            Object.DestroyImmediate(targets[0].gameObject);
+            Object.DestroyImmediate(targets[69].gameObject);
+            Scene unloaded = EditorSceneManager.NewPreviewScene();
+            try
+            {
+                EditorSceneManager.ClosePreviewScene(unloaded);
+                NotifySceneUnloaded(unloaded);
+                NotifySceneUnloaded(unloaded);
+                Assert.AreEqual(68, targets.Count);
+                Assert.AreEqual(63, surface.GroundSnowSurfaceCount);
+                Assert.AreEqual(5, surface.PendingEnvironmentBindingCount);
+                Assert.AreSame(liveSnow, live.sharedMaterial);
+
+                Renderer("New streamed grass", source);
+                Bind();
+                Assert.AreEqual(69, targets.Count);
+                Assert.AreEqual(69, surface.GroundSnowSurfaceCount);
+                Assert.Zero(surface.PendingEnvironmentBindingCount);
+                Assert.IsTrue(surface.EnvironmentBindingsReady);
+                Assert.AreSame(liveSnow, live.sharedMaterial);
+                Assert.AreEqual(1, surface.SharedEnvironmentMaterialCount);
+                NotifySceneUnloaded(unloaded);
+                Bind();
+                Assert.AreEqual(69, targets.Count);
+                Assert.AreEqual(69, Field<HashSet<int>>("environmentTargetIds").Count);
+                Assert.AreEqual(69, surface.GroundSnowSurfaceCount);
+            }
+            finally
+            {
+                if (unloaded.IsValid()) EditorSceneManager.ClosePreviewScene(unloaded);
+            }
+        }
+
+        [Test]
         public void BindingBudgetAndDryTrackThresholdRemainBounded()
         {
             Material source = Material("Universal Render Pipeline/Lit", "Ground");
@@ -217,6 +336,25 @@ namespace LWS.TruckTaxi.Tests
 
         private void Bind() => typeof(TruckTaxiSnowSurface).GetMethod("BindGround",
             BindingFlags.Instance | BindingFlags.NonPublic).Invoke(surface, null);
+
+        private void NotifySceneUnloaded(Scene unloaded) => typeof(TruckTaxiSnowSurface).GetMethod("OnSceneUnloaded",
+            BindingFlags.Instance | BindingFlags.NonPublic).Invoke(surface, new object[] { unloaded });
+
+        private T Field<T>(string name) => (T)typeof(TruckTaxiSnowSurface).GetField(name,
+            BindingFlags.Instance | BindingFlags.NonPublic).GetValue(surface);
+
+        private Terrain CreateTerrain(string name, Material source)
+        {
+            var data = new TerrainData { heightmapResolution = 33, size = new Vector3(32, 10, 32) };
+            owned.Add(data);
+            var item = new GameObject(name, typeof(Terrain));
+            item.transform.SetParent(root.transform);
+            Terrain terrain = item.GetComponent<Terrain>();
+            terrain.terrainData = data;
+            terrain.materialTemplate = source;
+            terrain.detailObjectDensity = .75f;
+            return terrain;
+        }
 
         private Material Material(string shader, string name)
         {
