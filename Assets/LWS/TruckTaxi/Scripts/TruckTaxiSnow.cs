@@ -252,6 +252,8 @@ namespace LWS.TruckTaxi
             if (!CanRestore(value) || !Region.Restore(value)) return false;
             backgroundDepth = value.backgroundDepth;
             traction.ClearModifiers();
+            // Snapshot data owns accumulation, not runtime material bindings or the local trace texture.
+            surface.RefreshStreamedSurfaces();
             surface.SetCoverage(backgroundDepth / Region.MaximumDepth);
             surface.Refresh();
             nextVisualUpdate = 0;
@@ -333,11 +335,13 @@ namespace LWS.TruckTaxi
                 if (grounded && wheel.hasContact && snowDepthPresent)
                 {
                     Collider hitCollider = api.HitCollider;
-                    if (hitCollider != wheel.contactCollider)
+                    if (hitCollider != wheel.contactCollider || apply)
                     {
+                        bool wasOffRoad = wheel.snowCoveredGround;
                         wheel.contactCollider = hitCollider;
-                        TruckTaxiSurface hitSurface = hitCollider != null ? hitCollider.GetComponentInParent<TruckTaxiSurface>() : null;
-                        wheel.snowCoveredGround = hitSurface != null && !hitSurface.isRoad;
+                        wheel.snowCoveredGround = surface != null && api.HitNormal.y > .25f &&
+                            surface.IsSnowCoveredOffRoad(hitCollider, contact, transform);
+                        if (wasOffRoad != wheel.snowCoveredGround) wheel.hasTraceContact = false;
                     }
                     // Shoulders use the same accumulated Weatherade snow; lane cells retain plow/compression semantics.
                     float traceDepth = wheel.snowCoveredGround ? Mathf.Max(depth, backgroundDepthMeters) : depth;
@@ -358,7 +362,7 @@ namespace LWS.TruckTaxi
                             new Vector2(wheel.lastTraceContact.x, wheel.lastTraceContact.z));
                         if (traceDistance >= .05f && traceDistance <= 5f)
                         {
-                            surface.TraceWheel(i, wheel.lastTraceContact, contact, Mathf.Max(.15f, api.Width), traceDepth);
+                            surface.TraceWheel(i, wheel.lastTraceContact, contact, Mathf.Max(.15f, api.Width), traceDepth, wheel.snowCoveredGround);
                             wheel.lastTraceContact = contact;
                             wheel.lastTraceTime = Time.time;
                         }

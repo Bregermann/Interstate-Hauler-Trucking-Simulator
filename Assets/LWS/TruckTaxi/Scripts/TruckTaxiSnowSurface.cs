@@ -4,6 +4,7 @@ using System.Reflection;
 using LWS.InterstateHauler;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 namespace LWS.TruckTaxi
 {
@@ -29,6 +30,19 @@ namespace LWS.TruckTaxi
         private readonly HashSet<Material> updatedSnowMaterials = new HashSet<Material>();
         private readonly HashSet<int> warnedIncompatibleRoads = new HashSet<int>();
         private readonly Dictionary<MeshRenderer, GroundBinding> groundBindings = new Dictionary<MeshRenderer, GroundBinding>();
+        private readonly Dictionary<Material, Material> environmentMaterials = new Dictionary<Material, Material>();
+        private readonly Dictionary<Material, Material> exteriorMaterials = new Dictionary<Material, Material>();
+        private readonly Dictionary<Material, Material> trackMaterials = new Dictionary<Material, Material>();
+        private readonly Dictionary<Terrain, TerrainBinding> terrainBindings = new Dictionary<Terrain, TerrainBinding>();
+        private readonly List<MeshRenderer> environmentTargets = new List<MeshRenderer>();
+        private readonly HashSet<int> environmentTargetIds = new HashSet<int>();
+        private readonly Dictionary<int, MeshRenderer> wheelDepthProxies = new Dictionary<int, MeshRenderer>();
+        private readonly RaycastHit[] exposureHits = new RaycastHit[32];
+        private int nextEnvironmentTarget;
+        private static readonly int EnvironmentCoverageId = Shader.PropertyToID("_TaxiSnowCoverage");
+        private static readonly int EnvironmentTextureId = Shader.PropertyToID("_TaxiSnowTexture");
+        private static readonly int EnvironmentExposureId = Shader.PropertyToID("_TaxiSnowExposure");
+        private static readonly int EnvironmentTracesId = Shader.PropertyToID("_TaxiSnowTracesReady");
         private readonly Dictionary<Camera, CameraMask> cameraMasks = new Dictionary<Camera, CameraMask>();
         private readonly HashSet<Camera> boundDepthCameras = new HashSet<Camera>();
         private bool targetsCached;
@@ -49,8 +63,14 @@ namespace LWS.TruckTaxi
 
         private struct GroundBinding
         {
-            public Material original;
-            public Material snow;
+            public Material[] original;
+            public Material[] snow;
+            public bool trackable;
+        }
+        private struct TerrainBinding
+        {
+            public Material original, snow;
+            public float detailDensity;
         }
         private struct CameraMask
         {
@@ -75,6 +95,10 @@ namespace LWS.TruckTaxi
             }
         }
         public int GroundSnowSurfaceCount => groundBindings.Count;
+        public int TerrainSnowSurfaceCount => terrainBindings.Count;
+        public int SharedEnvironmentMaterialCount => environmentMaterials.Count + exteriorMaterials.Count + trackMaterials.Count;
+        public int PendingEnvironmentBindingCount => coverage01 <= .001f ? 0 : Mathf.Max(0, environmentTargets.Count - nextEnvironmentTarget);
+        public bool EnvironmentBindingsReady => coverage01 <= .001f || targetsCached && nextEnvironmentTarget >= environmentTargets.Count;
         // Discovery-time ground-cache counts, not live renderer counts.
         public int CacheTargetCount => groundTargets.Count;
         public int UniqueCacheTargetCount => cachedGroundTargetIds.Count;
@@ -117,7 +141,8 @@ namespace LWS.TruckTaxi
 
         public void SetCoverage(float value)
         {
-            coverage01 = Mathf.Clamp01(value);
+            coverage01 = float.IsFinite(value) ? Mathf.Clamp01(value) : 0;
+            Shader.SetGlobalFloat(EnvironmentCoverageId, coverage01);
             weatherade?.SetExternalCoverageControl(coverage01 > .001f);
         }
         public void ConfigureVendorTextures(Texture2D main, Texture2D detail, Texture2D sparkle)
@@ -125,6 +150,7 @@ namespace LWS.TruckTaxi
             snowTexture = main;
             snowDetailTexture = detail;
             snowSparkleTexture = sparkle;
+            Shader.SetGlobalTexture(EnvironmentTextureId, main);
             lastAppliedCoverage = -1;
         }
         public void ConfigureDepthRenderer(int rendererIndex) { depthRendererIndex = rendererIndex; }
@@ -135,6 +161,9 @@ namespace LWS.TruckTaxi
             targetsCached = false;
             roadTargets.Clear(); groundTargets.Clear();
             cachedGroundTargetIds.Clear();
+            environmentTargets.Clear(); environmentTargetIds.Clear(); nextEnvironmentTarget = 0;
+            StopAllTraces();
+            ClearTraceHistory();
             foreach (var proxy in roadDepthProxies.Values) if (proxy != null) Destroy(proxy.gameObject);
             roadDepthProxies.Clear(); tracedMaterials.Clear();
             RestoreGround(); lastAppliedCoverage = -1;
@@ -173,11 +202,12 @@ namespace LWS.TruckTaxi
                     condition = LwsRoadConditionType.LightSnow,
                     snowDepth01 = Mathf.Max(.021f, coverage01)
                 });
-                targetsCached = false;
                 nextRoadRegistration = Time.unscaledTime + 3f;
             }
             if (current == null || current.GetType().FullName != SnowCoverageType)
             {
+                Shader.SetGlobalFloat(EnvironmentCoverageId, 0);
+                Shader.SetGlobalFloat(EnvironmentTracesId, 0);
                 coverage = null;
                 generator = null;
                 StopAllTraces();
@@ -196,7 +226,11 @@ namespace LWS.TruckTaxi
                 boundDepthCameras.Clear();
                 ConfigureTrackAppearance(current);
             }
+            Shader.SetGlobalFloat(EnvironmentCoverageId, coverage01);
             BindCoverageDepthCamera(current);
+            Shader.SetGlobalVector(EnvironmentExposureId, new Vector4(
+                ReadFloat(current, "coverageAreaBias", .025f), ReadFloat(current, "coverageAreaMaskRange", 1),
+                ReadFloat(current, "coverageLeakReduction", 0), 1));
             BindVendorTextures(current);
             FieldInfo amount = current.GetType().GetField("coverageAmount", BindingFlags.Instance | BindingFlags.Public);
             MethodInfo update = current.GetType().GetMethod("UpdateCoverageMaterials", BindingFlags.Instance | BindingFlags.Public);
@@ -217,8 +251,9 @@ namespace LWS.TruckTaxi
             }
             EnsureTraceGenerator();
             BindTraceDepthCameras();
+            Shader.SetGlobalFloat(EnvironmentTracesId, TraceMaskReady ? 1 : 0);
             UpdateVisualDiagnostic();
-            Diagnostic = $"Weatherade SnowCoverage {coverage01:0.00}; SRS renderer={depthRendererIndex}, bound cameras={BoundDepthCameraCount}; snow texture ready={SnowTextureReady}; updated snow materials={BoundSnowMaterialCount}; trace mask ready={TraceMaskReady}; road depth sources={RoadDepthSourceCount}; ground surfaces={GroundSnowSurfaceCount}.";
+            Diagnostic = $"Weatherade SnowCoverage {coverage01:0.00}; SRS renderer={depthRendererIndex}, bound cameras={BoundDepthCameraCount}; snow texture ready={SnowTextureReady}; updated snow materials={BoundSnowMaterialCount}; trace mask ready={TraceMaskReady}; road depth sources={RoadDepthSourceCount}; environment surfaces={GroundSnowSurfaceCount}, terrains={TerrainSnowSurfaceCount}, shared materials={SharedEnvironmentMaterialCount}.";
         }
 
         private void BindCoverageDepthCamera(Component current)
@@ -379,6 +414,11 @@ namespace LWS.TruckTaxi
 
         public void TraceWheel(int index, Vector3 from, Vector3 to, float width, float depthMeters)
         {
+            TraceWheel(index, from, to, width, depthMeters, false);
+        }
+
+        public void TraceWheel(int index, Vector3 from, Vector3 to, float width, float depthMeters, bool offRoad)
+        {
             float strength = TrackStrength(depthMeters, coverage01);
             if (generator == null || strength <= 0) { StopWheelTrace(index); return; }
             if (!wheelTracers.TryGetValue(index, out MeshRenderer tracer) || tracer == null)
@@ -387,13 +427,53 @@ namespace LWS.TruckTaxi
                 if (tracer == null) return;
                 wheelTracers[index] = tracer;
             }
-            PlaceTrace(tracer, from, to, Mathf.Max(.34f, width * 1.15f), .18f + .36f * strength, .03f);
+            width = Mathf.Max(.15f, width);
+            PlaceTrace(tracer, from, to, width, .18f + .36f * strength, .03f);
+            if (offRoad)
+            {
+                if (!wheelDepthProxies.TryGetValue(index, out MeshRenderer depth) || depth == null)
+                {
+                    depth = CreateTracer("Taxi wheel contact depth " + index);
+                    if (depth != null) depth.gameObject.layer = SurfaceLayer;
+                    wheelDepthProxies[index] = depth;
+                }
+                // A reusable contact-sized depth volume, pitched between real NWH contacts.
+                // No terrain tessellation/rebuild, raycast grid, or duplicate terrain is required.
+                PlaceTrace(depth, from, to, width * 1.6f, .04f, -.02f);
+            }
+            else if (wheelDepthProxies.TryGetValue(index, out MeshRenderer depth) && depth != null) depth.enabled = false;
             WheelTraceStampCount++;
         }
 
         public void StopWheelTrace(int index)
         {
             if (wheelTracers.TryGetValue(index, out MeshRenderer tracer) && tracer != null) tracer.enabled = false;
+            if (wheelDepthProxies.TryGetValue(index, out MeshRenderer depth) && depth != null) depth.enabled = false;
+        }
+
+        public bool IsSnowCoveredOffRoad(Collider collider, Vector3 point, Transform vehicle)
+        {
+            if (collider == null || collider.isTrigger || !IsTaxiScene(collider.gameObject.scene)) return false;
+            TruckTaxiSurface marked = collider.GetComponentInParent<TruckTaxiSurface>();
+            if (marked != null && marked.isRoad || collider.GetComponentInParent<LwsRoadSurface>() != null) return false;
+            bool supported = collider is TerrainCollider terrainCollider &&
+                terrainCollider.GetComponent<Terrain>() is Terrain terrain && terrainBindings.ContainsKey(terrain);
+            if (!supported)
+            {
+                MeshRenderer renderer = collider.GetComponent<MeshRenderer>() ?? collider.GetComponentInParent<MeshRenderer>();
+                supported = renderer != null && groundBindings.TryGetValue(renderer, out GroundBinding binding) && binding.trackable;
+            }
+            if (!supported) return false;
+            int count = Physics.RaycastNonAlloc(point + Vector3.up * .15f, Vector3.up, exposureHits, 128,
+                ~((1 << SurfaceLayer) | (1 << TraceLayer)), QueryTriggerInteraction.Ignore);
+            if (count == exposureHits.Length) return false;
+            for (int i = 0; i < count; i++)
+            {
+                Transform hit = exposureHits[i].transform;
+                if (vehicle != null && hit.IsChildOf(vehicle)) continue;
+                return false;
+            }
+            return true;
         }
 
         private void EnsureTraceGenerator()
@@ -484,35 +564,184 @@ namespace LWS.TruckTaxi
                 {
                     if (!groundTargets.Contains(renderer)) groundTargets.Add(renderer);
                     cachedGroundTargetIds.Add(renderer.GetInstanceID());
-                    if (!roadTargets.Contains(renderer)) roadTargets.Add(renderer);
                 }
+            }
+            foreach (MeshRenderer renderer in FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None))
+            {
+                if (renderer == null || !IsTaxiScene(renderer.gameObject.scene) ||
+                    renderer.gameObject.layer == SurfaceLayer || renderer.gameObject.layer == TraceLayer ||
+                    renderer.GetComponentInParent<LwsRoadSurface>() != null || IsExcludedEnvironment(renderer.transform)) continue;
+                if (environmentTargetIds.Add(renderer.GetInstanceID())) environmentTargets.Add(renderer);
             }
         }
 
         private void BindGround()
         {
             CacheTargets();
-            foreach (MeshRenderer renderer in groundTargets)
+            // Streamed surfaces are discovered once, then adapted in bounded batches.
+            int end = Mathf.Min(nextEnvironmentTarget + 64, environmentTargets.Count);
+            while (nextEnvironmentTarget < end)
             {
+                MeshRenderer renderer = environmentTargets[nextEnvironmentTarget++];
                 if (renderer == null || groundBindings.ContainsKey(renderer)) continue;
-                Material original = renderer.sharedMaterial;
-                if (original == null || LwsWeatheradeMaterialFactory.IsWeatheradeMaterialForMode(original, LwsWeatheradeSurfaceMaterialMode.Snow)) continue;
-                if (!LwsWeatheradeMaterialFactory.TryCreateWeatheradeRoadSurfaceMaterial(
-                    "Taxi Weatherade ground " + renderer.name, original, Color.white,
-                    LwsWeatheradeSurfaceMaterialMode.Snow, out Material snow)) continue;
-                renderer.sharedMaterial = snow;
-                groundBindings[renderer] = new GroundBinding { original = original, snow = snow };
+                Material[] original = renderer.sharedMaterials;
+                Material[] snow = (Material[])original.Clone();
+                bool changed = false;
+                bool exterior = IsExteriorSurface(renderer);
+                bool trackable = IsTrackSurface(renderer);
+                for (int i = 0; i < snow.Length; i++)
+                {
+                    Material adapted = AdaptEnvironmentMaterial(original[i], exterior, trackable);
+                    if (adapted == null) continue;
+                    snow[i] = adapted;
+                    changed = true;
+                }
+                if (!changed) continue;
+                renderer.sharedMaterials = snow;
+                groundBindings[renderer] = new GroundBinding { original = original, snow = snow, trackable = trackable };
             }
+            BindTerrains();
         }
 
         private void RestoreGround()
         {
             foreach (var pair in groundBindings)
             {
-                if (pair.Key != null && pair.Key.sharedMaterial == pair.Value.snow) pair.Key.sharedMaterial = pair.Value.original;
-                if (pair.Value.snow != null) Destroy(pair.Value.snow);
+                if (pair.Key == null) continue;
+                Material[] current = pair.Key.sharedMaterials;
+                bool changed = false;
+                for (int i = 0; i < current.Length && i < pair.Value.snow.Length; i++)
+                    if (current[i] == pair.Value.snow[i]) { current[i] = pair.Value.original[i]; changed = true; }
+                if (changed) pair.Key.sharedMaterials = current;
             }
             groundBindings.Clear();
+            foreach (var pair in terrainBindings)
+            {
+                if (pair.Key == null) continue;
+                if (pair.Key.materialTemplate == pair.Value.snow) pair.Key.materialTemplate = pair.Value.original;
+                pair.Key.detailObjectDensity = pair.Value.detailDensity;
+            }
+            terrainBindings.Clear();
+            foreach (Material material in environmentMaterials.Values) if (material != null) DestroyOwned(material);
+            foreach (Material material in exteriorMaterials.Values) if (material != null) DestroyOwned(material);
+            foreach (Material material in trackMaterials.Values) if (material != null) DestroyOwned(material);
+            environmentMaterials.Clear();
+            exteriorMaterials.Clear();
+            trackMaterials.Clear();
+            nextEnvironmentTarget = 0;
+        }
+
+        public static bool IsSnowEligibleMaterial(Material material)
+        {
+            if (material == null || material.shader == null || material.renderQueue >= (int)RenderQueue.Transparent ||
+                material.GetTag("RenderType", false) == "Transparent" ||
+                material.HasProperty("_Surface") && material.GetFloat("_Surface") > .5f) return false;
+            string name = material.name.ToLowerInvariant();
+            return !name.Contains("glass") && !name.Contains("window") && !name.Contains("water") &&
+                !name.Contains("interior") && !name.Contains("screen");
+        }
+
+        private static bool IsExcludedEnvironment(Transform target)
+        {
+            for (Transform current = target; current != null; current = current.parent)
+            {
+                string name = current.name.ToLowerInvariant();
+                if (name.Contains("interior") || name.Contains("indoor") || name.Contains("passenger") ||
+                    name.Contains("player") || name.Contains("cockpit") || name.Contains("hud")) return true;
+            }
+            return false;
+        }
+
+        private static bool IsExteriorSurface(MeshRenderer renderer)
+        {
+            // Conservative distant fallback. Composite buildings/floors require the depth volume;
+            // explicit outdoor geometry can remain snowy beyond its bounded shelter map.
+            string name = renderer.name.ToLowerInvariant();
+            foreach (string token in new[] { "roof", "awning", "grass", "ground", "terrain", "dirt", "rock", "tree",
+                "bush", "shrub", "sidewalk", "pavement", "fence", "barrier", "bench", "dumpster", "container" })
+                if (name.Contains(token)) return true;
+            return false;
+        }
+
+        private static bool IsTrackSurface(MeshRenderer renderer)
+        {
+            TruckTaxiSurface marker = renderer.GetComponentInParent<TruckTaxiSurface>();
+            if (marker != null) return !marker.isRoad;
+            string name = renderer.name.ToLowerInvariant();
+            foreach (string token in new[] { "grass", "ground", "terrain", "dirt", "field", "earth", "shoulder", "parking", "sidewalk", "pavement" })
+                if (name.Contains(token)) return true;
+            return false;
+        }
+
+        private Material AdaptEnvironmentMaterial(Material source, bool exterior, bool trackable)
+        {
+            if (!IsSnowEligibleMaterial(source)) return null;
+            var cache = trackable ? trackMaterials : exterior ? exteriorMaterials : environmentMaterials;
+            if (cache.TryGetValue(source, out Material cached)) return cached;
+            string resource;
+            switch (source.shader.name)
+            {
+                case "Universal Render Pipeline/Lit": resource = trackable ? "EnvironmentLitGround" : exterior ? "EnvironmentLitExterior" : "EnvironmentLit"; break;
+                case "NatureManufacture/URP/Foliage/Foliage": resource = "EnvironmentFoliage"; break;
+                case "Toby Fredson/The Toby Foliage Engine/(TTFE) Tree Foliage": resource = "EnvironmentTreeFoliage"; break;
+                case "Toby Fredson/The Toby Foliage Engine/(TTFE) Tree Bark": resource = "EnvironmentTreeBark"; break;
+                case "Toby Fredson/The Toby Foliage Engine/(TTFE) Tree Billboard": resource = "EnvironmentTreeBillboard"; break;
+                default: return null; // Unknown shaders retain their authored presentation.
+            }
+            Shader shader = Resources.Load<Shader>("TruckTaxi/Snow/" + resource);
+            if (shader == null || !shader.isSupported) return null;
+            var material = new Material(source) { name = source.name + " Taxi snow", shader = shader, hideFlags = HideFlags.DontSave };
+            material.enableInstancing = source.enableInstancing;
+            material.shaderKeywords = source.shaderKeywords;
+            cache.Add(source, material);
+            return material;
+        }
+
+        private void BindTerrains()
+        {
+            foreach (Terrain terrain in Terrain.activeTerrains)
+            {
+                if (terrain == null || !IsTaxiScene(terrain.gameObject.scene) || terrain.terrainData == null) continue;
+                if (!terrainBindings.TryGetValue(terrain, out TerrainBinding binding))
+                {
+                    Material source = terrain.materialTemplate;
+                    if (source == null || source.shader == null || source.shader.name != "Universal Render Pipeline/Terrain/Lit") continue;
+                    if (!environmentMaterials.TryGetValue(source, out Material snow))
+                    {
+                        Material template = Resources.Load<Material>("TruckTaxi/Snow/EnvironmentTerrain");
+                        if (template == null || !template.shader.isSupported) continue;
+                        snow = new Material(template) { name = source.name + " Taxi snow", hideFlags = HideFlags.DontSave, enableInstancing = true };
+                        foreach (string property in new[] { "_EnableHeightBlend", "_HeightTransition", "_EnableInstancedPerPixelNormal" })
+                            if (source.HasProperty(property)) snow.SetFloat(property, source.GetFloat(property));
+                        if (source.IsKeywordEnabled("_TERRAIN_BLEND_HEIGHT")) snow.EnableKeyword("_TERRAIN_BLEND_HEIGHT");
+                        if (source.IsKeywordEnabled("_NORMALMAP")) snow.EnableKeyword("_NORMALMAP");
+                        environmentMaterials.Add(source, snow);
+                    }
+                    binding = new TerrainBinding { original = source, snow = snow, detailDensity = terrain.detailObjectDensity };
+                    terrainBindings.Add(terrain, binding);
+                    terrain.materialTemplate = snow;
+                }
+                if (coverage != null)
+                    coverage.GetType().GetMethod("UpdateCoverageMaterial", BindingFlags.Instance | BindingFlags.Public)?.Invoke(coverage, new object[] { binding.snow });
+                // Only the live instance changes; TerrainData/detail prototypes remain untouched.
+                terrain.detailObjectDensity = binding.detailDensity * Mathf.Lerp(1, .18f, coverage01 * coverage01);
+            }
+        }
+
+        private static float ReadFloat(Component component, string field, float fallback)
+        {
+            for (Type type = component.GetType(); type != null; type = type.BaseType)
+            {
+                FieldInfo member = type.GetField(field, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+                if (member?.GetValue(component) is float value) return value;
+            }
+            return fallback;
+        }
+
+        private static void DestroyOwned(UnityEngine.Object value)
+        {
+            if (Application.isPlaying) Destroy(value);
+            else DestroyImmediate(value);
         }
 
         private void HideTraceLayersFromGameCameras()
@@ -560,7 +789,6 @@ namespace LWS.TruckTaxi
         {
             if (tracer == null) return;
             Vector3 direction = to - from;
-            direction.y = 0;
             if (direction.sqrMagnitude < .0025f) { tracer.enabled = false; return; }
             Transform shape = tracer.transform;
             shape.SetPositionAndRotation((from + to) * .5f + Vector3.up * yOffset, Quaternion.LookRotation(direction.normalized, Vector3.up));
@@ -590,15 +818,46 @@ namespace LWS.TruckTaxi
             component.GetType().GetField(name, BindingFlags.Instance | BindingFlags.NonPublic)?.SetValue(component, value);
         }
 
+        private void ClearTraceHistory()
+        {
+            if (generator == null) return;
+            RenderTexture previous = RenderTexture.active;
+            try
+            {
+                foreach (string field in new[] { "traceMaskRT", "finalTraceMask", "bluredRT", "traceTex" })
+                {
+                    RenderTexture texture = generator.GetType().GetField(field, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(generator) as RenderTexture;
+                    if (texture == null || !texture.IsCreated()) continue;
+                    RenderTexture.active = texture;
+                    GL.Clear(false, true, field == "traceTex" ? new Color(.5f, .5f, 0, .5f) : Color.clear);
+                }
+            }
+            finally { RenderTexture.active = previous; }
+        }
+
         private void StopAllTraces()
         {
             StopPlowTrace();
             foreach (MeshRenderer tracer in wheelTracers.Values) if (tracer != null) tracer.enabled = false;
             foreach (MeshRenderer proxy in roadDepthProxies.Values) if (proxy != null) proxy.enabled = false;
+            foreach (MeshRenderer proxy in wheelDepthProxies.Values) if (proxy != null) proxy.enabled = false;
         }
+
+        private void OnEnable()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+            MarkDirty();
+        }
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode) { MarkDirty(); }
+        private void OnSceneUnloaded(Scene scene) { RefreshStreamedSurfaces(); }
 
         private void OnDisable()
         {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
+            Shader.SetGlobalFloat(EnvironmentCoverageId, 0);
+            Shader.SetGlobalFloat(EnvironmentTracesId, 0);
             StopAllTraces(); RestoreGround(); RestoreCameraMasks();
             weatherade?.SetExternalCoverageControl(false);
         }
@@ -608,7 +867,7 @@ namespace LWS.TruckTaxi
             RestoreGround();
             RestoreCameraMasks();
             if (createdGenerator && generator != null) Destroy(generator);
-            if (traceMaterial != null) Destroy(traceMaterial);
+            if (traceMaterial != null) DestroyOwned(traceMaterial);
         }
     }
 }
