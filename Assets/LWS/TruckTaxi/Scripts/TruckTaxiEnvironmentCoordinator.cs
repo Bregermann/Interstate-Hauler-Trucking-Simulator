@@ -6,7 +6,7 @@ using UnityEngine;
 namespace LWS.TruckTaxi
 {
     // Taxi policy only: LWS owns elapsed game time and weather, Weather Maker owns visuals.
-    [DefaultExecutionOrder(80), DisallowMultipleComponent]
+    [DefaultExecutionOrder(-150), DisallowMultipleComponent]
     public sealed class TruckTaxiEnvironmentCoordinator : MonoBehaviour
     {
         public TruckTaxiEnvironmentSettings settings;
@@ -37,6 +37,15 @@ namespace LWS.TruckTaxi
         public TruckTaxiSnow Snow { get; private set; }
         public TruckTaxiCalendarWeatherService CalendarWeather { get; private set; }
 
+        private void Awake()
+        {
+            // Weatherade can render depth during OnEnable. Its URP passes need the scene's
+            // Weather Maker managers before coverage starts, including on return trips.
+            if (weatherAdapter == null) return;
+            adapterWasEnabled = weatherAdapter.enabled;
+            weatherAdapter.enabled = true;
+        }
+
         public bool Initialize(TruckTaxiBootstrap owner)
         {
             if (initialized) return true;
@@ -59,7 +68,7 @@ namespace LWS.TruckTaxi
             // The installed vendor sky renderer deliberately leaves assigned Unity skyboxes
             // alone. Taxi uses Weather Maker's generated sky, including at night.
             RenderSettings.skybox = null;
-            adapterWasEnabled = weatherAdapter.enabled; weatherAdapter.enabled = true;
+            weatherAdapter.enabled = true;
             AutomaticWeather = settings.automaticWeather;
             Frozen = !settings.timeProgressionEnabled;
             clock.SetTimeScale(Mathf.Max(0, settings.timeScale));
