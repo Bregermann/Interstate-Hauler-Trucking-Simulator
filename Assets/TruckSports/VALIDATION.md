@@ -1,3 +1,7 @@
+# Five-sport Wallball validation — 2026-10-14
+
+Current saved-scene build 07 and final physical/software-input probes passed. See ../TruckWallball/VALIDATION.md for native exits, 720p/1080p checks, complete autonomous match, preservation hashes, performance under concurrent desktop load and manual hardware/handling limits. All four older sport folders and host settings are preserved. The prior reports below are historical.
+
 > Current five-scene/four-sport Windows validation: ../TruckAirHockey/VALIDATION.md. Final build 16, both-resolution physical fixtures, sustained full AI match/rematch evidence, preservation hashes and manual limits. Older reports below are explicitly historical.
 
 > Historical three-scene handoff (2026-10-12). The executable has since been rebuilt with Bowling as the third sport. Current four-scene build, physical match/regression evidence and limitations: ../TruckBowling/VALIDATION.md.

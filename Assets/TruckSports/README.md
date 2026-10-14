@@ -1,3 +1,9 @@
+# Truck Sports — five offline sports
+
+Wallball adds a physical 1v1 front-wall court with grounded jumping, eligible-only contacts, first-to-11/win-by-two scoring, named human/AI slots and full local input setup. Space / Right Shift / controller South jumps; shared pads use LT and RT independently. See ../TruckWallball/README.md and VALIDATION.md for controls, vendor ownership and current evidence. Billiards, Bowling, Ice Hockey and Air Hockey gameplay/tuning remain unchanged. Final Windows builder is LWS.TruckSports.Editor.SportsBuilder.Build with six explicit saved scenes and exact host-setting restoration.
+
+The four-sport and earlier reports below are historical; the Wallball validation report identifies the current build and delivery.
+
 # Truck Sports — four offline sports
 
 2026-10-14 update: larger, more slippery 3v3 Ice Hockey with strong coherent physical hits, plus first-to-7 Truck Air Hockey. Billiards and first-person Bowling source/scenes/tuning are preserved. Start at TruckSports; five-scene Windows development builder: LWS.TruckSports.Editor.SportsBuilder.Build. Output Builds/TruckSports/TruckSports.exe. Keep the complete generated directory together.
@@ -8,7 +14,7 @@ Air Hockey uses the original 24 × 12 footprint, two confined trucks without sti
 
 Truck Sports is the existing local Windows collection in Interstate: Hauler. Start with Assets/TruckSports/Scenes/TruckSports.unity. The development executable is F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\Builds\TruckSports\TruckSports.exe; keep its entire build payload together.
 
-TRUCK SPORTS > Play > Billiards Match, Billiards Practice, Hockey, Bowling or Air Hockey. Existing title, settings, navigation, scene transitions and DOTween results remain. Shared Master/SFX/steering/display/vibration preferences retain the TruckBilliards.Settings.* keys. Each sport saves its participant setup separately. UPDATE_3V3.md records the previous update. Current Bowling and combined-build evidence is in ../TruckBowling/VALIDATION.md; VALIDATION.md preserves the earlier three-scene evidence.
+TRUCK SPORTS > Play > Billiards Match, Billiards Practice, Hockey, Bowling, Air Hockey or Wallball. Existing title, settings, navigation, scene transitions and DOTween results remain. Shared Master/SFX/steering/display/vibration preferences retain the TruckBilliards.Settings.* keys. Each sport saves its participant setup separately. UPDATE_3V3.md records the previous update. Current Bowling and combined-build evidence is in ../TruckBowling/VALIDATION.md; VALIDATION.md preserves the earlier three-scene evidence.
 
 ## Bowling: the truck is the ball
 
@@ -66,7 +72,7 @@ On an open table, one legally potted group assigns automatically. If the same le
 
 ## Build and future authoring
 
-Final builds use LWS.TruckSports.Editor.SportsBuilder.Build from the saved scenes. It validates and supplies a build-specific explicit array: TruckSports, TruckBilliards, TruckHockey, TruckBowling. Truck Sports branding is scoped, with exact host PlayerSettings and EditorBuildSettings restoration on success and failure. Original host/Truck Taxi configurations remain untouched.
+Final builds use LWS.TruckSports.Editor.SportsBuilder.Build from the saved scenes. It validates and supplies a build-specific explicit array: TruckSports, TruckBilliards, TruckHockey, TruckBowling, TruckAirHockey, TruckWallball. Truck Sports branding is scoped, with exact host PlayerSettings and EditorBuildSettings restoration on success and failure. Original host/Truck Taxi configurations remain untouched.
 
 SportsUpdateAuthoring.UpgradeAll is the explicit owned-scene migration. SportsBuilder.CreateValidateBuild reauthors the front end and hockey scene; inspect it before use on hand-tuned scenes. Updated authoring defaults now produce six trucks and the current setup. BilliardsMenuBuilder's explicit recreation also applies the current Billiards upgrade. The existing Billiards-only builder remains.
 

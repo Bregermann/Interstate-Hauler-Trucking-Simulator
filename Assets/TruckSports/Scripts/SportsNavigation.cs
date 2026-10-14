@@ -4,13 +4,13 @@ using UnityEngine.SceneManagement;
 using LWS.TruckBilliards;
 namespace LWS.TruckSports {
 public static class SportsNavigation {
- public const string Front="TruckSports",Billiards="TruckBilliards",Hockey="TruckHockey",Bowling="TruckBowling",AirHockey="TruckAirHockey";
+ public const string Front="TruckSports",Billiards="TruckBilliards",Hockey="TruckHockey",Bowling="TruckBowling",AirHockey="TruckAirHockey",Wallball="TruckWallball";
  public static bool Collection{get;private set;} public static bool OpenSelection,BilliardsPractice;
  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset(){Collection=false;OpenSelection=false;BilliardsPractice=false;SceneManager.sceneLoaded-=Loaded;SceneManager.sceneLoaded+=Loaded;}
  static void Loaded(Scene scene,LoadSceneMode mode){if(Collection&&scene.name==Billiards){var s=Object.FindAnyObjectByType<BilliardsSession>();if(s!=null)s.gameObject.AddComponent<SportsBilliardsEntry>();}}
  static void Load(string scene){
 #if UNITY_EDITOR
-string folder=scene==Front?"TruckSports":scene==Hockey?"TruckHockey":scene==Bowling?"TruckBowling":scene==AirHockey?"TruckAirHockey":"TruckBilliards";UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode("Assets/"+folder+"/Scenes/"+scene+".unity",new LoadSceneParameters(LoadSceneMode.Single));
+string folder=scene==Front?"TruckSports":scene==Hockey?"TruckHockey":scene==Bowling?"TruckBowling":scene==AirHockey?"TruckAirHockey":scene==Wallball?"TruckWallball":"TruckBilliards";UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode("Assets/"+folder+"/Scenes/"+scene+".unity",new LoadSceneParameters(LoadSceneMode.Single));
 #else
 SceneManager.LoadScene(scene,LoadSceneMode.Single);
 #endif
@@ -23,7 +23,3 @@ public static void EnterCollection(){Collection=true;}
  public static void FrontEnd(bool selection=true){OpenSelection=selection;Time.timeScale=1;Load(Front);}
 }
 }
-
-
-
-
