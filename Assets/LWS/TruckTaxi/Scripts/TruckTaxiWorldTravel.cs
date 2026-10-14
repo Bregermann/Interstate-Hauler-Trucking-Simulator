@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using LWS.InterstateHauler;
 using TMPro;
 using UnityEngine;
@@ -64,7 +65,9 @@ namespace LWS.TruckTaxi
             var bar = new GameObject("Actual scene loading progress",typeof(RectTransform),typeof(UnityEngine.UI.Image)); bar.transform.SetParent(panel,false);
             var rect = bar.GetComponent<RectTransform>(); rect.anchorMin = new Vector2(.12f,.29f); rect.anchorMax = new Vector2(.88f,.31f); rect.offsetMin = rect.offsetMax = Vector2.zero;
             progress = bar.GetComponent<UnityEngine.UI.Image>(); progress.color = new Color(.2f,.8f,.65f);
-            progress.type = UnityEngine.UI.Image.Type.Filled; progress.fillMethod = UnityEngine.UI.Image.FillMethod.Horizontal;
+            // A sprite-less Image ignores fillAmount. Scale its actual rectangle from the left instead.
+            rect.pivot = new Vector2(0, .5f);
+            rect.localScale = new Vector3(0, 1, 1);
             view.Text(panel,"Tip",new Vector2(.12f,.13f),new Vector2(.88f,.23f),22).text = "Your career and truck travel with you. Regional weather remains local.";
         }
         private IEnumerator Travel()
@@ -72,16 +75,14 @@ namespace LWS.TruckTaxi
             yield return null;
             failure = null;
             yield return LoadRegion(requestedScene);
-            if (arrived != null) yield return arrived.GetComponent<TruckTaxiRegionalWorld>().PrepareInitialWorld(
-                arrived.Persistence.WorldTransferPreparationPoint(movingSnapshot, useLastPosition));
+            if (arrived != null) yield return PrepareRegion(movingSnapshot, useLastPosition);
             bool success = arrived != null && TryApply(arrived, movingSnapshot, useLastPosition, false);
             if (!success)
             {
                 string originalFailure = failure ?? "Destination could not be restored.";
                 detail.text = "Returning to your original region. " + originalFailure;
                 yield return LoadRegion(sourceScene);
-                if (arrived != null) yield return arrived.GetComponent<TruckTaxiRegionalWorld>().PrepareInitialWorld(
-                    arrived.Persistence.WorldTransferPreparationPoint(sourceSnapshot, true));
+                if (arrived != null) yield return PrepareRegion(sourceSnapshot, true);
                 if (arrived != null && TryApply(arrived, sourceSnapshot, true, true))
                 {
                     IsBusy = false; arrived.SetPaused(false);
@@ -113,6 +114,80 @@ namespace LWS.TruckTaxi
             yield return new WaitForEndOfFrame();
             Destroy(gameObject);
         }
+        private IEnumerator PrepareRegion(LwsSaveSnapshot snapshot, bool last)
+        {
+            Exception error = null;
+            bool completed = false;
+            float deadline = Time.realtimeSinceStartup + 60; // Matches PrepareInitialWorld's real-time budget.
+            TruckTaxiBootstrap host = arrived;
+            IEnumerator preparation = RunPreparation(
+                () => host.GetComponent<TruckTaxiRegionalWorld>().PrepareInitialWorld(
+                    host.Persistence.WorldTransferPreparationPoint(snapshot, last)),
+                result => { error ??= result; completed = true; }, () => Time.realtimeSinceStartup, deadline);
+            Coroutine running = null;
+            try
+            {
+                try { running = StartCoroutine(preparation); }
+                catch (Exception e) { error = e; }
+                // Watch independently so native Unity yield instructions cannot suspend the deadline.
+                while (error == null && !completed && Time.realtimeSinceStartup < deadline) yield return null;
+                if (error == null && !completed) error = new TimeoutException("Timed out preparing regional arrival.");
+            }
+            finally
+            {
+                try { if (running != null && !completed) StopCoroutine(running); }
+                catch (Exception e) { error ??= e; }
+                try { (preparation as IDisposable)?.Dispose(); }
+                catch (Exception e) { error ??= e; }
+            }
+            if (error != null)
+            {
+                failure = error.GetType().Name + ": " + error.Message;
+                arrived = null; // Never apply a partially prepared destination (or rollback source).
+                Debug.LogWarning("Regional preparation: " + failure);
+            }
+        }
+
+        private static IEnumerator RunPreparation(Func<IEnumerator> create, Action<Exception> completed,
+            Func<float> realtime, float deadline)
+        {
+            var pending = new Stack<IEnumerator>();
+            Exception error = null;
+            try
+            {
+                try { pending.Push(create() ?? throw new InvalidOperationException("Regional preparation returned no iterator.")); }
+                catch (Exception e) { error = e; }
+                while (error == null && pending.Count > 0)
+                {
+                    object yielded = null;
+                    bool active = false;
+                    try
+                    {
+                        if (realtime() >= deadline) throw new TimeoutException("Timed out preparing regional arrival.");
+                        IEnumerator current = pending.Peek();
+                        active = current.MoveNext();
+                        if (active) yielded = current.Current;
+                        else { pending.Pop(); (current as IDisposable)?.Dispose(); }
+                    }
+                    catch (Exception e) { error = e; }
+                    if (error != null) break;
+                    if (!active) continue;
+                    // Unity normally advances nested iterators outside the caller's catch block.
+                    if (yielded is IEnumerator nested) pending.Push(nested);
+                    else yield return yielded;
+                }
+            }
+            finally
+            {
+                while (pending.Count > 0)
+                {
+                    try { (pending.Pop() as IDisposable)?.Dispose(); }
+                    catch (Exception e) { error ??= e; }
+                }
+                completed(error);
+            }
+        }
+
         private bool TryApply(TruckTaxiBootstrap host, LwsSaveSnapshot snapshot, bool last, bool rollback)
         {
             try
@@ -132,7 +207,11 @@ namespace LWS.TruckTaxi
             try { operation = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single); }
             catch (Exception e) { failure = e.Message; }
             if (operation == null) yield break;
-            while (!operation.isDone) { progress.fillAmount = Mathf.Clamp01(operation.progress / .9f); yield return null; }
+            while (!operation.isDone)
+            {
+                progress.rectTransform.localScale = new Vector3(Mathf.Clamp01(operation.progress / .9f), 1, 1);
+                yield return null;
+            }
             progress.gameObject.SetActive(false);
             detail.text = "Preparing safe arrival, career, truck and controls...";
             float deadline = Time.realtimeSinceStartup + 90;

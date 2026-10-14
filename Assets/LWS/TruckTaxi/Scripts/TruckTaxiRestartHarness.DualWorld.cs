@@ -40,16 +40,19 @@ namespace LWS.TruckTaxi
                 yield return PrepareDriveSeedEngine(); host.SetPaused(false);
                 yield return DualNativeDrive("Demo City initial drive");
                 Result(host.Persistence.Save(1,true),"dual-world Demo City manual checkpoint");
-                yield return DualSnowViews("DemoCity");
-                yield return DualOffroadTracks("DemoCity");
                 yield return DualTransfer(true);
                 yield return DualNativeDrive("Edenborough physical arrival");
-                yield return DualSnowViews("Edenborough");
-                yield return DualOffroadTracks("Edenborough");
                 yield return DualTransfer(true);
                 yield return DualNativeDrive("Demo City physical return");
+                yield return DualTravelCancelInputs();
+                yield return DualSnowViews("DemoCity");
+                yield return DualOffroadTracks("DemoCity");
+                yield return DualTransfer(false, true);
+                yield return DualNativeDrive("Edenborough menu arrival");
+                yield return DualSnowViews("Edenborough");
+                yield return DualOffroadTracks("Edenborough");
                 // Ten transfers in the same real player process; first two use native trigger contacts.
-                for (int i = 2; i < 10; i++)
+                for (int i = 3; i < 10; i++)
                 {
                     host.hud.WorldTravel.Open();
                     Check(host.hud.WorldTravel.IsOpen,"actual pause travel panel opens");
@@ -105,10 +108,10 @@ namespace LWS.TruckTaxi
             yield return DualScreenshot(host.gameObject.scene.name+"-exit");
         }
 
-        private IEnumerator DualTransfer(bool physical)
+        private IEnumerator DualTransfer(bool physical, bool gamepadConfirm = false)
         {
             string source = host.gameObject.scene.name, destination = TruckTaxiWorldCatalog.Other(source);
-            double time = host.Environment.Clock.CurrentSnapshot.totalGameSeconds;
+            DateTime time = TruckTaxiCalendarWeatherService.SnapshotDateTime(host.Environment.Clock.CurrentSnapshot);
             long wallet = host.Session.WalletBalanceCents;
             if (physical)
             {
@@ -128,8 +131,24 @@ namespace LWS.TruckTaxi
             else
             {
                 host.SetPaused(true); host.hud.WorldTravel.Open();
-                var button = host.hud.WorldTravel.FocusRoot.GetComponentsInChildren<Button>().First(b=>b.GetComponentInChildren<TMPro.TextMeshProUGUI>()?.text=="TRAVEL");
-                button.onClick.Invoke();
+                if (gamepadConfirm)
+                {
+                    var pad = InputSystem.AddDevice<Gamepad>("Dual-world travel UI gamepad");
+                    try
+                    {
+                        pad.MakeCurrent();
+                        InputSystem.QueueStateEvent(pad, new GamepadState().WithButton(GamepadButton.South));
+                        yield return null; yield return null;
+                        InputSystem.QueueStateEvent(pad, new GamepadState());
+                        yield return null;
+                    }
+                    finally { InputSystem.RemoveDevice(pad); }
+                }
+                else
+                {
+                    var button = host.hud.WorldTravel.FocusRoot.GetComponentsInChildren<Button>().First(b=>b.GetComponentInChildren<TMPro.TextMeshProUGUI>()?.text=="TRAVEL");
+                    button.onClick.Invoke();
+                }
                 Check(TruckTaxiWorldTravel.IsBusy,"actual travel panel confirm callback started transaction");
             }
             yield return null; yield return DualScreenshot(source+"-loading");
@@ -140,18 +159,51 @@ namespace LWS.TruckTaxi
             host=TruckTaxiBootstrap.Instance; saves=host.Persistence.SaveService;
             Check(host.gameObject.scene.name==destination,"arrived in intended world "+destination+" | "+TruckTaxiWorldTravel.LastStatus);
             Check(host.Session.WalletBalanceCents==wallet,"wallet preserved through transaction");
-            Check(host.Environment.Clock.CurrentSnapshot.totalGameSeconds>=time,"global calendar never moved backward");
+            DateTime arrivalTime = TruckTaxiCalendarWeatherService.SnapshotDateTime(host.Environment.Clock.CurrentSnapshot);
+            Check(arrivalTime>=time,"global calendar never moved backward: "+time.ToString("O")+" -> "+arrivalTime.ToString("O"));
             DualCareerAssertions();
             Check(FindObjectsByType<TruckTaxiBootstrap>(FindObjectsSortMode.None).Length==1 &&
                 FindObjectsByType<LwsPlayerTruck>(FindObjectsSortMode.None).Length==1 &&
                 FindObjectsByType<TruckTaxiHud>(FindObjectsSortMode.None).Length==1,"one host, truck and HUD after transfer");
             Check(FindObjectsByType<TruckTaxiWorldTravel>(FindObjectsSortMode.None).Length==0,"loading transaction retired");
             Check(Vector3.Distance(host.Player.transform.position,DualExit().transform.position)>25,"arrival does not overlap outbound trigger");
+            var localExit = DualExit(); var marker = localExit.GetComponent<TruckTaxiMapMarker>();
+            Check(host.GPS.TrySetServiceDestination(marker.stableId, marker.label, localExit.transform.position, TruckTaxiMapMarkerType.Place),
+                "arrived region accepts its own GPS exit objective");
+            float routeDeadline = Time.realtimeSinceStartup + 8;
+            while (!host.GPS.RouteReady && Time.realtimeSinceStartup < routeDeadline) yield return null;
+            Check(host.GPS.RouteReady, "current region graph and Compass route rebound after transfer");
             dualEvidence.Add("TRANSFER "+TruckTaxiWorldTravel.CompletedTransfers+" "+source+" -> "+destination+
                 " objects="+FindObjectsByType<Transform>(FindObjectsSortMode.None).Length+
                 " managed="+GC.GetTotalMemory(false)+" allocated="+UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong()+
                 " traffic="+host.traffic.LogicalCount+" peds="+host.pedestrians.ActiveCount);
             yield return DualScreenshot(destination+"-arrival-"+TruckTaxiWorldTravel.CompletedTransfers);
+        }
+
+        private IEnumerator DualTravelCancelInputs()
+        {
+            host.SetPaused(false); host.hud.WorldTravel.Open();
+            var keyboard = InputSystem.AddDevice<Keyboard>("Dual-world travel cancel keyboard");
+            try
+            {
+                keyboard.MakeCurrent(); InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Escape));
+                yield return null; yield return null;
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState()); yield return null;
+                Check(!host.hud.WorldTravel.IsOpen && !host.Paused && !TruckTaxiWorldTravel.IsBusy,
+                    "Escape cancels travel and restores previous driving state without also opening Pause");
+            }
+            finally { InputSystem.RemoveDevice(keyboard); }
+            host.hud.WorldTravel.Open();
+            var pad = InputSystem.AddDevice<Gamepad>("Dual-world travel cancel gamepad");
+            try
+            {
+                pad.MakeCurrent(); InputSystem.QueueStateEvent(pad, new GamepadState().WithButton(GamepadButton.East));
+                yield return null; yield return null;
+                InputSystem.QueueStateEvent(pad, new GamepadState()); yield return null;
+                Check(!host.hud.WorldTravel.IsOpen && !host.Paused && !TruckTaxiWorldTravel.IsBusy,
+                    "gamepad East cancels travel through the existing UI actions");
+            }
+            finally { InputSystem.RemoveDevice(pad); }
         }
 
         private void DualCareerAssertions()
@@ -212,7 +264,7 @@ namespace LWS.TruckTaxi
                 while(Time.realtimeSinceStartup<until){ms.Add(Time.unscaledDeltaTime*1000);yield return null;}
                 ms.Sort(); dualEvidence.Add("PERF "+label+" snow="+depth+" median="+ms[ms.Count/2]+" p95="+ms[(int)((ms.Count-1)*.95f)]+" p99="+ms[(int)((ms.Count-1)*.99f)]+
                     " materials="+surface.SharedEnvironmentMaterialCount+" surfaces="+surface.GroundSnowSurfaceCount+" terrain="+surface.TerrainSnowSurfaceCount+
-                    " screen="+Screen.width+"x"+Screen.height+" GPU="+SystemInfo.graphicsDeviceName+" paused stationary, not driving/human acceptance");
+                    " screen="+Screen.width+"x"+Screen.height+" GPU="+SystemInfo.graphicsDeviceName+" stationary truck; live NPCs; clock frozen for controlled snow; NOT isolated/driving/human acceptance");
                 File.WriteAllLines(Path.Combine(request.Root,"dual-world-"+request.Mode+".txt"),dualEvidence);
             }
             host.Environment.SetFrozen(frozen);
@@ -238,13 +290,18 @@ namespace LWS.TruckTaxi
             var surface=host.GetComponent<TruckTaxiSnowSurface>();
             var snow=host.Environment.Snow.Capture();
             Check(host.Environment.Snow.Restore(snow),"off-road trace fixture resets only transient trace history");
+            float bindDeadline=Time.realtimeSinceStartup+30;
+            while(!surface.EnvironmentBindingsReady && Time.realtimeSinceStartup<bindDeadline){surface.Refresh();yield return null;}
+            Check(surface.EnvironmentBindingsReady,"off-road fixture waits for restored environment bindings");
             bool placed=false;
             foreach(float offset in new[]{14f,-14f,25f,-25f})
             {
                 Vector3 candidate=roadPoint+body.transform.right*offset;
-                if(!TruckTaxiRecoverySpace.TryGroundedPose(body,candidate,roadRotation,.35f,body,null,out var grounded))continue;
+                if(!TruckTaxiRecoverySpace.TryGroundedPose(body,candidate,roadRotation,.35f,body,null,out var grounded))
+                {Debug.Log(Prefix+"OFFROAD candidate lacks clearance offset="+offset);continue;}
                 if(!Physics.Raycast(grounded+Vector3.up*4,Vector3.down,out var hit,12,~0,QueryTriggerInteraction.Ignore) ||
-                    hit.collider.GetComponentInParent<Rigidbody>()!=null || !surface.IsSnowCoveredOffRoad(hit.collider,hit.point,body.transform))continue;
+                    hit.collider.GetComponentInParent<Rigidbody>()!=null || !surface.IsSnowCoveredOffRoad(hit.collider,hit.point,body.transform))
+                {Debug.Log(Prefix+"OFFROAD candidate unsupported offset="+offset+" hit="+hit.collider?.name+" bound="+surface.GroundSnowSurfaceCount+" terrain="+surface.TerrainSnowSurfaceCount);continue;}
                 TruckTaxiRecoverySpace.Move(body,grounded,roadRotation); body.linearVelocity=body.angularVelocity=Vector3.zero;
                 host.Session.DiscardTeleportDistance(); Physics.SyncTransforms(); placed=true;break;
             }
