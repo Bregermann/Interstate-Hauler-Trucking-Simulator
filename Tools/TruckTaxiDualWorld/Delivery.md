@@ -2,7 +2,7 @@
 
 ## Actual build
 - Executable: `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckTaxiDualWorld/TruckTaxi.exe`.
-- Build SUCCESS: 2026-10-15 01:45:06 UTC (October 14, 9:45 PM Eastern). Unity6000.4.10f1, Windows x64, development Mono/D3D11. Binary source commit `9bbac8e9`; generated manifest in `Evidence/Windows-build-manifest.json`.
+- Replacement build SUCCESS: 2026-10-15 04:29:05 UTC (12:29 AM Eastern). Unity6000.4.10f1, Windows x64, development Mono/D3D11. Binary source `f5749b7d`; actual shipped hashes in `Evidence/Arrival-guard-Windows-build.json`. Clean C# compilation; BuildReport succeeded but counted one Pipeline5s command-timeout log while the build continued. Do not describe it as zero logged build errors. The older manifest/evidence remains historical.
 - Included main scenes: `Assets/LWS/TruckTaxi/Scenes/TruckTaxi_MainMenu.unity`, `Assets/LWS/TruckTaxi/Scenes/TruckTaxi_DemoCity.unity`, `Assets/LWS/TruckTaxi/Scenes/TruckTaxi_Edenborough.unity`, plus existing regional chunks and venues.
 - Main Menu -> NEW GAME -> VIBIN' -> DEMO CITY or EDENBOROUGH. Each has a description. CONTINUE uses the save's recorded world; it does not substitute the default new-game map.
 - Pause -> TRAVEL TO ANOTHER MAP -> TRAVEL / CANCEL. Current and opposite region are shown. Existing Heat focus/submit and keyboard/gamepad cancellation are reused; no permanent travel HUD clutter.
@@ -21,6 +21,7 @@ These are read from the actual saved scene transforms, not guessed from the gene
 - Each connector is 7.4m total, with two3.45m lanes, center dashes and a destination/regional-connection sign. The maps remain separate coordinate spaces; there is no giant cross-scene bridge.
 - Canonical moving tractor only, validated entry direction, contact debounce and active-transaction suppression. NPCs cannot initiate transfer. Inbound placement faces back into the region, outside the outbound portal.
 - Saved poses within30 horizontal meters of an outbound trigger use the safe inbound point. This fixes immediate re-entry when a menu return reuses a physical departure pose.
+- Follow-up Windows testing found that an inbound tractor could still roll backwards down the slope into the return boundary. The existing boundary now requires outbound tractor HEADING as well as outbound velocity; seven new unit cases cover rollback/sideways/missing heading and legitimate pitched forward travel. The stationary development probe uses the existing parking brake and rejects moving/wrong-world samples; no physics or input controller replaced.
 - Selectable local regional-exit POIs use the existing LWS road graph and Compass route. Each world's supplemental atlas contains only its own spur. Normal dispatch stays local.
 
 ## Travel, career and persistence
@@ -51,29 +52,31 @@ These are read from the actual saved scene transforms, not guessed from the gene
 | Check | Actual outcome |
 |---|---|
 | Unity compilation / Windows build | PASS, actual final executable built and run |
-| EditMode | 243 distinct PASS: world173, calendar12, snow22, occupancy/navigation24, MainMenu2, garage10. Subsets not double-counted |
+| EditMode | Current targeted world-travel104/104 PASS, including7 new direction cases. Earlier243 distinct PASS: world173, calendar12, snow22, occupancy/navigation24, MainMenu2, garage10; historical, not all rerun after the narrow guard/probe fix |
 | Graphics PlayMode | Demo and elevated Eden GPU cases PASS; real offroad replay, vendor reset, stale elevated anchor, actual GPU readback, availability callback and8s retention. Not a physical-driving claim |
 | Windows A/B | PASS automated core: actual native NWH drive/contact activates physical exits both ways; grounded non-retrigger arrivals, local routes and driving after arrival |
 | Windows C | PASS automated core: actual Heat submit, virtual gamepad confirm/cancel and Escape cancel; both directions |
-| Windows D | PASS automated core: same career values, paint/real purchased/equipped upgrade/nonzero damage/fuel/inventory, save/quit/relaunch/Continue in snowy Eden then rainy Demo, immediate native drive. Manual1 load/drive/rollback also PASS on prior candidate with identical persistence code; final legacy compatibility PASS |
+| Windows D | Current restoration/control core passed in Eden then Demo with shared career/climate; final Demo exact exit0. Seed/Eden shutdown errors recorded separately. Manual1 rollback and legacy compatibility are earlier-binary evidence with unchanged persistence code, not rerun after the exit-heading fix |
 | Windows E | PASS core/representative visuals: clear/light/heavy states, live gradual accumulation/rain melt, real long curved offroad wheel tracks in BOTH maps, distinct regional climate through restart; representative terrain/branch/roof images reviewed |
 | Windows F | PASS automated core on FINAL binary: ten transfers, then an eleventh to the snowy Eden checkpoint; every arrival checks career, native input/physics, local GPS, one player/host/HUD and retired loading transaction |
-| Final process exits | Fresh seed0, Eden Continue0, Demo Continue0, actual old-save Continue0; no required own player left running |
+| Current process exits | Seed gameplay assertions completed then native0xc0000005; Eden Continue completed then native shutdown error. Final clean-client Demo Continue PASS/exit0. Earlier zero-exit runs below are historical, not substituted for these failures. No own player/helper remains |
 
-Final integrated disposable root: `b59ee4f0674944458235d7389e170b11`. Raw files: `Evidence/Windows-final-seed.log`, `Windows-final-Continue-Eden.log`, `Windows-final-Continue-Demo.log`, `Windows-legacy-final-build.log`. Earlier failures are retained and explicitly named; they are not counted as passing tests. Actual real saves were never redirected, overwritten or deleted.
+Current integrated disposable root: `ab987faebd6842a0a2e78bd5ffc52e54`. Eleven transfers, all six valid parked snow measurements, both curved offroad paths, vendor checkpoints and fresh-process Eden/Demo career restoration were exercised. Current progress, metrics, exact Demo exit and screenshots are in `Evidence/Windows-recheck-*`; provenance/failures in `Windows-Shared-GPU-Recheck.md`. Older integrated root `b59ee4f0674944458235d7389e170b11` and its `Windows-final-*`/legacy files remain historical. Failed/interrupted runs are not relabelled as passes. Real saves were never used.
 
-Final native offroad paths: Demo15.96m, four contacts/742 stamps, GPU1809 marked/1684 indented pixels. Eden four contacts/649 stamps, GPU1362/1293. Screenshots: `Windows-final-DemoCity-curved-grooves.png`, `Windows-final-Edenborough-curved-grooves.png`. These are actual rendered game frames, not generated images. Representative roof/branch images come from the preceding same-renderer candidate, not a claim of exhaustive scenery acceptance.
+Current native offroad paths: Demo16.041m, four contacts/544stamps, GPU1818marked/1667indented; Eden15.759m, four contacts/568stamps, GPU1373/1315. Screenshots: `Windows-recheck-DemoCity-curved-grooves.png`, `Windows-recheck-Edenborough-curved-grooves.png`, both visually reviewed actual game frames, not generated images. Earlier `Windows-final-*` groove/roof/branch files remain historical same-renderer observations, not exhaustive scenery acceptance.
 
 ## Performance and honest remaining limits
-The two user TruckSports games (PID28400/33688) remained running on the GTX1660Ti; neither was interrupted. Therefore isolated before/after regression analysis and dense urban/vegetation driving benchmarks remain BLOCKED/NOT RUN, not passed.
+The original two games were closed, but another task subsequently launched new Sports players/headless builds. The human explicitly approved shared-GPU testing. Foreground windows were coordinated separately to preserve strict native-input tests. Equivalent before/after and dense urban/vegetation driving benchmarks remain NOT RUN; no isolated-performance claim.
 
 Final stationary regional-exit observations,1920x1080, live NPCs, clock frozen only for controlled snow. Milliseconds median/P95/P99:
 | Map | Clear | Light | Heavy |
 |---|---|---|---|
-| Demo |12.503/18.766/25.002|18.745/18.841/25.030|18.827/25.107/31.226|
-| Eden |12.507/18.807/18.883|18.758/25.055/25.145|24.993/25.128/31.375|
+| Demo |18.712/25.015/37.507|18.763/31.270/50.017|24.998/37.498/43.789|
+| Eden |18.758/25.036/31.269|25.002/37.523/50.008|25.010/43.758/50.007|
 
-These are NON-ISOLATED observations, not a locked60FPS result or a dense-city driving benchmark. Final ten-transfer object counts: Demo8544 stable; Eden46464->46459. Allocated bytes Demo369435901->370593498; Eden530928602->533247923. Warm-cache finite samples are not proof of zero leaks; the eleventh snow-loaded Eden visit is recorded separately.
+These are SHARED-GPU observations, not a locked60FPS result or dense-city driving benchmark. Quality/VSync/frame-cap values were not captured by this existing stationary probe. Current ten-transfer object counts: Demo10118->8544; Eden46464->46459. Allocated bytes Demo371143456->370340120; Eden512804505->533463430. Warm-cache finite samples are not zero-leak proof; the eleventh snow-loaded Eden visit is separate.
+- A prior recheck's alleged Eden measurements are INVALID: an uncommanded return loaded Demo during sampling. That failure caused the guard fix, not a weather rewrite; wrong-world image retained.
+- Native shutdown failures resolved to installed UnityPlayer symbols at ExternalGPUProfiler::GetGameViewWindowHandle+0x9, with UIAutomationCore on the exception stack. Resetting the automation client/no text-accessibility capture produced a fresh Demo Continue PASS and exact exit0. This supports an automation/native-accessibility interaction, not a claim all engine shutdown paths are fixed. Failed shutdowns remain recorded; no engine/vendor patch or forced process termination.
 - Human full-route driving, every service/dispatch interaction, exhaustive imported-material review, night-track readability, physical gamepad hardware, mouse menu clicking and trailer-guard physics still need manual acceptance.
 - The driving tests use controlled existing connector approaches followed by actual Input System->NWH driving, not a claim of manually driving the entire map. Career fixtures prove preservation, not manually earning money/shopping.
 - NPC ownership/population counts and local-route reinitialization were checked, not human inspection of every traffic junction/pedestrian location.
@@ -85,4 +88,4 @@ RELEVANT ASSETS NOT USED: UTS is not used for player trailer physics; no new Sce
 CUSTOM SYSTEMS CREATED: bounded world-visit semantics, transient regional ordering transaction, canonical directional exit, existing-HUD travel panel, narrow connection authoring, development-only probes and project-owned material/contact adaptations. None owns physical save storage or an independent serializer.
 VENDOR SOURCE MODIFIED BY THIS TASK: NO. Pre-existing unrelated vendor changes remain untouched.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO. No new packages/purchases.
-Local implementation commits: `8b23f96f`, `7cb9baf9`, `ed6b39e4`, `6c19ae1a`, `89a431ec`, `9aa4de5d`, `c908cf7b`, `cad0f2eb`, `cd0d9faa`, `efc622fa`, `fd321e0b`, `60ab13bc`, `404d95e9`, `e3e85a0f`, `660f72bb`, `306cfecb`, `9bbac8e9`. Final handoff/evidence commit is recorded in git. PUSHED: NO.
+Local follow-up source commit: `f5749b7d` (three existing project-owned files, no new runtime system). Earlier implementation commits remain recorded above/in Git; prior handoff `86551781`. Current evidence/docs commit is recorded in Git. PUSHED BY THIS TASK: NO.

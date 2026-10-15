@@ -1,9 +1,9 @@
 # Truck Taxi dual-world checkpoint
 
 ## Final state
-Actual Windows build DELIVERED; automated core acceptance PASSED. Human full-route/service/exhaustive visual acceptance and isolated performance remain explicitly unverified/blocked, not passed.
+Replacement Windows build DELIVERED; directional-exit fix compiled/tested and automated gameplay core revalidated. Human full-route/service/exhaustive visual acceptance and controlled driving performance remain unverified. Native shutdown errors occurred under UI Automation; a clean-client fresh Demo Continue passed and exited0. Do not claim every run exited cleanly.
 Executable: F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckTaxiDualWorld/TruckTaxi.exe.
-Unity6000.4.10f1 Windows64 Mono/D3D11 development; actual BuildReport PASS2026-10-15T01:45:06.8834840Z. Binary source9bbac8e9. Full report: Delivery.md; raw evidence/screenshots: Evidence/.
+Unity6000.4.10f1 Windows64 Mono/D3D11 development; replacement BuildReport Succeeded2026-10-15T04:29:05.1598766Z. Binary sourcef5749b7d. C# compilation clean; build counted1 Pipeline command-timeout log while continuing to success, not zero logged errors. Full report: Delivery.md; current hashes/tests/observations: Evidence/Arrival-guard-* and Windows-Shared-GPU-Recheck.md.
 Authoritative request: C:/Users/Jeremy/.codex/attachments/f3d55121-e14a-487b-a5d8-990f8bc2d3a7/Pasted text.txt.
 Scenes: Assets/LWS/TruckTaxi/Scenes/TruckTaxi_DemoCity.unity and TruckTaxi_Edenborough.unity, with existing main menu/chunks/venues. Existing maps NOT regenerated.
 
@@ -31,10 +31,15 @@ Scenes: Assets/LWS/TruckTaxi/Scenes/TruckTaxi_DemoCity.unity and TruckTaxi_Edenb
 | D manual/legacy/save-quit-relaunch both maps | PASS automated core | Final seed+Eden Continue+Demo Continue+legacy each exit0. Prior306cfecb manual/rollback exit0 has identical persistence code; only later ground shading/probe length changed |
 | E regional climate/full snow/curved tracks | PASS core/representative visual FINAL binary | Both maps clear/light/heavy/live melt, long realwheel paths/GPU, own weather through process restart |
 | F >=10 transfers/input/GPS/objects/save | PASS automated core FINAL binary | Ten transfers plus11th checkpoint; each drive/career/localroute/oneowner check passes; finite samples not zero-leak proof |
-| Isolated before/after and dense-urban/vegetation driving performance | Blocked / not run | User TruckSports PID28400/33688 remained active on same GPU; do NOT stop them. Non-isolated stationary metrics retained |
+| Isolated before/after and dense-urban/vegetation driving performance | Not run / shared-GPU continuation approved | Original players closed, but another task launched new players. User explicitly approved continuing alongside them. No isolated claim. Current recheck details in Evidence/Windows-Shared-GPU-Recheck.md |
+| Backwards-roll boundary / native shutdown recheck | Guard verified by7 new unit cases; Windows forward paths and parked measurements passed | Velocity AND tractor heading required. Seed gameplay completed but shutdown0xc0000005; UIAutomationCore caller/native Unity window-handle fault. Reset client/no text capture yielded fresh Demo Continue PASS and exact exit0. Not proof all engine shutdown paths fixed |
 | Actual final executable/screenshots/test evidence/local commits | Verified complete | Build exists and run; no required own player/test session left running; source committed, handoff/evidence local commit only; NO PUSH |
 
-## Exact final Windows evidence
+## Current Windows recheck
+Sourcef5749b7d; disposable rootab987faebd6842a0a2e78bd5ffc52e54. SeedPID42552: all gameplay assertions completed,11 transfers including ten repeated native-drive/career/GPS/one-owner checks,6 stationary weather samples, both curved offroad paths and vendor checkpoints; then native shutdown0xc0000005, NOT an overall clean-exit pass. Fresh EdenPID43432 restored/drove4.652m, returned/saved Demo, then native shutdown error. Its completion marker/progress survived, but raw Temp logs were cleared by another Editor startup; do not invent recovered logs. Fresh DemoPID18744 passed controls/motion3.906m and exited EXACTLY0; retained external launcher JSON/raw log. Earlier DemoPID6228 also passed but its exact exit was not captured. Focus failures remain failures, not passes.
+Current Demo curved path16.041m/4contacts/544stamps/GPU1818marked1667indented; Eden15.759m/4contacts/568stamps/GPU1373marked1315indented. Both new groove detail screenshots visually inspected. Six current timing cases retained in Evidence/Windows-recheck-summary.json, plus raw progress and process monitor. Old alleged Eden measurements from run cd90450e were INVALID: tractor rolled back into Demo during the probe; wrong-world screenshot retained. Fixed boundary checks heading, probe parks and rejects movement/world changes.
+
+## Earlier Windows evidence (historical binary)
 Fresh disposable root b59ee4f0674944458235d7389e170b11:
 - Final seed PID38668 exit0: both physical exits, actual menu/gamepad/cancel, TEN transfers, native drive after each, then11th transfer to snowy Eden save/quit. Evidence/Windows-final-seed.log.
 - Fresh Eden Continue PID37088 exit0: own heavy snow/career restored, native drive4.106m, menu return Demo, own Rain forecast completes automatically and elapsed melt validated, save/quit. Evidence/Windows-final-Continue-Eden.log.
@@ -44,18 +49,20 @@ Fresh disposable root b59ee4f0674944458235d7389e170b11:
 - Final native Demo offroad15.958m,4 contacts/742 stamps; GPU1809marked/1684indented. Eden4 contacts/649stamps; GPU1362/1293. Actual representative groove images visually reviewed in both maps.
 - No exceptions/errors found in final seed+Continue logs; no shader errors in successful final build. Deliberate earlier failures are retained with explicit failure names, not counted as passing.
 
-## Final tests / measurements
+## Tests / measurements
+Current targeted world-travel104/104 EditMode PASS (includes7 new direction cases), compilation clean, actual replacement Windows build succeeded. Previous243 unique EditMode and2 graphics cases below are historical, not all rerun after the narrow exit-guard/probe change.
 243 unique EditMode PASS: world173/calendar12/snow22/occupancy24/MainMenu2/garage10. Subsets not counted twice; summary Evidence/Test-summary.json. GPU Demo final40.23s PASS; Eden elevated42.45s PASS, including actual raycast replay, vendor reset, stale elevated anchor, callback and8s retention. GPU test alone is not physical driving proof.
-Final stationary regional-exit1920x1080 GTX1660Ti, live NPCs, frozen clock only for controlled snow; NON-ISOLATED median/P95/P99 ms:
-Demo clear12.503/18.766/25.002, light18.745/18.841/25.030, heavy18.827/25.107/31.226.
-Eden clear12.507/18.807/18.883, light18.758/25.055/25.145, heavy24.993/25.128/31.375.
-No locked60FPS or isolated before/after or dense-city driving claim. Final ten-transfer object counts Demo8544stable; Eden46464->46459. Allocated bytes Demo369435901->370593498; Eden530928602->533247923 (warm caches/finite samples, NOT zero-leak proof).
+Current stationary regional-exit1920x1080 GTX1660Ti, live NPCs, frozen clock only for controlled snow; SHARED-GPU median/P95/P99 ms:
+Demo clear18.712/25.015/37.507, light18.763/31.270/50.017, heavy24.998/37.498/43.789.
+Eden clear18.758/25.036/31.269, light25.002/37.523/50.008, heavy25.010/43.758/50.007.
+No locked60FPS, isolated before/after or dense-city driving claim. Current ten-transfer object counts Demo10118->8544; Eden46464->46459. Allocated bytes Demo371143456->370340120; Eden512804505->533463430 (warm caches/finite samples, NOT zero-leak proof). Eleventh snow-loaded Eden visit separate.
 
 ## Fixes completed / boundaries
 Existing Pixel Crushers authority and generic coordinator retained. Same existing Taxi prefab/canonical ID/reviewed paint material; exact eight-seat cab contract preserved. Local graph-spur subdivision fixes planner aliasing. Weather Maker initialized before Weatherade depth cameras. SRS renderer/RTHandle rebinding; three-texel contact-depth support; availability refresh preserves history; thresholded public follow repair after vendor UpdateDepth stops its coroutine. Saved unfinished weather blends resume persisted forecast intent; manual rain melt ignores stale FROM preset. Project flat-ground shader uses Weatherade RG groove normals/A compression, no second trace system.
 No independent serializer/storage/slot database; no vendor source changes BY THIS TASK. Other pre-existing vendor dirty changes are untouched. Attached trailer transfer remains explicitly blocked.
 
 ## Repository and recovery notes
+2026-10-15 follow-up complete: source fixf5749b7d, current104 targeted tests, replacement build,11-transfer/six-case runtime recheck and fresh-process restoration as above. Own EditorPID34884 closed; all own players/helpers/exec sessions collected. Supported client reset/no text accessibility capture avoided the observed native shutdown failure in the final exact-exit Demo test. No speculative engine/vendor patch. Remaining: controlled before/after, dense-city/vegetation driving benchmarks, exhaustive human acceptance and native UIA shutdown compatibility. External launcher now logs outside Unity Temp and retains process exit JSON. No real saves or vendor code changed. Sports foreground/project handoffs honored; only scoped Tools documentation/evidence updated during its granted docs window. NO PUSH.
 Branch codex/truck-sports-3v3. Preserve ALL unrelated dirty files, especially Demo updateQueue344874416->67430938 remains UNSTAGED. Baseline in Temp/TruckTaxiDualWorld/Baseline. NO PUSH.
 Local implementation commits:8b23f96f,7cb9baf9,ed6b39e4,6c19ae1a,89a431ec,9aa4de5d,c908cf7b,cad0f2eb,cd0d9faa,efc622fa,fd321e0b,60ab13bc,404d95e9,e3e85a0f,660f72bb,306cfecb,9bbac8e9. Final handoff/evidence commit can be read from git log.
 No further source edits required by current evidence. Remaining work is human acceptance and isolated performance when other games are closed, NOT another implementation restart.

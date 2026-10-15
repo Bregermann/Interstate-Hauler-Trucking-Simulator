@@ -1,0 +1,869 @@
+Mono path[0] = 'F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckTaxiDualWorld/TruckTaxi_Data/Managed'
+Mono config path = 'F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckTaxiDualWorld/MonoBleedingEdge/etc'
+CodeReloadManager initialized
+Found 1 interfaces on host : 0) 192.168.0.107
+Player connection [38944]  Target information:
+
+Player connection [38944]  * "[IP] 192.168.0.107 [Port] 55001 [Flags] 2 [Guid] 3676895346 [EditorId] 2672344666 [Version] 1048832 [Id] WindowsPlayer(2,DESKTOP-S6E7U2U) [Debug] 0 [PackageName] WindowsPlayer [ProjectName] Interstate Hauler" 
+
+Player connection [38944] Started UDP target info broadcast (1) on [225.0.0.222:54997].
+
+Input System module state changed to: Initialized.
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Initialize engine version: 6000.4.10f1 (feeafc12a938)
+[Subsystems] Discovering subsystems at path F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckTaxiDualWorld/TruckTaxi_Data/UnitySubsystems
+GfxDevice: creating device client; kGfxThreadingModeThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1660 Ti (ID=0x2182)
+    Vendor:   NVIDIA
+    VRAM:     5966 MB
+    Driver:   32.0.15.6094
+Begin MonoManager ReloadAssembly
+- Finished resetting the current domain, in  0.005 seconds
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+<RI> Initializing input.
+Using Windows.Gaming.Input
+<RI> Input initialized.
+UnloadTime: 0.917300 ms
+TRUCK TAXI RESTART CONFIGURED mode=continue run=ab987faebd6842a0a2e78bd5ffc52e54 vendorRoot=C:\Users\Jeremy\AppData\Local\Temp\Jeremy Bregermann\Interstate Hauler\TruckTaxiRestartTests\ab987faebd6842a0a2e78bd5ffc52e54 evidenceVersion=2
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:ConfigureVendor () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:119)
+LWS.TruckTaxi.TruckTaxiRestartHarness:ConfigureBeforeDiscovery () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:47)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH Dev UI] Input bridge ready
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogStage (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2587)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildUi () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:433)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:152)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.InterstateHauler.LwsDevelopmentUiRoot> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:173)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH Dev UI] Canvas created
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogStage (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2587)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildUi () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:447)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:152)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.InterstateHauler.LwsDevelopmentUiRoot> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:173)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH Dev UI] EventSystem ready
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogStage (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2587)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:EnsureEventSystem () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:536)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildUi () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:448)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:152)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.InterstateHauler.LwsDevelopmentUiRoot> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:173)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH Dev UI] DEV button created
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogStage (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2587)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildDevButton () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:550)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildUi () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:453)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:152)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.InterstateHauler.LwsDevelopmentUiRoot> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:173)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH Dev UI] Reset truck button created
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogStage (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2587)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildResetTruckButton () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:565)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildUi () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:454)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:152)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.InterstateHauler.LwsDevelopmentUiRoot> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:173)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH Dev UI] Transmission HUD created
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogStage (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2587)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildTransmissionHud () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:599)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildUi () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:455)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:152)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.InterstateHauler.LwsDevelopmentUiRoot> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:173)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH Dev UI] Control Center created
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogStage (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2587)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildControlCenter () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:702)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildUi () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:458)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:152)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.InterstateHauler.LwsDevelopmentUiRoot> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:173)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH HUD] Persistent HUD ready: DEV bottom-left, transmission controls bottom-center, GPS minimap camera policy active.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogHud (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2608)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:BuildUi () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:464)
+LWS.InterstateHauler.LwsDevelopmentUiRoot:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:152)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.InterstateHauler.LwsDevelopmentUiRoot> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:173)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH HUD] Persistent HUD self-healed without a registered development UI service.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsDevelopmentUiDiagnostics:LogHud (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiRoot.cs:2608)
+LWS.InterstateHauler.LwsDevelopmentUiService:EnsureDevelopmentRuntimeAfterSceneLoad () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/UI/Development/LwsDevelopmentUiService.cs:174)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: player boots into the actual main menu
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Run>d__68:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:294)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: actual menu discovered scoped vendor facade
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<WaitForMenu>d__64:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:236)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: no unexpected profile in isolated directory: profile.truck-taxi
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:FindTestProfile (bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:275)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:85)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no manual save
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:FindTestProfile (bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:278)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:85)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no manual save
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:FindTestProfile (bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:278)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:85)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no manual save
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:FindTestProfile (bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:278)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:85)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no autosave
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:FindTestProfile (bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:279)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:85)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: test profile name is unique
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:FindTestProfile (bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:273)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:85)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: ASTRA_SANDBOX_TEST discovered through vendor directory
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:FindTestProfile (bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:281)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:85)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+Unloading 7 Unused Serialized files (Serialized files now loaded: 0)
+UnloadTime: 23.349900 ms
+Changing weather profile None to WeatherMakerProfile_Clear, transition time: 0.001, hold time: Unknown
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogFormat (string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:133)
+DigitalRuby.WeatherMaker.WeatherMakerScript:RaiseWeatherProfileChanged (DigitalRuby.WeatherMaker.WeatherMakerProfileScript,DigitalRuby.WeatherMaker.WeatherMakerProfileScript,single,single,bool,string[]) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/WeatherMaker/Prefab/Scripts/Manager/WeatherMakerScript.cs:1001)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+LWS.InterstateHauler.LwsWeatherMakerAdapter:ApplyWeatherPreset (LWS.InterstateHauler.LwsWeatherPreset,single,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeatherMakerAdapter.cs:222)
+LWS.InterstateHauler.LwsWeatherCoordinator:AttachAdapter (LWS.InterstateHauler.ILwsWeatherRuntimeAdapter) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeather.cs:604)
+LWS.InterstateHauler.LwsWeatherMakerAdapter:AttachToService () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeatherMakerAdapter.cs:332)
+LWS.InterstateHauler.LwsWeatherMakerAdapter:OnEnable () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeatherMakerAdapter.cs:114)
+UnityEngine.Behaviour:set_enabled (bool)
+LWS.TruckTaxi.TruckTaxiEnvironmentCoordinator:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiEnvironmentCoordinator.cs:46)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 133)
+
+Can't find a camera with a 'MainCamera' tag. The Follow Target feature will be disabled.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+NOT_Lonely.Weatherade.CoverageBase:Init () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/NOT_Lonely/Weatherade SRS/Scripts/CoverageBase.cs:448)
+NOT_Lonely.Weatherade.CoverageBase:OnEnable () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/NOT_Lonely/Weatherade SRS/Scripts/CoverageBase.cs:144)
+NOT_Lonely.Weatherade.RainCoverage:OnEnable () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/NOT_Lonely/Weatherade SRS/Scripts/RainCoverage.cs:79)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+LWS.InterstateHauler.LwsWeatheradeAdapter:EnsureCoverage (LWS.InterstateHauler.LwsWeatheradeAdapter/CoverageMode) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Roads/Conditions/LwsWeatheradeAdapter.cs:247)
+LWS.InterstateHauler.LwsWeatheradeAdapter:ApplyRoadCondition (LWS.InterstateHauler.LwsRoadConditionSnapshot) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Roads/Conditions/LwsWeatheradeAdapter.cs:110)
+LWS.InterstateHauler.LwsRoadConditionCoordinator:AttachVisualAdapter (LWS.InterstateHauler.ILwsRoadConditionVisualAdapter) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Roads/Conditions/LwsRoadCondition.cs:875)
+LWS.InterstateHauler.LwsWeatheradeAdapter:OnEnable () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Roads/Conditions/LwsWeatheradeAdapter.cs:73)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+
+Unloading 20 unused Assets / (49.7 KB). Loaded Objects now: 21171.
+Memory consumption went from 233.4 MB to 233.4 MB.
+Total: 9.143100 ms (FindLiveObjects: 1.345500 ms CreateObjectMapping: 2.015600 ms MarkObjects: 5.647700 ms  DeleteObjects: 0.133800 ms)
+
+TAXI TRAFFIC: original cap 12, observed startup 8, multiplier 12.5, target/cap 150/150.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:66)
+UnityEngine.Debug:Log (object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:128)
+LWS.TruckTaxi.TruckTaxiTrafficAdapter:Initialize () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiTrafficAdapter.cs:240)
+LWS.TruckTaxi.TruckTaxiBootstrap/<Start>d__185:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiBootstrap.cs:148)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 128)
+
+TAXI PEDESTRIANS: UTS baseline 15, graph nodes 4376, target 720, initial 24.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:66)
+UnityEngine.Debug:Log (object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:128)
+LWS.TruckTaxi.TruckTaxiPedestrianPopulation:Initialize (LWS.TruckTaxi.TruckTaxiPedestrianImpactSettings) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiPedestrianPopulation.cs:209)
+LWS.TruckTaxi.TruckTaxiBootstrap/<Start>d__185:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiBootstrap.cs:149)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 128)
+
+TRUCK TAXI RESTART DRIVE SOURCE OBSERVED before completion: lws.input.keyboard-gamepad.truck owner=KeyboardMouse
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:CaptureDriveInput (LWS.InterstateHauler.ILwsVehicleInputService) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:373)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<WaitForRun>d__65:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:253)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[IH Cab GPS] Bound world-space GPS to IH_CabAnchor_GpsMount; local pos (0.00, 0.00, 0.00); local euler (0.00, 180.00, 0.00); scale 0.00042; approx size 0.27m x 0.17m.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:66)
+UnityEngine.Debug:Log (object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:128)
+LWS.InterstateHauler.LwsCabGpsController:LogPlacementDiagnostic (UnityEngine.Transform,UnityEngine.Transform) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Navigation/LwsCabGpsController.cs:327)
+LWS.InterstateHauler.LwsCabGpsController:BindPhysicalScreen () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Navigation/LwsCabGpsController.cs:150)
+LWS.InterstateHauler.LwsCabGpsController:Start () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Navigation/LwsCabGpsController.cs:64)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 128)
+
+Duplicate service map ID: TT_STORE_taxi.stop.12. Keeping the first service.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:66)
+UnityEngine.Debug:LogWarning (object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:216)
+LWS.TruckTaxi.TruckTaxiMapMarkers:RefreshServices () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiMapMarkers.cs:228)
+LWS.TruckTaxi.TruckTaxiMapMarkers:RefreshStreamedContent () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiMapMarkers.cs:187)
+LWS.TruckTaxi.TruckTaxiMapMarkers:Initialize (LWS.TruckTaxi.TruckTaxiBootstrap,LWS.TruckTaxi.TruckTaxiGPSAdapter) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiMapMarkers.cs:127)
+LWS.TruckTaxi.TruckTaxiGPSAdapter:ConfigureDemoPresentation () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiGPSAdapter.cs:241)
+LWS.TruckTaxi.TruckTaxiBootstrap/<Start>d__185:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiBootstrap.cs:161)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 216)
+
+Dialogue System: No dialogue database is assigned.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+PixelCrushers.DialogueSystem.DialogueSystemController:InitializeDatabase () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs:925)
+PixelCrushers.DialogueSystem.DialogueSystemController:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Pixel Crushers/Dialogue System/Scripts/Manager/DialogueSystemController.cs:516)
+UnityEngine.GameObject:SetActive (bool)
+TruckTaxiPixelCrushersBarkAdapter:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/VendorBridges/TruckTaxiPixelCrushersBarkAdapter.cs:32)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<TruckTaxiPixelCrushersBarkAdapter> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+TruckTaxiPixelCrushersBarkAdapter/<>c:<Register>b__16_0 (UnityEngine.GameObject) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/VendorBridges/TruckTaxiPixelCrushersBarkAdapter.cs:23)
+LWS.TruckTaxi.TruckTaxiDialoguePlayer:Awake () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiDialoguePlayer.cs:38)
+UnityEngine.GameObject:Internal_AddComponentWithType (System.Type)
+UnityEngine.GameObject:AddComponent (System.Type) (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:246)
+UnityEngine.GameObject:AddComponent<LWS.TruckTaxi.TruckTaxiDialoguePlayer> () (at C:/build/output/unity/unity/Runtime/Export/Scripting/GameObject.bindings.cs:251)
+LWS.TruckTaxi.TruckTaxiPassengerRuntime:Initialize (LWS.TruckTaxi.TruckTaxiBootstrap) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiPassengerRuntime.cs:69)
+LWS.TruckTaxi.TruckTaxiBootstrap/<Start>d__185:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiBootstrap.cs:163)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+
+Radio group / RadioVolume authoring pending. Radio uses Master with its own source volume until configured.
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:66)
+UnityEngine.Debug:LogWarning (object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:216)
+LWS.TruckTaxi.TruckTaxiRadio:Initialize (LWS.TruckTaxi.TruckTaxiBootstrap) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRadio.cs:45)
+LWS.TruckTaxi.TruckTaxiBootstrap/<Start>d__185:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiBootstrap.cs:174)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 216)
+
+Changing weather profile WeatherMakerProfile_Clear to WeatherMakerProfile_Clear, transition time: 25, hold time: Unknown
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogFormat (string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:133)
+DigitalRuby.WeatherMaker.WeatherMakerScript:RaiseWeatherProfileChanged (DigitalRuby.WeatherMaker.WeatherMakerProfileScript,DigitalRuby.WeatherMaker.WeatherMakerProfileScript,single,single,bool,string[]) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/WeatherMaker/Prefab/Scripts/Manager/WeatherMakerScript.cs:1001)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+LWS.InterstateHauler.LwsWeatherMakerAdapter:ApplyWeatherPreset (LWS.InterstateHauler.LwsWeatherPreset,single,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeatherMakerAdapter.cs:222)
+LWS.InterstateHauler.LwsWeatherCoordinator:RequestWeather (LWS.InterstateHauler.LwsWeatherPreset,single,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeather.cs:498)
+LWS.InterstateHauler.LwsWeatherCoordinator:RequestWeather (string,single,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeather.cs:482)
+LWS.TruckTaxi.TruckTaxiEnvironmentCoordinator:ApplyScheduledWeather (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiEnvironmentCoordinator.cs:162)
+LWS.TruckTaxi.TruckTaxiCalendarWeatherService:ForceCurrentInternal (LWS.TruckTaxi.TruckTaxiWeatherCondition,single,string,LWS.TruckTaxi.TruckTaxiWeatherSeverity,System.Nullable`1<LWS.TruckTaxi.TruckTaxiExtremeWeatherProfile>) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiCalendarWeatherService.cs:189)
+LWS.TruckTaxi.TruckTaxiCalendarWeatherService:ForceCurrent (LWS.TruckTaxi.TruckTaxiWeatherCondition,single,string,LWS.TruckTaxi.TruckTaxiWeatherSeverity) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiCalendarWeatherService.cs:179)
+LWS.TruckTaxi.TruckTaxiCalendarWeatherService:ForceForecast (LWS.TruckTaxi.TruckTaxiWeatherCondition) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiCalendarWeatherService.cs:173)
+LWS.TruckTaxi.TruckTaxiCalendarWeatherService:Initialize (LWS.InterstateHauler.ILwsGameClockService,LWS.TruckTaxi.TruckTaxiEnvironmentSettings,System.Func`2<string, bool>) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiCalendarWeatherService.cs:121)
+LWS.TruckTaxi.TruckTaxiCalendarWeatherService:Initialize (LWS.TruckTaxi.TruckTaxiEnvironmentCoordinator,LWS.TruckTaxi.TruckTaxiEnvironmentSettings) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiCalendarWeatherService.cs:104)
+LWS.TruckTaxi.TruckTaxiEnvironmentCoordinator:Initialize (LWS.TruckTaxi.TruckTaxiBootstrap) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiEnvironmentCoordinator.cs:87)
+LWS.TruckTaxi.TruckTaxiBootstrap/<Start>d__185:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiBootstrap.cs:176)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 133)
+
+LWS mid-route resume origin diagnostics
+Saved Global: (1360.765, 0.245, -164.377)
+Current Origin Offset: (0, 0, 0)
+Calculated Local: (1360.77, 0.24, -164.38)
+Reconstructed Difference: (0.00, 0.00, 0.00)
+Origin Shift: 
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:EstablishOriginForResume (LWS.InterstateHauler.LwsLoadApplicationContext) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:617)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:ApplyPreparedContext (LWS.InterstateHauler.LwsLoadApplicationContext,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:376)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:LoadPreparedVendorSlot (LWS.InterstateHauler.LwsLoadApplicationContext) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:342)
+LWS.InterstateHauler.LwsSaveService:LoadAutosave (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:835)
+LWS.TruckTaxi.TruckTaxiVibinPersistence:InvokeFacade (string,int,bool,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:356)
+LWS.TruckTaxi.TruckTaxiVibinPersistence/<LoadRoutine>d__105:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:318)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+Changing weather profile WeatherMakerProfile_Clear to WeatherMakerProfile_LightRain, transition time: 0.001, hold time: Unknown
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:LogFormat (UnityEngine.LogType,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:138)
+UnityEngine.Debug:LogFormat (string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:133)
+DigitalRuby.WeatherMaker.WeatherMakerScript:RaiseWeatherProfileChanged (DigitalRuby.WeatherMaker.WeatherMakerProfileScript,DigitalRuby.WeatherMaker.WeatherMakerProfileScript,single,single,bool,string[]) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/WeatherMaker/Prefab/Scripts/Manager/WeatherMakerScript.cs:1001)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+LWS.InterstateHauler.LwsWeatherMakerAdapter:ApplyWeatherPreset (LWS.InterstateHauler.LwsWeatherPreset,single,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeatherMakerAdapter.cs:222)
+LWS.InterstateHauler.LwsWeatherCoordinator:RequestWeather (LWS.InterstateHauler.LwsWeatherPreset,single,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Weather/LwsWeather.cs:498)
+LWS.InterstateHauler.LwsWeatherSaveParticipant:RestoreState (LWS.InterstateHauler.LwsSaveParticipantState) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:2671)
+LWS.InterstateHauler.LwsSaveService:RestoreSnapshotCore (LWS.InterstateHauler.LwsSaveSnapshot) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:382)
+LWS.InterstateHauler.LwsSaveService:RestoreSnapshot (LWS.InterstateHauler.LwsSaveSnapshot) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:343)
+LWS.InterstateHauler.LwsPixelCrushersSemanticSaver:ApplyData (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHaulerPixelCrushers/Save/LwsPixelCrushersSemanticSaver.cs:69)
+PixelCrushers.SaveSystem:ApplySavedGameData (PixelCrushers.SavedGameData) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/SaveSystem.cs:905)
+PixelCrushers.SaveSystem:LoadGame (PixelCrushers.SavedGameData) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/SaveSystem.cs:1009)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+LWS.InterstateHauler.LwsPixelCrushersSaveAdapter:LoadPreparedSlot (int) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:1683)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:ApplyPreparedContext (LWS.InterstateHauler.LwsLoadApplicationContext,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:393)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:LoadPreparedVendorSlot (LWS.InterstateHauler.LwsLoadApplicationContext) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:342)
+LWS.InterstateHauler.LwsSaveService:LoadAutosave (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:835)
+LWS.TruckTaxi.TruckTaxiVibinPersistence:InvokeFacade (string,int,bool,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:356)
+LWS.TruckTaxi.TruckTaxiVibinPersistence/<LoadRoutine>d__105:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:318)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 133)
+
+Rejected gameplay state transition LoadingWorld -> Paused: LoadingWorld may complete to a derived active-job state, FreeDrive, or RecoveryError. Reason: Truck Taxi menu
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogWarning (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:213)
+LWS.InterstateHauler.LwsGameplayStateService:TryTransitionTo (LWS.InterstateHauler.LwsGameplayState,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Gameplay/LwsGameplayState.cs:256)
+LWS.InterstateHauler.LwsGameplayStateService:Pause (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Gameplay/LwsGameplayState.cs:208)
+LWS.TruckTaxi.TruckTaxiBootstrap:SetPaused (bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiBootstrap.cs:417)
+LWS.TruckTaxi.TruckTaxiBootstrap:OnSessionChanged () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiBootstrap.cs:337)
+LWS.TruckTaxi.TruckTaxiSession:TryRestorePreparedCareerRun (string,LWS.TruckTaxi.TruckTaxiPersistentState,string&) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiSession.Persistence.cs:343)
+LWS.TruckTaxi.TruckTaxiSession:TryRestoreCareerRun (string,LWS.TruckTaxi.TruckTaxiPersistentState,string&) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiSession.Persistence.cs:294)
+LWS.TruckTaxi.TruckTaxiVibinPersistence:Restore (LWS.TruckTaxi.TruckTaxiVibinSavePayload) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:418)
+LWS.TruckTaxi.TruckTaxiVibinSaveParticipant:RestoreState (LWS.InterstateHauler.LwsSaveParticipantState) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinSaveParticipant.cs:58)
+LWS.InterstateHauler.LwsSaveService:RestoreSnapshotCore (LWS.InterstateHauler.LwsSaveSnapshot) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:382)
+LWS.InterstateHauler.LwsSaveService:RestoreSnapshot (LWS.InterstateHauler.LwsSaveSnapshot) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:343)
+LWS.InterstateHauler.LwsPixelCrushersSemanticSaver:ApplyData (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHaulerPixelCrushers/Save/LwsPixelCrushersSemanticSaver.cs:69)
+PixelCrushers.SaveSystem:ApplySavedGameData (PixelCrushers.SavedGameData) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/SaveSystem.cs:905)
+PixelCrushers.SaveSystem:LoadGame (PixelCrushers.SavedGameData) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Pixel Crushers/Common/Scripts/Save System/SaveSystem.cs:1009)
+System.Reflection.RuntimeMethodInfo:Invoke (object,System.Reflection.BindingFlags,System.Reflection.Binder,object[],System.Globalization.CultureInfo)
+System.Reflection.MethodBase:Invoke (object,object[])
+LWS.InterstateHauler.LwsPixelCrushersSaveAdapter:LoadPreparedSlot (int) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:1683)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:ApplyPreparedContext (LWS.InterstateHauler.LwsLoadApplicationContext,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:393)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:LoadPreparedVendorSlot (LWS.InterstateHauler.LwsLoadApplicationContext) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:342)
+LWS.InterstateHauler.LwsSaveService:LoadAutosave (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:835)
+LWS.TruckTaxi.TruckTaxiVibinPersistence:InvokeFacade (string,int,bool,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:356)
+LWS.TruckTaxi.TruckTaxiVibinPersistence/<LoadRoutine>d__105:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:318)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 213)
+
+LWS mid-route resume truck pose diagnostics
+Actual Truck Local: (1360.77, 0.44, -164.38)
+Global reconstructed from loaded truck: (1360.765, 0.438, -164.377)
+Difference: (0.00, 0.19, 0.00)
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:66)
+UnityEngine.Debug:Log (object,UnityEngine.Object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:128)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:FinalizeCanonicalTruck (LWS.InterstateHauler.LwsLoadApplicationContext) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:688)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:ApplyPreparedContext (LWS.InterstateHauler.LwsLoadApplicationContext,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:402)
+LWS.InterstateHauler.LwsSaveLoadCoordinator:LoadPreparedVendorSlot (LWS.InterstateHauler.LwsLoadApplicationContext) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveLoadCoordinator.cs:342)
+LWS.InterstateHauler.LwsSaveService:LoadAutosave (string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/InterstateHauler/Save/LwsSaveArchitecture.cs:835)
+LWS.TruckTaxi.TruckTaxiVibinPersistence:InvokeFacade (string,int,bool,bool) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:356)
+LWS.TruckTaxi.TruckTaxiVibinPersistence/<LoadRoutine>d__105:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiVibinPersistence.cs:318)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 128)
+
+TRUCK TAXI RESTART ASSERT PASS: one active Truck Taxi host
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<WaitForRun>d__65:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:258)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[CNP Route] build pts=12 tex=False width=1.648394 flow=1 tiling=0.05 mat=CompassNavigatorPro/RouteOverlay styleId=0.0 renderShader=CompassNavigatorPro/RouteOverlay renderIsRouteMat=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+CompassNavigatorPro.CompassPro:BuildMiniMapRoute () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/Private/CompassProPrivate.Route.cs:406)
+CompassNavigatorPro.CompassPro:UpdateRoute () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/Private/CompassProPrivate.Route.cs:266)
+CompassNavigatorPro.CompassPro:LateUpdate () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/Private/CompassProPrivate.cs:440)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+[CNP Route] build pts=12 tex=False width=5.666667 flow=1 tiling=0.05 mat=CompassNavigatorPro/RouteOverlay styleId=0.0 renderShader=CompassNavigatorPro/RouteOverlay renderIsRouteMat=True
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+CompassNavigatorPro.CompassPro:BuildMiniMapRoute () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/Private/CompassProPrivate.Route.cs:406)
+CompassNavigatorPro.CompassPro:UpdateRoute () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/Private/CompassProPrivate.Route.cs:266)
+CompassNavigatorPro.CompassPro:LateUpdate () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/Plugins/Kronnect/CompassNavigatorPro/Scripts/Private/CompassProPrivate.cs:440)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: fresh process continue restored saved world TruckTaxi_DemoCity
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:90)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: same career identity across worlds/restart
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:308)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: driver name retained
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:310)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: paint and truck ownership retained
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:312)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: existing paint presentation bound in current world
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:313)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: inventory retained without starter grants
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:314)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: needs/progression marker retained
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:315)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: completed fares retained
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:316)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: purchased and equipped authored upgrade retained
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:317)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: nonzero component damage retained
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness:DualCareerAssertions () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:319)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:91)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: restored forecast transition completes without intervention
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<DualWaitForRestoredWeather>d__5:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:142)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART ASSERT PASS: saved region retains its own weather and snow/melt state after process restart
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Check (bool,string) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:166)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<RunDualWorld>d__3:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:97)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART DRIVE SOURCE OBSERVED before completion: lws.input.keyboard-gamepad.truck owner=KeyboardMouse
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:Log (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:123)
+LWS.TruckTaxi.TruckTaxiRestartHarness:CaptureDriveInput (LWS.InterstateHauler.ILwsVehicleInputService) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:373)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<DualNativeDrive>d__11:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.DualWorld.cs:325)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:210)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 123)
+
+TRUCK TAXI RESTART FAIL: System.InvalidOperationException: Post-load drive gate failed: focus=False resume=True paused=False scale=1 clockPaused=False gameplay=FreeDrive allows=True owner=KeyboardMouse source=lws.input.keyboard-gamepad.truck active=True sameService=True sameSource=True sameOwner=True initialized=True autoInput=True kinematic=False constraints=None vehicleEnabled=True vehicleActive=True sleeping=False fixedTime=1.719999 actualRatio=0 isShifting=False shiftProgress=1 clutchType=Automatic clutchEngagement=0 clutchInput=0 wheels= [0:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=0 load=27678.16 contact=DemoCity_Connection_0] [1:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=0 load=27498.75 contact=DemoCity_Connection_0] [2:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=0 load=15801.52 contact=DemoCity_Connection_0] [3:active=True grounded=True motorTorque=0 brakeTorque=0 rpm=0 load=15488.14 contact=DemoCity_Connection_0] worldLife=Driving busy=False blocked=False modal=False keyboardSources=-17990:enabled=True,suppressed=False; nativeProviders=1 engine=False gear=0 PB=False locks[race/capture/recovery/fuel/travel/sleep]=False/False/False/False/False/False saveEvents[race/custom/companion/private/jug/roadPep/extreme]=False/False/False/False/False/False/0 ---> System.InvalidOperationException: Post-load canonical focused gameplay/input/vehicle authority unavailable; no harness recovery permitted.
+  at LWS.TruckTaxi.TruckTaxiRestartHarness.RequireDriveReadyCore () [0x00454] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\Assets\LWS\TruckTaxi\Scripts\TruckTaxiRestartHarness.cs:988 
+  at LWS.TruckTaxi.TruckTaxiRestartHarness.RequireDriveReady () [0x00002] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\Assets\LWS\TruckTaxi\Scripts\TruckTaxiRestartHarness.cs:901 
+   --- End of inner exception stack trace ---
+  at LWS.TruckTaxi.TruckTaxiRestartHarness.RequireDriveReady () [0x0000e] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\Assets\LWS\TruckTaxi\Scripts\TruckTaxiRestartHarness.cs:902 
+  at LWS.TruckTaxi.TruckTaxiRestartHarness+<DualNativeDrive>d__11.MoveNext () [0x000d8] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\Assets\LWS\TruckTaxi\Scripts\TruckTaxiRestartHarness.DualWorld.cs:329 
+  at LWS.TruckTaxi.TruckTaxiRestartHarness+<Start>d__60.MoveNext () [0x001d9] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\Assets\LWS\TruckTaxi\Scripts\TruckTaxiRestartHarness.cs:210 
+UnityEngine.Debug:ExtractStackTraceNoAlloc (byte*,int,string)
+UnityEngine.StackTraceUtility:ExtractStackTrace () (at C:/build/output/unity/unity/Runtime/Export/Scripting/StackTrace.cs:35)
+UnityEngine.DebugLogHandler:Internal_Log (UnityEngine.LogType,UnityEngine.LogOption,string,UnityEngine.Object)
+UnityEngine.DebugLogHandler:LogFormat (UnityEngine.LogType,UnityEngine.Object,string,object[]) (at C:/build/output/unity/unity/Runtime/Export/Logging/DebugLogHandler.cs:9)
+UnityEngine.Logger:Log (UnityEngine.LogType,object) (at C:/build/output/unity/unity/Runtime/Export/Logging/Logger.cs:60)
+UnityEngine.Debug:LogError (object) (at C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs:151)
+LWS.TruckTaxi.TruckTaxiRestartHarness:Fail (System.Exception) (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:160)
+LWS.TruckTaxi.TruckTaxiRestartHarness/<Start>d__60:MoveNext () (at F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Assets/LWS/TruckTaxi/Scripts/TruckTaxiRestartHarness.cs:215)
+UnityEngine.SetupCoroutine:InvokeMoveNext (System.Collections.IEnumerator,intptr) (at C:/build/output/unity/unity/Runtime/Export/Scripting/Coroutines.cs:17)
+
+(Filename: C:/build/output/unity/unity/Runtime/Export/Debug/Debug.bindings.cs Line: 151)
+
+[Physics::Module] Cleanup current backend.
+[Physics::Module] Id: 0xf2b8ea05
+Input System module state changed to: ShutdownInProgress.
+Input Polling Thread exited.
+Input System module state changed to: Shutdown.
+CodeReloadManager destroyed
+PlayerConnection::Cleanup

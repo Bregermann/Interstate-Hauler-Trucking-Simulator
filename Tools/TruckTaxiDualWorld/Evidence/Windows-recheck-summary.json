@@ -1,0 +1,203 @@
+{
+  "run": "ab987faebd6842a0a2e78bd5ffc52e54",
+  "sourceCommit": "f5749b7d",
+  "hardware": "GTX1660Ti",
+  "resolution": "1920x1080",
+  "sampleSecondsPerCase": 10,
+  "workload": "Stationary regional connector, native parking brake; live NPCs, semantic clock frozen only for controlled weather",
+  "isolated": false,
+  "sharedGpuApprovedByHuman": true,
+  "beforeAfterComparison": false,
+  "denseUrbanDrivingMeasured": false,
+  "frames": [
+    {
+      "world": "DemoCity",
+      "snowFraction": 0.0,
+      "medianMs": 18.7122,
+      "p95Ms": 25.0147,
+      "p99Ms": 37.5069,
+      "sharedMaterials": 0,
+      "groundSurfaces": 0,
+      "terrains": 0
+    },
+    {
+      "world": "DemoCity",
+      "snowFraction": 0.2,
+      "medianMs": 18.7627,
+      "p95Ms": 31.2699,
+      "p99Ms": 50.01669,
+      "sharedMaterials": 245,
+      "groundSurfaces": 2739,
+      "terrains": 0
+    },
+    {
+      "world": "DemoCity",
+      "snowFraction": 0.85,
+      "medianMs": 24.9979,
+      "p95Ms": 37.4976,
+      "p99Ms": 43.78899,
+      "sharedMaterials": 245,
+      "groundSurfaces": 2769,
+      "terrains": 0
+    },
+    {
+      "world": "Edenborough",
+      "snowFraction": 0.0,
+      "medianMs": 18.7575,
+      "p95Ms": 25.0358,
+      "p99Ms": 31.269,
+      "sharedMaterials": 0,
+      "groundSurfaces": 0,
+      "terrains": 0
+    },
+    {
+      "world": "Edenborough",
+      "snowFraction": 0.2,
+      "medianMs": 25.0021,
+      "p95Ms": 37.5234,
+      "p99Ms": 50.0083,
+      "sharedMaterials": 44,
+      "groundSurfaces": 19602,
+      "terrains": 6
+    },
+    {
+      "world": "Edenborough",
+      "snowFraction": 0.85,
+      "medianMs": 25.0104,
+      "p95Ms": 43.7576,
+      "p99Ms": 50.0069,
+      "sharedMaterials": 44,
+      "groundSurfaces": 19602,
+      "terrains": 6
+    }
+  ],
+  "transfers": [
+    {
+      "index": 1,
+      "from": "TruckTaxi_DemoCity",
+      "to": "TruckTaxi_Edenborough",
+      "objects": 46464,
+      "managedBytes": 352571392,
+      "allocatedBytes": 512804505,
+      "traffic": 150,
+      "pedestrians": 24
+    },
+    {
+      "index": 2,
+      "from": "TruckTaxi_Edenborough",
+      "to": "TruckTaxi_DemoCity",
+      "objects": 10118,
+      "managedBytes": 176926720,
+      "allocatedBytes": 371143456,
+      "traffic": 150,
+      "pedestrians": 24
+    },
+    {
+      "index": 3,
+      "from": "TruckTaxi_DemoCity",
+      "to": "TruckTaxi_Edenborough",
+      "objects": 46464,
+      "managedBytes": 373714944,
+      "allocatedBytes": 514491560,
+      "traffic": 150,
+      "pedestrians": 24
+    },
+    {
+      "index": 4,
+      "from": "TruckTaxi_Edenborough",
+      "to": "TruckTaxi_DemoCity",
+      "objects": 8544,
+      "managedBytes": 143020032,
+      "allocatedBytes": 369761750,
+      "traffic": 150,
+      "pedestrians": 0
+    },
+    {
+      "index": 5,
+      "from": "TruckTaxi_DemoCity",
+      "to": "TruckTaxi_Edenborough",
+      "objects": 46463,
+      "managedBytes": 371785728,
+      "allocatedBytes": 514466649,
+      "traffic": 150,
+      "pedestrians": 24
+    },
+    {
+      "index": 6,
+      "from": "TruckTaxi_Edenborough",
+      "to": "TruckTaxi_DemoCity",
+      "objects": 8544,
+      "managedBytes": 143597568,
+      "allocatedBytes": 370053509,
+      "traffic": 150,
+      "pedestrians": 0
+    },
+    {
+      "index": 7,
+      "from": "TruckTaxi_DemoCity",
+      "to": "TruckTaxi_Edenborough",
+      "objects": 46459,
+      "managedBytes": 372150272,
+      "allocatedBytes": 533192385,
+      "traffic": 150,
+      "pedestrians": 24
+    },
+    {
+      "index": 8,
+      "from": "TruckTaxi_Edenborough",
+      "to": "TruckTaxi_DemoCity",
+      "objects": 8544,
+      "managedBytes": 150433792,
+      "allocatedBytes": 370261608,
+      "traffic": 150,
+      "pedestrians": 0
+    },
+    {
+      "index": 9,
+      "from": "TruckTaxi_DemoCity",
+      "to": "TruckTaxi_Edenborough",
+      "objects": 46459,
+      "managedBytes": 372670464,
+      "allocatedBytes": 533463430,
+      "traffic": 150,
+      "pedestrians": 24
+    },
+    {
+      "index": 10,
+      "from": "TruckTaxi_Edenborough",
+      "to": "TruckTaxi_DemoCity",
+      "objects": 8544,
+      "managedBytes": 151314432,
+      "allocatedBytes": 370340120,
+      "traffic": 150,
+      "pedestrians": 0
+    },
+    {
+      "index": 11,
+      "from": "TruckTaxi_DemoCity",
+      "to": "TruckTaxi_Edenborough",
+      "objects": 46459,
+      "managedBytes": 381255680,
+      "allocatedBytes": 541858831,
+      "traffic": 150,
+      "pedestrians": 24
+    }
+  ],
+  "peakWorkingSetBytes": 1870204928.0,
+  "peakPrivateBytes": 4622749696.0,
+  "otherProcesses": [
+    "Unity.exe",
+    "TruckSports.exe"
+  ],
+  "cleanDemoExit": {
+    "pid": 18744,
+    "exitCode": 0,
+    "mode": "continue",
+    "run": "ab987faebd6842a0a2e78bd5ffc52e54",
+    "endedUtc": "2026-10-15T05:06:09.7373628Z"
+  },
+  "seedShutdown": "Gameplay assertions completed, then0xc0000005 at UnityPlayer+0x1d41c9; NOT a clean exit",
+  "nativeSymbol": "ExternalGPUProfiler::GetGameViewWindowHandle+0x9",
+  "nativeCaller": "Exception-thread stack[RSP] points into UIAutomationCore.DLL+0x224d00",
+  "humanAcceptance": false
+}
