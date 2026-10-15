@@ -14,6 +14,6 @@ public sealed class SportsMotionReplay:MonoBehaviour {
  public Vector3 Position(int index)=>ghosts[Mathf.Clamp(index,0,ghosts.Length-1)].position;
  void Draw(){if(!Playing)return;int lo=0,hi=count-1;while(lo+1<hi){int mid=(lo+hi)/2;if(times[mid]<=Cursor)lo=mid;else hi=mid;}float blend=Mathf.InverseLerp(times[lo],times[hi],Cursor);for(int i=0;i<sources.Length;i++){ghosts[i].gameObject.SetActive((masks[lo]&(1<<i))!=0);var a=roots[lo*sources.Length+i];var b=roots[hi*sources.Length+i];ghosts[i].SetPositionAndRotation(Vector3.Lerp(a.p,b.p,blend),Quaternion.Slerp(a.q,b.q,blend));ghosts[i].localScale=Vector3.Lerp(a.s,b.s,blend);for(int k=1;k<ghostParts[i].Length;k++){a=parts[lo*width+offsets[i]+k];b=parts[hi*width+offsets[i]+k];ghostParts[i][k].SetLocalPositionAndRotation(Vector3.Lerp(a.p,b.p,blend),Quaternion.Slerp(a.q,b.q,blend));ghostParts[i][k].localScale=Vector3.Lerp(a.s,b.s,blend);}}}
  public void Colorize(Color[] colors){for(int i=0;i<ghosts.Length;i++){var block=new MaterialPropertyBlock();block.SetColor("_BaseColor",colors[i]);block.SetColor("_Color",colors[i]);foreach(var r in ghosts[i].GetComponentsInChildren<Renderer>(true))if(r.name=="Cab")r.SetPropertyBlock(block);}}
- public void End(){Playing=false;if(ghosts!=null)foreach(var g in ghosts)g.gameObject.SetActive(false);}
+ public void End(){Playing=false;if(ghosts!=null)foreach(var g in ghosts)if(g!=null)g.gameObject.SetActive(false);}
 }
 }
