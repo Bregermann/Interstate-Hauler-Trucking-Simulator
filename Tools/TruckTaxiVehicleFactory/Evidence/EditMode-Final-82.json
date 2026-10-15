@@ -1,0 +1,607 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {
+      "caller": "plugin",
+      "skill": "unity-build-validation",
+      "json": true
+    },
+    "result": {
+      "status": "completed",
+      "duration": 0.25,
+      "summary": {
+        "total": 82,
+        "passed": 82,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.DefaultOwnedTruckAndEditableNameUseExistingRunIdentity",
+          "Status": "Passed",
+          "Duration": 0.0051565,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.DuplicateCatalogIdsAndActiveRaceRejectPurchases",
+          "Status": "Passed",
+          "Duration": 0.0007886,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.EquipmentEventPrecedesGeneralChangeAfterCommitAndRestoreOnly",
+          "Status": "Passed",
+          "Duration": 0.0018672,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.ExplicitRestoreAllowsLegacyIdentityAndBindsTargetBeforeInitialization(1)",
+          "Status": "Passed",
+          "Duration": 0.0010427,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.ExplicitRestoreAllowsLegacyIdentityAndBindsTargetBeforeInitialization(2)",
+          "Status": "Passed",
+          "Duration": 0.000387,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.ExplicitRestoreRejectsForeignInnerIdentityWithoutChangingRunOrWallet",
+          "Status": "Passed",
+          "Duration": 0.0010107,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.ExplicitRestoreRejectsInvalidPreparationWithoutRebinding",
+          "Status": "Passed",
+          "Duration": 0.0006014,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.ExplicitRestoreSwitchesRunAndNotifiesExistingSubscribersWithDetachedState",
+          "Status": "Passed",
+          "Duration": 0.0012007,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.ForeignOrCorruptOwnedStateRejectsBeforeWalletOrIdentityMutation",
+          "Status": "Passed",
+          "Duration": 0.0012377,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.HeadwearIsPlayerOwnedAndSurvivesTruckSelection",
+          "Status": "Passed",
+          "Duration": 0.0026355,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.InvalidDriverNameCannotMutateIdentity(\"\")",
+          "Status": "Passed",
+          "Duration": 0.0008033,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.InvalidDriverNameCannotMutateIdentity(\"  \")",
+          "Status": "Passed",
+          "Duration": 0.0002787,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.InvalidDriverNameCannotMutateIdentity(\"<b>Driver</b>\")",
+          "Status": "Passed",
+          "Duration": 0.0002524,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.InvalidDriverNameCannotMutateIdentity(\"Driver\\nName\")",
+          "Status": "Passed",
+          "Duration": 0.0002595,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.InvalidDriverNameCannotMutateIdentity(\"Driver‮Name\")",
+          "Status": "Passed",
+          "Duration": 0.0002656,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.JsonRoundTripIsDetachedIdempotentAndDoesNotDoubleCharge",
+          "Status": "Passed",
+          "Duration": 0.0020142,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.LegacySavesPreserveStatsAndDoNotAcquireFirstDayGuideEligibility(1)",
+          "Status": "Passed",
+          "Duration": 0.0010377,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.LegacySavesPreserveStatsAndDoNotAcquireFirstDayGuideEligibility(2)",
+          "Status": "Passed",
+          "Duration": 0.0004458,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.NewCareerClaimsGuideOnceWithExactSubtitleAndNoVoice",
+          "Status": "Passed",
+          "Duration": 0.0012449,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.PurchaseDebitsExistingWalletOnceAndDoesNotAutoEquip",
+          "Status": "Passed",
+          "Duration": 0.0005167,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.PurchaseNotificationSeesAtomicOwnershipAndDebitAndRejectsReentry",
+          "Status": "Passed",
+          "Duration": 0.0009832,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.UnavailableIncompatibleAndUnaffordableContentNeverCharges",
+          "Status": "Passed",
+          "Duration": 0.0004688,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCareerFoundationTests.UpgradesReplacePerCategoryButRemainOwnedPerTruck",
+          "Status": "Passed",
+          "Duration": 0.0006535,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDealershipUiTests.AffordabilityIncludesExactPrice(999,\"NEED CASH\")",
+          "Status": "Passed",
+          "Duration": 0.0016923,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDealershipUiTests.AffordabilityIncludesExactPrice(1000,\"FOR SALE\")",
+          "Status": "Passed",
+          "Duration": 0.0002743,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDealershipUiTests.AffordabilityIncludesExactPrice(1001,\"FOR SALE\")",
+          "Status": "Passed",
+          "Duration": 0.0002583,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDealershipUiTests.MissingContentAndDisabledSalesDoNotLookPurchasable",
+          "Status": "Passed",
+          "Duration": 0.0003724,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDealershipUiTests.MissingFactoryCannotCommitGarageSelectionOrPaint",
+          "Status": "Passed",
+          "Duration": 0.0022128,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDealershipUiTests.SixCatalogRowsProjectEquippedOwnedAndSaleWithoutChangingWallet",
+          "Status": "Passed",
+          "Duration": 0.0006481,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDealershipUiTests.UninitializedDealershipOpenCloseAndDisableAreSafe",
+          "Status": "Passed",
+          "Duration": 0.0018103,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.AdultClothedShapeIsVisibleBoundedAndDoesNotAccumulate",
+          "Status": "Passed",
+          "Duration": 0.0025879,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.AppearanceRoundTripsInsideExistingSessionSnapshot",
+          "Status": "Passed",
+          "Duration": 0.001499,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.CommitCaptureProfileAndSnapshotCopiesAreIsolated",
+          "Status": "Passed",
+          "Duration": 0.0007292,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(0)",
+          "Status": "Passed",
+          "Duration": 0.0007044,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(1)",
+          "Status": "Passed",
+          "Duration": 0.0001381,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(2)",
+          "Status": "Passed",
+          "Duration": 0.0001248,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(3)",
+          "Status": "Passed",
+          "Duration": 0.0001221,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(4)",
+          "Status": "Passed",
+          "Duration": 0.000117,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(5)",
+          "Status": "Passed",
+          "Duration": 0.0001179,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(6)",
+          "Status": "Passed",
+          "Duration": 0.0001185,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(7)",
+          "Status": "Passed",
+          "Duration": 0.0001166,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(8)",
+          "Status": "Passed",
+          "Duration": 0.0001154,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(9)",
+          "Status": "Passed",
+          "Duration": 0.0001139,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidAppearanceCannotMutateCareerOrEmitChange(10)",
+          "Status": "Passed",
+          "Duration": 0.0001228,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.InvalidPersistedAppearanceRejectsWholeRestore",
+          "Status": "Passed",
+          "Duration": 0.0007758,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.LegacyMissingChestFieldPreservesOriginalShapeAndColors",
+          "Status": "Passed",
+          "Duration": 0.0009999,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.NullableLegacyAppearanceUsesFreshDefaultsWithoutChangingIdentity",
+          "Status": "Passed",
+          "Duration": 0.0007934,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiDriverAppearanceTests.ShapeOnlyEditUsesExistingCareerEventAndCopies",
+          "Status": "Passed",
+          "Duration": 0.0005095,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.ApplyPublishesOneAtomicSelectionAndPaintWithoutCharging",
+          "Status": "Passed",
+          "Duration": 0.0019409,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.CancelDiscardsDraftWithoutMutatingCareerOrPublishingEquipment",
+          "Status": "Passed",
+          "Duration": 0.0003968,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.ChangedCareerSelectionInvalidatesDraft",
+          "Status": "Passed",
+          "Duration": 0.0003155,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.DraftNeverChangesCanonicalSelectionWithoutFactorySwap",
+          "Status": "Passed",
+          "Duration": 0.0003785,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.ExistingVendorPayloadRoundtripsPaintAndDefaultThroughNewSession(True)",
+          "Status": "Passed",
+          "Duration": 0.0029117,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.ExistingVendorPayloadRoundtripsPaintAndDefaultThroughNewSession(False)",
+          "Status": "Passed",
+          "Duration": 0.0011075,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.InvalidPaintAndMissingDeclaredPaintDoNotPassValidation",
+          "Status": "Passed",
+          "Duration": 0.000384,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.OnlyOwnedEntriesWithRealMatchingDefinitionsAndPrefabsAreListed",
+          "Status": "Passed",
+          "Duration": 0.0004866,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.PaintComponentConstructionAndUnconfiguredCleanupDoNotAllocateNativeConstructorState",
+          "Status": "Passed",
+          "Duration": 0.0010623,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiGarageTests.RestoreDefaultIsOnlyCommittedByApply",
+          "Status": "Passed",
+          "Duration": 0.0005904,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiRosterArgumentTests.DuplicateOrConflictingRosterFlagsAreRejected",
+          "Status": "Passed",
+          "Duration": 0.0003311,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiRosterArgumentTests.RosterIndicesRemainExplicitAndSaveRootIsIsolated(\"0\",True)",
+          "Status": "Passed",
+          "Duration": 0.0004827,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiRosterArgumentTests.RosterIndicesRemainExplicitAndSaveRootIsIsolated(\"5\",True)",
+          "Status": "Passed",
+          "Duration": 0.0000698,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiRosterArgumentTests.RosterIndicesRemainExplicitAndSaveRootIsIsolated(\"6\",False)",
+          "Status": "Passed",
+          "Duration": 0.0000432,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiRosterArgumentTests.RosterIndicesRemainExplicitAndSaveRootIsIsolated(\"-1\",False)",
+          "Status": "Passed",
+          "Duration": 0.0000416,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiRosterArgumentTests.RosterIndicesRemainExplicitAndSaveRootIsIsolated(\"../save\",False)",
+          "Status": "Passed",
+          "Duration": 0.000039,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.AuthoredCameraMountRemovalPreservesNativeCameraAndCachedLocalPose",
+          "Status": "Passed",
+          "Duration": 0.0010109,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.AuthoredLampResourceReleaseDestroysOnlyOwnedMaterialsAndIsIdempotent",
+          "Status": "Passed",
+          "Duration": 0.0022038,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.CareerRejectionRestoresPreparedActor",
+          "Status": "Passed",
+          "Duration": 0.0015093,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.DriverSeatDoesNotMultiplyAlreadySeatedScaleOnRepeatedPlacement",
+          "Status": "Passed",
+          "Duration": 0.0007153,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.DuplicateHistoricalStartersFailWithoutDroppingOwnedData",
+          "Status": "Passed",
+          "Duration": 0.0011809,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.KnownStarterMigrationPreservesOwnershipPaintUpgradesWalletAndOtherSelection(False)",
+          "Status": "Passed",
+          "Duration": 0.0014891,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.KnownStarterMigrationPreservesOwnershipPaintUpgradesWalletAndOtherSelection(True)",
+          "Status": "Passed",
+          "Duration": 0.000346,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.PreparationFailureRestoresActorAndLeavesCareerUntouched",
+          "Status": "Passed",
+          "Duration": 0.0008199,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.PreviewDoesNotIncludePrefabRootScaleTwice",
+          "Status": "Passed",
+          "Duration": 0.0009868,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.PreviewPaintUsesExactDeclaredMaterialAndDoesNotMutateSharedAsset",
+          "Status": "Passed",
+          "Duration": 0.001104,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.PreviewUsesLocalActivationEvenUnderInactivePrefabContainer",
+          "Status": "Passed",
+          "Duration": 0.0004908,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.PreviewUsesLodMembershipNotRendererNameAndCopiesNoBehaviours",
+          "Status": "Passed",
+          "Duration": 0.0008317,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.RemoveAuthoredRemovesOnlyGeneratedLampBindingsAcrossRepeats",
+          "Status": "Passed",
+          "Duration": 0.0059785,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.RollbackFailureReportsBothErrorsWithoutEscaping",
+          "Status": "Passed",
+          "Duration": 0.0011151,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.SimilarLookingButUnknownStarterIdIsNotMigrated",
+          "Status": "Passed",
+          "Duration": 0.0004234,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.SnapshotRestoresOnlyDeclaredSourceRenderersAndPreservesBaselineLods",
+          "Status": "Passed",
+          "Duration": 0.0056458,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.ThrowingCareerObserverDoesNotRollBackAlreadyCommittedActor",
+          "Status": "Passed",
+          "Duration": 0.000669,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiVehicleFactoryTests.UninitializedFactoryFailsClosedWithoutThrowing",
+          "Status": "Passed",
+          "Duration": 0.0002275,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}
