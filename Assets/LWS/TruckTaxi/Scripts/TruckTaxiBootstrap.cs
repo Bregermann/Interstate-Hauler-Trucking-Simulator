@@ -506,7 +506,8 @@ namespace LWS.TruckTaxi
             resetTargets = FindObjectsByType<TruckTaxiImpactTarget>(FindObjectsSortMode.None);
             ConfigureBreakawayProps();
             RebuildObjectiveCapabilities();
-            GetComponent<TruckTaxiSnowSurface>()?.RefreshStreamedSurfaces();
+            // Availability is discovery, not save restoration: keep live snow and tire history.
+            GetComponent<TruckTaxiSnowSurface>()?.MarkDirty();
             GPS?.MapMarkers?.RefreshStreamedContent();
             PhysicalFacilities?.Refresh();
         }

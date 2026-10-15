@@ -396,6 +396,47 @@ namespace LWS.TruckTaxi.Tests
             }
         }
 
+        [TestCase(90f, 512, 1.0546875f)]
+        [TestCase(45f, 256, 1.0546875f)]
+        [TestCase(90f, 1024, .52734375f)]
+        public void ContactDepthUsesThreeSurfaceTexelsWithoutWideningTheTrace(float size, int resolution, float expectedSpan)
+        {
+            var cameraObject = new GameObject("Surface depth footprint", typeof(Camera));
+            cameraObject.transform.SetParent(root.transform);
+            Camera camera = cameraObject.GetComponent<Camera>();
+            camera.enabled = false;
+            camera.orthographic = true; camera.orthographicSize = size; camera.aspect = 1;
+            var texture = new RenderTexture(resolution, resolution, 16, RenderTextureFormat.Depth);
+            owned.Add(texture); camera.targetTexture = texture;
+            typeof(TruckTaxiSnowSurface).GetMethod("CacheContactDepthFootprint", BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(surface, new object[] { camera });
+            float span = Field<float>("minimumContactDepthSpan");
+            Assert.AreEqual(expectedSpan, span, .00001f);
+
+            MeshRenderer depth = Renderer("Contact depth", Material("Universal Render Pipeline/Lit", "Depth"));
+            MeshRenderer tracer = Renderer("Wheel trace", depth.sharedMaterial);
+            MethodInfo placeDepth = typeof(TruckTaxiSnowSurface).GetMethod("PlaceContactDepth", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo placeTrace = typeof(TruckTaxiSnowSurface).GetMethod("PlaceTrace", BindingFlags.Static | BindingFlags.NonPublic);
+            Vector3 from = Vector3.zero, to = new Vector3(0, .03f, .06f);
+            const float width = .3185f;
+            placeDepth.Invoke(null, new object[] { depth, from, to, width, span });
+            placeTrace.Invoke(null, new object[] { tracer, from, to, width, .4f, .03f });
+            Assert.IsTrue(depth.enabled);
+            Assert.GreaterOrEqual(depth.transform.localScale.x, expectedSpan);
+            float horizontal = Vector3.ProjectOnPlane(depth.transform.forward, Vector3.up).magnitude;
+            Assert.GreaterOrEqual(depth.transform.localScale.z * horizontal + .00001f, expectedSpan);
+            Assert.AreEqual(.04f, depth.transform.localScale.y, .00001f);
+            Assert.Less(Vector3.Angle(depth.transform.forward, to - from), .01f);
+            Assert.Less(Vector3.Distance(depth.transform.position, (from + to) * .5f - Vector3.up * .02f), .00001f);
+            Assert.AreEqual(width, tracer.transform.localScale.x, .00001f);
+            Assert.AreEqual(Vector3.Distance(from, to) + width * .25f, tracer.transform.localScale.z, .00001f);
+
+            to = new Vector3(0, 1, 3);
+            placeDepth.Invoke(null, new object[] { depth, from, to, width, span });
+            Assert.AreEqual(to.magnitude + width * 1.6f * .25f, depth.transform.localScale.z, .00001f,
+                "Long contact patches must not be shortened by the minimum footprint.");
+        }
+
         [Test]
         public void ContactVolumeFollowsSlopeRatherThanFlatteningWheelSegment()
         {

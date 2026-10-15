@@ -4,6 +4,7 @@ using System.Reflection;
 using LWS.InterstateHauler;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 namespace LWS.TruckTaxi
@@ -62,6 +63,7 @@ namespace LWS.TruckTaxi
         private Texture2D snowSparkleTexture;
         private float lastAppliedCoverage = -1;
         private int depthRendererIndex = -1;
+        private float minimumContactDepthSpan;
 
         private struct GroundBinding
         {
@@ -289,19 +291,30 @@ namespace LWS.TruckTaxi
             foreach (string name in new[] { "traceSurfCam", "traceObjsCam" })
             {
                 Camera camera = type.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue(generator) as Camera;
-                if (camera != null) BindDepthCameraRenderer(camera);
+                if (camera == null) continue;
+                if (name == "traceSurfCam") CacheContactDepthFootprint(camera);
+                BindDepthCameraRenderer(camera);
             }
+        }
+
+        private void CacheContactDepthFootprint(Camera camera)
+        {
+            RenderTexture texture = camera.targetTexture;
+            if (!camera.orthographic || texture == null || texture.width <= 0 || texture.height <= 0) return;
+            float height = camera.orthographicSize * 2;
+            minimumContactDepthSpan = 3 * Mathf.Max(height * camera.aspect / texture.width, height / texture.height);
         }
 
         private bool BindDepthCameraRenderer(Camera camera)
         {
             BindDepthTarget(camera);
-            if (boundDepthCameras.Contains(camera)) return false;
-            Type dataType = ResolveType("UnityEngine.Rendering.Universal.UniversalAdditionalCameraData");
-            Component data = dataType == null ? null : camera.GetComponent(dataType);
-            MethodInfo setRenderer = dataType?.GetMethod("SetRenderer", BindingFlags.Instance | BindingFlags.Public);
-            if (data == null || setRenderer == null) return false;
-            setRenderer.Invoke(data, new object[] { depthRendererIndex });
+            var data = camera.GetComponent<UniversalAdditionalCameraData>();
+            if (data == null) return false;
+            var pipeline = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+            // Vendor Init reapplies its renderer ID even to cameras we already bound.
+            if (boundDepthCameras.Contains(camera) && pipeline != null &&
+                ReferenceEquals(data.scriptableRenderer, pipeline.GetRenderer(depthRendererIndex))) return false;
+            data.SetRenderer(depthRendererIndex);
             boundDepthCameras.Add(camera);
             return true;
         }
@@ -484,9 +497,8 @@ namespace LWS.TruckTaxi
                     if (depth != null) depth.gameObject.layer = SurfaceLayer;
                     wheelDepthProxies[index] = depth;
                 }
-                // A reusable contact-sized depth volume, pitched between real NWH contacts.
-                // No terrain tessellation/rebuild, raycast grid, or duplicate terrain is required.
-                PlaceTrace(depth, from, to, width * 1.6f, .04f, -.02f);
+                // Only the hidden sampling support expands; the object mask keeps the real tire/path footprint.
+                PlaceContactDepth(depth, from, to, width, minimumContactDepthSpan);
             }
             else if (wheelDepthProxies.TryGetValue(index, out MeshRenderer depth) && depth != null) depth.enabled = false;
             WheelTraceStampCount++;
@@ -830,6 +842,19 @@ namespace LWS.TruckTaxi
             renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
             renderer.enabled = false;
             return renderer;
+        }
+
+        private static void PlaceContactDepth(MeshRenderer depth, Vector3 from, Vector3 to, float width, float minimumSpan)
+        {
+            PlaceTrace(depth, from, to, width * 1.6f, .04f, -.02f);
+            if (depth == null || !depth.enabled) return;
+            Transform shape = depth.transform;
+            Vector3 scale = shape.localScale;
+            scale.x = Mathf.Max(scale.x, minimumSpan);
+            // Preserve contact pitch while covering three surface-depth texels in the horizontal projection.
+            float horizontal = Vector3.ProjectOnPlane(shape.forward, Vector3.up).magnitude;
+            scale.z = Mathf.Max(scale.z, minimumSpan / Mathf.Max(.25f, horizontal));
+            shape.localScale = scale;
         }
 
         private static void PlaceTrace(MeshRenderer tracer, Vector3 from, Vector3 to, float width, float height, float yOffset)
