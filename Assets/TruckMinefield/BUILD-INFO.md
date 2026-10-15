@@ -1,0 +1,3 @@
+# Minefield build integration
+
+Saved scene: Assets/TruckMinefield/Scenes/TruckMinefield.unity. Included in the explicit SportsBuilder scene list, currently fifteen scenes / thirteen sports, TruckSports startup. Final output remains F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe, with every companion file. No new player has been built for this milestone; the existing executable is older. Final combined build through LWS.TruckSports.Editor.SportsBuilder.Build after all seven requested modes, with exact scoped host-settings restoration. Do not use CreateValidateBuild for delivery.

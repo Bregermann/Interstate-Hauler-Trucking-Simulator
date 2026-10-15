@@ -1,0 +1,73 @@
+using System;using System.Text;using UnityEngine;using LWS.TruckSports;using LWS.TruckBowling;
+
+namespace LWS.TruckMinefield {
+
+public sealed class MinefieldMatch:SportsEventSession {
+
+ public MinefieldRacer[] racers;public MinefieldHazard[] hazards;public MinefieldFlag[] blastFlags,landingFlags,bestFlags;public Terrain terrain;public Terrain[] grounds;public SportsChaosWeather weatherField;public SportsRallyViews views;public SportsMotionReplay replay;public ParticleSystem[] blasts;public TrailRenderer[] flightTrails;public ParticleSystem[] landPuffs;public TextMesh[] identities;public int seed=72137;
+
+ public MinefieldPhase Phase{get;private set;}public float HeatTime{get;private set;}public int Heat{get;private set;}public int Winner{get;private set;}=-1;public readonly int[] points=new int[8],personalBest=new int[8];public int HeatLocks{get;private set;}public int LastLeaders{get;private set;}
+
+ int eligible=255,heatSerial,focus,fx;float phaseAge,resolvedAt;bool heatLocked,tieBreak;readonly float[] react=new float[8];readonly Vector2[] ai=new Vector2[8];readonly Vector3[] memory=new Vector3[8];readonly bool[] air=new bool[8];readonly Vector3[] cameraPoints=new Vector3[8];readonly StringBuilder text=new StringBuilder(1024);
+
+ public override string Title=>"TRUCK MINEFIELD";public override int MinimumPlayers=>8;public override int MaximumPlayers=>8;public override int OptionCount=>1;public override int WeatherCount=>6;public override bool UsesAction=>false;public override string OptionLabel=>"FIRST TO FIVE · ONE MILE INSTANT WIN";public override bool MultiViewHUD=>views!=null&&views.Humans>0&&Phase!=MinefieldPhase.Replay;public override bool ReplayControls=>Phase==MinefieldPhase.Replay;
+
+ public override string Help=>"THE LONG WAY HOME\nEight competitors. Every heat uses the same seeded mile-long minefield. Drive farther before a mine or explosive sheep launches your truck. First subsequent terrain contact locks forward distance to0.1m; sideways travel and later bounces never improve it. Tall flags mark the blast, landing and your best this match.\n\nWIN TWO WAYS\nFarthest valid landing earns a heat point; tied leaders each score. First to five wins. Multiple match leaders run a tiebreak. Cross the one-mile finish while still DRIVING to win the entire match immediately. Crossing after a blast cannot win instantly. Incomplete/stuck attempts score nothing;180s heat limit allows a legitimate finish run.\n\nCONTROLS\nSteer and accelerate; opposite throttle brakes then reverses. In flight, left/right nudges trajectory. Release forward/back once after launch to enable small range correction. A shared2.2s correction budget cannot hover or reverse flight. After landing there is no propulsion.\n\nREAD THE COURSE\nSubtle mine plates, sheep, ramps and winding clear gaps reward observation. Mines restore identically each heat. AI sees only nearby clues and remembers its own previous blast, with the same forces and controls. Up to four local humans; AI fills eight. Pause/reconnect preserves all flags, scores and bodies. Recorded highlight has angle/speed/rewind/skip; AI advances automatically.";
+
+ public override string Header=>Title+" · HEAT "+Heat+" · FIRST TO FIVE";
+
+ public override string Status=>Phase==MinefieldPhase.Countdown?Mathf.CeilToInt(3-phaseAge).ToString():Phase==MinefieldPhase.Replay?"RECORDED HIGHLIGHT · FIRST CONTACT IS FINAL":Phase==MinefieldPhase.HeatResult?LastLeaders==0?"NO VALID LANDINGS · RERUN":"HEAT POINTS LOCKED":"DRIVE THE MILE TO WIN INSTANTLY · "+Mathf.CeilToInt(MinefieldRules.HeatLimit-HeatTime)+"s";
+
+ public override string Standings{get{text.Clear();for(int i=0;i<8;i++)text.Append(setup.players[i].name).Append("  ").Append(points[i]).Append(" pts · ").Append(racers[i].Distance>=0?(racers[i].Distance*.1f).ToString("F1")+"m":"—").Append(i==7?"":"\n");return text.ToString();}}
+
+ public override string Results=>(Winner>=0?setup.players[Winner].name+" WINS\n":"TIE\n")+Standings;
+
+ public override bool ValidateSources(out string reason){if(!base.ValidateSources(out reason))return false;int humans=0;for(int i=0;i<8;i++)if(setup.players[i].source!=BowlingSource.AI)humans++;if(humans>4){reason="At most four local humans; AI fills the other competitors.";return false;}return true;}
+
+ public float GroundHeight(Vector3 p){if(grounds!=null)foreach(var ground in grounds){var a=ground.transform.position;var b=a+ground.terrainData.size;if(p.x>=a.x&&p.x<=b.x&&p.z>=a.z&&p.z<=b.z)return ground.SampleHeight(p)+a.y;}return terrain.SampleHeight(p)+terrain.transform.position.y;}
+
+ public Vector3 Surface(Vector3 p){p.y=GroundHeight(p);return p;}
+
+ protected override void BeginGame(){Array.Clear(points,0,8);Array.Clear(personalBest,0,8);Array.Clear(memory,0,8);HeatLocks=heatSerial=fx=0;eligible=255;tieBreak=false;Winner=-1;for(int i=0;i<8;i++)bestFlags[i].gameObject.SetActive(false);var colors=new Color[8];for(int i=0;i<8;i++)colors[i]=setup.players[i].color;replay.Colorize(colors);if(flightTrails!=null)for(int i=0;i<flightTrails.Length;i++){flightTrails[i].startColor=colors[i];flightTrails[i].endColor=new Color(colors[i].r,colors[i].g,colors[i].b,0);}BeginHeat();}
+
+ void ClearFlightEffects(){if(flightTrails!=null)foreach(var trail in flightTrails){trail.emitting=false;trail.Clear();}if(landPuffs!=null)foreach(var puff in landPuffs)puff.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);}
+ void BeginHeat(){ClearFlightEffects();Heat=++heatSerial;HeatTime=phaseAge=0;resolvedAt=-1;heatLocked=false;Phase=MinefieldPhase.Countdown;for(int i=0;i<8;i++){react[i]=0;bestFlags[i].gameObject.SetActive(personalBest[i]>0);blastFlags[i].gameObject.SetActive(false);landingFlags[i].gameObject.SetActive(false);var p=Surface(new Vector3((i-3.5f)*8,0,0))+Vector3.up*.55f;racers[i].ResetAttempt(p,(eligible&(1<<i))!=0);}foreach(var h in hazards)h.ResetHazard();weatherField.Configure(unchecked(seed+Heat*997),weather,1);views.Replay=false;views.Layout();replay.ResetRecord();Gate();}
+
+ protected override void Simulate(float dt){phaseAge+=dt;if(Phase==MinefieldPhase.Countdown){if(phaseAge>=3){Phase=MinefieldPhase.Driving;phaseAge=0;foreach(var r in racers)r.Release();feedback.Play(0,0,true);}return;}if(Phase==MinefieldPhase.Replay){if(replay.Step(dt))EndReplay();return;}if(Phase==MinefieldPhase.HeatResult){if(phaseAge>=2.5f)BeginHeat();return;}
+
+ HeatTime+=dt;weatherField.Tick(HeatTime);int resolved=0;focus=0;float farthest=-999;for(int i=0;i<8;i++){var r=racers[i];if((eligible&(1<<i))==0){resolved++;continue;}var drive=setup.players[i].source==BowlingSource.AI?AI(i):commands[i];r.Step(drive,dt);air[i]=r.Phase!=MineAttempt.Driving;if(r.Phase==MineAttempt.Landed||r.Phase==MineAttempt.Failed)resolved++;if(!r.Retired&&r.truck.body.position.z>farthest){farthest=r.truck.body.position.z;focus=i;}}
+
+ int crossed=0;float earliest=float.PositiveInfinity;for(int i=0;i<8;i++)if(racers[i].Phase==MineAttempt.DrivenFinish){float t=racers[i].FinishTime;if(t<earliest-.0001f){earliest=t;crossed=1<<i;}else if(Mathf.Abs(t-earliest)<=.0001f)crossed|=1<<i;}if(crossed!=0){if(MinefieldRules.Count(crossed)==1){Winner=First(crossed);EndMatch();return;}eligible=crossed;tieBreak=true;LockHeat(false);return;}
+
+ int visible=0;for(int i=0;i<8;i++)if(!racers[i].Retired&&(eligible&(1<<i))!=0)visible|=1<<i;replay.Record(HeatTime,visible);if(resolved==8&&resolvedAt<0)resolvedAt=HeatTime;if(resolved==8&&HeatTime-resolvedAt>=2||HeatTime>=MinefieldRules.HeatLimit){if(HeatTime>=MinefieldRules.HeatLimit)foreach(var r in racers)r.Fail();LockHeat(true);}}
+
+ Vector2 AI(int slot){if(HeatTime<react[slot])return ai[slot];var r=racers[slot];float d=(int)setup.players[slot].difficulty;react[slot]=HeatTime+Mathf.Lerp(.48f,.13f,d*.5f);var p=r.truck.body.position;if(r.Phase==MineAttempt.Launched){ai[slot]=new Vector2(Mathf.Clamp(-p.x*.03f,-.5f,.5f),0);return ai[slot];}float lane=(slot-3.5f)*6+Mathf.Sin(p.z*.015f+slot+Heat*.6f)*(8-d);if(memory[slot].z>p.z&&memory[slot].z-p.z<25&&Mathf.Abs(memory[slot].x-lane)<6)lane+=memory[slot].x>0?-8:8;
+
+ // Only nearby readable plates inform a correction. No hidden all-course route lookup.
+
+ float visible=9+d*4,avoid=0;foreach(var h in hazards){if(h.Spent)continue;var delta=h.transform.position-p;if(delta.z>0&&delta.z<visible&&Mathf.Abs(delta.x)<3.5f)avoid+=(delta.x>0?-1:1)*(1-delta.z/visible)*9;}lane=Mathf.Clamp(lane+avoid,-40,40);var target=Surface(new Vector3(lane,0,p.z+14+d*2));var local=r.truck.transform.InverseTransformPoint(target);float turn=Mathf.Clamp(local.x/(5+d),-1,1);ai[slot]=new Vector2(turn,Mathf.Abs(turn)>.75f?.65f:1);return ai[slot];}
+
+ public void Blast(MinefieldRacer r,Vector3 p){memory[r.slot]=r.LaunchOrigin;blastFlags[r.slot].Reveal(Surface(r.LaunchOrigin),setup.players[r.slot].color,setup.players[r.slot].name+"\nBLAST");var effect=blasts[fx++%blasts.Length];effect.transform.position=p;effect.Play();feedback.Play(2,0,true);Pulse(r.slot,.8f,.3f);}
+
+ public void Landed(MinefieldRacer r){bool best=r.Distance>personalBest[r.slot];landingFlags[r.slot].Reveal(Surface(r.LandingOrigin),setup.players[r.slot].color,setup.players[r.slot].name+"\n"+(r.Distance*.1f).ToString("F1")+"m"+(best?" | BEST":""));if(best){personalBest[r.slot]=r.Distance;bestFlags[r.slot].Reveal(Surface(r.LandingOrigin),setup.players[r.slot].color,setup.players[r.slot].name+"\nBEST "+(r.Distance*.1f).ToString("F1")+"m");}if(r.Distance==personalBest[r.slot])bestFlags[r.slot].gameObject.SetActive(false);if(landPuffs!=null&&landPuffs.Length>0){var puff=landPuffs[r.slot%landPuffs.Length];puff.transform.position=Surface(r.LandingOrigin);puff.Play();}feedback.Play(1,8);if(best)feedback.Play(7,0,true);}
+
+ void LockHeat(bool award){if(heatLocked)return;ClearFlightEffects();heatLocked=true;HeatLocks++;var scores=new int[8];for(int i=0;i<8;i++)scores[i]=racers[i].Distance;LastLeaders=award?MinefieldRules.Leaders(scores,eligible):0;for(int i=0;i<8;i++)if((LastLeaders&(1<<i))!=0)points[i]++;Winner=MinefieldRules.MatchLeader(points,eligible,LastLeaders,tieBreak,out eligible,out tieBreak);focus=LastLeaders!=0?First(LastLeaders):focus;int finalVisible=0;for(int i=0;i<8;i++)if(!racers[i].Retired&&(eligible&(1<<i))!=0)finalVisible|=1<<i;replay.Record(HeatTime+.05f,finalVisible);foreach(var r in racers){r.truck.Power(false);r.truck.body.isKinematic=true;r.truck.body.detectCollisions=false;r.truck.visuals.gameObject.SetActive(false);}foreach(var h in hazards)h.gameObject.SetActive(false);Phase=MinefieldPhase.Replay;phaseAge=0;replay.Begin(Mathf.Max(0,racers[focus].LaunchTime-1),racers[focus].LandingTime>0?racers[focus].LandingTime+1.6f:Mathf.Min(HeatTime,8));views.Replay=false;Gate();}
+
+ static int First(int mask){for(int i=0;i<8;i++)if((mask&(1<<i))!=0)return i;return 0;}
+
+ void EndReplay(){replay.End();views.Restore();if(Winner>=0){EndMatch();return;}Phase=MinefieldPhase.HeatResult;phaseAge=0;}
+
+ public override void ExtraAction(string key){if(!ReplayControls)return;if(key=="replayangle")replay.Angle=(replay.Angle+1)%3;else if(key=="replayspeed")replay.Speed=replay.Speed<.5f?1:replay.Speed<1.1f?2:replay.Speed<2.1f?4:.25f;else if(key=="replayrewind")replay.Seek(Mathf.Max(0,replay.Cursor-4));else if(key=="replayskip"&&replay.Age>1)EndReplay();}
+
+ public override string ViewText(int view){int i=views.owners[view];var r=racers[i];return "<color=#"+ColorUtility.ToHtmlStringRGB(setup.players[i].color)+">"+setup.players[i].name+"</color> · "+points[i]+" PTS · HEAT "+Heat+"\n"+(Phase==MinefieldPhase.Countdown?Status:r.Phase==MineAttempt.Launched?"AFTERTOUCH · RELEASE THROTTLE FOR RANGE":r.Phase==MineAttempt.Landed?"LANDED · "+(r.Distance*.1f).ToString("F1")+"m":r.Phase==MineAttempt.Failed?"FAILED | WATCHING LEADER":"DRIVE · "+Mathf.Max(0,MinefieldRules.Mile-r.truck.body.position.z).ToString("F0")+"m TO FINISH")+"\nBEST "+(personalBest[i]*.1f).ToString("F1")+"m";}
+
+ protected override void Present(float dt){if(views==null||racers==null)return;if(flightTrails!=null)for(int i=0;i<flightTrails.Length;i++){flightTrails[i].transform.position=racers[i].truck.body.position+Vector3.up;flightTrails[i].emitting=Live&&Phase==MinefieldPhase.Driving&&racers[i].Phase==MineAttempt.Launched;}if(Phase==MinefieldPhase.Replay){for(int i=0;i<8;i++){blastFlags[i].gameObject.SetActive(racers[i].Launches>0&&replay.Cursor>=racers[i].LaunchTime);landingFlags[i].gameObject.SetActive(racers[i].LandingLocks>0&&replay.Cursor>=racers[i].LandingTime);bestFlags[i].gameObject.SetActive(false);}}if(Phase==MinefieldPhase.Replay&&replay.Playing)views.ReplayView(replay.Position(focus),replay.Angle);else{for(int i=0;i<8;i++){var r=racers[i];cameraPoints[i]=r.Phase==MineAttempt.Landed&&HeatTime-r.LandingTime>2?r.LandingOrigin:r.Retired?Surface(new Vector3(Mathf.Clamp(r.truck.body.position.x,-48,48),0,Mathf.Clamp(r.truck.body.position.z,0,MinefieldRules.Mile))):r.truck.body.position;}for(int i=0;i<8;i++)if(racers[i].Phase==MineAttempt.Failed)cameraPoints[i]=cameraPoints[focus];views.Focus=focus;views.Follow(dt,air,cameraPoints);for(int v=0;v<views.Humans;v++){var r=racers[views.owners[v]];if(r.Phase==MineAttempt.Failed)views.views[v].Pose(cameraPoints[focus]+Vector3.up,new Vector3(12,12,-24),68,true);else if(r.Phase==MineAttempt.Landed&&HeatTime-r.LandingTime>2)views.views[v].Pose(r.LandingOrigin+Vector3.up*2,new Vector3(16,14,-25),65);}}for(int i=0;i<8;i++){identities[i].transform.position=racers[i].truck.body.position+Vector3.up*3;identities[i].text=setup.players[i].name;identities[i].color=setup.players[i].color;}}
+
+ protected override void StopGame(){ClearFlightEffects();if(replay==null)return;replay.End();foreach(var r in racers){r.truck.Power(false);if(!r.truck.body.isKinematic)r.truck.body.linearVelocity=r.truck.body.angularVelocity=Vector3.zero;r.truck.body.isKinematic=true;}foreach(var b in blasts)b.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);}
+
+ protected override void SetPaused(bool value){weatherField?.Pause(value);}protected override void StopSounds(){if(racers!=null)foreach(var r in racers)r.truck.StopSound();}
+
+}
+
+}
+
