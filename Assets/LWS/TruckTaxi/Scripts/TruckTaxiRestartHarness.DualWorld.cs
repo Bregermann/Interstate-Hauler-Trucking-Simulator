@@ -16,6 +16,12 @@ namespace LWS.TruckTaxi
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         private string dualProfile;
         private readonly List<string> dualEvidence = new List<string>();
+        private void RecordDualEvidence(string evidence)
+        {
+            dualEvidence.Add(evidence);
+            Debug.Log(Prefix + evidence);
+            File.AppendAllText(Path.Combine(request.Root, "dual-world-progress-" + request.Mode + ".txt"), evidence + Environment.NewLine);
+        }
         private IEnumerator RunDualWorld()
         {
             if (request.Mode == "seed")
@@ -38,6 +44,12 @@ namespace LWS.TruckTaxi
                 Check(host.Player.TransmissionController.TrySetAutomaticMode(out reason),"dual-world seed automatic mode: "+reason);
                 yield return DualPlaceAtExit(false);
                 yield return PrepareDriveSeedEngine(); host.SetPaused(false);
+                Check(host.CareerEquipment.PurchaseOrEquip("taxi.upgrade.brake-hardware"), "purchase existing authored brake upgrade");
+                Check(host.CareerEquipment.PurchaseOrEquip("taxi.upgrade.brake-hardware"), "equip existing purchased brake upgrade");
+                var damage = host.ComponentDamage.Capture();
+                string bodyPart = SelectBodyPart(host.ComponentDamage.Parts);
+                foreach (var part in damage.Parts) if (part.Id == bodyPart) part.Condition = .87f;
+                Check(host.ComponentDamage.Restore(damage), "nonzero body-only damage fixture through existing semantic restore");
                 yield return DualNativeDrive("Demo City initial drive");
                 Result(host.Persistence.Save(1,true),"dual-world Demo City manual checkpoint");
                 yield return DualTransfer(true);
@@ -45,12 +57,8 @@ namespace LWS.TruckTaxi
                 yield return DualTransfer(true);
                 yield return DualNativeDrive("Demo City physical return");
                 yield return DualTravelCancelInputs();
-                yield return DualSnowViews("DemoCity");
-                yield return DualOffroadTracks("DemoCity");
                 yield return DualTransfer(false, true);
                 yield return DualNativeDrive("Edenborough menu arrival");
-                yield return DualSnowViews("Edenborough");
-                yield return DualOffroadTracks("Edenborough");
                 // Ten transfers in the same real player process; first two use native trigger contacts.
                 for (int i = 3; i < 10; i++)
                 {
@@ -62,25 +70,45 @@ namespace LWS.TruckTaxi
                     yield return DualNativeDrive("menu arrival " + i);
                 }
                 Check(TruckTaxiWorldTravel.CompletedTransfers == 10,"ten successful transfers in one process");
+                yield return DualSnowViews("DemoCity");
+                yield return DualOffroadTracks("DemoCity");
                 // Leave the restart checkpoint in Edenborough; next process returns to Demo City.
                 yield return DualTransfer(false);
+                yield return DualSnowViews("Edenborough");
+                yield return DualOffroadTracks("Edenborough");
                 Result(host.Persistence.Save(2,true),"dual-world Edenborough manual checkpoint");
                 Result(host.Persistence.SaveBeforeLeaving(),"dual-world Edenborough quit checkpoint");
             }
             else
             {
+                bool returningContinue = request.Mode == "continue" && File.Exists(Path.Combine(request.Root, "dual-world-continue.txt"));
                 dualProfile = FindTestProfile(true).stableProfileId;
                 if (request.Mode == "manual") { openLoad.Invoke(menu,null); loadSlot.Invoke(menu,new object[] { 0 }); }
                 else continueGame.Invoke(menu,null);
                 yield return WaitForRun(false);
-                string expected = request.Mode == "continue" ? TruckTaxiWorldCatalog.Edenborough : TruckTaxiWorldCatalog.Demo;
+                string expected = request.Mode == "continue" && !returningContinue ? TruckTaxiWorldCatalog.Edenborough : TruckTaxiWorldCatalog.Demo;
                 Check(host.gameObject.scene.name == expected,"fresh process " + request.Mode + " restored saved world "+expected);
                 DualCareerAssertions();
-                yield return DualNativeDrive("fresh process " + expected);
                 if (request.Mode == "continue")
                 {
+                    string weather = returningContinue ? LwsWeatherPresetCatalog.LightRainId : LwsWeatherPresetCatalog.HeavySnowId;
+                    Check(host.Environment.Weather.CurrentSnapshot.weatherPresetId == weather && host.Environment.Snow.Capture().backgroundDepth > .1f,
+                        "saved region retains its own weather and nonzero accumulated snow after process restart");
+                }
+                yield return DualNativeDrive("fresh process " + expected);
+                if (request.Mode == "continue" && !returningContinue)
+                {
                     yield return DualTransfer(false);
+                    Check(host.Environment.Weather.CurrentSnapshot.weatherPresetId == LwsWeatherPresetCatalog.LightRainId &&
+                        host.Environment.Snow.Capture().backgroundDepth > .1f, "returning Demo City keeps its rainy, melting regional snow rather than Edenborough weather");
                     Result(host.Persistence.SaveBeforeLeaving(),"dual-world Demo City quit checkpoint");
+                }
+                else if (request.Mode == "manual")
+                {
+                    yield return DualRollbackFixture();
+                    yield return DualNativeDrive("failed-transfer rollback");
+                    yield return DualTransfer(false);
+                    yield return DualTownSnowInspection();
                 }
             }
             File.WriteAllLines(Path.Combine(request.Root,"dual-world-"+request.Mode+".txt"),dualEvidence);
@@ -113,6 +141,7 @@ namespace LWS.TruckTaxi
             string source = host.gameObject.scene.name, destination = TruckTaxiWorldCatalog.Other(source);
             DateTime time = TruckTaxiCalendarWeatherService.SnapshotDateTime(host.Environment.Clock.CurrentSnapshot);
             long wallet = host.Session.WalletBalanceCents;
+            float fuel = host.Fuel.Fuel.amount;
             if (physical)
             {
                 host.SetPaused(false); yield return DualPlaceAtExit(true);
@@ -125,12 +154,15 @@ namespace LWS.TruckTaxi
                     while (!TruckTaxiWorldTravel.IsBusy && Time.realtimeSinceStartup<until)
                     { InputSystem.QueueStateEvent(keyboard,new KeyboardState(Key.W)); yield return null; }
                     Check(TruckTaxiWorldTravel.IsBusy,"actual NWH driven tractor contact activated directional exit");
+                    // Compare the departure checkpoint, not fuel consumed while driving to the trigger.
+                    fuel = host.Fuel.Fuel.amount;
                 }
                 finally { InputSystem.RemoveDevice(keyboard); if(previous!=null && previous.added)previous.MakeCurrent(); }
             }
             else
             {
                 host.SetPaused(true); host.hud.WorldTravel.Open();
+                yield return null; // A real player cannot confirm before the opened UI receives its first frame.
                 if (gamepadConfirm)
                 {
                     var pad = InputSystem.AddDevice<Gamepad>("Dual-world travel UI gamepad");
@@ -149,7 +181,8 @@ namespace LWS.TruckTaxi
                     var button = host.hud.WorldTravel.FocusRoot.GetComponentsInChildren<Button>().First(b=>b.GetComponentInChildren<TMPro.TextMeshProUGUI>()?.text=="TRAVEL");
                     button.onClick.Invoke();
                 }
-                Check(TruckTaxiWorldTravel.IsBusy,"actual travel panel confirm callback started transaction");
+                Check(TruckTaxiWorldTravel.IsBusy,"actual travel panel confirm callback started transaction | status="+
+                    TruckTaxiWorldTravel.LastStatus+" safety="+host.Persistence.WorldTransferBlockReason);
             }
             yield return null; yield return DualScreenshot(source+"-loading");
             float deadline = Time.realtimeSinceStartup+180;
@@ -159,6 +192,7 @@ namespace LWS.TruckTaxi
             host=TruckTaxiBootstrap.Instance; saves=host.Persistence.SaveService;
             Check(host.gameObject.scene.name==destination,"arrived in intended world "+destination+" | "+TruckTaxiWorldTravel.LastStatus);
             Check(host.Session.WalletBalanceCents==wallet,"wallet preserved through transaction");
+            Check(Mathf.Abs(host.Fuel.Fuel.amount-fuel)<.1f, "fuel quantity retained across regional arrival: "+fuel+" -> "+host.Fuel.Fuel.amount);
             DateTime arrivalTime = TruckTaxiCalendarWeatherService.SnapshotDateTime(host.Environment.Clock.CurrentSnapshot);
             Check(arrivalTime>=time,"global calendar never moved backward: "+time.ToString("O")+" -> "+arrivalTime.ToString("O"));
             DualCareerAssertions();
@@ -173,10 +207,11 @@ namespace LWS.TruckTaxi
             float routeDeadline = Time.realtimeSinceStartup + 8;
             while (!host.GPS.RouteReady && Time.realtimeSinceStartup < routeDeadline) yield return null;
             Check(host.GPS.RouteReady, "current region graph and Compass route rebound after transfer");
-            dualEvidence.Add("TRANSFER "+TruckTaxiWorldTravel.CompletedTransfers+" "+source+" -> "+destination+
+            RecordDualEvidence("TRANSFER "+TruckTaxiWorldTravel.CompletedTransfers+" "+source+" -> "+destination+
                 " objects="+FindObjectsByType<Transform>(FindObjectsSortMode.None).Length+
                 " managed="+GC.GetTotalMemory(false)+" allocated="+UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong()+
-                " traffic="+host.traffic.LogicalCount+" peds="+host.pedestrians.ActiveCount);
+                " traffic="+host.traffic.LogicalCount+" peds="+host.pedestrians.ActiveCount+
+                " weather="+host.Environment.Weather.CurrentSnapshot.weatherPresetId+" snow="+host.Environment.Snow.Capture().backgroundDepth);
             yield return DualScreenshot(destination+"-arrival-"+TruckTaxiWorldTravel.CompletedTransfers);
         }
 
@@ -206,6 +241,41 @@ namespace LWS.TruckTaxi
             finally { InputSystem.RemoveDevice(pad); }
         }
 
+        private IEnumerator DualRollbackFixture()
+        {
+            string source = host.gameObject.scene.name, target = TruckTaxiWorldCatalog.Other(source);
+            int completed = TruckTaxiWorldTravel.CompletedTransfers;
+            long wallet = host.Session.WalletBalanceCents;
+            Check(host.WorldLife.TryExitTruck(), "safe on-foot world travel fixture: " + host.WorldLife.ExitBlockReason);
+            // Disposable-player fixture only: reject this arrival without editing a scene asset or save.
+            void RejectArrival(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+            {
+                if (scene.name != target) return;
+                foreach (var exit in FindObjectsByType<TruckTaxiWorldExit>(FindObjectsSortMode.None))
+                    if (exit.gameObject.scene == scene) exit.arrival = null;
+            }
+            UnityEngine.SceneManagement.SceneManager.sceneLoaded += RejectArrival;
+            try
+            {
+                Check(TruckTaxiWorldTravel.TryTravel(host, target, false), "safe on-foot transfer enters existing transaction");
+                float until = Time.realtimeSinceStartup + 240;
+                while (TruckTaxiWorldTravel.IsBusy && Time.realtimeSinceStartup < until) yield return null;
+                Check(!TruckTaxiWorldTravel.IsBusy, "controlled rejected arrival resolves without a permanent loading lock");
+                yield return new WaitForEndOfFrame(); yield return null;
+                host = TruckTaxiBootstrap.Instance; saves = host.Persistence.SaveService;
+                Check(host.gameObject.scene.name == source && TruckTaxiWorldTravel.CompletedTransfers == completed,
+                    "rejected destination rolls back to the source rather than counting a successful transfer");
+                Check(host.Session.WalletBalanceCents == wallet && !host.WorldLife.IsOnFoot,
+                    "rollback preserves wallet and safely returns the on-foot driver to the truck");
+                DualCareerAssertions();
+                Check(FindObjectsByType<TruckTaxiWorldTravel>(FindObjectsSortMode.None).Length == 0,
+                    "failed-transfer loading overlay and transaction retired");
+                RecordDualEvidence("ROLLBACK " + source + " | " + TruckTaxiWorldTravel.LastStatus);
+                yield return DualScreenshot(source + "-rollback");
+            }
+            finally { UnityEngine.SceneManagement.SceneManager.sceneLoaded -= RejectArrival; }
+        }
+
         private void DualCareerAssertions()
         {
             Check(host.Persistence.RunProfileId==dualProfile && saves.ActiveProfileId==dualProfile,"same career identity across worlds/restart");
@@ -217,6 +287,10 @@ namespace LWS.TruckTaxi
             Check(host.DriverNeeds.State.Count(TruckTaxiNeedsItem.Snack)==9,"inventory retained without starter grants");
             Check(host.DriverNeeds.State.AmbientChoiceIds.Contains("astra.dualworld."+request.RunId),"needs/progression marker retained");
             Check(host.Session.CapturePersistentState().statistics.completedRides==2,"completed fares retained");
+            Check(host.CareerEquipment.IsOwned("taxi.upgrade.brake-hardware") && host.CareerEquipment.IsEquipped("taxi.upgrade.brake-hardware"),
+                "purchased and equipped authored upgrade retained");
+            Check(Mathf.Abs(host.ComponentDamage.Parts[SelectBodyPart(host.ComponentDamage.Parts)].Condition-.87f)<.005f,
+                "nonzero component damage retained");
         }
 
         private IEnumerator DualNativeDrive(string label, bool curve = false)
@@ -238,7 +312,7 @@ namespace LWS.TruckTaxi
                 yield return DriveKeys(3,Key.A); Check(host.Player.NwhAdapter.VehicleController.input.Steering<-.5f,label+" native steering");
                 yield return DriveKeys(2);
                 if(!host.Player.TruckControlController.CurrentState.parkingBrakeOn)yield return DrivePulse("ParkingBrake",Key.P);
-                dualEvidence.Add("DRIVE "+label+" meters="+Vector3.Distance(start,body.position));
+                RecordDualEvidence("DRIVE "+label+" meters="+Vector3.Distance(start,body.position));
             }
             finally { InputSystem.RemoveDevice(keyboard); driveKeyboard=null; if(previous!=null&&previous.added)previous.MakeCurrent(); }
         }
@@ -262,7 +336,7 @@ namespace LWS.TruckTaxi
                 yield return DualScreenshot(label+"-snow-"+depth);
                 var ms=new List<float>(); until=Time.realtimeSinceStartup+10;
                 while(Time.realtimeSinceStartup<until){ms.Add(Time.unscaledDeltaTime*1000);yield return null;}
-                ms.Sort(); dualEvidence.Add("PERF "+label+" snow="+depth+" median="+ms[ms.Count/2]+" p95="+ms[(int)((ms.Count-1)*.95f)]+" p99="+ms[(int)((ms.Count-1)*.99f)]+
+                ms.Sort(); RecordDualEvidence("PERF "+label+" snow="+depth+" median="+ms[ms.Count/2]+" p95="+ms[(int)((ms.Count-1)*.95f)]+" p99="+ms[(int)((ms.Count-1)*.99f)]+
                     " materials="+surface.SharedEnvironmentMaterialCount+" surfaces="+surface.GroundSnowSurfaceCount+" terrain="+surface.TerrainSnowSurfaceCount+
                     " screen="+Screen.width+"x"+Screen.height+" GPU="+SystemInfo.graphicsDeviceName+" stationary truck; live NPCs; clock frozen for controlled snow; NOT isolated/driving/human acceptance");
                 File.WriteAllLines(Path.Combine(request.Root,"dual-world-"+request.Mode+".txt"),dualEvidence);
@@ -276,11 +350,43 @@ namespace LWS.TruckTaxi
             yield return new WaitForSecondsRealtime(6);
             float melted=host.Environment.Snow.Capture().backgroundDepth;
             Check(melted>0 && melted<accumulated,"rain reduces snow gradually rather than instantly clearing it");
-            dualEvidence.Add("SNOW_EVOLUTION "+label+" before="+before+" snowfall="+accumulated+" rain="+melted);
+            RecordDualEvidence("SNOW_EVOLUTION "+label+" before="+before+" snowfall="+accumulated+" rain="+melted);
             if(label=="Edenborough")
             {
                 Check(host.Environment.ForceWeather(LwsWeatherPresetCatalog.HeavySnowId),"Edenborough keeps its own snowy weather");
                 yield return new WaitForSecondsRealtime(6);
+            }
+        }
+
+        private IEnumerator DualTownSnowInspection()
+        {
+            // Disposable observation fixture: use the existing real spawn/garage frontage, not a new scene.
+            var world = host.GetComponent<TruckTaxiRegionalWorld>();
+            Vector3 point = host.playerSpawn.position;
+            yield return world.PrepareInitialWorld(point);
+            Vector3 look = TruckTaxiEdenboroughLayout.Garage - point; look.y = 0;
+            Quaternion rotation = Quaternion.LookRotation(look.normalized, Vector3.up);
+            var body = host.Player.GetComponent<Rigidbody>();
+            Check(TruckTaxiRecoverySpace.TryGroundedPose(body, point, rotation, .35f, body, null, out var grounded),
+                "existing town/garage frontage has safe observation ground");
+            TruckTaxiRecoverySpace.Move(body, grounded, rotation); body.linearVelocity = body.angularVelocity = Vector3.zero;
+            host.Session.DiscardTeleportDistance(); Physics.SyncTransforms();
+            host.Environment.SetFrozen(true); host.SetPaused(false);
+            foreach (float depth in new[] { 0f, .85f })
+            {
+                Check(host.Environment.ForceWeather(depth == 0 ? LwsWeatherPresetCatalog.ClearId : LwsWeatherPresetCatalog.HeavySnowId),
+                    "town observation uses existing weather controls");
+                yield return new WaitForSecondsRealtime(6);
+                var snow = host.Environment.Snow.Capture(); snow.backgroundDepth = snow.maximumDepth * depth;
+                for (int i = 0; i < snow.depths.Length; i++) snow.depths[i] = snow.backgroundDepth;
+                Check(host.Environment.Snow.Restore(snow), "town snow observation fixture restored");
+                var surface = host.GetComponent<TruckTaxiSnowSurface>(); float until = Time.realtimeSinceStartup + 30;
+                while (!surface.EnvironmentBindingsReady && Time.realtimeSinceStartup < until) { surface.Refresh(); yield return null; }
+                Check(surface.EnvironmentBindingsReady, "town imported surfaces and terrain finished binding");
+                yield return new WaitForSecondsRealtime(2);
+                RecordDualEvidence("TOWN_SNOW " + depth + " ground=" + surface.GroundSnowSurfaceCount + " terrain=" + surface.TerrainSnowSurfaceCount +
+                    " sharedMaterials=" + surface.SharedEnvironmentMaterialCount);
+                yield return DualScreenshot("Edenborough-garage-foliage-snow-" + depth);
             }
         }
 
@@ -318,7 +424,7 @@ namespace LWS.TruckTaxi
             surface.RequestTracePixelDiagnostic(); float until=Time.realtimeSinceStartup+6;
             while(surface.TracePixelDiagnostic.Contains("pending") && Time.realtimeSinceStartup<until)yield return null;
             Check(surface.TraceActivePixelCount>0,"actual GPU Weatherade off-road trace mask contains tire marks: "+surface.TracePixelDiagnostic);
-            dualEvidence.Add("OFFROAD "+label+" wheelContacts="+contacts+" newStamps="+(surface.WheelTraceStampCount-stamps)+" "+surface.TracePixelDiagnostic);
+            RecordDualEvidence("OFFROAD "+label+" wheelContacts="+contacts+" newStamps="+(surface.WheelTraceStampCount-stamps)+" "+surface.TracePixelDiagnostic);
             yield return DualScreenshot(label+"-offroad-snow-tracks");
             TruckTaxiRecoverySpace.Move(body,roadPoint,roadRotation); body.linearVelocity=body.angularVelocity=Vector3.zero;
             host.Session.DiscardTeleportDistance(); Physics.SyncTransforms(); yield return new WaitForFixedUpdate();
