@@ -84,7 +84,7 @@ namespace CompassNavigatorPro {
         Transform canvasTextPool;
         Canvas _canvas;
 
-        // Effective viewport dimensions (accounts for viewportRect in Screen Space Overlay mode)
+        // Effective viewport dimensions
         float effectiveViewportWidth {
             get {
                 float baseWidth = _cameraMain != null ? _cameraMain.pixelWidth : Screen.width;
@@ -153,7 +153,7 @@ namespace CompassNavigatorPro {
             if (!Application.isPlaying) {
                 Sprite iconNonVisited = Resources.Load<Sprite>("CNPro/Sprites/compassIcon");
                 if (iconNonVisited != null && iconNonVisited.hideFlags != 0) {
-                    iconNonVisited.hideFlags = 0; // attempt to fix an issue with older versions which could mark this file as don't save preventing builds
+                    iconNonVisited.hideFlags = 0;
                     UnityEditor.EditorUtility.SetDirty(iconNonVisited);
                     UnityEditor.AssetDatabase.SaveAssets();
                 }
@@ -177,8 +177,7 @@ namespace CompassNavigatorPro {
                 Init();
             }
 
-            // ensure there's an EventSystem gameobject is buttons are visible so they can be used
-            // an EventSystem gameobject is automatically created when instantiating a Canvas prefab so here we go
+            // Create an EventSystem if the mini-map buttons need one
             if (Application.isPlaying && currentMiniMapUsesEvents && Misc.FindObjectOfType<EventSystem>() == null) {
                 GameObject eventSystem = new GameObject("EventSystem", typeof(EventSystem));
 #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
@@ -327,7 +326,7 @@ namespace CompassNavigatorPro {
         void InitDelayed () {
 
             _canvas = GetComponent<Canvas>();
-            _canvas.pixelPerfect = false; // improves performance
+            _canvas.pixelPerfect = false;
             pois.Clear();
             audioSource = GetComponent<AudioSource>();
             if (compassIconPrefab == null) {
@@ -776,7 +775,7 @@ namespace CompassNavigatorPro {
             for (int k = 0; k < poisCount; k++) {
                 CompassProPOI poi = activePOIs[k];
                 if (poi == null) {
-                    activePOIs.RemoveAt(k);  // POI no longer registered; remove and exit to prevent indexing errors
+                    activePOIs.RemoveAt(k);
                     k--;
                     poisCount--;
                     continue;
@@ -815,7 +814,7 @@ namespace CompassNavigatorPro {
                 vpos = GetViewportPos(poiPosition);
             }
 
-            // Remap viewport position to custom viewport rect (for split-screen support in Screen Space Overlay mode)
+            // Remap viewport position to the custom viewport rect
             if (_canvas != null && _canvas.renderMode == RenderMode.ScreenSpaceOverlay) {
                 if (_viewportRect.width < 1f || _viewportRect.height < 1f || _viewportRect.x > 0f || _viewportRect.y > 0f) {
                     vpos.x = (vpos.x - _viewportRect.x) / _viewportRect.width;
@@ -854,10 +853,6 @@ namespace CompassNavigatorPro {
             return viewportPos;
         }
 
-        /// <summary>
-        /// Update bar icons
-        /// </summary>
-        // Rounding factor (10^decimals) for a .NET numeric format, used to detect when a distance label would actually change before re-formatting it
         protected static float DistanceRoundFactor (string format) {
             if (string.IsNullOrEmpty(format)) return 1f;
             int decimals = 0;
@@ -988,17 +983,26 @@ namespace CompassNavigatorPro {
                 } else {
                     // POI is visible, should we create the icon in the compass bar?
                     if (state.compassIconRT == null) {
+                        if (state.compassIconPrefabInvalid) continue;
                         GameObject iconGO = CreateCompassBarIcon(poi);
                         if (iconGO == null) continue;
                         CompassPOIElements elements = iconGO.GetComponent<CompassPOIElements>();
                         if (elements == null) {
-                            Debug.LogError("Compass POI prefab missing Compass POI elements component.");
+                            Debug.LogError("Compass bar icon prefab is missing the Compass POI Elements component. Assign a valid prefab in Compass Bar > Icon Prefab.");
                             DestroySafe(iconGO);
+                            state.compassIconPrefabInvalid = true;
                             continue;
                         }
                         iconGO.name = "CompassIcon " + poi.gameObject.name;
                         state.compassIconRT = iconGO.GetComponent<RectTransform>();
                         state.compassIconImage = elements.iconImage;
+                        if (state.compassIconImage == null) {
+                            Debug.LogError("Compass bar icon prefab is missing the Icon Image reference on its Compass POI Elements component. Assign it in the prefab set in Compass Bar > Icon Prefab.");
+                            DestroySafe(iconGO);
+                            state.compassIconRT = null;
+                            state.compassIconPrefabInvalid = true;
+                            continue;
+                        }
                         state.compassIconImage.material = null;
                         state.compassIconDistanceText = elements.distanceText;
                         if (state.compassIconDistanceText != null) {
@@ -1008,6 +1012,8 @@ namespace CompassNavigatorPro {
                         state.visibleTime = now;
                         OnCompassBarIconCreated?.Invoke(poi, iconGO);
                     }
+
+                    if (state.compassIconImage == null) continue;
 
                     // Check bending
                     if (state.curvedMaterialSet) {
@@ -1022,7 +1028,7 @@ namespace CompassNavigatorPro {
                     Vector3 screenPos = GetScreenPos(poi, state);
                     float posX = screenPos.x;
 
-                    // Always show the focused icon in the compass bar; if out of bar, maintain it on the edge with normal scale
+                    // Always show the focused icon in the compass bar
                     if (poi.clampPosition || _focusedPOI == poi) {
                         if (screenPos.z < 0) {
                             posX = barMax * -Mathf.Sign(screenPos.x - 0.5f);
@@ -1949,7 +1955,7 @@ namespace CompassNavigatorPro {
                 compassBackImage.gameObject.AddComponent<CompassBarMeshModifier>();
             }
 
-            // In Screen Space Overlay mode with viewport rect, scale width for shader calculations
+            // Scale the width for the shader in Screen Space Overlay mode
             float shaderWidth = _width;
             if (_canvas != null && _canvas.renderMode == RenderMode.ScreenSpaceOverlay) {
                 shaderWidth *= _viewportRect.width;

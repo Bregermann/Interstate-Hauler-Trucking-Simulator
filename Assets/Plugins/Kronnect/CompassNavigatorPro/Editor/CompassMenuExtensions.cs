@@ -14,7 +14,7 @@ namespace CompassNavigatorPro {
             GameObject newPOI = Instantiate(poi);
             newPOI.name = "Compass POI";
 
-            // Ensure it gets reparented if this was a context click (otherwise does nothing)
+            // Reparent when this was a context click
             GameObjectUtility.SetParentAndAlign(newPOI, menuCommand.context as GameObject);
 
             // Register root object for undo.
@@ -34,7 +34,7 @@ namespace CompassNavigatorPro {
             GameObject newPOI = Instantiate(fv);
             newPOI.name = "Mini-Map Fog Of War Volume";
 
-            // Ensure it gets reparented if this was a context click (otherwise does nothing)
+            // Reparent when this was a context click
             GameObjectUtility.SetParentAndAlign(newPOI, menuCommand.context as GameObject);
 
             // Register root object for undo.

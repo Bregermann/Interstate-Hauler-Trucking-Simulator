@@ -1128,7 +1128,7 @@ namespace CompassNavigatorPro {
             if (showRoute.boolValue) {
                 expandRouteSettings = DrawSectionTitle("Route Settings", expandRouteSettings);
                 if (expandRouteSettings) {
-                    // ── Common (apply to mini-map and in-world) ──
+                    // Common
                     EditorGUILayout.LabelField("Common", EditorStyles.boldLabel);
                     EditorGUILayout.PropertyField(routeUseWaypoints, new GUIContent("Use Waypoints"));
                     if (routeUseWaypoints.boolValue) {
@@ -1180,7 +1180,7 @@ namespace CompassNavigatorPro {
                     }
                     EditorGUILayout.PropertyField(routeMaxSegments, new GUIContent("Max Segments"));
 
-                    // ── Mini-Map ──
+                    // Mini-Map
                     EditorGUILayout.Space();
                     EditorGUILayout.LabelField("Mini-Map", EditorStyles.boldLabel);
                     EditorGUILayout.PropertyField(routeShowOnMiniMap, new GUIContent("Polyline On Mini-Map"));
@@ -1212,7 +1212,7 @@ namespace CompassNavigatorPro {
                         EditorGUI.indentLevel--;
                     }
 
-                    // ── In-World ──
+                    // In-World
                     EditorGUILayout.Space();
                     EditorGUILayout.LabelField("In-World", EditorStyles.boldLabel);
                     EditorGUILayout.PropertyField(routeShowInWorld, new GUIContent("Show Path In World"));
@@ -1450,7 +1450,7 @@ namespace CompassNavigatorPro {
                 return;
             }
 
-            // Directly position the camera for the snapshot (replicating UpdateMiniMap logic)
+            // Position the camera for the snapshot
             Transform miniMapCameraTransform = _compass.miniMapCamera.transform;
             Vector3 miniMapCenter;
             
@@ -1490,7 +1490,7 @@ namespace CompassNavigatorPro {
                 _compass.miniMapCamera.targetTexture = newRT;
             }
 
-            // Ensure the camera renders to its target texture *now* with the updated settings
+            // Render the camera to its target texture now
             if (_compass.miniMapCamera != null && _compass.miniMapCamera.targetTexture != null) {
                 bool originalFog = RenderSettings.fog;
                 RenderSettings.fog = false;
@@ -1521,9 +1521,8 @@ namespace CompassNavigatorPro {
             // Cleanup
             DestroyImmediate(tex);
 
-            // Force update to restore the minimap to its previous state
+            // Restore the minimap to its previous state
             if (_compass.showMiniMap) {
-                // Force the camera back to its normal position
                 _compass.UpdateSettings();
             }
 
@@ -1539,7 +1538,6 @@ namespace CompassNavigatorPro {
             Debug.Log($"World snapshot saved to: {path}");
         }
 
-        // Helper method to check SSAO render feature source setting.
         private bool IsSSAOUsingDepthNormals() {
             var pipelineAsset = GraphicsSettings.currentRenderPipeline;
             if (pipelineAsset == null)
@@ -1548,7 +1546,7 @@ namespace CompassNavigatorPro {
             if (pipelineAssetType.Name != "UniversalRenderPipelineAsset")
                 return false;
 
-            // Try to retrieve the renderer via reflection.
+            // Get the renderer by reflection
             var rendererProperty = pipelineAssetType.GetProperty("scriptableRenderer");
             if (rendererProperty == null)
                 return false;
@@ -1556,7 +1554,7 @@ namespace CompassNavigatorPro {
             if (rendererObj == null)
                 return false;
             
-            // Attempt to retrieve renderer features via a public (or nonpublic) property "rendererFeatures" first.
+            // Get the renderer features property
             var featuresProp = rendererObj.GetType().GetProperty("rendererFeatures", 
                                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
             System.Collections.IEnumerable rendererFeatures = null;
@@ -1572,16 +1570,16 @@ namespace CompassNavigatorPro {
             if (rendererFeatures == null)
                 return false;
 
-            // Iterate through renderer features to find the SSAO render feature.
+            // Find the SSAO render feature
             foreach (var feature in rendererFeatures) {
                 if (feature != null && feature.GetType().Name == "ScreenSpaceAmbientOcclusion") {
-                    // Retrieve the "m_Settings" field from the feature.
+                    // Get the feature settings
                     var settingsField = feature.GetType().GetField("m_Settings", 
                                   BindingFlags.Instance | BindingFlags.NonPublic);
                     if (settingsField != null) {
                         object settings = settingsField.GetValue(feature);
                         if (settings != null) {
-                            // Retrieve the Source field from the settings object.
+                            // Get the source setting
                             var sourceField = settings.GetType().GetField("Source", 
                                           BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                             if (sourceField != null) {

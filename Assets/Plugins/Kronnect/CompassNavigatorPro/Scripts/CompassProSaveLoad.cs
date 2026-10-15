@@ -31,8 +31,8 @@ namespace CompassNavigatorPro {
         public CompassSaveScope scope = CompassSaveScope.All;
 
         /// <summary>
-        /// When loading, replay gameplay events (OnPOIVisited, OnRouteUpdated, OnMiniMapChangeFullScreenState...).
-        /// Default false: a load restores state silently so it doesn't re-trigger discovery audio/text/quests.
+        /// When loading, replay gameplay events such as OnPOIVisited or OnRouteUpdated.
+        /// Default false.
         /// </summary>
         public bool fireEventsOnLoad;
 
@@ -57,9 +57,8 @@ namespace CompassNavigatorPro {
     }
 
     /// <summary>
-    /// Implement and register (SetPOIFactory) to control how runtime-created POIs are rebuilt on load.
-    /// Return a GameObject (already positioned) that should carry the recreated POI, or null to let
-    /// the compass create a bare GameObject. The compass then adds/configures the CompassProPOI from the descriptor.
+    /// Controls how runtime-created POIs are rebuilt on load, registered with SetPOIFactory.
+    /// Returns the GameObject that carries the recreated POI, or null for a bare GameObject.
     /// </summary>
     public interface ICompassPOIFactory {
         GameObject CreatePOIObject (CompassPoiDTO descriptor);
@@ -73,7 +72,7 @@ namespace CompassNavigatorPro {
     [Serializable]
     public class CompassStateDTO {
         public int schemaVersion;
-        public bool poisIncluded;        // true if the POI list was captured (POI scope active at save time); guards the authoritative prune on load
+        public bool poisIncluded;        // true if the POI list was captured
         public List<CompassInstanceDTO> compasses = new List<CompassInstanceDTO>();
         public List<CompassPoiDTO> pois = new List<CompassPoiDTO>();
     }
@@ -162,7 +161,7 @@ namespace CompassNavigatorPro {
         public float miniMapCircleStartRadius;
         public bool miniMapCircleAnimationWhenAppears;
         public int miniMapCircleAnimationRepetitions;
-        // asset refs (stored by asset name; re-resolved on load against loaded assets, empty = leave current untouched)
+        // asset refs stored by name
         public string iconNonVisitedName;
         public string iconVisitedName;
         public string visitedAudioClipName;
@@ -199,8 +198,8 @@ namespace CompassNavigatorPro {
 
         #region Save/Load constants
 
-        const int SAVE_SCHEMA_VERSION = 2;          // v2: full POI snapshot (authoritative save/restore + prune)
-        const int MIN_SUPPORTED_SCHEMA = 2;         // v1 saves only stored partial POI data; reject to avoid wiping props
+        const int SAVE_SCHEMA_VERSION = 2;          // v2: full POI snapshot
+        const int MIN_SUPPORTED_SCHEMA = 2;
         static readonly byte[] SAVE_MAGIC = { (byte)'C', (byte)'N', (byte)'P', (byte)'3' };
 
         const int ROUTE_MODE_NONE = 0;
@@ -220,15 +219,14 @@ namespace CompassNavigatorPro {
         ICompassPOIFactory poiFactory;
 
         /// <summary>
-        /// Optional. Registers a factory to control how recreated POIs get their host GameObject (e.g. spawn your own
-        /// prefab). If unset, the compass creates a bare GameObject. Not required for save/load to work.
+        /// Registers a factory that provides the host GameObject for recreated POIs.
+        /// Optional: without it the compass creates a bare GameObject.
         /// </summary>
         public void SetPOIFactory (ICompassPOIFactory factory) {
             poiFactory = factory;
         }
 
-        // Asset references (icons, audio) can't live in a portable blob, so the save stores each asset's name and the
-        // load re-resolves it transparently against the assets already loaded in memory. No registration needed.
+        // Assets used to resolve the asset names stored in the save
         Dictionary<Type, UnityEngine.Object[]> assetPoolCache;
 
         static string AssetName (UnityEngine.Object asset) {
@@ -254,8 +252,8 @@ namespace CompassNavigatorPro {
         #region Save/Load public API (instance)
 
         /// <summary>
-        /// Captures this compass' runtime state (fog, route, visited POIs, runtime POIs, minimap view) into a compact binary blob.
-        /// Store it in your own save file; pass it back to LoadState to restore. Returns an empty array if nothing to save.
+        /// Captures this compass' runtime state into a binary blob you can store in your own save file.
+        /// Returns an empty array when there is nothing to save.
         /// </summary>
         public byte[] SaveState (CompassSaveOptions options = null) {
             CompassStateDTO dto = BuildStateDTO(options ?? CompassSaveOptions.Default);
@@ -271,9 +269,8 @@ namespace CompassNavigatorPro {
         }
 
         /// <summary>
-        /// Restores runtime state previously produced by SaveState. The save is authoritative: matched POIs are
-        /// overwritten with their saved state, POIs missing from the scene are recreated, and live POIs absent from
-        /// the save are removed. Call once the scene has loaded.
+        /// Restores runtime state previously produced by SaveState, once the scene has loaded.
+        /// The scene POIs are overwritten, recreated or removed to match the save.
         /// </summary>
         public CompassLoadResult LoadState (byte[] data, CompassSaveOptions options = null) {
             if (data == null || data.Length == 0) return CompassLoadResult.Failed("Empty data.");
@@ -394,8 +391,7 @@ namespace CompassNavigatorPro {
         }
 
         void BuildPoiDTOs (List<CompassPoiDTO> outList, CompassSaveOptions options) {
-            // The save is authoritative for the scene: capture every POI, including those a visit unregistered
-            // (hideWhenVisited disables the component, which drops it from 'pois'). Scan the scene to catch them all.
+            // Capture every POI in the scene, including the unregistered ones
             CompassProPOI[] all = Misc.FindObjectsOfType<CompassProPOI>(true);
             HashSet<string> seen = new HashSet<string>();
             for (int i = 0; i < all.Length; i++) {
@@ -553,12 +549,11 @@ namespace CompassNavigatorPro {
             }
 
             CompassLoadResult result = new CompassLoadResult { ok = true, schemaVersion = dto.schemaVersion };
-            assetPoolCache = null; // resolve asset names against whatever is loaded right now
+            assetPoolCache = null;
 
             CompassInstanceDTO inst = FindInstanceForGroup(dto, _compassGroup);
 
-            // Reconcile the scene's POIs against the save (authoritative): overwrite matches, recreate missing,
-            // prune POIs that aren't in the save. Returns the live index used afterwards for route/focus lookups.
+            // Reconcile the scene's POIs against the save
             bool poiScope = (options.scope & (CompassSaveScope.POIVisited | CompassSaveScope.RuntimePOIs)) != 0;
             Dictionary<string, CompassProPOI> liveIndex = poiScope
                 ? ReconcilePOIs(dto, ref result)
@@ -603,7 +598,6 @@ namespace CompassNavigatorPro {
             return null;
         }
 
-        // Live index of every POI in the scene by save key, including ones a visit unregistered (component disabled).
         Dictionary<string, CompassProPOI> BuildLiveIndex () {
             Dictionary<string, CompassProPOI> liveIndex = new Dictionary<string, CompassProPOI>();
             CompassProPOI[] all = Misc.FindObjectsOfType<CompassProPOI>(true);
@@ -616,8 +610,6 @@ namespace CompassNavigatorPro {
             return liveIndex;
         }
 
-        // POI reconciliation is global (POIs are shared objects, not per-compass): when several compasses load the
-        // same blob the first pass makes the scene match the save and later passes are idempotent.
         Dictionary<string, CompassProPOI> ReconcilePOIs (CompassStateDTO dto, ref CompassLoadResult result) {
             CompassProPOI[] all = Misc.FindObjectsOfType<CompassProPOI>(true);
             Dictionary<string, CompassProPOI> liveIndex = new Dictionary<string, CompassProPOI>();
@@ -647,8 +639,7 @@ namespace CompassNavigatorPro {
                 }
             }
 
-            // Prune: the save is authoritative, so any live POI not present in it shouldn't exist (e.g. a re-spawn).
-            // Guarded by poisIncluded so a save made without POI scope (empty pois list) can't wipe the scene on load.
+            // Remove live POIs that are not in the save
             if (dto.poisIncluded) {
                 for (int i = 0; i < all.Length; i++) {
                     CompassProPOI poi = all[i];
@@ -679,8 +670,6 @@ namespace CompassNavigatorPro {
             return poi;
         }
 
-        // Overwrites the POI with the full saved state. enabled is applied last because toggling it
-        // (un)registers the POI via OnEnable/OnDisable.
         void ApplyFullState (CompassProPOI poi, CompassPoiDTO d) {
             if (!string.IsNullOrEmpty(d.stableId)) poi.StableId = d.stableId;
             if (d.id != 0) poi.id = d.id;
@@ -745,8 +734,7 @@ namespace CompassNavigatorPro {
             poi.miniMapCircleAnimationWhenAppears = d.miniMapCircleAnimationWhenAppears;
             poi.miniMapCircleAnimationRepetitions = d.miniMapCircleAnimationRepetitions;
 
-            // Asset refs re-resolve by name against loaded assets; keep the current asset when unresolved so authored
-            // scene references aren't wiped by a portable blob that can't carry object references.
+            // Keep the current asset when a saved name can't be resolved
             Sprite iconNV = ResolveAssetByName<Sprite>(d.iconNonVisitedName); if (iconNV != null) poi.iconNonVisited = iconNV;
             Sprite iconV = ResolveAssetByName<Sprite>(d.iconVisitedName); if (iconV != null) poi.iconVisited = iconV;
             AudioClip visitedClip = ResolveAssetByName<AudioClip>(d.visitedAudioClipName); if (visitedClip != null) poi.visitedAudioClipOverride = visitedClip;
@@ -759,8 +747,6 @@ namespace CompassNavigatorPro {
             if (poi.enabled != d.enabled) poi.enabled = d.enabled;
         }
 
-        // Sets the visited flag per group without firing OnPOIVisited and without touching enabled (the caller
-        // applies the authoritative enabled state afterwards).
         void ApplyVisitedMask (CompassProPOI poi, int mask) {
             for (int g = 1; g <= CompassProPOI.MAX_COMPASS_GROUPS; g++) {
                 bool visited = (mask & (1 << (g - 1))) != 0;
@@ -800,14 +786,13 @@ namespace CompassNavigatorPro {
         }
 
         void ApplyMiniMapView (CompassInstanceDTO inst, CompassSaveOptions options) {
-            // Set backing fields directly to avoid firing OnMiniMapChangeFullScreenState.
             _miniMapFullScreenZoomLevel = inst.miniMapFullScreenZoomLevel;
             _miniMapFollowOffset = inst.miniMapFollowOffset;
 
             bool wantFullScreen = inst.miniMapFullScreenState;
             if (wantFullScreen != _miniMapFullScreenState) {
                 if (options.fireEventsOnLoad) OnMiniMapChangeFullScreenState?.Invoke(wantFullScreen);
-                // Set the regular zoom first so the toggle stashes/uses the right values
+                // Set the regular zoom first
                 _miniMapZoomLevel = inst.miniMapZoomLevel;
                 miniMapRegularZoomLevel = inst.miniMapZoomLevel;
                 MiniMapZoomToggle(wantFullScreen);
@@ -831,7 +816,7 @@ namespace CompassNavigatorPro {
                     break;
                 case ROUTE_MODE_WAYPOINTS:
                     _routeUseWaypoints = true;
-                    // Keep the waypoint trackers in sync so RefreshRouteFromWaypoints doesn't reset the restored progress next frame
+                    // Keep the waypoint trackers in sync
                     lastRouteUseWaypoints = true;
                     lastWaypointCount = _routeWaypoints.Count;
                     routeNextWaypoint = r.nextWaypoint;
@@ -872,7 +857,7 @@ namespace CompassNavigatorPro {
                     break;
             }
 
-            // Overwrite progress/index after the rebuild (SetRoute* would have reset them)
+            // Overwrite progress and index after the rebuild
             routeNextWaypoint = r.nextWaypoint;
             routeProgressValue = Mathf.Clamp01(r.progress);
             needUpdateRoute = true;
@@ -942,7 +927,6 @@ namespace CompassNavigatorPro {
 
         #region Save/Load - RLE codec (fog alpha bytes)
 
-        // Simple byte RLE: [count(1..255)][value] repeated. Long runs split into chunks of 255.
         static byte[] RleEncode (byte[] src) {
             if (src == null || src.Length == 0) return Array.Empty<byte>();
             using (MemoryStream ms = new MemoryStream(src.Length / 2 + 16)) {

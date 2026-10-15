@@ -47,6 +47,21 @@ https://assetstore.unity.com/publishers/15018
 Version history
 ---------------
 
+Version 6.0.4
+- [Fix] Added compatibility with Unity 6.6
+
+Version 6.0.3
+- [Fix] Console error spam in edit mode when a compass bar icon prefab lacks its icon image reference
+- [Fix] Exceptions in edit mode when a custom icon prefab lacks its icon image reference (compass bar and mini-map)
+
+Version 6.0.2
+- [Fix] Route waypoint markers showed white instead of the route color when the route was set by script (mini-map and in-world)
+- [Fix] Loading a saved game restarted Waypoints-mode routes from the first waypoint
+- [Fix] Loading a save with no POI data could delete existing POIs from the scene
+- [Fix] Duplicated POIs (copy/paste or prefab) could share the same id and lose state on load
+- [Fix] In-world waypoint markers ignored the Scene view preview toggle
+- [Fix] Minor editor fixes (undo for POI id and Fog Of War volume menu, multi-object compass group editing)
+
 Version 6.0
 - New feature: Route - shows an animated, guided path to a destination on the mini-map plus a directional cue on the compass bar
 - Added a global "Show POIs" toggle for the mini-map

@@ -8,7 +8,6 @@ namespace CompassNavigatorProDemos {
         CompassProPOI poi;
         Rigidbody rb;
 
-        // Create random POIs
         void Start() {
             poi = GetComponent<CompassProPOI>();
             if (poi == null) {

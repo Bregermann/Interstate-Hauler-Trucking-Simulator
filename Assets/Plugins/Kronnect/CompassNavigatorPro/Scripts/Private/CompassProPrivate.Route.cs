@@ -36,7 +36,7 @@ namespace CompassNavigatorPro {
         CompassProPOI routeCuePOI;
         GameObject routeCuePOIGO;
 
-        // reused build scratch (no per-frame allocations after warmup)
+        // reused build scratch
         readonly List<Vector3> routeScreenNorm = new List<Vector3>();
         readonly List<Vector2> routeScreenLocal = new List<Vector2>();
         readonly List<Vector2> routeLLocal = new List<Vector2>();
@@ -53,7 +53,7 @@ namespace CompassNavigatorPro {
         bool routeCapWarned;
         bool routeTraced;
 
-        // geometry-settings change detection (rebuild even when the camera is still)
+        // geometry-settings change detection
         float lastBuiltWidth = -1f;
         int lastBuiltWidthSpace = -1;
         int lastBuiltTilingSpace = -1;
@@ -72,7 +72,6 @@ namespace CompassNavigatorPro {
 
         #region Route settings invalidation
 
-        // Called from UpdateSettings() so inspector edits update the live route
         void RouteSettingsChanged () {
             needUpdateRoute = true;
         }
@@ -92,7 +91,6 @@ namespace CompassNavigatorPro {
             }
         }
 
-        // Called by the scripting API so the authored-waypoints list stops driving the route
         void RouteApiTakeover () {
             _routeUseWaypoints = false;
             routeIcons.Clear();
@@ -100,7 +98,6 @@ namespace CompassNavigatorPro {
             lastWaypointCount = -1;
         }
 
-        // Captures the current (API-set) route into the editable waypoints list
         void SeedWaypointsFromCurrentRoute () {
             _routeWaypoints.Clear();
             for (int i = 0; i < routePoints.Count; i++) {
@@ -225,7 +222,7 @@ namespace CompassNavigatorPro {
 
         void UpdateRoute () {
 
-            // Authored waypoints drive the route when enabled (runtime only; avoids creating objects in edit mode)
+            // Authored waypoints drive the route when enabled
             if (_routeUseWaypoints && Application.isPlaying) {
                 // When just enabled with an empty list, capture the current route into the editable list
                 if (!lastRouteUseWaypoints && _routeWaypoints.Count == 0 && routePoints.Count > 1) {
@@ -253,7 +250,7 @@ namespace CompassNavigatorPro {
                 routeActive = _showRoute && routePoints.Count > 1;
             }
 
-            // Travelled progress: computed once, shared by the mini-map polyline and the in-world ribbon
+            // Travelled progress
             if (routeActive && _routeShowTraveled && _routeAutoProgress) {
                 routeProgressValue = ComputeRouteProgress();
             }
@@ -262,9 +259,7 @@ namespace CompassNavigatorPro {
             if (routeActive && _routeShowOnMiniMap && _showMiniMap) {
                 EnsureRouteGraphic();
                 if (routeGraphic != null) {
-                    // Apply material params every frame so inspector edits take effect even on prefab instances
-                    // (UpdateSettings early-returns for prefabs, so we can't rely on a dirty flag here).
-                    // The marching-ants flow is driven by _Time inside the shader, so no per-frame scroll push is needed.
+                    // Apply material params every frame
                     ApplyRouteMaterial();
                     bool rebuild = needUpdateRoute || RouteViewChanged() || RouteGeometrySettingsChanged() || routeStartFollowsPlayer;
                     if (rebuild) {
@@ -275,7 +270,7 @@ namespace CompassNavigatorPro {
                 HideRouteGraphic();
             }
 
-            // Route cue: an auto-managed POI placed at the next waypoint (shows on bar and/or minimap)
+            // Route cue: an auto-managed POI placed at the next waypoint
             if (routeActive) {
                 UpdateRouteCuePOI();
             } else {
@@ -289,10 +284,10 @@ namespace CompassNavigatorPro {
                 HideRouteMarkers();
             }
 
-            // In-world holographic line (independent of the mini-map; previews from waypoints in edit mode)
+            // In-world holographic line
             UpdateRouteWorld();
 
-            // In-world billboard markers at each waypoint (independent of the in-world line)
+            // In-world billboard markers at each waypoint
             UpdateRouteWorldMarkers();
 
             needUpdateRoute = false;
@@ -367,12 +362,12 @@ namespace CompassNavigatorPro {
             int n = routePoints.Count;
             if (n < 2) { routeGraphic.ClearGeometry(); return; }
 
-            // keep mask in sync (it can change with full screen / style)
+            // keep mask in sync
             Texture maskTex = GetRouteMaskTexture();
             if (routeGraphic.maskTexture != maskTex) routeGraphic.maskTexture = maskTex;
             if (routeMat != null) routeMat.SetTexture(ShaderParams.MaskTex, maskTex);
 
-            // Smoothed render polyline (same shape as the in-world ribbon); route logic/progress still use the raw routePoints
+            // Smoothed render polyline
             List<Vector3> rpts = routePoints;
             List<float> rarc = routeArcWorld;
             if (routePoints.Count >= 3) {
@@ -397,7 +392,7 @@ namespace CompassNavigatorPro {
                 routeScreenLocal[i] = new Vector2((sp.x - 0.5f) * rectSize.x, (sp.y - 0.5f) * rectSize.y);
             }
 
-            // pixel arc length (stable origin at route start)
+            // pixel arc length
             routePixelArc[0] = 0f;
             for (int i = 1; i < n; i++) {
                 routePixelArc[i] = routePixelArc[i - 1] + Vector2.Distance(routeScreenLocal[i], routeScreenLocal[i - 1]);
@@ -411,7 +406,7 @@ namespace CompassNavigatorPro {
                 Debug.Log($"[CNP Route] build pts={n} tex={(_routeTexture != null)} width={_routeWidth} flow={_routeFlowSpeed} tiling={_routeTextureTiling} {matInfo} renderShader={renderShader} renderIsRouteMat={ReferenceEquals(rm, routeMat)}");
             }
 
-            // Uniform-width ribbon, one quad per segment (no miter -> uniform stroke width); travelled coloring is shader-based.
+            // Uniform-width ribbon, one quad per segment
             bool worldWidth = _routeWidthSpace == RouteWidthSpace.World;
             bool worldDash = _routeTextureTilingSpace == RouteTilingSpace.World;
             float half = worldWidth ? Mathf.Max(_routeWidth * 0.5f, 0.001f) : Mathf.Max(_routeWidth * 0.5f, 0.5f);
@@ -471,7 +466,6 @@ namespace CompassNavigatorPro {
             return new Vector2((sp.x - 0.5f) * rectSize.x, (sp.y - 0.5f) * rectSize.y);
         }
 
-        // Emits one ribbon quad between two points at the given half-width (pixel or world space)
         void EmitRouteQuad (Vector2 a, Vector2 b, Vector3 aw, Vector3 bw, float arcA, float arcB, float wnA, float wnB, Color32 cA, Color32 cB, float half, bool worldWidth, float aspect, Vector2 rectSize) {
             Vector2 L0, R0, L1, R1;
             if (worldWidth) {
@@ -505,7 +499,6 @@ namespace CompassNavigatorPro {
             return Color.Lerp(_routeColor, _routeGradientColor, tNorm);
         }
 
-        // World arc length over the smoothed render polyline (mirrors routeArcWorld but for the displayed line)
         void BuildRouteRenderArc () {
             int m = routeRenderPts.Count;
             routeRenderArc.Clear();
@@ -528,7 +521,7 @@ namespace CompassNavigatorPro {
         bool RouteSegmentVisible (int s, float margin) {
             Vector3 p0 = routeScreenNorm[s];
             Vector3 p1 = routeScreenNorm[s + 1];
-            // skip segments behind the minimap camera (near-plane)
+            // skip segments behind the minimap camera
             if (p0.z <= 0f || p1.z <= 0f) return false;
             float minx = Mathf.Min(p0.x, p1.x), maxx = Mathf.Max(p0.x, p1.x);
             float miny = Mathf.Min(p0.y, p1.y), maxy = Mathf.Max(p0.y, p1.y);
@@ -659,7 +652,7 @@ namespace CompassNavigatorPro {
             rt.localRotation = Quaternion.identity;
             go.transform.SetAsFirstSibling();
 
-            // The route mesh carries the mask uv in TexCoord1; make sure the canvas keeps that channel
+            // Keep the canvas channel used by the route mask uv
             if (_canvas != null) {
                 _canvas.additionalShaderChannels |= AdditionalCanvasShaderChannels.TexCoord1 | AdditionalCanvasShaderChannels.TexCoord2;
             }
@@ -674,7 +667,7 @@ namespace CompassNavigatorPro {
 
         void ApplyRouteMaterial () {
             if (routeMat == null) return;
-            // Texture when assigned (styleId 4, tiling follows Tiling/density), otherwise a plain solid line (styleId 0)
+            // Textured line when a texture is assigned, plain solid line otherwise
             bool useTex = _routeTexture != null;
             routeMat.SetFloat(ShaderParams.RouteStyleId, useTex ? 4f : 0f);
             routeMat.SetTexture(ShaderParams.RouteTex, useTex ? _routeTexture : null);
@@ -686,7 +679,6 @@ namespace CompassNavigatorPro {
             routeMat.SetTexture(ShaderParams.MaskTex, GetRouteMaskTexture());
         }
 
-        // Projects the follow target onto the route polyline (XZ) and returns the travelled fraction [0..1]
         float ComputeRouteProgress () {
             int n = routePoints.Count;
             if (n < 2 || routeArcWorld.Count != n) return routeProgressValue;

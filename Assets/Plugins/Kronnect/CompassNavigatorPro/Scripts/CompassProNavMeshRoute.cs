@@ -5,8 +5,7 @@ using UnityEngine.AI;
 namespace CompassNavigatorPro {
 
     /// <summary>
-    /// Optional helper that computes a path to a target using Unity's NavMesh and feeds it to the compass route.
-    /// Keeps the compass core decoupled from NavMesh: the compass draws, this component (or your own pathfinder) computes.
+    /// Computes a path to a target with Unity's NavMesh and feeds it to the compass route.
     /// </summary>
     [AddComponentMenu("Compass Navigator Pro/Compass Pro NavMesh Route")]
     public class CompassProNavMeshRoute : MonoBehaviour {
@@ -39,7 +38,7 @@ namespace CompassNavigatorPro {
         bool hasComputed;
 
         void Reset () {
-            compass = FindObjectOfType<CompassPro>();
+            compass = Misc.FindObjectOfType<CompassPro>();
         }
 
         void OnEnable () {

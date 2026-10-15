@@ -42,6 +42,7 @@ namespace CompassNavigatorPro {
         public bool isVisible;
         public float lastCompassIconDistance;
         public string lastCompassIconDistanceText;
+        public bool compassIconPrefabInvalid;
 
         // Mini-map
         public RectTransform miniMapIconRT;
@@ -57,6 +58,7 @@ namespace CompassNavigatorPro {
         public float circleVisibleTime;
         public bool circleIsVisible;
         public int insideCircle;
+        public bool miniMapIconPrefabInvalid;
 
         // Indicators
         public RectTransform indicatorRT;
@@ -76,7 +78,7 @@ namespace CompassNavigatorPro {
         public Vector3 viewportPos;
         public int viewportPosFrameCount;
 
-        // Per-compass visited state (each player discovers independently)
+        // Per-compass visited state
         public bool isVisited;
         public float visitedTime;
         public bool heartbeatIsActive;
@@ -87,10 +89,12 @@ namespace CompassNavigatorPro {
                 Misc.DestroySafe(compassIconRT.gameObject);
                 compassIconRT = null;
             }
+            compassIconPrefabInvalid = false;
             if (miniMapIconRT != null) {
                 Misc.DestroySafe(miniMapIconRT.gameObject);
                 miniMapIconRT = null;
             }
+            miniMapIconPrefabInvalid = false;
             if (indicatorRT != null) {
                 Misc.DestroySafe(indicatorRT.gameObject);
                 indicatorRT = null;
@@ -403,7 +407,7 @@ namespace CompassNavigatorPro {
         [NonSerialized]
         public CompassPro compass;
 
-        // Backward compatibility properties - access state for compass group 1
+        // Backward compatibility properties for compass group 1
         public float distanceToFollow { 
             get => GetState(1).distanceToFollow; 
             set => GetState(1).distanceToFollow = value; 
@@ -712,14 +716,14 @@ namespace CompassNavigatorPro {
             }
             #if UNITY_EDITOR
             if (iconNonVisited != null && iconNonVisited.hideFlags != 0) {
-                iconNonVisited.hideFlags = 0; // attempt to fix an issue with older versions which could mark this file as don't save preventing builds
+                iconNonVisited.hideFlags = 0;
             }
             #endif
             #if UNITY_EDITOR
             if (gameObject.scene.rootCount == 0 || UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(gameObject) != null) return; // Skip if this is a prefab in the project or in prefab edit mode
             #endif
 
-            // Initialize per-compass states with the initial visited state from the inspector
+            // Initialize the per-compass visited state
             if (_isVisitedInitial) {
                 for (int i = 1; i <= MAX_COMPASS_GROUPS; i++) {
                     GetState(i).isVisited = true;
@@ -732,7 +736,7 @@ namespace CompassNavigatorPro {
                 if (!Application.isPlaying) UnityEditor.EditorUtility.SetDirty(this);
 #endif
             } else if (!dontDestroyOnLoad) {
-                // Regenerate a duplicated stableId (editor duplication / prefab-baked id) so save keys stay unique
+                // Regenerate a duplicated stableId
                 CompassPro compassForStableId = CompassPro.instance;
                 if (compassForStableId != null) {
                     int stableCount = compassForStableId.pois.Count;
@@ -752,8 +756,7 @@ namespace CompassNavigatorPro {
             if (id == 0) {
                 GenerateNewId();
             } else if (!dontDestroyOnLoad) {
-                // Check for duplications of this object
-                // If there's another POI with same id in edit time, generate a new id
+                // Generate a new id when another POI already uses this one
                 CompassPro compass = CompassPro.instance;
                 if (compass != null) {
                     int poiCount = compass.pois.Count;

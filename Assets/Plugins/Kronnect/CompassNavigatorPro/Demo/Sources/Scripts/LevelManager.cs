@@ -100,7 +100,7 @@ namespace CompassNavigatorProDemos {
             }
         }
 
-        // Save/Load State API demo (F5 saves, F9 reloads); state is written to persistentDataPath so it survives a session restart
+        // Save/Load State API demo (F5 saves, F9 reloads)
         void SaveCompassState () {
             byte[] data = compass.SaveState();
             if (data == null || data.Length == 0) {
@@ -124,7 +124,7 @@ namespace CompassNavigatorProDemos {
             }
         }
 
-        // Builds a multi-waypoint route from the player through the active POIs (press R again to clear)
+        // Builds a multi-waypoint route through the active POIs
         void ToggleDemoRoute () {
             if (compass.hasRoute) {
                 compass.ClearRoute();
@@ -152,7 +152,7 @@ namespace CompassNavigatorProDemos {
             Debug.Log($"[CNP Route] route set through {targets.Count} POIs ({routeWaypoints.Count} points)");
         }
 
-        // Nearest-neighbor ordering plus 2-opt; a locally shortest path has no self-intersections
+        // Nearest-neighbor ordering plus 2-opt
         void BuildNonCrossingRoute (Vector3 start, List<Vector3> targets, List<Vector3> result) {
             result.Clear();
             result.Add(start);

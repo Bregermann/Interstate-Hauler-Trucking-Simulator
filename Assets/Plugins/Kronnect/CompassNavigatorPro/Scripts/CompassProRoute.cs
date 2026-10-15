@@ -565,8 +565,8 @@ namespace CompassNavigatorPro {
         public int routeNextWaypointIndex => routeNextWaypoint;
 
         /// <summary>
-        /// The auto-managed POI placed at the next waypoint (the route cue). Null if the cue is not active.
-        /// Tagged with isRouteWaypoint = true so you can filter it from your own POI logic.
+        /// The auto-managed POI placed at the next waypoint, null if the route cue is not active.
+        /// It is tagged with isRouteWaypoint = true.
         /// </summary>
         public CompassProPOI routeWaypointPOI => routeCuePOI;
 

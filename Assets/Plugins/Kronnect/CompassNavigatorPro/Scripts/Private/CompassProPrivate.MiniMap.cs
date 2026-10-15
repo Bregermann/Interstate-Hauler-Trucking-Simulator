@@ -539,7 +539,7 @@ namespace CompassNavigatorPro {
 					}
 				}
 			} else {
-				// Freeze camera transform to last snapshot pose so viewport/projection matches displayed snapshot
+				// Freeze the camera on the last snapshot pose
 				if (_miniMapFullScreenState) {
 					miniMapCenter = miniMapFullScreenWorldCenterFollows ? GetMiniMapFollowPos() : GetMiniMapFullScreenWorldCenter();
 					if (miniMapFullScreenClampToWorldEdges) miniMapCenter = ClampMiniMapCenterToWorldSize(miniMapCenter);
@@ -808,7 +808,7 @@ namespace CompassNavigatorPro {
                             MiniMapResizeRenderTexture((int)_miniMapResolution, (int)_miniMapResolution);
                         }
 
-                        if (CNP2HDRPCameraSetup.usesHDRP) { // workaround for HDRP bug which renders screen space overlay UI in the minimap render texture..
+                        if (CNP2HDRPCameraSetup.usesHDRP) {
                             _canvas.enabled = false;
                         }
 
@@ -924,7 +924,7 @@ namespace CompassNavigatorPro {
                 float rotationForShader = freezeView && miniMapLastSnapshotTime > 0f ? miniMapLastSnapshotRotationY : rotation;
                 float currentYaw = t.eulerAngles.y;
                 if (freezeView) {
-                    // Tilted + non-continuous: keep map horizon level; cone rotates only if Keep Straight is enabled
+                    // Keep the map horizon level
                     mat.SetFloat(ShaderParams.Rotation, 0);
                     float coneRot = _miniMapKeepStraight ? -currentYaw * Mathf.Deg2Rad : 0f;
                     mat.SetFloat(ShaderParams.ConeRotation, coneRot);
@@ -1116,19 +1116,24 @@ namespace CompassNavigatorPro {
 
                     Vector3 miniMapScreenPos = GetMiniMapScreenPos(poiPosition, miniMapAspectRatio);
 
-                    // POI is visible, should we create the icon in the minimap? Need to create due to the circle effect even if the icon is out of the mini-map area
+                    // POI is visible, should we create the icon in the minimap?
                     if (state.miniMapIconRT == null) {
+                        if (state.miniMapIconPrefabInvalid) continue;
                         GameObject iconGO = CreateMiniMapIcon(poi);
                         if (iconGO == null) continue;
                         state.miniMapIconRT = iconGO.GetComponent<RectTransform>();
                         MiniMapIconElements elements = iconGO.GetComponent<MiniMapIconElements>();
                         if (elements == null) {
-                            Debug.LogError("MiniMap icon prefab missing MiniMapIconElements component.");
+                            Debug.LogError("Mini-map icon prefab is missing the MiniMap Icon Elements component. Assign a valid prefab in Mini-Map > Icon Prefab or in the POI mini-map icon prefab override.");
                             Misc.DestroySafe(iconGO);
                             state.miniMapIconRT = null;
+                            state.miniMapIconPrefabInvalid = true;
                             continue;
                         }
                         state.miniMapIconImage = elements.iconImage;
+                        if (state.miniMapIconImage == null) {
+                            Debug.LogError("Mini-map icon prefab is missing the Icon Image reference on its MiniMap Icon Elements component. Assign it in the prefab set in Mini-Map > Icon Prefab or in the POI mini-map icon prefab override.");
+                        }
                         if (state.miniMapIconImage != null) {
                             state.miniMapIconImageRT = state.miniMapIconImage.GetComponent<RectTransform>();
                             if (_miniMapIconEvents) {
@@ -1162,7 +1167,7 @@ namespace CompassNavigatorPro {
                             miniMapIconAlpha = 1f - Mathf.Clamp01((len - 0.7f) / 0.3f);
                         }
 
-                        // Always show the clamped icon in the minimap; if out of map, maintain it on the edge with normal scale
+                        // Always show the clamped icon in the minimap
                         if (poi.miniMapClampPosition) {
                             iconVisibleInMiniMap = true;
                             float border = currentMiniMapClampBorder;
@@ -1227,28 +1232,30 @@ namespace CompassNavigatorPro {
                         // Position the icon on the mini-map area
                         state.miniMapIconRT.anchorMin = state.miniMapIconRT.anchorMax = miniMapScreenPos;
 
-                        // Assign proper icon
-                        if (state.isVisited) {
-                            if (state.miniMapIconImage.sprite != poi.iconVisited) {
-                                state.miniMapIconImage.sprite = poi.iconVisited;
+                        if (state.miniMapIconImage != null) {
+                            // Assign proper icon
+                            if (state.isVisited) {
+                                if (state.miniMapIconImage.sprite != poi.iconVisited) {
+                                    state.miniMapIconImage.sprite = poi.iconVisited;
+                                }
+                            } else if (state.miniMapIconImage.sprite != poi.iconNonVisited) {
+                                state.miniMapIconImage.sprite = poi.iconNonVisited;
                             }
-                        } else if (state.miniMapIconImage.sprite != poi.iconNonVisited) {
-                            state.miniMapIconImage.sprite = poi.iconNonVisited;
-                        }
 
-                        // tint color
-                        Color miniMapIconTintColor = poi.tintColor;
-                        miniMapIconTintColor.a *= miniMapIconAlpha;
-                        state.miniMapIconImage.color = miniMapIconTintColor;
+                            // tint color
+                            Color miniMapIconTintColor = poi.tintColor;
+                            miniMapIconTintColor.a *= miniMapIconAlpha;
+                            state.miniMapIconImage.color = miniMapIconTintColor;
 
-                        // Scale icon
-                        state.miniMapCurrentIconScale = _miniMapIconSize * poi.miniMapIconScale * miniMapIconTempScale;
-                        Vector3 rtCurrentScale = state.miniMapIconImageRT.localScale;
-                        if (SignificantlyDifferents(state.miniMapCurrentIconScale, rtCurrentScale.x)) {
-                            needUpdateMiniMapIcons = true;
-                            float scale = Mathf.Lerp(rtCurrentScale.x, state.miniMapCurrentIconScale, scaleAnimSpeed);
-                            scaleVector.x = scaleVector.y = scale;
-                            state.miniMapIconImageRT.localScale = scaleVector;
+                            // Scale icon
+                            state.miniMapCurrentIconScale = _miniMapIconSize * poi.miniMapIconScale * miniMapIconTempScale;
+                            Vector3 rtCurrentScale = state.miniMapIconImageRT.localScale;
+                            if (SignificantlyDifferents(state.miniMapCurrentIconScale, rtCurrentScale.x)) {
+                                needUpdateMiniMapIcons = true;
+                                float scale = Mathf.Lerp(rtCurrentScale.x, state.miniMapCurrentIconScale, scaleAnimSpeed);
+                                scaleVector.x = scaleVector.y = scale;
+                                state.miniMapIconImageRT.localScale = scaleVector;
+                            }
                         }
 
                         // Rotate?
@@ -1429,7 +1436,7 @@ else {
                 float padding = (1f - _miniMapFullScreenSize) * 0.5f;
                 float minX, minY, maxX, maxY;
                 if (_miniMapFullScreenPlaceholder != null) {
-                    // Disables blocking on the image just in case
+                    // Disable blocking on the image
                     _miniMapFullScreenPlaceholder.gameObject.SetActive(false);
                     // Adjust viewport
                     Rect vwRect = _miniMapFullScreenPlaceholder.GetViewportRect(_cameraMain);

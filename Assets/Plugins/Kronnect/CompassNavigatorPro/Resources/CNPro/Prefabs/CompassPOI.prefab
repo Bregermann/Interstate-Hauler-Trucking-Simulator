@@ -3,9 +3,10 @@
 --- !u!1 &105238
 GameObject:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 5
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
   m_Component:
   - component: {fileID: 407954}
   - component: {fileID: 11463480}
@@ -18,44 +19,73 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &407954
 Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 105238}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12.557338, y: 0.7783052, z: -43.74028}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &11463480
 MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 105238}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 78ba861a214074aa4bdac708dcacc9fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
+  stableId: 
+  priority: 0
+  _compassGroupMask: 15
   visibility: 0
+  ignoreAreaOfInterest: 0
+  clampPosition: 0
   visibleDistanceOverride: 0
+  visibleMinDistanceOverride: 0
+  titleMinPOIDistanceOverride: 0
   title: Unnamed Location
   titleVisibility: 0
   canBeVisited: 1
+  visitedDistanceOverride: 0
   hideWhenVisited: 0
-  isVisited: 0
+  _isVisitedInitial: 0
   visitedText: LOCATION DISCOVERED
-  visitedAudioClip: {fileID: 0}
+  playAudioClipWhenVisited: 1
+  visitedAudioClipOverride: {fileID: 0}
   radius: 0
+  iconScale: 1
+  iconScaleIsFixed: 0
+  iconShowDistance: 1
   iconNonVisited: {fileID: 21300000, guid: 1b2c3285fb5124166bd08b31551131b9, type: 3}
   iconVisited: {fileID: 21300000, guid: f2eaed57a12e74124932795a0c5a7f00, type: 3}
   tintColor: {r: 1, g: 1, b: 1, a: 1}
-  showPlayModeGizmo: 0
-  clampPosition: 0
+  showOnScreenIndicator: 1
+  onScreenIndicatorScale: 1
+  onScreenIndicatorShowDistance: 1
+  onScreenIndicatorShowTitle: 1
+  onScreenIndicatorPrefabOverride: {fileID: 0}
+  positionOffset: {x: 0, y: 0, z: 0}
+  showSceneGizmo: 1
+  showOffScreenIndicator: 1
+  offScreenIndicatorShowDistance: 1
+  offScreenIndicatorMarginOverride: 0
+  onScreenIndicatorNearFadeDistance: 0
+  onScreenIndicatorNearFadeMin: 0
+  onScreenIndicatorFarDistance: 0
+  onScreenIndicatorFarFadeDistance: 0
   beaconAudioClip: {fileID: 0}
+  scanHitAudioClip: {fileID: 0}
   dontDestroyOnLoad: 0
   heartbeatEnabled: 0
   heartbeatAudioClip: {fileID: 0}
@@ -63,54 +93,42 @@ MonoBehaviour:
   heartbeatInterval:
     serializedVersion: 2
     m_Curve:
-    - serializedVersion: 2
+    - serializedVersion: 3
       time: 0
       value: 0.25
       inSlope: 0
       outSlope: 2.75
       tangentMode: 0
-    - serializedVersion: 2
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 1
       value: 3
       inSlope: 2.75
       outSlope: 0
       tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  miniMapType: 0
   miniMapVisibility: 0
+  miniMapIconPrefabOverride: {fileID: 0}
+  miniMapVisibleDistanceOverride: 0
   miniMapClampPosition: 0
-  distanceToCameraSQR: 0
-  iconScale: {x: 0, y: 0, z: 0}
-  iconAlpha: 0
-  id: 0
-  miniMapIconScale: {x: 0, y: 0, z: 0}
---- !u!1001 &100100000
-Prefab:
-  m_ObjectHideFlags: 1
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: iconNonVisited
-      value: 
-      objectReference: {fileID: 21300000, guid: 1b2c3285fb5124166bd08b31551131b9,
-        type: 3}
-    - target: {fileID: 0}
-      propertyPath: iconVisited
-      value: 
-      objectReference: {fileID: 21300000, guid: f2eaed57a12e74124932795a0c5a7f00,
-        type: 3}
-    - target: {fileID: 0}
-      propertyPath: visitedText
-      value: LOCATION DISCOVERED
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: title
-      value: Unnamed Location
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 105238}
-  m_IsPrefabParent: 1
+  miniMapClampedScaleMultiplier: 1.1
+  miniMapShowRotation: 0
+  miniMapRotationAngleOffset: 0
+  miniMapIconScale: 1
+  miniMapShowCircle: 0
+  miniMapCircleRadius: 0
+  miniMapCircleColor: {r: 0, g: 1, b: 0, a: 0.5}
+  miniMapCircleInnerColor: {r: 0, g: 0, b: 1, a: 0}
+  miniMapCircleStartRadius: 0.25
+  miniMapCircleAnimationWhenAppears: 1
+  miniMapCircleAnimationRepetitions: 5
+  scene:
+    m_Handle: 0

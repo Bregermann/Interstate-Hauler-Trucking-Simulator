@@ -32,7 +32,6 @@ namespace CompassNavigatorPro {
 
         #region In-world route update
 
-        // Called every frame from UpdateRoute (runs in edit mode too via ExecuteAlways)
         void UpdateRouteWorld () {
 
             if (!_showRoute || !_routeShowInWorld) return;
@@ -59,7 +58,7 @@ namespace CompassNavigatorPro {
                 BuildRouteWorldMesh();
             }
 
-            // General material settings: re-applied only when something changed (route edit, inspector, or material recreated)
+            // General material settings
             if (needUpdateRoute || routeWorldMatDirty) {
                 routeWorldMatDirty = false;
                 ApplyRouteWorldMaterialStatic();
@@ -72,7 +71,6 @@ namespace CompassNavigatorPro {
             }
         }
 
-        // Billboard waypoint markers in the 3D world (independent of the ribbon; both gated by showRoute)
         void UpdateRouteWorldMarkers () {
 
             if (!_showRoute || !_routeWorldShowWaypointMarkers) return;
@@ -83,7 +81,7 @@ namespace CompassNavigatorPro {
             EnsureRouteMarkerQuad();
             if (routeMarkerMPB == null) routeMarkerMPB = new MaterialPropertyBlock();
 
-            // Shared state: same depth/fade behaviour as the ribbon; tint matches the mini-map markers
+            // Marker material state
             routeWorldMarkerMat.SetFloat(ShaderParams.RouteZTest, _routeWorldAlwaysVisible ? 8f : 4f);
             bool fade = _routeWorldMaxDistance > 0f || _routeWorldMinDistance > 0f;
             routeWorldMarkerMat.SetVector(ShaderParams.RouteFade, fade
@@ -120,7 +118,7 @@ namespace CompassNavigatorPro {
                 Texture tex = icon != null ? icon.texture : null;
                 if (tex == null) continue;
 
-                // Sit on the ground at the waypoint, lift by half the size so the billboard stands on it, plus the user Y offset
+                // Sit the marker on the ground at the waypoint
                 Vector3 pos = DrapeRoutePoint(src) + Vector3.up * (size * 0.5f + _routeWorldWaypointMarkerYOffset);
                 routeMarkerMPB.SetTexture(ShaderParams.MainTex, tex);
                 routeMarkerMPB.SetColor(ShaderParams.Color, tint);
@@ -169,7 +167,7 @@ namespace CompassNavigatorPro {
 
         void BuildRouteWorldMesh () {
 
-            // Smoothing on the source polyline: fillet corners or a spline through every point (Straight uses the raw points)
+            // Smoothing on the source polyline
             List<Vector3> baseLine = routeWorldSrc;
             if (routeWorldSrc.Count >= 3) {
                 if (_routeSmoothing == RouteSmoothing.Rounded && _routeCornerRadius > 0.001f) {
@@ -181,7 +179,7 @@ namespace CompassNavigatorPro {
                 }
             }
 
-            // Draped centerline (subdivide each segment so it follows the ground; no subdivision needed at a fixed height)
+            // Draped centerline
             routeWorldPts.Clear();
             routeWorldPts.Add(DrapeRoutePoint(baseLine[0]));
             float step = _routeWorldGroundMode == RouteWorldGroundMode.FixedHeight ? 0f : _routeWorldSampleStep;
@@ -201,7 +199,7 @@ namespace CompassNavigatorPro {
             int n = routeWorldPts.Count;
             if (n < 2) return;
 
-            // Arc length (world meters) for dash/progress
+            // Arc length in world meters
             routeWorldArc.Clear();
             routeWorldArc.Add(0f);
             for (int i = 1; i < n; i++) {
@@ -213,7 +211,7 @@ namespace CompassNavigatorPro {
             float half = Mathf.Max(_routeWorldWidth * 0.5f, 0.0001f);
 
             rwVerts.Clear(); rwUv0.Clear(); rwUv1.Clear(); rwTris.Clear();
-            // One independent rectangular quad per segment (own perpendicular -> uniform UVs, no shear); joints closed with a bevel fan
+            // One rectangular quad per segment
             int prevTop = -1, prevBot = -1;
             Vector3 prevDir = Vector3.zero;
             for (int s = 0; s < n - 1; s++) {
@@ -232,7 +230,7 @@ namespace CompassNavigatorPro {
                 rwTris.Add(bi); rwTris.Add(bi + 1); rwTris.Add(bi + 3);
                 rwTris.Add(bi); rwTris.Add(bi + 3); rwTris.Add(bi + 2);
 
-                // Bevel fill: close the outer wedge at the joint with the previous segment (Cull Off -> winding free)
+                // Bevel fill at the joint with the previous segment
                 if (prevTop >= 0) {
                     float cross = prevDir.x * dir.z - prevDir.z * dir.x;
                     if (cross * cross > 1e-10f) {
@@ -258,7 +256,6 @@ namespace CompassNavigatorPro {
             routeWorldMesh.RecalculateBounds();
         }
 
-        // Replaces each interior corner with a tangent fillet arc so the ribbon (and its texture) flows around bends
         void BuildRoundedSource (List<Vector3> src, List<Vector3> dst, float radius) {
             dst.Clear();
             int m = src.Count;
@@ -288,7 +285,6 @@ namespace CompassNavigatorPro {
             dst.Add(src[m - 1]);
         }
 
-        // Centripetal Catmull-Rom resample so the ribbon (and its texture) curves smoothly through every point
         void BuildSplineSource (List<Vector3> src, List<Vector3> dst, int subdivisions) {
             dst.Clear();
             int m = src.Count;
@@ -352,11 +348,10 @@ namespace CompassNavigatorPro {
             routeWorldMatDirty = true;
         }
 
-        // General appearance: only re-applied when a setting changes (color is a tint here, not baked into the mesh)
         void ApplyRouteWorldMaterialStatic () {
-            // Texture when assigned (styleId 4), otherwise a plain solid line (styleId 0)
+            // Textured line when a texture is assigned, plain solid line otherwise
             bool useTex = _routeWorldTexture != null;
-            // Color, gradient and travelled coloring are shared with the mini-map (gradient color = base color when disabled)
+            // Color, gradient and travelled coloring
             routeWorldMat.SetColor(ShaderParams.Color, _routeColor);
             routeWorldMat.SetColor(ShaderParams.RouteGradientColor, _routeUseGradient ? _routeGradientColor : _routeColor);
             routeWorldMat.SetFloat(ShaderParams.RouteStyleId, useTex ? 4f : 0f);
@@ -369,14 +364,13 @@ namespace CompassNavigatorPro {
             routeWorldMat.SetFloat(ShaderParams.RouteZTest, _routeWorldAlwaysVisible ? 8f : 4f);
         }
 
-        // Per-frame state: fade is centered on the follow target, plus travelled progress (shared with the mini-map; -1 disables)
         void ApplyRouteWorldMaterialDynamic () {
             bool fade = _routeWorldMaxDistance > 0f || _routeWorldMinDistance > 0f;
             routeWorldMat.SetVector(ShaderParams.RouteFade, fade
                 ? new Vector4(followPos.x, followPos.z, _routeWorldMaxDistance, _routeWorldMinDistance)
                 : Vector4.zero);
             routeWorldMat.SetFloat(ShaderParams.RouteFadeBand, _routeWorldFadeDistance);
-            // Travelled coloring in-world: needs the global Color Travelled Part on AND the in-world travelled toggle (-1 disables)
+            // Travelled coloring in-world
             routeWorldMat.SetFloat(ShaderParams.RouteProgress, (_routeShowTraveled && _routeWorldShowTraveled) ? routeProgressValue : -1f);
         }
 

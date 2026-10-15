@@ -1851,8 +1851,8 @@ namespace CompassNavigatorPro {
         }
 
         /// <summary>
-        /// Used to add a POI to the compass. Returns false if POI is already registered.
-        /// POI will only register with compasses whose group matches the POI's group mask.
+        /// Adds a POI to the compass, returns false if it was already registered.
+        /// The POI only registers with compasses matching its group mask.
         /// </summary>
         public bool POIRegister (CompassProPOI newPOI) {
             bool res = false;
@@ -2180,7 +2180,7 @@ namespace CompassNavigatorPro {
             if (poi == null) return;
 
             if (visited && !poi.isVisited) {
-                // Setting to visited - replicate automatic visiting behavior
+                // Setting to visited
                 poi.isVisited = true;
 
                 // Hide POI if configured
@@ -2204,7 +2204,7 @@ namespace CompassNavigatorPro {
                 ShowPOIDiscoveredText(poi);
 
             } else if (!visited && poi.isVisited) {
-                // Setting to unvisited - just change the flag
+                // Setting to unvisited
                 poi.isVisited = false;
 
                 // Re-enable POI if it was hidden

@@ -6,15 +6,13 @@ namespace CompassNavigatorPro {
 
     /// <summary>
     /// Renders the route polyline on the minimap as a single masked UI mesh.
-    /// Geometry is built by the compass route updater and uploaded here; the mask
-    /// texture provides the same circular/box clipping used by the rest of the minimap.
     /// </summary>
     [RequireComponent(typeof(CanvasRenderer))]
     public class CompassProRouteGraphic : Graphic {
 
         public Texture maskTexture;
 
-        // Reused buffers filled by the route updater (no per-frame allocations)
+        // Reused buffers filled by the route updater
         public readonly List<Vector3> vertices = new List<Vector3>();
         public readonly List<Vector2> uv0 = new List<Vector2>();    // x = arc length, y = cross axis [-1..1]
         public readonly List<Vector2> uv1 = new List<Vector2>();    // normalized minimap position [0..1] (mask uv)

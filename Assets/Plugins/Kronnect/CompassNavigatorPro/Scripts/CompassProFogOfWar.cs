@@ -162,8 +162,8 @@ namespace CompassNavigatorPro
 
 
         /// <summary>
-        /// Changes the alpha value of the fog of war at world position creating a transition from current alpha value to specified target alpha. It takes into account FogOfWarCenter and FogOfWarSize.
-        /// Note that only x and z coordinates are used. Y (vertical) coordinate is ignored.
+        /// Changes the fog of war alpha around a world position.
+        /// Only the x and z coordinates are used.
         /// </summary>
         /// <param name="worldPosition">in world space coordinates.</param>
         /// <param name="radius">radius of application in world units.</param>
@@ -202,7 +202,7 @@ namespace CompassNavigatorPro
                                 if (t > 1f) {
                                     t = 1f;
                                 }
-                                byte targetAlpha = (byte)(newAlpha8 * (1.0 - t) + colorBuffer.a * t); // Mathf.Lerp (newAlpha8, colorBuffer.a, t);
+                                byte targetAlpha = (byte)(newAlpha8 * (1.0 - t) + colorBuffer.a * t);
                                 colorBuffer.a = targetAlpha;
                                 fogOfWarColorBuffer[colorBufferPos] = colorBuffer;
                                 needFogOfWarTextureUpdate = true;
@@ -215,8 +215,8 @@ namespace CompassNavigatorPro
 
 
         /// <summary>
-        /// Changes the alpha value of the fog of war within bounds creating a transition from current alpha value to specified target alpha. It takes into account FogOfWarCenter and FogOfWarSize.
-        /// Note that only x and z coordinates are used. Y (vertical) coordinate is ignored.
+        /// Changes the fog of war alpha inside the given bounds.
+        /// Only the x and z coordinates are used.
         /// </summary>
         /// <param name="bounds">in world space coordinates.</param>
         /// <param name="fogNewAlpha">target alpha value.</param>
@@ -261,7 +261,7 @@ namespace CompassNavigatorPro
                                 if (t > 1f) {
                                     t = 1f;
                                 }
-                                byte targetAlpha = (byte)(colorBuffer.a * (1f - t) + newAlpha8 * t); // Mathf.Lerp (colorBuffer.a, newAlpha8, t);
+                                byte targetAlpha = (byte)(colorBuffer.a * (1f - t) + newAlpha8 * t);
                                 colorBuffer.a = targetAlpha;
                                 fogOfWarColorBuffer[colorBufferPos] = colorBuffer;
                                 needFogOfWarTextureUpdate = true;

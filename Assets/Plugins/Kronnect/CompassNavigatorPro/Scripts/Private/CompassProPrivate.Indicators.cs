@@ -39,7 +39,7 @@ namespace CompassNavigatorPro {
 
         protected virtual void UpdateIndicators() {
 
-            // Calculate effective aspect ratio considering viewport rect in Screen Space Overlay mode
+            // Effective aspect ratio
             float aspect = _cameraMain.aspect;
             bool useViewportRect = _canvas != null && _canvas.renderMode == RenderMode.ScreenSpaceOverlay && 
                                    (_viewportRect.width < 1f || _viewportRect.height < 1f || _viewportRect.x > 0f || _viewportRect.y > 0f);
@@ -53,14 +53,14 @@ namespace CompassNavigatorPro {
             float overlapDir = 1f;
             float distThreshold = _offScreenIndicatorOverlapDistance * 0.9f;
 
-            // In Screen Space Overlay with viewport rect, increase margin to account for indicator size in smaller viewport
+            // Increase the margin on a smaller viewport
             float effectiveMargin = _offScreenIndicatorMargin;
             if (useViewportRect) {
-                // Scale margin inversely with viewport size to maintain visual spacing
+                // Scale the margin with the viewport size
                 float minViewportDim = Mathf.Min(_viewportRect.width, _viewportRect.height);
                 if (minViewportDim > 0 && minViewportDim < 1f) {
                     effectiveMargin = _offScreenIndicatorMargin / minViewportDim;
-                    effectiveMargin = Mathf.Min(effectiveMargin, 0.15f); // Cap to avoid too much margin
+                    effectiveMargin = Mathf.Min(effectiveMargin, 0.15f);
                 }
             }
 
@@ -267,12 +267,12 @@ namespace CompassNavigatorPro {
                 if (state.lastIndicatorViewportPos == vpos) continue;
                 state.lastIndicatorViewportPos = vpos;
 
-                // Convert local viewport coords back to screen coords for UI positioning (Screen Space Overlay only)
+                // Convert viewport coords back to screen coords
                 Vector2 anchorPos;
                 if (useViewportRect) {
                     anchorPos.x = _viewportRect.x + vpos.x * _viewportRect.width;
                     anchorPos.y = _viewportRect.y + vpos.y * _viewportRect.height;
-                    // Clamp to viewport bounds to prevent any overflow
+                    // Clamp to viewport bounds
                     anchorPos.x = Mathf.Clamp(anchorPos.x, _viewportRect.xMin + 0.01f, _viewportRect.xMax - 0.01f);
                     anchorPos.y = Mathf.Clamp(anchorPos.y, _viewportRect.yMin + 0.01f, _viewportRect.yMax - 0.01f);
                 } else {
@@ -297,10 +297,10 @@ namespace CompassNavigatorPro {
                     float nearFadeDistance = poi.onScreenIndicatorNearFadeDistance > 0 ? poi.onScreenIndicatorNearFadeDistance : _onScreenIndicatorNearFadeDistance;
                     float farFadeDistance = poi.onScreenIndicatorFarFadeDistance > 0 ? poi.onScreenIndicatorFarFadeDistance : _onScreenIndicatorFarFadeDistance;
 
-                    // Calculate near fade factor (1 at nearFadeDistance, 0 at nearFadeMin)
+                    // Near fade factor
                     float nearFadeFactor = nearFadeDistance <= nearFadeMin ? 1f : Mathf.Clamp01((state.distanceToFollow - nearFadeMin) / (nearFadeDistance - nearFadeMin));
                     
-                    // Calculate far fade factor (1 at farFadeDistance, 0 at maxVisibleDistance)
+                    // Far fade factor
                     float farFadeFactor = farFadeDistance >= maxVisibleDistance ? 1f : Mathf.Clamp01((maxVisibleDistance - state.distanceToFollow) / (maxVisibleDistance - farFadeDistance));
                     
                     // Combine both fade factors

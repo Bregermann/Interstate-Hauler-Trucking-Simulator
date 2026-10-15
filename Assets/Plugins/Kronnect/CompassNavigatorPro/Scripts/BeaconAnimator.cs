@@ -18,7 +18,6 @@ namespace CompassNavigatorPro {
             public static int EmissionColor = Shader.PropertyToID("_EmissionColor");
         }
 
-        // Use this for initialization
         void Awake() {
             mat = GetComponent<Renderer>().material;
             fullyTransparentColor = new Color(0, 0, 0, 0);
@@ -36,7 +35,6 @@ namespace CompassNavigatorPro {
             DestroyBeacon();
         }
 
-        // Update is called once per frame
         void Update() {
             float now = Time.time;
             mat.mainTextureOffset = new Vector2(now * -0.25f, now * -0.25f);
