@@ -96,6 +96,16 @@ namespace DeadAir
         ClearOverlay,
         CustomCombined
     }
+
+    public enum DeadAirTrailerConnectionStatus
+    {
+        NotFound,
+        Positioned,
+        CouplingRequested,
+        Connecting,
+        Connected,
+        Failed
+    }
     public enum DeadAirAudioChannel
     {
         Dispatcher,
@@ -277,6 +287,16 @@ namespace DeadAir
         public bool reverse;
         public bool hornActive;
         public string transmissionMode;
+        public bool truckFound;
+        public bool inputSourceFound;
+        public bool inputServiceFound;
+        public bool transmissionFound;
+        public bool transmissionAutomatic;
+        public bool nwhVehicleFound;
+        public float throttleInput;
+        public float brakeInput;
+        public float steeringInput;
+        public DeadAirTrailerConnectionStatus trailerStatus;
         public bool trailerConnected;
     }
 

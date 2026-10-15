@@ -1,3 +1,4 @@
+using LWS.InterstateHauler;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -11,6 +12,7 @@ namespace DeadAir
     {
         private const string DefaultPlayerTruckPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_PlayerTruck_NWH.prefab";
         private const string DefaultDeliveryTrailerPrefabPath = "Assets/LWS/InterstateHauler/Vehicles/Prefabs/IH_TestTrailer_DryVan.prefab";
+        private const string DefaultTransmissionDefinitionPath = "Assets/LWS/InterstateHauler/Vehicles/Transmission/Data/IH_18SpeedTransmission_G29_EatonDevelopment.asset";
 
         [SerializeField] private bool createRuntimeSystems = true;
         [SerializeField] private bool createDefaultUi = true;
@@ -18,6 +20,7 @@ namespace DeadAir
         [SerializeField] private bool spawnPlayerTruck = true;
         [SerializeField] private GameObject playerTruckPrefab;
         [SerializeField] private GameObject deliveryTrailerPrefab;
+        [SerializeField] private Lws18SpeedTransmissionDefinition transmissionDefinition;
         [SerializeField] private Vector3 truckSpawnPosition;
         [SerializeField] private Vector3 truckSpawnEulerAngles;
 
@@ -46,7 +49,7 @@ namespace DeadAir
             EnsureRoot("DEBUG");
             DeadAirStartMarker ensuredStartMarker = EnsureStartMarker(start);
             DeadAirStartMarker startMarker = DeadAirBeatLayoutUtility.FindPreferredRuntimeStartMarker() ?? ensuredStartMarker;
-            ResolveEditorDefaultPrefabs();
+            ResolveEditorDefaultAssets();
 
             if (!createRuntimeSystems)
             {
@@ -63,7 +66,7 @@ namespace DeadAir
             EnsureComponent<DeadAirDashboardMisinformationDirector>(systems, "Dead Air Dashboard Director");
             EnsureComponent<DeadAirTrafficHorrorDirector>(systems, "Dead Air Traffic Horror Director");
             DeadAirStartRigController startRig = EnsureComponent<DeadAirStartRigController>(start, "Dead Air Start Rig Controller");
-            startRig.Configure(playerTruckPrefab, deliveryTrailerPrefab, startMarker);
+            startRig.Configure(playerTruckPrefab, deliveryTrailerPrefab, startMarker, transmissionDefinition);
             EnsureComponent<DeadAirCockpitCameraLock>(systems, "Dead Air Cockpit Camera Lock");
 
             if (createDefaultUi)
@@ -155,7 +158,7 @@ namespace DeadAir
             DeadAirVehicleAdapter existing = FindFirstObjectByType<DeadAirVehicleAdapter>();
             if (existing != null)
             {
-                existing.EnableBasicAutomatic();
+                existing.ConfigureDeadAirTruckRig(transmissionDefinition, out _);
                 return;
             }
 
@@ -173,16 +176,10 @@ namespace DeadAir
                 adapter = truck.AddComponent<DeadAirVehicleAdapter>();
             }
 
-            LWS.InterstateHauler.LwsKeyboardGamepadTruckInputSource inputSource = truck.GetComponent<LWS.InterstateHauler.LwsKeyboardGamepadTruckInputSource>();
-            if (inputSource == null)
-            {
-                inputSource = truck.AddComponent<LWS.InterstateHauler.LwsKeyboardGamepadTruckInputSource>();
-            }
-
-            adapter.EnableBasicAutomatic();
+            adapter.ConfigureDeadAirTruckRig(transmissionDefinition, out _);
         }
 
-        private void ResolveEditorDefaultPrefabs()
+        private void ResolveEditorDefaultAssets()
         {
 #if UNITY_EDITOR
             if (playerTruckPrefab == null)
@@ -193,6 +190,11 @@ namespace DeadAir
             if (deliveryTrailerPrefab == null)
             {
                 deliveryTrailerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(DefaultDeliveryTrailerPrefabPath);
+            }
+
+            if (transmissionDefinition == null)
+            {
+                transmissionDefinition = AssetDatabase.LoadAssetAtPath<Lws18SpeedTransmissionDefinition>(DefaultTransmissionDefinitionPath);
             }
 #endif
         }

@@ -1,5 +1,7 @@
 using System.Collections;
 using LWS.InterstateHauler;
+using NWH.VehiclePhysics2;
+using NWH.VehiclePhysics2.Modules.Trailer;
 using UnityEngine;
 
 namespace DeadAir
@@ -11,18 +13,18 @@ namespace DeadAir
         [SerializeField] private DeadAirStartMarker startMarker;
         [SerializeField] private GameObject playerTruckPrefab;
         [SerializeField] private GameObject deliveryTrailerPrefab;
+        [SerializeField] private Lws18SpeedTransmissionDefinition transmissionDefinition;
         [SerializeField] private DeadAirVehicleAdapter playerTruck;
         [SerializeField] private GameObject deliveryTrailer;
         [SerializeField] private bool spawnOnStart;
         [SerializeField] private bool parentRuntimeRigToStartRoot = true;
         [SerializeField] private bool resetRigidbodiesOnRestart = true;
         [SerializeField] private bool requestCouplingOnInitialize = true;
-        [SerializeField] private bool considerTrailerConnectedWhileCouplingPending = true;
-        [SerializeField, Min(1)] private int couplingRequestAttempts = 3;
+        [SerializeField, Min(1)] private int couplingRequestAttempts = 5;
         [SerializeField, Min(0f)] private float couplingRetryDelaySeconds = 0.25f;
 
         private Coroutine _couplingRoutine;
-        private bool _trailerConsideredConnected;
+        private DeadAirTrailerConnectionStatus _trailerConnectionStatus = DeadAirTrailerConnectionStatus.NotFound;
 
         public DeadAirStartMarker StartMarker => startMarker;
         public GameObject PlayerTruckPrefab => playerTruckPrefab;
@@ -31,8 +33,11 @@ namespace DeadAir
         public GameObject DeliveryTrailer => deliveryTrailer;
         public bool TrailerReferenceAvailable => deliveryTrailer != null || deliveryTrailerPrefab != null;
         public bool StartRigConfigured => startMarker != null && (playerTruck != null || playerTruckPrefab != null) && TrailerReferenceAvailable;
-        public bool TrailerConsideredConnected => playerTruck != null && playerTruck.TrailerAttachedForDeadAir || _trailerConsideredConnected;
+        public bool TrailerConsideredConnected => playerTruck != null && playerTruck.TrailerAttachedForDeadAir;
         public bool CouplingRequestEnabled => requestCouplingOnInitialize;
+        public DeadAirTrailerConnectionStatus TrailerConnectionStatus => playerTruck != null
+            ? playerTruck.TrailerConnectionStatus
+            : _trailerConnectionStatus;
 
         private void Start()
         {
@@ -42,7 +47,7 @@ namespace DeadAir
             }
         }
 
-        public void Configure(GameObject truckPrefab, GameObject trailerPrefab, DeadAirStartMarker marker)
+        public void Configure(GameObject truckPrefab, GameObject trailerPrefab, DeadAirStartMarker marker, Lws18SpeedTransmissionDefinition truckTransmissionDefinition = null)
         {
             if (truckPrefab != null)
             {
@@ -58,6 +63,11 @@ namespace DeadAir
             {
                 startMarker = marker;
             }
+
+            if (truckTransmissionDefinition != null)
+            {
+                transmissionDefinition = truckTransmissionDefinition;
+            }
         }
 
         public DeadAirVehicleAdapter InitializeRig()
@@ -69,7 +79,10 @@ namespace DeadAir
             if (playerTruck != null)
             {
                 ApplyTruckPose(playerTruck.gameObject);
-                playerTruck.EnableBasicAutomatic();
+                if (!playerTruck.ConfigureDeadAirTruckRig(transmissionDefinition, out string message))
+                {
+                    Debug.LogWarning(message, this);
+                }
             }
 
             if (deliveryTrailer != null)
@@ -84,10 +97,21 @@ namespace DeadAir
                 ResetRigidbodyState(deliveryTrailer);
             }
 
-            _trailerConsideredConnected = deliveryTrailer != null && considerTrailerConnectedWhileCouplingPending;
-            if (playerTruck != null)
+            if (playerTruck != null && deliveryTrailer != null)
             {
-                playerTruck.ConfigureDeadAirTrailerState(_trailerConsideredConnected, deliveryTrailer);
+                bool aligned = TryAlignTrailerAttachmentToHitch();
+                if (resetRigidbodiesOnRestart)
+                {
+                    ResetRigidbodyState(playerTruck.gameObject);
+                    ResetRigidbodyState(deliveryTrailer);
+                }
+
+                Physics.SyncTransforms();
+                SetTrailerStatus(aligned ? DeadAirTrailerConnectionStatus.Positioned : DeadAirTrailerConnectionStatus.Failed);
+            }
+            else
+            {
+                SetTrailerStatus(deliveryTrailer != null ? DeadAirTrailerConnectionStatus.Positioned : DeadAirTrailerConnectionStatus.NotFound);
             }
 
             StartCouplingAttempts();
@@ -125,11 +149,6 @@ namespace DeadAir
             if (playerTruck == null)
             {
                 playerTruck = truck.AddComponent<DeadAirVehicleAdapter>();
-            }
-
-            if (truck.GetComponent<LwsKeyboardGamepadTruckInputSource>() == null)
-            {
-                truck.AddComponent<LwsKeyboardGamepadTruckInputSource>();
             }
 
             return playerTruck;
@@ -239,29 +258,81 @@ namespace DeadAir
 
         private IEnumerator RequestCouplingUntilAttached()
         {
+            SetTrailerStatus(DeadAirTrailerConnectionStatus.CouplingRequested);
             yield return new WaitForFixedUpdate();
+
             for (int attempt = 0; attempt < couplingRequestAttempts; attempt++)
             {
-                if (playerTruck == null)
+                if (playerTruck == null || deliveryTrailer == null)
                 {
                     yield break;
                 }
 
                 if (playerTruck.TrailerAttachedForDeadAir)
                 {
-                    _trailerConsideredConnected = true;
-                    playerTruck.ConfigureDeadAirTrailerState(true, deliveryTrailer);
+                    SetTrailerStatus(DeadAirTrailerConnectionStatus.Connected);
                     yield break;
                 }
 
+                TryAlignTrailerAttachmentToHitch();
+                ResetRigidbodyState(deliveryTrailer);
+                Physics.SyncTransforms();
+                SetTrailerStatus(attempt == 0 ? DeadAirTrailerConnectionStatus.CouplingRequested : DeadAirTrailerConnectionStatus.Connecting);
                 playerTruck.RequestTrailerAttachDetach();
-                yield return new WaitForSeconds(couplingRetryDelaySeconds);
+
+                yield return new WaitForFixedUpdate();
+                yield return new WaitForFixedUpdate();
+
+                if (playerTruck.TrailerAttachedForDeadAir)
+                {
+                    SetTrailerStatus(DeadAirTrailerConnectionStatus.Connected);
+                    yield break;
+                }
+
+                if (couplingRetryDelaySeconds > 0f)
+                {
+                    yield return new WaitForSeconds(couplingRetryDelaySeconds);
+                }
             }
 
+            SetTrailerStatus(playerTruck != null && playerTruck.TrailerAttachedForDeadAir
+                ? DeadAirTrailerConnectionStatus.Connected
+                : DeadAirTrailerConnectionStatus.Failed);
+        }
+
+        private bool TryAlignTrailerAttachmentToHitch()
+        {
+            if (playerTruck == null || deliveryTrailer == null)
+            {
+                return false;
+            }
+
+            TrailerHitchModuleWrapper hitchWrapper = playerTruck.GetComponentInChildren<TrailerHitchModuleWrapper>(true);
+            TrailerModuleWrapper trailerWrapper = deliveryTrailer.GetComponentInChildren<TrailerModuleWrapper>(true);
+            Transform hitchPoint = hitchWrapper != null && hitchWrapper.module != null ? hitchWrapper.module.attachmentPoint : null;
+            Transform trailerPoint = trailerWrapper != null && trailerWrapper.module != null ? trailerWrapper.module.attachmentPoint : null;
+            if (hitchPoint == null || trailerPoint == null)
+            {
+                return false;
+            }
+
+            Transform trailerRoot = trailerWrapper.module.vehicleController != null
+                ? trailerWrapper.module.vehicleController.transform
+                : deliveryTrailer.transform;
+            trailerRoot.rotation = hitchPoint.rotation;
+            Vector3 attachmentOffset = trailerPoint.position - trailerRoot.position;
+            trailerRoot.position = hitchPoint.position - attachmentOffset;
+            return true;
+        }
+
+        private void SetTrailerStatus(DeadAirTrailerConnectionStatus status)
+        {
+            _trailerConnectionStatus = playerTruck != null && playerTruck.TrailerAttachedForDeadAir
+                ? DeadAirTrailerConnectionStatus.Connected
+                : status == DeadAirTrailerConnectionStatus.Connected ? DeadAirTrailerConnectionStatus.Connecting : status;
             if (playerTruck != null)
             {
-                _trailerConsideredConnected = playerTruck.TrailerAttachedForDeadAir || deliveryTrailer != null && considerTrailerConnectedWhileCouplingPending;
-                playerTruck.ConfigureDeadAirTrailerState(_trailerConsideredConnected, deliveryTrailer);
+                playerTruck.ConfigureDeadAirTrailerStatus(_trailerConnectionStatus, deliveryTrailer);
             }
         }
 

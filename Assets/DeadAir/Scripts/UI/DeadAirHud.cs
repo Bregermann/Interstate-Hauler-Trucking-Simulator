@@ -92,8 +92,14 @@ namespace DeadAir
         {
             _builder.Length = 0;
             _builder.AppendLine($"DEAD AIR | {(_manager != null ? _manager.State.ToString() : "NO MANAGER")}");
+            _builder.AppendLine($"Truck: {(vehicle.truckFound ? "FOUND" : "MISSING")}");
+            _builder.AppendLine($"Input Source: {(vehicle.inputSourceFound ? "FOUND" : "MISSING")}");
+            _builder.AppendLine($"Input Service: {(vehicle.inputServiceFound ? "FOUND" : "MISSING")}");
+            _builder.AppendLine($"Transmission: {FormatTransmissionStatus(vehicle)}");
+            _builder.AppendLine($"NWH Vehicle: {(vehicle.nwhVehicleFound ? "FOUND" : "MISSING")}");
+            _builder.AppendLine($"NWH Input: T {vehicle.throttleInput:0.00} / B {vehicle.brakeInput:0.00} / S {vehicle.steeringInput:0.00}");
             _builder.AppendLine($"Speed: {vehicle.signedSpeedMph:0.0} mph");
-            _builder.AppendLine($"Trailer: {(vehicle.trailerConnected ? "CONNECTED" : "PENDING")}");
+            _builder.AppendLine($"Trailer: {FormatTrailerStatus(vehicle)}");
             if (_manager != null && _manager.StoryDirector != null)
             {
                 _builder.AppendLine($"Beat: {_manager.StoryDirector.CurrentBeatId}");
@@ -181,7 +187,7 @@ namespace DeadAir
             _mapGraphic.raycastTarget = false;
             _gpsText = CreateText(mapPanel, "Dead Air GPS", font, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(10f, -44f), new Vector2(292f, 42f), 13, TextAnchor.MiddleLeft);
             _subtitleText = CreateText(canvasRect, "Subtitles", font, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 138f), new Vector2(900f, 72f), 24, TextAnchor.MiddleCenter);
-            _debugText = CreateText(canvasRect, "Debug", font, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-420f, -32f), new Vector2(390f, 180f), 14, TextAnchor.UpperLeft);
+            _debugText = CreateText(canvasRect, "Debug", font, new Vector2(1f, 1f), new Vector2(1f, 1f), new Vector2(-420f, -32f), new Vector2(390f, 260f), 14, TextAnchor.UpperLeft);
             _subtitleText.gameObject.SetActive(false);
         }
 
@@ -257,6 +263,28 @@ namespace DeadAir
         private static string FormatArrow(DeadAirGpsArrow arrow)
         {
             return arrow == DeadAirGpsArrow.None ? "--" : arrow.ToString().ToUpperInvariant();
+        }
+
+        private static string FormatTransmissionStatus(DeadAirVehicleSnapshot vehicle)
+        {
+            if (!vehicle.transmissionFound)
+            {
+                return "MISSING";
+            }
+
+            if (vehicle.transmissionAutomatic)
+            {
+                return "AUTOMATIC";
+            }
+
+            return string.IsNullOrWhiteSpace(vehicle.transmissionMode) ? "FOUND" : vehicle.transmissionMode.ToUpperInvariant();
+        }
+
+        private static string FormatTrailerStatus(DeadAirVehicleSnapshot vehicle)
+        {
+            return vehicle.trailerConnected
+                ? "CONNECTED"
+                : vehicle.trailerStatus.ToString().ToUpperInvariant();
         }
 
         private void UpdateSemanticMap(DeadAirVehicleSnapshot vehicle)

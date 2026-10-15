@@ -245,6 +245,15 @@ namespace DeadAir
             if (transmissionController == null)
             {
                 transmissionController = GetComponent<Lws18SpeedTransmissionController>();
+                if (transmissionController == null)
+                {
+                    transmissionController = GetComponentInParent<Lws18SpeedTransmissionController>();
+                }
+
+                if (transmissionController == null)
+                {
+                    transmissionController = GetComponentInChildren<Lws18SpeedTransmissionController>(true);
+                }
             }
 
             if (_inputService != null ||
