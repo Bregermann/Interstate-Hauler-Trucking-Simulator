@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 namespace LWS.TruckHockey {
 // Measurements come from the preceding physics step; responses replace the solver's planar
 // outcome rather than adding another full-strength collision impulse on top of it.
@@ -16,7 +16,7 @@ namespace LWS.TruckHockey {
   else{float kick=Mathf.Clamp(closing*.85f+(sb-sa)*1.25f,0,cap);a=av-normal*kick;b=bv+normal*closing*.38f;}
   a=Vector3.ClampMagnitude(a,cap);b=Vector3.ClampMagnitude(b,cap);return true;
  }
- public void Record(HockeyTruck one,HockeyTruck two,Vector3 point){if(one==null||two==null||one==two||one.match!=match||two.match!=match)return;int a=Mathf.Min(one.side,two.side),b=Mathf.Max(one.side,two.side),key=a*6+b;if(touching[key])return;touching[key]=true;if(Time.time<protectedUntil[a]||Time.time<protectedUntil[b])return;var ta=match.trucks[a];var tb=match.trucks[b];var n=Flat(tb.IncomingPosition-ta.IncomingPosition).normalized;if(n.sqrMagnitude<.5f)return;float closing=Vector3.Dot(ta.IncomingVelocity-tb.IncomingVelocity,n);hits[key]=new Hit{pending=true,a=a,b=b,av=ta.IncomingVelocity,bv=tb.IncomingVelocity,normal=n,point=point,closing=closing};}
+ public void Record(HockeyTruck one,HockeyTruck two,Vector3 point,Vector3 surfaceNormal){if(one==null||two==null||one==two||one.match!=match||two.match!=match)return;int a=Mathf.Min(one.side,two.side),b=Mathf.Max(one.side,two.side),key=a*6+b;if(touching[key])return;touching[key]=true;if(Time.time<protectedUntil[a]||Time.time<protectedUntil[b])return;var ta=match.trucks[a];var tb=match.trucks[b];var n=Flat(one.side==a?-surfaceNormal:surfaceNormal).normalized;if(n.sqrMagnitude<.5f)return;float closing=Vector3.Dot(ta.IncomingVelocity-tb.IncomingVelocity,n);hits[key]=new Hit{pending=true,a=a,b=b,av=ta.IncomingVelocity,bv=tb.IncomingVelocity,normal=n,point=point,closing=closing};}
  public void Separate(int a,int b){touching[Mathf.Min(a,b)*6+Mathf.Max(a,b)]=false;}
  public void Forget(int slot){for(int i=0;i<6;i++){int key=Mathf.Min(i,slot)*6+Mathf.Max(i,slot);touching[key]=false;hits[key]=default;}protectedUntil[slot]=0;}
  void FixedUpdate(){if(!match.InMatch||!match.rules.Live||match.MenuOpen)return;System.Array.Clear(proposals,0,6);System.Array.Clear(proposed,0,6);

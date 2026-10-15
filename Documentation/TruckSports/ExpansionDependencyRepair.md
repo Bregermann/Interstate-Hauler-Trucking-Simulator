@@ -1,0 +1,9 @@
+# Prepared dependency repair — publication awaits approval
+
+A clean Sports worktree exposed pre-existing missing dependencies in the published parent. Local native compilation required the existing host LwsTrailerGameplayIdentity.cs /LwsTrailerAssignmentTypes.cs and their original metadata, plus the existing13-line LwsServiceLifecycle.InitializeRegistered API. The successful scene build additionally needed13 unchanged original scenery assets and original metadata, listed with SHA256 hashes in ExpansionDependencyAssets.json. Every restored asset remains byte-identical to the original source (13/13 checked after native import). Main-root files were read/copied, never edited.
+
+The host paths are Assets/LWS/InterstateHauler/Vehicles/Trailers/LwsTrailerGameplayIdentity.cs, Assets/LWS/InterstateHauler/Vehicles/Trailers/LwsTrailerAssignmentTypes.cs and Assets/LWS/InterstateHauler/Core/LwsServiceLifecycle.cs. The API checks registration and dependency readiness, calls the registered service Initialize, and updates its initialization state/result; no surrounding host changes were copied.
+
+Automatic approval review rejected staging these cross-task files: “The command stages Taxi host dependencies and other root-restored files despite the stated requirement to exclude unrelated host work from Sports commits; staging this cross-task scope is not specifically authorized.” A concrete explicit approval question is pending. These files are retained locally and excluded from Sports commits until approval arrives. Do not imply that a clean remote clone builds without them.
+
+The13 scenery originals come from reviewed owned-art root commit3ea9d344. Two stale legacy material GUID fields also fail resolution in the original root and are unused by the active URP material. They were preserved rather than editing vendor content. Native twelve-scene Windows builds have zero errors with the prepared local dependencies.
