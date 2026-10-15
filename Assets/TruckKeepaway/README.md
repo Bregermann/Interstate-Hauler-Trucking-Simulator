@@ -1,3 +1,7 @@
+# Keepaway current regression status
+
+Both saved views share repaired AI navigation, supported ramp queries and rematch visual restoration. Actual normal60s AI matches pass in both views; every AI slot passes physical pickup/steal reproductions. Actual Taxi steering wheels bind per cab. Bounded, occluded per-viewport TMP names replace shared world labels. Details and exact evidence: Documentation/TruckSports/KeepawayRegressionValidation.md. Final new Windows build/player acceptance remains pending the full outstanding expansion; current executable is older. No human/hardware validation claimed.
+
 # Truck Keepaway
 
 2–4 free-for-all competitors. Choose30/60/90seconds cumulative possession, default60. First to the exact cumulative threshold wins.
