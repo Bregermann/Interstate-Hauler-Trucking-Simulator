@@ -37,16 +37,16 @@ Future prompts may extend this glossary when a real new gameplay system or macro
 
 ## Gameplay Flow Terms
 
-These are canonical gameplay-flow terms. Prompt 020 activates depot/job-board states; later states remain reserved vocabulary until their owning prompts.
+These are canonical gameplay-flow terms. Prompt 020 activates depot/job-board states. Prompt 021 activates physical trailer pickup and HAUL_ACTIVE after correct trailer coupling.
 
 | Canonical Term | Code Name | Expected Driving | Future Owner |
 |---|---|---|---|
 | AT_DEPOT | `AtDepot` | Yes | Active in Prompt 020 depot presence. |
 | JOB_SELECTION | `JobSelection` | No | Active in Prompt 020 authored job board. |
 | TRAILER_PICKUP | `TrailerPickup` | Yes | Activated after Prompt 020 job acceptance; Prompt 021 owns physical pickup. |
-| HAUL_ACTIVE | `HaulActive` | Yes | Job/haul systems |
-| DELIVERY | `Delivery` | Context-dependent | Prompt 022 delivery/parking |
-| DELIVERY_RESULTS | `DeliveryResults` | No | Economy/results/statistics systems |
+| HAUL_ACTIVE | `HaulActive` | Yes | Active in Prompt 021 after the assigned trailer is physically coupled. |
+| DELIVERY | Delivery | Yes | Active in Prompt 022 while the assigned trailer is being parked at the matching destination. |
+| DELIVERY_RESULTS | DeliveryResults | No | Active Prompt 022 handoff after parking completion; rewards/economy remain later work. |
 
 ## Authority Boundaries
 
@@ -164,7 +164,8 @@ Prompt 020 status updates:
 
 - `AT_DEPOT`: ACTIVE / IMPLEMENTED IN PROMPT 020. `AllowsDrivingInput = YES`.
 - `JOB_SELECTION`: ACTIVE / IMPLEMENTED IN PROMPT 020. `AllowsDrivingInput = NO`.
-- `TRAILER_PICKUP`: ACTIVE STATE ENTERED AFTER JOB ACCEPTANCE. `AllowsDrivingInput = YES`. Physical pickup gameplay belongs to Prompt 021.
+- `TRAILER_PICKUP`: ACTIVE STATE ENTERED AFTER JOB ACCEPTANCE. `AllowsDrivingInput = YES`. Physical trailer assignment and pickup validation are implemented in Prompt 021.
+- `HAUL_ACTIVE`: ACTIVE STATE ENTERED AFTER CORRECT ASSIGNED TRAILER COUPLING. `AllowsDrivingInput = YES`. Delivery/parking belongs to Prompt 022.
 
 Depot/job-board flow:
 
@@ -213,3 +214,72 @@ LwsActiveJobService
 ```
 
 Scriptable Sheets role: `LwsDepotDefinition`, `LwsDestinationDefinition`, `LwsJobDefinition`, and `LwsJobCatalog` are normal serialized ScriptableObjects intentionally shaped for Scriptable Sheets table editing. Prompt 023 owns the high-volume Scriptable Sheets job and destination authoring workflow.
+
+## Prompt 021 Trailer Assignment And Pickup Vocabulary
+
+Prompt 021 adds physical trailer assignment and pickup semantics without replacing NWH trailer physics or coupling.
+
+| Term | Canonical Meaning | Authority |
+| --- | --- | --- |
+| Trailer Gameplay Identity | Stable LWS identity attached to a physical NWH trailer. It stores trailer ID, trailer type, origin depot, assignment state, and assigned active-job ID. | `LwsTrailerGameplayIdentity` |
+| Trailer Type ID | Stable semantic trailer category used by authored jobs, for example `trailer.dry-van`. It is not a prefab name or GameObject path. | LWS trailer semantics |
+| Trailer Registry | Runtime registry for resolving loaded `LwsTrailerGameplayIdentity` instances by stable trailer ID. It is not a save database. | `ILwsTrailerRegistryService`, `LwsTrailerRegistryService` |
+| Trailer Assignment | Persistent semantic link between an active job and one assigned trailer. | `LwsTrailerAssignment` stored on `LwsActiveJob` |
+| Trailer Spawn Point | Scene/runtime pickup spawn point for deterministic trailer placement or same-ID recovery. | `LwsTrailerSpawnPoint` |
+| Trailer Pickup Service | Coordinator that assigns a compatible trailer, focuses pickup navigation, validates NWH coupling, transitions to `HaulActive`, activates destination navigation, and requests autosave. | `ILwsTrailerPickupService`, `LwsTrailerPickupService` |
+| Correct Trailer | The physically attached NWH trailer whose stable LWS trailer ID matches the active job assignment. | Prompt 021 validation |
+
+Prompt 021 flow:
+
+```text
+LwsActiveJob.Status = AwaitingTrailerPickup
+        |
+        v
+LwsTrailerPickupService
+        |
+        +--> LwsTrailerRegistryService / LwsTrailerSpawnPoint
+        |
+        +--> pickup navigation objective
+        |
+        v
+NWH coupling event through LwsNwhTrailerCouplingAdapter
+        |
+        v
+assigned trailer ID matches attached trailer ID
+        |
+        v
+LwsActiveJob.Status = HaulActive
+        |
+        v
+LwsGameplayState = HaulActive
+        |
+        v
+active job destination navigation
+```
+
+The trailer pickup system does not save files, call Pixel Crushers directly, manipulate Compass Navigator Pro internals, or fake pickup completion by proximity.
+## Prompt 022 Delivery Vocabulary
+
+| Term | Canonical Meaning | Authority |
+| --- | --- | --- |
+| Delivery Area | Broad runtime arrival context for one stable Destination ID. Entry begins delivery only for the matching active job and exact physically coupled assigned trailer. | LwsDeliveryArea |
+| Delivery Parking Zone | Configurable target volume and desired heading used to evaluate the assigned trailer's colliders, orientation, and motion. | LwsDeliveryParkingZone |
+| Delivery Context | Runtime phase where the matching facility has been reached and parking is underway. It maps persistent job status Delivery to macro gameplay state Delivery. | ILwsDeliveryService plus ILwsActiveJobService |
+| Delivery Validation | Event-scoped parking evaluation of stable destination identity, exact trailer coupling, collider containment, horizontal heading, motion, and continuous hold. | LwsDeliveryService and LwsDeliveryValidation |
+| Delivery Snapshot | Transient UI/debug view of current destination, parking target, assigned/attached trailers, containment, heading, speed, hold, and message. It is not a save database. | LwsDeliverySnapshot |
+| Delivery Completion | Semantic parking success retained on the active job for later results processing. It does not pay or clear the job. | LwsDeliveryCompletionSnapshot |
+| Completed Job Handoff | Active job status Completed with a valid completion snapshot, deriving macro state DeliveryResults. | ILwsActiveJobService |
+
+Prompt 022 flow:
+
+    HAUL_ACTIVE
+        |
+        | matching destination + exact assigned trailer
+        v
+    DELIVERY
+        |
+        | valid parking held continuously
+        v
+    DELIVERY_RESULTS
+
+Delivery allows driving. DeliveryResults blocks driving. NWH remains physical tractor/trailer/coupling authority, LWS navigation remains route-intent authority, Compass remains presentation authority, and Pixel Crushers remains save authority.

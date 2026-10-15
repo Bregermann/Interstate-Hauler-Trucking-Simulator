@@ -85,6 +85,8 @@ namespace LWS.InterstateHauler
         public int quotedGrossPayCents;
         public LwsJobStatus status = LwsJobStatus.None;
         public long acceptedUtcTicks;
+        public LwsTrailerAssignment trailerAssignment;
+        public LwsDeliveryCompletionSnapshot deliveryCompletion;
 
         public bool IsValid => schemaVersion > 0 &&
                                schemaVersion <= LwsSaveSchema.CurrentVersion &&
@@ -95,6 +97,8 @@ namespace LWS.InterstateHauler
                                !string.IsNullOrWhiteSpace(cargoId) &&
                                !string.IsNullOrWhiteSpace(requiredTrailerTypeId) &&
                                status != LwsJobStatus.None &&
+                               trailerAssignment.IsValid &&
+                               (status != LwsJobStatus.Completed || deliveryCompletion.IsValid) &&
                                cargoWeightLbs >= 0 &&
                                estimatedDistanceMiles >= 0f &&
                                quotedGrossPayCents >= 0;
@@ -128,7 +132,9 @@ namespace LWS.InterstateHauler
                 estimatedDistanceMiles = Mathf.Max(0f, offer.estimatedDistanceMiles),
                 quotedGrossPayCents = Math.Max(0, offer.quotedGrossPayCents),
                 status = LwsJobStatus.AwaitingTrailerPickup,
-                acceptedUtcTicks = DateTime.UtcNow.Ticks
+                acceptedUtcTicks = DateTime.UtcNow.Ticks,
+                trailerAssignment = LwsTrailerAssignment.None,
+                deliveryCompletion = LwsDeliveryCompletionSnapshot.None
             };
         }
     }

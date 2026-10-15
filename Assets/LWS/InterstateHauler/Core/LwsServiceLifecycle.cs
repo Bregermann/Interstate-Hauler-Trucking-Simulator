@@ -215,6 +215,19 @@ namespace LWS.InterstateHauler
             return LwsServiceResult.Success("All LWS services initialized.");
         }
 
+        public LwsServiceResult InitializeRegistered<T>() where T : class, ILwsService
+        {
+            if (!_byType.TryGetValue(typeof(T), out var registration)) return LwsServiceResult.Failure("Service is not registered.");
+            if (registration.State == LwsServiceState.Ready) return LwsServiceResult.Success();
+            foreach (var dependency in registration.Dependencies)
+                if (!_byType.TryGetValue(dependency, out var required) || required.State != LwsServiceState.Ready)
+                    return LwsServiceResult.Failure("Service dependency is not ready: " + dependency.Name);
+            registration.State = LwsServiceState.Initializing;
+            var result = registration.Service.Initialize(new LwsServiceContext(this));
+            registration.State = result.Succeeded ? LwsServiceState.Ready : LwsServiceState.Failed;
+            return result;
+        }
+
         public LwsServiceResult ShutdownAll()
         {
             var context = new LwsServiceContext(this);

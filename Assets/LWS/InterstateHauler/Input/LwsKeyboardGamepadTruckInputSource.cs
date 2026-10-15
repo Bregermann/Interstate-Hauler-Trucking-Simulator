@@ -352,7 +352,6 @@ namespace LWS.InterstateHauler
                 hazardLights = Edge("kb.hazards", keyboard.jKey.isPressed),
                 wipers = Edge("kb.wipers", keyboard.vKey.isPressed),
                 horn = Edge("kb.horn", keyboard.hKey.isPressed),
-                airHorn = Edge("kb.airHorn", keyboard.bKey.isPressed),
                 engineBrake = Edge("kb.engineBrake", keyboard.mKey.isPressed),
                 engineBrakeIncrease = Edge("kb.engineBrakeUp", keyboard.pageUpKey.isPressed),
                 engineBrakeDecrease = Edge("kb.engineBrakeDown", keyboard.pageDownKey.isPressed),

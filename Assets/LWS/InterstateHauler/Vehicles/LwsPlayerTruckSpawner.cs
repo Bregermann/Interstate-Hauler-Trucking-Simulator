@@ -6,6 +6,11 @@ namespace LWS.InterstateHauler
     [DisallowMultipleComponent]
     public sealed class LwsPlayerTruckSpawner : MonoBehaviour
     {
+        private const string ValidationTrailerDefinitionId = "ih.trailer.validation.dryvan";
+        private const string ValidationTrailerDisplayName = "NWH Dry Van Validation Trailer";
+        private const string ValidationTrailerOriginDepotId = "depot.validation.interstate-corridor";
+        private const string ValidationTrailerSpawnPointId = "trailer.spawn.validation.dryvan";
+
         [SerializeField] private LwsTruckDefinition truckDefinition;
         [SerializeField] private Lws18SpeedTransmissionDefinition transmissionDefinition;
         [SerializeField] private GameObject fallbackPlayerTruckPrefab;
@@ -55,6 +60,7 @@ namespace LWS.InterstateHauler
                 : truckDefinition != null ? truckDefinition.ValidationTrailerPrefab : null;
             if (resolvedTrailerPrefab != null)
             {
+                EnsureTrailerSpawnPoint(resolvedTrailerPrefab);
                 Vector3 trailerPosition = trailerSpawnPoint != null ? trailerSpawnPoint.position : truckPosition - truckRotation * Vector3.forward * 8f;
                 Quaternion trailerRotation = trailerSpawnPoint != null ? trailerSpawnPoint.rotation : truckRotation;
                 SpawnedTrailer = Instantiate(resolvedTrailerPrefab, trailerPosition, trailerRotation);
@@ -278,15 +284,42 @@ namespace LWS.InterstateHauler
 
             identity.Configure(
                 spawnedTrailerId,
-                "ih.trailer.validation.dryvan",
+                ValidationTrailerDefinitionId,
                 LwsVehicleRole.Trailer,
-                "NWH Dry Van Validation Trailer",
+                ValidationTrailerDisplayName,
                 false);
+
+            LwsTrailerGameplayIdentity trailerIdentity = trailerInstance.GetComponent<LwsTrailerGameplayIdentity>() ??
+                                                        trailerInstance.AddComponent<LwsTrailerGameplayIdentity>();
+            trailerIdentity.Configure(
+                spawnedTrailerId,
+                LwsTrailerTypeIds.DryVan,
+                ValidationTrailerDisplayName,
+                ValidationTrailerOriginDepotId,
+                true);
 
             LwsFloatingOriginRigidbodyParticipant originParticipant =
                 trailerInstance.GetComponent<LwsFloatingOriginRigidbodyParticipant>() ??
                 trailerInstance.AddComponent<LwsFloatingOriginRigidbodyParticipant>();
             originParticipant.Configure(spawnedTrailerId, LwsFloatingOriginParticipantKind.PlayerTrailer, false);
+        }
+
+        private void EnsureTrailerSpawnPoint(GameObject resolvedTrailerPrefab)
+        {
+            if (trailerSpawnPoint == null || resolvedTrailerPrefab == null)
+            {
+                return;
+            }
+
+            LwsTrailerSpawnPoint spawnPoint = trailerSpawnPoint.GetComponent<LwsTrailerSpawnPoint>() ??
+                                             trailerSpawnPoint.gameObject.AddComponent<LwsTrailerSpawnPoint>();
+            spawnPoint.Configure(
+                ValidationTrailerSpawnPointId,
+                ValidationTrailerOriginDepotId,
+                LwsTrailerTypeIds.DryVan,
+                resolvedTrailerPrefab,
+                true,
+                ValidationTrailerDisplayName);
         }
 
         private void EnsureNwhInputProvider()

@@ -33,6 +33,10 @@ namespace LWS.InterstateHauler
         event Action<LwsActiveJob> ActiveJobChanged;
         LwsServiceResult AcceptJob(LwsJobOffer offer, out LwsActiveJob activeJob, string reason);
         LwsServiceResult RestoreActiveJob(LwsActiveJob activeJob, string reason, bool deriveGameplayState);
+        LwsServiceResult AssignTrailerToActiveJob(LwsTrailerAssignment assignment, string reason);
+        LwsServiceResult CompleteTrailerPickup(string attachedTrailerId, string reason);
+        LwsServiceResult EnterDelivery(string destinationId, string attachedTrailerId, string reason);
+        LwsServiceResult CompleteDelivery(LwsDeliveryCompletionSnapshot completion, string reason);
         LwsServiceResult ClearActiveJob(string reason);
         LwsGameplayState DeriveGameplayStateForCurrentJob();
         bool TryDeriveGameplayState(string reason, out string message);
@@ -359,6 +363,138 @@ namespace LWS.InterstateHauler
             return LwsServiceResult.Success($"Restored active job {_currentActiveJob.stableActiveJobId}.");
         }
 
+
+        public LwsServiceResult AssignTrailerToActiveJob(LwsTrailerAssignment assignment, string reason)
+        {
+            if (!HasActiveJob)
+            {
+                return LwsServiceResult.Failure("Cannot assign a trailer without an active job.");
+            }
+
+            if (!assignment.hasAssignedTrailer || !assignment.IsValid)
+            {
+                return LwsServiceResult.Failure("Cannot assign an invalid trailer assignment.");
+            }
+
+            if (!_currentActiveJob.trailerAssignment.MatchesRequiredType(_currentActiveJob.requiredTrailerTypeId) && _currentActiveJob.trailerAssignment.hasAssignedTrailer)
+            {
+                return LwsServiceResult.Failure($"Existing trailer assignment {_currentActiveJob.trailerAssignment.stableTrailerId} does not match required trailer type {_currentActiveJob.requiredTrailerTypeId}.");
+            }
+
+            if (!assignment.MatchesRequiredType(_currentActiveJob.requiredTrailerTypeId))
+            {
+                return LwsServiceResult.Failure($"Assigned trailer type {assignment.trailerTypeId} does not match required type {_currentActiveJob.requiredTrailerTypeId}.");
+            }
+
+            if (_currentActiveJob.trailerAssignment.hasAssignedTrailer &&
+                !string.Equals(_currentActiveJob.trailerAssignment.stableTrailerId, assignment.stableTrailerId, StringComparison.Ordinal))
+            {
+                return LwsServiceResult.Failure($"Active job already has assigned trailer {_currentActiveJob.trailerAssignment.stableTrailerId}; refusing to replace it with {assignment.stableTrailerId}.");
+            }
+
+            _currentActiveJob.trailerAssignment = assignment;
+            ActiveJobChanged?.Invoke(CurrentActiveJob);
+            return LwsServiceResult.Success(string.IsNullOrWhiteSpace(reason) ? $"Assigned trailer {assignment.stableTrailerId}." : reason);
+        }
+
+        public LwsServiceResult CompleteTrailerPickup(string attachedTrailerId, string reason)
+        {
+            if (!HasActiveJob)
+            {
+                return LwsServiceResult.Failure("Cannot complete trailer pickup without an active job.");
+            }
+
+            if (_currentActiveJob.status != LwsJobStatus.AwaitingTrailerPickup)
+            {
+                return LwsServiceResult.Failure($"Active job status {_currentActiveJob.status} is not awaiting trailer pickup.");
+            }
+
+            if (!_currentActiveJob.trailerAssignment.hasAssignedTrailer)
+            {
+                return LwsServiceResult.Failure("Active job has no assigned trailer to validate.");
+            }
+
+            if (!string.Equals(_currentActiveJob.trailerAssignment.stableTrailerId, attachedTrailerId, StringComparison.Ordinal))
+            {
+                return LwsServiceResult.Failure($"Attached trailer {attachedTrailerId} does not match assigned trailer {_currentActiveJob.trailerAssignment.stableTrailerId}.");
+            }
+
+            LwsTrailerAssignment assignment = _currentActiveJob.trailerAssignment;
+            assignment.pickupCompletedUtcTicks = DateTime.UtcNow.Ticks;
+            _currentActiveJob.trailerAssignment = assignment;
+            _currentActiveJob.status = LwsJobStatus.HaulActive;
+            ActiveJobChanged?.Invoke(CurrentActiveJob);
+            TryDeriveGameplayState(string.IsNullOrWhiteSpace(reason) ? "Assigned trailer pickup completed." : reason, out _);
+            return LwsServiceResult.Success($"Trailer pickup complete for active job {_currentActiveJob.stableActiveJobId}.");
+        }
+
+        public LwsServiceResult EnterDelivery(string destinationId, string attachedTrailerId, string reason)
+        {
+            if (!HasActiveJob)
+            {
+                return LwsServiceResult.Failure("Cannot enter delivery without an active job.");
+            }
+
+            if (_currentActiveJob.status == LwsJobStatus.Delivery)
+            {
+                return LwsServiceResult.Success("Active job is already in Delivery.");
+            }
+
+            if (_currentActiveJob.status != LwsJobStatus.HaulActive)
+            {
+                return LwsServiceResult.Failure($"Active job status {_currentActiveJob.status} cannot enter Delivery.");
+            }
+
+            if (!LwsDeliveryValidation.DestinationMatches(_currentActiveJob.destinationId, destinationId))
+            {
+                return LwsServiceResult.Failure($"Delivery destination {destinationId} does not match active job destination {_currentActiveJob.destinationId}.");
+            }
+
+            if (!_currentActiveJob.trailerAssignment.hasAssignedTrailer ||
+                !LwsDeliveryValidation.AssignedTrailerMatches(_currentActiveJob.trailerAssignment.stableTrailerId, attachedTrailerId))
+            {
+                return LwsServiceResult.Failure($"Attached trailer {attachedTrailerId} does not match assigned trailer {_currentActiveJob.trailerAssignment.stableTrailerId}.");
+            }
+
+            _currentActiveJob.status = LwsJobStatus.Delivery;
+            _currentActiveJob.deliveryCompletion = LwsDeliveryCompletionSnapshot.None;
+            ActiveJobChanged?.Invoke(CurrentActiveJob);
+            TryDeriveGameplayState(string.IsNullOrWhiteSpace(reason) ? "Matching destination delivery area entered." : reason, out _);
+            return LwsServiceResult.Success($"Active job {_currentActiveJob.stableActiveJobId} entered Delivery.");
+        }
+
+        public LwsServiceResult CompleteDelivery(LwsDeliveryCompletionSnapshot completion, string reason)
+        {
+            if (!HasActiveJob)
+            {
+                return LwsServiceResult.Failure("Cannot complete delivery without an active job.");
+            }
+
+            if (_currentActiveJob.status == LwsJobStatus.Completed && _currentActiveJob.deliveryCompletion.IsValid)
+            {
+                return LwsServiceResult.Success("Active job delivery is already complete.");
+            }
+
+            if (_currentActiveJob.status != LwsJobStatus.Delivery)
+            {
+                return LwsServiceResult.Failure($"Active job status {_currentActiveJob.status} cannot complete delivery.");
+            }
+
+            if (!completion.IsValid ||
+                !string.Equals(_currentActiveJob.stableActiveJobId, completion.activeJobId, StringComparison.Ordinal) ||
+                !LwsDeliveryValidation.DestinationMatches(_currentActiveJob.destinationId, completion.destinationId) ||
+                !LwsDeliveryValidation.AssignedTrailerMatches(_currentActiveJob.trailerAssignment.stableTrailerId, completion.assignedTrailerId))
+            {
+                return LwsServiceResult.Failure("Delivery completion snapshot does not match the active job, destination, and assigned trailer.");
+            }
+
+            _currentActiveJob.deliveryCompletion = completion;
+            _currentActiveJob.status = LwsJobStatus.Completed;
+            ActiveJobChanged?.Invoke(CurrentActiveJob);
+            TryDeriveGameplayState(string.IsNullOrWhiteSpace(reason) ? "Delivery gameplay completed; results handoff ready." : reason, out _);
+            return LwsServiceResult.Success($"Active job {_currentActiveJob.stableActiveJobId} completed delivery gameplay.");
+        }
+
         public LwsServiceResult ClearActiveJob(string reason)
         {
             _currentActiveJob = null;
@@ -381,6 +517,8 @@ namespace LWS.InterstateHauler
                     return LwsGameplayState.HaulActive;
                 case LwsJobStatus.Delivery:
                     return LwsGameplayState.Delivery;
+                case LwsJobStatus.Completed:
+                    return LwsGameplayState.DeliveryResults;
                 default:
                     return LwsGameplayState.FreeDrive;
             }

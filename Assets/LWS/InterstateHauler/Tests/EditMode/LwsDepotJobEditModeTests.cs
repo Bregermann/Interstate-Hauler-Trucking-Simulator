@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -87,6 +87,8 @@ namespace LWS.InterstateHauler.Tests.EditMode
             Assert.IsTrue(gameplay.TryTransitionTo(LwsGameplayState.AtDepot, "close job board").Succeeded);
             Assert.IsTrue(gameplay.TryTransitionTo(LwsGameplayState.JobSelection, "open again").Succeeded);
             Assert.IsTrue(gameplay.TryTransitionTo(LwsGameplayState.TrailerPickup, "accept job").Succeeded);
+            Assert.IsTrue(gameplay.AllowsDrivingInput);
+            Assert.IsTrue(gameplay.TryTransitionTo(LwsGameplayState.HaulActive, "correct trailer attached").Succeeded);
             Assert.IsTrue(gameplay.AllowsDrivingInput);
         }
 

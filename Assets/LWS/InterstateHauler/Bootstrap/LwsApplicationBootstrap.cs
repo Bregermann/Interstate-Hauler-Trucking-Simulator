@@ -114,13 +114,16 @@ namespace LWS.InterstateHauler
             registry.Register<ILwsTruckControlService>(new LwsTruckControlService(), typeof(ILwsPlayerVehicleService), typeof(ILwsVehicleRuntimeService));
             registry.Register<ILwsTruckDashboardService>(new LwsTruckDashboardService(), typeof(ILwsTruckControlService), typeof(ILwsVehicleRuntimeService), typeof(ILwsRenderingService));
             if (!includeCareerServices) return registry;
+            registry.Register<ILwsTrailerRegistryService>(new LwsTrailerRegistryService());
             registry.Register<ILwsDepotService>(new LwsDepotService(), typeof(ILwsGameplayStateService));
             registry.Register<ILwsJobCatalogService>(new LwsJobCatalogService(), typeof(ILwsDepotService));
             registry.Register<ILwsJobOfferProvider>(new LwsAuthoredJobOfferProvider(), typeof(ILwsJobCatalogService));
             registry.Register<ILwsActiveJobService>(new LwsActiveJobService(), typeof(ILwsGameplayStateService), typeof(ILwsSaveService));
+            registry.Register<ILwsTrailerPickupService>(new LwsTrailerPickupService(), typeof(ILwsTrailerRegistryService), typeof(ILwsActiveJobService), typeof(ILwsPlayerVehicleService), typeof(ILwsGameplayStateService), typeof(ILwsNavigationService), typeof(ILwsRoadGraphService), typeof(ILwsJobCatalogService), typeof(ILwsWorldOriginService), typeof(ILwsSaveService));
+            registry.Register<ILwsDeliveryService>(new LwsDeliveryService(), typeof(ILwsActiveJobService), typeof(ILwsTrailerRegistryService), typeof(ILwsPlayerVehicleService), typeof(ILwsGameplayStateService), typeof(ILwsNavigationService), typeof(ILwsRoadGraphService), typeof(ILwsSaveService), typeof(ILwsWorldOriginService));
             registry.Register<ILwsJobBoardService>(new LwsJobBoardService(), typeof(ILwsDepotService), typeof(ILwsJobOfferProvider), typeof(ILwsActiveJobService), typeof(ILwsGameplayStateService), typeof(ILwsSaveService));
             registry.Register<ILwsPersistenceMenuService>(new LwsPersistenceMenuService(), typeof(ILwsSaveService), typeof(ILwsVehicleInputService), typeof(ILwsGameplayStateService));
-            registry.Register<ILwsDevelopmentUiService>(new LwsDevelopmentUiService(), typeof(ILwsNavigationService), typeof(ILwsRoadGraphService), typeof(ILwsWorldOriginService), typeof(ILwsPlayerSettingsService), typeof(ILwsCameraPresentationService), typeof(ILwsGameplayStateService), typeof(ILwsDepotService), typeof(ILwsJobCatalogService), typeof(ILwsJobBoardService), typeof(ILwsActiveJobService));
+            registry.Register<ILwsDevelopmentUiService>(new LwsDevelopmentUiService(), typeof(ILwsNavigationService), typeof(ILwsRoadGraphService), typeof(ILwsWorldOriginService), typeof(ILwsPlayerSettingsService), typeof(ILwsCameraPresentationService), typeof(ILwsGameplayStateService), typeof(ILwsDepotService), typeof(ILwsJobCatalogService), typeof(ILwsJobBoardService), typeof(ILwsActiveJobService), typeof(ILwsTrailerRegistryService), typeof(ILwsTrailerPickupService), typeof(ILwsDeliveryService));
 
             return registry;
         }

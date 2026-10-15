@@ -59,6 +59,9 @@ namespace LWS.InterstateHauler
         private ILwsJobCatalogService _jobCatalogService;
         private ILwsJobBoardService _jobBoardService;
         private ILwsActiveJobService _activeJobService;
+        private ILwsTrailerRegistryService _trailerRegistryService;
+        private ILwsTrailerPickupService _trailerPickupService;
+        private ILwsDeliveryService _deliveryService;
         private LwsCompassNavigatorProAdapter _compassNavigatorProAdapter;
 
         private Canvas _canvas;
@@ -786,6 +789,9 @@ namespace LWS.InterstateHauler
             AddInfo("Job board", _jobBoardService != null ? $"{(_jobBoardService.IsOpen ? "OPEN" : "closed")} / offers {_jobBoardService.CurrentOffers.Count}" : "missing");
             LwsActiveJob activeJob = _activeJobService?.CurrentActiveJob;
             AddInfo("Active job", activeJob != null ? $"{activeJob.stableActiveJobId} / {activeJob.status} / {activeJob.originDepotId} -> {activeJob.destinationId}" : "none");
+            AddInfo("Trailer pickup", _trailerPickupService != null ? FormatTrailerPickupOverview(_trailerPickupService.CurrentSnapshot) : "missing");
+            AddInfo("Delivery", _deliveryService != null ? $"{_deliveryService.CurrentSnapshot.jobStatus} / {_deliveryService.CurrentSnapshot.currentDestinationId} / ready: {(_deliveryService.CurrentSnapshot.deliveryReady ? "YES" : "NO")}" : "missing");
+            AddInfo("Trailer registry", _trailerRegistryService != null ? $"{_trailerRegistryService.RegisteredTrailers.Count} registered" : "missing");
             AddInfo("Transmission", FormatTransmissionOverview(transmission));
             AddInfo("Camera", FormatCameraMode());
             AddInfo("HUD Minimap", HudMinimapVisible ? "VISIBLE" : "HIDDEN");
@@ -808,6 +814,36 @@ namespace LWS.InterstateHauler
             AddInfo("Parking brake", state.parkingBrakeOn ? "ON" : "OFF");
             AddInfo("Lights", $"head: {state.headlightsOn}, high: {state.highBeamsOn}, hazards: {state.hazardsOn}, signal: {state.turnSignal}");
             AddInfo("Trailer", state.trailerAttached ? state.trailerId : "not attached");
+            if (_trailerPickupService != null)
+            {
+                LwsTrailerPickupSnapshot pickup = _trailerPickupService.CurrentSnapshot;
+                AddInfo("Assigned trailer", pickup.hasAssignedTrailer ? $"{pickup.assignedTrailerId} / resolved: {(pickup.assignedTrailerResolved ? "YES" : "NO")}" : "none");
+                AddInfo("Required trailer", string.IsNullOrWhiteSpace(pickup.requiredTrailerTypeId) ? "--" : pickup.requiredTrailerTypeId);
+                AddInfo("Attached trailer", string.IsNullOrWhiteSpace(pickup.attachedTrailerId) ? "none" : pickup.attachedTrailerId);
+                AddInfo("Pickup valid", pickup.correctTrailerAttached ? "YES" : "NO");
+                AddInfo("Pickup distance", pickup.pickupDistanceMeters >= 0f ? FormatDistance(pickup.pickupDistanceMeters) : "--");
+                AddInfo("Pickup message", string.IsNullOrWhiteSpace(pickup.lastMessage) ? "--" : pickup.lastMessage);
+                AddButtonRow(("RESOLVE TRAILER", ResolveAssignedTrailerForActiveJob),
+                    ("PICKUP GPS", FocusTrailerPickupObjective),
+                    ("DEST GPS", FocusActiveJobDestination));
+            }
+            if (_deliveryService != null)
+            {
+                LwsDeliverySnapshot delivery = _deliveryService.CurrentSnapshot;
+                AddInfo("Delivery destination", string.IsNullOrWhiteSpace(delivery.destinationId) ? "--" : delivery.destinationId);
+                AddInfo("Delivery runtime", delivery.deliveryAreaResolved ? $"{delivery.currentDestinationId} / inside: {(delivery.playerInsideDeliveryArea ? "YES" : "NO")}" : "not resolved");
+                AddInfo("Parking target", delivery.parkingTargetResolved ? delivery.parkingTargetName : "not resolved");
+                AddInfo("Delivery trailer", $"assigned: {DisplayValue(delivery.assignedTrailerId)} / attached: {DisplayValue(delivery.attachedTrailerId)}");
+                AddInfo("Correct trailer", delivery.correctTrailer && delivery.physicallyCoupled ? "YES" : "NO");
+                AddInfo("Trailer containment", $"{delivery.containmentRatio:P0} / inside: {(delivery.trailerInsideZone ? "YES" : "NO")}");
+                AddInfo("Trailer heading", $"{delivery.headingErrorDegrees:0.0} deg / valid: {(delivery.headingValid ? "YES" : "NO")}");
+                AddInfo("Trailer motion", $"{delivery.trailerLinearSpeedMetersPerSecond:0.00} m/s / stopped: {(delivery.stopped ? "YES" : "NO")}");
+                AddInfo("Delivery hold", $"{delivery.validHoldSeconds:0.0}/{delivery.requiredHoldSeconds:0.0}s");
+                AddInfo("Delivery ready", delivery.deliveryReady ? "YES" : "NO");
+                AddInfo("Delivery message", DisplayValue(delivery.lastMessage));
+                AddButtonRow(("DELIVERY TARGET", FocusDeliveryTarget), ("RE-EVALUATE", ReevaluateDelivery));
+                AddButtonRow(("ENTER DELIVERY", ForceEnterDeliveryContext), ("RESET HOLD", ResetDeliveryHold));
+            }
             AddButtonRow(("START", () => SendTruckCommand((ref LwsVehicleCommandFrame c) => c.engineStart = LwsMomentaryIntent.Pressed)),
                 ("STOP", () => SendTruckCommand((ref LwsVehicleCommandFrame c) => c.engineStop = LwsMomentaryIntent.Pressed)),
                 ("PARK BRAKE", () => SendTruckCommand((ref LwsVehicleCommandFrame c) => c.parkingBrakeToggle = LwsMomentaryIntent.Pressed)));
@@ -1352,6 +1388,9 @@ namespace LWS.InterstateHauler
             _registry.TryGet(out _jobCatalogService);
             _registry.TryGet(out _jobBoardService);
             _registry.TryGet(out _activeJobService);
+            _registry.TryGet(out _trailerRegistryService);
+            _registry.TryGet(out _trailerPickupService);
+            _registry.TryGet(out _deliveryService);
             _compassNavigatorProAdapter = ResolveCompassNavigatorProAdapter();
         }
 
@@ -1590,6 +1629,78 @@ namespace LWS.InterstateHauler
             _lastActionMessage = "Truck command sent through semantic LWS control frame.";
         }
 
+
+        private void ResolveAssignedTrailerForActiveJob()
+        {
+            ResolveServices();
+            LwsServiceResult result = _trailerPickupService != null
+                ? _trailerPickupService.EnsureAssignmentForCurrentJob("Development UI requested trailer assignment resolution.")
+                : LwsServiceResult.Failure("Trailer pickup service is missing.");
+            _lastActionMessage = result.Message;
+        }
+
+        private void FocusTrailerPickupObjective()
+        {
+            ResolveServices();
+            LwsServiceResult result = _trailerPickupService != null
+                ? _trailerPickupService.FocusPickupObjective("Development UI requested trailer pickup objective.")
+                : LwsServiceResult.Failure("Trailer pickup service is missing.");
+            _lastActionMessage = result.Message;
+        }
+
+        private void FocusActiveJobDestination()
+        {
+            ResolveServices();
+            LwsServiceResult result = _trailerPickupService != null
+                ? _trailerPickupService.ActivateDestinationObjective("Development UI requested active job destination.")
+                : LwsServiceResult.Failure("Trailer pickup service is missing.");
+            _lastActionMessage = result.Message;
+        }
+
+        private void FocusDeliveryTarget()
+        {
+            ResolveServices();
+            LwsServiceResult result = _deliveryService != null
+                ? _deliveryService.FocusDeliveryTarget("Development UI requested delivery target.")
+                : LwsServiceResult.Failure("Delivery service is missing.");
+            _lastActionMessage = result.Message;
+        }
+
+        private void ReevaluateDelivery()
+        {
+            ResolveServices();
+            LwsServiceResult result = _deliveryService != null
+                ? _deliveryService.ReevaluateDelivery("Development UI requested delivery re-evaluation.")
+                : LwsServiceResult.Failure("Delivery service is missing.");
+            _lastActionMessage = result.Message;
+        }
+
+        private void ForceEnterDeliveryContext()
+        {
+            ResolveServices();
+            LwsServiceResult result = _deliveryService != null
+                ? _deliveryService.ForceEnterDeliveryContextForDevelopment("Development UI requested delivery context.")
+                : LwsServiceResult.Failure("Delivery service is missing.");
+            _lastActionMessage = result.Message;
+        }
+
+        private void ResetDeliveryHold()
+        {
+            ResolveServices();
+            if (_deliveryService == null)
+            {
+                _lastActionMessage = "Delivery service is missing.";
+                return;
+            }
+
+            _deliveryService.ResetValidationHold("Development UI reset delivery hold timer.");
+            _lastActionMessage = _deliveryService.LastMessage;
+        }
+
+        private static string DisplayValue(string value)
+        {
+            return string.IsNullOrWhiteSpace(value) ? "--" : value;
+        }
 
         private void RequestResetTruckUpright()
         {
@@ -2341,6 +2452,19 @@ namespace LWS.InterstateHauler
             }
 
             return $"{meters:0} m";
+        }
+
+        private static string FormatTrailerPickupOverview(LwsTrailerPickupSnapshot pickup)
+        {
+            if (!pickup.hasActiveJob)
+            {
+                return "none";
+            }
+
+            string assigned = pickup.hasAssignedTrailer ? pickup.assignedTrailerId : "unassigned";
+            string resolved = pickup.assignedTrailerResolved ? "resolved" : "unresolved";
+            string distance = pickup.pickupDistanceMeters >= 0f ? FormatDistance(pickup.pickupDistanceMeters) : "--";
+            return $"{pickup.jobStatus} / {pickup.requiredTrailerTypeId} / {assigned} ({resolved}) / {distance}";
         }
 
         private static string FormatTransmissionOverview(Lws18SpeedTransmissionController transmission)

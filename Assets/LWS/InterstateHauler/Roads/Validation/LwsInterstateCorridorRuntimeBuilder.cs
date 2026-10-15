@@ -30,6 +30,7 @@ namespace LWS.InterstateHauler
         [Header("Validation")]
         [SerializeField] private bool createServiceArea = true;
         [SerializeField] private bool createDepotJobBoardValidation = true;
+        [SerializeField] private bool createDeliveryValidation = true;
         [SerializeField] private bool createLaneDebugLines = true;
         [SerializeField] private bool showDebugPanel = true;
         [SerializeField] private bool createUtsTrafficValidation = true;
@@ -82,6 +83,11 @@ namespace LWS.InterstateHauler
             if (createDepotJobBoardValidation)
             {
                 BuildDepotJobBoardValidation(_generatedRoot.transform);
+            }
+
+            if (createDeliveryValidation)
+            {
+                BuildDeliveryValidation(_generatedRoot.transform);
             }
 
             string easyRoadsMessage = "EasyRoads runtime generation was disabled.";
@@ -449,6 +455,65 @@ namespace LWS.InterstateHauler
             boardTerminal.Configure(runtime, terminal.transform, 12f, 1f);
             LwsJobBoardPresenter.EnsureScenePresenter();
         }
+        private void BuildDeliveryValidation(Transform parent)
+        {
+            LwsJobCatalog catalog = Resources.Load<LwsJobCatalog>(LwsJobCatalogService.ValidationCatalogResourcePath);
+            if (catalog == null)
+            {
+                Debug.LogWarning("Prompt 022 delivery validation could not find the authored validation job catalog.", this);
+                return;
+            }
+
+            Material deliveryPadMaterial = LwsWeatheradeMaterialFactory.CreateRoadSurfaceMaterial(
+                "IH Delivery Validation Asphalt Weatherade",
+                new Color(0.075f, 0.08f, 0.075f, 1f));
+            foreach (LwsDestinationDefinition destination in catalog.DestinationDefinitions)
+            {
+                if (destination == null || !destination.Enabled || !destination.HasSemanticGlobalPosition)
+                {
+                    continue;
+                }
+
+                Vector3 localPosition = destination.SemanticGlobalPosition.ToVector3();
+                if (LwsApplicationBootstrap.Instance != null &&
+                    LwsApplicationBootstrap.Instance.Registry != null &&
+                    LwsApplicationBootstrap.Instance.Registry.TryGet(out ILwsWorldOriginService originService))
+                {
+                    localPosition = originService.GlobalToLocal(destination.SemanticGlobalPosition);
+                }
+
+                GameObject deliveryRoot = new GameObject($"IH Delivery Runtime - {destination.DisplayName}");
+                deliveryRoot.transform.SetParent(parent, false);
+                deliveryRoot.transform.position = localPosition;
+
+                CreatePavedRect(
+                    deliveryRoot.transform,
+                    $"IH Delivery Pad - {destination.DisplayName}",
+                    localPosition + Vector3.up * 0.02f,
+                    new Vector2(28f, 44f),
+                    deliveryPadMaterial,
+                    $"DELIVERY_{destination.StableDestinationId}");
+
+                BoxCollider arrival = deliveryRoot.AddComponent<BoxCollider>();
+                arrival.isTrigger = true;
+                arrival.center = new Vector3(0f, 4f, 0f);
+                arrival.size = new Vector3(54f, 8f, 64f);
+
+                GameObject parkingTarget = new GameObject($"IH Delivery Parking Target - {destination.DisplayName}");
+                parkingTarget.transform.SetParent(deliveryRoot.transform, false);
+                parkingTarget.transform.localPosition = new Vector3(0f, 2.75f, 0f);
+                parkingTarget.transform.localRotation = Quaternion.identity;
+                LwsDeliveryParkingZone parkingZone = parkingTarget.AddComponent<LwsDeliveryParkingZone>();
+                parkingZone.Configure(new Vector3(5.5f, 5.5f, 18f), 0.35f, 0.8f, 12f, false, 0.35f, 5f, 2f, true);
+
+                LwsDeliveryArea deliveryArea = deliveryRoot.AddComponent<LwsDeliveryArea>();
+                deliveryArea.Configure(destination, arrival, parkingZone);
+
+                LwsFloatingOriginTransformParticipant participant = deliveryRoot.AddComponent<LwsFloatingOriginTransformParticipant>();
+                participant.Configure($"delivery.runtime.{destination.StableDestinationId}", LwsFloatingOriginParticipantKind.GenericSpatialRoot, false);
+            }
+        }
+
         private void CreatePavedRect(Transform parent, string name, Vector3 center, Vector2 size, Material material, string segmentId)
         {
             GameObject go = new GameObject(name);
