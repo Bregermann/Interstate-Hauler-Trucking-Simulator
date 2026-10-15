@@ -92,23 +92,39 @@ namespace LWS.TruckTaxi
                 if (request.Mode == "continue")
                 {
                     string weather = returningContinue ? LwsWeatherPresetCatalog.LightRainId : LwsWeatherPresetCatalog.HeavySnowId;
-                    Check(host.Environment.Weather.CurrentSnapshot.weatherPresetId == weather && host.Environment.Snow.Capture().backgroundDepth > .1f,
-                        "saved region retains its own weather and nonzero accumulated snow after process restart");
+                    float depth = host.Environment.Snow.Capture().backgroundDepth;
+                    Check(host.Environment.Weather.CurrentSnapshot.weatherPresetId == weather && float.IsFinite(depth) &&
+                        (returningContinue ? depth >= 0 : depth > .1f),
+                        "saved region retains its own weather and snow/melt state after process restart");
                 }
                 yield return DualNativeDrive("fresh process " + expected);
                 if (request.Mode == "continue" && !returningContinue)
                 {
+                    var visits = TruckTaxiVibinPersistence.ReadTravelPayload(saves.CaptureSnapshot(dualProfile)).worldVisits;
+                    var demo = visits.Single(v => v.scene == TruckTaxiWorldCatalog.Demo);
                     yield return DualTransfer(false);
+                    double now = TruckTaxiCalendarWeatherService.SnapshotDateTime(host.Environment.Clock.CurrentSnapshot).Ticks / (double)TimeSpan.TicksPerSecond;
+                    var weather = JsonUtility.FromJson<LwsWeatherSavePayload>(demo.weather.payloadJson);
+                    TruckTaxiWorldVisit.AdvanceSnow(demo.environment, now-demo.gameSeconds, demo.clockRate, host.Environment.settings,
+                        TruckTaxiCalendarWeatherService.ConditionFor(weather.weatherPresetId), weather.ambientTemperatureC);
                     Check(host.Environment.Weather.CurrentSnapshot.weatherPresetId == LwsWeatherPresetCatalog.LightRainId &&
-                        host.Environment.Snow.Capture().backgroundDepth > .1f, "returning Demo City keeps its rainy, melting regional snow rather than Edenborough weather");
+                        Mathf.Abs(host.Environment.Snow.Capture().backgroundDepth-demo.environment.snow.backgroundDepth)<.02f,
+                        "returning Demo City keeps its own rainy snow state with elapsed-time melting, not Edenborough weather");
                     Result(host.Persistence.SaveBeforeLeaving(),"dual-world Demo City quit checkpoint");
                 }
                 else if (request.Mode == "manual")
                 {
                     yield return DualRollbackFixture();
                     yield return DualNativeDrive("failed-transfer rollback");
+                    yield return DualSnowViews("DemoCity");
+                    yield return DualOffroadTracks("DemoCity");
                     yield return DualTransfer(false);
                     yield return DualTownSnowInspection();
+                    host.Environment.SetFrozen(false);
+                    yield return DualPlaceAtExit(false);
+                    yield return DualOffroadTracks("Edenborough");
+                    Result(host.Persistence.Save(2,true), "manual regression leaves a snowy Edenborough restart checkpoint");
+                    Result(host.Persistence.SaveBeforeLeaving(), "manual regression quit checkpoint");
                 }
             }
             File.WriteAllLines(Path.Combine(request.Root,"dual-world-"+request.Mode+".txt"),dualEvidence);
@@ -179,7 +195,9 @@ namespace LWS.TruckTaxi
                 else
                 {
                     var button = host.hud.WorldTravel.FocusRoot.GetComponentsInChildren<Button>().First(b=>b.GetComponentInChildren<TMPro.TextMeshProUGUI>()?.text=="TRAVEL");
-                    button.onClick.Invoke();
+                    // Heat owns its click event; the co-located Unity Button can have no listeners.
+                    UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(button.gameObject);
+                    host.hud.UIInput.SubmitSelected();
                 }
                 Check(TruckTaxiWorldTravel.IsBusy,"actual travel panel confirm callback started transaction | status="+
                     TruckTaxiWorldTravel.LastStatus+" safety="+host.Persistence.WorldTransferBlockReason);
@@ -421,6 +439,19 @@ namespace LWS.TruckTaxi
                     wheel.wheelUAPI.HitPoint,body.transform))contacts++;
             Check(contacts>=2 && surface.WheelTraceStampCount>stamps,"actual off-road wheel contacts generated Weatherade trace stamps");
             Check(Quaternion.Angle(before,body.rotation)>2,"native steering produced a curved snow path");
+            var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic;
+            var generator = typeof(TruckTaxiSnowSurface).GetField("generator", flags).GetValue(surface) as Component;
+            var inputs = generator.GetType().GetField("traceMaskCalcMtl", flags).GetValue(generator) as Material;
+            foreach (string name in new[] { "traceSurfCam", "traceObjsCam" })
+            {
+                var camera = generator.GetType().GetField(name, flags).GetValue(generator) as Camera;
+                var data = camera.GetComponent<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();
+                var pipeline = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline as UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset;
+                Debug.Log(Prefix + "TRACE_INPUT " + name + " mask=" + camera.cullingMask + " expectedRenderer=" +
+                    ReferenceEquals(data.scriptableRenderer, pipeline.GetRenderer(surface.WeatheradeDepthRendererIndex)) +
+                    " target=" + camera.targetTexture.GetInstanceID() + " input=" + inputs.GetTexture(name == "traceSurfCam" ? "_SRS_SurfaceDepth" : "_SRS_TraceObjsDepth")?.GetInstanceID() +
+                    " area=" + camera.orthographicSize + " near/far=" + camera.nearClipPlane + "/" + camera.farClipPlane + " volume=" + inputs.GetFloat("_VolumeDepth"));
+            }
             surface.RequestTracePixelDiagnostic(); float until=Time.realtimeSinceStartup+6;
             while(surface.TracePixelDiagnostic.Contains("pending") && Time.realtimeSinceStartup<until)yield return null;
             Check(surface.TraceActivePixelCount>0,"actual GPU Weatherade off-road trace mask contains tire marks: "+surface.TracePixelDiagnostic);
