@@ -1,0 +1,291 @@
+PASS collection startup
+PASS sixth menu entry authored
+PASS saved Cornhole setup
+PASS one listener
+PASS one EventSystem
+PASS begin 1 simultaneous courses
+PASS actual contact once-only upward launch
+NATURAL LAUNCH p=(0.52, 1.41, 2.63) v=(-0.25, 30.57, 9.34)
+PASS multiple collider / sustained contact cannot relaunch
+NATURAL_ARC duration=6.139925 peak=48.49538 range=58.47199
+PASS readable physical flight longer than five seconds with high arc
+NATURAL LAND p=(0.47, 3.79, 61.10) score=0 supported=True ground=False
+PASS earlier truck retained, new input body
+PASS begin 2 simultaneous courses
+PASS natural recorded replay starts
+PASS replay horizon 1
+PASS replay horizon 2
+PASS replay horizon 3
+PASS replay horizon 0
+REPLAY_RATE speed=2 actual=0.6009033 expected=0.6000595 frame=0.0001190051
+PASS independent replay rate 2
+REPLAY_RATE speed=4 actual=1.201139 expected=1.20018 frame=0.0001218041
+PASS independent replay rate 4
+REPLAY_RATE speed=0.25 actual=0.07506444 expected=0.07500935 frame=0.0001246032
+PASS independent replay rate 0.25
+REPLAY_RATE speed=0.5 actual=0.1500528 expected=0.1500282 frame=0.0002058036
+PASS independent replay rate 0.5
+REPLAY_RATE speed=1 actual=0.3004932 expected=0.3002052 frame=0.0001875
+PASS independent replay rate 1
+PASS replay does not alter attempts or scoring
+PASS replay does not move settled authoritative body
+PASS other course continues during replay
+PASS replay pause preserved
+PASS return to live cab
+PASS begin 1 simultaneous courses
+PASS contact launch variation exactly once 0
+ENTRY_VARIATION kind=0 p=(0.00, 1.08, 1.43) v=(-0.08, 25.52, 8.72)
+PASS begin 1 simultaneous courses
+PASS contact launch variation exactly once 1
+ENTRY_VARIATION kind=1 p=(0.00, 1.18, 1.63) v=(0.00, 30.74, 11.13)
+PASS begin 1 simultaneous courses
+PASS contact launch variation exactly once 2
+ENTRY_VARIATION kind=2 p=(0.14, 1.18, 1.62) v=(3.54, 30.72, 10.91)
+PASS entry speed affects range; angle affects lateral flight
+Seeded PhysX scoring poses below are fixtures, not unassisted shots.
+PASS begin 1 simultaneous courses
+POSE p=(3.00, 3.90, 63.95) tr=(3.00, 3.90, 63.95) v=(0.00, 0.00, 0.00) board=(0.00, 3.60, 64.00)
+RAY Inclined open target board normal=(0.00, 0.98, -0.17) point=(3.00, 3.60, 64.00)
+REST 0 p=(3.00, 3.68, 63.95) v=(0.00, -1.96, 0.00) w=(0.00, 0.00, 0.00) supported=False stable=0 phase=Flight
+REST 1 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=0.05999998 phase=Settling
+REST 2 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=0.2599999 phase=Settling
+REST 3 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=0.4599997 phase=Settling
+REST 4 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=0.6599995 phase=Settling
+REST 5 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=0.8599994 phase=Settling
+REST 6 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=1.059999 phase=Settling
+REST 7 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=1.259999 phase=Settling
+REST 8 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=1.459999 phase=Settling
+REST 9 p=(3.00, 3.63, 63.94) v=(0.00, 0.00, 0.00) w=(0.00, 0.00, 0.00) supported=True stable=1.659999 phase=AttemptResult
+PASS stable board landing scores one and remains physical
+PASS no propulsion / aftertouch after board contact
+PASS sleeping body cannot retain stale board support after contact exit
+PASS stable zero-point result is normal progression
+PASS begin 1 simultaneous courses
+PASS partial overlap cannot count as holed
+PASS hole collected once and no live collision
+PASS repeated hole observation scores once
+PASS begin 1 simultaneous courses
+PASS off-board ground scores zero
+PASS collected miss stays zero and cannot become a hole
+PASS begin 1 simultaneous courses
+PUSH_BEFORE earlier=(0.00, 4.24, 67.40) dynamic=True score=1
+PASS later delivery has physical truck contact provenance
+PUSH_SAMPLE p=(0.00, 4.47, 68.74) local=(0.00, 0.03, 4.82) v=(-0.01, 0.58, 4.75) supported=True score=0 holed=False
+PUSH_SAMPLE p=(0.00, 4.38, 69.68) local=(0.00, -0.22, 5.73) v=(-0.01, -1.34, 4.71) supported=False score=0 holed=False
+PUSH_SAMPLE p=(-0.01, 3.89, 70.63) local=(-0.01, -0.86, 6.58) v=(-0.01, -3.31, 4.71) supported=False score=0 holed=False
+PUSH_SAMPLE p=(-0.01, 3.82, 70.72) local=(-0.01, -0.95, 6.66) v=(0.00, 0.00, 0.00) supported=False score=3 holed=True
+PUSH_SAMPLE p=(-0.01, 3.82, 70.72) local=(-0.01, -0.95, 6.66) v=(0.00, 0.00, 0.00) supported=False score=3 holed=True
+PUSH_SAMPLE p=(-0.01, 3.82, 70.72) local=(-0.01, -0.95, 6.66) v=(0.00, 0.00, 0.00) supported=False score=3 holed=True
+PUSH_SAMPLE p=(-0.01, 3.82, 70.72) local=(-0.01, -0.95, 6.66) v=(0.00, 0.00, 0.00) supported=False score=3 holed=True
+PUSH_SAMPLE p=(-0.01, 3.82, 70.72) local=(-0.01, -0.95, 6.66) v=(0.00, 0.00, 0.00) supported=False score=3 holed=True
+PUSH_SAMPLE p=(-0.01, 3.82, 70.72) local=(-0.01, -0.95, 6.66) v=(0.00, 0.00, 0.00) supported=False score=3 holed=True
+PUSH_SAMPLE p=(-0.01, 3.82, 70.72) local=(-0.01, -0.95, 6.66) v=(0.00, 0.00, 0.00) supported=False score=3 holed=True
+PUSH outcome hole=True score=3 p=(-0.01, 3.82, 70.72)
+PASS earlier one-point truck pushed through hole becomes three
+PASS begin 1 simultaneous courses
+PASS knocking earlier one-point truck off removes provisional point
+PASS begin 1 simultaneous courses
+PASS held acceleration does not spend range correction
+PASS software lateral aftertouch changes velocity
+PASS bounded budget cannot reverse or hover
+PASS camera horizon stable while truck tumbles
+PASS begin 2 simultaneous courses
+PASS two independent keyboard clusters
+PASS left/right sticks share one pad
+PASS duplicate stick rejected
+PASS whole versus shared conflict rejected
+PASS independent shared stick routing
+PASS shared steering sensitivity applies independently after stick processing
+PASS steering sensitivity remains bounded
+PASS begin 1 simultaneous courses
+PASS pause preserves flight velocity bodies attempts score
+PASS pause stops haptics
+PASS resume continues flight
+PASS assign airborne controller
+PASS disconnect preserves flight
+PASS explicit device replacement
+PASS held confirmation cannot leak through replacement gate
+PASS neutral replacement resume
+PASS begin 1 simultaneous courses
+PASS actual window resolution (1280, 720)
+PASS viewport (1280, 720) / 1 / 0
+HEADER 1 / 0 text=Alexandra Montgomery 1 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 1 / 0
+PASS default driver-seat view 1 / 0
+PASS visible cab aligned with physical truck 0
+PASS help page one complete (1280, 720)
+PASS help page two complete (1280, 720)
+PASS begin 2 simultaneous courses
+PASS actual window resolution (1280, 720)
+PASS viewport (1280, 720) / 2 / 0
+HEADER 2 / 0 text=Alexandra Montgomery 1 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 2 / 0
+PASS default driver-seat view 2 / 0
+PASS visible cab aligned with physical truck 0
+PASS viewport (1280, 720) / 2 / 1
+HEADER 2 / 1 text=Alexandra Montgomery 2 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 2 / 1
+PASS default driver-seat view 2 / 1
+PASS visible cab aligned with physical truck 1
+PASS help page one complete (1280, 720)
+PASS help page two complete (1280, 720)
+PASS begin 3 simultaneous courses
+PASS actual window resolution (1280, 720)
+PASS viewport (1280, 720) / 3 / 0
+HEADER 3 / 0 text=Alexandra Montgomery 1 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 3 / 0
+PASS default driver-seat view 3 / 0
+PASS visible cab aligned with physical truck 0
+PASS viewport (1280, 720) / 3 / 1
+HEADER 3 / 1 text=Alexandra Montgomery 2 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 3 / 1
+PASS default driver-seat view 3 / 1
+PASS visible cab aligned with physical truck 1
+PASS viewport (1280, 720) / 3 / 2
+HEADER 3 / 2 text=Alexandra Montgomery 3 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 3 / 2
+PASS default driver-seat view 3 / 2
+PASS visible cab aligned with physical truck 2
+PASS help page one complete (1280, 720)
+PASS help page two complete (1280, 720)
+PASS begin 4 simultaneous courses
+PASS actual window resolution (1280, 720)
+PASS viewport (1280, 720) / 4 / 0
+HEADER 4 / 0 text=Alexandra Montgomery 1 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 4 / 0
+PASS default driver-seat view 4 / 0
+PASS visible cab aligned with physical truck 0
+PASS viewport (1280, 720) / 4 / 1
+HEADER 4 / 1 text=Alexandra Montgomery 2 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 4 / 1
+PASS default driver-seat view 4 / 1
+PASS visible cab aligned with physical truck 1
+PASS viewport (1280, 720) / 4 / 2
+HEADER 4 / 2 text=Alexandra Montgomery 3 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 4 / 2
+PASS default driver-seat view 4 / 2
+PASS visible cab aligned with physical truck 2
+PASS viewport (1280, 720) / 4 / 3
+HEADER 4 / 3 text=Alexandra Montgomery 4 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 4 / 3
+PASS default driver-seat view 4 / 3
+PASS visible cab aligned with physical truck 3
+PASS help page one complete (1280, 720)
+PASS help page two complete (1280, 720)
+PASS begin 1 simultaneous courses
+PASS actual window resolution (1920, 1080)
+PASS viewport (1920, 1080) / 1 / 0
+HEADER 1 / 0 text=Alexandra Montgomery 1 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 1 / 0
+PASS default driver-seat view 1 / 0
+PASS visible cab aligned with physical truck 0
+PASS help page one complete (1920, 1080)
+PASS help page two complete (1920, 1080)
+PASS begin 2 simultaneous courses
+PASS actual window resolution (1920, 1080)
+PASS viewport (1920, 1080) / 2 / 0
+HEADER 2 / 0 text=Alexandra Montgomery 1 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 2 / 0
+PASS default driver-seat view 2 / 0
+PASS visible cab aligned with physical truck 0
+PASS viewport (1920, 1080) / 2 / 1
+HEADER 2 / 1 text=Alexandra Montgomery 2 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 2 / 1
+PASS default driver-seat view 2 / 1
+PASS visible cab aligned with physical truck 1
+PASS help page one complete (1920, 1080)
+PASS help page two complete (1920, 1080)
+PASS begin 3 simultaneous courses
+PASS actual window resolution (1920, 1080)
+PASS viewport (1920, 1080) / 3 / 0
+HEADER 3 / 0 text=Alexandra Montgomery 1 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 3 / 0
+PASS default driver-seat view 3 / 0
+PASS visible cab aligned with physical truck 0
+PASS viewport (1920, 1080) / 3 / 1
+HEADER 3 / 1 text=Alexandra Montgomery 2 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 3 / 1
+PASS default driver-seat view 3 / 1
+PASS visible cab aligned with physical truck 1
+PASS viewport (1920, 1080) / 3 / 2
+HEADER 3 / 2 text=Alexandra Montgomery 3 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 3 / 2
+PASS default driver-seat view 3 / 2
+PASS visible cab aligned with physical truck 2
+PASS help page one complete (1920, 1080)
+PASS help page two complete (1920, 1080)
+PASS begin 4 simultaneous courses
+PASS actual window resolution (1920, 1080)
+PASS viewport (1920, 1080) / 4 / 0
+HEADER 4 / 0 text=Alexandra Montgomery 1 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 4 / 0
+PASS default driver-seat view 4 / 0
+PASS visible cab aligned with physical truck 0
+PASS viewport (1920, 1080) / 4 / 1
+HEADER 4 / 1 text=Alexandra Montgomery 2 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 4 / 1
+PASS default driver-seat view 4 / 1
+PASS visible cab aligned with physical truck 1
+PASS viewport (1920, 1080) / 4 / 2
+HEADER 4 / 2 text=Alexandra Montgomery 3 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 4 / 2
+PASS default driver-seat view 4 / 2
+PASS visible cab aligned with physical truck 2
+PASS viewport (1920, 1080) / 4 / 3
+HEADER 4 / 3 text=Alexandra Montgomery 4 · ROUND 1 / 5 · TRUCK 1 / 4 / BANKED 0     PROVISIONAL +0
+PASS long name readable 4 / 3
+PASS default driver-seat view 4 / 3
+PASS visible cab aligned with physical truck 3
+PASS help page one complete (1920, 1080)
+PASS help page two complete (1920, 1080)
+PASS begin 4 simultaneous courses
+PROGRESS round=1 totals=0,0,0,0 attempts=1:Approach:(0.00, 6.56, -20.96),1:Approach:(110.00, 6.56, -20.96),1:Approach:(220.00, 6.56, -20.96),1:Approach:(330.00, 6.56, -20.96)
+PROGRESS round=1 totals=0,0,0,0 attempts=3:Approach:(0.00, 6.43, -20.62),2:AttemptResult:(110.02, 4.57, 66.46),2:AttemptResult:(220.00, 4.80, 66.91),3:Approach:(330.00, 6.52, -20.90)
+PROGRESS round=1 totals=0,0,0,0 attempts=4:AttemptResult:(-0.23, 4.14, 65.48),4:AttemptResult:(109.32, -9.68, 69.81),4:AttemptResult:(219.97, 3.81, 64.96),4:AttemptResult:(330.11, 3.77, 64.76)
+PROGRESS round=2 totals=4,3,2,5 attempts=2:Flight:(-0.30, 47.92, 37.01),2:Flight:(110.69, 42.55, 46.00),2:Flight:(220.08, 44.71, 42.11),2:Flight:(329.76, 48.57, 35.74)
+PROGRESS round=2 totals=4,3,2,5 attempts=4:Flight:(-0.02, 48.38, 34.69),4:Flight:(110.64, 40.97, 46.29),4:Flight:(220.15, 48.66, 35.32),4:Approach:(329.78, 2.95, -6.10)
+PROGRESS round=3 totals=10,8,8,7 attempts=1:Settling:(0.28, 3.89, 63.78),1:Settling:(109.99, 3.54, 69.24),1:AttemptResult:(220.22, 4.53, 67.44),1:Settling:(330.95, 4.25, 67.48)
+PROGRESS round=3 totals=10,8,8,7 attempts=3:Settling:(0.10, 3.62, 70.21),3:AttemptResult:(110.46, 3.74, 64.56),3:Settling:(220.21, 4.80, 66.85),3:Settling:(330.88, 5.15, 66.71)
+PROGRESS round=4 totals=16,14,10,11 attempts=1:Flight:(-1.06, 10.62, 5.75),1:Flight:(110.17, 12.80, 6.29),1:Flight:(220.18, 13.37, 6.63),1:Flight:(329.85, 12.82, 6.61)
+PROGRESS round=4 totals=16,14,10,11 attempts=3:Approach:(-0.97, 3.64, -9.01),3:Flight:(110.06, 8.48, 4.86),3:Approach:(220.33, 3.96, -10.33),3:Approach:(329.91, 2.61, -4.72)
+PROGRESS round=4 totals=16,14,10,11 attempts=4:Waiting:(-2.05, 3.57, 63.63),4:AttemptResult:(110.28, 3.84, 63.53),4:AttemptResult:(220.30, 4.24, 65.30),4:Waiting:(330.00, 4.57, 67.22)
+PROGRESS round=5 totals=20,18,13,14 attempts=2:Flight:(-0.74, 36.64, 50.67),2:Flight:(109.51, 45.34, 40.98),2:Flight:(219.92, 28.68, 53.37),2:Flight:(330.19, 13.42, 60.67)
+PROGRESS round=5 totals=20,18,13,14 attempts=4:Flight:(-1.26, 39.65, 44.10),4:Flight:(109.51, 45.68, 39.48),4:Flight:(219.92, 37.40, 18.08),4:Approach:(330.14, 1.85, -1.55)
+PASS exactly five round finalizations
+PASS one finished course waits without freezing others
+PHYSICAL_MATCH launches=80 holed=7
+PASS four attempts per round no fifth / five banks 0
+PASS valid cumulative total 0
+AI difficulty=Easy total=26 timeouts=0
+PASS four attempts per round no fifth / five banks 1
+PASS valid cumulative total 1
+AI difficulty=Normal total=20 timeouts=0
+PASS four attempts per round no fifth / five banks 2
+PASS valid cumulative total 2
+AI difficulty=Hard total=15 timeouts=0
+PASS four attempts per round no fifth / five banks 3
+PASS valid cumulative total 3
+AI difficulty=Hard total=16 timeouts=0
+PASS final winner or tie
+PASS shared aftertouch bound throughout match
+PASS final throw review 0
+PASS final throw review 1
+PASS final throw review 2
+PASS final throw review 3
+PASS standings exit remains available after replay stops
+PASS final review returns to standings
+PERF duration=116.0024 frames=17633 meanMs=6.5338806116789 p95=6.285197 p99=12.5124 maxMs=31.25419 managedDelta=-827392 gen0=5 GPU=NVIDIA GeForce GTX 1660 Ti size=1920x1080 timescale=3
+PASS rematch preserves configuration resets score/body pool
+PASS scene exit cleanup 0
+PASS repeat menu entry 0
+PASS scene exit cleanup 1
+PASS repeat menu entry 1
+PASS scene exit cleanup 2
+PASS repeat menu entry 2
+PASS existing saved sport loads TruckBilliards
+PASS existing saved sport loads TruckHockey
+PASS existing saved sport loads TruckBowling
+PASS existing saved sport loads TruckAirHockey
+PASS existing saved sport loads TruckWallball
+PASS no runtime errors
+CHECKS 216

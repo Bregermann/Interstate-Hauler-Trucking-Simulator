@@ -1,3 +1,11 @@
+# Six-sport Cornhole delivery — 2026-10-15
+
+Cornhole implementation/build and final validation are complete. See [Cornhole validation](../TruckCornhole/VALIDATION.md), [controls/scoring](../TruckCornhole/README.md) and [build information](../TruckCornhole/BUILD-INFO.md).262 native fixtures;216 complete physical/lifecycle checks;146 visible view/software-input checks;9 authority fixtures; two full four-course matches with160 launches,12 holes and zero timeouts. Normal-speed1080p match344.42s/54,183 frames: mean6.34ms,p9912.48ms, worst737.67ms (unisolated hitch, recheck manually). No physical-controller or human acceptance is claimed.
+
+Final normal-company Windows x64 Development build24 succeeded with0 errors/13 inherited warnings; exact176 DLL and7 scene hashes match validation.1536 settings/package hashes remain unchanged. Existing sport gameplay/scenes are preserved. Git status is recorded in the checkpoint and generated build GIT-DELIVERY.txt.
+
+Earlier five-sport evidence follows as history.
+
 # Focused polish validation — 2026-10-14
 
 This section is the current evidence for attachment a0079752-f75d-4987-85ef-10c63af421fc. Reports below it describe earlier updates. All native evidence and before/after PNGs are local under `Logs/TruckSports/Polish`; generated builds/logs are excluded from Git.
