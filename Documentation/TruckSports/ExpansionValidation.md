@@ -32,7 +32,9 @@ No physical-controller, wheel, rumble, audio-listening or human gameplay accepta
 
 Implementation commits e7e07e652d8263ca13884d33e5cc4d4ca9b224e1 and a53cc7ea8cbf47aa846d6934537fa9deab9258a9 are pushed to codex/truck-cheese-rolling. Prior completed Sports through40ec3fc was already pushed. Main F: Taxi checkout/source/index/Editor and user testing builds were preserved.
 
-Complete clean-clone delivery is still blocked by explicit approval for copied cross-task dependencies:13 unchanged scenery originals/metas plus existing LwsTrailerGameplayIdentity/LwsTrailerAssignmentTypes and13-line InitializeRegistered API. They remain local/unstaged and are not part of the pushes. See [exact blocker and files](ExpansionDependencyRepair.md) and [hash manifest](ExpansionDependencyAssets.json). The delivered executable includes their compiled/built data and runs locally without source files.
+Dependency publication is complete following explicit human approval: commit `12f0653faae7290f0e6895097e9ff68ce06447b3` is pushed and directly verified. It includes exactly the approved 45 files. All 13 scenery hashes and original Git blobs were rechecked; active references resolve through tracked assets and declared URP 17.4.0 package content. The two documented unused legacy GUID fields remain unchanged. EXE and managed gameplay DLL hashes remain identical to the validated build. A fresh remote clone/import/build was not rerun. See [scope and evidence](ExpansionDependencyRepair.md).
+
+The final runtime payload was copied to the main F: project and all 414 source payload files were SHA256-verified before promotion. Test captures were moved to ignored Logs. Current Sports source was safely synchronized there; no divergent root Sports edits were found. Temporary validation builds were removed; the open C: testing game was preserved.
 
 ## Vendor report
 

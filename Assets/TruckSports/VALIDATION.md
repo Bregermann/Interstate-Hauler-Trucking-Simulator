@@ -1,6 +1,6 @@
 # Eleven-sport expansion validation — 2026-10-15
 
-The combined normal-company Windows x64 Development build succeeded with0errors30vendor warnings and passed actual injected pointer/keyboard startup, selection, driving, pause/resume and return. All new events completed full AI matches; repeated collection transitions and720/1080 layouts passed. [Detailed current evidence and limits](../../Documentation/TruckSports/ExpansionValidation.md). Real controllers, rumble/audio listening and human acceptance remain manual. Cross-task dependency publication is pending approval, so clean remote-clone reproducibility is not claimed.
+The combined normal-company Windows x64 Development build succeeded with0errors30vendor warnings and passed actual injected pointer/keyboard startup, selection, driving, pause/resume and return. All new events completed full AI matches; repeated collection transitions and720/1080 layouts passed. [Detailed current evidence and limits](../../Documentation/TruckSports/ExpansionValidation.md). Real controllers, rumble/audio listening and human acceptance remain manual. Approved dependency publication is complete in `12f0653faae7290f0e6895097e9ff68ce06447b3`; original asset/metadata blobs and existing executable/DLL hashes were rechecked. Fresh remote-clone import/build was not repeated. The verified final player and current source now reside in the main F: project.
 
 Earlier validation history follows.
 
