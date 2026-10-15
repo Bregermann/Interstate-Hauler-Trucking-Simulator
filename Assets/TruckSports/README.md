@@ -1,4 +1,4 @@
-# Truck Sports — active fifteen-sport update and seven-sport expansion
+# Truck Sports — active sixteen-sport update and seven-sport expansion
 
 The saved collection includes the original eleven sports plus Terrier Racing, Minefield, Mattress Racing and Wife Carrying. The latter three new expansion modes have complete native AI matches and focused physical/input/lifecycle acceptance. Musical Parking, Giant Swing, Buzkashi and Bog Snorkelling remain under implementation. See Documentation/TruckSports/SevenSportsCheckpoint.md. The existing executable remains older than these changes.
 
@@ -270,3 +270,6 @@ VENDOR SOURCE MODIFIED: NO.
 
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
 
+
+
+Musical Parking: eight actual trucks, up to four humans, random music/horn, seven-to-one eliminations. Full-footprint continuous stable capture, protected secured trucks, visible anti-camping progress and deterministic bounded timeout. Shared persisted Music volume; same source/reconnect policies. See Assets/TruckMusicalParking/README.md and VALIDATION.md. Native three complete Easy/Normal/Hard matches and focused checks pass; final Windows build pending.
