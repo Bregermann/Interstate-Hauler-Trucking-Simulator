@@ -1,0 +1,117 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {
+      "caller": "plugin",
+      "skill": "unity-build-validation",
+      "json": true
+    },
+    "result": {
+      "status": "completed",
+      "duration": 0.15,
+      "summary": {
+        "total": 12,
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.AdvancingWindowPreservesAlreadyPublishedTomorrow",
+          "Status": "Passed",
+          "Duration": 0.0322256,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.CalendarUsesClockSnapshotAndAdvancesAcrossMonth",
+          "Status": "Passed",
+          "Duration": 0.0038428,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.ForecastCoversSevenDaysAndRollsWithoutGaps",
+          "Status": "Passed",
+          "Duration": 0.0061624,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.InvalidDebugDateDoesNotMutateClockOrSchedule",
+          "Status": "Passed",
+          "Duration": 0.0009929,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.ManualModeKeepsForecastTruthful",
+          "Status": "Passed",
+          "Duration": 0.001443,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.ResumeMatchingRestoredWeatherDoesNotApplyAgain(Clear)",
+          "Status": "Passed",
+          "Duration": 0.0020328,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.ResumeMatchingRestoredWeatherDoesNotApplyAgain(Rain)",
+          "Status": "Passed",
+          "Duration": 0.0012597,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.ResumeStaleRestoredClearAppliesManualRainOnce",
+          "Status": "Passed",
+          "Duration": 0.0015526,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.RewindDiscardsDebugOverrideAndRestoresDeterministicSchedule",
+          "Status": "Passed",
+          "Duration": 0.0021915,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.ScheduledConditionIsTheAppliedWeatherAtEveryBoundary",
+          "Status": "Passed",
+          "Duration": 0.0016833,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.SevereOverrideChangesForecastAndActualThenExpires",
+          "Status": "Passed",
+          "Duration": 0.0020765,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiCalendarWeatherTests.WinterSnowAndSummerStormWeightsAreConfigurable",
+          "Status": "Passed",
+          "Duration": 0.0013588,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

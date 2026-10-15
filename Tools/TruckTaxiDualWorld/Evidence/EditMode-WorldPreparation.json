@@ -1,0 +1,82 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {
+      "caller": "plugin",
+      "skill": "unity-build-validation",
+      "json": true
+    },
+    "result": {
+      "status": "completed",
+      "duration": 0.35,
+      "summary": {
+        "total": 7,
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.CurrentFailureIsCapturedAndCleanupFailureDoesNotReplaceIt",
+          "Status": "Passed",
+          "Duration": 0.009794,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.FactoryFailureIsCapturedBeforePreparationStarts",
+          "Status": "Passed",
+          "Duration": 0.0043315,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.MoveNextFailureAtAnyDepthUnwindsEveryEnteredIterator(0)",
+          "Status": "Passed",
+          "Duration": 0.0009303,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.MoveNextFailureAtAnyDepthUnwindsEveryEnteredIterator(1)",
+          "Status": "Passed",
+          "Duration": 0.0001424,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.MoveNextFailureAtAnyDepthUnwindsEveryEnteredIterator(3)",
+          "Status": "Passed",
+          "Duration": 0.0000793,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.RealTimeDeadlineTimesOutNestedPreparationAndUnwindsIt",
+          "Status": "Passed",
+          "Duration": 0.0051479,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.SuccessDrivesNestedIteratorsAndPreservesNativeYields",
+          "Status": "Passed",
+          "Duration": 0.0010835,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

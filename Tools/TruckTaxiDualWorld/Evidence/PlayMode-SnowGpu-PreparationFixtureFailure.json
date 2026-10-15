@@ -1,0 +1,47 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {
+      "caller": "plugin",
+      "skill": "unity-build-validation",
+      "json": true
+    },
+    "result": {
+      "status": "completed",
+      "duration": 85.6,
+      "summary": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiSnowGpuPlayModeTests.DemoHeldWheelContactWritesWeatheradeGpuTraceMask",
+          "Status": "Passed",
+          "Duration": 34.8806392,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiSnowGpuPlayModeTests.EdenboroughElevatedContactWritesWeatheradeGpuTraceMask",
+          "Status": "Failed",
+          "Duration": 50.6217108,
+          "Message": "  Weatherade SnowCoverage 0.80; SRS renderer=1, bound cameras=3; snow texture ready=True; updated snow materials=184; trace mask ready=True; road depth sources=184; environment surfaces=4899, terrains=6, shared materials=40.\r\n  Expected: True\r\n  But was:  False\r\n",
+          "StackTrace": "at LWS.TruckTaxi.Tests.TruckTaxiSnowGpuPlayModeTests+<ProbeWorld>d__2.MoveNext () [0x00365] in F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator\\Assets\\LWS\\TruckTaxi\\Tests\\PlayMode\\TruckTaxiSnowGpuPlayModeTests.cs:58\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@996f223345ba\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\r\n"
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

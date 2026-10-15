@@ -1,0 +1,53 @@
+TRUCK TAXI RESTART CONFIGURED mode=manual run=8db5935b012341898340b2ced5167823 vendorRoot=C:\Users\Jeremy\AppData\Local\Temp\Jeremy Bregermann\Interstate Hauler\TruckTaxiRestartTests\8db5935b012341898340b2ced5167823 evidenceVersion=2
+TRUCK TAXI RESTART ASSERT PASS: player boots into the actual main menu
+TRUCK TAXI RESTART ASSERT PASS: actual menu discovered scoped vendor facade
+TRUCK TAXI RESTART ASSERT PASS: no unexpected profile in isolated directory: profile.truck-taxi
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no manual save
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no manual save
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no manual save
+TRUCK TAXI RESTART ASSERT PASS: placeholder has no autosave
+TRUCK TAXI RESTART ASSERT PASS: test profile name is unique
+TRUCK TAXI RESTART ASSERT PASS: ASTRA_SANDBOX_TEST discovered through vendor directory
+TRUCK TAXI RESTART DRIVE SOURCE OBSERVED before completion: lws.input.keyboard-gamepad.truck owner=KeyboardMouse
+TRUCK TAXI RESTART ASSERT PASS: one active Truck Taxi host
+TRUCK TAXI RESTART ASSERT PASS: fresh process manual restored saved world TruckTaxi_DemoCity
+TRUCK TAXI RESTART ASSERT PASS: same career identity across worlds/restart
+TRUCK TAXI RESTART ASSERT PASS: driver name retained
+TRUCK TAXI RESTART ASSERT PASS: paint and truck ownership retained
+TRUCK TAXI RESTART ASSERT PASS: existing paint presentation bound in current world
+TRUCK TAXI RESTART ASSERT PASS: inventory retained without starter grants
+TRUCK TAXI RESTART ASSERT PASS: needs/progression marker retained
+TRUCK TAXI RESTART ASSERT PASS: completed fares retained
+TRUCK TAXI RESTART ASSERT PASS: purchased and equipped authored upgrade retained
+TRUCK TAXI RESTART ASSERT PASS: nonzero component damage retained
+TRUCK TAXI RESTART DRIVE SOURCE OBSERVED before completion: lws.input.keyboard-gamepad.truck owner=KeyboardMouse
+TRUCK TAXI RESTART ASSERT PASS: fresh process TruckTaxi_DemoCity native throttle/forward motion without recovery
+TRUCK TAXI RESTART ASSERT PASS: fresh process TruckTaxi_DemoCity native brake input
+TRUCK TAXI RESTART ASSERT PASS: fresh process TruckTaxi_DemoCity native steering
+TRUCK TAXI RESTART ASSERT PASS: command evidence service
+TRUCK TAXI RESTART ASSERT PASS: ParkingBrake delivered exactly once across held/released frames; actual=1
+TRUCK TAXI RESTART DRIVE fresh process TruckTaxi_DemoCity meters=3.947492
+TRUCK TAXI RESTART ASSERT PASS: safe on-foot world travel fixture: Already outside the truck.
+TRUCK TAXI RESTART ASSERT PASS: safe on-foot transfer enters existing transaction
+TRUCK TAXI RESTART ASSERT PASS: controlled rejected arrival resolves without a permanent loading lock
+TRUCK TAXI RESTART ASSERT PASS: rejected destination rolls back to the source rather than counting a successful transfer
+TRUCK TAXI RESTART ASSERT PASS: rollback preserves wallet and safely returns the on-foot driver to the truck
+TRUCK TAXI RESTART ASSERT PASS: same career identity across worlds/restart
+TRUCK TAXI RESTART ASSERT PASS: driver name retained
+TRUCK TAXI RESTART ASSERT PASS: paint and truck ownership retained
+TRUCK TAXI RESTART ASSERT PASS: existing paint presentation bound in current world
+TRUCK TAXI RESTART ASSERT PASS: inventory retained without starter grants
+TRUCK TAXI RESTART ASSERT PASS: needs/progression marker retained
+TRUCK TAXI RESTART ASSERT PASS: completed fares retained
+TRUCK TAXI RESTART ASSERT PASS: purchased and equipped authored upgrade retained
+TRUCK TAXI RESTART ASSERT PASS: nonzero component damage retained
+TRUCK TAXI RESTART ASSERT PASS: failed-transfer loading overlay and transaction retired
+TRUCK TAXI RESTART ROLLBACK TruckTaxi_DemoCity | This region has no validated regional entry road.
+TRUCK TAXI RESTART DRIVE SOURCE OBSERVED before completion: lws.input.keyboard-gamepad.truck owner=KeyboardMouse
+TRUCK TAXI RESTART ASSERT PASS: failed-transfer rollback native throttle/forward motion without recovery
+TRUCK TAXI RESTART ASSERT PASS: failed-transfer rollback native brake input
+TRUCK TAXI RESTART ASSERT PASS: failed-transfer rollback native steering
+TRUCK TAXI RESTART ASSERT PASS: command evidence service
+TRUCK TAXI RESTART ASSERT PASS: ParkingBrake delivered exactly once across held/released frames; actual=1
+TRUCK TAXI RESTART DRIVE failed-transfer rollback meters=3.754865
+TRUCK TAXI RESTART FAIL: System.InvalidOperationException: actual travel panel confirm callback started transaction | status=This region has no validated regional entry road. safety=

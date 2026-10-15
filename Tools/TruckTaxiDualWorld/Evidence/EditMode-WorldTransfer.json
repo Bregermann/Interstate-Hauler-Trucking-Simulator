@@ -1,0 +1,1237 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {
+      "caller": "plugin",
+      "skill": "unity-build-validation",
+      "json": true
+    },
+    "result": {
+      "status": "completed",
+      "duration": 22.1,
+      "summary": {
+        "total": 172,
+        "passed": 172,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldBuilderTests.ConfigureAnchor_DoesNotOverwritePreExistingStoreComponent",
+          "Status": "Passed",
+          "Duration": 0.0242618,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldBuilderTests.ConfigureAnchor_IsIdempotentAndPreservesTransformAndAuthoredValues",
+          "Status": "Passed",
+          "Duration": 0.0047947,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldBuilderTests.MergeRoad_PreservesExistingGraphAndReusesNearbyEndpoint",
+          "Status": "Passed",
+          "Duration": 0.0070566,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldBuilderTests.ParseRoadPoints_SortsAndRejectsGaps",
+          "Status": "Passed",
+          "Duration": 0.0075627,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldBuilderTests.ValidateAnchorIds_ReportsCopiedIdentity",
+          "Status": "Passed",
+          "Duration": 0.0016109,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.CoplanarCandidates_RejectSeparatedHeightsAndEdgeTouch",
+          "Status": "Passed",
+          "Duration": 2.4307332,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.DuplicateRepair_RemovesOnlyRenderer_IsIdempotent_AndRequiresResidency",
+          "Status": "Passed",
+          "Duration": 1.6979958,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.EqualBoundsWithDifferentMesh_IsNeverAutomaticallyRetired",
+          "Status": "Passed",
+          "Duration": 1.6549002,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.FixtureCleanup_PreservesPreviouslyLoadedScenesAndDeletesOnlyItsOwnedAsset",
+          "Status": "Passed",
+          "Duration": 1.6522048,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.GroundTrim_RefusesRoadsAndInteriorOverlapWithoutMutation",
+          "Status": "Passed",
+          "Duration": 1.6507378,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.GroundTrim_RemovesOnlyFortyMeterOverlap_PreservesUnionAndIsIdempotent",
+          "Status": "Passed",
+          "Duration": 1.6532537,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.GroundTrim_UndoAndRedoRetainColliderCoverage",
+          "Status": "Passed",
+          "Duration": 1.7059127,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.InstalledParkedUtsPrefab_RepairIsIdempotentAndKeepsVendorBehavioursOff",
+          "Status": "Passed",
+          "Duration": 2.3315371,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.LoadedAudit_IsReadOnly_ReportsBothSourcesAndDoesNotClaimRootCause",
+          "Status": "Passed",
+          "Duration": 1.6630676,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.VehicleAudit_ChassisOnlyAndIgnoredPlayerPairsAreFlagged",
+          "Status": "Passed",
+          "Duration": 1.6436301,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldGeometryAuditTests.VehicleAudit_DoesNotCountTriggersDisabledOrWheelColliders",
+          "Status": "Passed",
+          "Duration": 2.2477062,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.CandidateOrderAndSelectionSurviveMotionAndUnrelatedRemoval",
+          "Status": "Passed",
+          "Duration": 0.0102248,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.CareerHooksRecordOnlySuccessfulFirstDiscoveryAndAmbientChoice",
+          "Status": "Passed",
+          "Duration": 0.0153305,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.CategoryRadiiAreForgivingButBoundedAndAuthoredRangeCanOverride",
+          "Status": "Passed",
+          "Duration": 0.0016598,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.CheckoutRequiresThisStoresVisibleRegisterNotItsOrigin",
+          "Status": "Passed",
+          "Duration": 0.0022226,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.DamageSaveKeysAreVehicleAndStableComponentIds",
+          "Status": "Passed",
+          "Duration": 0.0012178,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.DistancePresentationUsesFeetUntilOneTenthMile(64.37376d,\"211 ft\")",
+          "Status": "Passed",
+          "Duration": 0.0004396,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.DistancePresentationUsesFeetUntilOneTenthMile(144.84096d,\"475 ft\")",
+          "Status": "Passed",
+          "Duration": 0.0000412,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.DistancePresentationUsesFeetUntilOneTenthMile(160.9344d,\"0.1 mi\")",
+          "Status": "Passed",
+          "Duration": 0.0000363,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.DistancePresentationUsesFeetUntilOneTenthMile(2027.77344d,\"1.3 mi\")",
+          "Status": "Passed",
+          "Duration": 0.0001047,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.DuplicateToiletIdsFailWithoutPartialRestore",
+          "Status": "Passed",
+          "Duration": 0.0005225,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.FuelAndSpeedRemainPresentationConversions",
+          "Status": "Passed",
+          "Duration": 0.0010679,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.InspectionUsesTheHitRegionInsteadOfAlwaysSelectingTheFront(-1,2,\"body.front.left\")",
+          "Status": "Passed",
+          "Duration": 0.0003986,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.InspectionUsesTheHitRegionInsteadOfAlwaysSelectingTheFront(1,2,\"body.front.right\")",
+          "Status": "Passed",
+          "Duration": 0.000046,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.InspectionUsesTheHitRegionInsteadOfAlwaysSelectingTheFront(0,-2,\"body.rear\")",
+          "Status": "Passed",
+          "Duration": 0.0000427,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.InspectionUsesTheHitRegionInsteadOfAlwaysSelectingTheFront(0,0,\"body.cab\")",
+          "Status": "Passed",
+          "Duration": 0.0000326,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.LegacyNeedsSnapshotRestoresWithHealthyBowelAndNoToilets",
+          "Status": "Passed",
+          "Duration": 0.0004171,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.ModalFocusBlocksWorldCyclingAndDisablingReturnsControl",
+          "Status": "Passed",
+          "Duration": 0.0028044,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.MotelAccessAndAmbientChoicesRoundTripWithoutChangingOldSaves",
+          "Status": "Passed",
+          "Duration": 0.00076,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.MotelSleepRecoversMoreThanCabNapThroughExistingFatigueState",
+          "Status": "Passed",
+          "Duration": 0.0011957,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.EditMode.TruckTaxiWorldLifeDamageTests.ToiletDiscoveryAndBowelNeedRoundTripThroughExistingNeedsSnapshot",
+          "Status": "Passed",
+          "Duration": 0.0013646,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.CompositionUsesReferencesAndDoesNotDuplicateComponents",
+          "Status": "Passed",
+          "Duration": 0.0080529,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.DuplicateMapIdentityFailsBeforeAddingService",
+          "Status": "Passed",
+          "Duration": 0.0009644,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.EmptyRendererDoesNotCountAsReferencedArt",
+          "Status": "Passed",
+          "Duration": 0.0003828,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.ExplicitInteractionApproachReportsBlockingGeometry",
+          "Status": "Passed",
+          "Duration": 0.0021605,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.InvalidLoadBearingClassificationIsReportOnly",
+          "Status": "Passed",
+          "Duration": 0.0012396,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.MissingAnchorFailsBeforeAddingService",
+          "Status": "Passed",
+          "Duration": 0.0003752,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.NonFiniteRoadPositionIsRejectedBeforePlanning",
+          "Status": "Passed",
+          "Duration": 0.0048128,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.RoadEndpointMismatchIsReportedWithoutRepair",
+          "Status": "Passed",
+          "Duration": 0.0100628,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.RouteAuditFindsDisconnectedNodeAndInteriorStreamingGap",
+          "Status": "Passed",
+          "Duration": 0.001062,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.ScopedSupportAuditReportsWithoutMovingProp(2.0f,\"FLOATING PROP CANDIDATE\")",
+          "Status": "Passed",
+          "Duration": 0.0014175,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldAuthoringCompletionTests.ScopedSupportAuditReportsWithoutMovingProp(-0.3f,\"BURIED PROP CANDIDATE\")",
+          "Status": "Passed",
+          "Duration": 0.0005913,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.BlizzardRegistrationIsResolvableIdempotentAndKeepsTheCanonicalCoordinator",
+          "Status": "Passed",
+          "Duration": 0.0183531,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.CanonicalSavedBlizzardObservationDrivesCatchupInsteadOfManualClear",
+          "Status": "Passed",
+          "Duration": 0.0030292,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.FreshRegionDryRestoreRemovesPriorSnowIceAndGripLoss",
+          "Status": "Passed",
+          "Duration": 0.0051288,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.MissingObservationRetainsManualForecastCompatibility",
+          "Status": "Passed",
+          "Duration": 0.0003188,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.ObservedNonSnowMeltsDespiteStaleBlizzardManualForecast(Clear)",
+          "Status": "Passed",
+          "Duration": 0.0010294,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.ObservedNonSnowMeltsDespiteStaleBlizzardManualForecast(Rain)",
+          "Status": "Passed",
+          "Duration": 0.0003681,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.ObservedNonSnowMeltsDespiteStaleBlizzardManualForecast(Fog)",
+          "Status": "Passed",
+          "Duration": 0.0002317,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.ObservedSnowAccumulatesDespiteStaleClearManualForecast(Snow,0.3f,0.1f,0.2f)",
+          "Status": "Passed",
+          "Duration": 0.0006703,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.ObservedSnowAccumulatesDespiteStaleClearManualForecast(HeavySnow,0.4f,0.2f,0.3f)",
+          "Status": "Passed",
+          "Duration": 0.000305,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.ObservedSnowAccumulatesDespiteStaleClearManualForecast(Blizzard,0.5f,0.3f,0.4f)",
+          "Status": "Passed",
+          "Duration": 0.0002794,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.RegisteringBlizzardMakesTheSameCanonicalSavedWeatherRecordRestorable",
+          "Status": "Passed",
+          "Duration": 0.0038516,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.ReRegistrationUpdatesOneCaseInsensitiveCatalogEntry",
+          "Status": "Passed",
+          "Duration": 0.0016861,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.RestoredWorldGripIsRecomputedFromConditionAndSentToPhysicsAdapter",
+          "Status": "Passed",
+          "Duration": 0.00214,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.WarmRainAcceleratesGradualMelt(-10.0f,False,0.15f)",
+          "Status": "Passed",
+          "Duration": 0.0008376,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.WarmRainAcceleratesGradualMelt(0.0f,False,1.0f)",
+          "Status": "Passed",
+          "Duration": 0.0002503,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.WarmRainAcceleratesGradualMelt(15.0f,False,2.0f)",
+          "Status": "Passed",
+          "Duration": 0.000158,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.WarmRainAcceleratesGradualMelt(15.0f,True,3.0f)",
+          "Status": "Passed",
+          "Duration": 0.0001688,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.WarmRainAcceleratesGradualMelt(30.0f,True,4.5f)",
+          "Status": "Passed",
+          "Duration": 0.0001251,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.WorldAccumulationPreservesCurrentOverrideIntent(AutoFromWeather,False)",
+          "Status": "Passed",
+          "Duration": 0.0005422,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.WorldAccumulationPreservesCurrentOverrideIntent(ForceSnow,True)",
+          "Status": "Passed",
+          "Duration": 0.0001758,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTransferPersistenceTests.WorldAccumulationReplacesOldRoadCacheAndKeepsLiveTargetIdentity",
+          "Status": "Passed",
+          "Duration": 0.0005879,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.CurrentFailureIsCapturedAndCleanupFailureDoesNotReplaceIt",
+          "Status": "Passed",
+          "Duration": 0.0014483,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.FactoryFailureIsCapturedBeforePreparationStarts",
+          "Status": "Passed",
+          "Duration": 0.0002534,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.MoveNextFailureAtAnyDepthUnwindsEveryEnteredIterator(0)",
+          "Status": "Passed",
+          "Duration": 0.0007294,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.MoveNextFailureAtAnyDepthUnwindsEveryEnteredIterator(1)",
+          "Status": "Passed",
+          "Duration": 0.0000593,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.MoveNextFailureAtAnyDepthUnwindsEveryEnteredIterator(3)",
+          "Status": "Passed",
+          "Duration": 0.0000519,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.RealTimeDeadlineTimesOutNestedPreparationAndUnwindsIt",
+          "Status": "Passed",
+          "Duration": 0.0011882,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelPreparationTests.SuccessDrivesNestedIteratorsAndPreservesNativeYields",
+          "Status": "Passed",
+          "Duration": 0.0009183,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.CatalogContainsOnlyTheTwoAuthoredScenesWithStableLabelsAndOppositeDestinations",
+          "Status": "Passed",
+          "Duration": 0.0011485,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.CatchupIsBoundedToOneDayOfRealEquivalentSeconds",
+          "Status": "Passed",
+          "Duration": 0.0006326,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ElapsedSnowUsesSavedClockRateAndTheActualCondition(Snow,0.3f,0.1f,0.2f)",
+          "Status": "Passed",
+          "Duration": 0.0004017,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ElapsedSnowUsesSavedClockRateAndTheActualCondition(HeavySnow,0.4f,0.2f,0.3f)",
+          "Status": "Passed",
+          "Duration": 0.0001305,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ElapsedSnowUsesSavedClockRateAndTheActualCondition(Blizzard,0.5f,0.3f,0.4f)",
+          "Status": "Passed",
+          "Duration": 0.0001119,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitDirectionFollowsConnectorHeadingAndRejectsMissingHeading",
+          "Status": "Passed",
+          "Duration": 0.0004725,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitRequiresActualForwardMotionAboveTheStationaryThreshold(0.0f,0.0f,3.0f,True)",
+          "Status": "Passed",
+          "Duration": 0.0004909,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitRequiresActualForwardMotionAboveTheStationaryThreshold(0.0f,0.0f,-3.0f,False)",
+          "Status": "Passed",
+          "Duration": 0.0001111,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitRequiresActualForwardMotionAboveTheStationaryThreshold(0.0f,0.0f,0.0f,False)",
+          "Status": "Passed",
+          "Duration": 0.0000972,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitRequiresActualForwardMotionAboveTheStationaryThreshold(3.0f,0.0f,0.0f,False)",
+          "Status": "Passed",
+          "Duration": 0.0000972,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitRequiresActualForwardMotionAboveTheStationaryThreshold(0.0f,0.0f,0.5f,False)",
+          "Status": "Passed",
+          "Duration": 0.0000953,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitRequiresActualForwardMotionAboveTheStationaryThreshold(0.0f,0.0f,0.51f,True)",
+          "Status": "Passed",
+          "Duration": 0.0000943,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitRequiresActualForwardMotionAboveTheStationaryThreshold(3.0f,0.0f,2.0f,True)",
+          "Status": "Passed",
+          "Duration": 0.0000971,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ExitRequiresActualForwardMotionAboveTheStationaryThreshold(3.0f,0.0f,1.0f,False)",
+          "Status": "Passed",
+          "Duration": 0.0000956,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.FrozenRegionDoesNotAdvanceItsSnowWhileAnotherRegionClockRuns",
+          "Status": "Passed",
+          "Duration": 0.0002469,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.LegacyDemoWorldIdentitiesDoNotResolveIntoEdenborough",
+          "Status": "Passed",
+          "Duration": 0.0003023,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.LongAbsenceClampsEveryCellAndBackgroundToPhysicalBounds(Snow,0.6f)",
+          "Status": "Passed",
+          "Duration": 0.0004566,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.LongAbsenceClampsEveryCellAndBackgroundToPhysicalBounds(HeavySnow,0.6f)",
+          "Status": "Passed",
+          "Duration": 0.0001224,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.LongAbsenceClampsEveryCellAndBackgroundToPhysicalBounds(Blizzard,0.6f)",
+          "Status": "Passed",
+          "Duration": 0.0001161,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.LongAbsenceClampsEveryCellAndBackgroundToPhysicalBounds(Clear,0.0f)",
+          "Status": "Passed",
+          "Duration": 0.0001171,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.LongAbsenceClampsEveryCellAndBackgroundToPhysicalBounds(Rain,0.0f)",
+          "Status": "Passed",
+          "Duration": 0.000123,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.MissingOptionalSnowOrSettingsIsANoOpAndMissingForecastUsesClearWeather",
+          "Status": "Passed",
+          "Duration": 0.0005837,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NonSnowWeatherMeltsGraduallyWithoutNegativeDepths(Clear)",
+          "Status": "Passed",
+          "Duration": 0.0004432,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NonSnowWeatherMeltsGraduallyWithoutNegativeDepths(PartlyCloudy)",
+          "Status": "Passed",
+          "Duration": 0.0001438,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NonSnowWeatherMeltsGraduallyWithoutNegativeDepths(Overcast)",
+          "Status": "Passed",
+          "Duration": 0.00012,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NonSnowWeatherMeltsGraduallyWithoutNegativeDepths(Rain)",
+          "Status": "Passed",
+          "Duration": 0.0001206,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NonSnowWeatherMeltsGraduallyWithoutNegativeDepths(HeavyRain)",
+          "Status": "Passed",
+          "Duration": 0.0001185,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NonSnowWeatherMeltsGraduallyWithoutNegativeDepths(Thunderstorm)",
+          "Status": "Passed",
+          "Duration": 0.0001191,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NonSnowWeatherMeltsGraduallyWithoutNegativeDepths(Fog)",
+          "Status": "Passed",
+          "Duration": 0.0001153,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NoPositiveElapsedTimeLeavesSnowUnchanged(0.0d)",
+          "Status": "Passed",
+          "Duration": 0.0005025,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.NoPositiveElapsedTimeLeavesSnowUnchanged(-600.0d)",
+          "Status": "Passed",
+          "Duration": 0.0001221,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.OldDemoSaveSceneAndFreePlayAliasRemainSupportedAlongsideEdenborough",
+          "Status": "Passed",
+          "Duration": 0.0003093,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.SavedExitPoseCannotBeReusedInsideHorizontalArrivalBuffer(0.0f,0.0f,False)",
+          "Status": "Passed",
+          "Duration": 0.0007822,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.SavedExitPoseCannotBeReusedInsideHorizontalArrivalBuffer(29.9f,0.0f,False)",
+          "Status": "Passed",
+          "Duration": 0.000181,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.SavedExitPoseCannotBeReusedInsideHorizontalArrivalBuffer(0.0f,200.0f,False)",
+          "Status": "Passed",
+          "Duration": 0.0001668,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.SavedExitPoseCannotBeReusedInsideHorizontalArrivalBuffer(30.0f,0.0f,True)",
+          "Status": "Passed",
+          "Duration": 0.0001674,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.SavedExitPoseCannotBeReusedInsideHorizontalArrivalBuffer(65.0f,-50.0f,True)",
+          "Status": "Passed",
+          "Duration": 0.000163,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.SnowCatchupMutatesOnlyTheVisitedRegion",
+          "Status": "Passed",
+          "Duration": 0.0001985,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.StoppedOrInvalidNegativeClockRateLeavesSnowUnchanged(0.0f)",
+          "Status": "Passed",
+          "Duration": 0.0002358,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.StoppedOrInvalidNegativeClockRateLeavesSnowUnchanged(-60.0f)",
+          "Status": "Passed",
+          "Duration": 0.0000924,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(null)",
+          "Status": "Passed",
+          "Duration": 0.0010733,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(\"\")",
+          "Status": "Passed",
+          "Duration": 0.0001084,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(\"Demo City\")",
+          "Status": "Passed",
+          "Duration": 0.000125,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(\"trucktaxi_democity\")",
+          "Status": "Passed",
+          "Duration": 0.0001236,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(\"TruckTaxi_FreePlay\")",
+          "Status": "Passed",
+          "Duration": 0.0001037,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(\"TruckTaxi_Edenborough \")",
+          "Status": "Passed",
+          "Duration": 0.0000971,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(\"../TruckTaxi_DemoCity\")",
+          "Status": "Passed",
+          "Duration": 0.0001942,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(\"Assets/LWS/TruckTaxi/Scenes/TruckTaxi_Edenborough.unity\")",
+          "Status": "Passed",
+          "Duration": 0.0001388,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.UnknownSceneIsNotAWorldOrTravelDestination(\"TruckTaxi_MainMenu\")",
+          "Status": "Passed",
+          "Duration": 0.0001804,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsOnlyCanonicalWeatherAndRoadParticipantIdentities",
+          "Status": "Passed",
+          "Duration": 0.000826,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(Clear)",
+          "Status": "Passed",
+          "Duration": 0.000469,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(PartlyCloudy)",
+          "Status": "Passed",
+          "Duration": 0.0000981,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(Overcast)",
+          "Status": "Passed",
+          "Duration": 0.0000866,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(Rain)",
+          "Status": "Passed",
+          "Duration": 0.0000889,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(HeavyRain)",
+          "Status": "Passed",
+          "Duration": 0.0000869,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(Thunderstorm)",
+          "Status": "Passed",
+          "Duration": 0.0000858,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(Fog)",
+          "Status": "Passed",
+          "Duration": 0.000087,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(Snow)",
+          "Status": "Passed",
+          "Duration": 0.0000845,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(HeavySnow)",
+          "Status": "Passed",
+          "Duration": 0.0000851,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitAcceptsTheActualDefinedForecastConditions(Blizzard)",
+          "Status": "Passed",
+          "Duration": 0.0000856,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitHistoryAcceptsLegacyNullEmptyAndBothUniqueWorldsInEitherOrder",
+          "Status": "Passed",
+          "Duration": 0.000321,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitHistoryRejectsDuplicateWorldsEvenWhenEntriesHaveDifferentPoses(\"TruckTaxi_DemoCity\")",
+          "Status": "Passed",
+          "Duration": 0.0003849,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitHistoryRejectsDuplicateWorldsEvenWhenEntriesHaveDifferentPoses(\"TruckTaxi_Edenborough\")",
+          "Status": "Passed",
+          "Duration": 0.000094,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitHistoryRejectsMoreThanTwoEntriesAndNullEntries",
+          "Status": "Passed",
+          "Duration": 0.0001887,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsDegenerateRotationButAcceptsFiniteRotatedPoseAndZeroTime",
+          "Status": "Passed",
+          "Duration": 0.0002956,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(0,float.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0001976,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(0,float.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000867,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(0,float.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000848,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(1,float.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0000832,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(1,float.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000815,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(1,float.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000876,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(2,float.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0000875,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(2,float.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000864,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFinitePositionComponent(2,float.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0001109,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(0,float.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0003785,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(0,float.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0001069,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(0,float.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000868,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(1,float.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0000846,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(1,float.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000805,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(1,float.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000835,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(2,float.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0000858,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(2,float.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000816,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(2,float.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000802,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(3,float.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0000805,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(3,float.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000823,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsEveryNonFiniteQuaternionComponent(3,float.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.00008,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsInvalidClockRate(-0.01f)",
+          "Status": "Passed",
+          "Duration": 0.0003412,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsInvalidClockRate(float.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0001067,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsInvalidClockRate(float.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000842,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsInvalidClockRate(float.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000864,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsInvalidGameTime(-0.01d)",
+          "Status": "Passed",
+          "Duration": 0.0004142,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsInvalidGameTime(double.NaN)",
+          "Status": "Passed",
+          "Duration": 0.0001125,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsInvalidGameTime(double.PositiveInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000867,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsInvalidGameTime(double.NegativeInfinity)",
+          "Status": "Passed",
+          "Duration": 0.0000879,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsUndefinedManualOverrideAndSeverityEnums(-1)",
+          "Status": "Passed",
+          "Duration": 0.0003077,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.VisitRejectsUndefinedManualOverrideAndSeverityEnums(int.MaxValue)",
+          "Status": "Passed",
+          "Duration": 0.0000924,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiWorldTravelTests.ZeroAccumulationAndMeltRatesLeaveSnowUnchanged",
+          "Status": "Passed",
+          "Duration": 0.0002556,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}

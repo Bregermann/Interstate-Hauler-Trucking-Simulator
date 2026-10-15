@@ -1,0 +1,47 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {
+      "caller": "plugin",
+      "skill": "unity-build-validation",
+      "json": true
+    },
+    "result": {
+      "status": "completed",
+      "duration": 65.37,
+      "summary": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiSnowGpuPlayModeTests.DemoHeldWheelContactWritesWeatheradeGpuTraceMask",
+          "Status": "Passed",
+          "Duration": 25.2433567,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "LWS.TruckTaxi.Tests.TruckTaxiSnowGpuPlayModeTests.EdenboroughElevatedContactWritesWeatheradeGpuTraceMask",
+          "Status": "Failed",
+          "Duration": 40.0228194,
+          "Message": "  Need a nearby exposed nonroad path outside full-road depth-proxy footprints; do not substitute road contacts.\r\n  Expected: True\r\n  But was:  False\r\n",
+          "StackTrace": "at LWS.TruckTaxi.Tests.TruckTaxiSnowGpuPlayModeTests+<ProbeWorld>d__2.MoveNext () [0x010c1] in F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator\\Assets\\LWS\\TruckTaxi\\Tests\\PlayMode\\TruckTaxiSnowGpuPlayModeTests.cs:189\r\nat UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.unity.test-framework@996f223345ba\\UnityEngine.TestRunner\\NUnitExtensions\\Attributes\\TestEnumerator.cs:44\r\n"
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator"
+    },
+    "success": true
+  },
+  "errors": [],
+  "warnings": []
+}
