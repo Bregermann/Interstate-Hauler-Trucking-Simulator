@@ -1,4 +1,14 @@
-﻿# Truck Sports — seven offline sports
+# Truck Sports — eleven offline sports
+
+## Four-event expansion — 2026-10-15
+
+The combined collection now includes eleven playable sports in twelve explicit sports-only scenes, starting at TruckSports. New events: [Dock Diving](../TruckDockDiving/README.md), [Keepaway](../TruckKeepaway/README.md), [Curling](../TruckCurling/README.md) and [Base Jumping](../TruckBaseJumping/README.md). All use the existing offline participant setup, names/colors, whole/shared controller ownership, keyboard clusters, independent AI, shared settings, pause/reconnect, results and rematches.
+
+Wallball supports uneven teams of1–4 with a fresh ball-only contact envelope and coordinated interceptors. Bowling has a physical overhead sweeper with proper lower/back/return/raise/replace phases. Ice Hockey adds capped pre-impact knockback/stopped counters and articulated, puck-only, wall-aware sticks. Existing handling/scoring, Cornhole cab views/replays and Cheese Rolling features are preserved.
+
+The truck mesh authoring offset and repeated Weather Maker scene-transition leaks found during validation are fixed. Dock supports human-owned slow/fast multiangle replay without an automatic timeout once manually controlled; solo records use the same whole-inch score as display/ties. Base uses a compact colored per-view HUD and bounded bloom so canopies and trucks stay visible.
+
+Build through `LWS.TruckSports.Editor.SportsBuilder.Build`; never use `CreateValidateBuild` for delivery because it reauthors older scenes. See [validation](VALIDATION.md), [build information](BUILD-INFO.md), [checkpoint](CHECKPOINT.md) and [approved dependency delivery](../../Documentation/TruckSports/ExpansionDependencyRepair.md). The normal-company Windows x64 Development build is complete and passes startup/input, physical new-event matches and repeated collection navigation. The explicitly approved dependencies are committed and pushed as `12f0653faae7290f0e6895097e9ff68ce06447b3`. Current source and the single final delivery are in the main F: project; see [delivery policy](../../Documentation/TruckSports/BuildDeliveryPolicy.md). A fresh remote clone/build was not repeated after publication. Earlier milestone descriptions below are historical.
 
 ## Hardcore Truck Cheese Rolling — 2026-10-15
 

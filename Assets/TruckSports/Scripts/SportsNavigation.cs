@@ -1,16 +1,16 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using LWS.TruckBilliards;
 namespace LWS.TruckSports {
 public static class SportsNavigation {
- public const string Front="TruckSports",Billiards="TruckBilliards",Hockey="TruckHockey",Bowling="TruckBowling",AirHockey="TruckAirHockey",Wallball="TruckWallball",Cornhole="TruckCornhole",Cheese="TruckCheeseRolling";
+ public const string Front="TruckSports",Billiards="TruckBilliards",Hockey="TruckHockey",Bowling="TruckBowling",AirHockey="TruckAirHockey",Wallball="TruckWallball",Cornhole="TruckCornhole",Cheese="TruckCheeseRolling",Dock="TruckDockDiving",Keepaway="TruckKeepaway",Curling="TruckCurling",BaseJump="TruckBaseJumping";
  public static bool Collection{get;private set;} public static bool OpenSelection,BilliardsPractice;
  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)] static void Reset(){Collection=false;OpenSelection=false;BilliardsPractice=false;SceneManager.sceneLoaded-=Loaded;SceneManager.sceneLoaded+=Loaded;}
  static void Loaded(Scene scene,LoadSceneMode mode){if(Collection&&scene.name==Billiards){var s=Object.FindAnyObjectByType<BilliardsSession>();if(s!=null)s.gameObject.AddComponent<SportsBilliardsEntry>();}}
  static void Load(string scene){
 #if UNITY_EDITOR
-string folder=scene==Front?"TruckSports":scene==Hockey?"TruckHockey":scene==Bowling?"TruckBowling":scene==AirHockey?"TruckAirHockey":scene==Wallball?"TruckWallball":scene==Cornhole?"TruckCornhole":scene==Cheese?"TruckCheeseRolling":"TruckBilliards";UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode("Assets/"+folder+"/Scenes/"+scene+".unity",new LoadSceneParameters(LoadSceneMode.Single));
+string folder=scene==Front?"TruckSports":scene==Hockey?"TruckHockey":scene==Bowling?"TruckBowling":scene==AirHockey?"TruckAirHockey":scene==Wallball?"TruckWallball":scene==Cornhole?"TruckCornhole":scene==Cheese?"TruckCheeseRolling":scene==Dock?"TruckDockDiving":scene==Keepaway?"TruckKeepaway":scene==Curling?"TruckCurling":scene==BaseJump?"TruckBaseJumping":"TruckBilliards";UnityEditor.SceneManagement.EditorSceneManager.LoadSceneInPlayMode("Assets/"+folder+"/Scenes/"+scene+".unity",new LoadSceneParameters(LoadSceneMode.Single));
 #else
 SceneManager.LoadScene(scene,LoadSceneMode.Single);
 #endif
