@@ -9,3 +9,5 @@ Startup TruckSports; explicit scenes: TruckSports, TruckBilliards, TruckHockey, 
 All176 managed DLL hashes and all seven level0–6 hashes match isolated validation23. Only normal/validation company metadata differs. The full accompanying runtime payload includes TruckSports_Data, MonoBleedingEdge, UnityPlayer.dll, UnityCrashHandler64.exe, D3D12/runtime libraries and development symbols. Keep these with the executable. BuildReport summary and runtime/source SHA256 manifests are supplied beside it. Generated builds, logs and player preferences are excluded from Git.
 
 Runtime, hardware limitations and actual publication status are in VALIDATION.md, CHECKPOINT.md and the generated Builds/TruckSports/GIT-DELIVERY.txt. The source branch for publication is codex/truck-cornhole; the root branch contains unrelated unpublished host/Taxi history and must not be pushed.
+
+Feature commit d053b2a0ba5aba1c2f0ae94d48fce60267eb970c was pushed successfully to origin/codex/truck-cornhole. Both prior completed Sports work and the new implementation are published. The final docs commit and verification are listed in GIT-DELIVERY.txt.
