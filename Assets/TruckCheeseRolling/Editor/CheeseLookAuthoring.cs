@@ -1,0 +1,19 @@
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using LWS.TruckTaxi;
+namespace LWS.TruckCheeseRolling.Editor {
+public static class CheeseLookAuthoring {
+ const string Root="Assets/TruckCheeseRolling/Rendering/";
+ public static void Create(CheeseMatch m){Directory.CreateDirectory(Root);AssetDatabase.Refresh();var source=AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>("Assets/LWS/InterstateHauler/Rendering/Quality/IH_High_RPAsset.asset");var so=new SerializedObject(source);var rendererSource=so.FindProperty("m_RendererDataList").GetArrayElementAtIndex(0).objectReferenceValue as ScriptableRendererData;
+  var renderer=UnityEngine.Object.Instantiate(rendererSource);renderer.name="Cheese mushroom renderer";renderer.rendererFeatures.Clear();AssetDatabase.CreateAsset(renderer,AssetDatabase.GenerateUniqueAssetPath(Root+"Cheese renderer.asset"));foreach(var feature in rendererSource.rendererFeatures)if(feature!=null&&feature.GetType().Namespace!=null&&feature.GetType().Namespace.Contains("WeatherMaker")){var copy=UnityEngine.Object.Instantiate(feature);AssetDatabase.AddObjectToAsset(copy,renderer);renderer.rendererFeatures.Add(copy);}
+  var wave=ScriptableObject.CreateInstance<TruckTaxiMushroomWaveFeature>();wave.name="Taxi mushroom wave (sport owned)";wave.SetShader(AssetDatabase.LoadAssetAtPath<Shader>("Assets/LWS/TruckTaxi/Rendering/TruckTaxiMushroomWorldWave.shader"));AssetDatabase.AddObjectToAsset(wave,renderer);renderer.rendererFeatures.Add(wave);renderer.SetDirty();
+  var pipeline=UnityEngine.Object.Instantiate(source);pipeline.name="Cheese scene-only pipeline";var settings=new SerializedObject(pipeline);var list=settings.FindProperty("m_RendererDataList");list.arraySize=1;list.GetArrayElementAtIndex(0).objectReferenceValue=renderer;settings.FindProperty("m_DefaultRendererIndex").intValue=0;settings.ApplyModifiedPropertiesWithoutUndo();AssetDatabase.CreateAsset(pipeline,AssetDatabase.GenerateUniqueAssetPath(Root+"Cheese pipeline.asset"));
+  var profile=ScriptableObject.CreateInstance<VolumeProfile>();var values=TruckTaxiTemporaryEffects.Profile(TruckTaxiTemporaryEffectKind.MysteryMushroom);var color=profile.Add<ColorAdjustments>();color.saturation.Override(values.Saturation);color.contrast.Override(values.Contrast);color.hueShift.Override(0);var bloom=profile.Add<Bloom>();bloom.intensity.Override(values.BloomIntensity);bloom.threshold.Override(.65f);profile.Add<ChromaticAberration>().intensity.Override(values.ChromaticAberration);var lens=profile.Add<LensDistortion>();lens.intensity.Override(-.1f);lens.scale.Override(1.03f);var vignette=profile.Add<Vignette>();vignette.intensity.Override(.14f);vignette.smoothness.Override(.5f);string profilePath=AssetDatabase.GenerateUniqueAssetPath(Root+"Mushroom grade.asset");AssetDatabase.CreateAsset(profile,profilePath);foreach(var component in profile.components)AssetDatabase.AddObjectToAsset(component,profile);
+  var sky=new Material(Shader.Find("Skybox/Procedural"));sky.SetColor("_SkyTint",new Color(.4f,.12f,.65f));sky.SetColor("_GroundColor",new Color(.06f,.11f,.14f));sky.SetFloat("_Exposure",1.5f);sky.SetFloat("_AtmosphereThickness",1.1f);sky.SetFloat("_SunSize",.08f);AssetDatabase.CreateAsset(sky,AssetDatabase.GenerateUniqueAssetPath(Root+"Epic mushroom sky.mat"));
+  var root=new GameObject("Scene-owned mushroom world presentation");root.layer=31;var volume=root.AddComponent<Volume>();volume.isGlobal=true;volume.priority=200;volume.weight=.65f;volume.sharedProfile=profile;var look=root.AddComponent<CheeseLook>();look.match=m;look.pipeline=pipeline;look.volume=volume;look.skyTemplate=sky;m.look=look;foreach(var rendererSky in m.weather.vendor.GetComponentsInChildren<Renderer>(true))if(rendererSky.name.Contains("SkySphere")||rendererSky.name.Contains("SkyPlane"))rendererSky.enabled=false;
+ }
+}
+}
