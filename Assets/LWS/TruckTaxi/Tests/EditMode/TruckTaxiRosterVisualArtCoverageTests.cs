@@ -78,6 +78,24 @@ namespace LWS.TruckTaxi.Tests
                 Object.DestroyImmediate(accent);
             }
         }
+        [Test, Explicit("Run after Apply Themed Wobble Roster Visuals in the Unity Editor.")]
+        public void RegisteredFallbackPrefabsHaveThemedVisuals()
+        {
+            var db = AssetDatabase.LoadAssetAtPath<TruckTaxiPassengerDatabase>(TruckTaxiPassengerFactoryBuilder.DatabasePath);
+            Assert.IsNotNull(db);
+            foreach (var passenger in db.passengers)
+            {
+                if (passenger == null || passenger.modelPrefab != null ||
+                    passenger.appearance == null || passenger.appearance.visualStyle != TruckTaxiVisualStyle.WobblePeople)
+                    continue;
+                Assert.IsNotNull(passenger.runtimePrefab, passenger.passengerId);
+                var visual = passenger.runtimePrefab.transform.Find(TruckTaxiWobbleVisual.VisualName);
+                Assert.IsNotNull(visual, passenger.passengerId);
+                Assert.IsNotNull(visual.Find("RosterVisual-v1-" + passenger.passengerId), passenger.passengerId);
+                Assert.IsEmpty(visual.GetComponentsInChildren<Collider>(true), passenger.passengerId);
+            }
+        }
+
         [Test] public void AmbientActorsShareOneThreeMaterialMeshWithoutChangingCollision()
         {
             var a=GameObject.CreatePrimitive(PrimitiveType.Capsule);
