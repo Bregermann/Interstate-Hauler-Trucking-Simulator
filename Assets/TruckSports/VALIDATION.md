@@ -1,3 +1,11 @@
+﻿# Seven-sport Cheese Rolling validation — 2026-10-15
+
+Cheese Rolling implementation and native player validation are complete. [Detailed evidence](../TruckCheeseRolling/VALIDATION.md):300 native editor assertions,46 focused physical/software-input checks,27 layout/grass checks,94 full-game/lifecycle checks, all native exits0. The real-time16-truck match finishes4–2–5–4 after15 physical catches,218 explosions, zero neutral replays and531.9966s. A separate solo five-catch challenge completes. Pause/reconnect/replacement/rematch and two return cycles through all six older sports pass. Hardware and human acceptance are not claimed.
+
+The aggregate71,980 live-frame sample averages10.0065ms onGTX1660Ti (p9518.7643 / p9925.0083 / max368.8503ms), including2,975 four-view hurricane/multiple-blast frames. The maximum hitch is unisolated; the sample includes captures/logging and multiple view counts. No user builds were closed. All1,536 settings/package hashes match. Final normal build/publication details follow in the checkpoint and Cheese build information.
+
+Earlier Cornhole and five-sport evidence below is historical.
+
 # Six-sport Cornhole delivery — 2026-10-15
 
 Cornhole implementation/build and final validation are complete. See [Cornhole validation](../TruckCornhole/VALIDATION.md), [controls/scoring](../TruckCornhole/README.md) and [build information](../TruckCornhole/BUILD-INFO.md).262 native fixtures;216 complete physical/lifecycle checks;146 visible view/software-input checks;9 authority fixtures; two full four-course matches with160 launches,12 holes and zero timeouts. Normal-speed1080p match344.42s/54,183 frames: mean6.34ms,p9912.48ms, worst737.67ms (unisolated hitch, recheck manually). No physical-controller or human acceptance is claimed.

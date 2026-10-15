@@ -1,4 +1,12 @@
-# Truck Sports — six offline sports
+﻿# Truck Sports — seven offline sports
+
+## Hardcore Truck Cheese Rolling — 2026-10-15
+
+The seventh sport adds one to four simultaneous marked racers plus twelve non-scoring background trucks, a physical rolling cheese wheel, a steep grass hill and muddy runout. First genuine participant contact earns one catch; first to five wins, with a timed solo challenge. Clear/blizzard/hurricane rounds reuse Weather Maker. Actual explosive sheep launch trucks without stopping their momentum.
+
+Each round reshuffles the full-width start grid and randomizes trees, rocks, cats, wolves and tall-grass patches. A dramatic 3 / 2 / 1 start rewards a fresh accelerator press during 2, held through GO, with one physical jump boost. Trees have breakable physical roots and can be knocked down by trucks and sheep explosions. Taxi's exact mushroom world shader is reused with a sport-owned animated sky, pipeline and grading; pause offers full / low / off. Existing sports retain their tuning.
+
+See [Cheese controls and rules](../TruckCheeseRolling/README.md), [validation](../TruckCheeseRolling/VALIDATION.md), [sources](../TruckCheeseRolling/SOURCES.md) and [build information](../TruckCheeseRolling/BUILD-INFO.md). The combined saved-scene builder now contains eight explicit sports-only scenes with TruckSports startup. Do not use CreateValidateBuild for delivery.
 
 ## Truck Cornhole — 2026-10-15
 
