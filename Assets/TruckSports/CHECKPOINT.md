@@ -1,4 +1,18 @@
-﻿# Hardcore Truck Cheese Rolling completed — 2026-10-15
+# Latest checkpoint — eleven-sport Windows delivery, 2026-10-15
+
+Implementation/runtime/build work is complete in the isolated C: managed Sports checkout. The final normal-company Windows x64 Development executable is Builds/TruckSports/TruckSports.exe; all accompanying files exist;0errors30vendor warnings. Detailed evidence: Documentation/TruckSports/ExpansionValidation.md and ExpansionEvidence.
+
+Current branch codex/truck-cheese-rolling. Existing-sport e7e07e652d8263ca13884d33e5cc4d4ca9b224e1 and four-event a53cc7ea8cbf47aa846d6934537fa9deab9258a9 are committed/pushed. Prior completed Sports through40ec3fc was already pushed. Final documentation commit and verified remote tip are recorded in generated Builds/TruckSports/GIT-DELIVERY.txt and the handoff. Main F: checkout remains leased to Taxi; no Sports-owned dirty paths were found there during read-only audit. Do not touch its Editor/index/source or close user testing builds.
+
+Normal-build checks:10 actual injected pointer/keyboard UI/driving/pause/return;13 four-view open-canopy/layout checks;68 Dock physical/record/replay/full eight-AI assertions. The final normal build also passed119 repeated integration assertions. Other native suites:21 Keepaway,14 Curling,44 Base weather/flight/source,60 extended Ice,22 existing-sport checks. Full six-AI real-time Hockey:8740live frames,3goals,0emergency faceoffs; mean6.88ms,p9512.48ms.90s four-view snow:7918frames,mean11.37ms,p9512.55ms,max106.27ms; pre-final HUD location, final HUD separately visually validated. No hardware/human/audio acceptance claimed.
+
+DEPENDENCY PUBLICATION REMAINS BLOCKED: automatic approval review rejected staging cross-task dependencies without specific authorization. Explicit user approval is pending.13 byte-identical original scenery assets/metas plus existing trailer identity/assignment files and13-line InitializeRegistered API remain local/UNSTAGED. Exact paths/hashes/reason: ExpansionDependencyRepair.md and ExpansionDependencyAssets.json. Do not bypass the rejection. Both implementation pushes succeeded, but not all required dependencies are published; do not claim a clean clone builds.
+
+Continuation: if approval arrives, stage ONLY the listed dependency files and required original metadata, review, commit and push on this Sports branch; no unrelated host work or force push. Validate a fresh isolated checkout against the same explicit scene builder. Otherwise keep this worktree active because it contains the playable build and unpublished dependencies. Remaining human checks are handling/balance, real-device combinations/reconnect/rumble/audio, hot-seat comfort and additional machines/aspects. Raw logs/builds/prototype preparations are ignored and excluded from Git.
+
+## Earlier checkpoint history
+
+# Hardcore Truck Cheese Rolling completed — 2026-10-15
 
 Implementation, saved scenes and native Windows delivery are complete. Seventh sport:1–4 configured scoring racers plus12 background AI, physical cheese catches/first5, steep grass/muddy runout, seeded clear/blizzard/hurricane weather, genuine explosive SheepV5 models and fair damage/recovery. Cornhole's cab default/replays and all older sports remain intact.
 

@@ -8,7 +8,7 @@ Wallball supports uneven teams of1–4 with a fresh ball-only contact envelope a
 
 The truck mesh authoring offset and repeated Weather Maker scene-transition leaks found during validation are fixed. Dock supports human-owned slow/fast multiangle replay without an automatic timeout once manually controlled; solo records use the same whole-inch score as display/ties. Base uses a compact colored per-view HUD and bounded bloom so canopies and trucks stay visible.
 
-Build through `LWS.TruckSports.Editor.SportsBuilder.Build`; never use `CreateValidateBuild` for delivery because it reauthors older scenes. See [validation](VALIDATION.md), [build information](BUILD-INFO.md), [checkpoint](CHECKPOINT.md) and [dependency publication blocker](../../Documentation/TruckSports/ExpansionDependencyRepair.md). Native Windows validation builds succeed locally. Publication of copied cross-task dependencies is awaiting explicit approval; a clean remote clone is not yet claimed reproducible. Earlier milestone descriptions below are historical.
+Build through `LWS.TruckSports.Editor.SportsBuilder.Build`; never use `CreateValidateBuild` for delivery because it reauthors older scenes. See [validation](VALIDATION.md), [build information](BUILD-INFO.md), [checkpoint](CHECKPOINT.md) and [dependency publication blocker](../../Documentation/TruckSports/ExpansionDependencyRepair.md). The normal-company Windows x64 Development build is complete and passes startup/input, physical new-event matches and repeated collection navigation. Publication of copied cross-task dependencies is awaiting explicit approval; a clean remote clone is not yet claimed reproducible. Earlier milestone descriptions below are historical.
 
 ## Hardcore Truck Cheese Rolling — 2026-10-15
 

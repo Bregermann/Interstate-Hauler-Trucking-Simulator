@@ -1,0 +1,52 @@
+PASS saved four-payload scene
+PASS four injected-keyboard views start
+PASS four independent human camera mapping
+PASS equal actual release altitude 0
+PASS equal actual release altitude 1
+PASS equal actual release altitude 2
+PASS equal actual release altitude 3
+PASS pause preserves freefall and shared wind clock
+PASS injected whole-controller assignment
+PASS disconnect during flight opens preserved reconnect modal
+PASS disconnect freezes unchanged freefall
+PASS explicit replacement source accepted
+PASS four first contacts and one round finalization
+PASS early and normal actual canopy landings safe
+PASS too-late and missed deployments physically crash
+Deployment variant 0 SAFE · INSIDE TARGET errorMM=20 timeMS=45421 down=4.459095
+Deployment variant 1 SAFE · INSIDE TARGET errorMM=323 timeMS=20400 down=4.459095
+Deployment variant 2 CRASH · INVALID errorMM=71963 timeMS=9040 down=44.20877
+Deployment variant 3 CRASH · INVALID errorMM=75274 timeMS=9040 down=44.21669
+PASS post-contact motion cannot improve or repeat scoring
+PASS software layout for 1 humans
+PASS view routed to participant 0 of 1
+PASS software layout for 2 humans
+PASS view routed to participant 0 of 2
+PASS view routed to participant 1 of 2
+PASS software layout for 3 humans
+PASS view routed to participant 0 of 3
+PASS view routed to participant 1 of 3
+PASS view routed to participant 2 of 3
+PASS software layout for 4 humans
+PASS view routed to participant 0 of 4
+PASS view routed to participant 1 of 4
+PASS view routed to participant 2 of 4
+PASS view routed to participant 3 of 4
+PASS all-AI weather match 0 starts
+PASS AI-only spectator without controller
+PASS all AI rounds lock exactly once 0
+PASS weather preset permits actual safe AI landings 0
+Weather=0 rounds=3 totals=3,9,12,6 finalValid=4 winner=2
+PASS all-AI weather match 1 starts
+PASS AI-only spectator without controller
+PASS all AI rounds lock exactly once 1
+PASS weather preset permits actual safe AI landings 1
+Weather=1 rounds=3 totals=5,9,12,4 finalValid=4 winner=2
+PASS all-AI weather match 2 starts
+PASS AI-only spectator without controller
+PASS all AI rounds lock exactly once 2
+PASS weather preset permits actual safe AI landings 2
+Weather=2 rounds=3 totals=6,9,12,3 finalValid=4 winner=2
+PASS four-view rematch configuration preserved
+Four-view real-time sample frames=7918 meanMS=11.36738 p95=12.5454 p99=18.76859 max=106.2722 GPU=NVIDIA GeForce GTX 1660 Ti
+PASS Base Jumping returns cleanly and scoped weather pipeline restores
