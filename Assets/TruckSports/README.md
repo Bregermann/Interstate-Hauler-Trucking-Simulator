@@ -1,4 +1,12 @@
-# Truck Sports — five offline sports
+# Truck Sports — six offline sports
+
+## Truck Cornhole — 2026-10-15
+
+Cornhole joins Billiards, Ice Hockey, Bowling, Air Hockey and Wallball. One to four simultaneous courses launch the truck itself from a physical trampoline onto an inclined open-hole board. Five rounds × four deliveries use provisional board points, complete downward hole credit and cumulative free-for-all totals. Existing sports and their tuning are preserved.
+
+Each Cornhole player starts in the driver seat. A higher ballistic arc gives roughly six seconds of readable flight, with limited aftertouch and fully physical landings. Per-view recorded replays offer cab, chase, board-side and overhead angles, 0.25×–4× speed, rewind and return, while other courses continue. Shared setup/source ownership, audio, steering settings, haptics and modal input policies follow the collection conventions.
+
+See [Cornhole controls and scoring](../TruckCornhole/README.md), [validation](../TruckCornhole/VALIDATION.md), and [build information](../TruckCornhole/BUILD-INFO.md). The current explicit combined build contains seven scenes, starts at TruckSports, and uses `LWS.TruckSports.Editor.SportsBuilder.Build`. Legacy scene-authoring hooks retain the sixth menu entry. Exact host settings restore on success and failure. Earlier five-sport polish details below are retained as history.
 
 ## Focused polish — 2026-10-14
 
