@@ -12,6 +12,7 @@ public sealed class TerrierCourse:MonoBehaviour {
  public Vector3 Local(Vector3 world)=>geometry.InverseTransformPoint(world);
  public Vector3 World(Vector3 local)=>geometry.TransformPoint(local);
  public float HalfWidth(float z)=>Mathf.Lerp(34,TerrierRules.TunnelHalfWidth+.35f,Mathf.Clamp01(z/Length));
+ public void TruckCorners(BoxCollider shape,Vector3[] points){for(int i=0;i<8;i++)points[i]=Local(shape.transform.TransformPoint(shape.center+Vector3.Scale(shape.size*.5f,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1))));}
  public Bounds TruckBounds(BoxCollider shape){Bounds result=default;for(int i=0;i<8;i++){var p=Local(shape.transform.TransformPoint(shape.center+Vector3.Scale(shape.size*.5f,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1))));if(i==0)result=new Bounds(p,Vector3.zero);else result.Encapsulate(p);}return result;}
  public void Generate(int seed,int heat,bool fallback){Seed=seed;var random=new System.Random(seed);Length=fallback?160:160+random.Next(3)*8;finish.localPosition=new Vector3(0,0,Length);LayoutHash=Mathf.RoundToInt(Length);
  for(int i=0;i<hurdles.Length;i++){float z=32+i*27+(fallback?0:random.Next(-2,3));float h=fallback?.45f:.4f+(float)random.NextDouble()*.25f;hurdles[i].localPosition=new Vector3(0,h*.5f,z);hurdles[i].localScale=new Vector3((HalfWidth(z)-.3f)*2,h,.4f);LayoutHash=unchecked(LayoutHash*31+Mathf.RoundToInt(z*100+h*100));}

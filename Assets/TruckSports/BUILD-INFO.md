@@ -1,3 +1,11 @@
+# Active build status — expansion in progress
+
+Final requested output: F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe. Keep every accompanying file together. No extra build directories or C: worktrees will be created.
+
+Most recent native build: fourteen explicit scenes, twelve sports, TruckSports startup, Windows x64 Mono Development, 0 errors / 387 warnings, 920010883 bytes, 249.1021686 seconds. Host-settings success/failure restoration passed. That build predates the latest Terrier finish/cab/debris/dessert changes and the seven new sports. The final rebuild and current-revision built-player acceptance are pending.
+
+Earlier build records below are historical.
+
 # Truck Sports Windows development build â€” 2026-10-15
 
 Executable: `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe`

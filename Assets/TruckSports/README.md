@@ -1,3 +1,13 @@
+# Truck Sports � active twelve-sport update and seven-sport expansion
+
+The current saved collection includes the original eleven sports plus Truck Terrier Racing. The seven additional requested sports are being implemented sequentially; Minefield has a saved physical implementation and a complete eight-AI match, with integration validation underway. Mattress Racing, Wife Carrying, Musical Parking, Giant Swing, Buzkashi and Bog Snorkelling are not yet delivered. See [active checkpoint](../../Documentation/TruckSports/SevenSportsCheckpoint.md).
+
+Latest Terrier fixes preserve clean full-body finishes, protect results against later impacts, animate the actual Taxi steering wheel, throw real physical truck parts for all twelve wrecks, and catch off-course falls in a giant ice-cream bowl. Editor finish and physical debris/dessert acceptance pass; final steering/presentation and Windows acceptance are still running. Keepaway cab steering uses the same presentation adapter.
+
+All outputs remain in this F: project. One final combined output is Builds/TruckSports/TruckSports.exe with its full companions. The existing fourteen-scene development build predates the latest fixes and seven-sport expansion. It is not the final new delivery. Build only through LWS.TruckSports.Editor.SportsBuilder.Build; preserve exact host settings and explicit sports scenes. Hardware/audio/human acceptance remains manual.
+
+The reports below are historical milestones, not current expansion completion claims.
+
 # Truck Sports — eleven offline sports
 
 ## Four-event expansion — 2026-10-15

@@ -1,0 +1,19 @@
+using System;using UnityEngine;
+namespace LWS.TruckTerrierRacing {
+// Actual truck mesh parts, pooled for every racer. Cosmetic rigidbodies collide with the course, never decide a result.
+public sealed class TerrierWreckPool:MonoBehaviour {
+ [Serializable]public sealed class Piece {public int owner;public Transform source;public Rigidbody body;public BoxCollider shape;public MeshRenderer renderer;public Transform ghost;public MeshRenderer ghostRenderer;[NonSerialized]public float age;}
+ public TerrierMatch match;public Piece[] pieces;public float lifetime=6;public int ActiveCount{get;private set;}public int Emissions{get;private set;}public int capacity=2200;
+ struct Pose {public Vector3 p,s;public Quaternion q;public bool active;}
+ Pose[] record;MaterialPropertyBlock tint;
+ void Awake(){tint=new MaterialPropertyBlock();record=new Pose[capacity*pieces.Length];for(int i=0;i<pieces.Length;i++){var p=pieces[i];foreach(var racer in match.racers)foreach(var collider in racer.truck.GetComponentsInChildren<Collider>(true))Physics.IgnoreCollision(p.shape,collider,true);for(int k=0;k<i;k++)if(pieces[k].owner==p.owner)Physics.IgnoreCollision(p.shape,pieces[k].shape,true);}ResetHeat();}
+ public void Emit(int owner){var truck=match.racers[owner].truck;foreach(var p in pieces)if(p.owner==owner){p.body.gameObject.SetActive(true);p.age=0;p.body.isKinematic=false;p.body.detectCollisions=true;p.body.transform.SetPositionAndRotation(p.source.position,p.source.rotation);p.body.transform.localScale=p.source.lossyScale;var center=p.source.TransformPoint(p.source.GetComponent<MeshFilter>().sharedMesh.bounds.center);var radial=center-truck.body.worldCenterOfMass;if(radial.sqrMagnitude<.01f)radial=Vector3.up;radial.Normalize();p.body.linearVelocity=truck.body.GetPointVelocity(center)*.65f+radial*5+Vector3.up*6;p.body.angularVelocity=truck.body.angularVelocity+new Vector3(Mathf.Sin(owner+p.body.mass)*9,7,Mathf.Cos(owner*2+p.body.mass)*9);p.source.GetComponent<Renderer>().GetPropertyBlock(tint);p.renderer.SetPropertyBlock(tint);p.ghostRenderer.SetPropertyBlock(tint);p.body.WakeUp();}foreach(var a in pieces)if(a.owner==owner){foreach(var racer in match.racers)foreach(var collider in racer.truck.GetComponentsInChildren<Collider>(true))Physics.IgnoreCollision(a.shape,collider,true);foreach(var b in pieces)if(b.owner==owner&&a!=b)Physics.IgnoreCollision(a.shape,b.shape,true);}Emissions++;}
+ void FixedUpdate(){ActiveCount=0;foreach(var p in pieces)if(p.body.gameObject.activeSelf){p.age+=Time.fixedDeltaTime;if(p.age>=lifetime){p.body.isKinematic=true;p.body.gameObject.SetActive(false);}else ActiveCount++;}}
+ public void ResetHeat(){ActiveCount=Emissions=0;foreach(var p in pieces){p.body.isKinematic=true;p.body.gameObject.SetActive(false);p.ghost.gameObject.SetActive(false);}if(record!=null)Array.Clear(record,0,record.Length);}
+ public void Record(int frame){if(record==null||frame>=capacity)return;for(int i=0;i<pieces.Length;i++){var p=pieces[i];record[frame*pieces.Length+i]=new Pose{p=p.body.position,q=p.body.rotation,s=p.body.transform.localScale,active=p.body.gameObject.activeSelf};}}
+ public void BeginReplay(){foreach(var p in pieces){p.body.isKinematic=true;p.body.gameObject.SetActive(false);}}
+ public void DrawReplay(int lo,int hi,float t){if(record==null)return;for(int i=0;i<pieces.Length;i++){var a=record[Mathf.Min(capacity-1,lo)*pieces.Length+i];var b=record[Mathf.Min(capacity-1,hi)*pieces.Length+i];var ghost=pieces[i].ghost;ghost.gameObject.SetActive(a.active);if(a.active){ghost.SetPositionAndRotation(Vector3.Lerp(a.p,b.p,t),Quaternion.Slerp(a.q,b.q,t));ghost.localScale=Vector3.Lerp(a.s,b.s,t);}}}
+ public void EndReplay(){foreach(var p in pieces)p.ghost.gameObject.SetActive(false);}
+ public void Clear(){foreach(var p in pieces){p.body.isKinematic=true;p.body.gameObject.SetActive(false);p.ghost.gameObject.SetActive(false);}ActiveCount=0;}
+}
+}
