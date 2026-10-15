@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using NWH.WheelController3D;
 namespace LWS.TruckCheeseRolling {
 // NWH owns tire/suspension forces; PhysX owns contact response. No extra truck collision impulse.
@@ -6,8 +6,12 @@ public sealed class CheeseTruck:MonoBehaviour {
  public CheeseMatch match;public Rigidbody body;public WheelController[] wheels;public Renderer paint;public Transform marker;public AudioSource engine,skid;public ParticleSystem splash;public TrailRenderer[] tracks;
  public int index;public Vector2 command;public bool Scoring=>index<match.setup.count;public float Damage{get;private set;}public float DisabledFor{get;private set;}public float RecoveryCooldown{get;private set;}public int Recoveries{get;private set;}public int Blasts{get;private set;}public bool CatchArmed{get;private set;}public bool Grounded{get;private set;}
  public bool StartBoosted{get;private set;}public float Progress{get;private set;}public bool Mud=>body.position.z>170;public Vector3 LastRecovery{get;private set;}public float LastProgressBeforeRecovery{get;private set;}
- float decisionAt,stuck,airBudget,soundAt,separation;bool braking;Vector2 planned;
- public void ResetTruck(Vector3 position,Quaternion rotation){gameObject.SetActive(true);body.isKinematic=false;body.position=position;body.rotation=rotation;body.linearVelocity=body.angularVelocity=Vector3.zero;Damage=DisabledFor=RecoveryCooldown=stuck=airBudget=separation=0;Progress=position.z;CatchArmed=true;braking=false;command=planned=Vector2.zero;decisionAt=index*.015f;Recoveries=Blasts=0;StartBoosted=false;body.isKinematic=true;foreach(var w in wheels){w.enabled=true;w.wheel.angularVelocity=0;if(w.wheel.meshCollider!=null)w.wheel.meshCollider.enabled=true;w.WakeFromSleep();}StopSound();}
+ [Header("Flat runout handling — NWH tires remain authoritative")]
+ public float bottomMotorTorque=42,bottomGrip=.92f,bottomBrakeTorque=110,bottomSteerAngle=42;
+ public float lateralScrub=1.8f,groundYawAuthority=2.1f,uprightAuthority=5.5f;
+ public float BottomBlend{get;private set;}public float GroundControl{get;private set;}
+ float groundedAge;float decisionAt,stuck,airBudget,soundAt,separation;bool braking;Vector2 planned;
+ public void ResetTruck(Vector3 position,Quaternion rotation){gameObject.SetActive(true);body.isKinematic=false;body.position=position;body.rotation=rotation;body.linearVelocity=body.angularVelocity=Vector3.zero;Damage=DisabledFor=RecoveryCooldown=stuck=airBudget=separation=groundedAge=BottomBlend=GroundControl=0;Progress=position.z;CatchArmed=true;braking=false;command=planned=Vector2.zero;decisionAt=index*.015f;Recoveries=Blasts=0;StartBoosted=false;body.isKinematic=true;foreach(var w in wheels){w.enabled=true;w.wheel.angularVelocity=0;if(w.wheel.meshCollider!=null)w.wheel.meshCollider.enabled=true;w.WakeFromSleep();}StopSound();}
  public void Release(){body.isKinematic=false;body.WakeUp();}
  public void StartJump(float up,float forward){if(StartBoosted||body.isKinematic)return;StartBoosted=true;body.AddForce(Vector3.up*Mathf.Clamp(up,0,7)+Vector3.forward*Mathf.Clamp(forward,0,6),ForceMode.VelocityChange);}
  public void Blast(Vector3 origin,float delta,int explosion){Blasts++;Damage=Mathf.Min(100,Damage+delta*2.4f);DisabledFor=Mathf.Max(DisabledFor,Mathf.Clamp(delta*.1f,.3f,2.5f));if(Scoring)match.Pulse(index,Mathf.Clamp01(delta*.04f),.35f);}
@@ -20,9 +24,28 @@ public sealed class CheeseTruck:MonoBehaviour {
   if(!CatchArmed){separation=Vector3.Distance(body.position,match.cheese.body.position)>6?separation+dt:0;if(separation>.75f)CatchArmed=true;}
   bool ai=!Scoring||match.setup.players[index].source==LWS.TruckBowling.BowlingSource.AI;if(ai&&match.RaceTime>=decisionAt){Plan();decisionAt=match.RaceTime+(Scoring?.12f+(2-(int)match.setup.players[index].difficulty)*.09f:.24f+(index%3)*.04f);}Vector2 input=ai?planned:command;if(DisabledFor>0)input=Vector2.zero;
   float speed=Vector3.Dot(body.linearVelocity,transform.forward);if(!braking&&input.y*speed<-.3f&&Mathf.Abs(speed)>.5f)braking=true;if(braking&&(Mathf.Abs(speed)<.25f||input.y*speed>=0))braking=false;
-  float grip=(Mud?.48f:1)*(match.weather.Kind==CheeseWeatherKind.Blizzard?.62f:match.weather.Kind==CheeseWeatherKind.Hurricane?.82f:1);foreach(var w in wheels){w.forwardFriction.loadFactor=grip;w.sideFriction.loadFactor=grip;w.MotorTorque=braking?0:input.y*24*(DisabledFor>0?0:Mathf.Lerp(1,.65f,Damage/100));w.BrakeTorque=braking?Mathf.Abs(input.y)*65:0;w.SteerAngle=w.transform.localPosition.z>0?input.x*30:0;}
-  // Damping never uses orientation-relative forward/reverse speed clamps.
-  body.linearDamping=Mud?.45f:.025f;body.angularDamping=Mud?.8f:.18f;body.AddForce(match.weather.Gust,ForceMode.Acceleration);
+  // The old full-runout damping and half tire load factor prevented useful low-speed control.
+  // Blend by real terrain grade. Airborne tumbles and the steep hill retain their original response.
+  BottomBlend=CheeseRules.RunoutControl(body.position);
+  bool supported=Grounded&&Vector3.Dot(transform.up,Vector3.up)>.28f;
+  groundedAge=supported?Mathf.Min(1.5f,groundedAge+dt):0;
+  GroundControl=BottomBlend*Mathf.SmoothStep(0,1,Mathf.InverseLerp(.15f,.9f,groundedAge));
+  float weatherGrip=match.weather.Kind==CheeseWeatherKind.Blizzard?Mathf.Lerp(.62f,.78f,BottomBlend):match.weather.Kind==CheeseWeatherKind.Hurricane?.82f:1;
+  float grip=Mathf.Lerp(Mud?.48f:1,bottomGrip,BottomBlend)*weatherGrip;
+  foreach(var w in wheels){w.forwardFriction.loadFactor=grip;w.sideFriction.loadFactor=grip;w.MotorTorque=braking?0:input.y*Mathf.Lerp(24,bottomMotorTorque,BottomBlend)*(DisabledFor>0?0:Mathf.Lerp(1,.8f,Damage/100));w.BrakeTorque=braking?Mathf.Abs(input.y)*Mathf.Lerp(65,bottomBrakeTorque,BottomBlend):0;w.SteerAngle=w.transform.localPosition.z>0?input.x*Mathf.Lerp(30,bottomSteerAngle,BottomBlend):0;}
+  body.linearDamping=Mathf.Lerp(.025f,.09f,BottomBlend);body.angularDamping=Mathf.Lerp(.18f,.24f,BottomBlend);body.AddForce(match.weather.Gust,ForceMode.Acceleration);
+  if(GroundControl>0){
+   var forward=Vector3.ProjectOnPlane(transform.forward,Vector3.up).normalized;
+   var right=Vector3.Cross(Vector3.up,forward);var flat=Vector3.ProjectOnPlane(body.linearVelocity,Vector3.up);
+   // Bounded tire-like lateral scrub redirects momentum gradually after landing; never clamps it.
+   body.AddForce(Vector3.ClampMagnitude(-right*Vector3.Dot(flat,right)*lateralScrub,12)*GroundControl,ForceMode.Acceleration);
+   float direction=speed<-.25f||Mathf.Abs(speed)<.25f&&input.y<0?-1:1;
+   float desiredYaw=input.x*direction*Mathf.Lerp(1.3f,.85f,Mathf.InverseLerp(0,16,flat.magnitude));
+   float yaw=(desiredYaw-body.angularVelocity.y)*groundYawAuthority;
+   var tilt=Vector3.Cross(transform.up,Vector3.up)*uprightAuthority-new Vector3(body.angularVelocity.x,0,body.angularVelocity.z)*1.5f;
+   if(DisabledFor>0)yaw=0;
+   body.AddTorque(Vector3.ClampMagnitude(tilt+Vector3.up*yaw,8)*GroundControl,ForceMode.Acceleration);
+  }
   if(!Grounded&&DisabledFor<=0&&airBudget<1.2f){Vector3 correction=new Vector3(input.x,0,input.y)*.65f;float cost=correction.magnitude*dt;float fraction=cost>0?Mathf.Min(cost,1.2f-airBudget)/cost:0;body.AddForce(correction*fraction,ForceMode.Acceleration);body.AddTorque(new Vector3(input.y*.25f,0,-input.x*.35f),ForceMode.Acceleration);airBudget+=cost*fraction;}if(Grounded)airBudget=0;
   bool motionless=body.linearVelocity.sqrMagnitude<.01f&&input.sqrMagnitude>.1f;bool overturned=Vector3.Dot(transform.up,Vector3.up)<.05f&&body.linearVelocity.sqrMagnitude<4;stuck=motionless||overturned?stuck+dt:Mathf.Max(0,stuck-dt);if((!CheeseRules.Safe(body.position)||stuck>7||Damage>90&&DisabledFor<=0&&body.linearVelocity.sqrMagnitude<1)&&RecoveryCooldown<=0)Recover();
  }

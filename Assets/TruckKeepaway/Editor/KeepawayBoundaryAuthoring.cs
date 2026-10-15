@@ -1,0 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using LWS.TruckSports.Editor;
+namespace LWS.TruckKeepaway.Editor {
+public static class KeepawayBoundaryAuthoring {
+ const string Folder="TruckKeepaway",Root="Rounded continuous Keepaway boards";
+ public static void UpgradeBoth(){foreach(var path in new[]{KeepawayAuthoring.Scene,KeepawayChaosAuthoring.CabScene}){EditorSceneManager.OpenScene(path);Install(UnityEngine.Object.FindAnyObjectByType<KeepawayMatch>());EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());}AssetDatabase.SaveAssets();}
+ public static void Install(KeepawayMatch m){var old=GameObject.Find(Root);if(old!=null)UnityEngine.Object.DestroyImmediate(old);foreach(var t in UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include).Where(t=>t.name=="Side boundary"||t.name=="End boundary").ToArray())UnityEngine.Object.DestroyImmediate(t.gameObject);
+ var root=new GameObject(Root).transform;var mat=AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckKeepaway/Materials/Arena white.mat");var contact=SportsEventAuthoring.Contact(Folder,"Rounded board contact",.035f,.3f);float r=KeepawayBoundary.Radius,cx=KeepawayBoundary.HalfX-r,cz=KeepawayBoundary.HalfZ-r;
+ for(int sign=-1;sign<=1;sign+=2){SportsEventAuthoring.Box("Straight long board",new Vector3(0,.8f,sign*(KeepawayBoundary.HalfZ+.3f)),new Vector3(cx*2,1.6f,.6f),mat,contact,root);SportsEventAuthoring.Box("Straight short board",new Vector3(sign*(KeepawayBoundary.HalfX+.3f),.8f,0),new Vector3(.6f,1.6f,cz*2),mat,contact,root);}
+ var arc=new Mesh{name="Seamless quarter rink board"};var vertices=new List<Vector3>();var triangles=new List<int>();const int segments=32;for(int i=0;i<=segments;i++){float angle=i*Mathf.PI*.5f/segments;var d=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));vertices.Add(d*r);vertices.Add(d*r+Vector3.up*1.6f);vertices.Add(d*(r+.6f));vertices.Add(d*(r+.6f)+Vector3.up*1.6f);}for(int i=0;i<segments;i++){int a=i*4,b=a+4;Quad(a,b,b+1,a+1);Quad(a+2,a+3,b+3,b+2);Quad(a+1,b+1,b+3,a+3);Quad(a,a+2,b+2,b);}Quad(0,1,3,2);int last=segments*4;Quad(last,last+2,last+3,last+1);arc.SetVertices(vertices);arc.SetTriangles(triangles,0);arc.RecalculateNormals();arc.RecalculateBounds();var mesh=Save(arc,"Rounded quarter board.asset");
+ for(int q=0;q<4;q++){var g=new GameObject("Continuous curved corner "+q);g.transform.SetParent(root,false);g.transform.localPosition=new Vector3(q==0||q==3?cx:-cx,0,q<2?cz:-cz);g.transform.localRotation=Quaternion.Euler(0,-q*90,0);g.AddComponent<MeshFilter>().sharedMesh=mesh;g.AddComponent<MeshRenderer>().sharedMaterial=mat;g.AddComponent<MeshCollider>().sharedMesh=mesh;g.GetComponent<MeshCollider>().sharedMaterial=contact;}
+ // Trim the visible surface to the same outline. Existing underfloor collider remains sealed below the boards.
+ var floor=GameObject.Find("Keepaway arena");floor.GetComponent<Renderer>().enabled=false;var surface=new GameObject("Rounded arena surface");surface.transform.SetParent(root,false);var points=new List<Vector3>{new Vector3(0,.005f,0)};var indices=new List<int>();for(int q=0;q<4;q++)for(int i=0;i<=32;i++){float a=(q+i/32f)*Mathf.PI*.5f;points.Add(new Vector3((q==0||q==3?cx:-cx)+Mathf.Cos(a)*(r+.05f),.005f,(q<2?cz:-cz)+Mathf.Sin(a)*(r+.05f)));}for(int i=1;i<points.Count;i++){indices.Add(0);indices.Add(i==points.Count-1?1:i+1);indices.Add(i);}var field=new Mesh{name="Rounded arena felt"};field.SetVertices(points);field.SetTriangles(indices,0);field.RecalculateNormals();field.RecalculateBounds();surface.AddComponent<MeshFilter>().sharedMesh=Save(field,"Rounded arena surface.asset");surface.AddComponent<MeshRenderer>().sharedMaterial=floor.GetComponent<Renderer>().sharedMaterial;
+ KeepawayPresentationAuthoring.Install(m);foreach(var camera in m.cabViews)SportsChaosAuthoring.Cab(camera.view,Folder,Array.IndexOf(m.cabViews,camera));EditorUtility.SetDirty(m);
+ void Quad(int a,int b,int c,int d){triangles.AddRange(new[]{a,b,c,a,c,d});}
+ }
+ static Mesh Save(Mesh mesh,string name){string path="Assets/TruckKeepaway/Materials/"+name;var asset=AssetDatabase.LoadAssetAtPath<Mesh>(path);if(asset==null){AssetDatabase.CreateAsset(mesh,path);return mesh;}EditorUtility.CopySerialized(mesh,asset);UnityEngine.Object.DestroyImmediate(mesh);EditorUtility.SetDirty(asset);return asset;}
+ public static void Validate(){foreach(var path in new[]{KeepawayAuthoring.Scene,KeepawayChaosAuthoring.CabScene}){EditorSceneManager.OpenScene(path);var root=GameObject.Find(Root);if(root==null||root.GetComponentsInChildren<MeshCollider>().Count(c=>c.name.StartsWith("Continuous curved corner"))!=4)throw new Exception("Keepaway requires four curved physical corners");for(int x=-1;x<=1;x+=2)for(int z=-1;z<=1;z+=2){if(KeepawayBoundary.Contains(new Vector3(x*31,0,z*17),1))throw new Exception("Square corner must be excluded");if(!KeepawayBoundary.Contains(new Vector3(x*27,0,z*11),2))throw new Exception("Starting truck must fit");}Debug.Log("KEEP_ROUNDED_SAVED_VALIDATED "+path);}}
+}
+}

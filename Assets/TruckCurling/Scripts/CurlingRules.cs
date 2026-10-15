@@ -4,7 +4,7 @@ namespace LWS.TruckCurling {
 public static class CurlingRules {
  public const int Deliveries=16;public const float Radius=1.6f,HouseRadius=4.6f,Tee=52,Hog=37.5f,Back=58.5f,HalfWidth=7;
  public static bool House(Vector3 p)=>new Vector2(p.x,p.z-Tee).magnitude<=HouseRadius+Radius;
- public static bool SideOrBack(Vector3 p)=>Mathf.Abs(p.x)+Radius>=HalfWidth||p.z-Radius>Back;
+ public static bool SideOrBack(Vector3 p)=>p.z-Radius>Back;
  public static bool HogQualified(Vector3 p,bool hitStone)=>p.z-Radius>Hog||hitStone;
  public static bool Guard(Vector3 p,bool guardContact)=>!House(p)&&p.z+Radius<Tee&&(p.z-Radius>Hog||guardContact);
  public static bool Protected(int delivery,int team,int ownerTeam,bool guard)=>delivery<5&&team!=ownerTeam&&guard;
