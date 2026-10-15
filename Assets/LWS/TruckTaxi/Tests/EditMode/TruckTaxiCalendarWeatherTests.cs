@@ -144,6 +144,42 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsTrue(calendar.Forecast.All(e => e.Condition == TruckTaxiWeatherCondition.Fog));
         }
 
+        [TestCase(TruckTaxiWeatherCondition.Clear)]
+        [TestCase(TruckTaxiWeatherCondition.Rain)]
+        public void ResumeMatchingRestoredWeatherDoesNotApplyAgain(TruckTaxiWeatherCondition condition)
+        {
+            var saved = new TruckTaxiForecastSnapshot { automatic = false, manualCondition = condition };
+            applied.Clear();
+            Assert.IsTrue(calendar.Restore(saved, false));
+            Assert.IsEmpty(applied, "Restoring forecast intent must not overwrite canonical restored weather.");
+            string restoredPreset = TruckTaxiCalendarWeatherService.PresetFor(condition);
+            Assert.IsTrue(calendar.ResumeRestoredWeather(restoredPreset));
+            Assert.IsTrue(calendar.ResumeRestoredWeather(restoredPreset));
+            Assert.IsEmpty(applied, "Matching restored weather must not restart a transition.");
+            Assert.AreEqual(condition, calendar.CurrentCondition);
+            Assert.IsFalse(calendar.AutomaticWeather);
+        }
+
+        [Test]
+        public void ResumeStaleRestoredClearAppliesManualRainOnce()
+        {
+            var saved = new TruckTaxiForecastSnapshot
+                { automatic = false, manualCondition = TruckTaxiWeatherCondition.Rain };
+            applied.Clear();
+            Assert.IsTrue(calendar.Restore(saved, false));
+            Assert.IsEmpty(applied);
+            Assert.IsTrue(calendar.ResumeRestoredWeather(LwsWeatherPresetCatalog.ClearId));
+            CollectionAssert.AreEqual(new[] { LwsWeatherPresetCatalog.LightRainId }, applied,
+                "A saved transition's source Clear must not orphan the restored manual Rain intent.");
+            Assert.AreEqual(TruckTaxiWeatherCondition.Rain, calendar.CurrentCondition);
+            Assert.IsFalse(calendar.AutomaticWeather);
+            Assert.IsTrue(calendar.ResumeRestoredWeather(LwsWeatherPresetCatalog.LightRainId));
+            Assert.AreEqual(1, applied.Count, "Once canonical weather matches, resume must not request Rain again.");
+            clock.AddHours(1);
+            Assert.AreEqual(TruckTaxiWeatherCondition.Rain, calendar.CurrentCondition);
+            Assert.AreEqual(1, applied.Count, "Clock changes must not duplicate the resumed manual request.");
+        }
+
         [Test]
         public void InvalidDebugDateDoesNotMutateClockOrSchedule()
         {

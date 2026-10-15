@@ -55,7 +55,8 @@ namespace LWS.TruckTaxi
             if (snow == null || settings == null || environment.frozen || !double.IsFinite(elapsedGameSeconds) ||
                 !float.IsFinite(clockRate) || elapsedGameSeconds <= 0 || clockRate <= 0) return;
             float seconds = (float)Math.Min(86400, elapsedGameSeconds / clockRate);
-            string name = observedCondition?.ToString() ?? environment.forecast?.manualCondition.ToString() ?? "Clear";
+            string name = environment.forecast?.automatic == false ? environment.forecast.manualCondition.ToString() :
+                observedCondition?.ToString() ?? environment.forecast?.manualCondition.ToString() ?? "Clear";
             float rate = name == "Blizzard" ? settings.blizzardMetersPerSecond : name == "HeavySnow" ? settings.heavySnowMetersPerSecond :
                 name == "LightSnow" || name == "Snow" ? settings.lightSnowMetersPerSecond : -settings.snowMeltMetersPerSecond *
                 TruckTaxiSnow.MeltRateMultiplier(temperatureC, name == "Rain" || name == "HeavyRain" || name == "Thunderstorm");

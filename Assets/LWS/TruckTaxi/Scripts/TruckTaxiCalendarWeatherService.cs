@@ -246,6 +246,16 @@ namespace LWS.TruckTaxi
             return ApplyCurrent();
         }
 
+        public bool ResumeRestoredWeather(string restoredPresetId)
+        {
+            if (current == null) return false;
+            if (string.Equals(current.PresetId, restoredPresetId, StringComparison.OrdinalIgnoreCase)) return true;
+            // The canonical snapshot can be the FROM side of an unfinished transition.
+            // Resume the persisted forecast intent instead of leaving that blend orphaned forever.
+            lastAppliedPreset = null;
+            return ApplyCurrent();
+        }
+
         public bool SetDate(int year, int month, int day)
         {
             if (clock == null || year < 1 || year > 9999 || month < 1 || month > 12 ||

@@ -133,9 +133,9 @@ namespace LWS.TruckTaxi
                 return CalendarWeather.Restore(new TruckTaxiForecastSnapshot { automatic = AutomaticWeather,
                     manualCondition = TruckTaxiCalendarWeatherService.ConditionFor(CurrentTaxiWeatherId) }, false);
             }
-            // The canonical weather provider already restored intensity/precipitation/transition state.
-            // Rebind Taxi policy without issuing a second vendor transition over that state.
+            // Keep restored canonical values when settled. An incomplete saved blend also needs its forecast target.
             if (!CalendarWeather.Restore(value.forecast, false) || Snow != null && !Snow.Restore(value.snow)) return false;
+            if (!Weather.CurrentSnapshot.transitioning && !CalendarWeather.ResumeRestoredWeather(Weather.CurrentSnapshot.weatherPresetId)) return false;
             CurrentTaxiWeatherId = CalendarWeather.Current.PresetId;
             AutomaticWeather = value.forecast.automatic;
             SetFrozen(value.frozen);

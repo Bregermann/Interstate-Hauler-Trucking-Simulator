@@ -91,6 +91,7 @@ namespace LWS.TruckTaxi
                 DualCareerAssertions();
                 if (request.Mode == "continue")
                 {
+                    yield return DualWaitForRestoredWeather();
                     string weather = returningContinue ? LwsWeatherPresetCatalog.LightRainId : LwsWeatherPresetCatalog.HeavySnowId;
                     float depth = host.Environment.Snow.Capture().backgroundDepth;
                     Check(host.Environment.Weather.CurrentSnapshot.weatherPresetId == weather && float.IsFinite(depth) &&
@@ -103,6 +104,7 @@ namespace LWS.TruckTaxi
                     var visits = TruckTaxiVibinPersistence.ReadTravelPayload(saves.CaptureSnapshot(dualProfile)).worldVisits;
                     var demo = visits.Single(v => v.scene == TruckTaxiWorldCatalog.Demo);
                     yield return DualTransfer(false);
+                    yield return DualWaitForRestoredWeather();
                     double now = TruckTaxiCalendarWeatherService.SnapshotDateTime(host.Environment.Clock.CurrentSnapshot).Ticks / (double)TimeSpan.TicksPerSecond;
                     var weather = JsonUtility.FromJson<LwsWeatherSavePayload>(demo.weather.payloadJson);
                     TruckTaxiWorldVisit.AdvanceSnow(demo.environment, now-demo.gameSeconds, demo.clockRate, host.Environment.settings,
@@ -132,6 +134,13 @@ namespace LWS.TruckTaxi
 
         private TruckTaxiWorldExit DualExit() => FindObjectsByType<TruckTaxiWorldExit>(FindObjectsSortMode.None)
             .Single(e=>e.gameObject.scene == host.gameObject.scene);
+
+        private IEnumerator DualWaitForRestoredWeather()
+        {
+            float deadline = Time.realtimeSinceStartup + host.Environment.settings.weatherTransitionSeconds + 10;
+            while (host.Environment.Weather.CurrentSnapshot.transitioning && Time.realtimeSinceStartup < deadline) yield return null;
+            Check(!host.Environment.Weather.CurrentSnapshot.transitioning, "restored forecast transition completes without intervention");
+        }
 
         private IEnumerator DualPlaceAtExit(bool outbound)
         {
@@ -487,25 +496,22 @@ namespace LWS.TruckTaxi
 
         private IEnumerator DualObservationScreenshot(string name, Vector3 target, Vector3 position)
         {
+            yield return new WaitForEndOfFrame();
             Camera camera = Camera.main;
             if (camera == null) yield break;
-            var followers = host.Player.GetComponentsInChildren<NWH.Common.Cameras.CameraMouseDrag>(true)
-                .Where(c => c.enabled).ToArray();
             Vector3 originalPosition = camera.transform.position;
             Quaternion originalRotation = camera.transform.rotation;
             try
             {
-                foreach (var follower in followers) follower.enabled = false;
                 camera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(target - position, Vector3.up));
-                yield return null;
-                yield return null;
-                yield return DualScreenshot(name);
+                // Reuse the existing synchronous real-camera capture, before the normal follow rig runs again.
+                TruckTaxiPlayerSmokeTest.Capture(Path.Combine(request.Root, "dual-" + name + ".png"), Screen.width, Screen.height);
             }
             finally
             {
                 if (camera != null) camera.transform.SetPositionAndRotation(originalPosition, originalRotation);
-                foreach (var follower in followers) if (follower != null) follower.enabled = true;
             }
+            yield return null;
         }
 #endif
     }

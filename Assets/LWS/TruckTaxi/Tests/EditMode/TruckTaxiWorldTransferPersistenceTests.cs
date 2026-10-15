@@ -233,6 +233,7 @@ namespace LWS.TruckTaxi.Tests
         public void ObservedNonSnowMeltsDespiteStaleBlizzardManualForecast(TruckTaxiWeatherCondition observed)
         {
             TruckTaxiEnvironmentSnapshot environment = SnowEnvironment(TruckTaxiWeatherCondition.Blizzard);
+            environment.forecast.automatic = true;
             TruckTaxiWorldVisit.AdvanceSnow(environment, 600, 60, settings, observed);
             Assert.AreEqual(.15f, environment.snow.backgroundDepth, .00001f);
             AssertDepths(environment.snow, 0, .05f, .45f, .55f);
@@ -249,9 +250,23 @@ namespace LWS.TruckTaxi.Tests
             TruckTaxiWeatherCondition observed = TruckTaxiCalendarWeatherService.ConditionFor(payload.weatherPresetId);
             Assert.AreEqual(TruckTaxiWeatherCondition.Blizzard, observed);
             TruckTaxiEnvironmentSnapshot environment = SnowEnvironment(TruckTaxiWeatherCondition.Clear);
+            environment.forecast.automatic = true;
             TruckTaxiWorldVisit.AdvanceSnow(environment, 600, 60, settings, observed);
             Assert.AreEqual(.5f, environment.snow.backgroundDepth, .00001f);
             AssertDepths(environment.snow, .3f, .4f, .6f, .6f);
+        }
+
+        [Test]
+        public void ManualRainMeltIgnoresStaleObservedClearFromSavedTransition()
+        {
+            TruckTaxiEnvironmentSnapshot environment = SnowEnvironment(TruckTaxiWeatherCondition.Rain);
+            environment.forecast.automatic = false;
+            TruckTaxiWorldVisit.AdvanceSnow(environment, 600, 60, settings, TruckTaxiWeatherCondition.Clear, 15);
+            Assert.AreEqual(.05f, environment.snow.backgroundDepth, .00001f,
+                "Ten real-equivalent seconds of warm Rain melt .15m, not stale Clear's .10m.");
+            AssertDepths(environment.snow, 0, 0, .35f, .45f);
+            Assert.AreEqual(TruckTaxiWeatherCondition.Rain, environment.forecast.manualCondition);
+            Assert.IsFalse(environment.forecast.automatic);
         }
 
         [Test]
