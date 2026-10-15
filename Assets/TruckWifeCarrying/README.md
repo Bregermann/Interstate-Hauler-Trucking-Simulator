@@ -1,0 +1,9 @@
+# Truck Wife Carrying
+
+Four pairs race three310m obstacle courses. Each pair has a full NWH-powered driver truck and a smaller unpowered roof passenger connected by a constrained PhysX joint on a visible installed pallet cradle. Up to four humans can share a pair or join separate pairs; each distinct human pair gets one stable chase view. AI fills individual roles.
+
+Drivers use movement to accelerate, steer and brake before reversing. Passenger movement shifts mass and applies bounded internal counter-torque; hold the displayed action to brace the load. Excessive tilt or a qualifying impact can drop a partner. Stop within4.8m, below1.6m/s, to retrieve with a1.2s visible lift and five-second physical braking penalty. No forward driver teleport or checkpoint skip. Both truck centers must pass the final ordered gate in carried state. Genuine stranding or180s maximum gives DNF.
+
+Finishers earn4/3/2/1, DNF0. Three races, highest cumulative points; true tied leaders race again. Optional or automatic role swaps occur between races, preserving each participant's name, input ownership and pair score. TEAM NAMES edits pair identities. KEYS buttons cycle independent keyboard clusters with matching action bindings, persisted through rematches and reloads. Whole pads conflict with shared sticks; opposite sticks may belong to driver/passenger separately. Pause/disconnect preserve all bodies and clocks.
+
+The course uses installed grass/mud terrain textures, low timber ramps fitted to terrain approaches, tire/barrel slalom islands, shallow water presentation, trees/rocks and Weather Maker. Actual GR3D truck geometry and NWH wheels remain authoritative. DOTween animates pickup only; no vendor source changed. Authoring: LWS.TruckWifeCarrying.Editor.WifeAuthoring.Create. Final build uses SportsBuilder.Build.
