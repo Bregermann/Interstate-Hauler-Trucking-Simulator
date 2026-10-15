@@ -1,0 +1,11 @@
+# Mattress validation — Editor milestone
+
+Seven placement-series fixtures pass, covering8..1/DNF points, duplicate finalization, tied leaders, extra race, cumulative totals and best-place tie resolution.
+
+Actual eight-AI mixed Easy/Normal/Hard PhysX series completed three races. Every competitor physically finished at least once; winner3, points7/14/13/20/20/19/8/7, ERRORS0. Gravity moved all platforms; every NWH wheel remained disabled. Recovery reproduction returned to checkpoint0 with a fixed five-second wait; pause preserved bodies/clock/penalty. Actual-pose replay ghosts had no physics authority. An earlier start-lip defect stranded a long mattress across flat/descending ground; moving the grid fully onto the continuous slope atz8 fixed it. This is not a powered acceleration assist.
+
+Focused physical/lifecycle probe passes ERRORS0: real COM shifts, held assigned-controller brace changes damping/rebound, release preserves motion, actual terrain impact compresses the mattress, bounded effects, injected device disconnect/replacement/neutral gate, whole-versus-shared/duplicate source rejection, four independent views with eight racers, sustained progress, long-name TMP fit, exact pause, rematch and actual collection-menu transitions. Scene-exit test exposed destroyed effect references; null-safe cleanup fixed the exception and rerun passed. Initial injected-key brace check did not hold its virtual keyboard state; acceptance uses a dedicated virtual assigned gamepad, not real hardware.
+
+Camera-only1280x720/1920x1080 four-view composites were inspected; these are not full-window HUD screenshots. Native TMP overflow checks pass. Actual installed bed/quilt model and landscape inspected. One listener, complete saved references and render-only replay verified by authoring validation.
+
+Evidence (ignored logs): Logs/TruckSports/TerrierUpdate/MattressEvidence/{progress,result}.txt and MattressFocusedEvidence/{progress,result}.txt plus four-cameras-1280/1920.png. Development flags -tsMattress and -tsMattressFocused. No human playtest or physical-controller validation claimed. Final current-revision Windows build, full-window UI, hardware feel/audio and sustained combined-build performance remain pending the complete seven-sport integration.
