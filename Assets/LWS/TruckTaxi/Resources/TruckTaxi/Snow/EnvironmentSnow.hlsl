@@ -2,6 +2,7 @@
 #define TAXI_ENVIRONMENT_SNOW_INCLUDED
 
 #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
 
 // The existing Weatherade volume and trace generator publish these globals.
 TEXTURE2D(_SRS_depth);
@@ -42,7 +43,7 @@ half TaxiSnowExposure(float3 positionWS)
     return sqrt(saturate(smoothstep(0, max(10 * _TaxiSnowExposure.y, .001), 5 * mask) * 2));
 }
 
-void TaxiApplyEnvironmentSnow(InputData input, inout SurfaceData surface)
+void TaxiApplyEnvironmentSnow(inout InputData input, inout SurfaceData surface)
 {
     if (_TaxiSnowCoverage <= .001) return;
     // Derivatives follow wind-deformed geometry; preserve the authored normal-map detail.
@@ -63,7 +64,16 @@ void TaxiApplyEnvironmentSnow(InputData input, inout SurfaceData surface)
         float2 traceUV = .5 + tracePosition.xy * .5;
         traceUV.y = 1 - traceUV.y; // Weatherade's trace texture uses the opposite vertical UV.
         if (_TaxiSnowTracesReady > .5 && all(traceUV > .005) && all(traceUV < .995))
-            trace = SAMPLE_TEXTURE2D(_SRS_TraceTex, sampler_TaxiSnowLinearClamp, traceUV).b;
+        {
+            half4 packedTrace = SAMPLE_TEXTURE2D(_SRS_TraceTex, sampler_TaxiSnowLinearClamp, traceUV);
+            half footprint = saturate(packedTrace.b * 5);
+            // Weatherade packs groove normals in RG and neutral/indented height around A=.5.
+            half2 slope = (packedTrace.rg * 2 - 1) * 1.35;
+            half3 grooveNormal = normalize(half3(slope, sqrt(1 - saturate(dot(slope, slope)))));
+            half3 combined = BlendNormalRNM(input.normalWS.xzy, grooveNormal).xzy;
+            input.normalWS = normalize(lerp(input.normalWS, combined, mask * footprint));
+            trace = footprint * saturate((.5 - packedTrace.a) * 2);
+        }
     #endif
     half3 snowColor = lerp(half3(.88, .92, .95), half3(.35, .41, .45), trace * .75);
     snowColor *= lerp(.88, 1, snow.b);

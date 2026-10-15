@@ -329,9 +329,10 @@ namespace LWS.TruckTaxi
                 RequireDriveReady(); var body=host.Player.GetComponent<Rigidbody>(); Vector3 start=body.position;
                 if(host.Player.TruckControlController.CurrentState.parkingBrakeOn) yield return DrivePulse("ParkingBrake",Key.P);
                 float until=Time.realtimeSinceStartup+18;
-                while(Vector3.Distance(start,body.position)<3 && Time.realtimeSinceStartup<until)
+                float requiredDistance = curve ? 12 : 3;
+                while(Vector3.Distance(start,body.position)<requiredDistance && Time.realtimeSinceStartup<until)
                     yield return curve ? DriveKeys(1,Key.W,Key.D) : DriveKeys(1,Key.W);
-                Check(Vector3.Distance(start,body.position)>=3 && host.Player.NwhAdapter.VehicleController.input.Throttle>.5f,label+" native throttle/forward motion without recovery");
+                Check(Vector3.Distance(start,body.position)>=requiredDistance && host.Player.NwhAdapter.VehicleController.input.Throttle>.5f,label+" native throttle/forward motion without recovery");
                 yield return DriveKeys(2,Key.W,Key.S);
                 Check(host.Player.NwhAdapter.VehicleController.input.Brakes>.5f,label+" native brake input");
                 until=Time.realtimeSinceStartup+8;
@@ -456,7 +457,7 @@ namespace LWS.TruckTaxi
             }
             Check(placed,"supported snow-covered off-road fixture exists beside the real connector");
             yield return new WaitForFixedUpdate();
-            int stamps=surface.WheelTraceStampCount; Quaternion before=body.rotation;
+            int stamps=surface.WheelTraceStampCount; Quaternion before=body.rotation; Vector3 traceStart=body.position;
             yield return DualNativeDrive(label+" curved off-road snow",true);
             int contacts=0;
             foreach(var wheel in host.Player.NwhAdapter.VehicleController.powertrain.wheels)
@@ -482,9 +483,9 @@ namespace LWS.TruckTaxi
             Check(surface.TraceActivePixelCount>0,"actual GPU Weatherade off-road trace mask contains tire marks: "+surface.TracePixelDiagnostic);
             RecordDualEvidence("OFFROAD "+label+" wheelContacts="+contacts+" newStamps="+(surface.WheelTraceStampCount-stamps)+" "+surface.TracePixelDiagnostic);
             yield return DualScreenshot(label+"-offroad-snow-tracks");
-            Vector3 trail = body.position - body.transform.forward * 3;
+            Vector3 trail = (traceStart + body.position) * .5f;
             yield return DualObservationScreenshot(label + "-offroad-track-detail", trail,
-                trail + Vector3.up * 12 - body.transform.forward * 7);
+                trail + Vector3.up * 18 - body.transform.forward * 9);
             TruckTaxiRecoverySpace.Move(body,roadPoint,roadRotation); body.linearVelocity=body.angularVelocity=Vector3.zero;
             host.Session.DiscardTeleportDistance(); Physics.SyncTransforms(); yield return new WaitForFixedUpdate();
         }
