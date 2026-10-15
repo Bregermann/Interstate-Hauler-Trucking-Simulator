@@ -14,12 +14,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiCareerCatalog
   trucks:
   - stableId: ih.truck.nwh.euro.semi
-    displayName: NWH Euro Semi Validation Tractor
+    displayName: Interstate Starter
     truck: {fileID: 11400000, guid: 0cc4e19407827f542be5923366c1db32, type: 2}
-    description: Current starter tractor
-    icon: {fileID: 0}
+    description: Your original, already-owned NWH daycab. Original appearance and
+      proven controls retained.
+    icon: {fileID: 21300000, guid: 18ec444f22d3106419a3a2b40a90c575, type: 3}
     priceCents: 0
     availableForPurchase: 0
+  - stableId: taxi.truck.highwayking
+    displayName: Highway King
+    truck: {fileID: 11400000, guid: 82698acced2811042871c1dbf2e3adf5, type: 2}
+    description: Classic long-nose sleeper. Chrome, tall stacks and a real furnished
+      berth.
+    icon: {fileID: 21300000, guid: 21cb64de27780914d941507f9c5db186, type: 3}
+    priceCents: 60000
+    availableForPurchase: 1
+  - stableId: taxi.truck.nightrunner
+    displayName: Nightrunner
+    truck: {fileID: 11400000, guid: 17652ea20e325fc44a9b4a75e1f1c477, type: 2}
+    description: Aerodynamic high-roof sleeper with a curved raised roof and integrated
+      lighting.
+    icon: {fileID: 21300000, guid: 30e318900d7d3d74da5e7b68d617d3a8, type: 3}
+    priceCents: 90000
+    availableForPurchase: 1
+  - stableId: taxi.truck.outlaw
+    displayName: Outlaw
+    truck: {fileID: 11400000, guid: e19203b44b147d1489c25e6e81885ab7, type: 2}
+    description: Custom daycab. Tall stacks, rally lamps, dark trim and a protective
+      front bar.
+    icon: {fileID: 21300000, guid: ef1d1103274fb924c8cec492f3108b45, type: 3}
+    priceCents: 125000
+    availableForPurchase: 1
+  - stableId: taxi.truck.thunderhaul
+    displayName: Thunderhaul
+    truck: {fileID: 11400000, guid: c5f7ae4990d0a4b4595aeb7381ec11dc, type: 2}
+    description: Sport daycab. Lower roof, tapered hood, heat vents, aero lip and
+      splitter.
+    icon: {fileID: 21300000, guid: 526b3ccb7a6acfe49ab7c686529d2b39, type: 3}
+    priceCents: 170000
+    availableForPurchase: 1
+  - stableId: taxi.truck.roadpalace
+    displayName: Road Palace
+    truck: {fileID: 11400000, guid: 9757eb64354f95a47b3db22f5c39e5b8, type: 2}
+    description: Premium high-roof sleeper with extra storage, refrigerator, berth
+      and warm interior lighting.
+    icon: {fileID: 21300000, guid: 4c79120271c30554b9fe79065ec6238d, type: 3}
+    priceCents: 240000
+    availableForPurchase: 1
   upgrades:
   - stableId: taxi.upgrade.engine-calibration
     displayName: Engine Calibration
@@ -29,6 +70,11 @@ MonoBehaviour:
     category: 0
     compatibleTruckIds:
     - ih.truck.nwh.euro.semi
+    - taxi.truck.highwayking
+    - taxi.truck.nightrunner
+    - taxi.truck.outlaw
+    - taxi.truck.thunderhaul
+    - taxi.truck.roadpalace
     adapterId: taxi.nwh.tuning
     adapterConfiguration: {fileID: 11400000, guid: 5c1f55dba94f0e842b096a1151d0fdfa,
       type: 2}
@@ -41,6 +87,11 @@ MonoBehaviour:
     category: 2
     compatibleTruckIds:
     - ih.truck.nwh.euro.semi
+    - taxi.truck.highwayking
+    - taxi.truck.nightrunner
+    - taxi.truck.outlaw
+    - taxi.truck.thunderhaul
+    - taxi.truck.roadpalace
     adapterId: taxi.nwh.tuning
     adapterConfiguration: {fileID: 11400000, guid: 38159fb9f8ba2a340bcee2123160327c,
       type: 2}
@@ -53,6 +104,11 @@ MonoBehaviour:
     category: 3
     compatibleTruckIds:
     - ih.truck.nwh.euro.semi
+    - taxi.truck.highwayking
+    - taxi.truck.nightrunner
+    - taxi.truck.outlaw
+    - taxi.truck.thunderhaul
+    - taxi.truck.roadpalace
     adapterId: taxi.nwh.tuning
     adapterConfiguration: {fileID: 11400000, guid: 3e137f1eae1b2d84a8bc411d2a099dd8,
       type: 2}

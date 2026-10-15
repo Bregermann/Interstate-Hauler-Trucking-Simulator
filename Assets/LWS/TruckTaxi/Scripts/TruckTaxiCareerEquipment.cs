@@ -64,6 +64,10 @@ namespace LWS.TruckTaxi
         }
         private void Apply()
         {
+            Refresh();
+        }
+        public void Refresh()
+        {
             float power=1,brakes=1,fuel=1;
             var profile=host.Session.CaptureCareerProfile();
             var truck=profile?.trucks.Find(t=>t.truckId==profile.equippedTruckId);

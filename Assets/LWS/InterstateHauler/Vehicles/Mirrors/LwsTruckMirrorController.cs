@@ -47,6 +47,23 @@ namespace LWS.InterstateHauler
         public Camera LeftMirrorCamera => leftMirrorCamera;
         public Camera RightMirrorCamera => rightMirrorCamera;
 
+        // Model replacement reuses these cameras/RTs; only the physical glass changes.
+        public void RebindSurfaces(Renderer left, Renderer right)
+        {
+            if (left == null || right == null) throw new ArgumentException("Both authored mirror surfaces are required.");
+            ReleaseReplacedSurface(leftMirrorRenderer, left);
+            ReleaseReplacedSurface(rightMirrorRenderer, right);
+            leftMirrorRenderer = left; rightMirrorRenderer = right;
+            if (Application.isPlaying) ApplyResolvedQuality();
+        }
+        private void ReleaseReplacedSurface(Renderer previous, Renderer replacement)
+        {
+            if (previous == null || previous == replacement || !previous.name.StartsWith("TT_Authored_", StringComparison.Ordinal)) return;
+            if (!_runtimeMaterials.TryGetValue(previous, out Material material)) return;
+            _runtimeMaterials.Remove(previous);
+            if (material != null) { if (Application.isPlaying) Destroy(material); else DestroyImmediate(material); }
+        }
+
         private void Awake()
         {
             ResolveReferences();

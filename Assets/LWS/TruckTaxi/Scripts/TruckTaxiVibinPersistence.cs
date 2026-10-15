@@ -421,6 +421,9 @@ namespace LWS.TruckTaxi
             if (!host.Session.HasCareerIdentity &&
                 !host.Session.TryInitializeCareer("Driver", host.Player.DefinitionId, out _))
                 return restoreResult = LwsSaveOperationResult.Failure("Legacy Career identity could not be initialized.");
+            if (host.TruckFactory != null && !host.TruckFactory.RestoreSelected(out string modelError))
+                return restoreResult = LwsSaveOperationResult.Failure("Saved truck could not be restored: " + modelError);
+            host.CareerEquipment?.Refresh();
             if (host.ComponentDamage != null && !host.ComponentDamage.Restore(payload.damage))
                 return restoreResult = LwsSaveOperationResult.Failure("Vibin component damage could not be restored.");
             if (payload.hasFuelState && host.Fuel?.Fuel != null)

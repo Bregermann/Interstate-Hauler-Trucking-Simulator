@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d9c4ab74e2c4d57bb276fc670c19914, type: 3}
+  m_Name: TT_HighwayKing
+  m_EditorClassIdentifier: 
+  stableId: taxi.truck.highwayking
+  displayName: Highway King
+  category: tractor
+  manufacturerFamily: Truck Taxi Original
+  playerPrefab: {fileID: 591435745913456501, guid: 37839a5067a261140a9c7633f1ac1c95,
+    type: 3}
+  sourceVendorPrefab: {fileID: 5883506326239853832, guid: 0d6a0c181517e6f4d89ad9ebc70b6b95,
+    type: 3}
+  validationTrailerPrefab: {fileID: 0}
+  controlCapabilities:
+    supportsIgnition: 1
+    supportsEngineStartStop: 1
+    supportsParkingBrake: 1
+    supportsHeadlights: 1
+    supportsHighBeams: 1
+    supportsTurnSignals: 1
+    supportsHazards: 1
+    supportsWipers: 0
+    supportsHorn: 1
+    supportsSeparateAirHorn: 0
+    supportsEngineBrake: 0
+    engineBrakeLevels: 0
+    supportsRetarder: 0
+    retarderLevels: 0
+    supportsDifferentialLock: 1
+    supportsCruiseControl: 1
+    supportsIndependentTrailerBrake: 0
+    supportsTrailerAttachDetach: 1
+    supportsCameraCycle: 1
+    supportsLookReset: 1
+    supportsFlipOffDriver: 1
+  dashboardDefinition: {fileID: 11400000, guid: d604711ae88eeae439588b434861de77,
+    type: 2}
+  dashboardCapabilities:
+    analogSpeedometer: 1
+    analogTachometer: 1
+    digitalGearDisplay: 1
+    parkingBrakeLamp: 1
+    highBeamLamp: 1
+    turnSignalLamps: 1
+    engineBrakeDisplay: 0
+    retarderDisplay: 0
+    differentialLockLamp: 1
+    cruiseLamp: 1
+    trailerStateIndicator: 1
+    steeringWheelAnimation: 1
+    leftMirror: 1
+    rightMirror: 1
+    dashboardAccessoryAnchors: 1
+    hangingAccessoryAnchors: 1
+    passengerSeatAnchor: 1
+    sleeperAnchor: 1
+    mementoAnchors: 1
+  notes: Prompt 004 baseline tractor. LWS runtime adapters are added by the validation
+    spawner; NWH owns physics, drivetrain, wheels, suspension, and trailer coupling.

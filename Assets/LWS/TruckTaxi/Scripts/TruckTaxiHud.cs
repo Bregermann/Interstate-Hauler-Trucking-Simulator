@@ -65,7 +65,7 @@ namespace LWS.TruckTaxi
         private UnityEngine.UI.Image fuelFade;
         public RectTransform Root => root;
         public bool DebugOverlayOpen => debug?.IsOpen == true || MegaDebug?.IsOpen==true;
-        public bool NormalHudSuppressed => DebugOverlayOpen || FullMap?.IsOpen == true || Planning?.IsOpen==true || host?.Races?.MenuOpen==true || SaveLoad?.IsOpen==true || Career?.IsOpen==true || DriverAppearance?.IsOpen==true;
+        public bool NormalHudSuppressed => DebugOverlayOpen || FullMap?.IsOpen == true || Planning?.IsOpen==true || host?.Races?.MenuOpen==true || SaveLoad?.IsOpen==true || Career?.IsOpen==true || DriverAppearance?.IsOpen==true || GetComponent<TruckTaxiHudModalBridge>()?.IsOpen==true;
         public bool CanOpenFullMap => host?.Ready == true && !host.Paused && !DebugOverlayOpen && !appreciationRunning && host.CustomContent?.IsPlaying != true &&
             host.WorldLife?.FocusRoot == null &&
             modal != null && !modal.gameObject.activeSelf && !pausePanel.gameObject.activeSelf &&

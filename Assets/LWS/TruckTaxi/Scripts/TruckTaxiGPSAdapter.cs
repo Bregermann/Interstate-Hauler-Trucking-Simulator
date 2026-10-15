@@ -99,6 +99,30 @@ namespace LWS.TruckTaxi
         public bool BakedTilesVisible => fullMapOpen && tileLayer!=null && tileLayer.IsAssignedTo(PreviewCamera) && BakedTileCount>0;
         public event System.Action DisplaySettingsChanged;
         public RectTransform DashboardScreen { get; private set; }
+        private Transform originalDashboardParent;
+        private Vector3 originalDashboardPosition, originalDashboardScale;
+        private Quaternion originalDashboardRotation;
+        private bool dashboardPoseCaptured;
+        public void SetVehicleDashboardMount(Transform mount)
+        {
+            if(DashboardScreen==null) return;
+            if(!dashboardPoseCaptured)
+            {
+                originalDashboardParent=DashboardScreen.parent;
+                originalDashboardPosition=DashboardScreen.localPosition;
+                originalDashboardRotation=DashboardScreen.localRotation;
+                originalDashboardScale=DashboardScreen.localScale;
+                dashboardPoseCaptured=true;
+            }
+            // The starter has a mesh-specific fit; new cabs use their authored mount.
+            DashboardScreen.SetParent(mount!=null ? mount : originalDashboardParent,false);
+            DashboardScreen.localPosition=mount!=null ? Vector3.zero : originalDashboardPosition;
+            // Do not inherit the starter mount's mesh-specific tilt in the new cab.
+            if(mount!=null) DashboardScreen.rotation=player.rotation;
+            else DashboardScreen.localRotation=originalDashboardRotation;
+            DashboardScreen.localScale=mount!=null ? Vector3.one*.00042f : originalDashboardScale;
+            RequestPresentationRefresh();
+        }
         public TruckTaxiMapMarkers MapMarkers { get; private set; }
         public Camera PreviewCamera => previewCompass != null ? previewCameraField?.GetValue(previewCompass) as Camera : null;
         public string TargetId => intents.Active?.TargetId ?? "";

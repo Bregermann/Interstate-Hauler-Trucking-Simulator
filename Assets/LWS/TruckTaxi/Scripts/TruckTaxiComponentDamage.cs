@@ -91,6 +91,8 @@ namespace LWS.TruckTaxi
         private readonly List<string> suspensionIds = new List<string>();
         private readonly List<Vector3> suspensionBaseline = new List<Vector3>();
         private readonly List<Light> leftHeadlights = new List<Light>(), rightHeadlights = new List<Light>();
+        private readonly Dictionary<Light,NWH.VehiclePhysics2.Effects.LightSource> headlightSources =
+            new Dictionary<Light,NWH.VehiclePhysics2.Effects.LightSource>();
         private TruckTaxiBootstrap host;
         private VehicleController vehicle;
         private Rigidbody body;
@@ -135,13 +137,7 @@ namespace LWS.TruckTaxi
             Add("light.head.right", "Right Headlight", TruckTaxiDamageCategory.Light, 20000);
             RegisterWheels();
             originalBrakeTorque = vehicle.brakes.maxTorque;
-            foreach (var light in owner.Player.GetComponentsInChildren<Light>(true))
-            {
-                string label = light.name.ToLowerInvariant();
-                if (!label.Contains("head") && !label.Contains("low beam")) continue;
-                if (owner.Player.transform.InverseTransformPoint(light.transform.position).x < 0) leftHeadlights.Add(light);
-                else rightHeadlights.Add(light);
-            }
+            RefreshHeadlightBindings();
             snow = owner.Player.GetComponent<TruckTaxiSnowTraction>();
             if (snow != null) { snow.TireGripMultiplier = TireGripMultiplier; snow.TireRollingMultiplier = TireRollingMultiplier; }
             owner.Handling.MechanicalPowerMultiplier = PowerMultiplier;
@@ -301,10 +297,31 @@ namespace LWS.TruckTaxi
                     wheels[i].wheelUAPI.DamperBumpRate = suspensionBaseline[i].y * Mathf.Lerp(.48f, 1f, suspension);
                     wheels[i].wheelUAPI.DamperReboundRate = suspensionBaseline[i].z * Mathf.Lerp(.48f, 1f, suspension);
                 }
-            foreach (var light in leftHeadlights) if (light != null) light.enabled = Condition("light.head.left") > .1f;
-            foreach (var light in rightHeadlights) if (light != null) light.enabled = Condition("light.head.right") > .1f;
+            ApplyHeadlights(leftHeadlights,"light.head.left");
+            ApplyHeadlights(rightHeadlights,"light.head.right");
         }
-        public void ReapplyPhysicalState() => ApplyMechanical();
+        private void RefreshHeadlightBindings()
+        {
+            leftHeadlights.Clear();rightHeadlights.Clear();headlightSources.Clear();
+            if(vehicle==null || host?.Player==null) return;
+            var manager=vehicle.effectsManager.lightsManager;
+            foreach(var group in new[]{manager.lowBeamLights,manager.highBeamLights})
+                if(group?.lightSources!=null) foreach(var source in group.lightSources)
+                    if(source?.light!=null) headlightSources[source.light]=source;
+            foreach(var light in host.Player.GetComponentsInChildren<Light>(true))
+            {
+                string label=light.name.ToLowerInvariant();
+                if(!headlightSources.ContainsKey(light) && !label.Contains("head") && !label.Contains("low beam")) continue;
+                if(host.Player.transform.InverseTransformPoint(light.transform.position).x<0) leftHeadlights.Add(light);
+                else rightHeadlights.Add(light);
+            }
+        }
+        private void ApplyHeadlights(List<Light> lights,string part)
+        {
+            foreach(var light in lights) if(light!=null)
+                light.enabled=Condition(part)>.1f && (!headlightSources.TryGetValue(light,out var source) || source.IsOn);
+        }
+        public void ReapplyPhysicalState() { RefreshHeadlightBindings();ApplyMechanical(); }
         private void Update()
         {
             if (host?.Ready != true || Time.time < nextTick || host.Paused) return;

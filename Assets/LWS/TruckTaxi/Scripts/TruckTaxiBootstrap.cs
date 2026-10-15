@@ -53,6 +53,7 @@ namespace LWS.TruckTaxi
         public TruckTaxiComponentDamage ComponentDamage { get; private set; }
         public bool Ready { get; private set; }
         public TruckTaxiCareerEquipment CareerEquipment { get; private set; }
+        public TruckTaxiTruckFactory TruckFactory { get; private set; }
         public TruckTaxiMoralityWorldController Morality { get; private set; }
         public ITruckTaxiPlatformCapabilities PlatformCapabilities { get; private set; } = new TruckTaxiOfflinePlatformCapabilities();
         public void BindPlatformCapabilities(ITruckTaxiPlatformCapabilities capabilities) =>
@@ -227,6 +228,11 @@ namespace LWS.TruckTaxi
             Ready = true;
             CareerEquipment = GetComponent<TruckTaxiCareerEquipment>() ?? gameObject.AddComponent<TruckTaxiCareerEquipment>();
             CareerEquipment.Initialize(this);
+            TruckFactory = GetComponent<TruckTaxiTruckFactory>() ?? gameObject.AddComponent<TruckTaxiTruckFactory>();
+            TruckFactory.Initialize(this);
+            var dealership = GetComponent<TruckTaxiDealership>() ?? gameObject.AddComponent<TruckTaxiDealership>();
+            dealership.Initialize(this, hud);
+            TruckTaxiDealershipFacility.Ensure(this);
             Morality = GetComponent<TruckTaxiMoralityWorldController>() ?? gameObject.AddComponent<TruckTaxiMoralityWorldController>();
             if (!Morality.Initialize(this, hud)) Debug.LogWarning("Truck Taxi authored trailer events could not bind to the existing session/HUD.", this);
             var analytics = GetComponent<TruckTaxiAnalytics>() ?? gameObject.AddComponent<TruckTaxiAnalytics>();

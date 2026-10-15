@@ -293,6 +293,8 @@ namespace LWS.TruckTaxi
         {
             Check(SceneManager.GetActiveScene().name == TruckTaxiMainMenu.SceneName, "player boots into the actual main menu");
             yield return WaitForMenu();
+            if (request.RosterIndex>=0)
+            {yield return RunVehicleRoster();yield break;}
             if (request.DualWorld) { yield return RunDualWorld(); yield break; }
             if (request.Drive)
             {

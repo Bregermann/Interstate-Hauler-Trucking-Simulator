@@ -17,6 +17,8 @@ namespace LWS.TruckTaxi
         private TruckTaxiGaragePaint paint;
         private TruckTaxiSession session;
         private TruckTaxiCareerCatalog catalog;
+        private TruckTaxiTruckFactory factory;
+        private Material[] fallbackPaintMaterials;
         private RectTransform overlay, panel;
         private TextMeshProUGUI prompt, truckName, feedback, colorLabel;
         private UnityEngine.UI.Image swatch;
@@ -30,8 +32,7 @@ namespace LWS.TruckTaxi
         private string runId;
         private int selectedIndex;
         private bool applying;
-        private Camera previewCamera;
-        private RenderTexture previewTexture;
+        private TruckTaxiModelPreview modelPreview;
         public bool IsOpen => lease != null;
         public Transform FocusRoot => panel;
 
@@ -44,11 +45,11 @@ namespace LWS.TruckTaxi
                 throw new ArgumentException("Garage requires a ready host/HUD, Heat slider, trigger volume and explicit body materials.");
             Cancel(); Unsubscribe(); DestroyUi();
             host = owner; hud = view; volume = interactionVolume; session = host.Session;
-            catalog = host.CareerEquipment?.Catalog;
+            factory = host.TruckFactory; fallbackPaintMaterials = bodyMaterials;
+            catalog = factory?.Catalog ?? host.CareerEquipment?.Catalog;
             bridge = hud.GetComponent<TruckTaxiHudModalBridge>() ?? hud.gameObject.AddComponent<TruckTaxiHudModalBridge>();
             bridge.Initialize(host, hud);
-            paint = host.Player.GetComponent<TruckTaxiGaragePaint>() ?? host.Player.gameObject.AddComponent<TruckTaxiGaragePaint>();
-            paint.Configure(host.Player, bodyMaterials, session, catalog);
+            RebindPaint();
             if (!paint.Ready) Debug.LogWarning("Garage has no matching canonical body-material slots; customization stays unavailable.", this);
             BuildUi(); Subscribe();
         }
@@ -101,8 +102,7 @@ namespace LWS.TruckTaxi
             if (lease == null) { draft.Cancel(); return false; }
             runId = host.Persistence.RunProfileId;
             session.AcquireOfferSuppression(this);
-            inputs.Clear(); host.Player.GetComponentsInChildren(true, inputs);
-            foreach (var input in inputs) input.AcquireDrivingInputSuppression(this);
+            inputs.Clear(); SuppressCurrentTruck();
             owned = TruckTaxiGarageDraft.OwnedTrucks(session.CaptureCareerProfile(), catalog);
             previousTruck.SetActive(owned.Count > 1); nextTruck.SetActive(owned.Count > 1);
             selectedIndex = owned.FindIndex(t => t.StableId == draft.TruckId);
@@ -121,9 +121,14 @@ namespace LWS.TruckTaxi
             restoringDefault = false;
             var entry = owned[selectedIndex];
             truckName.text = entry.DisplayName + "  (" + (selectedIndex + 1) + "/" + owned.Count + ")";
-            feedback.text = entry.StableId == host.Player.DefinitionId ? string.Empty : "Canonical factory swap is unavailable for this truck.";
+            feedback.text = string.Empty;
+            var model = entry.truck.PlayerPrefab.GetComponent<TruckTaxiTruckModel>();
+            if (!modelPreview.Show(factory, entry.StableId, model != null ? model.primaryPaintMaterials :
+                entry.StableId == host.Player.DefinitionId ? factory?.CurrentPaintMaterials ?? fallbackPaintMaterials : null))
+                feedback.text = "Real-model preview unavailable for this truck.";
             var selected = session.CaptureCareerProfile().trucks.Find(t => t.truckId == draft.TruckId);
-            SetPicker(draft.Paint?.color ?? paint.CareerColor(selected)); Preview();
+            SetPicker(draft.Paint?.color ?? (entry.StableId == host.Player.DefinitionId ?
+                paint.CareerColor(selected) : modelPreview.DefaultColor)); Preview();
         }
         private void SetPicker(Color value)
         {
@@ -170,13 +175,14 @@ namespace LWS.TruckTaxi
                 }
             }
             else paint.Refresh();
-            RenderPreview();
+            modelPreview.Tint(draft.Paint); modelPreview.Render();
         }
         private bool restoringDefault;
         public void RestoreDefault()
         {
             if (!IsOpen) return;
-            restoringDefault = true; draft.SetPaint(null); SetPicker(paint.DefaultColor); Preview();
+            restoringDefault = true; draft.SetPaint(null);
+            SetPicker(draft.TruckId == host.Player.DefinitionId ? paint.DefaultColor : modelPreview.DefaultColor); Preview();
         }
         public void Apply()
         {
@@ -184,7 +190,10 @@ namespace LWS.TruckTaxi
             applying = true;
             try
             {
-                if (!draft.Apply(session, catalog, host.Player.DefinitionId, out string reason)) { feedback.text = reason; return; }
+                string reason;
+                bool committed = factory != null ? draft.Apply(session, catalog, factory, out reason) :
+                    draft.Apply(session, catalog, host.Player.DefinitionId, out reason);
+                if (!committed) { feedback.text = reason; return; }
                 var result = host.Persistence.RequestAutosave("Truck Taxi garage customization");
                 Close();
                 if (!result.Succeeded) Debug.LogWarning("Garage applied to Career; autosave request failed: " + result.Message, this);
@@ -196,14 +205,51 @@ namespace LWS.TruckTaxi
         private void Close()
         {
             if (overlay != null) overlay.gameObject.SetActive(false);
+            modelPreview?.Clear();
             if (paint != null) paint.Refresh(); restoringDefault = false;
             foreach (var input in inputs) if (input != null) input.ReleaseDrivingInputSuppression(this);
             inputs.Clear(); session?.ReleaseOfferSuppression(this);
             var held = lease; lease = null; held?.Dispose(); runId = null;
         }
+        private void RebindPaint()
+        {
+            if (host?.Player == null) return;
+            paint = host.Player.GetComponent<TruckTaxiGaragePaint>() ?? host.Player.gameObject.AddComponent<TruckTaxiGaragePaint>();
+            if (!paint.Ready) paint.Configure(host.Player, factory?.CurrentPaintMaterials ?? fallbackPaintMaterials, session, catalog);
+        }
+        private void SuppressCurrentTruck()
+        {
+            if (host?.Player == null) return;
+            foreach (var input in host.Player.GetComponentsInChildren<LwsKeyboardGamepadTruckInputSource>(true))
+                if (!inputs.Contains(input)) { input.AcquireDrivingInputSuppression(this); inputs.Add(input); }
+        }
+        private void ModelChanged()
+        {
+            RebindPaint();
+            if (!IsOpen) return;
+            // Factory publishes Career/model events during Apply; these do not surrender our lease.
+            if (applying) SuppressCurrentTruck(); else Cancel();
+        }
+        private void OpenDealership()
+        {
+            if (!IsOpen || !Eligible(true)) return;
+            var dealership = host.GetComponent<TruckTaxiDealership>() ?? hud.GetComponent<TruckTaxiDealership>();
+            if (dealership == null) { feedback.text = "Dealership is not initialized."; return; }
+            Cancel();
+            if (!dealership.TryOpen()) TryOpen();
+        }
         private void CareerChanged() { if (!applying && IsOpen) Cancel(); }
-        private void Subscribe() { if (session != null) { session.CareerEquipmentChanged -= CareerChanged; session.CareerEquipmentChanged += CareerChanged; } }
-        private void Unsubscribe() { if (session != null) session.CareerEquipmentChanged -= CareerChanged; }
+        private void Subscribe()
+        {
+            Unsubscribe();
+            if (session != null) session.CareerEquipmentChanged += CareerChanged;
+            if (factory != null) factory.ModelChanged += ModelChanged;
+        }
+        private void Unsubscribe()
+        {
+            if (session != null) session.CareerEquipmentChanged -= CareerChanged;
+            if (factory != null) factory.ModelChanged -= ModelChanged;
+        }
         private void OnEnable() { Subscribe(); }
         private void OnDisable() { Cancel(); Unsubscribe(); if (prompt != null) prompt.gameObject.SetActive(false); }
         private void OnDestroy() { Cancel(); Unsubscribe(); DestroyUi(); }
@@ -217,7 +263,8 @@ namespace LWS.TruckTaxi
             var scrim = overlay.gameObject.AddComponent<UnityEngine.UI.Image>(); scrim.color = new Color(0,0,0,.65f);
             scrim.raycastTarget = true;
             panel = hud.Panel(overlay, "Garage controls", new Vector2(.12f,.14f), new Vector2(.88f,.87f));
-            hud.Text(panel, "Title", new Vector2(.06f,.87f), new Vector2(.94f,.97f), 30).text = "TRUCK CUSTOMIZATION";
+            hud.Text(panel, "Title", new Vector2(.06f,.87f), new Vector2(.66f,.97f), 30).text = "TRUCK CUSTOMIZATION";
+            hud.Button(panel, "DEALERSHIP", new Vector2(.69f,.87f), new Vector2(.94f,.97f), OpenDealership);
             truckName = hud.Text(panel, "Owned truck", new Vector2(.17f,.72f), new Vector2(.83f,.84f), 24);
             truckName.richText = false; truckName.alignment = TextAlignmentOptions.Center;
             previousTruck = hud.Button(panel, "<", new Vector2(.06f,.73f), new Vector2(.14f,.83f), () => SelectTruck(-1));
@@ -262,9 +309,7 @@ namespace LWS.TruckTaxi
         }
         private void DestroyUi()
         {
-            if (previewCamera != null) { previewCamera.targetTexture = null; DestroyOwned(previewCamera.gameObject); }
-            if (previewTexture != null) { previewTexture.Release(); DestroyOwned(previewTexture); }
-            previewCamera = null; previewTexture = null;
+            modelPreview?.Dispose(); modelPreview = null;
             if (overlay != null) DestroyOwned(overlay.gameObject);
             if (prompt != null) DestroyOwned(prompt.gameObject);
             foreach (var texture in gradients) DestroyOwned(texture);
@@ -275,40 +320,10 @@ namespace LWS.TruckTaxi
 
         private void BuildPreview()
         {
-            var frame = TruckTaxiHud.Rect(panel, "Canonical truck preview", new Vector2(.73f,.34f), new Vector2(.94f,.68f));
-            var imageRoot = TruckTaxiHud.Rect(frame, "Image", Vector2.zero, Vector2.one);
-            var image = imageRoot.gameObject.AddComponent<UnityEngine.UI.RawImage>(); image.raycastTarget = false;
-            var fit = imageRoot.gameObject.AddComponent<UnityEngine.UI.AspectRatioFitter>();
-            fit.aspectMode = UnityEngine.UI.AspectRatioFitter.AspectMode.FitInParent; fit.aspectRatio = 5f / 3f;
-            previewTexture = new RenderTexture(640, 384, 16) { name = "Garage canonical truck preview", hideFlags = HideFlags.DontSave };
-            previewTexture.Create(); image.texture = previewTexture;
-            var eye = new GameObject("Garage preview camera", typeof(Camera)); eye.transform.SetParent(transform, false);
-            previewCamera = eye.GetComponent<Camera>(); previewCamera.enabled = false; previewCamera.targetTexture = previewTexture;
-            previewCamera.cameraType = CameraType.Preview;
-            previewCamera.cullingMask = 1 << LayerMask.NameToLayer("UI");
-            previewCamera.clearFlags = CameraClearFlags.SolidColor; previewCamera.backgroundColor = new Color(.10f,.12f,.11f);
-            previewCamera.fieldOfView = 36; previewCamera.nearClipPlane = .1f; previewCamera.farClipPlane = 150;
-        }
-        private void RenderPreview()
-        {
-            if (previewCamera == null || host.Player == null) return;
-            if (paint == null || !paint.TryGetBodyBounds(out var bounds)) return;
-            float distance = Mathf.Max(4, bounds.extents.magnitude / Mathf.Tan(previewCamera.fieldOfView * Mathf.Deg2Rad * .5f) * 1.1f);
-            Vector3 direction = (host.Player.transform.forward + host.Player.transform.right + Vector3.up * .45f).normalized;
-            previewCamera.transform.position = bounds.center + direction * distance;
-            previewCamera.transform.LookAt(bounds.center);
-            var originalLayers = new Dictionary<GameObject,int>();
-            try
-            {
-                // Scope the preview draw only. No physics tick or lasting truck-layer change.
-                foreach (var renderer in host.Player.GetComponentsInChildren<MeshRenderer>())
-                {
-                    if (!originalLayers.ContainsKey(renderer.gameObject)) originalLayers.Add(renderer.gameObject, renderer.gameObject.layer);
-                    renderer.gameObject.layer = LayerMask.NameToLayer("UI");
-                }
-                previewCamera.Render();
-            }
-            finally { foreach (var item in originalLayers) if (item.Key != null) item.Key.layer = item.Value; }
+            var frame = TruckTaxiHud.Rect(panel, "Selected real truck preview", new Vector2(.73f,.36f), new Vector2(.94f,.68f));
+            modelPreview = new TruckTaxiModelPreview(frame, transform);
+            hud.Button(panel, "<", new Vector2(.73f,.315f), new Vector2(.82f,.36f), () => modelPreview.Rotate(-45));
+            hud.Button(panel, ">", new Vector2(.85f,.315f), new Vector2(.94f,.36f), () => modelPreview.Rotate(45));
         }
     }
 }

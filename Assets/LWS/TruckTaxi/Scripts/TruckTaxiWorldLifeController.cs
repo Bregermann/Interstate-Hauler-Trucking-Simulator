@@ -88,6 +88,9 @@ namespace LWS.TruckTaxi
         private float simplifiedRestroomHold;
         private Vector3 preSeatPosition;
         private bool seatedAtDiner;
+        private bool viewingAuthoredSleeper;
+        private Vector3 preSleeperCameraPosition;
+        private Quaternion preSleeperCameraRotation;
         private TruckTaxiRoadPepChallenge ambientChallenge;
         private readonly Collider[] exitHits = new Collider[24];
         private TruckTaxiPlayerRagdoll playerRagdoll;
@@ -564,6 +567,7 @@ namespace LWS.TruckTaxi
             if (controller != null) controller.enabled = true;
             if (footCamera != null) { footCamera.transform.localPosition = new Vector3(0, 1.62f, 0); footCamera.transform.localRotation = Quaternion.identity; }
             verticalSpeed = 0; pauseUtilityOpen = false;
+            viewingAuthoredSleeper = false;
             if (footCamera != null) footCamera.enabled = false;
             if (truckCamera != null) truckCamera.enabled = true;
             if (footListener != null) footListener.enabled = false;
@@ -716,6 +720,19 @@ namespace LWS.TruckTaxi
         public void OpenCabSleep()
         {
             if (!IsOnFoot) return;
+            var model = host.Player.Definition?.PlayerPrefab?.GetComponent<TruckTaxiTruckModel>();
+            if (model != null && model.hasSleeper)
+            {
+                // Reuse the existing on-foot camera and rest interaction. The
+                // collision capsule stays safely outside the parked tractor.
+                preSleeperCameraPosition = footCamera.transform.localPosition;
+                preSleeperCameraRotation = footCamera.transform.localRotation;
+                viewingAuthoredSleeper = true;
+                controller.enabled = false;
+                Vector3 eye = host.Player.transform.TransformPoint(new Vector3(-.35f, 2.52f, .62f));
+                Vector3 berth = host.Player.transform.TransformPoint(model.sleeperDriver + new Vector3(.35f, .40f, 0));
+                footCamera.transform.SetPositionAndRotation(eye, Quaternion.LookRotation(berth - eye, host.Player.transform.up));
+            }
             Mode = TruckTaxiPlayerControlMode.SeatedInteraction;
             OpenTemporaryPanel("CAB REST", "SLEEP 2 HOURS", () => SleepInCab(2));
             hud.Button(temporaryPanel, "SLEEP 4 HOURS", new Vector2(.12f, .35f), new Vector2(.88f, .48f), () => SleepInCab(4));
@@ -783,6 +800,11 @@ namespace LWS.TruckTaxi
         }
         public void CloseTemporaryInteraction()
         {
+            if (viewingAuthoredSleeper)
+            {
+                footCamera.transform.SetLocalPositionAndRotation(preSleeperCameraPosition, preSleeperCameraRotation);
+                viewingAuthoredSleeper = false;
+            }
             if (temporaryPanel != null) temporaryPanel.gameObject.SetActive(false);
             if (Mode == TruckTaxiPlayerControlMode.SeatedInteraction)
             {

@@ -10984,6 +10984,7 @@ GameObject:
   - component: {fileID: 3156921735478113559}
   - component: {fileID: 1644967249624673343}
   - component: {fileID: 127743129521880073}
+  - component: {fileID: 1237253155703993694}
   m_Layer: 0
   m_Name: TruckTaxi_InterstateTractor
   m_TagString: Vehicle
@@ -12009,6 +12010,7 @@ MonoBehaviour:
   hasSleeperCapability: 0
   anchors:
   - id: 4
+    slotId: 
     mountPath: Cab
     localPosition: {x: 0.55, y: 0.83, z: -0.95}
     localEulerAngles: {x: 0, y: 0, z: 0}
@@ -12019,10 +12021,57 @@ MonoBehaviour:
     firstPersonVisible: 1
     privateEventEligible: 0
     secondaryOccupantSeat: 1
+    sharedPrimarySeat: 0
     occupantRadius: 0.35
     pose: []
   privateTransitionSeconds: 0.9
   privacyDivider: {fileID: 0}
+--- !u!114 &1237253155703993694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7368871050060613851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 276b5face9df7844dab4ca3063149450, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiTruckModel
+  retainsOriginalBody: 1
+  bodyVisualPrefab: {fileID: 0}
+  distanceLodPrefabs: []
+  primaryPaintMaterials:
+  - {fileID: 2100000, guid: 37923151f71dc6244b55ee8304572d5c, type: 2}
+  replacedSourceMeshes: []
+  hasSleeper: 0
+  cabOffset: {x: 0, y: 0, z: 0}
+  rearAxleOffset: 0
+  fifthWheelOffset: 0
+  driverEye: {x: -0.56, y: 2.32, z: 0.62}
+  gpsMount: {x: -0.08, y: 2.18, z: 1.35}
+  driverSeat: {x: -0.56, y: 1.22, z: 0.65}
+  frontPassengerSeat: {x: 0.56, y: 1.22, z: 0.65}
+  companionSeat: {x: 0.65, y: 1.76, z: -0.4}
+  sleeperDriver: {x: -0.65, y: 1.76, z: -0.4}
+  sleeperLamp: {x: 0, y: 3.6, z: -0.25}
+  headlampOffset: {x: 0.99, y: 1.05, z: 3.24}
+  cabinCollision:
+    m_Center: {x: 0, y: 2.35, z: 0.3}
+    m_Extent: {x: 1.15, y: 1.15, z: 1.2}
+  hoodCollision:
+    m_Center: {x: 0, y: 1.4, z: 2.2}
+    m_Extent: {x: 0.875, y: 0.525, z: 0.825}
+  tractorMassKg: 7400
+  launchPowerAtRest: 3.4
+  launchPowerAt15Mph: 2.2
+  lowSpeedSteeringLock: 70
+  citySteeringLock: 40
+  highwaySteeringLock: 8
+  steeringResponse: 400
+  engineDescription: Balanced NWH starter
+  handlingDescription: Short-wheelbase daycab
+  previewAngles: []
 --- !u!1 &7709429145585368335
 GameObject:
   m_ObjectHideFlags: 0

@@ -228,6 +228,8 @@ namespace LWS.TruckTaxi.Editor
         [MenuItem("Truck Taxi/Regional/Build Dual World Windows")]
         public static void BuildDualWorldWindows()
         { BuildWindowsAt("Builds/TruckTaxiDualWorld/TruckTaxi.exe"); }
+        public static void BuildVehicleFactoryWindows()
+        { BuildWindowsAt("Builds/TruckTaxiVehicleFactory/TruckTaxi.exe"); }
 
         private static void BuildWindowsAt(string output)
         {

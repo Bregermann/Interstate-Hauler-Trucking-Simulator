@@ -264,9 +264,9 @@ namespace LWS.TruckTaxi.Tests
             Object.Destroy(obstacle); Object.Destroy(point.gameObject);
             yield return null;
         }
-        internal static void Capture(string name,int width,int height)
+        internal static void Capture(string name,int width,int height,Camera source=null)
         {
-            var camera=Camera.main;
+            var camera=source!=null ? source : Camera.main;
             Assert.IsNotNull(camera,"No gameplay camera.");
             var canvases=Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None);
             var overlays=new System.Collections.Generic.List<Canvas>();

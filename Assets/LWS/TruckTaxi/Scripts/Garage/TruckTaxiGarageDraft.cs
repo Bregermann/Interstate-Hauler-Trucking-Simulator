@@ -55,11 +55,26 @@ namespace LWS.TruckTaxi
             reason = "Garage draft no longer belongs to the active Career truck.";
             if (!IsActive || session == null || session.CareerRunProfileId != runId || session.EquippedTruckId != originalTruckId)
                 return false;
-            // The current factory has no hot-swap/rebind operation. Never leave Session and the actor divergent.
+            // Callers without the factory must still prove the selected actor is canonical.
             if (TruckId != canonicalTruckId)
             { reason = "This truck requires a canonical factory swap before it can be equipped."; return false; }
             if (!session.TryApplyGarage(catalog, TruckId, Paint, out reason)) return false;
             Cancel(); return true;
+        }
+        public bool Apply(TruckTaxiSession session, TruckTaxiCareerCatalog catalog, TruckTaxiTruckFactory factory, out string reason)
+        {
+            reason = "Garage draft no longer belongs to the active Career truck.";
+            if (!IsActive || session == null || session.CareerRunProfileId != runId ||
+                session.EquippedTruckId != originalTruckId || catalog == null || !catalog.Validate(out reason) ||
+                !OwnedTrucks(session.CaptureCareerProfile(), catalog).Exists(t => t.StableId == TruckId) ||
+                Paint != null && !Paint.Validate()) return false;
+            if (factory == null) { reason = "Truck factory is unavailable."; return false; }
+            if (TruckId != originalTruckId && !factory.TryEquip(TruckId, out reason, true)) return false;
+            if (session.EquippedTruckId != TruckId)
+            { reason = "Factory did not equip the selected Career truck."; return false; }
+            // Keep a failed paint transaction retryable if the factory already changed the actor.
+            originalTruckId = TruckId;
+            return Apply(session, catalog, TruckId, out reason);
         }
         public void Cancel() { snapshot = null; Paint = null; TruckId = runId = originalTruckId = null; }
     }
