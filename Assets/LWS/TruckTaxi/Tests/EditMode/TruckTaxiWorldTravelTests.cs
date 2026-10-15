@@ -346,6 +346,17 @@ namespace LWS.TruckTaxi.Tests
             Assert.AreEqual(TruckTaxiEdenboroughLayout.WorldId, TruckTaxiWorldCatalog.WorldId(TruckTaxiWorldCatalog.Edenborough));
         }
 
+        [TestCase(0f, 0f, false)]
+        [TestCase(29.9f, 0f, false)]
+        [TestCase(0f, 200f, false)]
+        [TestCase(30f, 0f, true)]
+        [TestCase(65f, -50f, true)]
+        public void SavedExitPoseCannotBeReusedInsideHorizontalArrivalBuffer(float distance, float height, bool safe)
+        {
+            var exit = new Vector3(1200, 10, -240);
+            Assert.AreEqual(safe, TruckTaxiWorldExit.IsSafeArrival(exit + new Vector3(distance, height, 0), exit));
+        }
+
         [Test]
         public void LegacyDemoWorldIdentitiesDoNotResolveIntoEdenborough()
         {

@@ -50,8 +50,12 @@ namespace LWS.TruckTaxi
         public Vector3 WorldTransferPreparationPoint(LwsSaveSnapshot snapshot, bool last)
         {
             var visit = Array.Find(ReadTravelPayload(snapshot).worldVisits ?? Array.Empty<TruckTaxiWorldVisit>(), v => v.scene == gameObject.scene.name);
-            if (last && visit != null) return origin.GlobalToLocal(new LwsWorldPositionD(visit.position.x, visit.position.y, visit.position.z));
             var exit = FindObjectsByType<TruckTaxiWorldExit>(FindObjectsSortMode.None).SingleOrDefault(e => e.gameObject.scene == gameObject.scene);
+            if (last && visit != null)
+            {
+                Vector3 previous = origin.GlobalToLocal(new LwsWorldPositionD(visit.position.x, visit.position.y, visit.position.z));
+                if (exit == null || TruckTaxiWorldExit.IsSafeArrival(previous, exit.transform.position)) return previous;
+            }
             return exit != null && exit.arrival != null ? exit.arrival.position : host.playerSpawn.position;
         }
         public LwsSaveOperationResult ApplyWorldTransfer(LwsSaveSnapshot snapshot, bool returnToLastPosition, bool rollback)
@@ -65,6 +69,10 @@ namespace LWS.TruckTaxi
             if (exit == null || exit.arrival == null) return LwsSaveOperationResult.Failure("This region has no validated regional entry road.");
             Vector3 point = (returnToLastPosition || rollback) && visit != null ? origin.GlobalToLocal(new LwsWorldPositionD(visit.position.x, visit.position.y, visit.position.z)) : exit.arrival.position;
             Quaternion facing = (returnToLastPosition || rollback) && visit != null ? visit.rotation : exit.arrival.rotation;
+            // A physical departure records a pose inside the outbound portal. Never reuse it
+            // for menu return/rollback, where native driving could immediately retrigger travel.
+            if (!TruckTaxiWorldExit.IsSafeArrival(point, exit.transform.position))
+            { point = exit.arrival.position; facing = exit.arrival.rotation; }
             Physics.SyncTransforms();
             if (!regional.IsPositionAvailable(point) || !TruckTaxiRecoverySpace.TryGroundedPose(body, point, facing, .35f, body, null, out preparedPosition))
             {

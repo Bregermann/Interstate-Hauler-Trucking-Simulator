@@ -6,11 +6,17 @@ namespace LWS.TruckTaxi
     [DisallowMultipleComponent]
     public sealed class TruckTaxiWorldExit : MonoBehaviour
     {
+        public const float ArrivalExclusionRadiusMeters = 30f;
         public string destinationScene;
         public Transform arrival;
         private float nextAttempt;
         public static bool CorrectDirection(Vector3 velocity, Vector3 exitForward) => velocity.sqrMagnitude > .25f &&
             Vector3.Dot(velocity.normalized, exitForward.normalized) > .4f;
+        public static bool IsSafeArrival(Vector3 point, Vector3 exitPosition)
+        {
+            Vector3 horizontal = point - exitPosition; horizontal.y = 0;
+            return horizontal.sqrMagnitude >= ArrivalExclusionRadiusMeters * ArrivalExclusionRadiusMeters;
+        }
         private void OnTriggerEnter(Collider other)
         {
             var host = TruckTaxiBootstrap.Instance;
