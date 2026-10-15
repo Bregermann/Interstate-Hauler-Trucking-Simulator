@@ -1,0 +1,40 @@
+using System;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using LWS.TruckHockey;
+namespace LWS.TruckSports.Editor {
+public static class SportsExpansionAuthoring {
+ public static void RepairGrass(){var scene=EditorSceneManager.OpenScene(LWS.TruckCheeseRolling.Editor.CheeseAuthoring.Scene);var source=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/JC_LP_MegaCity/Prefabs/Nature/SM_Nature_Grass_01.prefab");if(source==null)throw new Exception("Installed grass source missing");int n=0;foreach(var old in scene.GetRootGameObjects()){if(!old.name.StartsWith("SM_Nature_Grass_01")||PrefabUtility.GetPrefabInstanceStatus(old)!=PrefabInstanceStatus.MissingAsset)continue;var copy=(GameObject)PrefabUtility.InstantiatePrefab(source);copy.transform.SetPositionAndRotation(old.transform.position,old.transform.rotation);copy.transform.localScale=old.transform.localScale;PrefabUtility.UnpackPrefabInstance(copy,PrefabUnpackMode.Completely,InteractionMode.AutomatedAction);foreach(var c in copy.GetComponentsInChildren<Collider>())UnityEngine.Object.DestroyImmediate(c);UnityEngine.Object.DestroyImmediate(old);n++;}EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();Debug.Log("TS_CHEESE_GRASS_PREFABS_REPAIRED "+n);}
+ public static void RepairBuild(){var scene=EditorSceneManager.OpenScene(LWS.TruckHockey.Editor.HockeyAuthoring.Scene);InstallHockey(UnityEngine.Object.FindAnyObjectByType<HockeyMatch>());EditorSceneManager.SaveScene(scene);RepairGrass();SportsBuilder.Build();}
+ public static void ProbeStick(){EditorSceneManager.OpenScene(LWS.TruckHockey.Editor.HockeyAuthoring.Scene);var m=UnityEngine.Object.FindAnyObjectByType<HockeyMatch>();var s=m.trucks[0].stick;var p=new Vector3(10,.22f,0);s.blade.enabled=false;Debug.Log("STICK_DISABLED_CLOSEST distance="+Vector3.Distance(p,Physics.ClosestPoint(p,s.blade,new Vector3(.65f,.22f,.85f),Quaternion.identity)));s.blade.enabled=true;Debug.Log("STICK_ENABLED_CLOSEST distance="+Vector3.Distance(p,Physics.ClosestPoint(p,s.blade,new Vector3(.65f,.22f,.85f),Quaternion.identity)));}
+ public static void InspectBuild(){var r=UnityEditor.Build.Reporting.BuildReport.GetLatestReport();System.IO.Directory.CreateDirectory("Logs/TruckSports/Expansion");using(var w=new System.IO.StreamWriter("Logs/TruckSports/Expansion/build-messages.txt")){if(r==null){w.WriteLine("No persistent report");return;}foreach(var step in r.steps)foreach(var m in step.messages)if(m.type==LogType.Error||m.type==LogType.Exception||m.type==LogType.Assert)w.WriteLine(step.name+" | "+m.type+" | "+m.content);}}
+
+ public static void ExistingSports(){
+  var scene=EditorSceneManager.OpenScene(LWS.TruckBowling.Editor.BowlingAuthoring.Scene);var bowling=UnityEngine.Object.FindAnyObjectByType<LWS.TruckBowling.BowlingMatch>();foreach(var lane in bowling.lanes){lane.ParkSweeper();if(lane.sweep.GetComponent<BoxCollider>()==null)lane.sweep.gameObject.AddComponent<BoxCollider>();var rb=lane.sweep.GetComponent<Rigidbody>();if(rb==null)rb=lane.sweep.gameObject.AddComponent<Rigidbody>();rb.isKinematic=true;rb.useGravity=false;rb.collisionDetectionMode=CollisionDetectionMode.ContinuousSpeculative;}EditorSceneManager.SaveScene(scene);
+  scene=EditorSceneManager.OpenScene(LWS.TruckHockey.Editor.HockeyAuthoring.Scene);var hockey=UnityEngine.Object.FindAnyObjectByType<HockeyMatch>();InstallHockey(hockey);EditorSceneManager.SaveScene(scene);
+  LWS.TruckWallball.Editor.WallballAuthoring.Create();ValidateExisting();AssetDatabase.SaveAssets();Debug.Log("TS_EXPANSION_EXISTING_AUTHORED");
+ }
+ public static void InstallHockey(HockeyMatch hockey){if(hockey.impacts==null)hockey.impacts=hockey.gameObject.AddComponent<HockeyKnockback>();hockey.impacts.match=hockey;
+  var obstacles=UnityEngine.Object.FindObjectsByType<Collider>(FindObjectsInactive.Include).Where(c=>c.attachedRigidbody==null&&!c.isTrigger&&c.bounds.max.y>.18f&&c.bounds.min.y<1.4f).ToArray();var paint=AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckHockey/Materials/Puck.mat");var contact=AssetDatabase.LoadAssetAtPath<PhysicsMaterial>("Assets/TruckHockey/Materials/Puck contact.asset");
+  foreach(var truck in hockey.trucks){if(truck.stick!=null){truck.stick.transform.SetParent(hockey.transform,true);var empty=truck.stick.GetComponent<MeshFilter>();if(empty!=null)UnityEngine.Object.DestroyImmediate(empty);var redundant=truck.stick.GetComponent<MeshRenderer>();if(redundant!=null)UnityEngine.Object.DestroyImmediate(redundant);continue;}var g=GameObject.CreatePrimitive(PrimitiveType.Cube);g.name="Articulated hockey blade";g.transform.SetParent(hockey.transform,false);g.transform.localScale=Vector3.one;UnityEngine.Object.DestroyImmediate(g.GetComponent<MeshFilter>());UnityEngine.Object.DestroyImmediate(g.GetComponent<MeshRenderer>());UnityEngine.Object.DestroyImmediate(g.GetComponent<BoxCollider>());
+   var rb=g.AddComponent<Rigidbody>();rb.isKinematic=true;rb.useGravity=false;rb.interpolation=RigidbodyInterpolation.Interpolate;rb.collisionDetectionMode=CollisionDetectionMode.ContinuousSpeculative;var box=g.AddComponent<BoxCollider>();box.size=new Vector3(.58f,.13f,.16f);box.sharedMaterial=contact;
+   var visual=GameObject.CreatePrimitive(PrimitiveType.Cube);visual.name="Visible blade";visual.transform.SetParent(g.transform,false);visual.transform.localScale=box.size;visual.GetComponent<Renderer>().sharedMaterial=paint;UnityEngine.Object.DestroyImmediate(visual.GetComponent<Collider>());
+   var rig=g.AddComponent<HockeyStick>();rig.owner=truck;rig.bladeBody=rb;rig.blade=box;rig.bladeVisual=visual.transform;rig.obstacles=obstacles;var shaft=new GameObject("Articulated shaft").AddComponent<LineRenderer>();shaft.transform.SetParent(g.transform,false);shaft.useWorldSpace=true;shaft.positionCount=2;shaft.startWidth=shaft.endWidth=.065f;shaft.sharedMaterial=paint;rig.shaft=shaft;truck.stick=rig;rig.ResetRig();
+  }
+ }
+ public static void ValidateExisting(){KnockbackFixtures();var scene=EditorSceneManager.OpenScene(LWS.TruckBowling.Editor.BowlingAuthoring.Scene);foreach(var lane in UnityEngine.Object.FindAnyObjectByType<LWS.TruckBowling.BowlingMatch>().lanes){if(lane.sweep.position.y<2.8f||lane.sweep.GetComponent<BoxCollider>()==null)throw new Exception("Bowling sweeper not safely raised/physical");}LWS.TruckWallball.Editor.WallballAuthoring.Validate();scene=EditorSceneManager.OpenScene(LWS.TruckHockey.Editor.HockeyAuthoring.Scene);var m=UnityEngine.Object.FindAnyObjectByType<HockeyMatch>();if(m.impacts==null||m.trucks.Any(t=>t.stick==null||t.stick.blade==null||t.stick.obstacles.Length<4))throw new Exception("Hockey articulated contact references missing");Debug.Log("TS_EXPANSION_EXISTING_VALIDATED");}
+ static void Check(bool good,string label){if(!good)throw new Exception("Expansion fixture: "+label);Debug.Log("TS_EXPANSION_FIXTURE "+label);}
+ public static void KnockbackFixtures(){Vector3 n=Vector3.right,a,b;bool c;
+  Check(HockeyKnockback.Response(n*11,n*2,n,.35f,2.2f,25,out a,out b,out c)&&!c&&b.x>18,"moving target receives substantial launch");
+  Check(HockeyKnockback.Response(n*11,Vector3.zero,n,.35f,2.2f,25,out a,out b,out c)&&c&&a.x< -14&&b.magnitude<.23f,"stopped defender counters attacker");
+  Check(HockeyKnockback.Response(Vector3.zero,-n*11,n,.35f,2.2f,25,out a,out b,out c)&&c&&b.x>14&&a.magnitude<.23f,"counter is symmetric");
+  Check(HockeyKnockback.Response(n*8,-n*8,n,.35f,2.2f,25,out a,out b,out c)&&Mathf.Abs(a.x+b.x)<.001f&&a.x<0,"equal-speed head-on balanced");
+  Check(!HockeyKnockback.Response(n,n*.2f,n,.35f,2.2f,25,out a,out b,out c),"gentle nudge retains normal PhysX");
+  Check(!HockeyKnockback.Response(Vector3.forward*10,Vector3.zero,n,.35f,2.2f,25,out a,out b,out c),"tangent contact no strong launch");
+  Check(HockeyKnockback.Response(n*10,n*.6f,n,.35f,2.2f,25,out a,out b,out c)&&!c,"sliding no-throttle defender is moving");
+  Check(HockeyKnockback.Response(n*50,n,n,.35f,2.2f,25,out a,out b,out c)&&a.magnitude<=25.001f&&b.magnitude<=25.001f,"bounded extreme impact");
+ }
+}
+}

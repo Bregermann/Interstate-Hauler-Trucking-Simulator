@@ -1,17 +1,19 @@
-using UnityEngine;
+﻿using UnityEngine;
 using DG.Tweening;
 namespace LWS.TruckBowling {
-public enum BowlingPhase {Idle,Approach,Rolling,Settling,Popup,Lifting,Sweeping,Setting,Finished}
+public enum BowlingPhase {Idle,Approach,Rolling,Settling,Popup,Lifting,Sweeping,Setting,Finished,Lowering,Returning,Raising}
 public sealed class BowlingLane:MonoBehaviour {
  public BowlingMatch match;public int index,ownerSlot;public float center,halfWidth=2.1f,pinLine=60,approachLimit=40,rollingLimit=40,settleLimit=8,stoppedSpeed=.45f,stoppedSeconds=4;
+ public float sweepRaisedY=3.1f,sweepLoweredY=.45f,sweepFrontOffset=-4,sweepBackOffset=4;
  public BowlingTruck truck;public BowlingAI ai;public BowlingCabCamera cab;public BowlingPin[] pins;public Transform sweep,plate;public Vector3[] rack;public Quaternion[] poses;
  public BowlingPhase Phase{get;private set;}public bool Driving=>Phase==BowlingPhase.Approach||Phase==BowlingPhase.Rolling;public bool Committed=>Phase==BowlingPhase.Rolling||Phase==BowlingPhase.Settling;public bool MotionLive=>Driving||Phase==BowlingPhase.Settling;public bool ScoringLive=>MotionLive;
  public BowlingPlayer Owner=>match.setup.players[ownerSlot];public bool Gutter{get;private set;}public bool LegalPinContact;public float Furthest{get;private set;}public float Elapsed{get;private set;}public int LastPins{get;private set;}public int ScoreLocks{get;private set;}public int Sweeps{get;private set;}public int Recoveries{get;private set;}public string Result{get;private set;}="";
- float timer,quiet,stopped;bool frameComplete,fresh;Vector3[] retained;Quaternion[] retainedRot;int oldFrame,oldBall;Tween[] motions;
- void Awake(){retained=new Vector3[10];retainedRot=new Quaternion[10];motions=new Tween[12];}
+ Rigidbody sweepBody;float timer,quiet,stopped;bool frameComplete,fresh;Vector3[] retained;Quaternion[] retainedRot;int oldFrame,oldBall;Tween[] motions;
+ void Awake(){retained=new Vector3[10];retainedRot=new Quaternion[10];motions=new Tween[12];sweepBody=sweep.GetComponent<Rigidbody>();}
  public void StartLane(int owner,bool freshRack=true){ownerSlot=owner;KillMotion();if(freshRack)ResetRack();BeginDelivery();}
  public void ResetRack(){for(int i=0;i<10;i++){var p=pins[i];p.gameObject.SetActive(true);p.Freeze();p.transform.SetPositionAndRotation(rack[i],poses[i]);p.credited=false;p.downTime=0;p.Release();}Physics.SyncTransforms();}
- void BeginDelivery(){truck.Spawn(new Vector3(center-.35f,.28f,-16));Owner.released=false;truck.Stop();Furthest=0;Elapsed=quiet=stopped=timer=0;Gutter=LegalPinContact=false;Result="";oldFrame=Owner.score.Frame;oldBall=Owner.score.Ball;Phase=BowlingPhase.Approach;cab.ResetView();ai.Plan();match.menus.Dirty();}
+ public void ParkSweeper(){if(sweep!=null){var parked=new Vector3(center,sweepRaisedY,pinLine+sweepFrontOffset);sweep.position=parked;if(sweepBody!=null)sweepBody.position=parked;}if(plate!=null)plate.position=new Vector3(plate.position.x,3.8f,plate.position.z);}
+ void BeginDelivery(){KillMotion();ParkSweeper();truck.Spawn(new Vector3(center-.35f,.28f,-16));Owner.released=false;truck.Stop();Furthest=0;Elapsed=quiet=stopped=timer=0;Gutter=LegalPinContact=false;Result="";oldFrame=Owner.score.Frame;oldBall=Owner.score.Ball;Phase=BowlingPhase.Approach;cab.ResetView();ai.Plan();match.menus.Dirty();}
  public void EndDelivery(string reason){if(!Driving)return;if(reason=="GUTTER")Gutter=true;else if(reason.Contains("recovery")||reason.Contains("limit"))Recoveries++;Result=reason;truck.Stop();if(reason.StartsWith("Simulation"))truck.Clear();Phase=BowlingPhase.Settling;timer=quiet=0;match.menus.Dirty();}
  void FixedUpdate(){if(!match.InMatch||match.Paused||!match.DeliveryAllowed)return;float dt=Time.fixedDeltaTime;
   if(Driving){Elapsed+=dt;var p=truck.body.position;Furthest=Mathf.Max(Furthest,p.z);if(Phase==BowlingPhase.Approach&&p.z>=0){Phase=BowlingPhase.Rolling;Elapsed=0;match.menus.Dirty();}
@@ -26,8 +28,11 @@ public sealed class BowlingLane:MonoBehaviour {
  }
  void Update(){if(!match.InMatch||match.Paused||!match.DeliveryAllowed)return;if(Phase!=BowlingPhase.Settling)timer+=Time.deltaTime;
   if(Phase==BowlingPhase.Popup&&timer>.8f){Phase=BowlingPhase.Lifting;timer=0;match.feedback.Play(6,0,true);for(int i=0;i<10;i++)if(pins[i].gameObject.activeSelf&&!pins[i].credited)motions[i]=pins[i].transform.DOMoveY(retained[i].y+1.7f,.3f);motions[10]=plate.DOMoveY(3.25f,.3f);}
-  else if(Phase==BowlingPhase.Lifting&&timer>.35f){Phase=BowlingPhase.Sweeping;timer=0;Sweeps++;motions[11]=sweep.DOMoveZ(pinLine+4,.4f);match.feedback.Play(7,0,true);}
-  else if(Phase==BowlingPhase.Sweeping&&timer>.45f){Phase=BowlingPhase.Setting;timer=0;truck.exterior.SetActive(false);for(int i=0;i<10;i++){var p=pins[i];if(fresh){p.gameObject.SetActive(true);p.credited=false;p.transform.SetPositionAndRotation(rack[i]+Vector3.up*1.7f,poses[i]);motions[i]=p.transform.DOMoveY(rack[i].y,.35f);}else if(p.credited)p.gameObject.SetActive(false);else {p.transform.rotation=retainedRot[i];motions[i]=p.transform.DOMoveY(retained[i].y,.35f);}}motions[11]=sweep.DOMoveZ(pinLine-4,.3f);motions[10]=plate.DOMoveY(3.8f,.35f);}
+  else if(Phase==BowlingPhase.Lifting&&timer>.35f){Phase=BowlingPhase.Lowering;timer=0;motions[11]=sweepBody.DOMoveY(sweepLoweredY,.3f).SetUpdate(UpdateType.Fixed);}
+  else if(Phase==BowlingPhase.Lowering&&timer>.35f){Phase=BowlingPhase.Sweeping;timer=0;Sweeps++;foreach(var p in pins)if(p.gameObject.activeSelf&&p.credited)p.Release();motions[11]=sweepBody.DOMoveZ(pinLine+sweepBackOffset,.55f).SetEase(Ease.InOutSine).SetUpdate(UpdateType.Fixed);match.feedback.Play(7,0,true);}
+  else if(Phase==BowlingPhase.Sweeping&&timer>.6f){Phase=BowlingPhase.Returning;timer=0;foreach(var p in pins)if(p.credited&&p.gameObject.activeSelf){p.Freeze();p.gameObject.SetActive(false);}motions[11]=sweepBody.DOMoveZ(pinLine+sweepFrontOffset,.45f).SetEase(Ease.InOutSine).SetUpdate(UpdateType.Fixed);}
+  else if(Phase==BowlingPhase.Returning&&timer>.5f){Phase=BowlingPhase.Raising;timer=0;motions[11]=sweepBody.DOMoveY(sweepRaisedY,.3f).SetUpdate(UpdateType.Fixed);}
+  else if(Phase==BowlingPhase.Raising&&timer>.35f){Phase=BowlingPhase.Setting;timer=0;truck.exterior.SetActive(false);for(int i=0;i<10;i++){var p=pins[i];if(fresh){p.gameObject.SetActive(true);p.credited=false;p.transform.SetPositionAndRotation(rack[i]+Vector3.up*1.7f,poses[i]);motions[i]=p.transform.DOMoveY(rack[i].y,.35f);}else if(p.credited)p.gameObject.SetActive(false);else {p.transform.rotation=retainedRot[i];motions[i]=p.transform.DOMoveY(retained[i].y,.35f);}}motions[10]=plate.DOMoveY(3.8f,.35f);}
   else if(Phase==BowlingPhase.Setting&&timer>.42f){KillMotion();for(int i=0;i<10;i++)if(pins[i].gameObject.activeSelf){var p=pins[i];Vector3 seated=fresh?rack[i]:new Vector3(retained[i].x,rack[i].y,retained[i].z);p.body.position=seated;p.body.rotation=poses[i];p.transform.SetPositionAndRotation(seated,poses[i]);}Physics.SyncTransforms();for(int i=0;i<10;i++)if(pins[i].gameObject.activeSelf)pins[i].Release();Phase=BowlingPhase.Idle;match.Next(this,frameComplete);}
  }
  public void Continue(){BeginDelivery();}public void FinishLane(){Phase=BowlingPhase.Finished;truck.Clear();match.menus.Dirty();}

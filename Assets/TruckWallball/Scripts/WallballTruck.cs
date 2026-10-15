@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using NWH.WheelController3D;
 namespace LWS.TruckWallball {
 // NWH alone owns tire/suspension forces. LWS owns sport inputs, upright jump and limits.
@@ -6,7 +6,7 @@ namespace LWS.TruckWallball {
  public WallballMatch match;public Rigidbody body;public BoxCollider shape;public int slot;public AudioSource engine;public WheelController[] wheels;public Collider[] CollisionShapes{get;private set;}
  public float motorTorque=3.6f,brakeTorque=9,maxSpeed=9,reverseSpeed=6,steerAngle=36,grip=1.25f,turnDegrees=200,gravity=24,jumpSpeed=9,jumpCooldown=.45f;
  public float throttle,steer;public bool Grounded{get;private set;}public bool BrakingOpposite{get;private set;}public int Jumps{get;private set;}public int Landings{get;private set;}public int Hits{get;private set;}
- bool opposing,jumpRequested,wasGrounded;float nextJump,airborneUntil;
+ readonly Collider[] rims=new Collider[4];bool opposing,jumpRequested,wasGrounded;float nextJump,airborneUntil;
  public void CacheShapes(){CollisionShapes=GetComponentsInChildren<Collider>(true);foreach(var c in CollisionShapes)c.gameObject.layer=2;}
  // Collider.ClosestPoint uses the interpolated Transform. Eligibility needs the current physics pose.
  public Vector3 PhysicalClosestPoint(Collider c,Vector3 point){var offset=transform.InverseTransformPoint(c.transform.position);var rotation=Quaternion.Inverse(transform.rotation)*c.transform.rotation;return Physics.ClosestPoint(point,c,body.position+body.rotation*offset,body.rotation*rotation);}
@@ -14,7 +14,7 @@ namespace LWS.TruckWallball {
  public void Stop(){throttle=steer=0;opposing=jumpRequested=false;if(wheels!=null)foreach(var w in wheels)if(w!=null){w.MotorTorque=w.BrakeTorque=0;w.SteerAngle=0;}}
  public void ResetBody(Vector3 p){body.position=p;body.rotation=Quaternion.identity;if(!body.isKinematic)body.linearVelocity=body.angularVelocity=Vector3.zero;Stop();nextJump=airborneUntil=0;wasGrounded=false;foreach(var w in wheels)w.wheel.angularVelocity=0;}
  public void RecordHit(){Hits++;}
- void FixedUpdate(){if(!match.rules.Active||match.MenuOpen){Stop();return;}int grounded=0;if(Time.time>=airborneUntil)foreach(var w in wheels){if(!w.enabled){w.enabled=true;w.WakeFromSleep();CacheShapes();match.BindTruckPairs();}if(w.IsGrounded)grounded++;}Grounded=grounded>=2&&body.linearVelocity.y<1;
+ void FixedUpdate(){if(!match.rules.Active||match.MenuOpen){Stop();return;}bool changed=false;for(int k=0;k<wheels.Length;k++)if(wheels[k].wheel.meshCollider!=rims[k]){rims[k]=wheels[k].wheel.meshCollider;changed=true;}if(changed){CacheShapes();match.BindTruckPairs();}int grounded=0;if(Time.time>=airborneUntil)foreach(var w in wheels){if(!w.enabled){w.enabled=true;w.WakeFromSleep();CacheShapes();match.BindTruckPairs();}if(w.IsGrounded)grounded++;}Grounded=grounded>=2&&body.linearVelocity.y<1;
   if(Grounded&&!wasGrounded){Landings++;match.feedback.Play(3,Mathf.Max(1,Mathf.Abs(body.linearVelocity.y)));}wasGrounded=Grounded;
   float speed=Vector3.Dot(body.linearVelocity,transform.forward);bool requested=Mathf.Abs(throttle)>.08f&&speed*throttle<0;if(!requested||Mathf.Abs(speed)<.12f)opposing=false;else if(Mathf.Abs(speed)>.3f)opposing=true;BrakingOpposite=opposing;
   float motor=opposing||speed*(throttle<0?-1:1)>=(throttle<0?reverseSpeed:maxSpeed)?0:throttle*motorTorque;

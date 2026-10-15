@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,7 +11,7 @@ public enum HockeySource {AI,Keyboard,WholeController,LeftStick,RightStick}
  public bool controller{get=>source>=HockeySource.WholeController;set{source=value?HockeySource.WholeController:HockeySource.Keyboard;}}
 }
 [DefaultExecutionOrder(-100)] public sealed class HockeyMatch:MonoBehaviour {
- public Rigidbody puck;public HockeyPuck puckContact;public HockeyTruck[] trucks;public HockeyAI ai;public HockeyAI[] agents;public HockeyMenus menus;public SportsSettings settings;public SportsFeedback feedback;public HockeyContactFeedback contacts;public Collider[] truckGoalBarriers;public Renderer[] goalCreases;public TextMesh[] labels;
+ public HockeyKnockback impacts;public Rigidbody puck;public HockeyPuck puckContact;public HockeyTruck[] trucks;public HockeyAI ai;public HockeyAI[] agents;public HockeyMenus menus;public SportsSettings settings;public SportsFeedback feedback;public HockeyContactFeedback contacts;public Collider[] truckGoalBarriers;public Renderer[] goalCreases;public TextMesh[] labels;
  public HockeyPlayer[] players=Defaults();public HockeyMode mode;public HockeyDifficulty difficulty=HockeyDifficulty.Normal;public int durationMinutes=3;public bool soloController;public float goalLine=17.4f,goalHalfWidth=3.045f,halfWidth=8.7f,cornerRadius=3.625f,deadlockSeconds=10;
  public readonly HockeyRules rules=new HockeyRules();public bool InMatch{get;private set;}public bool MenuOpen=>menus.Screen!=HockeyScreen.Match;
  public string Notice{get;private set;}="Drive into the puck. Opposite throttle brakes then reverses.";public int EmergencyFaceoffs{get;private set;}public int QueryOverflows{get;private set;}public float PuckDeadlockElapsed=>deadlock;public int SetupVersion{get;private set;}
