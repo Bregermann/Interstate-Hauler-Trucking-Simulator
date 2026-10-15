@@ -15,18 +15,36 @@ namespace LWS.TruckTaxi.Tests
     public sealed class TruckTaxiSnowGpuPlayModeTests
     {
         [UnityTest, Timeout(180000)]
-        public IEnumerator DemoHeldWheelContactWritesWeatheradeGpuTraceMask()
+        public IEnumerator DemoHeldWheelContactWritesWeatheradeGpuTraceMask() => ProbeWorld(TruckTaxiWorldCatalog.Demo);
+
+        [UnityTest, Timeout(180000)]
+        public IEnumerator EdenboroughElevatedContactWritesWeatheradeGpuTraceMask() => ProbeWorld(TruckTaxiWorldCatalog.Edenborough);
+
+        private IEnumerator ProbeWorld(string scene)
         {
             Assert.AreNotEqual(GraphicsDeviceType.Null, SystemInfo.graphicsDeviceType, "Requires an actual graphics device, not -nographics.");
             Assert.IsTrue(SystemInfo.supportsAsyncGPUReadback, "Requires actual GPU readback.");
-            yield return SceneManager.LoadSceneAsync(TruckTaxiWorldCatalog.Demo);
+            yield return SceneManager.LoadSceneAsync(scene);
             float deadline = Time.realtimeSinceStartup + 60;
             while ((TruckTaxiBootstrap.Instance == null || !TruckTaxiBootstrap.Instance.Ready) && Time.realtimeSinceStartup < deadline)
                 yield return null;
             var host = TruckTaxiBootstrap.Instance;
             Assert.IsNotNull(host); Assert.IsTrue(host.Ready);
             yield return TruckTaxiPlayModeSaveIsolation.CompleteNewRunIntroduction(host);
-            Assert.IsTrue(host.Environment.weatherAdapter.WeatherMakerRuntimeExists, "Use the real Demo weather runtime.");
+            if (scene == TruckTaxiWorldCatalog.Edenborough)
+            {
+                // Use the same authored elevated connector as Windows; the town spawn is surrounded by buildings.
+                var exit = UnityEngine.Object.FindFirstObjectByType<TruckTaxiWorldExit>();
+                Assert.IsNotNull(exit); Assert.IsNotNull(exit.arrival);
+                yield return host.GetComponent<TruckTaxiRegionalWorld>().PrepareInitialWorld(exit.arrival.position);
+                var body = host.Player.GetComponent<Rigidbody>();
+                Assert.IsTrue(TruckTaxiRecoverySpace.TryGroundedPose(body, exit.arrival.position, exit.arrival.rotation,
+                    .35f, body, null, out var grounded), "Existing elevated connector needs supported terrain.");
+                TruckTaxiRecoverySpace.Move(body, grounded, exit.arrival.rotation);
+                body.linearVelocity = body.angularVelocity = Vector3.zero;
+                host.Session.DiscardTeleportDistance(); Physics.SyncTransforms();
+            }
+            Assert.IsTrue(host.Environment.weatherAdapter.WeatherMakerRuntimeExists, "Use the real world weather runtime.");
             var surface = host.GetComponent<TruckTaxiSnowSurface>();
             Assert.IsNotNull(surface);
             bool frozen = host.Environment.Frozen;
@@ -46,7 +64,8 @@ namespace LWS.TruckTaxi.Tests
                 deadline = Time.realtimeSinceStartup + 30;
                 while ((!surface.EnvironmentBindingsReady || !surface.TraceMaskReady) && Time.realtimeSinceStartup < deadline)
                 {
-                    if (Time.time >= nextRefresh) { surface.Refresh(); nextRefresh = Time.time + refreshInterval; }
+                    // Match the real regional loading screen's bounded 64-renderer preparation batches.
+                    surface.Refresh(); nextRefresh = Time.time + refreshInterval;
                     yield return null;
                 }
                 Assert.IsTrue(surface.TraceMaskReady, surface.Diagnostic);
@@ -68,7 +87,7 @@ namespace LWS.TruckTaxi.Tests
                     }
                     if (!grounded) yield return null;
                 }
-                Assert.IsTrue(grounded, "Demo needs a real grounded NWH contact for this renderer-only probe.");
+                Assert.IsTrue(grounded, scene + " needs a real grounded NWH contact for this renderer-only probe.");
                 Vector3 end = contact + Vector3.ProjectOnPlane(host.Player.transform.forward, Vector3.up).normalized;
                 Component generator = Field<Component>(surface, "generator");
                 Assert.IsNotNull(generator);
@@ -82,6 +101,25 @@ namespace LWS.TruckTaxi.Tests
 
                 // Reproduce a player-like vendor reset after the adapter has cached both cameras.
                 Component coverage = Field<Component>(surface, "coverage");
+                if (scene == TruckTaxiWorldCatalog.Edenborough)
+                {
+                    // Reproduce the lost native follower at elevated terrain, without moving the truck or changing clip planes.
+                    coverage.GetType().GetMethod("UpdateDepth", BindingFlags.Instance | BindingFlags.Public).Invoke(coverage, null);
+                    Vector3 stale = coverage.transform.position; stale.y = 0;
+                    coverage.transform.position = stale;
+                    generator.GetType().GetMethod("SimOneStep", BindingFlags.Instance | BindingFlags.Public).Invoke(generator, null);
+                    PrintContactVolume("elevated stale anchor", coverage, objects, surfaces, contact);
+                    surface.Refresh();
+                    nextRefresh = Time.time + refreshInterval;
+                    yield return null;
+                    PrintContactVolume("elevated after Refresh", coverage, objects, surfaces, contact);
+                    foreach (Camera camera in new[] { objects, surfaces })
+                    {
+                        float distance = camera.WorldToViewportPoint(contact).z;
+                        Assert.That(distance, Is.InRange(camera.nearClipPlane, camera.farClipPlane),
+                            "Actual elevated contact must be inside both vendor trace camera depth ranges after Refresh.");
+                    }
+                }
                 FieldInfo rendererId = coverage.GetType().GetField("srsRendererId", BindingFlags.Instance | BindingFlags.Public);
                 Assert.IsNotNull(rendererId);
                 rendererId.SetValue(coverage, 0);
@@ -107,6 +145,7 @@ namespace LWS.TruckTaxi.Tests
                 }
                 PrintCamera("objects", objects);
                 PrintCamera("surface", surfaces);
+                PrintContactVolume("held contact", coverage, objects, surfaces, contact);
                 var objectRange = new DepthRange();
                 var surfaceRange = new DepthRange();
                 yield return ReadDepth(objects.targetTexture, objectRange);
@@ -157,6 +196,7 @@ namespace LWS.TruckTaxi.Tests
                     Debug.Log("SNOW GPU renderer-only OFFROAD path collider=" + offroadPath[0].collider.name +
                         " start=" + offroadPath[0].point.ToString("F3") + " end=" + offroadPath[50].point.ToString("F3") +
                         " road-depth exclusion margin=" + depthMargin + " (no physical NWH driving claim)");
+                    PrintContactVolume("offroad contact", coverage, objects, surfaces, offroadPath[0].point);
                     break;
                 }
                 Assert.IsTrue(offroadFound, "Need a nearby exposed nonroad path outside full-road depth-proxy footprints; do not substitute road contacts.");
@@ -326,6 +366,18 @@ namespace LWS.TruckTaxi.Tests
 
         private static int RendererIndex(Camera camera) => Field<int>(
             camera.GetComponent(FindType("UnityEngine.Rendering.Universal.UniversalAdditionalCameraData")), "m_RendererIndex");
+
+        private static void PrintContactVolume(string label, Component coverage, Camera objects, Camera surfaces, Vector3 contact)
+        {
+            Transform target = Field<Transform>(coverage, "followTarget");
+            Debug.Log("SNOW GPU " + label + " contact=" + contact.ToString("F3") + " coverage=" + coverage.transform.position.ToString("F3") +
+                " follow=" + (target != null ? target.position.ToString("F3") : "null") +
+                " offset=" + Field<Vector3>(coverage, "targetPosOffset").ToString("F3") +
+                " object viewport=" + objects.WorldToViewportPoint(contact).ToString("F5") +
+                " surface viewport=" + surfaces.WorldToViewportPoint(contact).ToString("F5") +
+                " cameraY object/surface=" + objects.transform.position.y + "/" + surfaces.transform.position.y +
+                " clips=" + objects.nearClipPlane + ".." + objects.farClipPlane + "/" + surfaces.nearClipPlane + ".." + surfaces.farClipPlane);
+        }
 
         private sealed class DepthRange
         {

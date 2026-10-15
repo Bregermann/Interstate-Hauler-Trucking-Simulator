@@ -234,6 +234,7 @@ namespace LWS.TruckTaxi
             }
             Shader.SetGlobalFloat(EnvironmentCoverageId, coverage01);
             BindCoverageDepthCamera(current);
+            RefreshCoverageAnchor(current);
             Shader.SetGlobalVector(EnvironmentExposureId, new Vector4(
                 ReadFloat(current, "coverageAreaBias", .025f), ReadFloat(current, "coverageAreaMaskRange", 1),
                 ReadFloat(current, "coverageLeakReduction", 0), 1));
@@ -282,6 +283,20 @@ namespace LWS.TruckTaxi
             bool rendererChanged = BindDepthCameraRenderer(camera);
             if (maskChanged || rendererChanged)
                 type.GetMethod("UpdateDepth", BindingFlags.Instance | BindingFlags.Public)?.Invoke(current, null);
+        }
+
+        private static void RefreshCoverageAnchor(Component current)
+        {
+            Type type = current.GetType();
+            if (!(type.GetField("useFollowTarget", BindingFlags.Instance | BindingFlags.Public)?.GetValue(current) is bool follows) || !follows) return;
+            Transform target = type.GetField("followTarget", BindingFlags.Instance | BindingFlags.Public)?.GetValue(current) as Transform;
+            if (target == null) return;
+            Vector3 offset = type.GetField("targetPosOffset", BindingFlags.Instance | BindingFlags.Public)?.GetValue(current) is Vector3 value ? value : Vector3.zero;
+            float threshold = Mathf.Lerp(0, ReadFloat(current, "areaSize", 100) * .5f, ReadFloat(current, "updateDistanceThreshold", .3f));
+            if (Vector3.Distance(target.position + offset, current.transform.position) <= threshold) return;
+            // CoverageBase.UpdateDepth stops its PositionUpdate coroutine. Use the vendor's own move/UV-scroll API,
+            // under the same threshold, without Init (which reallocates and clears the trace history).
+            type.GetMethod("UpdateSRSPosition", BindingFlags.Instance | BindingFlags.Public)?.Invoke(current, null);
         }
 
         private void BindTraceDepthCameras()

@@ -405,6 +405,22 @@ namespace LWS.TruckTaxi
                 RecordDualEvidence("TOWN_SNOW " + depth + " ground=" + surface.GroundSnowSurfaceCount + " terrain=" + surface.TerrainSnowSurfaceCount +
                     " sharedMaterials=" + surface.SharedEnvironmentMaterialCount);
                 yield return DualScreenshot("Edenborough-garage-foliage-snow-" + depth);
+                Vector3 roof = TruckTaxiEdenboroughLayout.Garage + Vector3.up * 3;
+                yield return DualObservationScreenshot("Edenborough-rooftop-snow-" + depth, roof,
+                    roof + new Vector3(18, 16, -22));
+                var foliage = FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None)
+                    .Where(r => r.gameObject.scene == host.gameObject.scene && r.enabled && r.bounds.size.y > 3 &&
+                        r.sharedMaterials.Any(m => m != null && m.shader != null &&
+                            (m.shader.name.Contains("EnvironmentTree") || m.shader.name.Contains("EnvironmentFoliage"))))
+                    .OrderBy(r => (r.bounds.center - point).sqrMagnitude).FirstOrDefault();
+                if (foliage != null)
+                {
+                    Vector3 center = foliage.bounds.center;
+                    float span = Mathf.Clamp(foliage.bounds.size.magnitude, 12, 35);
+                    RecordDualEvidence("FOLIAGE_OBSERVATION " + foliage.name + " shader=" + foliage.sharedMaterial.shader.name);
+                    yield return DualObservationScreenshot("Edenborough-imported-foliage-snow-" + depth, center,
+                        center + new Vector3(span * .7f, span * .35f, -span));
+                }
             }
         }
 
@@ -457,6 +473,9 @@ namespace LWS.TruckTaxi
             Check(surface.TraceActivePixelCount>0,"actual GPU Weatherade off-road trace mask contains tire marks: "+surface.TracePixelDiagnostic);
             RecordDualEvidence("OFFROAD "+label+" wheelContacts="+contacts+" newStamps="+(surface.WheelTraceStampCount-stamps)+" "+surface.TracePixelDiagnostic);
             yield return DualScreenshot(label+"-offroad-snow-tracks");
+            Vector3 trail = body.position - body.transform.forward * 3;
+            yield return DualObservationScreenshot(label + "-offroad-track-detail", trail,
+                trail + Vector3.up * 12 - body.transform.forward * 7);
             TruckTaxiRecoverySpace.Move(body,roadPoint,roadRotation); body.linearVelocity=body.angularVelocity=Vector3.zero;
             host.Session.DiscardTeleportDistance(); Physics.SyncTransforms(); yield return new WaitForFixedUpdate();
         }
@@ -464,6 +483,29 @@ namespace LWS.TruckTaxi
         {
             yield return new WaitForEndOfFrame(); ScreenCapture.CaptureScreenshot(Path.Combine(request.Root,"dual-"+name+".png"));
             yield return null;
+        }
+
+        private IEnumerator DualObservationScreenshot(string name, Vector3 target, Vector3 position)
+        {
+            Camera camera = Camera.main;
+            if (camera == null) yield break;
+            var followers = host.Player.GetComponentsInChildren<NWH.Common.Cameras.CameraMouseDrag>(true)
+                .Where(c => c.enabled).ToArray();
+            Vector3 originalPosition = camera.transform.position;
+            Quaternion originalRotation = camera.transform.rotation;
+            try
+            {
+                foreach (var follower in followers) follower.enabled = false;
+                camera.transform.SetPositionAndRotation(position, Quaternion.LookRotation(target - position, Vector3.up));
+                yield return null;
+                yield return null;
+                yield return DualScreenshot(name);
+            }
+            finally
+            {
+                if (camera != null) camera.transform.SetPositionAndRotation(originalPosition, originalRotation);
+                foreach (var follower in followers) if (follower != null) follower.enabled = true;
+            }
         }
 #endif
     }
