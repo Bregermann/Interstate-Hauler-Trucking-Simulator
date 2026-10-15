@@ -335,6 +335,26 @@ namespace LWS.TruckTaxi.Tests
             Assert.IsFalse(TruckTaxiWorldExit.CorrectDirection(Vector3.forward * 3, Vector3.zero));
         }
 
+        [TestCase(0f, 0f, 1f, true)]
+        [TestCase(0f, 0f, -1f, false)]
+        [TestCase(1f, 0f, 0f, false)]
+        [TestCase(0f, 1f, 0f, false)]
+        [TestCase(0f, 0f, 0f, false)]
+        [TestCase(0f, .3f, 1f, true)]
+        public void OutboundVelocityAlsoRequiresOutboundTractorHeading(float x, float y, float z, bool expected)
+        {
+            Assert.AreEqual(expected, TruckTaxiWorldExit.CorrectDirection(Vector3.forward * 3,
+                Vector3.forward, new Vector3(x, y, z)));
+        }
+
+        [Test]
+        public void ArrivalRollingBackwardsCannotActivateReturnBoundary()
+        {
+            Assert.IsFalse(TruckTaxiWorldExit.CorrectDirection(Vector3.right * 3, Vector3.right, Vector3.left));
+            Assert.IsTrue(TruckTaxiWorldExit.CorrectDirection(Vector3.right * 3, Vector3.right, Vector3.right));
+            Assert.IsFalse(TruckTaxiWorldExit.CorrectDirection(Vector3.left * 3, Vector3.right, Vector3.right));
+        }
+
         [Test]
         public void OldDemoSaveSceneAndFreePlayAliasRemainSupportedAlongsideEdenborough()
         {

@@ -349,6 +349,16 @@ namespace LWS.TruckTaxi
         {
             bool frozen = host.Environment.Frozen;
             host.Environment.SetFrozen(true); host.SetPaused(false);
+            string measuredScene = host.gameObject.scene.name;
+            var measuredHost = host;
+            var measuredBody = host.Player.GetComponent<Rigidbody>();
+            var controls = host.Player.TruckControlController;
+            if (!controls.CurrentState.parkingBrakeOn)
+                controls.ApplyCommandFrame(new LwsVehicleCommandFrame { parkingBrakeToggle = LwsMomentaryIntent.Pressed }, default);
+            float settleDeadline = Time.realtimeSinceStartup + 10;
+            while (measuredBody.linearVelocity.sqrMagnitude > .0025f && Time.realtimeSinceStartup < settleDeadline) yield return null;
+            Check(controls.CurrentState.parkingBrakeOn && measuredBody.linearVelocity.sqrMagnitude <= .0025f,
+                "snow benchmark stationary under native parking brake");
             foreach(float depth in new[]{0f,.2f,.85f})
             {
                 string preset=depth==0 ? LwsWeatherPresetCatalog.ClearId : depth<.5f ? LwsWeatherPresetCatalog.LightSnowId : LwsWeatherPresetCatalog.HeavySnowId;
@@ -363,7 +373,13 @@ namespace LWS.TruckTaxi
                 Check(surface.EnvironmentBindingsReady,"bounded outdoor material binding completed");
                 yield return DualScreenshot(label+"-snow-"+depth);
                 var ms=new List<float>(); until=Time.realtimeSinceStartup+10;
-                while(Time.realtimeSinceStartup<until){ms.Add(Time.unscaledDeltaTime*1000);yield return null;}
+                while(Time.realtimeSinceStartup<until)
+                {
+                    if (TruckTaxiBootstrap.Instance != measuredHost || !measuredHost || measuredHost.gameObject.scene.name != measuredScene ||
+                        TruckTaxiWorldTravel.IsBusy || !measuredBody || measuredBody.linearVelocity.sqrMagnitude > .01f)
+                        throw new InvalidOperationException("Snow benchmark changed world or lost stationary native parking; sample rejected.");
+                    ms.Add(Time.unscaledDeltaTime*1000); yield return null;
+                }
                 ms.Sort(); RecordDualEvidence("PERF "+label+" snow="+depth+" median="+ms[ms.Count/2]+" p95="+ms[(int)((ms.Count-1)*.95f)]+" p99="+ms[(int)((ms.Count-1)*.99f)]+
                     " materials="+surface.SharedEnvironmentMaterialCount+" surfaces="+surface.GroundSnowSurfaceCount+" terrain="+surface.TerrainSnowSurfaceCount+
                     " screen="+Screen.width+"x"+Screen.height+" GPU="+SystemInfo.graphicsDeviceName+" stationary truck; live NPCs; clock frozen for controlled snow; NOT isolated/driving/human acceptance");
