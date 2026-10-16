@@ -1,0 +1,12 @@
+using UnityEngine;using LWS.TruckSports;
+namespace LWS.TruckLogRolling {
+public sealed class LogFighter:MonoBehaviour {
+ public LogMatch match;public SportsEventTruck truck;public ParticleSystem splash;public AudioSource scrape;public int slot;public bool Fallen{get;private set;}public float Brace{get;private set;}public float Cooldown{get;private set;}public float WetAge{get;private set;}public int Braces{get;private set;}public int Impacts{get;private set;}
+ public void ResetFighter(Vector3 p,Quaternion rotation){truck.Prepare(p,rotation);truck.Power(false);truck.body.isKinematic=true;Fallen=false;Brace=Cooldown=WetAge=0;Braces=Impacts=0;splash.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);}
+ public void Step(Vector2 input,bool brace,float dt){if(Fallen)return;Cooldown=Mathf.Max(0,Cooldown-dt);Brace=Mathf.Max(0,Brace-dt);if(brace&&Cooldown<=0){Brace=.85f;Cooldown=2.6f;Braces++;match.Pulse(slot,.14f,.08f);}truck.body.centerOfMass=new Vector3(0,Brace>0?-.28f:-.06f,0);truck.motorTorque=Brace>0?4400:8000;truck.grip=Brace>0?1.65f:1.35f;truck.TickDrive(Brace>0?input*.55f:input);if(Brace>0)foreach(var wheel in truck.wheels)wheel.BrakeTorque=Mathf.Max(wheel.BrakeTorque,30000);}
+ public bool ObserveWater(float dt){if(Fallen)return true;float water=match.buoyancy.Height(truck.body.worldCenterOfMass);float min=truck.shape.bounds.min.y;bool supported=false;foreach(var wheel in truck.wheels)if(wheel.IsGrounded&&wheel.HitCollider!=null&&wheel.HitCollider.attachedRigidbody==match.log)supported=true;bool wet=truck.body.worldCenterOfMass.y<water-.1f||!supported&&min<water-.35f;WetAge=wet?WetAge+dt:0;return WetAge>=.12f;}
+ public void Fall(){if(Fallen)return;Fallen=true;truck.Power(false);splash.transform.position=new Vector3(truck.body.position.x,match.buoyancy.Height(truck.body.position),truck.body.position.z);var emission=splash.emission;emission.SetBursts(new[]{new ParticleSystem.Burst(0,(short)Mathf.Clamp(truck.body.linearVelocity.magnitude*5,18,64))});splash.Play();match.feedback.Play(3,0,true);match.Pulse(slot,.35f,.14f);}
+ void OnCollisionEnter(Collision collision){if(!match.Live||match.Stage!=LogStage.Balance)return;var other=collision.rigidbody!=null?collision.rigidbody.GetComponent<LogFighter>():null;if(other!=null){Impacts++;match.ContactCount++;match.feedback.Play(1,collision.relativeVelocity.magnitude);}}
+ public void Freeze(){truck.Power(false);truck.body.isKinematic=true;if(scrape!=null)scrape.Stop();}void OnDisable(){if(scrape!=null)scrape.Stop();}
+}
+}
