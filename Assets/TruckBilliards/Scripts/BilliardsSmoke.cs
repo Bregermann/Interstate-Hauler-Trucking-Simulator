@@ -19,7 +19,7 @@ namespace LWS.TruckBilliards
   static void Launch(){var args=Environment.GetCommandLineArgs();if(Array.IndexOf(args,"-tbFeatureSmoke")>=0||Array.IndexOf(args,"-tbLocalSmoke")>=0||Array.IndexOf(args,"-tbSmoke")>=0||Array.IndexOf(args,"-tbHandoffProbe")>=0){var m=UnityEngine.Object.FindAnyObjectByType<BilliardsMatch>();if(m!=null)m.gameObject.AddComponent<BilliardsSmoke>();}}
   void Start(){
    match=GetComponent<BilliardsMatch>();session=match.session;menus=session.menus;
-   folder=Path.GetFullPath(Path.Combine(Application.dataPath,Array.IndexOf(Environment.GetCommandLineArgs(),"-tbFeatureSmoke")>=0?"../FeatureSmokeTest":"../LocalSmokeTest"));Directory.CreateDirectory(folder);
+   folder=LWS.TruckSports.SportsEvidencePaths.Folder(Array.IndexOf(Environment.GetCommandLineArgs(),"-tbFeatureSmoke")>=0?"FeatureSmokeTest":"LocalSmokeTest");Directory.CreateDirectory(folder);
    // Keep opt-in injected input tests stable when desktop focus moves to the
    // report window. Clone settings; never edit the project's settings asset.
    originalInputSettings=InputSystem.settings;probeInputSettings=UnityEngine.Object.Instantiate(originalInputSettings);
@@ -67,16 +67,16 @@ namespace LWS.TruckBilliards
    if(!match.rules.BeginShot())throw new Exception("Scratch fixture shot not permitted");match.balls[0].body.linearVelocity=new Vector3(-2,0,0);
   }
   void Capture(string name){ScreenCapture.CaptureScreenshot(Path.Combine(folder,name+".png"));}
-  string oldSetup;bool hadSetup; void SaveSettingsBaseline(){hadSetup=PlayerPrefs.HasKey(BilliardsSession.SetupKey);oldSetup=PlayerPrefs.GetString(BilliardsSession.SetupKey);
+  string oldSetup;bool hadSetup; void SaveSettingsBaseline(){hadSetup=LWS.TruckSports.SportsPrefs.HasKey(BilliardsSession.SetupKey);oldSetup=LWS.TruckSports.SportsPrefs.GetString(BilliardsSession.SetupKey);
    oldVibration=session.settings.vibration;oldDifficulty=session.difficulty;oldMaster=session.settings.master;oldSfx=session.settings.sfx;oldSensitivity=session.settings.sensitivity;oldFullscreen=session.settings.fullscreen;oldResolution=session.settings.resolutionIndex;
    foreach(var key in new[]{"Master","SFX","Steering","Fullscreen","Width","Height","Vibration","Difficulty"}){
     string full="TruckBilliards.Settings."+key;
-    oldPrefs[full]=!PlayerPrefs.HasKey(full)?null:(key=="Master"||key=="SFX"||key=="Steering")?"F:"+PlayerPrefs.GetFloat(full):"I:"+PlayerPrefs.GetInt(full);
+    oldPrefs[full]=!LWS.TruckSports.SportsPrefs.HasKey(full)?null:(key=="Master"||key=="SFX"||key=="Steering")?"F:"+LWS.TruckSports.SportsPrefs.GetFloat(full):"I:"+LWS.TruckSports.SportsPrefs.GetInt(full);
    }
   }
-  void RestoreSettings(){if(hadSetup)PlayerPrefs.SetString(BilliardsSession.SetupKey,oldSetup);else PlayerPrefs.DeleteKey(BilliardsSession.SetupKey);
-   foreach(var pair in oldPrefs){if(pair.Value==null)PlayerPrefs.DeleteKey(pair.Key);else if(pair.Value.StartsWith("F:"))PlayerPrefs.SetFloat(pair.Key,float.Parse(pair.Value.Substring(2)));else PlayerPrefs.SetInt(pair.Key,int.Parse(pair.Value.Substring(2)));}
-   PlayerPrefs.Save();session.settings.vibration=oldVibration;session.difficulty=oldDifficulty;session.settings.master=oldMaster;session.settings.sfx=oldSfx;session.settings.sensitivity=oldSensitivity;session.settings.fullscreen=oldFullscreen;session.settings.resolutionIndex=oldResolution;session.settings.ApplyAudio();
+  void RestoreSettings(){if(hadSetup)LWS.TruckSports.SportsPrefs.SetString(BilliardsSession.SetupKey,oldSetup);else LWS.TruckSports.SportsPrefs.DeleteKey(BilliardsSession.SetupKey);
+   foreach(var pair in oldPrefs){if(pair.Value==null)LWS.TruckSports.SportsPrefs.DeleteKey(pair.Key);else if(pair.Value.StartsWith("F:"))LWS.TruckSports.SportsPrefs.SetFloat(pair.Key,float.Parse(pair.Value.Substring(2)));else LWS.TruckSports.SportsPrefs.SetInt(pair.Key,int.Parse(pair.Value.Substring(2)));}
+   LWS.TruckSports.SportsPrefs.Save();session.settings.vibration=oldVibration;session.difficulty=oldDifficulty;session.settings.master=oldMaster;session.settings.sfx=oldSfx;session.settings.sensitivity=oldSensitivity;session.settings.fullscreen=oldFullscreen;session.settings.resolutionIndex=oldResolution;session.settings.ApplyAudio();
   }
   IEnumerator HandoffOnly(){
    IEnumerator w=Delay(1);while(w.MoveNext())yield return null;
@@ -111,7 +111,7 @@ namespace LWS.TruckBilliards
    // Persist settings without changing the command-line test resolution.
    int originalIndex=session.settings.resolutionIndex;session.settings.resolutionIndex=Array.FindIndex(session.settings.resolutions,r=>r.x==Screen.width&&r.y==Screen.height);
    if(session.settings.resolutionIndex<0)session.settings.resolutionIndex=originalIndex;
-   session.settings.Save();Check(Mathf.Approximately(PlayerPrefs.GetFloat("TruckBilliards.Settings.Steering"),1.4f),"settings persist with mode-owned keys");RestoreSettings();
+   session.settings.Save();Check(Mathf.Approximately(LWS.TruckSports.SportsPrefs.GetFloat("TruckBilliards.Settings.Steering"),1.4f),"settings persist with mode-owned keys");RestoreSettings();
    Capture("02-settings");w=Delay(.3f);while(w.MoveNext())yield return null;menus.Back();
    Click("play");session.players[0].name="Alex";session.players[1].name="Morgan";session.SelectMode(BilliardsMode.SharedKeyboard);session.breakChoice=1;menus.RefreshSetup();
    Capture("03-setup");w=Delay(.3f);while(w.MoveNext())yield return null;

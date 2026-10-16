@@ -154,8 +154,8 @@ namespace LWS.TruckBilliards
     case "reposition":session.RepositionCue();break;
     case "nextrack":session.NextRack();break;
     case "format":session.format=(BilliardsFormat)(((int)session.format+1)%3);RefreshSetup();break;
-    case "difficulty":session.difficulty=(BilliardsDifficulty)(((int)session.DifficultyFor(1)+1)%3);session.players[1].difficulty=session.difficulty;session.SaveSetup();PlayerPrefs.SetInt("TruckBilliards.Settings.Difficulty",(int)session.difficulty);PlayerPrefs.Save();RefreshSetup();break;
-    case "vibration":session.settings.vibration=!session.settings.vibration;PlayerPrefs.SetInt("TruckBilliards.Settings.Vibration",session.settings.vibration?1:0);PlayerPrefs.Save();if(!session.settings.vibration)session.feedback.StopMotors();RefreshSettings();break;
+    case "difficulty":session.difficulty=(BilliardsDifficulty)(((int)session.DifficultyFor(1)+1)%3);session.players[1].difficulty=session.difficulty;session.SaveSetup();LWS.TruckSports.SportsPrefs.SetInt("TruckBilliards.Settings.Difficulty",(int)session.difficulty);LWS.TruckSports.SportsPrefs.Save();RefreshSetup();break;
+    case "vibration":session.settings.vibration=!session.settings.vibration;LWS.TruckSports.SportsPrefs.SetInt("TruckBilliards.Settings.Vibration",session.settings.vibration?1:0);LWS.TruckSports.SportsPrefs.Save();if(!session.settings.vibration)session.feedback.StopMotors();RefreshSettings();break;
     case "main":RequestConfirm("main");break;
     case "yes":if(confirmation=="restart"||confirmation=="practicereset")session.RestartRack();else if(confirmation=="restartseries")session.RestartSeries();else session.MainMenu();break;
     case "ready":

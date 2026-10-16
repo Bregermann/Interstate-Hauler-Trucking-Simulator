@@ -20,8 +20,8 @@ public sealed class SportsFocusedProbe:MonoBehaviour {
  void Log(string message,string trace,LogType type){if(type==LogType.Error||type==LogType.Exception){errors++;lines.Add("ERROR "+message);}}
  void Check(bool good,string label){lines.Add((good?"PASS ":"FAIL ")+label);if(!good)errors++;File.WriteAllLines(folder+"/progress.txt",lines);}
  void Note(string message){lines.Add(message);File.WriteAllLines(folder+"/progress.txt",lines);}
- void Protect(string key){if(!preferences.ContainsKey(key))preferences.Add(key,PlayerPrefs.HasKey(key)?PlayerPrefs.GetString(key):null);}
- void Restore(){if(restored)return;restored=true;foreach(var item in preferences)if(item.Value==null)PlayerPrefs.DeleteKey(item.Key);else PlayerPrefs.SetString(item.Key,item.Value);PlayerPrefs.Save();Time.timeScale=1;}
+ void Protect(string key){if(!preferences.ContainsKey(key))preferences.Add(key,LWS.TruckSports.SportsPrefs.HasKey(key)?LWS.TruckSports.SportsPrefs.GetString(key):null);}
+ void Restore(){if(restored)return;restored=true;foreach(var item in preferences)if(item.Value==null)LWS.TruckSports.SportsPrefs.DeleteKey(item.Key);else LWS.TruckSports.SportsPrefs.SetString(item.Key,item.Value);LWS.TruckSports.SportsPrefs.Save();Time.timeScale=1;}
  IEnumerator Delay(float seconds){float end=Time.realtimeSinceStartup+seconds;while(Time.realtimeSinceStartup<end)yield return null;}
  IEnumerator Wait(Func<bool> predicate,float seconds,string label){float end=Time.realtimeSinceStartup+seconds;while(!predicate()){if(Time.realtimeSinceStartup>end)throw new Exception("TIMEOUT "+label);yield return null;}}
  void Update(){if(done)return;try{while(steps.Count>0){var next=steps.Peek();if(!next.MoveNext()){steps.Pop();continue;}if(next.Current is IEnumerator nested){steps.Push(nested);continue;}return;}Finish();}catch(Exception e){errors++;lines.Add("FAIL "+e);Finish();}}
