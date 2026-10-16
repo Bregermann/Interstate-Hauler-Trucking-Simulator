@@ -1,4 +1,22 @@
-# ACTIVE CHECKPOINT — current25sport expansion implemented; build/player delivery next
+# ACTIVE NOW — corrected containment source validated; commit/rebuild then visible Windows suite
+
+Final corrected native30After:159pins,23meaningful returns,61secondary contacts,0errors. Before141/0/0. Earlier162/29 sample archived. Native4carrycasesPASS and saved/query-layer validationPASS, host0/2matrix permits pins; EditorSTOPPED. Need scoped correction commit(clean parenta25d92d8), updated SAME25sport Windows build usingStartExpansion25Build.cs, visibleRun25WindowsBatch.py, fixactualfailures/docs/mainFFpublication, THEN fullqueued31sportproductionpass. Do not finish at checkpoint. ExistingEXE25firstbuildstilllackscontainmentfix.
+
+# CURRENT RECOVERY STATUS — 25sport build produced; fix/rebuild/player checks pending
++
++Clean Bowling milestone a25d92d8b04e38005f54591eb56ffa099287ef89(local6ec2e6e2a2b0d76e3e8860085ef42a16b6d74f9b) pushed working branch. Main still9460b553. Native27scene audit passed. Combined Windows25sports/27scenes built2026-10-16T11:24:03Z,0errors45warnings,1152721093bytes,221.13s; host12files byte-identical (HostSettingsBefore25). First assembly SHA256d4375f32736ee62e79687cb8ebfb58fdac7d5200aac3917fea043fccf4dec131.
++
++Actual Windows startup/menu/driving/pause/return PASSED. Hidden-window screenshots were black; RunWindowsCase.py now uses NORMAL VISIBLE player windows. Visible rerun passed and actual startup picture inspected. Do not claim rendering from hidden tests. Old hidden evidence archived WindowsHiddenDelivery.
++
++WINDOWS FOUND REAL NEW REGRESSION: sideways gutter truck stoppedz59.08 at leading face of newly added pin containment. Batch stopped on this failure, archived WindowsSidewaysContainmentFailure. Fixed source/saved scene: serialize both pin-only containment colliders per lane, ignore every truck collider against them in BindLaneCollision, put them on existing built-in Ignore Raycast layer2 and exclude2 from NWH tire query masks. No host layer/settings edits, no handling retune. Normal pit bumper still collides physically with trucks; only enhanced return remains pin-specific.
++
++Existing carry suite now supports an Editor session flag and isolated injected keyboard routing. NATIVE corrected-source carry PASS all4cases: normal/sideways/backward/committed gutter reach actual pit, no mid-lane stop; sideways maxZ66.24/gutter0pins, backward66.45/1physicalpin, committed gutter66.27/0pins. Source EditorSTOPPED after this clean run. Need rerun30After equivalent Bowling cases with correction (old162pin After archived BowlingReboundBeforeContainmentCorrection), then update measured docs. All earlier six new sports/fullBowling tests remain retained; correction requires actual Windows carry/fullBowling rerun.
++
++NEXT: StartBowlingRebound.cs (baselinefalse), read fresh result; stop owned probe; update docs/metadata, scoped correction commit+clean mirror/push; replace SAME combined25sport output through StartExpansion25Build.cs/SportsBuilder.Build (source correction not in currentEXE). Reuse HostSettingsBefore25 ONLY after verifying current12hashes unchanged; never overwrite original snapshot. Then rerun Run25WindowsBatch.py in visible windows. It currently FAILED first-tsPolishMotion on OLD executable; no remaining cases ran. Batchscript includesfullBowling/Pong, focusednew6+Bog rendered60s workloads,Keepaway/Terrier. Preserve failure evidence. Fix any real player failures; updateactualbuild/hash/evidence docs; normal cleanbranchFFpushmain. THEN immediately full queued dbf407b8 production pass (6more sports +shared/oldmodefixes), build/test/push again. No partial final; no subagents; lease retained. Current32-ish totalGoal remains31sports/33scenes, notimplemented yet.
++
++## Earlier history (superseded by CURRENT above)
++
++# ACTIVE CHECKPOINT — current25sport expansion implemented; build/player delivery next
 
 Pong committed local4a2d0f47fe02b9e84ddf6208df7fff76404b9fd8 /clean de30bfcfb2212f6e71bb0fe5013a3ae55085698c; working-branch push verified. FieldGoal previous local3d0e07ed/clean6f292231 also pushed working. Origin/main still stable19sports9460b553. Root main has private Taxi ancestor3651e3ee: NEVER push root HEAD.
 

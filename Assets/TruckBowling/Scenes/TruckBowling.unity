@@ -20875,7 +20875,7 @@ GameObject:
   - component: {fileID: 354744607}
   - component: {fileID: 354744606}
   - component: {fileID: 354744605}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Physical rear-deck pin containment -1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33030,7 +33030,7 @@ GameObject:
   - component: {fileID: 568788906}
   - component: {fileID: 568788905}
   - component: {fileID: 568788904}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Physical rear-deck pin containment -1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -34398,6 +34398,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBowling.BowlingReboundWall
   lane: {fileID: 1312727545}
   bed: {fileID: 213822249}
+  pinContainment:
+  - {fileID: 1841501561}
+  - {fileID: 1270688382}
   returnMultiplier: 1.18
   maxReturnSpeed: 11.5
   energyRatio: 1.35
@@ -57096,7 +57099,7 @@ GameObject:
   - component: {fileID: 1005651870}
   - component: {fileID: 1005651869}
   - component: {fileID: 1005651868}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Physical rear-deck pin containment -1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -71700,7 +71703,7 @@ GameObject:
   - component: {fileID: 1270688383}
   - component: {fileID: 1270688382}
   - component: {fileID: 1270688381}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Physical rear-deck pin containment 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76510,6 +76513,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBowling.BowlingReboundWall
   lane: {fileID: 1151023742}
   bed: {fileID: 924153843}
+  pinContainment:
+  - {fileID: 354744606}
+  - {fileID: 1720479970}
   returnMultiplier: 1.18
   maxReturnSpeed: 11.5
   energyRatio: 1.35
@@ -83935,7 +83941,7 @@ GameObject:
   - component: {fileID: 1503385965}
   - component: {fileID: 1503385964}
   - component: {fileID: 1503385963}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Physical rear-deck pin containment 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86529,7 +86535,7 @@ GameObject:
   - component: {fileID: 1534760111}
   - component: {fileID: 1534760110}
   - component: {fileID: 1534760109}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Physical rear-deck pin containment 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95026,6 +95032,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBowling.BowlingReboundWall
   lane: {fileID: 825402082}
   bed: {fileID: 2109757259}
+  pinContainment:
+  - {fileID: 1005651869}
+  - {fileID: 1503385964}
   returnMultiplier: 1.18
   maxReturnSpeed: 11.5
   energyRatio: 1.35
@@ -97266,7 +97275,7 @@ GameObject:
   - component: {fileID: 1720479971}
   - component: {fileID: 1720479970}
   - component: {fileID: 1720479969}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Physical rear-deck pin containment 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105024,7 +105033,7 @@ GameObject:
   - component: {fileID: 1841501562}
   - component: {fileID: 1841501561}
   - component: {fileID: 1841501560}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Physical rear-deck pin containment -1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124903,6 +124912,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBowling.BowlingReboundWall
   lane: {fileID: 886442627}
   bed: {fileID: 1048393978}
+  pinContainment:
+  - {fileID: 568788905}
+  - {fileID: 1534760110}
   returnMultiplier: 1.18
   maxReturnSpeed: 11.5
   energyRatio: 1.35

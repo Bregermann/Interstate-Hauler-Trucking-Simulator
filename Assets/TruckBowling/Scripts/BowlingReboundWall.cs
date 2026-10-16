@@ -3,7 +3,7 @@ namespace LWS.TruckBowling {
 // Only real pin/back-wall contacts enter this policy. PhysX already responded;
 // apply the delta to one bounded desired return, never a second full bounce.
 public sealed class BowlingReboundWall:MonoBehaviour {
- public BowlingLane lane;public Transform bed;public float returnMultiplier=1.18f,maxReturnSpeed=11.5f,energyRatio=1.35f,extraSpeedSquared=4,debounce=.55f;public int Returns{get;private set;}public float LastReturnAt{get;private set;}=-100;public Vector3 LastIncoming{get;private set;}public Vector3 LastOutgoing{get;private set;}public float LastNormalSpeed{get;private set;}
+ public BowlingLane lane;public Transform bed;public Collider[] pinContainment;public float returnMultiplier=1.18f,maxReturnSpeed=11.5f,energyRatio=1.35f,extraSpeedSquared=4,debounce=.55f;public int Returns{get;private set;}public float LastReturnAt{get;private set;}=-100;public Vector3 LastIncoming{get;private set;}public Vector3 LastOutgoing{get;private set;}public float LastNormalSpeed{get;private set;}
  readonly float[] ready=new float[10];Tween motion;Vector3 restScale;
  void Awake(){restScale=bed.localScale;for(int i=0;i<ready.Length;i++)ready[i]=-100;}
  public bool Contact(BowlingPin pin,Collision collision){if(!enabled||pin==null||pin.lane!=lane||!lane.ScoringLive||lane.match.Paused||pin.body.isKinematic||Time.time<ready[pin.index])return false;var incoming=pin.IncomingVelocity;float normal=0;for(int i=0;i<collision.contactCount;i++){var contact=collision.GetContact(i);if(contact.normal.z<-.7f)normal=Mathf.Max(normal,Vector3.Dot(incoming,-contact.normal));}if(normal<.8f||incoming.z<.6f)return false;
