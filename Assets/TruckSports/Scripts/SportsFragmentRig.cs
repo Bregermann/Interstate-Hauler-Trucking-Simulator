@@ -1,0 +1,13 @@
+using System;using UnityEngine;
+namespace LWS.TruckSports {
+// Reuses the established actual-mesh wreck presentation with a sport-neutral truck owner.
+// Child transforms retain every piece pose in SportsMotionReplay; scale-zero hides dormant parts.
+public sealed class SportsFragmentRig:MonoBehaviour {
+ [Serializable]public sealed class Piece{public Transform source;public Rigidbody body;public Collider collider;public Renderer renderer;}
+ public SportsEventTruck truck;public Piece[] pieces;public bool Bursting{get;private set;}Vector3 visualScale;MaterialPropertyBlock tint;
+ void Awake(){visualScale=truck.visuals.localScale;tint=new MaterialPropertyBlock();var own=truck.GetComponentsInChildren<Collider>(true);foreach(var p in pieces)foreach(var c in own)if(p.collider!=c)Physics.IgnoreCollision(p.collider,c,true);}
+ public void ResetBody(){if(tint==null)Awake();Bursting=false;truck.visuals.localScale=visualScale;foreach(var p in pieces){p.body.isKinematic=true;p.collider.enabled=false;p.body.transform.localScale=Vector3.zero;} }
+ public void Burst(){if(Bursting)return;Bursting=true;foreach(var p in pieces){var filter=p.source.GetComponent<MeshFilter>();p.body.transform.SetPositionAndRotation(p.source.position,p.source.rotation);var scale=p.source.lossyScale;var parent=p.body.transform.parent.lossyScale;p.body.transform.localScale=new Vector3(scale.x/parent.x,scale.y/parent.y,scale.z/parent.z);p.source.GetComponent<Renderer>().GetPropertyBlock(tint);p.renderer.SetPropertyBlock(tint);p.collider.enabled=true;p.body.isKinematic=false;var direction=p.source.TransformPoint(filter.sharedMesh.bounds.center)-truck.body.worldCenterOfMass;if(direction.sqrMagnitude<.01f)direction=Vector3.up;direction.Normalize();p.body.linearVelocity=Vector3.ClampMagnitude(truck.body.GetPointVelocity(p.source.position),30)+direction*4+Vector3.up*4;p.body.angularVelocity=Vector3.ClampMagnitude(truck.body.angularVelocity,10)+new Vector3(4,6,3);p.body.WakeUp();}truck.Power(false);truck.body.isKinematic=true;truck.body.detectCollisions=false;truck.visuals.localScale=Vector3.zero;}
+ public void Freeze(){if(pieces!=null)foreach(var p in pieces)if(p.body!=null){p.body.isKinematic=true;p.collider.enabled=false;}}
+ void OnDisable(){Freeze();}
+}}

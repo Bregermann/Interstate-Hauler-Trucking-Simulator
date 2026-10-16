@@ -1,0 +1,13 @@
+# Mountain Tug of War
+
+Playable native-validated stage of the queued31-sport production update. The saved scene, collection entry and explicit sports-only scene list are integrated. The final combined Windows build is still pending; the existing executable remains the earlier25-sport milestone.
+
+Two teams of1–4 compete first to three round wins, swapping sides each round. Up to four humans use the collection’s exclusive keyboard/controller/shared-stick routing; remaining participants use named Easy/Normal/Hard AI. Reverse creates baseline NWH traction. Ease between1.8–2.35seconds of each six-second cycle, reapply reverse between2.35–2.85, then steer the assigned brace direction. Misses briefly reduce grip. Timing Assist accepts held reverse and widens the brace window. The same limits apply to AI.
+
+One physical central SpringJoint connects two team headers; physical tow joints connect individual trucks. NWH wheels create live pulling force. LWS does not apply a second live pulling impulse, hidden rubber band or scripted competitive trajectory. Actual NWH wheel contacts leave built-in TrailRenderer grooves; bounded cached wear modestly lowers grip equally. A chassis crossing the marked ledge edge or falling loses its team’s round. Same-step losses draw. At80seconds a0.75m physical ground-gain difference decides; a closer result is an explicit replayed draw. Result locks before the cinematic. Winners are secured, connections released, losers physically pulled/fall into lava and burst into twelve actual truck mesh parts each. This post-result cinematic cannot change the winner. Recorded transforms include fragment poses; angle, slow/fast speed, rewind and skip never rescore.
+
+Heat progress meters show team effort and remaining edge distance; public rope strain/ground advantage and per-player brace prompts remain visible. Shared audio/vibration, pause, explicit replacement, results, rematch and collection return use established systems.
+
+Vendor audit: NWH WheelController3D, Unity physical joints, Heat ProgressBar/TMP, Cinemachine, DOTween, Weather Maker and installed Toon Gas Station rock meshes are used through LWS adapters. Installed and accessible owned-library searches found no Rope Toolkit, Obi or winch implementation. Weatherade’s shipped Snow/Rain coverage provides no mud-rut solver, so LWS supplies only the game’s bounded wear semantics over Unity TrailRenderer presentation. No vendor source modified.
+
+Still required in the final production pass: stronger volcanic surface/depth/ash art and presentation polish, final Windows/full-window/aspect/performance acceptance, human timing/balance/audio review and real physical-controller checks. Native evidence does not substitute for those checks.
