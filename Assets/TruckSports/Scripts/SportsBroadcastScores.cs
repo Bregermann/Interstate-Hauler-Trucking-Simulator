@@ -9,6 +9,7 @@ namespace LWS.TruckSports {
 [DefaultExecutionOrder(220)]public sealed class SportsBroadcastScores:MonoBehaviour {
  public SportsEventMenus menus;public TMP_FontAsset headingFont,bodyFont;
  sealed class Card {public GameObject root;public TMP_Text name,value,detail;public Image stripe,progress;public GameObject padlock;}
+ public bool OwnsStandings=>mapped&&menus!=null&&menus.Screen==SportsEventScreen.Play&&!menus.match.MultiViewHUD;
  Card[] cards;string prior;float next;RectTransform root;bool mapped;
  TMP_Text Text(Transform parent,string name,Vector2 position,Vector2 size,int font,bool bold){var g=new GameObject(name,typeof(RectTransform));g.transform.SetParent(parent,false);var r=g.GetComponent<RectTransform>();r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=position;r.sizeDelta=size;var text=g.AddComponent<TextMeshProUGUI>();text.font=bold?headingFont:bodyFont;text.fontSize=font;text.enableAutoSizing=true;text.fontSizeMin=font-2;text.fontSizeMax=font;text.color=SportsBroadcastCanvas.Cream;text.raycastTarget=false;text.alignment=TextAlignmentOptions.MidlineLeft;text.overflowMode=TextOverflowModes.Ellipsis;return text;}
  Image Block(Transform parent,string name,Vector2 position,Vector2 size,Color color){var g=new GameObject(name,typeof(RectTransform),typeof(Image));g.transform.SetParent(parent,false);var r=g.GetComponent<RectTransform>();r.anchorMin=r.anchorMax=r.pivot=new Vector2(0,1);r.anchoredPosition=position;r.sizeDelta=size;var image=g.GetComponent<Image>();image.color=color;image.raycastTarget=false;return image;}
