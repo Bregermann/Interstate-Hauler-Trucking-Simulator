@@ -1,9 +1,18 @@
+using System;
 using UnityEngine;
 namespace LWS.TruckMusicalParking {
+public readonly struct ParkingResolution {
+ public readonly int SecuredMask,EliminatedMask,Remaining,Winner;public readonly bool Replay;
+ public ParkingResolution(int secured,int eliminated,int remaining,int winner,bool replay){SecuredMask=secured;EliminatedMask=eliminated;Remaining=remaining;Winner=winner;Replay=replay;}
+}
 public static class ParkingRules {
- public const float CaptureSeconds=1.0f;
- public static bool Contains(BoxCollider shape,Rigidbody body,Vector3 center,Quaternion rotation,Vector2 size){var inverse=Quaternion.Inverse(rotation);for(int i=0;i<4;i++){var local=shape.center+new Vector3((i%2==0?-1:1)*shape.size.x*.5f,0,(i<2?-1:1)*shape.size.z*.5f);var p=body.position+body.rotation*Vector3.Scale(local,shape.transform.lossyScale);p=inverse*(p-center);if(Mathf.Abs(p.x)>size.x*.5f-.06f||Mathf.Abs(p.z)>size.y*.5f-.06f)return false;}return true;}
+ public const float CaptureSeconds=1,PaintTolerance=.08f,InnerBand=.76f,OuterBand=1.22f;
+ public static float Radius(Vector3 position)=>new Vector2(position.x/30,position.z/23).magnitude;
+ public static bool InBand(Vector3 p,float tolerance=.045f){float r=Radius(p);return r>=InnerBand-tolerance&&r<=OuterBand+tolerance;}
+ public static bool Contains(BoxCollider shape,Rigidbody body,Vector3 center,Quaternion rotation,Vector2 size){var inverse=Quaternion.Inverse(rotation);for(int i=0;i<8;i++){var local=shape.center+Vector3.Scale(shape.size*.5f,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1));var p=body.position+body.rotation*Vector3.Scale(local,shape.transform.lossyScale);p=inverse*(p-center);if(Mathf.Abs(p.x)>size.x*.5f+PaintTolerance||Mathf.Abs(p.z)>size.y*.5f+PaintTolerance)return false;}return true;}
  public static bool BetterClaim(float a,int aSlot,float b,int bSlot,int tieOffset)=>a<b-.0001f||Mathf.Abs(a-b)<.0001f&&(aSlot-tieOffset+8)%8<(bSlot-tieOffset+8)%8;
- public static int Lowest(bool[] active,int[] secured,float[] progress,float[] distance,int rotation){int loser=-1;for(int i=0;i<8;i++){if(!active[i]||secured[i]>=0)continue;if(loser<0||progress[i]<progress[loser]-.0001f||Mathf.Abs(progress[i]-progress[loser])<.0001f&&(distance[i]>distance[loser]+.001f||Mathf.Abs(distance[i]-distance[loser])<.001f&&(i-rotation+8)%8<(loser-rotation+8)%8))loser=i;}return loser;}
+ public static ParkingResolution Resolve(bool[] active,int[] secured,int[] owners){if(active.Length!=8||secured.Length!=8||owners.Length!=8)throw new ArgumentException("Eight-slot snapshot required");int alive=0,parked=0;for(int i=0;i<8;i++)if(active[i]){alive|=1<<i;int bay=secured[i];if(bay>=0&&bay<8&&owners[bay]==i)parked|=1<<i;}if(parked==0)return new ParkingResolution(0,0,Count(alive),-1,true);int eliminated=alive&~parked,remaining=Count(parked);return new ParkingResolution(parked,eliminated,remaining,remaining==1?First(parked):-1,false);}
+ public static int Count(int mask){int n=0;for(;mask!=0;mask&=mask-1)n++;return n;}
+ public static int First(int mask){for(int i=0;i<8;i++)if((mask&(1<<i))!=0)return i;return -1;}
 }
 }
