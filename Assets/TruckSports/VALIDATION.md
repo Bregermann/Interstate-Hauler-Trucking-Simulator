@@ -170,3 +170,14 @@ RELEVANT ASSETS NOT USED: Road-wheel powertrain/traffic-path systems do not prov
 CUSTOM SYSTEMS CREATED: Extended six-player team coordination, source ownership, key setup, recovery/contact feedback and validation; extended existing Billiards navigation, opening break and group choice.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+## Shared focus versus reconnect policy — native acceptance
+
+InputSystem1.19 emits InputDeviceChange.Disabled both for explicit suspension and its TemporaryWhilePlayerIsInBackground focus path. Devices stay added while enabled becomes false. Existing readiness checks then misreported an attached keyboard as disconnected; controller callbacks treated Disabled directly as unplugged. FocusBefore reproduces that exact installed-manager path: added=True,enabled=False,paused=True,screen=Join. FocusAfter retains the same attached source and opens ordinary Pause.
+
+Scene-owned SportsFocusPolicy now distinguishes attached suspension from Removed/Disconnected. Human focus loss pauses without automatic resume. Actual missing keyboards/controllers still require reconnect/replacement. Existing neutral/fresh modal gates remain in each sport; ordinary Billiards turns receive no new gate. An application-background override lets AI-only play continue and is restored on scene exit. No host setting or vendor input source is edited.
+
+Eight saved-scene families passed160native checks/0errors: shared event sessions, Bowling, Cornhole, Ice Hockey, Air Hockey, Wallball, Cheese Rolling, Billiards. Each exercises keyboard suspension/sync, exact motion while paused, no automatic focus-return resume, held-input exclusion and neutral rearming, AI continuation with suspended devices, actual software keyboard removal/replacement, controller removal/explicit reassignment and continued match. Billiards motion sample is its authoritative cue-ball body; the truck is intentionally a collider-free visual rig. Earlier four matrix failures were countdown-phase fixture errors: hockey does not arm driving until the faceoff completes. The test now waits for real live hockey before asserting neutral readiness; failures retained in FocusMatrixCountdownFixture. No physics/rules relaxation.
+
+Evidence under Logs/TruckSports/TerrierUpdate/{FocusBefore,FocusAfter,FocusMatrixEvidence}. These use real installed InputSystem lifecycle calls with injected devices, not OS focus switching, physical-controller checks or human playtesting. Actual Windows focus/hardware checks remain pending the final combined production build. The existing25-sport executable predates this stage. Saved native adapters retain every collider/Rigidbody fingerprint; source authoring/runtime scene installation preserves the policy on regeneration.

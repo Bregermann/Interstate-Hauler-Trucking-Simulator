@@ -99628,6 +99628,7 @@ GameObject:
   - component: {fileID: 1084666371}
   - component: {fileID: 1084666368}
   - component: {fileID: 1084666379}
+  - component: {fileID: 1084666380}
   m_Layer: 0
   m_Name: TruckMattressRacing Authority
   m_TagString: Untagged
@@ -99791,6 +99792,7 @@ MonoBehaviour:
   - {fileID: 306407127}
   capacity: 2400
   interval: 0.05
+  maximumReplayAge: 18
   Speed: 1
   Angle: 0
 --- !u!114 &1084666369
@@ -100103,6 +100105,18 @@ MonoBehaviour:
   - {fileID: 474380914}
   - {fileID: 112155943}
   - {fileID: 959001518}
+--- !u!114 &1084666380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084666366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36f5ce16887fcfc4eb5e4f1e19cef529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsFocusPolicy
 --- !u!1 &1085662529
 GameObject:
   m_ObjectHideFlags: 0

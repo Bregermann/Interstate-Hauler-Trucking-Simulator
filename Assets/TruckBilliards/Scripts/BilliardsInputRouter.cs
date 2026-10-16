@@ -27,6 +27,7 @@ namespace LWS.TruckBilliards
   void OnDisable(){InputSystem.onDeviceChange-=DeviceChanged;}
   void DeviceChanged(InputDevice d,InputDeviceChange change)
   {
+   if(LWS.TruckSports.SportsFocusPolicy.Suspended(d,change))return;
    if(session==null||!session.InMatch)return;
    if(change==InputDeviceChange.Added||change==InputDeviceChange.Reconnected||change==InputDeviceChange.Enabled){for(int i=0;i<(session.IsPractice?1:2);i++)if(!session.IsAI(i)&&session.players[i].control==BilliardsControl.Gamepad&&Pad(i)==d){buttons.Remove((Gamepad)d);GateAll();break;}}
    if(change==InputDeviceChange.Disconnected||change==InputDeviceChange.Removed||change==InputDeviceChange.Disabled){

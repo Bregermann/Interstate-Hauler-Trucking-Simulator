@@ -279,3 +279,8 @@ Beer Pong: sequential1v1/2v2 and unlimited solo practice, actual NWH approach/ch
 
 
 Bowling trampoline pit wall: capped pin-only return, actual spring bed/audio, down-state latch and protected settling/pinsetter flow.30equivalent before/after deliveries increased pinfall141→159 with23meaningful returns/61secondary contacts; no strikes in that grid. Three complete mixed-difficulty four-lane games produced4strikes/30spares plus real tenth bonuses; hot-seat full game and focused contact/reset tests0errors. See Bowling validation. Combined25sport Windows update pending.
+
+
+## Focus and input availability
+
+Human focus loss or attached input suspension now pauses normally. Returning focus never auto-resumes; existing fresh/neutral confirmation applies. Actual keyboard/controller removal still opens reconnect and permits explicit replacement. All-AI play continues in the background. This policy is shared across all existing sport families and does not gate ordinary Billiards turns. Native eight-family/160-check acceptance passed; final production Windows OS-focus/hardware acceptance is pending.
