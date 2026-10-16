@@ -1,0 +1,2 @@
+using UnityEngine;using DG.Tweening;
+namespace LWS.TruckDodgeball {public sealed class DodgeTrampoline:DodgeGround {public Transform bed;Tween compression;Vector3 scale,position;void Awake(){scale=bed.localScale;position=bed.localPosition;}public void Bounce(){compression?.Kill();bed.localScale=scale;bed.localPosition=position;compression=DOTween.Sequence().Join(bed.DOLocalMoveY(position.y-.16f,.08f).SetLoops(2,LoopType.Yoyo)).Join(bed.DOScale(new Vector3(scale.x*.985f,scale.y*.55f,scale.z*.985f),.08f).SetLoops(2,LoopType.Yoyo));}void OnDestroy(){compression?.Kill();}}}
