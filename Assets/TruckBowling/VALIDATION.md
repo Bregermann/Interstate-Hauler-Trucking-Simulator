@@ -64,3 +64,17 @@ RELEVANT ASSETS NOT USED: Full road powertrain/UTS routes/world/wheel hardware d
 CUSTOM SYSTEMS CREATED: Bowling score/rack policy, lane/frame coordination, input/AI adapters, cab/pinsetter presentation, geometry, pin counting and validation.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+## Rebound wall evidence — October16,2026
+
+Actual before/after initialized PhysX truck deliveries: speeds12/15/17m/s at lateral offsets-.75/-.35/0/.35/.75m, two repeats each, same initial rack/truck controls. No injected scores or pinfall. Before:30deliveries,141pins,0meaningful returns,0post-return pin contacts,0strikes. After:30deliveries,162pins,29returns into the rack,61post-return contacts,0strikes; all30remain imperfect. Peak pin speed17.10/18.51m/s includes ordinary original truck/pin and pin/pin impacts, not just capped wall output. This sample shows stronger physical chain action, not ideal human balance or guaranteed strikes. PhysX repeats can vary despite equivalent initialized inputs.
+
+Three full four-lane autonomous games with ordinary Easy/Normal/Hard driving passed0errors. Seed900 totals69/98/110/80,0strikes/6spares/11gutters/205wall returns;901 totals94/110/118/107,2strikes/11spares/12gutters/203returns;902 totals109/117/122/111,2strikes/13spares/9gutters/212returns. Actual tenth bonuses included6/4 andX62. A subsequent complete two-AI hot-seat game scored121/123 with21/20deliveries. Every positive delivery had genuine pin-contact provenance. No premature sweeper activation; observed outgoing wall speed/energy budgets passed.
+
+Focused initialized contact/state fixtures passed: real truck/wall contact causes no enhanced pin impulse; a qualifying physical pin contact returns once, no early stacked boost, strong bounded reverse/height; pause preserves return pose and momentum; actual toppled pin registers then retains its latch after an explicitly reseated-upright state fixture; exactly one down pin counted; rematch clears latch/rack/score; repeated full-game menu return leaves one listener. Rule fixtures covering perfect games, spares, tenth bonuses and source ownership reran successfully.
+
+Native full/focused evidence: Logs/TruckSports/TerrierUpdate/BowlingReboundBefore, BowlingReboundAfter, BowlingReboundFocusedEvidence. Wall spring art inspected with a temporary camera; a coplanar cloth/backing face was found and separated before delivery. Final visual offset/audio do not alter collision or the measured physics. Unity synchronized legacy _Color values to existing _BaseColor when saving owned Bowling materials; their active base colors were not retuned. The legacy carry regression now also observes actual NWH tire contact with the physical pit instead of requiring travel through the nearer solid bumper.
+
+Windows expansion build and player carry/rebound regressions remain pending. These are automated simulations and injected/state fixtures, not human/controller-hardware/audio acceptance or GPU performance evidence.
+
+VENDOR ASSETS AUDITED/USED for this addition: existing NWH/PhysX pin and truck contact model, DOTween1.2.825 fixed-step presentation, shared feedback/settings/voices, existing persistent Beer Pong coil mesh and Cornhole Launch.wav. No appropriate installed trampoline-wall model was found. Custom code is limited to sport-specific pin return/settle/latch policy and native upgrade/acceptance. VENDOR SOURCE MODIFIED: NO. DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

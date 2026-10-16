@@ -1,3 +1,15 @@
+# ACTIVE CHECKPOINT — current25sport expansion implemented; build/player delivery next
+
+Pong committed local4a2d0f47fe02b9e84ddf6208df7fff76404b9fd8 /clean de30bfcfb2212f6e71bb0fe5013a3ae55085698c; working-branch push verified. FieldGoal previous local3d0e07ed/clean6f292231 also pushed working. Origin/main still stable19sports9460b553. Root main has private Taxi ancestor3651e3ee: NEVER push root HEAD.
+
+Bowling wall native-complete and uncommitted: actual30before/30after physical cases0errors, pins141→162, meaningful returns0→29, post-return contacts0→61. No strikes in that grid. Three ordinary full4AI games0errors,4strikes/30spares, real tenth bonuses; hot-seat full2AI game121/123 and21/20deliveries; focused real truck-vs-pin wall discrimination, caps, pause, down-latch, reset/menu0errors. Final cloth coplanar separation/audio wiring saved; no physics retuning after acceptance. Existing handling/control-loss momentum/rack fixes preserved. Source Assets/TruckBowling authoritative, Logs drafts obsolete. Native25sports/27saved scenes; all six new sports integrated and individually tested. Existing EXE remains19 until next build.
+
+NEXT: final native27scene/rule/settings audit, fresh host snapshot(HostSettingsBefore25), scoped Bowling commit/clean mirror, SportsBuilder.Build to SAME F:Builds/TruckSports output, actual Windows new-mode/rebound/carry/delivery/Keepaway/Terrier checks and rendered workloads. Fix concrete build/player failures. Update build/hash/docs; normal clean-branch fast-forward publication to origin/main. THEN immediately full queued dbf407b8 production pass (six more sports and shared/old-mode fixes), build/test/push again. Do not end at this checkpoint. No subagents; Sports retains exclusive Editor/source/index lease.
+
+Editor STOPPED after clean full/focused tests and saved presentation patch. Asset source edits may proceed only while stopped. Current native Editor31692/port7800. No new validation build folders. Do not stop user games or ask user to close them. See earlier operating/publication safeguards below.
+
+## Earlier checkpoints/history (superseded by ACTIVE above)
+
 # ACTIVE CHECKPOINT — native25sports /27scenes; executable still19
 
 Field Goal committed local3d0e07ed6454bd6f1efae5dbab57e627fac32470 /clean6f2922313edec02b8395a1a0f5ee9a73d9bf36cc; working-branch push succeeded/remote verified. Beer Pong now native-complete: two full1v1/2v2 Hard AI games26launches each,83rule checks and focused physical/input/replay suite0errors;27saved-scene audit passed. Actual hollow cups/rims/liquid, installed table/chairs, flush supported spring pad, bounded aftertouch, rebuttal/OT/practice implemented. Current source Assets/TruckBeerPong is authoritative. Scoped review/commit next.

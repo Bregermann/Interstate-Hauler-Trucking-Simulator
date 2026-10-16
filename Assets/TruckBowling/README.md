@@ -64,3 +64,11 @@ RELEVANT ASSETS NOT USED: Full road powertrain/Arcade drift assist is unnecessar
 CUSTOM SYSTEMS CREATED: Bowling score/rack semantics, lane/delivery coordination, remaining-pin AI input policy, pinfall/pinsetter sequencing, cab view, alley/pin geometry, participant/device adapters, presentation and focused validation.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+## Pin trampoline back wall — October16,2026
+
+The existing pit bumper is now at67m instead of69m, with a visible spring bed, eight reused modeled tension springs per lane and a distinct existing Cornhole launch cue through the bounded shared feedback voices. Rear pin-area side containment remains physical and lane-specific. The truck receives ordinary PhysX wall contact; no enhanced response is applied to trucks and no handling/grip/motor changes were made.
+
+A qualifying real pin/front-wall impact uses the cached incoming world velocity and actual contact normal. Apply only the difference between the post-PhysX velocity and one bounded desired return. Reverse the down-lane component strongly, retain94% useful lateral velocity(subject to5.5m/s lateral cap), limit vertical motion near pin height and allow a small bounded lift from the lower pit. Outgoing speed<=11.5m/s; outgoing squared speed<=1.35*incoming squared speed+4. Preserve natural tumbling without a second custom spin impulse. Per-pin0.55s cooldown and Enter-only handling prevent resting-contact boosts.
+
+Pins registering down for0.3s remain down for that delivery even if they later stand upright. Reset/release clears that latch appropriately. Finalization requires at least0.9s and0.8s quiet, plus no wall return in the last0.9s; a12s settling maximum fairly locks the current actual/latching state for pathological persistent motion. The sweeper remains overhead during live ricochets. Existing first/second-ball, rack, strike/spare and tenth rules remain authoritative. Physical low pit arrival can hand off to settling without clearing momentum; no arbitrary early body freeze was added.
