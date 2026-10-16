@@ -1,0 +1,17 @@
+using System;using UnityEngine;using DG.Tweening;
+namespace LWS.TruckFishing {
+public sealed class FishingStream:MonoBehaviour {
+ public LWS.TruckSports.SportsEventTruck truck;public Transform net,netBag;public GameObject[] fishPrefabs;public ParticleSystem splash;public float netSpeed=8.5f,acceleration=42,radius=1.1f;public int slot;public float NetX{get;private set;}public float PreviousNetX{get;private set;}public float MaximumTravel{get;private set;}public int Resolutions{get;private set;}
+ public const int Capacity=72;public readonly FishPlan[] plans=new FishPlan[Capacity];readonly bool[] active=new bool[Capacity];readonly Transform[] models=new Transform[Capacity];float velocity;Tween dip;public bool Overflowed{get;private set;}
+ public void Initialize(){if(models[0]!=null)return;for(int i=0;i<Capacity;i++){var g=Instantiate(fishPrefabs[i%3],transform);models[i]=g.transform;g.SetActive(false);}}
+ public void ResetStream(){Initialize();truck.ApplyColor(truck.session.setup.players[slot].color);dip?.Kill();netBag.localPosition=Vector3.zero;NetX=PreviousNetX=velocity=MaximumTravel=0;Resolutions=0;Overflowed=false;for(int i=0;i<Capacity;i++){active[i]=false;models[i].gameObject.SetActive(false);}net.localPosition=new Vector3(0,.12f,0);splash?.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);}
+ public void Spawn(FishPlan plan){for(int i=(int)plan.kind;i<Capacity;i+=3)if(!active[i]){plans[i]=plan;active[i]=true;models[i].gameObject.SetActive(true);models[i].localPosition=Position(plan,0);return;}Overflowed=true;}
+ public static Vector3 Position(FishPlan plan,float u){float q=Mathf.Clamp(u,0,1.1f),remaining=1-q;return new Vector3(Mathf.Clamp(plan.x+plan.curve*Mathf.Sin(remaining*Mathf.PI*.5f)*remaining,-5.5f,5.5f),.13f,20*(1-((1-plan.ramp)*q+plan.ramp*q*q)));}
+ public void MoveNet(float horizontal,float dt){PreviousNetX=NetX;velocity=Mathf.MoveTowards(velocity,Mathf.Clamp(horizontal,-1,1)*netSpeed,acceleration*dt);NetX=Mathf.Clamp(NetX+velocity*dt,-5.2f,5.2f);if(Mathf.Abs(NetX)>=5.2f&&Mathf.Sign(NetX)==Mathf.Sign(velocity))velocity=0;MaximumTravel+=Mathf.Abs(NetX-PreviousNetX);net.localPosition=new Vector3(NetX,.12f,0);}
+ public void Advance(double clock,float dt,FishingMatch match){for(int i=0;i<Capacity;i++){if(!active[i])continue;var plan=plans[i];float u=(float)((clock-plan.Spawn)/plan.travel);var p=Position(plan,u);models[i].localPosition=p;var direction=Position(plan,u+.002f)-p;if(direction.sqrMagnitude>.000001f)models[i].localRotation=Quaternion.LookRotation(direction.normalized,Vector3.up);if(clock<plan.arrival)continue;float fraction=Mathf.Clamp01((float)((plan.arrival-(clock-dt))/dt));float netAt= Mathf.Lerp(PreviousNetX,NetX,fraction);bool caught=Mathf.Abs(plan.x-netAt)<=radius;match.Queue(slot,plan,caught,fraction);active[i]=false;models[i].gameObject.SetActive(false);Resolutions++;}}
+ public bool Visible(int index,double clock)=>index>=0&&index<Capacity&&active[index]&&clock>=plans[index].Spawn;
+ public void CatchEffect(){dip?.Kill();netBag.localPosition=Vector3.zero;dip=netBag.DOLocalMoveY(-.12f,.09f).SetLoops(2,LoopType.Yoyo).OnComplete(()=>{if(netBag!=null)netBag.localPosition=Vector3.zero;});if(splash!=null){var p=new ParticleSystem.EmitParams{position=transform.TransformPoint(new Vector3(NetX,.25f,0)),velocity=Vector3.up*1.3f};splash.Emit(p,12);}}
+ public void HideFish(){for(int i=0;i<Capacity;i++){active[i]=false;if(models[i]!=null)models[i].gameObject.SetActive(false);}}
+ void OnDestroy(){dip?.Kill();}
+}
+}
