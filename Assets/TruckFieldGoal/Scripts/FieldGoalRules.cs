@@ -1,0 +1,13 @@
+using System;
+namespace LWS.TruckFieldGoal {
+// Equal-opportunity sequential attempts. Presentation advances only after a locked delivery.
+public sealed class FieldGoalRules {
+ public readonly int[] goals=new int[4],attempts=new int[4];public int Count{get;private set;}public int Current{get;private set;}public int Round{get;private set;}public int Eligible{get;private set;}public int Winner{get;private set;}=-1;public bool AttemptLocked{get;private set;}public bool LastGood{get;private set;}public bool Practice{get;private set;}public bool Complete=>Winner>=0;int delivered;
+ public void Reset(int count,bool practice=false){Count=practice?1:Math.Max(1,Math.Min(4,count));Practice=practice;Round=1;Winner=-1;Eligible=(1<<Count)-1;Array.Clear(goals,0,4);Array.Clear(attempts,0,4);BeginRound();}
+ void BeginRound(){delivered=0;AttemptLocked=false;LastGood=false;int first=(Round-1)%Count;for(int n=0;n<Count;n++){int i=(first+n)%Count;if((Eligible&(1<<i))!=0){Current=i;return;}}throw new InvalidOperationException("No eligible field-goal competitor");}
+ public bool Lock(bool good){if(Complete||AttemptLocked)return false;AttemptLocked=true;LastGood=good;attempts[Current]++;if(good)goals[Current]++;return true;}
+ public bool Advance(){if(Complete||!AttemptLocked)return false;if(Practice){AttemptLocked=false;LastGood=false;return true;}delivered|=1<<Current;if((delivered&Eligible)!=Eligible){for(int n=1;n<=Count;n++){int next=(Current+n)%Count;if((Eligible&(1<<next))!=0&&(delivered&(1<<next))==0){Current=next;AttemptLocked=false;LastGood=false;return true;}}throw new InvalidOperationException("Field-goal turn order incomplete");}if(Round<5){Round++;BeginRound();return true;}int best=-1,leaders=0,number=0,last=-1;for(int i=0;i<Count;i++)if((Eligible&(1<<i))!=0){if(goals[i]>best){best=goals[i];leaders=0;number=0;}if(goals[i]==best){leaders|=1<<i;last=i;number++;}}if(number==1){Winner=last;return true;}Eligible=leaders;Round++;BeginRound();return true;}
+ // Contact chronology is supplied by the physics owner. Ground contact must be strictly later.
+ public static bool ForwardGoal(float previousX,float previousY,float previousZ,float x,float y,float z,float plane,float halfWidth,float bar,float firstGroundFraction,out float fraction,out float crossingX,out float crossingY){fraction=crossingX=crossingY=0;float dz=z-previousZ;if(dz<=.00001f||previousZ>plane||z<plane)return false;fraction=(plane-previousZ)/dz;crossingX=previousX+(x-previousX)*fraction;crossingY=previousY+(y-previousY)*fraction;return fraction<firstGroundFraction&&Math.Abs(crossingX)<=halfWidth&&crossingY>=bar;}
+}
+}

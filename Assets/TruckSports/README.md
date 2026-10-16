@@ -278,3 +278,6 @@ Musical Parking: eight actual trucks, up to four humans, random music/horn, seve
 
 
 Giant Swing: one to eight sequential competitors, three real pendulum throws each, timing-based pump and actual release velocity, finite aftertouch, first-contact10/25/50/100zones, tied-leader extra attempts, soloPB and recorded multiangle speed/rewind/skip replay. Native complete8AI24throw match and focused physical/input/lifecycle checks0errors; final Windows build pending. See Assets/TruckGiantSwing/README.md and VALIDATION.md.
+
+
+Field Goal BOTH variants now native-complete:24sports/26saved scenes,80rule checks, six complete4AI matches/176actual kicks and focused physical/input/replay suite0errors. Final seeded longest tiebreak10rounds. See Assets/TruckFieldGoal docs. Existing executable remains19sports; Windows expansion acceptance pending. Next Beer Pong, then actual Bowling before/after wall comparisons, combined build/tests and publication, then full queued dbf production pass.
