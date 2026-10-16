@@ -1,0 +1,2 @@
+using UnityEngine;
+namespace LWS.TruckBuzkashi {public sealed class BuzCargoContacts:MonoBehaviour {public float LastWallContact{get;private set;}=float.NegativeInfinity;public void Clear(){LastWallContact=float.NegativeInfinity;}void OnCollisionStay(Collision collision){if(collision.collider.isTrigger||collision.collider.GetComponentInParent<BuzSolidBarrier>()==null)return;for(int i=0;i<collision.contactCount;i++)if(Mathf.Abs(collision.GetContact(i).normal.y)<.6f){LastWallContact=Time.time;break;}}}}

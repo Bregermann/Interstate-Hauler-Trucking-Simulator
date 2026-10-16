@@ -11,7 +11,13 @@ namespace LWS.TruckSports {
  public readonly Vector2[] commands=new Vector2[12];public readonly bool[] actions=new bool[12];readonly bool[] held=new bool[12];readonly SportsDeviceInput input=new SportsDeviceInput();bool menuReleased;int gateFrame,modalOwner;
  public abstract string Title{get;}public abstract string Help{get;}public abstract int MinimumPlayers{get;}public abstract int MaximumPlayers{get;}public virtual int OptionCount=>3;public virtual int WeatherCount=>3;public virtual void RefreshExtraUI(){}public virtual bool TeamSport=>false;public virtual bool UsesAction=>true;
  public abstract string Header{get;}public abstract string Status{get;}public abstract string Standings{get;}public abstract string Results{get;}public virtual string SourcePolicy=>"Whole controllers have one owner; left/right sticks can share one pad.\nChoose AI per slot or ALL AI to spectate. Action bindings are shown with each source.";public virtual string OptionLabel=>"OPTIONS";public virtual bool MultiViewHUD=>false;public virtual bool ReplayControls=>false;public virtual string ViewText(int index)=>Header;public virtual void ExtraAction(string key){}
- public string PreferenceKey=>GetType().Name+".Setup.v1";
+ public string PreferenceKey{get{
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+ return (SportsProbeInputIsolation.Active?"Validation.":"")+GetType().Name+".Setup.v1";
+#else
+ return GetType().Name+".Setup.v1";
+#endif
+ }}
  [Serializable]sealed class Saved {public BowlingSetup setup;public Key[] actionKeys;public int option=1,teamA=1,teamB=1,weather;}
  protected virtual void Awake(){try{if(PlayerPrefs.HasKey(PreferenceKey)){var s=JsonUtility.FromJson<Saved>(PlayerPrefs.GetString(PreferenceKey));if(s?.setup?.players!=null&&s.setup.players.Length>=Mathf.Max(8,MinimumPlayers)&&s.setup.players.Length<=12){setup=s.setup;if(s.actionKeys!=null&&s.actionKeys.Length>=8&&s.actionKeys.Length<=12)actionKeys=s.actionKeys;option=s.option;teamA=s.teamA;teamB=s.teamB;weather=s.weather;}}}catch(Exception){Debug.LogWarning(Title+" setup invalid; defaults retained.");}NormalizeSetup();}
  public virtual void NormalizeSetup(){EnsureRoster();teamA=Mathf.Clamp(teamA,1,4);teamB=Mathf.Clamp(teamB,1,4);setup.count=TeamSport?teamA+teamB:Mathf.Clamp(setup.count,MinimumPlayers,MaximumPlayers);setup.mode=BowlingMode.Simultaneous;option=Mathf.Clamp(option,0,OptionCount-1);weather=Mathf.Clamp(weather,0,WeatherCount-1);}

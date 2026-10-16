@@ -6,7 +6,7 @@ public sealed class KeepawayRegressionProbe:MonoBehaviour {
 #if UNITY_EDITOR
  run|=UnityEditor.SessionState.GetBool("LWS.KeepawayRegression",false);UnityEditor.SessionState.SetBool("LWS.KeepawayRegression",false);
 #endif
- if(run){var g=new GameObject("Keepaway actual control rules and cab regression acceptance");DontDestroyOnLoad(g);g.AddComponent<KeepawayRegressionProbe>();}}
+ if(run){var g=new GameObject("Keepaway actual control rules and cab regression acceptance");DontDestroyOnLoad(g);if(FindAnyObjectByType<SportsProbeInputIsolation>()==null)g.AddComponent<SportsProbeInputIsolation>();g.AddComponent<KeepawayRegressionProbe>();}}
  [Serializable]sealed class PreferenceBackup {public bool had;public string saved;}
  KeepawayMatch m;Keyboard keyboard;InputSettings.BackgroundBehavior background;string saved,folder,key;bool had,restored;int errors;readonly StringBuilder log=new StringBuilder();readonly Vector3[] previous=new Vector3[4];readonly float[] distance=new float[4];readonly int[] intent=new int[4],motor=new int[4];void Check(bool ok,string label){log.AppendLine((ok?"PASS ":"FAIL ")+label);if(!ok)errors++;Write();}void Write(){File.WriteAllText(folder+"/progress.txt",log.ToString());}void Error(string s,string stack,LogType type){if(type==LogType.Error||type==LogType.Exception||s.Contains("ClosestPoint can only")){errors++;log.AppendLine("ERROR "+s);Write();}}
  IEnumerator Load(bool cab){if(m!=null)m.SetupScreen();SportsNavigation.LoadSport(cab?SportsNavigation.KeepawayCab:SportsNavigation.Keepaway);yield return null;yield return null;m=FindAnyObjectByType<KeepawayMatch>();}
