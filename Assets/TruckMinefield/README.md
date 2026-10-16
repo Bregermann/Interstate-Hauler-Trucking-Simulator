@@ -1,3 +1,17 @@
+# Truck Minefield — final-rest scoring update
+
+Eight competitors drive the same seeded mile course. Drive across the mile finish before exploding to win immediately; a launched truck crossing it only earns distance. First to five heat points, shared tied heat points and equal-leader tiebreaks remain unchanged.
+
+After a mine/sheep launches the truck, physical bounces, skids, rolls and distinct later blasts continue. The first surface contact ends aftertouch, not motion or scoring. The authoritative final forward COM position is recorded only after supported linear speed<0.25m/s and angular speed<0.35rad/s remain quiet for1.5s. A stationary unsupported apex is never rest. Backward sliding lowers the final distance; path length and peak distance are not scored. Driving, traction, first blast power, existing bounded aftertouch and PhysX impacts retain their authority. Added secondary blast contribution is bounded by the existing95m/s speed ceiling and never replenishes aftertouch.
+
+Every blast-origin and final-rest flag persists for the match, with participant color, heat and blast/attempt identification. Flags wave, have nonblocking geometry, standard LOD and bounded camera labels. Rematch clears previous-match history. Score precision remains the established0.1m rule, while player text displaysfeet. Replays record through physical resolution (300s capacity for this mode), with existing angle/speed/seek/skip controls.
+
+The180s driving limit no longer truncates launched motion. A separate generous90s first-blast simulation failure locks its CURRENT position once and labels RECOVERY LOCK; leaving the authored world still fails. Ordinary full-match validation used none of these recovery locks. Once a genuinely settled attempt is finalized, its body is noncolliding and cannot acquire another score.
+
+Native focused/17-heat full-match/source/lifecycle acceptance passed; see VALIDATION.md. This update is newer than the current25-sport Windows executable and awaits the final queued production-pass build. It is not yet Windows/human/controller-hardware acceptance.
+
+## Earlier implementation notes (historical; first-contact policy superseded)
+
 # Truck Minefield
 
 Eight competitors, up to four local humans, first to five heat points. Mines and terrain use one reproducible layout throughout a match. Steer and accelerate through a broad mile-long rolling meadow; opposite throttle brakes then reverses. Read subtle real mine plates, winding clear gaps, explosive sheep and physical roadside props.

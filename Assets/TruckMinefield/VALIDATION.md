@@ -1,3 +1,17 @@
+# Final-rest/history production update — native acceptance
+
+Focused MinefieldRestProbe passed0errors on actual Terrain/PhysX with explicitly initialized fixtures. First contact335.565m continued to final337.519m (contact5.460s, final7.160s, quiet1.52s). Controlled backward velocity produced final389.8071m after contact396.3613m; score matched CURRENT final COM, not first/furthest position. First contact did not score; post-contact input added no propulsion/aftertouch; a distinct second blast preserved first record/budget and kept its previous flag. Normal-frame pause preserved exact live pose/clock. Unsupported stationary apex remained unresolved. An explicitly advanced90s pathology-timer fixture visibly locked current position once. History survived the next heat with color/position/heat text, no colliders; rematch cleared it; collection return kept one listener.
+
+A complete natural eight-AI match passed17heats with243 actual blasts,107 supported final rests,335 archived flags before the final heat,0pathological recovery locks and0errors. Winner slot5, points1/4/2/3/0/5/1/1. Ordinary heats resolved in physical motion; an observed late heat took55.32simseconds. These are AI-commanded NWH driving and actual mines/PhysX, not injected scores or a human balance claim. Secondary blasts legitimately change the old first-contact match distribution.
+
+The existing focused suite also passed0errors after updating its obsolete first-contact expectations: actual keyboard/control release, real mine contact/deduplication, bounded aftertouch, pause, actual supported rest, replay flag event times, persistent PB/heat history, actual DRIVEN mile victory, airborne crossing rejection, failure bounds, injected controller ownership/replacement, four viewports/long names, rematch and actual collection return. Saved authoring/default replay duration/flag LOD and original finish/tie rule fixtures passed.
+
+Evidence: Logs/TruckSports/TerrierUpdate/MinefieldRestEvidence, MinefieldEvidence, MinefieldFocusedEvidence; SevenSports/mine-rest-saved.txt. Native manual renders and batch four-view simulation are not actual Windows overlay or GPU performance acceptance. No new intermediate Windows build was made. Final queued production-pass build must rerun the relevant player checks and inspect accumulated flag readability/render cost. No real hardware/human/audio acceptance claimed.
+
+Vendor foundations preserved: NWH/PhysX truck and contact simulation, existing Vista-authored terrain/course assets, Weather Maker, Heat, Cinemachine, DOTween and native LOD. Custom changes are Minefield scoring/progression/history/replay coordination and acceptance fixtures. Vendor source modified:NO. Duplicate vendor functionality:NO.
+
+## Earlier evidence (historical; first-contact policy superseded)
+
 # Truck Minefield validation - 2026-10-15
 
 Status: Editor implementation and scene/menu/build-list integration complete; final combined Windows rebuild and built-player acceptance remain pending until all seven sports are implemented.
