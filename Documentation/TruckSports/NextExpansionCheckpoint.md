@@ -1,3 +1,15 @@
+# CURRENT — focus pushed; Poker rules core imported, playable table next
+
+Clean Sportsbranch5e42e2ac65bd713e79b9f4d4d3fdfb21519a834e pushed (rootlocal6c9c6b06e5668f774979e0098b87d4ab9af44384). Focus26sport-scenes/27explicit +eight-family160checks0 committed. Main and Windows remain25sport f1126314 /assembly1f769e58…; no final31build yet.
+
+New Assets/TruckPoker/{Scripts,Editor} now imports authoritative pure PokerHand/Pots/Table/Policy and PokerFixtures ONLY. NO playable Poker scene/menu yet. .NET10 harness under ignored Logs/TruckSports/SevenSports/PokerRulesHarness passed505checks: exhaustive2,598,960 five-card category counts, best7/wheel/ties, full/short/cumulative reopening, heads-up/short-blind no-phantom-call, pot/odd/uncalled/fold/chip invariants,84randomlegal2–8seat tournaments and9own-snapshot AI tournaments(2/5/8seats ×3diff). Native Unity compilation/exhaustive acceptance now PASS505 via PokerCoreCheck.cs/marker poker-core-native.txt. Use current Assets after import as authority; obsolete other prepared drafts must not overwrite fixes. Official TDA current webpage rules45/49 re-read2026-10-16 for short-allin behavior (do not claim2026version). Ordinary showdown exposes winners; all-in showdown exposes surviving hands; fold win neverexposes.
+
+Next finish complete Poker playable scene/table/private own-pane hold-to-peek/betting/setup/AI/dealer/results; reuse established APIs. PokerPolicy takes ONLY copied PokerView and independent personalRandom, never engine/deck/opponenthands. Assets/TruckPoker rules stage ready for scoped commit; read poker-core-commit.json/publication-tip after commit. Playable sport still pending. Then six total new sports +all queued production scope still required. Shared cablook draft/actual-interior anchor issue in CabLookIntegrationNotes.md remains pending, as do other oldsport fixes/snow/water/UI polish. Do not deliver empty menu entries or stop at core scaffolding.
+
+Owned Editor30088/7800 RecoveryEditor4.log stopped after focusScenePatch; no agents/otherEditor. Taxi lease retained. Rootlocalmain private3651ancestor NEVERpush. Allwork/outputin F:project; onefinalBuilds/TruckSports executable only aftercomplete. Preserve12hosthashes/unrelatedTaxi/Vendor. Full nextsteps/scopesafetybelow.
+
+---
+
 # CURRENT — shared focus policy complete/native validated; new sports and cab look next
 
 2026-10-16. Parking completed and working-branch pushed ddbbac96c025dc90116f3f6bf60b767665123e79 (rootlocal097fe2ef). Focus stage now implemented: scene-owned SportsFocusPolicy, attached Disabled→ordinary human pause, Removed/Disconnected→reconnect, real missing keyboard including Billiards, no auto-resume, existing neutral gates, AI background continuation/restored runtime background setting. No ordinary Billiards turn gate or gameplay retuning. Existing source handlers delegate attached suspension. Runtime install + shared authoring Save retain the policy; native26sport scenes/27explicit scenes saved with EVERY collider/Rigidbody fingerprint unchanged.
