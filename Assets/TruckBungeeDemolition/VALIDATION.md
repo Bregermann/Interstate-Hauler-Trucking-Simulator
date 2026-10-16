@@ -1,3 +1,9 @@
+# Actual Windows milestone — October16,2026
+
+Included in the25-sport combined Windows build. Actual visible player BungeeFocused passed0errors. See [collection validation](../TruckSports/VALIDATION.md) for exact build hashes, measured results, version boundaries and remaining human checks. Earlier statements below saying the executable contains19sports or Windows acceptance is pending are superseded by this section.
+
+## Earlier evidence (historical)
+
 # Native acceptance and remaining Windows checks
 
 Unity6000.4.10f1 / URP17.4. Core-Collapse1.1 manual, demo (132 modules), prefractured/procedural examples and public APIs were audited. The prefractured path was selected for bounded physical clusters; no competing destruction framework or vendor-source patch.

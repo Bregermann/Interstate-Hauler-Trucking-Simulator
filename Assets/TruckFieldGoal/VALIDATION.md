@@ -1,3 +1,9 @@
+# Actual Windows milestone — October16,2026
+
+Included in the25-sport combined Windows build. Actual visible player FieldGoalFocused passed0errors. See [collection validation](../TruckSports/VALIDATION.md) for exact build hashes, measured results, version boundaries and remaining human checks. Earlier statements below saying the executable contains19sports or Windows acceptance is pending are superseded by this section.
+
+## Earlier evidence (historical)
+
 # Field Goal validation — October16,2026
 
 Unity6000.4.10f1 native compilation and80 rule assertions passed. Saved integration audit:24sports/26 distinct explicit scenes, correct TruckSports startup, no missing scripts, one listener each, exact simulated build-failure setting restoration. Native preview and authoring defaults synchronized.

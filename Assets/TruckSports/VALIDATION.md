@@ -1,3 +1,29 @@
+#25-sport Windows acceptance — October16,2026
+
+Build 2026-10-16T12:20:39.8422894Z,0errors /29warnings,25sports /27scenes. Managed assembly SHA256 `1f769e585301e8891d4f8c5d86d64505fedcecfc3666991e384a43a73006251f`.12 host files unchanged. One F: output folder, all companions present. No second validation-build folder.
+
+Windows cases are archived in Logs/TruckSports/FinalWindows. Bowling motion/full games, Pong full/focused, FieldGoalFocused, TargetFocused, SumoFocused, BungeeFocused, FishingFocused and BogFocused passed on the corrected-containment build with assembly b8b360b7e9f02f8e559b67db8643ca08c1988bd6b1c64fd16b645e6cc7bad528. Subsequent source changes are diagnostic/test-only: added KeepawayPauseProbe, isolated its opt-in flag and moved the regression pause outside an in-flight fixed coroutine. Final assembly above passed KeepPause, corrected full KeepawayRegression, TerrierFinish and normal Delivery. Game rules/physics did not change between these assemblies.
+
+Bowling Windows: all four normal/sideways/backward/committed-gutter carries reach the physical pit; three ordinary four-lane games totals96/116/89/111,83/112/130/100,112/115/119/105; three strikes and35spares,40gutters,632actual pin returns across the samples. Hot-seat122/108 with21/20deliveries. Actual tenth bonuses, rack resets, pin-specific impact/cooldown/caps/down-latch/pause/rematch/menu passed. Score variation is physical seeded simulation, not a human balance claim. Final equivalent30-case native before/after remains141→159pins,0→23meaningful returns,0→61secondary contacts,0strikes/30imperfect.
+
+Beer Pong Windows full matches and focused suite passed0errors, including ten physical cup interiors,500m/s entry, side/bottom/overflight rejection, real table bounce/rim-in/rim-out, charge/release, finite aftertouch, source replacement and replay lifecycle. Native83rules cover rebuttal/overtime/practice beyond the full match outcomes. Field Goal/Target/Sumo Windows focused physical and source/lifecycle checks passed; full multi-difficulty native matches are documented in their sport folders.
+
+Rendered60-real-second Windows samples at1280x720, GTX1660Ti: Bungee8178frames/32712camera renders, mean7.36ms,p9512.51ms,0gen0; Fishing9460/37840, mean6.38ms,p956.28ms,0gen0; Sumo9239arena frames, mean6.53ms,p956.29ms,0gen0; Bog6612frames/26448views, mean9.08ms,p9512.52ms,38gen0. These are observed whole-frame times with concurrent host load uncontrolled, not isolated GPU timings or performance guarantees. Native batch samples with automaticrenders0 are not substituted for them.
+
+Keepaway initially reported two pause assertion failures. Instrumented Windows comparison proved that WaitForFixedUpdate can resume inside the already-started physics step: pausing there allowed one remaining step (measured0.145m in one diagnostic). All six normal Update-phase pauses preserved exact position, velocity and score. The regression now yields to normal frame/input timing before requesting pause and retains exact equality. No tolerance relaxation or gameplay freeze workaround. Failed evidence is retained at Logs/TruckSports/SevenSports/WindowsKeepPauseFailure; native and Windows traces retained. The corrected full regression passed both natural autonomous possession matches, mixed rosters, physical pickup/steal/recovery, ownership, cab steering and clean menu return.
+
+Visible title/menu and representative Bowling/Pong/FieldGoal camera captures were inspected. Native/manual camera-only five-aspect captures omit overlay UI and are not full-window HUD acceptance. The queued shared UI pass must validate actual full windows at720p/1080p/16:10/4:3/ultrawide. Real controllers, shared-device ergonomics, vibration, speakers/audio, human handling/balance and clean-clone licensed imports remain manual checks.
+
+VENDOR ASSETS AUDITED: existing NWH/PhysX, DOTween, Heat, Cinemachine, EasyRoads, Weather Maker, Weatherade, Core-Collapse, Layer Lab fish, installed scenery/Taxi cab and owned local asset catalogs.
+VENDOR ASSETS USED: those foundations where documented per sport; pin-wall presentation reuses Pong coils and Cornhole launch audio.
+RELEVANT ASSETS NOT USED: Rope Toolkit absent from audited installed/cache/owned paths; Bungee documents its one-spring fallback. Legacy built-in water samples were not blindly installed into URP.
+CUSTOM SYSTEMS CREATED: sport rules/coordination/adapters and focused acceptance probes; no competing vehicle/weather/UI framework.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+## Earlier evidence (historical)
+
 # Eleven-sport expansion validation — 2026-10-15
 
 The combined normal-company Windows x64 Development build succeeded with0errors30vendor warnings and passed actual injected pointer/keyboard startup, selection, driving, pause/resume and return. All new events completed full AI matches; repeated collection transitions and720/1080 layouts passed. [Detailed current evidence and limits](../../Documentation/TruckSports/ExpansionValidation.md). Real controllers, rumble/audio listening and human acceptance remain manual. Approved dependency publication is complete in `12f0653faae7290f0e6895097e9ff68ce06447b3`; original asset/metadata blobs and existing executable/DLL hashes were rechecked. Fresh remote-clone import/build was not repeated. The verified final player and current source now reside in the main F: project.

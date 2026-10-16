@@ -1,3 +1,9 @@
+# Actual Windows milestone — October16,2026
+
+Included in the25-sport combined Windows build. Actual visible player PolishMotion /BowlingReboundFocused passed0errors. See [collection validation](../TruckSports/VALIDATION.md) for exact build hashes, measured results, version boundaries and remaining human checks. Earlier statements below saying the executable contains19sports or Windows acceptance is pending are superseded by this section.
+
+## Earlier evidence (historical)
+
 # Current carry-through / AI validation — 2026-10-14
 
 Focused polish is complete. See ../TruckSports/VALIDATION.md for the authoritative detailed report/evidence under Logs/TruckSports/Polish. Native final combined build 14 succeeds; isolated-preference build 13 has the same176 managed DLLs and six level hashes.

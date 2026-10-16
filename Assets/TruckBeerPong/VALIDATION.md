@@ -1,3 +1,9 @@
+# Actual Windows milestone — October16,2026
+
+Included in the25-sport combined Windows build. Actual visible player Pong /PongFocused passed0errors. See [collection validation](../TruckSports/VALIDATION.md) for exact build hashes, measured results, version boundaries and remaining human checks. Earlier statements below saying the executable contains19sports or Windows acceptance is pending are superseded by this section.
+
+## Earlier evidence (historical)
+
 # Beer Pong validation — October16,2026
 
 Unity6000.4.10f1 compilation and83 plain house-rule assertions passed, including ordinary/teammate alternation, duplicate/own/removed-cup rejection, rebuttal miss loss, successful rebuttal, repeated alternating-first overtime and unlimited practice reracks. Separate native saved audit passed25sports/27distinct explicit scenes, correct startup, no missing scripts, one listener each and exact simulated build-failure setting restoration. Downward rays through every opening hit the sealed interior bottom, not an opaque top collider.

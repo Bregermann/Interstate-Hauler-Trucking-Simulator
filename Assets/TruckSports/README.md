@@ -1,20 +1,12 @@
-# Truck Sports — twenty-three saved sports, next expansion in progress
+# Truck Sports —25 playable offline sports
 
-The preceding nineteen-sport Windows build succeeded with zero errors and passed menu/driving/pause, Keepaway regression and Terrier finish checks. Bungee Demolition is now the twentieth saved/integrated sport, with Core-Collapse1.1 physical support destruction, four independent bays, complete AI match/overtime and focused native acceptance. Its Windows checks await the final combined expansion build. The current executable contains nineteen sports.
+The combined Windows development build includes all previous sports and the completed Bungee Demolition, Fishing, Sumo, Target Launch, Field Goal(two variants) and Beer Pong additions. Bowling now has a pin-only spring back wall, physical secondary pin action, latched down pins and corrected containment filtering that preserves sideways/gutter truck momentum. Existing sport rules/handling remain intact.
 
-The six-sport addition is still in progress: Field Goal(two variants), Beer Pong and the Bowling rebound-wall update remain. Bungee uses a documented spring/visual fallback because Rope Toolkit was not found. Newly imported licensed source/assets are not published to this public repository; licensed vendor imports remain required. See [latest checkpoint](../../Documentation/TruckSports/NextExpansionCheckpoint.md) and [Bungee validation](../TruckBungeeDemolition/VALIDATION.md).
+One delivery folder: `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe` with every companion. Native27-scene validation and targeted actual Windows matches, source/reconnect/replay checks and rendered four-view workloads passed. These are automated software-device/PhysX checks, not human playtesting or real-controller acceptance. See [build information](BUILD-INFO.md), [validation](VALIDATION.md) and [current checkpoint](../../Documentation/TruckSports/NextExpansionCheckpoint.md).
 
-All outputs stay in this F: project. One combined destination: Builds/TruckSports/TruckSports.exe with companions. Use LWS.TruckSports.Editor.SportsBuilder.Build and its explicit scene list; preserve host settings. Final Windows/rendered performance and human/hardware/audio checks remain outstanding.
+The subsequent authorized production pass remains active: cohesive broadcast UI, owned cab look, shared snow/water, the requested existing-sport fixes and six more complete sports. No placeholder entries for those six are claimed. Licensed vendor originals stay local and require the owner's installed packages; existing NWH, Weather Maker, Weatherade, Heat, DOTween, EasyRoads and Cinemachine foundations are preserved.
 
-Fishing is now the twenty-first saved/integrated sport: native three-difficulty full matches, endless solo beyond200lb, fast net/poison actor checks, animation, input/reconnect and camera/layout acceptance passed. See Assets/TruckFishing/VALIDATION.md. The subsequent six-sport production pass is queued in the checkpoint after this expansion.
-
-Sumo is the twenty-second integrated sport: two complete physical first-to-five AI matches and focused source/contact/ring/shrink/expression/lifecycle/layout checks passed. Final Windows acceptance remains pending.
-
-Target Launch is the twenty-third integrated sport: complete three-difficulty four-AI physical matches, actual bullseye/dive/contact flights, focused inputs/scoring/replay/layout/rematch checks and25-scene native validation passed. Windows expansion testing remains pending. See Assets/TruckTargetLaunch/VALIDATION.md.
-
-The reports below are historical milestones, not current expansion completion claims.
-
-
+## Earlier collection milestones (historical)
 
 # Truck Sports — eleven offline sports
 

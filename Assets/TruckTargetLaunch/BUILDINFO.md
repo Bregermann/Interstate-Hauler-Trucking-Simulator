@@ -1,9 +1,3 @@
-# Target Launch build integration
+# Build information — October16,2026
 
-Saved startup entry: Assets/TruckTargetLaunch/Scenes/TruckTargetLaunch.unity. Registered collection key: targetlaunch. The combined native configuration has23sports /25explicit scenes, TruckSports as startup. Authoring: LWS.TruckTargetLaunch.Editor.TargetAuthoring.Create. Final build: LWS.TruckSports.Editor.SportsBuilder.Build only.
-
-One output: F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe plus all required companions. Temporary host overrides restore on success/failure. Do not use CreateValidateBuild casually; it reauthors earlier sports.
-
-Development probes: -tsTargetLaunch (three full four-AI physical matches), -tsTargetFocused (input/contact/replay/layout/lifecycle), -tsTargetRange (actual straight software-keyboard range comparison). The former range archive belongs to the old142m layout and is comparison evidence, not a current default acceptance run. Native save/rule checks passed. Updated Windows build/testing is pending; the existing executable contains19sports.
-
-Commercial originals remain licensed project prerequisites and must not be staged wholesale. Target reuses the project-owned Sumo platform/Bungee lattice and installed NWH/EasyRoads/Weather/Heat/scenery foundations through existing adapters. See collection BUILD-INFO and checkpoint for actual build/hash/Git status.
+Included in the combined25-sport Windows x64 Development build at `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe` with all companions. Startup TruckSports;27 explicit scenes;0build errors. Use LWS.TruckSports.Editor.SportsBuilder.Build. See [current collection build information](../TruckSports/BUILD-INFO.md) and this sport’s VALIDATION.md for actual native/Windows evidence and manual limitations. Generated builds and newly licensed original imports are excluded from public Git.

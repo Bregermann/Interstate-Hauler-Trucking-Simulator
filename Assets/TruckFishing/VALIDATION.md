@@ -1,3 +1,9 @@
+# Actual Windows milestone — October16,2026
+
+Included in the25-sport combined Windows build. Actual visible player FishingFocused passed0errors. See [collection validation](../TruckSports/VALIDATION.md) for exact build hashes, measured results, version boundaries and remaining human checks. Earlier statements below saying the executable contains19sports or Windows acceptance is pending are superseded by this section.
+
+## Earlier evidence (historical)
+
 # Fishing validation
 
 Native rule/schedule fixtures:16 assertions and10000 identical seeded schedule pairs passed. These cover1/5lb catches/misses,20lb elimination, poison/safe passage, duplicate/ancient/out-of-order IDs, completed-result locking, same-step final draw, last survivor, solo300lb without cap, fast relative swept intersections, inclusive net edge, bounded monotone downstream paths and practical consecutive good-fish spacing.

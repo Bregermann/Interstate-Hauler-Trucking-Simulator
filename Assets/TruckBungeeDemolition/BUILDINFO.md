@@ -1,10 +1,3 @@
-# Build status
+# Build information — October16,2026
 
-Saved scene: Assets/TruckBungeeDemolition/Scenes/TruckBungeeDemolition.unity.
-Native authoring: LWS.TruckBungeeDemolition.Editor.BungeeAuthoring.Create.
-Combined builder: LWS.TruckSports.Editor.SportsBuilder.Build.
-Combined destination: Builds/TruckSports/TruckSports.exe plus every companion file.
-
-This milestone extends registration to20 sports /22 explicit scenes, keeping TruckSports startup and both Keepaway views. No host scene list is edited. Existing Windows build succeeded2026-10-16T02:00:42Z with19 sports /21 scenes and does not yet contain Bungee Demolition. Do not report this new sport as Windows-validated until the final six-sport expansion build and its runtime probes run. One final output folder; no intermediate build folders.
-
-Development flags: -tsBungeeSlice, -tsBungee, -tsBungeeFocused. Explicit probes isolate preferences and physical input inside their own process; evidence is project-local. Required licensed local dependency: Core-Collapse1.1. Rope Toolkit absent: documented fallback, not a vendor-integration claim.
+Included in the combined25-sport Windows x64 Development build at `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe` with all companions. Startup TruckSports;27 explicit scenes;0build errors. Use LWS.TruckSports.Editor.SportsBuilder.Build. See [current collection build information](../TruckSports/BUILD-INFO.md) and this sport’s VALIDATION.md for actual native/Windows evidence and manual limitations. Generated builds and newly licensed original imports are excluded from public Git.

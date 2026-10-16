@@ -1,7 +1,3 @@
-# Sumo build status
+# Build information — October16,2026
 
-Native scene: Assets/TruckSumo/Scenes/TruckSumo.unity. Author through LWS.TruckSumo.Editor.SumoAuthoring.Create. Combined builder: LWS.TruckSports.Editor.SportsBuilder.Build. Current native collection integration:22sports /24explicit scenes, TruckSports startup, host overrides restored on success/failure.
-
-Final output: Builds/TruckSports/TruckSports.exe with every companion file, in this F: project only. Current Windows executable still contains19sports; Bungee/Fishing/Sumo are newer native additions. Final expansion and queued production rebuild/Windows probes remain pending. No intermediate build folders.
-
-Development acceptance: -tsSumo, -tsSumoFocused. Physical inputs/preferences are isolated only for explicit probes. Native timing without automatic camera renders is not a GPU benchmark. Dependencies remain the collection's established NWH, Heat, Cinemachine, DOTween and installed scenery/audio; no vendor source edit.
+Included in the combined25-sport Windows x64 Development build at `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe` with all companions. Startup TruckSports;27 explicit scenes;0build errors. Use LWS.TruckSports.Editor.SportsBuilder.Build. See [current collection build information](../TruckSports/BUILD-INFO.md) and this sport’s VALIDATION.md for actual native/Windows evidence and manual limitations. Generated builds and newly licensed original imports are excluded from public Git.

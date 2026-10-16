@@ -1,5 +1,3 @@
-# Beer Pong build information
+# Build information — October16,2026
 
-Saved scene Assets/TruckBeerPong/Scenes/TruckBeerPong.unity, menu actionbeerpong. Native25sports/27explicit scenes validated. Development flags -tsPong(full1v1/2v2), -tsPongFocused(physical/input/lifecycle) and -tsPongBounce(calibration) are opt-in; ordinary launches run none. All assets and scene authoring defaults retained with Unity metadata.
-
-Build only via LWS.TruckSports.Editor.SportsBuilder.Build to F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe plus all companions. Existing19sport executable does not yet include Pong or the other six-sport expansion. Finish Bowling back-wall comparisons, build and actual Windows acceptance next, then continue the authorized queued production pass.
+Included in the combined25-sport Windows x64 Development build at `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe` with all companions. Startup TruckSports;27 explicit scenes;0build errors. Use LWS.TruckSports.Editor.SportsBuilder.Build. See [current collection build information](../TruckSports/BUILD-INFO.md) and this sport’s VALIDATION.md for actual native/Windows evidence and manual limitations. Generated builds and newly licensed original imports are excluded from public Git.
