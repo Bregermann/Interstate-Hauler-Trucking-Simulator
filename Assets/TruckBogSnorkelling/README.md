@@ -1,0 +1,13 @@
+# Truck Bog Snorkelling
+
+Four snorkel-equipped trucks race350m through five flooded muddy sections, low timber dive barriers, safe air pockets and a longer shallow branch. Three races,4/3/2/1 placement points, DNF zero; cumulative leaders tied on points race again. Up to four local humans; AI fills remaining roles. Names/colors, independent difficulty, keyboard clusters and whole/shared controllers use the collection’s existing setup.
+
+MOVE drives/steers/brakes/reverses. HOLD ACTION to DIVE; release to regain buoyancy. The actual orange-capped snorkel intake must be above the water and unobstructed to breathe. A deliberately arcade14-second air gauge drains underwater or when blocked and refills4seconds per second when clear. Trench pockets allow legal replenishment. Rain changes shared tyre grip; water level remains fixed.
+
+NWH owns tyres and suspension. Bounded buoyancy, water drag, dive force and limited partially buoyant paddle controls affect everyone equally. Paddle acceleration is capped at2m/s² times immersion, with an8m/s input cutoff; no checkpoint homing or unlimited dive propulsion. AI physically negotiates obstacles, chooses deep/shallow routes and manages its own air. No infinite air, privileged grip or invented results.
+
+Empty air stalls the engine for2s, then returns to the last earned safe checkpoint with a5s penalty. More than three recoveries or240s race time is DNF. Ordered gates prevent checkpoint skips. Ordinary surfacing is not a failure. Other racers continue during an individual recovery. Pause/disconnect preserves bodies, air and clock; a replacement requires neutral input. Rematch retains setup; return to the collection restores the host pipeline.
+
+Stable third-person Cinemachine chase views enter the water with0.15m hysteresis. River Modeler’s installed URP shader provides animated normals, reflection highlights, refraction and depth coloration on the installed NWH surface mesh. Vista/Path Painter terrain layers provide grass banks and actual mud; installed construction timber, cones and vegetation dress the route. Camera-local URP depth fog/refraction, bubbles, sediment, splash and headlamps communicate submersion. Engine filtering is per truck; a single listener mixes the shared output, not separate headphones for each player. Weather Maker supplies sky, rain and atmospheric fog. Heat/TMP and shared Sports controls/settings remain the UI/input foundation.
+
+Vendor source unchanged. LWS owns race/air/checkpoint semantics, bounded dive/buoyancy coordination and the missing independent-camera underwater treatment. No networking or powerups.

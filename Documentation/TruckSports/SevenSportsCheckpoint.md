@@ -1,3 +1,15 @@
+# Current continuation status — all seven native milestones validated
+
+Nineteen saved sports / twenty-one explicit scenes. Bog now completes its native four-AI three-race series with all four finishing every race, zero recoveries, totals3/9/12/6 and minimum air7.7–9.0s. Focused physics/intake/depletion/recovery/input/four-camera/GPU/lifecycle acceptance ERRORS0. Installed River Modeler URP water replaces the failed legacy Weather Maker lake setup; camera-local depth treatment, real mud paint, smooth trench exits and bounded partially buoyant controls are saved/defaulted. See sport README/VALIDATION/BUILD-INFO.
+
+Next required work: scoped Bog milestone commit/clean publication push; final native scene/rule/dependency validation; one combined Windows build via SportsBuilder.Build; actual Windows regressions for all seven and the Keepaway/Terrier fixes, full sustained six-AI hockey with repeated rematches, four-view performance and full-window resolution checks. Fix actual build-specific failures, update final docs, commit and normal-fast-forward the clean publication branch to remote main. Existing exe remains OLD until that build succeeds. Do not stop at this native milestone.
+
+Git root local main contains private Taxi3651 ancestry: NEVER push root HEAD. Clean codex/truck-sports-seven-events branch last pushed bda065628de1d56774cc1fff81af9283e25538d9 (Buz milestone); scoped alternate-index scripts/tip under Logs/TruckSports/SevenSports. Preserve unrelated Taxi/host/user-imported Layer Lab work. All outputs/logs in F:, one final build folder, never close user test games. Sports still holds exclusive workspace/Editor lease.
+
+The following entries are historical and superseded.
+
+---
+
 # Current continuation status — Buzkashi milestone
 
 Eighteen saved playable sports / twenty explicit sports scenes. Six of the seven requested expansion modes have native autonomous full-match and focused acceptance: Minefield, Mattress Racing, Wife Carrying, Musical Parking, Giant Swing and Buzkashi. Bog Snorkelling is drafted only under ignored Logs/TruckSports/SevenSports/PreparedBog; not imported, menu-listed or build-claimed.

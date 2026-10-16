@@ -1,6 +1,6 @@
-# Truck Sports — eighteen saved sports; final expansion in progress
+# Truck Sports — nineteen saved sports
 
-The saved collection includes the original eleven sports plus Terrier Racing, Minefield, Mattress Racing, Wife Carrying, Musical Parking, Giant Swing and Buzkashi. Each new saved event has completed a native autonomous match and focused acceptance. Bog Snorkelling remains under implementation and is not yet offered in the menu. See Documentation/TruckSports/SevenSportsCheckpoint.md. The existing executable remains older than these changes; the final combined Windows build is pending.
+All seven requested expansion sports are now saved and integrated: [Minefield](../TruckMinefield/README.md), [Mattress Racing](../TruckMattressRacing/README.md), [Wife Carrying](../TruckWifeCarrying/README.md), [Musical Parking](../TruckMusicalParking/README.md), [Giant Swing](../TruckGiantSwing/README.md), [Buzkashi](../TruckBuzkashi/README.md) and [Bog Snorkelling](../TruckBogSnorkelling/README.md). Each has native autonomous complete-match and focused acceptance evidence. The collection retains the preceding twelve sports and both Keepaway views. The final combined Windows build and built-player regression are still pending; the existing executable is older.
 
 Latest Terrier fixes preserve clean full-body finishes, protect results against later impacts, animate the actual Taxi steering wheel, throw real physical truck parts for all twelve wrecks, and catch off-course falls in a giant ice-cream bowl. Editor finish and physical debris/dessert acceptance pass; final steering/presentation and Windows acceptance are still running. Keepaway cab steering uses the same presentation adapter.
 
