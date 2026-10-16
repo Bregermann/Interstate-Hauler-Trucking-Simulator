@@ -281,3 +281,6 @@ Giant Swing: one to eight sequential competitors, three real pendulum throws eac
 
 
 Field Goal BOTH variants now native-complete:24sports/26saved scenes,80rule checks, six complete4AI matches/176actual kicks and focused physical/input/replay suite0errors. Final seeded longest tiebreak10rounds. See Assets/TruckFieldGoal docs. Existing executable remains19sports; Windows expansion acceptance pending. Next Beer Pong, then actual Bowling before/after wall comparisons, combined build/tests and publication, then full queued dbf production pass.
+
+
+Beer Pong: sequential1v1/2v2 and unlimited solo practice, actual NWH approach/charged spring launch,20hollow cups/penetration scoring, real table/rim bounces, rebuttal/repeated overtime, recorded replay and retained ownership/settings.83rule checks, two full AI games and focused physical/input suite0errors. Native25sports/27scenes; Windows expansion build still pending. See Assets/TruckBeerPong docs.

@@ -1,3 +1,13 @@
+# ACTIVE CHECKPOINT — native25sports /27scenes; executable still19
+
+Field Goal committed local3d0e07ed6454bd6f1efae5dbab57e627fac32470 /clean6f2922313edec02b8395a1a0f5ee9a73d9bf36cc; working-branch push succeeded/remote verified. Beer Pong now native-complete: two full1v1/2v2 Hard AI games26launches each,83rule checks and focused physical/input/replay suite0errors;27saved-scene audit passed. Actual hollow cups/rims/liquid, installed table/chairs, flush supported spring pad, bounded aftertouch, rebuttal/OT/practice implemented. Current source Assets/TruckBeerPong is authoritative. Scoped review/commit next.
+
+Next: Bowling pin-only back-wall improvement. New BowlingReboundProbe source ONLY measures unchanged physical baseline; no Bowling handling/pin/wall/scoring change has been made yet. Run StartBowlingBaseline.cs for30 equivalent initialized real truck deliveries and preserve BowlingReboundBefore evidence BEFORE editing wall/pin behavior. Compare the same inputs after the change, then full games/tenth/rack/rematch checks. Existing bowling controls/momentum/rack fix remains intact.
+
+After current25sport/Bowling work: ONE updated combined Windows output under the F:project, actual player regressions/rendered performance, docs and normal clean-branch fast-forward publication to main. THEN immediately complete the full queued dbf407b8 production pass (six further sports/shared presentation/input/snow/water/old-sport fixes), build/test/push again in the same folder. Do not stop after this checkpoint. All prior lease/scope/publication safeguards below remain active. Editor STOPPED after clean Pong acceptance and native audit; next baseline is owned test only. No subagents or concurrent Unity editing.
+
+## Earlier evidence/history (older NOW/next descriptions are superseded by ACTIVE above)
+
 # Truck Sports checkpoint — October16,2026
 
 Current saved integration:23sports /25explicit scenes. Earlier19sport milestone is built and published to GitHub main. New Bungee Demolition, Fishing, Sumo and Target Launch are complete native gameplay integrations; the combined Windows executable still contains19sports. Do not claim newer additions are Windows-tested yet.

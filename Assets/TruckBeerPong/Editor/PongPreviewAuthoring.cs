@@ -1,0 +1,6 @@
+using System.IO;using UnityEngine;using UnityEditor;
+namespace LWS.TruckBeerPong.Editor {
+public static class PongPreviewAuthoring {
+ public static void Create(PongMatch m){Directory.CreateDirectory("Assets/TruckBeerPong/Art");var camera=m.cameraRig.view;var p=camera.transform.position;var q=camera.transform.rotation;var old=camera.targetTexture;var active=RenderTexture.active;var rt=new RenderTexture(768,432,24);rt.Create();camera.targetTexture=rt;camera.transform.SetPositionAndRotation(new Vector3(-30,35,-52),Quaternion.LookRotation(new Vector3(0,4,4)-new Vector3(-30,35,-52)));camera.Render();RenderTexture.active=rt;var image=new Texture2D(768,432,TextureFormat.RGB24,false);image.ReadPixels(new Rect(0,0,768,432),0,0);image.Apply();string path="Assets/TruckBeerPong/Art/Menu Preview.png";File.WriteAllBytes(path,image.EncodeToPNG());Object.DestroyImmediate(image);camera.targetTexture=old;RenderTexture.active=active;rt.Release();Object.DestroyImmediate(rt);camera.transform.SetPositionAndRotation(p,q);AssetDatabase.ImportAsset(path);var importer=(TextureImporter)AssetImporter.GetAtPath(path);importer.textureType=TextureImporterType.Sprite;importer.spriteImportMode=SpriteImportMode.Single;importer.mipmapEnabled=false;importer.SaveAndReimport();}
+}
+}
