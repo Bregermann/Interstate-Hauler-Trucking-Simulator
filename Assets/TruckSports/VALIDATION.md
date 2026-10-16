@@ -1,3 +1,7 @@
+# Queued production pass: shared presentation foundation (native only)
+
+All27 current saved Sports scenes now share owned Heat Roboto Condensed font variants, beveled navy/cream/orange broadcast backing, DOTween page fades and responsive safe areas. Source-only/scene UI changes preserve every Collider/Rigidbody fingerprint. Minefield and Giant Swing maximum eight-name controlled UI captures at1280x720,1920x1080,1440x900,1280x960 and2560x1080 reproduce and fix the clipped first row; world labels have per-camera pixel caps/distance culling. Final controlled run0errors, one listener, clean collection return;720p Minefield image actually inspected. No claim of final Windows overlay, controller/human acceptance, every UI screen or completion of the queued31-sport update. Current executable is still the verified25-sport milestone below. Evidence: BroadcastBefore/BroadcastAfter and SevenSports/broadcast-apply-result.txt.
+
 #25-sport Windows acceptance — October16,2026
 
 Build 2026-10-16T12:20:39.8422894Z,0errors /29warnings,25sports /27scenes. Managed assembly SHA256 `1f769e585301e8891d4f8c5d86d64505fedcecfc3666991e384a43a73006251f`.12 host files unchanged. One F: output folder, all companions present. No second validation-build folder.

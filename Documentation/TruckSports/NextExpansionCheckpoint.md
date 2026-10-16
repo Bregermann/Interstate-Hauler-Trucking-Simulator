@@ -1,3 +1,19 @@
+# ACTIVE: queued31-sport production pass — shared presentation foundation native-validated
+
+The completed25-sport milestone is published to main and Sports branch f112631420d46ce4001bb6ae9951b258124a0361 (local67dc287d). Current Windows output remains that verified25-sport milestone; DO NOT build another intermediate sport output. Continue remaining queued work and deliver final combined build in the same folder.
+
+Shared presentation foundation now implemented: original navy/cream/orange beveled broadcast plates; installed Heat Roboto Condensed owned font variants with the existing default fallback; existing Heat buttons/sliders retained; DOTween page fades; CanvasScaler Expand plus anchored header/status/safe standings; participant cards with identifying color/name/score/status for event modes; per-camera world-label pixel caps and distance culling. All27 existing Sports saved scenes updated, with byte fingerprints of every Collider/Rigidbody before/after identical. Scene regeneration is protected by a saved Resources theme/bootstrap; scene authoring API available. SportsBuilder.SceneList is now public to reuse the single explicit scene authority.
+
+Native controlled before/after captures reproduced clipped Minefield/Swing first rows and enormous names, then showed all eight long-name cards fitting at720p/1080p/16:10/4:3/ultrawide. Final after run0errors/one listener/clean return. These manually render a camera with a converted canvas; they are not normal-overlay Windows acceptance. Captures Logs/TruckSports/TerrierUpdate/BroadcastBefore and BroadcastAfter, physics proof broadcast-apply-result.txt. First authoring run caught/fixed Unity native fake-null CanvasGroup handling. First visual run caught/fixed early blank-card refresh/page-fade capture. Final720p Minefield after image actually inspected; 4:3 Swing initial transition failure was inspected and corrected. Full Windows UI and other setup/modal/replay/results layouts still need final verification/polish. This is a foundation stage, NOT completion of all Part1 presentation requirements.
+
+Editor31692/port7800 STOPPED after the final after probe. Uncommitted current UI stage ready for scoped review/commit/clean mirror/push working branch, then continue Minefield final-rest scoring/history. Draft new MinefieldRacer in Logs/TruckSports/SevenSports/PreparedProduction is NOT imported and needs review/integration/tests, including appropriate late blast handling/history/replay capacity. Pure Poker/CabLook drafts there remain uncompiled/incomplete. None of the six new sports are implemented yet.
+
+Next: implement/test Minefield final-rest distance/all-history flags; fix shared focus/reconnect and owned cab look; Parking/etc old-mode changes; six complete new sports/shared snow/water; broad full-window/physics/player regressions; final31sport build/docs/clean mainFF. Do not stop at checkpoint. Prior operating/Git safeguards below remain authoritative.
+
+# ACTIVE:25sport milestone published; queued31sport production pass starting
+
+GitHub main and Sports branch both verified f112631420d46ce4001bb6ae9951b258124a0361. Root local67dc287d(private ancestry never pushed).25sport Windows tests passed; now implement queued shared/old-mode/six-new-sport scope below.
+
 # Truck Sports active checkpoint —25-sport Windows milestone validated
 
 Current build: F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe plus companions.25sports /27scenes, built2026-10-16T12:20:39.8422894Z,0errors/29warnings,1152727712bytes. SHA256 Assembly-CSharp.dll 1f769e585301e8891d4f8c5d86d64505fedcecfc3666991e384a43a73006251f. All12 host files unchanged. Targeted actual Windows acceptance passed; see Assets/TruckSports/VALIDATION.md and BUILD-INFO.md. Human/hardware/audio acceptance remains outstanding.
