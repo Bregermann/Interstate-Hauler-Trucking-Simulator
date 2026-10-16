@@ -1,14 +1,10 @@
-# Truck Sports — nineteen saved sports
+# Truck Sports — twenty saved sports, next expansion in progress
 
-All seven requested expansion sports are now saved and integrated: [Minefield](../TruckMinefield/README.md), [Mattress Racing](../TruckMattressRacing/README.md), [Wife Carrying](../TruckWifeCarrying/README.md), [Musical Parking](../TruckMusicalParking/README.md), [Giant Swing](../TruckGiantSwing/README.md), [Buzkashi](../TruckBuzkashi/README.md) and [Bog Snorkelling](../TruckBogSnorkelling/README.md). Each has native autonomous complete-match and focused acceptance evidence. The collection retains the preceding twelve sports and both Keepaway views. The final combined Windows build and built-player regression are still pending; the existing executable is older.
+The preceding nineteen-sport Windows build succeeded with zero errors and passed menu/driving/pause, Keepaway regression and Terrier finish checks. Bungee Demolition is now the twentieth saved/integrated sport, with Core-Collapse1.1 physical support destruction, four independent bays, complete AI match/overtime and focused native acceptance. Its Windows checks await the final combined expansion build. The current executable contains nineteen sports.
 
-Latest Terrier fixes preserve clean full-body finishes, protect results against later impacts, animate the actual Taxi steering wheel, throw real physical truck parts for all twelve wrecks, and catch off-course falls in a giant ice-cream bowl. Editor finish and physical debris/dessert acceptance pass; final steering/presentation and Windows acceptance are still running. Keepaway cab steering uses the same presentation adapter.
+The six-sport addition is still in progress: Fishing, Sumo, Target Launch, Field Goal(two variants), Beer Pong and the Bowling rebound-wall update remain. Bungee uses a documented spring/visual fallback because Rope Toolkit was not found. Newly imported licensed source/assets are not published to this public repository; licensed vendor imports remain required. See [latest checkpoint](../../Documentation/TruckSports/NextExpansionCheckpoint.md) and [Bungee validation](../TruckBungeeDemolition/VALIDATION.md).
 
-
-
-All outputs remain in this F: project. One final combined output is Builds/TruckSports/TruckSports.exe with its full companions. The existing fourteen-scene development build predates the latest fixes and seven-sport expansion. It is not the final new delivery. Build only through LWS.TruckSports.Editor.SportsBuilder.Build; preserve exact host settings and explicit sports scenes. Hardware/audio/human acceptance remains manual.
-
-
+All outputs stay in this F: project. One combined destination: Builds/TruckSports/TruckSports.exe with companions. Use LWS.TruckSports.Editor.SportsBuilder.Build and its explicit scene list; preserve host settings. Final Windows/rendered performance and human/hardware/audio checks remain outstanding.
 
 The reports below are historical milestones, not current expansion completion claims.
 
