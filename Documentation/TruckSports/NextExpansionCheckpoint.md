@@ -1,3 +1,13 @@
+# CURRENT — Delivered and published
+
+## Verified Git delivery
+
+Implementation commit `6febbc6b8028ed1e1311bbadd436fd2733b4df1b` on `codex/truck-sports-seven-events` was pushed successfully to both that branch and GitHub `main`, verified with ls-remote at 2026-10-17T03:04:44.946800+00:00. **Both previous relevant Truck Sports work and this production update are committed and pushed to main.** All32 Sports folder trees, folder metadata and the checkpoint match the reviewed root implementation. Unrelated local Taxi/host work is preserved and excluded; the private Taxi ancestor is absent from the public history. Generated builds/logs/caches and original licensed package prerequisites are excluded. This documentation record is committed as a subsequent clean public descendant; the delivered folder's GIT-DELIVERY.txt records the final verified tip.
+
+The implementation,33-area version-labelled Windows acceptance, final build and first verified main push are complete. Source/physics equality safeguards and all earlier evidence remain below. Real hardware/human/audio checks remain manual; Wallball stays experimental.
+
+## Earlier validation recovery record
+
 # CURRENT — Implementation and Windows acceptance complete; scoped publication next
 
 Updated 2026-10-17T03:00:15.993204+00:00.31implemented sports/33saved scenes;30normal catalogue plus manual experimental Wallball. Final Windows x64 Development build succeeded SUCCEEDED 2026-10-17T02:53:33.8658602Z; actual bytes/warnings/duration in Assets/TruckSports/BUILD-INFO.md. One delivery F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe plus all companions. Final managedSHA256 8d1f8ed24a700ecb824a5ead1a51b423020c69d31fd239f8aa5d4a1d43eeb126; AMD64PE0x8664;12host snapshots unchanged. OwnedEditor11 exited gracefully; finalDelivery, DerbyFocused, BuzFocused and corrected three-course four-owner workload passed. No owned player/Editor remains. No user builds closed.

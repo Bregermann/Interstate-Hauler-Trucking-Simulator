@@ -290,3 +290,7 @@ Bowling trampoline pit wall: capped pin-only return, actual spring bed/audio, do
 ## Focus and input availability
 
 Human focus loss or attached input suspension now pauses normally. Returning focus never auto-resumes; existing fresh/neutral confirmation applies. Actual keyboard/controller removal still opens reconnect and permits explicit replacement. All-AI play continues in the background. This policy is shared across all existing sport families and does not gate ordinary Billiards turns. Native eight-family/160-check acceptance passed; final production Windows OS-focus/hardware acceptance is pending.
+
+## Verified Git delivery
+
+Implementation commit `6febbc6b8028ed1e1311bbadd436fd2733b4df1b` on `codex/truck-sports-seven-events` was pushed successfully to both that branch and GitHub `main`, verified with ls-remote at 2026-10-17T03:04:44.946800+00:00. **Both previous relevant Truck Sports work and this production update are committed and pushed to main.** All32 Sports folder trees, folder metadata and the checkpoint match the reviewed root implementation. Unrelated local Taxi/host work is preserved and excluded; the private Taxi ancestor is absent from the public history. Generated builds/logs/caches and original licensed package prerequisites are excluded. This documentation record is committed as a subsequent clean public descendant; the delivered folder's GIT-DELIVERY.txt records the final verified tip.

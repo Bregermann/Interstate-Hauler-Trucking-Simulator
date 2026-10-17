@@ -4,4 +4,6 @@ Implementation and Windows acceptance complete:31implemented sports/33saved scen
 
 All source/default/native scene changes are authoritative. Do not rerun the ignored one-off import/patch draft scripts. Use SportsBuilder.Build, not broad scene regeneration. No user testing builds were closed. No concurrent source/Editor task was permitted during this pass.
 
-Scoped Git publication is the final pending delivery step. The root checkout contains unrelated private Taxi history; only the reviewed clean Sports publication branch may be pushed. Final branch/hashes/remote outcome will be appended after verification. Detailed recovery/publication safeguards are in Documentation/TruckSports/NextExpansionCheckpoint.md.
+## Verified Git delivery
+
+Implementation commit `6febbc6b8028ed1e1311bbadd436fd2733b4df1b` on `codex/truck-sports-seven-events` was pushed successfully to both that branch and GitHub `main`, verified with ls-remote at 2026-10-17T03:04:44.946800+00:00. **Both previous relevant Truck Sports work and this production update are committed and pushed to main.** All32 Sports folder trees, folder metadata and the checkpoint match the reviewed root implementation. Unrelated local Taxi/host work is preserved and excluded; the private Taxi ancestor is absent from the public history. Generated builds/logs/caches and original licensed package prerequisites are excluded. This documentation record is committed as a subsequent clean public descendant; the delivered folder's GIT-DELIVERY.txt records the final verified tip.
