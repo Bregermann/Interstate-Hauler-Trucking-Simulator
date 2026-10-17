@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Skee-Ball is included in the final31-sport Windows build. All five full physical cases passed, including three difficulties, eight-player hot seat and solo, plus focused swept high-speed entry/input/replay checks. A previous native hot-seat run exceeded its old test deadline; the retained failure is not a pass, and the complete longer final Windows case is the acceptance evidence. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Truck Skee-Ball
 
 Your truck is the ball. Nine launches each; drive the actual curved EasyRoads ramp and enter physical open rings worth 10/20/30/40/50/100. The whole authoritative chassis must clear the same hole. Outside/rim impacts and misses score zero. One numbered delivery awards once. Tied leaders receive equal extra launches after every participant completes nine. Solo practice keeps a personal best.

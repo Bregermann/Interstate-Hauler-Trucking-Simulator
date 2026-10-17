@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Current collection status: manually playable under Scrap Heap — Experimental / unfinished, excluded from normal catalogue. Eight distinct starts, explicit opening serve release and enlarged ball-only envelopes fix overlap and initial movement defects. Final Windows opening-input and actual4v4 volley checks passed. Human playability remains unapproved; no claim of finished competitive balance. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Truck Wallball
 
 Offline 1v1 in the five-sport Truck Sports collection. Saved scene: `Assets/TruckWallball/Scenes/TruckWallball.unity`. Combined Windows x64 development executable: `Builds/TruckSports/TruckSports.exe`; keep its accompanying files together. Enter through Play → Wallball.

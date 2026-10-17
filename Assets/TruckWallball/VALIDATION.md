@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Current collection status: manually playable under Scrap Heap — Experimental / unfinished, excluded from normal catalogue. Eight distinct starts, explicit opening serve release and enlarged ball-only envelopes fix overlap and initial movement defects. Final Windows opening-input and actual4v4 volley checks passed. Human playability remains unapproved; no claim of finished competitive balance. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Wallball validation — 2026-10-14
 
 Final build/runtime validation passed. Native Unity 6000.4.10f1 Windows x64 Mono Development build 07 succeeds through SportsBuilder.Build, native exit 0, with six saved scenes, TruckSports startup, zero errors and 25 inherited vendor/package warnings. Exact host title/build settings restore on success and deliberate failure. All 345 files in the four existing sport folders and all 27 ProjectSettings/Packages files match their captured SHA256 baselines. Unrelated Git status matches the pre-update snapshot.

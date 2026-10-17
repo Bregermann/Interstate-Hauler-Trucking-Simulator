@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Production update: seeded viable terrain variation, physical knockdown trees, bounded exploding sheep, loose props/fences and Taxi ragdoll pedestrians. Actual scenery/destruction is the ninth replay source and resets per seed. Shared contact-based Weatherade snow adds broad mattress trails. Full eight-AI races, world/replay/reset checks and a sustained four-view Windows sample passed; original handling and checkpoint policy remain. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Truck Mattress Racing
 
 Eight real truck-and-mattress rigid bodies race down a banked650m meadow. Up to four humans use independent keyboard clusters, whole controllers or separate sticks; AI fills the field. A single root listener serves all views.

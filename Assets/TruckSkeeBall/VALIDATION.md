@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Skee-Ball is included in the final31-sport Windows build. All five full physical cases passed, including three difficulties, eight-player hot seat and solo, plus focused swept high-speed entry/input/replay checks. A previous native hot-seat run exceeded its old test deadline; the retained failure is not a pass, and the complete longer final Windows case is the acceptance evidence. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Skee-Ball native acceptance
 
 2026-10-16, Unity6000.4.10f1. Final Windows production pass remains pending.

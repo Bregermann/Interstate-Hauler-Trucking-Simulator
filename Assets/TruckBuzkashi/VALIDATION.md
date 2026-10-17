@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Production update: tighter low-speed steering, understandable7m attach eligibility/highlight/source prompt, nearest-body rope anchor, short attach grace and previous-carrier reclaim delay, modest fresh main-body ram stealing. Shared arena remains selectable; four human cab views use actual Taxi steering/free look and Bowling per-camera visibility, preventing the owning exterior from blocking the cab. Full physical match, focused lifecycle/scoring and sustained four-view Windows sample passed. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Buzkashi validation
 
 Eight native rule fixtures cover whole cargo containment, partial entry, team mapping, opposing-contact qualification and regulation/sudden-death decisions. The scoring bounds include both physical floppy tassels, not just the root.

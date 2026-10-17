@@ -1,3 +1,93 @@
+# Final 31-sport Windows acceptance — October 16, 2026
+
+Final build `2026-10-17T02:53:33.8658602Z`: **0 errors / 47 incremental build warnings**, Windows x64 PE0x8664, Mono Development, 33 explicit Sports-only scenes, TruckSports startup. Managed assembly SHA256 `8d1f8ed24a700ecb824a5ead1a51b423020c69d31fd239f8aa5d4a1d43eeb126`. The earlier full compilation produced 400 warnings (mostly host/vendor deprecations); it is retained separately and is not presented as a warning-free compile. Two Derby GetInstanceID deprecations remain; vendor sources were not edited to hide warnings. All 12 protected host-setting hashes match, including the existing host build list. The deliberate failure-restoration fixture also passed.
+
+**33 Windows acceptance areas passed**, each successful process required exit0, a fresh PASS result and no player-log exception/shader/fatal/crash entries. 32 gameplay/visual/regression suites passed on build4 (managed assembly 6a9285186a8f408752b814b520936b5868d9aae85532c8eafcd6d3953950ebad). Final narrow corrections adjust optional probes, bind Derby displays to the vendor's real mirror faces, and reuse Bowling's existing per-camera visibility in Buzkashi. Every other player source/asset/meta is byte-identical; 11,575 compiled methods including ALL physical gameplay code remain equivalent after resolving metadata addresses. Only Buz's reviewed camera Layout binding differs in normal runtime code. Native and serialized-file proofs verify eight mirror reference arrays and four existing camera visibility adapters, with7032 Derby/2943 Buz pre-existing components unchanged. Final menu/driving smoke, Derby and Buz focused suites, and three-course workload passed on the delivered assembly. The other29 case results retain their build4 provenance. This is33 accepted areas with explicit differential validation, not a claim that all33 processes ran on the final bytes. Evidence is local under `Logs/TruckSports/FinalWindows`, with version-specific assembly identity, equivalence proof and batch manifest under `Logs/TruckSports/SevenSports`. Superseded/failed attempts remain labelled; they are not counted as passes. The first production-workload fixture incorrectly retained Derby's two-participant default and failed its four-owner assertions; its numbers are excluded from four-view performance claims. The corrected final workload actually uses four human viewports plus the remaining AI seats.
+
+The actual Windows scene tour loads all 32 non-front scenes, checks missing scripts and one listener, starts maximum AI rosters for 25 event sessions, and repeats pause/rematch/menu cleanup. Normal overlay screenshots use actual window sizes 1280×720, 1920×1080, 1440×900, 1280×960 and 2560×1080. Focused suites additionally test four owning human viewports using software devices. Representative final images were inspected; not every captured image was individually reviewed. Controlled Camera.Render/UI composites are labelled separately from these normal-window screenshots.
+
+## New sports and physical match coverage
+
+All six new modes completed actual saved-scene AI series plus focused rule/input/lifecycle checks in build4; their physical gameplay IL is equivalent in the delivered build, and subsequent scene repairs are verified presentation-only. Physics series accelerate simulation time and measure progress/outcomes, not frame performance. Scoring fixtures and posed contacts are explicitly separate from naturally played matches.
+
+```text
+-tsPoker: MATCH level=0 hands=17 actions=233 winner=2 chips=4000
+-tsPoker: MATCH level=1 hands=18 actions=262 winner=4 chips=4000
+-tsPoker: MATCH level=2 hands=27 actions=293 winner=5 chips=4000
+-tsTug: MATCH difficulty=0 heats=4 draws=0 wins=3,1 heaves=72 peakTension=239.2272 peakSpeed=31.63701 maxAdvantage=11.34332
+-tsTug: MATCH difficulty=1 heats=5 draws=0 wins=3,2 heaves=419 peakTension=700.7675 peakSpeed=33.04056 maxAdvantage=3.994428
+-tsTug: MATCH difficulty=2 heats=5 draws=0 wins=3,2 heaves=520 peakTension=775.1224 peakSpeed=33.25211 maxAdvantage=4.542258
+-tsSkee: MATCH case=0 winner=1 totals=10,20,10,0,0,0,0,0 attempts=9,9,9,9,0,0,0,0 physicalLaunches=36 genuineEntries=4 misses=32
+-tsSkee: MATCH case=1 winner=2 totals=10,40,70,30,0,0,0,0 attempts=9,9,9,9,0,0,0,0 physicalLaunches=36 genuineEntries=8 misses=28
+-tsSkee: MATCH case=2 winner=0 totals=70,30,50,40,0,0,0,0 attempts=9,9,9,9,0,0,0,0 physicalLaunches=36 genuineEntries=7 misses=29
+-tsSkee: MATCH case=3 winner=0 totals=80,20,30,0,60,20,0,30 attempts=9,9,9,9,9,9,9,9 physicalLaunches=72 genuineEntries=9 misses=63
+-tsSkee: MATCH case=4 winner=0 totals=20,0,0,0,0,0,0,0 attempts=9,0,0,0,0,0,0,0 physicalLaunches=9 genuineEntries=1 misses=8
+-tsLogProbe: MATCH difficulty=0 winner=0 heats=6 wins=5,1,0,0 draws=0 falls=6 contacts=26 roll=73.66241 peakTruckSpeed=14.88191 braces=2
+-tsLogProbe: MATCH difficulty=1 winner=1 heats=12 wins=1,5,0,3 draws=3 falls=39 contacts=122 roll=73.84644 peakTruckSpeed=14.88898 braces=2
+-tsLogProbe: MATCH difficulty=2 winner=2 heats=17 wins=3,4,5,3 draws=2 falls=53 contacts=142 roll=75.83377 peakTruckSpeed=15.01416 braces=2
+-tsDodgeProbe: MATCH difficulty=0 winner=1 rounds=4 wins=1,3 draws=0 bounces=131 strikes=11 returns=2 eliminations=4 neutralizations=5 friendly=0 peakY=5.43413 contactPeak=3
+-tsDodgeProbe: MATCH difficulty=1 winner=0 rounds=21 wins=3,2 draws=16 bounces=6942 strikes=296 returns=26 eliminations=75 neutralizations=185 friendly=63 peakY=6.632982 contactPeak=3
+-tsDodgeProbe: MATCH difficulty=2 winner=0 rounds=8 wins=3,1 draws=4 bounces=1037 strikes=41 returns=8 eliminations=14 neutralizations=19 friendly=8 peakY=5.553286 contactPeak=3
+-tsDerby: MATCH difficulty=0 winner=1 heats=3 wins=0,3,0,0,0,0,0,0 hits=40 explosions=3 draws=0 peakIncomingNormal=19.34106 peakSpeed=12.08145 peakRoll=99.92561 maxDamageEventsOnTruck=260
+-tsDerby: MATCH difficulty=1 winner=7 heats=3 wins=0,0,0,0,0,0,0,3 hits=273 explosions=21 draws=0 peakIncomingNormal=17.67043 peakSpeed=16.92241 peakRoll=147.1845 maxDamageEventsOnTruck=242
+-tsDerby: MATCH difficulty=2 winner=2 heats=10 wins=1,0,3,1,1,1,2,1 hits=1351 explosions=70 draws=0 peakIncomingNormal=22.00971 peakSpeed=18.80929 peakRoll=166.994 maxDamageEventsOnTruck=321
+-tsMattress: MATCH races=3 winner=3 total=6,8,13,19,8,19,18,16 ERRORS=0. Actual PhysX/NWH-disabled gravity platforms and AI weight controls; no hardware/human playtest.
+-tsWife: MATCH races=3 winner=1 points=6,10,9,4,0,0,0,0 ERRORS=0. Actual NWH/PhysX, controlled drop/retrieval reproduction and AI; no human/hardware validation.
+-tsBuzkashi: MATCH score=4,2 deliveries=6 attachments=77 breaks=70 cargoRecoveries=0 truckRecoveries=0 clock=300.0137
+```
+
+Poker's isolated and native rule acceptance covers 505 checks plus exhaustive enumeration of all 2,598,960 five-card combinations, 84 random legal-action tournaments, side pots, short all-ins/reopening, uncalled returns, odd chips, bust-outs and conservation. Actual final Windows tournaments and four-view privacy/source checks pass. AI receives only own-seat/public snapshots. No private cards enter world faces or replays; hold release clears TMP text, geometry and character metadata. Human shared-screen privacy still depends on viewers respecting each other's panes.
+
+Tug uses actual NWH traction and one physical pulling chain, not a second live force. Skee uses physical EasyRoads ramps and swept whole-truck open-ring entry, one award per delivery, solo practice, four simultaneous lanes and eight-player hot seat. Log uses the unchanged owned Floating Entities solver, real buoyant roll and water elimination; its exposed triangle-area metadata is corrected by an LWS adapter before the vendor forces. Dodge checks live/friendly/neutral states, finite returns, actual trampoline flight, same-step strike arbitration and wipes. Multi-truck AI samples are draw-heavy: one Windows Normal4v4 sample completed3–2 after21rounds,16drawn. Human pacing remains a playtest priority; completion is not evidence of ideal balance. Derby checks localized actual contact damage, public NWH consequences/deformation, rollovers, real rear-view pixels, resettable collapse props and rematch repair. A separate stationary-human-versus-AI reproduction explodes at 4.999996 active seconds; paused time is excluded and survivors remain protected for 8.2 seconds after the locked heat.
+
+The actual Windows run found and reproduced a Derby reset failure that native full matches missed. Disabling NWH cancels RevLimiterCoroutine before it clears the public revLimiterActive latch; the vendor disable/repair/start lifecycle preserves that flag. Subsequent heats then have valid input but cut engine torque, stall and repeatedly explode at their starting positions. Controlled before/after public-state fixtures retain True/True before the fix and False/False after reset/wake with the fix. LWS clears only that transient latch on a fresh Derby reset; the normal active rev limiter, vehicle physics and five-second rule remain intact. A focused injected-state regression and per-heat all-AI departure assertion now cover it, followed by the final actual Windows full series. Failed and diagnostic player evidence is retained under BeforeDerbyResetFix. Wheel-spin retention was investigated but was not the demonstrated cause; no speculative drivetrain or physics retune was applied.
+
+## Existing fixes and presentation
+
+Final normal-window inspection also caught a narrower Derby presentation defect: rear-camera render textures contained valid world pixels, but authoring bound them to objects named MirrorGlassL/R, which are actually the vendor's housings. The true display meshes are mirror lft.001/rt.001 using the vendor MirrorGlass materials. Native material/mesh inspection and isolated actual-cab renders proved the mismatch. Saved references and authoring defaults now select those true faces and order left/right cameras consistently. All7032 other scene components and every other serialized document remain byte-identical. The focused Windows suite checks visible glass and all eight independent rear targets; actual final live cab screenshots were inspected after the reference repair. No UV/geometry/offset/custom shader, camera placement, truck physics, damage, scoring or vendor source changed. The preliminary visibility-only attempt did not fix the image and was reverted; its evidence is retained separately, not claimed as visual acceptance.
+
+The actual Buzkashi four-view image exposed its owning exterior mesh blocking the newly added cab camera. The fix reuses the existing BowlingCabCamera per-camera visibility component, with lane=null so Bowling never moves the Buz camera. Layout caches each owning exterior once; its original Taxi interior stays visible while other trucks remain visible. Four existing visibility adapters are saved and installed idempotently by authoring; all2943 pre-existing scene components and other serialized documents remain unchanged. Controlled native four-camera checks prove correct ownership and complete flag restoration. Final Windows workload additionally checks the actual render-event visibility state and its live four-cab screenshot was inspected. Driving, towing, camera position, scoring and AI remain unchanged.
+
+Minefield measures continuous supported rest rather than first touch, retains every blast/final flag, permits backwards settling and shows the full tumble. Musical Parking validates full authoritative body capture, final two-player bay, all-unsecured elimination, zero-capture replay, retargeting and served/escalating penalties. Mattress's full eight-AI series, three physical world/reset repeats, fallen trees, bounded sheep blasts, actual Taxi ragdolls and ninth replay scenery source pass. Wife's loop races, ordered route flags, drop/pickup/penalty/role swap and pair cards pass. Swing's three layouts, equivalent per-round conditions and genuine physical scoring pass. Buzkashi passes actual attach/release/ram steal, grace/reclaim, scoring/recovery, shared and owned-cab views. Wallball passes eight separated starts and immediate opening movement; its final actual4v4 match records `MATCH shots=38 physicalReturns=23 legalReturns=13 maxVolley=5 score=11:4 neutralReplays=0`. It remains explicitly experimental pending human acceptance.
+
+Shared snow tests observe actual NWH/PhysX supporting contacts, GPU trace readback, broad mattress/object traces, reset/accumulation and dry/pause exclusion. Water tests use actual Log/Bog/Dock entries and recorded interactions, independent underwater/above-water cameras and no global fog mutation. No new fluid solver or tire-grip policy was added. Legacy cab suites verify five existing modes, actual original Taxi interior/wheel animation, independent pad/mouse look, fixed shared sticks and source transitions. Existing deliberate modal/reconnect neutral gates remain; normal billiards turns do not acquire them.
+
+Bowling motion/full-game and pin-rebound cases, billiards spherical displacement-driven rolling/rebounds/stopped/reset/cue/pocket presentation, Keepaway regression and the six Terrier ordered finish/solid-wall cases passed in build4 with unchanged normal gameplay IL/assets in the delivered executable. Terrier retains valid whole-body finish lock, swept crossing and gentle-scrape safety; later collision callbacks cannot revoke it. Earlier full scoring/AI evidence remains below and in the sport folders.
+
+Actual Windows visual inspection caught two defects before delivery. Wife's team names bypassed individual score cards and incorrectly read DNF during countdown; the read-only card adapter now maps pairs and displays READY. Tug's height-fitted shallow rock meshes became 282–441m wide and hid the lava; native authoring caps only decorative footprints and adjusts presentation framing. Every physical collider/body was verified unchanged. The corrected screenshots and focused physical regressions passed before this final rebuild.
+
+## Sustained final-executable rendering
+
+Three separate 60-real-second, timescale1 samples at 1280×720 exercise four actual owner views; Derby includes actual mirror cameras. Normal result/replay transitions can temporarily switch to shared views, so the counters report actual camera renders rather than assuming four on every frame. The same AI planners supply the four software-owned control slots. These are whole-frame observations under uncontrolled concurrent host load, not isolated GPU benchmarks, real-controller tests or guaranteed frame rates.
+
+```text
+PERF scene=TruckDemolitionDerby seconds=60.01 frames=6874 mainRenders=27496 mirrorRenders=3168 meanMS=8.732 p95MS=18.755 p99MS=25.013 GC0=4 managedDelta=25718784 GPU=NVIDIA GeForce GTX 1660 Ti resolution=1280x720 timescale=1
+PERF scene=TruckMattressRacing seconds=60.02 frames=4967 mainRenders=16668 mirrorRenders=0 meanMS=12.081 p95MS=18.763 p99MS=18.783 GC0=2 managedDelta=6717440 GPU=NVIDIA GeForce GTX 1660 Ti resolution=1280x720 timescale=1
+PERF scene=TruckBuzkashi seconds=60.01 frames=9453 mainRenders=37812 mirrorRenders=0 meanMS=6.348 p95MS=6.274 p99MS=12.491 GC0=0 managedDelta=15384576 GPU=NVIDIA GeForce GTX 1660 Ti resolution=1280x720 timescale=1
+```
+
+## Remaining human checks
+
+1. Play Derby in four-way cab view: rear mirrors, five-second warning, impact readability and audio; compare shared broadcast.
+2. Try Tug timing/assist, Skee speed and hot-seat flow, Log recovery, Dodge pacing/returns, and Poker privacy/bet confirmation with real controllers/shared sticks.
+3. Play the upgraded Mattress/Wife/Swing/Buz courses; review snow/water readability and subjective balance. Wallball remains experimental.
+4. Check speakers, vibration, wheel hardware, focus/reconnect ergonomics and long-name HUD readability on the actual displays. These have software-device coverage, not physical-hardware approval.
+5. A fresh remote clone plus licensed-package imports/build has not been repeated. Core-Collapse, Layer Lab, Floating Entities and selectively owned hair originals remain local licensed prerequisites, not public redistributions.
+
+VENDOR ASSETS AUDITED: NWH, Heat, DOTween, Cinemachine, EasyRoads, UTS/Taxi characters/cabs, Weather Maker, Weatherade, River Modeler, Floating Entities, Core-Collapse, installed scenery/UI/fonts and the accessible owned catalogue; Rope Toolkit availability was checked.
+
+VENDOR ASSETS USED: the appropriate foundations above, through existing or new LWS adapters. Original truck interiors/steering and Transport Helicopter presentation are preserved.
+
+RELEVANT ASSETS NOT USED: Rope Toolkit was absent from installed/cache/accessible owned paths; one PhysX joint chain supplies the missing tug semantics. Legacy built-in water examples are unsuitable for URP. GPS, dialogue, traffic routing and online services are outside these offline arenas.
+
+CUSTOM SYSTEMS CREATED: six sport rule/progression/AI systems, contact-qualified Derby damage semantics, shared input/camera/presentation/snow-water coordination, bounded actual-state replay and focused acceptance tooling. Vendor physics/rendering retain their authority.
+
+VENDOR SOURCE MODIFIED: NO.
+
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+## Historical acceptance
+
 # Queued production pass: shared presentation foundation (native only)
 
 All27 current saved Sports scenes now share owned Heat Roboto Condensed font variants, beveled navy/cream/orange broadcast backing, DOTween page fades and responsive safe areas. Source-only/scene UI changes preserve every Collider/Rigidbody fingerprint. Minefield and Giant Swing maximum eight-name controlled UI captures at1280x720,1920x1080,1440x900,1280x960 and2560x1080 reproduce and fix the clipped first row; world labels have per-camera pixel caps/distance culling. Final controlled run0errors, one listener, clean collection return;720p Minefield image actually inspected. No claim of final Windows overlay, controller/human acceptance, every UI screen or completion of the queued31-sport update. Current executable is still the verified25-sport milestone below. Evidence: BroadcastBefore/BroadcastAfter and SevenSports/broadcast-apply-result.txt.

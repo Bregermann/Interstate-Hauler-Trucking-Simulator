@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Log Rolling is included in the final31-sport Windows build. Full multi-difficulty matches and focused real water/support/ownership/replay checks passed. The unchanged vendor buoyancy DLL and LWS public-area metadata correction remain the sole buoyancy foundation. Human recovery/balance and hardware remain manual. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Log Rolling native acceptance
 
 2026-10-16 · Unity6000.4.10f1. Source stage only; final combined Windows production build remains pending.

@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Production update: tighter low-speed steering, understandable7m attach eligibility/highlight/source prompt, nearest-body rope anchor, short attach grace and previous-carrier reclaim delay, modest fresh main-body ram stealing. Shared arena remains selectable; four human cab views use actual Taxi steering/free look and Bowling per-camera visibility, preventing the owning exterior from blocking the cab. Full physical match, focused lifecycle/scoring and sustained four-view Windows sample passed. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Truck Buzkashi
 
 Two teams of three trucks contest an oversized non-gory stuffed sheep. Five minutes of playing time, one point per complete cargo delivery into the owning team’s corral; regulation ties enter sudden death. Up to four humans, independent AI difficulty, keyboard clusters, whole controllers or separate sticks, editable participant/team names and colors. Shared broadcast frames both corrals.

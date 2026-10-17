@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Complete offline virtual-chip Hold’em is included in the final31-sport Windows build. Full eight-seat tournaments and four-view hold-to-peek/privacy/input/reconnect checks passed. Exhaustive rules evidence below is unchanged; actual hardware and human betting/privacy ergonomics remain manual. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Truck Poker — offline no-limit Hold’em
 
 The saved playable scene, collection entry and explicit sports-only scene list are integrated. Two–eight seated trucks play a virtual-chip tournament; up to four humans have independent driver views, with sequential private hot-seat handoffs also available. Remaining seats use independent Easy/Normal/Hard AI. The final combined Windows rebuild remains pending the rest of the queued production pass.

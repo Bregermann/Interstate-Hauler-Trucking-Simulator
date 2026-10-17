@@ -4,7 +4,7 @@ using TMPro;
 namespace LWS.TruckSports {
 // A saved theme plus a regeneration safety net for legacy sport-specific menu authors.
 public sealed class SportsBroadcastTheme:ScriptableObject {
- public TMP_FontAsset headingFont,bodyFont;
+ public TMP_FontAsset headingFont,bodyFont;public Sprite controllerGlyph,leftStickGlyph,rightStickGlyph;
  static SportsBroadcastTheme current;
  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]static void ResetScope(){SceneManager.sceneLoaded-=Loaded;current=null;}
  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]static void Install(){current=Resources.Load<SportsBroadcastTheme>("SportsBroadcastTheme");if(current!=null)SceneManager.sceneLoaded+=Loaded;}

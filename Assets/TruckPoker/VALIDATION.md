@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Complete offline virtual-chip Hold’em is included in the final31-sport Windows build. Full eight-seat tournaments and four-view hold-to-peek/privacy/input/reconnect checks passed. Exhaustive rules evidence below is unchanged; actual hardware and human betting/privacy ergonomics remain manual. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Poker rules validation
 
 2026-10-16:505checks passed in both an isolated .NET10 harness and the actual Unity6000.4.10f1 C# runtime. Native marker: Logs/TruckSports/SevenSports/poker-core-native.txt. Harness: Logs/TruckSports/SevenSports/PokerRulesHarness/result.txt. These505 checks cover the pure rules/policy. Separate saved-scene acceptance below covers the playable runtime. Neither is a physical-controller or human playtest.

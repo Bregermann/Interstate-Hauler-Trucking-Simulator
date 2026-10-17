@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Mountain Tug is included in the final31-sport Windows build. Full physical matches and focused timing/ownership/replay checks passed. The volcanic flow shader and bounded decorative rock-depth dressing are now saved and retained by authoring; native verification proves the presentation correction changed no colliders or bodies. Human timing/balance/audio remains manual. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Mountain Tug of War
 
 Playable native-validated stage of the queued31-sport production update. The saved scene, collection entry and explicit sports-only scene list are integrated. The final combined Windows build is still pending; the existing executable remains the earlier25-sport milestone.

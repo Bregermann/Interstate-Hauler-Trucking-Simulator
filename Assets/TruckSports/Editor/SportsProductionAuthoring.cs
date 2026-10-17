@@ -1,0 +1,6 @@
+using UnityEngine;
+namespace LWS.TruckSports.Editor {
+// Additive native scene migrations; the established authors retain ownership of sport configuration.
+public static class SportsProductionAuthoring {
+ public static void InstallScene(){var tug=Object.FindAnyObjectByType<LWS.TruckTugOfWar.TugMatch>();if(tug!=null)LWS.TruckTugOfWar.Editor.TugProductionAuthoring.Install(tug);var swing=Object.FindAnyObjectByType<LWS.TruckGiantSwing.SwingMatch>();if(swing!=null)LWS.TruckGiantSwing.Editor.SwingProductionAuthoring.Install(swing);var wall=Object.FindAnyObjectByType<LWS.TruckWallball.WallballMatch>();if(wall!=null)LWS.TruckWallball.Editor.WallballProductionAuthoring.Install(wall);var buz=Object.FindAnyObjectByType<LWS.TruckBuzkashi.BuzMatch>();if(buz!=null)LWS.TruckBuzkashi.Editor.BuzProductionAuthoring.Install(buz);var wife=Object.FindAnyObjectByType<LWS.TruckWifeCarrying.WifeMatch>();if(wife!=null)LWS.TruckWifeCarrying.Editor.WifeProductionAuthoring.Install(wife);var mattress=Object.FindAnyObjectByType<LWS.TruckMattressRacing.MattressMatch>();if(mattress!=null)LWS.TruckMattressRacing.Editor.MattressProductionAuthoring.Install(mattress);SportsSnowAuthoring.InstallScene();SportsWaterAuthoring.InstallScene();}
+}}

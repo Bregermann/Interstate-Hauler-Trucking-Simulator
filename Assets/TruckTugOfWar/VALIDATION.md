@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Mountain Tug is included in the final31-sport Windows build. Full physical matches and focused timing/ownership/replay checks passed. The volcanic flow shader and bounded decorative rock-depth dressing are now saved and retained by authoring; native verification proves the presentation correction changed no colliders or bodies. Human timing/balance/audio remains manual. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Native validation —2026-10-16
 
 TugEvidence: three complete real NWH/PhysX AI matches passed0runtime errors, with no injected points. Easy1v1:3heats,3–0,54heaves, peak rope force238.85, maximum advantage13.04m. Normal4v4:5heats,3–2,419heaves, peak701.69, advantage3.99m. Hard4v4 with timing assistance:5heats,3–2,520heaves, peak774.93, advantage5.49m. Zero drawn heats in this sample. This demonstrates sustained match completion and actual motion, not human competitiveness. Replays changed angle/speed/time without changing locked scores; physical pause preserved exact positions/velocities/clock. Rematch reset wins, headers, ropes, fragments and heave state.

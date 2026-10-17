@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Production update: countryside looping circuit with ordered route flags, corners/elevation, slalom/bridges/mud/flood and safer bypass, spectators/banners and contact-based snow/water effects. Existing carrying/drop/retrieval/penalty/role-swap behavior is preserved. Paired score cards now show READY during countdown. Full physical races, focused lifecycle and final actual Windows layouts passed. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Wife Carrying validation — Editor milestone
 
 Five scoring fixtures pass:4..1 placements, exactly-once race lock, DNF zero, true tied leaders and extra-race resolution.

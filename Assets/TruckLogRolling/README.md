@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Log Rolling is included in the final31-sport Windows build. Full multi-difficulty matches and focused real water/support/ownership/replay checks passed. The unchanged vendor buoyancy DLL and LWS public-area metadata correction remain the sole buoyancy foundation. Human recovery/balance and hardware remain manual. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Truck Log Rolling
 
 Two to four trucks balance on one genuinely buoyant rotating timber log. Physically drive, reposition weight and bump opponents into the water. First to five round wins; last survivor takes the round. Same-step final falls draw. Starts rotate along the safe centerline. From35seconds waves grow gradually; unresolved120second rounds explicitly draw and replay.

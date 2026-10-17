@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Production update: three achievable target layouts selected equally per round, equivalent wind/weather timeline for each attempt, bounded actual flight wind, readable power/release meter and MPH arrow. Full physical scoring, focused equal-condition/replay checks and final Windows layout acceptance passed. No extra scripted launch impulse was added. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Truck Giant Swing
 
 One to eight competitors take turns on a real twenty-metre hinged seat. Three throws each; cumulative points win, with extra attempts for tied leaders. Solo keeps a local personal best. Sources can be reused between turns, including one whole controller; each turn has one active owner.

@@ -1,3 +1,9 @@
+# Current combined Windows delivery — October16,2026
+
+Dodgeball is included in the final31-sport Windows build. Full multi-difficulty matches, focused physical contacts, input/lifecycle and same-step strike arbitration passed. Multi-truck AI matches are draw-heavy: one Windows Normal4v4 sample completed3–2 in21rounds with16draws. Human pacing remains a priority; completion is not proof of ideal balance. See [collection validation](../TruckSports/VALIDATION.md) for version-labelled evidence, performance limits and remaining human checks. Earlier native-stage statements below are historical.
+
+---
+
 # Trampoline Dodgeball
 
 Offline physical truck dodgeball: one to four trucks per team, up to four local humans, named Easy/Normal/Hard AI, first team to three heat wins. Saved scene: `Assets/TruckTrampolineDodgeball/Scenes/TruckTrampolineDodgeball.unity`.
