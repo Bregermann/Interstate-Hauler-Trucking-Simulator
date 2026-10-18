@@ -1,3 +1,5 @@
+> Historical audit below. Plowing wall recovery is now fixed and accepted in [PlowingPresentationDelivery.md](PlowingPresentationDelivery.md); its reported lack of AI contribution is resolved by the targeted wall test and six full AI games. The other listed repairs remain open.
+
 # Next repair audit — source evidence, not acceptance
 
 Read during the current Windows acceptance run on October 18. These findings guide subsequent reproductions. They do not mark the queued features complete, and no speculative handling changes have been applied.

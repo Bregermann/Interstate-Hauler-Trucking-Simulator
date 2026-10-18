@@ -1,0 +1,38 @@
+PLOW_RUN mode=cabcostumes pid=47472 editor=False buildGuid=6a20705a91ba44f792bd8cb04ee69c92
+PASS eight AI setup starts
+PASS full authored crowd spawned
+PASS all targets truck-clear connected navigation 240
+PASS Taxi jointed rigs 240
+PASS native LOD retains original detailed and jointed models
+PASS standard-only noncolliding cartoon costume noses
+PASS no persistent world-space target text
+PASS every shared-roster character has role wardrobe and bounded evasion
+PASS scene-owned Weather Maker night tracks every actual gameplay view
+PASS fixed actual vendor night, not a weather label
+PASS wardrobe match rematches from setup
+NIGHT_RENDER sunIntensity=0 moonDirection=(-0.89, 0.35, 0.30) nightMultiplier=1 skybox=vendor sky pass
+PASS legacy Unity daylight sky cannot suppress the vendor night sky
+PASS vendor computes actual night illumination
+SKY_PATH ignored=False actions=1 moonShader=WeatherMaker/WeatherMakerMoonShader supported=True pipeline=Parade night pipeline
+PASS exclusive role costume 0
+PASS role fabric retains shared batching without renderer blocks 0
+PASS shared palette preserves exact configured fabric color 0
+PASS exclusive role costume 1
+PASS role fabric retains shared batching without renderer blocks 1
+PASS shared palette preserves exact configured fabric color 1
+PASS exclusive role costume 2
+PASS role fabric retains shared batching without renderer blocks 2
+PASS shared palette preserves exact configured fabric color 2
+PASS bonus ordinary ground dodge begins
+PASS bounded jump rises and returns to ordinary navigation
+PASS bonus prop climb begins through bounded traversal
+PASS runner actually perches on solid prop
+PASS actual perch evidence camera contains the runner
+PASS perch automatically returns to reachable ground
+PASS normal crowd and trucks restore after explicit wardrobe fixtures
+PASS one authoritative award per actual accepted impact
+PASS rematch restores finite roster or correctly awaits removed injected devices
+PASS scene-owned crowd and authority cleaned
+PASS scene-owned role material palette released
+PASS front-end listener restored
+ERRORS=0; injected input / real PhysX / no human or hardware playtest.

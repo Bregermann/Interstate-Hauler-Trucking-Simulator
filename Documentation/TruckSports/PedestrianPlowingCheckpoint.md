@@ -1,3 +1,5 @@
+> Historical earlier delivery below. The latest accepted build, appearance, performance and Git result are in [PlowingPresentationDelivery.md](PlowingPresentationDelivery.md).
+
 # Truck Sports checkpoint — Pedestrian Plowing delivery
 
 ## Exclusive workspace and publication

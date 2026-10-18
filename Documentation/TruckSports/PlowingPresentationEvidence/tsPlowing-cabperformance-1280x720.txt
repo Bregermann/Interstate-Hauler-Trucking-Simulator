@@ -1,0 +1,27 @@
+PLOW_RUN mode=cabperformance pid=48104 editor=False buildGuid=6a20705a91ba44f792bd8cb04ee69c92
+PASS eight AI setup starts
+PASS full authored crowd spawned
+PASS all targets truck-clear connected navigation 240
+PASS Taxi jointed rigs 240
+PASS native LOD retains original detailed and jointed models
+PASS standard-only noncolliding cartoon costume noses
+PASS performance starts eight competitors and four actual independent AI views
+PERFORMANCE_VARIANT cabperformance
+PROFILE_UNAVAILABLE Render Thread
+PROFILE_UNAVAILABLE Draw Calls Count
+PROFILE Main Thread mean=26.546 max=129.360 unit=ms samples=2258
+PROFILE GPU Frame Time mean=15.001 max=37.218 unit=ms samples=2258
+PROFILE Gfx.WaitForPresentOnGfxThread mean=0.002 max=0.016 unit=ms samples=2258
+PROFILE Physics.Simulate mean=1.758 max=6.860 unit=ms samples=2258
+PROFILE Triangles Count mean=19705489.110 max=43779293.000 unit=Count samples=2258
+PROFILE SetPass Calls Count mean=669.716 max=1186.000 unit=Count samples=2258
+PROFILE GC Allocated In Frame mean=55435.427 max=38845064.000 unit=Bytes samples=2258
+PERFORMANCE 60 real seconds / four AI views / eight competitors / 240 crowd / frames=2259 meanMs=26.5744 p95Ms=37.5256 p99Ms=43.7921
+PERFORMANCE_LIFECYCLE liveFrames=2259 focusedFrames=2259 total=2259 actualViews=4 rematches=0 peakActiveRagdolls=25 physicalHits=126
+PASS sustained live rendered four-view performance sample
+PASS one authoritative award per actual accepted impact
+PASS rematch restores finite roster or correctly awaits removed injected devices
+PASS scene-owned crowd and authority cleaned
+PASS scene-owned role material palette released
+PASS front-end listener restored
+ERRORS=0; injected input / real PhysX / no human or hardware playtest.

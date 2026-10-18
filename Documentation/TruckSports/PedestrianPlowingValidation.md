@@ -1,3 +1,5 @@
+> Historical earlier delivery below. The latest accepted build, appearance, performance and Git result are in [PlowingPresentationDelivery.md](PlowingPresentationDelivery.md).
+
 # Pedestrian Plowing implementation and validation
 
 Two saved entries extend the existing collection: **Pedestrian Plowing** (shared arena, split chase or cab) and **Plowing · Cab Chaos** (forced full Taxi driver interior, live per-owner Compass GPS, animated steering/free look and existing Taxi jug challenge). One to eight competitors, at most four local humans, editable names/colors, independent Easy/Normal/Hard, shared keyboard/whole or opposite-stick controllers, solo score attack and AI-only matches use the existing offline lifecycle.

@@ -1,8 +1,10 @@
 # Truck Sports queued-release checkpoint — October 18
 
-## Active build state
+## Current accepted Plowing milestone
 
-The canonical output is currently an in-progress Plowing candidate, not the previously accepted binary below. Do not infer final acceptance from the executable's presence. Follow PlowingPresentationRepair.md and version-bound evidence under Logs/TruckSports/Plowing. The earlier gameplay/layout candidate completed six eight-AI matches with every competitor contributing. Its 37–39ms four-view cost was traced to wardrobe tint blocks; shared runtime fabric materials restored chase24.30ms / cab26.57ms with p95about37.5ms and unchanged visuals. Exact-color and palette-cleanup checks pass. Candidate `28cd5346` / data `997688c9` is running the remaining full regression suite. This pass is not pushed yet.
+Canonical Windows x64 Development: Builds/TruckSports/TruckSports.exe. Managed SHA256 `28cd5346297bb6d904972990440c58f0f13024576f56c05c38a0648a72039dd5`; full data manifest `997688c9fc0c148ce204755347c04a33058f488206ef5a575f6b049355fef60c`. Zero errors, 31 warnings,35 explicit Sports scenes. All 24 version-bound Windows suites pass, including six full eight-AI matches and five-aspect layouts. Chase 24.30 ms / cab 26.57 ms mean, p95 about 37.5 ms; human/hardware/384-crowd sustained checks remain manual. [Delivery and evidence](PlowingPresentationDelivery.md).
+
+Source local `f85a2cd117848a24e84aae477f615034463c8d4d`, clean public `82990a892dbc8cdb7511568986332d00c19986f8`; both remote branches verified after normal atomic push. Previous published Sports work remains included. This milestone does not finish the whole queue. Continue the global-identity audit and ordered Party/Fare Fight/Goddess/new-sport requirements below. Preserve the full exclusive lease and unrelated work.
 
 ## Last accepted published milestone (historical binary)
 
@@ -13,7 +15,7 @@ Grounded Cheese starts/terrain, optional AI cameras, swept Cornhole hole credit,
 ## Queue remains active
 
 1. Continue PartyMasterLedger.md: audit historical implementation before changing working mechanics. Global stable-ID identity/lossless migration/result contract, remaining mode repairs, Kickball and Dance-Off remain outstanding.
-   First reproduce and repair the Plowing AI obstacle-throttle/stall threshold issue observed in full-match results; preserve contact scoring and human handling.
+   Plowing wall recovery is now accepted, with individual progress verified in six full AI games. Continue the remaining identity and mode requirements.
 2. Show AI Cameras is accepted for 20 applicable current modes; integrate future Parking cab/new modes when implemented.
 3. Implement FareFightLedger.md as a complete Taxi-derived sport, not a menu stub.
 4. Continue GoddessPlaytestLedger.md by priority. Cornhole clean-hole repair is accepted; broader Bowling wall/environment/gutters/replays, Terrier jump/momentum, Mattress spectator/weather, Wife AI, Target air control and Parking cab still require investigation/integration/runtime acceptance.
@@ -25,7 +27,7 @@ After the existing queue, implement [Sky Tow Rings Arctic expansion](QueuedSkyTo
 
 Trailer Plug addendum: reuse the existing Plowing character assets, animation/navigation, Taxi ragdolls, impact reactions/audio, pooling and cleanup. Adapt mode-owned emergence, gradual density and panic from the sinkhole; stop spawning on an authoritative settled seal. Keep each sport's scoring independent, deduplicate actual trailer impacts, preserve Plowing's roster/balance and both variants. Test shared identities/assets, traversal, physical strikes, scoring, seal/spawn stop, resets and Plowing regression. Do not create a second pedestrian framework or generic replacement crowd.
 
-Active Plowing pass: label-free role costumes, full-moon Weather Maker night, pitchfork props, AI wall recovery, bounded bonus dodges/perches and Heat/DOTween UI polish are in progress. Native wall baseline reached the isolated target around 18.6s after setup; the repaired same-wall test reached it around 7.6s. Windows acceptance for this new pass is pending. Prior accepted implementation `3a9c64a2` and receipt `fc290f21` are pushed to both public branches; later work is not yet committed/pushed.
+The Plowing presentation/recovery pass is accepted and its source is pushed; see the current milestone above. Later queued requirements remain pending.
 
 ## Workspace and delivery safety
 

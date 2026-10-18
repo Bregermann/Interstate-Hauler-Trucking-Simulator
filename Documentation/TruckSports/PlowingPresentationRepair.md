@@ -1,6 +1,6 @@
 # Plowing readability, night atmosphere and AI recovery
 
-Status: implementation and native runtime validation in progress; new Windows acceptance and Git publication pending. The earlier accepted build/commit remains separately identified in PartyDeliveryReceipt.md.
+Status: accepted after all24 version-bound Windows suites passed and source publication was verified. See PlowingPresentationDelivery.md. The chronological entries below retain superseded candidate states and failed evidence.
 
 ## Current performance gate
 

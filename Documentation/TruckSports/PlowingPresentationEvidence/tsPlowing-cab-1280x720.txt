@@ -1,0 +1,48 @@
+PLOW_RUN mode=cab pid=35592 editor=False buildGuid=6a20705a91ba44f792bd8cb04ee69c92
+PASS eight AI setup starts
+PASS full authored crowd spawned
+PASS all targets truck-clear connected navigation 240
+PASS Taxi jointed rigs 240
+PASS native LOD retains original detailed and jointed models
+PASS standard-only noncolliding cartoon costume noses
+PASS separate Cab Chaos entry forces first person
+CAB_START started=True devicesReady=True focused=True background=IgnoreFocus reason=
+CAB_PAD 0 id=15 enabled=True added=True native=False source=WholeController
+CAB_PAD 1 id=16 enabled=True added=True native=False source=WholeController
+CAB_PAD 2 id=17 enabled=True added=True native=False source=WholeController
+CAB_PAD 3 id=18 enabled=True added=True native=False source=WholeController
+PASS four-controller cab match starts
+PASS four independent cab views
+PASS GPS owner 0
+PASS real vendor world-space GPS 0
+PASS GPS owner 1
+PASS real vendor world-space GPS 1
+PASS GPS owner 2
+PASS real vendor world-space GPS 2
+PASS GPS owner 3
+PASS real vendor world-space GPS 3
+PASS one listener with four dashboard GPS displays
+PASS injected pad drives NWH truck
+PASS actual steering wheel follows NWH angle
+PASS jug input starts only owning driver's Taxi state
+PASS pause preserves jug challenge and pressure
+PASS disconnect pauses all physical bodies without losing state
+PASS explicit independent controller replacement
+PASS replacement resumes existing cab match
+PASS injected timed Taxi jug three-cue success
+PASS early release genuinely spills owning jug
+PASS physical dashboard screen fitted 0
+PASS physical dashboard screen fitted 1
+PASS physical dashboard screen fitted 2
+PASS physical dashboard screen fitted 3
+PASS free look turns driver's head independently of physical cab
+LOOK yaw at1s=0.272641 realtime=25.29385
+PASS owning driver's look recenters
+LOOK yaw at2s=0.04093289
+PASS recenter observation after2s
+PASS one authoritative award per actual accepted impact
+PASS rematch restores finite roster or correctly awaits removed injected devices
+PASS scene-owned crowd and authority cleaned
+PASS scene-owned role material palette released
+PASS front-end listener restored
+ERRORS=0; injected input / real PhysX / no human or hardware playtest.
