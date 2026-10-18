@@ -1,5 +1,10 @@
 # Truck Sports: Party! — original wordmark refresh
 
+Current combined Windows delivery: Windows x64 Development;35 explicit Sports-only scenes; TruckSports startup;0 errors /20 warnings. Built 2026-10-18T17:53:15.697166+00:00. Managed SHA256 `6d67807a233ee2a2163b44b902c096e86ca0958b3b1b92ac2032c0405c2c6446`;438-file data manifest `d97805acd6b7cbc758219bd00ce3a7d643cc601adc0af59a0e0fa9df7d464633`. The final executable includes the mark;14 actual Windows title/action checks and720p/1080p title screenshots pass in [FieldGoalEvidence](FieldGoalEvidence/Acceptance.json). Source-only statements below describe the preceding artwork milestone.
+
+## Original source milestone (historical)
+
+
 October 18, 2026. This is an artwork and front-end source milestone. The canonical Windows executable still contains the previously accepted Target Launch milestone; this logo has **not** yet been delivered in a new player build. Field Goal and the broader queued repairs remain in progress.
 
 The first glossy italic treatment was rejected by the user. Its replacement uses custom, uneven, wedge-ended lettering, painted yellow faces, blue dimensional sides and a red-orange PARTY tier. Truck exhaust stacks frame the top. The O in SPORTS is an 8-ball, and the exclamation combines a bowling pin with a cheese-wheel dot. The logo is original; no reference-game characters or logo artwork ship with it.

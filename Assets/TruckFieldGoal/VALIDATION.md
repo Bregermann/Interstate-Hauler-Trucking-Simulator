@@ -1,3 +1,9 @@
+# Current Field Goal validation — October18,2026
+
+Windows x64 Development;35 explicit Sports-only scenes; TruckSports startup;0 errors /20 warnings. Built 2026-10-18T17:53:15.697166+00:00. Managed SHA256 `6d67807a233ee2a2163b44b902c096e86ca0958b3b1b92ac2032c0405c2c6446`;438-file data manifest `d97805acd6b7cbc758219bd00ce3a7d643cc601adc0af59a0e0fa9df7d464633`.
+
+All15 final-version Windows suites and native fixtures pass. [Actual results, root causes, scenes/scripts/assets, screenshots, warning inventory and manual limits](../../Documentation/TruckSports/FieldGoalRepair.md). Earlier detached-foot/truck-projectile evidence describes the retired variant and does not apply to current bumper-only play.
+
 # Actual Windows milestone — October16,2026
 
 Included in the25-sport combined Windows build. Actual visible player FieldGoalFocused passed0errors. See [collection validation](../TruckSports/VALIDATION.md) for exact build hashes, measured results, version boundaries and remaining human checks. Earlier statements below saying the executable contains19sports or Windows acceptance is pending are superseded by this section.

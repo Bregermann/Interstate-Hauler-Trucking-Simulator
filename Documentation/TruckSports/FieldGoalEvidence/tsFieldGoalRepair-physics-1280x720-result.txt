@@ -1,0 +1,25 @@
+FIELD_GOAL_REPAIR mode=physics PID=58744 editor=False
+PASS measured bumper speed changes bounded kick power
+PASS actual approach direction produces a shank without homing
+PASS contact height changes elevation rather than forcing one arc
+PASS off-center contact changes line and angular motion
+PASS still ball in still air receives no invented motion
+PASS relative-air drag opposes flight
+PASS aerodynamic acceleration remains bounded
+PASS real PhysX flight remains finite and lands comparison=0
+INITIALIZED_PHYSX wind=(0.00, 0.00, 0.00) kick=(0.00, 12.80, 23.10) spin=(4.20, 0.00, 0.00) goalCross=(0.00, 8.59, 30.00) landing=(0.00, 0.27, 52.71)
+PASS real PhysX flight remains finite and lands comparison=1
+INITIALIZED_PHYSX wind=(0.00, 0.00, -15.00) kick=(0.00, 12.80, 23.10) spin=(4.20, 0.00, 0.00) goalCross=(0.00, 7.90, 30.00) landing=(0.00, 0.29, 45.75)
+PASS real PhysX flight remains finite and lands comparison=2
+INITIALIZED_PHYSX wind=(0.00, 0.00, 15.00) kick=(0.00, 12.80, 23.10) spin=(4.20, 0.00, 0.00) goalCross=(0.00, 9.02, 30.00) landing=(0.00, 0.29, 57.46)
+PASS real PhysX flight remains finite and lands comparison=3
+INITIALIZED_PHYSX wind=(15.00, 0.00, 0.00) kick=(0.00, 12.80, 23.10) spin=(4.20, 0.00, 0.00) goalCross=(0.96, 8.50, 30.00) landing=(2.94, 0.29, 51.90)
+PASS real PhysX flight remains finite and lands comparison=4
+INITIALIZED_PHYSX wind=(-15.00, 0.00, 0.00) kick=(0.00, 12.80, 23.10) spin=(4.20, 0.00, 0.00) goalCross=(-0.96, 8.50, 30.00) landing=(-2.94, 0.29, 51.90)
+PASS same initialized kick travels shorter in headwind and farther in tailwind
+PASS continuous crosswinds produce opposite physical drift
+PASS same scoring-plane approach drifts by more than1.5 ball radii in crosswind
+These are deterministic contact-model checks and explicitly initialized real Rigidbody simulations. They do not replace driven bumper contacts, actual Weather Maker matches, or hardware testing.
+CHECKS=15
+ERRORS=0
+PASS

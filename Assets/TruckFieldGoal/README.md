@@ -1,19 +1,41 @@
-# Truck Field Goal
+# Truck Field Goal — bumper kick
 
-Two real physical variants: TRUCK IS THE FOOT drives into a shaped American football; TRUCK IS THE FOOTBALL drives into an actual reachable giant boot and times one action during its windup. Five attempts at30/38/46/54/62m, displayed in yards. One point for an authoritative center crossing forward between physical uprights and above the crossbar before airborne ground contact. Swept crossing, chronological ground cutoff and once-only lock prevent duplicate/revoked goals. Real post ricochets can still score. Tied leaders take equal extras cycling the same distance schedule; starting order rotates.
+The truck is the kicking foot. Drive into the upright physical football beside its stationary holder truck. Approach speed, direction, contact height and lateral contact determine bounded power, elevation, line and spin. No launch button or airborne football control. NWH owns driving; PhysX owns gravity, flight and post collisions. The contact response applies once, then the shooter loses propulsion without applying another kick.
 
-One to four sequential human/AI competitors, shared hot seat or assigned sources. Only the current shooter controls the truck. Each AI physically approaches and executes the same contact and input path. Practice offers selectable fixed distance and quick retry; variant statistics and personal bests are separate. Rematches retain setup.
+One to four sequential human/AI competitors use assigned sources or shared hot seat. Keyboard clusters, whole controllers and separate sticks follow established ownership rules. Only the current shooter drives. Easy/Normal/Hard estimate an approach using the same model, retain execution errors and physically drive into the ball. No homing, direct score awards or privileged launch power.
 
-Foot uses movement alone, with contact-derived bounded lift and spin. No control over the airborne football. Boot uses movement plus one timed ACTION near the center mark, with early/late errors reducing power. Visible fixed-step boot overlap is required. Truck flight has a finite1.6m/s horizontal correction budget, no vertical thrust, and fore/aft neutral gating. No driving after launch or duplicate kick impulse. Replay uses actual recorded noncolliding poses, three angles,0.5/1/2x, rewind and skip. Pause/reconnect preserves the attempt.
+Competition gives five attempts at30/38/46/54/62m, displayed in yards. A forward authoritative-center crossing between physical uprights and above the crossbar scores once if it precedes airborne ground contact. Sweeps/contact chronology preserve post ricochets and reject backward/wide/low/ground-first shots. Later contacts cannot revoke GOOD. Tied leaders receive equal-opportunity extras; first shooter rotates. Solo practice selects a fixed distance and retries indefinitely.
 
-VENDOR ASSETS AUDITED: NWH wheel/vehicle APIs and GR3D truck; installed sports/replay/input/Heat/uGUI/Cinemachine/DOTween; WeatherMaker; existing public UnionField stadium and local owned-model filename inventory.
+The detached giant-foot/truck-projectile option is retired. Versioned setup migration keeps old competition choices as bumper competition and old practice choices as bumper practice, preserving saved names/identities. Established bumper personal-best/statistics keys remain in use.
 
-VENDOR ASSETS USED: NWH via SportsEventTruck; Cinemachine stable camera; shared Heat/uGUI controls/settings/ownership; WeatherMaker via SportsChaosWeather and restored scene pipeline; existing NWH/Weather audio and Dock cheer; eleven mesh/material-only grandstand/concourse/pressbox assemblies copied read-only from the already-public Taxi_SportsStadium scene. Source stadium bytes verified unchanged. Existing cable-reel model and ground normal maps.
+## Weather and presentation
 
-RELEVANT ASSETS NOT USED: No suitable supplied football/giant kicking boot was found in the audited local inventory. Finished persistent prolate football/laces and shaped mechanical boot meshes fill that missing art. Traffic/navigation and general flight controllers do not implement these goal semantics or finite aftertouch.
+Choose Random or one of33 installed/configured Weather Maker forecasts through the Heat dropdown. The stable shared preference survives reloads. One forecast lasts the match, never reset per attempt. Explicit weather remains selected; Random rolls a fresh seed on rematch. Weighted selection uses Weather Maker's profile-group API. Other sports retain their current weather integration until their queued migration is completed.
 
-CUSTOM SYSTEMS CREATED: Variant rules, chronological projectile scoring, real-contact boot adapter, physical AI planning, native scene/art authoring and acceptance probes. Existing vehicle, replay, UI and weather foundations are extended.
+The same actual vendor wind drives bounded relative-air drag/spin forces, windsock and compact MPH card. Its arrow is relative to the current camera. Head/tail/crosswinds affect flight continuously. Wet/snow presets reduce the same NWH grip for humans and AI. Existing Taxi/Weatherade accumulation/contact-track adapters remain the snow foundation.
 
-VENDOR SOURCE MODIFIED: NO.
+The holder reuses the existing truck render model without adding another input/physics authority or obstructing the kicking lane. Goalposts stand at the back of a marked ten-yard end zone with the original Truck Sports: Party! wordmark. The football's visual and collision long axes are upright on the tee; actual angular motion rotates laces/stripes. Recorded noncolliding replay retains three angles,0.5/1/2x, rewind and skip. Pause/reconnect preserves the attempt; replacement input requires neutral before resuming.
 
-DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+## Editing and regeneration
+
+Scene: Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity. Match-owned flightModel exposes shared contact power, air drag, spin lift and acceleration caps. Weather metadata: Assets/TruckSports/Settings/SportsWeatherPresets.asset (stable IDs, profile references, random weights, grip and explicit wind-unit conversion). Zero random weight excludes an entry from Random. Existing customized catalog entries are never automatically repopulated.
+
+FieldGoalRepairAuthoring.Install upgrades inspected saved objects additively; explicit fresh-scene authoring invokes it too. Normal builds use saved scenes via LWS.TruckSports.Editor.SportsBuilder.Build. Do not invoke destructive scene rebuilding for delivery. Preserve original Taxi/vendor prefabs and host settings.
+
+## Validation and delivery
+
+Windows x64 Development;35 explicit Sports-only scenes; TruckSports startup;0 errors /20 warnings. Built 2026-10-18T17:53:15.697166+00:00. Managed SHA256 `6d67807a233ee2a2163b44b902c096e86ca0958b3b1b92ac2032c0405c2c6446`;438-file data manifest `d97805acd6b7cbc758219bd00ce3a7d643cc601adc0af59a0e0fa9df7d464633`.
+
+All15 exact-build Windows suites pass, including real driven kicks, full AI difficulty/weather matches, input/replay/score regression and60-second snowy single-camera performance. See [repair, causes, evidence and limitations](../../Documentation/TruckSports/FieldGoalRepair.md). No human or physical-controller/audio acceptance claim. The whole queued release remains unfinished.
+
+VENDOR ASSETS AUDITED: NWH truck/wheels; Heat dropdown/UI Manager public customization; Cinemachine/DOTween; Weather Maker8.0.9 profile/group/URP APIs; existing stadium and Taxi/Weatherade snow adapters.
+
+VENDOR ASSETS USED: NWH through SportsEventTruck; Heat/uGUI; existing Cinemachine/DOTween; Weather Maker full profiles, weighted selection, wind/precipitation/cloud/fog/lightning and vendor Render Graph feature; existing snow, stadium/truck art, audio/replay/input/settings.
+
+RELEVANT ASSETS NOT USED: No suitable installed windsock or football model was found in the relevant inventory. Owned tapered cloth mesh and established prolate football fill those shapes. The retired detached boot is disabled. Traffic/general flight controllers do not provide this sport's contact/scoring semantics.
+
+CUSTOM SYSTEMS CREATED: Contact/aerodynamic semantics, equivalent AI approach estimation, stable forecast metadata/Heat binding, additive scene/default integration and explicit development probes. Existing chronological scoring/shared foundations are extended.
+
+VENDOR SOURCE MODIFIED: None.
+
+DUPLICATE VENDOR FUNCTIONALITY CREATED: None.

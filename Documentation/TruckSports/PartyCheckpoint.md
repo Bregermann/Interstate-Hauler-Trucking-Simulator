@@ -1,5 +1,17 @@
 # Truck Sports queued-release checkpoint — October18
 
+## Current Field Goal and original wordmark milestone
+
+Windows x64 Development;35 explicit Sports-only scenes; TruckSports startup;0 errors /20 warnings. Built 2026-10-18T17:53:15.697166+00:00. Managed SHA256 `6d67807a233ee2a2163b44b902c096e86ca0958b3b1b92ac2032c0405c2c6446`;438-file data manifest `d97805acd6b7cbc758219bd00ce3a7d643cc601adc0af59a0e0fa9df7d464633`.
+
+Bumper-only kick/save migration, upright ball/holder/end zone, actual selectable vendor weather and continuous wind, shared Heat forecast preference and corrected weather rendering are integrated in the saved scene/defaults. The original painted retro logo is included in the Windows title and field. Native fixtures and all15 exact-build Windows suites pass, including complete AI difficulty/weather games, real driven/injected input and60-second snowy single-camera sample. [Root causes, results, evidence and manual limits](FieldGoalRepair.md).
+
+Git outcome must be read from Logs/TruckSports/FieldGoalRepair/commit.json and Builds/TruckSports/GIT-DELIVERY.txt before claiming push. Preserve root main's private Taxi ancestor; publish scoped Sports changes over the existing public parent without force-pushing. Original brand source was previously pushed at f9900ead.
+
+This milestone does not finish the queue. Next audit Party Sumo/Fishing/Buzkashi/Derby/Poker and remaining Minefield/Bungee deltas, then Kickball/DanceOff, FareFight/Goddess and later SkyTow/Limbo/TrailerPlug. Goddess Field Goal crowds/fan events are still pending. Shared catalog/picker exists but only Field Goal is opted in; universal per-sport adoption remains pending. Keep one canonical project-local build; no concurrent agent/Editor; no closing user-tested games.
+
+## Historical checkpoints below
+
 ## Original wordmark source milestone
 
 The user's rejected glossy title treatment has been replaced with an original PS1/PS2-era-inspired painted wordmark, with integrated truck exhausts, an 8-ball O and bowling-pin/cheese punctuation. The saved title scene and explicit authoring defaults use the transparent sprite. Twelve automated Play Mode menu/lifecycle checks pass; initialized controlled Editor renders at720p/1080p were visually inspected. See BrandRefresh.md and BrandEvidence. This source milestone is not a new Windows build. The canonical executable remains the accepted Target Launch build below. Scoped Git outcome is recorded in Logs/TruckSports/BrandStudy/commit.json; verify it before reporting push success.
