@@ -29,7 +29,7 @@ namespace LWS.TruckPedestrianPlowing.Editor {
     foreach(var child in jug.GetComponentsInChildren<Transform>())child.gameObject.layer=26+i;
    }
    var option=m.menus.optionText.GetComponentInParent<LWS.TruckSports.SportsMenuAction>();if(option!=null)option.action="cabinfo";m.menus.pages[4].transform.Find("Rules and controls").GetComponent<TMPro.TMP_Text>().text=m.Help;
-   EditorSceneManager.SaveScene(scene,Scene);AssetDatabase.SaveAssets();Debug.Log("PLOW_CAB_AUTHORED canonical Taxi interior, CNP GPS and shared Taxi jug state");PlowPolishAuthoring.Install();
+   PlowImpactAuthoring.InstallCurrent(m);EditorSceneManager.SaveScene(scene,Scene);AssetDatabase.SaveAssets();Debug.Log("PLOW_CAB_AUTHORED canonical Taxi interior, CNP GPS and shared Taxi jug state");PlowPolishAuthoring.Install();
   }
  }
 }

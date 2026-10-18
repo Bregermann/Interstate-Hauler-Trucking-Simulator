@@ -11,8 +11,29 @@ public sealed class CheeseTruck:MonoBehaviour {
  public float lateralScrub=1.8f,groundYawAuthority=2.1f,uprightAuthority=5.5f;
  public float BottomBlend{get;private set;}public float GroundControl{get;private set;}
  float groundedAge;float decisionAt,stuck,airBudget,soundAt,separation;bool braking;Vector2 planned;
- public void ResetTruck(Vector3 position,Quaternion rotation){gameObject.SetActive(true);body.isKinematic=false;body.position=position;body.rotation=rotation;body.linearVelocity=body.angularVelocity=Vector3.zero;Damage=DisabledFor=RecoveryCooldown=stuck=airBudget=separation=groundedAge=BottomBlend=GroundControl=0;Progress=position.z;CatchArmed=true;braking=false;command=planned=Vector2.zero;decisionAt=index*.015f;Recoveries=Blasts=0;StartBoosted=false;body.isKinematic=true;foreach(var w in wheels){w.enabled=true;w.wheel.angularVelocity=0;if(w.wheel.meshCollider!=null)w.wheel.meshCollider.enabled=true;w.WakeFromSleep();}StopSound();}
- public void Release(){body.isKinematic=false;body.WakeUp();}
+ RigidbodyConstraints raceConstraints;RigidbodyInterpolation raceInterpolation;bool savedBodyState;float gridStable,gridLow,gridHigh;
+ public bool GridPrepared{get;private set;}
+ // Start close to the real tire support plane; NWH, not this estimate, finds the final ride height.
+ public float StartLift{get{float lift=0;foreach(var w in wheels)lift=Mathf.Max(lift,w.wheel.radius+w.spring.maxLength*.85f-w.transform.localPosition.y);return lift;}}
+ public void ResetTruck(Vector3 position,Quaternion rotation){
+  if(!savedBodyState){raceConstraints=body.constraints;raceInterpolation=body.interpolation;savedBodyState=true;}
+  gameObject.SetActive(true);body.isKinematic=false;body.interpolation=RigidbodyInterpolation.None;body.constraints=RigidbodyConstraints.FreezePositionX|RigidbodyConstraints.FreezePositionZ|RigidbodyConstraints.FreezeRotation;
+  body.position=position;body.rotation=rotation;transform.SetPositionAndRotation(position,rotation);body.linearVelocity=body.angularVelocity=Vector3.zero;
+  Damage=DisabledFor=RecoveryCooldown=stuck=airBudget=separation=groundedAge=BottomBlend=GroundControl=0;Progress=position.z;CatchArmed=true;braking=false;command=planned=Vector2.zero;decisionAt=index*.015f;Recoveries=Blasts=0;StartBoosted=GridPrepared=false;gridStable=0;gridLow=gridHigh=position.y;
+  foreach(var w in wheels){w.enabled=true;w.MotorTorque=w.BrakeTorque=w.SteerAngle=0;w.wheel.angularVelocity=0;w.spring.length=w.spring.prevLength=w.spring.maxLength*.85f;w.spring.compressionVelocity=w.spring.force=w.damper.force=0;w.Initialize();if(w.wheel.meshCollider!=null)w.wheel.meshCollider.enabled=true;w.WakeFromSleep();}
+  body.WakeUp();StopSound();
+ }
+ public bool SettleOnGrid(float dt){
+  if(GridPrepared)return true;bool supported=true;foreach(var w in wheels)supported&=w.IsGrounded;
+  // PhysX wheel support can retain a small alternating solver velocity while its pose is stationary.
+  // Require a stable 2mm ride-height window as well as support and bounded motion.
+  gridLow=Mathf.Min(gridLow,body.position.y);gridHigh=Mathf.Max(gridHigh,body.position.y);
+  if(!supported||Mathf.Abs(body.linearVelocity.y)>.12f||body.angularVelocity.sqrMagnitude>.0004f||gridHigh-gridLow>.002f){gridStable=0;gridLow=gridHigh=body.position.y;}else gridStable+=dt;
+  if(gridStable<.3f)return false;
+  body.linearVelocity=body.angularVelocity=Vector3.zero;body.isKinematic=true;body.constraints=raceConstraints;body.interpolation=raceInterpolation;GridPrepared=true;return true;
+ }
+ public void Hold(){body.isKinematic=true;if(savedBodyState){body.constraints=raceConstraints;body.interpolation=raceInterpolation;}StopSound();}
+ public void Release(){body.constraints=raceConstraints;body.interpolation=raceInterpolation;body.isKinematic=false;body.WakeUp();}
  public void StartJump(float up,float forward){if(StartBoosted||body.isKinematic)return;StartBoosted=true;body.AddForce(Vector3.up*Mathf.Clamp(up,0,7)+Vector3.forward*Mathf.Clamp(forward,0,6),ForceMode.VelocityChange);}
  public void Blast(Vector3 origin,float delta,int explosion){Blasts++;Damage=Mathf.Min(100,Damage+delta*2.4f);DisabledFor=Mathf.Max(DisabledFor,Mathf.Clamp(delta*.1f,.3f,2.5f));if(Scoring)match.Pulse(index,Mathf.Clamp01(delta*.04f),.35f);}
  public bool Recover(){if(RecoveryCooldown>0||!match.InMatch||match.Phase!=CheesePhase.Racing)return false;float z=Mathf.Clamp(Mathf.Min(Progress,match.cheese.body.position.z-9)-3,-10,300);Vector3 choice=CheeseRules.Surface(0,z,1.1f);float best=float.MaxValue;bool found=false;

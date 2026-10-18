@@ -17,6 +17,9 @@ namespace LWS.TruckPedestrianPlowing {
   [Range(4,15)]public float crowdThinkRate=6;
   [Range(15,120)]public float animationDetailDistance=55;
   [Header("Impact presentation")][Range(1,60)]public float ragdollSeconds=24;
+  [Tooltip("Keep hit characters visible until the round resets. Settled bodies leave active physics.")]
+  public bool keepRagdolls=true;
+  [Tooltip("Default for the in-game Blood Amount slider. Small stylized splashes only; zero disables them.")][Range(0,1)]public float bloodAmount=.35f;
   public AudioClip[] reactionVoices=Array.Empty<AudioClip>();
   [TextArea]public string customizationNotes="Edit crowd count and role fractions here. Characters are weighted prefab entries; their appearances never determine points. In the scene, select Crowd Spawn Zones; move/resize zones and adjust weights. Navigation must be rebaked after changing solid arena geometry.";
  }

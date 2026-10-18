@@ -14,9 +14,11 @@ namespace LWS.TruckPedestrianPlowing {
   public float ClaimedAt{get;private set;}float nextThink,nextDestination,nextBark,collectionTime,calmUntil,nextCalm;bool collecting;Vector3 collectionStart,originalScale;int state=-1;
   static readonly int[] states={Animator.StringToHash("idle1"),Animator.StringToHash("talk1"),Animator.StringToHash("cheer"),Animator.StringToHash("walk"),Animator.StringToHash("run")};
   MaterialPropertyBlock block;
+  public bool Resting{get;private set;}Mesh restMesh,originalDistanceMesh;
   void Awake(){ragdoll.Expired+=Expired;block=new MaterialPropertyBlock();}
   void Expired(TruckTaxiPedestrian value){RetireRequested=true;}
   public void ResetTarget(PlowMatch owner,int targetId,PlowTargetKind kind,Vector3 position,Quaternion rotation,string label,string reaction){
+   if(restMesh!=null){distanceModel.GetComponent<MeshFilter>().sharedMesh=originalDistanceMesh;Destroy(restMesh);restMesh=null;}Resting=false;
    if(presentationLOD!=null){presentationLOD.enabled=useDistanceRendering;foreach(var r in detailedRenderers)r.enabled=true;distanceModel.enabled=useDistanceRendering;}match=owner;id=targetId;role=kind;characterName=label;panicLine=reaction;Claimed=RetireRequested=collecting=false;state=-1;transform.localScale=Vector3.one;
    if(agent.enabled)agent.enabled=false;
    ragdoll.Reactivate(position,rotation,"plowing-"+targetId,true);
@@ -29,7 +31,7 @@ namespace LWS.TruckPedestrianPlowing {
    nextThink=Time.time+(id%17)/17f;nextDestination=0;calmUntil=0;nextCalm=Time.time+id%7;nextBark=Time.time+id%4;
   }
   public void Tick(float dt){
-   if(Claimed){if(collecting){collectionTime+=dt;float t=Mathf.Clamp01(collectionTime/.9f);transform.localScale=Vector3.Lerp(originalScale,Vector3.zero,t*t);transform.position=collectionStart-Vector3.up*t*.4f;if(t>=1)ragdoll.PrepareForPool();return;}if(Time.time-ClaimedAt>6&&Settled){foreach(var body in ragdoll.RagdollBodies)body.Sleep();}if(gameObject.activeSelf&&RetireRequested){if(match.SafeToRetire(DisplayPosition))ragdoll.PrepareForPool();else if(Settled||Time.time-ClaimedAt>30)Collect();}return;}
+   if(Claimed){if(match.crowdSettings.keepRagdolls){if(!Resting&&Time.time-ClaimedAt>6&&Settled)Rest();return;}if(collecting){collectionTime+=dt;float t=Mathf.Clamp01(collectionTime/.9f);transform.localScale=Vector3.Lerp(originalScale,Vector3.zero,t*t);transform.position=collectionStart-Vector3.up*t*.4f;if(t>=1)ragdoll.PrepareForPool();return;}if(Time.time-ClaimedAt>6&&Settled){foreach(var body in ragdoll.RagdollBodies)body.Sleep();}if(gameObject.activeSelf&&RetireRequested){if(match.SafeToRetire(DisplayPosition))ragdoll.PrepareForPool();else if(Settled||Time.time-ClaimedAt>30)Collect();}return;}
    if(!agent.enabled||!agent.isOnNavMesh)return;
    if(Time.time<nextThink)return;nextThink=Time.time+1/match.crowdSettings.crowdThinkRate;
    Vector3 escape=Vector3.zero;float danger=0;
@@ -55,8 +57,16 @@ namespace LWS.TruckPedestrianPlowing {
   public bool Strike(Vector3 relative,Vector3 point){if(Claimed)return false;Claimed=true;if(presentationLOD!=null){presentationLOD.enabled=false;distanceModel.enabled=false;foreach(var r in detailedRenderers)r.enabled=true;}ClaimedAt=Time.time;agent.enabled=false;animator.enabled=true;beacon.gameObject.SetActive(false);return ragdoll.TryStrike(relative,point);}
   public bool Settled{get{foreach(var body in ragdoll.RagdollBodies)if(!body.isKinematic&&(body.linearVelocity.sqrMagnitude>.08f||body.angularVelocity.sqrMagnitude>.12f))return false;return true;}}
   public bool Collect(){if(collecting||!Claimed)return false;collecting=true;collectionTime=0;collectionStart=transform.position;originalScale=transform.localScale;foreach(var body in ragdoll.RagdollBodies)body.isKinematic=true;foreach(var collider in ragdoll.GetComponentsInChildren<Collider>(true))collider.enabled=false;return true;}
+  public bool Rest(){
+   if(Resting||!Claimed||!Settled)return false;
+   foreach(var body in ragdoll.RagdollBodies){if(!body.isKinematic){body.linearVelocity=body.angularVelocity=Vector3.zero;body.isKinematic=true;}}
+   foreach(var collider in ragdoll.GetComponentsInChildren<Collider>(true))collider.enabled=false;
+   Resting=true;
+   if(distanceModel!=null&&useDistanceRendering){originalDistanceMesh=distanceModel.GetComponent<MeshFilter>().sharedMesh;restMesh=PlowRestPose.Bake(this);if(restMesh!=null){foreach(var renderer in detailedRenderers)renderer.enabled=false;distanceModel.GetComponent<MeshFilter>().sharedMesh=restMesh;distanceModel.enabled=true;}}
+   return true;
+  }
   public void ReactionCooldown(float seconds){nextBark=Mathf.Max(nextBark,Time.time+seconds);}
   void OnCollisionEnter(Collision collision){if(!Claimed&&match!=null)match.Contact(this,collision);}
-  void OnDestroy(){if(ragdoll!=null)ragdoll.Expired-=Expired;}
+  void OnDestroy(){if(ragdoll!=null)ragdoll.Expired-=Expired;if(restMesh!=null)Destroy(restMesh);}
  }
 }

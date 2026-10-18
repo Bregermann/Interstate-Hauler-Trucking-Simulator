@@ -43,3 +43,9 @@ Jug bindings are displayed in the owning view. Whole pad: holdLB / tapRB; shared
 ## Rebuild versus preserve hand edits
 
 **Create or Rebuild Owned Scene** reauthors the arena from defaults and can overwrite hand edits in that owned scene. **Update First Person Variant** derives a fresh cab scene from the saved arena and can overwrite cab-scene edits. Use these deliberately, not as a routine save command. Normal build delivery uses **LWS.TruckSports.Editor.SportsBuilder.Build**, which validates saved scenes and uses the explicit Sports-only scene list. Keep the complete final `Builds/TruckSports` directory together.
+
+## Impact amount and persistent ragdolls
+
+In either Plowing mode, open **Pause → Settings → Blood Amount** and drag the percentage slider.0 disables the short stylized splashes;100 is the bounded maximum. The preference is shared by the arena/chase and Cab Chaos versions, survives rematches and is saved with settings or scene exit. It changes presentation only and never changes points or impact qualification.
+
+For authoring defaults, choose **Truck Sports → Pedestrian Plowing → Select Crowd Settings**. Under **Impact Presentation**, drag **Blood Amount** (0–1) and keep **Keep Ragdolls** enabled. A player's existing in-game preference takes precedence over the default. Hit characters remain visible until rematch; once settled, their real poses leave active physics. Original flat-color characters combine into one posed mesh each. Custom textured/non-readable models keep their original renderers, so test their crowd performance. Settled presentation bodies do not obstruct driving. Rematch restores the original rig, animation, movement and colliders. No source Taxi prefab is modified.

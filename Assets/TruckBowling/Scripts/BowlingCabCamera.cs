@@ -3,11 +3,12 @@ using UnityEngine.Rendering;
 namespace LWS.TruckBowling {
 public sealed class BowlingCabCamera:MonoBehaviour {
  public Camera view;public BowlingLane lane;public Renderer[] exterior,interior;public float Impact;float yaw;
+ bool Spectating=>lane!=null&&lane.match.AllAI&&!LWS.TruckSports.SportsCameraOptions.ShowAI;
  void OnEnable(){RenderPipelineManager.beginCameraRendering+=Begin;RenderPipelineManager.endCameraRendering+=End;}
  void OnDisable(){RenderPipelineManager.beginCameraRendering-=Begin;RenderPipelineManager.endCameraRendering-=End;Restore();}
- void Begin(ScriptableRenderContext context,Camera camera){foreach(var r in exterior)if(r!=null)r.forceRenderingOff=camera==view;foreach(var r in interior)if(r!=null)r.forceRenderingOff=camera!=view;}
+ void Begin(ScriptableRenderContext context,Camera camera){foreach(var r in exterior)if(r!=null)r.forceRenderingOff=camera==view&&!Spectating;foreach(var r in interior)if(r!=null)r.forceRenderingOff=camera!=view||Spectating;}
  void End(ScriptableRenderContext context,Camera camera){Restore();}void Restore(){if(exterior!=null)foreach(var r in exterior)if(r!=null)r.forceRenderingOff=false;if(interior!=null)foreach(var r in interior)if(r!=null)r.forceRenderingOff=false;}
  public void ResetView(){yaw=lane.truck.transform.eulerAngles.y;Impact=0;}
- void LateUpdate(){if(lane==null||!view.enabled)return;bool reduced=lane.match.setup.reducedMotion;var body=lane.truck.body;float target=body.rotation.eulerAngles.y;yaw=Mathf.MoveTowardsAngle(yaw,target,(reduced?180:540)*Time.deltaTime);Impact=Mathf.MoveTowards(Impact,0,Time.deltaTime*.12f);float shake=Impact*(reduced?.12f:1)*Mathf.Sin(Time.time*43);transform.position=body.position+Vector3.up*.43f+body.rotation*Vector3.forward*.05f+Vector3.up*shake;transform.rotation=Quaternion.Euler(1,yaw,0);}
+ void LateUpdate(){if(lane==null||!view.enabled)return;bool reduced=lane.match.setup.reducedMotion;var body=lane.truck.body;if(Spectating){var p=body.position;float deck=Mathf.InverseLerp(lane.pinLine-10,lane.pinLine+3,p.z);var focus=Vector3.Lerp(p+Vector3.forward*4,new Vector3(lane.center,.8f,lane.pinLine+2),deck);var position=Vector3.Lerp(p+new Vector3(2.8f,4,-7),new Vector3(lane.center+1.8f,5,lane.pinLine-5),deck);transform.SetPositionAndRotation(position,Quaternion.LookRotation(focus-position,Vector3.up));return;}float target=body.rotation.eulerAngles.y;yaw=Mathf.MoveTowardsAngle(yaw,target,(reduced?180:540)*Time.deltaTime);Impact=Mathf.MoveTowards(Impact,0,Time.deltaTime*.12f);float shake=Impact*(reduced?.12f:1)*Mathf.Sin(Time.time*43);transform.position=body.position+Vector3.up*.43f+body.rotation*Vector3.forward*.05f+Vector3.up*shake;transform.rotation=Quaternion.Euler(1,yaw,0);}
 }
 }

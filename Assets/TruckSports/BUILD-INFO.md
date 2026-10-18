@@ -1,37 +1,15 @@
-# Pedestrian Plowing update — October 18, 2026
+# Truck Sports combined Windows build
 
-Two saved menu entries share one sport: **Pedestrian Plowing** (arena/chase/cab) and **Plowing · Cab Chaos** (full Taxi driver interior, independent live GPS, animated wheel/free look and jug challenge). Up to eight competitors, four local humans, solo and AI-only play use the existing offline lifecycle. The finite crowd occupies nine connected city blocks with burning buildings, flipped burning cars and festival dressing. Character appearances remain independent of points.
+Windows x64 Development: `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe`. Keep the entire folder. 35 explicit Sports-only scenes; TruckSports startup. Managed SHA256 `ef8a78590f6119af62340482d3b2c16fcc49be010f1e87e0cfa435fb19ea7b28`. Build succeeded with zero errors; all 21 version-bound Windows suites passed. Human/hardware checks remain manual.
 
-Windows x64 Development executable: `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe`. Keep its entire accompanying folder. Built through `LWS.TruckSports.Editor.SportsBuilder.Build` at2026-10-18T03:52:00.8606738Z: zero errors,47 warnings,1,246,555,118bytes,1m46.245s. Managed assembly SHA256 `e48749992b233aa8f5c061cccb596b3ac9aa768991a87fe3ebfd8e2f581896bf`; build GUID `90f93087e950471c9864a98c5e0f51e5`. All25 protected settings restored; deliberate failure restoration passed. All35 explicit Sports-only scenes and TruckSports startup are retained. Generated builds are excluded from Git.
+```
+Succeeded
+Errors: 0
+Warnings: 31
+Bytes: 1246707246
+Duration: 00:00:37.7964409
+Startup: Assets/TruckSports/Scenes/TruckSports.unity
+Scenes: Assets/TruckSports/Scenes/TruckSports.unity, Assets/TruckBilliards/Scenes/TruckBilliards.unity, Assets/TruckHockey/Scenes/TruckHockey.unity, Assets/TruckBowling/Scenes/TruckBowling.unity, Assets/TruckAirHockey/Scenes/TruckAirHockey.unity, Assets/TruckWallball/Scenes/TruckWallball.unity, Assets/TruckCornhole/Scenes/TruckCornhole.unity, Assets/TruckCheeseRolling/Scenes/TruckCheeseRolling.unity, Assets/TruckDockDiving/Scenes/TruckDockDiving.unity, Assets/TruckKeepaway/Scenes/TruckKeepaway.unity, Assets/TruckKeepaway/Scenes/TruckKeepawayFirstPerson.unity, Assets/TruckCurling/Scenes/TruckCurling.unity, Assets/TruckBaseJumping/Scenes/TruckBaseJumping.unity, Assets/TruckTerrierRacing/Scenes/TruckTerrierRacing.unity, Assets/TruckMinefield/Scenes/TruckMinefield.unity, Assets/TruckMattressRacing/Scenes/TruckMattressRacing.unity, Assets/TruckWifeCarrying/Scenes/TruckWifeCarrying.unity, Assets/TruckMusicalParking/Scenes/TruckMusicalParking.unity, Assets/TruckGiantSwing/Scenes/TruckGiantSwing.unity, Assets/TruckBuzkashi/Scenes/TruckBuzkashi.unity, Assets/TruckBogSnorkelling/Scenes/TruckBogSnorkelling.unity, Assets/TruckBungeeDemolition/Scenes/TruckBungeeDemolition.unity, Assets/TruckFishing/Scenes/TruckFishing.unity, Assets/TruckSumo/Scenes/TruckSumo.unity, Assets/TruckTargetLaunch/Scenes/TruckTargetLaunch.unity, Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity, Assets/TruckBeerPong/Scenes/TruckBeerPong.unity, Assets/TruckPoker/Scenes/TruckPoker.unity, Assets/TruckTugOfWar/Scenes/TruckTugOfWar.unity, Assets/TruckSkeeBall/Scenes/TruckSkeeBall.unity, Assets/TruckLogRolling/Scenes/TruckLogRolling.unity, Assets/TruckTrampolineDodgeball/Scenes/TruckTrampolineDodgeball.unity, Assets/TruckDemolitionDerby/Scenes/TruckDemolitionDerby.unity, Assets/TruckPedestrianPlowing/Scenes/TruckPedestrianPlowing.unity, Assets/TruckPedestrianPlowing/Scenes/TruckPedestrianPlowingFirstPerson.unity
+```
 
-Eight final Windows suites completed with zero captured runtime errors:384-crowd density, LOD/accessories, actual contact scoring/replay, cab/input/jug/reconnect, smoke/rematch,720p/1080p view layouts and two60-second four-view performance samples. Twelve earlier baseline suites include six complete eight-AI matches, five legacy cab modes and the35-scene/five-aspect tour. These are version-bound automated/injected-input/real-PhysX results, not human or physical-controller testing. Chase/cab mean frame times were29.58/29.28ms; performance is specific to this PC with user applications left running.
-
-[Implementation, evidence and manual limits](../../Documentation/TruckSports/PedestrianPlowingValidation.md) · [Crowd/model/spawn customization](../../Documentation/TruckSports/PedestrianPlowingCustomization.md) · [Checkpoint and ordered outstanding queue](../../Documentation/TruckSports/PedestrianPlowingCheckpoint.md) · [Vendor audit](../../Documentation/TruckSports/PedestrianPlowingVendorAudit.md).
-
-Pedestrian Plowing implementation `cd0a603b` is committed and pushed to the existing Sports branch and GitHub main; see the verified receipt below. Historical receipts apply only to their named milestones. Party/Cheese, Show AI Cameras, Fare Fight and Goddess repairs remain outstanding and are tracked in their ledgers. Human/controller, haptics, audio balance and subjective gameplay acceptance remain manual.
-
-## Verified Pedestrian Plowing Git delivery
-
-Implementation `cd0a603b925c2abc0421a976abb88dad22161a06` on `codex/truck-sports-seven-events` was pushed successfully to that branch and GitHub `main`, verified at2026-10-18T04:17:19.324524+00:00. Local scoped source commit: `960b1cec110d39dfb210478867bab103d0dff998`. **Both previous relevant Truck Sports work and the Pedestrian Plowing update are committed and pushed to main.** Unrelated Taxi/host/vendor work and private Taxi ancestry were preserved and excluded. Builds, caches, logs and original licensed package prerequisites are excluded.
-
-The built assembly and20-case evidence are identified above; later Party/Cheese, Show AI Cameras, Fare Fight and Goddess work is still outstanding. This receipt is a separate documentation commit. The delivered folder's GIT-DELIVERY.txt records the final verified public tip. Post-build source cleanup removed only one blank line at the end of PlowRound.cs; no gameplay behavior changed.
-
-## Historical milestone documentation
-
-# Truck Sports master repair — October 17, 2026
-
-All ten requested repair packages are implemented, saved and validated. The combined Windows x64 Development build contains all 31 implemented sports in 33 explicit Sports-only scenes. TruckSports starts first; the normal catalogue has 30 entries and Wallball remains manually reachable in Experimental Scrap Heap.
-
-Executable: `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/TruckSports/TruckSports.exe`. Keep the complete accompanying folder together. Build `2026-10-17T10:53:04.7155517Z`, zero errors / 47 incremental warnings, 1,191,046,536 bytes, 00:01:39.5986327. Managed assembly SHA256 `1ded15c3f1629166224a67d36d754d2d821b22a8cdf587fbfdecdf42efa9bf4d`. All 25 protected ProjectSettings files match their pre-build hashes, including the host build configuration; the deliberate failure-restoration fixture also passes.
-
-The sole delivery folder includes TruckSports.exe, TruckSports_Data, UnityPlayer.dll, MonoBleedingEdge, UnityCrashHandler64.exe and the remaining generated companions. AMD64 PE machine 0x8664 verified. Unity 6000.4.10f1, URP 17.4, Mono, Development.
-
-Build uses LWS.TruckSports.Editor.SportsBuilder.Build with explicit Sports-only scenes and TruckSports startup. No host build-list or Taxi settings are changed. All 25 pre-build ProjectSettings hashes match after success; deliberate failure restoration also passed. Generated build files are excluded from Git.
-
-All 33 Windows acceptance suites have explicit version/asset/compiled-method provenance; see [full results](../../Documentation/TruckSports/MasterRepairValidation.md). Original licensed packages must be installed for a fresh source build. Verified Git delivery is recorded below.
-
-## Verified Git delivery
-
-Implementation `bfd14cadbc72ceab0b865c912a6e8661f67c198e` on `codex/truck-sports-seven-events` was pushed successfully to that branch and GitHub `main`, verified at 2026-10-18T00:59:19.606915+00:00. **Both previous relevant Truck Sports work and this repair update are committed and pushed to main.** The public Sports tree matches the reviewed local Sports implementation. Unrelated local Taxi/host/vendor work and private Taxi ancestry are preserved and excluded; generated builds, logs, caches and original licensed package prerequisites are excluded.
-
-This receipt is committed as a subsequent clean public descendant. The delivered folder's GIT-DELIVERY.txt records the final verified public tip after the receipt push. All build, test and remaining-manual limits above still apply.
+Setting restoration, executable companions and AMD64 machine verified. Existing warnings reviewed; no vendor edits. [Acceptance](../../Documentation/TruckSports/PartyCheeseImpactValidation.md). Git delivery is recorded after publication; historical implementation cd0a603b and receipt bcba7784 remain published.
