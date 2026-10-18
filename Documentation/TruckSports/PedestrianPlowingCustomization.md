@@ -44,6 +44,14 @@ Jug bindings are displayed in the owning view. Whole pad: holdLB / tapRB; shared
 
 **Create or Rebuild Owned Scene** reauthors the arena from defaults and can overwrite hand edits in that owned scene. **Update First Person Variant** derives a fresh cab scene from the saved arena and can overwrite cab-scene edits. Use these deliberately, not as a routine save command. Normal build delivery uses **LWS.TruckSports.Editor.SportsBuilder.Build**, which validates saved scenes and uses the explicit Sports-only scene list. Keep the complete final `Builds/TruckSports` directory together.
 
+## Role costumes and night presentation (active update)
+
+The sport-owned prefabs are under `Assets/TruckPedestrianPlowing/Prefabs/`: alien-tinkerer Parade, analytical-robot Parade, chaotic-marsupial Parade, cheetah-challenger Parade and glam-fire-fighter Parade. Open a duplicate prefab to customize it, preserving its rig and PlowPedestrian references. The PlowRoleCostume component exposes separate Standard, Bonus, Penalty and Pitchfork presentation objects plus their attachments. These are costume presentations on the shared character roster; they do not assign a prefab to a point value. Edit head/skin materials on the original model; costumes cover the model and never rewrite its skin material. Keep clear blue-nose / gold-mask-star / red-STOP conventions for gameplay readability. The build pipeline uses the saved prefabs and does not regenerate this wardrobe.
+
+Both saved scenes have a PlowNight component referencing the scene-owned Weather Maker adapter. `Assets/TruckPedestrianPlowing/Materials/Parade full moon night.asset` controls the frozen time/date and night ambient lighting. Scene hierarchy `Festival night fill lights` contains the warm/cool, shadow-free practical lights. Move or adjust those lights normally; the ordinary Sports build preserves them. The explicit **Install Role Wardrobe and Night (preserves layout)** tool creates missing defaults and bindings; it is not run by ordinary builds.
+
+On the prefab root, **Plow Role Costume → Role fabric colors — never skin** exposes Bonus Fabric, Penalty Fabric and the Standard Fabric palette. These tint clothing only. Edit **Parade moon.mat** for sport-owned lunar material adjustments; avoid editing Weather Maker's shared source material. The explicit wardrobe tool refits costume defaults, so use normal saves/builds to preserve your hand adjustments.
+
 ## Impact amount and persistent ragdolls
 
 In either Plowing mode, open **Pause → Settings → Blood Amount** and drag the percentage slider.0 disables the short stylized splashes;100 is the bounded maximum. The preference is shared by the arena/chase and Cab Chaos versions, survives rematches and is saved with settings or scene exit. It changes presentation only and never changes points or impact qualification.

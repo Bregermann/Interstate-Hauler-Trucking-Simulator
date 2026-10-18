@@ -6,8 +6,9 @@ namespace LWS.TruckPedestrianPlowing {
   public static Mesh Bake(PlowPedestrian ped){
    var sources=new List<MeshRenderer>();
    foreach(var renderer in ped.detailedRenderers){
-    var mesh=renderer!=null?renderer.GetComponent<MeshFilter>()?.sharedMesh:null;
-    if(!(renderer is MeshRenderer source)||!source.enabled||!source.gameObject.activeInHierarchy||source.GetComponent<TMPro.TMP_Text>()!=null||mesh==null)continue;
+    if(!(renderer is MeshRenderer source)||!source.enabled||!source.gameObject.activeInHierarchy||source.GetComponent<TMPro.TMP_Text>()!=null)continue;
+    // TMP removes its generated MeshFilter when its label is disabled; Unity's destroyed-object null is not C# null.
+    var filter=source.GetComponent<MeshFilter>();if(filter==null)continue;var mesh=filter.sharedMesh;if(mesh==null)continue;
     if(!mesh.isReadable||source.sharedMaterials.Length!=1)return null;
     var material=source.sharedMaterial;if(material!=null&&material.mainTexture!=null&&material.mainTexture!=Texture2D.whiteTexture)return null;
     sources.Add(source);
