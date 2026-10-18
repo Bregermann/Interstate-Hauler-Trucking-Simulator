@@ -1,5 +1,16 @@
 # Truck Sports queued-release checkpoint — October18
 
+## Current Sumo scoring milestone
+
+Windows x64 Development; 35 explicit Sports-only scenes; TruckSports startup; 0 errors /31 warnings. Built 2026-10-18T19:53:10.004882+00:00. Managed SHA256 `90dc08698caa0e7f9a2335644d3b985930f0a00d4b1c6c5bce90d7ac81d933d4`; 438-file data manifest `217c43b660c82864c4880352931a332823969968160fb72ecaca62b3b548161f`.
+
++1 causal opponent ring-out/+3 sole-survivor points, recent receiving-normal/pre-step/queued-shove contact evidence, duplicate-safe rules, typed rounded point/round-win/cooldown cards, score-aware AI targeting and staggered blocked-truck recovery are integrated. Existing first-to-five-heat-win endpoint, physics, arena and handling remain. Native fixtures/physical/injected-input suites and all 14 final-version Windows suites pass. See SumoRepair.md/SumoEvidence for actual results, source, screenshots and manual limits. Field Goal and the original retro wordmark remain included; their previous full acceptance below is separately versioned.
+
+Git status must be verified from Logs/TruckSports/SumoRepair/commit.json and Builds/TruckSports/GIT-DELIVERY.txt. No root-private Taxi ancestry, unrelated/vendor changes, builds, caches or logs belong in publication. No force-push. Full release queue remains active: next Party Fishing/Buzkashi/Derby/Poker and remaining Minefield/Bungee deltas, then new Kickball/DanceOff, FareFight/Goddess and later SkyTow/Limbo/TrailerPlug. Goddess Sumo front-costume correction remains pending. Keep one project-local canonical build and the exclusive Sports Editor lease.
+
+## Historical checkpoints below
+
+
 ## Current Field Goal and original wordmark milestone
 
 Windows x64 Development;35 explicit Sports-only scenes; TruckSports startup;0 errors /20 warnings. Built 2026-10-18T17:53:15.697166+00:00. Managed SHA256 `6d67807a233ee2a2163b44b902c096e86ca0958b3b1b92ac2032c0405c2c6446`;438-file data manifest `d97805acd6b7cbc758219bd00ce3a7d643cc601adc0af59a0e0fa9df7d464633`.

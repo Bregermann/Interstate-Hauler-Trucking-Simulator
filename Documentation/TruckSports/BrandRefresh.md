@@ -1,5 +1,8 @@
 # Truck Sports: Party! — original wordmark refresh
 
+Current canonical binary is the later [Sumo combined milestone](SumoRepair.md), which retains this implementation and original wordmark. Tests below remain versioned to their recorded binary; the later build reruns the relevant Field Goal/title regressions.
+
+
 Current combined Windows delivery: Windows x64 Development;35 explicit Sports-only scenes; TruckSports startup;0 errors /20 warnings. Built 2026-10-18T17:53:15.697166+00:00. Managed SHA256 `6d67807a233ee2a2163b44b902c096e86ca0958b3b1b92ac2032c0405c2c6446`;438-file data manifest `d97805acd6b7cbc758219bd00ce3a7d643cc601adc0af59a0e0fa9df7d464633`. The final executable includes the mark;14 actual Windows title/action checks and720p/1080p title screenshots pass in [FieldGoalEvidence](FieldGoalEvidence/Acceptance.json). Source-only statements below describe the preceding artwork milestone.
 
 ## Original source milestone (historical)

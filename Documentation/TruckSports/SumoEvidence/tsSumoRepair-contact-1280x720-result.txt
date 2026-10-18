@@ -1,0 +1,12 @@
+SUMO_REPAIR mode=contact PID=61740 editor=False
+PASS real dynamic bodies produce one first-contact callback each
+ACTUAL_CONTACT body=Attacker other=Victim impulse=(0.0000, 0.0000, 36.6750) normal=(0.0000, 0.0000, -1.0000) relativeVelocity=(0.0000, 0.0000, -6.0000) postVelocity=(-0.0068, -0.0035, 2.9438)
+
+ACTUAL_CONTACT body=Victim other=Attacker impulse=(0.0000, 0.0000, 36.6750) normal=(0.0000, 0.0000, 1.0000) relativeVelocity=(0.0000, 0.0000, 6.0000) postVelocity=(0.0068, 0.0035, 3.0563)
+
+PASS receiving contact normals identify the opposite physical response directions
+PASS normal-oriented impulse agrees with each body's actual momentum change
+PASS actual contact transfers forward momentum without a custom impulse
+CHECKS=4
+ERRORS=0
+PASS

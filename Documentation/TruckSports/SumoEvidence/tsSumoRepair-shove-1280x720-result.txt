@@ -1,0 +1,16 @@
+SUMO_REPAIR mode=shove PID=48568 editor=False
+PASS four human keyboard-source fixture starts
+PASS normal countdown enters physical fight
+PASS actual resting truck contact exists before the stationary shove
+PASS grounded stationary human truck is ready for its ordinary shove action
+PASS fresh assigned action produces one ordinary bounded shove
+PASS standing human shove physically pushes the opponent over the rim
+STANDING_SHOVE contacts=1 incoming=(0.00, 0.08, 1.36) shoves=1 points=1,0,0,0 ringouts=1,0,0,0
+ACTUAL_CONTACT body=Sumo competitor 2 other=Sumo competitor 1 impulse=(0.0000, 0.0000, 0.0000) normal=(0.0000, 0.0000, 1.0000) relativeVelocity=(0.0000, 0.0000, 0.0000) postVelocity=(0.0000, 0.0000, 0.0000)
+ACTUAL_PRESSURE impulse=(0.0000, 0.0124, 24.2006) normal=(0.0000, 0.0005, 1.0000) relativeVelocity=(0.0000, 0.1393, -0.0186) otherIncoming=(0.0000, 0.1305, 3.8060)
+
+PASS standing shove's actual collision receives exactly one ring-out point
+PASS standing shove fixture cleans up to one audio owner
+CHECKS=8
+ERRORS=0
+PASS

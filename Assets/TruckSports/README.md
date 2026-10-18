@@ -1,6 +1,9 @@
 # Truck Sports: Party!
 
-Current Field Goal/wordmark milestone: Windows x64 Development;35 explicit Sports-only scenes; TruckSports startup;0 errors /20 warnings. Built 2026-10-18T17:53:15.697166+00:00. Managed SHA256 `6d67807a233ee2a2163b44b902c096e86ca0958b3b1b92ac2032c0405c2c6446`;438-file data manifest `d97805acd6b7cbc758219bd00ce3a7d643cc601adc0af59a0e0fa9df7d464633`. All15 exact-build Windows suites pass. [Results and limitations](../../Documentation/TruckSports/FieldGoalRepair.md). Previous milestone details below remain historical; the full queued release is unfinished.
+Current Sumo/FieldGoal/original-wordmark combined milestone: Windows x64 Development; 35 explicit Sports-only scenes; TruckSports startup; 0 errors /31 warnings. Built 2026-10-18T19:53:10.004882+00:00. Managed SHA256 `90dc08698caa0e7f9a2335644d3b985930f0a00d4b1c6c5bce90d7ac81d933d4`; 438-file data manifest `217c43b660c82864c4880352931a332823969968160fb72ecaca62b3b548161f`. All 14 exact-build Windows suites pass. [Accepted results and limits](../../Documentation/TruckSports/SumoRepair.md). Previous milestone details below are historical; the full queued release remains unfinished.
+
+
+Current Field Goal/wordmark milestone: Windows x64 Development; 35 explicit Sports-only scenes; TruckSports startup; 0 errors /20 warnings. Built 2026-10-18T17:53:15.697166+00:00. Managed SHA256 `6d67807a233ee2a2163b44b902c096e86ca0958b3b1b92ac2032c0405c2c6446`; 438-file data manifest `d97805acd6b7cbc758219bd00ce3a7d643cc601adc0af59a0e0fa9df7d464633`. All15 exact-build Windows suites pass. [Results and limitations](../../Documentation/TruckSports/FieldGoalRepair.md). Previous milestone details below remain historical; the full queued release is unfinished.
 
 
 Target Launch now scores supported final rest, preserves real slides/falls, adds bounded wing correction and a modeled volcanic venue with actual lava impacts, real truck fragments and Cinemachine impact/replay framing. The updated combined Windows build passes13 exact-build suites; broader queued work remains unfinished. [Repair, evidence and manual limits](../../Documentation/TruckSports/TargetLaunchRepair.md).

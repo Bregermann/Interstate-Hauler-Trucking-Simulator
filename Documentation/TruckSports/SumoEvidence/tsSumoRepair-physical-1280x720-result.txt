@@ -1,0 +1,32 @@
+SUMO_REPAIR mode=physical PID=52000 editor=False
+PASS four human keyboard-source fixture starts
+PASS normal countdown enters physical fight
+PASS actual keyboard-driven bumper push produces a real opponent ring-out
+REAL_RINGOUT contacts=26 lastVictim=1 lastAttacker=0 normal=(0.00, -0.02, 1.00) normalSpeed=0.03026213 points=1,0,0,0 ringouts=1,0,0,0
+PASS actual physical aggressor earns one point; victim receives none
+PASS continued contacts and eliminated body cannot duplicate the award
+PASS duplicate names retain independent typed point/ring-out cards
+PASS pause preserves actual awarded score
+PASS actual Windows viewport 1280x720
+PASS actual Windows viewport 1920x1080
+PASS four human keyboard-source fixture starts
+PASS normal countdown enters physical fight
+PASS initialized actual truck contact crosses the rim in its first receiving physics step
+IMMEDIATE_RIM pre=(0.00, 0.55, 11.96) after=(0.00, 0.55, 12.13) contacts=1 points=1,0,0,0
+PASS immediate physical rim crossing uses pre-step contact evidence and scores once
+PASS four human keyboard-source fixture starts
+PASS normal countdown enters physical fight
+PASS actual unopposed human truck drives itself over the visible edge
+PASS self-inflicted fall grants nobody a ring-out point
+PASS four human keyboard-source fixture starts
+PASS normal countdown enters physical fight
+PASS three physical departures leave a sole survivor and start actual replay
+PASS passive sole survivor earns exactly three points and one heat win
+PASS actual replay seek/angle/slow motion cannot change awarded points
+PASS normal replay/result progression advances to next heat
+PASS next heat retains cumulative survival reward
+PASS rematch clears all points, ring-outs, heat wins and contact state
+PASS physical scoring exits cleanly to one collection/audio owner
+CHECKS=26
+ERRORS=0
+PASS

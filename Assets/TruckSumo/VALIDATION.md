@@ -1,3 +1,9 @@
+# Current Sumo scoring milestone — October 18, 2026
+
+Windows x64 Development; 35 explicit Sports-only scenes; TruckSports startup; 0 errors /31 warnings. Built 2026-10-18T19:53:10.004882+00:00. Managed SHA256 `90dc08698caa0e7f9a2335644d3b985930f0a00d4b1c6c5bce90d7ac81d933d4`; 438-file data manifest `217c43b660c82864c4880352931a332823969968160fb72ecaca62b3b548161f`.
+
+All 14 final-version Windows suites pass. [Root causes, exact actual results, screenshots, vendor accounting and remaining manual checks](../../Documentation/TruckSports/SumoRepair.md). Keep all files in Builds/TruckSports. Earlier statements below are historical.
+
 # Actual Windows milestone — October16,2026
 
 Included in the25-sport combined Windows build. Actual visible player SumoFocused passed0errors. See [collection validation](../TruckSports/VALIDATION.md) for exact build hashes, measured results, version boundaries and remaining human checks. Earlier statements below saying the executable contains19sports or Windows acceptance is pending are superseded by this section.
@@ -12,7 +18,7 @@ Two complete native four-AI PhysX matches passed with zero errors. Initial: ten 
 
 Focused acceptance ERRORS0: software left/right stick/trigger ownership and independent keyboard clusters; whole-pad and duplicate-stick rejection; actual driven impact moves a stopped opponent; one trigger surge and held-contact deduplication; wheel overhang legal; airborne center inside legal; actual center crossing eliminates and disables competitive collisions; controlled real glancing contact transfers motion/rotation (observed angular speed.0603rad/s, incoming normal speed8.5m/s); brow pose/priority hold; fitted outfit render references with no colliders; real collider/visual/legal shrink synchronization; pause freezes body/clock/cooldown; virtual disconnect/replacement/neutral gate; fresh input owner; rematches and front-end cleanup.
 
-Native camera-only arena captures at1280x720,1920x1080,1440x900,1280x960 and2560x1080, plus a1200x900 close view, were inspected. Four long-name score/cooldown rows have actual font/glyphs and fit their rectangles. Images show the modeled brow/headband/wrap and ring occupying the useful viewport. Screen-space full-window Windows UI remains a separate final acceptance.
+Native camera-only arena captures at 1280x720,1920x1080,1440x900,1280x960 and 2560x1080, plus a1200x900 close view, were inspected. Four long-name score/cooldown rows have actual font/glyphs and fit their rectangles. Images show the modeled brow/headband/wrap and ring occupying the useful viewport. Screen-space full-window Windows UI remains a separate final acceptance.
 
 A60real-second four-truck batch workload passed with206252frames, mean.292ms,p95.384ms,p99.770ms,GC0=0,managed+14262272bytes. Automatic renders=0 in batch: this is NOT player/GPU performance evidence. Final -tsSumoFocused in the development Windows build must include actual automatic arena renders. -tsSumo runs a full first-to-five autonomous match.
 

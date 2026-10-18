@@ -9427,18 +9427,21 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: 'Drive and shove opponents out of the raised circular ring. First to five
-    heat wins takes the match. Last truck remaining wins; final ring-outs in the
-    same physics step are a draw with no point. Your authoritative chassis center
-    must cross the visible outer edge: wheel overhang and being airborne inside do
-    not eliminate you. Accelerate, steer, and brake before reversing. Press your
-    assigned ACTION for one forward shove, then wait3.2seconds. A missed shove can
-    carry you over the edge. Stopped trucks can be pushed; there is no stationary
-    counter. At20seconds a warning announces the physical ring shrinking from23seconds
-    toward its minimum. The visible surface and legal radius shrink together. An
-    unresolved90second heat is an explicit draw and replay. Starts rotate each heat.
-    Outfits and eyebrows are cosmetic. Recorded decisive replays offer angle, speed,
-    rewind and skip. Pause/reconnect preserves the match; release and freshly confirm
-    after replacement. No online services.'
+    heat wins takes the match. Each credited opponent ring-out awards +1 activity
+    point; the sole survivor earns +3 more. Points, ring-outs and heat wins are shown
+    separately. Final ring-outs in one physics step give no survival bonus, but legitimate
+    mutual ring-out points remain. Only meaningful recent physical pushes count;
+    recovered, old or self-inflicted falls do not. The match still ends at five heat
+    wins. Your authoritative chassis center must cross the visible outer edge: wheel
+    overhang and being airborne inside do not eliminate you. Accelerate, steer, and
+    brake before reversing. Press your assigned ACTION for one forward shove, then
+    wait3.2seconds. A missed shove can carry you over the edge. Stopped trucks can
+    be pushed; there is no stationary counter. At20seconds a warning announces the
+    physical ring shrinking from23seconds toward its minimum. The visible surface
+    and legal radius shrink together. An unresolved90second heat is an explicit draw
+    and replay. Starts rotate each heat. Outfits and eyebrows are cosmetic. Recorded
+    decisive replays offer angle, speed, rewind and skip. Pause/reconnect preserves
+    the match; release and freshly confirm after replacement. No online services.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -55826,7 +55829,8 @@ MonoBehaviour:
     sharedHotSeat: 1
     reducedMotion: 0
     players:
-    - name: Player 1
+    - participantId: 
+      name: Player 1
       color: {r: 0.1, g: 0.8, b: 1, a: 1}
       source: 1
       difficulty: 1
@@ -55834,7 +55838,8 @@ MonoBehaviour:
       left: 15
       back: 33
       right: 18
-    - name: Player 2
+    - participantId: 
+      name: Player 2
       color: {r: 1, g: 0.6, b: 0.15, a: 1}
       source: 0
       difficulty: 1
@@ -55842,7 +55847,8 @@ MonoBehaviour:
       left: 61
       back: 64
       right: 62
-    - name: Player 3
+    - participantId: 
+      name: Player 3
       color: {r: 0.4, g: 1, b: 0.4, a: 1}
       source: 0
       difficulty: 1
@@ -55850,7 +55856,8 @@ MonoBehaviour:
       left: 20
       back: 21
       right: 22
-    - name: Player 4
+    - participantId: 
+      name: Player 4
       color: {r: 1, g: 0.35, b: 0.65, a: 1}
       source: 0
       difficulty: 1
@@ -55858,7 +55865,8 @@ MonoBehaviour:
       left: 24
       back: 25
       right: 26
-    - name: Player 5
+    - participantId: 
+      name: Player 5
       color: {r: 0.65, g: 0.45, b: 1, a: 1}
       source: 0
       difficulty: 1
@@ -55866,7 +55874,8 @@ MonoBehaviour:
       left: 38
       back: 17
       right: 36
-    - name: Player 6
+    - participantId: 
+      name: Player 6
       color: {r: 1, g: 0.9, b: 0.25, a: 1}
       source: 0
       difficulty: 1
@@ -55874,7 +55883,8 @@ MonoBehaviour:
       left: 88
       back: 89
       right: 90
-    - name: Player 7
+    - participantId: 
+      name: Player 7
       color: {r: 0.2, g: 1, b: 0.85, a: 1}
       source: 0
       difficulty: 1
@@ -55882,7 +55892,8 @@ MonoBehaviour:
       left: 44
       back: 45
       right: 46
-    - name: Player 8
+    - participantId: 
+      name: Player 8
       color: {r: 0.95, g: 0.65, b: 0.4, a: 1}
       source: 0
       difficulty: 1
