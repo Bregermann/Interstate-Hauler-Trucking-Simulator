@@ -1,13 +1,25 @@
-# Truck Sports queued-release checkpoint — October 18
+# Truck Sports queued-release checkpoint — October18
+
+## Current Target Launch milestone
+
+Implementation/native/Windows acceptance complete; source Git commit/push outcome must be read from Logs/TruckSports/TargetRepair/commit.json and Builds/TruckSports/GIT-DELIVERY.txt. Do not infer a successful push from this build acceptance alone. Parent local51dbd9ae27caa6ca86a9301cf5e3e7ec8392de84/public54d5b69b49a11d91e831097ff0eacddd1c3b4fb6 contained prior published Sports work.
+
+Windows x64 Development;35 explicit Sports-only scenes; TruckSports startup;0 errors /47 warnings. Built 2026-10-18T15:01:32.476217+00:00. Managed SHA256 `d9c7c7d3a10cb729e9ad23e064b910b3534ff3f79bd305ee78d1aecb1fde1dcb`;438-file data manifest `58f5c5c4a96e42a0672c13b60d5a10f32e35ec45a5893e2450d1ae5875e72ff1`.
+
+Final supported-rest scoring fixes the actual first-contact award cause. Existing launch/rings/rules preserved; finite wing torque, owned volcanic venue, real lava impacts/12 physical fragments, retired hidden authority, per-owner impact/replay framing and compact typed score feedback. Saved-scene audit/14 deterministic fixtures/71 physical Play Mode checks and13 exact-build Windows suites pass, including3 Target difficulty matches,33-heat12-truck Terrier match, shared cameras/identities and2 sustained60-second four-view samples. See TargetLaunchRepair.md for results, warnings, screenshots and human/hardware limits.699 scene dependencies; no unpublished dependencies outside the owned Target scope.
+
+Source review/publication scripts and preservation hashes live under Logs/TruckSports/TargetRepair. Never rerun older hardcoded parent scripts after Git advances. Keep one canonical build, exclude generated builds/logs/caches, preserve unrelated work and private Taxi ancestry. No concurrent agent/Editor; the exclusive Sports lease remains active.
+
+Next: continue the remaining PartyMasterLedger requirements (audit existing Field Goal/Sumo/Fishing/Buzkashi/Derby/Poker and outstanding Minefield/Bungee deltas; Kickball/Dance-Off are not implemented), then FareFight/Goddess and later SkyTow/Limbo/TrailerPlug, respecting dependencies and newer priorities. Shared weather currently only has five legacy kinds in SportsChaosWeather; the universal preset selector is not implemented. Do not claim the full queue is complete. Existing Swing/Curling/Parking/Mattress/Bungee regressions were revalidated on the prior d016 binary and are separately versioned.
 
 <!-- KEEPAWAY-BEGIN -->
-## Current accepted Keepaway milestone
+## Previously accepted Keepaway milestone
 
 Canonical Windows x64 Development: `Builds/TruckSports/TruckSports.exe`, all companions, 35 explicit Sports-only scenes / TruckSports startup. Managed SHA256 `d016cd49c427f4acef886e468ca78da8c206748e21a1fbfc003059adc1988f11`; full 437-file data manifest `40e99ec79496f7471941225e1482eba85a3162173d612ee1ab16874965379001`. Zero errors / 31 warnings. Keepaway now has independent duplicate-name totals, compact bottom cards clear of the near board, no obsolete header/status strip, largest-safe camera fit and vendor-backed human-only cab ball guidance. Existing enlarged physics, rules, AI and SheepV5 motion are preserved.
 
 Native saved-scene16 / final-source PlayMode95 checks pass. All four current-build Windows suites pass:117 presentation checks/five aspect ratios, real NWH/PhysX recovery/pickups/thefts/explosions and two full normal60s-target AI matches/rematches,2,467 camera checks across20 modes,769 identity checks across34 sport scenes. Actual screenshots inspected. No hardware/human playtesting or new sustained four-cab benchmark is claimed. [Causes, implementation, evidence, limitations and vendor accounting](KeepawayRepair.md).
 
-Next: validate remaining Swing replay/clearance, then continue ordered Party repairs and new Kickball/Dance-Off, Fare Fight, Goddess and later Sky Tow/Limbo/Trailer Plug. Those are not complete. Preserve the exclusive Sports lease, private Taxi ancestry and unrelated changes. Publication receipts live in ignored Logs/TruckSports/Keepaway/commit.json and the build GIT-DELIVERY.txt.
+Following the Target milestone, continue the remaining ordered Party repairs and new Kickball/Dance-Off, Fare Fight, Goddess and later Sky Tow/Limbo/Trailer Plug. Those are not complete. Preserve the exclusive Sports lease, private Taxi ancestry and unrelated changes. Publication receipts live in ignored Logs/TruckSports/Keepaway/commit.json and the build GIT-DELIVERY.txt.
 <!-- KEEPAWAY-END -->
 
 <!-- SHARED-PARTICIPANTS-BEGIN -->

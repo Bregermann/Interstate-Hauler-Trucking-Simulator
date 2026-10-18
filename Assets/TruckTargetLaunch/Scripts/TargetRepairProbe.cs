@@ -1,0 +1,80 @@
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+using System;
+using System.Collections;
+using System.IO;
+using System.Linq;
+using System.Text;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using LWS.TruckSports;
+using LWS.TruckBowling;
+namespace LWS.TruckTargetLaunch {
+[DefaultExecutionOrder(-160)]public sealed class TargetRepairProbe:MonoBehaviour {
+ [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]static void Boot(){var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-tsTargetRepair");string mode=at>=0&&at+1<args.Length?args[at+1]:null;
+#if UNITY_EDITOR
+  if(UnityEditor.SessionState.GetBool("Target.RepairProbe",false)){UnityEditor.SessionState.SetBool("Target.RepairProbe",false);mode=UnityEditor.SessionState.GetString("Target.RepairMode","settling");}
+#endif
+  if(mode==null)return;var root=new GameObject("Explicit Target final-rest acceptance");DontDestroyOnLoad(root);root.AddComponent<SportsProbeInputIsolation>();root.AddComponent<TargetRepairProbe>().mode=mode;
+ }
+ string mode,folder;int checks,errors;bool done;TargetMatch match;IDisposable scope;Keyboard keyboard;Vector2 injected;bool inject,spin;readonly StringBuilder log=new StringBuilder();
+ void Awake(){scope=SportsPrefs.IsolateValidation("TargetRepair");SportsParticipantRegistry.ForgetCache();keyboard=InputSystem.AddDevice<Keyboard>("Target repair software keyboard");Application.logMessageReceived+=Error;}
+ void Error(string value,string stack,LogType kind){if(kind==LogType.Error||kind==LogType.Exception){errors++;log.AppendLine("ERROR "+value+"\n"+stack);Write();}}
+ void Check(bool ok,string value){checks++;if(!ok)errors++;log.AppendLine((ok?"PASS ":"FAIL ")+value);Write();}
+ void Write(){if(folder!=null)File.WriteAllText(folder+"/progress.txt",log.ToString());}
+ IEnumerator Start(){folder=Path.GetFullPath(Path.Combine(Application.dataPath,Application.isEditor?"..":"../../..","Logs/TruckSports/TargetRepair",Application.isEditor?"Native":"Windows",mode));Directory.CreateDirectory(folder);File.WriteAllText(folder+"/result.txt","RUNNING");log.AppendLine("TARGET_REPAIR mode="+mode+" PID="+System.Diagnostics.Process.GetCurrentProcess().Id+" editor="+Application.isEditor);var stack=new System.Collections.Generic.Stack<IEnumerator>();stack.Push(Run());while(stack.Count>0){object next=null;try{var routine=stack.Peek();if(!routine.MoveNext()){stack.Pop();continue;}next=routine.Current;if(next is IEnumerator child){stack.Push(child);continue;}}catch(Exception e){Check(false,e.ToString());Finish();yield break;}yield return next;}Finish();}
+ IEnumerator Run(){yield return SportsProbeScene.Ensure<TargetMatch>("TruckTargetLaunch");match=FindAnyObjectByType<TargetMatch>();yield return null;Check(match!=null&&match.volcano!=null&&match.volcano.wrecks.pieces.Length==48,"saved volcanic scene and four real truck-fragment sets");Check(match.replay.sources.Length==9&&match.replay.ghosts.All(g=>g.GetComponentsInChildren<Collider>(true).Length==0),"target and fragment replay remains render-only");Check(FindObjectsByType<DigitalRuby.WeatherMaker.WeatherMakerScript>(FindObjectsInactive.Include).Length==1,"one shared Weather Maker authority");Check(FindObjectsByType<AudioListener>(FindObjectsInactive.Include).Length==1,"one AudioListener");if(errors>0)yield break;
+  if(mode=="performance")yield return Performance();else if(mode=="air")yield return Air();else{yield return Settling();if(mode=="all"&&errors==0)yield return Air();}
+  if(match!=null)match.SetupScreen();SportsNavigation.FrontEnd();yield return null;yield return null;Check(FindAnyObjectByType<SportsFrontEnd>()!=null,"scene exit returns to actual collection");Check(FindObjectsByType<TargetVolcano>(FindObjectsInactive.Include).Length==0,"volcano, fragments, replay and effects are scene-owned");
+ }
+ IEnumerator Prepare(int count=1){inject=spin=false;injected=Vector2.zero;match.SetupScreen();match.setup.count=count;match.NormalizeSetup();for(int i=0;i<count;i++){match.setup.players[i].source=BowlingSource.Keyboard;match.setup.players[i].pad=null;}Check(match.StartMatch(),"physical fixture starts count="+count);Time.timeScale=4;float until=Time.realtimeSinceStartup+8;while(match.Stage!=TargetStage.Playing&&Time.realtimeSinceStartup<until)yield return null;Check(match.Stage==TargetStage.Playing,"clean countdown completes");}
+ void Drop(int slot,Vector3 local,Vector3 velocity,Quaternion rotation){var r=match.racers[slot];r.truck.Prepare(match.target.position+local,rotation,false);r.truck.body.linearVelocity=velocity;r.truck.body.angularVelocity=Vector3.zero;r.ObservePastStep();typeof(TargetRacer).GetProperty("Phase").SetValue(r,TargetFlight.Airborne);Physics.SyncTransforms();}
+ IEnumerator WaitResolved(float seconds=22){float until=Time.realtimeSinceStartup+seconds;while(!match.rules.RoundComplete&&Time.realtimeSinceStartup<until)yield return null;Check(match.rules.RoundComplete,"physical attempts resolve within bounded observation");}
+ IEnumerator Settling(){
+  yield return Prepare();Drop(0,new Vector3(0,8,0),Vector3.down*4,Quaternion.identity);var r=match.racers[0];float until=Time.realtimeSinceStartup+8;while(r.TopContacts==0&&Time.realtimeSinceStartup<until)yield return null;
+  Check(r.TopContacts>0&&!match.rules.resolved[0]&&match.rules.totals[0]==0,"actual first top impact awards no score and does not freeze the truck");Check(!r.truck.body.isKinematic&&!r.truck.Powered,"landing retains physical motion with propulsion disabled");yield return WaitResolved();Check(match.rules.last[0]==100&&r.ResolutionReason=="FINAL_REST"&&r.StableTime>=1.8f,"genuine supported bullseye scores only after continuous final stability");if(errors>0)yield break;
+  int attempts=match.rules.attempts[0];r.FinalizeRest();Check(match.rules.attempts[0]==attempts&&attempts==1,"one final score per delivery");
+  bool inward=false,outward=false;
+  foreach(var plan in new[]{new Vector2(-34,10.8f),new Vector2(-18.5f,10.8f),new Vector2(-4,6),new Vector2(0,8)}){
+   yield return Prepare();Drop(0,new Vector3(0,8,plan.x),new Vector3(0,-4,plan.y),Quaternion.identity);r=match.racers[0];int first=-1;until=Time.realtimeSinceStartup+24;while(!match.rules.resolved[0]&&Time.realtimeSinceStartup<until){if(first<0&&r.TopContacts>0){first=match.ScoreAt(r.truck.body.worldCenterOfMass);Check(match.rules.totals[0]==0,"moving ring contact remains provisional plan="+plan);}yield return null;}
+   int final=match.rules.last[0];log.AppendLine("PHYSICAL_SLIDE plan="+plan+" firstZone="+first+" final="+final+" finalPosition="+r.LandingPoint+" reason="+r.ResolutionReason);
+   Check(match.rules.resolved[0]&&final==(r.Destroyed?0:match.ScoreAt(r.LandingPoint)),"score uses actual final position after slide "+plan);inward|=first>0&&final>first;outward|=first>0&&final>0&&final<first;
+  }
+  Check(inward&&outward,"actual physical slides demonstrate both higher and lower final rings");
+  yield return Prepare();Drop(0,new Vector3(0,8,0),Vector3.down*4,Quaternion.Euler(180,0,0));yield return WaitResolved();r=match.racers[0];Check(match.rules.last[0]==100&&Vector3.Dot(r.truck.body.rotation*Vector3.up,Vector3.up)<-.8f,"upside-down supported final rest scores correctly");
+  yield return Prepare();Drop(0,new Vector3(0,7,0),Vector3.down*3,Quaternion.identity);r=match.racers[0];until=Time.realtimeSinceStartup+12;while(r.StableTime<.65f&&!match.rules.resolved[0]&&Time.realtimeSinceStartup<until)yield return null;Check(!match.rules.resolved[0]&&r.StableTime>=.65f,"observe partial stability before award");r.truck.body.AddForce(Vector3.right*.85f,ForceMode.VelocityChange);yield return new WaitForFixedUpdate();yield return new WaitForFixedUpdate();Check(r.StableTime<.2f&&!match.rules.resolved[0],"physical motion restarts the continuous stability timer");yield return WaitResolved();Check(match.rules.last[0]>0,"truck can settle again after physical disturbance");
+  yield return Prepare(2);Drop(0,new Vector3(0,7,0),Vector3.down*3,Quaternion.identity);r=match.racers[0];until=Time.realtimeSinceStartup+14;while(!r.ReadyToScore&&Time.realtimeSinceStartup<until)yield return null;Check(r.ReadyToScore&&!match.rules.resolved[0]&&match.rules.totals[0]==0,"stable early truck waits for other simultaneous attempts");Drop(1,new Vector3(10,7,0),Vector3.down*3,Quaternion.identity);yield return WaitResolved();Check(match.rules.last[0]==100&&match.rules.last[1]>0&&match.rules.attempts[0]==1&&match.rules.attempts[1]==1,"all final stable snapshots lock exactly once together");
+  yield return Prepare();Drop(0,new Vector3(28.5f,7,0),new Vector3(8,-4,0),Quaternion.identity);r=match.racers[0];until=Time.realtimeSinceStartup+14;bool leftUnresolved=false;while(!match.rules.resolved[0]&&Time.realtimeSinceStartup<until){if(r.truck.body.position.y>match.volcano.lava.position.y+4&&Vector2.Distance(new Vector2(r.truck.body.position.x,r.truck.body.position.z),new Vector2(match.target.position.x,match.target.position.z))>31)leftUnresolved=true;yield return null;}Check(leftUnresolved,"leaving target boundary continues real fall without premature explosion");Check(r.Destroyed&&match.rules.last[0]==0&&r.ResolutionReason=="ACTUAL_LAVA_CONTACT"&&match.volcano.Impacts==1,"late fall scores zero only on actual lava contact");Check(match.volcano.wrecks.Emissions==1&&match.volcano.wrecks.pieces.Count(p=>p.body.gameObject.activeSelf)==12,"lava emits one pooled set of actual physical truck pieces");Check(r.truck.body.isKinematic&&!r.truck.body.detectCollisions,"destroyed hidden authority retires while real fragments remain dynamic");match.director.Present(1);Check(match.playerCameras[0].rig.LookAt==match.director.impactGroups[0].transform,"missed human pane frames the actual impact rather than the distant target or hidden body");yield return Capture("lava-and-fragments");var impactCamera=match.playerCameras[0].view;int visible=match.volcano.wrecks.pieces.Count(piece=>piece.body.gameObject.activeSelf&&piece.renderer.bounds.max.y>match.volcano.lava.position.y&&Visible(impactCamera,piece.renderer.bounds.center));log.AppendLine("IMPACT_CAMERA position="+impactCamera.transform.position+" focusViewport="+impactCamera.WorldToViewportPoint(match.volcano.impactFocus[0].position)+" visibleParts="+visible);Check(visible>=6,"actual impact view retains at least six airborne real truck fragments above lava");
+  yield return Prepare();Drop(0,new Vector3(0,7,0),Vector3.down*3,Quaternion.identity);r=match.racers[0];r.maximumSettleTime=10;spin=true;yield return WaitResolved();spin=false;Check(match.rules.last[0]==0&&r.ResolutionReason=="PERSISTENT_MOTION_TIMEOUT","documented persistent physical motion timeout awards zero, never first-contact points");r.maximumSettleTime=60;
+  yield return Prepare();Drop(0,new Vector3(0,7,0),Vector3.down*3,Quaternion.identity);yield return WaitResolved();yield return Capture("final-rest");Check(match.volcano.Impacts==0&&match.volcano.wrecks.Emissions==0&&match.rules.attempts[0]==1,"rematch clears lava/debris and restores exact attempt count");
+ }
+ IEnumerator Performance(){
+  match.SetupScreen();match.setup.count=4;match.NormalizeSetup();match.AllBots();SportsCameraOptions.Set(true);Check(match.StartMatch()&&match.HumanViews==4,"four autonomous trucks receive four real viewports for the rendered sample");Time.timeScale=1;
+  float preview=Time.realtimeSinceStartup+22;while(!match.racers.Any(r=>r.Phase==TargetFlight.Airborne&&r.FlightAge>.8f)&&Time.realtimeSinceStartup<preview)yield return null;
+  yield return Capture("four-view-natural-flight");Time.timeScale=1;
+  float warm=Time.realtimeSinceStartup+5;while(Time.realtimeSinceStartup<warm)yield return null;
+  var times=new System.Collections.Generic.List<float>(6000);float until=Time.realtimeSinceStartup+60;int fourViews=0,live=0,focused=0,rematches=0;bool departure=false,contact=false;
+  while(Time.realtimeSinceStartup<until){times.Add(Time.unscaledDeltaTime*1000);if(match.cameras.Length==4)fourViews++;if(match.Live&&!match.Paused)live++;if(Application.isFocused)focused++;
+   foreach(var r in match.racers){departure|=r.LaunchVelocity.sqrMagnitude>.01f;contact|=r.TopContacts>0;}
+   if(match.Finished){match.SetupScreen();match.StartMatch();rematches++;}yield return null;
+  }
+  times.Sort();log.AppendLine("PERFORMANCE seconds=60 realtime frames="+times.Count+" meanMs="+times.Average()+" p95Ms="+times[(int)(times.Count*.95f)]+" p99Ms="+times[(int)(times.Count*.99f)]+" fourViewFrames="+fourViews+" liveFrames="+live+" focusedFrames="+focused+" rematches="+rematches+" resolution="+Screen.width+"x"+Screen.height);
+  Check(times.Count>100&&fourViews>100&&live>100,"sustained rendered four-view gameplay collected, including normal replay transitions");Check(departure&&contact,"sample includes actual NWH ramp departures and physical target contact");
+ }
+ IEnumerator Air(){yield return Prepare();var r=match.racers[0];Drop(0,new Vector3(0,60,-45),new Vector3(0,4,20),Quaternion.identity);r.touch.Reset(1.6f,Vector2.up);inject=true;injected=Vector2.up;yield return new WaitForSeconds(.5f);Check(r.touch.Spent==0&&r.truck.body.angularVelocity.magnitude<.01f,"held launch acceleration spends neither range nor pitch correction");injected=Vector2.zero;yield return new WaitForSeconds(.15f);injected=Vector2.one;float startY=r.truck.body.linearVelocity.y;yield return new WaitForSeconds(2.4f);Check(r.touch.Spent>0&&r.touch.Spent<=1.6001f,"wing corrections share the existing finite aftertouch budget");float angle=Quaternion.Angle(Quaternion.identity,r.truck.body.rotation);Check(angle>3&&angle<70,"modest physical pitch/yaw/bank correction angle="+angle);Check(r.truck.body.linearVelocity.y<startY-10&&r.truck.body.linearVelocity.z>10,"air control cannot hover or reverse forward flight");inject=false;match.Pause();var p=r.truck.body.position;var velocity=r.truck.body.linearVelocity;yield return new WaitForSecondsRealtime(.2f);Check(p==r.truck.body.position&&velocity==r.truck.body.linearVelocity,"pause preserves actual corrected flight");match.Resume();yield return Capture("wing-flight");
+  yield return Prepare();Drop(0,new Vector3(0,7,0),Vector3.down*3,Quaternion.identity);r=match.racers[0];float until=Time.realtimeSinceStartup+10;while(r.Phase==TargetFlight.Airborne&&Time.realtimeSinceStartup<until)yield return null;float spent=r.touch.Spent;inject=true;injected=Vector2.one;yield return new WaitForSeconds(.4f);Check(r.touch.Spent==spent&&!r.truck.Powered&&r.Phase!=TargetFlight.Airborne,"first target contact permanently ends propulsion and aftertouch");inject=false;
+ }
+ IEnumerator Capture(string label){yield return new WaitForSeconds(.08f);Time.timeScale=0;yield return new WaitForSecondsRealtime(.2f);if(Application.isEditor){SportsControlledCapture.Save(match,1280,720,folder+"/"+label+"-1280-controlled.png");yield return null;}else foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080)}){Screen.SetResolution(size.x,size.y,false);yield return new WaitForSecondsRealtime(.3f);ScreenCapture.CaptureScreenshot(folder+"/"+label+"-"+size.x+".png");yield return new WaitForSecondsRealtime(.2f);}Time.timeScale=4;}
+ static bool Visible(Camera camera,Vector3 point){var p=camera.WorldToViewportPoint(point);return p.z>0&&p.x>.02f&&p.x<.98f&&p.y>.02f&&p.y<.98f;}
+ void FixedUpdate(){if(match==null||!match.Live||!match.RoundLive)return;if(inject)match.commands[0]=injected;if(spin&&match.racers[0].Phase==TargetFlight.Passive)match.racers[0].truck.body.AddTorque(Vector3.up*12,ForceMode.Acceleration);}
+ void Finish(){if(done)return;done=true;Time.timeScale=1;log.AppendLine("CHECKS="+checks);log.AppendLine("ERRORS="+errors);log.AppendLine(errors==0?"PASS":"FAIL");File.WriteAllText(folder+"/result.txt",log.ToString());
+#if UNITY_EDITOR
+  if(Application.isEditor)UnityEditor.EditorApplication.isPlaying=false;else
+#endif
+  Application.Quit(errors==0?0:2);
+ }
+ void OnDestroy(){Application.logMessageReceived-=Error;inject=spin=false;if(keyboard!=null&&keyboard.added)InputSystem.RemoveDevice(keyboard);scope?.Dispose();SportsParticipantRegistry.ForgetCache();Time.timeScale=1;}
+}
+}
+#endif
+
+

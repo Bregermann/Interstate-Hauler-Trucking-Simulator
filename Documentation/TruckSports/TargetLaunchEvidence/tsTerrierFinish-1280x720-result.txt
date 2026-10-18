@@ -1,0 +1,47 @@
+PASS fresh physical finish reproduction starts · ready=True reason= key=Keyboard:/Keyboard1 enabled=True
+PASS centered complete-body passage finishes
+TRACE centered complete-body passage finishes
+EVENT slot=0 reason=FINISH_CANDIDATE time=3.769656 boundsCenter=(-0.00138, 1.07744, 180.51260) boundsSize=(1.57620, 1.93582, 3.01248)
+EVENT slot=0 reason=OFFICIAL_FINISH_LOCKED time=3.769656 boundsCenter=(-0.00138, 1.07744, 180.51260) boundsSize=(1.57620, 1.93582, 3.01248)
+
+PASS actual barrier collision after finish and delayed callback cannot revoke it
+TRACE POST_FINISH
+EVENT slot=0 reason=FINISH_CANDIDATE time=3.769656 boundsCenter=(-0.00138, 1.07744, 180.51260) boundsSize=(1.57620, 1.93582, 3.01248)
+EVENT slot=0 reason=OFFICIAL_FINISH_LOCKED time=3.769656 boundsCenter=(-0.00138, 1.07744, 180.51260) boundsSize=(1.57620, 1.93582, 3.01248)
+EVENT slot=0 reason=AFTER_FINISH_CONTACT_IGNORED Solid finish barrier time=4.139998 boundsCenter=(6.00010, 0.53750, 180.12080) boundsSize=(1.57642, 2.07264, 3.09764)
+EVENT slot=0 reason=QUEUED_AFTER_FINISH_IGNORED INJECTED_DELAYED_CALLBACK_AFTER_FINISH time=4.779998 boundsCenter=(6.00523, -4.06022, 181.96870) boundsSize=(1.58550, 3.27657, 2.39111)
+
+PASS fresh physical finish reproduction starts · ready=True reason= key=Keyboard:/Keyboard1 enabled=True
+PASS slightly angled complete-body passage finishes
+TRACE slightly angled complete-body passage finishes
+EVENT slot=0 reason=FINISH_CANDIDATE time=8.618105 boundsCenter=(0.53318, 1.07505, 180.41960) boundsSize=(1.91297, 1.93321, 3.16486)
+EVENT slot=0 reason=OFFICIAL_FINISH_LOCKED time=8.618105 boundsCenter=(0.53318, 1.07505, 180.41960) boundsSize=(1.91297, 1.93321, 3.16486)
+
+PASS fresh physical finish reproduction starts · ready=True reason= key=Keyboard:/Keyboard1 enabled=True
+PASS light physical opening-edge scrape survives and finishes
+PASS edge-scrape fixture produced actual solid contact
+TRACE EDGE_SCRAPE
+CONTACT slot=0 object=Solid finish barrier type=BoxCollider trigger=False point=(1.6875, 2.0317, 177.0973) normal=(-1.0000, 0.0000, 0.0000) incomingNormalSpeed=1.43438 boundsCenter=(0.89680, 1.07416, 175.95690) boundsSize=(1.57732, 1.92035, 3.00281) eventTime=12.106700 class=SAFE_OPENING
+CONTACT slot=0 object=Solid finish barrier type=BoxCollider trigger=False point=(1.6875, 0.1157, 177.0984) normal=(-1.0000, 0.0000, 0.0000) incomingNormalSpeed=1.43438 boundsCenter=(0.89680, 1.07416, 175.95690) boundsSize=(1.57732, 1.92035, 3.00281) eventTime=12.106700 class=SAFE_OPENING
+CONTACT slot=0 object=Solid finish barrier type=BoxCollider trigger=False point=(1.6875, 2.0310, 176.0002) normal=(-1.0000, 0.0000, 0.0000) incomingNormalSpeed=1.43438 boundsCenter=(0.89680, 1.07416, 175.95690) boundsSize=(1.57732, 1.92035, 3.00281) eventTime=12.106700 class=SAFE_OPENING
+CONTACT slot=0 object=Solid finish barrier type=BoxCollider trigger=False point=(1.6875, 0.1151, 175.9999) normal=(-1.0000, 0.0000, 0.0000) incomingNormalSpeed=1.43438 boundsCenter=(0.89680, 1.07416, 175.95690) boundsSize=(1.57732, 1.92035, 3.00281) eventTime=12.106700 class=SAFE_OPENING
+EVENT slot=0 reason=FINISH_CANDIDATE time=12.350360 boundsCenter=(0.89910, 1.07683, 180.49670) boundsSize=(1.57612, 1.93288, 3.01077)
+EVENT slot=0 reason=OFFICIAL_FINISH_LOCKED time=12.350360 boundsCenter=(0.89910, 1.07683, 180.49670) boundsSize=(1.57612, 1.93288, 3.01077)
+
+PASS fresh physical finish reproduction starts · ready=True reason= key=Keyboard:/Keyboard1 enabled=True
+PASS genuine pre-finish solid-wall slam still wrecks without bypass win
+PASS wreck emits actual physical truck mesh pieces
+TRACE WALL_SLAM
+CONTACT slot=0 object=Solid finish barrier type=BoxCollider trigger=False point=(6.7799, 1.5542, 168.0000) normal=(0.0000, 0.0000, -1.0000) incomingNormalSpeed=19.95904 boundsCenter=(5.99168, 0.52841, 166.71200) boundsSize=(1.57650, 2.07852, 3.10132) eventTime=15.739990 class=SOLID_BARRIER_IMPACT
+CONTACT slot=0 object=Solid finish barrier type=BoxCollider trigger=False point=(5.2040, 1.5542, 168.0000) normal=(0.0000, 0.0000, -1.0000) incomingNormalSpeed=19.95904 boundsCenter=(5.99168, 0.52841, 166.71200) boundsSize=(1.57650, 2.07852, 3.10132) eventTime=15.739990 class=SOLID_BARRIER_IMPACT
+CONTACT slot=0 object=Solid finish barrier type=BoxCollider trigger=False point=(6.7799, 0.0000, 168.0000) normal=(0.0000, 0.0000, -1.0000) incomingNormalSpeed=19.95904 boundsCenter=(5.99168, 0.52841, 166.71200) boundsSize=(1.57650, 2.07852, 3.10132) eventTime=15.739990 class=SOLID_BARRIER_IMPACT
+CONTACT slot=0 object=Solid finish barrier type=BoxCollider trigger=False point=(5.2039, -0.0002, 168.0000) normal=(0.0000, 0.0000, -1.0000) incomingNormalSpeed=19.95904 boundsCenter=(5.99168, 0.52841, 166.71200) boundsSize=(1.57650, 2.07852, 3.10132) eventTime=15.739990 class=SOLID_BARRIER_IMPACT
+EVENT slot=0 reason=WRECK SOLID_BARRIER Solid finish barrier normalSpeed=19.959 time=15.739990 boundsCenter=(5.99168, 0.52841, 166.71200) boundsSize=(1.57650, 2.07852, 3.10132)
+
+PASS fresh physical finish reproduction starts · ready=True reason= key=Keyboard:/Keyboard1 enabled=True
+PASS high-speed swept passage cannot skip finish detection
+TRACE high-speed swept passage cannot skip finish detection
+EVENT slot=0 reason=FINISH_CANDIDATE time=18.822360 boundsCenter=(-0.00008, 1.18517, 173.99980) boundsSize=(1.57591, 1.91600, 3.00000)
+EVENT slot=0 reason=OFFICIAL_FINISH_LOCKED time=18.822360 boundsCenter=(-0.00008, 1.18517, 173.99980) boundsSize=(1.57591, 1.91600, 3.00000)
+
+ERRORS=0. Controlled initial physics poses/velocities and software commands; no hardware/human playtest.

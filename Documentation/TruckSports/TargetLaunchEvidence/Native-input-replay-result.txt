@@ -1,0 +1,54 @@
+PASS one human actual ramp run starts
+PASS actual NWH lip departure preserves positive ramp momentum
+PASS held runway acceleration does not spend range aftertouch
+PASS actual mid-flight pause preserves body momentum and scoring clock
+PASS fresh lateral/range input uses finite shared aftertouch budget
+PASS mapped action commits one physical dive
+PASS held dive cannot generate lift and downward gravity remains
+PASS post-contact input cannot drive or rescore
+PASS four physical scoring contact fixtures start
+PASS real descending PhysX top contacts score10/25/50/100
+PASS one persistent participant marker appears at each locked landing
+PASS physical post-score rebounds do not alter points or duplicate deliveries
+PASS actual shared replay has render-only ghosts and frozen authoritative trucks
+PASS recorded truck retains owning participant paint
+PASS actual replay retains baked target number geometry
+PASS replay angle and slow motion controls
+PASS replay fast motion control
+PASS recorded replay rewind remains bounded
+PASS skip consumes input and exits actual replay
+PASS high-speed actual swept contact fixture starts
+EXTREME_DOWNWARD phase=Passive contacts=1 position=(0.00, 22.21, 130.00) velocity=(0.00, 224.26, 0.00) score=0
+PASS actual extreme CCD impact rebounds physically and awards nothing while unsupported; no first-contact score or freeze
+PASS two independent sticks and triggers share one controller
+PASS whole-controller/shared-stick conflict rejected
+PASS duplicate stick source rejected
+PASS four named human panes start with independent ownership
+PASS software pad sticks and separate keyboard clusters drive their own trucks
+PASS controller disconnect during delivery preserves flight and opens reconnect
+PASS explicit replacement accepts separate-stick ownership
+PASS held replacement controls wait for neutral
+PASS fresh shared sticks route independently after reconnect
+PASS native four-human camera-only render 1280x720
+PASS native four-human camera-only render 1920x1080
+PASS native four-human camera-only render 1440x900
+PASS native four-human camera-only render 1280x960
+PASS native four-human camera-only render 2560x1080
+PASS long-name viewport HUD retains readable glyphs inside panel
+PASS long-name viewport HUD retains readable glyphs inside panel
+PASS long-name viewport HUD retains readable glyphs inside panel
+PASS long-name viewport HUD retains readable glyphs inside panel
+PASS two-human rematch retains setup and clears attempts
+PASS native two-human camera-only render 1280x720
+PASS native two-human camera-only render 1920x1080
+PASS solo rematch clears points markers dive aftertouch and replay
+PASS native one-human camera-only render 1280x720
+PASS native one-human camera-only render 1920x1080
+PASS menu return cleans camera replay tween audio and scene weather owners
+PASS collection loads saved Target scene visit=0
+PASS returned Target starts with one listener visit=0
+PASS collection loads saved Target scene visit=1
+PASS returned Target starts with one listener visit=1
+PASS collection loads saved Target scene visit=2
+PASS returned Target starts with one listener visit=2
+ERRORS=0. Actual runway input/flight plus explicitly injected physical contact fixtures and devices. Camera-only manual renders; no human/hardware/audio or rendered-player performance acceptance.

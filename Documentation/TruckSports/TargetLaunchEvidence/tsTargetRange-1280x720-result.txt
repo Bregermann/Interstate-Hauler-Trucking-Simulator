@@ -1,0 +1,33 @@
+PASS solo real approach starts desiredSpeed=16
+RELEASE desired=16 velocity=(-0.072, 1.048, 7.139) position=(-0.054, 24.399, 73.123)
+PASS real no-steer/no-aftertouch attempt resolves with physical landing or genuine approach miss desired=16
+APPROACH_OUTCOME launched=True reason=ACTUAL_LAVA_CONTACT
+TRIAL desired=16 launch=(-0.072, 1.048, 7.139) landing=(-0.739, -148.730, 119.645) score=0 secondsAfterRelease=6.920
+PASS solo real approach starts desiredSpeed=19
+RELEASE desired=19 velocity=(-0.212, 3.052, 10.387) position=(-0.092, 25.320, 72.557)
+PASS real no-steer/no-aftertouch attempt resolves with physical landing or genuine approach miss desired=19
+APPROACH_OUTCOME launched=True reason=ACTUAL_LAVA_CONTACT
+TRIAL desired=19 launch=(-0.212, 3.052, 10.387) landing=(-1.155, -149.578, 88.164) score=0 secondsAfterRelease=9.700
+PASS solo real approach starts desiredSpeed=22
+RELEASE desired=22 velocity=(0.036, 5.961, 12.868) position=(-0.026, 25.477, 72.384)
+PASS actual mid-flight pause preserves pose velocity and clock
+PASS real no-steer/no-aftertouch attempt resolves with physical landing or genuine approach miss desired=22
+APPROACH_OUTCOME launched=True reason=FINAL_REST
+TRIAL desired=22 launch=(0.036, 5.961, 12.868) landing=(6.349, 4.271, 130.412) score=50 secondsAfterRelease=8.600
+PASS solo real approach starts desiredSpeed=25
+RELEASE desired=25 velocity=(0.045, 10.144, 19.018) position=(0.119, 24.875, 73.938)
+PASS real no-steer/no-aftertouch attempt resolves with physical landing or genuine approach miss desired=25
+APPROACH_OUTCOME launched=True reason=ACTUAL_LAVA_CONTACT
+TRIAL desired=25 launch=(0.045, 10.144, 19.018) landing=(0.887, -149.066, 211.916) score=0 secondsAfterRelease=10.640
+PASS solo real approach starts desiredSpeed=23.5
+RELEASE desired=23.5 velocity=(0.094, 7.777, 13.893) position=(0.036, 26.109, 72.430)
+PASS real no-steer/no-aftertouch attempt resolves with physical landing or genuine approach miss desired=23.5
+APPROACH_OUTCOME launched=True reason=FINAL_REST
+TRIAL desired=23.5 launch=(0.094, 7.777, 13.893) landing=(1.121, 4.271, 135.549) score=50 secondsAfterRelease=8.560
+PASS solo real approach starts desiredSpeed=24.5
+RELEASE desired=24.5 velocity=(0.215, 9.881, 16.834) position=(0.236, 24.833, 73.529)
+PASS real no-steer/no-aftertouch attempt resolves with physical landing or genuine approach miss desired=24.5
+APPROACH_OUTCOME launched=True reason=FINAL_REST
+TRIAL desired=24.5 launch=(0.215, 9.881, 16.834) landing=(1.699, 5.500, 153.484) score=10 secondsAfterRelease=9.080
+PASS at least four of six varied speed approaches physically depart the real ramp; misses remain allowed
+ERRORS=0. Software keyboard only; no launch velocity overrides, steering, or aftertouch. Camera-only manual render is not human or GPU performance validation.

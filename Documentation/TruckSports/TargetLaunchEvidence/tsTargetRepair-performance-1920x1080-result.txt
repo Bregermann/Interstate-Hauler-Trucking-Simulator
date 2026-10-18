@@ -1,0 +1,14 @@
+TARGET_REPAIR mode=performance PID=52916 editor=False
+PASS saved volcanic scene and four real truck-fragment sets
+PASS target and fragment replay remains render-only
+PASS one shared Weather Maker authority
+PASS one AudioListener
+PASS four autonomous trucks receive four real viewports for the rendered sample
+PERFORMANCE seconds=60 realtime frames=7611 meanMs=7.8842 p95Ms=12.51417 p99Ms=12.53437 fourViewFrames=5085 liveFrames=7611 focusedFrames=7611 rematches=0 resolution=1920x1080
+PASS sustained rendered four-view gameplay collected, including normal replay transitions
+PASS sample includes actual NWH ramp departures and physical target contact
+PASS scene exit returns to actual collection
+PASS volcano, fragments, replay and effects are scene-owned
+CHECKS=9
+ERRORS=0
+PASS
