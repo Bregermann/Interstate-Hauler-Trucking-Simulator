@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "oldAssemblySHA256": "3f69e06c097f7e0bf46688c0c6179993c7f916a400af08846855186d32677220",
+  "finalAssemblySHA256": "1ded15c3f1629166224a67d36d754d2d821b22a8cdf587fbfdecdf42efa9bf4d",
+  "comparedMethods": 11746,
+  "finalMethods": 11746,
+  "excludedTypes": [
+    "LWS.TruckTerrierRacing.TerrierSmoke",
+    "LWS.TruckSports.SportsBroadcastScores::LateUpdate/200001",
+    "LWS.TruckMinefield.MinefieldProbe",
+    "LWS.TruckTerrierRacing.TerrierSmoke\u002B\u003CStart\u003Ed__17",
+    "LWS.TruckMinefield.MinefieldProbe\u002B\u003C\u003Ec",
+    "LWS.TruckMinefield.MinefieldProbe\u002B\u003CStart\u003Ed__16",
+    "LWS.TruckCheeseRolling.CheeseSmoke\u002B\u003CRun\u003Ed__34::MoveNext/200002"
+  ],
+  "differences": [],
+  "note": "Decoded IL, signatures, local signatures, flags, stack and exception regions compared. Metadata operands resolve to stable member/type/string identities, rather than allocation token numbers. Excludes the three optional development harnesses CheeseSmoke.Run, TerrierSmoke (virtual keyboard setup/cleanup) and MinefieldProbe (fair outside-world recovery classification), plus the read-only SportsBroadcastScores.LateUpdate Curling status-label binding. Exact source deltas separately reviewed. Debug metadata/MVID/RVA excluded. Exact source deltas and native scene proofs independently verified. ALL other methods, including all physical gameplay, scoring, AI, input and camera methods, remain equivalent. The sole normal runtime difference is the read-only Curling DELIVERING/READY card label; no turn or score writes. Native scene/component and exact asset input proofs independently bound the Terrier atmosphere-only change."
+}

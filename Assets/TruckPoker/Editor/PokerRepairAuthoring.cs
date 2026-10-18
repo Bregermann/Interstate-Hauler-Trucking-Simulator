@@ -1,0 +1,8 @@
+using UnityEngine;using UnityEditor;using TMPro;using LWS.TruckSports.Editor;
+namespace LWS.TruckPoker.Editor {
+public static class PokerRepairAuthoring {
+ public static void Install(PokerMatch m){foreach(var card in Object.FindObjectsByType<PokerCardView>(FindObjectsInactive.Include))InstallCard(card);EditorUtility.SetDirty(m);}
+ public static void InstallCard(PokerCardView card){var size=card.GetComponent<RectTransform>().sizeDelta;Rank(card.rank,new Vector2(size.x*.52f,size.y*.3f),new Vector2(-size.x*.21f,size.y*.31f),size.y*.26f,TextAlignmentOptions.Center);Rank(card.corner,new Vector2(size.x*.42f,size.y*.24f),new Vector2(size.x*.26f,-size.y*.34f),size.y*.17f,TextAlignmentOptions.Center);if(card.cornerSuit==null){var marker=SportsUIAuthoring.Rect("Rank corner suit",card.face.transform,new Vector2(size.x*.19f,size.y*.17f),new Vector2(-size.x*.30f,size.y*.12f));card.cornerSuit=marker.AddComponent<PokerSuitGraphic>();card.cornerSuit.raycastTarget=false;}foreach(var label in card.back.GetComponentsInChildren<TMP_Text>(true)){label.text="TRUCK\nSPORTS";label.enableAutoSizing=true;label.fontSizeMax=size.y*.14f;label.fontSizeMin=size.y*.11f;label.alignment=TextAlignmentOptions.Center;EditorUtility.SetDirty(label);}EditorUtility.SetDirty(card);}
+ static void Rank(TMP_Text text,Vector2 size,Vector2 position,float font,TextAlignmentOptions alignment){text.rectTransform.sizeDelta=size;text.rectTransform.anchoredPosition=position;text.margin=Vector4.zero;text.enableAutoSizing=true;text.fontSizeMax=font;text.fontSizeMin=font*.8f;text.fontSize=font;text.textWrappingMode=TextWrappingModes.NoWrap;text.overflowMode=TextOverflowModes.Overflow;text.alignment=alignment;EditorUtility.SetDirty(text);}
+}
+}

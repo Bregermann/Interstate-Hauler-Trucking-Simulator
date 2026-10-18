@@ -4,7 +4,7 @@ namespace LWS.TruckPoker {
 public static class PokerHand {
  public static int Rank(int card)=>card%13+2;
  public static int Suit(int card)=>card/13;
- public static string Name(int card){if(card<0||card>=52)return "BACK";return "23456789TJQKA"[card%13]+new[]{"♣","♦","♥","♠"}[card/13];}
+ public static string Name(int card){if(card<0||card>=52)return "BACK";return (card%13==8?"10":"23456789TJQKA"[card%13].ToString())+new[]{"♣","♦","♥","♠"}[card/13];}
  public static string Category(long value)=>new[]{"HIGH CARD","PAIR","TWO PAIR","THREE OF A KIND","STRAIGHT","FLUSH","FULL HOUSE","FOUR OF A KIND","STRAIGHT FLUSH"}[(int)(value>>20)];
  static long Pack(int category,int a=0,int b=0,int c=0,int d=0,int e=0)=>(long)category<<20|(long)a<<16|(long)b<<12|(long)c<<8|(long)d<<4|(long)e;
  public static long Evaluate(params int[] cards){if(cards==null||cards.Length<5||cards.Length>7)throw new ArgumentException("Five to seven cards required");ulong used=0;foreach(int c in cards){if(c<0||c>=52||(used&(1UL<<c))!=0)throw new ArgumentException("Invalid/duplicate card");used|=1UL<<c;}long best=-1;for(int a=0;a<cards.Length-4;a++)for(int b=a+1;b<cards.Length-3;b++)for(int c=b+1;c<cards.Length-2;c++)for(int d=c+1;d<cards.Length-1;d++)for(int e=d+1;e<cards.Length;e++)best=Math.Max(best,Five(cards[a],cards[b],cards[c],cards[d],cards[e]));return best;}

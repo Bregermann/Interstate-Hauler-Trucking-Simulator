@@ -37764,16 +37764,17 @@ MonoBehaviour:
       m_Calls: []
   m_text: "TRUCK KEEPAWAY \xB7 CUMULATIVE POSSESSION\nArena View or human-only split-screen
     First Person; AI-only uses broadcast. Random/explicit weather, Lively chaos and
-    reproducible match seeds. Ramps, rotating sweepers, loose tires, mud and wandering
-    SheepV5 vary the connected chase routes. Sheep blasts can knock you away or wreck
-    your truck; a wrecked carrier drops the single ball, surviving carriers retain
-    possession. Chains/effects are bounded and sheep replenish away from trucks.\n\nTwo
-    to four competitors. First to hold the ball for a TOTAL of 30 / 60 / 90 seconds
-    wins (default60). Your time persists after every steal; it need not be one uninterrupted
-    hold.\n\nDrive using the source shown in setup. Reverse input brakes before reversing.
-    Touch the neutral physical ball to collect it. A meaningful fresh truck-body
-    hit INTO the carrier steals it. Coasting overlap and merely being rammed by the
-    carrier do not steal. Simultaneous equal challenges leave ownership unchanged.\n\nOwnership
+    reproducible match seeds. Rounded boards keep chases flowing around the corners.
+    Ramps, rotating sweepers, loose tires, mud and wandering SheepV5 vary the connected
+    chase routes. Sheep blasts can knock you away or wreck your truck; a wrecked
+    carrier drops the single ball, surviving carriers retain possession. Chains/effects
+    are bounded and sheep replenish away from trucks.\n\nTwo to four competitors.
+    First to hold the ball for a TOTAL of 30 / 60 / 90 seconds wins (default60).
+    Your time persists after every steal; it need not be one uninterrupted hold.\n\nDrive
+    using the source shown in setup. Reverse input brakes before reversing. Touch
+    the neutral physical ball to collect it. A meaningful fresh truck-body hit INTO
+    the carrier steals it. Coasting overlap and merely being rammed by the carrier
+    do not steal. Simultaneous equal challenges leave ownership unchanged.\n\nOwnership
     transfers atomically before the former carrier explodes. The thief receives short
     visible steal/blast protection. Debris and blast-induced collisions never steal
     or recursively explode carriers. The same pair must separate before another steal.\n\nWrecked
@@ -37784,7 +37785,9 @@ MonoBehaviour:
     Possession pauses while recovering.\n\nAI uses the same NWH drive and body-contact
     rules: the carrier selects open routes while challengers intercept. Pause/disconnect
     freezes time and preserves every body, score and respawn clock. Rematch keeps
-    configuration. Offline only; no permanent elimination."
+    configuration. Each seed selects rocky Cheese mud, snow, beach sand or meadow
+    ground. Timber ramps, crates, barrels, tires and striped steel sweepers are physical
+    obstacles. Offline only; no permanent elimination."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -127668,7 +127671,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2676512060555683814}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -127782,7 +127785,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7100387522658227539}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -127898,7 +127901,7 @@ Transform:
   m_GameObject: {fileID: 734043347003992592}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -128013,7 +128016,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2823921195890182136}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -128143,6 +128146,7 @@ GameObject:
   - component: {fileID: 2304576640872409424}
   - component: {fileID: 2304576640872409426}
   - component: {fileID: 2304576640872409425}
+  - component: {fileID: 2304576640872409427}
   m_Layer: 0
   m_Name: Wandering SheepV5 13
   m_TagString: Untagged
@@ -128158,7 +128162,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6961949303634638157}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -128239,7 +128243,7 @@ Transform:
   m_GameObject: {fileID: 593257289602435598}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -128287,7 +128291,7 @@ Transform:
   m_GameObject: {fileID: 1110261858488046622}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -128335,7 +128339,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2406291358147682863}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -128467,7 +128471,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7406618606272549018}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -128484,6 +128488,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1029852664774632787}
+  - component: {fileID: 1029852664774632788}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -128508,7 +128513,7 @@ Transform:
   m_GameObject: {fileID: 1040300987474849753}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -128557,7 +128562,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2333788497917860328}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -128616,7 +128621,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7479930439761259357}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -129149,6 +129154,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 247835349967589556}
+  - component: {fileID: 593257289602435599}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -129156,6 +129162,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &593257289602435599
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 593257289602435598}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &619850498737977897
 GameObject:
   m_ObjectHideFlags: 0
@@ -129353,6 +129381,7 @@ GameObject:
   - component: {fileID: 1554555921598071463}
   - component: {fileID: 1554555921598071465}
   - component: {fileID: 1554555921598071464}
+  - component: {fileID: 1554555921598071466}
   m_Layer: 0
   m_Name: Wandering SheepV5 8
   m_TagString: Untagged
@@ -129629,6 +129658,7 @@ GameObject:
   - component: {fileID: 1483216053623339360}
   - component: {fileID: 1483216053623339362}
   - component: {fileID: 1483216053623339361}
+  - component: {fileID: 1483216053623339363}
   m_Layer: 0
   m_Name: Wandering SheepV5 7
   m_TagString: Untagged
@@ -129653,6 +129683,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 100214044188291242}
+  - component: {fileID: 734043347003992593}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -129660,6 +129691,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &734043347003992593
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 734043347003992592}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!33 &742139088068844608
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -129787,8 +129840,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!4 &792563250695100548
 Transform:
   m_ObjectHideFlags: 0
@@ -129900,8 +129953,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!4 &858824429505652146
 Transform:
   m_ObjectHideFlags: 0
@@ -130316,8 +130369,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!4 &961896856957728081
 Transform:
   m_ObjectHideFlags: 0
@@ -130351,6 +130404,7 @@ GameObject:
   - component: {fileID: 1212960955573763241}
   - component: {fileID: 1212960955573763243}
   - component: {fileID: 1212960955573763242}
+  - component: {fileID: 1212960955573763244}
   m_Layer: 0
   m_Name: Wandering SheepV5 14
   m_TagString: Untagged
@@ -130483,8 +130537,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!1 &1021327772772452743
 GameObject:
   m_ObjectHideFlags: 0
@@ -130527,7 +130581,7 @@ Transform:
   m_GameObject: {fileID: 360592699533950953}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -130535,6 +130589,28 @@ Transform:
   - {fileID: 3273542437345541029}
   m_Father: {fileID: 2145138686784467994}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1029852664774632788
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360592699533950953}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1033883705781740433
 GameObject:
   m_ObjectHideFlags: 0
@@ -130560,6 +130636,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 370478862890268003}
+  - component: {fileID: 1040300987474849754}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -130567,6 +130644,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &1040300987474849754
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040300987474849753}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!33 &1044478242403471120
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -130665,7 +130764,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3029282247149679135}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -130763,6 +130862,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 298260034119798436}
+  - component: {fileID: 1110261858488046623}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -130770,6 +130870,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &1110261858488046623
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1110261858488046622}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1111582078539089563
 Transform:
   m_ObjectHideFlags: 0
@@ -130794,7 +130916,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7901400051200573610}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -130831,6 +130953,7 @@ GameObject:
   - component: {fileID: 1351424329147423927}
   - component: {fileID: 1351424329147423929}
   - component: {fileID: 1351424329147423928}
+  - component: {fileID: 1351424329147423930}
   m_Layer: 0
   m_Name: Wandering SheepV5 10
   m_TagString: Untagged
@@ -130863,6 +130986,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1969314667601723013}
+  - component: {fileID: 1969314667601723014}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -130882,6 +131006,7 @@ GameObject:
   - component: {fileID: 960307379887659985}
   - component: {fileID: 2135434069541209467}
   - component: {fileID: 2135434069541209466}
+  - component: {fileID: 2135434069541209468}
   m_Layer: 0
   m_Name: Wandering SheepV5 4
   m_TagString: Untagged
@@ -130950,8 +131075,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &1212960955573763242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130967,6 +131092,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 14
   body: {fileID: 1212960955573763243}
+  rootToFeet: 0.6
 --- !u!54 &1212960955573763243
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -130994,6 +131120,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1212960955573763244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982391451145542037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 734043347003992593}
+  mover: {fileID: 10249723533517313}
 --- !u!4 &1218592884054925244
 Transform:
   m_ObjectHideFlags: 0
@@ -131076,6 +131216,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1896216859040076639}
+  - component: {fileID: 1896216859040076640}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -131297,8 +131438,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &1351424329147423928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131314,6 +131455,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 10
   body: {fileID: 1351424329147423929}
+  rootToFeet: 0.6
 --- !u!54 &1351424329147423929
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -131341,6 +131483,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1351424329147423930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1132183639537908107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 593257289602435599}
+  mover: {fileID: 157659822148387359}
 --- !u!33 &1358004534883634715
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -131458,6 +131614,7 @@ GameObject:
   - component: {fileID: 1018297808790309446}
   - component: {fileID: 2220450503687918832}
   - component: {fileID: 2220450503687918831}
+  - component: {fileID: 2220450503687918833}
   m_Layer: 0
   m_Name: Wandering SheepV5 6
   m_TagString: Untagged
@@ -131721,8 +131878,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &1483216053623339361
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131738,6 +131895,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 7
   body: {fileID: 1483216053623339362}
+  rootToFeet: 0.6
 --- !u!54 &1483216053623339362
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -131765,6 +131923,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1483216053623339363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 712161814131858524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 1040300987474849754}
+  mover: {fileID: 316473143852443592}
 --- !u!4 &1484837910166078663
 Transform:
   m_ObjectHideFlags: 0
@@ -131807,6 +131979,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2274596822204548677}
+  - component: {fileID: 2274596822204548678}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -131904,8 +132077,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &1554555921598071464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131921,6 +132094,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 8
   body: {fileID: 1554555921598071465}
+  rootToFeet: 0.6
 --- !u!54 &1554555921598071465
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -131948,6 +132122,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1554555921598071466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641074782323353499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 1110261858488046623}
+  mover: {fileID: 388369352936905743}
 --- !u!1 &1572670711366382056
 GameObject:
   m_ObjectHideFlags: 0
@@ -132150,6 +132338,7 @@ GameObject:
   - component: {fileID: 856232154496868188}
   - component: {fileID: 1950292946820202998}
   - component: {fileID: 1950292946820202997}
+  - component: {fileID: 1950292946820202999}
   m_Layer: 0
   m_Name: Wandering SheepV5 3
   m_TagString: Untagged
@@ -132357,6 +132546,7 @@ GameObject:
   - component: {fileID: 785083144974938758}
   - component: {fileID: 1879139538677673008}
   - component: {fileID: 1879139538677673007}
+  - component: {fileID: 1879139538677673009}
   m_Layer: 0
   m_Name: Wandering SheepV5 9
   m_TagString: Untagged
@@ -132396,6 +132586,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2081498438567892946}
+  - component: {fileID: 2081498438567892947}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -132612,6 +132803,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 9
   body: {fileID: 1879139538677673008}
+  rootToFeet: 0.6
 --- !u!54 &1879139538677673008
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -132639,6 +132831,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1879139538677673009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698497748781619130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 1969314667601723014}
+  mover: {fileID: 1879139538677673006}
 --- !u!4 &1882953073199655079
 Transform:
   m_ObjectHideFlags: 0
@@ -132647,7 +132853,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4545399676005558729}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -132696,7 +132902,7 @@ Transform:
   m_GameObject: {fileID: 1232692736805603813}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -132704,6 +132910,28 @@ Transform:
   - {fileID: 4140926978426719657}
   m_Father: {fileID: 711395981055033878}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1896216859040076640
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1232692736805603813}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!23 &1901473179245133185
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -132776,7 +133004,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8699201518767446908}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -132978,6 +133206,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 3
   body: {fileID: 1950292946820202998}
+  rootToFeet: 0.6
 --- !u!54 &1950292946820202998
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -133005,6 +133234,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1950292946820202999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627656378594163296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 1896216859040076640}
+  mover: {fileID: 1950292946820202996}
 --- !u!1 &1950780503620387950
 GameObject:
   m_ObjectHideFlags: 0
@@ -133031,7 +133274,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4472178344213971987}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -133080,7 +133323,7 @@ Transform:
   m_GameObject: {fileID: 1161851656576279615}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -133088,6 +133331,28 @@ Transform:
   - {fileID: 4067693070938398835}
   m_Father: {fileID: 638311092287713228}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1969314667601723014
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161851656576279615}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1969398279513368951
 GameObject:
   m_ObjectHideFlags: 0
@@ -133129,7 +133394,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8772198292483290790}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -133330,7 +133595,7 @@ Transform:
   m_GameObject: {fileID: 1704937234419862888}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -133338,6 +133603,28 @@ Transform:
   - {fileID: 4595298653632629028}
   m_Father: {fileID: 1111582078539089563}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2081498438567892947
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1704937234419862888}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &2086668116222200837
 Transform:
   m_ObjectHideFlags: 0
@@ -133410,7 +133697,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9155636881959907883}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -133442,7 +133729,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4080857612441075870}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -133497,6 +133784,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 4
   body: {fileID: 2135434069541209467}
+  rootToFeet: 0.6
 --- !u!54 &2135434069541209467
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -133524,6 +133812,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2135434069541209468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163292341984739053}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 2081498438567892947}
+  mover: {fileID: 2135434069541209465}
 --- !u!33 &2140061113584617678
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -133646,7 +133948,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8970415313691468732}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -133727,6 +134029,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 6
   body: {fileID: 2220450503687918832}
+  rootToFeet: 0.6
 --- !u!54 &2220450503687918832
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -133754,6 +134057,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2220450503687918833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1393532271067934586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 2274596822204548678}
+  mover: {fileID: 2220450503687918830}
 --- !u!1 &2225091779724900068
 GameObject:
   m_ObjectHideFlags: 0
@@ -133778,7 +134095,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4309967312743387401}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -133803,7 +134120,7 @@ Transform:
   m_GameObject: {fileID: 1502844854081445119}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -133811,6 +134128,28 @@ Transform:
   - {fileID: 4375191823291259059}
   m_Father: {fileID: 873460892520535820}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2274596822204548678
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502844854081445119}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &2286240694944061983
 GameObject:
   m_ObjectHideFlags: 0
@@ -133910,8 +134249,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &2304576640872409425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133927,6 +134266,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 13
   body: {fileID: 2304576640872409426}
+  rootToFeet: 0.6
 --- !u!54 &2304576640872409426
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -133954,6 +134294,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2304576640872409427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183779517143288940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 1029852664774632788}
+  mover: {fileID: 1083863099619571704}
 --- !u!23 &2308747846398322168
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -134091,8 +134445,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!1 &2371766308766184180
 GameObject:
   m_ObjectHideFlags: 0
@@ -134616,6 +134970,7 @@ GameObject:
   - component: {fileID: 4468053109970711604}
   - component: {fileID: 4468053109970711606}
   - component: {fileID: 4468053109970711605}
+  - component: {fileID: 4468053109970711607}
   m_Layer: 0
   m_Name: Wandering SheepV5 5
   m_TagString: Untagged
@@ -134665,8 +135020,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!1 &2573143989391731455
 GameObject:
   m_ObjectHideFlags: 0
@@ -135057,6 +135412,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3436513787528575031}
+  - component: {fileID: 3436513787528575032}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -135417,8 +135773,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!4 &2756009418535530503
 Transform:
   m_ObjectHideFlags: 0
@@ -135575,8 +135931,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!4 &2842338832331475037
 Transform:
   m_ObjectHideFlags: 0
@@ -136262,7 +136618,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5502659754413956558}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -136326,7 +136682,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 860216909432237947}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -136482,7 +136838,7 @@ Transform:
   m_GameObject: {fileID: 2664762884309852813}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -136490,6 +136846,28 @@ Transform:
   - {fileID: 907408389638416065}
   m_Father: {fileID: 4341231287680543102}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &3436513787528575032
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2664762884309852813}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3442150115258132237
 GameObject:
   m_ObjectHideFlags: 0
@@ -136562,7 +136940,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1531185320598541509}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -136694,7 +137072,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5949987053503587952}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -136806,7 +137184,7 @@ Transform:
   m_GameObject: {fileID: 4194229965534828851}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -136862,7 +137240,7 @@ Transform:
   m_GameObject: {fileID: 4138731397424633574}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -137061,7 +137439,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1613558903475362576}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -137118,7 +137496,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5893459405718022565}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -137338,7 +137716,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6075822972320251848}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -137402,7 +137780,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1440287190136311165}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -137515,7 +137893,7 @@ Transform:
   m_GameObject: {fileID: 4446278781661364217}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -137531,7 +137909,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6130004526423965882}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -137562,7 +137940,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1350908362867945999}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -137610,7 +137988,7 @@ Transform:
   m_GameObject: {fileID: 4393213679601959051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -137920,6 +138298,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3613130361677024348}
+  - component: {fileID: 4138731397424633575}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -137927,6 +138306,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &4138731397424633575
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4138731397424633574}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &4140926978426719657
 Transform:
   m_ObjectHideFlags: 0
@@ -138177,6 +138578,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3566627987899073417}
+  - component: {fileID: 4194229965534828852}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -138184,6 +138586,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &4194229965534828852
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4194229965534828851}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4195566666853665916
 GameObject:
   m_ObjectHideFlags: 0
@@ -138196,6 +138620,7 @@ GameObject:
   - component: {fileID: 2832429804186577216}
   - component: {fileID: 4195566666853665918}
   - component: {fileID: 4195566666853665917}
+  - component: {fileID: 4195566666853665919}
   m_Layer: 0
   m_Name: Wandering SheepV5 15
   m_TagString: Untagged
@@ -138218,6 +138643,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 15
   body: {fileID: 4195566666853665918}
+  rootToFeet: 0.6
 --- !u!54 &4195566666853665918
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -138245,6 +138671,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4195566666853665919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4195566666853665916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 4446278781661364218}
+  mover: {fileID: 4017184925221631976}
 --- !u!1 &4214621729379535729
 GameObject:
   m_ObjectHideFlags: 0
@@ -138501,6 +138941,7 @@ GameObject:
   - component: {fileID: 2741919801776723506}
   - component: {fileID: 4285786140554801936}
   - component: {fileID: 4285786140554801935}
+  - component: {fileID: 4285786140554801937}
   m_Layer: 0
   m_Name: Wandering SheepV5 2
   m_TagString: Untagged
@@ -138523,6 +138964,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 2
   body: {fileID: 4285786140554801936}
+  rootToFeet: 0.6
 --- !u!54 &4285786140554801936
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -138550,6 +138992,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4285786140554801937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4285786140554801934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 4393213679601959052}
+  mover: {fileID: 3962153965090785434}
 --- !u!4 &4299765600997049452
 Transform:
   m_ObjectHideFlags: 0
@@ -138710,6 +139166,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4016089624018393649}
+  - component: {fileID: 4393213679601959052}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -138717,6 +139174,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &4393213679601959052
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4393213679601959051}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &4414202177227998834
 Transform:
   m_ObjectHideFlags: 0
@@ -138844,6 +139323,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3963038281967887683}
+  - component: {fileID: 4446278781661364218}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -138851,6 +139331,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &4446278781661364218
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4446278781661364217}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4447615482735946422
 GameObject:
   m_ObjectHideFlags: 0
@@ -138863,6 +139365,7 @@ GameObject:
   - component: {fileID: 2363951058202234762}
   - component: {fileID: 4447615482735946424}
   - component: {fileID: 4447615482735946423}
+  - component: {fileID: 4447615482735946425}
   m_Layer: 0
   m_Name: Wandering SheepV5 12
   m_TagString: Untagged
@@ -138885,6 +139388,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 12
   body: {fileID: 4447615482735946424}
+  rootToFeet: 0.6
 --- !u!54 &4447615482735946424
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -138912,6 +139416,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4447615482735946425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4447615482735946422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 4194229965534828852}
+  mover: {fileID: 3476593609383022882}
 --- !u!1 &4451441094495368964
 GameObject:
   m_ObjectHideFlags: 0
@@ -138963,8 +139481,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &4468053109970711605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138980,6 +139498,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 5
   body: {fileID: 4468053109970711606}
+  rootToFeet: 0.6
 --- !u!54 &4468053109970711606
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -139007,6 +139526,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4468053109970711607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2555472695792718088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 3436513787528575032}
+  mover: {fileID: 3382362890005949084}
 --- !u!1 &4468417091610598652
 GameObject:
   m_ObjectHideFlags: 0
@@ -139130,6 +139663,7 @@ GameObject:
   - component: {fileID: 2564007651630202975}
   - component: {fileID: 4531260171250312549}
   - component: {fileID: 4531260171250312548}
+  - component: {fileID: 4531260171250312550}
   m_Layer: 0
   m_Name: Wandering SheepV5 11
   m_TagString: Untagged
@@ -139152,6 +139686,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 11
   body: {fileID: 4531260171250312549}
+  rootToFeet: 0.6
 --- !u!54 &4531260171250312549
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -139179,6 +139714,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4531260171250312550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4531260171250312547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 4138731397424633575}
+  mover: {fileID: 3703094544891109111}
 --- !u!4 &4538309413142328230
 Transform:
   m_ObjectHideFlags: 0
@@ -140026,8 +140575,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!1 &4903823599993822388
 GameObject:
   m_ObjectHideFlags: 0
@@ -141789,7 +142338,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3913788823057971796}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -141882,7 +142431,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8213958163201984737}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -142005,7 +142554,7 @@ Transform:
   m_GameObject: {fileID: 6842918845016048919}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -142468,6 +143017,7 @@ GameObject:
   - component: {fileID: 4903429848964207534}
   - component: {fileID: 6447766216076588692}
   - component: {fileID: 6447766216076588691}
+  - component: {fileID: 6447766216076588693}
   m_Layer: 0
   m_Name: Wandering SheepV5 1
   m_TagString: Untagged
@@ -142490,6 +143040,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 1
   body: {fileID: 6447766216076588692}
+  rootToFeet: 0.6
 --- !u!54 &6447766216076588692
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -142517,6 +143068,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &6447766216076588693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6447766216076588690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 6842918845016048920}
+  mover: {fileID: 6124153281563954438}
 --- !u!4 &6478586591091677139
 Transform:
   m_ObjectHideFlags: 0
@@ -208299,6 +208864,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6178163274059767725}
+  - component: {fileID: 6842918845016048920}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -208306,6 +208872,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &6842918845016048920
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6842918845016048919}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &6859578869728922293
 Transform:
   m_ObjectHideFlags: 0
@@ -208999,7 +209587,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4844822872999638141}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.4718648, y: 0.484584, z: 0.5009516, w: 0.5399719}
+  m_LocalRotation: {x: 0.47186473, y: 0.48458394, z: 0.5009515, w: 0.5399718}
   m_LocalPosition: {x: -0.002419952, y: -0.008781965, z: 0.00299239}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -209063,7 +209651,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 329046340246177480}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6017262, y: 0.42413613, z: 0.4027749, w: 0.54388094}
+  m_LocalRotation: {x: 0.60172623, y: 0.42413616, z: 0.40277493, w: 0.543881}
   m_LocalPosition: {x: -0.009831028, y: -0.008825659, z: -0.0026210349}
   m_LocalScale: {x: 0.99999964, y: 0.9999999, z: 0.99999976}
   m_ConstrainProportionsScale: 0
@@ -209225,7 +209813,7 @@ Transform:
   m_GameObject: {fileID: 7797839521210808715}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.14427847, y: -0.32930306, z: -0.04602931}
+  m_LocalPosition: {x: 0.14427847, y: -0.5873239, z: -0.04602931}
   m_LocalScale: {x: 64.045006, y: 64.045006, z: 64.045006}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -210092,6 +210680,7 @@ GameObject:
   - component: {fileID: 8560754249817435954}
   - component: {fileID: 8560754249817435956}
   - component: {fileID: 8560754249817435955}
+  - component: {fileID: 8560754249817435957}
   m_Layer: 0
   m_Name: Wandering SheepV5 0
   m_TagString: Untagged
@@ -210124,6 +210713,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7457025394361099057}
+  - component: {fileID: 7797839521210808716}
   m_Layer: 0
   m_Name: SheepV5
   m_TagString: Untagged
@@ -210131,6 +210721,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &7797839521210808716
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7797839521210808715}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 17b75179993fabb438d573d1f37c1996, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7807039703678625293
 GameObject:
   m_ObjectHideFlags: 0
@@ -211378,8 +211990,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.95
+  m_Center: {x: 0, y: 0.35, z: 0}
 --- !u!114 &8560754249817435955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -211395,6 +212007,7 @@ MonoBehaviour:
   arena: {fileID: 719690027}
   index: 0
   body: {fileID: 8560754249817435956}
+  rootToFeet: 0.6
 --- !u!54 &8560754249817435956
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -211422,6 +212035,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8560754249817435957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7762660822505343502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84504aff66571fa4fbbf4ff5072fe6e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSheepMotion
+  animator: {fileID: 7797839521210808716}
+  mover: {fileID: 7366990842334949786}
 --- !u!33 &8623054066080942112
 MeshFilter:
   m_ObjectHideFlags: 0

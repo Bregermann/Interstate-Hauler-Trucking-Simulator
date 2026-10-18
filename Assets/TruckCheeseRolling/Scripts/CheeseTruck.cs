@@ -5,7 +5,7 @@ namespace LWS.TruckCheeseRolling {
 public sealed class CheeseTruck:MonoBehaviour {
  public CheeseMatch match;public Rigidbody body;public WheelController[] wheels;public Renderer paint;public Transform marker;public AudioSource engine,skid;public ParticleSystem splash;public TrailRenderer[] tracks;
  public int index;public Vector2 command;public bool Scoring=>index<match.setup.count;public float Damage{get;private set;}public float DisabledFor{get;private set;}public float RecoveryCooldown{get;private set;}public int Recoveries{get;private set;}public int Blasts{get;private set;}public bool CatchArmed{get;private set;}public bool Grounded{get;private set;}
- public bool StartBoosted{get;private set;}public float Progress{get;private set;}public bool Mud=>body.position.z>170;public Vector3 LastRecovery{get;private set;}public float LastProgressBeforeRecovery{get;private set;}
+ public bool StartBoosted{get;private set;}public float Progress{get;private set;}public bool Mud=>body.position.z>214;public Vector3 LastRecovery{get;private set;}public float LastProgressBeforeRecovery{get;private set;}
  [Header("Flat runout handling — NWH tires remain authoritative")]
  public float bottomMotorTorque=42,bottomGrip=.92f,bottomBrakeTorque=110,bottomSteerAngle=42;
  public float lateralScrub=1.8f,groundYawAuthority=2.1f,uprightAuthority=5.5f;
@@ -17,7 +17,7 @@ public sealed class CheeseTruck:MonoBehaviour {
  public void Blast(Vector3 origin,float delta,int explosion){Blasts++;Damage=Mathf.Min(100,Damage+delta*2.4f);DisabledFor=Mathf.Max(DisabledFor,Mathf.Clamp(delta*.1f,.3f,2.5f));if(Scoring)match.Pulse(index,Mathf.Clamp01(delta*.04f),.35f);}
  public bool Recover(){if(RecoveryCooldown>0||!match.InMatch||match.Phase!=CheesePhase.Racing)return false;float z=Mathf.Clamp(Mathf.Min(Progress,match.cheese.body.position.z-9)-3,-10,300);Vector3 choice=CheeseRules.Surface(0,z,1.1f);float best=float.MaxValue;bool found=false;
   for(int k=0;k<36;k++){float x=Mathf.Clamp(body.position.x+(k%9-4)*4,-43,43),zz=Mathf.Clamp(z-(k/9)*5,-12,300);var p=CheeseRules.Surface(x,zz,1.1f);if(Vector3.Distance(p,match.cheese.body.position)<8||!match.SafeRecovery(p,this))continue;float cost=Mathf.Abs(p.x-body.position.x)+(z-zz)*.8f;if(cost<best){choice=p;best=cost;found=true;}}
-  if(!found)return false;LastProgressBeforeRecovery=Progress;LastRecovery=choice;body.position=choice;body.rotation=Quaternion.Euler(choice.z<140?50:0,0,0);body.linearVelocity=body.angularVelocity=Vector3.zero;foreach(var w in wheels){w.wheel.angularVelocity=0;w.WakeFromSleep();}Damage=25;DisabledFor=.5f;RecoveryCooldown=5;CatchArmed=false;separation=stuck=airBudget=0;Recoveries++;return true;
+  if(!found)return false;LastProgressBeforeRecovery=Progress;LastRecovery=choice;body.position=choice;body.rotation=CheeseRules.SlopeRotation(choice);body.linearVelocity=body.angularVelocity=Vector3.zero;foreach(var w in wheels){w.wheel.angularVelocity=0;w.WakeFromSleep();}Damage=25;DisabledFor=.5f;RecoveryCooldown=5;CatchArmed=false;separation=stuck=airBudget=0;Recoveries++;return true;
  }
  void FixedUpdate(){if(!match.Live||body.isKinematic){foreach(var w in wheels){w.MotorTorque=w.BrakeTorque=0;}return;}float dt=Time.fixedDeltaTime;RecoveryCooldown=Mathf.Max(0,RecoveryCooldown-dt);DisabledFor=Mathf.Max(0,DisabledFor-dt);Damage=Mathf.Max(0,Damage-dt*3);Grounded=false;foreach(var w in wheels)Grounded|=w.IsGrounded;
   if(Grounded&&Vector3.Dot(transform.up,Vector3.up)>.25f&&CheeseRules.Safe(body.position))Progress=Mathf.Max(Progress,body.position.z);

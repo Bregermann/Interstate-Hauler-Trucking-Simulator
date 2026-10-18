@@ -1,0 +1,37 @@
+PASS focused setup starts
+PASS actual mine contact launches once and disables propulsion
+PASS overlapping blast cannot duplicate launch or origin
+PASS real forward/up launch and colored blast flag · velocity=(0.00, 26.22, 42.20)
+PASS pause preserves actual flight and heat clock
+PASS actual supported rest locks final distance after physical settling
+PASS actual held aftertouch spends only bounded shared budget
+PASS landing flag and persistent personal-best record are present
+PASS a finalized supported-rest attempt cannot receive another scoring blast
+PASS recorded replay hides flags before actual blast/landing event times
+PASS recorded replay reveals landing flag at actual locked event time
+PASS personal-best flag persists into the next heat without duplicate current landing labels
+PASS focused setup starts
+PASS real driven mile crossing wins entire match
+PASS focused setup starts
+PASS actual mine-launched flight over mile does not win instantly
+PASS explicit injected controller assignment during flight
+PASS injected disconnect preserves flight and scores
+PASS explicit replacement source is accepted
+PASS held reconnect input cannot leak from confirmation
+PASS fresh post-neutral replacement input reaches assigned truck
+PASS whole controller conflicts with shared stick
+PASS left and right stick ownership may share one controller
+PASS duplicate stick ownership rejected
+PASS four distinct human sources create four viewports with eight physical competitors
+PASS sustained four-view simulation progresses independently of camera count
+PASS long participant HUD fits view 0
+PASS long participant HUD fits view 1
+PASS long participant HUD fits view 2
+PASS long participant HUD fits view 3
+PASS four-view pause preserves progression
+PASS rematch resets heat and retains four-source configuration
+PASS paginated collection front loads
+PASS Minefield entry visible on second page
+PASS collection menu loads actual saved Minefield scene
+PASS menu-returned Minefield starts autonomous rematch
+ERRORS=0. Actual PhysX plus controlled initial poses, injected virtual devices, rule fixtures and camera-only resolution renders; no hardware/human playtesting.

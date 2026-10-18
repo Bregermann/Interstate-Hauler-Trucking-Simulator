@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using LWS.TruckBowling;
 namespace LWS.TruckTerrierRacing {
 public sealed class TerrierSmoke:MonoBehaviour {
@@ -12,10 +13,11 @@ public sealed class TerrierSmoke:MonoBehaviour {
  run|=UnityEditor.SessionState.GetBool("LWS.TerrierNativeProbe",false);UnityEditor.SessionState.SetBool("LWS.TerrierNativeProbe",false);
 #endif
  if(run){var g=new GameObject("Terrier native validation");DontDestroyOnLoad(g);g.AddComponent<TerrierSmoke>();}}
+ Keyboard keyboard;InputSettings.BackgroundBehavior background;
  TerrierMatch m;string saved,folder;bool existed,restored;int errors,oldLocks,lastHeat,replayLocks;float lastWrite,firstFinishAt=-1;bool windowChecked;readonly StringBuilder report=new StringBuilder(12000);readonly System.Collections.Generic.List<float> frames=new System.Collections.Generic.List<float>(8000);
  void Check(bool good,string label){report.AppendLine((good?"PASS ":"FAIL ")+label);if(!good)errors++;}
  void Log(string s,string stack,LogType type){if(type==LogType.Error||type==LogType.Exception){errors++;report.AppendLine("ERROR "+s);}}
- IEnumerator Start(){m=FindAnyObjectByType<TerrierMatch>();if(m==null){LWS.TruckSports.SportsNavigation.LoadSport(LWS.TruckSports.SportsNavigation.Terrier);yield return null;m=FindAnyObjectByType<TerrierMatch>();}folder=LWS.TruckSports.SportsEvidencePaths.Folder("TerrierEvidence");Directory.CreateDirectory(folder);existed=LWS.TruckSports.SportsPrefs.HasKey(m.PreferenceKey);saved=LWS.TruckSports.SportsPrefs.GetString(m.PreferenceKey);Application.logMessageReceived+=Log;yield return null;
+ IEnumerator Start(){background=InputSystem.settings.backgroundBehavior;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;keyboard=InputSystem.AddDevice<Keyboard>("Terrier software keyboard");InputSystem.EnableDevice(keyboard);m=FindAnyObjectByType<TerrierMatch>();if(m==null){LWS.TruckSports.SportsNavigation.LoadSport(LWS.TruckSports.SportsNavigation.Terrier);yield return null;m=FindAnyObjectByType<TerrierMatch>();}folder=LWS.TruckSports.SportsEvidencePaths.Folder("TerrierEvidence");Directory.CreateDirectory(folder);existed=LWS.TruckSports.SportsPrefs.HasKey(m.PreferenceKey);saved=LWS.TruckSports.SportsPrefs.GetString(m.PreferenceKey);Application.logMessageReceived+=Log;yield return null;
  for(int humans=1;humans<=4;humans++){m.SetupScreen();for(int i=0;i<12;i++)m.setup.players[i].source=i<humans?BowlingSource.Keyboard:BowlingSource.AI;m.option=0;Check(m.StartMatch(),"software keyboard layout starts "+humans);Check(m.HumanViews==humans&&m.cameras.Length==humans,"human-only viewports "+humans);Screen.SetResolution(humans%2==0?1920:1280,humans%2==0?1080:720,false);yield return new WaitForSecondsRealtime(.25f);if(!Application.isEditor)ScreenCapture.CaptureScreenshot(folder+"/cab-layout-"+humans+".png");yield return null;}
  m.SetupScreen();for(int i=0;i<12;i++){m.setup.players[i].source=BowlingSource.AI;m.setup.players[i].difficulty=(BowlingDifficulty)(i%3);}m.option=0;Check(m.StartMatch(),"twelve-AI autonomous match starts");Check(m.HumanViews==0&&m.cameras.Length==1,"AI uses one broadcast viewport");bool paused=false,replayChecked=false;float end=Time.realtimeSinceStartup+700;int firstReplayWins=-1;
  while(!m.Finished&&Time.realtimeSinceStartup<end){
@@ -30,7 +32,7 @@ public sealed class TerrierSmoke:MonoBehaviour {
  }
  Check(windowChecked,"finish window observed during physical match");Check(m.Finished&&m.MatchWinner>=0&&m.wins[m.MatchWinner]==5,"complete first-to-five match through actual controls/PhysX");report.AppendLine("RESULT winner="+m.MatchWinner+" heats="+m.Heat+" locks="+m.Locks+" wins="+string.Join(",",m.wins));if(frames.Count>0){frames.Sort();report.AppendLine("First heat real-time frames="+frames.Count+" medianMS="+frames[frames.Count/2]+" p95MS="+frames[(int)((frames.Count-1)*.95f)]+" GPU="+SystemInfo.graphicsDeviceName);}report.AppendLine("ERRORS="+errors+"; software keyboard layout/AI/native physics only; no physical controller or human playtest");File.WriteAllText(folder+"/native-result.txt",report.ToString());Debug.Log("TERRIER_NATIVE_SMOKE_COMPLETE "+report);Restore();if(!Application.isEditor)Application.Quit(errors==0?0:2);}
  void CheckWindowStillRacing(){if(m.replay.Playing)Check(false,"replay must not interrupt the finish window");}
- void Restore(){if(restored)return;restored=true;Application.logMessageReceived-=Log;if(m!=null){m.SetupScreen();if(existed)LWS.TruckSports.SportsPrefs.SetString(m.PreferenceKey,saved);else LWS.TruckSports.SportsPrefs.DeleteKey(m.PreferenceKey);LWS.TruckSports.SportsPrefs.Save();}Time.timeScale=1;}
+ void Restore(){if(restored)return;restored=true;Application.logMessageReceived-=Log;if(m!=null){m.SetupScreen();if(existed)LWS.TruckSports.SportsPrefs.SetString(m.PreferenceKey,saved);else LWS.TruckSports.SportsPrefs.DeleteKey(m.PreferenceKey);LWS.TruckSports.SportsPrefs.Save();}if(keyboard!=null&&keyboard.added)InputSystem.RemoveDevice(keyboard);keyboard=null;InputSystem.settings.backgroundBehavior=background;Time.timeScale=1;}
  void OnDestroy(){Restore();}
 #endif
 }

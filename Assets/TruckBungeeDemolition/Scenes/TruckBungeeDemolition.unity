@@ -29673,6 +29673,8 @@ MonoBehaviour:
   towerMount: {fileID: 293789845}
   towerPrefab: {fileID: 3214542925333321029, guid: c9319de1eefaccd4bab4902b763a90cc,
     type: 3}
+  expansionPrefab: {fileID: 7849422545013449003, guid: 29a24bcb1d8372b4c99507f1c8f246b2,
+    type: 3}
   spring: {fileID: 86076591}
   rope: {fileID: 180116794}
   wind: {fileID: 794881649}
@@ -40009,6 +40011,8 @@ MonoBehaviour:
   towerMount: {fileID: 1101836794}
   towerPrefab: {fileID: 3214542925333321029, guid: c9319de1eefaccd4bab4902b763a90cc,
     type: 3}
+  expansionPrefab: {fileID: 7849422545013449003, guid: 29a24bcb1d8372b4c99507f1c8f246b2,
+    type: 3}
   spring: {fileID: 148689496}
   rope: {fileID: 1120000058}
   wind: {fileID: 917810685}
@@ -40445,6 +40449,8 @@ MonoBehaviour:
   craneAnchor: {fileID: 1646480642}
   towerMount: {fileID: 1338464928}
   towerPrefab: {fileID: 3214542925333321029, guid: c9319de1eefaccd4bab4902b763a90cc,
+    type: 3}
+  expansionPrefab: {fileID: 7849422545013449003, guid: 29a24bcb1d8372b4c99507f1c8f246b2,
     type: 3}
   spring: {fileID: 1252235929}
   rope: {fileID: 2017970335}
@@ -61049,13 +61055,15 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: Your truck is the wrecking ball. Pump with movement controls; ACTION gives
-    a short reel tug on cooldown. Physical impacts damage tower supports and can
-    bring upper floors down. Each structural module scores only once; loose rubble
-    cannot farm points. Three simultaneous 60-second rounds, most destruction points
-    wins. Tied leaders play a 20-second extra round. The siren locks scores BEFORE
-    the automatic demolition finale. Finale destruction awards no points. A genuine
-    stuck truck is rehung with three seconds of lost control. Escape pauses all bays;
-    reconnect preserves current state.
+    a short reel tug on cooldown. Physical impacts damage the original tower and
+    ten additional reachable buildings, bringing unsupported floors down. Return
+    hits can finish a partially damaged structure; settled rubble remains physical
+    and wakes on contact. Each structural module scores only once; loose rubble cannot
+    farm points. Three simultaneous 60-second rounds, most destruction points wins.
+    Tied leaders play a 20-second extra round. The siren locks scores BEFORE the
+    automatic demolition finale. Finale destruction awards no points. A genuine stuck
+    truck is rehung with three seconds of lost control. Escape pauses all bays; reconnect
+    preserves current state.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -62985,6 +62993,8 @@ MonoBehaviour:
   craneAnchor: {fileID: 1920456964}
   towerMount: {fileID: 146545551}
   towerPrefab: {fileID: 3214542925333321029, guid: c9319de1eefaccd4bab4902b763a90cc,
+    type: 3}
+  expansionPrefab: {fileID: 7849422545013449003, guid: 29a24bcb1d8372b4c99507f1c8f246b2,
     type: 3}
   spring: {fileID: 872346545}
   rope: {fileID: 588556556}

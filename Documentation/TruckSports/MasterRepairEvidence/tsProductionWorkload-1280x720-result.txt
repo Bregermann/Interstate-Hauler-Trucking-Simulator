@@ -1,0 +1,20 @@
+PASS real rendered Windows player required
+PASS TruckDemolitionDerby actual four-owner viewport workload starts
+PASS TruckDemolitionDerby sustained60-second workload includes actual automatic four-view rendering
+PASS actual owned Derby mirror cameras rendered during sustained play
+PERF scene=TruckDemolitionDerby seconds=60.01 frames=6626 mainRenders=26504 mirrorRenders=2440 meanMS=9.060 p95MS=15.139 p99MS=24.468 GC0=2 managedDelta=25931776 GPU=NVIDIA GeForce GTX 1660 Ti resolution=1280x720 timescale=1
+PASS TruckDemolitionDerby repeated rematch restores four views
+PASS TruckMattressRacing actual four-owner viewport workload starts
+PASS TruckMattressRacing sustained60-second workload includes actual automatic four-view rendering
+PERF scene=TruckMattressRacing seconds=60.01 frames=4701 mainRenders=15604 mirrorRenders=0 meanMS=12.766 p95MS=17.256 p99MS=19.467 GC0=2 managedDelta=-303104 GPU=NVIDIA GeForce GTX 1660 Ti resolution=1280x720 timescale=1
+PASS TruckMattressRacing repeated rematch restores four views
+PASS TruckBungeeDemolition actual four-owner viewport workload starts
+PASS TruckBungeeDemolition sustained60-second workload includes actual automatic four-view rendering
+PERF scene=TruckBungeeDemolition seconds=60.01 frames=8200 mainRenders=31444 mirrorRenders=0 meanMS=7.318 p95MS=10.769 p99MS=11.609 GC0=0 managedDelta=3043328 GPU=NVIDIA GeForce GTX 1660 Ti resolution=1280x720 timescale=1
+PASS TruckBungeeDemolition repeated rematch restores four views
+PASS TruckBuzkashi actual four-owner viewport workload starts
+PASS TruckBuzkashi sustained60-second workload includes actual automatic four-view rendering
+PERF scene=TruckBuzkashi seconds=60.01 frames=9543 mainRenders=38172 mirrorRenders=0 meanMS=6.288 p95MS=6.626 p99MS=7.681 GC0=0 managedDelta=15441920 GPU=NVIDIA GeForce GTX 1660 Ti resolution=1280x720 timescale=1
+PASS TruckBuzkashi repeated rematch restores four views
+PASS heavy scene cycles retain one listener
+ERRORS=0. Actual Windows rendering, NWH/PhysX, software-owned AI commands in four human viewports. Whole-frame timings under uncontrolled host load; no isolated GPU benchmark, real hardware or human playtest claim.
