@@ -132,7 +132,7 @@ Images show the actual renderer; their exact payload/capture provenance is in [V
 
 Use `LWS.TruckSports.Editor.SportsBuilder.Build` from the saved scenes. Do not routinely call `CreateValidateBuild`: it reauthors the front end and hockey. Native repair defaults live behind `SportsProductionAuthoring.MasterRepairs` and each sport's author. Scene serialization used native Unity APIs. All 2,898 final Sports source/asset/metadata files were frozen through final Windows testing; README edits are excluded. The complete reviewed delta from the earlier acceptance candidate contains exactly nine paths. The final rebuild differs from the immediately preceding candidate only in the optional Terrier/Minefield harnesses and read-only Curling card label. Native comparison preserves 9,631 pre-existing Terrier components, exempting only the volcanic child list and camera scene-color-copy settings. No authoritative gameplay method changed across these final rebuilds.
 
-Git publication is the final pending delivery step. The reviewed scope includes all remaining relevant Sports source/assets/scenes/metas/docs, while preserving unrelated Taxi/host/vendor work. No generated build, cache, credentials or player/Editor log is staged.
+Git delivery is verified below. The reviewed scope includes all remaining relevant Sports source/assets/scenes/metas/docs, while preserving unrelated Taxi/host/vendor work. No generated build, cache, credentials or player/Editor log is staged.
 
 ## Vendor record
 
@@ -142,3 +142,9 @@ Git publication is the final pending delivery step. The reviewed scope includes 
 - **CUSTOM SYSTEMS CREATED:** Sport-specific motion/lifecycle adapters, native repair migrations, winner-only cream/lava coordination, camera safety and opt-in development regression probes.
 - **VENDOR SOURCE MODIFIED:** None.
 - **DUPLICATE VENDOR FUNCTIONALITY CREATED:** None; existing vendor foundations retain their authority.
+
+## Verified Git delivery
+
+Implementation `bfd14cadbc72ceab0b865c912a6e8661f67c198e` on `codex/truck-sports-seven-events` was pushed successfully to that branch and GitHub `main`, verified at 2026-10-18T00:59:19.606915+00:00. **Both previous relevant Truck Sports work and this repair update are committed and pushed to main.** The public Sports tree matches the reviewed local Sports implementation. Unrelated local Taxi/host/vendor work and private Taxi ancestry are preserved and excluded; generated builds, logs, caches and original licensed package prerequisites are excluded.
+
+This receipt is committed as a subsequent clean public descendant. The delivered folder's GIT-DELIVERY.txt records the final verified public tip after the receipt push. All build, test and remaining-manual limits above still apply.

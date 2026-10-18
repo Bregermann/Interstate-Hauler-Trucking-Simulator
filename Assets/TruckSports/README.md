@@ -8,7 +8,7 @@ The ten-mode repair updates Keepaway sheep/cameras, Cheese's giant hill, Swing r
 
 Controls remain in each sport's setup and pause/help pages. Normal billiards turn changes keep held movement uninterrupted. Use SportsBuilder.Build; preserve the explicit scene list and exact host-setting restoration. Original licensed vendor prerequisites are required for a source checkout and are not republished.
 
-[Repair causes, Windows results, images and manual checks](../../Documentation/TruckSports/MasterRepairValidation.md) · [Build](BUILD-INFO.md) · [Checkpoint](CHECKPOINT.md). Git publication is pending final delivery.
+[Repair causes, Windows results, images and manual checks](../../Documentation/TruckSports/MasterRepairValidation.md) · [Build](BUILD-INFO.md) · [Checkpoint](CHECKPOINT.md). Verified Git delivery is recorded below.
 
 ## Earlier collection milestones (historical)
 
@@ -292,3 +292,9 @@ Human focus loss or attached input suspension now pauses normally. Returning foc
 ## Verified Git delivery
 
 Implementation commit `6febbc6b8028ed1e1311bbadd436fd2733b4df1b` on `codex/truck-sports-seven-events` was pushed successfully to both that branch and GitHub `main`, verified with ls-remote at 2026-10-17T03:04:44.946800+00:00. **Both previous relevant Truck Sports work and this production update are committed and pushed to main.** All32 Sports folder trees, folder metadata and the checkpoint match the reviewed root implementation. Unrelated local Taxi/host work is preserved and excluded; the private Taxi ancestor is absent from the public history. Generated builds/logs/caches and original licensed package prerequisites are excluded. This documentation record is committed as a subsequent clean public descendant; the delivered folder's GIT-DELIVERY.txt records the final verified tip.
+
+## Verified Git delivery
+
+Implementation `bfd14cadbc72ceab0b865c912a6e8661f67c198e` on `codex/truck-sports-seven-events` was pushed successfully to that branch and GitHub `main`, verified at 2026-10-18T00:59:19.606915+00:00. **Both previous relevant Truck Sports work and this repair update are committed and pushed to main.** The public Sports tree matches the reviewed local Sports implementation. Unrelated local Taxi/host/vendor work and private Taxi ancestry are preserved and excluded; generated builds, logs, caches and original licensed package prerequisites are excluded.
+
+This receipt is committed as a subsequent clean public descendant. The delivered folder's GIT-DELIVERY.txt records the final verified public tip after the receipt push. All build, test and remaining-manual limits above still apply.

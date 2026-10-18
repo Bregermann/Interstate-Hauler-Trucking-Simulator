@@ -7,3 +7,9 @@ Executable: `F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/Builds/Truck
 [Complete current repair report, all 33 version-bound Windows cases, root causes, physical evidence, sustained samples, screenshots and manual limits](../../Documentation/TruckSports/MasterRepairValidation.md).
 
 The previous production acceptance is preserved in Git history (implementation 6febbc6b and receipt c193694e). It is not substituted for the current repair tests. This pass reran the repaired modes and broad scene/lifecycle tour, while preserving earlier sport handling/rules. Hardware/human/audio acceptance remains manual.
+
+## Verified Git delivery
+
+Implementation `bfd14cadbc72ceab0b865c912a6e8661f67c198e` on `codex/truck-sports-seven-events` was pushed successfully to that branch and GitHub `main`, verified at 2026-10-18T00:59:19.606915+00:00. **Both previous relevant Truck Sports work and this repair update are committed and pushed to main.** The public Sports tree matches the reviewed local Sports implementation. Unrelated local Taxi/host/vendor work and private Taxi ancestry are preserved and excluded; generated builds, logs, caches and original licensed package prerequisites are excluded.
+
+This receipt is committed as a subsequent clean public descendant. The delivered folder's GIT-DELIVERY.txt records the final verified public tip after the receipt push. All build, test and remaining-manual limits above still apply.

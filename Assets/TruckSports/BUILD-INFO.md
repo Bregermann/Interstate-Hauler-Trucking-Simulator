@@ -8,4 +8,10 @@ The sole delivery folder includes TruckSports.exe, TruckSports_Data, UnityPlayer
 
 Build uses LWS.TruckSports.Editor.SportsBuilder.Build with explicit Sports-only scenes and TruckSports startup. No host build-list or Taxi settings are changed. All 25 pre-build ProjectSettings hashes match after success; deliberate failure restoration also passed. Generated build files are excluded from Git.
 
-All 33 Windows acceptance suites have explicit version/asset/compiled-method provenance; see [full results](../../Documentation/TruckSports/MasterRepairValidation.md). Original licensed packages must be installed for a fresh source build. Git publication pending.
+All 33 Windows acceptance suites have explicit version/asset/compiled-method provenance; see [full results](../../Documentation/TruckSports/MasterRepairValidation.md). Original licensed packages must be installed for a fresh source build. Verified Git delivery is recorded below.
+
+## Verified Git delivery
+
+Implementation `bfd14cadbc72ceab0b865c912a6e8661f67c198e` on `codex/truck-sports-seven-events` was pushed successfully to that branch and GitHub `main`, verified at 2026-10-18T00:59:19.606915+00:00. **Both previous relevant Truck Sports work and this repair update are committed and pushed to main.** The public Sports tree matches the reviewed local Sports implementation. Unrelated local Taxi/host/vendor work and private Taxi ancestry are preserved and excluded; generated builds, logs, caches and original licensed package prerequisites are excluded.
+
+This receipt is committed as a subsequent clean public descendant. The delivered folder's GIT-DELIVERY.txt records the final verified public tip after the receipt push. All build, test and remaining-manual limits above still apply.
