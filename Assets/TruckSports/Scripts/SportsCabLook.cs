@@ -24,7 +24,13 @@ public sealed class SportsCabLook:MonoBehaviour {
   bool mouseHeld=mouse&&Mouse.current.rightButton.isPressed;var stick=pad?player.pad.rightStick.ReadValue():Vector2.zero;if(!neutral){if(!mouseHeld&&stick.sqrMagnitude<.015f)neutral=true;ReleaseCursor();return basis*Quaternion.Euler(Pitch,Yaw,0);}
   if(mouseHeld){CaptureCursor();input=Mouse.current.delta.ReadValue();}else{ReleaseCursor();if(pad)input=stick.magnitude>.14f?stick:Vector2.zero;}
   horizontal.m_SpeedMode=vertical.m_SpeedMode=mouseHeld?AxisState.SpeedMode.InputValueGain:AxisState.SpeedMode.MaxSpeed;horizontal.m_MaxSpeed=mouseHeld?.14f*sensitivity:125*sensitivity;vertical.m_MaxSpeed=mouseHeld?.11f*sensitivity:95*sensitivity;horizontal.m_AccelTime=vertical.m_AccelTime=mouseHeld?0:.09f;horizontal.m_DecelTime=vertical.m_DecelTime=mouseHeld?0:.12f;horizontal.m_InputAxisValue=input.x;vertical.m_InputAxisValue=input.y*(invertY?1:-1);horizontal.Update(Time.deltaTime);vertical.Update(Time.deltaTime);
-  if(recenter){recenterX.RecenterNow();recenterY.RecenterNow();}
+  if(recenter){
+   // Stop residual axis inertia, then prime Cinemachine's render-time clock without moving the view.
+   // Otherwise the first recenter after a long idle snaps to zero and leftover speed drifts it away again.
+   horizontal.Reset();vertical.Reset();
+   recenterX.DoRecentering(ref horizontal,0,horizontal.Value);recenterY.DoRecentering(ref vertical,0,vertical.Value);
+   recenterX.RecenterNow();recenterY.RecenterNow();
+  }
   if(recenter||input.sqrMagnitude<.0001f&&recentering){recentering=true;recenterX.DoRecentering(ref horizontal,Time.deltaTime,0);recenterY.DoRecentering(ref vertical,Time.deltaTime,0);if(Mathf.Abs(Yaw)+Mathf.Abs(Pitch)<.05f)recentering=false;}else{recentering=false;recenterX.CancelRecentering();recenterY.CancelRecentering();}
   return basis*Quaternion.Euler(Pitch,Yaw,0);
  }
