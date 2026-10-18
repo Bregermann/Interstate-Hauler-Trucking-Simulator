@@ -1,20 +1,24 @@
-﻿using System;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using LWS.TruckSports;
 using LWS.TruckBowling;
 namespace LWS.TruckCornhole {
 [DefaultExecutionOrder(-100)]public sealed class CornholeMatch:MonoBehaviour {
+ LWS.TruckSports.SportsParticipantBinding participantBinding;string participantMatchId;
+ public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}
+ void RecordParticipants(string summary,int count){LWS.TruckSports.SportsParticipantRegistry.Record(participantMatchId,SetupKey,summary,setup.players,count);}
+
  public const string SetupKey="TruckCornhole.Setup.v1";public BowlingSetup setup=new BowlingSetup();public CornholeCourse[] courses;public CornholeMenus menus;public SportsSettings settings;public SportsFeedback feedback;
  public bool InMatch{get;private set;}public bool Paused{get;private set;}public bool Finished{get;private set;}public bool RoundBreak{get;private set;}public int Round{get;private set;}public int[] totals=new int[4];public int[] lastRound=new int[4];public int[] winners=Array.Empty<int>();public int RoundFinalizations{get;private set;}public int Revision{get;private set;}
  readonly SportsDeviceInput input=new SportsDeviceInput();bool menuReleased;int gateFrame;float roundTimer,roundQuiet;public int ModalOwner{get;private set;}
  public bool Ready(int i){var p=setup.players[i];return p.source==BowlingSource.AI||p.source==BowlingSource.Keyboard&&Keyboard.current!=null&&Keyboard.current.enabled||p.Controller&&p.pad!=null&&p.pad.added&&p.pad.enabled;}
  public bool DevicesReady{get{if(!setup.Validate(out _))return false;for(int i=0;i<setup.count;i++)if(!Ready(i))return false;return true;}}
- public void Dirty(){Revision++;menus.Dirty();}public void Save(){setup.mode=BowlingMode.Simultaneous;LWS.TruckSports.SportsPrefs.SetString(SetupKey,JsonUtility.ToJson(setup));LWS.TruckSports.SportsPrefs.Save();Dirty();}
+ public void Dirty(){Revision++;menus.Dirty();}public void Save(){RefreshParticipants(true);setup.mode=BowlingMode.Simultaneous;LWS.TruckSports.SportsPrefs.SetString(SetupKey,JsonUtility.ToJson(setup));LWS.TruckSports.SportsPrefs.Save();Dirty();}
  void Awake(){try{if(LWS.TruckSports.SportsPrefs.HasKey(SetupKey)){var s=JsonUtility.FromJson<BowlingSetup>(LWS.TruckSports.SportsPrefs.GetString(SetupKey));if(s!=null&&s.players!=null&&s.players.Length==8)setup=s;}}catch(Exception){Debug.LogWarning("Cornhole setup invalid; defaults restored.");}setup.count=Mathf.Clamp(setup.count,1,4);setup.mode=BowlingMode.Simultaneous;}
- void Start(){foreach(var c in courses)c.Clear();Layout();menus.Show(CornholeScreen.Setup);}
+ void Start(){RefreshParticipants();foreach(var c in courses)c.Clear();Layout();menus.Show(CornholeScreen.Setup);}
  void OnEnable(){InputSystem.onDeviceChange+=Changed;}void OnDisable(){InputSystem.onDeviceChange-=Changed;feedback.StopAll();}void OnDestroy(){Time.timeScale=1;}
- public bool StartMatch(){if(!DevicesReady){menus.Show(CornholeScreen.Join);return false;}Save();InMatch=true;Paused=Finished=RoundBreak=false;Round=1;RoundFinalizations=0;winners=Array.Empty<int>();Array.Clear(totals,0,4);Array.Clear(lastRound,0,4);Time.timeScale=1;foreach(var c in courses){c.Clear();c.RoundLocksReset();}Layout();for(int i=0;i<setup.count;i++){Paint(courses[i],setup.players[i].color);courses[i].BeginRound();}roundQuiet=roundTimer=0;Gate();menus.Show(CornholeScreen.Play);return true;}
+ public bool StartMatch(){if(!DevicesReady){menus.Show(CornholeScreen.Join);return false;}Save();participantMatchId=System.Guid.NewGuid().ToString("N");InMatch=true;Paused=Finished=RoundBreak=false;Round=1;RoundFinalizations=0;winners=Array.Empty<int>();Array.Clear(totals,0,4);Array.Clear(lastRound,0,4);Time.timeScale=1;foreach(var c in courses){c.Clear();c.RoundLocksReset();}Layout();for(int i=0;i<setup.count;i++){Paint(courses[i],setup.players[i].color);courses[i].BeginRound();}roundQuiet=roundTimer=0;Gate();menus.Show(CornholeScreen.Play);return true;}
  void Paint(CornholeCourse c,Color color){var block=new MaterialPropertyBlock();block.SetColor("_BaseColor",color);foreach(var t in c.trucks)t.paint.SetPropertyBlock(block);}
  public void AllAI(){for(int i=0;i<setup.count;i++){setup.players[i].source=BowlingSource.AI;setup.players[i].pad=null;}Save();}
  public bool Assign(int i,Gamepad pad){if(i<0||i>=setup.count||!setup.players[i].Controller||pad==null||!pad.added||!pad.enabled)return false;var old=setup.players[i].pad;setup.players[i].pad=pad;if(!setup.Validate(out _)){setup.players[i].pad=old;return false;}Gate();Dirty();return true;}
@@ -42,7 +46,7 @@ namespace LWS.TruckCornhole {
   if(RoundBreak){roundTimer+=Time.deltaTime;if(roundTimer>=3){RoundBreak=false;Round++;for(int i=0;i<setup.count;i++)courses[i].BeginRound();roundQuiet=roundTimer=0;}return;}
   bool done=true,quiet=true;for(int i=0;i<setup.count;i++){done&=courses[i].Done;quiet&=courses[i].AllQuiet;}if(!done){roundTimer=roundQuiet=0;return;}roundTimer+=Time.deltaTime;roundQuiet=quiet?roundQuiet+Time.deltaTime:0;if(roundQuiet<1.5f&&roundTimer<12)return;
   if(!quiet)for(int i=0;i<setup.count;i++)foreach(var t in courses[i].trucks)if(t.gameObject.activeSelf&&!t.Quiet)t.Exclude();
-  for(int i=0;i<setup.count;i++){lastRound[i]=courses[i].FinalizeRound();totals[i]+=lastRound[i];}RoundFinalizations++;roundTimer=0;feedback.Play(4,0,true);Dirty();if(Round>=CornholeRules.Rounds){Finished=true;winners=CornholeRules.Winners(totals,setup.count);feedback.StopMotors();menus.Show(CornholeScreen.Result);}else RoundBreak=true;
+  for(int i=0;i<setup.count;i++){lastRound[i]=courses[i].FinalizeRound();totals[i]+=lastRound[i];}RoundFinalizations++;roundTimer=0;feedback.Play(4,0,true);Dirty();if(Round>=CornholeRules.Rounds){Finished=true;RecordParticipants("Final totals: "+LWS.TruckSports.SportsParticipantRegistry.Totals(setup.players,setup.count,i=>totals[i]),setup.count);winners=CornholeRules.Winners(totals,setup.count);feedback.StopMotors();menus.Show(CornholeScreen.Result);}else RoundBreak=true;
  }
 }
 }

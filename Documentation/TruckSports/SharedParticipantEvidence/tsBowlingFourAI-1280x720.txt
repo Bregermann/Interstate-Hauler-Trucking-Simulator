@@ -1,0 +1,23 @@
+Physical pads before injection: 0
+PASS Bowling saved scene entry
+PASS one AudioListener
+PASS one EventSystem
+PASS four lanes and eight configured slots
+AUTONOMOUS physical match: no injected pinfall, score assignments, truck relocation or shot-to-shot setup; only normal game respawns/racks. Hot seat uses timeScale=3 for elapsed-time validation; four-lane sample timeScale=1.
+PASS start 4 Simultaneous
+PASS complete ten-frame participant 0 score=90 deliveries=20
+PASS complete ten-frame participant 1 score=117 deliveries=20
+PASS complete ten-frame participant 2 score=109 deliveries=20
+PASS complete ten-frame participant 3 score=107 deliveries=20
+PASS autonomous physical contacts and pinfall
+PASS all-AI final results remain available
+PASS simultaneous lanes advance independently
+PASS a finished lane does not stop unfinished lanes
+AUTONOMOUS_COMPLETE mode=Simultaneous elapsedSeconds=406.1 timeScale=1 impacts=834 pinfall=339 sweeps=80
+SUSTAINED frames=58406 meanMs=6.95 p95Ms=12.51 p99Ms=12.53 worstMs=56.25 managedDelta=7430144 gen0=135
+ENVIRONMENT GPU=NVIDIA GeForce GTX 1660 Ti API=Direct3D11 resolution=1280x720 vSync=1
+PASS rematch retains participants
+PASS rematch resets score and retains identity 0
+PASS rematch resets score and retains identity 1
+PASS rematch resets score and retains identity 2
+PASS rematch resets score and retains identity 3

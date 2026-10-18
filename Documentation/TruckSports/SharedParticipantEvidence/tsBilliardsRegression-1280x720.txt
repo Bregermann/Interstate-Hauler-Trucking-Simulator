@@ -1,0 +1,62 @@
+HARDWARE gamepads observed before injection: 0
+PASS main menu and sensible initial focus
+PASS injected keyboard menu navigation
+PASS controller navigation reaches help
+PASS injected controller menu navigation (selected settings Button)
+PASS controller submit activates Heat settings button
+PASS working master and SFX volume
+PASS settings persist with mode-owned keys
+PASS Player 2 breaker and held Enter consumed
+PASS both shared-keyboard trucks move independently
+PASS human Player 2 uses common physical strike path
+PASS pause freezes physics without resetting shot
+PASS pause Controls returns to paused state
+PASS real cue/object first contact
+PASS physical object capture assigns group and legally retains turn
+PASS physical pocket resolves once
+PASS physical cue capture opens incoming Player 2 placement
+PASS other keyboard player cannot move or confirm placement
+PASS incoming player's keyboard placement (delta=1.281537 / focus=True / keyboardEnabled=True)
+PASS Player 2 placement confirmation restores cue
+PASS held placement input cannot leak into driving
+PASS mouse ray positions a valid cue preview
+PASS mouse click confirms placement through incoming player's input
+PASS missing controller setup cannot start a broken match
+PASS join button locks pad 1 and rejects duplicate assignment
+PASS join button independently locks pad 2
+PASS pad 1 controls only player 1
+PASS pad 2 independently controls player 2
+PASS controller disconnect pauses and preserves match
+PASS same controller reconnect resumes safely
+PASS explicit replacement preserves state and assignment
+PASS wrong controller cannot confirm cue placement
+PASS assigned stick moves placement preview
+PASS controller confirm consumed before driving
+PASS legal retained turn does not ask for handoff
+PASS shooter keeps device while balls resolve
+PASS handoff precedes scratch placement and held Enter is ignored
+PASS incoming hot-seat player gets placement after confirmation
+PASS hot-seat placement returns correct truck controls
+PASS restart confirmation can cancel
+PASS accepted restart clears gameplay and handoff state
+PASS return to main menu clears AI/input/placement activity
+PASS held controller confirm cannot skip hot-seat handoff
+PASS disconnect inside paused settings preserves pending handoff
+PASS recovery restores handoff instead of routing the old shooter
+PROBE handoff screen=Match turn=1 owner=1 ready=False control=Gamepad sharedPad=16 pad1=16 added=True enabled=True south=True rawSouth=1
+PASS shared controller handles incoming hot-seat placement
+PASS full H-v-H physical pot 1
+PASS full H-v-H physical pot 2
+PASS full H-v-H physical pot 3
+PASS full H-v-H physical pot 4
+PASS full H-v-H physical pot 5
+PASS full H-v-H physical pot 6
+PASS full H-v-H physical pot 7
+PASS complete H-v-H match physically finishes
+PASS rematch keeps identity/mode and alternates breaker
+PASS single-player AI physically strikes with AI opening-break choice
+PASS complete single-player match physically finishes
+PASS result Main Menu leaves no stale AI/match state
+PASS no runtime errors in local multiplayer smoke
+NOT RUN: native keyboard/mouse automation and two physical-controller hardware tests. All input/device checks above use injected Input System devices.
+Physical full-match fixtures reposition remaining balls/cue between shots; every pot then requires real motion, object contact and pocket capture. No recorded pocket facts are injected.

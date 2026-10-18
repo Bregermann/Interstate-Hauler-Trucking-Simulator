@@ -5,7 +5,13 @@ namespace LWS.TruckBowling {
 public enum BowlingMode {Simultaneous,HotSeat}
 public enum BowlingSource {AI,Keyboard,WholeController,LeftStick,RightStick}
 public enum BowlingDifficulty {Easy,Normal,Hard}
-[Serializable]public sealed class BowlingPlayer {
+[Serializable]public sealed class BowlingPlayer : LWS.TruckSports.ISportsParticipantSlot {
+ public string participantId;
+ string LWS.TruckSports.ISportsParticipantSlot.ParticipantId {get=>participantId;set=>participantId=value;}
+ string LWS.TruckSports.ISportsParticipantSlot.DisplayName {get=>name;set=>name=value;}
+ Color LWS.TruckSports.ISportsParticipantSlot.ParticipantColor {get=>color;set=>color=value;}
+ bool LWS.TruckSports.ISportsParticipantSlot.IsBot=>source==BowlingSource.AI;
+
  public string name="Player";public Color color=Color.cyan;public BowlingSource source;public BowlingDifficulty difficulty=BowlingDifficulty.Normal;public Key forward,left,back,right;
  [NonSerialized]public Gamepad pad;[NonSerialized]public bool released;[NonSerialized]public BowlingScore score;
  public bool Controller=>source>=BowlingSource.WholeController;

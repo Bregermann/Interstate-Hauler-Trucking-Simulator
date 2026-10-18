@@ -1,0 +1,122 @@
+Physical gamepads before injection: 0
+PASS startup collection title
+PASS single active EventSystem and AudioListener
+PASS saved scene contains six trucks, participants, agents and identity labels
+PASS single active EventSystem and AudioListener
+PASS start SharedKeyboard
+PASS six default keyboard clusters exclusive
+PASS spawn separation 1/0
+PASS spawn separation 2/0
+PASS spawn separation 2/1
+PASS spawn separation 3/0
+PASS spawn separation 3/1
+PASS spawn separation 3/2
+PASS spawn separation 4/0
+PASS spawn separation 4/1
+PASS spawn separation 4/2
+PASS spawn separation 4/3
+PASS spawn separation 5/0
+PASS spawn separation 5/1
+PASS spawn separation 5/2
+PASS spawn separation 5/3
+PASS spawn separation 5/4
+PASS injected simultaneous keyboard source drives slot 0
+PASS injected simultaneous keyboard source drives slot 1
+PASS injected simultaneous keyboard source drives slot 2
+PASS injected simultaneous keyboard source drives slot 3
+PASS injected simultaneous keyboard source drives slot 4
+PASS injected simultaneous keyboard source drives slot 5
+PASS input-check highlights received slot 0
+PASS input-check highlights received slot 1
+PASS input-check highlights received slot 2
+PASS input-check highlights received slot 3
+PASS input-check highlights received slot 4
+PASS input-check highlights received slot 5
+PASS duplicate active keyboard source rejected
+PASS Escape reserved for pause
+PASS reverse input first brakes local forward speed
+PASS held reverse transitions through zero into reverse
+PASS forward input first brakes reverse speed
+PASS pause individual recovery available
+PASS individual recovery preserves puck, clock and other trucks
+PASS individual recovery cooldown enforced
+PASS three shared pads assign source 0
+PASS three shared pads assign source 1
+PASS three shared pads assign source 2
+PASS three shared pads assign source 3
+PASS three shared pads assign source 4
+PASS three shared pads assign source 5
+PASS left/right sticks may share a controller
+PASS duplicate left stick rejected
+PASS whole-controller ownership conflicts with shared stick
+PASS start three shared controllers
+PASS left stick exclusively drives first owner
+PASS right stick exclusively drives second owner
+PASS six shared stick inputs routed 0
+PASS six shared stick inputs routed 1
+PASS six shared stick inputs routed 2
+PASS six shared stick inputs routed 3
+PASS six shared stick inputs routed 4
+PASS six shared stick inputs routed 5
+PASS shared disconnect pauses and preserves both owners
+PASS shared disconnect lists affected names and preserves physics state
+PASS held reconnect South cannot resume or reassign either shared owner; screen=Disconnect owner0=True owner1=True rawSouth=True
+PASS fresh South resumes through UI with both shared owners preserved
+PASS held shared sticks consumed on resumed gameplay
+PASS fresh shared stick input restores both owners
+PASS six separate virtual controllers assign 0
+PASS six separate virtual controllers assign 1
+PASS six separate virtual controllers assign 2
+PASS six separate virtual controllers assign 3
+PASS six separate virtual controllers assign 4
+PASS six separate virtual controllers assign 5
+PASS duplicate whole controller rejected
+PASS six whole controller sources ready without four-device cap
+PASS whole-controller route 0
+PASS whole-controller route 1
+PASS whole-controller route 2
+PASS whole-controller route 3
+PASS whole-controller route 4
+PASS whole-controller route 5
+PASS mixed keyboard, whole, shared and AI lineup
+PASS AI ownership respects all six independent slots
+PASS start SharedKeyboard
+PASS stationary accessible puck does not trigger crowd recovery
+PASS ordinary accessible contact crowding does not trigger repeated faceoffs
+PASS individual recovery clears stale physical contact
+PASS cleared contact history cannot cause false faceoff
+PASS actual truck collision creates bounded contact sparks without overlap
+PASS physical impact keeps trucks upright
+PASS genuinely invalid puck gets announced fair faceoff
+PASS actual full-mouth crossing wins sudden death
+PASS rematch
+PASS all six rematch spawns follow swapped team 0
+PASS all six rematch spawns follow swapped team 1
+PASS all six rematch spawns follow swapped team 2
+PASS all six rematch spawns follow swapped team 3
+PASS all six rematch spawns follow swapped team 4
+PASS all six rematch spawns follow swapped team 5
+PASS rematch swaps teams
+PASS physical bumper own-goal credits opposing team
+PASS restart preserves setup and ends while resetting match
+PASS single active EventSystem and AudioListener
+PASS return to selection 0
+PASS single active EventSystem and AudioListener
+PASS Billiards scene transition retains updated references 0
+PASS single active EventSystem and AudioListener
+PASS Hockey reload has six slots and no stale match 0
+PASS single active EventSystem and AudioListener
+PASS return to selection 1
+PASS single active EventSystem and AudioListener
+PASS Billiards scene transition retains updated references 1
+PASS single active EventSystem and AudioListener
+PASS Hockey reload has six slots and no stale match 1
+PASS single active EventSystem and AudioListener
+PASS return to selection 2
+PASS single active EventSystem and AudioListener
+PASS Billiards scene transition retains updated references 2
+PASS single active EventSystem and AudioListener
+PASS Hockey reload has six slots and no stale match 2
+Input checks use Unity software devices. Six-device backend routing is verified; physical USB capacity, keyboard rollover, audio perception and physical rumble still require hardware testing.
+ENVIRONMENT GPU=NVIDIA GeForce GTX 1660 Ti API=Direct3D11 CPU=Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz resolution=1280x720 vSync=1 targetFrameRate=-1
+FRAME SAMPLE live frames=3226 meanMs=7.14 p95Ms=12.49 p99Ms=12.54 worstMs=24.98 managedBytesDelta=6696960 gen0Collections=13

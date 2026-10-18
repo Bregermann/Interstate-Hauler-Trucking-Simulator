@@ -1,16 +1,26 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using LWS.TruckSports;
 namespace LWS.TruckHockey {
 public enum HockeySource {AI,Keyboard,WholeController,LeftStick,RightStick}
-[Serializable] public sealed class HockeyPlayer {
+[Serializable] public sealed class HockeyPlayer : LWS.TruckSports.ISportsParticipantSlot {
+ public string participantId;
+ string LWS.TruckSports.ISportsParticipantSlot.ParticipantId {get=>participantId;set=>participantId=value;}
+ string LWS.TruckSports.ISportsParticipantSlot.DisplayName {get=>name;set=>name=value;}
+ Color LWS.TruckSports.ISportsParticipantSlot.ParticipantColor {get=>color;set=>color=value;}
+ bool LWS.TruckSports.ISportsParticipantSlot.IsBot=>source==HockeySource.AI;
+
  public string name="Player";public Color color=Color.cyan;public HockeySource source;public HockeyDifficulty difficulty=HockeyDifficulty.Normal;public Key forward,left,back,right;
  [NonSerialized]public Gamepad pad;[NonSerialized]public bool released;
  public bool controller{get=>source>=HockeySource.WholeController;set{source=value?HockeySource.WholeController:HockeySource.Keyboard;}}
 }
 [DefaultExecutionOrder(-100)] public sealed class HockeyMatch:MonoBehaviour {
+ LWS.TruckSports.SportsParticipantBinding participantBinding;string participantMatchId;
+ public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(players);else participantBinding.Refresh(saveEdits);}
+ void RecordParticipants(string summary,int count){LWS.TruckSports.SportsParticipantRegistry.Record(participantMatchId,SetupKey,summary,players,count);}
+
  public HockeyKnockback impacts;public Rigidbody puck;public HockeyPuck puckContact;public HockeyTruck[] trucks;public HockeyAI ai;public HockeyAI[] agents;public HockeyMenus menus;public SportsSettings settings;public SportsFeedback feedback;public HockeyContactFeedback contacts;public Collider[] truckGoalBarriers;public Renderer[] goalCreases;public TextMesh[] labels;
  public HockeyPlayer[] players=Defaults();public HockeyMode mode;public HockeyDifficulty difficulty=HockeyDifficulty.Normal;public int durationMinutes=3;public bool soloController;public float goalLine=17.4f,goalHalfWidth=3.045f,halfWidth=8.7f,cornerRadius=3.625f,deadlockSeconds=10;
  public readonly HockeyRules rules=new HockeyRules();public bool InMatch{get;private set;}public bool MenuOpen=>menus.Screen!=HockeyScreen.Match;
@@ -24,7 +34,7 @@ public enum HockeySource {AI,Keyboard,WholeController,LeftStick,RightStick}
  public bool DevicesReady=>ValidateOwnership(out _)&&AllReady();bool AllReady(){for(int i=0;i<6;i++)if(!Ready(i))return false;return true;}
  public bool ValidateOwnership(out string reason){for(int i=0;i<6;i++){var a=players[i];if(a.source==HockeySource.Keyboard){var keys=new[]{a.forward,a.left,a.back,a.right};for(int k=0;k<4;k++){if(keys[k]==Key.None||keys[k]==Key.Escape){reason="Slot "+(i+1)+": gameplay keys must be assigned; Escape is reserved.";return false;}for(int l=0;l<k;l++)if(keys[k]==keys[l]){reason="Duplicate key in slot "+(i+1);return false;}for(int j=0;j<i;j++){var b=players[j];if(b.source==HockeySource.Keyboard&&(keys[k]==b.forward||keys[k]==b.left||keys[k]==b.back||keys[k]==b.right)){reason="Duplicate gameplay key "+keys[k]+" in slots "+(j+1)+" and "+(i+1);return false;}}}}else if(a.controller&&a.pad!=null){for(int j=0;j<i;j++){var b=players[j];if(!b.controller||b.pad!=a.pad)continue;if(a.source==HockeySource.WholeController||b.source==HockeySource.WholeController||a.source==b.source){reason="Controller source already belongs to slot "+(j+1);return false;}}}}reason="";return true;}
  void Awake(){if(players==null||players.Length!=6)players=Defaults();puckCollider=puck.GetComponent<Collider>();foreach(var b in truckGoalBarriers)Physics.IgnoreCollision(b,puckCollider);Freeze(true);}
- void Start(){settings.Load();if(!LoadSetup())Configure();UpdateAgents();menus.Show(HockeyScreen.Setup);}
+ void Start(){settings.Load();if(!LoadSetup())Configure();RefreshParticipants();UpdateAgents();menus.Show(HockeyScreen.Setup);}
  void OnEnable(){InputSystem.onDeviceChange+=DeviceChanged;}void OnDisable(){InputSystem.onDeviceChange-=DeviceChanged;feedback.StopAll();}
  void OnDestroy(){foreach(var m in ownedColors)if(m!=null)Destroy(m);Time.timeScale=1;}
  void DeviceChanged(InputDevice device,InputDeviceChange change){if(LWS.TruckSports.SportsFocusPolicy.Suspended(device,change))return;Dirty();if(!InMatch)return;if(change==InputDeviceChange.Added||change==InputDeviceChange.Reconnected||change==InputDeviceChange.Enabled){for(int i=0;i<6;i++)if(players[i].controller&&players[i].pad==device){input.Forget((Gamepad)device);Gate();menus.ResetReconnectInput((Gamepad)device);break;}return;}if(change!=InputDeviceChange.Removed&&change!=InputDeviceChange.Disconnected&&change!=InputDeviceChange.Disabled)return;for(int i=0;i<6;i++)if(players[i].controller&&players[i].pad==device){Pause(true);break;}}
@@ -35,7 +45,7 @@ public enum HockeySource {AI,Keyboard,WholeController,LeftStick,RightStick}
  public bool Assign(int slot,Gamepad pad){if(slot<0||slot>=6||!players[slot].controller||pad==null||!pad.added||!pad.enabled)return false;var old=players[slot].pad;players[slot].pad=pad;if(!ValidateOwnership(out _)){players[slot].pad=old;return false;}Gate();Dirty();SaveSetup();return true;}
  public void Unassign(int slot){players[slot].pad=null;Gate();Dirty();SaveSetup();}
  public void Gate(){foreach(var p in players)p.released=false;foreach(var t in trucks)t.ClearInput();}
- public bool StartMatch(bool rematch=false){rematch|=pendingRematch;if(!DevicesReady){pendingRematch=rematch;menus.Show(HockeyScreen.Join);return false;}pendingRematch=false;if(rematch)swapped=!swapped;else swapped=false;SaveSetup();UpdateAgents();InMatch=true;rules.Start(durationMinutes*60,swapped);EmergencyFaceoffs=0;Notice="FACE OFF • drive into the puck";ApplyIdentity();ResetPositions();menus.Show(HockeyScreen.Match);Time.timeScale=1;return true;}
+ public bool StartMatch(bool rematch=false){rematch|=pendingRematch;if(!DevicesReady){pendingRematch=rematch;menus.Show(HockeyScreen.Join);return false;}pendingRematch=false;if(rematch)swapped=!swapped;else swapped=false;SaveSetup();participantMatchId=System.Guid.NewGuid().ToString("N");UpdateAgents();InMatch=true;rules.Start(durationMinutes*60,swapped);EmergencyFaceoffs=0;Notice="FACE OFF • drive into the puck";ApplyIdentity();ResetPositions();menus.Show(HockeyScreen.Match);Time.timeScale=1;return true;}
  public void Restart(){if(!DevicesReady){Pause(true);return;}InMatch=true;rules.Start(durationMinutes*60,swapped);Notice="MATCH RESTARTED";ResetPositions();menus.Show(HockeyScreen.Match);Time.timeScale=1;}
  public void ChangeSetup(){pendingRematch=false;InMatch=false;feedback.StopAll();Freeze(true);menus.Show(HockeyScreen.Setup);Time.timeScale=1;}
  public void Pause(bool disconnected=false){if(!InMatch||rules.Phase==HockeyPhase.Finished)return;rules.Pause();Gate();feedback.StopAll();menus.Show(disconnected?HockeyScreen.Disconnect:HockeyScreen.Pause);Time.timeScale=0;}
@@ -57,7 +67,7 @@ public enum HockeySource {AI,Keyboard,WholeController,LeftStick,RightStick}
  void FixedUpdate(){if(!InMatch||MenuOpen||rules.Phase==HockeyPhase.Paused)return;if(rules.Live){Coordinate();if(haveSegment){bool goal=rules.Step(stepDuration,previous,puck.position,goalLine,goalHalfWidth,puckContact.radius);if(goal){Freeze(true);haveSegment=false;Gate();int scorer=rules.LastScorer;string attribution=puckContact.LastTouch>=0?" • last touch "+PlayerName(puckContact.LastTouch)+(TeamOf(puckContact.LastTouch)!=scorer?" (OWN GOAL)":""):"";Notice="GOAL • "+TeamName(scorer)+attribution;menus.Celebrate(players[scorer*3].color,rules.Phase==HockeyPhase.Finished);feedback.Play(5,0,true);Debug.Log("TH_PHYSICAL_GOAL team="+scorer+" lastTouch="+puckContact.LastTouch+" score="+rules.Score[0]+":"+rules.Score[1]);}if(rules.Phase==HockeyPhase.Finished){Finish();return;}if(!rules.Live){if(!goal){ResetPositions();Notice="SUDDEN DEATH • NEXT GOAL WINS";}return;}}
  if(InvalidPuck()){EmergencyFaceoff();return;}previous=puck.position;stepDuration=Time.fixedDeltaTime;haveSegment=true;
  }else{var before=rules.Phase;int count=Mathf.CeilToInt(rules.PhaseTimer);if((before==HockeyPhase.Pregame||before==HockeyPhase.Faceoff)&&count!=lastCount){lastCount=count;feedback.Play(4,0,true);}rules.Countdown(Time.fixedDeltaTime);if(before==HockeyPhase.Goal&&rules.Phase==HockeyPhase.Faceoff){rules.EndAfterGoal();ResetPositions();}if(rules.Phase==HockeyPhase.Finished){Finish();return;}if(rules.Live){Freeze(false);Gate();Notice=rules.Overtime?"SUDDEN DEATH • NEXT GOAL WINS":"GO!";feedback.Play(4,0,true);previous=puck.position;haveSegment=false;}}}
- void Finish(){Freeze(true);haveSegment=false;feedback.StopAll();menus.Show(HockeyScreen.Result);feedback.Play(6,0,true);for(int i=rules.Winner*3;i<rules.Winner*3+3;i++)if(players[i].controller)feedback.Pulse(players[i].pad,.22f,.2f);menus.Celebrate(players[rules.Winner*3].color,true);Time.timeScale=0;Debug.Log("TH_FINISHED winner="+rules.Winner);}
+ void Finish(){RecordParticipants("Team score: "+rules.Score[0]+":"+rules.Score[1],6);Freeze(true);haveSegment=false;feedback.StopAll();menus.Show(HockeyScreen.Result);feedback.Play(6,0,true);for(int i=rules.Winner*3;i<rules.Winner*3+3;i++)if(players[i].controller)feedback.Pulse(players[i].pad,.22f,.2f);menus.Celebrate(players[rules.Winner*3].color,true);Time.timeScale=0;Debug.Log("TH_FINISHED winner="+rules.Winner);}
  Collider[] Query(Vector3 p,float radius,out int count){count=Physics.OverlapSphereNonAlloc(p,radius,overlaps,~0,QueryTriggerInteraction.Ignore);if(count<overlaps.Length)return overlaps;QueryOverflows++;var all=Physics.OverlapSphere(p,radius,~0,QueryTriggerInteraction.Ignore);count=all.Length;return all;}
  bool Blocked(Vector3 p){var found=Query(p,puckContact.radius*.92f,out int count);for(int i=0;i<count;i++){var c=found[i];if(c==puckCollider||c==truckGoalBarriers[0]||c==truckGoalBarriers[1])continue;if(c.attachedRigidbody!=null||c.name=="Solid rink board"||c.name.StartsWith("Goal "))return true;}return false;}
  bool NoEscape(){for(int i=0;i<16;i++){Vector3 d=Quaternion.Euler(0,i*22.5f,0)*Vector3.forward;if(!Blocked(puck.position+d*.7f)&&!Blocked(puck.position+d*1.4f))return false;}return true;}
@@ -67,8 +77,8 @@ public enum HockeySource {AI,Keyboard,WholeController,LeftStick,RightStick}
  public void ClearRecoveryHistory(){stationary=deadlock=0;}
  public const string SetupKey="TruckHockey.Setup.v2";
  [Serializable]sealed class SetupData {public HockeyMode mode;public int minutes;public SlotData[] slots;}
- [Serializable]sealed class SlotData {public string name;public Color color;public HockeySource source;public HockeyDifficulty difficulty;public Key forward,left,back,right;public int device;}
- public void SaveSetup(){var data=new SetupData{mode=mode,minutes=durationMinutes,slots=new SlotData[6]};for(int i=0;i<6;i++){var p=players[i];data.slots[i]=new SlotData{name=p.name,color=p.color,source=p.source,difficulty=p.difficulty,forward=p.forward,left=p.left,back=p.back,right=p.right,device=p.pad?.deviceId??-1};}LWS.TruckSports.SportsPrefs.SetString(SetupKey,JsonUtility.ToJson(data));LWS.TruckSports.SportsPrefs.Save();}
- bool LoadSetup(){if(!LWS.TruckSports.SportsPrefs.HasKey(SetupKey))return false;try{var d=JsonUtility.FromJson<SetupData>(LWS.TruckSports.SportsPrefs.GetString(SetupKey));if(d?.slots==null||d.slots.Length!=6)return false;mode=d.mode;durationMinutes=d.minutes==2||d.minutes==3||d.minutes==5?d.minutes:3;for(int i=0;i<6;i++){var s=d.slots[i];players[i]=new HockeyPlayer{name=s.name,color=s.color,source=s.source,difficulty=s.difficulty,forward=s.forward,left=s.left,back=s.back,right=s.right,pad=InputSystem.GetDeviceById(s.device) as Gamepad};}return true;}catch(Exception){return false;}}
+ [Serializable]sealed class SlotData {public string name,participantId;public Color color;public HockeySource source;public HockeyDifficulty difficulty;public Key forward,left,back,right;public int device;}
+ public void SaveSetup(){RefreshParticipants(true);var data=new SetupData{mode=mode,minutes=durationMinutes,slots=new SlotData[6]};for(int i=0;i<6;i++){var p=players[i];data.slots[i]=new SlotData{participantId=p.participantId,name=p.name,color=p.color,source=p.source,difficulty=p.difficulty,forward=p.forward,left=p.left,back=p.back,right=p.right,device=p.pad?.deviceId??-1};}LWS.TruckSports.SportsPrefs.SetString(SetupKey,JsonUtility.ToJson(data));LWS.TruckSports.SportsPrefs.Save();}
+ bool LoadSetup(){if(!LWS.TruckSports.SportsPrefs.HasKey(SetupKey))return false;try{var d=JsonUtility.FromJson<SetupData>(LWS.TruckSports.SportsPrefs.GetString(SetupKey));if(d?.slots==null||d.slots.Length!=6)return false;mode=d.mode;durationMinutes=d.minutes==2||d.minutes==3||d.minutes==5?d.minutes:3;for(int i=0;i<6;i++){var s=d.slots[i];players[i]=new HockeyPlayer{participantId=s.participantId,name=s.name,color=s.color,source=s.source,difficulty=s.difficulty,forward=s.forward,left=s.left,back=s.back,right=s.right,pad=InputSystem.GetDeviceById(s.device) as Gamepad};}return true;}catch(Exception){return false;}}
 }
 }
