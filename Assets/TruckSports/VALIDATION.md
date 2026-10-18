@@ -8,7 +8,13 @@ Eight final Windows suites completed with zero captured runtime errors:384-crowd
 
 [Implementation, evidence and manual limits](../../Documentation/TruckSports/PedestrianPlowingValidation.md) · [Crowd/model/spawn customization](../../Documentation/TruckSports/PedestrianPlowingCustomization.md) · [Checkpoint and ordered outstanding queue](../../Documentation/TruckSports/PedestrianPlowingCheckpoint.md) · [Vendor audit](../../Documentation/TruckSports/PedestrianPlowingVendorAudit.md).
 
-Git publication is being completed separately; historical receipts below apply only to their named milestone. Party/Cheese, Show AI Cameras, Fare Fight and Goddess repairs remain outstanding and are tracked in their ledgers. Human/controller, haptics, audio balance and subjective gameplay acceptance remain manual.
+Pedestrian Plowing implementation `cd0a603b` is committed and pushed to the existing Sports branch and GitHub main; see the verified receipt below. Historical receipts apply only to their named milestones. Party/Cheese, Show AI Cameras, Fare Fight and Goddess repairs remain outstanding and are tracked in their ledgers. Human/controller, haptics, audio balance and subjective gameplay acceptance remain manual.
+
+## Verified Pedestrian Plowing Git delivery
+
+Implementation `cd0a603b925c2abc0421a976abb88dad22161a06` on `codex/truck-sports-seven-events` was pushed successfully to that branch and GitHub `main`, verified at2026-10-18T04:17:19.324524+00:00. Local scoped source commit: `960b1cec110d39dfb210478867bab103d0dff998`. **Both previous relevant Truck Sports work and the Pedestrian Plowing update are committed and pushed to main.** Unrelated Taxi/host/vendor work and private Taxi ancestry were preserved and excluded. Builds, caches, logs and original licensed package prerequisites are excluded.
+
+The built assembly and20-case evidence are identified above; later Party/Cheese, Show AI Cameras, Fare Fight and Goddess work is still outstanding. This receipt is a separate documentation commit. The delivered folder's GIT-DELIVERY.txt records the final verified public tip. Post-build source cleanup removed only one blank line at the end of PlowRound.cs; no gameplay behavior changed.
 
 ## Historical milestone documentation
 

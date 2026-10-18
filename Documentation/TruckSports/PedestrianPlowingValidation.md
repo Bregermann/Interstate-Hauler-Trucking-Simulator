@@ -45,3 +45,9 @@ Follow [the exact Inspector/spawn/model guide](PedestrianPlowingCustomization.md
 Human checks remain: driving/visibility and target readability in a dense moving crowd, subjective AI difficulty/fun, actual mixed keyboards/controllers/shared hardware, cab free-look comfort, jug challenge while driving, real haptics/audio balance, optional replay enjoyment and crowd-density tuning on the user's target PC. Recorded voice coverage is limited: existing matching audio plays only where installed; most funny character reactions are authored text rather than fully voiced dialogue.
 
 Vendor audit: [concrete reuse and exclusions](PedestrianPlowingVendorAudit.md). No vendor source was edited and no replacement vendor framework was created.
+
+## Verified Pedestrian Plowing Git delivery
+
+Implementation `cd0a603b925c2abc0421a976abb88dad22161a06` on `codex/truck-sports-seven-events` was pushed successfully to that branch and GitHub `main`, verified at2026-10-18T04:17:19.324524+00:00. Local scoped source commit: `960b1cec110d39dfb210478867bab103d0dff998`. **Both previous relevant Truck Sports work and the Pedestrian Plowing update are committed and pushed to main.** Unrelated Taxi/host/vendor work and private Taxi ancestry were preserved and excluded. Builds, caches, logs and original licensed package prerequisites are excluded.
+
+The built assembly and20-case evidence are identified above; later Party/Cheese, Show AI Cameras, Fare Fight and Goddess work is still outstanding. This receipt is a separate documentation commit. The delivered folder's GIT-DELIVERY.txt records the final verified public tip. Post-build source cleanup removed only one blank line at the end of PlowRound.cs; no gameplay behavior changed.
