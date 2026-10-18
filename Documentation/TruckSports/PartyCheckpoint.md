@@ -1,15 +1,25 @@
 # Truck Sports queued-release checkpoint — October 18
 
-<!-- SHARED-PARTICIPANTS-BEGIN -->
-## Accepted shared-participant milestone
+<!-- KEEPAWAY-BEGIN -->
+## Current accepted Keepaway milestone
 
-Current combined Windows x64 Development: `Builds/TruckSports/TruckSports.exe`, with all companions and 35 explicit Sports-only scenes / TruckSports startup. Managed SHA256 `6f6e3da1478ce9a9760bc7308a200c80de391aabc3fb5ec1023171177d272e72`; full 437-file data manifest `8963d253cb96ad577a7b6eeea1971d52f429c5782758a64133c13f6435717647`. Zero errors / 31 warnings. Source/evidence is scoped to the shared participant repair; the whole release queue is not complete.
+Canonical Windows x64 Development: `Builds/TruckSports/TruckSports.exe`, all companions, 35 explicit Sports-only scenes / TruckSports startup. Managed SHA256 `d016cd49c427f4acef886e468ca78da8c206748e21a1fbfc003059adc1988f11`; full 437-file data manifest `40e99ec79496f7471941225e1482eba85a3162173d612ee1ab16874965379001`. Zero errors / 31 warnings. Keepaway now has independent duplicate-name totals, compact bottom cards clear of the near board, no obsolete header/status strip, largest-safe camera fit and vendor-backed human-only cab ball guidance. Existing enlarged physics, rules, AI and SheepV5 motion are preserved.
+
+Native saved-scene16 / final-source PlayMode95 checks pass. All four current-build Windows suites pass:117 presentation checks/five aspect ratios, real NWH/PhysX recovery/pickups/thefts/explosions and two full normal60s-target AI matches/rematches,2,467 camera checks across20 modes,769 identity checks across34 sport scenes. Actual screenshots inspected. No hardware/human playtesting or new sustained four-cab benchmark is claimed. [Causes, implementation, evidence, limitations and vendor accounting](KeepawayRepair.md).
+
+Next: validate remaining Swing replay/clearance, then continue ordered Party repairs and new Kickball/Dance-Off, Fare Fight, Goddess and later Sky Tow/Limbo/Trailer Plug. Those are not complete. Preserve the exclusive Sports lease, private Taxi ancestry and unrelated changes. Publication receipts live in ignored Logs/TruckSports/Keepaway/commit.json and the build GIT-DELIVERY.txt.
+<!-- KEEPAWAY-END -->
+
+<!-- SHARED-PARTICIPANTS-BEGIN -->
+## Prior accepted shared-participant milestone (historical binary)
+
+Historical combined Windows x64 Development: `Builds/TruckSports/TruckSports.exe`, with all companions and 35 explicit Sports-only scenes / TruckSports startup. Managed SHA256 `6f6e3da1478ce9a9760bc7308a200c80de391aabc3fb5ec1023171177d272e72`; full 437-file data manifest `8963d253cb96ad577a7b6eeea1971d52f429c5782758a64133c13f6435717647`. Zero errors / 31 warnings. Source/evidence is scoped to the shared participant repair; the whole release queue is not complete.
 
 Eight session families now use one stable-ID registry, deterministic lossless legacy-name migration, preserved input ownership and additive Heat Your Crew / Choose Driver pages. Native fixtures pass **325** checks. All **12 current-build Windows suites** pass, including actual executable restart, **769** checks across all 34 sport scenes and crew/selector layouts, the 20-mode camera ownership suite, Hockey/Billiards regressions, three full eight-AI Plowing matches, a full four-lane ten-frame Bowling game/results/rematch, Cheese repeated starts/full completion, all 80 Cornhole throws/rematch and focused Poker checks. Actual persisted receipts from six session families verify stable IDs and active-only summaries. The recorder's inactive-Bowling-score exception was reproduced, fixed and revalidated; rejected runs are not passes. Four-view/240-target Plowing performance: 23.11 ms mean / 37.49 ms p95 over 60 seconds. Human UX, physical controllers/wheels/rollover and perceived audio/haptics remain manual.
 
 [Implementation, causes, evidence and vendor accounting](SharedParticipants.md). Curated evidence is in SharedParticipantEvidence; ignored complete diagnostics and guarded publication tools are under Logs/TruckSports/Identity. Git history and the canonical build's GIT-DELIVERY.txt provide actual local/public commit and push verification. Never push unrelated private Taxi ancestry from root main. Previous published Sports work remains included.
 
-Next: actual Keepaway deltas in PartyMasterLedger.md, then the remaining Party repairs/new Kickball/Dance-Off, Fare Fight, Goddess priorities and later Sky Tow/Limbo/Trailer Plug. The owned Editor remains PID 39408 / CLI port 7800 under the exclusive Sports lease. No competing editing agent or Editor. The read-only Bowling inventory under Logs/TruckSports/Identity is deferred; no broader alley/gutter/camera/replay changes were made in this identity milestone.
+Keepaway is now accepted above; next validate Swing and continue the remaining Party repairs/new Kickball/Dance-Off, Fare Fight, Goddess priorities and later Sky Tow/Limbo/Trailer Plug. The owned Editor remains PID 39408 / CLI port 7800 under the exclusive Sports lease. No competing editing agent or Editor. The read-only Bowling inventory under Logs/TruckSports/Identity is deferred; no broader alley/gutter/camera/replay changes were made in this identity milestone.
 <!-- SHARED-PARTICIPANTS-END -->
 
 ## Prior accepted Plowing milestone (historical binary)
