@@ -1,5 +1,11 @@
 # Truck Sports queued-release checkpoint — October18
 
+## Original wordmark source milestone
+
+The user's rejected glossy title treatment has been replaced with an original PS1/PS2-era-inspired painted wordmark, with integrated truck exhausts, an 8-ball O and bowling-pin/cheese punctuation. The saved title scene and explicit authoring defaults use the transparent sprite. Twelve automated Play Mode menu/lifecycle checks pass; initialized controlled Editor renders at720p/1080p were visually inspected. See BrandRefresh.md and BrandEvidence. This source milestone is not a new Windows build. The canonical executable remains the accepted Target Launch build below. Scoped Git outcome is recorded in Logs/TruckSports/BrandStudy/commit.json; verify it before reporting push success.
+
+Field Goal is the active unfinished repair. Bumper-only mode/save migration is implemented and tested33checks. An opt-in shared catalog covers33 installed/configured Weather Maker profiles;100 integration-smoke checks pass. Its missing renderer feature and foreground overdraw from enabling the ordinary sky mesh were isolated and corrected in a Field Goal-owned pipeline. These are not yet complete gameplay/weather-physics acceptance. The Heat selector adapter, holder/upright football, end zone, kick/air physics, updated legacy probes and final combined build still need completion. Preserve this WIP and do not claim the broader queue is done.
+
 ## Current Target Launch milestone
 
 Implementation/native/Windows acceptance complete; source Git commit/push outcome must be read from Logs/TruckSports/TargetRepair/commit.json and Builds/TruckSports/GIT-DELIVERY.txt. Do not infer a successful push from this build acceptance alone. Parent local51dbd9ae27caa6ca86a9301cf5e3e7ec8392de84/public54d5b69b49a11d91e831097ff0eacddd1c3b4fb6 contained prior published Sports work.
