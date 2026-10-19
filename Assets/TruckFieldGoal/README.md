@@ -39,3 +39,12 @@ CUSTOM SYSTEMS CREATED: Contact/aerodynamic semantics, equivalent AI approach es
 VENDOR SOURCE MODIFIED: None.
 
 DUPLICATE VENDOR FUNCTIONALITY CREATED: None.
+
+### Stadium presentation — October19 working update
+The field is a full120yards with10-yard end zones, one-yard hashes and traditional sideline yard numbers. The original Party logo sits at midfield; a new original Field Goal wordmark spans the goal end zone. The embedded stadium board stays behind/above the posts at every kick distance.
+
+The stadium holds2304 existing-character spectators, with32 live animators. Occasional jumping, comic scuffles and sealed jug tosses stay cosmetic. A rare referee-truck/pitch-invader sequence can play after a result locks, using the existing Taxi ragdoll and a fixed pool; pause, rematch and menu return clean it up. Kick physics and scores remain authoritative and independent. For editable chance/timing, select the `FieldGoalStadiumAntics` component on the FieldGoalMatch object. Set Referee Chance to0 to disable the vignette.
+
+See `Documentation/TruckSports/FieldGoalStadiumBoard.md` for exact validation and current build status. Native validation does not imply Windows/human/controller acceptance.
+
+Latest follow-up: the actual wind sock mounts at the upper-right upright corner, 19m above turf. The stadium apron and end concourse use green textured grass and real collision; the authoritative football recognizes them as ground and resolves a miss once. The midfield Party art faces the right-hand stands. Native final field/board acceptance is 42/0, dense crowd 33/0 and collection PlayMode 28/28; Windows build/player verification is recorded separately in FieldGoalStadiumBoard.md.

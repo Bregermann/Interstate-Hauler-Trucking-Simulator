@@ -1,0 +1,6 @@
+using System;using System.Reflection;using NUnit.Framework;
+public sealed class FishingGoddessTests {
+ const BindingFlags Any=BindingFlags.Public|BindingFlags.Instance|BindingFlags.Static;
+ [Test]public void ExistingTenThousandSeededScheduleAndScoringFixturesStillPass(){var type=Type.GetType("LWS.TruckFishing.Editor.FishingFixtures, Assembly-CSharp-Editor",true);Assert.DoesNotThrow(()=>type.GetMethod("Run",Any).Invoke(null,null));}
+ [Test]public void UnwantedObjectsConsumeTheirIDWithoutAddingCaughtOrMissedWeight(){var type=Type.GetType("LWS.TruckFishing.FishingRules, Assembly-CSharp",true);var kind=Type.GetType("LWS.TruckFishing.FishKind, Assembly-CSharp",true);var rules=Activator.CreateInstance(type);type.GetMethod("Reset").Invoke(rules,new object[]{4});var resolve=type.GetMethod("Resolve");Assert.That((bool)resolve.Invoke(rules,new object[]{0,42L,Enum.Parse(kind,"Debris"),true}));Assert.That((bool)resolve.Invoke(rules,new object[]{0,42L,Enum.Parse(kind,"Large"),true}),Is.False,"Duplicate debris contact cannot later become a fish reward.");Assert.That(((int[])type.GetField("caught").GetValue(rules))[0],Is.Zero);Assert.That(((int[])type.GetField("missed").GetValue(rules))[0],Is.Zero);Assert.That(((bool[])type.GetField("alive").GetValue(rules))[0]);}
+}

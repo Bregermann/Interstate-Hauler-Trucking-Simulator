@@ -1,3 +1,13 @@
+# October 19 Field Goal QA update - final Windows acceptance blocked
+
+The requested upright-mounted wind sock, green physical runoff/concourse and right-facing midfield logo are implemented in saved scenes and authoring defaults. Native field/board42/0, crowd33/0, collection PlayMode28/28 and Kickball EditMode30/30 passed. Actual Windows field/board42assertions/0errors passed twice, including real runoff contacts, full four-AI games, four resolutions, rematches and menu cleanup. Both processes subsequently faulted in Unity's native Windows accessibility shutdown code. These are not accepted full release runs.
+
+The42-scene combined build succeeded twice (first0errors/410warnings; second0errors/57warnings). The source-matching QA rebuild completed22:40:33UTC,0errors/57warnings,42scenes,managed`785f8676ba8c9fe0f35ef5a35f03e30460dccfc3a250c72418a093b487041ffe`. The failed cleanup experiment is removed. Its exact-build crowd35/0 and actual screenshot/60s render sample pass, but native shutdown still faults; full release acceptance is blocked. Keep the full canonical `Builds/TruckSports` directory; no extra numbered builds are supplied. The vendor-fixed6000.5.5f1 SDK was checksum/signature verified inside the project, but Windows canceled its elevation prompt; explicit approval is pending before retrying. The host project remains6000.4.10f1 with settings preserved.
+
+Public push is separately blocked by automatic approval review pending exact scope approval for the licensed/source payload. Local Sports preservation commits exist; no new public push has occurred. See [Field Goal evidence and exact blockers](../../Documentation/TruckSports/FieldGoalStadiumBoard.md) and [active checkpoint](../../Documentation/TruckSports/PartyCheckpoint.md). The full backlog remains incomplete.
+
+Previous accepted-build history follows; its hashes do not identify the current QA executable.
+
 # Truck Sports combined Windows build
 
 Current Sumo/FieldGoal/original-wordmark combined milestone: Windows x64 Development; 35 explicit Sports-only scenes; TruckSports startup; 0 errors /31 warnings. Built 2026-10-18T19:53:10.004882+00:00. Managed SHA256 `90dc08698caa0e7f9a2335644d3b985930f0a00d4b1c6c5bce90d7ac81d933d4`; 438-file data manifest `217c43b660c82864c4880352931a332823969968160fb72ecaca62b3b548161f`. All 14 exact-build Windows suites pass. [Accepted results and limits](../../Documentation/TruckSports/SumoRepair.md). Previous milestone details below are historical; the full queued release remains unfinished.

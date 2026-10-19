@@ -1,0 +1,139 @@
+Field Goal native acceptance - October 19, 2026
+Editor runtime, software input and explicit PhysX fixtures; not Windows/human/hardware evidence.
+
+
+Field and board, final revision
+PASS saved physical scoreboard behind the actual uprights
+PASS windsock is attached above an upper upright corner and moves with the posts
+PASS screen and prompts cannot interfere with football collisions
+PASS gameplay stats use stadium board without duplicate broadcast strips
+PASS existing Party wordmark is on the actual fifty-yard midfield line
+PASS midfield wordmark faces the right-hand stadium stands
+PASS saved green stadium runoff and concourses have solid collision
+PASS original full-width Field Goal art occupies a regulation ten-yard end zone
+PASS traditional10/20/30/40/50 yard numbers exist on both sidelines
+PASS single-yard hashes use0.9144m spacing with ten-yard stripes between groups
+PASS four-AI match starts on saved upgraded scene
+PASS field turf and ten-yard end line terminate at goal plane distance=30
+PASS board stays behind uprights across attempt 1
+PASS all four long names and scores fit their embedded cards · Long driver 1 name size=37.5 overflow=False | Long driver 2 name size=37.5 overflow=False | Long driver 3 name size=37.5 overflow=False | Long driver 4 name size=37.5 overflow=False
+PASS live board reads actual per-slot goal totals
+PASS embedded Heat speed button controls the actual replay
+PASS embedded Heat angle button controls the actual replay
+PASS embedded rewind button rewinds recorded presentation
+PASS embedded continue button exits replay without scoring twice
+PASS field turf and ten-yard end line terminate at goal plane distance=38
+PASS board stays behind uprights across attempt 2
+PASS field turf and ten-yard end line terminate at goal plane distance=46
+PASS board stays behind uprights across attempt 3
+PASS field turf and ten-yard end line terminate at goal plane distance=54
+PASS board stays behind uprights across attempt 4
+PASS field turf and ten-yard end line terminate at goal plane distance=62
+PASS board stays behind uprights across attempt 5
+PASS entire physical scoreboard remains in view at longest kick
+PASS longest-kick board has at least180pixels of vertical space at720p · height=186.4045
+PASS complete four-AI physical bumper-kick match gives all players five attempts
+PASS actual physical kick and swept legal goal still score
+PASS final stadium scores agree exactly with authoritative results
+PASS injected missed-kick/runoff collision fixture starts
+PASS actual football CCD contacts green runoff, resolves one miss and remains above ground · (40.00, 5.00, 10.00)
+PASS injected missed-kick/runoff collision fixture starts
+PASS actual football CCD contacts green runoff, resolves one miss and remains above ground · (0.00, 5.00, 40.00)
+PASS rematch starts 0
+PASS rematch retains one correctly aligned board 0
+PASS rematch starts 1
+PASS rematch retains one correctly aligned board 1
+PASS pause preserves the authoritative football
+PASS menu exit clears stadium and retains one listener
+CHECKS=42 ERRORS=0 2026-10-19T20:47:21.4345856Z
+Actual NWH/PhysX AI match. Editor images are controlled RT captures; Windows images are actual player screenshots. No physical-controller or human playtest claim.
+
+
+Dense crowd and forced referee presentation
+PASS saved real stadium has2304 existing-character spectators with32 live animators
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS all2272 distant spectators remain visible to normal and manually rendered cameras
+PASS four-AI physical kick match starts
+PASS actual bumper contact and legal goal trigger exactly one authoritative crowd reaction
+PASS real successful goal selects cheering rather than constant applause
+PASS distant spectators display their visibly different baked cheering poses
+PASS stadium overview actually contains a large rendered crowd · visible=1791
+OBSERVATION crowd on drawSamples=0 meanDraws=unavailable mainSamples=60 meanMainMs=32.87 · controlled paused Editor camera, not sustained GPU or Windows benchmark
+OBSERVATION crowd hidden drawSamples=0 meanDraws=unavailable mainSamples=60 meanMainMs=16.66 · controlled paused Editor camera, not sustained GPU or Windows benchmark
+PASS later callbacks cannot duplicate crowd feedback or revoke a legal goal
+PASS saved stadium reuses eight owned canister props and the actual Taxi jointed ragdoll
+PASS explicit jumping fixture moves an existing animated spectator
+PASS paired shout/lean scuffle choreography runs
+PASS pooled sealed jug is visibly airborne and collider-free
+PASS jug antics cannot obstruct a kick or score
+PASS rare referee vignette starts only after the result is locked
+PASS pause preserves both referee and pitch invader choreography
+PASS referee reaches the fan and activates shared Taxi ragdoll exactly once
+PASS canned tackle never participates in live football collision geometry
+PASS referee leaves and the fixed event pool retires cleanly
+PASS wild stadium presentation cannot award or revoke any kick
+PASS explicit rare-event fixture starts the existing character on a noninterfering sideline route
+PASS pause preserves the fan's exact route position
+PASS fan resumes smooth travel outside the central ball corridor
+PASS setup cancels the rare event and crowd sound
+PASS rematch starts without rebuilding crowd 0
+PASS rematch starts without rebuilding crowd 1
+PASS rematch starts without rebuilding crowd 2
+PASS repeated rematches reuse the fixed audience rather than duplicating spectators
+PASS menu return cleans audience callbacks and preserves one listener
+CHECKS=33 ERRORS=0 · actual physical kick/goal; explicit forced rare-event presentation fixture. Controlled renders, not human/hardware/audio listening or Windows/GPU benchmark evidence.
+
+
+Collection PlayMode
+PASS passed=28 failed=0 skipped=0 2026-10-19T20:54:07.9262892Z
+
+Kickball EditMode
+PASS passed=30 failed=0 skipped=0 2026-10-19T20:58:02.2125727Z
+
+WINDOWS QA - NOT FULLY ACCEPTED
+Source-matching managed SHA256: 785f8676ba8c9fe0f35ef5a35f03e30460dccfc3a250c72418a093b487041ffe
+PASS saved real stadium has2304 existing-character spectators with32 live animators
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS posed crowd uses real collider-free Unity renderers and shared instanced materials
+PASS all2272 distant spectators remain visible to normal and manually rendered cameras
+PASS four-AI physical kick match starts
+PASS actual bumper contact and legal goal trigger exactly one authoritative crowd reaction
+PASS real successful goal selects cheering rather than constant applause
+PASS distant spectators display their visibly different baked cheering poses
+PASS stadium overview actually contains a large rendered crowd · visible=1791
+OBSERVATION crowd on drawSamples=0 meanDraws=unavailable mainSamples=60 meanMainMs=25.82 · controlled paused manual camera, not sustained GPU/frame-budget evidence
+OBSERVATION crowd hidden drawSamples=0 meanDraws=unavailable mainSamples=60 meanMainMs=6.72 · controlled paused manual camera, not sustained GPU/frame-budget evidence
+PASS later callbacks cannot duplicate crowd feedback or revoke a legal goal
+PASS saved stadium reuses eight owned canister props and the actual Taxi jointed ragdoll
+PASS explicit jumping fixture moves an existing animated spectator
+PASS paired shout/lean scuffle choreography runs
+PASS pooled sealed jug is visibly airborne and collider-free
+PASS jug antics cannot obstruct a kick or score
+PASS rare referee vignette starts only after the result is locked
+PASS pause preserves both referee and pitch invader choreography
+PASS referee reaches the fan and activates shared Taxi ragdoll exactly once
+PASS canned tackle never participates in live football collision geometry
+PASS referee leaves and the fixed event pool retires cleanly
+PASS wild stadium presentation cannot award or revoke any kick
+PASS explicit rare-event fixture starts the existing character on a noninterfering sideline route
+PASS pause preserves the fan's exact route position
+PASS fan resumes smooth travel outside the central ball corridor
+PASS setup cancels the rare event and crowd sound
+PASS rematch starts without rebuilding crowd 0
+PASS rematch starts without rebuilding crowd 1
+PASS rematch starts without rebuilding crowd 2
+PASS repeated rematches reuse the fixed audience rather than duplicating spectators
+PASS dense-crowd Windows workload starts with actual four-AI competition
+PASS sustained sixty-second Windows sample includes automatic gameplay rendering
+WINDOWS PERF seconds=60.01 frames=8652 cameraRenders=8652 meanMS=6.94 p95MS=12.50 p99MS=12.53 GC0=5 managedDelta=-30687232 GPU=NVIDIA GeForce GTX 1660 Ti resolution=1280x720 requestedCap=60 vSync=1 · timeScale1, uncontrolled host load; no physical-controller or isolated GPU claim
+PASS menu return cleans audience callbacks and preserves one listener
+CHECKS=35 ERRORS=0 · actual physical kick/goal; explicit forced rare-event presentation fixture. Controlled renders, not human/hardware/audio listening or Windows/GPU benchmark evidence.
+
+Process exit:0xC0000005 (Unity native accessibility shutdown); installer retry approval pending. Feature assertions are separate from successful process lifecycle.

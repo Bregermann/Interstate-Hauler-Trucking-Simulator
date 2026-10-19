@@ -1,0 +1,11 @@
+using System;using NUnit.Framework;using LWS.TruckSkyTow;
+public sealed class SkyTowRuleTests {
+ [TestCase(1)][TestCase(2)][TestCase(3)][TestCase(4)]public void SupportedParticipants(int count){var r=new SkyTowRules();r.Start(count,36);Assert.That(r.Count,Is.EqualTo(count));}
+ [TestCase(0)][TestCase(5)]public void InvalidParticipantsFail(int count){Assert.Throws<ArgumentOutOfRangeException>(()=>new SkyTowRules().Start(count,36));}
+ [Test]public void RingScoresOnlyOnce(){var r=new SkyTowRules();r.Start(1,36);Assert.That(r.Ring(0,0,true,false,true));Assert.That(r.score[0],Is.EqualTo(125));Assert.That(r.Ring(0,0,true,true,true),Is.False);Assert.That(r.score[0],Is.EqualTo(125));}
+ [Test]public void GoldAndStreakAreExplained(){var r=new SkyTowRules();r.Start(1,36);r.Ring(0,0,true,true,false);r.Ring(0,1,true,false,false);r.Ring(0,2,true,false,false);Assert.That(r.score[0],Is.EqualTo(410));r.Ring(0,3,false,false,false);Assert.That(r.streak[0],Is.Zero);}
+ [Test]public void FinishClosesUnseenRingsWithoutPoints(){var r=new SkyTowRules();r.Start(1,36);r.Ring(0,0,true,false,false);r.Finish(0);Assert.That(r.score[0],Is.EqualTo(100));Assert.That(r.Complete);for(int i=1;i<36;i++)Assert.That(r.outcomes[0,i],Is.EqualTo(-1));Assert.That(r.Finish(0),Is.False);Assert.That(r.Ring(0,1,true,true,true),Is.False);}
+ [Test]public void EqualFinalScoresShareVictory(){var r=new SkyTowRules();r.Start(2,36);r.Ring(0,0,true,false,false);r.Ring(1,0,true,false,false);r.Finish(0);Assert.That(r.Complete,Is.False);r.Finish(1);Assert.That(r.winners[0]&&r.winners[1]);}
+ [Test]public void RematchClearsEverything(){var r=new SkyTowRules();r.Start(1,36);r.Ring(0,0,true,true,true);r.Finish(0);r.Start(1,36);Assert.That(r.Complete,Is.False);Assert.That(r.score[0],Is.Zero);Assert.That(r.winners[0],Is.False);Assert.That(r.outcomes[0,0],Is.Zero);}
+ [TestCase(-3,4,0,4.8f,1.65f,false,true)][TestCase(-3,4,3.2f,4.8f,1.65f,false,false)][TestCase(-3,4,0,4.8f,1.65f,true,false)][TestCase(2,4,0,4.8f,1.65f,false,false)][TestCase(-2,-1,0,4.8f,1.65f,false,false)]public void SweptOpeningRejectsRimAndNonCrossings(float before,float after,float radial,float radius,float body,bool touched,bool expected){Assert.That(SkyTowRules.SweptOpening(before,after,radial,radius,body,touched),Is.EqualTo(expected));}
+}

@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f99ac3b3b68c8af4589fc671b4d94647, type: 3}
+  m_Name: Sinkhole Crowd
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckPedestrianPlowing.PlowSettings
+  roundSeconds: 180
+  crowdSize: 240
+  bonusFraction: 0.1
+  penaltyFraction: 0.16
+  randomSeed: 17419
+  varySeedEachMatch: 1
+  characters:
+  - displayName: Bongo Cratefoot
+    prefab: {fileID: 5167938683609722511, guid: 5d5ea507dd5ce0d4b91b9c55ce083d4b,
+      type: 3}
+    reactions: {fileID: 11400000, guid: 3087322ef7b75d94585619990736cc27, type: 2}
+    weight: 1
+    calmReaction: What a parade!
+    panicReaction: Look out! Truck!
+  - displayName: Dash Stopwatch
+    prefab: {fileID: 2394457416576105682, guid: e8e91e224aa81fb4eaaaacc17296dfee,
+      type: 3}
+    reactions: {fileID: 11400000, guid: 4f31c94c88ce31743b1296e1c830b8ef, type: 2}
+    weight: 1
+    calmReaction: What a parade!
+    panicReaction: Look out! Truck!
+  - displayName: Rivet Starwrench
+    prefab: {fileID: 2167310078453107336, guid: 6881fdd78a5ffbf4ea4cb07e51a5c7c3,
+      type: 3}
+    reactions: {fileID: 11400000, guid: c0d1918eed4641843a222b3ab2a56cc0, type: 2}
+    weight: 1
+    calmReaction: What a parade!
+    panicReaction: Look out! Truck!
+  - displayName: Piper Ash
+    prefab: {fileID: 3515686775185768073, guid: d69a16a0a03f6bc43945acd3ce60391b,
+      type: 3}
+    reactions: {fileID: 11400000, guid: 91af1883a30d6e045882a230e7937507, type: 2}
+    weight: 1
+    calmReaction: What a parade!
+    panicReaction: Look out! Truck!
+  - displayName: Cobalt Unit Seven
+    prefab: {fileID: 1194810179824595327, guid: c1449dd3f13a17e49b42f6345292f7a8,
+      type: 3}
+    reactions: {fileID: 11400000, guid: 6c9c81c13e09931488cc2693022118fa, type: 2}
+    weight: 1
+    calmReaction: What a parade!
+    panicReaction: Look out! Truck!
+  walkSpeed: 1.4
+  panicSpeed: 3
+  bonusSpeed: 4.1
+  threatRadius: 12
+  maximumActiveRagdolls: 32
+  crowdThinkRate: 6
+  animationDetailDistance: 55
+  ragdollSeconds: 50
+  keepRagdolls: 1
+  bloodAmount: 0.35
+  reactionVoices: []
+  customizationNotes: Edit crowd count and role fractions here. Characters are weighted
+    prefab entries; their appearances never determine points. In the scene, select
+    Crowd Spawn Zones; move/resize zones and adjust weights. Navigation must be rebaked
+    after changing solid arena geometry.

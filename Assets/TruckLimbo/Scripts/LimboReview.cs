@@ -1,0 +1,14 @@
+using UnityEngine;using LWS.TruckSports;
+namespace LWS.TruckLimbo {
+// Reuses the bounded recorded-transform player and existing rally cameras.
+public sealed class LimboReview:MonoBehaviour {
+ public LimboMatch match;public SportsMotionReplay motion;public bool Active{get;private set;}Renderer[] live;bool[] hidden;int focus;
+ public void ResetRecord(){Stop(false);motion.ResetRecord();var colors=new Color[16];for(int i=0;i<8;i++)colors[i*2]=colors[i*2+1]=match.setup.players[i].color;motion.Colorize(colors);}
+ public void Record(float time){int mask=0;for(int i=0;i<match.setup.count;i++)if(match.racers[i].Phase!=LimboAttempt.Eliminated)mask|=3<<(i*2);motion.Record(time,mask);}
+ public bool Play(){if(!match.Finished||motion.Duration<.1f)return false;Stop(false);focus=0;for(int i=0;i<match.setup.count;i++)if(match.rules.winners[i]){focus=i;break;}motion.Begin(Mathf.Max(0,motion.Duration-22));if(!motion.Playing)return false;var list=new System.Collections.Generic.List<Renderer>();foreach(var racer in match.racers){list.AddRange(racer.GetComponentsInChildren<Renderer>(true));list.AddRange(racer.bar.GetComponentsInChildren<Renderer>(true));}live=list.ToArray();hidden=new bool[live.Length];for(int i=0;i<live.Length;i++){hidden[i]=live[i].forceRenderingOff;live[i].forceRenderingOff=true;}Active=true;match.menus.Show(SportsEventScreen.Play);return true;}
+ public void Tick(float dt){if(!Active)return;if(motion.Step(dt)){Stop();return;}var point=Vector3.Lerp(motion.Position(focus*2),motion.Position(focus*2+1),.3f)+Vector3.up*.8f;match.views.ReplayView(point,motion.Angle,motion.Angle==0?new Vector3(7,2.2f,-5):motion.Angle==1?new Vector3(-8,1.3f,2):new Vector3(0,12,-6));match.cameras=new[]{match.views.broadcast.view};}
+ public void Action(string key){if(key=="limboreview"){Play();return;}if(!Active)return;if(key=="replayangle")motion.Angle=(motion.Angle+1)%3;else if(key=="replayspeed")motion.Speed=motion.Speed==1?.35f:motion.Speed<1?2:1;else if(key=="replayrewind")motion.Seek(Mathf.Max(0,motion.Duration-22));else if(key=="replayskip")Stop();}
+ public void Stop(bool showResult=true){if(motion!=null)motion.End();if(!Active)return;Active=false;if(live!=null)for(int i=0;i<live.Length;i++)if(live[i]!=null)live[i].forceRenderingOff=hidden[i];live=null;hidden=null;match.views.Restore();if(showResult)match.menus.Show(SportsEventScreen.Result);}
+ void OnDisable(){Stop(false);}
+}
+}

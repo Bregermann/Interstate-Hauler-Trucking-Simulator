@@ -8,15 +8,16 @@ using DigitalRuby.WeatherMaker;
 namespace LWS.TruckSports.Editor {
 // Opt-in installation. Never mutate a host/shared renderer or change other sports.
 public static class SportsWeatherRenderingAuthoring {
- public static void Install(SportsEventSession match,string folder){
-  var weather=match.GetComponent<SportsChaosWeather>();
-  var binding=match.GetComponent<LWS.TruckBaseJumping.BaseJumpRendering>();
+ public static void Install(SportsEventSession match,string folder)=>Install(match.gameObject,match.cameras,folder);
+ public static void Install(GameObject owner,Camera[] cameras,string folder){
+  var weather=owner.GetComponent<SportsChaosWeather>();
+  var binding=owner.GetComponent<LWS.TruckBaseJumping.BaseJumpRendering>();
   if(weather==null||binding==null)throw new System.InvalidOperationException("Scene-owned Weather Maker and scoped pipeline are required.");
   string directory="Assets/"+folder+"/Rendering";Directory.CreateDirectory(directory);AssetDatabase.Refresh();
   string pipelinePath=directory+"/Weather pipeline.asset",rendererPath=directory+"/Weather renderer.asset";
   var pipeline=AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(pipelinePath);
   if(pipeline==null){AssetDatabase.CopyAsset(AssetDatabase.GetAssetPath(binding.pipeline),pipelinePath);pipeline=AssetDatabase.LoadAssetAtPath<UniversalRenderPipelineAsset>(pipelinePath);}
-  var settings=new SerializedObject(pipeline);var list=settings.FindProperty("m_RendererDataList");int index=settings.FindProperty("m_DefaultRendererIndex").intValue;
+  var settings=new SerializedObject(pipeline);var list=settings.FindProperty("m_RendererDataList");var previous=new SerializedObject(binding.pipeline).FindProperty("m_RendererDataList");for(int n=0;n<previous.arraySize;n++){if(n==new SerializedObject(binding.pipeline).FindProperty("m_DefaultRendererIndex").intValue)continue;var extra=previous.GetArrayElementAtIndex(n).objectReferenceValue;if(extra==null)continue;bool exists=false;for(int j=0;j<list.arraySize;j++)exists|=list.GetArrayElementAtIndex(j).objectReferenceValue==extra;if(!exists){int last=list.arraySize;list.arraySize++;list.GetArrayElementAtIndex(last).objectReferenceValue=extra;}}int index=settings.FindProperty("m_DefaultRendererIndex").intValue;
   var data=AssetDatabase.LoadAssetAtPath<UniversalRendererData>(rendererPath);
   if(data==null){AssetDatabase.CopyAsset(AssetDatabase.GetAssetPath(list.GetArrayElementAtIndex(index).objectReferenceValue),rendererPath);data=AssetDatabase.LoadAssetAtPath<UniversalRendererData>(rendererPath);}
 #if UNITY_URP
@@ -28,11 +29,11 @@ public static class SportsWeatherRenderingAuthoring {
 #endif
   // Vendor fog is authoritative; avoid a second deferred fog path. Match vendor demo's intermediate texture requirement.
   var rendererSettings=new SerializedObject(data);rendererSettings.FindProperty("m_RenderingMode").intValue=0;rendererSettings.FindProperty("m_IntermediateTextureMode").intValue=1;rendererSettings.ApplyModifiedPropertiesWithoutUndo();
-  data.SetDirty();EditorUtility.SetDirty(data);list.GetArrayElementAtIndex(index).objectReferenceValue=data;settings.ApplyModifiedPropertiesWithoutUndo();binding.pipeline=pipeline;EditorUtility.SetDirty(binding);
+  data.SetDirty();EditorUtility.SetDirty(data);list.GetArrayElementAtIndex(index).objectReferenceValue=data;settings.ApplyModifiedPropertiesWithoutUndo();binding.pipeline=pipeline;EditorUtility.SetDirty(binding);var snow=owner.GetComponent<SportsSnowSurface>();if(snow!=null){var depth=AssetDatabase.LoadAssetAtPath<ScriptableRendererData>("Assets/NOT_Lonely/Weatherade SRS/Resources/SRS_DepthRenderer.asset");for(int n=0;n<list.arraySize;n++)if(list.GetArrayElementAtIndex(n).objectReferenceValue==depth)snow.depthRenderer=n;EditorUtility.SetDirty(snow);}
   // Weather Maker draws this mesh through its camera command buffer. Enabling the
   // ordinary renderer draws its ZTest Always material over foreground geometry.
   var sky=weather.vendor.GetComponentInChildren<WeatherMakerSkySphereScript>(true);if(sky!=null){sky.gameObject.SetActive(true);sky.enabled=true;var renderer=sky.GetComponent<MeshRenderer>();if(renderer!=null){renderer.enabled=false;EditorUtility.SetDirty(renderer);}EditorUtility.SetDirty(sky);}
-  foreach(var camera in match.cameras){camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;camera.farClipPlane=Mathf.Max(10000,camera.farClipPlane);EditorUtility.SetDirty(camera);}
+  foreach(var camera in cameras){camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;camera.farClipPlane=Mathf.Max(10000,camera.farClipPlane);EditorUtility.SetDirty(camera);}
   AssetDatabase.SaveAssets();
  }
 }

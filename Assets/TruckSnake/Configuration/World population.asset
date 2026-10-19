@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 232e6eec663387b4995fd4dc292802cb, type: 3}
+  m_Name: World population
+  m_EditorClassIdentifier: LWS.TruckTaxi.Runtime::LWS.TruckTaxi.TruckTaxiPopulationProfile
+  pedestrianDensityMultiplier: 1.25
+  trafficDensityMultiplier: 1.3
+  measuredPedestrianBaseline: 120
+  measuredTrafficBaseline: 36
+  maximumActivePedestrians: 150
+  maximumActiveTraffic: 48
+  spawnRadius: 2200
+  despawnRadius: 2400
+  maintenanceInterval: 0.5
+  maximumSpawnsPerPass: 8
+  maximumActiveRagdolls: 24
+  pedestrianSpawnClearance: 1.5
+  trafficSpawnClearance: 14
+  playerTrafficSpawnClearance: 20
+  optimizePresentation: 1
+  cullOffscreenAnimation: 1
+  lodTransitionMultiplier: 1.75
+  pedestrianShadowDistance: 60
+  trafficShadowDistance: 100
+  pedestrianReducedSkinningDistance: 50
+  disableSkinnedMotionVectors: 1
+  presentationDistanceHysteresis: 8

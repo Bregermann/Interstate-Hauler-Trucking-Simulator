@@ -1,0 +1,25 @@
+using System;using System.IO;using System.Text;using System.Collections;using UnityEngine;using LWS.TruckSports;
+namespace LWS.TruckDockDiving {
+public sealed class DockSlangProbe:MonoBehaviour {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+ [RuntimeInitializeOnLoadMethod]static void Boot(){bool run=Array.IndexOf(Environment.GetCommandLineArgs(),"-tsDockSlang")>=0;
+#if UNITY_EDITOR
+ run|=UnityEditor.SessionState.GetBool("Sports.Dock.Slang",false);UnityEditor.SessionState.SetBool("Sports.Dock.Slang",false);
+#endif
+ if(run){var g=new GameObject("Dock Diving actual flight bubble acceptance");DontDestroyOnLoad(g);g.AddComponent<SportsProbeInputIsolation>();g.AddComponent<DockSlangProbe>();}}
+ const string Folder="Logs/TruckSports/EssentialRelease/Dock/Slang";readonly StringBuilder log=new StringBuilder();int errors,checks;IDisposable preferences;
+ void Awake(){preferences=SportsPrefs.IsolateValidation("DockSlang");SportsParticipantRegistry.ForgetCache();}
+ void Check(bool ok,string label){checks++;if(!ok)errors++;log.AppendLine((ok?"PASS ":"FAIL ")+label);File.WriteAllText(Folder+"/progress.txt",log.ToString());}
+ void Error(string s,string stack,LogType type){if(type==LogType.Error||type==LogType.Exception){errors++;log.AppendLine("ERROR "+s);}}
+ IEnumerator Start(){Directory.CreateDirectory(Folder);File.WriteAllText(Folder+"/result.txt","RUNNING "+DateTime.UtcNow.ToString("o"));Application.logMessageReceived+=Error;yield return SportsProbeScene.Ensure<DockMatch>("TruckDockDiving");yield return null;var m=FindAnyObjectByType<DockMatch>();var slang=m.GetComponent<DockSlang>();Check(slang!=null&&slang.caption!=null&&slang.group!=null,"saved Dock scene contains reusable comic bubble references");m.setup.count=2;m.AllBots();Check(m.StartMatch(),"two autonomous divers start through the established match lifecycle");Time.timeScale=3;bool captured=false,paused=false;float deadline=Time.realtimeSinceStartup+180;
+  while(!m.Finished&&Time.realtimeSinceStartup<deadline){if(slang.group.alpha>.9f&&m.Phase==DockPhase.Flight){if(!paused){paused=true;int launches=m.Launches,locks=m.Locks;var position=m.truck.body.position;m.Pause();yield return new WaitForSecondsRealtime(.2f);Check(m.Launches==launches&&m.Locks==locks&&m.truck.body.position==position,"pause preserves physical flight and exact scoring counters");m.Resume();Time.timeScale=3;}else if(!captured){captured=true;Check(slang.Speaker==m.Active&&slang.caption.text.Length>0,"readable Canadian expression belongs only to the airborne active diver");foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080),new Vector2Int(1280,960)}){SportsControlledCapture.Save(m,size.x,size.y,Folder+"/flight-"+size.x+"x"+size.y+".png");yield return null;}}}yield return null;}
+  Time.timeScale=1;Check(m.Finished&&m.CompletedAttempts>=6&&m.Launches==m.Locks,"complete real two-AI three-attempt match resolves every physical launch exactly once");Check(slang.Bubbles>0&&slang.Bubbles<=m.Launches,"occasional bubbles stay bounded to at most one per launch");Check(captured&&paused,"actual airborne bubble and pause were exercised, not a forced scoring fixture");Check(m.best[0]>0||m.best[1]>0,"real water contact preserves valid measured dock distances");m.SetupScreen();Check(slang.group.alpha==0,"setup hides any previous flight bubble");Check(m.StartMatch()&&m.Launches==0&&m.Locks==0&&m.CompletedAttempts==0,"rematch restores original approach and scoring state");yield return null;m.SetupScreen();SportsNavigation.FrontEnd();yield return null;yield return null;Check(FindAnyObjectByType<DockSlang>()==null&&FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length==1,"menu return removes bubble tweens and retains one listener");log.AppendLine("CHECKS="+checks+" ERRORS="+errors+" · native autonomous NWH/PhysX and controlled rendered captures. No human, hardware, Windows or audio listening claim.");File.WriteAllText(Folder+"/result.txt",log.ToString());Application.logMessageReceived-=Error;
+#if UNITY_EDITOR
+ if(Application.isEditor)UnityEditor.EditorApplication.isPlaying=false;else
+#endif
+ Application.Quit(errors==0?0:2);
+ }
+ void OnDestroy(){Application.logMessageReceived-=Error;preferences?.Dispose();SportsParticipantRegistry.ForgetCache();Time.timeScale=1;}
+#endif
+}
+}

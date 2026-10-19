@@ -18,7 +18,7 @@ public sealed class BungeeBay:MonoBehaviour {
  void FixedUpdate(){if(truck==null||truck.body==null)return;var b=truck.body;IncomingVelocity=b.linearVelocity;IncomingAngular=b.angularVelocity;IncomingCenter=b.worldCenterOfMass;}
  public void Tick(Vector2 input,bool action,float dt){Cooldown=Mathf.Max(0,Cooldown-dt);if(!released)return;if(RecoveryTime>0)return;
   var b=truck.body;var delta=b.worldCenterOfMass-craneAnchor.position;Extension=Mathf.Max(0,delta.magnitude-restLength);if(action&&Cooldown<=0){tug=.3f;Cooldown=tugCooldown;match.feedback.Play(2,0,true);match.Pulse(slot,.28f,.12f);}tug=Mathf.Max(0,tug-dt);spring.maxDistance=Mathf.MoveTowards(spring.maxDistance,restLength-(tug>0?2.5f:0),dt*10);
-  input=Vector2.ClampMagnitude(input,1);var push=new Vector3(input.x,0,input.y)*pumpAcceleration;b.AddForce(push,ForceMode.Acceleration);b.AddTorque(new Vector3(input.y,0,-input.x)*.8f,ForceMode.Acceleration);
+  BungeeSwingForces.Apply(b,input,pumpAcceleration);
   bool immobile=Vector3.Distance(b.position,prior)<.035f&&b.linearVelocity.sqrMagnitude<1;stuck=immobile?stuck+dt:0;prior=b.position;
   if(stuck>6||b.position.y< -8||delta.magnitude>restLength+23||Mathf.Abs(b.position.x-transform.position.x)>65){Recover();}
  }

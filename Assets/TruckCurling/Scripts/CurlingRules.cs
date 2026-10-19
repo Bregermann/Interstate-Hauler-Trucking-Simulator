@@ -2,7 +2,10 @@ using UnityEngine;
 namespace LWS.TruckCurling {
 // Arcade-sized sheet; stone-distance scoring and line/FGZ semantics follow World Curling R2/R6/R12.
 public static class CurlingRules {
- public const int Deliveries=16;public const float Radius=1.6f,HouseRadius=4.6f,Tee=156,Hog=112.5f,Back=175.5f,HalfWidth=7;
+ // Original tee156 minus20% of the actual186m start-to-target distance.
+ // The234m sheet and release conversion remain unchanged.
+ public const float OriginalTee=156,TargetShift=37.2f,WallBandLength=3.048f;
+ public const int Deliveries=16;public const float Radius=1.6f,HouseRadius=4.6f,Tee=118.8f,Hog=75.3f,Back=138.3f,HalfWidth=7;
  public const float Start=-30,SheetCenter=78,SheetLength=234,MaximumEntry=20,ReleaseRatio=.74f;
  // One release-line conversion; subsequent collisions and sliding remain authoritative PhysX motion.
  public static float ReleaseSpeed(float entry)=>Mathf.Clamp(entry,0,MaximumEntry)*ReleaseRatio;

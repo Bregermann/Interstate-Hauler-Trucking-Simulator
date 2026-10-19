@@ -1,5 +1,7 @@
 # Truck Sports: Party!
 
+Working source, October19: Truck Snake now starts every participant with one actual trailer, uses denser road pickups and an attached-length score multiplier. Its higher jump is physically verified at29.1feet of lowest-collider clearance with55trailers. Default spawning produced61pickupcontacts across1.47km in the native controlled road test. This is part of the unfinished combined release; it is not included in the historical35-scene executable below. [Tuning and actual evidence](../../Documentation/TruckSports/TruckSnakeGrowth.md).
+
 Current Sumo/FieldGoal/original-wordmark combined milestone: Windows x64 Development; 35 explicit Sports-only scenes; TruckSports startup; 0 errors /31 warnings. Built 2026-10-18T19:53:10.004882+00:00. Managed SHA256 `90dc08698caa0e7f9a2335644d3b985930f0a00d4b1c6c5bce90d7ac81d933d4`; 438-file data manifest `217c43b660c82864c4880352931a332823969968160fb72ecaca62b3b548161f`. All 14 exact-build Windows suites pass. [Accepted results and limits](../../Documentation/TruckSports/SumoRepair.md). Previous milestone details below are historical; the full queued release remains unfinished.
 
 

@@ -1,0 +1,5 @@
+# Truck Snake original menu icon
+
+Asset: `Assets/TruckSnake/Art/Truck Snake Icon.png`. Built-in ImageGen, generated October19,2026; project-local selected original, with genuine alpha. Style reference only: the collection's existing `Newcomers.png` sheet. No runtime C-drive references. Native Sprite import and menu wiring remain pending.
+
+Prompt: Create one original transparent PNG game-selection icon for Truck Snake. Match the existing coherent colorful hand-painted early-2000s console party-game illustration: expressive semi-truck, readable outlined silhouette, lively brush texture and warm/cool contrast. A joyful orange-red semi jumps forward in three-quarter view, towing an S-shaped articulated cream/turquoise road train receding behind it, including a delayed airborne wave. Dominant tractor, small luminous green pickup ring, tiny gold glint. Original unbranded vehicle, no copied characters, words, letters, frame, background or checkerboard. One centered cutout with transparent padding.

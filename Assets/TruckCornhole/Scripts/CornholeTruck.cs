@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using NWH.WheelController3D;
 namespace LWS.TruckCornhole {
 // NWH alone owns approach tire/suspension forces. PhysX owns all landing contacts.
@@ -21,7 +21,7 @@ public sealed class CornholeTruck:MonoBehaviour {
  void FixedUpdate(){if(course==null||!course.match.InMatch||course.match.Paused||Holed||body.isKinematic)return;float dt=Time.fixedDeltaTime;bool current=course.Current==this;Vector2 input=current?command:Vector2.zero;
   if(current&&!Launched&&!Landed&&!Excluded&&course.Phase==CornholePhase.Approach){float speed=Vector3.Dot(body.linearVelocity,transform.forward);if(!braking&&input.y*speed<-.12f&&Mathf.Abs(speed)>.25f)braking=true;if(braking&&(Mathf.Abs(speed)<.12f||input.y*speed>=0))braking=false;foreach(var w in wheels){w.MotorTorque=braking||body.linearVelocity.magnitude>=21?0:input.y*2.3f;w.BrakeTorque=braking?9*Mathf.Abs(input.y):0;w.SteerAngle=w.transform.localPosition.z>0?input.x*22:0;if(w.IsGrounded&&w.HitCollider!=null){var surface=w.HitCollider.GetComponent<CornholeSurface>();if(surface!=null&&surface.course==course&&surface.kind==CornholeSurfaceKind.Trampoline)Launch();}}
   }
-  if(Launched&&!Landed&&!Excluded){flightTime+=dt;if(Mathf.Abs(input.y)<.15f)rangeReleased=true;rangeGate=Mathf.MoveTowards(rangeGate,flightTime>.25f?1:0,dt*2);Vector2 touch=new Vector2(input.x,rangeReleased?input.y:0);float cost=touch.magnitude*course.aftertouchAcceleration*dt;float allowed=Mathf.Min(cost,Mathf.Max(0,course.aftertouchBudget-UsedAftertouch));if(cost>0){float factor=allowed/cost*rangeGate;body.AddForce(new Vector3(touch.x,0,touch.y*.65f)*course.aftertouchAcceleration*factor,ForceMode.Acceleration);body.AddTorque(new Vector3(touch.y*.22f,0,-touch.x*.35f)*factor,ForceMode.Acceleration);UsedAftertouch+=allowed*rangeGate;}
+  if(Launched&&!Landed&&!Excluded){body.AddForce(course.match.FlightWind(body.linearVelocity),ForceMode.Acceleration);flightTime+=dt;if(Mathf.Abs(input.y)<.15f)rangeReleased=true;rangeGate=Mathf.MoveTowards(rangeGate,flightTime>.25f?1:0,dt*2);Vector2 touch=new Vector2(input.x,rangeReleased?input.y:0);float cost=touch.magnitude*course.aftertouchAcceleration*dt;float allowed=Mathf.Min(cost,Mathf.Max(0,course.aftertouchBudget-UsedAftertouch));if(cost>0){float factor=allowed/cost*rangeGate;body.AddForce(new Vector3(touch.x,0,touch.y*.65f)*course.aftertouchAcceleration*factor,ForceMode.Acceleration);body.AddTorque(new Vector3(touch.y*.22f,0,-touch.x*.35f)*factor,ForceMode.Acceleration);UsedAftertouch+=allowed*rangeGate;}
   }
   ObserveHole();
   GroundDuration=Grounded?GroundDuration+dt:0;bool stable=Supported&&!Grounded&&Quiet;StableTime=stable?StableTime+dt:0;quiet=Quiet?quiet+dt:0;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
@@ -36,7 +36,7 @@ public static class CornholeAuthoring {
    c.trucks=new CornholeTruck[4];for(int t=0;t<4;t++)c.trucks[t]=Truck(c,t,contact,dark);
    var camera=new GameObject("Driver seat and replay view "+(i+1));camera.transform.position=c.StartPosition+new Vector3(0,4,-8);var cam=camera.AddComponent<Camera>();cam.fieldOfView=72;cam.nearClipPlane=.015f;cam.farClipPlane=180;cam.backgroundColor=new Color(.23f,.4f,.52f);cam.clearFlags=CameraClearFlags.SolidColor;c.chase=camera.AddComponent<CornholeCamera>();c.chase.course=c;c.chase.view=cam;Cab(c,dark,white);IsolateRendering(c);
   }
-  UI(m);LWS.TruckSports.Editor.SportsCabUpgradeAuthoring.InstallScene();foreach(var menu in UnityEngine.Object.FindObjectsByType<LWS.TruckSports.SportsMenuView>(FindObjectsInactive.Include))LWS.TruckSports.Editor.SportsCabUpgradeAuthoring.InstallSettings(menu);EditorSceneManager.SaveScene(scene,Scene);AssetDatabase.SaveAssets();UpgradeFront();Validate();Debug.Log("CORNHOLE_AUTHORED");
+  UI(m);LWS.TruckSports.Editor.SportsCabUpgradeAuthoring.InstallScene();foreach(var menu in UnityEngine.Object.FindObjectsByType<LWS.TruckSports.SportsMenuView>(FindObjectsInactive.Include))LWS.TruckSports.Editor.SportsCabUpgradeAuthoring.InstallSettings(menu);EditorSceneManager.SaveScene(scene,Scene);CornholeWeatherAuthoring.Install(m);EditorSceneManager.SaveScene(scene,Scene);AssetDatabase.SaveAssets();UpgradeFront();Validate();Debug.Log("CORNHOLE_AUTHORED");
  }
  // Render-only layers are scene-local component settings. Collider layers and host TagManager stay untouched.
  static void IsolateRendering(CornholeCourse course){int layer=24+course.index;foreach(var renderer in course.GetComponentsInChildren<Renderer>(true)){var filter=renderer.GetComponent<MeshFilter>();if(renderer is MeshRenderer&&filter!=null&&renderer.GetComponent<Collider>()!=null){var visual=new GameObject(renderer.name+" visible surface",typeof(MeshFilter),typeof(MeshRenderer));visual.transform.SetParent(renderer.transform,false);visual.layer=layer;visual.GetComponent<MeshFilter>().sharedMesh=filter.sharedMesh;visual.GetComponent<MeshRenderer>().sharedMaterials=renderer.sharedMaterials;visual.GetComponent<MeshRenderer>().enabled=renderer.enabled;UnityEngine.Object.DestroyImmediate(renderer);UnityEngine.Object.DestroyImmediate(filter);}else renderer.gameObject.layer=layer;}foreach(var truck in course.trucks)foreach(var renderer in truck.GetComponentsInChildren<Renderer>(true))renderer.gameObject.layer=layer;course.chase.view.cullingMask=1<<layer;}

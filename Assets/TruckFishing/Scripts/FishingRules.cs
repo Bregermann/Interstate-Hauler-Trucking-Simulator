@@ -1,16 +1,16 @@
 using System;
 namespace LWS.TruckFishing {
-public enum FishKind{Small,Large,Poison}
+public enum FishKind{Small,Large,Poison,Debris}
 public sealed class FishingRules {
  public readonly int[] caught=new int[4],missed=new int[4];public readonly bool[] alive=new bool[4];public readonly string[] reason=new string[4];public int Count{get;private set;}public int Winner{get;private set;}=-1;public bool Complete{get;private set;}readonly long[] newest={-1,-1,-1,-1};readonly ulong[] resolved=new ulong[4];
  public void Reset(int count){Count=Math.Max(1,Math.Min(4,count));Winner=-1;Complete=false;for(int i=0;i<4;i++){caught[i]=missed[i]=0;alive[i]=i<Count;reason[i]="";newest[i]=-1;resolved[i]=0;}}
- public bool Resolve(int slot,long id,FishKind kind,bool catchFish){if(Complete||slot<0||slot>=Count||!alive[slot]||id<0)return false;long delta=id-newest[slot];if(delta>0){resolved[slot]=delta>=64?0:resolved[slot]<<(int)delta;newest[slot]=id;}long age=newest[slot]-id;if(age>=64)return false;ulong mask=1UL<<(int)age;if((resolved[slot]&mask)!=0)return false;resolved[slot]|=mask;if(kind==FishKind.Poison){if(catchFish){alive[slot]=false;reason[slot]="POISON CAUGHT";}}else{int pounds=kind==FishKind.Large?5:1;if(catchFish)caught[slot]+=pounds;else{missed[slot]+=pounds;if(missed[slot]>=20){alive[slot]=false;reason[slot]="20 LB MISSED";}}}return true;}
+ public bool Resolve(int slot,long id,FishKind kind,bool catchFish){if(Complete||slot<0||slot>=Count||!alive[slot]||id<0)return false;long delta=id-newest[slot];if(delta>0){resolved[slot]=delta>=64?0:resolved[slot]<<(int)delta;newest[slot]=id;}long age=newest[slot]-id;if(age>=64)return false;ulong mask=1UL<<(int)age;if((resolved[slot]&mask)!=0)return false;resolved[slot]|=mask;if(kind==FishKind.Debris)return true;if(kind==FishKind.Poison){if(catchFish){alive[slot]=false;reason[slot]="POISON CAUGHT";}}else{int pounds=kind==FishKind.Large?5:1;if(catchFish)caught[slot]+=pounds;else{missed[slot]+=pounds;if(missed[slot]>=20){alive[slot]=false;reason[slot]="20 LB MISSED";}}}return true;}
  // Called once AFTER the entire shared simulation-step event batch, never inside Resolve.
  public void FinishStep(){if(Complete)return;int living=0;Winner=-1;for(int i=0;i<Count;i++)if(alive[i]){living++;Winner=i;}if(Count==1){if(living==0)Complete=true;return;}if(living<=1)Complete=true;else Winner=-1;}
  public int Remaining{get{int n=0;for(int i=0;i<Count;i++)if(alive[i])n++;return n;}}
  public static bool SweptCatch(float previousZ,float currentZ,float previousX,float currentX,float oldNet,float newNet,float radius,out float fraction){fraction=0;if(previousZ<0||currentZ>0||previousZ==currentZ)return false;fraction=previousZ/(previousZ-currentZ);float fish=previousX+(currentX-previousX)*fraction;float net=oldNet+(newNet-oldNet)*fraction;return Math.Abs(fish-net)<=radius;}
 }
-public struct FishPlan {public long id;public FishKind kind;public double arrival;public float travel,x,curve,ramp;public double Spawn=>arrival-travel;}
+public struct FishPlan {public long id;public FishKind kind;public double arrival;public float travel,x,curve,ramp,entryLead;public double Spawn=>arrival-travel-entryLead;}
 public sealed class FishingDirector {
  readonly Random random;long sequence;double next=8,lastArrival;float lastX;FishKind previous;bool schoolNext;public float acceleration=.12f,minimumSpeed=2.8f,maximumSpeed=4.5f,density=1,maxNetSpeed=8.5f,openingSeconds=25,challengeSeconds=600,minTravel=4.5f,maxTravel=8.5f,poisonMaximum=.2f,burstSeconds=5,breakSeconds=3;
  public FishingDirector(int seed){random=new Random(seed);}

@@ -1,0 +1,85 @@
+using System;
+using System.Text;
+using System.Collections.Generic;
+using UnityEngine;
+using LWS.TruckSports;
+using LWS.TruckBowling;
+using LWS.TruckTaxi;
+namespace LWS.TruckFareFight {
+ public sealed class FareFightMatch:SportsEventSession {
+  public FareFightWorldReset worldReset;public FareFightDistrict district;public SportsEventTruck[] trucks;
+  public SportsDrivingViews drivingViews;public SportsEventCamera broadcast;
+  public SportsChaosWeather atmosphere;public SportsWeatherPresets presets;
+  public TruckTaxiTrafficAdapter traffic;public TruckTaxiPedestrianPopulation pedestrians;
+  public Transform pickupMarker,destinationMarker,carrierMarker;public GameObject passengerVisual;
+  public FareFightHazards hazards;public FareFightActions interactions;public FareFightNavigation navigation;
+  public FareFightReview review;public SportsMotionReplay replay;public int matchSeed;
+  public float triggerRadius=16;
+  public readonly FareFightRules rules=new FareFightRules();
+  public readonly FareFightRoute[] routes={new FareFightRoute(),new FareFightRoute(),new FareFightRoute(),new FareFightRoute()};
+  public int PhysicalContacts{get;private set;}public int Recoveries{get;private set;}public float Intro{get;private set;}
+  public override string Title=>"TRUCK FARE FIGHT";public override int MinimumPlayers=>1;public override int MaximumPlayers=>4;
+  public override int OptionCount=>5;public override string OptionLabel=>new[]{"FIRST TO THREE","FIRST TO FIVE","FIRST TO TEN","FIVE MINUTES","SOLO PRACTICE"}[option];
+  public override bool ReplayControls=>review!=null&&review.Playing;public override bool SupportsSplitAIViews=>true;public override bool MultiViewHUD=>!drivingViews.NeedsArena;
+  public override bool BroadcastStandingsVisible=>!MultiViewHUD;public override bool UsesAction=>false;
+  public override string Help=>"ONE PASSENGER. FOUR TAXIS. NO MANNERS.\n\nDrive through the blue roadside pickup marker. The first qualifying truck collects automatically. Drive through the gold destination marker to score. Stopping and interaction menus are never required.\n\nBump the carrier at a meaningful closing speed to steal the SAME passenger and destination. A visible 1.25-second lock prevents contact ping-pong. Ordinary traffic, pedestrians and explosions never steal. A destroyed or out-of-bounds carrier resets the passenger at a neutral roadside stop; the destination survives. Shallow surface water is safe.\n\nFirst to five by default. Choose another target, five minutes (tied leaders play a sudden-death delivery), or solo practice. Global names, colors and controller ownership are retained.\n\nUse the setup or pause VIEW button for shared arena, chase or the actual Taxi cab. Each whole controller may switch its own view with NORTH; shared sticks preserve independent steering and use the setup view. Keyboard clusters use C, End, F, J for camera. Hold and cue the jug using the displayed source bindings, then throw a filled jug using the displayed action. Its blast never awards possession. Flip-off is a separate action.\n\nThe playable district is the original authored Taxi town. Road barriers visibly close the later regional connections. GPS uses its actual connected road graph; it never routes through a different district. Offline only.";
+  public override string Header=>Title+" · "+(rules.SuddenDeath?"SUDDEN DEATH":rules.TimeLimit>0?Mathf.CeilToInt(Mathf.Max(0,rules.TimeLimit-rules.Clock))+"s":option==4?"PRACTICE":"FIRST TO "+rules.Target)+" · "+(atmosphere!=null?atmosphere.Description:"");
+  public override string Status=>Intro>0?"GET READY · "+Mathf.CeilToInt(Intro):noticeUntil>Time.time?notice:rules.Carrier>=0?setup.players[rules.Carrier].name+" HAS "+PassengerName+" · "+district.stops[rules.Destination].label+(rules.TransferCooldown>0?" · TRANSFER LOCK "+rules.TransferCooldown.ToString("F1")+"s":""):"PICKUP · "+PassengerName+" · "+(rules.PickupLocation>=0?district.stops[rules.PickupLocation].label:"");
+  public string PassengerName=>new[]{"Margo","Eddie","Jules","Finley","Robin","Pat","Sasha","Cameron"}[(Mathf.Max(1,rules.Passenger)-1)%8];
+  readonly StringBuilder text=new StringBuilder();readonly List<FareFightEvent> events=new List<FareFightEvent>(24);
+  readonly Vector3[] previous=new Vector3[4];readonly float[] recoverAt=new float[4],badTime=new float[4];
+  System.Random random;int lastRevision=-1,rematchSerial,lastPickup=-1,lastDestination=-1;float noticeUntil;string notice;
+  public override string Standings{get{text.Clear();for(int i=0;i<setup.count;i++)text.Append(setup.players[i].name).Append("  ").Append(rules.score[i]).Append(" FARES").Append(i==rules.Carrier?" · CARRIER":"").Append('\n');return text.ToString();}}
+  public override string Results{get{text.Clear();for(int i=0;i<setup.count;i++)if(rules.winners[i])text.Append(setup.players[i].name).Append("  ");return text+"WIN FARE FIGHT!\n\n"+Standings;}}
+  public override string ViewText(int view){int slot=drivingViews.rally.owners[view];var body=trucks[slot].body;float distance=Vector3.Distance(body.position,Goal(slot));return setup.players[slot].name+" · "+rules.score[slot]+" FARES\n"+(body.linearVelocity.magnitude*2.236936f).ToString("F0")+" MPH · "+DistanceText(distance)+"\n"+(slot==rules.Carrier?"DELIVER ":rules.Carrier>=0?"CHASE ":"PICK UP ")+PassengerName+"\n"+(interactions!=null?interactions.Caption(slot):Controls(slot));}
+  public static string DistanceText(float metres)=>metres>1609.344f?(metres/1609.344f).ToString("F1")+" MI":Mathf.RoundToInt(metres*3.28084f)+" FT";
+  public override bool TryReadScoreCard(int i,out string value,out string detail){value=rules.score[i].ToString();detail=(i==rules.Carrier?"CARRYING · ":"")+rules.steals[i]+" STEALS";return true;}
+  public Vector3 Goal(int slot)=>rules.Carrier==slot&&rules.Destination>=0?district.stops[rules.Destination].position:rules.Carrier>=0?trucks[rules.Carrier].body.position:rules.PickupLocation>=0?district.stops[rules.PickupLocation].position:trucks[slot].body.position;
+  protected override void BeginGame(){
+   worldReset?.Restore();matchSeed=UnityEngine.Random.Range(1,int.MaxValue);random=new System.Random(matchSeed);rematchSerial++;
+   rules.Start(setup.count,option==0?3:option==2?10:5,option==3?300:0,option==4);PhysicalContacts=Recoveries=0;events.Clear();lastRevision=-1;lastPickup=lastDestination=-1;Intro=3;
+   atmosphere.ConfigurePreset(presets.Resolve(matchSeed),matchSeed);
+   if(traffic!=null){traffic.SetRegionAvailability(district.Contains);traffic.Initialize();if(rematchSerial>1)traffic.ResetTraffic();traffic.SetWeatherCaution(1-atmosphere.Grip);}
+   if(pedestrians!=null){pedestrians.SetRegionAvailability(district.Contains);pedestrians.Initialize();if(rematchSerial>1)pedestrians.ResetPopulation();}
+   for(int i=0;i<4;i++){routes[i].Reset();recoverAt[i]=badTime[i]=0;if(i>=setup.count){trucks[i].Park(new Vector3(0,-100-i*12,0));trucks[i].gameObject.SetActive(false);continue;}int spawn=(i+rematchSerial-1)%district.startingPositions.Length;trucks[i].tractorMotor.Configure();trucks[i].Prepare(district.startingPositions[spawn],Quaternion.LookRotation(district.startingForwards[spawn]));trucks[i].body.isKinematic=true;previous[i]=trucks[i].body.position;}
+   hazards?.ResetMatch();interactions?.ResetMatch();navigation?.ResetMatch();drivingViews.Layout();AssignFare();
+  }
+  void AssignFare(){if(!rules.NeedsPassenger)return;int pickup=random.Next(district.stops.Length);for(int n=0;n<district.stops.Length;n++){if(pickup!=lastPickup&&pickup!=lastDestination)break;pickup=(pickup+1)%district.stops.Length;}int destination=-1;for(int n=0;n<100;n++){int candidate=random.Next(district.stops.Length);if(candidate!=pickup&&candidate!=lastDestination&&Vector3.Distance(district.stops[pickup].position,district.stops[candidate].position)>230){destination=candidate;break;}}if(destination<0)throw new InvalidOperationException("Fare Fight needs separated reachable original-town stop pairs.");rules.AssignPassenger(pickup,destination);lastPickup=pickup;lastDestination=destination;}
+  protected override void Simulate(float dt){
+   atmosphere.Tick(Time.time);
+   if(Intro>0){Intro-=dt;if(Intro<=0){if(review==null){review=gameObject.AddComponent<FareFightReview>();review.match=this;}review.ResetRecord();for(int i=0;i<setup.count;i++){trucks[i].body.isKinematic=false;trucks[i].body.WakeUp();}feedback.Play(5,0,true);}return;}
+   AssignFare();hazards?.Tick();
+   for(int i=0;i<setup.count;i++){
+    var truck=trucks[i];var body=truck.body;
+    if(recoverAt[i]>0){if(Time.time>=recoverAt[i])Recover(i);previous[i]=body.position;continue;}
+    if(!district.Contains(body.position)){Queue(FareFightEventKind.CarrierReset,i,1);BeginRecovery(i,"OUT OF BOUNDS");}
+    else if(body.position.y<-3){badTime[i]+=dt;if(badTime[i]>2.5f){Queue(FareFightEventKind.CarrierReset,i,1);BeginRecovery(i,"UNRECOVERABLE WATER");}}
+    else if(Vector3.Dot(body.rotation*Vector3.up,Vector3.up)<.2f&&body.linearVelocity.magnitude<1){badTime[i]+=dt;if(badTime[i]>6){Queue(FareFightEventKind.CarrierReset,i,1);BeginRecovery(i,"OVERTURNED");}}
+    else badTime[i]=0;
+    if(recoverAt[i]>0)continue;
+    if(rules.Phase==FareFightPhase.Waiting&&rules.PickupLocation>=0&&Crosses(previous[i],body.position,district.stops[rules.PickupLocation].position,triggerRadius,out float pickup))Queue(FareFightEventKind.Pickup,i,pickup);
+    // Observe every slot: an earlier physical theft in this same step may make
+    // it the carrier before a later destination crossing is resolved.
+    if(rules.Destination>=0&&Crosses(previous[i],body.position,district.stops[rules.Destination].position,triggerRadius,out float drop))Queue(FareFightEventKind.Delivery,i,drop);
+    routes[i].Update(district,body.position,Goal(i),rules.Revision,Time.time,false,truck.transform.forward);
+    Vector2 drive=setup.players[i].source==BowlingSource.AI?routes[i].Drive(body,truck.transform,(int)setup.players[i].difficulty,dt,atmosphere.Grip,rules.Carrier>=0&&rules.Carrier!=i?trucks[rules.Carrier].body:null):commands[i];truck.TickDrive(drive);previous[i]=body.position;
+   }
+   int revision=rules.Revision;rules.Advance(dt,events);events.Clear();if(rules.Revision!=revision)Changed();
+   interactions?.Tick(dt);navigation?.Tick(dt);review?.Capture(rules.Clock);
+   if(rules.Phase==FareFightPhase.Complete)EndMatch();
+  }
+  void Queue(FareFightEventKind kind,int slot,float fraction,int victim=-1,float speed=0){events.Add(new FareFightEvent{kind=kind,participant=slot,victim=victim,fraction=fraction,normalSpeed=speed,passenger=rules.Passenger});}
+  public void Contact(int first,int second,float speed,Vector3 point){if(!Live||Intro>0||rules.Carrier<0)return;PhysicalContacts++;int thief=rules.Carrier==first?second:rules.Carrier==second?first:-1;if(thief<0)return;int carrier=rules.Carrier;Vector3 path=trucks[carrier].body.position-previous[carrier];float fraction=path.sqrMagnitude>.0001f?Mathf.Clamp01(Vector3.Dot(point-previous[carrier],path)/path.sqrMagnitude):.5f;Queue(FareFightEventKind.Theft,thief,fraction,carrier,speed);}
+  void Changed(){lastRevision=rules.Revision;notice=rules.LastEvent+(rules.Carrier>=0?" · "+setup.players[rules.Carrier].name:"");noticeUntil=Time.time+2;feedback.Play(rules.LastEvent=="DELIVERED"?5:2,0,true);menus.Dirty();}
+  void BeginRecovery(int slot,string reason){if(recoverAt[slot]>0)return;recoverAt[slot]=Time.time+2;trucks[slot].Power(false);notice=setup.players[slot].name+" · "+reason;noticeUntil=Time.time+2;}
+  void Recover(int slot){var body=trucks[slot].body;Vector3 nearest=district.startingPositions[0];float distance=float.PositiveInfinity;foreach(var node in district.graph.nodes){float d=(node.position-body.position).sqrMagnitude;if(d<distance){nearest=node.position;distance=d;}}Quaternion rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(trucks[slot].transform.forward,Vector3.up).normalized);trucks[slot].Prepare(nearest+Vector3.up*.3f,rotation);recoverAt[slot]=badTime[slot]=0;previous[slot]=trucks[slot].body.position;routes[slot].Reset();Recoveries++;}
+  public void DestroyTruck(int slot){if(!Live||recoverAt[slot]>0)return;Queue(FareFightEventKind.CarrierReset,slot,1);BeginRecovery(slot,"WRECKED · PASSENGER RESET");}
+  public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
+  public override string ControlCaption(int slot)=>Controls(slot)+(interactions!=null?" · "+interactions.Caption(slot):"");
+  protected override void Present(float dt){if(drivingViews==null)return;if(review!=null&&review.Playing){review.Tick();return;}drivingViews.Tick(dt);if(drivingViews.NeedsArena){Vector3 focus=rules.Carrier>=0?trucks[rules.Carrier].body.position:rules.PickupLocation>=0?district.stops[rules.PickupLocation].position:Vector3.zero;broadcast.Pose(focus,new Vector3(0,145,-100),65);}bool pickup=Running&&rules.Phase==FareFightPhase.Waiting&&rules.PickupLocation>=0;pickupMarker.gameObject.SetActive(pickup);passengerVisual.SetActive(pickup);if(pickup){pickupMarker.position=district.stops[rules.PickupLocation].position;passengerVisual.transform.position=pickupMarker.position+Vector3.up*.15f;}bool destination=Running&&rules.Destination>=0;destinationMarker.gameObject.SetActive(destination);if(destination)destinationMarker.position=district.stops[rules.Destination].position;carrierMarker.gameObject.SetActive(Running&&rules.Carrier>=0);if(rules.Carrier>=0)carrierMarker.position=trucks[rules.Carrier].body.position+Vector3.up*5;}
+  protected override void SetPaused(bool pause){atmosphere?.Pause(pause);interactions?.Pause(pause);}
+  protected override void StopSounds(){interactions?.Pause(true);if(trucks!=null)foreach(var truck in trucks)truck?.StopSound();}
+  protected override void StopGame(){review?.End(false);if(trucks!=null)foreach(var truck in trucks)if(truck!=null){truck.Power(false);truck.body.isKinematic=true;}interactions?.Pause(true);}
+  public static bool Crosses(Vector3 from,Vector3 to,Vector3 center,float radius,out float fraction){from.y=to.y=center.y=0;Vector3 delta=to-from,relative=from-center;float c=relative.sqrMagnitude-radius*radius;if(c<=0){fraction=0;return true;}float a=delta.sqrMagnitude,b=Vector3.Dot(relative,delta),disc=b*b-a*c;if(a<.000001f||disc<0){fraction=0;return false;}fraction=(-b-Mathf.Sqrt(disc))/a;return fraction>=0&&fraction<=1;}
+ }
+}

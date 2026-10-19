@@ -12,12 +12,12 @@ namespace LWS.TruckPedestrianPlowing {
   public void ResetMotion(){phase=0;velocity=Vector3.zero;nextAttempt=Time.time+2+(pedestrian.id%7);JumpCount=ClimbCount=0;if(pedestrian.agent!=null)pedestrian.agent.updatePosition=true;}
   public bool TryEscape(Vector3 away){
    if(Active||pedestrian.Claimed||pedestrian.role!=PlowTargetKind.BonusRunner||Time.time<nextAttempt||away.sqrMagnitude<.01f)return false;
-   nextAttempt=Time.time+cooldownSeconds+(pedestrian.id%4);var agent=pedestrian.agent;var match=pedestrian.match;
+   nextAttempt=Time.time+cooldownSeconds+(pedestrian.id%4);var agent=pedestrian.agent;var match=pedestrian.Context;
    Vector3 direction=away.normalized;ground=transform.position;
    if(!match.TryRoute(ground,ground+direction*1.8f,out var exit))return false;
    from=ground;to=exit;perch=null;
    if(Physics.SphereCast(ground+Vector3.up*.8f,.3f,(exit-ground).normalized,out _,Vector3.Distance(exit,ground),1,QueryTriggerInteraction.Ignore))return false;
-   foreach(var surface in match.climbSurfaces){
+   foreach(var surface in match.ClimbSurfaces){
     if(surface==null||!surface.enabled||!surface.gameObject.activeInHierarchy)continue;var bounds=surface.bounds;
     Vector3 top=new Vector3(bounds.center.x,bounds.max.y+.04f,bounds.center.z);float height=top.y-ground.y;
     if(height<.45f||height>1.75f||Vector3.ProjectOnPlane(top-ground,Vector3.up).sqrMagnitude>7||bounds.size.x<1.2f||bounds.size.z<1.2f)continue;

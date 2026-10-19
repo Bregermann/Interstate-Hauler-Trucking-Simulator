@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using DG.Tweening;
 using LWS.TruckBowling;
 namespace LWS.TruckCornhole {
@@ -25,7 +25,7 @@ public sealed class CornholeCourse:MonoBehaviour {
   if(Phase==CornholePhase.AttemptResult){resultTimer+=dt;if(resultTimer>3&&!replay.Playing)Spawn();}
  }
  Vector2 Plan(){var t=Current;if(Phase==CornholePhase.Approach){float x=t.body.position.x-center,heading=Vector3.SignedAngle(Vector3.forward,Vector3.ProjectOnPlane(t.transform.forward,Vector3.up),Vector3.up);float correction=Mathf.Clamp((planX-x)*.4f-heading*.035f,-.75f,.75f);float desired=planSpeed;float y=t.body.linearVelocity.z>desired+.35f?-.6f:t.body.linearVelocity.z<desired-.35f?1:.10f;return new Vector2(correction,y);}
-  if(Phase!=CornholePhase.Flight)return Vector2.zero;var v=t.body.linearVelocity;float yTarget=board.TransformPoint(new Vector3(0,0,holeZ)).y;float discriminant=v.y*v.y+2*9.81f*Mathf.Max(0,t.body.position.y-yTarget);float time=(v.y+Mathf.Sqrt(discriminant))/9.81f;float predictedX=t.body.position.x+v.x*time-center;float predictedZ=t.body.position.z+v.z*time;float lateral=Mathf.Clamp((planX-predictedX)*.5f,-1,1);float range=Mathf.Clamp((board.position.z+holeZ-6+planError-predictedZ)*.12f,-1,1);if(Owner.difficulty==BowlingDifficulty.Easy){lateral*=.55f;range*=.4f;}return new Vector2(lateral,elapsed<.45f?0:range);
+  if(Phase!=CornholePhase.Flight)return Vector2.zero;var v=t.body.linearVelocity;float yTarget=board.TransformPoint(new Vector3(0,0,holeZ)).y;float discriminant=v.y*v.y+2*9.81f*Mathf.Max(0,t.body.position.y-yTarget);float time=(v.y+Mathf.Sqrt(discriminant))/9.81f;var windAcceleration=match.FlightWind(v);float predictedX=t.body.position.x+v.x*time+.5f*windAcceleration.x*time*time-center;float predictedZ=t.body.position.z+v.z*time+.5f*windAcceleration.z*time*time;float lateral=Mathf.Clamp((planX-predictedX)*.5f,-1,1);float range=Mathf.Clamp((board.position.z+holeZ-6+planError-predictedZ)*.12f,-1,1);if(Owner.difficulty==BowlingDifficulty.Easy){lateral*=.55f;range*=.4f;}return new Vector2(lateral,elapsed<.45f?0:range);
  }
  void FinishAttempt(){replay.Complete();Phase=CornholePhase.AttemptResult;Current.command=Vector2.zero;resultTimer=0;Notice=Current.Holed?"IN THE HOLE · 3":Current.Points==1?"ON BOARD · 1 PROVISIONAL":"MISS · 0";match.feedback.Play(4,0,true);}
  public void RoundLocksReset(){RoundLocks=TimeoutCount=0;}

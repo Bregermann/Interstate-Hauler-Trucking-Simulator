@@ -16,6 +16,7 @@ namespace LWS.TruckPedestrianPlowing {
    run|=UnityEditor.SessionState.GetBool("LWS.PlowProbe",false);UnityEditor.SessionState.SetBool("LWS.PlowProbe",false);
 #endif
    if(run){var g=new GameObject("Plowing explicit validation");DontDestroyOnLoad(g);if(FindAnyObjectByType<SportsProbeInputIsolation>()==null)g.AddComponent<SportsProbeInputIsolation>();g.AddComponent<PlowValidationProbe>();}}
+  IDisposable preferences;void Awake(){preferences=SportsPrefs.IsolateValidation("PlowSharedCrowd");SportsParticipantRegistry.ForgetCache();}
   readonly StringBuilder log=new StringBuilder();int errors;string folder;PlowMatch m;bool done;PlowSettings testSettings;InputSettings originalInput,isolatedInput;
   void Check(bool value,string label){log.AppendLine((value?"PASS ":"FAIL ")+label);if(!value)errors++;Debug.Log("PLOW_CHECK "+(value?"PASS ":"FAIL ")+label);}
   void Error(string text,string stack,LogType type){if(type==LogType.Exception||type==LogType.Error){errors++;log.AppendLine("RUNTIME ERROR "+text+"\n"+stack);}}
@@ -44,9 +45,13 @@ namespace LWS.TruckPedestrianPlowing {
 #endif
    return mode;}
   IEnumerator Capture(string name){if(Application.isEditor){log.AppendLine("NOT_TESTED hidden Editor capture "+name+"; actual Windows capture required");yield break;}ScreenCapture.CaptureScreenshot(folder+"/"+name+".png");yield return new WaitForSecondsRealtime(.15f);}
-  void Finish(){done=true;Time.timeScale=1;log.AppendLine("ERRORS="+errors+"; injected input / real PhysX / no human or hardware playtest.");File.WriteAllText(folder+"/result.txt",log.ToString());Debug.Log("PLOW_PROBE_COMPLETE "+errors);if(!Application.isEditor)Application.Quit(errors==0?0:2);}
+  void Finish(){done=true;Time.timeScale=1;log.AppendLine("ERRORS="+errors+"; injected input / real PhysX / no human or hardware playtest.");File.WriteAllText(folder+"/result.txt",log.ToString());Debug.Log("PLOW_PROBE_COMPLETE "+errors);if(!Application.isEditor)Application.Quit(errors==0?0:2);
+#if UNITY_EDITOR
+else if(UnityEditor.SessionState.GetBool("Sports.PlowOwnEditorRun",false)){UnityEditor.SessionState.SetBool("Sports.PlowOwnEditorRun",false);UnityEditor.EditorApplication.isPlaying=false;}
+#endif
+}
   void Update(){if(errors>0&&!done){StopAllCoroutines();Finish();}}
-  void OnDestroy(){if(originalInput!=null)InputSystem.settings=originalInput;if(isolatedInput!=null)Destroy(isolatedInput);Application.logMessageReceived-=Error;if(testSettings!=null)Destroy(testSettings);if(!done&&folder!=null)File.WriteAllText(folder+"/result.txt",log+"\nINCOMPLETE");}
+  void OnDestroy(){preferences?.Dispose();SportsParticipantRegistry.ForgetCache();if(originalInput!=null)InputSystem.settings=originalInput;if(isolatedInput!=null)Destroy(isolatedInput);Application.logMessageReceived-=Error;if(testSettings!=null)Destroy(testSettings);if(!done&&folder!=null)File.WriteAllText(folder+"/result.txt",log+"\nINCOMPLETE");}
 #endif
  }
 }

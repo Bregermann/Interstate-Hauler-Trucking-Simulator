@@ -7,3 +7,6 @@ Library/Search/98957a664bd18c47a3e41b2a0189ef53.SearchIndexArtifactImporter.2621
 
 # Preserve imported Truck Sports animal source bytes, including ASCII FBX.
 Assets/TruckCheeseRolling/Art/**/*.fbx -text
+
+# Preserve the complete editable EasyRoads terrain state in the large Snake scene.
+Assets/TruckSnake/Scenes/TruckSnake.unity filter=lfs diff=lfs merge=lfs -text

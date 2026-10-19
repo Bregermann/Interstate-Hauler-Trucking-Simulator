@@ -1,0 +1,29 @@
+using System;using System.IO;using System.Text;using System.Linq;using System.Collections;using UnityEngine;using LWS.TruckSports;
+namespace LWS.TruckBuzkashi {
+public sealed class BuzNameplateProbe:MonoBehaviour {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+ [RuntimeInitializeOnLoadMethod]static void Boot(){bool run=Array.IndexOf(Environment.GetCommandLineArgs(),"-tsBuzNames")>=0;
+#if UNITY_EDITOR
+ run|=UnityEditor.SessionState.GetBool("Sports.Buz.Names",false);UnityEditor.SessionState.SetBool("Sports.Buz.Names",false);
+#endif
+ if(run){var g=new GameObject("Buzkashi actual match and compact name acceptance");DontDestroyOnLoad(g);g.AddComponent<SportsProbeInputIsolation>();g.AddComponent<BuzNameplateProbe>();}}
+ const string Folder="Logs/TruckSports/EssentialRelease/Buzkashi/Names";readonly StringBuilder log=new StringBuilder();IDisposable prefs;int checks,errors;
+ void Awake(){prefs=SportsPrefs.IsolateValidation("BuzNames");SportsParticipantRegistry.ForgetCache();}
+ void Check(bool ok,string text){checks++;if(!ok)errors++;log.AppendLine((ok?"PASS ":"FAIL ")+text);File.WriteAllText(Folder+"/progress.txt",log.ToString());}
+ void Error(string s,string stack,LogType type){if(type==LogType.Error||type==LogType.Exception){errors++;log.AppendLine("ERROR "+s);}}
+ IEnumerator Start(){Directory.CreateDirectory(Folder);File.WriteAllText(Folder+"/result.txt","RUNNING "+DateTime.UtcNow.ToString("o"));Application.logMessageReceived+=Error;yield return SportsProbeScene.Ensure<BuzMatch>("TruckBuzkashi");yield return null;var m=FindAnyObjectByType<BuzMatch>();var names=m.GetComponent<BuzNameplates>();Check(names!=null&&names.carriers.Length==6&&names.plates.All(p=>p.GetComponent<UnityEngine.UI.Image>()==null),"saved scene has six compact outline captions, separate carrier icons and no background rectangles");m.option=0;m.AllBots();for(int i=0;i<6;i++)m.setup.players[i].difficulty=(LWS.TruckBowling.BowlingDifficulty)(i%3);m.setup.players[0].name="A very long driver's display name";Check(m.StartMatch(),"six autonomous trucks begin the established five-minute physical match");Time.timeScale=4;bool rendered=false,paused=false,carrier=false;float until=Time.realtimeSinceStartup+240,next=0;
+  while(!m.Finished&&Time.realtimeSinceStartup<until){if(!paused&&m.Owner>=0){paused=true;float clock=m.Clock;int owner=m.Owner;var position=m.cargo.position;m.Pause();yield return new WaitForSecondsRealtime(.2f);Check(m.Owner==owner&&m.Clock==clock&&m.cargo.position==position,"pause retains the actual physical tow and carrier");m.Resume();Time.timeScale=4;}
+   if(m.Owner>=0){carrier=true;if(names.carriers[m.Owner].activeSelf)CheckOnceCarrier(names,m.Owner);}if(!rendered&&m.Clock>8&&m.Owner>=0){rendered=true;foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080),new Vector2Int(1280,960)}){SportsControlledCapture.Save(m,size.x,size.y,Folder+"/live-"+size.x+"x"+size.y+".png");yield return null;}}
+   if(Time.realtimeSinceStartup>=next){next=Time.realtimeSinceStartup+5;log.AppendLine("LIVE clock="+m.Clock.ToString("F1")+" owner="+m.Owner+" deliveries="+m.Deliveries+" breaks="+m.Breaks+" captions="+names.VisibleCount);File.WriteAllText(Folder+"/progress.txt",log.ToString());}yield return null;
+  }
+  Time.timeScale=1;Check(m.Finished&&m.Winner>=0&&m.Deliveries>0&&m.Attachments>m.Deliveries,"complete physical match includes real rope attachments and cargo deliveries");Check(carrier&&checkedCarrier&&rendered&&paused,"live carrier, rendered labels and pause were all exercised");m.SetupScreen();m.AllBots();Check(m.StartMatch()&&m.score.Sum()==0&&m.Owner<0,"rematch clears actual possession and scores without replacing identities");yield return null;yield return null;Check(names.carriers.All(c=>!c.activeSelf),"rematch removes the previous carrier marker");m.Pause();for(int i=0;i<6;i++){var p=new Vector3((i%3-1)*.4f,1,i/3*.4f);m.trucks[i].body.position=p;m.trucks[i].transform.position=p;}Physics.SyncTransforms();m.menus.Show(SportsEventScreen.Play);yield return new WaitForSecondsRealtime(.2f);Check(names.VisibleCount==6,"controlled crowded-camera fixture keeps all six names visible");var rectangles=names.plates.Select(p=>new Rect(p.anchoredPosition-p.sizeDelta*.5f,p.sizeDelta)).ToArray();bool separated=true;for(int i=0;i<6;i++)for(int j=0;j<i;j++)separated&=!rectangles[i].Overlaps(rectangles[j]);Check(separated&&names.plates.All(p=>p.sizeDelta.x<=196.1f)&&names.captions[0].text.Contains("long"),"cluster layout separates compact labels and preserves the actual long display name");foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080)})SportsControlledCapture.Save(m,size.x,size.y,Folder+"/controlled-cluster-"+size.x+"x"+size.y+".png");m.menus.Show(SportsEventScreen.Pause);m.SetupScreen();SportsNavigation.FrontEnd();yield return null;yield return null;Check(FindAnyObjectByType<BuzNameplates>()==null&&FindObjectsByType<AudioListener>().Length==1,"scene transition clears labels and retains one listener");log.AppendLine("CHECKS="+checks+" ERRORS="+errors+" · full native autonomous physical match plus explicitly posed paused caption-cluster fixture. No human, hardware, Windows or GPU benchmark claim.");File.WriteAllText(Folder+"/result.txt",log.ToString());Application.logMessageReceived-=Error;
+#if UNITY_EDITOR
+ if(Application.isEditor)UnityEditor.EditorApplication.isPlaying=false;else
+#endif
+ Application.Quit(errors==0?0:2);
+ }
+ bool checkedCarrier;void CheckOnceCarrier(BuzNameplates names,int owner){if(checkedCarrier)return;checkedCarrier=true;Check(names.carriers.Where((c,i)=>i!=owner).All(c=>!c.activeSelf),"carrier icon is independent of display-name strings and never assigned to other slots");}
+ void OnDestroy(){Application.logMessageReceived-=Error;prefs?.Dispose();SportsParticipantRegistry.ForgetCache();Time.timeScale=1;}
+#endif
+}
+}
