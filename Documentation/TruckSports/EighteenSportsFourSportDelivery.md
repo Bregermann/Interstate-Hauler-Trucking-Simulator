@@ -13,3 +13,5 @@ Focused XML, process receipts and actual Windows images are in `Evidence/2026-10
 The154-file four-sport update excluded private Taxi work, vendor source, host settings and King of the Hill's next implementation. Preservation checks found887protected files and25settings unchanged; all41original sport logos remain unchanged. Private work remains in the shared checkout and the existing local preservation branch/recovery archives.
 
 This is four of the18requested new sports. King of the Hill is in progress; its12rule tests and route-adapter comparison passed, but a complete physical Hill match was still under test at this publication. The remaining14sports and explicit outstanding presentation/hardware criteria are preserved in the permanent ledger. Vendor usage and limitations are detailed in the progress note and vendor audit.
+
+Superseded by the verified five-sport47-scene milestone: source `ef1e658429c77f2b26c74be626f3a14ee64d086c`; see `EighteenSportsFiveSportDelivery.md`. Historical four-sport test/build details above are retained.

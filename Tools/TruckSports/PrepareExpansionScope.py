@@ -32,7 +32,7 @@ files.add("Assets/TruckFareFight/Scripts/FareFightRoute.cs")
 for name in ("SportsDrivingSurfaceAuthoring", "ExpansionSnowJobs"):
     files.add(f"Assets/TruckSports/Editor/{name}.cs")
     files.add(f"Assets/TruckSports/Editor/{name}.cs.meta")
-for name in ("EighteenSportsProgress.md", "EighteenSportsVendorAudit.md", "EighteenSportsDelivery.md"):
+for name in ("EighteenSportsProgress.md", "EighteenSportsVendorAudit.md", "EighteenSportsDelivery.md", "EighteenSportsFiveSportDelivery.md"):
     files.add("Documentation/TruckSports/" + name)
 for name in ("2026-10-20-Eighteen-Sports.md", "2026-10-20-Eighteen-Sports-UI-Addendum.md"):
     files.add("Documentation/TruckSports/Requests/" + name)
