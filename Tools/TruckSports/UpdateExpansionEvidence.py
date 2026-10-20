@@ -13,18 +13,19 @@ receipt = json.loads((LOG / "windows-verified-processes.json").read_text())
 prior = json.loads((LOG / "windows-eight-full-processes.json").read_text())
 managed = ROOT / "Builds/TruckSports/TruckSports_Data/Managed/Assembly-CSharp.dll"
 digest = hashlib.sha256(managed.read_bytes()).hexdigest()
+fourteen = {r["probe"] for r in receipt} == {"hauler", "herd", "snow", "menu"}
 twelve = {r["probe"] for r in receipt} == {"volley", "freeze", "snow", "menu"}
 late_menu = {r["probe"] for r in receipt} == {"menu"}
 ten = late_menu or {r["probe"] for r in receipt} == {"magnet", "snow", "menu"}
-expected = {"volley", "freeze", "snow", "menu"} if twelve else {"menu"} if late_menu else {"magnet", "snow", "menu"} if ten else {"lava", "tether", "joust", "snow", "menu"}
+expected = {"hauler", "herd", "snow", "menu"} if fourteen else {"volley", "freeze", "snow", "menu"} if twelve else {"menu"} if late_menu else {"magnet", "snow", "menu"} if ten else {"lava", "tether", "joust", "snow", "menu"}
 if {r["probe"] for r in receipt} != expected or any(r["exit"] != 0 or not r["completedEvidence"] or r["errors"] != 0 or not r["unchangedManaged"] or r["managedSha256"] != digest for r in receipt):
     raise RuntimeError("Every affected Windows suite must pass on the current milestone build")
-gameplay = json.loads((LOG / "windows-ten-gameplay-processes.json").read_text()) if late_menu or twelve else []
+gameplay = json.loads((LOG / "windows-ten-gameplay-processes.json").read_text()) if late_menu or twelve or fourteen else []
 if late_menu and ({r["probe"] for r in gameplay} != {"magnet","snow"} or any(r["errors"] != 0 or r["exit"] != 0 or not r["completedEvidence"] or not r["unchangedManaged"] for r in gameplay)):
     raise RuntimeError("Preserve both passing pre-menu-fixture gameplay/snow processes")
-phase_name = "twelve-sport" if twelve else "ten-sport" if ten else "nine-sport"
-native_count = 188 if twelve else 156 if ten else 135
-ninth = json.loads((LOG / "windows-nine-targeted-processes.json").read_text()) if ten or twelve else receipt
+phase_name = "fourteen-sport" if fourteen else "twelve-sport" if twelve else "ten-sport" if ten else "nine-sport"
+native_count = 227 if fourteen else 188 if twelve else 156 if ten else 135
+ninth = json.loads((LOG / "windows-nine-targeted-processes.json").read_text()) if ten or twelve or fourteen else receipt
 if {r["probe"] for r in ninth} != {"lava", "tether", "joust", "snow", "menu"} or any(r["exit"] != 0 or r["errors"] != 0 or not r["completedEvidence"] for r in ninth):
     raise RuntimeError("Retain completed preceding nine-sport phase")
 
@@ -35,6 +36,12 @@ preserved = json.loads((LOG / "nine-prior-six-source-preservation.json").read_te
 changed = [p for p,h in preserved.items() if hashlib.sha256((clean/p).read_bytes()).hexdigest() != h]
 if changed:
     raise RuntimeError("Previously tested gameplay code/scenes changed: " + repr(changed))
+if fourteen:
+    proof = json.loads((LOG / "fourteen-prior-twelve-source-preservation.json").read_text())
+    changes = [p for p,h in proof.items() if hashlib.sha256((clean/p).read_bytes()).hexdigest() != h]
+    if changes:
+        raise RuntimeError("Previously verified twelve-sport gameplay changed: " + repr(changes))
+    (LOG / "fourteen-preservation-result.json").write_text(json.dumps({"files":len(proof),"changed":changes},indent=2))
 if twelve:
     proof = json.loads((LOG / "twelve-prior-ten-source-preservation.json").read_text())
     changes = [p for p,h in proof.items() if hashlib.sha256((clean/p).read_bytes()).hexdigest() != h]
@@ -48,7 +55,7 @@ if late_menu:
         raise RuntimeError("Only the explicit menu test fixture may change between final phases: " + repr(ten_changed))
     (LOG / "ten-preservation-result.json").write_text(json.dumps({"files":len(ten_proof),"changed":ten_changed,"excluded":"SportsMenuPresentationProbe.cs only"},indent=2))
 import xml.etree.ElementTree as ET
-native = ET.parse(LOG / ("twelve-editmode.xml" if twelve else "ten-editmode.xml" if ten else "nine-editmode.xml")).getroot()
+native = ET.parse(LOG / ("fourteen-editmode-final.xml" if fourteen else "twelve-editmode.xml" if twelve else "ten-editmode.xml" if ten else "nine-editmode.xml")).getroot()
 if native.get("passed") != str(native_count) or native.get("failed") != "0":
     raise RuntimeError(f"{native_count} native tests must pass; empty runs are rejected")
 (LOG / "nine-preservation-result.json").write_text(json.dumps({"files": len(preserved), "changed": changed},indent=2))
@@ -59,12 +66,12 @@ def counts(path):
         raise RuntimeError("Acceptance is not a pass: " + str(path))
     return int(match[1])
 menu_checks = counts(ROOT / "Logs/TruckSports/PresentationSprint/Menu/result.txt")
-for sport in ("HotPotato", "RedLight", "Balloon", "Whack", "Hill", "Seesaw", "Lava", "Tether", "Joust", "Magnet", "Volley", "Freeze", "Snow"):
+for sport in ("HotPotato", "RedLight", "Balloon", "Whack", "Hill", "Seesaw", "Lava", "Tether", "Joust", "Magnet", "Volley", "Freeze", "Hauler", "Herd", "Snow"):
     for name in ("result.txt", "gameplay-720.png", "gameplay-1080.png", "four-cabs-720.png", "four-cabs-1080.png", "replay-720.png", "warning-720.png", "eliminated-spectator-720.png", "decoy-cab-720.png", "quarry-impact-720.png", "lava-impact-720.png"):
         source = LOG / sport / name
         if source.exists():
             shutil.copy2(source, OUT / (sport + "-" + name))
-for name in ("twelve-editmode.xml", "twelve-final-build-summary.txt", "twelve-prior-ten-source-preservation.json", "twelve-preservation-result.json", "windows-twelve-final-processes.json", "volley-initial-result.txt", "volley-initial-progress.txt", "freeze-first-fx-failure-result.txt", "freeze-pool-fixed-result.txt", "freeze-cover-fixed-result.txt", "windows-verified-processes.json", "windows-nine-targeted-processes.json", "windows-ten-final-processes.json", "windows-ten-gameplay-processes.json", "windows-ten-final-menu-processes.json", "windows-ten-menu-focus-failure.json", "ten-menu-focus-failure.txt", "ten-final-presentation.xml", "ten-gameplay-source-preservation.json", "ten-preservation-result.json", "windows-ten-interrupted-processes.json", "ten-empty-filter.xml", "ten-editmode.xml", "ten-final-build-summary.txt", "ten-prior-nine-source-preservation.json", "magnet-windows-interrupted-result.txt", "magnet-windows-interrupted-progress.txt", "windows-eight-full-processes.json", "nine-editmode.xml", "nine-prior-six-source-preservation.json", "nine-preservation-result.json", "camera-before-fix.xml", "lava-grade-before.xml", "lava-grade-after.xml", "eight-editmode-final.xml", "windows-six-initial-processes.json", "windows-six-final-targeted-processes.json", "six-bracing-scene-preservation.json", "red-light-editmode-2.xml", "hot-potato-editmode.xml", "balloon-editmode-final.xml", "whack-editmode.xml", "presentation-editmode-final.xml", "five-editmode-final.xml", "six-editmode-final.xml", "seven-editmode-final.xml", "seven-presentation-editmode.xml", "seven-final-build-summary.txt", "preservation-all.json", "original-logo-preservation.json"):
+for name in ("herd-stale-damage-before-result.txt", "herd-final-capability-failure-result.txt", "herd-full-trace-failure-result.txt", "herd-repaired-final-native-result.txt", "hauler-repaired-final-native-result.txt", "fourteen-host-preservation.json", "hauler-script-binding-repair.json", "windows-fourteen-outcome-and-art-name-failures.json", "fourteen-menu-art-name-failure.txt", "fourteen-editmode-before-repair.xml", "fourteen-editmode-final.xml", "fourteen-final-build-summary.txt", "fourteen-prior-twelve-source-preservation.json", "fourteen-preservation-result.json", "windows-fourteen-final-processes.json", "windows-fourteen-corrupt-level-processes.json", "hauler-native-pass-result.txt", "hauler-ram-pass-result.txt", "hauler-first-failed-result.txt", "hauler-intake-before-progress.txt", "herd-initial-pass-result.txt", "herd-presentation-pass-result.txt", "twelve-editmode.xml", "twelve-final-build-summary.txt", "twelve-prior-ten-source-preservation.json", "twelve-preservation-result.json", "windows-twelve-final-processes.json", "volley-initial-result.txt", "volley-initial-progress.txt", "freeze-first-fx-failure-result.txt", "freeze-pool-fixed-result.txt", "freeze-cover-fixed-result.txt", "windows-verified-processes.json", "windows-nine-targeted-processes.json", "windows-ten-final-processes.json", "windows-ten-gameplay-processes.json", "windows-ten-final-menu-processes.json", "windows-ten-menu-focus-failure.json", "ten-menu-focus-failure.txt", "ten-final-presentation.xml", "ten-gameplay-source-preservation.json", "ten-preservation-result.json", "windows-ten-interrupted-processes.json", "ten-empty-filter.xml", "ten-editmode.xml", "ten-final-build-summary.txt", "ten-prior-nine-source-preservation.json", "magnet-windows-interrupted-result.txt", "magnet-windows-interrupted-progress.txt", "windows-eight-full-processes.json", "nine-editmode.xml", "nine-prior-six-source-preservation.json", "nine-preservation-result.json", "camera-before-fix.xml", "lava-grade-before.xml", "lava-grade-after.xml", "eight-editmode-final.xml", "windows-six-initial-processes.json", "windows-six-final-targeted-processes.json", "six-bracing-scene-preservation.json", "red-light-editmode-2.xml", "hot-potato-editmode.xml", "balloon-editmode-final.xml", "whack-editmode.xml", "presentation-editmode-final.xml", "five-editmode-final.xml", "six-editmode-final.xml", "seven-editmode-final.xml", "seven-presentation-editmode.xml", "seven-final-build-summary.txt", "preservation-all.json", "original-logo-preservation.json"):
     if (LOG / name).exists():
         shutil.copy2(LOG / name, OUT / name)
 for source in (LOG / "Snow").glob("*-snow-720.png"):
@@ -72,14 +79,15 @@ for source in (LOG / "Snow").glob("*-snow-720.png"):
 
 ledger = ROOT / "TRUCK_SPORTS_ACCEPTANCE_LEDGER.md"
 text = ledger.read_text(encoding="utf-8-sig")
-for prefix, folder, native, capture in (("EX02", "TruckRedLightGreenLight", 13, "RedLight"), ("EX03", "TruckHotPotato", 11, "HotPotato"), ("EX11", "TruckBalloonBattle", 13, "Balloon"), ("EX16", "TruckWhackAMole", 12, "Whack"), ("EX17", "TruckKingOfTheHill", 22, "Hill"), ("EX09", "TruckSeesaw", 14, "Seesaw"), ("EX06", "TruckFloorIsLava", 18, "Lava"), ("EX13", "TruckTetherball", 14, "Tether"), ("EX14", "TruckJousting", 15, "Joust"), *((("EX12", "TruckMagnetMayhem", 21, "Magnet"),) if ten or twelve else ()), *((("EX10", "TruckVolleyball", 15, "Volley"), ("EX08", "TruckFreezeTag", 17, "Freeze")) if twelve else ())):
+for prefix, folder, native, capture in (("EX02", "TruckRedLightGreenLight", 13, "RedLight"), ("EX03", "TruckHotPotato", 11, "HotPotato"), ("EX11", "TruckBalloonBattle", 13, "Balloon"), ("EX16", "TruckWhackAMole", 12, "Whack"), ("EX17", "TruckKingOfTheHill", 22, "Hill"), ("EX09", "TruckSeesaw", 14, "Seesaw"), ("EX06", "TruckFloorIsLava", 18, "Lava"), ("EX13", "TruckTetherball", 14, "Tether"), ("EX14", "TruckJousting", 15, "Joust"), *((("EX12", "TruckMagnetMayhem", 21, "Magnet"),) if ten or twelve or fourteen else ()), *((("EX10", "TruckVolleyball", 15, "Volley"), ("EX08", "TruckFreezeTag", 17, "Freeze")) if twelve or fourteen else ()), *((("EX15", "TruckHungryHaulers", 20, "Hauler"), ("EX18", "TruckSheepHerding", 19, "Herd")) if fourteen else ())):
     checks = counts(LOG / capture / "result.txt")
-    probe = {"HotPotato":"hot-potato","RedLight":"red-light","Balloon":"balloon","Whack":"whack","Hill":"hill","Seesaw":"seesaw","Lava":"lava","Tether":"tether","Joust":"joust","Magnet":"magnet","Volley":"volley","Freeze":"freeze"}[capture]
-    phase = next((r for r in receipt+([] if twelve else gameplay) if r["probe"] == probe),None)
+    probe = {"HotPotato":"hot-potato","RedLight":"red-light","Balloon":"balloon","Whack":"whack","Hill":"hill","Seesaw":"seesaw","Lava":"lava","Tether":"tether","Joust":"joust","Magnet":"magnet","Volley":"volley","Freeze":"freeze","Hauler":"hauler","Herd":"herd"}[capture]
+    phase = next((r for r in receipt+([] if twelve or fourteen else gameplay) if r["probe"] == probe),None)
     preceding = next((r for r in ninth if r["probe"] == probe),None)
-    evidence = phase or preceding or next((r for r in gameplay if r["probe"] == probe),None) or next(r for r in prior if r["probe"] == probe)
+    previous_twelve = next((r for r in json.loads((LOG / "windows-twelve-final-processes.json").read_text()) if r["probe"] == probe),None) if fourteen else None
+    evidence = phase or previous_twelve or preceding or next((r for r in gameplay if r["probe"] == probe),None) or next(r for r in prior if r["probe"] == probe)
     tested_hash = evidence["managedSha256"]
-    phase_note = "ten-sport gameplay build; final rebuild changed only the explicit menu probe, with all gameplay sources/scenes preserved" if phase and late_menu else "final "+phase_name+" build" if phase else "preceding nine-sport build; original gameplay source/scene preserved exactly" if preceding else "preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly" if probe=="magnet" else "preceding eight-sport build; original gameplay source/scene preserved exactly in final build"
+    phase_note = "ten-sport gameplay build; final rebuild changed only the explicit menu probe, with all gameplay sources/scenes preserved" if phase and late_menu else "final "+phase_name+" build" if phase else "preceding twelve-sport build; original gameplay sources/scenes preserved exactly" if previous_twelve else "preceding nine-sport build; original gameplay source/scene preserved exactly" if preceding else "preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly" if probe=="magnet" else "preceding eight-sport build; original gameplay source/scene preserved exactly in final build"
     humans = "one–two" if prefix in ("EX13","EX14") else "one–four"
     for suffix in ("CORE", "AI", "ENV", "LOGO", "PREVIEW", "SETUP", "HUD", "FX", "RESULTS", "QA"):
         rid = prefix + "-" + suffix
@@ -136,6 +144,12 @@ for prefix, folder, native, capture in (("EX02", "TruckRedLightGreenLight", 13, 
         if prefix == "EX08":
             values["Implementation Notes"] = "Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset."
             values["Known Issues"] = "Human balance, physical devices/listening and isolated profiling remain unverified; automated full matches usually favored runners and shared2–2results. Pure rules verify all-frozen wins. Original sample destroy-after-stop behavior and mismatched cover dimensions were fixed only in owned instances/scene."
+        if prefix == "EX15":
+            values["Implementation Notes"] = "Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances."
+            values["Known Issues"] = "Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch."
+        if prefix == "EX18":
+            values["Implementation Notes"] = "48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs."
+            values["Known Issues"] = "Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance."
         for field, value in values.items():
             block, count = re.subn(r"\| " + re.escape(field) + r" \|[^\n]*", "| " + field + " | " + value + " |", block)
             if count != 1:

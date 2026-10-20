@@ -112,3 +112,18 @@ Audited genuine Haberdashery SheepV5 FBX/RunCycle and existing SportsSheepMotion
 ## Twelve-sport acceptance update
 
 The earlier preparation notes are history. Volleyball passes15native/33Windows checks; Freeze Tag17/36. Both actual saved scenes, PNGs, menu previews, setups, world signage, multiplayer cameras, full AI matches, replay and rematches are integrated in54scenes. Combined188native, focused snow36 and menu347passed. See EighteenSportsTwelveSportDelivery.md for exact hash and remaining human/hardware/profile limits. Weatherade sample destroy-after-stop and cover orientation/collider mismatch were corrected only in owned scene instances. Vendor source and original41logos remain unchanged. Hungry Haulers is still undergoing native validation, not included in this milestone.
+
+
+## Upcoming Hide & Seek audit — preparation, not acceptance
+
+Audited published Truck Snake's existing7km² Vista-generated world, baked EasyRoads network and LWS graph, industrial/container scenery and original Taxi/FareFight district composition. Reuse those saved static assets without rerunning their world generator or changing source scenes. The installed JC_LP warehouse prefab has separate Gate_01/Gate_02/Door children, allowing sport-owned open-door instances with genuine mesh collision/interiors. NWH exposes EngineComponent.StartEngine/StopEngine/IsRunning and lights lowBeamLights.SetState; reuse those public APIs for stealth, leaving wheels/suspension live and disabling only automatic ignition in this mode. Existing NWH spatial engine audio, FareFightRoute/LWS road authority, Heat/TMP/DOTween, Weather Maker/Weatherade and driving-view adapters remain foundations. Mode-owned perception, coarse clues, hiding/tag/rotation scoring and privacy policy are missing game semantics; do not add a replacement pathfinder, vehicle, light, audio or weather framework.
+
+
+## Frogger — foundation audit, not scene acceptance
+
+Audited the installed UTS CarWalkPath, MovePath, CarAIController and CarMove public APIs and the already published LwsUtsTrafficApi adapter/Taxi traffic fleet. Ordinary crossing traffic must use those real vehicle/path systems; the sport only owns seeded attempt reset, hazard timing, fair observation and challenge rules. The installed model inventory contains no matching freight locomotive, complete freight-train or forklift prefab. Those missing sport-specific models may be composed from existing cargo-container/trailer/wheel assets and original detailed owned geometry, without replacing UTS traffic. The existing Sky Tow original expedition boat hull is available for barge presentation; NWH remains player driving and moving-ground contact authority. Existing PhysX kinematic rigidbodies can own deterministic machinery/train/platform movement, while existing Heat/TMP/DOTween, weather, crew, camera and replay adapters remain the shared presentation foundation. Prepared rules, tests and original PNG are local drafts, not evidence of a playable Frogger scene. No vendor source modified.
+
+
+## Fourteen-sport acceptance update
+
+Haulers20native rules/binding plus45actual native/Windows physical checks; Herding19native rules plus52actual native/Windows checks. NWH DamageHandler.Repair/public powertrain and wheel damage APIs fix the reproduced retained-damage rematch defect. No vendor source modified. The current56scene Windows build, exact hash, evidence and four remaining sports are recorded in EighteenSportsFourteenSportDelivery.md. Hide/Frogger preparations remain unaccepted local drafts.

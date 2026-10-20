@@ -25,7 +25,7 @@ namespace LWS.TruckSports
         IEnumerator Start()
         {
             Directory.CreateDirectory(Folder); File.WriteAllText(Folder + "/result.txt", "RUNNING"); Application.logMessageReceived += Error;
-            foreach (var scene in new[] { "TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw", "TruckFloorIsLava", "TruckTetherball", "TruckJousting", "TruckMagnetMayhem", "TruckVolleyball", "TruckFreezeTag" })
+            foreach (var scene in new[] { "TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw", "TruckFloorIsLava", "TruckTetherball", "TruckJousting", "TruckMagnetMayhem", "TruckVolleyball", "TruckFreezeTag", "TruckHungryHaulers", "TruckSheepHerding" })
             {
                 if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != scene) { SportsNavigation.LoadSport(scene); yield return null; yield return null; } yield return null; var match = FindAnyObjectByType<SportsEventSession>(); var weather = match.GetComponent<SportsChaosWeather>(); var snow = match.GetComponent<SportsSnowSurface>();
                 var preset = weather.presets.entries.First(p => p.Snow && p.legacyKind == SportsWeatherKind.Snow); weather.presets.Select(preset.id);

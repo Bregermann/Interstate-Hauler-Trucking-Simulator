@@ -35,6 +35,8 @@ namespace LWS.TruckSports.Editor
             Add(front,"whackamole","WHACK-A-MOLE","TRUCK WHACK-A-MOLE","Bumper-whack animated moles. Chase golden stars. Dodge explosive decoys.","TruckWhackAMole");
             Add(front,"kingofthehill","KING OF THE HILL","TRUCK KING OF THE HILL","Shove rivals off the crown. Five connected mountain plateaus. Hold60seconds to win.","TruckKingOfTheHill");
             Add(front,"seesaw","SEESAW","TRUCK SEESAW","Four trucks. One physical wobble board. Shift weight above a giant quarry.","TruckSeesaw");
+            Add(front,"hungryhaulers","HUNGRY HAULERS","HUNGRY HUNGRY HAULERS","Scoop real bouncing balls. Fill your hopper. Bank your cargo. Beware the fuse balls.","TruckHungryHaulers");
+            Add(front,"sheepherding","SHEEP HERDING","TRUCK SHEEP HERDING","Gentle driving. Big horns. Guide the animated flock into your color pen.","TruckSheepHerding");
             Add(front,"volleyball","VOLLEYBALL","TRUCK VOLLEYBALL","Real beach-ball rallies. Bumper returns and suspension jumps.\n2v2–4v4 · four local humans + AI.","TruckVolleyball");
             Add(front,"freezetag","FREEZE TAG","TRUCK FREEZE TAG","Four ice cannons. Four rescuers. Break the ice with real impact. Roles switch each round.","TruckFreezeTag");
             Add(front,"magnetmayhem","MAGNET MAYHEM","TRUCK MAGNET MAYHEM","Switch polarity. Haul physical scrap. Settle it in your bay. Eight magnetic trucks.","TruckMagnetMayhem");

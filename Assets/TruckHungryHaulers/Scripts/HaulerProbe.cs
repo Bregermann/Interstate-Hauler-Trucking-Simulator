@@ -1,0 +1,74 @@
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+using System;using System.Collections;using System.IO;using System.Text;using UnityEngine;using UnityEngine.InputSystem;using UnityEngine.InputSystem.LowLevel;
+using LWS.TruckSports;using LWS.TruckBowling;
+namespace LWS.TruckHungryHaulers
+{
+ public sealed class HaulerProbe:MonoBehaviour
+ {
+  public static bool IntakeOnly;const string Folder="Logs/TruckSports/EighteenSports/Hauler";IDisposable preferences;int checks,errors;readonly StringBuilder report=new StringBuilder();Gamepad[] pads=new Gamepad[4];InputSettings.BackgroundBehavior background;HaulerMatch watched;bool intentionalPause;float requestedScale=1,watchdog;
+  void Update(){if(watchdog>0&&Time.realtimeSinceStartup>watchdog){watchdog=0;Check(false,"bounded acceptance watchdog expired");watched?.SetupScreen();StopAllCoroutines();Complete();return;}if(watched!=null&&watched.Running&&!watched.Finished&&!intentionalPause&&watched.Paused&&watched.DevicesReady){report.AppendLine("HARNESS_ACKNOWLEDGED_EXTERNAL_PAUSE focused="+Application.isFocused);watched.Resume();Time.timeScale=requestedScale;}}
+#if UNITY_EDITOR
+  InputSettings.EditorInputBehaviorInPlayMode editorInput;
+#endif
+  [RuntimeInitializeOnLoadMethod]static void Boot(){bool run=Array.IndexOf(Environment.GetCommandLineArgs(),"-tsHauler")>=0;
+#if UNITY_EDITOR
+   IntakeOnly=UnityEditor.SessionState.GetBool("Sports.Hauler.Intake",false);UnityEditor.SessionState.SetBool("Sports.Hauler.Intake",false);run|=UnityEditor.SessionState.GetBool("Sports.Hauler.Probe",false);UnityEditor.SessionState.SetBool("Sports.Hauler.Probe",false);
+#endif
+   if(!run)return;var go=new GameObject("Explicit physical beach hungry-hauler acceptance");DontDestroyOnLoad(go);go.AddComponent<SportsProbeInputIsolation>();go.AddComponent<HaulerProbe>();}
+  void Awake(){preferences=SportsPrefs.IsolateValidation("Hauler");SportsParticipantRegistry.ForgetCache();background=InputSystem.settings.backgroundBehavior;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
+#if UNITY_EDITOR
+   editorInput=InputSystem.settings.editorInputBehaviorInPlayMode;InputSystem.settings.editorInputBehaviorInPlayMode=InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
+#endif
+  }
+  void Check(bool ok,string message){checks++;if(!ok)errors++;report.AppendLine((ok?"PASS ":"FAIL ")+message);File.WriteAllText(Folder+"/progress.txt",report.ToString());}
+  void Error(string message,string stack,LogType type){if(type==LogType.Error||type==LogType.Exception){errors++;report.AppendLine("ERROR "+message+"\n"+stack);}}
+  IEnumerator Start()
+  {
+   watchdog=Time.realtimeSinceStartup+480;Directory.CreateDirectory(Folder);File.WriteAllText(Folder+"/result.txt","RUNNING");Application.logMessageReceived+=Error;yield return SportsProbeScene.Ensure<HaulerMatch>("TruckHungryHaulers");yield return null;var m=FindAnyObjectByType<HaulerMatch>();watched=m;
+   Check(m!=null&&m.trucks.Length==4&&m.balls.Length==256&&m.scoops.Length==4,"saved toy stadium has four full NWH tractors and256actual physical bouncing balls");if(m==null){Complete();yield break;}var audio=m.GetComponent<SportsMatchAudioAnchor>();Check(audio!=null&&audio.listener!=null&&audio.listener.transform!=m.transform&&FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length==1,"existing single viewport audio anchor is bound separately from simulation authority");var clear=Array.Find(m.atmosphere.presets.entries,p=>p.legacyKind==SportsWeatherKind.Clear);if(clear!=null)m.atmosphere.presets.Select(clear.id);if(IntakeOnly){pads[0]=InputSystem.AddDevice<Gamepad>("Explicit intake diagnosis");yield return Cargo(m,false);yield return Cargo(m,true);m.SetupScreen();Complete();yield break;}m.setup.count=4;m.option=1;m.AllBots();SportsCameraOptions.Set(false);m.drivingViews.Select(0);Check(m.StartMatch(),"normal four-truck three-minute AI cargo competition starts");var positions=Array.ConvertAll(m.trucks,t=>t.body.position);yield return new WaitForSeconds(1.5f);bool stable=!m.rules.Live&&m.ActualCollections==0;for(int i=0;i<4;i++)stable&=m.trucks[i].tractorMotor.Grounded&&Vector3.ProjectOnPlane(m.trucks[i].body.position-positions[i],Vector3.up).magnitude<.35f;Check(stable,"four real trucks settle upright while every ball and scoop remains gated during countdown");
+   requestedScale=Time.timeScale=4;float deadline=Time.realtimeSinceStartup+200,nextTrace=0;bool paused=false,captured=false;
+   while(!m.Finished&&Time.realtimeSinceStartup<deadline)
+   {
+    if(!paused&&m.rules.Clock>3){paused=true;intentionalPause=true;float clock=m.rules.Clock;var p=m.trucks[0].body.position;m.Pause();yield return new WaitForSecondsRealtime(.15f);Check(clock==m.rules.Clock&&p==m.trucks[0].body.position,"pause freezes competition time and actual cargo physics");m.Resume();intentionalPause=false;Time.timeScale=4;}
+    if(!captured&&m.rules.Clock>12){captured=true;yield return SportsWindowCapture.Save(1280,720,Folder+"/gameplay-720.png");yield return SportsWindowCapture.Save(1920,1080,Folder+"/gameplay-1080.png");}
+    if(Time.realtimeSinceStartup>nextTrace){nextTrace=Time.realtimeSinceStartup+10;report.AppendLine("ACTUAL_HAULER t="+m.rules.Clock+" collections="+m.ActualCollections+" banked="+m.ActualDeposits+" bombs="+m.ActualBombs+" points="+string.Join(",",m.rules.points)+" cargo="+string.Join(",",m.rules.carried));for(int i=0;i<m.setup.count;i++)report.AppendLine("AI_BANK_TRACE slot="+i+" pos="+m.trucks[i].body.position+" velocity="+m.trucks[i].body.linearVelocity+" forward="+m.trucks[i].transform.forward+" goal="+m.AIGoal(i)+" cargoDistance="+Vector3.ProjectOnPlane(m.trucks[i].transform.TransformPoint(new Vector3(0,2.8f,-2.8f))-m.banks[i].position,Vector3.up).magnitude);File.WriteAllText(Folder+"/progress.txt",report.ToString());}yield return null;
+   }
+   requestedScale=Time.timeScale=1;Check(m.Finished&&m.rules.Complete,"actual full AI cargo match reaches final shared/winning standings");Check(m.ActualCollections>12&&m.ActualDeposits>0&&Array.TrueForAll(m.rules.points,p=>p>0),"all four AI physically scoop and bank their own cargo without automatic points");int deposited=0;for(int i=0;i<4;i++)deposited+=m.rules.deposits[i];Check(deposited==m.ActualDeposits,"actual banked-ball count matches one-time authoritative deposits");
+   if(m.Finished){string result=m.Results;m.ExtraAction("watchhauler");yield return new WaitForSecondsRealtime(.25f);Check(m.review.Playing,"actual moving scoops, balls and cargo replay starts");yield return SportsWindowCapture.Save(1280,720,Folder+"/replay-720.png");m.ExtraAction("replayskip");Check(result==m.Results&&!m.review.Playing,"replay cannot change cargo values or final points");}
+   pads[0]=InputSystem.AddDevice<Gamepad>("Actual scoop, cargo and bomb fixture");yield return Cargo(m,false);yield return Cargo(m,true);yield return Ram(m);m.SetupScreen();if(pads[0]!=null&&pads[0].added)InputSystem.RemoveDevice(pads[0]);pads[0]=null;
+   yield return SportsExpansionCameraAcceptance.Run(m,m.drivingViews,Check,Folder);m.SetupScreen();m.setup.count=4;m.AllBots();foreach(var t in m.trucks){t.tractorMotor.vehicle.powertrain.engine.Damage=1;t.tractorMotor.vehicle.powertrain.transmission.Damage=.9f;t.wheels[0].Damage=.8f;}Check(m.StartMatch()&&m.ActualCollections==0&&m.ActualBombs==0&&m.rules.PositiveRemaining>200&&Array.TrueForAll(m.balls,b=>b.gameObject.activeSelf&&b.shape.enabled),"rematch restores the full finite population, bombs, scoops, scores and cargo");Check(Array.TrueForAll(m.trucks,t=>t.tractorMotor.vehicle.powertrain.engine.Damage==0&&t.tractorMotor.vehicle.powertrain.transmission.Damage==0&&t.wheels[0].Damage==0),"rematch repairs actual damaged NWH engines, transmissions and tyres");m.SetupScreen();Complete();
+  }
+  IEnumerator Cargo(HaulerMatch m,bool hazard)
+  {
+   m.SetupScreen();m.setup.count=1;m.AllBots();m.setup.players[0].source=BowlingSource.WholeController;m.setup.players[0].pad=pads[0];InputSystem.QueueStateEvent(pads[0],new GamepadState());Check(m.StartMatch(),hazard?"isolated physical bomb/scatter fixture starts":"isolated actual scoop/deposit fixture starts");while(m.Countdown>0)yield return null;
+   var normal=Array.Find(m.balls,b=>b.value==1);var bomb=Array.Find(m.balls,b=>b.value==0);foreach(var ball in m.balls)if(ball!=normal&&(!hazard||ball!=bomb))ball.gameObject.SetActive(false);
+   m.trucks[0].Prepare(new Vector3(0,.65f,0),Quaternion.identity);SetBall(normal,new Vector3(0,1.1f,16));if(hazard)SetBall(bomb,new Vector3(0,1.1f,36));yield return new WaitForSeconds(.3f);InputSystem.QueueStateEvent(pads[0],new GamepadState().WithButton(GamepadButton.South));yield return null;InputSystem.QueueStateEvent(pads[0],new GamepadState{rightTrigger=1});float end=Time.realtimeSinceStartup+8,nextSample=0;while(m.rules.carried[0]==0&&Time.realtimeSinceStartup<end){if(Time.realtimeSinceStartup>=nextSample){nextSample=Time.realtimeSinceStartup+.3f;report.AppendLine("INTAKE_TRACE time="+m.rules.Clock+" command="+m.commands[0]+" truck="+m.trucks[0].body.position+" velocity="+m.trucks[0].body.linearVelocity+" ball="+normal.body.position+" ballVelocity="+normal.body.linearVelocity+" open="+m.scoops[0].Extended+" ready="+m.scoops[0].Ready+" mouth="+m.scoops[0].mouth.bounds);File.WriteAllText(Folder+"/progress.txt",report.ToString());}yield return null;}
+   Check(m.scoops[0].Ready&&m.rules.state[normal.id]==HaulerBallState.Carried&&m.rules.points[0]==0,"assigned action extends the colliding scoop and real driving collects a ball without scoring");
+   if(!hazard)
+   {
+    InputSystem.QueueStateEvent(pads[0],new GamepadState());yield return null;InputSystem.QueueStateEvent(pads[0],new GamepadState().WithButton(GamepadButton.South));yield return null;InputSystem.QueueStateEvent(pads[0],new GamepadState());yield return new WaitForSeconds(.4f);m.trucks[0].Prepare(m.banks[0].position-m.banks[0].forward*4+Vector3.up*.65f,Quaternion.LookRotation(m.banks[0].forward));yield return new WaitForSeconds(1.6f);report.AppendLine("BANK_TRACE truck="+m.trucks[0].body.position+" velocity="+m.trucks[0].body.linearVelocity+" bank="+m.banks[0].position+" state="+m.rules.state[normal.id]+" points="+m.rules.points[0]+" cargo="+m.rules.carried[0]);Check(m.rules.state[normal.id]==HaulerBallState.Deposited&&m.rules.points[0]==normal.value&&m.rules.carried[0]==0,"actual cargo enters the owned collection bin and banks exactly its real value");int score=m.rules.points[0];yield return new WaitForSeconds(1);Check(m.rules.points[0]==score&&normal.body.isKinematic&&!normal.shape.enabled,"secured cargo stays visible without repeated scoring or heavyweight stored-ball simulation");
+   }
+   else
+   {
+    end=Time.realtimeSinceStartup+10;float peak=0;while(m.ActualBombs==0&&Time.realtimeSinceStartup<end){peak=Mathf.Max(peak,m.trucks[0].body.linearVelocity.y);yield return null;}yield return null;peak=Mathf.Max(peak,m.trucks[0].body.linearVelocity.y);InputSystem.QueueStateEvent(pads[0],new GamepadState());Check(m.ActualBombs==1&&m.rules.state[bomb.id]==HaulerBallState.Spent&&m.rules.carried[0]==0&&m.rules.state[normal.id]==HaulerBallState.Loose,"actual fuse-ball intake triggers one explosion and releases physical carried cargo");Check(m.rules.points[0]==0&&peak>2&&normal.shape.enabled&&!normal.body.isKinematic,"bomb applies bounded actual truck motion, restores loose-ball collision and awards no hidden points");yield return new WaitForSeconds(.8f);Check(m.ActualBombs==1,"spent bomb cannot repeatedly detonate through compound or resting contacts");
+   }
+   m.SetupScreen();
+  }
+  IEnumerator Ram(HaulerMatch m)
+  {
+   pads[1]=InputSystem.AddDevice<Gamepad>("Actual opponent cargo ram fixture");m.SetupScreen();m.setup.count=2;m.AllBots();for(int i=0;i<2;i++){m.setup.players[i].source=BowlingSource.WholeController;m.setup.players[i].pad=pads[i];InputSystem.QueueStateEvent(pads[i],new GamepadState());}Check(m.StartMatch(),"two distinct human inputs start the physical cargo ram fixture");while(m.Countdown>0)yield return null;var ball=Array.Find(m.balls,b=>b.value==1);foreach(var other in m.balls)if(other!=ball)other.gameObject.SetActive(false);m.trucks[0].Prepare(new Vector3(0,.65f,0),Quaternion.identity);m.trucks[1].Prepare(new Vector3(0,.65f,40),Quaternion.Euler(0,180,0));SetBall(ball,new Vector3(0,1.1f,16));yield return new WaitForSeconds(.4f);InputSystem.QueueStateEvent(pads[0],new GamepadState().WithButton(GamepadButton.South));yield return null;InputSystem.QueueStateEvent(pads[0],new GamepadState{rightTrigger=1});float limit=Time.realtimeSinceStartup+8;while(m.rules.carried[0]==0&&Time.realtimeSinceStartup<limit)yield return null;Check(m.rules.carried[0]==1&&m.rules.points[0]==0,"real moving scoop collects the ram fixture cargo before the opponent approaches");InputSystem.QueueStateEvent(pads[1],new GamepadState{rightTrigger=1});limit=Time.realtimeSinceStartup+10;while(m.ActualRams==0&&Time.realtimeSinceStartup<limit)yield return null;for(int i=0;i<2;i++)InputSystem.QueueStateEvent(pads[i],new GamepadState());yield return null;Check(m.ActualRams==1&&m.rules.carried[0]==0&&m.rules.state[ball.id]==HaulerBallState.Loose&&ball.shape.enabled&&!ball.body.isKinematic,"genuine opposing truck impact spills held cargo through the same physical contact authority");Check(m.rules.points[0]==0&&m.rules.points[1]==0,"ramming and spilled balls never create hidden deposit points");m.SetupScreen();InputSystem.RemoveDevice(pads[1]);pads[1]=null;
+  }
+  static void SetBall(HaulerBall ball,Vector3 point){ball.body.interpolation=RigidbodyInterpolation.None;ball.body.position=point;ball.transform.position=point;ball.body.linearVelocity=ball.body.angularVelocity=Vector3.zero;ball.body.interpolation=RigidbodyInterpolation.Interpolate;Physics.SyncTransforms();}
+  void Complete(){report.AppendLine("CHECKS="+checks+" ERRORS="+errors+"; platform="+Application.platform+"; capture="+SportsWindowCapture.EvidenceKind+"; actual NWH/PhysX scoop, cargo and bomb contacts plus software input; no human/device/listening certification.");File.WriteAllText(Folder+"/result.txt",report.ToString());Application.logMessageReceived-=Error;
+#if UNITY_EDITOR
+   if(Application.isEditor)UnityEditor.EditorApplication.isPlaying=false;else
+#endif
+   Application.Quit(errors==0?0:2);}
+  void OnDestroy(){Application.logMessageReceived-=Error;foreach(var pad in pads)if(pad!=null&&pad.added)InputSystem.RemoveDevice(pad);InputSystem.settings.backgroundBehavior=background;
+#if UNITY_EDITOR
+   InputSystem.settings.editorInputBehaviorInPlayMode=editorInput;
+#endif
+   preferences?.Dispose();SportsParticipantRegistry.ForgetCache();Time.timeScale=1;}
+ }
+}
+#endif

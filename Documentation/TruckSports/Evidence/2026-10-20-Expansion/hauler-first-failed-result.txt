@@ -1,0 +1,45 @@
+PASS saved toy stadium has four full NWH tractors and256actual physical bouncing balls
+PASS normal four-truck three-minute AI cargo competition starts
+PASS four real trucks settle upright while every ball and scoop remains gated during countdown
+ACTUAL_HAULER t=0 collections=0 banked=0 bombs=0 points=0,0,0,0 cargo=0,0,0,0
+PASS pause freezes competition time and actual cargo physics
+ACTUAL_HAULER t=30.66051 collections=3 banked=0 bombs=0 points=0,0,0,0 cargo=0,0,0,1
+ACTUAL_HAULER t=70.66016 collections=3 banked=0 bombs=0 points=0,0,0,0 cargo=0,0,0,1
+ACTUAL_HAULER t=110.6534 collections=3 banked=0 bombs=0 points=0,0,0,0 cargo=0,0,0,1
+ACTUAL_HAULER t=150.6754 collections=5 banked=0 bombs=0 points=0,0,0,0 cargo=0,0,0,3
+PASS actual full AI cargo match reaches final shared/winning standings
+FAIL all four AI physically scoop and bank their own cargo without automatic points
+PASS actual banked-ball count matches one-time authoritative deposits
+PASS actual moving scoops, balls and cargo replay starts
+PASS replay cannot change cargo values or final points
+PASS isolated actual scoop/deposit fixture starts
+FAIL assigned action extends the colliding scoop and real driving collects a ball without scoring
+FAIL actual cargo enters the owned collection bin and banks exactly its real value
+FAIL secured cargo stays visible without repeated scoring or heavyweight stored-ball simulation
+PASS isolated physical bomb/scatter fixture starts
+FAIL assigned action extends the colliding scoop and real driving collects a ball without scoring
+FAIL actual fuse-ball intake triggers one explosion and releases physical carried cargo
+FAIL bomb applies bounded actual truck motion, restores loose-ball collision and awards no hidden points
+FAIL spent bomb cannot repeatedly detonate through compound or resting contacts
+PASS 1 software-controller humans plus AI start through setup
+PASS 1 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 1-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 2 software-controller humans plus AI start through setup
+PASS 2 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 2-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 3 software-controller humans plus AI start through setup
+PASS 3 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 3-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 4 software-controller humans plus AI start through setup
+PASS 4 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 4-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS the four-truck sport clamps an unsupported fifth competitor through its real setup
+PASS AI-only spectator rematch starts
+PASS AI-only with AI cameras OFF has a live broadcast instead of a blank screen
+PASS AI-only with AI cameras ON has four correctly allocated views
+PASS rematch restores the full finite population, bombs, scoops, scores and cargo
+CHECKS=39 ERRORS=8; platform=WindowsEditor; capture=controlled Editor camera/UI fixture; actual NWH/PhysX scoop, cargo and bomb contacts plus software input; no human/device/listening certification.

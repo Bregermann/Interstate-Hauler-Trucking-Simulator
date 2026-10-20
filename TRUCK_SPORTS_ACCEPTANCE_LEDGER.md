@@ -907,20 +907,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 1 (TRUCK HIDE & SEEK), including all confirmed design decisions. |
 | Acceptance Criteria | Verify actual hiding, engine shutdown, restart delay, radar clues, seeker navigation, physical tagging, correct spectating, and timed victory. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Verify actual hiding, engine shutdown, restart delay, radar clues, seeker navigation, physical tagging, correct spectating, and timed victory. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
 
 
 #### EX01-AI
@@ -931,20 +931,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 1 (TRUCK HIDE & SEEK), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
 
 
 #### EX01-ENV
@@ -955,20 +955,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 1 (TRUCK HIDE & SEEK), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
 
 
 #### EX01-LOGO
@@ -979,20 +979,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Prefabs or Assets | Assets/TruckSports/Art/Logos/TruckHideAndSeek.png; Tools/TruckSports/ArtworkSources/TruckHideAndSeek.json. |
+| Implementation Evidence | Original grungy late-1990s/early-2000s console-style transparent raster artwork generated and copied unchanged into the project. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | Unity import, actual setup/menu/venue assignment and Windows readability are not yet accepted. Existing logos were not changed. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Import artwork, assign to the completed scene and menu, inspect actual 720p/1080p output. |
 
 
 #### EX01-PREVIEW
@@ -1004,7 +1004,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -1027,20 +1027,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
 
 
 #### EX01-HUD
@@ -1051,20 +1051,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
 
 
 #### EX01-FX
@@ -1075,20 +1075,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
 
 
 #### EX01-RESULTS
@@ -1099,20 +1099,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
 
 
 #### EX01-QA
@@ -1123,20 +1123,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideSeek/Scenes/TruckHideSeek.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
 
 
 ### EX02 — TRUCK RED LIGHT, GREEN LIGHT
@@ -1157,7 +1157,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Verify the master laughs, the one-second warning, no yellow signal, fair stopping detection, legal finishes, and spectacular explosions. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1181,7 +1181,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1205,7 +1205,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1229,7 +1229,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | User approved the grungy revision3artwork: 'that one looks good, continue on'. This is artwork approval, not gameplay or hardware verification. |
@@ -1253,7 +1253,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1277,7 +1277,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1301,7 +1301,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1325,7 +1325,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1349,7 +1349,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1373,7 +1373,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1400,7 +1400,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Verify gentle contact transfers, cooldowns, carrier boost, explosions, eliminations, and final victory. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1424,7 +1424,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1448,7 +1448,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1472,7 +1472,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1496,7 +1496,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1520,7 +1520,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1544,7 +1544,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1568,7 +1568,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1592,7 +1592,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1616,7 +1616,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -1636,20 +1636,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 4 (TRUCK FROGGER), including all confirmed design decisions. |
 | Acceptance Criteria | All five challenges must be independently selectable and completable. One life per attempt. Fastest successful run receives the point. Five-challenge championship correctly determines the winner. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/FrogRules.cs; Tests/Editor/FrogRulesTests.cs. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Prepared finite alternating one-life challenge authority, five independent selections/championship, real timing inputs, one-point winner, equivalent seeds and explicit physical tiebreak flow. Not compiled or playable yet. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | All five challenges must be independently selectable and completable. One life per attempt. Fastest successful run receives the point. Five-challenge championship correctly determines the winner. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | No Frogger runtime/world/scene integration yet. Rules tests are written but not executed. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Integrate genuine UTS/rail/platform/industrial challenges, physical event ordering, hazard-aware AI, UI, scene and native/Windows validation. |
 
 
 #### EX04-AI
@@ -1661,7 +1661,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 4 (TRUCK FROGGER), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -1685,7 +1685,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 4 (TRUCK FROGGER), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -1708,20 +1708,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Status | PARTIAL |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Prefabs or Assets | Assets/TruckSports/Art/Logos/TruckFrogger.png; Tools/TruckSports/ArtworkSources/TruckFrogger.json. |
+| Implementation Evidence | Original grungy late-1990s/early-2000s console-style transparent raster artwork generated and copied unchanged into the project. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
 | Automated Verification | Not executed. |
 | Runtime Evidence | Not executed. |
 | Screenshot/Video Evidence | None yet. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
+| Known Issues | Unity import, actual setup/menu/venue assignment and Windows readability are not yet accepted. Existing logos were not changed. |
 | Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Remaining Work | Import artwork, assign to the completed scene and menu, inspect actual 720p/1080p output. |
 
 
 #### EX04-PREVIEW
@@ -1733,7 +1733,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -1757,7 +1757,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -1781,7 +1781,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -1805,7 +1805,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -1829,7 +1829,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -1853,7 +1853,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
 | Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (not yet created) |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
 | Implementation Evidence | None yet. |
@@ -2129,7 +2129,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Verify collapsing platforms, real weight/collision interaction, ramming, AI decisions, lava elimination, and full matches. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2153,7 +2153,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2177,7 +2177,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2201,7 +2201,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2225,7 +2225,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2249,7 +2249,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2273,7 +2273,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2297,7 +2297,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2321,7 +2321,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2345,7 +2345,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2615,7 +2615,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Verify freezing, persistent ice states, physical rescues, asymmetric roles, timers, scoring, and role reversal. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2639,7 +2639,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2663,7 +2663,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2687,7 +2687,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2711,7 +2711,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2735,7 +2735,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2759,7 +2759,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2783,7 +2783,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2807,7 +2807,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2831,7 +2831,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Asymmetric four-round freezer/runner teams, real first-solid spray casts and cooldown, three-hit freezing, no automatic thaw, real teammate-impact rescue, visible frozen/shield states, alternating roles and timed/all-frozen wins, physical AI pursuit/evasion/rescue, actual collision-matched stacked container cover, pooled Weatherade sample spray, recorded review/reset. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 17/17; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Freeze/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2858,7 +2858,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Verify real multidirectional platform response, recoverable tilts, legitimate falls, AI balancing, and proper quarry impacts. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2882,7 +2882,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2906,7 +2906,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2930,7 +2930,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2954,7 +2954,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -2978,7 +2978,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3002,7 +3002,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3026,7 +3026,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3050,7 +3050,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3074,7 +3074,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3101,7 +3101,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Verify serve, rally, touch limits, out-of-bounds calls, real ball contact, net behavior, scoring, and complete matches. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3125,7 +3125,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3149,7 +3149,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3173,7 +3173,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3197,7 +3197,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3221,7 +3221,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3245,7 +3245,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3269,7 +3269,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3293,7 +3293,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3317,7 +3317,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical oversized beach ball and solid net, NWH suspension jumps, actual contact-normal returns, three-touch/fourth-touch/double-touch rules, first15winby2cap21, 1–4perteam, predictive physical AI, real service/rallies, court fault resolution, locked outcomes, recorded review, reset and cab/shared views. Sand/palms, posed spectators and original grungy PNG are integrated. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on final twelve-sport build, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding twelve-sport build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Volley/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3344,7 +3344,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Verify three balloons per truck, tether motion, collision-based popping, correct scoring, elimination, AI competition, and rematches. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3368,7 +3368,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3392,7 +3392,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3416,7 +3416,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3440,7 +3440,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3464,7 +3464,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3488,7 +3488,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3512,7 +3512,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3536,7 +3536,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3560,7 +3560,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3587,7 +3587,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Verify real attraction/repulsion, correct polarity, force limits, scrap movement, contested scoring, AI strategies, and physics stability. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3611,7 +3611,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3635,7 +3635,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3659,7 +3659,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3683,7 +3683,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3707,7 +3707,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3731,7 +3731,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3755,7 +3755,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3779,7 +3779,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3803,7 +3803,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Eight full NWH magnet tractors,40finite owned canister/container/car scrap objects, OFF/positive/negative modes, bounded mass-aware occluded equal/opposite PhysX forces, actual whole-object1.5s settled-bay scoring, physical reverse-hauling AI, timed shared placings, rotating machinery, complete reset/replay/cab views, original PNG and recorded preview. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 21/21; actual Windows NWH/PhysX acceptance 38checks/0errors on preceding ten-sport gameplay build; original gameplay sources/scenes preserved exactly, Assembly-CSharp SHA256 d4ed62b2586c3a0b729a4be55b9bac4b21be8497d23b070a52e8deb30e911bbe; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Magnet/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3830,7 +3830,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Verify ball swinging, rope wrapping, direction changes, scoring, truck collisions, AI play, and resets. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3854,7 +3854,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3878,7 +3878,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3902,7 +3902,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3926,7 +3926,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3950,7 +3950,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3974,7 +3974,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -3998,7 +3998,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4022,7 +4022,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4046,7 +4046,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4073,7 +4073,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Verify lance adjustment, real contact, hit zones, breakage, proper score awards, repeated passes, and competition results. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4097,7 +4097,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4121,7 +4121,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4145,7 +4145,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4169,7 +4169,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4193,7 +4193,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4217,7 +4217,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4241,7 +4241,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4265,7 +4265,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4289,7 +4289,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on preceding nine-sport build; original gameplay source/scene preserved exactly, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4309,20 +4309,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 15 (HUNGRY HUNGRY HAULERS), including all confirmed design decisions. |
 | Acceptance Criteria | Verify physical collection, scoop animation, cargo capacity, deposits, scoring, golden balls, explosive penalties, AI, and rematches. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Verify physical collection, scoop animation, cargo capacity, deposits, scoring, golden balls, explosive penalties, AI, and rematches. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX15-AI
@@ -4333,20 +4333,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 15 (HUNGRY HUNGRY HAULERS), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX15-ENV
@@ -4357,20 +4357,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 15 (HUNGRY HUNGRY HAULERS), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX15-LOGO
@@ -4381,20 +4381,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX15-PREVIEW
@@ -4405,20 +4405,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX15-SETUP
@@ -4429,20 +4429,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX15-HUD
@@ -4453,20 +4453,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX15-FX
@@ -4477,20 +4477,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX15-RESULTS
@@ -4501,20 +4501,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX15-QA
@@ -4525,20 +4525,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | HUNGRY HUNGRY HAULERS |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity |
+| Relevant Scripts | Assets/TruckHungryHaulers/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckHungryHaulers.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Four full NWH tractors and256finite physical rubber/gold/bomb balls; actual DOTween telescoping scoop/lip contacts, six visible hopper slots, no collection points, one-time owned-bin deposits, genuine rival-ram cargo spill, bounded explosive balls, physical AI approach/banking, timed standings, recorded review/reset/cabs. HaulerMouth now has its own real MonoScript asset; first Windows serialized-level crash is preserved and the dedicated binding regression prevents embedded script instances. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Nineteen actual-runtime rule tests prepared using the existing reflection test boundary; not yet executed. Scoop/cargo/contact source and original PNG exist locally; no scene or gameplay validation. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Complete dedicated toy-stadium authoring, real physical scoop/cargo/deposit integration, native and Windows validation, menu/preview and presentation. This draft is excluded from the current ten-sport executable. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 20/20; actual Windows NWH/PhysX acceptance 45checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hauler/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing/balance, physical devices, listening and isolated long-run profiling remain unverified. The first Windows level54 was corrupted by an embedded intake MonoScript; dedicated asset bindings and current Windows45/0 prove the repaired build. Full native45/0 also verifies actual cargo/ram contacts and NWH damage repair on rematch. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 ### EX16 — TRUCK WHACK-A-MOLE
@@ -4559,7 +4559,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Verify emergence animation, timed windows, collision-based scoring, golden targets, decoys, AI pursuit, and match completion. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4583,7 +4583,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4607,7 +4607,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4631,7 +4631,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4655,7 +4655,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4679,7 +4679,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4703,7 +4703,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4727,7 +4727,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4751,7 +4751,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4775,7 +4775,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4802,7 +4802,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Verify contested-zone logic, correct timing, physical occupancy, moving zones, AI navigation, and victory conditions. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4826,7 +4826,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4850,7 +4850,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4874,7 +4874,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4898,7 +4898,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4922,7 +4922,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4946,7 +4946,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4970,7 +4970,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -4994,7 +4994,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -5018,7 +5018,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu347/0 and twelve-sport native188/188. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu359/0 and fourteen-sport native227/227. |
 | Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
@@ -5038,20 +5038,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 18 (TRUCK SHEEP HERDING), including all confirmed design decisions. |
 | Acceptance Criteria | Verify animated sheep movement, horn reactions, truck herding pressure, pen detection, scoring, explosive sheep, AI behavior, and full matches. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Verify animated sheep movement, horn reactions, truck herding pressure, pen detection, scoring, explosive sheep, AI behavior, and full matches. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX18-AI
@@ -5062,20 +5062,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 18 (TRUCK SHEEP HERDING), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX18-ENV
@@ -5086,20 +5086,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 18 (TRUCK SHEEP HERDING), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX18-LOGO
@@ -5110,20 +5110,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX18-PREVIEW
@@ -5134,20 +5134,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX18-SETUP
@@ -5158,20 +5158,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX18-HUD
@@ -5182,20 +5182,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX18-FX
@@ -5206,20 +5206,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX18-RESULTS
@@ -5230,20 +5230,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX18-QA
@@ -5254,20 +5254,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK SHEEP HERDING |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckSheepHerding/Scenes/TruckSheepHerding.unity |
+| Relevant Scripts | Assets/TruckSheepHerding/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckSheepHerding.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | 48genuine rigged SheepV5 animals, existing locomotion, Unity NavMesh flock/threat/avoidance, real truck/horn pressure, whole-body one-time pen contacts, completion-time tie policy, physical AI herding, marked explosive sheep and bounded loose-fence reactions, detailed rolling farm with original timber barn and reused Vista scenery, 3minute competition, recorded review/reset/cabs. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 19/19; actual Windows NWH/PhysX acceptance 52checks/0errors on final fourteen-sport build, Assembly-CSharp SHA256 269fc2ed6b2e860436c70d1a9a3bce32800b566c8c8532ce7e572f1d7b0f8700; final common menu359/0 and fourteen-sport native227/227. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Herd/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human balancing/pacing, physical controls, listening and isolated profiling remain unverified. Native and Windows52/0 include actual contested captures and independent physical penning by all four AI slots. An earlier every-loser-must-score assumption was replaced with stronger isolated capability cases. Those cases exposed retained NWH damage across rematches; the vendor repair API now restores engines, transmissions and tyres, with deliberately damaged-start regressions. This is not human balance acceptance. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 ## King of the Hill — bottom scorecard row
