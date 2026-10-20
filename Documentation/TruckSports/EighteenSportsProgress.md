@@ -95,3 +95,34 @@ Final native combined135/135. Windows final targeted432checks/0errors (Lava37,Te
 ## Tenth playable addition — Magnet Mayhem
 
 The latest delivered milestone is ten additions /52saved scenes; see EighteenSportsTenSportDelivery.md for exact hashes, distinct Windows phases and preserved failed attempts. Magnet passes21native rules and38actual Windows gameplay checks; combined156native tests and final presentation3pass. Ten-arena snow30/0 and final menu335/0 are recorded separately. Eight requested additions remain unfinished. Volleyball native authoring/match acceptance is next; Freeze Tag and Hungry Haulers remain local drafts. No empty menu entries were installed for those drafts.
+
+
+## Twelve-sport milestone — current measured status
+
+# Truck Sports expansion — twelve playable additions; assignment continues
+
+Windows x64 Development/Mono/D3D11, Unity6000.4.10f1.54saved scenes, startup TruckSports. Build report0errors/57warnings. Managed SHA256 08c070300cd5fec8ee88adee6f58f044a429b49b6955aab1d71344cf21e8013c.
+
+Added in this milestone: Truck Volleyball and Truck Freeze Tag. The preceding ten additions remain included. Six of the18requested additions remain unfinished: Hungry Hungry Haulers, Sheep Herding, Hide & Seek, Frogger, Avalanche Escape and Ninja Warrior. Local drafts are excluded from this executable and scoped publication.
+
+Volleyball: full NWH tractors, physical oversized striped beach ball/net, bounded suspension jumps, contact-normal returns,3touch/fourth-touch/double-touch rules, first15winby2cap21, actual coordinated AI, physical service/rallies, selectable team sizes, sand/palms/posed crowd, world scoreboard, original grungy PNG and actual gameplay preview. Native15rules and actual Windows33checks passed, including a complete AI match, real collision scoring, replay, rematch and1–4software-input views.
+
+Freeze Tag: asymmetric cannon/runner teams, actual first-solid spray casts,3hit freezing, no automatic thaw, actual teammate-impact rescue with a brief protection window,4alternating-role rounds, all-frozen/timer team wins, physical pursuit/evasion/rescue, readable ice shells/cooldowns, solid stacked-container cover, pooled snow effects, original grungy PNG and captured preview. Native17rules and actual Windows36checks passed, including full4v4matches and real input-driven freeze/rescue.
+
+Root causes corrected before this build: the reused snow effect's Destroy stop action invalidated pooled replay references after rescue; every owned instance/child now uses None and safe per-child stopping. No vendor prefab/source changed. Container visual orientation/fit originally mismatched cover bounds; owned stacked visuals and exact collider bounds now agree. Volleyball's initial floor fixture accidentally overlapped a real opposing truck; only the fixture position changed to isolate genuine court contact. Neither scoring thresholds nor physics rules were weakened.
+
+Combined native EditMode188/188passed,0failed/skipped. Current Windows phases all passed on the exact managed hash above: Volleyball33/0, Freeze36/0, twelve-arena accumulating snow/actual NWH tire tracks36/0, menu347/0. Menu checks launch saved setups, inspect imported logos/previews, return/navigation and representative display layouts. Earlier eight/nine/ten-sport receipts remain distinct history, with unchanged earlier gameplay sources/scenes verified by twelve-preservation-result.json. Those old full-match suites were not all rerun on this DLL.
+
+Actual gameplay, replay and four-cab720p/1080p frames were captured and inspected. Software-injected controllers are not physical-device or human testing. No subjective listening, human balance approval or isolated CPU/GPU profiling is claimed. Freeze AI often produces runner wins/shared2–2results; difficulty/pacing needs human review. Severe-weather replay visibility and moving-platform historical track anchoring remain unverified.
+
+Canonical executable: Builds/TruckSports/TruckSports.exe, with its complete companion files. Runtime manifest 386files / 1,814,470,857bytes, JSON SHA256 17eef1af8141606ee42460b80bbe134d699b04030e4f476776130d5fea2465d6. Complete accepted ten-sport build preserved separately; this twelve-sport build is also copied to .sports-validation/Recovery/Expansion-Twelve-Sport-54-Scene-Verified. Git delivery receipt is written after the scoped commit/push verifies both authorized public branches.
+
+Preservation: 887protected files, 25host settings and 41original logos checked, zero changes. Private Taxi/navigation history and the private recovery branch are excluded. No force push.
+
+VENDOR ASSETS AUDITED: NWH vehicle/jump/contact/input APIs; PhysX; Vista beach/palm assets; ShipContainerPack; Weatherade Projectile/SnowHitFX and SnowHit audio; existing snowfield/crowd/venue assets; Heat/TMP/DOTween; Weather Maker; existing driving views, identities, horn and recorded review.
+VENDOR ASSETS USED: full NWH tractors/cabs and AddAssemblyVelocity; PhysX collisions/sphere casts; existing genuine sand/palms/containers; SnowHitFX/SnowHit recordings; shared posed spectators and FieldGoalCrowd; existing Heat/TMP/DOTween/weather/review foundations.
+RELEVANT ASSETS NOT USED: sample projectile instantiation/destruction does not provide persistent freeze/team/rescue rules or reusable pool lifetime. No installed volleyball/net gameplay solution found. Their mode semantics and missing sport geometry are owned code/content.
+CUSTOM SYSTEMS CREATED: VolleyRules/VolleyMatch physical rally coordination, FreezeRules/FreezeMatch team/freeze/rescue authority, owned authoring/contact/board adapters and explicit native/Windows evidence probes; original PNG artwork and provenance.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
