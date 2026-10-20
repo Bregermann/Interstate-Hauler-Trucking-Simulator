@@ -11,7 +11,7 @@ Implementation is delivered for the four authorized priorities. No known blockin
 - Audio/listening approval: DD-002, PK-006.
 - Physical human/controller/reconnect acceptance: DD-004, PK-005, MN-004.
 - Fresh individual current-gameplay comparison of the unchanged39 previews: MN-002.
-- Publication receipt: LD-003 (updated after actual push).
+- Build and both approved public branch pushes: LD-003 verified; publication receipt retained with the implementation hash.
 
 Completed objective work remains recorded below, separate from human acceptance. This sprint does not certify or reopen the archived collection backlog.
 
@@ -863,11 +863,11 @@ Each registered scene has an individual art/integration requirement. Variants re
 | Sport/System | Build and Git delivery |
 | Original Request | Deliver one combined Windows build and scoped commits/push, preserving unrelated work. |
 | Acceptance Criteria | Builds/TruckSports/TruckSports.exe plus companions includes finished sprint work; settings restored; reviewed source pushed normally; remaining sprint issues explicit. |
-| Status | PARTIAL |
-| Implementation Evidence | Canonical Builds/TruckSports/TruckSports.exe and all companions; SportsBuilder.Build explicit42Sports-only scenes, startupTruckSports; scoped public-lineage delivery preparation. |
-| Automated Verification | FinalWindowsbuild0errors/57warnings; intentional build-failure restoration and final host-settings restoration pass. Exact build accepted by4targeted player processes. Windows receipts and composed-framebuffer images: Documentation/TruckSports/PresentationEvidence/. Exact managed SHA256 e98b590107681386b1f0fe0e87dc196719cbf44ef146674c019a656558bb307c. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Canonical Builds/TruckSports/TruckSports.exe and companions; SportsBuilder.Build explicit42Sports-only scenes; source preservation dd3de2efd4ff312c63289886aed723f4b78d6e83; public implementation c67ad99c1f4b0dc45eef3edf35124726ac31e980; exact receipt Documentation/TruckSports/PresentationEvidence/publication.json. |
+| Automated Verification | Build0errors/57warnings; failure and final settings restoration pass;4exactWindowsprocessesexit0. Both approved public branches read back c67ad99c1f4b0dc45eef3edf35124726ac31e980 after atomic normal push, including129MBLFSobject. 301scopedfiles;912protectedvendor/settingsfilesunchanged; privateTaxiancestryexcluded. Documentation-only receipt follow-up does not require rebuilding runtime. |
 | Human Verification | No new human playtest, physical-device or listening acceptance claimed. |
-| Remaining Work | Scoped source preservation commit and safe public-lineage normal push to both approved branches are pending; no push success claimed yet. |
+| Remaining Work | No publication blocker. Final documentation receipt commit is recorded in delivered GIT-DELIVERY.txt. Retain the full executable companion directory; human/hardware/listening limits remain in their individual entries. |
 
 ## Requirement history
 
@@ -877,3 +877,5 @@ Each registered scene has an individual art/integration requirement. Variants re
 - 2026-10-20 human art-direction feedback: user likes the initial logos but requests a stronger PS1/PS2-era look. Preserve sport concepts; revise toward chunky asymmetric letterforms, simple painted/faceted shading, low-poly cartoon trucks and bold color planes with less modern gloss/detail. This supersedes the first art rendering direction for every LG requirement.
 
 - 2026-10-20: PK-006 added for tabletop dealer shake/giggle. PK-002 reopened on the user's actual black/white Windows report, reproduced and repaired by bounded planar-module scale/static-batching/material corrections. MN-001 page-focus regression found by visual inspection after reference checks; corrected and final Windows menu273/0 passed.
+
+- 2026-10-20 publication: reviewed301-file implementation c67ad99c1f4b0dc45eef3edf35124726ac31e980 pushed normally/atomically to main and codex/truck-sports-seven-events; both heads read back successfully. Private Taxi ancestry excluded; no vendor source files added or modified. Documentation-only receipt follow-up is separately identified in the canonical delivery file.

@@ -64,3 +64,7 @@ These are explicit acceptance limits, not invented passes. The historical full-c
 - **CUSTOM SYSTEMS CREATED:** Original bitmap logos and prompt records; Sports catalogue presentation components; additive logo/menu/restaurant/park authoring adapters; targeted probes and tests; permanent requirement ledger.
 - **VENDOR SOURCE MODIFIED:** None.
 - **DUPLICATE VENDOR FUNCTIONALITY CREATED:** None. Match rules remain with existing authorities; animation remains DOTween, vehicle physics NWH and production controls Heat/uGUI.
+
+## Publication
+
+Implementation commit `c67ad99c1f4b0dc45eef3edf35124726ac31e980` was pushed normally and atomically to both approved public branches (`main`, `codex/truck-sports-seven-events`) and read back successfully. Local preservation: `dd3de2efd4ff312c63289886aed723f4b78d6e83`. The301-file scope excludes unrelated changes, adds no vendor source, and excludes private Truck Taxi ancestry. All912protected vendor/settings hashes remain unchanged. See [publication receipt](PresentationEvidence/publication.json) and the canonical GIT-DELIVERY.txt for the documentation-only follow-up commit.
