@@ -837,7 +837,7 @@ Each registered scene has an individual art/integration requirement. Variants re
 | Acceptance Criteria | Historical records preserved; stable IDs and all nine required fields exist for this sprint; future requests update original entries. |
 | Status | VERIFIED COMPLETE |
 | Implementation Evidence | Permanent TRUCK_SPORTS_ACCEPTANCE_LEDGER.md, AGENTS.md workflow, dated7-document historical archive and5redirects; no historical requirement import. |
-| Automated Verification | 60unique permanent requirement IDs, all9required fields; archived original document text preserved after line-ending normalization. |
+| Automated Verification | 61unique permanent requirement IDs, all9required fields; archived original document text preserved after line-ending normalization. |
 | Human Verification | No new human playtest, physical-device or listening acceptance claimed. |
 | Remaining Work | Maintain permanent IDs on future changes; no current implementation gap. |
 
@@ -869,6 +869,20 @@ Each registered scene has an individual art/integration requirement. Variants re
 | Human Verification | No new human playtest, physical-device or listening acceptance claimed. |
 | Remaining Work | No publication blocker. Final documentation receipt commit is recorded in delivered GIT-DELIVERY.txt. Retain the full executable companion directory; human/hardware/listening limits remain in their individual entries. |
 
+### LD-004 — Git divergence and preservation
+
+| Field | Record |
+|---|---|
+| Requirement ID | LD-004 |
+| Sport/System | Git delivery and local workspace |
+| Original Request | Resolve the diverged Pull origin badge, get the completed work pushed and preserve everything properly. |
+| Acceptance Criteria | Main tracks the public main head with no ahead/behind divergence; Sports delivery is pushed normally; all old local commits and uncommitted files remain recoverable and working files are unchanged. Private/unrelated work is not accidentally published. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/GitPreservation.md; local recovery branch codex/local-preservation-2026-10-20 at f4675ce3d353b42157c942876412bb0731793409; exact local reconciliation receipt and raw-file archive retained in .sports-validation/Recovery/GitReconciliation-20261020T073002Z. |
+| Automated Verification | Local main aligned to verified public739f3914;0ahead/0behind. All32512tracked/untracked file sizes/timestamps unchanged;1101candidate raw files archived, archive hashes checked and working bytes unchanged. All original main history is an ancestor of the recovery snapshot; nonignored uncommitted work included. No force push or working-tree reset. |
+| Human Verification | User supplied the Pull origin ahead/behind screenshot and requested reconciliation. |
+| Remaining Work | No reconciliation blocker. Private/unrelated work remains locally recoverable and deliberately uncommitted on public main; it was not published to the public repository. The following documentation-only normal push is recorded in GIT-DELIVERY.txt. |
+
 ## Requirement history
 
 - 2026-10-20: User explicitly replaced the historical backlog process and prioritized this sprint. Existing completed features are not automatically reopened.
@@ -879,3 +893,5 @@ Each registered scene has an individual art/integration requirement. Variants re
 - 2026-10-20: PK-006 added for tabletop dealer shake/giggle. PK-002 reopened on the user's actual black/white Windows report, reproduced and repaired by bounded planar-module scale/static-batching/material corrections. MN-001 page-focus regression found by visual inspection after reference checks; corrected and final Windows menu273/0 passed.
 
 - 2026-10-20 publication: reviewed301-file implementation c67ad99c1f4b0dc45eef3edf35124726ac31e980 pushed normally/atomically to main and codex/truck-sports-seven-events; both heads read back successfully. Private Taxi ancestry excluded; no vendor source files added or modified. Documentation-only receipt follow-up is separately identified in the canonical delivery file.
+
+- 2026-10-20 LD-004: preserved the full original local main history and nonignored working changes on a local recovery branch, verified a1101-file raw archive and32512unchanged file timestamps/sizes, then aligned main without changing working files. Private Taxi work is preserved locally, not sent to the public repository.
