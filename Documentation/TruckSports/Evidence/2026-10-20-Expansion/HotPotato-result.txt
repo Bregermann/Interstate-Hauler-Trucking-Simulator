@@ -1,0 +1,39 @@
+PASS authored eight-full-NWH-truck scene and existing Core-Collapse breakables load
+PASS complete autonomous eight-truck match starts through real setup
+PASS pause freezes bomb clock and vehicle physics
+CONTACT_PASS clock=9.00 count=1 carrier=3
+CONTACT_PASS clock=17.50 count=2 carrier=4
+CONTACT_PASS clock=20.12 count=3 carrier=5
+CONTACT_PASS clock=52.84 count=4 carrier=0
+CONTACT_PASS clock=53.88 count=5 carrier=4
+PASS actual full match resolves seven bomb eliminations and one survivor
+PASS AI genuinely drives, flees and passes through physical truck contact; passes=5 traveled=105.1
+PASS recorded match-end replay runs with frozen live physics
+PASS recorded replay hides live debris instead of drawing duplicate fragments
+REPLAY camera=(35.21, 14.09, -83.07) forward=(-0.54, -0.38, 0.76) ghost=(18.21, 0.09, -59.07)
+PASS skip preserves authoritative scores and returns to results
+PASS two-human rematch restores full tractors, props, bomb and scores
+PASS controlled gentle 0.65m/s actual tractor contact transfers without a ram threshold
+PASS continuous resting compound contact does not ping-pong after cooldown
+PASS injected local keyboard input belongs only to its assigned participant
+PASS 1 software-controller humans plus AI start through setup
+PASS 1 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 1-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 2 software-controller humans plus AI start through setup
+PASS 2 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 2-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 3 software-controller humans plus AI start through setup
+PASS 3 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 3-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 4 software-controller humans plus AI start through setup
+PASS 4 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 4-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS unsupported fifth human is rejected with a clear local-player limit
+PASS AI-only spectator rematch starts
+PASS AI-only with AI cameras OFF has a live broadcast instead of a blank screen
+PASS AI-only with AI cameras ON has four correctly allocated views
+CHECKS=32 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; genuine NWH/PhysX, controlled contact fixture and software input; no human/device/listening claim.

@@ -17,6 +17,7 @@ namespace LWS.TruckSports {
  public abstract string Header{get;}public abstract string Status{get;}public abstract string Standings{get;}public abstract string Results{get;}public virtual string SourcePolicy=>"Whole controllers have one owner; left/right sticks can share one pad.\nChoose AI per slot or ALL AI to spectate. Action bindings are shown with each source.";public virtual string OptionLabel=>"OPTIONS";public virtual bool MultiViewHUD=>false;public virtual bool ReplayControls=>false;public virtual string ViewText(int index)=>Header;public virtual void ExtraAction(string key){}
  public virtual bool SupportsSplitAIViews=>false;public virtual bool AISplitViewsApplicable=>SupportsSplitAIViews;public virtual bool BroadcastStandingsVisible=>true;public virtual bool BroadcastHeaderVisible=>true;public virtual bool BroadcastStatusVisible=>true;
  public virtual bool TryReadScoreCard(int card,out string value,out string detail){value=detail=null;return false;}
+ public virtual int CompactScoreColumns=>0;
  public virtual int ScoreCardCount=>setup.count;public virtual string ScoreCardLabel(int card)=>setup.players[card].name;public virtual int ScoreCardSource(int card)=>card;public virtual Color ScoreCardColor(int card)=>setup.players[ScoreCardSource(card)].color;public virtual float ParticipantProgress(int slot)=>-1;public virtual bool ParticipantLocked(int slot)=>false;
  // Read-only presentation values. Each race retains its existing countdown,
  // release, input gate and scoring clock as the sole simulation authority.

@@ -29,6 +29,9 @@ namespace LWS.TruckSports.Editor
             Add(front,"trailerplug","TRAILER PLUG","TRUCK TRAILER PLUG","Swing the real bungee. Drop the trailer. Seal the quarry sinkhole.","TruckTrailerPlug");
             Add(front,"farefight","FARE FIGHT","TRUCK FARE FIGHT","One passenger. Four taxis. Bump to steal. First to five fares.","TruckFareFight");
             Add(front,"snake","TRUCK SNAKE","TRUCK SNAKE","Keep rolling. Collect trailers. Jump your growing road train.","TruckSnake");
+            Add(front,"redlight","RED LIGHT GREEN LIGHT","TRUCK RED LIGHT, GREEN LIGHT","Twelve trucks. One giant game master. Hear the laugh, stop before red.","TruckRedLightGreenLight");
+            Add(front,"hotpotato","HOT POTATO","TRUCK HOT POTATO","Bump to pass the ticking bomb. Eight trucks. One survivor.","TruckHotPotato");
+            Add(front,"balloon","BALLOON BATTLE","TRUCK BALLOON BATTLE","Three giant balloons. Retractable spikes. Real-contact party combat.","TruckBalloonBattle");
             int count = front.catalogue.cards.Length;
             front.pages[0].transform.Find("Collection").GetComponent<TMP_Text>().text = count + " PLAYABLE TRUCK SPORTS. ONE COLLECTION.\nLocal humans, shared controllers and autonomous AI.";
             front.pages[1].transform.Find("Subtitle").GetComponent<TMP_Text>().text = count + " playable entries · Offline local play · Experimental Wallball in Scrap Heap";
