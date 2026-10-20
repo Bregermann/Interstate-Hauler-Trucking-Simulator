@@ -45,8 +45,20 @@ The installed-model filename audit found no mole/gopher/rodent character prefab.
 
 Thirty-six fixed pooled hole actors each retain their three authored visual variants, with only the selected exposed variant animated/rendered. Runtime does not instantiate a new mole or particle system per hit. A genuine front-bumper trigger against an exposed capsule target, with measured tractor speed, reaches one authoritative one-hit-per-generation rule. Decoys deduct points and give NWH's complete assembly a bounded physical launch; AI cannot call the scoring authority directly. Twelve native rule tests and33actual native gameplay checks passed before Windows integration; subsequent Windows results are recorded separately.
 
+## King of the Hill
+
+Audited/reused: full NWH tractor/cab/steering and public force/contact APIs; EasyRoads baked bridge meshes; existing LWS road graph/planner and Fare Fight route/driver adapter; Vista grass and Base Sky-owned Toon Gas Station rocks/Mega City trees; complete original posed spectator mesh/material arrays; Heat/TMP/DOTween, Cinemachine, Weather Maker/Weatherade and recorded review. Five sport-owned collision-matched plateau meshes supply the specific territory-control layout; they do not replace a terrain generator or navigation framework.
+
+The existing FareFightRoute district API forwards unchanged to a graph overload. A direct local-target operation preserves its measured reversing recovery during close combat instead of clearing it every physics step. The district/graph route-equivalence test passed. AI physical support checks brake before cliffs; visible guardrails protect the bridge spans while the combat plateaus retain exposed edges. No custom vehicle solver, automatic control points or teleport-to-objective mechanic is used.
+
+## Shared snow registration and completed earlier presentation
+
+The explicit five-sport driving-surface upgrade adds the existing TruckTaxiSurface metadata consumed by Weatherade. It does not change Taxi source, introduce a snow renderer or overwrite original scenes. Balloon's visible25mm party deck now has a matching MeshCollider so real tire contact and snow depth use the visible surface. Native actual NWH wheel contacts produced snow-track stamps in all five arenas; the Windows receipt separately records target-platform validation.
+
+Red Light's additional effects reuse the NWH ExhaustSmoke prefab, existing Derby alpha-smoke material, ordinary pooled particle systems and Cinemachine's ImpulseSource/IndependentImpulseListener. No bespoke shake implementation was added. The installed-model audit found no speaker prefab, so the sport-owned modeled PA towers are missing venue content, not a replacement framework. Digital venue standings read the existing match authority. Hot Potato's late-fuse steering/pursuit/evasion tuning feeds ordinary bounded NWH commands.
+
 ## Remaining sport-specific audits
 
-The other14sports retain MISSING requirements until their rules, environments and integration are implemented and tested. The inspected shared systems are reuse candidates, not evidence that those games already work. Inspect each original GAME section and appropriate owned model/terrain/animation assets immediately before that implementation.
+The other13sports retain MISSING requirements until their rules, environments and integration are implemented and tested. The inspected shared systems are reuse candidates, not evidence that those games already work. Inspect each original GAME section and appropriate owned model/terrain/animation assets immediately before that implementation.
 
 VENDOR SOURCE MODIFIED: None. DUPLICATE VENDOR FUNCTIONALITY CREATED: None intended; custom code is sport rules/coordination and vendor adapters.

@@ -55,7 +55,7 @@ namespace LWS.TruckRedLightGreenLight
             }
             bool racing = false;
             for (int i = 0; i < Count; i++) racing |= outcomes[i] == RedLightOutcome.Racing;
-            if (!racing || Elapsed >= 183 || firstFinish >= 0 && Elapsed - firstFinish >= 10)
+            if (!racing || firstFinish >= 0 && Elapsed - firstFinish >= 10)
                 Phase = RedLightPhase.Complete;
         }
 

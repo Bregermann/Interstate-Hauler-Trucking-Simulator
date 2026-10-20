@@ -48,6 +48,7 @@ namespace LWS.TruckRedLightGreenLight.Editor
                 var title = page.transform.Find("Title")?.GetComponent<TMP_Text>();
                 if (title != null) { title.rectTransform.anchoredPosition = new Vector2(140, title.rectTransform.anchoredPosition.y); title.rectTransform.sizeDelta = new Vector2(1000, title.rectTransform.sizeDelta.y); }
             }
+            RedLightPolishAuthoring.Install(m);
             SportsBroadcastAuthoring.ApplyScene();
             EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
         }

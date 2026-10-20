@@ -11,7 +11,10 @@ namespace LWS.TruckFareFight {
   public int Revision{get;private set;}public int Searches{get;private set;}public int Cursor{get;private set;}
   public Vector3 Goal{get;private set;}public float Distance{get;private set;}
   float nextSearch,stalled,reverseUntil,turnSign=1;Vector3 progressPosition;bool initialized;
-  public bool Update(FareFightDistrict district,Vector3 position,Vector3 goal,int revision,float now,bool force=false,Vector3 heading=default){
+  public bool Update(FareFightDistrict district,Vector3 position,Vector3 goal,int revision,float now,bool force=false,Vector3 heading=default)=>Update(district.graph,position,goal,revision,now,force,heading);
+  // Reuse the existing planner/driving adapter in authored Sports road graphs.
+  // The original Fare Fight district API forwards without changing behavior.
+  public bool Update(LwsRoadGraph graph,Vector3 position,Vector3 goal,int revision,float now,bool force=false,Vector3 heading=default){
    bool changed=revision!=Revision||!initialized;
    if(!force&&!changed&&now<nextSearch)return false;
    // Moving carrier routes update at most once per second, static goals every
@@ -20,14 +23,18 @@ namespace LWS.TruckFareFight {
    if(!changed&&!force&&Vector3.Distance(Goal,goal)<12&&points.Count>1&&OnRoute(position,18))return false;
    Goal=goal;Revision=revision;Searches++;initialized=true;
    string origin=null;float closest=180;heading=Vector3.ProjectOnPlane(heading,Vector3.up).normalized;
-   if(heading.sqrMagnitude>.5f)foreach(var node in district.graph.nodes){var delta=Vector3.ProjectOnPlane(node.position-position,Vector3.up);float along=Vector3.Dot(delta,heading);float lateral=Mathf.Abs(Vector3.Dot(delta,Vector3.Cross(Vector3.up,heading)));if(along>3&&along<closest&&lateral<9){closest=along;origin=node.nodeId;}}
-   var result=planner.PlanRoute(new LwsRouteRequest{originNodeId=origin,useOriginWorldPosition=origin==null,originWorldPosition=position,useDestinationWorldPosition=true,destinationWorldPosition=goal,truckRouteRequired=true},district.graph);
+   if(heading.sqrMagnitude>.5f)foreach(var node in graph.nodes){var delta=Vector3.ProjectOnPlane(node.position-position,Vector3.up);float along=Vector3.Dot(delta,heading);float lateral=Mathf.Abs(Vector3.Dot(delta,Vector3.Cross(Vector3.up,heading)));if(along>3&&along<closest&&lateral<9){closest=along;origin=node.nodeId;}}
+   var result=planner.PlanRoute(new LwsRouteRequest{originNodeId=origin,useOriginWorldPosition=origin==null,originWorldPosition=position,useDestinationWorldPosition=true,destinationWorldPosition=goal,truckRouteRequired=true},graph);
    points.Clear();Cursor=0;
-   if(!result.succeeded)result=planner.PlanRoute(new LwsRouteRequest{useOriginWorldPosition=true,originWorldPosition=position,useDestinationWorldPosition=true,destinationWorldPosition=goal,truckRouteRequired=true},district.graph);
+   if(!result.succeeded)result=planner.PlanRoute(new LwsRouteRequest{useOriginWorldPosition=true,originWorldPosition=position,useDestinationWorldPosition=true,destinationWorldPosition=goal,truckRouteRequired=true},graph);
    if(!result.succeeded)return true;
    points.AddRange(result.waypoints);if(points.Count==0||Vector3.Distance(points[points.Count-1],goal)>1)points.Add(goal);
    Distance=result.distanceMeters;return true;
   }
+  // A nearby physical-combat target changes frequently. Retargeting must keep
+  // the existing driver's measured stall/reverse recovery instead of resetting
+  // it every physics step. Road searches remain in Update above.
+  public void DirectGoal(Vector3 position,Vector3 goal){points.Clear();points.Add(goal);Cursor=0;Goal=goal;Distance=Vector3.Distance(position,goal);}
   bool OnRoute(Vector3 p,float radius){for(int i=Cursor;i<points.Count;i++)if((points[i]-p).sqrMagnitude<radius*radius)return true;return false;}
   public Vector2 Drive(Rigidbody body,Transform root,int skill,float dt,float grip,Rigidbody contestedCarrier=null){
    if(points.Count==0)return new Vector2(0,-1);

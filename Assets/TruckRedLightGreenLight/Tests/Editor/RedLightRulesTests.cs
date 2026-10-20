@@ -50,5 +50,7 @@ namespace LWS.TruckSports.Tests
         }
         [Test] public void RematchRestoresAllStatesAndWarningClock()
         { Red(); Call("Eliminate", 0, "TEST"); Call("Reset", 12, 19); Assert.That(Phase, Is.EqualTo("Countdown")); Assert.That(Property<int>("Winner"), Is.EqualTo(-1)); Assert.That(Property<int>("Laughs"), Is.Zero); Assert.That(Observe(.01f, 0, 1), Is.False); }
+        [Test] public void SlowLegalRaceDoesNotExpireAtAnUnrequestedTimeLimit()
+        { Call("Advance", 200f); Assert.That(Phase, Is.Not.EqualTo("Complete")); Assert.That(Property<int>("Winner"), Is.EqualTo(-1)); Assert.That((bool)Call("Finish", 0, 197f), Is.True); Call("Advance", 10.1f); Assert.That(Phase, Is.EqualTo("Complete")); Assert.That(Property<int>("Winner"), Is.Zero); }
     }
 }

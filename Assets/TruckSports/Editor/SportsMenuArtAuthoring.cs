@@ -115,7 +115,7 @@ namespace LWS.TruckSports.Editor
                 {"skee","TruckSkeeBall"},{"logrolling","TruckLogRolling"},{"dodgeball","TruckTrampolineDodgeball"},{"derby","TruckDemolitionDerby"},
                 {"pedestrianplowing","TruckPedestrianPlowing"},{"pedestrianplowingcab","TruckPedestrianPlowingFirstPerson"},{"keepawayfp","TruckKeepawayFirstPerson"},
                 {"airhockey","TruckAirHockey"},{"danceoff","TruckDanceOff"},{"skytow","TruckSkyTow"},{"trailerplug","TruckTrailerPlug"},
-                {"fieldgoal","TruckFieldGoal"},{"beerpong","TruckBeerPong"},{"kickball","TruckKickball"},{"limbo","TruckLimbo"},{"farefight","TruckFareFight"},{"whackamole","TruckWhackAMole"},{"balloon","TruckBalloonBattle"},{"hotpotato","TruckHotPotato"},{"redlight","TruckRedLightGreenLight"},{"snake","TruckSnake"},{"practice","TruckBilliards"}
+                {"fieldgoal","TruckFieldGoal"},{"beerpong","TruckBeerPong"},{"kickball","TruckKickball"},{"limbo","TruckLimbo"},{"farefight","TruckFareFight"},{"kingofthehill","TruckKingOfTheHill"},{"whackamole","TruckWhackAMole"},{"balloon","TruckBalloonBattle"},{"hotpotato","TruckHotPotato"},{"redlight","TruckRedLightGreenLight"},{"snake","TruckSnake"},{"practice","TruckBilliards"}
             };
             return map.TryGetValue(key, out string scene) ? scene : "Truck" + char.ToUpperInvariant(key[0]) + key.Substring(1);
         }

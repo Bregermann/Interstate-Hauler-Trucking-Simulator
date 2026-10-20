@@ -22,6 +22,7 @@ namespace LWS.TruckHotPotato
         public TMP_Text bombClock;
         public ParticleSystem fuseSparks;
         public float arenaRadius = 64, carrierPowerBoost = 1.15f;
+        [Min(1)] public float urgentFuseSeconds = 6;
         public HotPotatoRules rules = new HotPotatoRules();
         public LWS.TruckFieldGoal.FieldGoalCrowd crowd;
         public LWS.TruckPedestrianPlowing.PlowBreakable[] breakables;
@@ -132,18 +133,21 @@ namespace LWS.TruckHotPotato
         Vector2 Bot(int slot, float dt)
         {
             var t = trucks[slot]; var position = t.body.position; var carrier = trucks[rules.Carrier]; float skill = (int)setup.players[slot].difficulty;
+            float urgency = 1 - Mathf.Clamp01(rules.Fuse / Mathf.Max(1, urgentFuseSeconds));
             Vector3 goal;
             if (slot == rules.Carrier)
             {
                 int target = -1; float best = float.MaxValue;
                 for (int i = 0; i < setup.count; i++) if (i != slot && rules.alive[i])
                 { float distance = (trucks[i].body.position - position).sqrMagnitude; if (distance < best) { target = i; best = distance; } }
-                goal = trucks[target].body.position + trucks[target].body.linearVelocity * (.15f + skill * .12f);
+                // As the fuse expires, commit to a near-term physical bump
+                // rather than continuing a long speculative intercept.
+                goal = trucks[target].body.position + trucks[target].body.linearVelocity * Mathf.Lerp(.15f + skill * .12f, .08f, urgency);
             }
             else
             {
                 Vector3 away = Vector3.ProjectOnPlane(position - carrier.body.position, Vector3.up).normalized;
-                goal = position + away * 22 + Vector3.Cross(Vector3.up, away) * (slot % 2 == 0 ? 12 : -12);
+                goal = position + away * Mathf.Lerp(22, 34, urgency) + Vector3.Cross(Vector3.up, away) * (slot % 2 == 0 ? 12 : -12);
             }
             goal.y = position.y;
             if (Vector3.ProjectOnPlane(position, Vector3.up).magnitude > arenaRadius - 9) goal = -Vector3.ProjectOnPlane(position, Vector3.up) * .5f;
@@ -151,8 +155,8 @@ namespace LWS.TruckHotPotato
             if (stuck[slot] > 1.7f && reverseUntil[slot] <= rules.Clock) { reverseUntil[slot] = rules.Clock + 2; stuck[slot] = 0; }
             bool reverse = rules.Clock < reverseUntil[slot]; Vector3 heading = reverse ? -t.transform.forward : t.transform.forward;
             float angle = Vector3.SignedAngle(Vector3.ProjectOnPlane(heading, Vector3.up), goal - position, Vector3.up);
-            float steer = Mathf.Clamp(angle / (40 - skill * 5), -1, 1) * (reverse ? -1 : 1);
-            float throttle = reverse ? -.85f : Mathf.Abs(angle) > 75 ? .48f : .82f + skill * .09f;
+            float steer = Mathf.Clamp(angle / (40 - skill * 5 - urgency * 5), -1, 1) * (reverse ? -1 : 1);
+            float throttle = reverse ? -.85f : Mathf.Abs(angle) > 75 ? .48f : Mathf.Clamp01(.82f + skill * .09f + urgency * .16f);
             if (Vector3.Dot(t.transform.up, Vector3.up) < .25f) { stuck[slot] += dt; if (stuck[slot] > 2.5f) Recover(slot); }
             return new Vector2(steer, throttle);
         }

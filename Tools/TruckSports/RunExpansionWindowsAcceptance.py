@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 LOG = ROOT / "Logs/TruckSports/EighteenSports"
-MODES = {"hot-potato": "-tsHotPotato", "red-light": "-tsRedLight", "balloon": "-tsBalloon", "whack": "-tsWhack", "menu": "-tsRetroMenu"}
+MODES = {"hot-potato": "-tsHotPotato", "red-light": "-tsRedLight", "balloon": "-tsBalloon", "whack": "-tsWhack", "hill": "-tsHill", "snow": "-tsExpansionSnow", "menu": "-tsRetroMenu"}
 
 
 def main():
@@ -24,6 +24,7 @@ def main():
             ("LWS.TruckHotPotato.Editor.HotPotatoAuthoring.Upgrade", "hot-potato-delivery-authoring.log"),
             ("LWS.TruckRedLightGreenLight.Editor.RedLightAuthoring.Upgrade", "red-light-delivery-authoring.log"),
             ("LWS.TruckBalloonBattle.Editor.BalloonAuthoring.Upgrade", "balloon-delivery-authoring.log"),
+            ("LWS.TruckKingOfTheHill.Editor.HillIntegration.Menu", "hill-menu-integration.log"),
             ("LWS.TruckWhackAMole.Editor.WhackIntegration.Menu", "whack-menu-integration.log"),
             ("LWS.TruckBalloonBattle.Editor.BalloonIntegration.Menu", "balloon-menu-integration.log"),
             ("LWS.TruckSports.Editor.SportsBuilder.BuildFocused", "windows-build-verified.log"),

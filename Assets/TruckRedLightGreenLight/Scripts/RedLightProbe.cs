@@ -57,6 +57,8 @@ namespace LWS.TruckRedLightGreenLight
             var m = FindAnyObjectByType<RedLightMatch>();
             Check(m != null && m.trucks.Length == 12 && m.fragments.Length == 12, "saved twelve-full-NWH-truck scene and reusable fragment rigs exist");
             if (m == null) { Complete(); yield break; }
+            var venue = m.GetComponent<RedLightPresentation>();
+            Check(venue != null && venue.boards.Length == 2 && venue.listeners.Length == 5 && Array.TrueForAll(m.explosions, p => p.GetComponentsInChildren<ParticleSystem>(true).Length >= 3), "saved digital standings, PA towers, Cinemachine camera impulses and pooled smoke/sparks integrate with actual fireballs");
             SportsCameraOptions.Set(false); m.drivingViews.Select(0);
             bool humanOnly = Array.IndexOf(Environment.GetCommandLineArgs(), "-tsRedLightHuman") >= 0;
             if (!humanOnly)
@@ -134,6 +136,10 @@ namespace LWS.TruckRedLightGreenLight
             report.AppendLine("HUMAN phase=" + m.rules.Phase + " elapsed=" + m.rules.Elapsed + " position=" + m.trucks[0].body.position + " command=" + m.commands[0] + " released=" + m.setup.players[0].released + " paused=" + m.Paused + " outcome=" + m.rules.outcomes[0] + " reason=" + m.rules.reasons[0]);
             InputSystem.QueueStateEvent(keyboard, new KeyboardState());
             Check(m.rules.outcomes[0] == RedLightOutcome.Eliminated && m.fragments[0].Bursting && m.Explosions > 0, "injected human deliberately driving on red triggers an actual one-time mesh-shattering explosion");
+            yield return null;
+            bool extraParticles = Array.Exists(m.explosions[0].GetComponentsInChildren<ParticleSystem>(true), p => p != m.explosions[0] && p.isPlaying && p.particleCount > 0);
+            bool shake = Cinemachine.CinemachineImpulseManager.Instance.GetImpulseAt(m.broadcast.view.transform.position, false, 8, out var shakePosition, out var shakeRotation);
+            Check(venue.boards[0].text.Contains("ELIMINATED") && extraParticles && shake, "actual violation updates live statistics, emits pooled smoke/sparks and generates a real Cinemachine shake signal");
             yield return new WaitForSeconds(.22f);
             yield return null;
             var blastPoint = m.broadcast.view.WorldToViewportPoint(m.trucks[0].body.worldCenterOfMass);
