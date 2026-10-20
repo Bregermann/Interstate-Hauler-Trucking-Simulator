@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="18" result="Failed(Child)" total="18" passed="17" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:35:02Z" duration="4.1036036">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2672" result="Failed" site="Child" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:35:02Z" duration="4.103604" total="18" passed="17" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2041" name="LWS.TruckSports.FloorIsLava.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.FloorIsLava.EditModeTests.dll" runstate="Runnable" testcasecount="18" result="Failed" site="Child" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:35:02Z" duration="4.081317" total="18" passed="17" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="27248" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2042" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="18" result="Failed" site="Child" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:35:02Z" duration="4.080431" total="18" passed="17" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2043" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="18" result="Failed" site="Child" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:35:02Z" duration="4.079950" total="18" passed="17" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2044" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="18" result="Failed" site="Child" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:35:02Z" duration="4.079427" total="18" passed="17" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2021" name="LavaRulesTests" fullname="LWS.TruckSports.Tests.LavaRulesTests" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.049282" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2022" name="CountdownCannotActivateOrAgePlatforms" fullname="LWS.TruckSports.Tests.LavaRulesTests.CountdownCannotActivateOrAgePlatforms" methodname="CountdownCannotActivateOrAgePlatforms" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1783316350" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.019555" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2026" name="FallingPlatformsCannotReactivateOrAwardRepeatedCollapses" fullname="LWS.TruckSports.Tests.LavaRulesTests.FallingPlatformsCannotReactivateOrAwardRepeatedCollapses" methodname="FallingPlatformsCannotReactivateOrAwardRepeatedCollapses" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1622987781" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000571" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2024" name="GenuineTouchStartsOneFiniteWarning" fullname="LWS.TruckSports.Tests.LavaRulesTests.GenuineTouchStartsOneFiniteWarning" methodname="GenuineTouchStartsOneFiniteWarning" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="6814885" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000859" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2035" name="LastLivingTruckRanksAboveFinalEliminationsInSameSample" fullname="LWS.TruckSports.Tests.LavaRulesTests.LastLivingTruckRanksAboveFinalEliminationsInSameSample" methodname="LastLivingTruckRanksAboveFinalEliminationsInSameSample" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1928389198" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000517" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2030" name="OldContactDoesNotCreditALaterUnrelatedFall" fullname="LWS.TruckSports.Tests.LavaRulesTests.OldContactDoesNotCreditALaterUnrelatedFall" methodname="OldContactDoesNotCreditALaterUnrelatedFall" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="2048850151" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.002496" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2029" name="ProximityOrGentleContactCannotClaimAnElimination" fullname="LWS.TruckSports.Tests.LavaRulesTests.ProximityOrGentleContactCannotClaimAnElimination" methodname="ProximityOrGentleContactCannotClaimAnElimination" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1695030033" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000394" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2036" name="RematchRestoresFullFiniteArenaAndScores" fullname="LWS.TruckSports.Tests.LavaRulesTests.RematchRestoresFullFiniteArenaAndScores" methodname="RematchRestoresFullFiniteArenaAndScores" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="884485684" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.001058" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2025" name="RepeatedTouchCannotResetCollapseTimer" fullname="LWS.TruckSports.Tests.LavaRulesTests.RepeatedTouchCannotResetCollapseTimer" methodname="RepeatedTouchCannotResetCollapseTimer" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="327680095" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000298" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2032" name="SimultaneousFinalLavaContactsProduceSharedPlacing" fullname="LWS.TruckSports.Tests.LavaRulesTests.SimultaneousFinalLavaContactsProduceSharedPlacing" methodname="SimultaneousFinalLavaContactsProduceSharedPlacing" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="987661185" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000755" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2031" name="SoleSurvivorGetsOneLockedVictoryBonus" fullname="LWS.TruckSports.Tests.LavaRulesTests.SoleSurvivorGetsOneLockedVictoryBonus" methodname="SoleSurvivorGetsOneLockedVictoryBonus" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="419955218" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000302" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2034" name="SoloPracticeWaitsForItsActualLavaLoss" fullname="LWS.TruckSports.Tests.LavaRulesTests.SoloPracticeWaitsForItsActualLavaLoss" methodname="SoloPracticeWaitsForItsActualLavaLoss" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1558972248" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000240" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2033" name="SurvivalOrderIsNotOverriddenBySmallKnockoffBonuses" fullname="LWS.TruckSports.Tests.LavaRulesTests.SurvivalOrderIsNotOverriddenBySmallKnockoffBonuses" methodname="SurvivalOrderIsNotOverriddenBySmallKnockoffBonuses" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="432506818" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.002854" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2027" name="SurvivalPointsRequireActualElapsedLiveTime" fullname="LWS.TruckSports.Tests.LavaRulesTests.SurvivalPointsRequireActualElapsedLiveTime" methodname="SurvivalPointsRequireActualElapsedLiveTime" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1027993422" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000552" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2023" name="UntouchedPlatformsNeverCollapseAutomatically" fullname="LWS.TruckSports.Tests.LavaRulesTests.UntouchedPlatformsNeverCollapseAutomatically" methodname="UntouchedPlatformsNeverCollapseAutomatically" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="435045248" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000259" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2028" name="ValidRecentRamCanCreditOneActualLavaLoss" fullname="LWS.TruckSports.Tests.LavaRulesTests.ValidRecentRamCanCreditOneActualLavaLoss" methodname="ValidRecentRamCanCreditOneActualLavaLoss" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1480410946" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:34:58Z" duration="0.000271" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2037" name="LavaSceneTests" fullname="LWS.TruckSports.Tests.LavaSceneTests" classname="LWS.TruckSports.Tests.LavaSceneTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:35:02Z" duration="4.028695" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2040" name="AuthoredJumpEdgesJoinAdjacentReachableSlabsOnly" fullname="LWS.TruckSports.Tests.LavaSceneTests.AuthoredJumpEdgesJoinAdjacentReachableSlabsOnly" methodname="AuthoredJumpEdgesJoinAdjacentReachableSlabsOnly" classname="LWS.TruckSports.Tests.LavaSceneTests" runstate="Runnable" seed="1094517136" result="Passed" start-time="2026-10-20 18:34:58Z" end-time="2026-10-20 18:35:00Z" duration="2.071147" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2038" name="EveryFiniteSlabHasMatchingTopCollisionAndWeatheradeMetadata" fullname="LWS.TruckSports.Tests.LavaSceneTests.EveryFiniteSlabHasMatchingTopCollisionAndWeatheradeMetadata" methodname="EveryFiniteSlabHasMatchingTopCollisionAndWeatheradeMetadata" classname="LWS.TruckSports.Tests.LavaSceneTests" runstate="Runnable" seed="2043794660" result="Passed" start-time="2026-10-20 18:35:00Z" end-time="2026-10-20 18:35:01Z" duration="1.037875" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2039" name="SnowAndLavaUseTheExistingHdrGradeOnEveryGameplayCamera" fullname="LWS.TruckSports.Tests.LavaSceneTests.SnowAndLavaUseTheExistingHdrGradeOnEveryGameplayCamera" methodname="SnowAndLavaUseTheExistingHdrGradeOnEveryGameplayCamera" classname="LWS.TruckSports.Tests.LavaSceneTests" runstate="Runnable" seed="2112911850" result="Failed" start-time="2026-10-20 18:35:01Z" end-time="2026-10-20 18:35:02Z" duration="0.917681" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  The authored HDR grade cannot run without a URP camera configuration.
+  Expected: not null
+  But was:  null
+]]></message>
+                  <stack-trace><![CDATA[at LWS.TruckSports.Tests.LavaSceneTests.SnowAndLavaUseTheExistingHdrGradeOnEveryGameplayCamera () [0x0006c] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckFloorIsLava\Tests\Editor\LavaSceneTests.cs:42
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

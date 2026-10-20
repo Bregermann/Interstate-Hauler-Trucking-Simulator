@@ -30,7 +30,7 @@ Its AI investigation found per-physics-step local retargeting cleared measured s
 
 **Seesaw:** four full NWH trucks on a genuine two-axis ConfigurableJoint deck above the reused quarry. Existing NWH suspension/friction applies the real vehicle load to the board. No artificial tilt authority exists. One/three/five heats, survival/recovery/knockoff/sole-survivor scoring, actual falls and quarry-impact fragments, shared placings, complete rematches and recorded board/debris replay. The venue reuses quarry terrain, Vista rocks, warehouse/container assets, lattice cranes and448 shared posed spectators; sport-owned hazard edging, rivets, pivot and open gantry complete the deck. Final decorative bracing supports the spectator balconies. Source: `Assets/TruckSeesaw/`.
 
-Six playable expansion sports are integrated in48 saved build scenes (47 sport scenes/variants including experimental Wallball). Twelve new sports remain unfinished. Floor Is Lava is the next local implementation slice; no unfinished menu entry is installed.
+Nine playable expansion sports are integrated in51saved build scenes. Nine requested additions remain unfinished. Magnet Mayhem is the current local implementation slice; no unfinished menu entry is installed. See EighteenSportsNineSportDelivery.md for the latest exact build/evidence; earlier measurements below are retained history.
 
 ## Verification actually executed so far
 
@@ -79,3 +79,14 @@ Explicit normal snow checks found unnamed competition floors missing existing We
 The published five-sport visual bridge rails lacked colliders because the shared Box authoring helper removes a Collider when no PhysicsMaterial is supplied. The explicit scene migration now adds16 matching solid BoxColliders; native bounds/collider tests and actual Windows Hill gameplay passed.
 
 A further AI investigation found the navigation planner's default35m junction connector could connect nearby but physically separate bridge approaches across open air. The Hill-only route adapter now supplies0.5m connector tolerance and nearest physical approach. The original Fare Fight parameterless API keeps its existing tuning. All20 cross-plateau route combinations and physical waypoint proximity passed without editing the private LWS planner or vendor source. The final physical default60-second-control AI match finished; human pacing is not certified.
+
+
+## Nine-sport milestone — latest measured status
+
+Floor Is Lava:25finite real slabs, first-contact warning/collapse, bounded jump and ram combat, real lava destruction, survivor/knockoff ranking, replay/rematch; native18/18 and Windows37/0. Reset restores physics and interpolated pose. Actual gameplay cameras enable existing HDR grading; native forced Blizzard37/0 restores snow surface detail.
+
+Tetherball: actual two-truck striking, bounded ball joint and visible winding cable; signed real travel winds/unwinds,720degrees wins round, best3/5, real AI, cab/shared views, reset and recorded cable replay. Native14/14; Windows19/0.
+
+Jousting: physical adjustable lances/shields, normal-impact1/2points and observed knockdown upgrade3,3/5passes, true AI aiming/driving, Core Collapse splinters, full input/aim transitions, reset/review. Native15/15; Windows21/0. Prestarting NWH engine during countdown fixed sluggish return from aim; measured human fixture moves approximately5m over1.5s after fix.
+
+Final native combined135/135. Windows final targeted432checks/0errors (Lava37,Tether19,Joust21,snow27,menu328), exact current managed hash in nine-sport delivery. Preceding complete eight-sport phase609/0 retained. No physical-device/listening/human gameplay claims. Magnet Mayhem source is under native compilation/scene/AI validation and is not included in the nine-sport milestone.

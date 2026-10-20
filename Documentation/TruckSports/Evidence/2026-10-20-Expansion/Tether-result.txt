@@ -1,0 +1,30 @@
+PASS saved stadium has two NWH tractors, unit-scale physical ball and64pooled render-only rope segments
+PASS actual mixed-difficulty AI best-of-three match starts
+PASS real trucks settle upright and ball/rope/scoring remain held during countdown
+ACTUAL_TETHER round=0 t=0.0 net=0.0 contacts=0 ball=(22.91, 4.00, 0.00) rope=27.94
+PASS pause freezes actual ball, winding and match clock
+ACTUAL_TETHER round=0 t=15.0 net=144.4 contacts=6 ball=(-11.81, 3.00, 8.41) rope=25.93
+ACTUAL_TETHER round=0 t=30.0 net=383.9 contacts=8 ball=(13.59, 3.00, 6.23) rope=22.58
+ACTUAL_TETHER round=1 t=0.0 net=0.0 contacts=8 ball=(22.91, 4.00, 0.00) rope=27.94
+ACTUAL_TETHER round=1 t=15.0 net=157.7 contacts=10 ball=(-17.90, 3.00, 7.31) rope=25.74
+ACTUAL_TETHER round=1 t=30.0 net=445.5 contacts=12 ball=(1.00, 3.00, 13.50) rope=21.72
+PASS actual AI strikes complete the full best-of-three match without forced wraps or invented timeout points
+PASS actual ball trajectory completes the required winding after genuine physical truck contacts
+PASS real constrained rope remains bounded through impacts, wraps and reversals; maximum extension=0.113
+ACTUAL_RESULTS
+#1 Player 1 · 2 ROUND WINS · COUNTERCLOCKWISE
+#2 Player 2 · 0 ROUND WINS · CLOCKWISE
+
+PASS actual truck/ball/individual-cable-segment replay starts
+PASS replay cannot change round wins or results
+PASS 1 software humans start a clean rematch with all wraps/wins reset
+PASS 1 human-only cab views and reset rope state have correct owners
+PASS actual software accelerator ownership stays isolated
+PASS optional AI view adds only a camera, never removes a competitor
+PASS 2 software humans start a clean rematch with all wraps/wins reset
+PASS 2 human-only cab views and reset rope state have correct owners
+PASS actual software accelerator ownership stays isolated
+PASS optional AI view adds only a camera, never removes a competitor
+PASS AI-only spectator rematch starts
+PASS AI-only with AI cameras OFF shows actual broadcast instead of black screen
+CHECKS=19 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; actual NWH/PhysX ball/rope and software input; no human/device/listening certification.

@@ -59,7 +59,7 @@ Red Light's additional effects reuse the NWH ExhaustSmoke prefab, existing Derby
 
 ## Remaining sport-specific audits
 
-The other12sports retain incomplete requirements until their rules, environments and integration are implemented and tested. The inspected shared systems are reuse candidates, not evidence that those games already work. Inspect each original GAME section and appropriate owned model/terrain/animation assets immediately before that implementation.
+The other9sports retain incomplete requirements until their rules, environments and integration are implemented and tested. The inspected shared systems are reuse candidates, not evidence that those games already work. Inspect each original GAME section and appropriate owned model/terrain/animation assets immediately before that implementation.
 
 VENDOR SOURCE MODIFIED: None. DUPLICATE VENDOR FUNCTIONALITY CREATED: None intended; custom code is sport rules/coordination and vendor adapters.
 
@@ -70,3 +70,28 @@ NWH WheelController.cs explicitly applies both suspension/friction reaction forc
 Reuse: Trailer Plug's existing quarry TerrainData and physical floor mesh; Vista DesertRock prefabs; Mega City warehouse models; ShipContainerPack; Bungee's detailed lattice crane mesh; complete Hot Potato posed spectator assets; existing galvanised-steel material as an authored surface foundation; all common Heat/TMP/DOTween, NWH full cab, weather, camera, identity, horn, fragment and recorded-review adapters. The installed filename audit found no relevant excavator/forklift prefab; industrial machinery presentation uses the existing detailed cranes and cargo equipment. The wobble deck/pivot/gantry and sport rules are missing sport-specific content, not a new physics framework. Native14rule tests and actual native/Windows38-check physics probes passed. The real X/Z NWH load, full three-heat match, driven fall and quarry collision were measured; hardware/listening/human acceptance remains separate.
 
 Hill-only route tuning now prevents false35m junction links with0.5m connector tolerance. The original Fare Fight default constructor retains its existing behavior. Six actual floor metadata registrations use existing Weatherade; no vendor navigation/weather source was modified. Final quarry balcony bracing uses the existing sport-owned combined open-truss mesh.
+
+## Floor Is Lava — implementation in progress
+
+Audited and reused NWH WheelController moving-ground point velocity and reaction forces; Unity ConfigurableJoint constraints; the existing Target Launch volcanic-crater prefab, authored basalt TerrainData/layers, molten-channel material, heat plumes and pooled lava splash particles; full NWH trucks/cabs; FareFightRoute bounded physical steering; existing LWS graph metadata for finite adjacent jump links; Heat/TMP/DOTween, Weather Maker/Weatherade and SportsRecordedReview.
+
+Existing PlowBreakable/Core Collapse auto-impact damage is unsuitable for the required first-touch warning followed by a scheduled whole-platform fall. The sport therefore owns activation/collapse timing while ordinary PhysX bodies supply falling slabs, and existing SportsFragmentRig supplies real truck debris. This does not add a fracture framework. Temporary-safe/moving/tilting/short-warning gameplay and original beveled slabs are sport-specific content. No original Target/Terrier prefab or vendor source is modified; the reused environment is unpacked only in the new sport scene and its old mode-specific contact scripts are removed.
+
+Native15rule tests passed. The initial actual PlayMode run exposed solo-rematch contact failures and insufficient AI escape variety; those remain open until corrected and retested. No new Windows or human acceptance is claimed for this seventh sport.
+
+
+## Tetherball — source preparation, not runtime acceptance
+
+Audited the installed file inventory for rope/tether packages: no installed Obi or dedicated rope solver was found. NWH remains the truck/suspension/contact authority; Unity ConfigurableJoint supplies a bounded physical ball tether and LWS records actual directional orbit for game rules. The64pooled render-only braided segments visualize winding and participate in recorded replay; they do not form a dynamic joint chain or award contact points.
+
+Reuse planned in the saved scene: owned Kickball pebbled rubber material, Bungee braided safety cable material, installed galvanised steel, Hot Potato textured court and existing Union Field grandstands/posed spectators; full existing NWH cab vehicles, FareFightRoute physical steering, Heat/TMP/DOTween, Weather Maker/Weatherade, Your Crew, horn, driving views and recorded review. Original Tetherball PNG exists. Scene creation, compilation and actual match validation remain pending. No vendor source is modified and no additional vehicle/rope framework is created.
+
+
+## Jousting — source preparation, scene/runtime verification pending
+
+Audited installed models for lances, jousting and medieval equipment: no matching lance asset was found. The scene authoring uses sport-specific oak lance/shield geometry with the existing RoadPropsPack oak material, owned imported Minefield flag rigs, Vista grass and existing Union Field stands/spectators. NWH remains responsible for the actual trucks and compound tip/shield collisions. Core Collapse Collapser/Support public APIs own lance damage; JoustLance/JoustLanceSupport add pass resets and bounded pooled splinter lifecycle, following the existing PlowBreakable adapter approach. This is not a new fracture framework. Existing Heat/TMP/DOTween, weather, cab controls, Your Crew, horn and recorded review are reused. No vendor source is modified. Actual compilation, saved scene integration, real hit/AI/control tests and Windows checks are still pending.
+
+
+## Nine-sport acceptance update
+
+The preceding in-progress paragraphs are historical. Floor Is Lava now passes18native/37Windows checks, Tetherball14/19 and Jousting15/21. Concrete reset/engine/HDR causes and the two actual Windows build phases are recorded in EighteenSportsNineSportDelivery.md. No vendor source was modified. Magnet Mayhem audits/reuses NWH plus ordinary PhysX force APIs, RoadPropsPack canisters, ShipContainerPack, UTS visual-only car meshes, existing quarry/cranes/warehouses and shared weather/UI/review. No installed electromagnet gameplay package was found; force polarity/falloff/occlusion and finite settled-scoring rules are mode-owned semantics, not another vehicle physics solver. Its source remains local and unverified until actual hauling tests pass.

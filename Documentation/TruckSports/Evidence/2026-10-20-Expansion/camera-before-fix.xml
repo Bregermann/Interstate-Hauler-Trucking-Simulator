@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Failed(Child)" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.1887157">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2642" result="Failed" site="Child" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.188716" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2094" name="LWS.TruckSports.PresentationEditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.PresentationEditModeTests.dll" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.167504" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="42060" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2095" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.166885" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2096" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.166603" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2097" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.166310" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="2090" name="PresentationTests" fullname="LWS.TruckSports.Tests.PresentationTests" classname="LWS.TruckSports.Tests.PresentationTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.165053" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="2093" name="ArenaCameraKeepsValidLensBeforeBoundsAreInitialized" fullname="LWS.TruckSports.Tests.PresentationTests.ArenaCameraKeepsValidLensBeforeBoundsAreInitialized" methodname="ArenaCameraKeepsValidLensBeforeBoundsAreInitialized" classname="LWS.TruckSports.Tests.PresentationTests" runstate="Runnable" seed="1115333720" result="Failed" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.020071" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Default zero bounds must preserve the last valid lens rather than create a singular frustum.
+  Expected: 9
+  But was:  0.0f
+]]></message>
+                  <stack-trace><![CDATA[at LWS.TruckSports.Tests.PresentationTests.ArenaCameraKeepsValidLensBeforeBoundsAreInitialized () [0x00074] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\PresentationEditMode\PresentationTests.cs:22
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="2092" name="DockBubbleStaysInsideEachCameraViewport" fullname="LWS.TruckSports.Tests.PresentationTests.DockBubbleStaysInsideEachCameraViewport" methodname="DockBubbleStaysInsideEachCameraViewport" classname="LWS.TruckSports.Tests.PresentationTests" runstate="Runnable" seed="166916526" result="Passed" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.004979" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2091" name="EveryRegisteredSportHasDistinctImportedTransparentArtwork" fullname="LWS.TruckSports.Tests.PresentationTests.EveryRegisteredSportHasDistinctImportedTransparentArtwork" methodname="EveryRegisteredSportHasDistinctImportedTransparentArtwork" classname="LWS.TruckSports.Tests.PresentationTests" runstate="Runnable" seed="1877026409" result="Passed" start-time="2026-10-20 17:51:26Z" end-time="2026-10-20 17:51:26Z" duration="0.123927" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

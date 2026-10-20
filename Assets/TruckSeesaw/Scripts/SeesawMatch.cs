@@ -62,13 +62,14 @@ namespace LWS.TruckSeesaw
         }
         void ResetPlatform()
         {
-            platform.isKinematic=false;platform.linearVelocity=platform.angularVelocity=Vector3.zero;platform.position=platformOrigin;platform.rotation=Quaternion.identity;platform.isKinematic=true;Countdown=3;aftermath=0;
+            var interpolation=platform.interpolation;platform.interpolation=RigidbodyInterpolation.None;platform.isKinematic=false;platform.linearVelocity=platform.angularVelocity=Vector3.zero;platform.position=platformOrigin;platform.rotation=Quaternion.identity;platform.transform.SetPositionAndRotation(platformOrigin,Quaternion.identity);platform.isKinematic=true;platform.interpolation=interpolation;Countdown=3;aftermath=0;
             for(int i=0;i<trucks.Length;i++)
             {
                 drivers[i]??=new FareFightRoute();drivers[i].Reset();recoverySample[i]=armed[i]=crashed[i]=false;stopped[i]=recoveryCooldown[i]=0;
                 impacts[i].Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);fragments[i].ResetBody();trucks[i].gameObject.SetActive(i<setup.count);if(i>=setup.count)continue;
                 trucks[i].tractorMotor.Configure();trucks[i].Prepare(Grid(i),Quaternion.LookRotation(Vector3.ProjectOnPlane(platformOrigin-Grid(i),Vector3.up)));Hold(trucks[i]);
             }
+            Physics.SyncTransforms();
         }
         static void Hold(SportsEventTruck truck){var input=truck.tractorMotor.vehicle.input;input.states.throttle=input.states.throttleRaw=input.states.brakes=input.states.brakesRaw=0;input.states.handbrake=input.states.handbrakeRaw=1;}
         public bool OnBoard(int slot)

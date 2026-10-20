@@ -12,5 +12,17 @@ public sealed class PresentationTests {
  [Test]public void DockBubbleStaysInsideEachCameraViewport(){
   var type=Type.GetType("LWS.TruckDockDiving.DockSlang, Assembly-CSharp",true);var method=type.GetMethod("PositionInViewport");var canvas=new Rect(-960,-540,1920,1080);foreach(var viewport in new[]{new Rect(0,0,1,1),new Rect(0,.5f,.5f,.5f),new Rect(.5f,0,.5f,.5f)})foreach(var p in new[]{new Vector2(-2,3),new Vector2(2,-1),new Vector2(.5f,.5f)}){var result=(Vector2)method.Invoke(null,new object[]{canvas,viewport,new Vector2(250,108),p});var area=new Rect(canvas.xMin+viewport.x*canvas.width,canvas.yMin+viewport.y*canvas.height,viewport.width*canvas.width,viewport.height*canvas.height);Assert.That(area.Contains(result),Is.True);Assert.That(result.x-125,Is.GreaterThanOrEqualTo(area.xMin));Assert.That(result.x+125,Is.LessThanOrEqualTo(area.xMax));Assert.That(result.y-54,Is.GreaterThanOrEqualTo(area.yMin));Assert.That(result.y+54,Is.LessThanOrEqualTo(area.yMax));}
  }
+ [Test]public void ArenaCameraKeepsValidLensBeforeBoundsAreInitialized(){
+  var go=new GameObject("Uninitialized arena camera regression");
+  try{
+   var camera=go.AddComponent<Camera>();camera.orthographic=true;camera.orthographicSize=9;
+   var type=Type.GetType("LWS.TruckSports.SportsCameraFit, Assembly-CSharp",true);var fit=go.AddComponent(type);
+   type.GetField("cameraTarget").SetValue(fit,camera);type.GetField("arenaFit").SetValue(fit,true);
+   type.GetMethod("Apply").Invoke(fit,null);
+   Assert.That(camera.orthographicSize,Is.EqualTo(9),"Default zero bounds must preserve the last valid lens rather than create a singular frustum.");
+   Assert.That(camera.projectionMatrix.determinant,Is.Not.EqualTo(0));
+  }finally{UnityEngine.Object.DestroyImmediate(go);}
+ }
+
 }
 }

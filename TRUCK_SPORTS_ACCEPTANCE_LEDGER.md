@@ -1157,11 +1157,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Verify the master laughs, the one-second warning, no yellow signal, fair stopping detection, legal finishes, and spectacular explosions. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1181,11 +1181,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1205,11 +1205,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1229,11 +1229,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | User approved the grungy revision3artwork: 'that one looks good, continue on'. This is artwork approval, not gameplay or hardware verification. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
@@ -1253,11 +1253,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
@@ -1277,11 +1277,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1301,11 +1301,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1325,11 +1325,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1349,11 +1349,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1373,11 +1373,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 36checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/RedLight/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1400,11 +1400,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Verify gentle contact transfers, cooldowns, carrier boost, explosions, eliminations, and final victory. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1424,11 +1424,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1448,11 +1448,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1472,11 +1472,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
@@ -1496,11 +1496,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
@@ -1520,11 +1520,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1544,11 +1544,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1568,11 +1568,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1592,11 +1592,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -1616,11 +1616,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 11/11; actual Windows NWH/PhysX acceptance 32checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/HotPotato/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -2122,20 +2122,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 6 (TRUCK FLOOR IS LAVA), including all confirmed design decisions. |
 | Acceptance Criteria | Verify collapsing platforms, real weight/collision interaction, ramming, AI decisions, lava elimination, and full matches. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Verify collapsing platforms, real weight/collision interaction, ramming, AI decisions, lava elimination, and full matches. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX06-AI
@@ -2146,20 +2146,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 6 (TRUCK FLOOR IS LAVA), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX06-ENV
@@ -2170,20 +2170,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 6 (TRUCK FLOOR IS LAVA), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX06-LOGO
@@ -2194,20 +2194,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX06-PREVIEW
@@ -2218,20 +2218,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX06-SETUP
@@ -2242,20 +2242,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX06-HUD
@@ -2266,20 +2266,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX06-FX
@@ -2290,20 +2290,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX06-RESULTS
@@ -2314,20 +2314,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX06-QA
@@ -2338,20 +2338,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FLOOR IS LAVA |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity |
+| Relevant Scripts | Assets/TruckFloorIsLava/Scripts/ and Editor/; existing NWH moving-ground physics and FareFightRoute local steering. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckFloorIsLava.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Twenty-five finite contact-activated basalt slabs; wide/narrow/moving/tilting/short-warning/temporary-safe surfaces, actual bounded jumps and ramming, warning/cracks/whole-body falls, genuine lava contact/debris, survival ranking and limited knockoff bonuses, locked replay/results/rematch. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 18/18; actual Windows NWH/PhysX acceptance 37checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Lava/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and isolated performance remain unverified. Moving-slab historical snow-track anchoring and severe-weather replay require visual follow-up; normal snow/contact stamps are recorded separately. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 ### EX07 — TRUCK AVALANCHE ESCAPE
@@ -2858,8 +2858,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Verify real multidirectional platform response, recoverable tilts, legitimate falls, AI balancing, and proper quarry impacts. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -2882,8 +2882,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -2906,8 +2906,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -2930,8 +2930,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -2954,8 +2954,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -2978,8 +2978,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -3002,8 +3002,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -3026,8 +3026,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -3050,8 +3050,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -3074,8 +3074,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Physical two-axis suspended quarry board, genuine NWH wheel loads and movement, actual AI balancing/ramming, three-heat scoring, measured uphill recovery, attributed knockoffs, real falls/quarry-impact fragments, round reset, replay and shared/chase/cab presentation. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 38checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 39checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Seesaw/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical devices, listening, human pacing and isolated performance remain unverified. Moving-deck snow-track anchoring and severe-weather replays need visual follow-up; actual normal snow coverage/contact stamps are recorded separately. |
@@ -3344,11 +3344,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Verify three balloons per truck, tether motion, collision-based popping, correct scoring, elimination, AI competition, and rematches. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -3368,11 +3368,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -3392,11 +3392,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -3416,11 +3416,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
@@ -3440,11 +3440,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
@@ -3464,11 +3464,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -3488,11 +3488,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -3512,11 +3512,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -3536,11 +3536,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -3560,11 +3560,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 13/13; actual Windows NWH/PhysX acceptance 34checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Balloon/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -3823,20 +3823,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 13 (TRUCK TETHERBALL), including all confirmed design decisions. |
 | Acceptance Criteria | Verify ball swinging, rope wrapping, direction changes, scoring, truck collisions, AI play, and resets. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Verify ball swinging, rope wrapping, direction changes, scoring, truck collisions, AI play, and resets. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX13-AI
@@ -3847,20 +3847,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 13 (TRUCK TETHERBALL), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX13-ENV
@@ -3871,20 +3871,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 13 (TRUCK TETHERBALL), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX13-LOGO
@@ -3895,20 +3895,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX13-PREVIEW
@@ -3919,20 +3919,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX13-SETUP
@@ -3943,20 +3943,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX13-HUD
@@ -3967,20 +3967,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX13-FX
@@ -3991,20 +3991,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX13-RESULTS
@@ -4015,20 +4015,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX13-QA
@@ -4039,20 +4039,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK TETHERBALL |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckTetherball/Scenes/TruckTetherball.unity |
+| Relevant Scripts | Assets/TruckTetherball/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckTetherball.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two full NWH trucks physically strike a giant ball on one bounded ConfigurableJoint cable; actual angular travel winds/unwinds720degrees for a round, best3/5, AI intercepts, no contact-based free scores, reset/replay/cab/shared views. Original PNG and recorded gameplay preview installed. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 14/14; actual Windows NWH/PhysX acceptance 19checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Tether/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 ### EX14 — TRUCK JOUSTING
@@ -4066,20 +4066,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 14 (TRUCK JOUSTING), including all confirmed design decisions. |
 | Acceptance Criteria | Verify lance adjustment, real contact, hit zones, breakage, proper score awards, repeated passes, and competition results. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Verify lance adjustment, real contact, hit zones, breakage, proper score awards, repeated passes, and competition results. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX14-AI
@@ -4090,20 +4090,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 14 (TRUCK JOUSTING), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX14-ENV
@@ -4114,20 +4114,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 14 (TRUCK JOUSTING), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX14-LOGO
@@ -4138,20 +4138,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX14-PREVIEW
@@ -4162,20 +4162,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
 
 #### EX14-SETUP
@@ -4186,20 +4186,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX14-HUD
@@ -4210,20 +4210,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX14-FX
@@ -4234,20 +4234,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX14-RESULTS
@@ -4258,20 +4258,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 #### EX14-QA
@@ -4282,20 +4282,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK JOUSTING |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckJousting/Scenes/TruckJousting.unity |
+| Relevant Scripts | Assets/TruckJousting/Scripts/ and Editor/; shared SportsRecordedReview, SportsExpansionViewHud, SportsExpansionSpectators. |
+| Prefabs or Assets | Full NWH sport tractor/cab, owned venue/posed crowd and original Assets/TruckSports/Art/Logos/TruckJousting.png; see vendor audit. |
+| Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
+| Implementation Notes | Two NWH tractors charge in separate lanes with physical adjustable side lances and armor targets; real normal-speed shield contacts earn1/2points, observed knockdown upgrades to3, one hit per pass, Core Collapse pooled splinters,3/5passes, real AI aim, actual cab input, review/rematch. Prestarting NWH engine during held countdown fixes acceleration delay after aim mode. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 15/15; actual Windows NWH/PhysX acceptance 21checks/0errors on final nine-sport build, Assembly-CSharp SHA256 cfc08af13339f2c91a7443ffeb1804a35ff8a4f4569b2bd2fc63c17c537d1c9c; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–two software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Joust/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
+| Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
+| Known Issues | Human pacing, physical controls, listening and long-run performance remain unverified. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
 
 ### EX15 — HUNGRY HUNGRY HAULERS
@@ -4559,8 +4559,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Verify emergence animation, timed windows, collision-based scoring, golden targets, decoys, AI pursuit, and match completion. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4583,8 +4583,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4607,8 +4607,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4631,8 +4631,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4655,8 +4655,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4679,8 +4679,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4703,8 +4703,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4727,8 +4727,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4751,8 +4751,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4775,8 +4775,8 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Thirty-six pooled holes and three original animated mole prefabs; actual front-bumper contacts, one hit per emergence,10/50/−25points, timed difficulty growth, decoy launch, shared placings, complete timed AI match and rematch. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 12/12; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Whack/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
 | Known Issues | Physical controllers/wheels, subjective listening, human gameplay and isolated CPU/GPU performance remain unverified. No unimplemented Whack gameplay feature is inferred from those limits. |
@@ -4802,11 +4802,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Verify contested-zone logic, correct timing, physical occupancy, moving zones, AI navigation, and victory conditions. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -4826,11 +4826,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -4850,11 +4850,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -4874,11 +4874,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
@@ -4898,11 +4898,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human aesthetic review of final Windows placement; original41logos preserved. No missing image integration in targeted menu probe. |
 
@@ -4922,11 +4922,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -4946,11 +4946,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -4970,11 +4970,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -4994,11 +4994,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -5018,11 +5018,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Implementation Evidence | Saved scene and runtime integration; Documentation/TruckSports/EighteenSportsProgress.md; Evidence/2026-10-20-Expansion/. |
 | Implementation Notes | Five genuine collision-matched mountaintop plateaus, eight EasyRoads bridges, existing LWS connected navigation graph, real sole-occupant grounded control, contested ring, announced relocations, physical AI combat/cliff checks, safe recovery, locked results/rematch/review. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors; common menu310/0 on Assembly-CSharp SHA256 4445fba4cfd2caff74635c91cb4f19cf6419f9eee30dc04e1bee5a85fa8337ee. |
-| Runtime Evidence | Full AI match, actual collision fixture, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
+| Automated Verification | Unity6000.4.10f1 native EditMode 22/22; actual Windows NWH/PhysX acceptance 33checks/0errors on preceding eight-sport build; original gameplay source/scene preserved exactly in final build, Assembly-CSharp SHA256 9dbdb0a2c5b7ec3cc3921debdfbe8526df8686c7647753107b675b6412a1aaf3; final common menu328/0 and nine-sport native135/135. |
+| Runtime Evidence | Full AI match, actual physical interaction, pause, recorded replay, rematch, one–four software-controller viewport/input allocation and AI-only camera checks executed. Windows processes exited0; no physical hardware or human certification. |
 | Screenshot/Video Evidence | Logs/TruckSports/EighteenSports/Hill/; selected actual Windows frames copied to tracked Evidence/2026-10-20-Expansion/. |
 | Human Verification | Not performed for this new sport. No subjective listening or physical-device acceptance claimed. |
-| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Six-sport explicit snow accumulation and actual NWH tire-contact tracks passed the focused snow probe; see its receipt. |
+| Known Issues | Severe-weather replay presentation, subjective audio mix, physical controls and human gameplay remain unverified. Nine-sport explicit snow accumulation and actual NWH tire-contact tracks passed27checks; see its receipt. |
 | Last Verification Date | 2026-10-20 |
 | Remaining Work | Human playtest; physical devices/listening; severe-weather/long-run performance and remaining original presentation details. Preserve passed focused acceptance evidence. |
 
@@ -5268,6 +5268,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Known Issues | Requirement not implemented. |
 | Last Verification Date | None |
 | Remaining Work | Implement, integrate and execute this acceptance requirement. |
+
 
 ## King of the Hill — bottom scorecard row
 

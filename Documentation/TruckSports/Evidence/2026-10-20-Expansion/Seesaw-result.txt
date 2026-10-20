@@ -4,30 +4,36 @@ PASS all four trucks settle grounded and upright on the held board before clean 
 ACTUAL_SEESAW heat=0 clock=0.0 tilt=0.00 impacts=0 scores=0,0,0,0
 PASS pause freezes the actual pivot, tractors and scoring clock
 PASS shared camera keeps all eight actual tilted deck corners inside its viewport
-ACTUAL_SEESAW heat=0 clock=15.0 tilt=30.56 impacts=0 scores=1,1,1,1
-ACTUAL_SEESAW heat=0 clock=30.0 tilt=38.78 impacts=0 scores=5,1,5,1
-ACTUAL_SEESAW heat=1 clock=0.0 tilt=23.08 impacts=3 scores=10,1,5,1
-ACTUAL_SEESAW heat=1 clock=15.0 tilt=30.13 impacts=3 scores=11,2,6,2
-ACTUAL_SEESAW heat=1 clock=30.0 tilt=36.46 impacts=4 scores=12,2,7,3
-ACTUAL_SEESAW heat=2 clock=0.0 tilt=24.76 impacts=6 scores=17,2,7,3
-ACTUAL_SEESAW heat=2 clock=15.0 tilt=36.10 impacts=6 scores=18,3,8,4
+ACTUAL_SEESAW heat=0 clock=15.0 tilt=32.23 impacts=0 scores=1,1,1,1
+ACTUAL_SEESAW heat=0 clock=30.0 tilt=38.78 impacts=1 scores=2,2,1,1
+ACTUAL_SEESAW heat=1 clock=0.0 tilt=0.00 impacts=3 scores=7,2,1,1
+ACTUAL_SEESAW heat=1 clock=15.0 tilt=28.00 impacts=3 scores=8,3,2,2
+ACTUAL_SEESAW heat=1 clock=30.0 tilt=32.45 impacts=3 scores=9,4,3,3
+ACTUAL_SEESAW heat=1 clock=45.0 tilt=28.01 impacts=5 scores=10,5,3,3
+ACTUAL_SEESAW heat=1 clock=60.0 tilt=28.16 impacts=5 scores=11,6,3,3
+ACTUAL_SEESAW heat=1 clock=75.0 tilt=28.47 impacts=5 scores=12,7,3,3
+ACTUAL_SEESAW heat=2 clock=0.0 tilt=0.00 impacts=5 scores=13,8,3,3
+ACTUAL_SEESAW heat=2 clock=15.0 tilt=30.10 impacts=5 scores=14,9,4,4
+ACTUAL_SEESAW heat=2 clock=30.0 tilt=38.78 impacts=6 scores=15,9,8,5
+ACTUAL_SEESAW heat=2 clock=45.0 tilt=36.73 impacts=7 scores=16,9,9,5
 PASS actual AI balance/ramming completes all three heats and final results
 PASS actual vehicle weights and movement produce visible physical platform tilt; peak=38.78
 ACTUAL_AI_RESULTS
-#1 Player 1 · 23PTS · 3 HEATS · 1 KNOCKOFFS · 0 SAVES
-#4 Player 2 · 3PTS · 0 HEATS · 0 KNOCKOFFS · 0 SAVES
-#2 Player 3 · 8PTS · 0 HEATS · 1 KNOCKOFFS · 0 SAVES
-#3 Player 4 · 4PTS · 0 HEATS · 0 KNOCKOFFS · 0 SAVES
+#1 Player 1 · 21PTS · 2 HEATS · 0 KNOCKOFFS · 0 SAVES
+#2 Player 2 · 9PTS · 0 HEATS · 0 KNOCKOFFS · 0 SAVES
+#2 Player 3 · 9PTS · 0 HEATS · 1 KNOCKOFFS · 0 SAVES
+#4 Player 4 · 5PTS · 0 HEATS · 0 KNOCKOFFS · 0 SAVES
 
 PASS actual board and tractor pose replay starts
 PASS replay preserves authoritative heat scores and final placing
 PASS physical mass-distribution fixture starts at axis 0
 PASS centered physical tractor leaves the two-axis platform nearly level; tilt=0.49
 PASS physical mass-distribution fixture starts at axis 1
-PASS actual NWH wheel weight lowers the occupied right edge; tilt=26.36 lowered=-0.444
+PASS actual NWH wheel weight lowers the occupied right edge; tilt=26.40 lowered=-0.445
 PASS physical mass-distribution fixture starts at axis 2
-PASS actual NWH wheel weight lowers the occupied forward edge; tilt=26.65 lowered=-0.449
+PASS actual NWH wheel weight lowers the occupied forward edge; tilt=26.70 lowered=-0.449
 PASS driving fall/rematch restores a real unbroken tractor and level countdown
+PASS rematch after prior tilted/falling heats resets the rendered and physical deck and actual wheel support
 PASS software accelerator physically drives the tractor off the actual deck into a legitimate fall
 PASS the fallen physical truck hits the quarry and activates actual mesh destruction
 PASS 1 software-controller humans plus AI start through setup
@@ -50,4 +56,4 @@ PASS the four-truck sport clamps an unsupported fifth competitor through its rea
 PASS AI-only spectator rematch starts
 PASS AI-only with AI cameras OFF has a live broadcast instead of a blank screen
 PASS AI-only with AI cameras ON has four correctly allocated views
-CHECKS=38 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; real NWH wheel reactions, joint physics and software input; no human/device/listening certification.
+CHECKS=39 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; real NWH wheel reactions, joint physics and software input; no human/device/listening certification.

@@ -1,0 +1,916 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="119" result="Passed" total="119" passed="119" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-20 18:09:49Z" end-time="2026-10-20 18:10:01Z" duration="11.5785046">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2656" result="Passed" start-time="2026-10-20 18:09:49Z" end-time="2026-10-20 18:10:01Z" duration="11.578505" total="119" passed="119" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2017" name="LWS.TruckSports.Balloon.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.Balloon.EditModeTests.dll" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:09:49Z" end-time="2026-10-20 18:09:50Z" duration="0.053289" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2018" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:09:49Z" end-time="2026-10-20 18:09:50Z" duration="0.052400" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2019" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:09:49Z" end-time="2026-10-20 18:09:50Z" duration="0.051867" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2020" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:09:49Z" end-time="2026-10-20 18:09:50Z" duration="0.051320" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2003" name="BalloonRulesTests" fullname="LWS.TruckSports.Tests.BalloonRulesTests" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:09:49Z" end-time="2026-10-20 18:09:50Z" duration="0.049855" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2012" name="AttackHasRealCooldown" fullname="LWS.TruckSports.Tests.BalloonRulesTests.AttackHasRealCooldown" methodname="AttackHasRealCooldown" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="1022808763" result="Passed" start-time="2026-10-20 18:09:49Z" end-time="2026-10-20 18:09:49Z" duration="0.015057" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2005" name="ClockAndProximityNeverAutomaticallyPop" fullname="LWS.TruckSports.Tests.BalloonRulesTests.ClockAndProximityNeverAutomaticallyPop" methodname="ClockAndProximityNeverAutomaticallyPop" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="902817221" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.005489" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2004" name="ExactlyThreeBalloonsPerParticipant" fullname="LWS.TruckSports.Tests.BalloonRulesTests.ExactlyThreeBalloonsPerParticipant" methodname="ExactlyThreeBalloonsPerParticipant" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="1546272313" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000401" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2007" name="ExpiredSpikeCannotScore" fullname="LWS.TruckSports.Tests.BalloonRulesTests.ExpiredSpikeCannotScore" methodname="ExpiredSpikeCannotScore" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="167923448" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000733" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2008" name="OneActualTargetContactScoresExactlyOnce" fullname="LWS.TruckSports.Tests.BalloonRulesTests.OneActualTargetContactScoresExactlyOnce" methodname="OneActualTargetContactScoresExactlyOnce" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="1155921156" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000459" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2009" name="OneBodyBumpCannotEraseAllThreeBalloons" fullname="LWS.TruckSports.Tests.BalloonRulesTests.OneBodyBumpCannotEraseAllThreeBalloons" methodname="OneBodyBumpCannotEraseAllThreeBalloons" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="1881503871" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000287" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2010" name="OwnBalloonsCannotAwardPoints" fullname="LWS.TruckSports.Tests.BalloonRulesTests.OwnBalloonsCannotAwardPoints" methodname="OwnBalloonsCannotAwardPoints" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="955260260" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000164" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2016" name="RematchRestoresAllBalloonsAndAttackState" fullname="LWS.TruckSports.Tests.BalloonRulesTests.RematchRestoresAllBalloonsAndAttackState" methodname="RematchRestoresAllBalloonsAndAttackState" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="1001920344" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.002156" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2013" name="SeparateAttacksPopAndEliminateOnlyOnThird" fullname="LWS.TruckSports.Tests.BalloonRulesTests.SeparateAttacksPopAndEliminateOnlyOnThird" methodname="SeparateAttacksPopAndEliminateOnlyOnThird" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="435721817" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000354" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2015" name="SimultaneousMutualFinalPopIsDrawInsteadOfCallbackVictory" fullname="LWS.TruckSports.Tests.BalloonRulesTests.SimultaneousMutualFinalPopIsDrawInsteadOfCallbackVictory" methodname="SimultaneousMutualFinalPopIsDrawInsteadOfCallbackVictory" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="555334938" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000779" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2011" name="StaleOrInventedAttackSequenceCannotScore" fullname="LWS.TruckSports.Tests.BalloonRulesTests.StaleOrInventedAttackSequenceCannotScore" methodname="StaleOrInventedAttackSequenceCannotScore" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="295631234" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000328" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2006" name="TelegraphCannotScoreBeforeExtension" fullname="LWS.TruckSports.Tests.BalloonRulesTests.TelegraphCannotScoreBeforeExtension" methodname="TelegraphCannotScoreBeforeExtension" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="175868015" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000258" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2014" name="WinnerBonusIsLockedExactlyOnce" fullname="LWS.TruckSports.Tests.BalloonRulesTests.WinnerBonusIsLockedExactlyOnce" methodname="WinnerBonusIsLockedExactlyOnce" classname="LWS.TruckSports.Tests.BalloonRulesTests" runstate="Runnable" seed="727557400" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000547" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2040" name="LWS.TruckSports.FloorIsLava.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.FloorIsLava.EditModeTests.dll" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:52Z" duration="2.539337" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2041" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:52Z" duration="2.537895" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2042" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:52Z" duration="2.536903" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2043" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="17" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:52Z" duration="2.535813" total="17" passed="17" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2021" name="LavaRulesTests" fullname="LWS.TruckSports.Tests.LavaRulesTests" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.017044" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2022" name="CountdownCannotActivateOrAgePlatforms" fullname="LWS.TruckSports.Tests.LavaRulesTests.CountdownCannotActivateOrAgePlatforms" methodname="CountdownCannotActivateOrAgePlatforms" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="927955338" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.003125" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2026" name="FallingPlatformsCannotReactivateOrAwardRepeatedCollapses" fullname="LWS.TruckSports.Tests.LavaRulesTests.FallingPlatformsCannotReactivateOrAwardRepeatedCollapses" methodname="FallingPlatformsCannotReactivateOrAwardRepeatedCollapses" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="728473919" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000437" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2024" name="GenuineTouchStartsOneFiniteWarning" fullname="LWS.TruckSports.Tests.LavaRulesTests.GenuineTouchStartsOneFiniteWarning" methodname="GenuineTouchStartsOneFiniteWarning" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="878213020" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000477" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2035" name="LastLivingTruckRanksAboveFinalEliminationsInSameSample" fullname="LWS.TruckSports.Tests.LavaRulesTests.LastLivingTruckRanksAboveFinalEliminationsInSameSample" methodname="LastLivingTruckRanksAboveFinalEliminationsInSameSample" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1120291655" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000399" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2030" name="OldContactDoesNotCreditALaterUnrelatedFall" fullname="LWS.TruckSports.Tests.LavaRulesTests.OldContactDoesNotCreditALaterUnrelatedFall" methodname="OldContactDoesNotCreditALaterUnrelatedFall" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1344307648" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000551" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2029" name="ProximityOrGentleContactCannotClaimAnElimination" fullname="LWS.TruckSports.Tests.LavaRulesTests.ProximityOrGentleContactCannotClaimAnElimination" methodname="ProximityOrGentleContactCannotClaimAnElimination" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1665086608" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000271" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2036" name="RematchRestoresFullFiniteArenaAndScores" fullname="LWS.TruckSports.Tests.LavaRulesTests.RematchRestoresFullFiniteArenaAndScores" methodname="RematchRestoresFullFiniteArenaAndScores" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1611551129" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.001008" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2025" name="RepeatedTouchCannotResetCollapseTimer" fullname="LWS.TruckSports.Tests.LavaRulesTests.RepeatedTouchCannotResetCollapseTimer" methodname="RepeatedTouchCannotResetCollapseTimer" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="326376333" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000270" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2032" name="SimultaneousFinalLavaContactsProduceSharedPlacing" fullname="LWS.TruckSports.Tests.LavaRulesTests.SimultaneousFinalLavaContactsProduceSharedPlacing" methodname="SimultaneousFinalLavaContactsProduceSharedPlacing" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1952653325" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000602" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2031" name="SoleSurvivorGetsOneLockedVictoryBonus" fullname="LWS.TruckSports.Tests.LavaRulesTests.SoleSurvivorGetsOneLockedVictoryBonus" methodname="SoleSurvivorGetsOneLockedVictoryBonus" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="130975221" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000314" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2034" name="SoloPracticeWaitsForItsActualLavaLoss" fullname="LWS.TruckSports.Tests.LavaRulesTests.SoloPracticeWaitsForItsActualLavaLoss" methodname="SoloPracticeWaitsForItsActualLavaLoss" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1208486422" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000264" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2033" name="SurvivalOrderIsNotOverriddenBySmallKnockoffBonuses" fullname="LWS.TruckSports.Tests.LavaRulesTests.SurvivalOrderIsNotOverriddenBySmallKnockoffBonuses" methodname="SurvivalOrderIsNotOverriddenBySmallKnockoffBonuses" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="1341629278" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.003159" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2027" name="SurvivalPointsRequireActualElapsedLiveTime" fullname="LWS.TruckSports.Tests.LavaRulesTests.SurvivalPointsRequireActualElapsedLiveTime" methodname="SurvivalPointsRequireActualElapsedLiveTime" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="22221265" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000670" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2023" name="UntouchedPlatformsNeverCollapseAutomatically" fullname="LWS.TruckSports.Tests.LavaRulesTests.UntouchedPlatformsNeverCollapseAutomatically" methodname="UntouchedPlatformsNeverCollapseAutomatically" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="145682540" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000372" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2028" name="ValidRecentRamCanCreditOneActualLavaLoss" fullname="LWS.TruckSports.Tests.LavaRulesTests.ValidRecentRamCanCreditOneActualLavaLoss" methodname="ValidRecentRamCanCreditOneActualLavaLoss" classname="LWS.TruckSports.Tests.LavaRulesTests" runstate="Runnable" seed="98347183" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:50Z" duration="0.000365" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2037" name="LavaSceneTests" fullname="LWS.TruckSports.Tests.LavaSceneTests" classname="LWS.TruckSports.Tests.LavaSceneTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:52Z" duration="2.517279" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2039" name="AuthoredJumpEdgesJoinAdjacentReachableSlabsOnly" fullname="LWS.TruckSports.Tests.LavaSceneTests.AuthoredJumpEdgesJoinAdjacentReachableSlabsOnly" methodname="AuthoredJumpEdgesJoinAdjacentReachableSlabsOnly" classname="LWS.TruckSports.Tests.LavaSceneTests" runstate="Runnable" seed="107480252" result="Passed" start-time="2026-10-20 18:09:50Z" end-time="2026-10-20 18:09:51Z" duration="1.656430" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2038" name="EveryFiniteSlabHasMatchingTopCollisionAndWeatheradeMetadata" fullname="LWS.TruckSports.Tests.LavaSceneTests.EveryFiniteSlabHasMatchingTopCollisionAndWeatheradeMetadata" methodname="EveryFiniteSlabHasMatchingTopCollisionAndWeatheradeMetadata" classname="LWS.TruckSports.Tests.LavaSceneTests" runstate="Runnable" seed="1509994545" result="Passed" start-time="2026-10-20 18:09:51Z" end-time="2026-10-20 18:09:52Z" duration="0.859090" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2070" name="LWS.TruckSports.Hill.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.Hill.EditModeTests.dll" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-10-20 18:09:52Z" end-time="2026-10-20 18:10:01Z" duration="8.554539" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2071" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-10-20 18:09:52Z" end-time="2026-10-20 18:10:01Z" duration="8.551334" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2072" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-10-20 18:09:52Z" end-time="2026-10-20 18:10:01Z" duration="8.550234" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2073" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-10-20 18:09:52Z" end-time="2026-10-20 18:10:01Z" duration="8.549211" total="22" passed="22" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2044" name="HillRouteAdapterTests" fullname="LWS.TruckSports.Tests.HillRouteAdapterTests" classname="LWS.TruckSports.Tests.HillRouteAdapterTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-20 18:09:52Z" end-time="2026-10-20 18:09:54Z" duration="2.411763" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2046" name="AllTwentyPhysicalPlateauRoutesRemainConnectedWithTightJunctionTolerance" fullname="LWS.TruckSports.Tests.HillRouteAdapterTests.AllTwentyPhysicalPlateauRoutesRemainConnectedWithTightJunctionTolerance" methodname="AllTwentyPhysicalPlateauRoutesRemainConnectedWithTightJunctionTolerance" classname="LWS.TruckSports.Tests.HillRouteAdapterTests" runstate="Runnable" seed="1761388939" result="Passed" start-time="2026-10-20 18:09:52Z" end-time="2026-10-20 18:09:53Z" duration="0.852995" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2047" name="ExistingDistrictAndNewGraphApisProduceIdenticalRoutes" fullname="LWS.TruckSports.Tests.HillRouteAdapterTests.ExistingDistrictAndNewGraphApisProduceIdenticalRoutes" methodname="ExistingDistrictAndNewGraphApisProduceIdenticalRoutes" classname="LWS.TruckSports.Tests.HillRouteAdapterTests" runstate="Runnable" seed="452852021" result="Passed" start-time="2026-10-20 18:09:53Z" end-time="2026-10-20 18:09:54Z" duration="0.809336" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2045" name="MountainWorldOriginStartsNearItsActualPlateauInsteadOfSkippingAcrossVoid" fullname="LWS.TruckSports.Tests.HillRouteAdapterTests.MountainWorldOriginStartsNearItsActualPlateauInsteadOfSkippingAcrossVoid" methodname="MountainWorldOriginStartsNearItsActualPlateauInsteadOfSkippingAcrossVoid" classname="LWS.TruckSports.Tests.HillRouteAdapterTests" runstate="Runnable" seed="1581369836" result="Passed" start-time="2026-10-20 18:09:54Z" end-time="2026-10-20 18:09:54Z" duration="0.747974" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2048" name="HillRulesTests" fullname="LWS.TruckSports.Tests.HillRulesTests" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-20 18:09:54Z" end-time="2026-10-20 18:09:55Z" duration="0.388828" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2054" name="ControlResumesAfterOpponentLeaves" fullname="LWS.TruckSports.Tests.HillRulesTests.ControlResumesAfterOpponentLeaves" methodname="ControlResumesAfterOpponentLeaves" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="1468900360" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.002525" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2058" name="ExactTargetLocksResultAndLateSamplesCannotChangeIt" fullname="LWS.TruckSports.Tests.HillRulesTests.ExactTargetLocksResultAndLateSamplesCannotChangeIt" methodname="ExactTargetLocksResultAndLateSamplesCannotChangeIt" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="669494884" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.003829" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2060" name="LongUncontestedSampleCannotClaimSixtySecondsAcrossUnsampledMoves" fullname="LWS.TruckSports.Tests.HillRulesTests.LongUncontestedSampleCannotClaimSixtySecondsAcrossUnsampledMoves" methodname="LongUncontestedSampleCannotClaimSixtySecondsAcrossUnsampledMoves" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="1578282423" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.002017" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2057" name="OldLocationSampleCannotCreditNewLocation" fullname="LWS.TruckSports.Tests.HillRulesTests.OldLocationSampleCannotCreditNewLocation" methodname="OldLocationSampleCannotCreditNewLocation" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="611711082" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.001931" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2050" name="OneActualOccupantEarnsElapsedSeconds" fullname="LWS.TruckSports.Tests.HillRulesTests.OneActualOccupantEarnsElapsedSeconds" methodname="OneActualOccupantEarnsElapsedSeconds" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="890465047" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.000881" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2049" name="OutsideNeverEarnsControl" fullname="LWS.TruckSports.Tests.HillRulesTests.OutsideNeverEarnsControl" methodname="OutsideNeverEarnsControl" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="1721288721" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.000788" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2052" name="OverturnedOccupantCannotScore" fullname="LWS.TruckSports.Tests.HillRulesTests.OverturnedOccupantCannotScore" methodname="OverturnedOccupantCannotScore" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="1680178735" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.000496" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2053" name="OverturnedOpponentStillPhysicallyContests" fullname="LWS.TruckSports.Tests.HillRulesTests.OverturnedOpponentStillPhysicallyContests" methodname="OverturnedOpponentStillPhysicallyContests" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="349590140" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.000441" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2055" name="RelocationWarningIsThreeSeconds" fullname="LWS.TruckSports.Tests.HillRulesTests.RelocationWarningIsThreeSeconds" methodname="RelocationWarningIsThreeSeconds" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="1123158764" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.001684" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2059" name="RematchRestoresScoresAndSeededLocationSequence" fullname="LWS.TruckSports.Tests.HillRulesTests.RematchRestoresScoresAndSeededLocationSequence" methodname="RematchRestoresScoresAndSeededLocationSequence" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="2123831857" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.001285" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2051" name="TwoOpponentsContestAndEarnNothing" fullname="LWS.TruckSports.Tests.HillRulesTests.TwoOpponentsContestAndEarnNothing" methodname="TwoOpponentsContestAndEarnNothing" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="338076960" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.000949" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2056" name="ZoneMovesToAnnouncedDifferentAccessibleIndex" fullname="LWS.TruckSports.Tests.HillRulesTests.ZoneMovesToAnnouncedDifferentAccessibleIndex" methodname="ZoneMovesToAnnouncedDifferentAccessibleIndex" classname="LWS.TruckSports.Tests.HillRulesTests" runstate="Runnable" seed="254037596" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:55Z" duration="0.001169" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="2061" name="HillSurfaceTests" fullname="LWS.TruckSports.Tests.HillSurfaceTests" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:10:01Z" duration="5.747220" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="2069" name="ActualDrivingSurfaceUsesExistingSnowMetadata" fullname="LWS.TruckSports.Tests.HillSurfaceTests.ActualDrivingSurfaceUsesExistingSnowMetadata" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:10:00Z" duration="5.077915" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="2063" name="ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckRedLightGreenLight&quot;,&quot;Continuous competition runway&quot;)" fullname="LWS.TruckSports.Tests.HillSurfaceTests.ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckRedLightGreenLight&quot;,&quot;Continuous competition runway&quot;)" methodname="ActualDrivingSurfaceUsesExistingSnowMetadata" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" seed="992442528" result="Passed" start-time="2026-10-20 18:09:55Z" end-time="2026-10-20 18:09:56Z" duration="0.917717" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2064" name="ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckHotPotato&quot;,&quot;Continuous modeled stadium arena base&quot;)" fullname="LWS.TruckSports.Tests.HillSurfaceTests.ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckHotPotato&quot;,&quot;Continuous modeled stadium arena base&quot;)" methodname="ActualDrivingSurfaceUsesExistingSnowMetadata" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" seed="2020051314" result="Passed" start-time="2026-10-20 18:09:56Z" end-time="2026-10-20 18:09:57Z" duration="0.833144" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2065" name="ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckBalloonBattle&quot;,&quot;Broad plum battle pad&quot;)" fullname="LWS.TruckSports.Tests.HillSurfaceTests.ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckBalloonBattle&quot;,&quot;Broad plum battle pad&quot;)" methodname="ActualDrivingSurfaceUsesExistingSnowMetadata" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" seed="976597217" result="Passed" start-time="2026-10-20 18:09:57Z" end-time="2026-10-20 18:09:57Z" duration="0.828094" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2066" name="ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckWhackAMole&quot;,&quot;Continuous navigable dirt arena&quot;)" fullname="LWS.TruckSports.Tests.HillSurfaceTests.ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckWhackAMole&quot;,&quot;Continuous navigable dirt arena&quot;)" methodname="ActualDrivingSurfaceUsesExistingSnowMetadata" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" seed="408571066" result="Passed" start-time="2026-10-20 18:09:57Z" end-time="2026-10-20 18:09:58Z" duration="1.004948" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2067" name="ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckKingOfTheHill&quot;,&quot;Physical stratified CROWN PLATEAU&quot;)" fullname="LWS.TruckSports.Tests.HillSurfaceTests.ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckKingOfTheHill&quot;,&quot;Physical stratified CROWN PLATEAU&quot;)" methodname="ActualDrivingSurfaceUsesExistingSnowMetadata" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" seed="2125140772" result="Passed" start-time="2026-10-20 18:09:58Z" end-time="2026-10-20 18:09:59Z" duration="0.758864" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="2068" name="ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckSeesaw&quot;,&quot;Physical weight-responsive suspended wobble deck&quot;)" fullname="LWS.TruckSports.Tests.HillSurfaceTests.ActualDrivingSurfaceUsesExistingSnowMetadata(&quot;TruckSeesaw&quot;,&quot;Physical weight-responsive suspended wobble deck&quot;)" methodname="ActualDrivingSurfaceUsesExistingSnowMetadata" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" seed="263228010" result="Passed" start-time="2026-10-20 18:09:59Z" end-time="2026-10-20 18:10:00Z" duration="0.732712" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="2062" name="AllVisibleHillBridgeEdgeRailsHaveMatchingSolidColliders" fullname="LWS.TruckSports.Tests.HillSurfaceTests.AllVisibleHillBridgeEdgeRailsHaveMatchingSolidColliders" methodname="AllVisibleHillBridgeEdgeRailsHaveMatchingSolidColliders" classname="LWS.TruckSports.Tests.HillSurfaceTests" runstate="Runnable" seed="1585826970" result="Passed" start-time="2026-10-20 18:10:00Z" end-time="2026-10-20 18:10:01Z" duration="0.666333" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2086" name="LWS.TruckSports.HotPotato.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.HotPotato.EditModeTests.dll" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.081982" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2087" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.045023" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2088" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.042883" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2089" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.042436" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2074" name="HotPotatoRulesTests" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.041937" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2077" name="CompoundAndContinuousContactCannotPingPong" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.CompoundAndContinuousContactCannotPingPong" methodname="CompoundAndContinuousContactCannotPingPong" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="692576613" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.003020" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2083" name="EliminatedTruckCannotReceiveBomb" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.EliminatedTruckCannotReceiveBomb" methodname="EliminatedTruckCannotReceiveBomb" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="1965862420" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.001703" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2082" name="ExpiryEliminatesCarrierAndAwardsOnlySurvivors" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.ExpiryEliminatesCarrierAndAwardsOnlySurvivors" methodname="ExpiryEliminatesCarrierAndAwardsOnlySurvivors" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="151255314" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.001631" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2084" name="FullMatchResolvesSoleSurvivorAndLocksScoring" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.FullMatchResolvesSoleSurvivorAndLocksScoring" methodname="FullMatchResolvesSoleSurvivorAndLocksScoring" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="288220569" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.015954" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2081" name="FuseAlwaysWithinBoundedRange" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.FuseAlwaysWithinBoundedRange" methodname="FuseAlwaysWithinBoundedRange" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="273692270" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000550" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2076" name="GentleActualContactTransfersWithoutSpeedParameter" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.GentleActualContactTransfersWithoutSpeedParameter" methodname="GentleActualContactTransfersWithoutSpeedParameter" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="1645074413" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000548" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2079" name="MultipleContactsResolveOneAtomicStableTransfer" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.MultipleContactsResolveOneAtomicStableTransfer" methodname="MultipleContactsResolveOneAtomicStableTransfer" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="780442378" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000478" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2075" name="NoProximityOrAutomaticTransfer" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.NoProximityOrAutomaticTransfer" methodname="NoProximityOrAutomaticTransfer" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="272165284" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000657" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2085" name="RematchRestoresPopulationOwnershipAndScores" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.RematchRestoresPopulationOwnershipAndScores" methodname="RematchRestoresPopulationOwnershipAndScores" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="661403823" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.012510" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2080" name="RepeatedPassesCannotFarmScoreWithinCycle" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.RepeatedPassesCannotFarmScoreWithinCycle" methodname="RepeatedPassesCannotFarmScoreWithinCycle" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="1029568850" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000861" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2078" name="SamePairCanPassAgainAfterSeparationAndCooldown" fullname="LWS.TruckSports.Tests.HotPotatoRulesTests.SamePairCanPassAgainAfterSeparationAndCooldown" methodname="SamePairCanPassAgainAfterSeparationAndCooldown" classname="LWS.TruckSports.Tests.HotPotatoRulesTests" runstate="Runnable" seed="783477442" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000511" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2094" name="LWS.TruckSports.PresentationEditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.PresentationEditModeTests.dll" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.108939" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2095" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.107942" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2096" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.106117" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2097" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.105357" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2090" name="PresentationTests" fullname="LWS.TruckSports.Tests.PresentationTests" classname="LWS.TruckSports.Tests.PresentationTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.103697" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2093" name="ArenaCameraKeepsValidLensBeforeBoundsAreInitialized" fullname="LWS.TruckSports.Tests.PresentationTests.ArenaCameraKeepsValidLensBeforeBoundsAreInitialized" methodname="ArenaCameraKeepsValidLensBeforeBoundsAreInitialized" classname="LWS.TruckSports.Tests.PresentationTests" runstate="Runnable" seed="1828720439" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.002195" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2092" name="DockBubbleStaysInsideEachCameraViewport" fullname="LWS.TruckSports.Tests.PresentationTests.DockBubbleStaysInsideEachCameraViewport" methodname="DockBubbleStaysInsideEachCameraViewport" classname="LWS.TruckSports.Tests.PresentationTests" runstate="Runnable" seed="1205746610" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.001502" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2091" name="EveryRegisteredSportHasDistinctImportedTransparentArtwork" fullname="LWS.TruckSports.Tests.PresentationTests.EveryRegisteredSportHasDistinctImportedTransparentArtwork" methodname="EveryRegisteredSportHasDistinctImportedTransparentArtwork" classname="LWS.TruckSports.Tests.PresentationTests" runstate="Runnable" seed="1568966004" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.098548" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2112" name="LWS.TruckSports.RedLight.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.RedLight.EditModeTests.dll" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.040538" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2113" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.037914" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2114" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.037089" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2115" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.036668" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2098" name="RedLightRulesTests" fullname="LWS.TruckSports.Tests.RedLightRulesTests" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.036163" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2105" name="ACollisionDoesNotGrantImmunityToDriving" fullname="LWS.TruckSports.Tests.RedLightRulesTests.ACollisionDoesNotGrantImmunityToDriving" methodname="ACollisionDoesNotGrantImmunityToDriving" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="443743073" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.006758" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2104" name="AMeasuredExternalPushDoesNotPunishStationaryVictim" fullname="LWS.TruckSports.Tests.RedLightRulesTests.AMeasuredExternalPushDoesNotPunishStationaryVictim" methodname="AMeasuredExternalPushDoesNotPunishStationaryVictim" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="1935785953" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.002687" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2107" name="ARecordedFinisherCannotBeEliminatedLater" fullname="LWS.TruckSports.Tests.RedLightRulesTests.ARecordedFinisherCannotBeEliminatedLater" methodname="ARecordedFinisherCannotBeEliminatedLater" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="417464528" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.001190" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2101" name="DeliberateSlowCreepingIsNotAnUnlimitedSpeedLoophole" fullname="LWS.TruckSports.Tests.RedLightRulesTests.DeliberateSlowCreepingIsNotAnUnlimitedSpeedLoophole" methodname="DeliberateSlowCreepingIsNotAnUnlimitedSpeedLoophole" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="981747951" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.002712" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2099" name="LaughIsTheOnlyOneSecondWarning" fullname="LWS.TruckSports.Tests.RedLightRulesTests.LaughIsTheOnlyOneSecondWarning" methodname="LaughIsTheOnlyOneSecondWarning" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="391506942" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.003024" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2102" name="MeasuredSubTwoCentimetreSuspensionDriftIsNotDeliberateTravel" fullname="LWS.TruckSports.Tests.RedLightRulesTests.MeasuredSubTwoCentimetreSuspensionDriftIsNotDeliberateTravel" methodname="MeasuredSubTwoCentimetreSuspensionDriftIsNotDeliberateTravel" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="1017310162" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.003102" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2106" name="NegativeDrivenMovementAlsoViolates" fullname="LWS.TruckSports.Tests.RedLightRulesTests.NegativeDrivenMovementAlsoViolates" methodname="NegativeDrivenMovementAlsoViolates" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="786557511" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.002732" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2110" name="RematchRestoresAllStatesAndWarningClock" fullname="LWS.TruckSports.Tests.RedLightRulesTests.RematchRestoresAllStatesAndWarningClock" methodname="RematchRestoresAllStatesAndWarningClock" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="1617972623" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.002726" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2103" name="RollingOnRedEliminatesEvenWithoutThrottle" fullname="LWS.TruckSports.Tests.RedLightRulesTests.RollingOnRedEliminatesEvenWithoutThrottle" methodname="RollingOnRedEliminatesEvenWithoutThrottle" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="979338289" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.002508" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2108" name="SameStepFinishesUseCrossingTimeInsteadOfIterationOrder" fullname="LWS.TruckSports.Tests.RedLightRulesTests.SameStepFinishesUseCrossingTimeInsteadOfIterationOrder" methodname="SameStepFinishesUseCrossingTimeInsteadOfIterationOrder" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="1121669640" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000363" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2111" name="SlowLegalRaceDoesNotExpireAtAnUnrequestedTimeLimit" fullname="LWS.TruckSports.Tests.RedLightRulesTests.SlowLegalRaceDoesNotExpireAtAnUnrequestedTimeLimit" methodname="SlowLegalRaceDoesNotExpireAtAnUnrequestedTimeLimit" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="1055897327" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000359" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2100" name="SuspensionJitterDoesNotEliminate" fullname="LWS.TruckSports.Tests.RedLightRulesTests.SuspensionJitterDoesNotEliminate" methodname="SuspensionJitterDoesNotEliminate" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="1097227703" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.003821" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2109" name="WholeRearClearanceAndSweptCrossingAreRequired" fullname="LWS.TruckSports.Tests.RedLightRulesTests.WholeRearClearanceAndSweptCrossingAreRequired" methodname="WholeRearClearanceAndSweptCrossingAreRequired" classname="LWS.TruckSports.Tests.RedLightRulesTests" runstate="Runnable" seed="1052711190" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000839" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2131" name="LWS.TruckSports.Seesaw.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.Seesaw.EditModeTests.dll" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.013321" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2132" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.012378" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2133" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.011597" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2134" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.010896" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2116" name="SeesawRulesTests" fullname="LWS.TruckSports.Tests.SeesawRulesTests" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.010089" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2124" name="ConfirmedBalanceRecoveryAwardsOnlyActiveTruck" fullname="LWS.TruckSports.Tests.SeesawRulesTests.ConfirmedBalanceRecoveryAwardsOnlyActiveTruck" methodname="ConfirmedBalanceRecoveryAwardsOnlyActiveTruck" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="1057672721" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.001436" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2120" name="ExpiredRamDoesNotClaimAnUnrelatedLaterFall" fullname="LWS.TruckSports.Tests.SeesawRulesTests.ExpiredRamDoesNotClaimAnUnrelatedLaterFall" methodname="ExpiredRamDoesNotClaimAnUnrelatedLaterFall" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="32068700" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000364" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2125" name="FallCannotAlsoCollectABalanceRecovery" fullname="LWS.TruckSports.Tests.SeesawRulesTests.FallCannotAlsoCollectABalanceRecovery" methodname="FallCannotAlsoCollectABalanceRecovery" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="1187926122" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000195" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2128" name="FinalHeatLocksMatchAndSharedPlaces" fullname="LWS.TruckSports.Tests.SeesawRulesTests.FinalHeatLocksMatchAndSharedPlaces" methodname="FinalHeatLocksMatchAndSharedPlaces" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="847651306" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000921" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2119" name="GentleContactCannotClaimFall" fullname="LWS.TruckSports.Tests.SeesawRulesTests.GentleContactCannotClaimFall" methodname="GentleContactCannotClaimFall" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="1582751943" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000210" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2118" name="LegitimateRecentRamCreditsOneKnockoff" fullname="LWS.TruckSports.Tests.SeesawRulesTests.LegitimateRecentRamCreditsOneKnockoff" methodname="LegitimateRecentRamCreditsOneKnockoff" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="923984918" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000227" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2127" name="NextHeatRestoresBodiesAndPreservesMatchTotals" fullname="LWS.TruckSports.Tests.SeesawRulesTests.NextHeatRestoresBodiesAndPreservesMatchTotals" methodname="NextHeatRestoresBodiesAndPreservesMatchTotals" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="603543363" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000844" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2121" name="OneSurvivorGetsOnlyOneWinAward" fullname="LWS.TruckSports.Tests.SeesawRulesTests.OneSurvivorGetsOnlyOneWinAward" methodname="OneSurvivorGetsOnlyOneWinAward" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="716204681" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000414" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2130" name="RematchClearsAllPriorAwards" fullname="LWS.TruckSports.Tests.SeesawRulesTests.RematchClearsAllPriorAwards" methodname="RematchClearsAllPriorAwards" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="117598873" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000404" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2126" name="RepeatedRecoveryObservationCannotFarmPoints" fullname="LWS.TruckSports.Tests.SeesawRulesTests.RepeatedRecoveryObservationCannotFarmPoints" methodname="RepeatedRecoveryObservationCannotFarmPoints" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="373843386" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000224" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2122" name="SimultaneousFinalFallsAreADraw" fullname="LWS.TruckSports.Tests.SeesawRulesTests.SimultaneousFinalFallsAreADraw" methodname="SimultaneousFinalFallsAreADraw" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="753771507" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000198" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2129" name="SoloPracticeDoesNotEndImmediately" fullname="LWS.TruckSports.Tests.SeesawRulesTests.SoloPracticeDoesNotEndImmediately" methodname="SoloPracticeDoesNotEndImmediately" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="1216195674" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000216" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2117" name="SurvivalRewardsOnlyElapsedActiveTime" fullname="LWS.TruckSports.Tests.SeesawRulesTests.SurvivalRewardsOnlyElapsedActiveTime" methodname="SurvivalRewardsOnlyElapsedActiveTime" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="1381326474" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000220" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2123" name="SurvivingTimeoutDoesNotInventASoleSurvivor" fullname="LWS.TruckSports.Tests.SeesawRulesTests.SurvivingTimeoutDoesNotInventASoleSurvivor" methodname="SurvivingTimeoutDoesNotInventASoleSurvivor" classname="LWS.TruckSports.Tests.SeesawRulesTests" runstate="Runnable" seed="1416137282" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000226" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2150" name="LWS.TruckSports.Tether.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.Tether.EditModeTests.dll" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.014365" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2151" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.013298" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2152" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.012453" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2153" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.011603" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2135" name="TetherRulesTests" fullname="LWS.TruckSports.Tests.TetherRulesTests" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" testcasecount="14" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.010647" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2139" name="ActualNegativeOrbitBuildsOppositeDirection" fullname="LWS.TruckSports.Tests.TetherRulesTests.ActualNegativeOrbitBuildsOppositeDirection" methodname="ActualNegativeOrbitBuildsOppositeDirection" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="823940352" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.001755" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2138" name="ActualPositiveOrbitBuildsOnlyAssignedDirection" fullname="LWS.TruckSports.Tests.TetherRulesTests.ActualPositiveOrbitBuildsOnlyAssignedDirection" methodname="ActualPositiveOrbitBuildsOnlyAssignedDirection" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1810150274" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000314" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2148" name="BestOfThreeRequiresTwoGenuineRoundWins" fullname="LWS.TruckSports.Tests.TetherRulesTests.BestOfThreeRequiresTwoGenuineRoundWins" methodname="BestOfThreeRequiresTwoGenuineRoundWins" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="815736982" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.001364" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2143" name="ClockwiseBoundaryDoesNotInventAFullTurn" fullname="LWS.TruckSports.Tests.TetherRulesTests.ClockwiseBoundaryDoesNotInventAFullTurn" methodname="ClockwiseBoundaryDoesNotInventAFullTurn" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1085339956" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000417" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2141" name="CompletePhysicalWindingAwardsExactlyOneRound" fullname="LWS.TruckSports.Tests.TetherRulesTests.CompletePhysicalWindingAwardsExactlyOneRound" methodname="CompletePhysicalWindingAwardsExactlyOneRound" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1341840481" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000546" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2136" name="CountdownCannotBuildWrapProgress" fullname="LWS.TruckSports.Tests.TetherRulesTests.CountdownCannotBuildWrapProgress" methodname="CountdownCannotBuildWrapProgress" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1579461931" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000174" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2142" name="CounterclockwiseBoundaryDoesNotLoseAFullTurn" fullname="LWS.TruckSports.Tests.TetherRulesTests.CounterclockwiseBoundaryDoesNotLoseAFullTurn" methodname="CounterclockwiseBoundaryDoesNotLoseAFullTurn" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1611946387" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000169" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2144" name="ImpossibleTeleportDoesNotAwardWinding" fullname="LWS.TruckSports.Tests.TetherRulesTests.ImpossibleTeleportDoesNotAwardWinding" methodname="ImpossibleTeleportDoesNotAwardWinding" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1879859141" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000164" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2149" name="MatchResetRestoresScoresAndPhysicsSamplingState" fullname="LWS.TruckSports.Tests.TetherRulesTests.MatchResetRestoresScoresAndPhysicsSamplingState" methodname="MatchResetRestoresScoresAndPhysicsSamplingState" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1933348201" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000502" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2145" name="NearPoleNoiseCannotInventWraps" fullname="LWS.TruckSports.Tests.TetherRulesTests.NearPoleNoiseCannotInventWraps" methodname="NearPoleNoiseCannotInventWraps" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="136317332" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000173" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2147" name="NewRoundClearsBallWindingButKeepsRoundWins" fullname="LWS.TruckSports.Tests.TetherRulesTests.NewRoundClearsBallWindingButKeepsRoundWins" methodname="NewRoundClearsBallWindingButKeepsRoundWins" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="382036884" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000523" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2146" name="NonFiniteSamplesCannotCorruptResults" fullname="LWS.TruckSports.Tests.TetherRulesTests.NonFiniteSamplesCannotCorruptResults" methodname="NonFiniteSamplesCannotCorruptResults" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1637380337" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000203" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2137" name="RepeatedStationaryBallContactsCannotScore" fullname="LWS.TruckSports.Tests.TetherRulesTests.RepeatedStationaryBallContactsCannotScore" methodname="RepeatedStationaryBallContactsCannotScore" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="733410992" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000404" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2140" name="ReversalUnwindsPriorProgress" fullname="LWS.TruckSports.Tests.TetherRulesTests.ReversalUnwindsPriorProgress" methodname="ReversalUnwindsPriorProgress" classname="LWS.TruckSports.Tests.TetherRulesTests" runstate="Runnable" seed="1480162262" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000270" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2167" name="LWS.TruckSports.Whack.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.Whack.EditModeTests.dll" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.014889" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34164" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2168" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.014161" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2169" name="TruckSports" fullname="LWS.TruckSports" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.013618" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2170" name="Tests" fullname="LWS.TruckSports.Tests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.013106" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="2154" name="WhackRulesTests" fullname="LWS.TruckSports.Tests.WhackRulesTests" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.012503" total="12" passed="12" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="2160" name="DecoyCanProduceNegativeScore" fullname="LWS.TruckSports.Tests.WhackRulesTests.DecoyCanProduceNegativeScore" methodname="DecoyCanProduceNegativeScore" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="1914430302" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.001917" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2156" name="EmergingMoleCannotScoreEarly" fullname="LWS.TruckSports.Tests.WhackRulesTests.EmergingMoleCannotScoreEarly" methodname="EmergingMoleCannotScoreEarly" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="121364638" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000722" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2164" name="EqualScoresHaveSharedPlacing" fullname="LWS.TruckSports.Tests.WhackRulesTests.EqualScoresHaveSharedPlacing" methodname="EqualScoresHaveSharedPlacing" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="167924315" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000440" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2161" name="ExpiredExposureDoesNotScore" fullname="LWS.TruckSports.Tests.WhackRulesTests.ExpiredExposureDoesNotScore" methodname="ExpiredExposureDoesNotScore" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="894626293" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000311" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2166" name="FiniteMatchDoesNotRequireAnyContact" fullname="LWS.TruckSports.Tests.WhackRulesTests.FiniteMatchDoesNotRequireAnyContact" methodname="FiniteMatchDoesNotRequireAnyContact" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="535490029" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.003623" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2159" name="GoldenMoleScoresFiftyAndCorrectStatistic" fullname="LWS.TruckSports.Tests.WhackRulesTests.GoldenMoleScoresFiftyAndCorrectStatistic" methodname="GoldenMoleScoresFiftyAndCorrectStatistic" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="821399817" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000328" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2155" name="InactiveHoleCannotScore" fullname="LWS.TruckSports.Tests.WhackRulesTests.InactiveHoleCannotScore" methodname="InactiveHoleCannotScore" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="264036858" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000196" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2162" name="InvalidGenerationDoesNotStealNewExposure" fullname="LWS.TruckSports.Tests.WhackRulesTests.InvalidGenerationDoesNotStealNewExposure" methodname="InvalidGenerationDoesNotStealNewExposure" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="495308603" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000259" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2158" name="OneContactAtomicallyClaimsOneExposure" fullname="LWS.TruckSports.Tests.WhackRulesTests.OneContactAtomicallyClaimsOneExposure" methodname="OneContactAtomicallyClaimsOneExposure" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="1603651346" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000280" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2165" name="RematchRestoresCountsScoresAndSeededSchedule" fullname="LWS.TruckSports.Tests.WhackRulesTests.RematchRestoresCountsScoresAndSeededSchedule" methodname="RematchRestoresCountsScoresAndSeededSchedule" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="463657920" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000355" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2157" name="StationaryOverlapCannotFarmTargets" fullname="LWS.TruckSports.Tests.WhackRulesTests.StationaryOverlapCannotFarmTargets" methodname="StationaryOverlapCannotFarmTargets" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="1338661313" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000255" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="2163" name="TimerFreezesLateScoring" fullname="LWS.TruckSports.Tests.WhackRulesTests.TimerFreezesLateScoring" methodname="TimerFreezesLateScoring" classname="LWS.TruckSports.Tests.WhackRulesTests" runstate="Runnable" seed="72788534" result="Passed" start-time="2026-10-20 18:10:01Z" end-time="2026-10-20 18:10:01Z" duration="0.000704" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

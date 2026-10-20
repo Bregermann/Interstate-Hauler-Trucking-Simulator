@@ -140,6 +140,7 @@ namespace LWS.TruckRedLightGreenLight
             bool extraParticles = Array.Exists(m.explosions[0].GetComponentsInChildren<ParticleSystem>(true), p => p != m.explosions[0] && p.isPlaying && p.particleCount > 0);
             bool shake = Cinemachine.CinemachineImpulseManager.Instance.GetImpulseAt(m.broadcast.view.transform.position, false, 8, out var shakePosition, out var shakeRotation);
             Check(venue.boards[0].text.Contains("ELIMINATED") && extraParticles && shake, "actual violation updates live statistics, emits pooled smoke/sparks and generates a real Cinemachine shake signal");
+            if(m.Paused){Check(false,"unexpected pause aborts bounded human acceptance instead of stalling scaled waits");Complete();yield break;}
             yield return new WaitForSeconds(.22f);
             yield return null;
             var blastPoint = m.broadcast.view.WorldToViewportPoint(m.trucks[0].body.worldCenterOfMass);
@@ -155,6 +156,7 @@ namespace LWS.TruckRedLightGreenLight
         }
         void Complete()
         {
+            var match=FindAnyObjectByType<RedLightMatch>();if(match!=null)match.SetupScreen();
             report.AppendLine("CHECKS=" + checks + " ERRORS=" + errors + "; platform=" + Application.platform + "; capture=" + SportsWindowCapture.EvidenceKind + "; actual NWH/PhysX and software input; no human/device/listening acceptance.");
             File.WriteAllText(Folder + "/result.txt", report.ToString()); Application.logMessageReceived -= Error;
 #if UNITY_EDITOR
