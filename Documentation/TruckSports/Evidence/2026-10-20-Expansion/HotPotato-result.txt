@@ -1,16 +1,20 @@
 PASS authored eight-full-NWH-truck scene and existing Core-Collapse breakables load
 PASS complete autonomous eight-truck match starts through real setup
 PASS pause freezes bomb clock and vehicle physics
-CONTACT_PASS clock=9.00 count=1 carrier=3
-CONTACT_PASS clock=17.50 count=2 carrier=4
-CONTACT_PASS clock=20.12 count=3 carrier=5
-CONTACT_PASS clock=52.84 count=4 carrier=0
-CONTACT_PASS clock=53.88 count=5 carrier=4
+CONTACT_PASS clock=12.04 count=1 carrier=2
+CONTACT_PASS clock=14.40 count=2 carrier=3
+CONTACT_PASS clock=29.22 count=3 carrier=5
+CONTACT_PASS clock=30.04 count=4 carrier=7
+CONTACT_PASS clock=60.96 count=5 carrier=2
+CONTACT_PASS clock=76.30 count=6 carrier=4
+CONTACT_PASS clock=77.22 count=7 carrier=0
+CONTACT_PASS clock=94.72 count=8 carrier=5
+CONTACT_PASS clock=96.30 count=9 carrier=4
 PASS actual full match resolves seven bomb eliminations and one survivor
-PASS AI genuinely drives, flees and passes through physical truck contact; passes=5 traveled=105.1
+PASS AI genuinely drives, flees and passes through physical truck contact; passes=9 traveled=105.5
 PASS recorded match-end replay runs with frozen live physics
 PASS recorded replay hides live debris instead of drawing duplicate fragments
-REPLAY camera=(35.21, 14.09, -83.07) forward=(-0.54, -0.38, 0.76) ghost=(18.21, 0.09, -59.07)
+REPLAY camera=(55.32, 14.11, 26.03) forward=(-0.54, -0.38, 0.76) ghost=(38.32, 0.11, 50.03)
 PASS skip preserves authoritative scores and returns to results
 PASS two-human rematch restores full tractors, props, bomb and scores
 PASS controlled gentle 0.65m/s actual tractor contact transfers without a ram threshold

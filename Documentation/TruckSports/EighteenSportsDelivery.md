@@ -1,5 +1,7 @@
 # October20 expansion milestone publication
 
+Historical three-sport receipt. The current four-sport artifact is described by `Assets/TruckSports/BUILD-INFO.md` and the latest progress note. The45-scene counts and hashes below belong to the earlier published milestone.
+
 Tested source commit: `87a97bad7a27c7a50c60094b66e1b1c9a7379901`.
 
 The normal atomic push succeeded to public `main` and `codex/truck-sports-seven-events`. Both remote tips were independently verified at that commit.273explicitly scoped files were committed; private Taxi changes, unrelated imports, host settings and the local private-history preservation branch were excluded. No force-push was used.

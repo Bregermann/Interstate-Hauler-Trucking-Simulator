@@ -37,8 +37,16 @@ Custom code is limited to the three-balloon elimination authority, actual PhysX 
 
 Thirteen native rule tests passed. Corrected native and actual Windows gameplay probes each passed34checks/0errors, including full eight-truck AI competition, real contacts and rematches. See the progress note. Do not infer physical-controller, listening or human acceptance from those probes.
 
+## Whack-a-Mole
+
+Audited/reused: the same NWH tractor/cab and public input APIs; owned Union Field stadium and shared posed crowd; Mega City `SM_FloorProps_Fence_01` and `SM_Nature_Tree_03`; Toon Gas Station rock clusters; Vista's existing Grass Light terrain layer/texture; the authored Plowing festival canopy and Limbo cloth pennants; Heat/TMP/DOTween, Cinemachine and the shared weather/replay adapters. Original source prefabs and vendor files remain unchanged.
+
+The installed-model filename audit found no mole/gopher/rodent character prefab. Three sport-owned original cartoon mole prefabs therefore use deliberately authored face/body/paw/claw geometry and a real Unity Animator Controller with four saved animation clips: Emerge, Look, Dive and Whack. Golden star and helmet/red-cross decoy appearances have independent authored prefab identities. This is missing character content, not a substitute animation framework. The sculpted gentle mound mesh and original logo are sport-owned; commercial scenery remains the environment foundation.
+
+Thirty-six fixed pooled hole actors each retain their three authored visual variants, with only the selected exposed variant animated/rendered. Runtime does not instantiate a new mole or particle system per hit. A genuine front-bumper trigger against an exposed capsule target, with measured tractor speed, reaches one authoritative one-hit-per-generation rule. Decoys deduct points and give NWH's complete assembly a bounded physical launch; AI cannot call the scoring authority directly. Twelve native rule tests and33actual native gameplay checks passed before Windows integration; subsequent Windows results are recorded separately.
+
 ## Remaining sport-specific audits
 
-The other15sports retain MISSING requirements until their rules, environments and integration are implemented and tested. The inspected shared systems are reuse candidates, not evidence that those games already work. Inspect each original GAME section and appropriate owned model/terrain/animation assets immediately before that implementation.
+The other14sports retain MISSING requirements until their rules, environments and integration are implemented and tested. The inspected shared systems are reuse candidates, not evidence that those games already work. Inspect each original GAME section and appropriate owned model/terrain/animation assets immediately before that implementation.
 
 VENDOR SOURCE MODIFIED: None. DUPLICATE VENDOR FUNCTIONALITY CREATED: None intended; custom code is sport rules/coordination and vendor adapters.

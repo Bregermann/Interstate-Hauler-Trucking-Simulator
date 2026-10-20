@@ -1,0 +1,74 @@
+PASS saved fairground has eight full NWH tractors and36pooled holes
+PASS every pooled mole has actual authored emergence/look/dive/hit animation controllers
+PASS complete eight-truck timed AI match starts
+PASS pause freezes match clock and physical truck movement
+PHYSICAL_WHACK clock=9.2 hits=1
+PHYSICAL_WHACK clock=9.9 hits=2
+PHYSICAL_WHACK clock=11.3 hits=3
+PHYSICAL_WHACK clock=12.4 hits=4
+PHYSICAL_WHACK clock=12.9 hits=5
+PHYSICAL_WHACK clock=21.5 hits=6
+PHYSICAL_WHACK clock=24.8 hits=7
+PHYSICAL_WHACK clock=27.1 hits=8
+PHYSICAL_WHACK clock=28.5 hits=9
+PHYSICAL_WHACK clock=30.5 hits=10
+PHYSICAL_WHACK clock=32.4 hits=11
+PHYSICAL_WHACK clock=36.3 hits=12
+PHYSICAL_WHACK clock=48.2 hits=13
+PHYSICAL_WHACK clock=55.8 hits=14
+PHYSICAL_WHACK clock=63.0 hits=15
+PHYSICAL_WHACK clock=66.8 hits=16
+PHYSICAL_WHACK clock=73.6 hits=17
+PHYSICAL_WHACK clock=75.5 hits=18
+PHYSICAL_WHACK clock=85.6 hits=19
+PHYSICAL_WHACK clock=86.8 hits=20
+PHYSICAL_WHACK clock=92.4 hits=21
+PHYSICAL_WHACK clock=93.5 hits=22
+PHYSICAL_WHACK clock=94.4 hits=23
+PHYSICAL_WHACK clock=99.4 hits=24
+PHYSICAL_WHACK clock=101.7 hits=25
+PHYSICAL_WHACK clock=104.7 hits=26
+PHYSICAL_WHACK clock=110.6 hits=27
+PHYSICAL_WHACK clock=111.2 hits=28
+PHYSICAL_WHACK clock=111.5 hits=29
+PHYSICAL_WHACK clock=118.5 hits=30
+ACTUAL_AI_RESULTS
+#1 Player 1 · 210PTS · 6 NORMAL / 3 GOLD / 0 DECOYS
+#3 Player 2 · 50PTS · 0 NORMAL / 1 GOLD / 0 DECOYS
+#8 Player 3 · 5PTS · 3 NORMAL / 0 GOLD / 1 DECOYS
+#4 Player 4 · 30PTS · 3 NORMAL / 0 GOLD / 0 DECOYS
+#5 Player 5 · 20PTS · 2 NORMAL / 0 GOLD / 0 DECOYS
+#5 Player 6 · 20PTS · 2 NORMAL / 0 GOLD / 0 DECOYS
+#2 Player 7 · 110PTS · 6 NORMAL / 1 GOLD / 0 DECOYS
+#5 Player 8 · 20PTS · 2 NORMAL / 0 GOLD / 0 DECOYS
+
+PASS actual timed match reaches results without softlock
+PASS AI genuinely drives into emerged targets; all scoring comes from physical bumper contacts; hits=30
+PASS actual Animator moves model through intermediate emergence heights rather than teleporting
+PASS recorded tractor and actual animated-mole replay starts
+PASS replay skip preserves points and shared placings
+PASS solo rematch restores all pooled exposures and score statistics
+PASS solo match exposes a real timed target
+PASS real decoy bumper contact deducts25and physically launches the actual tractor
+PASS repeated overlap with a claimed exposure cannot duplicate points
+PASS 1 software-controller humans plus AI start through setup
+PASS 1 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 1-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 2 software-controller humans plus AI start through setup
+PASS 2 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 2-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 3 software-controller humans plus AI start through setup
+PASS 3 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 3-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 4 software-controller humans plus AI start through setup
+PASS 4 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 4-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS unsupported fifth human is rejected with a clear local-player limit
+PASS AI-only spectator rematch starts
+PASS AI-only with AI cameras OFF has a live broadcast instead of a blank screen
+PASS AI-only with AI cameras ON has four correctly allocated views
+CHECKS=33 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; actual NWH/PhysX, authored animation and software-input fixtures; no human/device/listening claim.

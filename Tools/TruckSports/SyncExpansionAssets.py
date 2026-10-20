@@ -17,7 +17,7 @@ def copy(relative):
     if not target.exists() or source.read_bytes() != target.read_bytes():
         shutil.copy2(source, target)
         count += 1
-for sport in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle"):
+for sport in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole"):
     folder = Path("Assets") / sport
     copy(str(folder) + ".meta")
     for path in (SOURCE / folder).rglob("*"):
