@@ -95,3 +95,10 @@ Audited installed models for lances, jousting and medieval equipment: no matchin
 ## Nine-sport acceptance update
 
 The preceding in-progress paragraphs are historical. Floor Is Lava now passes18native/37Windows checks, Tetherball14/19 and Jousting15/21. Concrete reset/engine/HDR causes and the two actual Windows build phases are recorded in EighteenSportsNineSportDelivery.md. No vendor source was modified. Magnet Mayhem audits/reuses NWH plus ordinary PhysX force APIs, RoadPropsPack canisters, ShipContainerPack, UTS visual-only car meshes, existing quarry/cranes/warehouses and shared weather/UI/review. No installed electromagnet gameplay package was found; force polarity/falloff/occlusion and finite settled-scoring rules are mode-owned semantics, not another vehicle physics solver. Its source remains local and unverified until actual hauling tests pass.
+
+
+## Upcoming Volleyball and Freeze Tag audits (not acceptance)
+
+Volleyball reuses NWH full trucks and public AddAssemblyVelocity for bounded jumps, PhysX ball/court/net contacts, installed Vista beach materials and the saved Limbo palm models, shared posed spectator meshes and FieldGoalCrowd reactions, Heat/TMP/DOTween and existing weather/view/review adapters. No dedicated installed volleyball/net asset was found; the striped ball mesh and woven-net venue geometry are missing sport content. Normal/contact-point velocity determines returns; no team-directed ball homing or fabricated AI points. Scene/runtime acceptance remains pending.
+
+Freeze Tag audits Weatherade's sample Projectile.cs and SnowProjectile/SnowHitFX prefabs. The sample instantiates/destroys effects and has no reusable freeze/team-state authority; it is not a weapon or rescue framework. Reuse its existing SnowHitFX as pooled presentation, installed ShipContainerPack cover, Snake-owned Vista pine visual, existing snowfield/steel/crowd materials and NWH. Mode-owned sphere-cast spray checks actual first solid obstruction; persistent frozen state and real teammate-impact rescue are game rules. Vendor projectile/weather/vehicle source is untouched. No saved-scene/runtime acceptance is inferred from these prepared sources.

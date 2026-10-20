@@ -90,3 +90,8 @@ Tetherball: actual two-truck striking, bounded ball joint and visible winding ca
 Jousting: physical adjustable lances/shields, normal-impact1/2points and observed knockdown upgrade3,3/5passes, true AI aiming/driving, Core Collapse splinters, full input/aim transitions, reset/review. Native15/15; Windows21/0. Prestarting NWH engine during countdown fixed sluggish return from aim; measured human fixture moves approximately5m over1.5s after fix.
 
 Final native combined135/135. Windows final targeted432checks/0errors (Lava37,Tether19,Joust21,snow27,menu328), exact current managed hash in nine-sport delivery. Preceding complete eight-sport phase609/0 retained. No physical-device/listening/human gameplay claims. Magnet Mayhem source is under native compilation/scene/AI validation and is not included in the nine-sport milestone.
+
+
+## Tenth playable addition — Magnet Mayhem
+
+The latest delivered milestone is ten additions /52saved scenes; see EighteenSportsTenSportDelivery.md for exact hashes, distinct Windows phases and preserved failed attempts. Magnet passes21native rules and38actual Windows gameplay checks; combined156native tests and final presentation3pass. Ten-arena snow30/0 and final menu335/0 are recorded separately. Eight requested additions remain unfinished. Volleyball native authoring/match acceptance is next; Freeze Tag and Hungry Haulers remain local drafts. No empty menu entries were installed for those drafts.
