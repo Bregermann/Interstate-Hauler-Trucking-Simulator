@@ -22,9 +22,18 @@ public sealed class FieldGoalStadiumBoard : MonoBehaviour {
  float next;
  bool wasReplay;
  string previousOutcome;
+ readonly RectTransform[] replayRects=new RectTransform[4];
+ readonly Vector2[] boardPositions=new Vector2[4],boardSizes=new Vector2[4];
+ bool transportInHUD;
 
  void Start(){
-  foreach(var button in buttons){string key=button.GetComponent<SportsMenuAction>().action;button.onClick.AddListener(()=>match.menus.Action(key));}
+  for(int i=0;i<4;i++){var rect=buttons[i].GetComponent<RectTransform>();replayRects[i]=rect;boardPositions[i]=rect.anchoredPosition;boardSizes[i]=rect.sizeDelta;}
+  foreach(var button in buttons){
+   string key=button.GetComponent<SportsMenuAction>().action;button.onClick.AddListener(()=>match.menus.Action(key));
+   if(button.GetComponent<SportsBroadcastPlate>()==null)button.gameObject.AddComponent<SportsBroadcastPlate>().cut=10;
+   var visual=button.GetComponent<LWS.TruckBilliards.BilliardsButtonVisual>();
+   if(visual!=null){visual.normal=SportsBroadcastCanvas.Raised;visual.highlight=new Color(.65f,.20f,.035f,.99f);}
+  }
   screen.worldCamera=match.cameraRig.view;
   AlignField();Refresh();
  }
@@ -36,6 +45,7 @@ public sealed class FieldGoalStadiumBoard : MonoBehaviour {
  void LateUpdate(){
   if(screen==null||match==null)return;
   bool replay=match.ReplayControls&&match.Live&&match.menus.Screen==SportsEventScreen.Play;
+  PositionReplayTransport(replay);
   for(int i=0;i<4;i++)if(buttons[i].gameObject.activeSelf!=replay)buttons[i].gameObject.SetActive(replay);
   bool retry=match.Practice&&match.Live&&!replay&&match.menus.Screen==SportsEventScreen.Play;
   if(buttons[4].gameObject.activeSelf!=retry)buttons[4].gameObject.SetActive(retry);
@@ -43,6 +53,31 @@ public sealed class FieldGoalStadiumBoard : MonoBehaviour {
   wasReplay=replay;
   if(Time.unscaledTime<next)return;
   next=Time.unscaledTime+.1f;Refresh();
+ }
+ // Close recorded-play angles deliberately frame the football rather than the
+ // distant scoreboard. Move the SAME Heat controls into the existing HUD for
+ // that presentation; never duplicate actions or change replay/scoring state.
+ public void PositionReplayTransport(bool replay){
+  if(replay){
+   var hud=(RectTransform)match.menus.hud.transform;
+   float width=Mathf.Min(290,Mathf.Max(120,(hud.rect.width-96)/4-14));
+   for(int i=0;i<4;i++){
+    var rect=replayRects[i];if(rect==null)continue;
+    if(!transportInHUD)rect.SetParent(hud,false);
+    rect.anchorMin=rect.anchorMax=new Vector2(.5f,0);rect.pivot=new Vector2(.5f,.5f);
+    rect.localScale=Vector3.one;rect.localRotation=Quaternion.identity;
+    rect.sizeDelta=new Vector2(width,58);rect.anchoredPosition3D=new Vector3((i-1.5f)*(width+14),54,0);
+   }
+   transportInHUD=true;
+  }else if(transportInHUD&&screen!=null){
+   for(int i=0;i<4;i++){
+    var rect=replayRects[i];if(rect==null)continue;rect.SetParent(screen.transform,false);
+    rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);
+    rect.localScale=Vector3.one;rect.localRotation=Quaternion.identity;
+    rect.sizeDelta=boardSizes[i];rect.anchoredPosition3D=new Vector3(boardPositions[i].x,boardPositions[i].y,0);
+   }
+   transportInHUD=false;
+  }
  }
  public void Refresh(){
   int slot=Mathf.Clamp(match.rules.Current,0,match.setup.count-1);
@@ -65,6 +100,6 @@ public sealed class FieldGoalStadiumBoard : MonoBehaviour {
   }
   if(previousOutcome!=match.Outcome){previousOutcome=match.Outcome;if(!string.IsNullOrEmpty(previousOutcome)){status.transform.DOKill();status.transform.localScale=Vector3.one;status.transform.DOPunchScale(Vector3.one*.07f,.35f,2,.5f).SetUpdate(true).SetLink(gameObject);}}
  }
- void OnDisable(){if(status!=null){status.transform.DOKill();status.transform.localScale=Vector3.one;}}
+ void OnDisable(){PositionReplayTransport(false);if(status!=null){status.transform.DOKill();status.transform.localScale=Vector3.one;}}
 }
 }

@@ -162,7 +162,25 @@ public sealed class GoddessPhysicsTests {
   yield return Load("TruckFieldGoal","FieldGoalMatch");var antics=match.GetComponent(Type.GetType("LWS.TruckFieldGoal.FieldGoalStadiumAntics, Assembly-CSharp",true));Assert.That(antics,Is.Not.Null);Set(antics,"refereeChance",0f);Call(match,"AllBots");Assert.That(StartChecked());yield return null;Assert.That((bool)Call(antics,"StartRefereeVignette"),Is.False,"The gag cannot interrupt an unresolved kick.");Call(match,"Resolve",true,"Explicit presentation-only fixture",Vector3.zero);Assert.That((bool)Call(antics,"StartRefereeVignette"),Is.True);Assert.That((bool)Call(antics,"StartRefereeVignette"),Is.False,"Only one invader uses the fixed event pool.");yield return new WaitForSeconds(.2f);Call(match,"Pause",0,false);yield return null;var referee=(Transform)Get(antics,"referee");var p=referee.position;yield return new WaitForSecondsRealtime(.2f);Assert.That(referee.position,Is.EqualTo(p));Call(match,"Resume");Call(match,"SetupScreen");Assert.That(referee.gameObject.activeSelf,Is.False);Assert.That(((Component)Get(antics,"invader")).gameObject.activeSelf,Is.False);Assert.That(((Transform[])Get(antics,"jugs")).All(j=>!j.gameObject.activeSelf&&j.GetComponentsInChildren<Collider>(true).Length==0));Assert.That(((int[])Get(Get(match,"rules"),"goals")).Sum(),Is.EqualTo(1));
  }
  [UnityTest]public IEnumerator MinefieldFlagsUseAttachedOutlinedTextAndSharedReducedSnowSelection(){
-  yield return Load("TruckMinefield","MinefieldMatch");var weather=Get(match,"weatherField");Assert.That((bool)Get(weather,"reduceSnowRandom"));var catalog=Get(weather,"presets");Assert.That(catalog,Is.Not.Null);var entries=(Array)Get(catalog,"entries");var clear=entries.Cast<object>().First(e=>(string)Get(e,"displayName")=="Clear");Call(catalog,"Select",Get(clear,"id"));Call(match,"AllBots");Assert.That(StartChecked());Assert.That((string)Get(weather,"PresetId"),Is.EqualTo((string)Get(clear,"id")));foreach(var field in new[]{"blastFlags","landingFlags","bestFlags"})foreach(var flag in (Array)Get(match,field)){Assert.That(Get(flag,"backing"),Is.Null);var label=(Component)Get(flag,"attachedName");Assert.That(label,Is.Not.Null);Assert.That((bool)Get(label,"isOverlay"),Is.False);Assert.That(label.transform.IsChildOf(((Component)flag).transform));Call(flag,"Reveal",new Vector3(0,0,20),Color.cyan,"A long participant name\nHEAT 1 · FINAL REST\n200 FT",1,0f);Assert.That((string)Get(label,"text"),Does.Contain("A long participant name"));Assert.That((Color)Get(label,"color"),Is.EqualTo(Color.cyan));}
+  yield return Load("TruckMinefield","MinefieldMatch");var weather=Get(match,"weatherField");Assert.That((bool)Get(weather,"reduceSnowRandom"));var catalog=Get(weather,"presets");Assert.That(catalog,Is.Not.Null);var entries=(Array)Get(catalog,"entries");var clear=entries.Cast<object>().First(e=>(string)Get(e,"displayName")=="Clear");Call(catalog,"Select",Get(clear,"id"));Call(match,"AllBots");Assert.That(StartChecked());Assert.That((string)Get(weather,"PresetId"),Is.EqualTo((string)Get(clear,"id")));foreach(var field in new[]{"blastFlags","landingFlags","bestFlags"})foreach(var flag in (Array)Get(match,field)){Assert.That(Get(flag,"backing"),Is.Null);var label=(Component)Get(flag,"attachedName");Assert.That(label,Is.Not.Null);Assert.That((bool)Get(label,"isOverlay"),Is.False);Assert.That(label.transform.IsChildOf(((Component)flag).transform));Call(flag,"Reveal",new Vector3(0,0,20),Color.cyan,"A long participant name\nHEAT 1 · FINAL REST\n200 FT",1,0f);Assert.That((string)Get(label,"text"),Does.Contain("A long participant name"));Assert.That((Color)Get(label,"color"),Is.EqualTo(Color.cyan));Assert.That((string)Get(label,"text"),Does.Not.Contain("\n"),"Only the player name belongs on the cloth; detailed records remain authoritative.");var billboard=label.GetComponent(Type.GetType("LWS.TruckSports.SportsPerCameraBillboard, Assembly-CSharp",true));Assert.That((float)Get(billboard,"cameraFacingOffset"),Is.GreaterThan(0),"Depth-tested lettering must clear its supporting flag in every camera.");}
+ }
+
+ [UnityTest]public IEnumerator MinefieldRandomReducesSnowWithoutOverridingExplicitSnowOrChangingAnActiveForecast(){
+  yield return Load("TruckMinefield","MinefieldMatch");var weather=Get(match,"weatherField");var catalog=Get(weather,"presets");
+  var entries=((Array)Get(catalog,"entries")).Cast<object>().ToArray();var snow=entries.First(e=>(bool)Get(e,"Snow")&&!(bool)Get(Get(e,"profile"),"Disabled"));
+  var clear=entries.First(e=>(string)Get(e,"displayName")=="Clear");Call(catalog,"Select","random");
+  int normal=0,reduced=0;
+  for(int seed=1;seed<=512;seed++){
+   if((bool)Get(Call(catalog,"Resolve",seed,false),"Snow"))normal++;
+   if((bool)Get(Call(catalog,"Resolve",seed,true),"Snow"))reduced++;
+   if(seed%64==0)yield return null;
+  }
+  TestContext.WriteLine("Installed vendor weighted selection,512 seeds: ordinary snow="+normal+", Minefield snow="+reduced);
+  Assert.That(reduced,Is.GreaterThan(0));Assert.That(reduced,Is.LessThan(normal*.7f));
+  Call(catalog,"Select",Get(snow,"id"));for(int seed=1;seed<=12;seed++)Assert.That((string)Get(Call(catalog,"Resolve",seed,true),"id"),Is.EqualTo((string)Get(snow,"id")));
+  Call(match,"AllBots");Assert.That(StartChecked());Assert.That((string)Get(weather,"PresetId"),Is.EqualTo((string)Get(snow,"id")));
+  Call(catalog,"Select",Get(clear,"id"));yield return null;Assert.That((string)Get(weather,"PresetId"),Is.EqualTo((string)Get(snow,"id")),"Changing the next-match preference must not reset active weather.");
+  Call(match,"SetupScreen");Assert.That(StartChecked());Assert.That((string)Get(weather,"PresetId"),Is.EqualTo((string)Get(clear,"id")),"Rematch honors the new explicit selection.");
  }
 
  [UnityTest]public IEnumerator CornholeStormBoltsBindLiveSplitCameraWithoutMainCameraTag(){
@@ -184,6 +202,108 @@ public sealed class GoddessPhysicsTests {
   float before=(float)Get(replay,"Clock");double start=Time.realtimeSinceStartupAsDouble;System.Threading.Thread.Sleep(80);Call(replay,"LateUpdate");float expected=(float)(Time.realtimeSinceStartupAsDouble-start)*2;Assert.That((float)Get(replay,"Clock")-before,Is.EqualTo(expected).Within(.035f),"Actual time after the action must still advance at the selected rate.");
   Call(match,"Pause",0,false);before=(float)Get(replay,"Clock");yield return new WaitForSecondsRealtime(.25f);Assert.That((float)Get(replay,"Clock"),Is.EqualTo(before));Call(match,"Resume");Call(replay,"LateUpdate");Assert.That((float)Get(replay,"Clock")-before,Is.LessThan(.06f),"Resume must not consume paused wall time.");Assert.That((int)Get(course,"Attempts"),Is.EqualTo(attempts));Assert.That((int)Get(course,"Provisional"),Is.EqualTo(score));
  }
+ [UnityTest]public IEnumerator SkyTowHumanAndAICameraOwnership(){yield return NewEventCameraOwnership("TruckSkyTow","SkyTowMatch");}
+ [UnityTest]public IEnumerator LimboHumanAndAICameraOwnership(){yield return NewEventCameraOwnership("TruckLimbo","LimboMatch");}
+ [UnityTest]public IEnumerator FareFightHumanAndAICameraOwnership(){yield return NewEventCameraOwnership("TruckFareFight","FareFightMatch");}
+ [UnityTest]public IEnumerator SnakeHumanAndAICameraOwnership(){yield return NewEventCameraOwnership("TruckSnake","SnakeMatch");}
+ [UnityTest]public IEnumerator KickballHumanAndAICameraOwnership(){
+  yield return NewEventCameraOwnership("TruckKickball","KickballMatch");
+  Call(match,"AllBots");while((int)Get(match,"ViewMode")!=0)Call(match,"ExtraAction","view");Assert.That(StartChecked());yield return null;
+  var camera=((Camera[])Get(match,"cameras"))[0];float previous=camera.aspect;
+  try{foreach(float aspect in new[]{16f/9,16f/10,4f/3,21f/9}){
+   camera.aspect=aspect;var presentation=Get(match,"presentation");presentation.GetType().GetMethod("FrameStadium").Invoke(null,new object[]{camera});
+   Assert.That(camera.orthographic,Is.False,"Weather Maker sky buffers must retain their supported perspective projection across setup, replay and broadcast.");
+   for(int i=0;i<56;i++){float angle=i*Mathf.PI*2/56;var edge=new Vector3(Mathf.Sin(angle)*78,3.6f,27+Mathf.Cos(angle)*78);var pixel=camera.WorldToViewportPoint(edge);Assert.That(pixel.z,Is.GreaterThan(0));Assert.That(pixel.x,Is.InRange(.015f,.985f));Assert.That(pixel.y,Is.InRange(.04f,.96f));}
+  }}finally{camera.aspect=previous;}
+  var weather=Get(match,"atmosphere");Assert.That(((Behaviour)Get(weather,"clouds")).enabled,Is.True,"The fix must preserve vendor weather rather than disable clouds.");
+ }
+ IEnumerator NewEventCameraOwnership(string scene,string authority){
+  yield return Load(scene,authority);keyboard=InputSystem.AddDevice<Keyboard>();InputSystem.EnableDevice(keyboard);
+  var options=Type.GetType("LWS.TruckSports.SportsCameraOptions, Assembly-CSharp",true);var setup=Get(match,"setup");var players=(Array)Get(setup,"players");
+  Set(setup,"count",Mathf.Min(8,(int)Get(match,"MaximumPlayers")));Call(match,"NormalizeSetup");
+  if(authority=="FareFightMatch")for(int i=0;i<(int)Get(setup,"count");i++)Set(players.GetValue(i),"name","Long Hauler Driver "+(i+1));
+  var driving=match.GetType().GetField("drivingViews",Any)?.GetValue(match);object views=driving!=null?Get(driving,"rally"):Get(match,"views");
+  if(driving!=null)Call(driving,"Select",1);if(authority=="KickballMatch")while((int)Get(match,"ViewMode")!=1)Call(match,"ExtraAction","view");
+  for(int humans=1;humans<=4;humans++){
+   Call(match,"AllBots");for(int i=0;i<humans;i++){var player=players.GetValue(i);var field=player.GetType().GetField("source");field.SetValue(player,Enum.Parse(field.FieldType,"Keyboard"));}
+   foreach(bool show in new[]{false,true}){
+    options.GetMethod("Set").Invoke(null,new object[]{show});Assert.That(StartChecked(),scene+" starts "+humans+" humans, AI cameras="+show);yield return null;yield return null;
+    if(authority=="KickballMatch"){
+     var board=(Component)Get(match,"scoreboard");Call(board,"ForceMeshUpdate",true,true);var bounds=(Bounds)Get(board,"textBounds");Assert.That(bounds.size.x,Is.GreaterThan(15),"Physical stadium lettering must fill the scoreboard rather than render as subpixel text.");Assert.That(bounds.size.y,Is.GreaterThan(2));
+     var crowd=match.GetComponent(Type.GetType("LWS.TruckFieldGoal.FieldGoalCrowd, Assembly-CSharp",true));Assert.That(crowd,Is.Not.Null);Assert.That((int)Get(crowd,"Spectators"),Is.GreaterThanOrEqualTo(2000));Assert.That(Get(crowd,"eventSession"),Is.SameAs(match));
+    }
+    if(authority=="FareFightMatch"){
+     yield return new WaitForSeconds(.12f);
+     var menus=Get(match,"menus");var labels=(Array)Get(menus,"viewTexts");foreach(Component label in labels)Assert.That(((RectTransform)Get(label,"rectTransform")).rect.width,Is.LessThanOrEqualTo(530));
+     for(int v=0;v<((Camera[])Get(match,"cameras")).Length;v++){var label=labels.GetValue(v);Call(label,"ForceMeshUpdate",true,true);Assert.That((string)Get(label,"text"),Does.Contain("Long Hauler Driver"));Assert.That((bool)Get(label,"isTextOverflowing"),Is.False,"Maximum-length Inspector names and contextual HUD must fit each actual viewport.");}
+     Assert.That((string)Call(match,"ViewText",0),Does.Not.Contain("GESTURE").And.Not.Contain(" HORN"),"Detailed mappings belong in Help rather than every driving viewport.");
+    }
+    var cameras=(Camera[])Get(match,"cameras");Assert.That(cameras.Length,Is.EqualTo(show?4:humans));Assert.That(cameras.All(c=>c.isActiveAndEnabled));
+    var owners=(int[])Get(views,"owners");for(int i=0;i<humans;i++)Assert.That(owners[i],Is.EqualTo(i),scene+" human-first stable camera ownership");
+    Assert.That(cameras.Select(c=>c.GetInstanceID()).Distinct().Count(),Is.EqualTo(cameras.Length));
+    foreach(var camera in cameras){var rect=camera.rect;Assert.That(rect.width,Is.GreaterThan(0));Assert.That(rect.height,Is.GreaterThan(0));Assert.That(rect.xMin,Is.GreaterThanOrEqualTo(0));Assert.That(rect.yMin,Is.GreaterThanOrEqualTo(0));Assert.That(rect.xMax,Is.LessThanOrEqualTo(1.001f));Assert.That(rect.yMax,Is.LessThanOrEqualTo(1.001f));}
+    for(int i=0;i<cameras.Length;i++)for(int j=0;j<i;j++)Assert.That(cameras[i].rect.Overlaps(cameras[j].rect),Is.False);
+    if(!show&&humans==1)Assert.That(cameras[0].rect,Is.EqualTo(new Rect(0,0,1,1)));
+    if(!show&&(humans==1||humans==4)){
+     var capture=Type.GetType("LWS.TruckSports.SportsControlledCapture, Assembly-CSharp",true).GetMethods().First(method=>method.Name=="Save"&&method.GetParameters()[0].ParameterType.Name=="SportsEventSession");
+     foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080)})capture.Invoke(null,new object[]{match,size.x,size.y,"Logs/TruckSports/EssentialRelease/NewEventCameras/"+scene+"-"+humans+"-"+size.x+"x"+size.y+".png",null});
+    }
+    if(authority=="FareFightMatch"&&!show&&humans==4){
+     Call(match,"Pause",0,false);var menu=Get(match,"menus");var screen=menu.GetType().GetProperty("Screen").PropertyType;menu.GetType().GetMethod("Show",new[]{screen}).Invoke(menu,new[]{Enum.Parse(screen,"Help")});yield return new WaitForSecondsRealtime(.3f);
+     var page=((GameObject[])Get(menu,"pages"))[4];var help=page.transform.Find("Rules and controls").GetComponent(Type.GetType("TMPro.TextMeshProUGUI, Unity.TextMeshPro",true));
+     Call(help,"ForceMeshUpdate",true,true);Assert.That((string)Get(help,"text"),Does.Contain("ASSIGNED CONTROLS").And.Contain("HORN").And.Contain("GESTURE"));Assert.That((bool)Get(help,"isTextOverflowing"),Is.False,"The complete assigned mappings must remain readable in Help.");
+     var capture=Type.GetType("LWS.TruckSports.SportsControlledCapture, Assembly-CSharp",true).GetMethods().First(method=>method.Name=="Save"&&method.GetParameters()[0].ParameterType.Name=="SportsEventSession");capture.Invoke(null,new object[]{match,1280,720,"Logs/TruckSports/EssentialRelease/NewEventCameras/FareFight-assigned-help-720.png",null});
+    }
+    Call(match,"SetupScreen");
+   }
+  }
+  Call(match,"AllBots");foreach(bool show in new[]{false,true}){
+   options.GetMethod("Set").Invoke(null,new object[]{show});Assert.That(StartChecked());yield return null;yield return null;var cameras=(Camera[])Get(match,"cameras");Assert.That(cameras.Length,Is.EqualTo(show?4:1));Assert.That(cameras.All(c=>c.isActiveAndEnabled));if(!show)Assert.That(cameras[0].rect,Is.EqualTo(new Rect(0,0,1,1)));Call(match,"SetupScreen");
+  }
+ }
+
+ [UnityTest]public IEnumerator RaceStartingLightsUseAuthoritativeTimersAndSurvivePauseAndRematch(){
+  keyboard=InputSystem.AddDevice<Keyboard>();InputSystem.EnableDevice(keyboard);
+  foreach(var item in new[]{new[]{"TruckMattressRacing","MattressMatch"},new[]{"TruckWifeCarrying","WifeMatch"},new[]{"TruckBogSnorkelling","BogMatch"},new[]{"TruckSkyTow","SkyTowMatch"},new[]{"TruckTerrierRacing","TerrierMatch"}}){
+   yield return Load(item[0],item[1]);Call(match,"AllBots");Assert.That((bool)Get(match,"SupportsRaceCountdown"),Is.True);Assert.That(StartChecked());yield return null;
+   var display=match.GetComponent(Type.GetType("LWS.TruckTerrierRacing.TerrierCountdown, Assembly-CSharp",true));Assert.That(display,Is.Not.Null,item[0]+" saved starting display");Assert.That(Get(display,"Session"),Is.SameAs(match));
+   var members=(Array)Get(match,item[1]=="WifeMatch"?"pairs":"racers");var bodies=members.Cast<object>().Select(member=>(Rigidbody)Get(Get(member,item[1]=="WifeMatch"?"driver":"truck"),"body")).ToArray();
+   var positions=bodies.Select(body=>body.position).ToArray();var rotations=bodies.Select(body=>body.rotation).ToArray();
+   Assert.That((int)Get(display,"Beat"),Is.EqualTo(3));yield return new WaitForSeconds(.15f);
+   for(int i=0;i<bodies.Length;i++){Assert.That(Vector3.Distance(positions[i],bodies[i].position),Is.LessThan(.005f),item[0]+" remains held during countdown");Assert.That(Quaternion.Angle(rotations[i],bodies[i].rotation),Is.LessThan(.1f));}
+   float remaining=(float)Get(match,"RaceCountdownSeconds");int cues=(int)Get(display,"Cues");Call(match,"Pause",0,false);yield return new WaitForSecondsRealtime(.15f);
+   Assert.That((float)Get(match,"RaceCountdownSeconds"),Is.EqualTo(remaining));Assert.That(((RectTransform[])Get(display,"panels")).All(panel=>!panel.gameObject.activeSelf),Is.True);Call(match,"Resume");yield return null;yield return null;Assert.That((int)Get(display,"Cues"),Is.EqualTo(cues),"Resume does not repeat the same countdown cue.");
+   var beats=new System.Collections.Generic.HashSet<int>{3};float deadline=Time.realtimeSinceStartup+8;Time.timeScale=2;
+   while(Time.realtimeSinceStartup<deadline){int beat=(int)Get(display,"Beat");if(beat>=0)beats.Add(beat);if(beat==0)break;yield return null;}
+   Assert.That(beats.OrderBy(value=>value).ToArray(),Is.EqualTo(new[]{0,1,2,3}),item[0]+" actual 3–2–1–GO sequence");Assert.That((float)Get(match,"RaceCountdownSeconds"),Is.LessThan(0));Assert.That((float)Get(match,"RaceStartSeconds"),Is.GreaterThanOrEqualTo(0));
+   Call(match,"SetupScreen");var setup=Get(match,"setup");var players=(Array)Get(setup,"players");for(int i=0;i<4;i++){var player=players.GetValue(i);var field=player.GetType().GetField("source");field.SetValue(player,Enum.Parse(field.FieldType,"Keyboard"));}
+   Assert.That(StartChecked());yield return null;yield return null;Assert.That((int)Get(display,"Beat"),Is.EqualTo(3),"Rematch resets the displayed countdown.");
+   var cameras=(Camera[])Get(match,"cameras");var panels=(RectTransform[])Get(display,"panels");Assert.That(cameras.Length,Is.EqualTo(4));for(int i=0;i<4;i++){Assert.That(panels[i].gameObject.activeSelf,Is.True);Assert.That(panels[i].anchorMin,Is.EqualTo(cameras[i].rect.min));Assert.That(panels[i].anchorMax,Is.EqualTo(cameras[i].rect.max));}
+   var capture=Type.GetType("LWS.TruckSports.SportsControlledCapture, Assembly-CSharp",true).GetMethods().First(method=>method.Name=="Save"&&method.GetParameters()[0].ParameterType.Name=="SportsEventSession");foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080)})capture.Invoke(null,new object[]{match,size.x,size.y,"Logs/TruckSports/EssentialRelease/RaceCountdown/"+item[0]+"-"+size.x+"x"+size.y+".png",null});Call(match,"SetupScreen");
+  }
+ }
+
+ [UnityTest]public IEnumerator GiantSwingReplayCameraClearsGroundAtLowAndExtremeRecordedPoses(){
+  yield return Load("TruckGiantSwing","SwingMatch");Call(match,"AllBots");Assert.That(StartChecked());
+  var cameraRig=Get(match,"cameraRig");var camera=(Camera)Get(cameraRig,"view");
+  var original=camera.targetTexture;var target=RenderTexture.GetTemporary(128,72,24);
+  try{
+   camera.targetTexture=target;
+   foreach(var position in new[]{new Vector3(0,-8,30),new Vector3(-90,.1f,70),new Vector3(90,.1f,180),new Vector3(0,120,100),new Vector3(145,-8,220)}){
+    var focus=(Vector3)Call(match,"ReplayFocus",position);float floor=(float)Call(match,"ReplayGroundHeight",position);
+    Assert.That(focus.y,Is.GreaterThanOrEqualTo(floor+.79f),"A recorded impact below the visible ground must remain frameable.");
+    foreach(var offset in new[]{new Vector3(20,11,-27),new Vector3(-27,9,4),new Vector3(0,37,-15)}){
+     camera.transform.position=position+offset;Call(match,"ClearReplayCamera",focus);
+     float cameraFloor=(float)Call(match,"ReplayGroundHeight",camera.transform.position);
+     Assert.That(camera.transform.position.y-cameraFloor,Is.GreaterThanOrEqualTo(.69f));
+     Assert.That(Physics.OverlapSphere(camera.transform.position,.38f,1,QueryTriggerInteraction.Ignore),Is.Empty,"Replay camera must clear actual solid terrain/venue geometry.");
+     Assert.That(Vector3.Dot(camera.transform.forward,(focus-camera.transform.position).normalized),Is.GreaterThan(.99f));camera.Render();
+    }
+   }
+  }finally{camera.targetTexture=original;RenderTexture.ReleaseTemporary(target);}
+  Call(match,"SetupScreen");
+ }
+
  [UnityTest]public IEnumerator SharedCabVisibilityCanRenderOutsideBowlingWithoutABowlingLane(){
   yield return Load("TruckBuzkashi","BuzMatch");Call(match,"AllBots");Assert.That(StartChecked());var borrowed=UnityEngine.Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include).Where(c=>c.GetType().Name=="BowlingCabCamera").ToArray();Assert.That(borrowed.Length,Is.GreaterThan(0));Assert.That(borrowed.Any(c=>Get(c,"lane")==null),"Buzkashi deliberately reuses only generic exterior/interior visibility.");var view=(Camera)Get(Get(match,"broadcast"),"view");var prior=view.targetTexture;var target=RenderTexture.GetTemporary(128,72,24);try{view.targetTexture=target;view.Render();yield return null;}finally{view.targetTexture=prior;RenderTexture.ReleaseTemporary(target);}Call(match,"SetupScreen");
  }

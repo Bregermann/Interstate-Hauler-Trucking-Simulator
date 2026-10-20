@@ -50,13 +50,27 @@ namespace LWS.TruckKickball
             for (int i = 0; i < match.setup.count; i++) match.setup.players[i].difficulty = (BowlingDifficulty)difficulty;
             Check(match.StartMatch(), "twelve-AI match starts without a controller or human confirmation");
             Check(match.rules.TeamSize == 6 && match.rules.BattingTeam == 0, "six-a-side and correct starting half");
+            while (match.ViewMode != 0) match.ExtraAction("view");
+            yield return new WaitForSecondsRealtime(.4f);
+            if (!Application.isEditor) yield return CaptureField(match, "startup", true);
             Time.timeScale = 8;
             float began = Time.realtimeSinceStartup, next = 0;
             float deadline = began + (mode.StartsWith("full") ? 900 : 100);
-            bool moved = false, pause = false;
+            bool moved = false, pause = false, sawReplay = false, restoredBroadcast = false;
             while (!match.Finished && Time.realtimeSinceStartup < deadline)
             {
                 foreach (var agent in match.agents) moved |= agent.truck.body.linearVelocity.magnitude > 2;
+                if (match.ReplayControls && !sawReplay)
+                {
+                    sawReplay = true;
+                    Check(!match.views.broadcast.view.orthographic, "recorded replay retains the weather-compatible perspective projection");
+                    if (!Application.isEditor) yield return CaptureField(match, "first-replay", false);
+                }
+                else if (sawReplay && !match.ReplayControls && !restoredBroadcast)
+                {
+                    restoredBroadcast = true;
+                    if (!Application.isEditor) yield return CaptureField(match, "broadcast-after-replay", true);
+                }
                 if (!pause && match.PhysicalKicks > 0)
                 {
                     pause = true; Time.timeScale = 1; match.Pause();
@@ -80,16 +94,19 @@ namespace LWS.TruckKickball
             Check(match.PhysicalCatches > 0, "actual front contact secures the visible ball");
             if (mode.StartsWith("full")) Check(match.Finished && match.rules.Complete, "complete actual three-inning match including necessary extra innings");
             else Check(match.rules.CompletedPlays >= 5, "five actual pitches/plays resolve without injected outs or scores");
+            var audience=match.GetComponent<LWS.TruckFieldGoal.FieldGoalCrowd>();Check(audience!=null&&audience.Spectators>=2000&&audience.Reactions>0,"reused stadium audience responds to actual runs or outs without scoring authority");
             log.AppendLine("MATCH difficulty=" + difficulty + " pitches=" + match.rules.Pitches + " kicks=" + match.PhysicalKicks + " catches=" + match.PhysicalCatches + " throws=" + match.PhysicalThrows + " bases=" + match.PhysicalBaseTouches + " plays=" + match.rules.CompletedPlays + " innings=" + match.rules.Inning + " scores=" + string.Join(",", match.rules.Scores));
             match.SetupScreen(); Check(match.StartMatch() && match.rules.Scores[0] == 0 && match.rules.Scores[1] == 0 && match.rules.Outs == 0, "rematch clears scores, runners, outs, possession and replay");
             yield return null; match.Pause();
-            for (int i = 0; i < 2; i++)
+            if (mode.StartsWith("full")) Check(sawReplay && restoredBroadcast, "real match enters a recorded highlight and restores broadcast rendering");
+            var sizes = new[] { new Vector2Int(1280,720), new Vector2Int(1920,1080), new Vector2Int(1440,900), new Vector2Int(1280,960), new Vector2Int(2560,1080) };
+            for (int i = 0; i < sizes.Length; i++)
             {
-                int w = i == 0 ? 1280 : 1920, h = i == 0 ? 720 : 1080;
+                int w = sizes[i].x, h = sizes[i].y;
                 if (!Application.isEditor) Screen.SetResolution(w, h, false);
                 yield return new WaitForSecondsRealtime(.3f);
                 if (!Application.isEditor)
-                { match.menus.Show(SportsEventScreen.Play); ScreenCapture.CaptureScreenshot(folder + "/arena-" + w + "-window.png"); yield return new WaitForSecondsRealtime(.2f); }
+                { match.menus.Show(SportsEventScreen.Play); yield return new WaitForSecondsRealtime(.15f); yield return CaptureField(match, "rematch-" + w + "x" + h, true); }
             }
             SportsNavigation.FrontEnd(); yield return null; yield return null;
             Check(FindAnyObjectByType<SportsFrontEnd>() != null && FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length == 1, "menu return removes trucks, cameras, replay and extra listeners");
@@ -100,6 +117,22 @@ namespace LWS.TruckKickball
             if (Application.isEditor) UnityEditor.EditorApplication.isPlaying = false; else
 #endif
                 Application.Quit(errors == 0 ? 0 : 2);
+        }
+        IEnumerator CaptureField(KickballMatch match, string label, bool requireTurf)
+        {
+            yield return new WaitForEndOfFrame();
+            var picture = ScreenCapture.CaptureScreenshotAsTexture();
+            try
+            {
+                File.WriteAllBytes(folder + "/" + label + "-window.png", picture.EncodeToPNG());
+                int green = 0, samples = 0;
+                for (int y = picture.height / 8; y < picture.height * 7 / 8; y += 8)
+                    for (int x = picture.width / 8; x < picture.width * 7 / 8; x += 8)
+                    { var color = picture.GetPixel(x,y); samples++; if (color.g > color.r * 1.15f && color.g > color.b * 1.15f && color.g > .07f) green++; }
+                log.AppendLine("RENDER " + label + " " + picture.width + "x" + picture.height + " turfFraction=" + ((float)green / samples).ToString("F3") + " position=" + match.cameras[0].transform.position);
+                if (requireTurf) Check((float)green / samples > .08f && !match.cameras[0].orthographic, label + " actual player framebuffer contains the stadium, not a fullscreen sky pass");
+            }
+            finally { Destroy(picture); }
         }
         void OnDestroy()
         { Application.logMessageReceived -= Error; preferences?.Dispose(); SportsParticipantRegistry.ForgetCache(); Time.timeScale = 1; }

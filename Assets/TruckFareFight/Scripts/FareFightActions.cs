@@ -20,8 +20,17 @@ namespace LWS.TruckFareFight {
   static readonly Key[] holdKeys={Key.Space,Key.RightShift,Key.R,Key.U},cueKeys={Key.LeftCtrl,Key.RightCtrl,Key.Y,Key.O},throwKeys={Key.Q,Key.Delete,Key.B,Key.P},gestureKeys={Key.E,Key.Insert,Key.N,Key.Semicolon},cameraKeys={Key.C,Key.End,Key.M,Key.Quote},hornKeys={Key.V,Key.Home,Key.Comma,Key.Slash};
   void Awake(){for(int i=0;i<4;i++){voices[i]=match.trucks[i].gameObject.AddComponent<AudioSource>();voices[i].playOnAwake=false;voices[i].spatialBlend=.8f;voices[i].minDistance=6;voices[i].maxDistance=90;loops[i]=new TruckTaxiJugLiquidLoop(voices[i],null);}}
   int Cluster(int slot)=>Mathf.Clamp(match.KeyboardCluster(slot)-1,0,3);
+  public void RefreshBindings()=>ConfigureKeys();
   public void ResetMatch(){ConfigureKeys();for(int i=0;i<4;i++){loops[i].Stop();needs[i]=new TruckTaxiDriverNeedsState(needsSettings,match.matchSeed+i);needs[i].SetPressure(.7f);needs[i].AddItem(TruckTaxiNeedsItem.EmptyPissJug,12);nextThrow[i]=nextGesture[i]=nextHorn[i]=0;ready[i]=priorHold[i]=priorCue[i]=priorThrow[i]=priorGesture[i]=priorCamera[i]=false;lastVelocity[i]=Vector3.zero;jugs[i].ResetJug();}}
-  public string Caption(int slot){var p=match.setup.players[slot];var n=needs[slot];string state=n==null?"":n.JugActive?"JUG "+Mathf.RoundToInt(n.JugProgress*100)+"% · "+(n.CueIsOpen(match.trucks[slot].body.linearVelocity.magnitude>1)?"TAP":"HOLD"):n.FilledJug?"FILLED JUG · "+Mathf.CeilToInt(Mathf.Max(0,nextThrow[slot]-Time.time))+"s":"EMPTY JUG";
+  public string JugStatus(int slot){var n=needs[slot];return n==null?"EMPTY JUG":n.JugActive?"JUG "+Mathf.RoundToInt(n.JugProgress*100)+"% · "+(n.CueIsOpen(match.trucks[slot].body.linearVelocity.magnitude>1)?"TAP":"HOLD"):n.FilledJug?"FILLED JUG · "+Mathf.CeilToInt(Mathf.Max(0,nextThrow[slot]-Time.time))+"s":"EMPTY JUG";}
+  public string HUDCaption(int slot){
+   var p=match.setup.players[slot];var n=needs[slot];string state=JugStatus(slot);
+   if(n==null||p.source==BowlingSource.AI)return state;
+   if(n.JugActive){string cue=p.source==BowlingSource.Keyboard?keys[slot,1].ToString():p.pad!=null?(p.source==BowlingSource.WholeController?p.pad.rightShoulder:p.source==BowlingSource.LeftStick?p.pad.leftStickButton:p.pad.rightStickButton).displayName:"CUE";return state+" · "+cue;}
+   if(n.FilledJug&&Time.time>=nextThrow[slot]){string action=p.source==BowlingSource.Keyboard?keys[slot,2].ToString():p.source==BowlingSource.WholeController&&p.pad!=null?p.pad.buttonWest.displayName:"TRIGGER + STICK";return "JUG READY · "+action+" THROW";}
+   return state;
+  }
+  public string Caption(int slot){var p=match.setup.players[slot];string state=JugStatus(slot);
    if(p.source==BowlingSource.AI)return state;
    if(p.source==BowlingSource.WholeController)return state+"\nLB HOLD / RB CUE · WEST THROW · EAST GESTURE · NORTH VIEW · L3 HORN";
    if(p.source==BowlingSource.LeftStick||p.source==BowlingSource.RightStick)return state+"\nTRIGGER HOLD / STICK CLICK CUE · BOTH THROW · CLICK GESTURE · SHOULDER HORN";

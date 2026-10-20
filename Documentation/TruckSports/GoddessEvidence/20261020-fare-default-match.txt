@@ -1,0 +1,1139 @@
+PASS saved original-town scene contains four full NWH tractors and twenty authored stops
+PASS four-AI match starts without controllers
+LIVE t=0.0 phase=Waiting carrier=-1 points=0,0,0,0 contacts=0 traffic=0 peds=24
+  slot=0 p=(-160.00, 0.35, -280.00) v=0.0 route=0/0 searches=0 target=none input=(0.00, 0.00)
+  slot=1 p=(160.00, 0.35, 280.00) v=0.0 route=0/0 searches=0 target=none input=(0.00, 0.00)
+  slot=2 p=(-280.00, 0.35, 160.00) v=0.0 route=0/0 searches=0 target=none input=(0.00, 0.00)
+  slot=3 p=(280.00, 0.35, -160.00) v=0.0 route=0/0 searches=0 target=none input=(0.00, 0.00)
+LIVE t=6.6 phase=Waiting carrier=-1 points=0,0,0,0 contacts=0 traffic=42 peds=150
+  slot=0 p=(-160.00, 0.26, -269.25) v=4.5 route=0/32 searches=3 target=(-160.00, 0.15, -160.00) input=(0.00, 1.00)
+  slot=1 p=(160.00, 0.24, 269.27) v=4.5 route=0/56 searches=3 target=(160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=2 p=(-269.24, 0.25, 160.00) v=4.5 route=0/24 searches=3 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=3 p=(269.25, 0.25, -160.00) v=4.5 route=0/64 searches=3 target=(160.00, 0.15, -160.00) input=(0.00, 1.00)
+LIVE t=13.2 phase=Waiting carrier=-1 points=0,0,0,0 contacts=0 traffic=42 peds=150
+  slot=0 p=(-160.01, 0.25, -216.76) v=13.0 route=0/32 searches=4 target=(-160.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=1 p=(160.01, 0.25, 216.79) v=13.0 route=0/56 searches=4 target=(160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-216.79, 0.26, 160.01) v=12.6 route=0/24 searches=4 target=(-160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(216.79, 0.26, -160.01) v=13.0 route=0/64 searches=4 target=(160.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=22.2 phase=Waiting carrier=-1 points=0,0,0,0 contacts=0 traffic=42 peds=146
+  slot=0 p=(-160.00, 0.24, -103.65) v=12.3 route=7/32 searches=5 target=(-160.00, 0.15, -90.00) input=(0.00, 0.25)
+  slot=1 p=(148.92, 0.25, 153.97) v=6.6 route=2/56 searches=5 target=(140.00, 0.15, 160.00) input=(1.00, 0.25)
+  slot=2 p=(-157.40, 0.26, 156.29) v=2.8 route=3/24 searches=5 target=(-160.00, 0.15, 145.00) input=(1.00, 1.00)
+  slot=3 p=(103.72, 0.26, -160.00) v=12.3 route=7/64 searches=5 target=(90.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=31.3 phase=Waiting carrier=-1 points=0,0,0,0 contacts=0 traffic=42 peds=144
+  slot=0 p=(-160.20, 0.26, 7.89) v=11.6 route=19/32 searches=5 target=(-160.00, 0.15, 15.00) input=(0.09, 0.25)
+  slot=1 p=(66.17, 0.24, 160.00) v=11.9 route=11/56 searches=5 target=(50.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-160.00, 0.25, 71.52) v=11.9 route=20/24 searches=5 target=(-160.00, 0.15, 60.00) input=(0.00, -0.50)
+  slot=3 p=(-7.96, 0.26, -160.00) v=12.3 route=18/64 searches=5 target=(-20.00, 0.15, -160.00) input=(0.00, 0.25)
+PASS pause preserves carrier, real truck pose and match clock
+LIVE t=39.5 phase=Carried carrier=2 points=0,0,0,0 contacts=0 traffic=42 peds=142
+  slot=0 p=(-159.99, 0.27, 5.71) v=3.4 route=0/24 searches=9 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=1 p=(-35.59, 0.26, 160.00) v=11.7 route=5/40 searches=10 target=(-50.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-149.92, 0.24, 58.09) v=1.5 route=0/70 searches=9 target=(-160.00, 0.15, 60.00) input=(1.00, 1.00)
+  slot=3 p=(-109.17, 0.27, -160.00) v=12.1 route=0/32 searches=10 target=(-160.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=48.6 phase=Carried carrier=0 points=0,0,0,0 contacts=10 traffic=42 peds=135
+  slot=0 p=(-160.02, 0.25, 40.81) v=0.2 route=0/72 searches=13 target=(-160.00, 0.15, 160.00) input=(-0.02, 0.25)
+  slot=1 p=(-142.03, 0.25, 160.00) v=3.7 route=0/25 searches=13 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=2 p=(-159.87, 0.26, 45.66) v=0.2 route=0/17 searches=10 target=(-160.00, 0.15, 0.00) input=(-0.02, 1.00)
+  slot=3 p=(-159.47, 0.24, -144.95) v=8.3 route=3/33 searches=12 target=(-160.00, 0.15, -130.00) input=(0.08, 1.00)
+LIVE t=57.6 phase=Carried carrier=0 points=0,0,0,0 contacts=10 traffic=42 peds=134
+  slot=0 p=(-161.97, 0.26, 39.92) v=2.9 route=0/70 searches=15 target=(-160.00, 0.15, 60.00) input=(0.20, 0.25)
+  slot=1 p=(-160.00, 0.25, 115.75) v=10.8 route=11/25 searches=13 target=(-160.00, 0.15, 105.00) input=(0.00, 1.00)
+  slot=2 p=(-156.92, 0.25, 52.16) v=2.9 route=0/17 searches=10 target=(-160.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=3 p=(-160.00, 0.25, -43.42) v=12.9 route=13/33 searches=12 target=(-160.00, 0.15, -30.00) input=(0.00, 0.25)
+LIVE t=66.8 phase=Carried carrier=1 points=0,0,0,0 contacts=16 traffic=42 peds=133
+  slot=0 p=(-160.46, 0.25, 53.75) v=1.3 route=0/0 searches=17 target=none input=(0.00, -1.00)
+  slot=1 p=(-158.93, 0.25, 59.12) v=1.0 route=1/70 searches=14 target=(-160.00, 0.15, 50.00) input=(0.12, -0.50)
+  slot=2 p=(-158.24, 0.25, 3.78) v=3.5 route=3/17 searches=12 target=(-160.00, 0.15, 15.00) input=(1.00, 0.25)
+  slot=3 p=(-160.00, 0.24, 46.30) v=8.1 route=0/25 searches=14 target=(-160.00, 0.15, 160.00) input=(0.00, -0.50)
+LIVE t=75.8 phase=Carried carrier=1 points=0,0,0,0 contacts=24 traffic=42 peds=132
+  slot=0 p=(-162.19, 0.25, 52.69) v=1.7 route=0/25 searches=19 target=(-160.00, 0.15, 160.00) input=(0.38, 1.00)
+  slot=1 p=(-159.89, 0.25, 56.81) v=0.9 route=2/70 searches=14 target=(-160.00, 0.15, 40.00) input=(-1.00, 0.25)
+  slot=2 p=(-159.97, 0.25, 40.99) v=0.4 route=10/17 searches=12 target=(-160.00, 0.15, 50.00) input=(-0.06, 0.25)
+  slot=3 p=(-159.39, 0.26, 45.90) v=1.3 route=0/25 searches=14 target=(-160.00, 0.15, 160.00) input=(-0.06, 1.00)
+LIVE t=84.8 phase=Carried carrier=1 points=0,0,0,0 contacts=32 traffic=42 peds=128
+  slot=0 p=(-169.96, 0.17, 62.98) v=2.4 route=0/25 searches=19 target=(-160.00, 0.15, 160.00) input=(-0.06, 1.00)
+  slot=1 p=(-166.82, 0.25, 60.34) v=1.6 route=1/70 searches=15 target=(-160.00, 0.15, 50.00) input=(-1.00, -0.50)
+  slot=2 p=(-159.98, 0.25, 52.35) v=1.8 route=12/17 searches=12 target=(-160.00, 0.15, 60.00) input=(0.00, 1.00)
+  slot=3 p=(-161.46, 0.25, 62.74) v=2.0 route=0/25 searches=14 target=(-160.00, 0.15, 160.00) input=(0.09, 1.00)
+LIVE t=93.8 phase=Carried carrier=1 points=0,0,0,0 contacts=34 traffic=42 peds=124
+  slot=0 p=(-165.77, 0.25, 114.81) v=10.9 route=0/25 searches=19 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=1 p=(-159.95, 0.25, 46.60) v=6.6 route=3/70 searches=15 target=(-160.00, 0.15, 30.00) input=(-0.01, 1.00)
+  slot=2 p=(-152.81, 0.24, 68.28) v=1.3 route=16/17 searches=12 target=(-159.28, 0.32, 60.88) input=(-1.00, 1.00)
+  slot=3 p=(-160.42, 0.25, 132.67) v=11.7 route=0/25 searches=14 target=(-160.00, 0.15, 160.00) input=(0.00, -0.50)
+LIVE t=102.9 phase=Carried carrier=1 points=0,0,0,0 contacts=36 traffic=42 peds=123
+  slot=0 p=(-160.45, 0.26, 154.27) v=1.9 route=2/18 searches=21 target=(-160.00, 0.15, 140.00) input=(1.00, 1.00)
+  slot=1 p=(-137.86, 0.25, 0.33) v=9.1 route=9/70 searches=15 target=(-130.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(-182.36, 0.05, 56.64) v=0.1 route=0/18 searches=16 target=(-320.00, 0.15, 0.00) input=(-0.01, 0.25)
+  slot=3 p=(-151.36, 0.25, 158.15) v=2.9 route=1/18 searches=16 target=(-160.00, 0.15, 150.00) input=(1.00, 0.25)
+LIVE t=111.9 phase=Carried carrier=1 points=0,0,0,0 contacts=36 traffic=42 peds=122
+  slot=0 p=(-145.87, 0.26, 167.84) v=2.1 route=0/40 searches=26 target=(-160.00, 0.15, 220.00) input=(-0.16, 1.00)
+  slot=1 p=(-33.58, 0.24, 0.01) v=12.5 route=20/70 searches=15 target=(-20.00, 0.15, 0.00) input=(-0.06, 0.25)
+  slot=2 p=(-175.98, 0.06, 59.64) v=3.3 route=0/24 searches=20 target=(-160.00, 0.15, 60.00) input=(0.04, 1.00)
+  slot=3 p=(-160.27, 0.25, 139.65) v=1.8 route=0/34 searches=20 target=(-160.00, 0.15, 160.00) input=(1.00, 1.00)
+LIVE t=121.0 phase=Carried carrier=1 points=0,0,0,0 contacts=36 traffic=42 peds=122
+  slot=0 p=(-158.15, 0.25, 177.10) v=2.5 route=0/34 searches=35 target=(-160.00, 0.15, 160.00) input=(-0.14, 1.00)
+  slot=1 p=(71.78, 0.24, 0.00) v=12.2 route=30/70 searches=15 target=(80.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-159.85, 0.25, 28.56) v=9.7 route=0/18 searches=28 target=(-160.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=3 p=(-149.80, 0.26, 156.28) v=1.6 route=0/34 searches=28 target=(-160.00, 0.15, 160.00) input=(-1.00, 1.00)
+LIVE t=130.1 phase=Carried carrier=1 points=0,0,0,0 contacts=36 traffic=42 peds=121
+  slot=0 p=(-159.91, 0.24, 90.98) v=12.5 route=0/34 searches=43 target=(-160.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=1 p=(184.06, 0.26, 0.00) v=12.2 route=42/70 searches=15 target=(200.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-133.28, 0.25, -0.05) v=9.0 route=0/18 searches=36 target=(0.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=3 p=(-181.79, 0.05, 176.69) v=4.6 route=0/72 searches=36 target=(-320.00, 0.15, 220.00) input=(0.00, -0.50)
+LIVE t=139.1 phase=Carried carrier=1 points=0,0,0,0 contacts=36 traffic=42 peds=120
+  slot=0 p=(-159.46, 0.26, 3.56) v=5.7 route=1/50 searches=51 target=(-150.00, 0.15, 0.00) input=(-1.00, 0.25)
+  slot=1 p=(295.50, 0.26, 0.00) v=12.1 route=53/70 searches=15 target=(310.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-24.84, 0.25, 0.42) v=12.3 route=0/34 searches=44 target=(0.00, 0.15, 0.00) input=(0.11, 0.25)
+  slot=3 p=(-203.67, 0.09, 183.01) v=0.1 route=0/88 searches=44 target=(-320.00, 0.15, 220.00) input=(-0.19, 0.25)
+LIVE t=148.2 phase=Announcement carrier=-1 points=0,1,0,0 contacts=36 traffic=42 peds=119
+  slot=0 p=(-83.23, 0.24, -0.14) v=12.2 route=0/34 searches=54 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=1 p=(319.99, 0.24, 50.95) v=9.2 route=66/70 searches=15 target=(320.00, 0.15, 60.00) input=(0.00, -0.50)
+  slot=2 p=(89.28, 0.24, 0.00) v=12.1 route=0/33 searches=48 target=(160.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-200.85, 0.06, 178.31) v=1.8 route=0/73 searches=49 target=(-160.00, 0.15, 160.00) input=(0.53, 1.00)
+LIVE t=157.3 phase=Waiting carrier=-1 points=0,1,0,0 contacts=36 traffic=42 peds=119
+  slot=0 p=(2.59, 0.26, -4.84) v=6.1 route=2/56 searches=57 target=(0.00, 0.15, -20.00) input=(1.00, 0.25)
+  slot=1 p=(320.00, 0.25, 145.24) v=4.1 route=0/72 searches=20 target=(320.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=2 p=(163.79, 0.27, -6.33) v=6.8 route=2/40 searches=51 target=(160.00, 0.15, -20.00) input=(1.00, 0.25)
+  slot=3 p=(-161.58, 0.26, 159.30) v=7.9 route=1/88 searches=54 target=(-160.00, 0.15, 150.00) input=(0.85, 0.25)
+LIVE t=166.3 phase=Waiting carrier=-1 points=0,1,0,0 contacts=36 traffic=42 peds=119
+  slot=0 p=(4.08, 0.26, -8.63) v=2.2 route=2/56 searches=57 target=(0.00, 0.15, -20.00) input=(-1.00, -0.80)
+  slot=1 p=(267.80, 0.26, 160.01) v=11.9 route=6/72 searches=20 target=(260.00, 0.15, 160.00) input=(0.01, 0.25)
+  slot=2 p=(160.00, 0.25, -97.30) v=12.5 route=11/40 searches=51 target=(160.00, 0.15, -110.00) input=(0.00, 0.25)
+  slot=3 p=(-160.00, 0.25, 58.82) v=12.2 route=11/88 searches=54 target=(-160.00, 0.15, 50.00) input=(0.00, 0.25)
+LIVE t=175.4 phase=Waiting carrier=-1 points=0,1,0,0 contacts=36 traffic=42 peds=116
+  slot=0 p=(0.00, 0.25, -51.92) v=11.0 route=6/56 searches=57 target=(0.00, 0.15, -60.00) input=(0.00, 1.00)
+  slot=1 p=(165.22, 0.26, 159.76) v=3.3 route=17/72 searches=20 target=(160.00, 0.15, 150.00) input=(-1.00, 1.00)
+  slot=2 p=(160.00, 0.25, -211.06) v=12.5 route=28/40 searches=51 target=(160.00, 0.15, -220.00) input=(0.00, 0.25)
+  slot=3 p=(-160.00, 0.25, -55.76) v=12.9 route=23/88 searches=54 target=(-160.00, 0.15, -70.00) input=(0.00, 0.25)
+LIVE t=184.5 phase=Carried carrier=2 points=0,1,0,0 contacts=36 traffic=42 peds=116
+  slot=0 p=(0.00, 0.25, -145.63) v=4.6 route=0/34 searches=60 target=(0.00, 0.15, -160.00) input=(0.00, 1.00)
+  slot=1 p=(160.13, 0.25, 75.11) v=12.5 route=0/34 searches=23 target=(160.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(160.00, 0.25, -304.46) v=2.9 route=0/48 searches=52 target=(160.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=3 p=(-160.00, 0.25, -151.55) v=9.2 route=0/50 searches=57 target=(-160.00, 0.15, -160.00) input=(0.00, 1.00)
+LIVE t=193.5 phase=Carried carrier=2 points=0,1,0,0 contacts=36 traffic=42 peds=113
+  slot=0 p=(0.62, 0.25, -246.70) v=12.1 route=0/18 searches=62 target=(0.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=1 p=(160.17, 0.25, -35.85) v=11.5 route=5/34 searches=25 target=(160.00, 0.15, -50.00) input=(-0.03, 0.25)
+  slot=2 p=(149.83, 0.27, -315.30) v=4.7 route=0/48 searches=53 target=(160.00, 0.15, -320.00) input=(1.00, -0.50)
+  slot=3 p=(-160.00, 0.25, -256.94) v=12.5 route=0/34 searches=59 target=(-160.00, 0.15, -320.00) input=(0.00, 0.25)
+LIVE t=202.6 phase=Carried carrier=2 points=0,1,0,0 contacts=36 traffic=42 peds=113
+  slot=0 p=(3.83, 0.27, -317.40) v=6.8 route=2/18 searches=64 target=(20.00, 0.15, -320.00) input=(-0.52, 1.00)
+  slot=1 p=(160.00, 0.25, -147.32) v=12.4 route=0/18 searches=27 target=(160.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=2 p=(159.22, 0.26, -312.46) v=3.9 route=0/48 searches=53 target=(160.00, 0.15, -320.00) input=(0.11, 0.25)
+  slot=3 p=(-150.26, 0.26, -318.94) v=8.1 route=2/34 searches=60 target=(-140.00, 0.15, -320.00) input=(-0.04, 1.00)
+LIVE t=211.6 phase=Carried carrier=2 points=0,1,0,0 contacts=36 traffic=42 peds=111
+  slot=0 p=(42.89, 0.24, -316.98) v=0.5 route=0/18 searches=66 target=(0.00, 0.15, -320.00) input=(-1.00, 0.25)
+  slot=1 p=(153.50, 0.24, -215.36) v=1.6 route=0/18 searches=28 target=(160.00, 0.15, -160.00) input=(1.00, 1.00)
+  slot=2 p=(162.09, 0.24, -296.61) v=6.3 route=3/48 searches=53 target=(160.00, 0.15, -290.00) input=(0.34, 1.00)
+  slot=3 p=(-54.60, 0.26, -320.60) v=11.9 route=0/18 searches=63 target=(0.00, 0.15, -320.00) input=(-0.02, 0.25)
+LIVE t=220.6 phase=Carried carrier=1 points=0,1,0,0 contacts=42 traffic=42 peds=111
+  slot=0 p=(38.09, 0.24, -310.86) v=1.5 route=0/33 searches=70 target=(0.00, 0.15, -320.00) input=(-0.42, -0.50)
+  slot=1 p=(157.54, 0.25, -213.88) v=0.0 route=0/42 searches=33 target=(160.00, 0.15, -260.00) input=(-1.00, 1.00)
+  slot=2 p=(160.10, 0.26, -203.31) v=9.0 route=0/25 searches=54 target=(160.00, 0.15, -160.00) input=(0.02, 1.00)
+  slot=3 p=(58.00, 0.26, -319.99) v=12.6 route=0/17 searches=69 target=(160.00, 0.15, -320.00) input=(0.00, 0.25)
+LIVE t=229.7 phase=Carried carrier=1 points=0,1,0,0 contacts=42 traffic=42 peds=111
+  slot=0 p=(12.81, 0.26, -316.74) v=3.8 route=0/33 searches=71 target=(0.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=1 p=(158.18, 0.25, -244.49) v=3.0 route=0/42 searches=33 target=(160.00, 0.15, -260.00) input=(0.00, 0.25)
+  slot=2 p=(156.20, 0.26, -161.90) v=3.0 route=2/25 searches=55 target=(160.00, 0.15, -170.00) input=(-1.00, 1.00)
+  slot=3 p=(152.52, 0.26, -320.00) v=5.4 route=0/17 searches=71 target=(160.00, 0.15, -320.00) input=(0.00, 0.25)
+LIVE t=238.8 phase=Carried carrier=1 points=0,1,0,0 contacts=42 traffic=42 peds=110
+  slot=0 p=(13.61, 0.27, -327.29) v=2.0 route=0/33 searches=73 target=(0.00, 0.15, -320.00) input=(-1.00, 1.00)
+  slot=1 p=(168.91, 0.22, -242.20) v=5.6 route=2/42 searches=33 target=(160.00, 0.15, -240.00) input=(-1.00, 0.25)
+  slot=2 p=(159.27, 0.26, -170.35) v=3.1 route=0/25 searches=57 target=(160.00, 0.15, -160.00) input=(-0.77, 0.25)
+  slot=3 p=(159.97, 0.24, -244.72) v=12.3 route=0/25 searches=74 target=(160.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=247.9 phase=Carried carrier=1 points=0,1,0,0 contacts=42 traffic=42 peds=110
+  slot=0 p=(-1.03, 0.24, -309.34) v=4.0 route=2/33 searches=74 target=(20.00, 0.15, -320.00) input=(1.00, 0.25)
+  slot=1 p=(160.00, 0.25, -183.70) v=10.8 route=9/42 searches=33 target=(160.00, 0.15, -170.00) input=(0.00, 1.00)
+  slot=2 p=(185.24, 0.26, -162.66) v=4.5 route=0/25 searches=58 target=(160.00, 0.15, -160.00) input=(-1.00, 0.25)
+  slot=3 p=(160.00, 0.26, -168.22) v=2.0 route=0/25 searches=75 target=(160.00, 0.15, -160.00) input=(0.00, 1.00)
+LIVE t=256.9 phase=Carried carrier=1 points=0,1,0,0 contacts=42 traffic=42 peds=109
+  slot=0 p=(-0.46, 0.25, -229.70) v=12.1 route=0/18 searches=77 target=(0.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=1 p=(160.00, 0.26, -154.86) v=7.6 route=12/42 searches=33 target=(160.00, 0.15, -140.00) input=(0.00, 1.00)
+  slot=2 p=(183.09, 0.25, -168.24) v=2.5 route=0/0 searches=61 target=none input=(0.00, -1.00)
+  slot=3 p=(160.38, 0.25, -124.46) v=7.6 route=0/8 searches=77 target=(160.00, 0.15, -100.00) input=(0.00, -0.50)
+LIVE t=265.9 phase=Carried carrier=1 points=0,1,0,0 contacts=42 traffic=42 peds=109
+  slot=0 p=(5.84, 0.26, -156.32) v=6.2 route=2/33 searches=80 target=(20.00, 0.15, -160.00) input=(1.00, 0.25)
+  slot=1 p=(160.00, 0.24, -97.15) v=4.9 route=17/42 searches=33 target=(160.00, 0.15, -90.00) input=(0.00, 1.00)
+  slot=2 p=(170.04, 0.16, -195.59) v=1.2 route=0/17 searches=65 target=(160.00, 0.15, -160.00) input=(-0.69, 1.00)
+  slot=3 p=(160.16, 0.24, -63.58) v=11.6 route=0/25 searches=79 target=(160.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=275.0 phase=Carried carrier=3 points=0,1,0,0 contacts=44 traffic=42 peds=107
+  slot=0 p=(23.74, 0.26, -165.66) v=3.6 route=0/34 searches=83 target=(0.00, 0.15, -160.00) input=(0.09, 0.25)
+  slot=1 p=(159.76, 0.25, -11.23) v=0.7 route=0/0 searches=34 target=none input=(0.00, -1.00)
+  slot=2 p=(160.00, 0.24, -139.57) v=9.4 route=0/18 searches=69 target=(160.00, 0.15, -160.00) input=(1.00, -0.50)
+  slot=3 p=(160.00, 0.24, -6.38) v=0.6 route=1/16 searches=83 target=(160.00, 0.15, 5.00) input=(0.03, 1.00)
+LIVE t=284.2 phase=Carried carrier=3 points=0,1,0,0 contacts=44 traffic=42 peds=106
+  slot=0 p=(2.50, 0.26, -152.37) v=1.3 route=0/34 searches=84 target=(0.00, 0.15, -160.00) input=(-1.00, 1.00)
+  slot=1 p=(159.73, 0.25, -27.71) v=4.2 route=0/0 searches=37 target=none input=(0.00, -1.00)
+  slot=2 p=(154.18, 0.25, -143.52) v=4.3 route=0/18 searches=70 target=(160.00, 0.15, -160.00) input=(-0.03, -0.50)
+  slot=3 p=(160.00, 0.25, 31.03) v=11.6 route=8/16 searches=83 target=(160.00, 0.15, 40.00) input=(0.00, 0.25)
+LIVE t=293.3 phase=Waiting carrier=-1 points=0,1,0,1 contacts=44 traffic=42 peds=105
+  slot=0 p=(-15.43, 0.27, -161.75) v=4.0 route=0/64 searches=87 target=(0.00, 0.15, -160.00) input=(-1.00, -0.50)
+  slot=1 p=(159.84, 0.26, -4.19) v=5.8 route=1/64 searches=42 target=(150.00, 0.15, 0.00) input=(-1.00, 0.25)
+  slot=2 p=(132.25, 0.26, -159.95) v=10.3 route=4/80 searches=73 target=(120.00, 0.15, -160.00) input=(0.01, 1.00)
+  slot=3 p=(160.00, 0.24, 135.01) v=11.4 route=0/72 searches=87 target=(160.00, 0.15, 160.00) input=(0.00, -0.50)
+LIVE t=302.3 phase=Waiting carrier=-1 points=0,1,0,1 contacts=44 traffic=42 peds=105
+  slot=0 p=(-7.18, 0.24, -173.57) v=4.4 route=0/64 searches=87 target=(0.00, 0.15, -160.00) input=(-0.19, -0.50)
+  slot=1 p=(98.91, 0.26, 0.00) v=11.4 route=7/64 searches=42 target=(90.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(26.59, 0.26, -160.00) v=12.4 route=15/80 searches=73 target=(10.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=3 p=(122.92, 0.24, 159.98) v=11.6 route=5/72 searches=87 target=(110.00, 0.15, 160.00) input=(-0.01, 0.25)
+LIVE t=311.3 phase=Waiting carrier=-1 points=0,1,0,1 contacts=44 traffic=42 peds=105
+  slot=0 p=(-29.03, 0.26, -160.01) v=9.4 route=4/64 searches=87 target=(-40.00, 0.15, -160.00) input=(0.00, 1.00)
+  slot=1 p=(-10.31, 0.26, 0.00) v=12.8 route=18/64 searches=42 target=(-20.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-84.41, 0.27, -160.00) v=12.4 route=26/80 searches=73 target=(-100.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=3 p=(10.77, 0.27, 160.00) v=13.0 route=16/72 searches=87 target=(0.00, 0.15, 160.00) input=(0.00, 0.25)
+LIVE t=320.3 phase=Waiting carrier=-1 points=0,1,0,1 contacts=44 traffic=42 peds=104
+  slot=0 p=(-136.98, 0.27, -160.00) v=12.6 route=15/64 searches=87 target=(-150.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=1 p=(-117.03, 0.26, 0.00) v=12.2 route=29/64 searches=42 target=(-130.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-199.36, 0.27, -160.00) v=12.5 route=37/80 searches=73 target=(-210.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=3 p=(-102.93, 0.25, 160.00) v=12.9 route=27/72 searches=87 target=(-110.00, 0.15, 160.00) input=(0.00, 0.25)
+LIVE t=329.4 phase=Waiting carrier=-1 points=0,1,0,1 contacts=44 traffic=42 peds=104
+  slot=0 p=(-251.94, 0.26, -160.00) v=12.2 route=26/64 searches=87 target=(-260.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=1 p=(-231.58, 0.27, 0.00) v=12.9 route=40/64 searches=42 target=(-240.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-310.97, 0.25, -160.00) v=6.2 route=48/80 searches=73 target=(-320.00, 0.15, -160.00) input=(0.00, -0.50)
+  slot=3 p=(-217.06, 0.26, 160.00) v=12.2 route=39/72 searches=87 target=(-230.00, 0.15, 160.00) input=(0.00, 0.25)
+LIVE t=338.5 phase=Waiting carrier=-1 points=0,1,0,1 contacts=44 traffic=42 peds=104
+  slot=0 p=(-319.64, 0.24, -141.63) v=9.1 route=35/64 searches=87 target=(-320.00, 0.15, -130.00) input=(0.05, 1.00)
+  slot=1 p=(-322.27, 0.25, 0.62) v=1.3 route=2/16 searches=43 target=(-320.00, 0.15, 10.00) input=(1.00, 1.00)
+  slot=2 p=(-320.00, 0.24, -83.73) v=11.8 route=57/80 searches=73 target=(-320.00, 0.15, -70.00) input=(0.00, 0.25)
+  slot=3 p=(-315.97, 0.25, 158.90) v=2.4 route=50/72 searches=87 target=(-320.00, 0.15, 150.00) input=(-0.98, 1.00)
+LIVE t=347.5 phase=Carried carrier=1 points=0,1,0,1 contacts=44 traffic=42 peds=104
+  slot=0 p=(-320.00, 0.25, -34.91) v=12.1 route=0/17 searches=88 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=1 p=(-320.00, 0.24, 60.43) v=8.0 route=0/104 searches=44 target=(-320.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=2 p=(-320.03, 0.24, 24.21) v=11.8 route=0/25 searches=74 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-320.00, 0.25, 65.04) v=12.7 route=0/17 searches=88 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=356.6 phase=Carried carrier=0 points=0,1,0,1 contacts=66 traffic=42 peds=104
+  slot=0 p=(-319.99, 0.25, 50.84) v=0.1 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(-320.03, 0.25, 60.51) v=0.1 route=0/25 searches=46 target=(-320.00, 0.15, 160.00) input=(-1.00, -0.80)
+  slot=2 p=(-320.01, 0.26, 55.68) v=0.1 route=0/25 searches=77 target=(-320.00, 0.15, 160.00) input=(-1.00, -0.80)
+  slot=3 p=(-320.01, 0.25, 65.85) v=0.0 route=0/17 searches=90 target=(-320.00, 0.15, 0.00) input=(-1.00, -0.80)
+LIVE t=365.6 phase=Carried carrier=0 points=0,1,0,1 contacts=72 traffic=42 peds=103
+  slot=0 p=(-320.00, 0.26, 55.90) v=1.2 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=1 p=(-320.02, 0.26, 65.77) v=0.9 route=0/25 searches=46 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-320.04, 0.26, 60.94) v=0.9 route=0/25 searches=77 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-319.98, 0.25, 70.62) v=0.9 route=0/17 searches=90 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=374.6 phase=Carried carrier=0 points=0,1,0,1 contacts=76 traffic=42 peds=103
+  slot=0 p=(-319.97, 0.26, 64.93) v=1.0 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(-319.98, 0.25, 74.60) v=1.0 route=0/25 searches=47 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-320.01, 0.25, 69.76) v=1.0 route=0/25 searches=77 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-319.98, 0.25, 79.45) v=1.0 route=0/17 searches=91 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=383.6 phase=Carried carrier=0 points=0,1,0,1 contacts=76 traffic=42 peds=103
+  slot=0 p=(-319.93, 0.25, 74.21) v=0.8 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(-319.97, 0.26, 83.87) v=0.8 route=0/25 searches=47 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-320.00, 0.25, 79.04) v=0.8 route=0/25 searches=78 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-319.96, 0.25, 88.72) v=0.8 route=0/17 searches=92 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=392.7 phase=Carried carrier=0 points=0,1,0,1 contacts=76 traffic=42 peds=103
+  slot=0 p=(-319.90, 0.26, 83.28) v=0.9 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(-319.96, 0.26, 92.95) v=0.9 route=0/25 searches=48 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-319.99, 0.25, 88.12) v=0.9 route=0/25 searches=79 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-319.96, 0.24, 97.80) v=0.9 route=0/17 searches=95 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=401.8 phase=Carried carrier=0 points=0,1,0,1 contacts=76 traffic=42 peds=102
+  slot=0 p=(-319.88, 0.25, 92.23) v=1.2 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=1 p=(-319.96, 0.25, 101.90) v=1.2 route=0/25 searches=49 target=(-320.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=2 p=(-319.99, 0.25, 97.07) v=1.2 route=0/25 searches=79 target=(-320.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=3 p=(-319.96, 0.25, 106.75) v=1.2 route=0/17 searches=97 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=410.8 phase=Carried carrier=0 points=0,1,0,1 contacts=76 traffic=42 peds=101
+  slot=0 p=(-319.87, 0.25, 101.19) v=0.9 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(-319.97, 0.27, 110.86) v=0.9 route=0/25 searches=49 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-320.00, 0.25, 106.03) v=0.9 route=0/25 searches=80 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-319.97, 0.26, 115.71) v=0.9 route=0/17 searches=99 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=419.8 phase=Carried carrier=0 points=0,1,0,1 contacts=76 traffic=42 peds=101
+  slot=0 p=(-319.89, 0.26, 110.11) v=0.9 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(-319.98, 0.26, 119.78) v=0.9 route=0/25 searches=50 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-320.01, 0.27, 114.94) v=0.9 route=0/25 searches=81 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-319.99, 0.24, 124.63) v=0.9 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=428.9 phase=Carried carrier=0 points=0,1,0,1 contacts=76 traffic=42 peds=100
+  slot=0 p=(-319.89, 0.27, 117.27) v=1.7 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=1 p=(-320.01, 0.25, 126.94) v=1.7 route=0/0 searches=52 target=none input=(0.00, -1.00)
+  slot=2 p=(-320.04, 0.26, 122.11) v=1.7 route=0/0 searches=82 target=none input=(0.00, -1.00)
+  slot=3 p=(-320.01, 0.25, 131.79) v=1.6 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=437.9 phase=Carried carrier=0 points=0,1,0,1 contacts=80 traffic=42 peds=99
+  slot=0 p=(-319.76, 0.26, 108.55) v=1.6 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.01, 1.00)
+  slot=1 p=(-320.01, 0.26, 118.21) v=1.6 route=0/0 searches=54 target=none input=(0.00, -1.00)
+  slot=2 p=(-319.99, 0.27, 113.38) v=1.6 route=0/0 searches=85 target=none input=(0.00, -1.00)
+  slot=3 p=(-320.01, 0.25, 123.19) v=0.9 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.02, 0.25)
+LIVE t=446.9 phase=Carried carrier=0 points=0,1,0,1 contacts=82 traffic=42 peds=97
+  slot=0 p=(-319.78, 0.26, 110.57) v=1.1 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.01, -0.50)
+  slot=1 p=(-320.01, 0.26, 120.23) v=1.1 route=0/25 searches=55 target=(-320.00, 0.15, 160.00) input=(0.02, -0.50)
+  slot=2 p=(-319.98, 0.27, 115.40) v=1.1 route=0/25 searches=86 target=(-320.00, 0.15, 160.00) input=(0.02, -0.50)
+  slot=3 p=(-320.06, 0.25, 125.08) v=1.1 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.02, 1.00)
+LIVE t=456.0 phase=Carried carrier=0 points=0,1,0,1 contacts=82 traffic=42 peds=97
+  slot=0 p=(-319.88, 0.26, 119.41) v=1.1 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.01, -0.50)
+  slot=1 p=(-320.11, 0.25, 129.08) v=1.1 route=0/25 searches=55 target=(-320.00, 0.15, 160.00) input=(0.02, -0.50)
+  slot=2 p=(-320.08, 0.25, 124.24) v=1.1 route=0/25 searches=86 target=(-320.00, 0.15, 160.00) input=(0.02, -0.50)
+  slot=3 p=(-320.14, 0.25, 133.93) v=1.1 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.02, 1.00)
+LIVE t=465.0 phase=Carried carrier=0 points=0,1,0,1 contacts=84 traffic=42 peds=96
+  slot=0 p=(-319.71, 0.27, 112.53) v=0.4 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.02, 0.25)
+  slot=1 p=(-320.04, 0.25, 122.19) v=0.4 route=0/0 searches=58 target=none input=(0.00, -1.00)
+  slot=2 p=(-319.98, 0.27, 117.35) v=0.4 route=0/0 searches=89 target=none input=(0.00, -1.00)
+  slot=3 p=(-320.13, 0.25, 127.55) v=0.8 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=474.0 phase=Carried carrier=0 points=0,1,0,1 contacts=90 traffic=42 peds=95
+  slot=0 p=(-319.63, 0.26, 110.93) v=1.1 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.03, -0.50)
+  slot=1 p=(-320.01, 0.26, 120.59) v=1.1 route=0/25 searches=60 target=(-320.00, 0.15, 160.00) input=(0.04, -0.50)
+  slot=2 p=(-319.94, 0.27, 115.75) v=1.1 route=0/25 searches=91 target=(-320.00, 0.15, 160.00) input=(0.03, -0.50)
+  slot=3 p=(-320.15, 0.25, 125.44) v=1.1 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.03, 1.00)
+LIVE t=483.1 phase=Carried carrier=0 points=0,1,0,1 contacts=90 traffic=42 peds=95
+  slot=0 p=(-319.78, 0.26, 119.95) v=0.9 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.03, 0.25)
+  slot=1 p=(-320.18, 0.25, 129.61) v=0.9 route=0/25 searches=60 target=(-320.00, 0.15, 160.00) input=(0.04, 0.25)
+  slot=2 p=(-320.13, 0.25, 124.78) v=0.9 route=0/25 searches=91 target=(-320.00, 0.15, 160.00) input=(0.04, 0.25)
+  slot=3 p=(-320.27, 0.25, 134.46) v=0.9 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.03, 1.00)
+LIVE t=492.1 phase=Carried carrier=0 points=0,1,0,1 contacts=92 traffic=42 peds=95
+  slot=0 p=(-319.60, 0.26, 117.05) v=0.4 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.03, 0.25)
+  slot=1 p=(-320.13, 0.24, 126.71) v=0.4 route=0/0 searches=63 target=none input=(0.00, -1.00)
+  slot=2 p=(-320.06, 0.26, 121.87) v=0.4 route=0/0 searches=94 target=none input=(0.00, -1.00)
+  slot=3 p=(-320.25, 0.25, 131.87) v=1.3 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.01, -0.50)
+LIVE t=500.7 phase=Carried carrier=0 points=0,1,0,1 contacts=98 traffic=42 peds=95
+  slot=0 p=(-319.18, 0.26, 108.72) v=2.0 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.04, 1.00)
+  slot=1 p=(-319.90, 0.26, 118.36) v=2.0 route=0/0 searches=65 target=none input=(0.00, -1.00)
+  slot=2 p=(-319.76, 0.27, 113.53) v=2.0 route=0/0 searches=96 target=none input=(0.00, -1.00)
+  slot=3 p=(-320.18, 0.25, 124.26) v=0.8 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.03, 0.25)
+LIVE t=509.8 phase=Carried carrier=0 points=0,1,0,1 contacts=100 traffic=41 peds=94
+  slot=0 p=(-319.23, 0.26, 112.01) v=0.9 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.05, 0.25)
+  slot=1 p=(-320.00, 0.26, 121.65) v=0.9 route=0/25 searches=66 target=(-320.00, 0.15, 160.00) input=(0.07, 0.25)
+  slot=2 p=(-319.84, 0.27, 116.82) v=0.9 route=0/25 searches=97 target=(-320.00, 0.15, 160.00) input=(0.06, 0.25)
+  slot=3 p=(-320.43, 0.25, 126.49) v=0.9 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.07, 1.00)
+LIVE t=518.8 phase=Carried carrier=0 points=0,1,0,1 contacts=100 traffic=42 peds=94
+  slot=0 p=(-319.55, 0.25, 121.01) v=0.7 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.06, 0.25)
+  slot=1 p=(-320.32, 0.25, 130.65) v=0.7 route=0/0 searches=67 target=none input=(0.00, -1.00)
+  slot=2 p=(-320.14, 0.25, 125.82) v=0.7 route=0/25 searches=97 target=(-320.00, 0.15, 160.00) input=(0.08, 0.25)
+  slot=3 p=(-320.85, 0.25, 135.48) v=0.7 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.07, 0.25)
+LIVE t=527.9 phase=Carried carrier=0 points=0,1,0,1 contacts=102 traffic=42 peds=94
+  slot=0 p=(-318.96, 0.26, 113.43) v=0.4 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.07, 0.25)
+  slot=1 p=(-319.96, 0.25, 123.05) v=0.4 route=0/0 searches=70 target=none input=(0.00, -1.00)
+  slot=2 p=(-319.69, 0.27, 118.22) v=0.4 route=0/0 searches=100 target=none input=(0.00, -1.00)
+  slot=3 p=(-320.69, 0.25, 127.99) v=0.9 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.01, 0.25)
+LIVE t=536.9 phase=Carried carrier=0 points=0,1,0,1 contacts=108 traffic=42 peds=94
+  slot=0 p=(-318.52, 0.25, 109.53) v=1.0 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.08, 0.25)
+  slot=1 p=(-319.69, 0.27, 119.13) v=1.0 route=0/25 searches=72 target=(-320.00, 0.15, 160.00) input=(0.11, 0.25)
+  slot=2 p=(-319.35, 0.27, 114.31) v=1.0 route=0/25 searches=102 target=(-320.00, 0.15, 160.00) input=(0.10, 0.25)
+  slot=3 p=(-320.72, 0.25, 123.91) v=1.0 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.12, 1.00)
+LIVE t=546.0 phase=Carried carrier=0 points=0,1,0,1 contacts=108 traffic=42 peds=94
+  slot=0 p=(-319.03, 0.26, 118.56) v=1.1 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.12, -0.50)
+  slot=1 p=(-320.38, 0.25, 128.13) v=1.1 route=0/25 searches=72 target=(-320.00, 0.15, 160.00) input=(0.17, -0.50)
+  slot=2 p=(-319.95, 0.26, 123.32) v=1.1 route=0/25 searches=102 target=(-320.00, 0.15, 160.00) input=(0.15, -0.50)
+  slot=3 p=(-321.52, 0.25, 132.89) v=1.1 route=0/18 searches=102 target=(-320.00, 0.15, 0.00) input=(0.13, 1.00)
+LIVE t=555.0 phase=Carried carrier=0 points=0,1,0,1 contacts=110 traffic=42 peds=94
+  slot=0 p=(-318.71, 0.26, 118.36) v=1.9 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.15, 1.00)
+  slot=1 p=(-320.18, 0.24, 127.91) v=1.9 route=0/0 searches=74 target=none input=(0.00, -1.00)
+  slot=2 p=(-319.78, 0.25, 123.09) v=1.9 route=0/0 searches=105 target=none input=(0.00, -1.00)
+  slot=3 p=(-321.61, 0.25, 132.75) v=1.1 route=0/12 searches=103 target=(-320.00, 0.15, 60.00) input=(0.14, -0.50)
+LIVE t=564.1 phase=Carried carrier=0 points=0,1,0,1 contacts=114 traffic=42 peds=94
+  slot=0 p=(-317.36, 0.26, 109.07) v=2.3 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.14, 1.00)
+  slot=1 p=(-318.97, 0.26, 118.60) v=2.3 route=0/0 searches=76 target=none input=(0.00, -1.00)
+  slot=2 p=(-318.51, 0.27, 113.78) v=2.3 route=0/0 searches=107 target=none input=(0.00, -1.00)
+  slot=3 p=(-321.30, 0.25, 124.14) v=1.0 route=0/12 searches=103 target=(-320.00, 0.15, 60.00) input=(0.03, -0.50)
+LIVE t=573.2 phase=Carried carrier=0 points=0,1,0,1 contacts=128 traffic=42 peds=94
+  slot=0 p=(-317.77, 0.26, 114.83) v=0.9 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.03, 0.25)
+  slot=1 p=(-316.53, 0.25, 129.09) v=2.7 route=0/25 searches=77 target=(-320.00, 0.15, 160.00) input=(-0.10, 1.00)
+  slot=2 p=(-318.69, 0.26, 119.93) v=0.9 route=0/25 searches=108 target=(-320.00, 0.15, 160.00) input=(0.03, 0.25)
+  slot=3 p=(-319.82, 0.25, 127.09) v=0.5 route=0/17 searches=104 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=582.2 phase=Carried carrier=0 points=0,1,0,1 contacts=144 traffic=42 peds=94
+  slot=0 p=(-318.23, 0.26, 124.85) v=3.8 route=0/104 searches=91 target=(-320.00, 0.15, 160.00) input=(0.01, 1.00)
+  slot=1 p=(-319.22, 0.25, 153.08) v=0.0 route=0/0 searches=79 target=none input=(0.00, -1.00)
+  slot=2 p=(-319.53, 0.24, 137.15) v=0.1 route=0/0 searches=109 target=none input=(0.00, -1.00)
+  slot=3 p=(-319.47, 0.27, 113.59) v=2.5 route=0/0 searches=107 target=none input=(0.00, -1.00)
+LIVE t=591.3 phase=Carried carrier=1 points=0,1,0,1 contacts=148 traffic=42 peds=94
+  slot=0 p=(-317.67, 0.27, 114.03) v=4.6 route=0/0 searches=95 target=none input=(0.00, -1.00)
+  slot=1 p=(-318.77, 0.25, 149.66) v=1.6 route=0/104 searches=81 target=(-320.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=2 p=(-319.63, 0.25, 135.30) v=1.3 route=0/0 searches=113 target=none input=(0.00, -1.00)
+  slot=3 p=(-327.78, 0.24, 101.58) v=2.1 route=0/12 searches=109 target=(-320.00, 0.15, 60.00) input=(-0.73, 1.00)
+LIVE t=600.3 phase=Carried carrier=1 points=0,1,0,1 contacts=148 traffic=42 peds=94
+  slot=0 p=(-319.21, 0.25, 97.62) v=1.6 route=0/12 searches=96 target=(-320.00, 0.15, 60.00) input=(-1.00, 1.00)
+  slot=1 p=(-335.11, 0.26, 158.47) v=3.1 route=0/104 searches=82 target=(-320.00, 0.15, 160.00) input=(1.00, 1.00)
+  slot=2 p=(-319.45, 0.25, 104.40) v=5.5 route=0/0 searches=115 target=none input=(0.00, -1.00)
+  slot=3 p=(-318.76, 0.25, 61.58) v=3.3 route=2/12 searches=110 target=(-320.00, 0.15, 80.00) input=(-1.00, 0.25)
+LIVE t=609.4 phase=Carried carrier=1 points=0,1,0,1 contacts=148 traffic=42 peds=94
+  slot=0 p=(-321.96, 0.24, 70.01) v=3.4 route=0/12 searches=98 target=(-320.00, 0.15, 60.00) input=(0.00, 0.25)
+  slot=1 p=(-320.07, 0.25, 138.29) v=11.3 route=3/104 searches=82 target=(-320.00, 0.15, 130.00) input=(0.02, 0.25)
+  slot=2 p=(-307.55, 0.06, 96.95) v=6.6 route=0/12 searches=117 target=(-320.00, 0.15, 60.00) input=(0.88, 1.00)
+  slot=3 p=(-319.71, 0.25, 88.51) v=2.3 route=0/12 searches=112 target=(-320.00, 0.15, 60.00) input=(-1.00, 1.00)
+LIVE t=618.4 phase=Carried carrier=1 points=0,1,0,1 contacts=148 traffic=42 peds=94
+  slot=0 p=(-293.61, 0.06, 76.19) v=9.4 route=0/41 searches=103 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=1 p=(-320.00, 0.24, 31.38) v=12.6 route=14/104 searches=82 target=(-320.00, 0.15, 20.00) input=(0.00, 0.25)
+  slot=2 p=(-313.71, 0.25, 72.25) v=1.6 route=0/0 searches=122 target=none input=(0.00, -1.00)
+  slot=3 p=(-325.90, 0.25, 93.03) v=3.3 route=0/0 searches=117 target=none input=(0.00, -1.00)
+LIVE t=627.5 phase=Carried carrier=1 points=0,1,0,1 contacts=148 traffic=42 peds=94
+  slot=0 p=(-221.62, 0.06, 121.45) v=0.0 route=0/34 searches=109 target=(-160.00, 0.15, 160.00) input=(-0.03, 0.25)
+  slot=1 p=(-262.60, 0.26, 0.00) v=11.8 route=23/104 searches=82 target=(-250.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-320.52, 0.24, 43.70) v=1.7 route=0/6 searches=127 target=(-339.00, 0.15, 0.00) input=(-0.01, 1.00)
+  slot=3 p=(-320.32, 0.26, 58.44) v=11.0 route=1/8 searches=123 target=(-320.00, 0.15, 50.00) input=(0.05, 0.25)
+LIVE t=636.5 phase=Carried carrier=1 points=0,1,0,1 contacts=148 traffic=42 peds=94
+  slot=0 p=(-226.49, 0.06, 118.66) v=0.0 route=0/18 searches=117 target=(-160.00, 0.15, 160.00) input=(-0.02, 1.00)
+  slot=1 p=(-152.03, 0.25, 0.00) v=11.8 route=34/104 searches=82 target=(-140.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-308.46, 0.24, 0.13) v=5.9 route=0/18 searches=135 target=(-320.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=3 p=(-319.89, 0.26, 6.17) v=5.3 route=1/18 searches=131 target=(-310.00, 0.15, 0.00) input=(-1.00, 1.00)
+LIVE t=645.6 phase=Carried carrier=1 points=0,1,0,1 contacts=164 traffic=42 peds=94
+  slot=0 p=(-221.64, 0.07, 122.10) v=0.1 route=0/34 searches=125 target=(-160.00, 0.15, 160.00) input=(-0.21, 0.25)
+  slot=1 p=(-39.53, 0.25, 0.00) v=11.5 route=45/104 searches=82 target=(-30.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-306.93, 0.06, -14.85) v=1.0 route=0/34 searches=143 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=3 p=(-309.84, 0.16, -21.65) v=3.3 route=0/50 searches=139 target=(-320.00, 0.15, -160.00) input=(-0.02, 1.00)
+LIVE t=653.3 phase=Carried carrier=1 points=0,1,0,1 contacts=164 traffic=42 peds=94
+  slot=0 p=(-226.46, 0.06, 119.68) v=0.0 route=0/34 searches=132 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=1 p=(51.12, 0.27, 0.00) v=12.2 route=54/104 searches=82 target=(60.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-317.58, 0.26, 0.16) v=1.5 route=1/34 searches=150 target=(-310.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=3 p=(-314.38, 0.25, -74.97) v=11.7 route=0/50 searches=146 target=(-320.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=662.8 phase=Carried carrier=1 points=0,1,0,1 contacts=164 traffic=42 peds=94
+  slot=0 p=(-221.64, 0.06, 122.98) v=0.1 route=0/50 searches=141 target=(-160.00, 0.15, 160.00) input=(-0.18, 0.25)
+  slot=1 p=(169.99, 0.27, 0.00) v=12.7 route=66/104 searches=82 target=(180.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-318.32, 0.26, 60.41) v=11.5 route=0/66 searches=159 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-318.65, 0.26, -156.48) v=2.2 route=1/66 searches=155 target=(-310.00, 0.15, -160.00) input=(-1.00, 1.00)
+LIVE t=671.9 phase=Carried carrier=1 points=0,1,0,1 contacts=164 traffic=42 peds=94
+  slot=0 p=(-223.07, 0.06, 122.61) v=0.2 route=0/66 searches=149 target=(-160.00, 0.15, 160.00) input=(0.01, 0.25)
+  slot=1 p=(285.12, 0.26, 0.00) v=12.7 route=78/104 searches=82 target=(300.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-319.79, 0.26, 147.78) v=3.3 route=0/82 searches=167 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-305.28, 0.27, -168.89) v=3.7 route=0/82 searches=163 target=(-320.00, 0.15, -160.00) input=(0.55, 0.25)
+LIVE t=681.0 phase=Carried carrier=1 points=0,1,0,1 contacts=164 traffic=42 peds=93
+  slot=0 p=(-224.81, 0.06, 122.15) v=0.6 route=0/66 searches=154 target=(-160.00, 0.15, 160.00) input=(1.00, -0.80)
+  slot=1 p=(320.00, 0.25, -54.83) v=11.6 route=93/104 searches=82 target=(320.00, 0.15, -65.00) input=(0.00, 0.25)
+  slot=2 p=(-332.07, 0.14, 149.57) v=2.6 route=0/82 searches=170 target=(-320.00, 0.15, 160.00) input=(-1.00, 0.25)
+  slot=3 p=(-316.46, 0.26, -136.02) v=7.6 route=0/76 searches=167 target=(-320.00, 0.15, -100.00) input=(-0.01, 1.00)
+LIVE t=690.1 phase=Waiting carrier=-1 points=0,2,0,1 contacts=164 traffic=42 peds=92
+  slot=0 p=(-221.63, 0.06, 124.42) v=0.1 route=0/32 searches=159 target=(-160.00, 0.15, 160.00) input=(-0.03, 0.25)
+  slot=1 p=(320.00, 0.25, -142.66) v=5.6 route=0/80 searches=86 target=(320.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=2 p=(-314.87, 0.25, 163.34) v=3.6 route=2/48 searches=173 target=(-300.00, 0.15, 160.00) input=(1.00, 1.00)
+  slot=3 p=(-319.92, 0.25, -51.90) v=11.7 route=0/64 searches=171 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=699.1 phase=Waiting carrier=-1 points=0,2,0,1 contacts=164 traffic=42 peds=92
+  slot=0 p=(-226.62, 0.07, 122.46) v=3.1 route=0/32 searches=162 target=(-160.00, 0.15, 160.00) input=(0.21, 1.00)
+  slot=1 p=(283.49, 0.25, -160.71) v=10.2 route=5/80 searches=86 target=(270.00, 0.15, -160.00) input=(-0.11, 1.00)
+  slot=2 p=(-239.42, 0.26, 160.00) v=11.8 route=9/48 searches=173 target=(-230.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-290.53, 0.26, 0.23) v=10.3 route=4/64 searches=172 target=(-280.00, 0.15, 0.00) input=(-0.03, 1.00)
+LIVE t=708.1 phase=Waiting carrier=-1 points=0,2,0,1 contacts=164 traffic=42 peds=92
+  slot=0 p=(-221.63, 0.06, 125.80) v=0.1 route=0/32 searches=164 target=(-160.00, 0.15, 160.00) input=(-0.23, 0.25)
+  slot=1 p=(177.99, 0.25, -160.00) v=12.5 route=15/80 searches=86 target=(170.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=2 p=(-127.95, 0.26, 160.00) v=12.2 route=20/48 searches=173 target=(-120.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-180.66, 0.25, 0.00) v=12.4 route=15/64 searches=172 target=(-170.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=717.2 phase=Waiting carrier=-1 points=0,2,0,1 contacts=164 traffic=42 peds=92
+  slot=0 p=(-222.59, 0.07, 125.74) v=1.4 route=0/32 searches=166 target=(-160.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=1 p=(62.70, 0.25, -160.00) v=12.6 route=27/80 searches=86 target=(50.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=2 p=(-13.65, 0.25, 160.00) v=11.4 route=32/48 searches=173 target=(0.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=3 p=(-66.33, 0.26, 0.00) v=12.7 route=27/64 searches=172 target=(-50.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=726.3 phase=Carried carrier=2 points=0,2,0,1 contacts=164 traffic=42 peds=92
+  slot=0 p=(-224.93, 0.06, 125.38) v=0.9 route=0/33 searches=170 target=(-160.00, 0.15, 160.00) input=(-1.00, -0.80)
+  slot=1 p=(0.45, 0.25, -131.73) v=11.1 route=0/33 searches=88 target=(0.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(0.01, 0.25, 226.96) v=8.4 route=0/88 searches=174 target=(0.00, 0.15, 320.00) input=(0.00, 1.00)
+  slot=3 p=(4.67, 0.26, 2.42) v=1.6 route=1/33 searches=173 target=(0.00, 0.15, 10.00) input=(-1.00, 1.00)
+LIVE t=735.3 phase=Carried carrier=2 points=0,2,0,1 contacts=164 traffic=42 peds=92
+  slot=0 p=(-221.63, 0.06, 127.19) v=0.1 route=0/34 searches=175 target=(-160.00, 0.15, 160.00) input=(-0.02, 0.25)
+  slot=1 p=(0.09, 0.25, -25.77) v=12.6 route=0/34 searches=93 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-0.14, 0.25, 306.20) v=3.4 route=0/88 searches=174 target=(0.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=3 p=(-19.81, 0.04, 28.85) v=7.1 route=0/44 searches=178 target=(-160.00, 0.15, 60.00) input=(0.00, -0.50)
+LIVE t=744.4 phase=Carried carrier=2 points=0,2,0,1 contacts=164 traffic=42 peds=92
+  slot=0 p=(-227.59, 0.06, 125.17) v=0.0 route=0/34 searches=179 target=(-160.00, 0.15, 160.00) input=(0.09, 1.00)
+  slot=1 p=(-0.01, 0.25, 89.26) v=12.7 route=0/18 searches=97 target=(0.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(23.41, 0.26, 318.28) v=4.6 route=0/88 searches=175 target=(0.00, 0.15, 320.00) input=(-1.00, 0.25)
+  slot=3 p=(-17.22, 0.06, 30.85) v=2.9 route=0/34 searches=181 target=(0.00, 0.15, 0.00) input=(0.33, 1.00)
+LIVE t=753.4 phase=Carried carrier=2 points=0,2,0,1 contacts=164 traffic=42 peds=92
+  slot=0 p=(-221.64, 0.05, 128.59) v=0.1 route=0/54 searches=182 target=(-160.00, 0.15, 160.00) input=(-0.15, 0.25)
+  slot=1 p=(0.00, 0.25, 203.81) v=12.7 route=0/6 searches=99 target=(0.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(12.78, 0.25, 328.91) v=8.2 route=0/88 searches=177 target=(0.00, 0.15, 320.00) input=(0.01, 0.25)
+  slot=3 p=(-7.38, 0.26, 13.40) v=0.6 route=0/38 searches=183 target=(0.00, 0.15, 0.00) input=(-0.10, 0.25)
+LIVE t=762.4 phase=Carried carrier=1 points=0,2,0,1 contacts=174 traffic=42 peds=92
+  slot=0 p=(-224.49, 0.05, 127.93) v=2.0 route=0/34 searches=186 target=(-160.00, 0.15, 160.00) input=(0.01, -0.50)
+  slot=1 p=(-1.35, 0.25, 272.70) v=0.3 route=0/88 searches=102 target=(0.00, 0.15, 320.00) input=(-0.30, 0.25)
+  slot=2 p=(0.42, 0.26, 277.25) v=0.3 route=0/18 searches=178 target=(0.00, 0.15, 160.00) input=(-0.33, 1.00)
+  slot=3 p=(6.82, 0.25, 10.93) v=5.0 route=2/34 searches=185 target=(0.00, 0.15, 20.00) input=(-1.00, 1.00)
+LIVE t=771.5 phase=Carried carrier=2 points=0,2,0,1 contacts=184 traffic=42 peds=92
+  slot=0 p=(-221.82, 0.05, 129.89) v=1.2 route=0/33 searches=189 target=(-160.00, 0.15, 160.00) input=(1.00, -0.80)
+  slot=1 p=(0.20, 0.25, 265.22) v=2.6 route=0/0 searches=104 target=none input=(0.00, -1.00)
+  slot=2 p=(0.77, 0.25, 255.71) v=5.7 route=0/72 searches=180 target=(0.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=3 p=(0.00, 0.25, 96.42) v=12.6 route=0/17 searches=186 target=(0.00, 0.15, 160.00) input=(0.00, 0.25)
+LIVE t=780.5 phase=Carried carrier=3 points=0,2,0,1 contacts=194 traffic=42 peds=92
+  slot=0 p=(-222.29, 0.06, 130.04) v=0.6 route=0/18 searches=193 target=(-160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(21.45, 0.16, 262.93) v=0.0 route=0/8 searches=108 target=(0.00, 0.15, 220.00) input=(-1.00, 1.00)
+  slot=2 p=(0.32, 0.24, 187.65) v=1.1 route=0/0 searches=184 target=none input=(0.00, -1.00)
+  slot=3 p=(-0.11, 0.25, 182.82) v=1.1 route=0/88 searches=190 target=(0.00, 0.15, 320.00) input=(-0.06, -0.50)
+LIVE t=789.6 phase=Carried carrier=2 points=0,2,0,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-225.24, 0.05, 129.48) v=1.7 route=0/18 searches=196 target=(-160.00, 0.15, 160.00) input=(1.00, -0.80)
+  slot=1 p=(14.89, 0.08, 255.12) v=3.0 route=0/8 searches=111 target=(0.00, 0.15, 220.00) input=(-0.01, 1.00)
+  slot=2 p=(0.60, 0.23, 190.96) v=1.8 route=0/72 searches=188 target=(0.00, 0.15, 160.00) input=(1.00, -0.80)
+  slot=3 p=(-0.17, 0.25, 186.13) v=1.6 route=0/25 searches=191 target=(0.00, 0.15, 320.00) input=(1.00, -0.80)
+LIVE t=798.7 phase=Carried carrier=2 points=0,2,0,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-221.64, 0.06, 131.55) v=0.1 route=0/33 searches=198 target=(-160.00, 0.15, 160.00) input=(-0.09, 0.25)
+  slot=1 p=(14.18, 0.06, 251.92) v=2.1 route=0/0 searches=113 target=none input=(0.00, -1.00)
+  slot=2 p=(0.24, 0.25, 178.64) v=6.7 route=0/72 searches=190 target=(0.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=3 p=(-3.17, 0.25, 204.49) v=10.2 route=0/25 searches=191 target=(0.00, 0.15, 320.00) input=(0.00, 1.00)
+LIVE t=807.7 phase=Carried carrier=2 points=0,2,0,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-226.76, 0.06, 129.80) v=0.1 route=0/41 searches=203 target=(-160.00, 0.15, 160.00) input=(-0.14, 1.00)
+  slot=1 p=(5.37, 0.25, 232.09) v=8.8 route=0/31 searches=118 target=(0.00, 0.15, 220.00) input=(0.00, 1.00)
+  slot=2 p=(0.00, 0.24, 78.76) v=12.2 route=9/72 searches=190 target=(0.00, 0.15, 70.00) input=(0.00, 0.25)
+  slot=3 p=(-0.13, 0.25, 301.57) v=2.8 route=0/41 searches=194 target=(0.00, 0.15, 320.00) input=(0.00, 0.25)
+LIVE t=816.8 phase=Carried carrier=2 points=0,2,0,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-221.60, 0.06, 132.52) v=0.1 route=0/34 searches=211 target=(-160.00, 0.15, 160.00) input=(-0.26, 0.25)
+  slot=1 p=(-0.04, 0.25, 137.64) v=1.4 route=0/18 searches=126 target=(0.00, 0.15, 160.00) input=(-1.00, 1.00)
+  slot=2 p=(0.00, 0.24, -34.60) v=12.6 route=21/72 searches=190 target=(0.00, 0.15, -50.00) input=(0.00, 0.25)
+  slot=3 p=(10.51, 0.26, 319.05) v=2.2 route=0/50 searches=202 target=(160.00, 0.15, 320.00) input=(-0.02, 1.00)
+LIVE t=825.8 phase=Carried carrier=2 points=0,2,0,1 contacts=196 traffic=41 peds=92
+  slot=0 p=(-222.90, 0.06, 132.32) v=0.3 route=0/50 searches=219 target=(-160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(0.41, 0.25, 57.86) v=12.1 route=0/18 searches=134 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(0.00, 0.23, -148.30) v=10.2 route=32/72 searches=190 target=(0.00, 0.15, -160.00) input=(0.00, -0.50)
+  slot=3 p=(97.72, 0.27, 320.07) v=11.8 route=0/66 searches=210 target=(160.00, 0.15, 320.00) input=(0.05, 0.25)
+LIVE t=834.9 phase=Carried carrier=2 points=0,2,0,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-224.95, 0.06, 132.39) v=0.8 route=0/50 searches=222 target=(-160.00, 0.15, 160.00) input=(-1.00, -0.80)
+  slot=1 p=(0.00, 0.24, -55.91) v=12.4 route=7/18 searches=136 target=(0.00, 0.15, -70.00) input=(0.00, 0.25)
+  slot=2 p=(73.35, 0.25, -160.00) v=12.1 route=41/72 searches=190 target=(90.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=3 p=(158.01, 0.27, 318.77) v=4.1 route=2/66 searches=211 target=(140.00, 0.15, 320.00) input=(1.00, 0.25)
+LIVE t=843.9 phase=Carried carrier=2 points=0,2,0,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-221.64, 0.06, 133.86) v=0.1 route=0/66 searches=229 target=(-160.00, 0.15, 160.00) input=(-0.04, 0.25)
+  slot=1 p=(0.00, 0.27, -149.29) v=5.3 route=0/18 searches=143 target=(0.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=2 p=(158.32, 0.26, -166.65) v=9.0 route=51/72 searches=190 target=(160.00, 0.15, -175.00) input=(0.18, 1.00)
+  slot=3 p=(160.38, 0.25, 243.34) v=12.6 route=0/34 searches=218 target=(160.00, 0.15, 160.00) input=(0.00, 0.25)
+LIVE t=853.0 phase=Waiting carrier=-1 points=0,2,1,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-226.95, 0.06, 133.27) v=2.0 route=0/40 searches=235 target=(-160.00, 0.15, 160.00) input=(1.00, -0.80)
+  slot=1 p=(16.53, 0.26, -159.70) v=4.7 route=0/38 searches=147 target=(0.00, 0.15, -100.00) input=(-0.24, 1.00)
+  slot=2 p=(160.00, 0.25, -263.88) v=7.4 route=0/64 searches=193 target=(160.00, 0.15, -320.00) input=(0.00, 1.00)
+  slot=3 p=(160.00, 0.25, 129.17) v=12.6 route=0/56 searches=224 target=(160.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=862.1 phase=Waiting carrier=-1 points=0,2,1,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-249.90, 0.26, 153.84) v=11.3 route=0/62 searches=238 target=(-320.00, 0.15, 220.00) input=(-0.12, 0.25)
+  slot=1 p=(3.21, 0.23, -111.42) v=2.6 route=0/38 searches=147 target=(0.00, 0.15, -100.00) input=(0.00, 0.25)
+  slot=2 p=(152.30, 0.27, -318.85) v=9.4 route=2/64 searches=194 target=(140.00, 0.15, -320.00) input=(0.08, 1.00)
+  slot=3 p=(160.00, 0.24, 18.94) v=4.1 route=0/56 searches=227 target=(160.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=871.1 phase=Waiting carrier=-1 points=0,2,1,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-289.27, 0.06, 190.81) v=0.0 route=0/62 searches=240 target=(-320.00, 0.15, 220.00) input=(-0.10, 0.25)
+  slot=1 p=(-2.89, 0.24, -117.98) v=4.6 route=3/38 searches=147 target=(0.00, 0.15, -130.00) input=(0.23, 1.00)
+  slot=2 p=(50.60, 0.25, -320.00) v=13.0 route=12/64 searches=194 target=(40.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=3 p=(120.35, 0.27, -0.27) v=10.3 route=5/56 searches=227 target=(110.00, 0.15, 0.00) input=(-0.03, 1.00)
+LIVE t=880.2 phase=Waiting carrier=-1 points=0,2,1,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-288.80, 0.06, 189.80) v=0.3 route=0/62 searches=242 target=(-320.00, 0.15, 220.00) input=(0.04, 0.25)
+  slot=1 p=(-4.14, 0.26, -157.79) v=4.5 route=8/38 searches=147 target=(-20.00, 0.15, -160.00) input=(0.61, 1.00)
+  slot=2 p=(-64.60, 0.27, -320.00) v=12.9 route=24/64 searches=194 target=(-80.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=3 p=(8.34, 0.25, 0.00) v=12.9 route=16/56 searches=227 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=889.3 phase=Waiting carrier=-1 points=0,2,1,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-288.45, 0.06, 188.29) v=1.0 route=0/62 searches=244 target=(-320.00, 0.15, 220.00) input=(-1.00, -0.80)
+  slot=1 p=(-95.11, 0.26, -160.00) v=12.6 route=17/38 searches=147 target=(-110.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=2 p=(-156.50, 0.27, -318.81) v=3.9 route=33/64 searches=194 target=(-160.00, 0.15, -310.00) input=(1.00, 1.00)
+  slot=3 p=(-99.80, 0.26, 0.00) v=12.3 route=27/56 searches=227 target=(-110.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=898.3 phase=Waiting carrier=-1 points=0,2,1,1 contacts=196 traffic=42 peds=92
+  slot=0 p=(-291.05, 0.06, 190.84) v=0.1 route=0/68 searches=247 target=(-320.00, 0.15, 220.00) input=(-0.02, 0.25)
+  slot=1 p=(-159.93, 0.25, -137.63) v=8.7 route=28/38 searches=147 target=(-160.00, 0.15, -130.00) input=(0.02, 1.00)
+  slot=2 p=(-160.10, 0.26, -271.10) v=9.8 route=38/64 searches=194 target=(-160.00, 0.15, -260.00) input=(-0.02, 1.00)
+  slot=3 p=(-159.97, 0.25, -25.65) v=9.8 route=39/56 searches=227 target=(-160.00, 0.15, -35.00) input=(-0.01, 1.00)
+LIVE t=907.3 phase=Carried carrier=3 points=0,2,1,1 contacts=206 traffic=42 peds=92
+  slot=0 p=(-288.70, 0.06, 187.57) v=2.9 route=0/63 searches=251 target=(-320.00, 0.15, 220.00) input=(-0.09, 0.25)
+  slot=1 p=(-160.06, 0.25, -87.43) v=0.1 route=0/25 searches=150 target=(-160.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(-160.00, 0.26, -162.87) v=11.9 route=1/17 searches=198 target=(-160.00, 0.15, -155.00) input=(0.00, 0.25)
+  slot=3 p=(-160.03, 0.25, -82.58) v=0.1 route=0/48 searches=230 target=(-160.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=916.4 phase=Carried carrier=1 points=0,2,1,1 contacts=206 traffic=42 peds=92
+  slot=0 p=(-291.95, 0.06, 189.97) v=2.2 route=0/63 searches=256 target=(-320.00, 0.15, 220.00) input=(1.00, -0.80)
+  slot=1 p=(-157.51, 0.24, -101.36) v=2.3 route=0/48 searches=152 target=(-160.00, 0.15, -160.00) input=(0.00, 1.00)
+  slot=2 p=(-160.03, 0.24, -105.63) v=1.4 route=0/0 searches=201 target=none input=(0.00, -1.00)
+  slot=3 p=(-147.03, 0.24, -100.14) v=0.4 route=0/17 searches=231 target=(-160.00, 0.15, -160.00) input=(0.08, 1.00)
+LIVE t=925.4 phase=Carried carrier=1 points=0,2,1,1 contacts=218 traffic=42 peds=92
+  slot=0 p=(-290.56, 0.06, 174.41) v=6.9 route=0/40 searches=259 target=(-320.00, 0.15, 60.00) input=(0.00, 1.00)
+  slot=1 p=(-158.99, 0.25, -143.60) v=3.4 route=0/48 searches=152 target=(-160.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=2 p=(-159.91, 0.26, -117.57) v=3.5 route=0/18 searches=203 target=(-160.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=3 p=(-155.39, 0.23, -139.19) v=0.2 route=0/0 searches=233 target=none input=(0.00, -1.00)
+LIVE t=934.4 phase=Carried carrier=1 points=0,2,1,1 contacts=218 traffic=42 peds=92
+  slot=0 p=(-311.34, 0.28, 83.22) v=11.8 route=0/40 searches=262 target=(-320.00, 0.15, 60.00) input=(0.02, 0.25)
+  slot=1 p=(-168.83, 0.24, -146.74) v=2.3 route=2/48 searches=152 target=(-160.00, 0.15, -140.00) input=(0.73, 1.00)
+  slot=2 p=(-159.98, 0.25, -27.73) v=12.0 route=0/18 searches=204 target=(-160.00, 0.15, 0.00) input=(0.00, -0.50)
+  slot=3 p=(-151.05, 0.26, -119.60) v=1.1 route=0/8 searches=236 target=(-160.00, 0.15, -100.00) input=(1.00, 1.00)
+LIVE t=943.5 phase=Carried carrier=3 points=0,2,1,1 contacts=228 traffic=42 peds=92
+  slot=0 p=(-319.94, 0.25, 6.07) v=5.2 route=1/41 searches=266 target=(-310.00, 0.15, 0.00) input=(-1.00, 1.00)
+  slot=1 p=(-160.08, 0.25, -60.78) v=12.5 route=0/25 searches=154 target=(-160.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-168.17, 0.25, -2.68) v=2.0 route=0/25 searches=206 target=(-160.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=3 p=(-159.89, 0.25, -91.92) v=10.7 route=2/42 searches=238 target=(-160.00, 0.15, -80.00) input=(0.02, 1.00)
+LIVE t=952.6 phase=Carried carrier=1 points=0,2,1,1 contacts=230 traffic=42 peds=92
+  slot=0 p=(-298.30, 0.26, 6.75) v=3.0 route=0/18 searches=270 target=(-320.00, 0.15, 0.00) input=(-1.00, 0.25)
+  slot=1 p=(-160.02, 0.25, -14.40) v=3.1 route=0/32 searches=157 target=(-160.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(-171.75, 0.25, 5.97) v=1.1 route=0/0 searches=209 target=none input=(0.00, -1.00)
+  slot=3 p=(-159.99, 0.25, -23.84) v=2.2 route=0/0 searches=240 target=none input=(0.00, -1.00)
+LIVE t=961.6 phase=Carried carrier=1 points=0,2,1,1 contacts=230 traffic=42 peds=92
+  slot=0 p=(-315.14, 0.25, -0.20) v=3.3 route=2/18 searches=271 target=(-300.00, 0.15, 0.00) input=(-1.00, 0.25)
+  slot=1 p=(-160.00, 0.25, 50.65) v=11.5 route=6/32 searches=157 target=(-160.00, 0.15, 60.00) input=(0.00, 0.25)
+  slot=2 p=(-179.04, 0.06, -24.67) v=5.5 route=0/0 searches=212 target=none input=(0.00, -1.00)
+  slot=3 p=(-159.97, 0.25, -41.72) v=3.0 route=0/17 searches=244 target=(-160.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=970.6 phase=Carried carrier=1 points=0,2,1,1 contacts=230 traffic=42 peds=92
+  slot=0 p=(-314.54, 0.27, -59.92) v=11.7 route=0/50 searches=278 target=(-320.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=1 p=(-160.00, 0.26, 161.44) v=13.0 route=18/32 searches=157 target=(-160.00, 0.15, 170.00) input=(0.00, 0.25)
+  slot=2 p=(-169.46, 0.25, -14.46) v=7.3 route=0/18 searches=219 target=(-160.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=3 p=(-159.98, 0.24, 27.00) v=2.9 route=0/18 searches=249 target=(-160.00, 0.15, 0.00) input=(-1.00, 0.25)
+LIVE t=979.7 phase=Waiting carrier=-1 points=0,3,1,1 contacts=230 traffic=42 peds=92
+  slot=0 p=(-319.29, 0.25, -146.95) v=4.2 route=0/32 searches=285 target=(-320.00, 0.15, -160.00) input=(0.00, -0.50)
+  slot=1 p=(-160.00, 0.25, 261.67) v=11.1 route=0/73 searches=160 target=(-160.00, 0.15, 320.00) input=(0.00, 1.00)
+  slot=2 p=(-158.71, 0.26, 39.21) v=9.7 route=0/40 searches=226 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=3 p=(-164.34, 0.25, 48.89) v=2.4 route=0/38 searches=255 target=(-160.00, 0.15, 60.00) input=(0.00, 0.25)
+LIVE t=988.7 phase=Waiting carrier=-1 points=0,3,1,1 contacts=230 traffic=42 peds=92
+  slot=0 p=(-330.17, 0.23, -150.90) v=2.9 route=1/32 searches=286 target=(-320.00, 0.15, -150.00) input=(1.00, 0.25)
+  slot=1 p=(-162.79, 0.24, 321.52) v=3.9 route=1/73 searches=161 target=(-170.00, 0.15, 320.00) input=(-1.00, 1.00)
+  slot=2 p=(-162.74, 0.24, 60.33) v=4.2 route=2/38 searches=227 target=(-160.00, 0.15, 40.00) input=(-1.00, 0.25)
+  slot=3 p=(-120.41, 0.06, 60.77) v=10.7 route=0/54 searches=256 target=(0.00, 0.15, 60.00) input=(0.00, 1.00)
+LIVE t=997.8 phase=Waiting carrier=-1 points=0,3,1,1 contacts=230 traffic=42 peds=92
+  slot=0 p=(-320.02, 0.24, -106.45) v=10.7 route=7/32 searches=286 target=(-320.00, 0.15, -90.00) input=(0.00, 1.00)
+  slot=1 p=(-243.17, 0.26, 320.00) v=12.1 route=9/73 searches=161 target=(-250.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(-160.00, 0.23, 13.65) v=8.9 route=6/38 searches=228 target=(-160.00, 0.15, 0.00) input=(0.00, -0.50)
+  slot=3 p=(-19.53, 0.05, 60.13) v=5.6 route=0/54 searches=259 target=(0.00, 0.15, 60.00) input=(0.00, 0.25)
+LIVE t=1006.9 phase=Waiting carrier=-1 points=0,3,1,1 contacts=230 traffic=42 peds=92
+  slot=0 p=(-319.78, 0.25, 0.31) v=12.0 route=18/32 searches=286 target=(-320.00, 0.15, 10.00) input=(0.02, 0.25)
+  slot=1 p=(-319.85, 0.25, 304.30) v=11.0 route=21/73 searches=161 target=(-320.00, 0.15, 295.00) input=(-0.11, 0.25)
+  slot=2 p=(-210.61, 0.28, 0.00) v=10.3 route=12/38 searches=228 target=(-220.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=3 p=(0.00, 0.24, 12.61) v=9.5 route=6/54 searches=259 target=(0.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1015.9 phase=Carried carrier=0 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-320.00, 0.25, 98.26) v=10.8 route=0/104 searches=287 target=(-320.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=1 p=(-338.61, 0.05, 238.68) v=2.0 route=0/37 searches=164 target=(-320.00, 0.15, 220.00) input=(-0.90, 1.00)
+  slot=2 p=(-306.92, 0.25, 0.00) v=3.5 route=0/17 searches=230 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=3 p=(-65.83, 0.26, -0.09) v=11.9 route=0/33 searches=261 target=(-160.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1025.0 phase=Carried carrier=0 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-319.33, 0.25, 157.12) v=4.4 route=2/104 searches=287 target=(-320.00, 0.15, 140.00) input=(1.00, 0.25)
+  slot=1 p=(-319.87, 0.24, 192.67) v=8.4 route=0/8 searches=167 target=(-320.00, 0.15, 220.00) input=(-1.00, -0.50)
+  slot=2 p=(-320.03, 0.25, 55.51) v=11.9 route=1/12 searches=234 target=(-320.00, 0.15, 70.00) input=(-0.01, 0.25)
+  slot=3 p=(-179.76, 0.25, 0.00) v=12.5 route=0/18 searches=267 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1034.0 phase=Carried carrier=0 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-313.50, 0.25, 148.37) v=1.4 route=0/104 searches=288 target=(-320.00, 0.15, 160.00) input=(1.00, 1.00)
+  slot=1 p=(-325.65, 0.23, 201.68) v=2.5 route=0/8 searches=167 target=(-320.00, 0.15, 220.00) input=(0.00, 0.25)
+  slot=2 p=(-320.20, 0.25, 153.82) v=1.8 route=11/12 searches=234 target=(-320.00, 0.25, 151.39) input=(-1.00, 1.00)
+  slot=3 p=(-293.41, 0.25, 0.00) v=12.5 route=0/18 searches=269 target=(-320.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1043.0 phase=Carried carrier=0 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-337.05, 0.26, 165.91) v=4.5 route=1/104 searches=289 target=(-320.00, 0.15, 150.00) input=(-1.00, 0.25)
+  slot=1 p=(-303.76, 0.23, 220.71) v=4.5 route=0/8 searches=168 target=(-320.00, 0.15, 220.00) input=(-1.00, 0.25)
+  slot=2 p=(-329.72, 0.23, 148.36) v=2.3 route=0/0 searches=236 target=none input=(0.00, -1.00)
+  slot=3 p=(-321.81, 0.24, 20.31) v=2.2 route=0/18 searches=270 target=(-320.00, 0.15, 0.00) input=(-1.00, 1.00)
+LIVE t=1052.0 phase=Carried carrier=0 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-340.39, 0.05, 145.66) v=2.4 route=0/104 searches=291 target=(-320.00, 0.15, 160.00) input=(-0.55, 0.25)
+  slot=1 p=(-269.83, 0.15, 270.50) v=10.6 route=0/8 searches=171 target=(-320.00, 0.15, 220.00) input=(-1.00, -0.50)
+  slot=2 p=(-348.47, 0.10, 172.14) v=5.4 route=0/0 searches=239 target=none input=(0.00, -1.00)
+  slot=3 p=(-330.52, 0.26, 6.01) v=3.8 route=0/18 searches=272 target=(-320.00, 0.15, 0.00) input=(-0.08, 0.25)
+LIVE t=1061.1 phase=Carried carrier=0 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-317.45, 0.25, 151.37) v=7.0 route=2/104 searches=292 target=(-320.00, 0.15, 140.00) input=(0.72, 1.00)
+  slot=1 p=(-253.48, 0.10, 303.67) v=2.8 route=0/43 searches=173 target=(-240.00, 0.15, 320.00) input=(0.03, 0.25)
+  slot=2 p=(-339.00, 0.42, 240.00) v=0.6 route=0/14 searches=242 target=(-320.00, 0.15, 220.00) input=(-0.16, 1.00)
+  slot=3 p=(-320.00, 0.25, 50.09) v=10.8 route=0/12 searches=274 target=(-320.00, 0.15, 60.00) input=(0.00, 1.00)
+LIVE t=1070.1 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-320.00, 0.25, 156.30) v=1.9 route=0/16 searches=294 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=1 p=(-252.90, 0.26, 322.07) v=4.2 route=2/65 searches=176 target=(-260.00, 0.15, 320.00) input=(-0.29, 1.00)
+  slot=2 p=(-320.60, 0.25, 215.66) v=7.5 route=3/36 searches=245 target=(-320.00, 0.15, 205.00) input=(0.17, 1.00)
+  slot=3 p=(-307.30, 0.24, 63.97) v=1.1 route=0/110 searches=276 target=(-320.00, 0.15, 220.00) input=(-0.01, 1.00)
+LIVE t=1079.2 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-319.99, 0.25, 89.32) v=12.2 route=0/17 searches=297 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=1 p=(-320.46, 0.28, 313.51) v=7.9 route=3/58 searches=177 target=(-320.00, 0.15, 305.00) input=(-0.33, 1.00)
+  slot=2 p=(-320.00, 0.25, 159.96) v=0.2 route=0/12 searches=248 target=(-320.00, 0.15, 60.00) input=(0.09, 1.00)
+  slot=3 p=(-313.54, 0.26, 140.50) v=12.1 route=0/110 searches=276 target=(-320.00, 0.15, 220.00) input=(0.00, 0.25)
+LIVE t=1088.2 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-320.00, 0.25, 9.96) v=1.9 route=0/33 searches=301 target=(-320.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=1 p=(-314.77, 0.26, 305.18) v=3.9 route=0/26 searches=181 target=(-320.00, 0.15, 320.00) input=(-0.01, 0.25)
+  slot=2 p=(-319.97, 0.25, 105.38) v=12.0 route=0/33 searches=252 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-319.56, 0.26, 213.76) v=4.2 route=2/110 searches=276 target=(-320.00, 0.15, 200.00) input=(-1.00, 0.25)
+LIVE t=1097.3 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-339.34, 0.05, 14.52) v=2.2 route=0/33 searches=303 target=(-320.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=1 p=(-341.52, 0.26, 315.82) v=4.6 route=0/26 searches=183 target=(-320.00, 0.15, 320.00) input=(-1.00, 0.25)
+  slot=2 p=(-319.99, 0.24, 13.48) v=3.5 route=0/33 searches=253 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-322.50, 0.24, 210.03) v=0.8 route=0/110 searches=277 target=(-320.00, 0.15, 220.00) input=(-1.00, 0.25)
+LIVE t=1106.4 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-321.84, 0.25, 3.22) v=2.8 route=2/33 searches=305 target=(-320.00, 0.15, 20.00) input=(-1.00, 0.25)
+  slot=1 p=(-326.26, 0.25, 293.70) v=2.2 route=0/26 searches=186 target=(-320.00, 0.15, 320.00) input=(-0.83, 1.00)
+  slot=2 p=(-331.05, 0.26, 4.60) v=3.7 route=0/33 searches=255 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=3 p=(-325.85, 0.25, 227.01) v=4.6 route=1/116 searches=278 target=(-320.00, 0.15, 215.00) input=(-1.00, 0.25)
+LIVE t=1115.4 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-316.53, 0.24, 27.83) v=2.5 route=0/38 searches=307 target=(-320.00, 0.15, 0.00) input=(-1.00, 1.00)
+  slot=1 p=(-315.05, 0.27, 316.38) v=2.3 route=3/22 searches=187 target=(-320.00, 0.15, 305.00) input=(1.00, 1.00)
+  slot=2 p=(-310.98, 0.25, 6.93) v=4.5 route=2/38 searches=256 target=(-320.00, 0.15, 20.00) input=(-1.00, 0.25)
+  slot=3 p=(-324.59, 0.26, 217.16) v=2.9 route=2/116 searches=279 target=(-320.00, 0.15, 210.00) input=(1.00, 1.00)
+LIVE t=1124.5 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-331.85, 0.38, 7.71) v=2.1 route=0/18 searches=311 target=(-320.00, 0.15, 0.00) input=(-0.85, 1.00)
+  slot=1 p=(-316.00, 0.27, 327.94) v=5.0 route=0/35 searches=191 target=(-320.00, 0.15, 320.00) input=(-1.00, 0.25)
+  slot=2 p=(-299.14, 0.26, -2.07) v=1.2 route=0/28 searches=261 target=(-320.00, 0.15, -100.00) input=(0.09, -0.50)
+  slot=3 p=(-320.00, 0.26, 141.44) v=12.3 route=15/116 searches=279 target=(-320.00, 0.15, 130.00) input=(0.00, 0.25)
+LIVE t=1133.5 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-313.60, 0.25, 14.29) v=0.8 route=0/0 searches=320 target=none input=(0.00, -1.00)
+  slot=1 p=(-324.68, 0.25, 263.83) v=11.4 route=0/18 searches=200 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-301.37, 0.10, -17.11) v=2.0 route=0/17 searches=269 target=(-320.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=3 p=(-320.00, 0.24, 26.75) v=12.9 route=26/116 searches=279 target=(-320.00, 0.15, 20.00) input=(0.00, 0.25)
+LIVE t=1142.6 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-331.86, 0.27, 7.29) v=1.4 route=0/6 searches=324 target=(-339.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=1 p=(-319.98, 0.25, 154.79) v=12.8 route=2/18 searches=204 target=(-320.00, 0.15, 140.00) input=(0.02, 0.25)
+  slot=2 p=(-301.71, 0.16, -23.43) v=1.1 route=0/12 searches=273 target=(-320.00, 0.15, -100.00) input=(0.11, -0.50)
+  slot=3 p=(-269.18, 0.27, 0.00) v=11.8 route=34/116 searches=279 target=(-260.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1151.6 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-323.93, 0.27, 3.53) v=4.7 route=1/18 searches=328 target=(-310.00, 0.15, 0.00) input=(-0.26, 1.00)
+  slot=1 p=(-320.00, 0.25, 67.33) v=11.7 route=0/18 searches=209 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-303.56, 0.14, -32.35) v=0.7 route=0/18 searches=279 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=3 p=(-191.66, 0.25, 0.00) v=1.2 route=42/116 searches=279 target=(-180.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1160.7 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-262.15, 0.26, -4.66) v=2.9 route=0/18 searches=329 target=(-320.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=1 p=(-313.37, 0.25, 0.19) v=7.5 route=2/18 searches=210 target=(-300.00, 0.15, 0.00) input=(-0.29, 1.00)
+  slot=2 p=(-306.98, 0.06, -40.25) v=0.9 route=0/18 searches=281 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=3 p=(-182.97, 0.25, -0.02) v=1.1 route=43/116 searches=279 target=(-170.00, 0.15, 0.00) input=(-0.01, -0.50)
+LIVE t=1169.7 phase=Carried carrier=3 points=0,3,1,1 contacts=230 traffic=42 peds=91
+  slot=0 p=(-286.34, 0.25, -6.98) v=0.5 route=0/18 searches=329 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=1 p=(-258.84, 0.25, -6.46) v=1.4 route=0/18 searches=211 target=(-320.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=2 p=(-312.80, 0.25, -45.64) v=0.9 route=0/18 searches=283 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=3 p=(-173.66, 0.25, -0.02) v=1.0 route=44/116 searches=279 target=(-160.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1178.1 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-296.21, 0.26, -5.19) v=1.5 route=0/18 searches=330 target=(-320.00, 0.15, 0.00) input=(0.10, -0.50)
+  slot=1 p=(-291.18, 0.26, -3.80) v=1.6 route=0/18 searches=211 target=(-320.00, 0.15, 0.00) input=(0.05, 0.25)
+  slot=2 p=(-319.44, 0.25, -45.10) v=1.0 route=0/18 searches=286 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=3 p=(-165.12, 0.24, -0.02) v=0.9 route=45/116 searches=279 target=(-150.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1187.1 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-304.53, 0.26, -7.83) v=1.0 route=0/17 searches=331 target=(-320.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=1 p=(-308.44, 0.25, -1.50) v=3.6 route=0/18 searches=212 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-328.37, 0.25, -45.38) v=0.9 route=0/18 searches=288 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=3 p=(-155.71, 0.25, -0.01) v=1.2 route=46/116 searches=279 target=(-140.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1196.1 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-312.72, 0.25, -9.06) v=0.7 route=0/17 searches=331 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=1 p=(-309.06, 0.14, 10.75) v=4.0 route=1/18 searches=213 target=(-310.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=2 p=(-337.46, 0.06, -46.46) v=1.1 route=0/18 searches=290 target=(-320.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=3 p=(-146.40, 0.25, -0.01) v=1.1 route=47/116 searches=279 target=(-130.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1205.2 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-320.89, 0.25, -5.12) v=1.1 route=1/18 searches=332 target=(-310.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=1 p=(-298.30, 0.25, -6.21) v=1.4 route=0/18 searches=214 target=(-320.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=2 p=(-345.93, 0.06, -49.65) v=1.1 route=0/18 searches=292 target=(-320.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=3 p=(-136.97, 0.25, -0.01) v=1.0 route=48/116 searches=279 target=(-120.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1214.3 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-329.96, 0.26, -3.06) v=1.2 route=1/18 searches=333 target=(-310.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=1 p=(-312.01, 0.25, -7.06) v=3.0 route=0/18 searches=214 target=(-320.00, 0.15, 0.00) input=(-0.05, 0.25)
+  slot=2 p=(-353.23, 0.06, -55.18) v=1.1 route=0/18 searches=295 target=(-320.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=3 p=(-127.51, 0.26, -0.01) v=1.1 route=48/116 searches=279 target=(-120.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1222.8 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-338.30, 0.27, -2.63) v=1.2 route=0/18 searches=335 target=(-320.00, 0.15, 0.00) input=(1.00, -0.50)
+  slot=1 p=(-310.08, 0.26, 4.64) v=6.6 route=2/18 searches=215 target=(-300.00, 0.15, 0.00) input=(0.16, 1.00)
+  slot=2 p=(-358.61, 0.06, -61.54) v=0.3 route=0/18 searches=297 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=3 p=(-119.12, 0.26, -0.02) v=1.1 route=49/116 searches=279 target=(-110.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1231.9 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-345.68, 0.27, 2.24) v=1.9 route=0/18 searches=337 target=(-320.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=1 p=(-223.78, 0.25, 0.00) v=1.7 route=0/0 searches=217 target=none input=(0.00, -1.00)
+  slot=2 p=(-364.87, 0.06, -65.80) v=1.0 route=0/28 searches=299 target=(-320.00, 0.15, -100.00) input=(-1.00, 0.25)
+  slot=3 p=(-109.65, 0.26, -0.02) v=1.1 route=50/116 searches=279 target=(-100.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1241.0 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-271.73, 0.27, 0.00) v=12.3 route=6/18 searches=337 target=(-260.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=1 p=(-242.71, 0.26, -0.03) v=0.7 route=0/18 searches=219 target=(-320.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=2 p=(-365.12, 0.06, -77.04) v=3.1 route=0/28 searches=301 target=(-320.00, 0.15, -100.00) input=(-0.12, 1.00)
+  slot=3 p=(-99.81, 0.26, -0.02) v=0.3 route=51/116 searches=279 target=(-90.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1250.0 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-240.95, 0.06, 14.70) v=5.1 route=0/18 searches=338 target=(-320.00, 0.15, 0.00) input=(-1.00, 0.25)
+  slot=1 p=(-231.49, 0.06, -13.86) v=4.9 route=0/18 searches=219 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=2 p=(-325.27, 0.24, -97.23) v=2.4 route=1/28 searches=302 target=(-320.00, 0.15, -90.00) input=(-1.00, 1.00)
+  slot=3 p=(-91.45, 0.25, -0.01) v=1.0 route=52/116 searches=279 target=(-80.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1259.0 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-270.33, 0.06, 31.12) v=0.0 route=0/24 searches=340 target=(-320.00, 0.15, 60.00) input=(-0.05, 0.25)
+  slot=1 p=(-281.09, 0.26, -7.19) v=11.0 route=0/18 searches=221 target=(-320.00, 0.15, 0.00) input=(-0.01, 1.00)
+  slot=2 p=(-320.00, 0.26, -30.75) v=11.9 route=0/18 searches=303 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-81.89, 0.24, 0.00) v=0.9 route=53/116 searches=279 target=(-70.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1268.1 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-271.49, 0.07, 31.03) v=1.5 route=0/40 searches=343 target=(-320.00, 0.15, 60.00) input=(0.03, -0.50)
+  slot=1 p=(-316.65, 0.25, 0.81) v=1.7 route=2/34 searches=222 target=(-300.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=2 p=(-275.06, 0.27, 0.00) v=11.9 route=6/18 searches=304 target=(-260.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-72.55, 0.26, -0.01) v=0.5 route=54/116 searches=279 target=(-60.00, 0.15, 0.00) input=(-0.01, 0.25)
+LIVE t=1277.1 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-270.33, 0.06, 28.84) v=1.5 route=0/40 searches=345 target=(-320.00, 0.15, 60.00) input=(-1.00, -0.80)
+  slot=1 p=(-292.79, 0.05, 15.14) v=4.3 route=0/34 searches=223 target=(-320.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=2 p=(-162.20, 0.25, 0.00) v=12.2 route=1/18 searches=306 target=(-150.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-63.13, 0.26, -0.04) v=1.3 route=55/116 searches=279 target=(-50.00, 0.15, 0.00) input=(-0.01, -0.50)
+LIVE t=1286.1 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-272.91, 0.06, 31.07) v=0.6 route=0/40 searches=347 target=(-320.00, 0.15, 60.00) input=(-0.02, 0.25)
+  slot=1 p=(-302.54, 0.26, 4.26) v=3.5 route=0/34 searches=224 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-62.25, 0.26, 0.00) v=0.0 route=0/0 searches=308 target=none input=(0.00, -1.00)
+  slot=3 p=(-54.01, 0.26, -0.03) v=0.9 route=56/116 searches=279 target=(-40.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1295.1 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-269.11, 0.06, 27.80) v=1.2 route=0/40 searches=349 target=(-320.00, 0.15, 60.00) input=(-0.28, 1.00)
+  slot=1 p=(-319.14, 0.25, -20.23) v=4.3 route=1/34 searches=225 target=(-310.00, 0.15, 0.00) input=(-1.00, 0.25)
+  slot=2 p=(-85.74, 0.25, -0.01) v=5.5 route=0/0 searches=310 target=none input=(0.00, -1.00)
+  slot=3 p=(-44.74, 0.25, 0.00) v=1.2 route=57/116 searches=279 target=(-30.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1304.2 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-274.40, 0.06, 30.98) v=0.1 route=0/40 searches=352 target=(-320.00, 0.15, 60.00) input=(-0.14, 0.25)
+  slot=1 p=(-263.61, 0.16, -18.17) v=11.2 route=0/18 searches=228 target=(-160.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(-98.25, 0.22, -8.81) v=1.6 route=0/18 searches=311 target=(-160.00, 0.15, 0.00) input=(1.00, 1.00)
+  slot=3 p=(-35.99, 0.24, 0.01) v=1.0 route=58/116 searches=279 target=(-20.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1313.3 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=42 peds=91
+  slot=0 p=(-272.40, 0.06, 29.08) v=2.5 route=0/40 searches=354 target=(-320.00, 0.15, 60.00) input=(-0.05, 0.25)
+  slot=1 p=(-153.85, 0.26, 0.06) v=12.4 route=2/18 searches=230 target=(-140.00, 0.15, 0.00) input=(0.06, 0.25)
+  slot=2 p=(-124.41, 0.26, -5.61) v=1.1 route=0/18 searches=311 target=(-160.00, 0.15, 0.00) input=(0.00, -0.50)
+  slot=3 p=(-26.69, 0.25, 0.00) v=0.9 route=59/116 searches=279 target=(-10.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1322.3 phase=Carried carrier=3 points=0,3,1,1 contacts=232 traffic=41 peds=90
+  slot=0 p=(-276.05, 0.06, 30.82) v=0.1 route=0/40 searches=356 target=(-320.00, 0.15, 60.00) input=(-0.32, 0.25)
+  slot=1 p=(-39.39, 0.25, 0.00) v=12.7 route=13/18 searches=230 target=(-30.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-129.32, 0.27, -4.94) v=0.0 route=0/18 searches=312 target=(-160.00, 0.15, 0.00) input=(-0.08, 0.25)
+  slot=3 p=(-17.27, 0.26, -0.01) v=1.3 route=59/116 searches=279 target=(-10.00, 0.15, 0.00) input=(-0.01, -0.50)
+LIVE t=1331.4 phase=Carried carrier=1 points=0,3,1,1 contacts=236 traffic=42 peds=90
+  slot=0 p=(-276.78, 0.06, 30.80) v=1.2 route=0/40 searches=359 target=(-320.00, 0.15, 60.00) input=(-0.01, -0.50)
+  slot=1 p=(-22.15, 0.25, 2.61) v=1.8 route=0/56 searches=234 target=(0.00, 0.15, 0.00) input=(-1.00, -0.80)
+  slot=2 p=(-136.96, 0.24, -3.75) v=1.6 route=0/18 searches=313 target=(-160.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-17.12, 0.26, 0.59) v=1.3 route=0/0 searches=282 target=none input=(0.00, -1.00)
+LIVE t=1340.2 phase=Carried carrier=3 points=0,3,1,1 contacts=238 traffic=42 peds=89
+  slot=0 p=(-273.57, 0.06, 28.24) v=0.4 route=0/40 searches=362 target=(-320.00, 0.15, 60.00) input=(-0.38, 1.00)
+  slot=1 p=(-41.47, 0.25, 6.21) v=2.3 route=0/0 searches=238 target=none input=(0.00, -1.00)
+  slot=2 p=(-141.02, 0.26, -2.99) v=0.0 route=0/18 searches=314 target=(-160.00, 0.15, 0.00) input=(0.16, 0.25)
+  slot=3 p=(-4.86, 0.26, 0.35) v=4.4 route=1/56 searches=285 target=(10.00, 0.15, 0.00) input=(-0.02, 1.00)
+LIVE t=1349.3 phase=Carried carrier=3 points=0,3,1,1 contacts=238 traffic=42 peds=89
+  slot=0 p=(-277.67, 0.06, 30.81) v=0.1 route=0/56 searches=367 target=(-320.00, 0.15, 60.00) input=(1.00, -0.80)
+  slot=1 p=(-83.71, 0.06, 15.11) v=0.0 route=0/18 searches=242 target=(0.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(-139.04, 0.24, -3.10) v=0.9 route=0/34 searches=318 target=(-160.00, 0.15, 0.00) input=(-0.02, 0.25)
+  slot=3 p=(95.73, 0.25, 0.00) v=12.9 route=11/56 searches=285 target=(110.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1358.2 phase=Carried carrier=3 points=0,3,1,1 contacts=238 traffic=42 peds=89
+  slot=0 p=(-273.27, 0.05, 30.69) v=0.1 route=0/66 searches=375 target=(-320.00, 0.15, 160.00) input=(-0.08, 0.25)
+  slot=1 p=(-50.60, 0.27, 9.26) v=11.3 route=0/18 searches=250 target=(0.00, 0.15, 0.00) input=(0.03, 0.25)
+  slot=2 p=(-134.63, 0.25, -3.93) v=3.1 route=0/34 searches=326 target=(-160.00, 0.15, 0.00) input=(-1.00, 1.00)
+  slot=3 p=(203.72, 0.26, 0.00) v=12.6 route=22/56 searches=285 target=(220.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1367.2 phase=Carried carrier=3 points=0,3,1,1 contacts=238 traffic=42 peds=89
+  slot=0 p=(-275.97, 0.06, 23.05) v=2.3 route=0/66 searches=383 target=(-320.00, 0.15, 0.00) input=(0.01, 1.00)
+  slot=1 p=(54.61, 0.27, -0.08) v=12.4 route=0/18 searches=258 target=(160.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-138.19, 0.24, 9.01) v=2.2 route=0/50 searches=334 target=(-160.00, 0.15, 0.00) input=(-1.00, 1.00)
+  slot=3 p=(312.44, 0.24, 0.00) v=4.5 route=32/56 searches=285 target=(320.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1376.2 phase=Carried carrier=3 points=0,3,1,1 contacts=238 traffic=42 peds=89
+  slot=0 p=(-310.65, 0.26, 5.04) v=4.2 route=0/89 searches=389 target=(-320.00, 0.15, 0.00) input=(0.00, -0.50)
+  slot=1 p=(167.51, 0.27, 0.00) v=12.8 route=0/25 searches=264 target=(320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-157.12, 0.26, -8.53) v=5.2 route=0/71 searches=339 target=(-160.00, 0.15, -100.00) input=(0.36, 1.00)
+  slot=3 p=(320.00, 0.26, -79.90) v=12.5 route=50/56 searches=285 target=(320.00, 0.15, -90.00) input=(0.00, 0.25)
+LIVE t=1385.3 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-320.00, 0.25, 50.76) v=11.7 route=6/32 searches=391 target=(-320.00, 0.15, 60.00) input=(0.00, 0.25)
+  slot=1 p=(281.78, 0.26, 0.00) v=12.8 route=0/96 searches=266 target=(320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-158.72, 0.24, -101.27) v=12.1 route=0/64 searches=344 target=(-160.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=3 p=(318.14, 0.27, -159.84) v=5.6 route=1/112 searches=289 target=(310.00, 0.15, -160.00) input=(1.00, 0.25)
+LIVE t=1394.4 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-320.00, 0.25, 163.69) v=13.0 route=19/32 searches=391 target=(-320.00, 0.15, 175.00) input=(0.00, 0.25)
+  slot=1 p=(318.42, 0.25, -7.54) v=3.3 route=2/96 searches=266 target=(300.00, 0.15, 0.00) input=(1.00, 0.25)
+  slot=2 p=(-172.95, 0.25, -160.34) v=7.3 route=2/64 searches=345 target=(-180.00, 0.15, -160.00) input=(0.04, 1.00)
+  slot=3 p=(236.03, 0.26, -160.00) v=12.4 route=10/112 searches=289 target=(220.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=1403.4 phase=Carried carrier=0 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-320.00, 0.25, 273.74) v=12.6 route=0/88 searches=394 target=(-320.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(310.54, 0.26, -1.44) v=3.0 route=0/102 searches=269 target=(320.00, 0.15, 0.00) input=(0.34, 0.25)
+  slot=2 p=(-274.06, 0.27, -160.00) v=12.3 route=0/54 searches=348 target=(-320.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=3 p=(121.65, 0.26, -160.00) v=12.6 route=0/86 searches=291 target=(0.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=1412.5 phase=Carried carrier=0 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-303.99, 0.26, 325.57) v=6.9 route=3/88 searches=394 target=(-290.00, 0.15, 320.00) input=(0.33, 1.00)
+  slot=1 p=(311.95, 0.24, 13.62) v=3.4 route=0/114 searches=273 target=(320.00, 0.15, 0.00) input=(-1.00, 0.25)
+  slot=2 p=(-319.63, 0.25, -141.33) v=8.5 route=3/66 searches=351 target=(-320.00, 0.15, -130.00) input=(0.02, 1.00)
+  slot=3 p=(11.46, 0.25, -160.00) v=12.6 route=0/98 searches=296 target=(0.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=1421.4 phase=Carried carrier=0 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-205.96, 0.26, 320.00) v=12.7 route=13/88 searches=394 target=(-190.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(324.80, 0.26, 3.30) v=4.5 route=1/112 searches=279 target=(320.00, 0.15, 10.00) input=(-1.00, 0.25)
+  slot=2 p=(-320.00, 0.25, -37.51) v=12.4 route=0/70 searches=357 target=(-320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-101.74, 0.26, -160.00) v=12.9 route=0/70 searches=302 target=(-160.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=1430.5 phase=Carried carrier=0 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-95.30, 0.25, 320.00) v=12.2 route=24/88 searches=394 target=(-80.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(326.82, 0.26, -3.32) v=6.2 route=0/92 searches=287 target=(320.00, 0.15, 0.00) input=(0.13, 0.25)
+  slot=2 p=(-319.90, 0.25, 72.06) v=12.6 route=0/50 searches=365 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-159.00, 0.24, -148.79) v=4.5 route=0/50 searches=310 target=(-160.00, 0.15, -160.00) input=(-1.00, -0.50)
+LIVE t=1439.5 phase=Carried carrier=0 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(18.21, 0.26, 320.00) v=12.5 route=35/88 searches=394 target=(30.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(319.66, 0.25, 78.46) v=12.4 route=0/60 searches=295 target=(320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-320.00, 0.25, 185.75) v=13.0 route=0/34 searches=373 target=(-320.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=3 p=(-154.92, 0.25, -159.16) v=7.4 route=2/66 searches=318 target=(-140.00, 0.15, -160.00) input=(-0.10, 1.00)
+LIVE t=1448.6 phase=Carried carrier=0 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(129.44, 0.25, 320.00) v=11.9 route=46/88 searches=394 target=(140.00, 0.15, 320.00) input=(-0.01, 0.25)
+  slot=1 p=(320.01, 0.26, 193.18) v=12.9 route=0/18 searches=303 target=(320.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(-319.36, 0.25, 298.26) v=9.6 route=0/50 searches=381 target=(-320.00, 0.15, 320.00) input=(-0.03, -0.50)
+  slot=3 p=(-78.80, 0.27, -159.83) v=12.2 route=0/66 searches=326 target=(0.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=1457.6 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(162.30, 0.26, 319.99) v=2.0 route=0/89 searches=395 target=(320.00, 0.15, 320.00) input=(-0.01, 1.00)
+  slot=1 p=(320.00, 0.24, 301.94) v=4.3 route=0/89 searches=309 target=(320.00, 0.15, 320.00) input=(0.03, 0.25)
+  slot=2 p=(-306.92, 0.26, 313.55) v=1.6 route=2/25 searches=386 target=(-320.00, 0.15, 310.00) input=(1.00, 1.00)
+  slot=3 p=(-6.76, 0.26, -160.00) v=4.0 route=2/80 searches=331 target=(-20.00, 0.15, -160.00) input=(1.00, 0.25)
+LIVE t=1466.6 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(233.57, 0.26, 320.00) v=12.1 route=0/89 searches=395 target=(320.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(278.73, 0.27, 319.93) v=9.5 route=5/89 searches=309 target=(270.00, 0.15, 320.00) input=(0.05, 1.00)
+  slot=2 p=(-310.79, 0.23, 308.29) v=0.1 route=2/25 searches=386 target=(-320.00, 0.15, 310.00) input=(-0.17, 1.00)
+  slot=3 p=(-16.80, 0.07, -171.14) v=1.4 route=0/80 searches=332 target=(0.00, 0.15, -160.00) input=(1.00, 1.00)
+LIVE t=1475.7 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(241.74, 0.19, 330.91) v=3.5 route=0/81 searches=396 target=(240.00, 0.15, 320.00) input=(0.03, 1.00)
+  slot=1 p=(234.05, 0.26, 320.00) v=10.5 route=10/89 searches=309 target=(220.00, 0.15, 320.00) input=(0.00, 1.00)
+  slot=2 p=(-312.28, 0.27, 308.85) v=0.4 route=2/25 searches=386 target=(-320.00, 0.15, 310.00) input=(-0.41, 0.25)
+  slot=3 p=(-0.53, 0.26, -153.20) v=4.6 route=2/80 searches=332 target=(-20.00, 0.15, -160.00) input=(-1.00, 0.25)
+LIVE t=1484.7 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(176.44, 0.26, 320.00) v=11.8 route=8/81 searches=396 target=(160.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(127.66, 0.25, 320.00) v=12.5 route=20/89 searches=309 target=(120.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(-317.42, 0.27, 304.41) v=0.8 route=5/25 searches=386 target=(-320.00, 0.15, 295.00) input=(-0.19, 0.25)
+  slot=3 p=(-27.07, 0.06, -139.67) v=5.0 route=0/64 searches=334 target=(-160.00, 0.15, -160.00) input=(0.00, 1.00)
+LIVE t=1493.7 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(67.43, 0.27, 320.31) v=11.4 route=18/81 searches=396 target=(60.00, 0.15, 320.00) input=(-0.01, 0.25)
+  slot=1 p=(19.34, 0.26, 320.00) v=12.1 route=31/89 searches=309 target=(10.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(-318.70, 0.27, 297.53) v=1.1 route=6/25 searches=386 target=(-320.00, 0.15, 290.00) input=(0.17, -0.50)
+  slot=3 p=(-127.46, 0.26, -155.00) v=12.7 route=0/64 searches=336 target=(-160.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=1502.8 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-42.19, 0.26, 320.00) v=12.7 route=29/81 searches=396 target=(-50.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(-94.86, 0.26, 320.00) v=12.8 route=43/89 searches=309 target=(-110.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(-319.17, 0.26, 291.75) v=0.2 route=8/25 searches=386 target=(-320.00, 0.15, 280.00) input=(0.16, 0.25)
+  slot=3 p=(-241.85, 0.27, -160.00) v=12.9 route=9/64 searches=337 target=(-250.00, 0.15, -160.00) input=(0.00, 0.25)
+LIVE t=1511.8 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-156.33, 0.25, 320.14) v=11.5 route=41/81 searches=396 target=(-170.00, 0.15, 320.00) input=(-0.21, 0.25)
+  slot=1 p=(-203.60, 0.26, 319.99) v=11.6 route=54/89 searches=309 target=(-220.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(-319.51, 0.27, 285.89) v=0.5 route=9/25 searches=386 target=(-320.00, 0.15, 275.00) input=(0.27, 0.25)
+  slot=3 p=(-319.37, 0.24, -147.01) v=9.0 route=18/64 searches=337 target=(-320.00, 0.15, -140.00) input=(-0.02, 1.00)
+LIVE t=1520.9 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-263.47, 0.27, 320.00) v=12.5 route=52/81 searches=396 target=(-280.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(-312.24, 0.26, 320.00) v=5.7 route=64/89 searches=309 target=(-320.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(-319.55, 0.27, 281.03) v=0.5 route=10/25 searches=386 target=(-320.00, 0.15, 270.00) input=(0.34, 0.25)
+  slot=3 p=(-320.00, 0.25, -41.99) v=12.5 route=29/64 searches=337 target=(-320.00, 0.15, -30.00) input=(0.00, 0.25)
+LIVE t=1530.0 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=41 peds=89
+  slot=0 p=(-319.94, 0.24, 289.08) v=3.0 route=64/81 searches=396 target=(-320.00, 0.15, 280.00) input=(0.00, -0.50)
+  slot=1 p=(-319.95, 0.27, 282.77) v=0.5 route=73/89 searches=309 target=(-320.00, 0.15, 275.00) input=(0.13, 0.25)
+  slot=2 p=(-319.95, 0.29, 277.80) v=0.8 route=10/25 searches=386 target=(-320.00, 0.15, 270.00) input=(0.14, 1.00)
+  slot=3 p=(-320.00, 0.25, 67.21) v=12.7 route=40/64 searches=337 target=(-320.00, 0.15, 80.00) input=(0.00, 0.25)
+LIVE t=1538.6 phase=Waiting carrier=-1 points=0,3,1,2 contacts=238 traffic=42 peds=89
+  slot=0 p=(-319.94, 0.31, 280.14) v=0.9 route=66/81 searches=396 target=(-320.00, 0.15, 270.00) input=(-0.02, 0.25)
+  slot=1 p=(-319.98, 0.25, 273.00) v=3.3 route=75/89 searches=309 target=(-320.00, 0.15, 265.00) input=(0.00, 1.00)
+  slot=2 p=(-320.46, 0.24, 244.09) v=3.3 route=18/25 searches=386 target=(-329.50, 0.15, 240.00) input=(1.00, 1.00)
+  slot=3 p=(-320.00, 0.26, 172.99) v=12.8 route=52/64 searches=337 target=(-320.00, 0.15, 180.00) input=(0.00, 0.25)
+LIVE t=1547.7 phase=Carried carrier=1 points=0,3,1,2 contacts=242 traffic=42 peds=89
+  slot=0 p=(-319.84, 0.30, 278.26) v=0.0 route=0/22 searches=398 target=(-320.00, 0.15, 320.00) input=(-1.00, -0.80)
+  slot=1 p=(-319.99, 0.25, 245.89) v=0.3 route=0/80 searches=313 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-335.67, 0.05, 237.00) v=2.1 route=0/0 searches=390 target=none input=(0.00, -1.00)
+  slot=3 p=(-320.00, 0.25, 241.04) v=0.3 route=0/22 searches=340 target=(-320.00, 0.15, 320.00) input=(0.00, 1.00)
+LIVE t=1556.8 phase=Carried carrier=1 points=0,3,1,2 contacts=242 traffic=42 peds=89
+  slot=0 p=(-325.58, 0.26, 282.00) v=4.3 route=0/22 searches=398 target=(-320.00, 0.15, 320.00) input=(1.00, 1.00)
+  slot=1 p=(-322.67, 0.24, 251.17) v=1.8 route=0/92 searches=315 target=(-320.00, 0.15, 220.00) input=(-1.00, 1.00)
+  slot=2 p=(-327.23, 0.25, 270.99) v=5.5 route=0/0 searches=392 target=none input=(0.00, -1.00)
+  slot=3 p=(-320.27, 0.25, 234.08) v=1.8 route=0/22 searches=340 target=(-320.00, 0.15, 320.00) input=(1.00, 1.00)
+LIVE t=1565.8 phase=Carried carrier=1 points=0,3,1,2 contacts=242 traffic=42 peds=89
+  slot=0 p=(-321.20, 0.26, 314.31) v=3.4 route=3/35 searches=402 target=(-320.00, 0.15, 305.00) input=(1.00, 0.25)
+  slot=1 p=(-320.00, 0.26, 171.81) v=11.9 route=11/92 searches=316 target=(-320.00, 0.15, 165.00) input=(0.00, 0.25)
+  slot=2 p=(-324.74, 0.25, 298.02) v=1.7 route=0/35 searches=397 target=(-320.00, 0.15, 320.00) input=(1.00, 1.00)
+  slot=3 p=(-322.48, 0.24, 294.19) v=4.8 route=0/35 searches=344 target=(-320.00, 0.15, 320.00) input=(0.00, -0.50)
+LIVE t=1574.9 phase=Carried carrier=1 points=0,3,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-308.78, 0.18, 302.16) v=1.0 route=0/35 searches=404 target=(-320.00, 0.15, 320.00) input=(1.00, 1.00)
+  slot=1 p=(-278.78, 0.26, 159.98) v=11.0 route=17/92 searches=316 target=(-270.00, 0.15, 160.00) input=(0.01, 1.00)
+  slot=2 p=(-323.56, 0.26, 315.54) v=3.9 route=3/35 searches=399 target=(-320.00, 0.15, 305.00) input=(1.00, 0.25)
+  slot=3 p=(-315.71, 0.27, 321.04) v=4.3 route=3/35 searches=346 target=(-320.00, 0.15, 305.00) input=(1.00, 0.25)
+LIVE t=1584.0 phase=Carried carrier=1 points=0,3,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-329.10, 0.26, 317.67) v=4.6 route=0/51 searches=412 target=(-320.00, 0.15, 320.00) input=(1.00, 0.25)
+  slot=1 p=(-170.40, 0.25, 160.00) v=12.7 route=28/92 searches=316 target=(-160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-285.55, 0.26, 316.85) v=7.7 route=0/18 searches=407 target=(-160.00, 0.15, 320.00) input=(0.00, 1.00)
+  slot=3 p=(-292.70, 0.11, 303.37) v=4.3 route=0/51 searches=354 target=(-320.00, 0.15, 320.00) input=(1.00, 0.25)
+LIVE t=1593.1 phase=Carried carrier=1 points=0,3,1,2 contacts=244 traffic=41 peds=89
+  slot=0 p=(-342.62, 0.05, 342.80) v=4.3 route=0/67 searches=420 target=(-320.00, 0.15, 320.00) input=(1.00, 0.25)
+  slot=1 p=(-55.74, 0.26, 160.00) v=12.5 route=40/92 searches=316 target=(-40.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-184.64, 0.24, 319.38) v=10.5 route=0/34 searches=415 target=(-160.00, 0.15, 320.00) input=(0.00, -0.50)
+  slot=3 p=(-305.73, 0.09, 287.61) v=0.3 route=0/67 searches=362 target=(-320.00, 0.15, 320.00) input=(1.00, 1.00)
+LIVE t=1602.1 phase=Carried carrier=1 points=0,3,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-320.02, 0.25, 297.25) v=11.8 route=0/34 searches=428 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(57.30, 0.24, 160.00) v=12.8 route=51/92 searches=316 target=(70.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-160.44, 0.24, 282.34) v=10.9 route=0/18 searches=423 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=3 p=(-315.51, 0.26, 308.40) v=4.6 route=0/67 searches=370 target=(-320.00, 0.15, 320.00) input=(0.00, -0.50)
+LIVE t=1611.1 phase=Carried carrier=1 points=0,3,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-319.84, 0.24, 185.90) v=12.2 route=0/50 searches=436 target=(-320.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=1 p=(170.85, 0.26, 160.00) v=12.5 route=62/92 searches=316 target=(180.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-160.07, 0.24, 179.06) v=4.2 route=0/34 searches=431 target=(-160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=3 p=(-333.68, 0.25, 317.82) v=3.7 route=0/83 searches=378 target=(-320.00, 0.15, 320.00) input=(1.00, 0.25)
+LIVE t=1620.2 phase=Carried carrier=1 points=0,3,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-302.36, 0.25, 155.10) v=7.1 route=0/50 searches=444 target=(-160.00, 0.15, 160.00) input=(0.02, 1.00)
+  slot=1 p=(284.94, 0.27, 160.00) v=12.9 route=74/92 searches=316 target=(300.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(-119.70, 0.26, 160.17) v=11.7 route=0/34 searches=439 target=(0.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-320.04, 0.25, 284.35) v=11.5 route=0/66 searches=386 target=(-320.00, 0.15, 160.00) input=(0.00, 0.25)
+LIVE t=1629.2 phase=Carried carrier=1 points=0,3,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-206.67, 0.27, 158.40) v=12.6 route=0/65 searches=449 target=(-160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(320.00, 0.24, 210.67) v=10.4 route=88/92 searches=316 target=(320.00, 0.15, 220.00) input=(0.00, -0.50)
+  slot=2 p=(-6.62, 0.25, 160.01) v=13.0 route=1/49 searches=444 target=(10.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=3 p=(-319.89, 0.24, 178.87) v=4.2 route=0/81 searches=391 target=(-320.00, 0.15, 160.00) input=(0.00, 1.00)
+LIVE t=1638.3 phase=Waiting carrier=-1 points=0,4,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-160.42, 0.26, 140.59) v=8.2 route=3/56 searches=452 target=(-160.00, 0.15, 130.00) input=(0.02, 1.00)
+  slot=1 p=(320.00, 0.24, 300.88) v=4.7 route=0/88 searches=321 target=(320.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(76.37, 0.26, 159.94) v=12.3 route=0/56 searches=447 target=(160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-320.00, 0.25, 89.29) v=12.6 route=8/72 searches=393 target=(-320.00, 0.15, 80.00) input=(0.00, 0.25)
+LIVE t=1647.4 phase=Waiting carrier=-1 points=0,4,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-160.00, 0.25, 35.55) v=12.4 route=14/56 searches=452 target=(-160.00, 0.15, 20.00) input=(0.00, 0.25)
+  slot=1 p=(276.32, 0.27, 320.26) v=10.7 route=6/88 searches=321 target=(260.00, 0.15, 320.00) input=(0.01, 1.00)
+  slot=2 p=(151.41, 0.25, 159.99) v=1.5 route=0/56 searches=447 target=(160.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=3 p=(-314.99, 0.26, 0.67) v=6.7 route=18/72 searches=393 target=(-300.00, 0.15, 0.00) input=(-0.33, 1.00)
+LIVE t=1656.5 phase=Waiting carrier=-1 points=0,4,1,2 contacts=244 traffic=41 peds=89
+  slot=0 p=(-109.90, 0.26, 0.01) v=11.6 route=22/56 searches=452 target=(-100.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=1 p=(164.88, 0.26, 320.00) v=12.8 route=17/88 searches=321 target=(150.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=2 p=(159.64, 0.24, 197.29) v=7.2 route=0/62 searches=448 target=(160.00, 0.15, 220.00) input=(0.00, -0.50)
+  slot=3 p=(-213.70, 0.27, 0.00) v=12.8 route=28/72 searches=393 target=(-200.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1665.5 phase=Waiting carrier=-1 points=0,4,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-5.09, 0.25, 0.54) v=6.7 route=33/56 searches=452 target=(0.00, 0.15, -5.00) input=(1.00, 0.25)
+  slot=1 p=(53.31, 0.26, 319.99) v=11.8 route=28/88 searches=321 target=(40.00, 0.15, 320.00) input=(-0.01, 0.25)
+  slot=2 p=(167.88, 0.24, 219.11) v=1.2 route=1/62 searches=449 target=(160.00, 0.15, 210.00) input=(1.00, 1.00)
+  slot=3 p=(-98.47, 0.26, 0.00) v=12.8 route=39/72 searches=393 target=(-90.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1674.6 phase=Waiting carrier=-1 points=0,4,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(0.36, 0.25, -22.82) v=3.8 route=38/56 searches=452 target=(0.00, 0.15, -30.00) input=(0.00, 1.00)
+  slot=1 p=(0.09, 0.25, 292.56) v=9.0 route=36/88 searches=321 target=(0.00, 0.15, 280.00) input=(-0.01, 1.00)
+  slot=2 p=(160.74, 0.24, 191.43) v=5.3 route=4/62 searches=449 target=(160.00, 0.15, 180.00) input=(-0.01, 1.00)
+  slot=3 p=(0.92, 0.26, -0.68) v=1.4 route=50/72 searches=393 target=(0.00, 0.15, -10.00) input=(1.00, 1.00)
+LIVE t=1683.7 phase=Carried carrier=0 points=0,4,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(0.00, 0.26, -96.03) v=9.4 route=0/64 searches=453 target=(0.00, 0.15, -160.00) input=(0.00, 1.00)
+  slot=1 p=(0.00, 0.25, 183.99) v=12.9 route=0/41 searches=322 target=(0.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(124.89, 0.24, 159.96) v=11.3 route=0/41 searches=450 target=(0.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(2.77, 0.27, -12.31) v=0.3 route=0/25 searches=394 target=(0.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1692.7 phase=Carried carrier=0 points=0,4,1,2 contacts=244 traffic=42 peds=89
+  slot=0 p=(-4.65, 0.25, -163.68) v=3.7 route=2/64 searches=454 target=(-20.00, 0.15, -160.00) input=(1.00, 1.00)
+  slot=1 p=(0.00, 0.25, 69.72) v=12.2 route=0/18 searches=324 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(20.62, 0.26, 159.99) v=5.8 route=0/34 searches=453 target=(0.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-4.31, 0.27, -11.04) v=0.0 route=0/18 searches=395 target=(0.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1701.8 phase=Carried carrier=0 points=0,4,1,2 contacts=254 traffic=42 peds=89
+  slot=0 p=(-81.25, 0.27, -160.00) v=12.2 route=9/64 searches=454 target=(-90.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=1 p=(-0.12, 0.27, -9.98) v=0.1 route=0/24 searches=330 target=(0.00, 0.15, -100.00) input=(0.32, 0.25)
+  slot=2 p=(-3.55, 0.25, 140.60) v=2.9 route=0/24 searches=458 target=(-160.00, 0.15, 60.00) input=(0.06, 1.00)
+  slot=3 p=(2.54, 0.26, -12.31) v=1.0 route=0/34 searches=400 target=(0.00, 0.15, 0.00) input=(-0.97, 1.00)
+LIVE t=1710.9 phase=Carried carrier=0 points=0,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-159.41, 0.24, -149.03) v=9.3 route=18/64 searches=454 target=(-160.00, 0.15, -140.00) input=(-0.05, 1.00)
+  slot=1 p=(0.30, 0.26, -2.35) v=1.6 route=1/34 searches=335 target=(-10.00, 0.15, 0.00) input=(-1.00, 1.00)
+  slot=2 p=(-22.36, 0.06, 130.77) v=0.1 route=0/24 searches=464 target=(-160.00, 0.15, 60.00) input=(-0.14, 0.25)
+  slot=3 p=(-30.28, 0.24, -0.11) v=10.1 route=4/34 searches=405 target=(-40.00, 0.15, 0.00) input=(0.08, 1.00)
+LIVE t=1719.9 phase=Carried carrier=0 points=0,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-160.00, 0.24, -45.63) v=13.0 route=29/64 searches=454 target=(-160.00, 0.15, -30.00) input=(0.00, 0.25)
+  slot=1 p=(-68.24, 0.25, -0.02) v=10.6 route=0/18 searches=339 target=(0.00, 0.15, 0.00) input=(-1.00, -0.50)
+  slot=2 p=(-15.57, 0.05, 131.91) v=2.6 route=0/34 searches=469 target=(0.00, 0.15, 160.00) input=(-0.19, 1.00)
+  slot=3 p=(-135.63, 0.24, -0.01) v=10.4 route=0/0 searches=410 target=none input=(0.00, -1.00)
+LIVE t=1729.0 phase=Carried carrier=0 points=0,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-160.00, 0.25, 68.26) v=12.2 route=40/64 searches=454 target=(-160.00, 0.15, 80.00) input=(0.00, 0.25)
+  slot=1 p=(-64.34, 0.05, 32.60) v=11.5 route=0/41 searches=347 target=(0.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=2 p=(-4.25, 0.25, 156.49) v=1.6 route=2/41 searches=477 target=(-20.00, 0.15, 160.00) input=(-1.00, 1.00)
+  slot=3 p=(-134.75, 0.25, -0.01) v=2.5 route=0/17 searches=418 target=(-160.00, 0.15, 0.00) input=(0.00, 1.00)
+LIVE t=1738.1 phase=Carried carrier=0 points=0,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-160.00, 0.25, 182.60) v=12.5 route=54/64 searches=454 target=(-160.00, 0.15, 190.00) input=(0.00, 0.25)
+  slot=1 p=(-62.64, 0.06, 34.64) v=1.5 route=0/34 searches=355 target=(0.00, 0.15, 0.00) input=(-1.00, -0.80)
+  slot=2 p=(-11.41, 0.06, 179.25) v=2.3 route=0/18 searches=485 target=(0.00, 0.15, 160.00) input=(1.00, 0.25)
+  slot=3 p=(-166.63, 0.24, 12.62) v=1.7 route=0/18 searches=426 target=(-160.00, 0.15, 0.00) input=(1.00, 1.00)
+LIVE t=1747.2 phase=Waiting carrier=-1 points=1,4,1,2 contacts=258 traffic=41 peds=89
+  slot=0 p=(-160.00, 0.24, 294.40) v=12.1 route=0/56 searches=456 target=(-160.00, 0.15, 320.00) input=(0.00, -0.50)
+  slot=1 p=(-61.65, 0.05, 32.48) v=0.9 route=0/16 searches=362 target=(0.00, 0.15, 0.00) input=(-1.00, -0.80)
+  slot=2 p=(-0.02, 0.26, 146.74) v=10.0 route=5/24 searches=490 target=(0.00, 0.15, 135.00) input=(0.01, 1.00)
+  slot=3 p=(-149.01, 0.15, 25.69) v=3.8 route=0/32 searches=432 target=(-160.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1756.2 phase=Carried carrier=2 points=1,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-168.39, 0.24, 320.34) v=2.1 route=1/57 searches=457 target=(-160.00, 0.15, 310.00) input=(-1.00, 1.00)
+  slot=1 p=(-62.09, 0.06, 32.16) v=0.9 route=0/17 searches=365 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(0.00, 0.24, 38.85) v=12.1 route=0/64 searches=492 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-148.20, 0.25, 4.63) v=3.2 route=0/33 searches=433 target=(-160.00, 0.15, 0.00) input=(0.01, 0.25)
+LIVE t=1765.3 phase=Carried carrier=2 points=1,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-158.80, 0.26, 316.01) v=1.9 route=2/50 searches=459 target=(-160.00, 0.15, 300.00) input=(1.00, 1.00)
+  slot=1 p=(-71.13, 0.06, 35.62) v=2.8 route=0/24 searches=369 target=(-160.00, 0.15, 60.00) input=(1.00, 1.00)
+  slot=2 p=(12.25, 0.24, -5.89) v=0.9 route=2/64 searches=492 target=(20.00, 0.15, 0.00) input=(-1.00, 0.25)
+  slot=3 p=(-146.94, 0.15, -10.19) v=1.6 route=0/18 searches=436 target=(-160.00, 0.15, 0.00) input=(-1.00, 1.00)
+LIVE t=1774.3 phase=Carried carrier=2 points=1,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-154.49, 0.24, 307.64) v=3.5 route=0/66 searches=461 target=(-160.00, 0.15, 320.00) input=(0.08, 0.25)
+  slot=1 p=(-67.56, 0.06, 32.86) v=1.4 route=0/18 searches=372 target=(0.00, 0.15, 0.00) input=(-1.00, 1.00)
+  slot=2 p=(91.66, 0.24, 0.00) v=12.3 route=10/64 searches=492 target=(100.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-140.18, 0.23, 1.68) v=7.5 route=0/34 searches=438 target=(-160.00, 0.15, 0.00) input=(1.00, -0.50)
+LIVE t=1783.4 phase=Carried carrier=2 points=1,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-181.70, 0.26, 317.81) v=8.4 route=0/99 searches=469 target=(-320.00, 0.15, 320.00) input=(0.00, 1.00)
+  slot=1 p=(-65.58, 0.06, 24.69) v=0.9 route=0/28 searches=380 target=(0.00, 0.15, -100.00) input=(0.05, 0.25)
+  slot=2 p=(205.39, 0.26, 0.00) v=12.5 route=22/64 searches=492 target=(220.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-144.04, 0.24, -6.70) v=4.0 route=0/34 searches=446 target=(-160.00, 0.15, 0.00) input=(0.04, 0.25)
+LIVE t=1792.4 phase=Carried carrier=2 points=1,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-285.83, 0.26, 319.46) v=12.4 route=0/115 searches=477 target=(-320.00, 0.15, 320.00) input=(0.00, 0.25)
+  slot=1 p=(-61.58, 0.05, 16.61) v=1.4 route=0/34 searches=388 target=(0.00, 0.15, 0.00) input=(-1.00, 1.00)
+  slot=2 p=(311.55, 0.26, 0.00) v=4.6 route=32/64 searches=492 target=(320.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-152.75, 0.25, 5.46) v=2.6 route=2/50 searches=454 target=(-140.00, 0.15, 0.00) input=(1.00, 1.00)
+LIVE t=1801.5 phase=Carried carrier=2 points=1,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-320.00, 0.25, 288.69) v=11.3 route=8/115 searches=479 target=(-320.00, 0.15, 280.00) input=(-0.01, 0.25)
+  slot=1 p=(-32.15, 0.24, 8.39) v=9.1 route=0/34 searches=391 target=(0.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(320.00, 0.25, 73.60) v=12.3 route=41/64 searches=492 target=(320.00, 0.15, 90.00) input=(0.00, 0.25)
+  slot=3 p=(-147.03, 0.25, 2.05) v=1.2 route=0/50 searches=455 target=(-160.00, 0.15, 0.00) input=(1.00, -0.50)
+LIVE t=1810.6 phase=Carried carrier=2 points=1,4,1,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-319.89, 0.24, 184.12) v=10.6 route=0/66 searches=487 target=(-320.00, 0.15, 160.00) input=(0.00, -0.50)
+  slot=1 p=(69.32, 0.25, -0.03) v=12.0 route=0/34 searches=399 target=(160.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(320.00, 0.25, 188.17) v=12.9 route=55/64 searches=492 target=(320.00, 0.15, 195.00) input=(0.00, 0.25)
+  slot=3 p=(-138.92, 0.25, -1.80) v=0.9 route=0/66 searches=463 target=(-160.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1819.6 phase=Waiting carrier=-1 points=1,4,2,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-280.73, 0.26, 160.00) v=10.8 route=5/88 searches=491 target=(-270.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=1 p=(182.21, 0.26, 0.00) v=12.7 route=3/32 searches=404 target=(190.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(320.00, 0.23, 298.11) v=8.9 route=0/40 searches=495 target=(320.00, 0.15, 320.00) input=(0.00, -0.50)
+  slot=3 p=(-130.74, 0.26, -5.55) v=1.0 route=0/64 searches=467 target=(-160.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1828.7 phase=Waiting carrier=-1 points=1,4,2,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-172.53, 0.25, 160.00) v=12.7 route=16/88 searches=491 target=(-160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(296.69, 0.26, 0.00) v=12.5 route=15/32 searches=404 target=(310.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(310.46, 0.27, 318.13) v=1.7 route=1/40 searches=496 target=(320.00, 0.15, 310.00) input=(-1.00, 1.00)
+  slot=3 p=(-130.87, 0.13, -11.39) v=1.3 route=0/64 searches=467 target=(-160.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1837.7 phase=Carried carrier=1 points=1,4,2,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(-57.92, 0.26, 160.00) v=12.8 route=0/57 searches=492 target=(0.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(320.00, 0.25, 56.17) v=7.2 route=0/72 searches=405 target=(320.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=2 p=(323.78, 0.24, 294.92) v=8.2 route=0/40 searches=497 target=(333.00, 0.15, 220.00) input=(0.03, 1.00)
+  slot=3 p=(-151.27, 0.25, -3.89) v=1.9 route=0/65 searches=468 target=(-160.00, 0.15, 0.00) input=(0.00, -0.50)
+LIVE t=1846.8 phase=Carried carrier=1 points=1,4,2,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(57.09, 0.25, 160.00) v=12.9 route=0/18 searches=498 target=(160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=1 p=(320.00, 0.25, 141.93) v=4.2 route=0/72 searches=408 target=(320.00, 0.15, 160.00) input=(0.00, 1.00)
+  slot=2 p=(320.20, 0.24, 218.42) v=8.6 route=1/8 searches=502 target=(320.00, 0.15, 210.00) input=(-0.34, 1.00)
+  slot=3 p=(-147.10, 0.25, -6.03) v=1.7 route=0/44 searches=473 target=(0.00, 0.15, 60.00) input=(-0.24, 1.00)
+LIVE t=1855.8 phase=Carried carrier=1 points=1,4,2,2 contacts=258 traffic=42 peds=89
+  slot=0 p=(171.98, 0.26, 160.06) v=12.4 route=0/18 searches=501 target=(160.00, 0.15, 160.00) input=(-1.00, -0.50)
+  slot=1 p=(267.34, 0.26, 160.00) v=11.6 route=6/72 searches=408 target=(260.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(320.00, 0.25, 182.42) v=3.6 route=0/0 searches=505 target=none input=(0.00, -1.00)
+  slot=3 p=(-102.18, 0.06, 13.96) v=11.0 route=0/44 searches=476 target=(0.00, 0.15, 60.00) input=(-0.01, 1.00)
+LIVE t=1864.9 phase=Carried carrier=0 points=1,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(183.75, 0.26, 158.29) v=2.8 route=0/56 searches=509 target=(160.00, 0.15, 160.00) input=(1.00, 1.00)
+  slot=1 p=(189.51, 0.26, 160.02) v=2.6 route=0/0 searches=410 target=none input=(0.00, -1.00)
+  slot=2 p=(319.99, 0.25, 181.57) v=5.7 route=0/18 searches=512 target=(320.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=3 p=(-61.63, 0.06, 32.50) v=0.0 route=0/28 searches=483 target=(0.00, 0.15, 60.00) input=(-0.12, 0.25)
+LIVE t=1873.9 phase=Carried carrier=0 points=1,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(161.24, 0.26, 157.19) v=2.0 route=1/56 searches=510 target=(160.00, 0.15, 150.00) input=(-1.00, 1.00)
+  slot=1 p=(219.54, 0.25, 159.57) v=5.4 route=0/0 searches=412 target=none input=(0.00, -1.00)
+  slot=2 p=(301.04, 0.25, 158.03) v=3.1 route=0/18 searches=513 target=(320.00, 0.15, 160.00) input=(1.00, 0.25)
+  slot=3 p=(-62.49, 0.06, 28.27) v=0.4 route=0/34 searches=485 target=(0.00, 0.15, 0.00) input=(-0.01, 0.25)
+LIVE t=1883.0 phase=Carried carrier=0 points=1,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(160.00, 0.25, 71.95) v=12.0 route=10/56 searches=510 target=(160.00, 0.15, 60.00) input=(0.00, 0.25)
+  slot=1 p=(260.96, 0.25, 158.95) v=0.0 route=0/25 searches=416 target=(160.00, 0.15, 160.00) input=(-0.02, 1.00)
+  slot=2 p=(309.89, 0.22, 169.52) v=2.7 route=0/41 searches=516 target=(320.00, 0.15, 160.00) input=(-0.03, 0.25)
+  slot=3 p=(-64.88, 0.06, 28.51) v=0.9 route=0/33 searches=490 target=(0.00, 0.15, 0.00) input=(-1.00, -0.80)
+LIVE t=1892.0 phase=Carried carrier=0 points=1,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(159.88, 0.25, -38.75) v=11.6 route=21/56 searches=510 target=(160.00, 0.15, -50.00) input=(0.02, 0.25)
+  slot=1 p=(201.00, 0.26, 159.57) v=11.5 route=0/18 searches=425 target=(160.00, 0.15, 160.00) input=(0.00, 0.25)
+  slot=2 p=(316.22, 0.26, 120.98) v=10.9 route=0/18 searches=525 target=(320.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=3 p=(-61.64, 0.06, 26.86) v=0.1 route=0/18 searches=499 target=(0.00, 0.15, 0.00) input=(0.06, 0.25)
+LIVE t=1901.1 phase=Carried carrier=0 points=1,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(160.00, 0.25, -149.56) v=13.0 route=32/56 searches=510 target=(160.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=1 p=(159.93, 0.24, 137.36) v=9.9 route=0/18 searches=433 target=(160.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(318.60, 0.24, 44.79) v=9.2 route=0/34 searches=533 target=(320.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=3 p=(-67.24, 0.06, 28.39) v=0.0 route=0/34 searches=507 target=(0.00, 0.15, 0.00) input=(0.02, 1.00)
+LIVE t=1910.1 phase=Announcement carrier=-1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(160.00, 0.25, -261.40) v=9.3 route=0/74 searches=511 target=(160.00, 0.15, -320.00) input=(0.00, 1.00)
+  slot=1 p=(159.99, 0.25, 32.31) v=12.4 route=0/32 searches=441 target=(160.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(315.34, 0.26, -3.55) v=5.2 route=1/16 searches=541 target=(320.00, 0.15, 5.00) input=(1.00, -0.50)
+  slot=3 p=(-61.61, 0.05, 25.65) v=0.1 route=0/48 searches=515 target=(0.00, 0.15, 0.00) input=(0.20, 0.25)
+LIVE t=1919.2 phase=Waiting carrier=-1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(154.22, 0.26, -318.38) v=7.8 route=2/96 searches=514 target=(140.00, 0.15, -320.00) input=(0.15, 1.00)
+  slot=1 p=(125.14, 0.26, 0.00) v=11.1 route=5/72 searches=444 target=(110.00, 0.15, 0.00) input=(0.00, 1.00)
+  slot=2 p=(236.42, 0.26, 0.00) v=12.4 route=10/88 searches=542 target=(220.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-69.66, 0.06, 25.93) v=3.0 route=0/56 searches=519 target=(0.00, 0.15, 0.00) input=(-1.00, 1.00)
+LIVE t=1928.3 phase=Waiting carrier=-1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(50.32, 0.25, -320.00) v=13.0 route=12/96 searches=514 target=(40.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=1 p=(17.26, 0.24, 0.00) v=12.6 route=15/72 searches=444 target=(10.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(121.29, 0.27, 0.00) v=13.0 route=21/88 searches=542 target=(110.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-15.39, 0.26, 4.46) v=3.8 route=0/56 searches=520 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+LIVE t=1937.3 phase=Waiting carrier=-1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-35.40, 0.26, -320.00) v=12.3 route=21/96 searches=514 target=(-50.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=1 p=(-91.89, 0.26, 0.00) v=11.9 route=26/72 searches=444 target=(-100.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(7.24, 0.25, 0.00) v=12.6 route=32/88 searches=542 target=(0.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-6.41, 0.26, -4.54) v=0.9 route=2/56 searches=520 target=(-20.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1946.4 phase=Waiting carrier=-1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-145.07, 0.27, -320.00) v=12.5 route=32/96 searches=514 target=(-160.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=1 p=(-204.07, 0.27, 0.00) v=12.2 route=38/72 searches=444 target=(-220.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=2 p=(-100.89, 0.26, 0.00) v=12.3 route=43/88 searches=542 target=(-110.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-10.75, 0.13, -12.05) v=0.5 route=2/56 searches=520 target=(-20.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1955.5 phase=Waiting carrier=-1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-260.44, 0.26, -320.00) v=12.8 route=43/96 searches=514 target=(-270.00, 0.15, -320.00) input=(0.00, 0.25)
+  slot=1 p=(-313.68, 0.25, -0.05) v=4.4 route=49/72 searches=444 target=(-320.00, 0.15, -5.00) input=(-0.87, 1.00)
+  slot=2 p=(-215.70, 0.27, 0.00) v=12.3 route=55/88 searches=542 target=(-230.00, 0.15, 0.00) input=(0.00, 0.25)
+  slot=3 p=(-15.85, 0.06, -13.80) v=1.7 route=2/56 searches=520 target=(-20.00, 0.15, 0.00) input=(1.00, 1.00)
+LIVE t=1964.6 phase=Waiting carrier=-1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-241.93, 0.06, -337.20) v=1.4 route=0/56 searches=515 target=(-240.00, 0.15, -320.00) input=(1.00, 1.00)
+  slot=1 p=(-320.00, 0.24, -85.78) v=11.8 route=67/72 searches=444 target=(-320.00, 0.15, -95.00) input=(0.00, 0.25)
+  slot=2 p=(-315.75, 0.25, -0.97) v=2.5 route=66/88 searches=542 target=(-320.00, 0.15, -10.00) input=(-1.00, 1.00)
+  slot=3 p=(-21.34, 0.26, -3.79) v=2.8 route=3/56 searches=520 target=(-30.00, 0.15, 0.00) input=(-1.00, 1.00)
+LIVE t=1973.6 phase=Carried carrier=1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-261.04, 0.26, -318.46) v=10.0 route=3/42 searches=517 target=(-270.00, 0.15, -320.00) input=(0.02, 1.00)
+  slot=1 p=(-319.59, 0.25, -155.35) v=2.8 route=1/64 searches=447 target=(-310.00, 0.15, -160.00) input=(-1.00, 1.00)
+  slot=2 p=(-316.34, 0.26, -62.63) v=2.8 route=0/18 searches=544 target=(-320.00, 0.15, 0.00) input=(-1.00, 1.00)
+  slot=3 p=(-6.75, 0.26, 0.93) v=3.9 route=2/50 searches=522 target=(-20.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=1982.7 phase=Carried carrier=1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-318.57, 0.25, -311.70) v=7.3 route=0/26 searches=522 target=(-320.00, 0.15, -240.00) input=(0.34, 1.00)
+  slot=1 p=(-231.80, 0.26, -160.00) v=12.6 route=10/64 searches=447 target=(-220.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=2 p=(-303.75, 0.13, -68.68) v=4.6 route=0/24 searches=549 target=(-320.00, 0.15, -100.00) input=(0.00, 1.00)
+  slot=3 p=(3.26, 0.27, -13.15) v=0.0 route=0/24 searches=526 target=(0.00, 0.15, -100.00) input=(0.13, 0.25)
+LIVE t=1991.7 phase=Carried carrier=1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-319.60, 0.25, -214.81) v=12.1 route=0/18 searches=527 target=(-320.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=1 p=(-160.36, 0.24, -142.77) v=8.8 route=19/64 searches=447 target=(-160.00, 0.15, -130.00) input=(-0.03, 1.00)
+  slot=2 p=(-320.03, 0.26, -145.67) v=5.5 route=0/18 searches=554 target=(-320.00, 0.15, -160.00) input=(0.00, 0.25)
+  slot=3 p=(1.90, 0.26, -7.68) v=2.8 route=0/34 searches=530 target=(0.00, 0.15, 0.00) input=(1.00, 1.00)
+LIVE t=2000.8 phase=Carried carrier=1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-315.37, 0.25, -161.03) v=5.5 route=2/34 searches=533 target=(-300.00, 0.15, -160.00) input=(0.77, 1.00)
+  slot=1 p=(-160.00, 0.25, -36.56) v=12.5 route=30/64 searches=447 target=(-160.00, 0.15, -20.00) input=(0.00, 0.25)
+  slot=2 p=(-283.60, 0.15, -177.17) v=5.2 route=0/28 searches=559 target=(-160.00, 0.15, -260.00) input=(-0.03, 1.00)
+  slot=3 p=(-33.80, 0.23, -0.11) v=4.4 route=0/18 searches=535 target=(0.00, 0.15, 0.00) input=(1.00, 0.25)
+LIVE t=2009.8 phase=Carried carrier=1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-311.18, 0.23, -138.91) v=0.8 route=0/49 searches=541 target=(-320.00, 0.15, -160.00) input=(-1.00, 1.00)
+  slot=1 p=(-160.00, 0.25, 77.17) v=12.5 route=41/64 searches=447 target=(-160.00, 0.15, 90.00) input=(0.00, 0.25)
+  slot=2 p=(-203.24, 0.06, -231.02) v=12.9 route=0/43 searches=567 target=(-160.00, 0.15, -260.00) input=(0.00, 0.25)
+  slot=3 p=(-32.78, 0.06, 20.96) v=4.7 route=0/39 searches=543 target=(0.00, 0.15, 60.00) input=(-0.55, 1.00)
+LIVE t=2018.9 phase=Carried carrier=1 points=2,4,2,2 contacts=266 traffic=42 peds=89
+  slot=0 p=(-308.23, 0.26, -159.58) v=11.3 route=2/50 searches=549 target=(-300.00, 0.15, -160.00) input=(-0.04, 0.25)
+  slot=1 p=(-160.00, 0.24, 192.32) v=11.7 route=56/64 searches=447 target=(-160.00, 0.15, 200.00) input=(0.00, 0.25)
+  slot=2 p=(-160.05, 0.25, -257.60) v=1.9 route=1/44 searches=575 target=(-160.00, 0.15, -250.00) input=(-1.00, 1.00)
+  slot=3 p=(-33.34, 0.05, 18.38) v=3.1 route=0/34 searches=551 target=(0.00, 0.15, 0.00) input=(0.56, 1.00)
+PASS actual NWH propulsion moves competing trucks
+PASS physical roadside crossing earns a passenger pickup
+PASS actual AI navigation completes a real passenger delivery
+PASS complete first-to-5 four-AI match through real driving, pickups and deliveries
+PASS default target is five actual physical deliveries, without a free fifth point
+PASS reused UTS ordinary traffic is active without rival taxis
+PASS original UTS/Taxi pedestrian ecosystem is active
+PASS one shared AudioListener despite four full Taxi vehicles
+PASS rematch clears possession, scores and participant route caches
+PASS menu return cleans match, four vehicles, GPS and population
+CHECKS=13 ERRORS=0 · actual NWH/PhysX and automated AI; no human or physical-device claim.

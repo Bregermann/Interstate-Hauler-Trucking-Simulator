@@ -62,6 +62,8 @@ namespace LWS.TruckKickball
         System.Random random;
         float transition, pitchReady, catchAvailable, deadTime, nextScoreboard;
         int contactSlot = -1, lastThrower = -1, lastTeam;
+        LWS.TruckFieldGoal.FieldGoalCrowd audience;
+        int audienceRuns, audienceOuts;
         float contactDistance;
         Vector3 contactPoint, firstGround;
         bool grounded, groundPending, replaying, pitchCrossed;
@@ -107,6 +109,7 @@ namespace LWS.TruckKickball
         protected override void BeginGame()
         {
             random = new System.Random(Environment.TickCount); rules.Reset(setup.count / 2, Innings);
+            audience=GetComponent<LWS.TruckFieldGoal.FieldGoalCrowd>();audience?.ResetAttempt();audienceRuns=audienceOuts=0;
             Clock = 0; PhysicalKicks = PhysicalCatches = PhysicalThrows = PhysicalBaseTouches = 0;
             if (weatherPresets != null) atmosphere.ConfigurePreset(weatherPresets.Resolve(random.Next()), random.Next());
             else atmosphere.Configure(random.Next(), 0, 1);
@@ -402,11 +405,14 @@ namespace LWS.TruckKickball
             if (!Running) return;
             atmosphere.Tick(dt); presentation.Tick(dt);
             if (scoreboard != null && Time.unscaledTime >= nextScoreboard)
-            { nextScoreboard = Time.unscaledTime + .2f; scoreText.Clear().Append("BLUE  ").Append(rules.Scores[0]).Append("   |   ").Append(rules.Scores[1]).Append("  ORANGE\n").Append(rules.BattingTeam == 0 ? "TOP " : "BOTTOM ").Append(rules.Inning).Append("   ").Append(rules.Outs).Append(" OUT"); scoreboard.text = scoreText.ToString(); }
+            { nextScoreboard = Time.unscaledTime + .2f; scoreText.Clear().Append("BLUE  ").Append(rules.Scores[0]).Append("   |   ").Append(rules.Scores[1]).Append("  ORANGE\n").Append(rules.BattingTeam == 0 ? "TOP " : "BOTTOM ").Append(rules.Inning).Append("   ").Append(rules.Outs).Append(" OUT"); scoreboard.text = scoreText.ToString();
+              int runs=rules.Scores[0]+rules.Scores[1];if(runs>audienceRuns)audience?.React(true,"RUN SCORED",ball.body.position);else if(rules.Outs>audienceOuts)audience?.React(false,"OUT",ball.body.position);audienceRuns=runs;audienceOuts=rules.Outs;
+            }
         }
         protected override void StopSounds() { if (agents != null) foreach (var a in agents) a.truck.StopSound(); }
         protected override void StopGame()
         {
+            audience?.ResetAttempt();
             if (replay != null) replay.End(); replaying = false;
             if (presentation != null) presentation.Restore();
             if (agents != null) foreach (var agent in agents)

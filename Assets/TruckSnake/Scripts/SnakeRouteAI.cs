@@ -6,9 +6,11 @@ namespace LWS.TruckSnake {
   readonly LwsRoutePlanner planner=new LwsRoutePlanner(LwsNavigationTuning.Default());
   readonly RaycastHit[] hits=new RaycastHit[64];LwsRouteResult route;SnakePickup target;int cursor;float nextPlan,nextReaction;Vector2 command;bool jump;Vector3 routeStart,lastAim;string obstacle="none";
   public int QueryOverflows{get;private set;}
-  public string RouteDiagnostic=>"target="+(target!=null?target.transform.position.ToString():"none")+" route="+(route==null?"null":route.succeeded+":"+route.message)+" steer="+command.x.ToString("F2")+" targetSpeed="+command.y.ToString("F1")+" obstacle="+obstacle+" look="+lastAim+" cursor="+cursor+" aim="+(route!=null&&route.waypoints.Count>cursor?route.waypoints[cursor].ToString():"none");
+  Collider detour;Vector3 detourForward,detourRight,detourOrigin;float detourSide;
+  public int AvoidancePlans{get;private set;}
+  public string RouteDiagnostic=>"target="+(target!=null?target.transform.position.ToString():"none")+" route="+(route==null?"null":route.succeeded+":"+route.message)+" steer="+command.x.ToString("F2")+" targetSpeed="+command.y.ToString("F1")+" obstacle="+obstacle+" avoidancePlans="+AvoidancePlans+" detour="+(detour!=null?detour.name:"none")+" look="+lastAim+" cursor="+cursor+" aim="+(route!=null&&route.waypoints.Count>cursor?route.waypoints[cursor].ToString():"none");
   bool OffRoute(Vector3 p){if(route==null||!route.succeeded)return true;for(int i=Mathf.Max(0,cursor-2);i<route.waypoints.Count;i++)if(Mathf.Abs(route.waypoints[i].y-p.y)<6&&Vector3.ProjectOnPlane(route.waypoints[i]-p,Vector3.up).sqrMagnitude<35*35)return false;return true;}
-  public void Reset(){route=null;target=null;cursor=0;nextPlan=nextReaction=0;command=Vector2.zero;}
+  public void Reset(){route=null;target=null;detour=null;AvoidancePlans=0;cursor=0;nextPlan=nextReaction=0;command=Vector2.zero;}
   public Vector2 Drive(SnakeMatch match,int slot,float dt,out bool requestJump){
    int skill=(int)match.setup.players[slot].difficulty;var truck=match.trucks[slot];Vector3 position=truck.body.position,forward=Vector3.ProjectOnPlane(truck.transform.forward,Vector3.up).normalized;
    if(target==null||!target.Live||Time.time>=nextPlan&&OffRoute(position)){
@@ -30,17 +32,59 @@ namespace LWS.TruckSnake {
    if(route!=null&&route.succeeded&&route.waypoints.Count>0){while(cursor<route.waypoints.Count-1){var a=cursor==0?routeStart:route.waypoints[cursor-1];var b=route.waypoints[cursor];var line=Vector3.ProjectOnPlane(b-a,Vector3.up);float t=line.sqrMagnitude<.01f?1:Vector3.Dot(Vector3.ProjectOnPlane(position-a,Vector3.up),line)/line.sqrMagnitude;if(Mathf.Abs(b.y-position.y)<8&&(t>=.98f||Vector3.ProjectOnPlane(b-position,Vector3.up).sqrMagnitude<9))cursor++;else break;}var from=cursor==0?routeStart:route.waypoints[cursor-1];var to=route.waypoints[cursor];var segment=Vector3.ProjectOnPlane(to-from,Vector3.up);float projection=segment.sqrMagnitude<.01f?1:Mathf.Clamp01(Vector3.Dot(Vector3.ProjectOnPlane(position-from,Vector3.up),segment)/segment.sqrMagnitude);aim=Vector3.Lerp(from,to,projection);float look=Mathf.Clamp(truck.body.linearVelocity.magnitude*.8f,7,16);for(int n=cursor;n<route.waypoints.Count;n++){var ahead=route.waypoints[n]-aim;float length=ahead.magnitude;if(length>=look){aim+=ahead/length*look;break;}aim=route.waypoints[n];look-=length;}}
    else if(target!=null&&Vector3.Distance(position,target.transform.position)<60)aim=target.transform.position;
    if(route!=null&&route.succeeded&&cursor>=route.waypoints.Count-1&&target!=null&&Vector3.Distance(position,target.transform.position)<45)aim=target.transform.position;
-   Vector3 direction=Vector3.ProjectOnPlane(aim-position,Vector3.up);float angle=Vector3.SignedAngle(forward,direction,Vector3.up);float error=Mathf.Sin(match.rules.Clock*.37f+slot*3)*(skill==0?.07f:skill==1?.025f:.008f);float desired=18; if(Mathf.Abs(angle)>25)desired=Mathf.Lerp(15,7,Mathf.InverseLerp(25,75,Mathf.Abs(angle)));
+   float distance=Mathf.Clamp(truck.body.linearVelocity.magnitude*(skill==0?3.0f:skill==1?3.5f:4f),48,90);
+   float danger=Clearance(position,forward,distance,match,slot,out var closest);
+   obstacle=closest.collider!=null?closest.collider.name+"@"+danger.ToString("F1"):"none";
+   // A moving cab/tail cannot retain a corridor based on where it was several
+   // seconds ago. Reconsider it as it moves, or when a nearer solid intervenes.
+   if(detour!=null&&(detour.attachedRigidbody!=null&&(detour.bounds.center-detourOrigin).sqrMagnitude>16||closest.collider!=null&&closest.collider!=detour&&closest.rigidbody==null&&danger<Mathf.Max(10,truck.body.linearVelocity.magnitude*1.2f)))detour=null;
+   if(detour==null&&danger<distance){
+    if(closest.collider.bounds.max.y<position.y+2.2f&&danger>5){if(danger<Mathf.Max(14,truck.body.linearVelocity.magnitude*1.2f))jump=true;}
+    else{
+     detour=closest.collider;detourOrigin=detour.bounds.center;detourForward=forward;detourRight=Vector3.Cross(Vector3.up,forward);
+     var bounds=detour.bounds;float lateral=Vector3.Dot(bounds.center-position,detourRight),extent=Extent(bounds,detourRight);
+     float left=lateral-extent-4.5f,right=lateral+extent+4.5f;
+     // Check both physical corridors before committing. A head-on normal has no
+     // useful lateral sign; always turning right traps trucks against corners.
+     float leftFree=Clearance(position,(forward*Mathf.Max(10,danger)+detourRight*left).normalized,distance,match,slot,out _);
+     float rightFree=Clearance(position,(forward*Mathf.Max(10,danger)+detourRight*right).normalized,distance,match,slot,out _);
+     float ahead=Mathf.Clamp(danger+9,9,24);
+     bool leftRoad=OnRoad(match.world.graph,position+forward*ahead+detourRight*left),rightRoad=OnRoad(match.world.graph,position+forward*ahead+detourRight*right);
+     if(!leftRoad&&!rightRoad)detour=null;
+     else{detourSide=leftRoad&&(!rightRoad||leftFree-Mathf.Abs(left)*.7f>rightFree-Mathf.Abs(right)*.7f)?-1:1;AvoidancePlans++;}
+    }
+   }
+   if(detour!=null){
+    var bounds=detour.bounds;float along=Vector3.Dot(bounds.center-position,detourForward),longExtent=Extent(bounds,detourForward);
+    // The starter trailer must clear too. Do not immediately steer back toward
+    // the route when only the tractor's bumper has passed the obstruction.
+    if(along+longExtent< -23||Vector3.Distance(position,bounds.center)>distance+bounds.extents.magnitude+30)detour=null;
+    else{
+     float lateral=Vector3.Dot(bounds.center-position,detourRight)+detourSide*(Extent(bounds,detourRight)+4.5f);
+     aim=position+detourForward*Mathf.Clamp(along-longExtent+9,9,24)+detourRight*lateral;
+    }
+   }
+   Vector3 direction=Vector3.ProjectOnPlane(aim-position,Vector3.up);float angle=Vector3.SignedAngle(forward,direction,Vector3.up);float error=Mathf.Sin(match.rules.Clock*.37f+slot*3)*(skill==0?.07f:skill==1?.025f:.008f);float desired=detour!=null?9:18; if(Mathf.Abs(angle)>25)desired=Mathf.Min(desired,Mathf.Lerp(15,7,Mathf.InverseLerp(25,75,Mathf.Abs(angle))));
    if(route!=null&&route.succeeded&&cursor<route.waypoints.Count-1){var bend=route.waypoints[cursor+1]-aim;float corner=Mathf.Abs(Vector3.SignedAngle(direction,bend,Vector3.up));if(corner>35&&direction.magnitude<40)desired=Mathf.Min(desired,Mathf.Lerp(7,15,Mathf.InverseLerp(10,40,direction.magnitude)));}
    var local=truck.transform.InverseTransformDirection(direction);var steering=truck.tractorMotor.vehicle.steering;float lockAngle=steering.useRawInput?steering.maximumSteerAngle:steering.maximumSteerAngle*steering.speedSensitiveSteeringCurve.Evaluate(truck.tractorMotor.vehicle.Speed/50f);float wheelbase=Mathf.Max(3,truck.tractorMotor.vehicle.wheelbase);float requested=Mathf.Atan2(2*wheelbase*local.x,Mathf.Max(1,direction.sqrMagnitude))*Mathf.Rad2Deg;lastAim=aim;command=new Vector2(Mathf.Clamp(requested/Mathf.Max(1,lockAngle)+error,-1,1),desired);
-   float distance=Mathf.Max(14,truck.body.linearVelocity.magnitude*1.05f);int count=Physics.SphereCastNonAlloc(position+Vector3.up*1.2f,.8f,forward,hits,distance,~0,QueryTriggerInteraction.Ignore);
-   RaycastHit[] candidates=hits;if(count==hits.Length){QueryOverflows++;candidates=Physics.SphereCastAll(position+Vector3.up*1.2f,.8f,forward,distance,~0,QueryTriggerInteraction.Ignore);count=candidates.Length;}
-   float danger=float.PositiveInfinity;RaycastHit closest=default;
-   for(int i=0;i<count;i++){var hit=candidates[i];if(hit.collider.transform.IsChildOf(truck.transform)||hit.normal.y>.6f)continue;if(hit.collider.GetComponentInParent<SnakeTrailerContact>() is SnakeTrailerContact tail&&tail.convoy==match.convoys[slot]&&tail.index<2)continue;if(hit.distance<danger){danger=hit.distance;closest=hit;}}
-   obstacle=closest.collider!=null?closest.collider.name+"@"+danger.ToString("F1"):"none";if(danger<distance){if(closest.collider.bounds.max.y<position.y+2.2f&&danger>5)jump=true;else if(danger<12){float side=Vector3.Dot(closest.normal,truck.transform.right);command.x=Mathf.Clamp(command.x+(side>=0?.65f:-.65f),-1,1);}}
+   if(local.z< -1){command.x=angle>=0?1:-1;command.y=7;}
    // Explicitly authored stunt-ramp jump windows use the same action as humans.
    if(truck.Grounded&&target!=null&&target.Golden&&aim.y-position.y>2&&direction.magnitude<22)jump=true;
    if(truck.Grounded&&Vector3.ProjectOnPlane(position-match.world.jumpLaunch,Vector3.up).magnitude<18&&Vector3.Dot(forward,match.world.jumpDirection)>.6f)jump=true;requestJump=jump;return command;
+  }
+  static float Extent(Bounds bounds,Vector3 axis)=>Vector3.Dot(bounds.extents,new Vector3(Mathf.Abs(axis.x),Mathf.Abs(axis.y),Mathf.Abs(axis.z)));
+  static bool OnRoad(LwsRoadGraph graph,Vector3 position){
+   if(!LwsRoadGraphQuery.TryFindNearestRoad(graph,position,20,out var road)||Mathf.Abs(road.NearestPosition.y-position.y)>5)return false;
+   float width=road.LaneCount*road.LaneWidthMeters;
+   foreach(var edge in graph.edges)if(edge.edgeId==road.EdgeId){if(edge.samples.Count>0)width=Mathf.Max(width,edge.samples[0].roadWidthMeters);break;}
+   return road.LateralDistanceMeters<=Mathf.Max(1,width*.5f-2);
+  }
+  float Clearance(Vector3 position,Vector3 direction,float distance,SnakeMatch match,int slot,out RaycastHit closest){
+   int count=Physics.SphereCastNonAlloc(position+Vector3.up*1.5f,1.35f,direction,hits,distance,~0,QueryTriggerInteraction.Ignore);
+   RaycastHit[] candidates=hits;if(count==hits.Length){QueryOverflows++;candidates=Physics.SphereCastAll(position+Vector3.up*1.5f,1.35f,direction,distance,~0,QueryTriggerInteraction.Ignore);count=candidates.Length;}
+   float danger=distance;closest=default;var truck=match.trucks[slot];
+   for(int i=0;i<count;i++){var hit=candidates[i];if(hit.collider.transform.IsChildOf(truck.transform)||hit.normal.y>.6f)continue;if(hit.collider.GetComponentInParent<SnakeTrailerContact>() is SnakeTrailerContact tail&&tail.convoy==match.convoys[slot]&&tail.index<2)continue;if(hit.distance<danger){danger=hit.distance;closest=hit;}}
+   return danger;
   }
   static void AppendSamples(System.Collections.Generic.List<Vector3> points,LwsRoadEdge edge,float from,float until){if(until>=from){foreach(var sample in edge.samples)if(sample.distanceFromStartMeters>from+.01f&&sample.distanceFromStartMeters<until-.01f)points.Add(sample.position);}else for(int n=edge.samples.Count-1;n>=0;n--){var sample=edge.samples[n];if(sample.distanceFromStartMeters<from-.01f&&sample.distanceFromStartMeters>until+.01f)points.Add(sample.position);}}
   void AddTerminal(LwsRoadEdge source,bool reverse,float along,Vector3 position,string destination,int slot){var points=new System.Collections.Generic.List<Vector3>();points.Add(source.samples[reverse?source.samples.Count-1:0].position);AppendSamples(points,source,reverse?source.samples[source.samples.Count-1].distanceFromStartMeters:0,along);points.Add(position);float distance=0;for(int i=1;i<points.Count;i++)distance+=Vector3.Distance(points[i-1],points[i]);if(distance<.01f)return;var edge=new LwsRoadEdge{edgeId="snake.target.access."+slot+"."+(reverse?"b":"a"),roadId="snake.target.road."+slot+"."+(reverse?"b":"a"),segmentId="snake.target.segment."+slot+"."+(reverse?"b":"a"),fromNodeId=reverse?source.toNodeId:source.fromNodeId,toNodeId=destination,roadClass=source.roadClass,direction=source.direction,surfaceType=source.surfaceType,oneWay=true,restrictions=source.restrictions,stateOrRegionId=source.stateOrRegionId,sceneChunkId=source.sceneChunkId,distanceMeters=distance,travelCost=distance,speedLimitMph=source.speedLimitMph,laneCount=source.laneCount,laneWidthMeters=source.laneWidthMeters};float walked=0;for(int i=0;i<points.Count;i++){if(i>0)walked+=Vector3.Distance(points[i-1],points[i]);var forward=i+1<points.Count?points[i+1]-points[i]:points[i]-points[Mathf.Max(0,i-1)];edge.samples.Add(new LwsRoadSample{position=points[i],forward=forward.normalized,up=Vector3.up,distanceFromStartMeters=walked,roadWidthMeters=30,laneCount=edge.laneCount,laneWidthMeters=edge.laneWidthMeters,speedLimitMph=edge.speedLimitMph});}planning.edges.Add(edge);}

@@ -117,6 +117,7 @@ namespace LWS.TruckKickball.Editor
             SportsEventAuthoring.Box("Stadium scoreboard housing", new Vector3(0, 13, 113.3f), new Vector3(46, 17, .6f), dark);
             for (int s = -1; s <= 1; s += 2)
                 SportsEventAuthoring.Box("Scoreboard support", new Vector3(s * 17, 5, 114), new Vector3(.6f, 10, .6f), dark);
+            InstallStadiumDisplay(m);
             SportsEventAuthoring.Save(Folder); Validate();
         }
         static void Chalk(Vector3 from, Vector3 to, Material material)
@@ -207,7 +208,89 @@ namespace LWS.TruckKickball.Editor
                 }
                 a.ApplyTeam(i < 6 ? 0 : 1); EditorUtility.SetDirty(a);
             }
+            InstallStadiumDisplay(match);
             EditorSceneManager.SaveScene(SceneManager.GetActiveScene()); AssetDatabase.SaveAssets(); Validate();
+        }
+        [MenuItem("Truck Sports/Kickball/Repair stadium display and surface materials")]
+        public static void UpgradeStadiumDisplay()
+        {
+            EditorSceneManager.OpenScene(Scene); var match = UnityEngine.Object.FindAnyObjectByType<KickballMatch>();
+            InstallStadiumDisplay(match); EditorSceneManager.SaveScene(match.gameObject.scene); AssetDatabase.SaveAssets();
+        }
+        static void InstallCrowd(KickballMatch match)
+        {
+            var prior = match.GetComponent<LWS.TruckFieldGoal.FieldGoalCrowd>();
+            if (prior != null) { prior.eventSession = match; EditorUtility.SetDirty(prior); return; }
+            var preview = EditorSceneManager.OpenPreviewScene(LWS.TruckFieldGoal.Editor.FieldGoalAuthoring.Scene);
+            try
+            {
+                var source = preview.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<LWS.TruckFieldGoal.FieldGoalCrowd>(true)).Single();
+                var stands = match.gameObject.scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<MeshRenderer>(true)).Where(r => r.name == "Union Field Grandstand tier").ToArray();
+                if (stands.Length < 8 || source.batches.Length == 0) throw new InvalidOperationException("Actual Union Field stands and existing posed audience assets are required.");
+                var crowd = match.gameObject.AddComponent<LWS.TruckFieldGoal.FieldGoalCrowd>(); crowd.eventSession = match;
+                crowd.nearFans = Array.Empty<Animator>(); crowd.authoredVersion = 1;
+                var root = new GameObject("Kickball audience · reused posed Taxi stadium fans").transform;
+                UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(root.gameObject, match.gameObject.scene);
+                var seats = new System.Collections.Generic.List<Matrix4x4>[source.batches.Length];
+                var fans = new System.Collections.Generic.List<MeshFilter>[source.batches.Length];
+                for (int i = 0; i < seats.Length; i++) { seats[i] = new System.Collections.Generic.List<Matrix4x4>(); fans[i] = new System.Collections.Generic.List<MeshFilter>(); }
+                int number = 0;
+                foreach (var stand in stands) for (int row = 0; row < 4; row++) for (int seat = 0; seat < 72; seat++)
+                {
+                    int who = number++ % source.batches.Length;
+                    var point = stand.transform.TransformPoint(new Vector3(Mathf.Lerp(-.47f, .47f, seat / 71f), .505f, Mathf.Lerp(-.36f, .36f, row / 3f)));
+                    var rotation = Quaternion.LookRotation(Vector3.ProjectOnPlane(new Vector3(0, point.y, 27) - point, Vector3.up));
+                    var fan = new GameObject("Instanced stadium spectator " + number).transform; fan.SetParent(root, false); fan.SetPositionAndRotation(point, rotation); fan.localScale = Vector3.one * 1.25f;
+                    var filter = fan.gameObject.AddComponent<MeshFilter>(); filter.sharedMesh = source.batches[who].idle; fans[who].Add(filter);
+                    var renderer = fan.gameObject.AddComponent<MeshRenderer>(); renderer.sharedMaterials = source.batches[who].materials; renderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off; renderer.receiveShadows = false;
+                    seats[who].Add(Matrix4x4.TRS(point, rotation, Vector3.one * 1.25f));
+                }
+                crowd.batches = new LWS.TruckFieldGoal.FieldGoalCrowd.Batch[source.batches.Length];
+                for (int i = 0; i < crowd.batches.Length; i++) crowd.batches[i] = new LWS.TruckFieldGoal.FieldGoalCrowd.Batch { idle = source.batches[i].idle, cheer = source.batches[i].cheer, materials = source.batches[i].materials, seats = seats[i].ToArray(), fans = fans[i].ToArray() };
+                var audio = new GameObject("Bounded event driven audience response").AddComponent<AudioSource>(); audio.transform.SetParent(root, false); audio.playOnAwake = false; audio.spatialBlend = 0;
+                crowd.response = audio; crowd.cheer = source.cheer; crowd.boo = source.boo; EditorUtility.SetDirty(crowd);
+            }
+            finally { EditorSceneManager.ClosePreviewScene(preview); }
+        }
+        public static void InstallStadiumDisplay(KickballMatch match)
+        {
+            // The old four-point 3D font occupied a fraction of this forty-metre
+            // board, and its quads were coplanar with the housing's front face.
+            var board = match.scoreboard;
+            board.transform.position = new Vector3(0, 13, 112.78f);
+            board.fontSize = 58; board.enableAutoSizing = true; board.fontSizeMin = 30; board.fontSizeMax = 58; board.textWrappingMode = TextWrappingModes.NoWrap;
+            board.rectTransform.sizeDelta = new Vector2(42, 15); board.extraPadding = true;
+            board.GetComponent<Renderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            EditorUtility.SetDirty(board);
+            var grass = AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckFieldGoal/Materials/Textured football turf.mat");
+            var turf = AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckKickball/Materials/Mown stadium turf.mat");
+            var clay = AssetDatabase.LoadAssetAtPath<Material>("Assets/TruckKickball/Materials/Raked kickball infield clay.mat");
+            var earth = AssetDatabase.LoadAssetAtPath<TerrainLayer>("Assets/3D Haven/Path Painter II/Editor/Demo/Terrains/DocsTerrain/TerrainLayers/stdMudRocky.terrainlayer");
+            if (grass == null || turf == null || clay == null || earth == null || earth.diffuseTexture == null)
+                throw new InvalidOperationException("Existing owned stadium turf and earth materials are required.");
+            turf.mainTexture = grass.mainTexture; turf.SetColor("_BaseColor", grass.GetColor("_BaseColor"));
+            turf.SetTexture("_BumpMap", grass.GetTexture("_BumpMap")); turf.SetFloat("_BumpScale", .3f);
+            turf.EnableKeyword("_NORMALMAP"); turf.mainTextureScale = Vector2.one * 46;
+            clay.mainTexture = earth.diffuseTexture; clay.SetColor("_BaseColor", new Color(.85f, .65f, .46f));
+            clay.SetTexture("_BumpMap", earth.normalMapTexture); clay.SetFloat("_BumpScale", .18f);
+            clay.EnableKeyword("_NORMALMAP"); clay.mainTextureScale = Vector2.one * 24;
+            var infield = match.gameObject.scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<MeshFilter>(true)).First(f => f.name == "Continuous dirt infield");
+            string meshPath = AssetDatabase.GetAssetPath(infield.sharedMesh);
+            if (infield.sharedMesh.name == "Cylinder" && (string.IsNullOrEmpty(meshPath) || meshPath.StartsWith("Library/", StringComparison.Ordinal) || meshPath.StartsWith("Resources/unity_builtin_extra", StringComparison.Ordinal)))
+            {
+                const string path = "Assets/TruckKickball/Models/Planar infield surface.asset";
+                var planar = AssetDatabase.LoadAssetAtPath<Mesh>(path);
+                if (planar == null)
+                {
+                    planar = UnityEngine.Object.Instantiate(infield.sharedMesh); planar.name = "Continuous planar infield texture coordinates";
+                    var vertices = planar.vertices; var uv = new Vector2[vertices.Length];
+                    for (int i = 0; i < vertices.Length; i++) uv[i] = new Vector2(vertices[i].x + .5f, vertices[i].z + .5f);
+                    planar.uv = uv; planar.RecalculateTangents(); AssetDatabase.CreateAsset(planar, path);
+                }
+                infield.sharedMesh = planar; EditorUtility.SetDirty(infield);
+            }
+            EditorUtility.SetDirty(turf); EditorUtility.SetDirty(clay);
+            InstallCrowd(match);
         }
     }
 }

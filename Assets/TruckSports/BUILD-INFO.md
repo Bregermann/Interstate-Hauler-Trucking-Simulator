@@ -1,3 +1,27 @@
+# Current42-scene Windows QA build — Kickball rendering repaired
+
+Build: 2026-10-20T00:49:54.116839+00:00; Windows x64 Development/Mono/D3D11; Unity6000.4.10f1;0errors/57warnings. Startup: TruckSports.
+
+Managed SHA256: `414ddce00cd60f2d6cb7782bea626a29236d91a02e9a50d21866bdb4ec1e3eb0`. Runtime manifest: `ee1b498a096b28f43aada1e885251309436e3cf40fa61fe9e227b682eb59293a`.
+
+Exact Windows: Kickball21/0 complete12-AI game plus actual startup/replay/rematch rendering at720p,1080p,16:10,4:3 and ultrawide; Minefield46/0; FieldGoalBoard57/0. All processes exited0. Native enhanced Kickball camera/ownership/framing regression1/1. Broader native continuation: Goddess36/36, Fare default13/0, Cheese86/0, race countdown1/1, long-name UI1/1 and Snake obstruction10/0.
+
+The full backlog remains OPEN. No human/hardware validation claim. Earlier native Unity accessibility shutdown faults were not reproduced by these runs; no engine-fix claim. The user chose to keep the current Editor and approved publishing the reviewed Sports payload to both branches. Actual public commit/push receipts: delivered `GIT-DELIVERY.txt`. Preserve all executable companion files.
+
+Historical build records follow; older hashes and approval blockers do not identify the current delivery.
+
+# October20 continuation — current42-scene Windows QA build
+
+Built 2026-10-20T00:25:35.320169+00:00; Windows x64 Development/Mono/D3D11; Unity6000.4.10f1;42 explicit scenes;0errors/57warnings; build duration 00:02:10.9524141.
+
+Managed SHA256: `d9e704cd850679949ebba9c2abd5d8b82e8eba054c9403a6575d7dd03f549881`. Runtime manifest: `c05f7fdfbafd975e66fcc70755f7cebad5edcb4934a0473f45b39f07aacd78aa` (503 runtime files). Canonical output: `Builds/TruckSports/TruckSports.exe` with every companion file.
+
+Includes Field Goal replay transport repair; shared animated race starts; readable single-name Minefield flags; Kickball stadium/2304 posed fans/real preview; compact contextual Fare Fight HUD/assigned Help; Snake physical-obstacle anticipation. Native full Goddess36/36, final Minefield46/0, full Kickball12/0, default Fare Fight13/0, countdown1/1, long-name UI1/1, Cheese86/0 and FieldGoal57/0 pass. Exact current Windows Field Goal57/0 passes with actual captures and normal process exit0. A complete current Windows Kickball match is running.
+
+The full backlog and wider Windows/hardware/human acceptance remain open. Earlier QA players faulted during native Unity accessibility shutdown; this new run did not reproduce it and no engine-fix claim is made. The verified vendor-fixed SDK install retry remains pending its specific approval. Automatic approval review separately blocked public licensed/source publication pending exact payload approval. No push has occurred. See the active checkpoint and requirement ledger; local commit identity is recorded in the delivered GIT-DELIVERY.txt.
+
+Historical build evidence follows. Its older hashes do not identify this executable.
+
 # October 19 Field Goal QA update - final Windows acceptance blocked
 
 The requested upright-mounted wind sock, green physical runoff/concourse and right-facing midfield logo are implemented in saved scenes and authoring defaults. Native field/board42/0, crowd33/0, collection PlayMode28/28 and Kickball EditMode30/30 passed. Actual Windows field/board42assertions/0errors passed twice, including real runoff contacts, full four-AI games, four resolutions, rematches and menu cleanup. Both processes subsequently faulted in Unity's native Windows accessibility shutdown code. These are not accepted full release runs.

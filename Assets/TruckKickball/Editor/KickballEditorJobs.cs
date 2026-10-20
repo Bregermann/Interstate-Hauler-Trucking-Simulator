@@ -36,7 +36,10 @@ namespace LWS.TruckKickball.Editor
             string command;try { command=File.ReadAllText(path).Trim();File.Delete(path); } catch(IOException) { return; }
             try
             {
-                if(command=="combined-validate"){LWS.TruckSports.Editor.SportsBuilder.Validate();File.WriteAllText(Folder+"/combined-validation-job.txt","PASS saved scenes "+DateTime.UtcNow.ToString("o"));}
+                if(command=="race-countdowns"){LWS.TruckTerrierRacing.Editor.TerrierCountdownAuthoring.UpgradeRaces();File.WriteAllText(Folder+"/race-countdown-job.txt","PASS saved "+DateTime.UtcNow.ToString("o"));}
+                else if(command=="race-countdown-tests")RunTests("LWS.TruckSports.GoddessPlayModeTests","race-countdown",TestMode.PlayMode,"LWS.TruckSports.Tests.GoddessPhysicsTests.RaceStartingLightsUseAuthoritativeTimersAndSurvivePauseAndRematch");
+                else if(command=="combined-validate"){LWS.TruckSports.Editor.SportsBuilder.Validate();File.WriteAllText(Folder+"/combined-validation-job.txt","PASS saved scenes "+DateTime.UtcNow.ToString("o"));}
+                else if(command=="kickball-stadium"){KickballAuthoring.UpgradeStadiumDisplay();File.WriteAllText(Folder+"/kickball-stadium-job.txt","PASS saved "+DateTime.UtcNow.ToString("o"));}
                 else if(command=="combined-build"){File.WriteAllText(Folder+"/combined-build-job.txt","RUNNING "+DateTime.UtcNow.ToString("o"));LWS.TruckSports.Editor.SportsBuilder.Build();File.WriteAllText(Folder+"/combined-build-job.txt","PASS "+DateTime.UtcNow.ToString("o"));}
                 else if(command.StartsWith("derby-traverse ")){UnityEditor.SceneManagement.EditorSceneManager.OpenScene(LWS.TruckDerby.Editor.DerbyAuthoring.Scene);SessionState.SetBool("Sports.Derby.Traverse",true);SessionState.SetString("Sports.Derby.TraverseMode",command.Substring(15));EditorApplication.isPlaying=true;}
                 else if(command=="buz-names-play"){UnityEditor.SceneManagement.EditorSceneManager.OpenScene(LWS.TruckBuzkashi.Editor.BuzAuthoring.Scene);SessionState.SetBool("Sports.Buz.Names",true);EditorApplication.isPlaying=true;}
@@ -53,6 +56,7 @@ namespace LWS.TruckKickball.Editor
                 else if(command=="fieldgoal-board-play"){UnityEditor.SceneManagement.EditorSceneManager.OpenScene(LWS.TruckFieldGoal.Editor.FieldGoalAuthoring.Scene);SessionState.SetBool("Sports.FieldGoal.Board",true);EditorApplication.isPlaying=true;}
                 else if(command=="fieldgoal-crowd-play"){UnityEditor.SceneManagement.EditorSceneManager.OpenScene(LWS.TruckFieldGoal.Editor.FieldGoalAuthoring.Scene);SessionState.SetBool("Sports.FieldGoal.Crowd",true);EditorApplication.isPlaying=true;}
                 else if(command=="goddess-stage"){LWS.TruckFieldGoal.Editor.FieldGoalCrowdAuthoring.Upgrade();LWS.TruckMinefield.Editor.MinefieldGoddessAuthoring.Upgrade();LWS.TruckLimbo.Editor.LimboReviewAuthoring.Upgrade();LWS.TruckWifeCarrying.Editor.WifeGoddessAuthoring.Upgrade();LWS.TruckCheeseRolling.Editor.CheeseIndicatorAuthoring.Upgrade();File.WriteAllText(Folder+"/goddess-stage-job.txt","PASS saved "+DateTime.UtcNow.ToString("o"));}
+                else if(command=="minefield-flags"){var scene=UnityEditor.SceneManagement.EditorSceneManager.OpenScene(LWS.TruckMinefield.Editor.MinefieldAuthoring.Scene);LWS.TruckMinefield.Editor.MinefieldGoddessAuthoring.Flags(UnityEngine.Object.FindAnyObjectByType<LWS.TruckMinefield.MinefieldMatch>());UnityEditor.SceneManagement.EditorSceneManager.SaveScene(scene);AssetDatabase.SaveAssets();File.WriteAllText(Folder+"/minefield-flags-job.txt","PASS saved "+DateTime.UtcNow.ToString("o"));}
                 else if(command=="minefield-goddess"){LWS.TruckMinefield.Editor.MinefieldGoddessAuthoring.Upgrade();File.WriteAllText(Folder+"/minefield-goddess-job.txt","PASS saved "+DateTime.UtcNow.ToString("o"));}
                 else if(command=="dock-goddess"){LWS.TruckDockDiving.Editor.DockSlangAuthoring.Upgrade();File.WriteAllText(Folder+"/dock-goddess-job.txt","PASS saved "+DateTime.UtcNow.ToString("o"));}
                 else if(command=="dock-goddess-play"){UnityEditor.SceneManagement.EditorSceneManager.OpenScene(LWS.TruckDockDiving.Editor.DockAuthoring.Scene);SessionState.SetBool("Sports.Dock.Slang",true);EditorApplication.isPlaying=true;}
@@ -112,6 +116,7 @@ namespace LWS.TruckKickball.Editor
                 else if(command.StartsWith("terrier-goddess-play ")){UnityEditor.SceneManagement.EditorSceneManager.OpenScene(LWS.TruckTerrierRacing.Editor.TerrierAuthoring.Scene);SessionState.SetString("Sports.Terrier.Goddess",command.Substring(21));EditorApplication.isPlaying=true;}
                 else if(command=="cornhole-replay-test")RunTests("LWS.TruckSports.GoddessPlayModeTests","cornhole-replay",TestMode.PlayMode,"LWS.TruckSports.Tests.GoddessPhysicsTests.CornholeReplayRewindCannotConsumeTimeFromBeforeTheAction");
                 else if(command=="goddess-physics-tests")RunTests("LWS.TruckSports.GoddessPlayModeTests","goddess-physics",TestMode.PlayMode);
+                else if(command=="goddess-fare-ui")RunTests("LWS.TruckSports.GoddessPlayModeTests","goddess-fare-ui",TestMode.PlayMode,"LWS.TruckSports.Tests.GoddessPhysicsTests.FareFightHumanAndAICameraOwnership");
                 else if (command == "rhythm-rules") RunTests("LWS.TruckDanceOff.EditModeTests", "rhythm", TestMode.EditMode);
                 else if (command == "playmode-tests") RunTests("LWS.TruckKickball.PlayModeTests", "kickball-playmode", TestMode.PlayMode);
                 else if (command == "create")

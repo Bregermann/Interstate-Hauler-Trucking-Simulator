@@ -18,6 +18,11 @@ namespace LWS.TruckSports {
  public virtual bool SupportsSplitAIViews=>false;public virtual bool AISplitViewsApplicable=>SupportsSplitAIViews;public virtual bool BroadcastStandingsVisible=>true;public virtual bool BroadcastHeaderVisible=>true;public virtual bool BroadcastStatusVisible=>true;
  public virtual bool TryReadScoreCard(int card,out string value,out string detail){value=detail=null;return false;}
  public virtual int ScoreCardCount=>setup.count;public virtual string ScoreCardLabel(int card)=>setup.players[card].name;public virtual int ScoreCardSource(int card)=>card;public virtual Color ScoreCardColor(int card)=>setup.players[ScoreCardSource(card)].color;public virtual float ParticipantProgress(int slot)=>-1;public virtual bool ParticipantLocked(int slot)=>false;
+ // Read-only presentation values. Each race retains its existing countdown,
+ // release, input gate and scoring clock as the sole simulation authority.
+ public virtual bool SupportsRaceCountdown=>false;
+ public virtual float RaceCountdownSeconds=>-1;
+ public virtual float RaceStartSeconds=>-1;
  public virtual string ControlCaption(int slot)=>Controls(slot);
  public string PreferenceKey{get{
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

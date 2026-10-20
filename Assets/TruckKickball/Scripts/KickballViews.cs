@@ -93,9 +93,11 @@ namespace LWS.TruckKickball
                 // Whole legal diamond/fence remains visible for spectators; no
                 // empty screen in an all-AI match when AI viewports are disabled.
                 var camera = rally.broadcast.view;
-                camera.orthographic = true;
-                camera.transform.SetPositionAndRotation(new Vector3(0, 120, -63), Quaternion.Euler(53, 0, 0));
-                camera.orthographicSize = Mathf.Max(62, 88 / camera.aspect);
+                // Weather Maker's volumetric sky supports perspective cameras.
+                // Switching this already-rendered camera to orthographic leaves
+                // its perspective command buffer covering the stadium. Keep the
+                // same projection through setup, broadcast, replay and rematches.
+                FrameStadium(camera);
                 return;
             }
             foreach (var v in rally.views) v.view.orthographic = false;
@@ -113,6 +115,30 @@ namespace LWS.TruckKickball
                 camera.fieldOfView = 78; camera.nearClipPlane = .025f;
                 rally.views[v].cabSteering.Bind(truck);
             }
+        }
+
+        public static void FrameStadium(Camera camera)
+        {
+            camera.orthographic = false;
+            camera.fieldOfView = 58;
+            var rotation = Quaternion.Euler(70, 0, 0);
+            var center = new Vector3(0, 3, 27);
+            var inverse = Quaternion.Inverse(rotation);
+            float vertical = Mathf.Tan(camera.fieldOfView * .5f * Mathf.Deg2Rad);
+            float horizontal = vertical * Mathf.Max(.2f, camera.aspect);
+            float distance = 0;
+            // The real fence is radius 78m around (0,0,27). Include its height,
+            // both dugouts and a margin below the compact top/bottom HUD rails.
+            for (int i = 0; i < 112; i++)
+            {
+                float angle = (i / 2) * Mathf.PI * 2 / 56;
+                var corner = new Vector3(Mathf.Sin(angle) * 82, (i & 1) == 0 ? -3 : 7,
+                    Mathf.Cos(angle) * 82);
+                var local = inverse * corner;
+                distance = Mathf.Max(distance, Mathf.Max(Mathf.Abs(local.x) / (horizontal * .94f) - local.z,
+                    Mathf.Abs(local.y) / (vertical * .86f) - local.z));
+            }
+            camera.transform.SetPositionAndRotation(center - rotation * Vector3.forward * distance, rotation);
         }
     }
 }

@@ -84,3 +84,12 @@ Public push is blocked by automatic approval review pending explicit consent for
 * CUSTOM SYSTEMS CREATED: read-only scoreboard/owned-ground adapter, targeted venue authoring, original field artwork, bounded stadium choreography and scoped acceptance probes.
 * VENDOR SOURCE MODIFIED: none.
 * DUPLICATE VENDOR FUNCTIONALITY CREATED: none. Existing vehicle, weather, rendering, UI, tweening and ragdoll providers remain authoritative.
+
+## Replay transport correction, October19 continuation
+
+The close recorded-play angles intentionally follow the football and can put the physical scoreboard outside the view. Its world-space replay buttons therefore became inaccessible even though their actions remained valid. `FieldGoalStadiumBoard.PositionReplayTransport` now reparents the same four Heat controls into the existing HUD during recorded playback, lays them out within the viewport, and restores their authored board positions afterward. No duplicated controls, new input authority or scoring changes. Existing rounded `SportsBroadcastPlate` styling and DOTween button feedback are reused. The board still carries match statistics; normal play keeps the embedded presentation.
+
+The full native four-Hard-AI match and field/runoff/rematch checks passed57 assertions with0 errors, including all three replay angles at1280x720,1920x1080,1280x800,1024x768 and2560x1080. The15 rendered layouts were captured; representative720p and4:3 captures were inspected. `FieldGoalEvidence/20261019-replay-transport.txt` records the actual results. The final rounded-style reuse was added after this run and needs a visual repeat; the canonical Windows binary predates this change. The previously confirmed native Windows shutdown defect remains unresolved.
+
+
+October20 exact-player continuation: the new42-scene QA build (managed`d9e704cd850679949ebba9c2abd5d8b82e8eba054c9403a6575d7dd03f549881`) passed57 FieldGoalBoard checks/0errors and exited normally0 after a complete four-AI match, actual multi-aspect replay captures, runoff contacts, rematches and menu cleanup. Receipt `FieldGoalEvidence/20261020-windows-board-57.txt`. The earlier native accessibility crash did not reproduce in this run; it is not claimed repaired. Other modes and the full backlog remain open.
