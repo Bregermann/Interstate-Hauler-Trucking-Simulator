@@ -13074,6 +13074,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 340701979}
   m_CullTransparentMesh: 1
+--- !u!1 &343439691
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 343439692}
+  - component: {fileID: 343439694}
+  - component: {fileID: 343439693}
+  m_Layer: 0
+  m_Name: Original sport title artwork
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &343439692
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343439691}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1002502960}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -545, y: 372}
+  m_SizeDelta: {x: 250, y: 125}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &343439693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343439691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: d9277bada3668d4478401a9bf8970722, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &343439694
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343439691}
+  m_CullTransparentMesh: 1
 --- !u!1 &343492445
 GameObject:
   m_ObjectHideFlags: 0
@@ -16163,6 +16238,7 @@ RectTransform:
   - {fileID: 852221210}
   - {fileID: 1584628774}
   - {fileID: 378233200}
+  - {fileID: 1442796168}
   m_Father: {fileID: 1771200875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -28523,7 +28599,8 @@ MonoBehaviour:
   - {fileID: 1581130137}
   - {fileID: 1391154781}
   players:
-  - name: Player 1
+  - participantId: 
+    name: Player 1
     color: {r: 0.15, g: 0.8, b: 1, a: 1}
     source: 1
     difficulty: 1
@@ -28531,7 +28608,8 @@ MonoBehaviour:
     left: 15
     back: 33
     right: 18
-  - name: Blue 2
+  - participantId: 
+    name: Blue 2
     color: {r: 0.15, g: 0.8, b: 1, a: 1}
     source: 0
     difficulty: 1
@@ -28539,7 +28617,8 @@ MonoBehaviour:
     left: 20
     back: 21
     right: 22
-  - name: Blue 3
+  - participantId: 
+    name: Blue 3
     color: {r: 0.15, g: 0.8, b: 1, a: 1}
     source: 0
     difficulty: 1
@@ -28547,7 +28626,8 @@ MonoBehaviour:
     left: 24
     back: 25
     right: 26
-  - name: Player 2
+  - participantId: 
+    name: Player 2
     color: {r: 1, g: 0.55, b: 0.13, a: 1}
     source: 0
     difficulty: 1
@@ -28555,7 +28635,8 @@ MonoBehaviour:
     left: 61
     back: 64
     right: 62
-  - name: Orange 2
+  - participantId: 
+    name: Orange 2
     color: {r: 1, g: 0.55, b: 0.13, a: 1}
     source: 0
     difficulty: 1
@@ -28563,7 +28644,8 @@ MonoBehaviour:
     left: 38
     back: 17
     right: 36
-  - name: Orange 3
+  - participantId: 
+    name: Orange 3
     color: {r: 1, g: 0.55, b: 0.13, a: 1}
     source: 0
     difficulty: 1
@@ -39816,6 +39898,7 @@ RectTransform:
   - {fileID: 538997517}
   - {fileID: 1489617087}
   - {fileID: 948951833}
+  - {fileID: 343439692}
   m_Father: {fileID: 1771200875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -59348,6 +59431,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
   cut: 10
   accent: 0
+--- !u!1 &1442796167
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1442796168}
+  - component: {fileID: 1442796170}
+  - component: {fileID: 1442796169}
+  m_Layer: 0
+  m_Name: Original sport title artwork
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1442796168
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442796167}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 410716881}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -545, y: 372}
+  m_SizeDelta: {x: 250, y: 125}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1442796169
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442796167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: d9277bada3668d4478401a9bf8970722, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1442796170
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442796167}
+  m_CullTransparentMesh: 1
 --- !u!1 &1445789629
 GameObject:
   m_ObjectHideFlags: 0
@@ -78669,8 +78827,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 365}
-  m_SizeDelta: {x: 1350, y: 78}
+  m_AnchoredPosition: {x: 140, y: 365}
+  m_SizeDelta: {x: 1020, y: 78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1893402113
 MonoBehaviour:
@@ -81356,8 +81514,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 365}
-  m_SizeDelta: {x: 1350, y: 78}
+  m_AnchoredPosition: {x: 140, y: 365}
+  m_SizeDelta: {x: 1020, y: 78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1962327039
 MonoBehaviour:

@@ -101,11 +101,12 @@ namespace LWS.TruckSports.Editor
                 EditorUtility.SetDirty(card); updated++;
             }
             front.catalogue.Step(0);
+            if(Directory.Exists(SportsRetroMenuAuthoring.LogoFolder))SportsRetroMenuAuthoring.Install(front);
             File.WriteAllText("Logs/TruckSports/EssentialRelease/menu-art.txt", "UPDATED=" + updated + " MISSING=" + missing + " · original native sprite icons and real saved-game opening captures; descriptions/actions preserved.");
         }
         static void Position(RectTransform rect, Vector2 size, Vector2 position)
         { rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f,.5f); rect.sizeDelta = size; rect.anchoredPosition = position; }
-        static string SceneFor(string key)
+        public static string SceneFor(string key)
         {
             var map = new Dictionary<string,string> {
                 {"basejump","TruckBaseJumping"},{"cheese","TruckCheeseRolling"},{"dock","TruckDockDiving"},{"terrier","TruckTerrierRacing"},
@@ -114,7 +115,7 @@ namespace LWS.TruckSports.Editor
                 {"skee","TruckSkeeBall"},{"logrolling","TruckLogRolling"},{"dodgeball","TruckTrampolineDodgeball"},{"derby","TruckDemolitionDerby"},
                 {"pedestrianplowing","TruckPedestrianPlowing"},{"pedestrianplowingcab","TruckPedestrianPlowingFirstPerson"},{"keepawayfp","TruckKeepawayFirstPerson"},
                 {"airhockey","TruckAirHockey"},{"danceoff","TruckDanceOff"},{"skytow","TruckSkyTow"},{"trailerplug","TruckTrailerPlug"},
-                {"fieldgoal","TruckFieldGoal"},{"beerpong","TruckBeerPong"},{"kickball","TruckKickball"},{"limbo","TruckLimbo"},{"farefight","TruckFareFight"},{"snake","TruckSnake"}
+                {"fieldgoal","TruckFieldGoal"},{"beerpong","TruckBeerPong"},{"kickball","TruckKickball"},{"limbo","TruckLimbo"},{"farefight","TruckFareFight"},{"snake","TruckSnake"},{"practice","TruckBilliards"}
             };
             return map.TryGetValue(key, out string scene) ? scene : "Truck" + char.ToUpperInvariant(key[0]) + key.Substring(1);
         }

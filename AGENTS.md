@@ -1,5 +1,9 @@
 # Interstate Hauler Codex Rules
 
+## Truck Sports active requirements
+
+For Truck Sports work, read `TRUCK_SPORTS_ACCEPTANCE_LEDGER.md` first. It is the permanent authority for the currently authorized sprint. Add new requests under permanent IDs, record implementation, automated evidence and human verification separately, and retain superseded requirements. Historical backlogs are archived in `Documentation/TruckSports/Archive/2026-10-20-LegacyBacklog`; do not automatically reopen them or import their reminders into active work.
+
 ## Vendor Asset First
 
 Before writing custom functionality, audit relevant installed commercial assets and use the vendor solution wherever it provides the requested capability or a strong foundation.

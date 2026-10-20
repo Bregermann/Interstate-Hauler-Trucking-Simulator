@@ -1,0 +1,47 @@
+PASS saved eight-seat table begins a cinematic physical travelling deal
+PASS pause freezes dealer travel, hand animation and delivery callbacks
+PASS complete moving/leaning dealer stays within the tabletop safety envelope
+PASS all eight seats receive exactly two visible face-down handoffs
+PASS dealer follows continuous world-space travel rather than teleporting · distance=50.9 maxFrame=0.109
+PASS each served seat gets one bounded shake/giggle without duplicate card events
+PASS dealer circuit remains on the existing tabletop
+PASS actual wheel meshes turn while their centers stay attached · drift=9.61096E-07
+PASS no travelling card or private player pane reveals a hidden value
+PASS animated handoffs cannot change deck values, actor, bets or chip totals
+PASS rematch recreates the complete deal
+PASS skip is idempotent and preserves the same authoritative cards
+PASS skip retires every transit card without retaining private faces
+PASS complete four-seat AI tournament begins difficulty=0
+HAND difficulty=0 hand=1 actions=0
+HAND difficulty=0 hand=2 actions=6
+HAND difficulty=0 hand=3 actions=19
+HAND difficulty=0 hand=4 actions=29
+HAND difficulty=0 hand=5 actions=41
+HAND difficulty=0 hand=6 actions=46
+HAND difficulty=0 hand=7 actions=47
+PASS actual tournament resolves with travelling dealer difficulty=0
+PASS chip conservation and exactly one tournament champion difficulty=0
+TOURNAMENT difficulty=0 hands=7 actions=47 winner=2 chips=800
+PASS complete four-seat AI tournament begins difficulty=1
+HAND difficulty=1 hand=1 actions=0
+HAND difficulty=1 hand=2 actions=6
+HAND difficulty=1 hand=3 actions=19
+HAND difficulty=1 hand=4 actions=25
+PASS actual tournament resolves with travelling dealer difficulty=1
+PASS chip conservation and exactly one tournament champion difficulty=1
+TOURNAMENT difficulty=1 hands=4 actions=27 winner=1 chips=800
+PASS complete four-seat AI tournament begins difficulty=2
+HAND difficulty=2 hand=1 actions=0
+HAND difficulty=2 hand=2 actions=17
+HAND difficulty=2 hand=3 actions=24
+HAND difficulty=2 hand=4 actions=30
+HAND difficulty=2 hand=5 actions=39
+HAND difficulty=2 hand=6 actions=47
+HAND difficulty=2 hand=7 actions=50
+PASS actual tournament resolves with travelling dealer difficulty=2
+PASS chip conservation and exactly one tournament champion difficulty=2
+TOURNAMENT difficulty=2 hands=7 actions=57 winner=1 chips=800
+PASS fresh match restores shuffling, all hidden cards and dealer home
+PASS setup cancels all dealer callbacks and transit objects
+PASS menu transition releases dealer, cards and presentation ownership
+CHECKS=25 ERRORS=0. Actual saved-scene DOTween choreography, private-state checks and authoritative AI tournaments; platform=WindowsPlayer; capture kind=Windows composed framebuffer. No human, hardware or audio listening claim.

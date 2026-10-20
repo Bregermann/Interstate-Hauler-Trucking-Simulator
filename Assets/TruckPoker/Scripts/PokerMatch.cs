@@ -42,7 +42,8 @@ public sealed class PokerMatch:SportsEventSession {
  public void DealerPresentationChanged(){presentation.PublicStateChanged();}
  public void DealerFinished(){ClearPeekGate();actor=-1;ActorChanged();delay=.2f;Gate();presentation.PublicStateChanged();if(Table.HandDone){awardAge=0;presentation.Award();}}
  public override void ExtraAction(string key){if(key=="skipdeal"){dealerDrive?.Skip();return;}if(key=="pokerdealspeed"){dealerDrive?.CyclePacing();return;}if(Running&&!Finished&&key!="pokerlook"&&key!="pokerinvert")return;bool changed=true;if(key=="pokerstack")startingStack=startingStack>=2000?500:startingStack*2;else if(key=="pokerblind")smallBlind=smallBlind>=25?5:smallBlind==5?10:25;else if(key=="pokerlevel")levelHands=levelHands>=9?3:levelHands+3;else if(key=="pokerlook")SportsLookOptions.CycleSensitivity();else if(key=="pokerinvert")SportsLookOptions.Set(SportsLookOptions.Sensitivity,!SportsLookOptions.InvertY);else changed=false;if(changed){SportsPrefs.SetString(ConfigKey,JsonUtility.ToJson(new Options{stack=startingStack,blind=smallBlind,level=levelHands}));SportsPrefs.Save();menus.Dirty();}}
- protected override void SetPaused(bool pause){if(pause){ClearPeekGate();presentation.ClearPrivate();foreach(var look in looks)look.ReleaseCursor();}}
+ protected override void SetPaused(bool pause){dealerDrive?.PauseVoice(pause);if(pause){ClearPeekGate();presentation.ClearPrivate();foreach(var look in looks)look.ReleaseCursor();}}
+ protected override void StopSounds(){dealerDrive?.StopVoice();}
  protected override void StopGame(){dealerDrive?.Stop();ClearPeekGate();if(presentation!=null)presentation.ClearPrivate();if(looks!=null)foreach(var look in looks)if(look!=null)look.ReleaseCursor();if(broadcast!=null)broadcast.view.enabled=true;if(seats!=null)foreach(var seat in seats)seat.view.enabled=false;HumanViews=0;cameras=broadcast!=null?new[]{broadcast.view}:Array.Empty<Camera>();}
 }
 }

@@ -6,15 +6,15 @@ namespace LWS.TruckSports {
 public sealed class SportsParticipantsMenu:MonoBehaviour {
  public SportsFrontEnd front;public int page;public TMP_InputField[] names;
  public TMP_Text[] details;public ButtonManager[] profiles,colors,kinds;
- public TMP_Text heading,notice,choiceHeading;public int choicePage;public ButtonManager[] choices;int bank,choiceBank,choiceSeat;
+ public TMP_Text heading,notice,choiceHeading;public int choicePage;public ButtonManager[] choices;int bank,choiceBank,choiceSeat,returnPage;
  int Seat(int row)=>bank*4+row;
  void Start(){for(int i=0;i<names.Length;i++){int row=i;names[i].onEndEdit.AddListener(value=>{var p=SportsParticipantRegistry.Default(Seat(row));SportsParticipantRegistry.Rename(p.id,value,p.color,p.preferredAI);Refresh();});}}
- public void Open(){bank=0;Refresh();front.Show(page);}
+ public void Open(){returnPage=front.Page;bank=0;Refresh();front.Show(page);}
  public void Action(string action){
   if(action=="peoplechooseback"){front.Show(page);Refresh();return;}
   if(action=="peoplechooseprev"||action=="peoplechoosenext"){int banks=Mathf.CeilToInt(SportsParticipantRegistry.Current.participants.Count/(float)choices.Length);choiceBank=(choiceBank+(action=="peoplechooseprev"?banks-1:1))%banks;RefreshChoices();return;}
   if(action.StartsWith("peoplepick")){int index=choiceBank*choices.Length+int.Parse(action.Substring(10));var all=SportsParticipantRegistry.Current.participants;if(index<all.Count)SportsParticipantRegistry.UseInSeat(choiceSeat,all[index].id);front.Show(page);Refresh();return;}
-  if(action=="peopleback"){front.Show(0);return;}
+  if(action=="peopleback"){front.Show(returnPage);return;}
   if(action=="peopleprev"||action=="peoplenext"){int banks=Mathf.CeilToInt(Mathf.Max(12,SportsParticipantRegistry.Current.roster.Count)/4f);bank=(bank+(action=="peopleprev"?banks-1:1))%banks;Refresh();return;}
   int row=action[action.Length-1]-'0';if(row<0||row>=names.Length)return;int seat=Seat(row);var p=SportsParticipantRegistry.Default(seat);
   if(action.StartsWith("peopleprofile")){

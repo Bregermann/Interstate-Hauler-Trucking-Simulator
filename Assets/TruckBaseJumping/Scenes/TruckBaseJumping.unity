@@ -10549,6 +10549,81 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 126858311}
   m_Mesh: {fileID: 4300014, guid: 9817eabadfb74f04abda4bd5329b9138, type: 3}
+--- !u!1 &128111580
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 128111581}
+  - component: {fileID: 128111583}
+  - component: {fileID: 128111582}
+  m_Layer: 0
+  m_Name: Original sport title artwork
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &128111581
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128111580}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 242286637}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -545, y: 372}
+  m_SizeDelta: {x: 250, y: 125}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &128111582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128111580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: d0f4c77c0fff6d646b91e02555ea5564, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &128111583
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 128111580}
+  m_CullTransparentMesh: 1
 --- !u!1 &128688985
 GameObject:
   m_ObjectHideFlags: 0
@@ -18769,6 +18844,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  tractorMotor: {fileID: 0}
   body: {fileID: 195422582}
   shape: {fileID: 195422581}
   wheels:
@@ -20470,6 +20546,7 @@ RectTransform:
   - {fileID: 525917205}
   - {fileID: 2027686791}
   - {fileID: 435219973}
+  - {fileID: 128111581}
   m_Father: {fileID: 152442388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -23190,6 +23267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  tractorMotor: {fileID: 0}
   body: {fileID: 345926634}
   shape: {fileID: 345926633}
   wheels:
@@ -58350,6 +58428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  tractorMotor: {fileID: 0}
   body: {fileID: 734806944}
   shape: {fileID: 734806943}
   wheels:
@@ -73361,8 +73440,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 365}
-  m_SizeDelta: {x: 1350, y: 78}
+  m_AnchoredPosition: {x: 140, y: 365}
+  m_SizeDelta: {x: 1020, y: 78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &915530956
 MonoBehaviour:
@@ -86387,6 +86466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cc136091ada53547b50fe5dbe829e2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsEventTruck
+  tractorMotor: {fileID: 0}
   body: {fileID: 1022497984}
   shape: {fileID: 1022497983}
   wheels:
@@ -86709,6 +86789,81 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1040008841
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1040008842}
+  - component: {fileID: 1040008844}
+  - component: {fileID: 1040008843}
+  m_Layer: 0
+  m_Name: Original sport title artwork
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1040008842
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040008841}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1531773637}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -545, y: 372}
+  m_SizeDelta: {x: 250, y: 125}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1040008843
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040008841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: d0f4c77c0fff6d646b91e02555ea5564, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1040008844
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1040008841}
+  m_CullTransparentMesh: 1
 --- !u!1 &1041219629
 GameObject:
   m_ObjectHideFlags: 0
@@ -115353,7 +115508,8 @@ MonoBehaviour:
     sharedHotSeat: 1
     reducedMotion: 0
     players:
-    - name: Player 1
+    - participantId: 
+      name: Player 1
       color: {r: 0.1, g: 0.8, b: 1, a: 1}
       source: 1
       difficulty: 1
@@ -115361,7 +115517,8 @@ MonoBehaviour:
       left: 15
       back: 33
       right: 18
-    - name: Player 2
+    - participantId: 
+      name: Player 2
       color: {r: 1, g: 0.6, b: 0.15, a: 1}
       source: 0
       difficulty: 1
@@ -115369,7 +115526,8 @@ MonoBehaviour:
       left: 61
       back: 64
       right: 62
-    - name: Player 3
+    - participantId: 
+      name: Player 3
       color: {r: 0.4, g: 1, b: 0.4, a: 1}
       source: 0
       difficulty: 1
@@ -115377,7 +115535,8 @@ MonoBehaviour:
       left: 20
       back: 21
       right: 22
-    - name: Player 4
+    - participantId: 
+      name: Player 4
       color: {r: 1, g: 0.35, b: 0.65, a: 1}
       source: 0
       difficulty: 1
@@ -115385,7 +115544,8 @@ MonoBehaviour:
       left: 24
       back: 25
       right: 26
-    - name: Player 5
+    - participantId: 
+      name: Player 5
       color: {r: 0.65, g: 0.45, b: 1, a: 1}
       source: 0
       difficulty: 1
@@ -115393,7 +115553,8 @@ MonoBehaviour:
       left: 38
       back: 17
       right: 36
-    - name: Player 6
+    - participantId: 
+      name: Player 6
       color: {r: 1, g: 0.9, b: 0.25, a: 1}
       source: 0
       difficulty: 1
@@ -115401,7 +115562,8 @@ MonoBehaviour:
       left: 88
       back: 89
       right: 90
-    - name: Player 7
+    - participantId: 
+      name: Player 7
       color: {r: 0.2, g: 1, b: 0.85, a: 1}
       source: 0
       difficulty: 1
@@ -115409,7 +115571,8 @@ MonoBehaviour:
       left: 44
       back: 45
       right: 46
-    - name: Player 8
+    - participantId: 
+      name: Player 8
       color: {r: 0.95, g: 0.65, b: 0.4, a: 1}
       source: 0
       difficulty: 1
@@ -115898,6 +116061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc283bda6c362c04ab5fc85c656147ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsSnowSurface
+  cornhole: {fileID: 0}
   weather: {fileID: 0}
   session: {fileID: 1275238798}
   cheese: {fileID: 0}
@@ -115942,6 +116106,7 @@ MonoBehaviour:
   - {fileID: 4800000, guid: d0b14971f315dd342b652197bb59d6a1, type: 3}
   - {fileID: 4800000, guid: 1eec6dff0fe58e14d81d3965d19f058f, type: 3}
   depthRenderer: 1
+  permanentCoverage: 0
 --- !u!1 &1276638222
 GameObject:
   m_ObjectHideFlags: 0
@@ -130337,6 +130502,7 @@ RectTransform:
   - {fileID: 1720942446}
   - {fileID: 1434139667}
   - {fileID: 1270017799}
+  - {fileID: 1040008842}
   m_Father: {fileID: 152442388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -135386,8 +135552,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 365}
-  m_SizeDelta: {x: 1350, y: 78}
+  m_AnchoredPosition: {x: 140, y: 365}
+  m_SizeDelta: {x: 1020, y: 78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1652960173
 MonoBehaviour:

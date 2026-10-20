@@ -9,7 +9,7 @@ namespace LWS.TruckSports
         bool hover, selected; Tween scaleTween, colorTween; Image background;
         void Awake() { background = GetComponent<Image>(); }
         void Update(){var focus=EventSystem.current!=null?EventSystem.current.currentSelectedGameObject:null;bool inside=focus!=null&&focus.transform.IsChildOf(transform);if(inside!=selected){selected=inside;Refresh();}}
-        public void OnPointerEnter(PointerEventData data) { hover = true; Refresh(); }
+        public void OnPointerEnter(PointerEventData data) { hover = true; GetComponentInChildren<SportsCatalogueChoice>(true)?.OnPointerEnter(data); Refresh(); }
         public void OnPointerExit(PointerEventData data) { hover = false; Refresh(); }
         public void Select(bool value) { selected = value; Refresh(); }
         void Refresh()
