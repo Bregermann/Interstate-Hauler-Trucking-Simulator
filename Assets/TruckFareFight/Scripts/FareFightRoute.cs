@@ -5,7 +5,9 @@ namespace LWS.TruckFareFight {
  // LWS's existing graph planner is the only route authority. Each participant
  // keeps its own result; CNP observes it and never steers a competitor.
  public sealed class FareFightRoute {
-  readonly LwsRoutePlanner planner=new LwsRoutePlanner(LwsNavigationTuning.Default());
+  readonly LwsRoutePlanner planner;
+  public FareFightRoute():this(LwsNavigationTuning.Default()){}
+  public FareFightRoute(LwsNavigationTuning tuning){planner=new LwsRoutePlanner(tuning??LwsNavigationTuning.Default());}
   public readonly List<Vector3> points=new List<Vector3>(128);
   readonly RaycastHit[] obstacles=new RaycastHit[32];
   public int Revision{get;private set;}public int Searches{get;private set;}public int Cursor{get;private set;}

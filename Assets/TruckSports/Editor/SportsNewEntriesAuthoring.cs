@@ -34,6 +34,7 @@ namespace LWS.TruckSports.Editor
             Add(front,"balloon","BALLOON BATTLE","TRUCK BALLOON BATTLE","Three giant balloons. Retractable spikes. Real-contact party combat.","TruckBalloonBattle");
             Add(front,"whackamole","WHACK-A-MOLE","TRUCK WHACK-A-MOLE","Bumper-whack animated moles. Chase golden stars. Dodge explosive decoys.","TruckWhackAMole");
             Add(front,"kingofthehill","KING OF THE HILL","TRUCK KING OF THE HILL","Shove rivals off the crown. Five connected mountain plateaus. Hold60seconds to win.","TruckKingOfTheHill");
+            Add(front,"seesaw","SEESAW","TRUCK SEESAW","Four trucks. One physical wobble board. Shift weight above a giant quarry.","TruckSeesaw");
             int count = front.catalogue.cards.Length;
             front.pages[0].transform.Find("Collection").GetComponent<TMP_Text>().text = count + " PLAYABLE TRUCK SPORTS. ONE COLLECTION.\nLocal humans, shared controllers and autonomous AI.";
             front.pages[1].transform.Find("Subtitle").GetComponent<TMP_Text>().text = count + " playable entries · Offline local play · Experimental Wallball in Scrap Heap";

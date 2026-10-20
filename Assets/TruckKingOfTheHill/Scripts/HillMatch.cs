@@ -49,6 +49,10 @@ namespace LWS.TruckKingOfTheHill
         readonly float[] stuck = new float[8], nextPlan = new float[8], fallenAt = new float[8];
         readonly int[] revisions = new int[8];
         readonly FareFightRoute[] drivers = new FareFightRoute[8];
+        readonly int[] combatTargets = new int[8];
+        readonly bool[] committed = new bool[8];
+        readonly float[] commitUntil = new float[8], reconsiderAt = new float[8];
+        readonly Vector3[] commitDirection = new Vector3[8];
         readonly RaycastHit[] supportHits = new RaycastHit[32];
         MaterialPropertyBlock tint;
         readonly StringBuilder text = new StringBuilder(700);
@@ -71,7 +75,7 @@ namespace LWS.TruckKingOfTheHill
             tint ??= new MaterialPropertyBlock();
             for (int i = 0; i < trucks.Length; i++)
             {
-                drivers[i] ??= new FareFightRoute(); drivers[i].Reset(); revisions[i] = -1; stuck[i] = nextPlan[i] = 0; fallenAt[i] = -1; present[i] = eligible[i] = false;
+                drivers[i] ??= new FareFightRoute(new LwsNavigationTuning { routeConnectorToleranceMeters = .5f }); drivers[i].Reset(); revisions[i] = combatTargets[i] = -1; committed[i] = false; commitUntil[i] = reconsiderAt[i] = 0; stuck[i] = nextPlan[i] = 0; fallenAt[i] = -1; present[i] = eligible[i] = false;
                 fragments[i].ResetBody(); trucks[i].gameObject.SetActive(i < setup.count); if (i >= setup.count) continue;
                 trucks[i].tractorMotor.Configure(); trucks[i].Prepare(Grid(i), Quaternion.LookRotation(Vector3.ProjectOnPlane(sites[0] - Grid(i), Vector3.up))); Hold(trucks[i]);
             }
@@ -112,22 +116,36 @@ namespace LWS.TruckKingOfTheHill
             var truck = trucks[slot]; var p = truck.body.position; var center = sites[rules.Zone]; var driver = drivers[slot]; Rigidbody opponent = null;
             if (Vector3.ProjectOnPlane(p - center, Vector3.up).magnitude < 24 && Mathf.Abs(p.y - center.y) < 5)
             {
-                Vector3 goal = center; float nearest = float.MaxValue;
-                if (rules.Occupants > 0) for (int i = 0; i < setup.count; i++) if (i != slot && present[i]) { float d = (trucks[i].body.position - p).sqrMagnitude; if (d < nearest) { nearest = d; opponent = trucks[i].body; } }
-                if (opponent != null)
+                Vector3 goal = center; int target = combatTargets[slot];
+                if (target < 0 || target >= setup.count || !present[target] || !committed[slot] && rules.Clock >= reconsiderAt[slot])
                 {
+                    target = -1; float nearest = float.MaxValue;
+                    for (int i = 0; i < setup.count; i++) if (i != slot && present[i]) { float d = (trucks[i].body.position - p).sqrMagnitude; if (d < nearest) { nearest = d; target = i; } }
+                    combatTargets[slot] = target; committed[slot] = false; reconsiderAt[slot] = rules.Clock + 5;
+                }
+                if (target >= 0)
+                {
+                    opponent = trucks[target].body;
                     var outward = Vector3.ProjectOnPlane(opponent.position - center, Vector3.up);
                     if (outward.sqrMagnitude < .5f) outward = Quaternion.Euler(0, slot * 47, 0) * Vector3.forward;
                     outward.Normalize(); var behind = opponent.position - outward * 9;
-                    bool needsPosition = Vector3.Dot(p - opponent.position, outward) > -2 && Vector3.Distance(p, behind) > 5;
-                    goal = needsPosition ? behind : opponent.position + outward * (radius + 12);
+                    if (committed[slot] && rules.Clock >= commitUntil[slot]) committed[slot] = false;
+                    if (!committed[slot] && Vector3.Dot(p - opponent.position, outward) < -2 && Vector3.Distance(p, behind) < 10 && Vector3.Angle(Vector3.ProjectOnPlane(truck.transform.forward, Vector3.up), outward) < 50)
+                    { committed[slot] = true; commitUntil[slot] = rules.Clock + 3; commitDirection[slot] = outward; }
+                    // Keep one opponent and shove direction long enough to
+                    // complete a physical ram instead of oscillating between
+                    // nearest neighbors at every physics sample.
+                    goal = committed[slot] ? opponent.position + commitDirection[slot] * (radius + 12) : behind;
                 }
                 driver.DirectGoal(p, goal); revisions[slot] = -1;
             }
             else if (revisions[slot] != rules.Moves || rules.Clock >= nextPlan[slot] || driver.points.Count == 0)
             {
-                driver.Update(roads, p, center, rules.Moves, rules.Clock, revisions[slot] < 0, truck.transform.forward);
-                revisions[slot] = rules.Moves; nextPlan[slot] = rules.Clock + .5f;
+                // Use the nearest physical road node. The city driver's optional
+                // heading shortcut can pick a distant node across empty air
+                // between these plateaus, bypassing the actual bridge approach.
+                driver.Update(roads, p, center, rules.Moves, rules.Clock, revisions[slot] < 0);
+                revisions[slot] = rules.Moves; nextPlan[slot] = rules.Clock + .5f; combatTargets[slot] = -1; committed[slot] = false;
             }
             var command = driver.Drive(truck.body, truck.transform, (int)setup.players[slot].difficulty, dt, atmosphere.Grip, opponent);
             // The route planner supplies the path; a local physical support
@@ -149,7 +167,7 @@ namespace LWS.TruckKingOfTheHill
                 float a = (slot + k) * Mathf.PI / 4; var point = sites[site] + new Vector3(Mathf.Sin(a) * 23, .65f, Mathf.Cos(a) * 23); bool clear = true;
                 for (int i = 0; i < setup.count; i++) if (i != slot && Vector3.Distance(trucks[i].body.position, point) < 11) clear = false;
                 if (!clear) continue;
-                truck.Prepare(point, Quaternion.LookRotation(Vector3.ProjectOnPlane(sites[site] - point, Vector3.up))); fallenAt[slot] = -1; nextPlan[slot] = stuck[slot] = 0; drivers[slot].Reset(); Recoveries++; return true;
+                truck.Prepare(point, Quaternion.LookRotation(Vector3.ProjectOnPlane(sites[site] - point, Vector3.up))); fallenAt[slot] = -1; nextPlan[slot] = stuck[slot] = 0; drivers[slot].Reset(); combatTargets[slot] = -1; committed[slot] = false; Recoveries++; return true;
             }
             return false;
         }

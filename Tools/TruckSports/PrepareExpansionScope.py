@@ -10,10 +10,10 @@ def git(*args):
 parser = argparse.ArgumentParser()
 parser.add_argument("--stage", action="store_true")
 args = parser.parse_args()
-folders = [f"Assets/{name}/" for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill")]
+folders = [f"Assets/{name}/" for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw")]
 folders += ["Documentation/TruckSports/Evidence/2026-10-20-Expansion/"]
 files = {"TRUCK_SPORTS_ACCEPTANCE_LEDGER.md", "Assets/TruckSports/BUILD-INFO.md", "Assets/TruckSports/Scenes/TruckSports.unity", "Assets/TruckSports/Art/Logos/Catalogue.json"}
-for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill"):
+for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw"):
     files.add(f"Assets/{name}.meta")
     for section in ("Logos", "Previews"):
         for suffix in (".png", ".png.meta"):
@@ -32,7 +32,7 @@ files.add("Assets/TruckFareFight/Scripts/FareFightRoute.cs")
 for name in ("SportsDrivingSurfaceAuthoring", "ExpansionSnowJobs"):
     files.add(f"Assets/TruckSports/Editor/{name}.cs")
     files.add(f"Assets/TruckSports/Editor/{name}.cs.meta")
-for name in ("EighteenSportsProgress.md", "EighteenSportsVendorAudit.md", "EighteenSportsDelivery.md", "EighteenSportsFiveSportDelivery.md"):
+for name in ("EighteenSportsProgress.md", "EighteenSportsVendorAudit.md", "EighteenSportsDelivery.md", "EighteenSportsFiveSportDelivery.md", "EighteenSportsSixSportDelivery.md"):
     files.add("Documentation/TruckSports/" + name)
 for name in ("2026-10-20-Eighteen-Sports.md", "2026-10-20-Eighteen-Sports-UI-Addendum.md"):
     files.add("Documentation/TruckSports/Requests/" + name)

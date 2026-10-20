@@ -59,6 +59,14 @@ Red Light's additional effects reuse the NWH ExhaustSmoke prefab, existing Derby
 
 ## Remaining sport-specific audits
 
-The other13sports retain MISSING requirements until their rules, environments and integration are implemented and tested. The inspected shared systems are reuse candidates, not evidence that those games already work. Inspect each original GAME section and appropriate owned model/terrain/animation assets immediately before that implementation.
+The other12sports retain incomplete requirements until their rules, environments and integration are implemented and tested. The inspected shared systems are reuse candidates, not evidence that those games already work. Inspect each original GAME section and appropriate owned model/terrain/animation assets immediately before that implementation.
 
 VENDOR SOURCE MODIFIED: None. DUPLICATE VENDOR FUNCTIONALITY CREATED: None intended; custom code is sport rules/coordination and vendor adapters.
+
+## Seesaw — current implementation audit
+
+NWH WheelController.cs explicitly applies both suspension/friction reaction forces to a hit Rigidbody through AddForceAtPosition and accounts for moving-surface point velocity. The new physical platform uses that existing capability with otherBodyForceScale1. Unity's existing two-axis ConfigurableJoint supplies constrained, damped restoring motion. No custom arbitrary tilt driver, secondary wheel solver or artificial truck-weight torque was created.
+
+Reuse: Trailer Plug's existing quarry TerrainData and physical floor mesh; Vista DesertRock prefabs; Mega City warehouse models; ShipContainerPack; Bungee's detailed lattice crane mesh; complete Hot Potato posed spectator assets; existing galvanised-steel material as an authored surface foundation; all common Heat/TMP/DOTween, NWH full cab, weather, camera, identity, horn, fragment and recorded-review adapters. The installed filename audit found no relevant excavator/forklift prefab; industrial machinery presentation uses the existing detailed cranes and cargo equipment. The wobble deck/pivot/gantry and sport rules are missing sport-specific content, not a new physics framework. Native14rule tests and actual native/Windows38-check physics probes passed. The real X/Z NWH load, full three-heat match, driven fall and quarry collision were measured; hardware/listening/human acceptance remains separate.
+
+Hill-only route tuning now prevents false35m junction links with0.5m connector tolerance. The original Fare Fight default constructor retains its existing behavior. Six actual floor metadata registrations use existing Weatherade; no vendor navigation/weather source was modified. Final quarry balcony bracing uses the existing sport-owned combined open-truss mesh.

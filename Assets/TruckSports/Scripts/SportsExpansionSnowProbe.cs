@@ -17,7 +17,7 @@ namespace LWS.TruckSports
 #if UNITY_EDITOR
             run |= UnityEditor.SessionState.GetBool("Sports.ExpansionSnow.Probe", false); UnityEditor.SessionState.SetBool("Sports.ExpansionSnow.Probe", false);
 #endif
-            if (!run) return; var root = new GameObject("Explicit actual Weatherade five-sport snow acceptance"); DontDestroyOnLoad(root); root.AddComponent<SportsProbeInputIsolation>(); root.AddComponent<SportsExpansionSnowProbe>();
+            if (!run) return; var root = new GameObject("Explicit actual Weatherade six-sport snow acceptance"); DontDestroyOnLoad(root); root.AddComponent<SportsProbeInputIsolation>(); root.AddComponent<SportsExpansionSnowProbe>();
         }
         void Awake() { preferences = SportsPrefs.IsolateValidation("ExpansionSnow"); SportsParticipantRegistry.ForgetCache(); }
         void Check(bool ok, string message) { checks++; if (!ok) errors++; report.AppendLine((ok ? "PASS " : "FAIL ") + message); File.WriteAllText(Folder + "/progress.txt", report.ToString()); }
@@ -25,7 +25,7 @@ namespace LWS.TruckSports
         IEnumerator Start()
         {
             Directory.CreateDirectory(Folder); File.WriteAllText(Folder + "/result.txt", "RUNNING"); Application.logMessageReceived += Error;
-            foreach (var scene in new[] { "TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill" })
+            foreach (var scene in new[] { "TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw" })
             {
                 if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != scene) { SportsNavigation.LoadSport(scene); yield return null; yield return null; } yield return null; var match = FindAnyObjectByType<SportsEventSession>(); var weather = match.GetComponent<SportsChaosWeather>(); var snow = match.GetComponent<SportsSnowSurface>();
                 var preset = weather.presets.entries.First(p => p.Snow && p.legacyKind == SportsWeatherKind.Snow); weather.presets.Select(preset.id);

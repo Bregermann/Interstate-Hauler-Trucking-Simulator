@@ -44,6 +44,9 @@ namespace LWS.TruckKingOfTheHill.Editor
                     foreach (int side in new[] {-1,1}) { var rail = SportsEventAuthoring.Box("Visible continuous bridge edge rail", (p+q)*.5f + right*(side*(width*.5f-.5f)) + Vector3.up*.7f, new Vector3(.6f,1.4f,delta.magnitude), supportMaterial, null, rails); rail.transform.rotation = Quaternion.LookRotation(delta); }
                 }
             }
+            var railContact = AssetDatabase.LoadAssetAtPath<PhysicsMaterial>("Assets/TruckKingOfTheHill/Materials/Mountain road grip.asset");
+            foreach (var rail in scene.GetRootGameObjects().SelectMany(g=>g.GetComponentsInChildren<MeshRenderer>(true)).Where(r=>r.name=="Visible continuous bridge edge rail"))
+            { var collider=rail.GetComponent<BoxCollider>(); if(collider==null)collider=rail.gameObject.AddComponent<BoxCollider>(); collider.sharedMaterial=railContact; }
             EditorUtility.SetDirty(m); EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
         }
         public static void Create()
@@ -119,7 +122,7 @@ namespace LWS.TruckKingOfTheHill.Editor
                 var pier = GameObject.CreatePrimitive(PrimitiveType.Cylinder); pier.name = "Single logical bridge support pier"; var mid = (p + q) * .5f; pier.transform.position = new Vector3(mid.x, mid.y * .5f - 1, mid.z); pier.transform.localScale = new Vector3(5, mid.y * .5f, 5); pier.GetComponent<Renderer>().sharedMaterial = steel;
             }
             if (!m.roads.Validate().IsValid) throw new InvalidOperationException("Authored hill graph metadata is invalid.");
-            var planner = new LwsRoutePlanner(LwsNavigationTuning.Default());
+            var planner = new LwsRoutePlanner(new LwsNavigationTuning { routeConnectorToleranceMeters = .5f });
             for (int a = 0; a < m.sites.Length; a++) for (int b = 0; b < m.sites.Length; b++) if (a != b) { var route = planner.PlanRoute(new LwsRouteRequest { originNodeId = "site." + a, destinationNodeId = "site." + b, truckRouteRequired = true }, m.roads); if (!route.succeeded) throw new InvalidOperationException("Disconnected physical hill route " + a + " to " + b); }
             Debug.Log("HILL_ALL_TWENTY_ROUTES_PLANNED nodes=" + m.roads.nodes.Count + " edges=" + m.roads.edges.Count);
         }

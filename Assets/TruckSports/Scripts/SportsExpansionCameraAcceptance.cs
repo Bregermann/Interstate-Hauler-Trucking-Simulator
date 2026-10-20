@@ -46,8 +46,16 @@ namespace LWS.TruckSports
                     check(aiPolicy, "Show AI Cameras fills only supported views after humans and leaves all trucks active");
                     match.SetupScreen();
                 }
-                match.setup.players[4].source = BowlingSource.Keyboard;
-                check(!match.ValidateSources(out string humanLimitReason) && humanLimitReason.Contains("four"), "unsupported fifth human is rejected with a clear local-player limit");
+                if (match.MaximumPlayers >= 5)
+                {
+                    match.setup.players[4].source = BowlingSource.Keyboard;
+                    check(!match.ValidateSources(out string humanLimitReason) && humanLimitReason.Contains("four"), "unsupported fifth human is rejected with a clear local-player limit");
+                }
+                else
+                {
+                    match.setup.count = 5; match.NormalizeSetup();
+                    check(match.setup.count == match.MaximumPlayers && match.MaximumPlayers <= 4, "the four-truck sport clamps an unsupported fifth competitor through its real setup");
+                }
                 match.setup.count = 4; match.AllBots(); SportsCameraOptions.Set(false); check(match.StartMatch(), "AI-only spectator rematch starts"); views.Select(1); yield return null;
                 check(views.NeedsArena && views.rally.broadcast.view.enabled && match.cameras.Length == 1, "AI-only with AI cameras OFF has a live broadcast instead of a blank screen");
                 SportsCameraOptions.Set(true); views.Layout(); yield return null;

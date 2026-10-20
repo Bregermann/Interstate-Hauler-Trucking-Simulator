@@ -3,52 +3,49 @@ PASS default cumulative60-second control match starts with actual mixed-difficul
 PASS all eight countdown tractors are grounded/level on the central flat platform; drift=0.041
 ACTUAL_HILL clock=0.0 zone=0 occupants=0 controller=-1 control=0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0 recoveries=0
 PASS pause freezes control clock and vehicle physics
-ACTUAL_HILL clock=20.0 zone=0 occupants=7 controller=-1 control=0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1 recoveries=0
-ACTUAL_HILL clock=40.0 zone=4 occupants=0 controller=-1 control=0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1 recoveries=0
-ACTUAL_HILL clock=60.0 zone=4 occupants=1 controller=3 control=0.0,0.0,0.0,6.6,0.0,0.0,0.0,0.1 recoveries=1
-ACTUAL_HILL clock=80.0 zone=0 occupants=0 controller=-1 control=0.0,0.0,0.9,8.6,0.0,0.0,6.6,0.1 recoveries=3
-ACTUAL_HILL clock=100.0 zone=0 occupants=3 controller=-1 control=0.0,0.0,0.9,8.6,0.0,0.0,6.6,0.1 recoveries=4
-ACTUAL_HILL clock=120.0 zone=3 occupants=0 controller=-1 control=0.0,0.0,0.9,8.6,0.0,0.0,6.6,0.1 recoveries=4
-ACTUAL_HILL clock=140.0 zone=3 occupants=0 controller=-1 control=0.0,0.0,0.9,8.6,0.0,0.0,6.6,0.1 recoveries=5
-ACTUAL_HILL clock=160.0 zone=2 occupants=0 controller=-1 control=3.3,0.0,0.9,8.6,0.0,0.0,6.6,0.1 recoveries=5
-ACTUAL_HILL clock=180.1 zone=2 occupants=1 controller=4 control=3.3,0.0,0.9,8.6,3.1,0.0,6.6,0.1 recoveries=5
-ACTUAL_HILL clock=200.0 zone=3 occupants=0 controller=-1 control=3.3,0.0,0.9,8.6,23.0,0.0,6.6,0.1 recoveries=7
-ACTUAL_HILL clock=220.0 zone=3 occupants=1 controller=1 control=3.3,1.7,0.9,8.6,23.0,0.0,6.6,6.6 recoveries=8
-ACTUAL_HILL clock=240.0 zone=2 occupants=0 controller=-1 control=3.3,6.4,7.3,8.6,23.0,0.0,6.6,7.2 recoveries=8
-ACTUAL_HILL clock=260.0 zone=2 occupants=0 controller=-1 control=3.3,6.4,7.3,8.6,23.0,0.0,6.6,7.2 recoveries=9
-ACTUAL_HILL clock=280.0 zone=1 occupants=0 controller=-1 control=18.1,6.4,7.3,8.6,23.0,0.0,6.6,7.2 recoveries=9
-ACTUAL_HILL clock=300.0 zone=1 occupants=1 controller=5 control=18.1,6.4,9.9,8.6,23.0,1.2,6.6,7.2 recoveries=9
-ACTUAL_HILL clock=320.0 zone=2 occupants=0 controller=-1 control=18.1,6.4,9.9,9.2,23.0,5.8,6.6,7.4 recoveries=10
-ACTUAL_HILL clock=340.0 zone=2 occupants=1 controller=4 control=18.1,6.4,9.9,9.2,29.8,5.8,6.6,7.4 recoveries=13
-ACTUAL_HILL clock=360.0 zone=0 occupants=0 controller=-1 control=18.6,6.4,9.9,11.8,31.0,5.8,6.6,7.4 recoveries=14
-ACTUAL_HILL clock=380.0 zone=0 occupants=3 controller=-1 control=18.6,21.2,9.9,11.8,31.0,5.8,6.6,7.4 recoveries=15
-ACTUAL_HILL clock=400.0 zone=3 occupants=0 controller=-1 control=18.6,21.2,9.9,11.8,31.0,5.8,6.6,7.4 recoveries=15
-ACTUAL_HILL clock=420.1 zone=3 occupants=2 controller=-1 control=18.6,21.2,9.9,11.8,31.0,7.0,6.6,7.4 recoveries=16
-ACTUAL_HILL clock=440.0 zone=4 occupants=0 controller=-1 control=18.6,21.2,9.9,11.8,31.0,7.0,6.6,22.4 recoveries=17
-ACTUAL_HILL clock=460.0 zone=4 occupants=1 controller=2 control=18.6,21.2,13.4,11.8,31.0,7.0,6.6,22.4 recoveries=17
-ACTUAL_HILL clock=480.1 zone=2 occupants=0 controller=-1 control=18.6,21.2,17.7,11.8,31.0,11.4,6.6,22.4 recoveries=18
-ACTUAL_HILL clock=500.1 zone=2 occupants=1 controller=7 control=18.6,21.2,17.7,11.8,31.0,11.4,6.6,27.1 recoveries=18
-ACTUAL_HILL clock=520.0 zone=3 occupants=0 controller=-1 control=18.6,24.8,17.7,11.8,31.0,11.4,6.6,28.8 recoveries=18
-ACTUAL_HILL clock=540.0 zone=3 occupants=0 controller=-1 control=18.6,24.8,17.7,11.8,31.0,11.4,6.6,28.8 recoveries=19
-ACTUAL_HILL clock=560.0 zone=1 occupants=0 controller=-1 control=18.6,24.8,17.7,11.8,32.2,11.9,6.6,28.8 recoveries=20
-ACTUAL_HILL clock=580.1 zone=1 occupants=0 controller=-1 control=18.6,24.8,17.7,11.8,32.2,11.9,6.6,28.8 recoveries=22
-ACTUAL_HILL clock=600.0 zone=2 occupants=0 controller=-1 control=18.6,27.3,17.7,11.8,32.2,11.9,6.6,28.8 recoveries=22
-ACTUAL_HILL clock=620.0 zone=2 occupants=0 controller=-1 control=18.6,27.3,17.7,11.8,32.2,11.9,6.6,28.8 recoveries=22
-ACTUAL_HILL clock=640.0 zone=0 occupants=0 controller=-1 control=18.6,29.2,17.7,11.8,32.2,11.9,6.6,28.8 recoveries=22
-ACTUAL_HILL clock=660.0 zone=0 occupants=1 controller=4 control=18.6,29.2,17.7,11.8,47.7,11.9,6.6,28.8 recoveries=23
-ACTUAL_HILL clock=680.0 zone=2 occupants=0 controller=-1 control=18.6,29.2,21.1,11.8,56.0,11.9,6.6,28.8 recoveries=24
-ACTUAL_HILL clock=700.0 zone=2 occupants=1 controller=2 control=18.6,29.2,22.1,11.8,56.0,11.9,6.6,28.8 recoveries=25
+ACTUAL_HILL clock=20.0 zone=0 occupants=8 controller=-1 control=0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1 recoveries=0
+ACTUAL_HILL clock=40.0 zone=3 occupants=0 controller=-1 control=0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.1 recoveries=0
+ACTUAL_HILL clock=60.0 zone=3 occupants=1 controller=3 control=0.0,0.0,0.0,6.6,0.0,0.0,0.0,0.1 recoveries=0
+ACTUAL_HILL clock=80.0 zone=4 occupants=0 controller=-1 control=0.0,0.0,0.0,22.9,0.0,0.0,0.0,0.1 recoveries=0
+ACTUAL_HILL clock=100.0 zone=4 occupants=0 controller=-1 control=0.0,0.0,0.0,22.9,0.0,0.0,0.0,0.1 recoveries=0
+ACTUAL_HILL clock=120.0 zone=2 occupants=0 controller=-1 control=0.0,0.0,9.2,22.9,0.0,0.0,0.0,0.1 recoveries=0
+ACTUAL_HILL clock=140.0 zone=2 occupants=1 controller=1 control=0.0,0.4,9.2,22.9,0.0,2.7,0.0,0.1 recoveries=1
+ACTUAL_HILL clock=160.1 zone=4 occupants=0 controller=-1 control=0.0,2.7,13.8,22.9,1.1,4.4,0.0,0.1 recoveries=2
+ACTUAL_HILL clock=180.1 zone=4 occupants=1 controller=6 control=0.0,2.7,13.8,22.9,1.1,4.4,0.8,0.1 recoveries=2
+ACTUAL_HILL clock=200.0 zone=0 occupants=0 controller=-1 control=0.0,2.7,13.8,30.0,1.1,4.4,4.1,1.1 recoveries=2
+ACTUAL_HILL clock=220.0 zone=0 occupants=2 controller=-1 control=10.9,2.7,13.8,30.0,1.1,4.4,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=240.0 zone=2 occupants=0 controller=-1 control=10.9,2.8,13.8,30.3,1.1,4.4,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=260.0 zone=2 occupants=1 controller=4 control=10.9,2.8,13.8,30.3,1.6,4.4,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=280.0 zone=4 occupants=0 controller=-1 control=10.9,6.8,13.8,30.3,9.0,4.4,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=300.0 zone=4 occupants=3 controller=-1 control=10.9,6.8,13.8,30.3,9.0,5.2,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=320.0 zone=0 occupants=0 controller=-1 control=10.9,13.5,13.8,30.3,9.0,5.2,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=340.0 zone=0 occupants=0 controller=-1 control=10.9,13.5,13.8,30.3,9.0,5.2,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=360.0 zone=3 occupants=0 controller=-1 control=10.9,13.8,13.8,30.3,9.1,5.2,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=380.0 zone=3 occupants=0 controller=-1 control=10.9,13.8,13.8,30.3,9.1,5.2,10.9,1.1 recoveries=2
+ACTUAL_HILL clock=400.0 zone=0 occupants=0 controller=-1 control=10.9,13.8,13.8,34.1,9.1,5.2,19.9,1.1 recoveries=2
+ACTUAL_HILL clock=420.0 zone=0 occupants=2 controller=-1 control=10.9,31.6,13.8,34.1,9.1,5.2,19.9,1.1 recoveries=2
+ACTUAL_HILL clock=440.0 zone=1 occupants=0 controller=-1 control=10.9,31.6,13.8,34.1,18.9,5.2,19.9,1.1 recoveries=2
+ACTUAL_HILL clock=460.0 zone=1 occupants=2 controller=-1 control=10.9,31.6,13.8,34.1,20.7,5.2,19.9,1.1 recoveries=2
+ACTUAL_HILL clock=480.0 zone=2 occupants=0 controller=-1 control=10.9,31.6,14.3,34.5,20.7,12.0,19.9,1.1 recoveries=2
+ACTUAL_HILL clock=500.0 zone=2 occupants=0 controller=-1 control=10.9,31.6,14.3,34.5,20.7,12.0,19.9,1.1 recoveries=2
+ACTUAL_HILL clock=520.0 zone=0 occupants=0 controller=-1 control=10.9,32.0,15.3,34.5,20.7,17.1,19.9,1.1 recoveries=3
+ACTUAL_HILL clock=540.0 zone=0 occupants=1 controller=6 control=10.9,32.0,15.3,34.5,20.7,17.1,28.6,1.1 recoveries=3
+ACTUAL_HILL clock=560.0 zone=4 occupants=0 controller=-1 control=10.9,32.0,15.3,34.5,20.7,17.1,48.6,1.1 recoveries=3
+ACTUAL_HILL clock=580.0 zone=4 occupants=2 controller=-1 control=10.9,32.0,15.3,34.5,20.7,17.1,55.8,1.1 recoveries=3
+ACTUAL_HILL clock=600.0 zone=0 occupants=0 controller=-1 control=10.9,32.0,15.3,34.5,27.4,23.6,55.8,1.1 recoveries=3
+ACTUAL_HILL clock=620.0 zone=0 occupants=0 controller=-1 control=10.9,32.0,15.3,34.5,27.4,23.6,55.8,1.1 recoveries=4
+ACTUAL_HILL clock=640.0 zone=3 occupants=0 controller=-1 control=10.9,32.0,15.3,34.5,27.4,26.1,55.8,8.1 recoveries=4
 PASS actual AI navigation/control/ramming completes the full default match without awarding fake points
 PASS actual competition contests the ring, previews the next accessible site and relocates
 ACTUAL_AI_RESULTS
-#5 Player 1 · 18.6 / 60s CONTROL
-#2 Player 2 · 29.2 / 60s CONTROL
-#4 Player 3 · 22.8 / 60s CONTROL
-#7 Player 4 · 11.8 / 60s CONTROL
-#1 Player 5 · 60.0 / 60s CONTROL
-#6 Player 6 · 11.9 / 60s CONTROL
-#8 Player 7 · 6.6 / 60s CONTROL
-#3 Player 8 · 28.8 / 60s CONTROL
+#7 Player 1 · 10.9 / 60s CONTROL
+#3 Player 2 · 32.0 / 60s CONTROL
+#6 Player 3 · 15.3 / 60s CONTROL
+#2 Player 4 · 34.5 / 60s CONTROL
+#4 Player 5 · 27.4 / 60s CONTROL
+#5 Player 6 · 26.1 / 60s CONTROL
+#1 Player 7 · 60.0 / 60s CONTROL
+#8 Player 8 · 8.1 / 60s CONTROL
 
 PASS recorded actual tractor and control-ring replay starts
 PASS replay preserves control totals and locked winner
