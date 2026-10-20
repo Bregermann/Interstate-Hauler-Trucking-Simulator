@@ -10,15 +10,18 @@ namespace LWS.TruckKingOfTheHill
 {
     public sealed class HillProbe : MonoBehaviour
     {
-        const string Folder = "Logs/TruckSports/EighteenSports/Hill";
+        static bool hudOnly;
+        static string Folder => "Logs/TruckSports/EighteenSports/" + (hudOnly ? "HillHud" : "Hill");
         IDisposable preferences; Keyboard fixtureKeys; int checks, errors; readonly StringBuilder report = new StringBuilder(); InputSettings.BackgroundBehavior priorBackground;
 #if UNITY_EDITOR
         InputSettings.EditorInputBehaviorInPlayMode priorEditor;
 #endif
         [RuntimeInitializeOnLoadMethod] static void Boot()
         {
-            bool run = Array.IndexOf(Environment.GetCommandLineArgs(), "-tsHill") >= 0;
+            hudOnly = Array.IndexOf(Environment.GetCommandLineArgs(), "-tsHillHud") >= 0;
+            bool run = hudOnly || Array.IndexOf(Environment.GetCommandLineArgs(), "-tsHill") >= 0;
 #if UNITY_EDITOR
+            hudOnly |= UnityEditor.SessionState.GetBool("Sports.Hill.HudProbe", false); UnityEditor.SessionState.SetBool("Sports.Hill.HudProbe", false); run |= hudOnly;
             run |= UnityEditor.SessionState.GetBool("Sports.Hill.Probe", false); UnityEditor.SessionState.SetBool("Sports.Hill.Probe", false);
 #endif
             if (!run) return;
@@ -39,6 +42,7 @@ namespace LWS.TruckKingOfTheHill
             yield return SportsProbeScene.Ensure<HillMatch>("TruckKingOfTheHill"); yield return null;
             var m = FindAnyObjectByType<HillMatch>(); Check(m != null && m.sites.Length == 5 && m.trucks.Length == 8 && m.roads.Validate().IsValid, "saved five-plateau mountain and existing LWS road graph load with eight NWH tractors");
             if (m == null) { Complete(); yield break; }
+            if (hudOnly) { yield return Hud(m); Complete(); yield break; }
             SportsCameraOptions.Set(false); m.drivingViews.Select(0); m.setup.count = 8; m.option = 1; m.AllBots(); for (int i = 0; i < 8; i++) m.setup.players[i].difficulty = i == 7 ? LWS.TruckBowling.BowlingDifficulty.Hard : i == 6 ? LWS.TruckBowling.BowlingDifficulty.Normal : LWS.TruckBowling.BowlingDifficulty.Easy;
             Check(m.StartMatch() && m.rules.Target == 60, "default cumulative60-second control match starts with actual mixed-difficulty AI");
             var starts = Array.ConvertAll(m.trucks, t => t.body.position); yield return new WaitForSeconds(1.5f); bool grounded = true; float drift = 0;
@@ -70,6 +74,41 @@ namespace LWS.TruckKingOfTheHill
             float before = m.rules.control[0]; yield return new WaitForSeconds(.6f); Check(m.rules.Controller == 0 && m.rules.control[0] > before && m.rules.control[1] == 0, "a distant competitor's overlapping child collider cannot contest or score"); Destroy(proxy);
             m.trucks[1].Prepare(center + Vector3.up * 15, Quaternion.identity); m.trucks[1].Power(false); m.trucks[1].body.isKinematic = true; yield return new WaitForSeconds(.6f); Check(m.rules.Controller == 0 && m.rules.control[1] == 0, "an airborne tractor above the ring does not earn control");
             m.SetupScreen(); yield return SportsExpansionCameraAcceptance.Run(m, m.drivingViews, Check, Folder); Complete();
+        }
+        IEnumerator Hud(HillMatch m)
+        {
+            SportsCameraOptions.Set(false); m.drivingViews.Select(0);
+            foreach(int count in new[]{8,4,2})
+            {
+                m.SetupScreen(); m.setup.count=count; m.AllBots();
+                Check(m.StartMatch(), "HUD fixture starts actual " + count + "-truck match");
+                yield return new WaitForSecondsRealtime(.3f);
+                foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080)})
+                {
+                    yield return SportsWindowCapture.Save(size.x,size.y,Folder+"/row-"+count+"-"+size.y+".png");
+                    Canvas.ForceUpdateCanvases();
+                    var holder=m.menus.hud.transform.Find("Broadcast participant cards");
+                    var status=m.menus.status.rectTransform; var corners=new Vector3[4];status.GetWorldCorners(corners);
+                    float barTop=corners[1].y, previousRight=float.NegativeInfinity,rowY=0;int visible=0;bool valid=holder!=null;
+                    if(holder!=null)foreach(Transform child in holder)
+                    {
+                        if(!child.gameObject.activeInHierarchy)continue;
+                        var rect=(RectTransform)child;rect.GetWorldCorners(corners);
+                        if(visible==0)rowY=corners[0].y;
+                        valid &= Mathf.Abs(corners[0].y-rowY)<.1f && Mathf.Abs(corners[0].y-barTop-8*m.menus.GetComponent<Canvas>().scaleFactor)<.2f && corners[0].x>=0 && corners[2].x<=Screen.width+.1f && corners[2].y<=Screen.height && corners[0].x>previousRight;
+                        previousRight=corners[2].x;visible++;
+                        var progress=child.Find("Capture progress").GetComponent<RectTransform>();
+                        valid &= progress.rect.width<=rect.rect.width-20;
+                        foreach(var text in child.GetComponentsInChildren<TMPro.TMP_Text>())
+                        {
+                            text.rectTransform.GetWorldCorners(corners);var bounds=new Vector3[4];rect.GetWorldCorners(bounds);
+                            valid &= corners[0].x>=bounds[0].x && corners[2].x<=bounds[2].x+.1f && corners[0].y>=bounds[0].y && corners[2].y<=bounds[2].y+.1f;
+                        }
+                    }
+                    Check(valid && visible==count,"actual "+size.x+"x"+size.y+" HUD: "+count+" cards share one bottom row, clear status bar, remain screen-safe and contain text/progress");
+                }
+            }
+            m.SetupScreen();
         }
         void Complete()
         {

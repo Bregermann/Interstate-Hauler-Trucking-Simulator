@@ -5268,3 +5268,19 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Known Issues | Requirement not implemented. |
 | Last Verification Date | None |
 | Remaining Work | Implement, integrate and execute this acceptance requirement. |
+
+## King of the Hill — bottom scorecard row
+
+### EX17-HUD-ROW-001 — King of the Hill
+
+| Field | Record |
+|---|---|
+| Requirement ID | EX17-HUD-ROW-001 |
+| Sport/System | King of the Hill / broadcast HUD |
+| Original Request | Fit all participant cards on one row at the bottom, just above the existing bottom information line (October20 screenshot). |
+| Acceptance Criteria | Eight cards occupy one row immediately above the status plate; names, values, status and progress remain within their cards at720p/1080p; smaller rosters resize on rematch. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | HillMatch.CompactScoreColumns=8; SportsBroadcastScores single-row layout with score on second line, compact portrait/name and bounded progress width. Other sports keep existing layouts. |
+| Automated Verification | 24/24 targeted native EditMode regressions; native actual-scene HUD10/0; exact Windows composed-frame HUD10/0 at1280x720 and1920x1080, with two/four/eight-truck rematches. All cards/text/progress remain bounded, same row, eight reference-pixels above the status plate. Windows build succeeded with0errors/57existing warnings. Evidence: Documentation/TruckSports/Evidence/2026-10-20-Expansion/HillHud/. |
+| Human Verification | User screenshot confirms the prior two-row layout was too high; no acceptance of this correction yet. |
+| Remaining Work | None for this layout request in exercised resolutions/rosters. Human aesthetic review remains unperformed; this entry does not certify the broader expansion candidate. |

@@ -33,7 +33,7 @@ namespace LWS.TruckKingOfTheHill
         public override int WeatherCount => 1;
         public override string OptionLabel => new[] { "30 SECONDS CONTROL", "60 SECONDS CONTROL", "90 SECONDS CONTROL" }[option];
         public override bool SupportsSplitAIViews => true;
-        public override int CompactScoreColumns => 4;
+        public override int CompactScoreColumns => 8;
         public override bool SupportsRaceCountdown => true;
         public override float RaceCountdownSeconds => Live && Countdown > 0 ? Countdown : -1;
         public override float RaceStartSeconds => Countdown <= 0 ? rules.Clock : -1;
