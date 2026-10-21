@@ -8,6 +8,7 @@ namespace LWS.TruckAvalancheEscape
 {
  public sealed class AvalancheMatch:SportsEventSession
  {
+ public override bool BroadcastParticipantActive(int slot)=>rules.alive[slot]&&!rules.finished[slot];
   public Transform burialsRoot;public Transform[] burialMounds=Array.Empty<Transform>();public AvalancheWorld world;public AvalancheFront front;public SportsEventTruck[] trucks;public SportsFragmentRig[] fragments;public SportsDrivingViews drivingViews;public SportsEventCamera broadcast;public SportsCameraFit framing;public SportsChaosWeather atmosphere;public SportsRecordedReview review;public AvalancheRules rules=new AvalancheRules();public float burialGrace=4.5f;public int PhysicalSnowContacts{get;private set;}public int ActualBurials{get;private set;}public int ActualEscapes{get;private set;}
   public override string Title=>"TRUCK AVALANCHE ESCAPE";public override int MinimumPlayers=>1;public override int MaximumPlayers=>12;public override int OptionCount=>3;public override int WeatherCount=>1;public override int CompactScoreColumns=>12;public override bool SupportsSplitAIViews=>true;public override bool SupportsRaceCountdown=>true;public override float RaceCountdownSeconds=>rules.Phase==AvalanchePhase.Countdown?rules.Countdown:-1;public override float RaceStartSeconds=>rules.Phase==AvalanchePhase.Racing?rules.Clock:-1;public override bool ReplayControls=>review!=null&&review.Playing;
   public override bool MultiViewHUD=>!ReplayControls&&drivingViews!=null&&drivingViews.rally.Humans>1;

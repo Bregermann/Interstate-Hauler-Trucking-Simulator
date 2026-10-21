@@ -4,11 +4,21 @@ using UnityEngine;
 using LWS.TruckBowling;
 using LWS.TruckSports;
 using LWS.TruckFieldGoal;
+using DG.Tweening;
 
 namespace LWS.TruckKickball
 {
     public sealed class KickballMatch : SportsEventSession
     {
+        public override bool BroadcastParticipantActive(int slot)=>rules.TeamSize>0&&(rules.Team(slot)!=rules.BattingTeam||slot==rules.Batter||rules.Runner(slot));
+        public override void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing)
+        {
+            if(HomeRunCelebrating){action.primary=rules.Batter;action.Objective(agents[rules.Batter].truck.body.worldCenterOfMass,1.5f);action.preferHuman=false;action.reason="SEALED HOME RUN CELEBRATION";return;}
+            bool pitch=rules.Phase==KickballPhase.PitchReady||rules.Phase==KickballPhase.Pitch;
+            action.primary=pitch?rules.Batter:Carrier>=0?Carrier:framing.Nearest(ball.body.position);
+            if(pitch)action.Objective(agents[Pitcher].truck.body.position,1.5f);else action.Objective(ball.body.position,ball.shape.radius);
+            action.preferHuman=false;action.reason=pitch?"FIRST-BASE BOOTH / PITCHER AND KICKER":rules.Phase==KickballPhase.HomeRun?"HOME RUN BALL TRACK":"LIVE BALL / INVOLVED FIELDER AND RUNNER";
+        }
         public KickballAgent[] agents;
         public KickballBall ball;
         public SportsRallyViews views;
@@ -29,6 +39,10 @@ namespace LWS.TruckKickball
         public int PhysicalCatches { get; private set; }
         public int PhysicalThrows { get; private set; }
         public int PhysicalBaseTouches { get; private set; }
+        public TMPro.TMP_Text homeRunBanner;public RectTransform homeRunCard;
+        public bool HomeRunCelebrating=>homeRunCelebration>0;
+        public int HomeRunCelebrations{get;private set;}
+        float homeRunCelebration;Tween bannerTween,cabTween;Transform celebrationCab;Vector3 cabHome;Quaternion cabRotation;
         public override bool SupportsSplitAIViews=>true;public override bool AISplitViewsApplicable=>ViewMode!=0;
         public override string Title => "TRUCK KICKBALL";
         public override int MinimumPlayers => 6;
@@ -38,7 +52,7 @@ namespace LWS.TruckKickball
         public override string OptionLabel => (3 + option % 4) + " v " + (3 + option % 4) + " · " + Innings + " INNINGS";
         public override bool ReplayControls => replaying;
         public override string SourcePolicy => "BLUE: first half of roster · ORANGE: second half. Up to four humans; all other trucks use AI.\n" + base.SourcePolicy;
-        public override string Help => "Six-a-side by default; choose 3v3 through 6v6 and 1/3/5/7 innings. Four local humans maximum. Blue kicks first. Pitcher: steer to aim, throttle/brake select speed, ACTION rolls the real ball. Kicker: drive your bumper into the pitch; approach speed and contact offset determine power, loft and spin. Three strikes retire a kicker; four balls award a walk. Fouls count only up to two strikes.\n\nAfter a fair kick, physically drive HOME → FIRST → SECOND → THIRD → HOME. Runners wait at their bases until the kick. Touch each large pad in order. Defenders secure the ball by actual front-cup contact and carry it visibly. Face a base or teammate and press ACTION to throw. Touch a forced base while holding the ball for a force out; collide with an unsafe runner for a tag. Fly catches retire the kicker; runners must return and tag their original base before advancing. A third force out cancels runs from that play. Three outs swap teams. Tied regulation games continue into extras.\n\nA fair airborne ball clearing the outfield fence is a home run; runners still physically round the bases. A grounded ball leaving the fenced field awards a ground-rule double, also driven physically. Walks and home runs use the same NWH controls to assist forced advancement. Three-a-side bases-loaded play remains live until a runner frees a kicking slot: no ghost runners.\n\nChoose Broadcast, Chase or Taxi Cab. Human-only split screens are default; Show AI Cameras is optional. Cab free look and animated steering respect device ownership. Highlights record actual motion, with angle, slow/fast, rewind and skip; scoring stays locked. Pause/reconnect preserves the match. Genuine 60-second unresolved loose-ball or out-of-world recovery never awards invented runs. Offline only.";
+        public override string Help => "Six-a-side by default; choose 3v3 through 6v6 and 1/3/5/7 innings. Four local humans maximum. Blue kicks first. Pitcher: steer to aim, throttle/brake select speed, ACTION rolls the real ball. Kicker: drive your bumper into the pitch; approach speed and contact offset determine power, loft and spin. Three strikes retire a kicker; four balls award a walk. Fouls count only up to two strikes.\n\nAfter a fair kick, physically drive HOME → FIRST → SECOND → THIRD → HOME. Runners wait at their bases until the kick. Touch each large pad in order. Defenders secure the ball by actual front-cup contact and carry it visibly. Face a base or teammate and press ACTION to throw. Touch a forced base while holding the ball for a force out; collide with an unsafe runner for a tag. Fly catches retire the kicker; runners must return and tag their original base before advancing. A third force out cancels runs from that play. Three outs swap teams. Tied regulation games continue into extras.\n\nA fair airborne ball clearing the outfield fence is a home run; all entitled runs are credited immediately and defensive play ends for a short celebration. A grounded ball leaving the fenced field awards a ground-rule double, also driven physically. Walks use the same NWH controls to assist forced advancement. Three-a-side bases-loaded play remains live until a runner frees a kicking slot: no ghost runners.\n\nChoose Broadcast, Chase or Taxi Cab. Human-only split screens are default; Show AI Cameras is optional. Cab free look and animated steering respect device ownership. Highlights record actual motion, with angle, slow/fast, rewind and skip; scoring stays locked. Pause/reconnect preserves the match. Genuine 60-second unresolved loose-ball or out-of-world recovery never awards invented runs. Offline only.";
         public override string Header => Title + " · " + (rules.BattingTeam == 0 ? "TOP " : "BOTTOM ") + rules.Inning + " · BLUE " + rules.Scores[0] + " : " + rules.Scores[1] + " ORANGE";
         public override string Status => replaying ? "RECORDED HIGHLIGHT · SEALED RESULT" : transition > 0 ? notice : notice + " · " + rules.Outs + " OUT · " + rules.Balls + " BALL / " + rules.Strikes + " STRIKE";
         public override string Standings => "BLUE " + rules.Scores[0] + "   ORANGE " + rules.Scores[1] + "\n" + (rules.Complete ? "FINAL" : setup.players[rules.Batter].name + " KICKING");
@@ -110,6 +124,7 @@ namespace LWS.TruckKickball
         {
             random = new System.Random(Environment.TickCount); rules.Reset(setup.count / 2, Innings);
             audience=GetComponent<LWS.TruckFieldGoal.FieldGoalCrowd>();audience?.ResetAttempt();audienceRuns=audienceOuts=0;
+            ClearHomeRunPresentation();HomeRunCelebrations=0;
             Clock = 0; PhysicalKicks = PhysicalCatches = PhysicalThrows = PhysicalBaseTouches = 0;
             if (weatherPresets != null) atmosphere.ConfigurePreset(weatherPresets.Resolve(random.Next()), random.Next());
             else atmosphere.Configure(random.Next(), 0, 1);
@@ -147,6 +162,7 @@ namespace LWS.TruckKickball
             }
             SetBallHeld(Pitcher); replay.ResetRecord();
             ball.gameObject.GetComponent<Renderer>().enabled = true;
+            Gate();
         }
 
         void SetBallHeld(int carrier)
@@ -211,6 +227,7 @@ namespace LWS.TruckKickball
         {
             Clock += dt;
             if (replaying) { if (replay.Step(dt)) FinishReplay(); return; }
+            if(homeRunCelebration>0){homeRunCelebration=Mathf.Max(0,homeRunCelebration-dt);if(homeRunCelebration<=0){ClearHomeRunPresentation();FinishPlay();}return;}
             if (transition > 0)
             {
                 transition -= dt; foreach (var a in agents) if (a.truck.Powered) a.truck.TickDrive(Vector2.zero);
@@ -246,7 +263,7 @@ namespace LWS.TruckKickball
                 var p = ball.body.position; var flat = new Vector2(p.x, p.z - 27);
                 if (p.z > 27 && Mathf.Abs(p.x) < p.z && flat.magnitude > 78)
                 {
-                    if (!grounded && p.y > 3.7f) { rules.HomeRun(); notice = "HOME RUN · ROUND THE BASES!"; }
+                    if (!grounded && p.y > 3.7f) { if(rules.HomeRun()){BeginHomeRunCelebration();return;} }
                     else { rules.GroundRuleDouble(); notice = "GROUND-RULE DOUBLE"; }
                     ParkBall();
                 }
@@ -299,6 +316,22 @@ namespace LWS.TruckKickball
         }
         void ParkBall()
         { Carrier = -1; ball.body.isKinematic = true; ball.body.detectCollisions = false; ball.body.position = new Vector3(0, -20, 0); }
+        void BeginHomeRunCelebration()
+        {
+            ParkBall();contactSlot=-1;Array.Clear(tags,0,tags.Length);homeRunCelebration=3.4f;HomeRunCelebrations++;
+            notice="HOME RUN · +"+rules.HomeRunRuns+(rules.HomeRunRuns==1?" RUN!":" RUNS!");Gate();
+            foreach(var agent in agents){if(!agent.gameObject.activeInHierarchy)continue;agent.truck.Power(false);if(!agent.truck.body.isKinematic){agent.truck.body.linearVelocity=Vector3.zero;agent.truck.body.angularVelocity=Vector3.zero;}agent.truck.body.isKinematic=true;}
+            if(homeRunCard!=null){homeRunBanner.text="HOME RUN!\n<size=45%>"+setup.players[rules.Batter].name+" · +"+rules.HomeRunRuns+(rules.HomeRunRuns==1?" RUN":" RUNS")+"</size>";homeRunCard.gameObject.SetActive(true);homeRunCard.localScale=Vector3.one*.7f;bannerTween=homeRunCard.DOScale(1,.28f).SetEase(Ease.OutBack);}
+            var cab=agents[rules.Batter].truck.paint;
+            if(cab!=null&&cab.transform!=agents[rules.Batter].truck.transform){celebrationCab=cab.transform;cabHome=celebrationCab.localPosition;cabRotation=celebrationCab.localRotation;cabTween=DOTween.Sequence().Join(celebrationCab.DOPunchRotation(new Vector3(-8,0,5),3,8,.45f)).Join(celebrationCab.DOPunchPosition(Vector3.up*.18f,3,8,.45f));}
+            audience?.React(true,"HOME RUN",agents[rules.Batter].truck.body.position);audienceRuns=rules.Scores[0]+rules.Scores[1];feedback.Play(5,0,true);Pulse(rules.Batter,.5f,.25f);
+        }
+        void ClearHomeRunPresentation()
+        {
+            homeRunCelebration=0;bannerTween?.Kill();cabTween?.Kill();bannerTween=cabTween=null;
+            if(celebrationCab!=null){celebrationCab.localPosition=cabHome;celebrationCab.localRotation=cabRotation;celebrationCab=null;}
+            if(homeRunCard!=null){homeRunCard.gameObject.SetActive(false);homeRunCard.localScale=Vector3.one;}
+        }
         void FinishPlay()
         {
             if (!rules.FinishPlay()) return;
@@ -412,6 +445,7 @@ namespace LWS.TruckKickball
         protected override void StopSounds() { if (agents != null) foreach (var a in agents) a.truck.StopSound(); }
         protected override void StopGame()
         {
+            ClearHomeRunPresentation();
             audience?.ResetAttempt();
             if (replay != null) replay.End(); replaying = false;
             if (presentation != null) presentation.Restore();

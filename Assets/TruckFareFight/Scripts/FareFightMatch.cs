@@ -7,6 +7,7 @@ using LWS.TruckBowling;
 using LWS.TruckTaxi;
 namespace LWS.TruckFareFight {
  public sealed class FareFightMatch:SportsEventSession {
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){int slot=f.Nearest(f.RequestedFocus,true);if(slot<0)slot=rules.Carrier>=0?rules.Carrier:f.Nearest(f.RequestedFocus);a.primary=slot;if(rules.Carrier==slot&&rules.Destination>=0)a.Objective(district.stops[rules.Destination].position,2);else if(rules.Carrier>=0)a.Objective(trucks[rules.Carrier].body.position,1);else if(rules.PickupLocation>=0)a.Objective(district.stops[rules.PickupLocation].position,1);a.reason=rules.Carrier==slot?"PASSENGER DELIVERY":rules.Carrier>=0?"MOVING PASSENGER CARRIER":"CONTESTED PICKUP";}
   public FareFightWorldReset worldReset;public FareFightDistrict district;public SportsEventTruck[] trucks;
   public SportsDrivingViews drivingViews;public SportsEventCamera broadcast;
   public SportsChaosWeather atmosphere;public SportsWeatherPresets presets;
@@ -28,6 +29,10 @@ namespace LWS.TruckFareFight {
   public string PassengerName=>new[]{"Margo","Eddie","Jules","Finley","Robin","Pat","Sasha","Cameron"}[(Mathf.Max(1,rules.Passenger)-1)%8];
   readonly StringBuilder text=new StringBuilder();readonly List<FareFightEvent> events=new List<FareFightEvent>(24);
   readonly Vector3[] previous=new Vector3[4];readonly float[] recoverAt=new float[4],badTime=new float[4];
+  readonly FareFightStartingGrid startingGrid=new FareFightStartingGrid();
+  readonly Vector3[] fairPositions=new Vector3[4],fairForwards=new Vector3[4];
+  public readonly float[] InitialRouteDistances=new float[4];
+  readonly Collider[] spawnContacts=new Collider[96];
   System.Random random;int lastRevision=-1,rematchSerial,lastPickup=-1,lastDestination=-1;float noticeUntil;string notice;
   public override string Standings{get{text.Clear();for(int i=0;i<setup.count;i++)text.Append(setup.players[i].name).Append("  ").Append(rules.score[i]).Append(" FARES").Append(i==rules.Carrier?" · CARRIER":"").Append('\n');return text.ToString();}}
   public override string Results{get{text.Clear();for(int i=0;i<setup.count;i++)if(rules.winners[i])text.Append(setup.players[i].name).Append("  ");return text+"WIN FARE FIGHT!\n\n"+Standings;}}
@@ -42,15 +47,21 @@ namespace LWS.TruckFareFight {
   public static string DistanceText(float metres)=>metres>1609.344f?(metres/1609.344f).ToString("F1")+" MI":Mathf.RoundToInt(metres*3.28084f)+" FT";
   public override bool TryReadScoreCard(int i,out string value,out string detail){value=rules.score[i].ToString();detail=(i==rules.Carrier?"CARRYING · ":"")+rules.steals[i]+" STEALS";return true;}
   public Vector3 Goal(int slot)=>rules.Carrier==slot&&rules.Destination>=0?district.stops[rules.Destination].position:rules.Carrier>=0?trucks[rules.Carrier].body.position:rules.PickupLocation>=0?district.stops[rules.PickupLocation].position:trucks[slot].body.position;
+  public string ObjectiveState(int slot)=>recoverAt[slot]>0?"RECOVER TRUCK":routes[slot].Reversing?"RECOVER BLOCKED PATH":rules.Carrier==slot?"DELIVER PASSENGER":rules.Carrier>=0?"STEAL PASSENGER":"SEEK PASSENGER";
   protected override void BeginGame(){
+   for(int slot=0;slot<routes.Length;slot++){routes[slot].useGoalProgressRecovery=true;routes[slot].useRoadConnectors=true;routes[slot].stallSeconds=2;routes[slot].reverseSeconds=1.4f;routes[slot].obstacleRadius=Mathf.Clamp(trucks[slot].shape.size.x*trucks[slot].transform.lossyScale.x*.45f,.8f,1.8f);}
    worldReset?.Restore();matchSeed=UnityEngine.Random.Range(1,int.MaxValue);random=new System.Random(matchSeed);rematchSerial++;
    rules.Start(setup.count,option==0?3:option==2?10:5,option==3?300:0,option==4);PhysicalContacts=Recoveries=0;events.Clear();lastRevision=-1;lastPickup=lastDestination=-1;Intro=3;
    atmosphere.ConfigurePreset(presets.Resolve(matchSeed),matchSeed);
-   if(traffic!=null){traffic.SetRegionAvailability(district.Contains);traffic.Initialize();if(rematchSerial>1)traffic.ResetTraffic();traffic.SetWeatherCaution(1-atmosphere.Grip);}
-   if(pedestrians!=null){pedestrians.SetRegionAvailability(district.Contains);pedestrians.Initialize();if(rematchSerial>1)pedestrians.ResetPopulation();}
-   for(int i=0;i<4;i++){routes[i].Reset();recoverAt[i]=badTime[i]=0;if(i>=setup.count){trucks[i].Park(new Vector3(0,-100-i*12,0));trucks[i].gameObject.SetActive(false);continue;}int spawn=(i+rematchSerial-1)%district.startingPositions.Length;trucks[i].tractorMotor.Configure();trucks[i].Prepare(district.startingPositions[spawn],Quaternion.LookRotation(district.startingForwards[spawn]));trucks[i].body.isKinematic=true;previous[i]=trucks[i].body.position;}
-   hazards?.ResetMatch();interactions?.ResetMatch();navigation?.ResetMatch();drivingViews.Layout();CompactViewHUD();AssignFare();
+   AssignFare();Physics.SyncTransforms();float separation=12;foreach(var truck in trucks)separation=Mathf.Max(separation,truck.shape.size.z*truck.transform.lossyScale.z+3);
+   if(!startingGrid.TryBuild(district.graph,district.stops[rules.PickupLocation].position,setup.count,separation,rematchSerial-1,fairPositions,fairForwards,InitialRouteDistances,ClearStartingRoad))throw new InvalidOperationException("Fare Fight cannot find separated, clear, equal-road-distance starts: "+startingGrid.Diagnostic);
+   for(int i=0;i<4;i++){routes[i].Reset();recoverAt[i]=badTime[i]=0;if(i>=setup.count){trucks[i].Park(new Vector3(0,-100-i*12,0));trucks[i].gameObject.SetActive(false);continue;}trucks[i].tractorMotor.Configure();trucks[i].Prepare(fairPositions[i],Quaternion.LookRotation(fairForwards[i]));trucks[i].body.isKinematic=true;previous[i]=trucks[i].body.position;}
+   if(traffic!=null){traffic.SetRegionAvailability(InitialPopulationAllowed);traffic.Initialize();if(rematchSerial>1)traffic.ResetTraffic();traffic.SetWeatherCaution(1-atmosphere.Grip);}
+   if(pedestrians!=null){pedestrians.SetRegionAvailability(InitialPopulationAllowed);pedestrians.Initialize();if(rematchSerial>1)pedestrians.ResetPopulation();}
+   hazards?.ResetMatch();interactions?.ResetMatch();navigation?.ResetMatch();drivingViews.Layout();CompactViewHUD();
   }
+  bool InitialPopulationAllowed(Vector3 point){if(!district.Contains(point))return false;if(Intro>0)for(int i=0;i<setup.count;i++)if(Vector3.Distance(point,fairPositions[i])<20)return false;return true;}
+  bool ClearStartingRoad(Vector3 point,Vector3 forward){if(!district.Contains(point))return false;var truck=trucks[0];var rotation=Quaternion.LookRotation(forward);var scale=truck.transform.lossyScale;var center=point+rotation*Vector3.Scale(truck.shape.center,scale);var half=Vector3.Scale(truck.shape.size,scale)*.55f;int count=Physics.OverlapBoxNonAlloc(center,half,spawnContacts,rotation,~0,QueryTriggerInteraction.Ignore);if(count==spawnContacts.Length)return false;for(int i=0;i<count;i++){var hit=spawnContacts[i];if(hit.bounds.max.y<=point.y+.25f||hit.GetComponentInParent<SportsEventTruck>()!=null||hit.GetComponentInParent<FareFightHazard>()!=null||traffic!=null&&hit.transform.IsChildOf(traffic.transform)||pedestrians!=null&&hit.transform.IsChildOf(pedestrians.transform))continue;return false;}return true;}
   void AssignFare(){if(!rules.NeedsPassenger)return;int pickup=random.Next(district.stops.Length);for(int n=0;n<district.stops.Length;n++){if(pickup!=lastPickup&&pickup!=lastDestination)break;pickup=(pickup+1)%district.stops.Length;}int destination=-1;for(int n=0;n<100;n++){int candidate=random.Next(district.stops.Length);if(candidate!=pickup&&candidate!=lastDestination&&Vector3.Distance(district.stops[pickup].position,district.stops[candidate].position)>230){destination=candidate;break;}}if(destination<0)throw new InvalidOperationException("Fare Fight needs separated reachable original-town stop pairs.");rules.AssignPassenger(pickup,destination);lastPickup=pickup;lastDestination=destination;}
   protected override void Simulate(float dt){
    atmosphere.Tick(Time.time);

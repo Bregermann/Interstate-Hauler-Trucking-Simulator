@@ -8,6 +8,7 @@ namespace LWS.TruckWhackAMole
 {
     public sealed class WhackMatch : SportsEventSession
     {
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){int slot=f.Nearest(f.RequestedFocus,true);if(slot<0)slot=f.Nearest(f.RequestedFocus);a.primary=slot;if(slot<0)return;int best=-1;float distance=float.PositiveInfinity;for(int i=0;i<moles.Length;i++)if(rules.Phase(i)==MolePhase.Exposed||rules.Phase(i)==MolePhase.Emerging){float d=(moles[i].transform.position-trucks[slot].body.position).sqrMagnitude;if(d<distance){distance=d;best=i;}}if(best>=0)a.Objective(moles[best].transform.position,1);a.reason="EXPOSED MOLE / LOCAL BUMPER PLAY";}
         public SportsEventTruck[] trucks;
         public SportsFragmentRig[] fragments;
         public WhackMole[] moles;
@@ -131,7 +132,7 @@ namespace LWS.TruckWhackAMole
         protected override void Present(float dt)
         {
             if (drivingViews == null) return; if (ReplayControls) { review.Tick(); return; } drivingViews.Tick(dt);
-            if (drivingViews.NeedsArena) { var area = new Bounds(new Vector3(0, 4, 0), new Vector3(170, 16, 170)); area.Encapsulate(new Vector3(0, 36, 102)); broadcast.view.orthographic = true; broadcast.Pose(area.center, new Vector3(0, 100, -150), 60); broadcast.transform.rotation = Quaternion.LookRotation(new Vector3(0, -100, 150), Vector3.up); framing.arenaBounds = area; framing.Apply(); }
+            if (drivingViews.NeedsArena) { var area = new Bounds(new Vector3(0, 4, 0), new Vector3(170, 16, 170)); area.Encapsulate(new Vector3(0, 36, 102)); if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true; broadcast.Pose(area.center, new Vector3(0, 100, -150), 60); if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0, -100, 150), Vector3.up); framing.arenaBounds = area; framing.Apply(); }
             if (stadiumScores != null && Running) stadiumScores.text = Header + "\n" + Standings;
         }
         public override void ExtraAction(string key) { if (key == "drivingview") drivingViews.Cycle(); else review?.Action(key); }

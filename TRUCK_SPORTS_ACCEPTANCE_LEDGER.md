@@ -6,6 +6,8 @@ Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED
 
 ## Active work
 
+Current priority (October21): Global broadcast-camera action/readability repair first, then the attached master human-playtest repairs in P0–P4 order. The protected Bowling/Poker/Cheese/Terrier/Fare Fight mechanics and deferred Tug of War decision take precedence over historical requests. Source directives: Requests/2026-10-21-GlobalBroadcastCamera.md and Requests/2026-10-21-HumanPlaytestRepair.md. The completed eighteen-sport delivery below remains the baseline.
+
 Git reconciliation is verified (LD-004); public main is synchronized and local/private work is recoverable. All18requested expansion sports are implemented and integrated in the60-scene Windows build. The individual entries retain automated evidence separately from outstanding human, physical-device, listening and extended-soak acceptance. Source requirements and UI addendum are preserved in Documentation/TruckSports/Requests/. Earlier focused-sprint implementation/evidence remains recorded; its human/device/listening limits have not disappeared.
 
 Expansion order: Red Light Green Light, Hot Potato, Balloon Battle, Whack-a-Mole, King of the Hill; Seesaw, Floor Is Lava, Tetherball, Jousting, Magnet Mayhem; Volleyball, Freeze Tag, Hungry Hungry Haulers, Sheep Herding; Hide and Seek, Frogger, Avalanche Escape, Ninja Warrior. Do not create18empty scenes or count registry entries as gameplay.
@@ -5285,3 +5287,2419 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Automated Verification | 24/24 targeted native EditMode regressions; native actual-scene HUD10/0; exact Windows composed-frame HUD10/0 at1280x720 and1920x1080, with two/four/eight-truck rematches. All cards/text/progress remain bounded, same row, eight reference-pixels above the status plate. Windows build succeeded with0errors/57existing warnings. Evidence: Documentation/TruckSports/Evidence/2026-10-20-Expansion/HillHud/. |
 | Human Verification | User screenshot confirms the prior two-row layout was too high; no acceptance of this correction yet. |
 | Remaining Work | None for this layout request in exercised resolutions/rosters. Human aesthetic review remains unperformed; this entry does not certify the broader expansion candidate. |
+
+## October 21 human playtest repair and broadcast-camera pass
+
+Permanent IDs below preserve both supplied directives. Initial PARTIAL means a reported defect or requested change awaits current-scene investigation, not that a fix has been established. Human feedback is recorded separately. Camera pass precedes HPR work; Bowling cameras and fixed precision/strategic views are protected exceptions.
+
+### GBC-01 — ESTABLISH MINIMUM VISIBLE TRUCK SIZE
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-01 |
+| Sport/System | ESTABLISH MINIMUM VISIBLE TRUCK SIZE |
+| Original Request | The main rule: Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-02 — ADD A MAXIMUM BROADCAST CAMERA DISTANCE / ZOOM LIMIT
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-02 |
+| Sport/System | ADD A MAXIMUM BROADCAST CAMERA DISTANCE / ZOOM LIMIT |
+| Original Request | Every shared camera needs an appropriate maximum zoom-out boundary. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-03 — STOP TRYING TO KEEP EVERY TRUCK VISIBLE AT ALL TIMES
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-03 |
+| Sport/System | STOP TRYING TO KEEP EVERY TRUCK VISIBLE AT ALL TIMES |
+| Original Request | This is likely a major cause of the problem. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-04 — IMPLEMENT INTELLIGENT DYNAMIC FRAMING
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-04 |
+| Sport/System | IMPLEMENT INTELLIGENT DYNAMIC FRAMING |
+| Original Request | The broadcast camera should adjust according to actual gameplay. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-05 — ADD OFFSCREEN COMPETITOR INDICATORS WHERE USEFUL
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-05 |
+| Sport/System | ADD OFFSCREEN COMPETITOR INDICATORS WHERE USEFUL |
+| Original Request | When important competitors leave the camera view, use subtle directional indicators instead of zooming out excessively. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-06 — TRUCK KICKBALL — SPECIFIC CAMERA REPAIR
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-06 |
+| Sport/System | TRUCK KICKBALL — SPECIFIC CAMERA REPAIR |
+| Original Request | Kickball is one of the worst offenders. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section6. |
+| Acceptance Criteria | All observable requirements and acceptance in source section6; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-07 — TRUCK MAGNET MAYHEM — SPECIFIC CAMERA REPAIR
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-07 |
+| Sport/System | TRUCK MAGNET MAYHEM — SPECIFIC CAMERA REPAIR |
+| Original Request | Magnet Mayhem also suffers from trucks appearing extremely small. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section7. |
+| Acceptance Criteria | All observable requirements and acceptance in source section7; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-08 — FIX ALL OTHER APPLICABLE SPORTS
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-08 |
+| Sport/System | FIX ALL OTHER APPLICABLE SPORTS |
+| Original Request | Audit every registered Truck Sports mode that uses: Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section8. |
+| Acceptance Criteria | All observable requirements and acceptance in source section8; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### GBC-09 — SUPPORT HUMAN-ONLY AND AI CAMERA OPTIONS
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-09 |
+| Sport/System | SUPPORT HUMAN-ONLY AND AI CAMERA OPTIONS |
+| Original Request | Respect the existing Show AI Cameras setting. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section9. |
+| Acceptance Criteria | All observable requirements and acceptance in source section9; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-10 — CAMERA SAFETY AND SMOOTHING
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-10 |
+| Sport/System | CAMERA SAFETY AND SMOOTHING |
+| Original Request | Preserve functional camera movement. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section10. |
+| Acceptance Criteria | All observable requirements and acceptance in source section10; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-11 — CONFIGURABLE SHARED CAMERA SETTINGS
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-11 |
+| Sport/System | CONFIGURABLE SHARED CAMERA SETTINGS |
+| Original Request | Create or update a reusable camera-framing configuration with parameters such as: Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section11. |
+| Acceptance Criteria | All observable requirements and acceptance in source section11; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-12 — MANDATORY VISUAL ACCEPTANCE TESTS
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-12 |
+| Sport/System | MANDATORY VISUAL ACCEPTANCE TESTS |
+| Original Request | This issue is fundamentally visual. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section12. |
+| Acceptance Criteria | All observable requirements and acceptance in source section12; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### GBC-13 — BEFORE-AND-AFTER EVIDENCE
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-13 |
+| Sport/System | BEFORE-AND-AFTER EVIDENCE |
+| Original Request | For Kickball, Magnet Mayhem, and at least three other affected sports, provide: Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section13. |
+| Acceptance Criteria | All observable requirements and acceptance in source section13; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+
+### GBC-14 — UPDATE THE PERMANENT ACCEPTANCE LEDGER
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-14 |
+| Sport/System | UPDATE THE PERMANENT ACCEPTANCE LEDGER |
+| Original Request | Create or update the shared broadcast-camera requirements in the existing Truck Sports ledger. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section14. |
+| Acceptance Criteria | All observable requirements and acceptance in source section14; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-1-1 — Fix the Broken Audio After Kicking
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-1-1 |
+| Sport/System | Fix the Broken Audio After Kicking |
+| Original Request | Human testing revealed an extremely unpleasant, broken sound after kicking the football. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section1.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section1.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-1-2 — Align the Holder Truck Correctly
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-1-2 |
+| Sport/System | Align the Holder Truck Correctly |
+| Original Request | The holder truck is currently positioned incorrectly relative to the football. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section1.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section1.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-1-3 — Holder Truck Victory Dance
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-1-3 |
+| Sport/System | Holder Truck Victory Dance |
+| Original Request | When a field goal succeeds, the holder truck should perform a cute celebration. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section1.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section1.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-1-4 — Preserve Other Football Features
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-1-4 |
+| Sport/System | Preserve Other Football Features |
+| Original Request | Keep the current: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section1.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section1.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-2-1 — Restore Actual Fish Catching
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-2-1 |
+| Sport/System | Restore Actual Fish Catching |
+| Original Request | Investigate: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section2.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FishingStream.Progress/Advance aligns visible movement and analytic moving-net crossing; original1.1m hoop radius and score authority retained. |
+| Automated Verification | FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Rerun corrected Windows ten-catch fixture and complete survival/rematches after the speed/river update. |
+
+### HPR-2-2 — Correct Fish Movement Speed
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-2-2 |
+| Sport/System | Correct Fish Movement Speed |
+| Original Request | The previous requests for much faster fish have not produced the desired result. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section2.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FishingDirector baseline2.0x,+0.5per30seconds, configurable6xcap, deterministic per-fish tempo variation; Match passes actual arrival-clock offset. |
+| Automated Verification | FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Windows measured motion/speed, full human/AI rounds and difficulty balance remain to verify. |
+
+### HPR-2-3 — Redesign the Waterway
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-2-3 |
+| Sport/System | Redesign the Waterway |
+| Original Request | Reduce the horizontal fish-travel area to approximately half its current width. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section2.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FishingRepairAuthoring.Upgrade version1; saved Fishing scene with half-width fish/net area, winding240m owned water mesh/Terrain, installed JC trees and existing grass/boulders, clear pier apron. |
+| Automated Verification | FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect rendered banks/bend at720p/1080p and offscreen births, validate all streams/rematches. |
+
+### HPR-2-4 — Increase Fish Size by 30%
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-2-4 |
+| Sport/System | Increase Fish Size by 30% |
+| Original Request | Increase the actual fish models to approximately 130% of their current size. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section2.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Three sport-owned fish prefab roots set to130%scale by versioned scene migration; original Layer Lab source models/materials/rigs unchanged. |
+| Automated Verification | FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Validate rendered scale/clearances and catch boundaries in the new player. |
+
+### HPR-2-5 — Preserve Other Fishing Features
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-2-5 |
+| Sport/System | Preserve Other Fishing Features |
+| Original Request | Retain: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section2.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-3-1 — Reduce Negative Targets
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-3-1 |
+| Sport/System | Reduce Negative Targets |
+| Original Request | There are too many -100 targets. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section3.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section3.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-3-2 — Make Negative Targets Obvious
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-3-2 |
+| Sport/System | Make Negative Targets Obvious |
+| Original Request | Add a highly visible radiant aura to -100 targets. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section3.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section3.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-3-3 — Restore Truck Taxi Pedestrian Physics
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-3-3 |
+| Sport/System | Restore Truck Taxi Pedestrian Physics |
+| Original Request | Pedestrians currently slow down or overturn the player's truck far too much. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section3.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section3.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-3-4 — Simplify the HUD
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-3-4 |
+| Sport/System | Simplify the HUD |
+| Original Request | Replace the crowded current interface with a compact, polished point scoreboard. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section3.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section3.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-04 — CAB CHAOS
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-04 |
+| Sport/System | CAB CHAOS |
+| Original Request |  Clarify and Verify the Actual Game Identity Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-5-1 — Broadcast Camera Position
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-5-1 |
+| Sport/System | Broadcast Camera Position |
+| Original Request | Maintain the shared-camera distance standard established by Truck Keepaway. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section5.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-5-2 — Fix Home-Run Resolution
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-5-2 |
+| Sport/System | Fix Home-Run Resolution |
+| Original Request | Current bug: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section5.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | KickballRules.HomeRun atomically credits pending/active eligible runs, clears live runners and rejects repeat/third-out credit. Match parks ball and suspends interactions during3.4second sealed celebration before existing replay/next-plate restoration. |
+| Automated Verification | New before-fix native2/2fail with zero awarded runs. kickball-after.xml33/33pass, including grand slam, immediate single, late tags, duplicate denial and previous rules. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Run actual Windows fence-crossing fixture, complete match/rematch and targeted PlayMode gameplay tests. |
+
+### HPR-5-3 — Add Home-Run Celebration
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-5-3 |
+| Sport/System | Add Home-Run Celebration |
+| Original Request | Use: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section5.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved Kickball HUD banner, DOTween entrance/cab flourish, existing stadium crowd/audio reaction; celebration uses sealed score and existing action director. |
+| Automated Verification | KickballRepairAuthoring bound banner in the real scene. Windows rendering, animation/audio subjective acceptance pending. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Verify banner at720p/1080p, camera, cleanup, next-play control ownership and human/listening acceptance. |
+
+### HPR-5-4 — Waiting-Line Camera Freedom
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-5-4 |
+| Sport/System | Waiting-Line Camera Freedom |
+| Original Request | When a human player is waiting to bat: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section5.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-5-5 — Fast-Forward to Next At-Bat
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-5-5 |
+| Sport/System | Fast-Forward to Next At-Bat |
+| Original Request | Add an option to fast-forward AI-controlled play until the user's next batting opportunity. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section5.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-6-1 — Repair Camera Jitter
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-6-1 |
+| Sport/System | Repair Camera Jitter |
+| Original Request | The camera is extremely jerky. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section6.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section6.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SkyTowMatch.Present removed a second competing camera evaluation; existing spline camera is sole pose owner. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human smoothness, difficulty, visual and listening acceptance; physical controller checks unperformed. |
+
+### HPR-6-2 — Fix Ring Difficulty
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-6-2 |
+| Sport/System | Fix Ring Difficulty |
+| Original Request | Current ring alignment is excessively difficult. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section6.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section6.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SkyTowCourse delayed spline nominal/ring alignment; ordinary8m vs gold4.8m, matching whole-truck swept clearance; real cable/forces/course preserved. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human smoothness, difficulty, visual and listening acceptance; physical controller checks unperformed. |
+
+### HPR-6-3 — Replace Ring Assets
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-6-3 |
+| Sport/System | Replace Ring Assets |
+| Original Request | Find high-quality existing ring models and suitable effects from the project asset collection. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section6.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section6.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Owned segmented/inset gate meshes, chevrons with valid separate front/back/side normals; existing Arctic materials; four pooled Weatherade-based snow-chip effects. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human smoothness, difficulty, visual and listening acceptance; physical controller checks unperformed. |
+
+### HPR-6-4 — Fix Boat Turns and Ring Alignment
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-6-4 |
+| Sport/System | Fix Boat Turns and Ring Alignment |
+| Original Request | The towing boat currently makes turns that throw the airborne truck far outside the intended ring path. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section6.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section6.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SkyTowCourse delayed nominal spline frame follows actual tow lag through bends; SkyTowMatch is sole camera pose owner; existing real boat/cable/forces retained. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human smoothness, difficulty, visual and listening acceptance; physical controller checks unperformed. |
+
+### HPR-7-1 — Correct Vehicle and Trailer Scale
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-7-1 |
+| Sport/System | Correct Vehicle and Trailer Scale |
+| Original Request | The truck and trailer dimensions currently look inconsistent. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section7.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section7.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-7-2 — Use Proper Hitch Attachment
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-7-2 |
+| Sport/System | Use Proper Hitch Attachment |
+| Original Request | Reuse the existing trailer hookup and detachment infrastructure from Interstate: Hauler. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section7.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section7.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-7-3 — Enlarge the Hole
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-7-3 |
+| Sport/System | Enlarge the Hole |
+| Original Request | The sinkhole is currently too small to receive or be sealed by the trailer. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section7.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section7.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-7-4 — Preserve Working Mechanics
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-7-4 |
+| Sport/System | Preserve Working Mechanics |
+| Original Request | Keep: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section7.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section7.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-8-1 — Objective Direction Arrow
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-8-1 |
+| Sport/System | Objective Direction Arrow |
+| Original Request | Add a large, clearly readable directional arrow showing the player's current objective. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section8.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FareFightNavigation and FareFightRepairAuthoring: four owned CNP markers, valid1-4vendor groups,48pxicons and goal/state updates; existing GPS route/minimap preserved. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalFareCabViews:30/0; four software-human input sources and isolated cab/chase/CNP views, actual original jointed Taxi actor bumper impact8.1786m/s with no delivery points, reconnect/rematch/menu;720p/1080p inspected, fourth cab clear and duplicate metric POI distance removed. Native fare-sky-mine PlayMode5/5. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human driving/impact feel/listening acceptance, physical controllers and extended dense-crowd soak unperformed. |
+
+### HPR-8-2 — Restore Truck Taxi Pedestrian Physics
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-8-2 |
+| Sport/System | Restore Truck Taxi Pedestrian Physics |
+| Original Request | Pedestrians currently behave like indestructible obstacles. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section8.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FareFightContact delegates actual pre-solver bumper collisions to existing Taxi TryStrike/MarkHitEventSent; existing positional sound pool; no passenger points. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalFareCabViews:30/0; four software-human input sources and isolated cab/chase/CNP views, actual original jointed Taxi actor bumper impact8.1786m/s with no delivery points, reconnect/rematch/menu;720p/1080p inspected, fourth cab clear and duplicate metric POI distance removed. Native fare-sky-mine PlayMode5/5. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human driving/impact feel/listening acceptance, physical controllers and extended dense-crowd soak unperformed. |
+
+### HPR-8-3 — Fix Dashboard Clipping
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-8-3 |
+| Sport/System | Fix Dashboard Clipping |
+| Original Request | Part of the dashboard visually escapes or glitches outside the truck during high-speed driving. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section8.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FareFightDriver mode-owned hidden-avatar layer adapter; original Taxi avatar29 collided with Sports cockpit4layer29. Only hidden avatar moved to25and excluded from these cameras. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalFareCabViews:30/0; four software-human input sources and isolated cab/chase/CNP views, actual original jointed Taxi actor bumper impact8.1786m/s with no delivery points, reconnect/rematch/menu;720p/1080p inspected, fourth cab clear and duplicate metric POI distance removed. Native fare-sky-mine PlayMode5/5. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human driving/impact feel/listening acceptance, physical controllers and extended dense-crowd soak unperformed. |
+
+### HPR-8-4 — Completely Repair AI Objective Pursuit
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-8-4 |
+| Sport/System | Completely Repair AI Objective Pursuit |
+| Original Request | AI currently drives aimlessly and collides with walls instead of pursuing the current goal. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section8.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FareFightRoadAccess, FareFightRoute progress-based recovery and match objective states; sampled road join plus authored opposing-edge handling, original shared planner retained. |
+| Automated Verification | FareFight22/22native; Windows FareFightFairRoutesFull2 candidate5869909c15/0 complete first-to-three real AI match, actual pickups/thefts/deliveries, rematch and menu. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Default first-to-five full match currently running; severe weather, physical devices and human driving acceptance remain unperformed. FinalFareCabViews30/0 establishes four software-human isolation and contact/arrow integration. |
+
+### HPR-8-5 — Fair Initial Passenger Distances
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-8-5 |
+| Sport/System | Fair Initial Passenger Distances |
+| Original Request | NEW REQUIREMENT: All competing trucks must begin at approximately equal driving distance from the first passenger. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section8.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FareFightStartingGrid; actual initial footprint clearance; comparable sampled road distances with rotated slot assignment; traffic/population and hazards avoid countdown truck poses. |
+| Automated Verification | Native every20authored pickup supports four separated fair starts; actual Windows full match starts at250.01m road distance for all four competitors, initialized truck bounds do not overlap. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Default first-to-five full match currently running; severe weather, physical devices and human driving acceptance remain unperformed. FinalFareCabViews30/0 establishes four software-human isolation and contact/arrow integration. |
+
+### HPR-8-6 — Preserve Existing Gameplay
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-8-6 |
+| Sport/System | Preserve Existing Gameplay |
+| Original Request | Passenger pickup, delivery, and stealing already work and must remain intact. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.6. |
+| Acceptance Criteria | All observable requirements and acceptance in source section8.6; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-9-1 — Complete HUD Modernization
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-9-1 |
+| Sport/System | Complete HUD Modernization |
+| Original Request | Replace the existing poor interface with polished player information. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section9.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-9-2 — Fix Eliminated AI Cameras
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-9-2 |
+| Sport/System | Fix Eliminated AI Cameras |
+| Original Request | AI cameras behave wildly after their trucks are eliminated. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section9.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-9-3 — Faster Acceleration and Better Turning
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-9-3 |
+| Sport/System | Faster Acceleration and Better Turning |
+| Original Request | Apply mode-specific improvements to: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section9.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-9-4 — Populate the Town
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-9-4 |
+| Sport/System | Populate the Town |
+| Original Request | Add more: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section9.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-9-5 — Respawning Trailer Pickups
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-9-5 |
+| Sport/System | Respawning Trailer Pickups |
+| Original Request | Keep new pickups spawning throughout the round. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section9.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-9-6 — Nearest-Pickup Arrow
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-9-6 |
+| Sport/System | Nearest-Pickup Arrow |
+| Original Request | Add a clear directional indicator toward the nearest reachable trailer pickup. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.6. |
+| Acceptance Criteria | All observable requirements and acceptance in source section9.6; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-10-1 — Minimal Polished HUD
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-10-1 |
+| Sport/System | Minimal Polished HUD |
+| Original Request | Normal gameplay should show only: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section10.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | MinefieldMatch live typed score cards/minimal view text; existing SportsExpansionViewHud gains optional Rally roster/minimal portrait mode, assigned by targeted MinefieldPlaytestRepairAuthoring. Empty Mine details no longer turn into READY. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalMineProgressHUD:52/0; actual grounded pre-blast progress, once-only nonzero last-valid-ground outside finalization, supported rest/backward slide/secondary blasts, rematch/menu.720p/1080p compact portrait+distance HUD inspected. Native final-camera-mine-gate EditMode11/11. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human boundary/gameplay acceptance and repeated full normal matches; mountain/environment requirement remains separate and open. |
+
+### HPR-10-2 — Correct Cumulative Distance
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-10-2 |
+| Sport/System | Correct Cumulative Distance |
+| Original Request | NEW CRITICAL CORRECTION: Distance currently appears to begin counting only after an explosion. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section10.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | MinefieldRacer.CurrentDistance and MinefieldMatch use live starting-line progression before explosions; authoritative final-rest Distance remains separate. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalMineProgressHUD:52/0; actual grounded pre-blast progress, once-only nonzero last-valid-ground outside finalization, supported rest/backward slide/secondary blasts, rematch/menu.720p/1080p compact portrait+distance HUD inspected. Native final-camera-mine-gate EditMode11/11. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human boundary/gameplay acceptance and repeated full normal matches; mountain/environment requirement remains separate and open. |
+
+### HPR-10-3 — Out-of-Bounds Distance
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-10-3 |
+| Sport/System | Out-of-Bounds Distance |
+| Original Request | If the truck falls beyond the map, finalize the score at the last valid grounded course position. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section10.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | MinefieldRacer records actual NWH-grounded/static-supported valid position; falling beyond terrain finalizes once at that position. No last-blast teleport, arbitrary falling distance or zeroing. Normal backward rest scoring preserved. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalMineProgressHUD:52/0; actual grounded pre-blast progress, once-only nonzero last-valid-ground outside finalization, supported rest/backward slide/secondary blasts, rematch/menu.720p/1080p compact portrait+distance HUD inspected. Native final-camera-mine-gate EditMode11/11. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Human boundary/gameplay acceptance and repeated full normal matches; mountain/environment requirement remains separate and open. |
+
+### HPR-10-4 — Map Width and Side Mountains
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-10-4 |
+| Sport/System | Map Width and Side Mountains |
+| Original Request | Ensure the earlier physical map improvements exist: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section10.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-10-5 — Preserve Gameplay
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-10-5 |
+| Sport/System | Preserve Gameplay |
+| Original Request | Minefield is otherwise satisfactory. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section10.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-11 — TRUCK BOWLING
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-11 |
+| Sport/System | TRUCK BOWLING |
+| Original Request |  LATEST INSTRUCTION OVERRIDES EARLIER BOWLING REQUESTS Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section11. |
+| Acceptance Criteria | All observable requirements and acceptance in source section11; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-12 — TRUCK BILLIARDS
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-12 |
+| Sport/System | TRUCK BILLIARDS |
+| Original Request | Perform a full polished HUD pass. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section12. |
+| Acceptance Criteria | All observable requirements and acceptance in source section12; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-13-1 — CRITICAL: FIX BROKEN GOAL DETECTION FIRST
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-13-1 |
+| Sport/System | CRITICAL: FIX BROKEN GOAL DETECTION FIRST |
+| Original Request | NEW HIGH-PRIORITY REGRESSION: The puck can enter the goal without registering a goal. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section13.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section13.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-13-2 — Complete UI Modernization
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-13-2 |
+| Sport/System | Complete UI Modernization |
+| Original Request | After goal detection is repaired, overhaul: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section13.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section13.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-14 — TRUCK AIR HOCKEY
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-14 |
+| Sport/System | TRUCK AIR HOCKEY |
+| Original Request | Perform a substantial release-quality menu and HUD redesign. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section14. |
+| Acceptance Criteria | All observable requirements and acceptance in source section14; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-15 — SCRAP HEAP
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-15 |
+| Sport/System | SCRAP HEAP |
+| Original Request | Move these two sports into the project's existing Scrap Heap category: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section15. |
+| Acceptance Criteria | All observable requirements and acceptance in source section15; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-16-1 — Preserve the Excellent Core Game
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-16-1 |
+| Sport/System | Preserve the Excellent Core Game |
+| Original Request | The game itself is excellent. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section16.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section16.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-16-2 — PS2 World Series of Poker-Inspired UI
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-16-2 |
+| Sport/System | PS2 World Series of Poker-Inspired UI |
+| Original Request | Research visual references from the PlayStation 2-era World Series of Poker games, particularly World Series of Poker and World Series of Poker: Tournament of Champions. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section16.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section16.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-16-3 — Animate AI Trucks
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-16-3 |
+| Sport/System | Animate AI Trucks |
+| Original Request | The AI trucks are completely stiff during poker. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section16.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section16.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-16-4 — Preserve Previous Poker Presentation Features
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-16-4 |
+| Sport/System | Preserve Previous Poker Presentation Features |
+| Original Request | Maintain: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section16.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section16.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-17-1 — Replace Placeholder Explosion VFX
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-17-1 |
+| Sport/System | Replace Placeholder Explosion VFX |
+| Original Request | Search existing owned assets for suitable explosion effects. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section17.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section17.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-17-2 — Complete HUD Overhaul
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-17-2 |
+| Sport/System | Complete HUD Overhaul |
+| Original Request | Modernize: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section17.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section17.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-17-3 — Use Owned Animated Cat Models
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-17-3 |
+| Sport/System | Use Owned Animated Cat Models |
+| Original Request | NEW REQUIREMENT: The developer owns animated cat models. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section17.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section17.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-17-4 — Preserve Racing Gameplay
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-17-4 |
+| Sport/System | Preserve Racing Gameplay |
+| Original Request | The underlying Cheese Rolling gameplay is good. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section17.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section17.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-18-1 — Denser, More Varied Crowds
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-18-1 |
+| Sport/System | Denser, More Varied Crowds |
+| Original Request | Populate the stands substantially more densely. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section18.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-18-2 — Enclose and Complete the Pool
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-18-2 |
+| Sport/System | Enclose and Complete the Pool |
+| Original Request | The pool has visible unfinished areas, particularly toward the back. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section18.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-18-3 — Replace Placeholder Run-Up Art
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-18-3 |
+| Sport/System | Replace Placeholder Run-Up Art |
+| Original Request | The approach section should look like a finished sporting venue. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section18.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-18-4 — Animated Water and Splashes
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-18-4 |
+| Sport/System | Animated Water and Splashes |
+| Original Request | Find and reuse appropriate existing water assets. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section18.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-18-5 — Stabilize Airborne Speech Bubbles
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-18-5 |
+| Sport/System | Stabilize Airborne Speech Bubbles |
+| Original Request | NEW REQUIREMENT: The speech/text bubbles shake excessively inside their small display area. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section18.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-19-1 — Triple the Playable Arena Area
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-19-1 |
+| Sport/System | Triple the Playable Arena Area |
+| Original Request | Increase the actual physical playable surface area to approximately 3× the current baseline, not simply the camera zoom. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section19.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-19-2 — Reduce Obstacle Density to Approximately One-Third
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-19-2 |
+| Sport/System | Reduce Obstacle Density to Approximately One-Third |
+| Original Request | Three times less dense means aim for approximately one-third the prior obstacle density per unit of playable area. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section19.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-19-3 — MAKE ALL GAMEPLAY OBSTACLES DESTRUCTIBLE
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-19-3 |
+| Sport/System | MAKE ALL GAMEPLAY OBSTACLES DESTRUCTIBLE |
+| Original Request | NEW REQUIREMENT: Every obstacle placed within the active arena should be capable of reacting to and being destroyed by sufficient physical contact. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section19.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-19-4 — Preserve Existing Keepaway Mechanics
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-19-4 |
+| Sport/System | Preserve Existing Keepaway Mechanics |
+| Original Request | Maintain: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section19.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-20-1 — Reduce Wind Intensity by Approximately 30%
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-20-1 |
+| Sport/System | Reduce Wind Intensity by Approximately 30% |
+| Original Request | Apply a mode-specific weather wind-force multiplier of approximately: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section20.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section20.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-20-2 — Do Not Rework Racing Physics
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-20-2 |
+| Sport/System | Do Not Rework Racing Physics |
+| Original Request | Do not unnecessarily adjust: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section20.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section20.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-20-3 — Replace the HUD with BASE Jumping-Style Compact Score Presentation
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-20-3 |
+| Sport/System | Replace the HUD with BASE Jumping-Style Compact Score Presentation |
+| Original Request | Remove the oversized repeated scoreboard/status layout. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section20.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section20.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-21-1 — Add Smoke to Flares
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-21-1 |
+| Sport/System | Add Smoke to Flares |
+| Original Request | The existing flares need visible smoke. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section21.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section21.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-21-2 — REMOVE THE MASSIVE TOP HUD BAR
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-21-2 |
+| Sport/System | REMOVE THE MASSIVE TOP HUD BAR |
+| Original Request | The large top scoreboard/status bar must be removed completely. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section21.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section21.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-21-3 — ONE CENTRAL SPLIT-SCREEN SCOREBOARD
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-21-3 |
+| Sport/System | ONE CENTRAL SPLIT-SCREEN SCOREBOARD |
+| Original Request | For four-player split-screen: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section21.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section21.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-22-1 — NO AUTOMATIC FLIP RESET
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-22-1 |
+| Sport/System | NO AUTOMATIC FLIP RESET |
+| Original Request | NEW REQUIREMENT: When a player flips their truck, do not automatically reset it. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section22.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section22.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-22-2 — Use the BASE Jumping HUD Layout
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-22-2 |
+| Sport/System | Use the BASE Jumping HUD Layout |
+| Original Request | Apply the same compact central split-screen presentation. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section22.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section22.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-22-3 — Preserve Existing Mattress Systems
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-22-3 |
+| Sport/System | Preserve Existing Mattress Systems |
+| Original Request | Keep: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section22.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section22.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-23-1 — Apply the Latest Minimal Racing HUD
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-23-1 |
+| Sport/System | Apply the Latest Minimal Racing HUD |
+| Original Request | The mode has been referred to as Wife Carrying and Wife Racing in the notes. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section23.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section23.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-23-2 — BASE Jumping-Style Split-Screen Layout
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-23-2 |
+| Sport/System | BASE Jumping-Style Split-Screen Layout |
+| Original Request | Use the same compact central split-screen information arrangement as Mattress Racing. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section23.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section23.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-24-1 — Preserve Working Gameplay
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-24-1 |
+| Sport/System | Preserve Working Gameplay |
+| Original Request | The developer likes the current game mechanics. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section24.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-24-2 — Improve Parking Bay Presentation
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-24-2 |
+| Sport/System | Improve Parking Bay Presentation |
+| Original Request | Replace default-looking markers and plain text with attractive: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section24.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-24-3 — Remove the Obstructive Top Bar
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-24-3 |
+| Sport/System | Remove the Obstructive Top Bar |
+| Original Request | Remove the unnecessary shared-view top information bar. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section24.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-24-4 — Redesign the Bottom UI
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-24-4 |
+| Sport/System | Redesign the Bottom UI |
+| Original Request | The bottom strip should no longer consume the entire screen width. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section24.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-24-5 — NEW: Shared-View Leaderboard Must Exist in Split-Screen
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-24-5 |
+| Sport/System | NEW: Shared-View Leaderboard Must Exist in Split-Screen |
+| Original Request | The polished shared-view leaderboard currently disappears or is not properly represented in split-screen. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section24.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-25 — TRUCK TARGET LAUNCH
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-25 |
+| Sport/System | TRUCK TARGET LAUNCH |
+| Original Request |  Use the BASE Jumping Compact Split-Screen HUD Standard Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section25. |
+| Acceptance Criteria | All observable requirements and acceptance in source section25; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-26 — TRUCK TUG OF WAR
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-26 |
+| Sport/System | TRUCK TUG OF WAR |
+| Original Request |  DO NOT IMPLEMENT GAMEPLAY CHANGES YET Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section26. |
+| Acceptance Criteria | All observable requirements and acceptance in source section26; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-27-1 — Repair Clipped Damage Percentages
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-27-1 |
+| Sport/System | Repair Clipped Damage Percentages |
+| Original Request | The HUD currently clips the damage percentages. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section27.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section27.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-27-2 — Remove Redundant Side Text
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-27-2 |
+| Sport/System | Remove Redundant Side Text |
+| Original Request | Remove the large: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section27.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section27.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-27-3 — Add Prominent Arena Branding
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-27-3 |
+| Sport/System | Add Prominent Arena Branding |
+| Original Request | Place a large, polished Demolition Derby / Truck Sports: Party! logo inside the actual arena. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section27.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section27.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-27-4 — Preserve Existing Derby Features
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-27-4 |
+| Sport/System | Preserve Existing Derby Features |
+| Original Request | Do not undo: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section27.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section27.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-28-1 — Correct Sport-Specific Logo
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-28-1 |
+| Sport/System | Correct Sport-Specific Logo |
+| Original Request | Replace the incorrect or generic displayed logo with the dedicated Truck Dance-Off logo. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section28.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-28-2 — Make Rhythm Inputs More Forgiving
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-28-2 |
+| Sport/System | Make Rhythm Inputs More Forgiving |
+| Original Request | Current button timing is too strict. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section28.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-28-3 — Make Trucks Face the Screen
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-28-3 |
+| Sport/System | Make Trucks Face the Screen |
+| Original Request | The dancing trucks should be oriented toward the primary gameplay/broadcast camera. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section28.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-28-4 — Improve Camera Work
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-28-4 |
+| Sport/System | Improve Camera Work |
+| Original Request | Add more interesting cinematic presentation: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section28.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-28-5 — Preserve Cute Truck Animations
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-28-5 |
+| Sport/System | Preserve Cute Truck Animations |
+| Original Request | Keep: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.5. |
+| Acceptance Criteria | All observable requirements and acceptance in source section28.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-29-1 — Four-Player Layout
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-29-1 |
+| Sport/System | Four-Player Layout |
+| Original Request | For a standard 2×2 split-screen: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.1. |
+| Acceptance Criteria | All observable requirements and acceptance in source section29.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-29-2 — Vary Contents by Sport
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-29-2 |
+| Sport/System | Vary Contents by Sport |
+| Original Request | BASE Jumping - Name. - Truck icon. - Score. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.2. |
+| Acceptance Criteria | All observable requirements and acceptance in source section29.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-29-3 — Other Player Counts
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-29-3 |
+| Sport/System | Other Player Counts |
+| Original Request | Adapt layouts for: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.3. |
+| Acceptance Criteria | All observable requirements and acceptance in source section29.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-29-4 — UI Visual Quality
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-29-4 |
+| Sport/System | UI Visual Quality |
+| Original Request | Match polished existing Truck Sports games. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.4. |
+| Acceptance Criteria | All observable requirements and acceptance in source section29.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
+| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+
+### HPR-BUNGEE — Bungee Destruction
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-BUNGEE |
+| Sport/System | Bungee Destruction |
+| Original Request | Master directive P1 item14 and final directive: building replacements and responsiveness; actual building destruction. Preserve established swing controls. |
+| Acceptance Criteria | Appropriate owned buildings physically break on valid impacts; responsive existing controls; full attempts, reset and rematch preserve them. |
+| Status | PARTIAL |
+| Implementation Evidence | Existing Bungee scene/assets to inspect. |
+| Automated Verification | Not run for this directive yet. |
+| Human Verification | New master directive requests this correction. |
+| Remaining Work | Audit current destruction, reproduce and repair without rebuilding working swing controls. |
+
+### GBC sport-by-sport camera acceptance
+
+Each permanent scene ID below tracks the actual registered variant separately. Source directive sections1–14 apply, with protected/precision/stealth exceptions documented. Original issue: shared views can shrink important trucks below readable screen size. Acceptance requires actual renderer projection measurements, legible action/objective, target-loss stability and720p/1080p rendered evidence; no compilation-only verification.
+
+#### GBC-SPORT-TruckBilliards
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckBilliards |
+| Sport/System | TruckBilliards |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckHockey
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckHockey |
+| Sport/System | TruckHockey |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckBowling
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckBowling |
+| Sport/System | TruckBowling |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Protected by newer master directive: camera/gameplay unchanged; only UI/text cleanup authorized. |
+
+#### GBC-SPORT-TruckAirHockey
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckAirHockey |
+| Sport/System | TruckAirHockey |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckWallball
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckWallball |
+| Sport/System | TruckWallball |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckCornhole
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckCornhole |
+| Sport/System | TruckCornhole |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckCheeseRolling
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckCheeseRolling |
+| Sport/System | TruckCheeseRolling |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckDockDiving
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckDockDiving |
+| Sport/System | TruckDockDiving |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckKeepaway
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckKeepaway |
+| Sport/System | TruckKeepaway |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckKeepawayFirstPerson
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckKeepawayFirstPerson |
+| Sport/System | TruckKeepawayFirstPerson |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckCurling
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckCurling |
+| Sport/System | TruckCurling |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckBaseJumping
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckBaseJumping |
+| Sport/System | TruckBaseJumping |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckTerrierRacing
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckTerrierRacing |
+| Sport/System | TruckTerrierRacing |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckMinefield
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckMinefield |
+| Sport/System | TruckMinefield |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckMattressRacing
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckMattressRacing |
+| Sport/System | TruckMattressRacing |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckWifeCarrying
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckWifeCarrying |
+| Sport/System | TruckWifeCarrying |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckMusicalParking
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckMusicalParking |
+| Sport/System | TruckMusicalParking |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckGiantSwing
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckGiantSwing |
+| Sport/System | TruckGiantSwing |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckBuzkashi
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckBuzkashi |
+| Sport/System | TruckBuzkashi |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckBogSnorkelling
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckBogSnorkelling |
+| Sport/System | TruckBogSnorkelling |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckBungeeDemolition
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckBungeeDemolition |
+| Sport/System | TruckBungeeDemolition |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckFishing
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckFishing |
+| Sport/System | TruckFishing |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckSumo
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckSumo |
+| Sport/System | TruckSumo |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckTargetLaunch
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckTargetLaunch |
+| Sport/System | TruckTargetLaunch |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckFieldGoal
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckFieldGoal |
+| Sport/System | TruckFieldGoal |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckBeerPong
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckBeerPong |
+| Sport/System | TruckBeerPong |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckPoker
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckPoker |
+| Sport/System | TruckPoker |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckTugOfWar
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckTugOfWar |
+| Sport/System | TruckTugOfWar |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Newer directive prohibits changes in this pass; retain future design discussion. |
+
+#### GBC-SPORT-TruckSkeeBall
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckSkeeBall |
+| Sport/System | TruckSkeeBall |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckLogRolling
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckLogRolling |
+| Sport/System | TruckLogRolling |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckTrampolineDodgeball
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckTrampolineDodgeball |
+| Sport/System | TruckTrampolineDodgeball |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckDemolitionDerby
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckDemolitionDerby |
+| Sport/System | TruckDemolitionDerby |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckPedestrianPlowing
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckPedestrianPlowing |
+| Sport/System | TruckPedestrianPlowing |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckPedestrianPlowingFirstPerson
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckPedestrianPlowingFirstPerson |
+| Sport/System | TruckPedestrianPlowingFirstPerson |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckKickball
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckKickball |
+| Sport/System | TruckKickball |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckDanceOff
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckDanceOff |
+| Sport/System | TruckDanceOff |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckLimbo
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckLimbo |
+| Sport/System | TruckLimbo |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckSkyTow
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckSkyTow |
+| Sport/System | TruckSkyTow |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckTrailerPlug
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckTrailerPlug |
+| Sport/System | TruckTrailerPlug |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+
+#### GBC-SPORT-TruckFareFight
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckFareFight |
+| Sport/System | TruckFareFight |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckSnake
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckSnake |
+| Sport/System | TruckSnake |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckRedLightGreenLight
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckRedLightGreenLight |
+| Sport/System | TruckRedLightGreenLight |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckHotPotato
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckHotPotato |
+| Sport/System | TruckHotPotato |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckBalloonBattle
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckBalloonBattle |
+| Sport/System | TruckBalloonBattle |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckWhackAMole
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckWhackAMole |
+| Sport/System | TruckWhackAMole |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckKingOfTheHill
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckKingOfTheHill |
+| Sport/System | TruckKingOfTheHill |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckSeesaw
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckSeesaw |
+| Sport/System | TruckSeesaw |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckFloorIsLava
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckFloorIsLava |
+| Sport/System | TruckFloorIsLava |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckTetherball
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckTetherball |
+| Sport/System | TruckTetherball |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckJousting
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckJousting |
+| Sport/System | TruckJousting |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckMagnetMayhem
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckMagnetMayhem |
+| Sport/System | TruckMagnetMayhem |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckVolleyball
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckVolleyball |
+| Sport/System | TruckVolleyball |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckFreezeTag
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckFreezeTag |
+| Sport/System | TruckFreezeTag |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckHungryHaulers
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckHungryHaulers |
+| Sport/System | TruckHungryHaulers |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckSheepHerding
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckSheepHerding |
+| Sport/System | TruckSheepHerding |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckHideAndSeek
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckHideAndSeek |
+| Sport/System | TruckHideAndSeek |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | PARTIAL |
+| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
+| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Stealth/privacy exception: never expose hidden players or add hidden-player POIs. Audit existing legal seeker/spectator view only. |
+
+#### GBC-SPORT-TruckFrogger
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckFrogger |
+| Sport/System | TruckFrogger |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckAvalancheEscape
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckAvalancheEscape |
+| Sport/System | TruckAvalancheEscape |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+#### GBC-SPORT-TruckNinjaWarrior
+
+| Field | Record |
+|---|---|
+| Requirement ID | GBC-SPORT-TruckNinjaWarrior |
+| Sport/System | TruckNinjaWarrior |
+| Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
+| Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
+| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
+| Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |

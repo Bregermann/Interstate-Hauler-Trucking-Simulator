@@ -4,6 +4,7 @@ namespace LWS.TruckVolleyball
 {
  public sealed class VolleyMatch:SportsEventSession
  {
+  public override void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing){action.Objective(ball.position,ballRadius);action.primary=framing.Nearest(ball.position);action.reason="BALL / ACTIVE RALLY";}
   public SportsEventTruck[] trucks;public SportsFragmentRig[] fragments;public Rigidbody ball;public Transform net;public SportsDrivingViews drivingViews;public SportsEventCamera broadcast;public SportsCameraFit framing;public SportsChaosWeather atmosphere;public SportsRecordedReview review;public LWS.TruckFieldGoal.FieldGoalCrowd crowd;
   public VolleyRules rules=new VolleyRules();public float Countdown{get;private set;}public int ActualContacts{get;private set;}public int ActualJumps{get;private set;}public int NetContacts{get;private set;}
   public float ballRadius=3,jumpHeight=8,jumpCooldown=1.8f,halfWidth=32,halfLength=50,netHeight=7;
@@ -62,7 +63,7 @@ namespace LWS.TruckVolleyball
   }
   public void MarkNet(){NetContacts++;}
   public void Landing(){if(!Live||!rules.Live||Countdown>0)return;if(Mathf.Abs(ball.position.x)<=halfWidth&&Mathf.Abs(ball.position.z)<=halfLength)rules.Land(ball.position.z<0?0:1);else rules.Out();}
-  protected override void Present(float dt){if(drivingViews==null)return;if(ReplayControls){review.Tick();return;}drivingViews.Tick(dt);if(!drivingViews.NeedsArena)return;var bounds=new Bounds(new Vector3(0,5,0),new Vector3(50,12,70));bounds.Encapsulate(ball.position);for(int i=0;i<setup.count;i++)bounds.Encapsulate(trucks[i].body.position+Vector3.up*2);bounds.Expand(new Vector3(10,8,10));broadcast.view.orthographic=true;broadcast.Pose(bounds.center,new Vector3(0,100,-85),60);broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-100,85),Vector3.up);framing.arenaBounds=bounds;framing.Apply();}
+  protected override void Present(float dt){if(drivingViews==null)return;if(ReplayControls){review.Tick();return;}drivingViews.Tick(dt);if(!drivingViews.NeedsArena)return;var bounds=new Bounds(new Vector3(0,5,0),new Vector3(50,12,70));bounds.Encapsulate(ball.position);for(int i=0;i<setup.count;i++)bounds.Encapsulate(trucks[i].body.position+Vector3.up*2);bounds.Expand(new Vector3(10,8,10));if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true;broadcast.Pose(bounds.center,new Vector3(0,100,-85),60);if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-100,85),Vector3.up);framing.arenaBounds=bounds;framing.Apply();}
   public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
   protected override void SetPaused(bool paused)=>atmosphere?.Pause(paused);protected override void StopSounds(){if(trucks!=null)foreach(var truck in trucks)truck.StopSound();}
   protected override void StopGame(){review?.End(false);StopSounds();if(ball!=null){if(!ball.isKinematic)ball.linearVelocity=ball.angularVelocity=Vector3.zero;ball.isKinematic=true;}if(trucks!=null)foreach(var truck in trucks){truck.Power(false);truck.body.isKinematic=true;}}

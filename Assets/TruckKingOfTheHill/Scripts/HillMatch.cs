@@ -9,6 +9,7 @@ namespace LWS.TruckKingOfTheHill
 {
     public sealed class HillMatch : SportsEventSession
     {
+        public override void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing){action.Objective(sites[rules.Zone],radius);action.objective=new Bounds(sites[rules.Zone],new Vector3(radius*2,.5f,radius*2));int human=framing.Nearest(sites[rules.Zone],true);action.primary=human>=0?human:framing.Nearest(sites[rules.Zone]);action.reason="ACTIVE HILL CONTEST";}
         public SportsEventTruck[] trucks;
         public SportsFragmentRig[] fragments;
         public SportsDrivingViews drivingViews;
@@ -184,7 +185,7 @@ namespace LWS.TruckKingOfTheHill
                 var area = new Bounds(sites[rules.Zone] + Vector3.up * 5, new Vector3(76, 28, 76));
                 for (int i = 0; i < setup.count; i++) if (setup.players[i].source != BowlingSource.AI && fallenAt[i] < 0) area.Encapsulate(trucks[i].body.position);
                 if (rules.Warning) area.Encapsulate(sites[rules.NextZone] + Vector3.up * 8);
-                area.Expand(new Vector3(12, 10, 12)); broadcast.view.orthographic = true; broadcast.Pose(area.center, new Vector3(0, 105, -155), 60); broadcast.transform.rotation = Quaternion.LookRotation(new Vector3(0, -105, 155), Vector3.up); framing.arenaBounds = area; framing.Apply();
+                area.Expand(new Vector3(12, 10, 12)); if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true; broadcast.Pose(area.center, new Vector3(0, 105, -155), 60); if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0, -105, 155), Vector3.up); framing.arenaBounds = area; framing.Apply();
             }
         }
         public override void ExtraAction(string key) { if (key == "drivingview") drivingViews.Cycle(); else review?.Action(key); }

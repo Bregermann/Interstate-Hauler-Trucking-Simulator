@@ -24626,6 +24626,7 @@ MonoBehaviour:
   follow: {fileID: 716029703}
   target: {fileID: 1695852251}
   aim: {fileID: 1940549385}
+  broadcastFraming: {fileID: 0}
 --- !u!20 &178406141
 Camera:
   m_ObjectHideFlags: 0
@@ -177281,6 +177282,7 @@ MonoBehaviour:
   follow: {fileID: 16560290}
   target: {fileID: 1764917218}
   aim: {fileID: 311584551}
+  broadcastFraming: {fileID: 0}
 --- !u!20 &948824028
 Camera:
   m_ObjectHideFlags: 0
@@ -255419,6 +255421,7 @@ MonoBehaviour:
   follow: {fileID: 641905368}
   target: {fileID: 592887769}
   aim: {fileID: 1029228042}
+  broadcastFraming: {fileID: 0}
 --- !u!20 &1314140580
 Camera:
   m_ObjectHideFlags: 0
@@ -290297,6 +290300,7 @@ GameObject:
   - component: {fileID: 1482885455}
   - component: {fileID: 1482885454}
   - component: {fileID: 1482885453}
+  - component: {fileID: 1482885456}
   m_Layer: 0
   m_Name: TruckMinefield Authority
   m_TagString: Untagged
@@ -291031,6 +291035,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsRallyViews
   session: {fileID: 1482885441}
+  retiredViews: {fileID: 0}
   broadcast: {fileID: 178406140}
   views:
   - {fileID: 1314140579}
@@ -291052,6 +291057,7 @@ MonoBehaviour:
   groundFov: 70
   Focus: 0
   Replay: 0
+  presentationGroups: 
 --- !u!114 &1482885444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291395,7 +291401,24 @@ MonoBehaviour:
   - {fileID: 4800000, guid: d0b14971f315dd342b652197bb59d6a1, type: 3}
   - {fileID: 4800000, guid: 1eec6dff0fe58e14d81d3965d19f058f, type: 3}
   depthRenderer: 1
+  traceExposedRoads: 0
   permanentCoverage: 0
+--- !u!114 &1482885456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482885440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62bbdc1d5f1556b4db720280e77225d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsExpansionViewHud
+  match: {fileID: 1482885441}
+  views: {fileID: 0}
+  rally: {fileID: 1482885443}
+  minimalDistance: 1
 --- !u!1 &1483254194
 GameObject:
   m_ObjectHideFlags: 0
@@ -351682,6 +351705,7 @@ MonoBehaviour:
   follow: {fileID: 1933698422}
   target: {fileID: 1021595285}
   aim: {fileID: 1179905225}
+  broadcastFraming: {fileID: 0}
 --- !u!20 &1803607527
 Camera:
   m_ObjectHideFlags: 0
@@ -407892,6 +407916,7 @@ MonoBehaviour:
   follow: {fileID: 259023460}
   target: {fileID: 1951527237}
   aim: {fileID: 449766447}
+  broadcastFraming: {fileID: 0}
 --- !u!20 &2134236024
 Camera:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ namespace LWS.TruckHotPotato
 {
     public sealed class HotPotatoMatch : SportsEventSession
     {
+        public override bool BroadcastParticipantActive(int slot)=>rules.alive[slot];
+        public override void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing){action.primary=rules.Carrier;if(rules.Carrier>=0)action.Objective(trucks[rules.Carrier].body.position,1);action.reason="BOMB CARRIER / NEARBY CHALLENGERS";}
         public SportsEventTruck[] trucks;
         public SportsFragmentRig[] fragments;
         public ParticleSystem[] blasts;
@@ -184,10 +186,10 @@ namespace LWS.TruckHotPotato
                 Bounds active = new Bounds(Vector3.zero, new Vector3(100, 8, 100));
                 for (int i = 0; i < setup.count; i++) if (rules.alive[i]) active.Encapsulate(trucks[i].body.position);
                 active.Expand(new Vector3(14, 10, 14));
-                broadcast.view.orthographic = true; broadcast.Pose(active.center, new Vector3(0, 90, -135), 60);
+                if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true; broadcast.Pose(active.center, new Vector3(0, 90, -135), 60);
                 // Fit uses this camera-space orientation; snap prevents the
                 // startup camera damping from leaving an unintended top-down shot.
-                broadcast.transform.rotation = Quaternion.LookRotation(new Vector3(0, -90, 135), Vector3.up);
+                if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0, -90, 135), Vector3.up);
                 framing.arenaBounds = active; framing.Apply();
             }
             bool visible = Running && !Finished && rules.Carrier >= 0; bomb.gameObject.SetActive(visible);

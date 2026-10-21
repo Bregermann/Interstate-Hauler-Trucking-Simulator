@@ -9,6 +9,8 @@ namespace LWS.TruckFrogger
 {
  public sealed class FrogMatch:SportsEventSession
  {
+ public override bool BroadcastParticipantActive(int slot)=>slot==rules.Active;
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){a.primary=rules.Active;var c=world.courses[world.Current];a.Objective(gate<c.gates.Length?c.gates[gate]:c.finish,1.5f);a.reason="ACTIVE CROSSING / NEXT SAFE GATE";}
   public SportsEventTruck[] trucks;public SportsFragmentRig[] fragments;public FrogWorld world;public SportsDrivingViews drivingViews;public SportsEventCamera broadcast;public SportsCameraFit framing;public SportsChaosWeather atmosphere;public SportsRecordedReview review;
   public FrogRules rules=new FrogRules();public float attemptLimit=180;public int seed;public int CompletedCrossings{get;private set;}public int ActualImpacts{get;private set;}public int WaitDecisions{get;private set;}
   public override string Title=>"TRUCK FROGGER";public override int MinimumPlayers=>1;public override int MaximumPlayers=>8;public override int OptionCount=>6;public override int WeatherCount=>1;public override int CompactScoreColumns=>8;public override bool SupportsSplitAIViews=>true;

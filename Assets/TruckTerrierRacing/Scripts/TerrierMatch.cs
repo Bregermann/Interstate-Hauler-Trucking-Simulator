@@ -6,6 +6,8 @@ using LWS.TruckBowling;
 namespace LWS.TruckTerrierRacing {
 public enum TerrierPhase {Countdown,Race,Replay,HeatResult,Complete}
 public sealed class TerrierMatch:SportsEventSession {
+ public override bool BroadcastParticipantActive(int slot)=>racers[slot].Alive&&!racers[slot].Finished;
+ public override void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing){int human=framing.Nearest(framing.RequestedFocus,true);action.primary=human>=0?human:framing.Nearest(framing.RequestedFocus);action.reason="LOCAL RACE ACTION / LEADING LIVE TRUCK";}
  public override bool SupportsRaceCountdown=>true;public override float RaceCountdownSeconds=>Phase==TerrierPhase.Countdown?Mathf.Max(0,3-phaseAge):-1;public override float RaceStartSeconds=>Phase==TerrierPhase.Race?HeatTime:-1;
  public TerrierVolcano volcano;public TerrierDessert dessert;public TerrierFinishDiagnostics finishDiagnostics;public TerrierWreckPool wrecks;public TerrierCrowd crowd;public TerrierSnow snow;public TerrierCountdown countdown;public float CountdownElapsed=>phaseAge;public TerrierRacer[] racers;public TerrierCourse course;public TerrierReplay replay;public SportsEventCamera broadcast;public SportsEventCamera[] cabViews;public ParticleSystem[] blasts;
  public TerrierPhase Phase{get;private set;}public float HeatTime{get;private set;}public int Heat{get;private set;}public int HeatWinner{get;private set;}=-1;public int MatchWinner{get;private set;}=-1;public int Seed{get;private set;}public int Locks{get;private set;}public int[] wins=new int[12];public int HumanViews{get;private set;}public int[] viewSlots=new int[4];

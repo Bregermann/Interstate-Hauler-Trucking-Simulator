@@ -7,6 +7,7 @@ namespace LWS.TruckBalloonBattle
 {
     public sealed class BalloonMatch : SportsEventSession
     {
+ public override bool BroadcastParticipantActive(int slot)=>rules.Alive(slot);
         public SportsEventTruck[] trucks;
         public SportsFragmentRig[] fragments;
         public BalloonTarget[] targets;
@@ -151,8 +152,8 @@ namespace LWS.TruckBalloonBattle
             {
                 Bounds area = new Bounds(new Vector3(0, 4, 0), new Vector3(65, 16, 65));
                 for (int i = 0; i < setup.count; i++) if (rules.Alive(i)) area.Encapsulate(trucks[i].body.position);
-                area.Expand(new Vector3(12, 8, 12)); broadcast.view.orthographic = true; broadcast.Pose(area.center, new Vector3(0, 75, -110), 60);
-                broadcast.transform.rotation = Quaternion.LookRotation(new Vector3(0, -75, 110), Vector3.up); framing.arenaBounds = area; framing.Apply();
+                area.Expand(new Vector3(12, 8, 12)); if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true; broadcast.Pose(area.center, new Vector3(0, 75, -110), 60);
+                if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0, -75, 110), Vector3.up); framing.arenaBounds = area; framing.Apply();
             }
         }
         public override void ExtraAction(string key) { if (key == "drivingview") drivingViews.Cycle(); else review?.Action(key); }

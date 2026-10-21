@@ -10,6 +10,8 @@ namespace LWS.TruckRedLightGreenLight
 {
     public sealed class RedLightMatch : SportsEventSession
     {
+ public override bool BroadcastParticipantActive(int slot)=>rules.outcomes[slot]==RedLightOutcome.Racing;
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){int slot=f.Nearest(f.RequestedFocus,true);if(slot<0)slot=f.Nearest(f.RequestedFocus);a.primary=slot;if(slot>=0)a.Objective(new Vector3(trucks[slot].body.position.x,0,finishZ),2);a.reason="LIVE RACER / FINISH DIRECTION";}
         public SportsEventTruck[] trucks;
         public SportsFragmentRig[] fragments;
         public ParticleSystem[] explosions;
@@ -228,9 +230,9 @@ namespace LWS.TruckRedLightGreenLight
                 if (first) b = explosionViewTime > 0 ? recentExplosions : new Bounds(new Vector3(0, 2, finishZ), new Vector3(60, 6, 60));
                 if (explosionViewTime > 0) b.Encapsulate(recentExplosions);
                 b.Expand(new Vector3(18, 8, 24)); framing.arenaBounds = b;
-                broadcast.view.orthographic = true;
+                if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true;
                 broadcast.Pose(b.center, new Vector3(0, 70, -100), 60);
-                broadcast.transform.rotation = Quaternion.LookRotation(new Vector3(0, -70, 100), Vector3.up);
+                if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0, -70, 100), Vector3.up);
                 framing.Apply();
             }
         }

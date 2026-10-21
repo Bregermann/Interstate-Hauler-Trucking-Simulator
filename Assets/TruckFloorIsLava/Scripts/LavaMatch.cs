@@ -10,6 +10,8 @@ namespace LWS.TruckFloorIsLava
 {
     public sealed class LavaMatch : SportsEventSession
     {
+ public override bool BroadcastParticipantActive(int slot)=>rules.alive[slot];
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){int slot=f.Nearest(f.RequestedFocus,true);if(slot<0)slot=f.Nearest(f.RequestedFocus);a.primary=slot;if(slot>=0&&target[slot]>=0&&target[slot]<platforms.Length)a.Objective(platforms[target[slot]].transform.position,2);a.reason="SURVIVING TRUCK / NEXT PLATFORM";}
         public SportsEventTruck[] trucks;
         public SportsFragmentRig[] fragments;
         public ParticleSystem[] blasts,splashes;
@@ -149,7 +151,7 @@ namespace LWS.TruckFloorIsLava
         protected override void Present(float dt)
         {
             if(drivingViews==null)return;if(ReplayControls){review.Tick();return;}drivingViews.Tick(dt);if(!drivingViews.NeedsArena)return;
-            int focus=0;for(int i=0;i<setup.count;i++)if(rules.alive[i]){focus=i;break;}var area=new Bounds(trucks[focus].body.position,new Vector3(36,6,36));for(int i=0;i<setup.count;i++)if(rules.alive[i])area.Encapsulate(trucks[i].body.position);area.Expand(new Vector3(12,8,12));broadcast.view.orthographic=true;broadcast.Pose(area.center,new Vector3(0,110,-90),60);broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-110,90),Vector3.up);framing.arenaBounds=area;framing.Apply();
+            int focus=0;for(int i=0;i<setup.count;i++)if(rules.alive[i]){focus=i;break;}var area=new Bounds(trucks[focus].body.position,new Vector3(36,6,36));for(int i=0;i<setup.count;i++)if(rules.alive[i])area.Encapsulate(trucks[i].body.position);area.Expand(new Vector3(12,8,12));if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true;broadcast.Pose(area.center,new Vector3(0,110,-90),60);if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-110,90),Vector3.up);framing.arenaBounds=area;framing.Apply();
         }
         public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
         protected override void SetPaused(bool paused)=>atmosphere?.Pause(paused);

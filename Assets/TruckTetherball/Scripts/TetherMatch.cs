@@ -8,6 +8,7 @@ namespace LWS.TruckTetherball
 {
     public sealed class TetherMatch : SportsEventSession
     {
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){a.primary=f.Nearest(ball.position,true);if(a.primary<0)a.primary=f.Nearest(ball.position);a.Objective(ball.position,1.5f);a.reason="TETHERED BALL / CURRENT CONTEST";}
         public SportsEventTruck[] trucks;
         public SportsFragmentRig[] fragments;
         public Rigidbody ball;
@@ -107,7 +108,7 @@ namespace LWS.TruckTetherball
         protected override void Present(float dt)
         {
             if(drivingViews==null)return;if(ReplayControls){review.Tick();return;}drivingViews.Tick(dt);if(!drivingViews.NeedsArena)return;
-            var area=new Bounds(new Vector3(0,10,0),new Vector3(52,22,52));area.Encapsulate(ball.position);foreach(var truck in trucks)area.Encapsulate(truck.body.position);area.Expand(new Vector3(16,5,16));broadcast.view.orthographic=true;broadcast.Pose(area.center,new Vector3(0,105,-90),60);broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-105,90),Vector3.up);framing.arenaBounds=area;framing.Apply();
+            var area=new Bounds(new Vector3(0,10,0),new Vector3(52,22,52));area.Encapsulate(ball.position);foreach(var truck in trucks)area.Encapsulate(truck.body.position);area.Expand(new Vector3(16,5,16));if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true;broadcast.Pose(area.center,new Vector3(0,105,-90),60);if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-105,90),Vector3.up);framing.arenaBounds=area;framing.Apply();
         }
         public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
         protected override void SetPaused(bool paused)=>atmosphere?.Pause(paused);

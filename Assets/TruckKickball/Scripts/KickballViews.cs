@@ -97,7 +97,7 @@ namespace LWS.TruckKickball
                 // Switching this already-rendered camera to orthographic leaves
                 // its perspective command buffer covering the stadium. Keep the
                 // same projection through setup, broadcast, replay and rematches.
-                FrameStadium(camera);
+                if(rally.broadcast.broadcastFraming!=null&&rally.broadcast.broadcastFraming.enabled)rally.broadcast.Pose(match.ball.body.position,new Vector3(32,36,-38),58);else FrameStadium(camera);
                 return;
             }
             foreach (var v in rally.views) v.view.orthographic = false;

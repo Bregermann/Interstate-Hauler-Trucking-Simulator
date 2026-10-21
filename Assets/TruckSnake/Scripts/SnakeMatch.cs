@@ -5,6 +5,7 @@ using LWS.TruckSports;
 using LWS.TruckBowling;
 namespace LWS.TruckSnake {
  public sealed class SnakeMatch:SportsEventSession {
+  public override bool BroadcastParticipantActive(int slot)=>!rules.crashed[slot];
   public LWS.TruckTaxi.TruckTaxiTrafficAdapter traffic;public LWS.TruckTaxi.TruckTaxiPedestrianPopulation pedestrians;public SnakeWorld world;public SportsEventTruck[] trucks;public SnakeConvoy[] convoys;public SnakePickup[] pickups;
   public SportsDrivingViews drivingViews;public SportsEventCamera broadcast;public SportsChaosWeather atmosphere;public SportsWeatherPresets presets;
   public Material couplerMaterial;public AudioClip horn;public AudioSource[] horns;

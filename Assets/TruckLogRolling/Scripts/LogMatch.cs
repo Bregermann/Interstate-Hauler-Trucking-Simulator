@@ -2,6 +2,8 @@ using System;using System.Text;using UnityEngine;using LWS.TruckSports;using LWS
 namespace LWS.TruckLogRolling {
 public enum LogStage{Countdown,Balance,Splash,Replay,RoundResult}
 public sealed class LogMatch:SportsEventSession {
+ public override bool BroadcastParticipantActive(int slot)=>rules.alive[slot];
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){a.Objective(log.position,2);a.reason="FLOATING LOG / LIVE BALANCE CONTEST";}
  public LogFighter[] fighters;public Rigidbody log;public SportsFloatingBody buoyancy;public SportsEventCamera broadcast;public SportsCameraFit fit;public SportsMotionReplay replay;public SumoRules rules=new SumoRules();public LogStage Stage{get;private set;}public float Clock{get;private set;}public float Timer{get;private set;}public int ContactCount{get;set;}public int Draws{get;private set;}public int Falls{get;private set;}public float MaximumRoll{get;private set;}
  readonly Vector2[] ai=new Vector2[4];readonly float[] think=new float[4],stuck=new float[4],back=new float[4];readonly bool[] brace=new bool[4];readonly StringBuilder text=new StringBuilder(600);string notice="";bool skip;
  public override string Title=>"TRUCK LOG ROLLING";public override int MinimumPlayers=>2;public override int MaximumPlayers=>4;public override int OptionCount=>1;public override int WeatherCount=>1;public override string OptionLabel=>"FIRST TO FIVE · SOLO VS AI OR LOCAL";public override bool ReplayControls=>Stage==LogStage.Replay;

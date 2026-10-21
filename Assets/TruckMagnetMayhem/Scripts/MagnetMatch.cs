@@ -8,6 +8,7 @@ namespace LWS.TruckMagnetMayhem
 {
  public sealed class MagnetMatch:SportsEventSession
  {
+  public override void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing){int slot=framing.Nearest(framing.RequestedFocus,true);if(slot<0){slot=0;for(int i=1;i<setup.count;i++)if(carrying[i]&&!carrying[slot])slot=i;}action.primary=slot;int item=target[slot];if(item<0||rules.owners[item]>=0){float nearest=float.PositiveInfinity;item=-1;for(int i=0;i<scrap.Length;i++)if(rules.owners[i]<0){float d=(scrap[i].body.position-trucks[slot].body.position).sqrMagnitude;if(d<nearest){nearest=d;item=i;}}}if(item>=0)action.Objective(scrap[item].body.position,2);action.reason=carrying[slot]?"MAGNETIC HAUL / SCORING BAY":"LOCAL MAGNET CONTEST";}
   public SportsEventTruck[] trucks;public SportsFragmentRig[] fragments;public MagnetMetal[] truckMetal,scrap;public MagnetBay[] bays;public MagnetFields fields;public Transform scrapGroup;
   public SportsDrivingViews drivingViews;public SportsEventCamera broadcast;public SportsCameraFit framing;public SportsChaosWeather atmosphere;public SportsRecordedReview review;
   public MagnetSortingArm[] sortingArms;
@@ -104,7 +105,7 @@ namespace LWS.TruckMagnetMayhem
   protected override void Present(float dt)
   {
    if(drivingViews==null)return;if(ReplayControls){review.Tick();return;}drivingViews.Tick(dt);if(!drivingViews.NeedsArena)return;
-   var bounds=new Bounds(new Vector3(0,5,0),new Vector3(180,18,180));broadcast.view.orthographic=true;broadcast.Pose(bounds.center,new Vector3(0,135,-105),60);broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-135,105),Vector3.up);framing.arenaBounds=bounds;framing.Apply();
+   var bounds=new Bounds(new Vector3(0,5,0),new Vector3(180,18,180));if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true;broadcast.Pose(bounds.center,new Vector3(0,135,-105),60);if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-135,105),Vector3.up);framing.arenaBounds=bounds;framing.Apply();
   }
   public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
   protected override void SetPaused(bool paused)=>atmosphere?.Pause(paused);

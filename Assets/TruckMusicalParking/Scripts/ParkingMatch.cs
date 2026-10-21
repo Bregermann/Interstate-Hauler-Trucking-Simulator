@@ -3,6 +3,8 @@ namespace LWS.TruckMusicalParking {
 public enum ParkingPhase {Countdown,Music,Scramble,RoundResult,Complete}
 public enum ParkingAIState {Searching,Approaching,Parking,Recovery,Secured}
 public sealed class ParkingMatch:SportsEventSession {
+ public override bool BroadcastParticipantActive(int slot)=>active[slot];
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){int slot=f.Nearest(f.RequestedFocus,true);if(slot<0)slot=f.Nearest(f.RequestedFocus);a.primary=slot;if(slot<0)return;int best=-1;float distance=float.PositiveInfinity;for(int i=0;i<bays.Length;i++)if(bays[i].Open&&bays[i].Owner<0){float d=(bays[i].transform.position-trucks[slot].body.position).sqrMagnitude;if(d<distance){distance=d;best=i;}}if(best>=0)a.Objective(bays[best].transform.position,2);a.reason="AVAILABLE PARKING BAY / LOCAL CONTEST";}
  public SportsDrivingViews drivingViews;public override bool SupportsSplitAIViews=>true;public override bool AISplitViewsApplicable=>drivingViews!=null&&drivingViews.Mode!=0;public override bool MultiViewHUD=>drivingViews!=null&&!drivingViews.NeedsArena;public override void ExtraAction(string key){if(key=="drivingview")drivingViews?.Cycle();}public override string ViewText(int v){int i=drivingViews.rally.owners[v];return setup.players[i].name+" · ROUND "+Round+"\n"+Eligibility(i)+"\n"+(Phase==ParkingPhase.Music?"KEEP CIRCLING":"FIND A GREEN BAY");}
  public bool aiDiagnostics;public readonly ParkingAIState[] aiState=new ParkingAIState[8];public readonly string[] retargetReason=new string[8];
  readonly float[] navigationAge=new float[8],navigationProgress=new float[8],escapeUntil=new float[8],avoidUntil=new float[8];

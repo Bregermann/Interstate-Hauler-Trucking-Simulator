@@ -27,6 +27,7 @@ namespace LWS.TruckKickball
         public int Pitches { get; private set; }
         public int LegalKicks { get; private set; }
         public int CompletedPlays { get; private set; }
+        public int HomeRunRuns { get; private set; }
         public int PendingRuns => pendingRuns;
         public int Count => TeamSize * 2;
         public KickballPhase Phase { get; private set; }
@@ -41,7 +42,7 @@ namespace LWS.TruckKickball
             if (innings != 1 && innings != 3 && innings != 5 && innings != 7)
                 throw new ArgumentOutOfRangeException(nameof(innings));
             TeamSize = teamSize; RegulationInnings = innings; Inning = 1; BattingTeam = 0;
-            Outs = Balls = Strikes = Pitches = LegalKicks = CompletedPlays = pendingRuns = 0;
+            Outs = Balls = Strikes = Pitches = LegalKicks = CompletedPlays = pendingRuns = HomeRunRuns = 0;
             Array.Clear(Scores, 0, 2); Array.Clear(lineup, 0, 2);
             ClearRunners(); Batter = 0; Phase = KickballPhase.PitchReady;
         }
@@ -80,6 +81,7 @@ namespace LWS.TruckKickball
             Array.Copy(Base, startBase, 12); Array.Copy(Active, startActive, 12);
             Array.Clear(TagRequired, 0, 12); Array.Clear(ForcedTo, 0, 12);
             pendingRuns = 0; thirdOutWasForce = false;
+            HomeRunRuns = 0;
         }
 
         void SetForces()
@@ -181,8 +183,14 @@ namespace LWS.TruckKickball
 
         public bool HomeRun()
         {
-            if (Phase != KickballPhase.Live) return false;
-            for (int i = 0; i < Count; i++) if (Active[i]) ForcedTo[i] = 4;
+            if (Phase != KickballPhase.Live || Outs >= 3) return false;
+            // A legal fence clearance ends defensive play immediately. Include
+            // runners who already crossed home in this play, then seal credit;
+            // later collisions/base callbacks cannot create outs or extra runs.
+            HomeRunRuns = pendingRuns;
+            for (int i = 0; i < Count; i++) if (Active[i] && Team(i) == BattingTeam)
+            { HomeRunRuns++; Active[i] = false; ForcedTo[i] = 0; TagRequired[i] = false; }
+            Scores[BattingTeam] += HomeRunRuns; pendingRuns = 0;
             Phase = KickballPhase.HomeRun; return true;
         }
 

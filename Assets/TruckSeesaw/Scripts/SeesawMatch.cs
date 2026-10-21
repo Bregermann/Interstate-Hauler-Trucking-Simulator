@@ -8,6 +8,8 @@ namespace LWS.TruckSeesaw
 {
     public sealed class SeesawMatch : SportsEventSession
     {
+ public override bool BroadcastParticipantActive(int slot)=>rules.alive[slot];
+ public override void DescribeBroadcast(SportsBroadcastAction a,SportsBroadcastFraming f){a.Objective(platform.position,2);a.reason="WEIGHT BALANCE / LOCAL EDGE CONTEST";}
         public Rigidbody platform;
         public ConfigurableJoint pivot;
         public SportsEventTruck[] trucks;
@@ -142,11 +144,11 @@ namespace LWS.TruckSeesaw
                 {
                     var point=review.record.Position(review.focusSlot);var offset=review.record.Angle==0?new Vector3(22,52,-30):review.record.Angle==1?new Vector3(-26,48,24):new Vector3(0,65,-8);broadcast.Pose(point+Vector3.up*2,offset,60,true);
                     var board=review.record.ghosts[trucks.Length*2];var local=board.InverseTransformPoint(broadcast.transform.position);
-                    if(Mathf.Abs(local.x)<halfWidth+3&&Mathf.Abs(local.z)<halfWidth+3&&local.y<8){broadcast.transform.position+=board.up*(8-local.y);broadcast.transform.rotation=Quaternion.LookRotation(point+Vector3.up*2-broadcast.transform.position,Vector3.up);}
+                    if(Mathf.Abs(local.x)<halfWidth+3&&Mathf.Abs(local.z)<halfWidth+3&&local.y<8){broadcast.transform.position+=board.up*(8-local.y);if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(point+Vector3.up*2-broadcast.transform.position,Vector3.up);}
                 }
                 return;
             }drivingViews.Tick(dt);
-            if(drivingViews.NeedsArena){var area=new Bounds(platformOrigin,Vector3.zero);for(int corner=0;corner<8;corner++)area.Encapsulate(platform.transform.TransformPoint(new Vector3((corner&1)==0?-halfWidth:halfWidth,(corner&2)==0?-halfThickness:halfThickness,(corner&4)==0?-halfWidth:halfWidth)));area.Expand(new Vector3(20,20,20));for(int i=0;i<setup.count;i++)if(!crashed[i])area.Encapsulate(trucks[i].body.position);broadcast.view.orthographic=true;broadcast.Pose(area.center,new Vector3(0,170,-85),60);broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-170,85),Vector3.up);framing.arenaBounds=area;framing.Apply();}
+            if(drivingViews.NeedsArena){var area=new Bounds(platformOrigin,Vector3.zero);for(int corner=0;corner<8;corner++)area.Encapsulate(platform.transform.TransformPoint(new Vector3((corner&1)==0?-halfWidth:halfWidth,(corner&2)==0?-halfThickness:halfThickness,(corner&4)==0?-halfWidth:halfWidth)));area.Expand(new Vector3(20,20,20));for(int i=0;i<setup.count;i++)if(!crashed[i])area.Encapsulate(trucks[i].body.position);if(broadcast.LegacyPoseAllowed)broadcast.view.orthographic=true;broadcast.Pose(area.center,new Vector3(0,170,-85),60);if(broadcast.LegacyPoseAllowed)broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(0,-170,85),Vector3.up);framing.arenaBounds=area;framing.Apply();}
         }
         public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
         protected override void SetPaused(bool paused)=>atmosphere?.Pause(paused);

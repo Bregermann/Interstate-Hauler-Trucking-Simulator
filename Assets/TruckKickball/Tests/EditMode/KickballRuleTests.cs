@@ -54,8 +54,8 @@ namespace LWS.TruckKickball.Tests
         { rules.Pitch(); rules.Kick(); rules.TouchBase(rules.Batter, 1); Assert.That(rules.Tag(rules.Batter, true), Is.False); Assert.That(rules.Tag(rules.Batter, false)); }
         [Test] public void FlyOutRetiresKickerAndRequiresPhysicalTagUp()
         { Walk(); int runner = rules.Batter; rules.TouchBase(runner, 1); rules.FinishPlay(); rules.Pitch(); rules.Kick(); rules.FlyCaught(); Assert.That(rules.Outs, Is.EqualTo(1)); Assert.That(rules.TouchBase(runner, 2), Is.False); Assert.That(rules.TouchBase(runner, 1)); Assert.That(rules.TouchBase(runner, 2)); }
-        [Test] public void HomeRunRequiresEveryBaseInOrder()
-        { rules.Pitch(); rules.Kick(); rules.HomeRun(); Assert.That(rules.FinishPlay(), Is.False); for (int n = 1; n <= 4; n++) rules.TouchBase(rules.Batter, n); Assert.That(rules.FinishPlay()); Assert.That(rules.Scores[0], Is.EqualTo(1)); }
+        [Test] public void HomeRunSealsWithoutRequiringPhysicalBaseDriving()
+        { rules.Pitch(); rules.Kick(); rules.HomeRun(); Assert.That(rules.Scores[0], Is.EqualTo(1)); Assert.That(rules.TouchBase(rules.Batter, 1), Is.False); Assert.That(rules.FinishPlay()); Assert.That(rules.Scores[0], Is.EqualTo(1)); }
         [Test] public void ThirdForceOutCancelsSamePlayRuns()
         { StrikeOut(); StrikeOut(); Walk(); int runner = rules.Batter; rules.TouchBase(runner, 1); rules.FinishPlay(); rules.Pitch(); rules.Kick(); rules.TouchBase(runner, 2); rules.TouchBase(runner, 3); rules.TouchBase(runner, 4); Assert.That(rules.PendingRuns, Is.EqualTo(1)); rules.ForceAt(1); rules.FinishPlay(); Assert.That(rules.Scores[0], Is.Zero); }
         [Test] public void EarlierRunSurvivesThirdNonForceTag()

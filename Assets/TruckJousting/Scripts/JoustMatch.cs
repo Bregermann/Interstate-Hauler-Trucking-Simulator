@@ -93,7 +93,11 @@ namespace LWS.TruckJousting
         {
             if(drivingViews==null)return;if(ReplayControls){review.Tick();return;}drivingViews.Tick(dt);if(!drivingViews.NeedsArena)return;
             var area=new Bounds(new Vector3(0,3,0),new Vector3(22,8,30));foreach(var truck in trucks)area.Encapsulate(truck.body.position);area.Expand(new Vector3(12,4,20));
-            broadcast.view.orthographic=true;broadcast.Pose(area.center,new Vector3(130,95,-20),60);broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(-130,-95,20),Vector3.up);framing.arenaBounds=area;framing.Apply();
+            // The shared director is the only pose writer while it owns this shot.
+            // The old side-on rotation used to replace it between camera updates.
+            broadcast.Pose(area.center,new Vector3(130,95,-20),60);
+            if(broadcast.broadcastFraming==null||!broadcast.broadcastFraming.OwnsShot){broadcast.view.orthographic=true;broadcast.transform.rotation=Quaternion.LookRotation(new Vector3(-130,-95,20),Vector3.up);}
+            framing.arenaBounds=area;framing.Apply();
         }
         public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
         protected override void SetPaused(bool paused)=>atmosphere?.Pause(paused);
