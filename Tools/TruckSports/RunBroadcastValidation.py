@@ -64,7 +64,7 @@ def run(name, arguments):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
@@ -87,6 +87,12 @@ def main():
         run("trailer-geometry-audit", ["-quit", "-executeMethod", "LWS.TruckTrailerPlug.Editor.TrailerPlugRepairAuthoring.Audit"])
     elif args.stage == "trailer-author":
         run("trailer-rig-repair-authoring", ["-quit", "-executeMethod", "LWS.TruckTrailerPlug.Editor.TrailerPlugRepairAuthoring.Upgrade"])
+    elif args.stage == "field-audit":
+        run("field-goal-audio-holder-audit", ["-quit", "-executeMethod", "LWS.TruckFieldGoal.Editor.FieldGoalPlaytestRepairAuthoring.Audit"])
+    elif args.stage == "field-holder":
+        run("field-goal-holder-repair", ["-quit", "-executeMethod", "LWS.TruckFieldGoal.Editor.FieldGoalPlaytestRepairAuthoring.UpgradeHolder"])
+    elif args.stage == "field-audio":
+        run("field-goal-audio-repair", ["-quit", "-executeMethod", "LWS.TruckFieldGoal.Editor.FieldGoalPlaytestRepairAuthoring.UpgradeAudio"])
     elif args.stage == "tests":
         run(args.test_name, ["-runTests", "-testPlatform", args.test_platform, "-testFilter", args.test_filter, "-testResults", str(LOG / (args.test_name+".xml"))])
         result = ET.parse(LOG / (args.test_name + ".xml")).getroot()

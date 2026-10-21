@@ -145,3 +145,26 @@ VENDOR SOURCE MODIFIED: None.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: None; NWH owns coupling and free-wheel
 physics. All1019saved-scene dependencies were already tracked, with no new vendor
 payload required for this repair.
+
+
+### Field Goal holder and post-kick audio
+
+VENDOR ASSETS AUDITED: Existing NWH kicking/holder model hierarchy and native
+SuspensionThump.wav; SportsFeedback pooled sources and shared SportsSettings;
+Weather Maker Wind1; existing Hockey/Billiards cues and Dock crowd samples;
+DanceTruckRig choreography and DOTween, field/crowd/referee/presentation source.
+VENDOR ASSETS USED: Original NWH render model and existing tracked SuspensionThump
+as dedicated kick-slot7; existing DOTween for render-only holder celebration;
+Cinemachine shot foundation and existing feedback/crowd/wind/settings adapters.
+RELEVANT ASSETS NOT USED: Dance-Off's physical stage rig requires an authoritative
+kinematic truck, inappropriate for this render-only holder. Reuse DOTween rather
+than adding that physics authority. The billiard click remains for post clangs;
+it is no longer the football kick. No new crowd framework/sample fabrication.
+CUSTOM SYSTEMS CREATED: Game-specific holder alignment/choreography, confirmed-
+goal cutaway, one result-audio owner and post-contact debounce; explicit versioned
+scene upgrade and development-only game-listener PCM/source-timeline diagnostic.
+The isolated tap is read-only and accesses neither microphone nor system audio.
+VENDOR SOURCE MODIFIED: None.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: None; existing pooled playback, settings,
+NWH physics and DOTween remain authorities. No new vendor payload; thump already
+tracked. Scene/physics/scoring/branding preserved; human listening not claimed.

@@ -429,3 +429,91 @@ Next implementation: Field Goal broken post-kick audio, holder alignment and
 confirmed-goal celebration (HPR-1-1through1-4); source/vendor audit begun only.
 Fare's prolonged single-AI recovery failure and Hockey's unreproduced legal-goal
 report remain open. Do not mark the rest of the HPR/GBC directive complete.
+
+
+## Next Field Goal checkpoint
+
+Trailer repair committed/pushed as4e6db4a0to both existing branches; exact49384
+canonical build promoted with all544companion files verified, precedingc8build
+preserved atRecovery/AcceptedBuildBeforeCamera-20261021-155923.
+
+Field Goal source/scene inspection identified incorrect holder clone centering:
+old root(3.15,-9.5665,-.15), sideways270degreeheading and imported mesh local
+offset countered only inY. Native before tests0/2failed (sideways facing; missing
+confirmed-goal presentation). Explicit owned scene upgrade now measures actual
+model bounds, recenters the render model, places itbesidetheball(1.75,.04,-.45),
+facesuprightsandretainsitsauthoredscale. New DOTween render-only hops/wiggle
+start only after rules.Lock confirms a good goal, reset/kill on new attempts and
+setup, no Rigidbody/colliders/scoring authority. Brief confirmed-goal holder shot
+preserves active kicking/flight cameras. Native after tests2/2passed.
+This Field Goal work is not yet in a Windows executable or committed.
+
+Audio remains uncorrected/unreproduced. Source disproved the latched-engine
+hypothesis: FootContact already powers off the kicker. Scene audit maps the
+existing looping wind/engine sources and feedback assets; current miss crowd
+is synthesized tonal boo, and good goals call both crowd response and shared
+feedback cheer. Do not declare either the exact audible root without playback
+evidence. New explicit dev-only FieldGoalAudioPlaybackProbe records three actual
+AI bumper kicks, source start timeline and bounded game-listener PCM (no microphone
+or system audio), plus actual goal-holder frames if naturally scored. Next build
+should run this baseline before changing audio. Canonical49384remains accepted.
+
+
+Field Goal focused preservation native5/5passed: new holder2, existing field/end-zone
+all distances, crowd and referee event guards. First Windows audio diagnostic
+FieldAudioBefore on892515ea9ff3failed6checks/12errors before any kick because
+I placed the recording filter on the shared Authority object, which also contains
+multiple AudioSources. This is a diagnostic defect, not the reported game sound.
+Corrected capture owns an isolated child listener at exactly the original pose;
+it disables/restores the original and never reads microphone/system audio. New
+native listener-isolation/cleanup regression1/1passed. No gameplay audio changed.
+A full-solo diagnostic option now covers five real distances, rematch and menu
+cleanup while recording a bounded30-second PCM prefix and the source timeline.
+Next Windows run:FieldAudioBaseline2with-tsFieldAudio-tsFieldAudioFull.
+Current build session25256ownsEditor57652; do not open another Editor/player or
+writeCLEANassetsuntilitexits. Candidate output may be changing; canonical49384
+remains accepted. Native/source/scene changes are uncommitted Field Goal scope.
+
+
+FieldAudioBaseline2on4db5b35a completed actual Hard AI solo five-distance game
+9/0, five naturally earned goals, rematch/menu. Non-silent game DSP recorded
+1440000stereo frames at48kHz, peak0.1317098and0clipped samples. Timeline confirms
+exact double Exceptional cheer after each goal: crowd1.06pitch and pooled
+feedback1.00pitch. Engine alreadystopsafterkick; one kick cue, no repeated
+kick or output clipping reproduced. This identifies duplicate result ownership
+and a plausible warbling source, not subjective human listening acceptance.
+Actual720/1080holdercelebration images inspected; black steadying arm looked
+awkward after the ball left, so it now hides after launch and restores on setup.
+
+Audio ownership regression0/1failed before. Corrected native bundle7/7passed:
+existing crowd owns result sound once (legacy fallback if absent), dedicated
+existing tracked NWH SuspensionThump atslot7replaces the billiard kick click;
+post clangs have120msreal-timecooldown and late locked-result contacts are silent.
+Original vendor clip untouched. No invented crowd audio or changed football
+physics. Explicit versioned audio authoring preserves customized clip arrays.
+Probe now supports Easy/full modes and bounded90secondlistenercaptureincluding
+finalwhistle. No listening claim. Current corrected candidate building in owned
+Editor53952/session73149. Next run FieldAudioAfterHard/Easy; canonical49384
+remains accepted until corrected Windows acceptance, scoped commit/push pending.
+
+
+## Corrected Field Goal Windows acceptance
+
+Exact348e00165f235bb7fd2791552b2ff79f83321cfccbca49fbcb4ac9b8607fbe1f
+compiled102scoped sources and60scenes. FieldAudioAfterHard10/0in71.55seconds:
+5actual kicks,5goals. FieldAudioAfterEasy10/0in67.68seconds:5actualkicks,2goals/
+3misses. Both completed normal five-distance competitions, rematch and menu.
+Actual game-listener PCM peaks0.1636124/0.1635208,0clipped samples. After each
+goal only existing crowd source starts; before there was also a second pitched
+feedback cheer. Kick engine stops correctly, one thump per actual launch.
+Actual720/1080holder cutaway images inspected with steadying arm hidden.
+Objective HPR-1-2/1-3verified;1-1remains IMPLEMENTED/UNVERIFIED for subjective
+human listening. Severe-weather/controller preservation not newly revalidated.
+Native corrected bundle7/7passed. No human/listening/device acceptance invented.
+
+Source and scene changes ready for scoped preservation. Canonical promotion
+348eis copying/verifying all companion files and retaining prior49384. Next
+implementation is the real prolonged Fare Fight recovery failure (HPR-8-4),
+not a re-audit of the entire backlog. Still inspect actual NWH engine/damage/
+gear/wheel state before editing; transient reverse timing or damage are hypotheses,
+not confirmed causes. Hockey goal report remains unreproduced/open.

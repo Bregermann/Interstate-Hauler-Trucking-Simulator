@@ -5496,11 +5496,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Fix the Broken Audio After Kicking |
 | Original Request | Human testing revealed an extremely unpleasant, broken sound after kicking the football. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section1.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section1.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | FieldGoalMatch uses the existing crowd as the single result-audio owner, dedicated NWH SuspensionThump pool slot7 for physical kicks,120ms unscaled post debounce and silence for late post contacts after locked results. Explicit scene audio upgrade preserves later Inspector customization. No vehicle/scoring/weather changes. |
+| Automated Verification | Windows baseline4db5b35a9/0 recorded actual five goals and duplicate cheer at pitches1.06/1.00; no engine latch, repeated kick or clipping. Native before duplicate-owner0/1failed; corrected audio/holder/preservation7/7passed. Exact348e00165f23Hard10/0andEasy10/0, ten actual bumper kicks total,7goals/3misses, one result crowd owner, no clipped samples; measured peaks0.1636124/0.1635208. Complete solo competitions/rematch/menu and isolated listener cleanup passed. |
+| Human Verification | Recorded and measured this game's audio output only; no subjective listening or physical-device acceptance claimed. |
+| Remaining Work | Human listening must confirm the reported unpleasant sound is resolved to taste. Technical duplicate ownership/debounce/clip integration checks pass; no known remaining technical defect. |
 
 ### HPR-1-2 — Align the Holder Truck Correctly
 
@@ -5510,11 +5510,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Align the Holder Truck Correctly |
 | Original Request | The holder truck is currently positioned incorrectly relative to the football. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section1.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section1.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | FieldGoalPlaytestRepairAuthoring targeted holder scene upgrade; measured model centering corrects lost import offset, holder(1.75,.04,-.45)faces downfield. FieldGoalHolderPresentation uses DOTween render-only celebration after rules.Lock, resets with attempt/setup; brief confirmed-goal cutaway leaves active kicking/flight cameras intact. |
+| Automated Verification | Native before0/2failed; corrected combined bundle7/7passed holder grounding/side/orientation/scale, one confirmed-goal visual-only celebration/reset, audio and existing stadium tests. Exact348e00165f23Windows: FieldAudioAfterHard10/0(five real goals), FieldAudioAfterEasy10/0(two real goals/three misses), complete competitions/rematch/menu. Actual720p/1080p holder cutaway images inspected with arm hidden after launch. |
+| Human Verification | No human playtest or physical-controller acceptance claimed; native position/authority and actual Windows visual evidence recorded. |
+| Remaining Work | No known scoped implementation defect; human subjective animation/framing and physical-device acceptance unperformed. |
 
 ### HPR-1-3 — Holder Truck Victory Dance
 
@@ -5524,11 +5524,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Holder Truck Victory Dance |
 | Original Request | When a field goal succeeds, the holder truck should perform a cute celebration. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section1.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section1.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | FieldGoalPlaytestRepairAuthoring targeted holder scene upgrade; measured model centering corrects lost import offset, holder(1.75,.04,-.45)faces downfield. FieldGoalHolderPresentation uses DOTween render-only celebration after rules.Lock, resets with attempt/setup; brief confirmed-goal cutaway leaves active kicking/flight cameras intact. |
+| Automated Verification | Native before0/2failed; corrected combined bundle7/7passed holder grounding/side/orientation/scale, one confirmed-goal visual-only celebration/reset, audio and existing stadium tests. Exact348e00165f23Windows: FieldAudioAfterHard10/0(five real goals), FieldAudioAfterEasy10/0(two real goals/three misses), complete competitions/rematch/menu. Actual720p/1080p holder cutaway images inspected with arm hidden after launch. |
+| Human Verification | No human playtest or physical-controller acceptance claimed; native position/authority and actual Windows visual evidence recorded. |
+| Remaining Work | No known scoped implementation defect; human subjective animation/framing and physical-device acceptance unperformed. |
 
 ### HPR-1-4 — Preserve Other Football Features
 
@@ -5538,11 +5538,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Other Football Features |
 | Original Request | Keep the current: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section1.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section1.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Targeted FieldGoalMatch presentation hooks, existing holder render subtree and feedback clip array only. Actual bumper kick/flight/scoring rules, field/end zone/uprights/branding, selected weather and crowd framework preserved. |
+| Automated Verification | Native combined7/7includes existing all-distance field/board alignment and crowd/referee authority tests. Exact348e00165f23Hard/Easy complete Windows competitions10/0each,10actual kicks,7goals/3misses, rematch/menu. Hard before/after both5/5goals; no goal physics changes. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Severe weather and physical controllers unchanged and not revalidated in this focused pass; human playtest/listening unperformed. |
 
 ### HPR-2-1 — Restore Actual Fish Catching
 
@@ -7166,11 +7166,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckBungeeDemolition |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; existing replay/precision authority preserved. Exact scene name verified against camera-scene-bindings.txt. |
+| Automated Verification | Windows c8 FinalCamera33:693/0 across33bound scenes, actual720p/1080p projected vehicle size/objective/zoom bounds, human cues,1-4software-human ownership, AI-only rematch and spectator retirement. Targeted camera/render fixtures, not complete human matches for all scenes. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness and physical-controller acceptance unperformed; unrelated gameplay requirements remain separate. |
 
 #### GBC-SPORT-TruckFishing
 
@@ -7306,11 +7306,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckTrampolineDodgeball |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; existing replay/precision authority preserved. Exact scene name verified against camera-scene-bindings.txt. |
+| Automated Verification | Windows c8 FinalCamera33:693/0 across33bound scenes, actual720p/1080p projected vehicle size/objective/zoom bounds, human cues,1-4software-human ownership, AI-only rematch and spectator retirement. Targeted camera/render fixtures, not complete human matches for all scenes. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness and physical-controller acceptance unperformed; unrelated gameplay requirements remain separate. |
 
 #### GBC-SPORT-TruckDemolitionDerby
 
@@ -7320,11 +7320,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckDemolitionDerby |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; existing replay/precision authority preserved. Exact scene name verified against camera-scene-bindings.txt. |
+| Automated Verification | Windows c8 FinalCamera33:693/0 across33bound scenes, actual720p/1080p projected vehicle size/objective/zoom bounds, human cues,1-4software-human ownership, AI-only rematch and spectator retirement. Targeted camera/render fixtures, not complete human matches for all scenes. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness and physical-controller acceptance unperformed; unrelated gameplay requirements remain separate. |
 
 #### GBC-SPORT-TruckPedestrianPlowing
 
