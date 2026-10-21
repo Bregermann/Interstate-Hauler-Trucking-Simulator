@@ -9,9 +9,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 LOG = ROOT / "Logs/TruckSports/EighteenSports"
-MODES = {"hide":"-tsHide", "hide-adapters":"-tsHideAdapters", "hauler":"-tsHauler", "herd":"-tsHerd", "volley": "-tsVolley", "freeze": "-tsFreeze", "magnet": "-tsMagnet", "hot-potato": "-tsHotPotato", "red-light": "-tsRedLight", "balloon": "-tsBalloon", "whack": "-tsWhack", "hill": "-tsHill", "seesaw": "-tsSeesaw", "lava": "-tsLava", "tether": "-tsTether", "joust": "-tsJoust", "snow": "-tsExpansionSnow", "menu": "-tsRetroMenu"}
+MODES = {"frog":"-tsFrog", "avalanche":"-tsAvalanche", "ninja":"-tsNinja", "hide":"-tsHide", "hide-adapters":"-tsHideAdapters", "hauler":"-tsHauler", "herd":"-tsHerd", "volley": "-tsVolley", "freeze": "-tsFreeze", "magnet": "-tsMagnet", "hot-potato": "-tsHotPotato", "red-light": "-tsRedLight", "balloon": "-tsBalloon", "whack": "-tsWhack", "hill": "-tsHill", "seesaw": "-tsSeesaw", "lava": "-tsLava", "tether": "-tsTether", "joust": "-tsJoust", "snow": "-tsExpansionSnow", "menu": "-tsRetroMenu"}
 
-RESULTS = {mode: LOG / folder / "result.txt" for mode,folder in {"hide":"Hide","hide-adapters":"HideAdapters","hauler":"Hauler","herd":"Herd","volley":"Volley","freeze":"Freeze","magnet":"Magnet","hot-potato":"HotPotato","red-light":"RedLight","balloon":"Balloon","whack":"Whack","hill":"Hill","seesaw":"Seesaw","lava":"Lava","tether":"Tether","joust":"Joust","snow":"Snow"}.items()}
+RESULTS = {mode: LOG / folder / "result.txt" for mode,folder in {"frog":"Frog","avalanche":"Avalanche","ninja":"Ninja","hide":"Hide","hide-adapters":"HideAdapters","hauler":"Hauler","herd":"Herd","volley":"Volley","freeze":"Freeze","magnet":"Magnet","hot-potato":"HotPotato","red-light":"RedLight","balloon":"Balloon","whack":"Whack","hill":"Hill","seesaw":"Seesaw","lava":"Lava","tether":"Tether","joust":"Joust","snow":"Snow"}.items()}
 RESULTS["menu"] = ROOT / "Logs/TruckSports/PresentationSprint/Menu/result.txt"
 
 
@@ -26,17 +26,7 @@ def main():
     LOG.mkdir(parents=True, exist_ok=True)
     if not args.skip_build:
         project = ROOT / ".sports-validation/TruckSportsPublicValidation"
-        jobs = [
-            ("LWS.TruckFloorIsLava.Editor.LavaIntegration.Menu", "lava-menu-integration.log"),
-            ("LWS.TruckHotPotato.Editor.HotPotatoAuthoring.Upgrade", "hot-potato-delivery-authoring.log"),
-            ("LWS.TruckRedLightGreenLight.Editor.RedLightAuthoring.Upgrade", "red-light-delivery-authoring.log"),
-            ("LWS.TruckBalloonBattle.Editor.BalloonAuthoring.Upgrade", "balloon-delivery-authoring.log"),
-            ("LWS.TruckSeesaw.Editor.SeesawIntegration.Menu", "seesaw-menu-integration.log"),
-            ("LWS.TruckKingOfTheHill.Editor.HillIntegration.Menu", "hill-menu-integration.log"),
-            ("LWS.TruckWhackAMole.Editor.WhackIntegration.Menu", "whack-menu-integration.log"),
-            ("LWS.TruckBalloonBattle.Editor.BalloonIntegration.Menu", "balloon-menu-integration.log"),
-            ("LWS.TruckSports.Editor.SportsBuilder.BuildFocused", "windows-build-verified.log"),
-        ]
+        jobs = [("LWS.TruckSports.Editor.ExpansionFinalIntegration.Menu", "final-menu-integration.log"), ("LWS.TruckSports.Editor.SportsBuilder.BuildFocused", "windows-build-verified.log")]
         for method, name in jobs:
             process = subprocess.Popen([args.unity, "-batchmode", "-quit", "-projectPath", str(project), "-executeMethod", method, "-logFile", str(LOG / name)], cwd=ROOT)
             print(method, "PID", process.pid, flush=True)

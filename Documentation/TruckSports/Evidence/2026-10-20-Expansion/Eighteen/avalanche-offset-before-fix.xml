@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-21 03:52:21Z" end-time="2026-10-21 03:52:22Z" duration="1.533894">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2858" result="Failed" site="Child" start-time="2026-10-21 03:52:21Z" end-time="2026-10-21 03:52:22Z" duration="1.533894" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2028" name="LWS.TruckSports.Avalanche.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.Avalanche.EditModeTests.dll" runstate="Runnable" testcasecount="23" result="Failed" site="Child" start-time="2026-10-21 03:52:21Z" end-time="2026-10-21 03:52:22Z" duration="1.493446" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="48724" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="2018" name="AvalancheSceneTests" fullname="AvalancheSceneTests" classname="AvalancheSceneTests" runstate="Runnable" testcasecount="9" result="Failed" site="Child" start-time="2026-10-21 03:52:21Z" end-time="2026-10-21 03:52:22Z" duration="1.492003" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="2025" name="AIAdvancesAtItsActualOffsetWaypoint" fullname="AvalancheSceneTests.AIAdvancesAtItsActualOffsetWaypoint" methodname="AIAdvancesAtItsActualOffsetWaypoint" classname="AvalancheSceneTests" runstate="Runnable" seed="1991870853" result="Failed" start-time="2026-10-21 03:52:22Z" end-time="2026-10-21 03:52:22Z" duration="0.020255" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  A truck at its real15m-offset waypoint must advance even when outside the centreline13m radius.
+  Expected: 11
+  But was:  10
+]]></message>
+            <stack-trace><![CDATA[at AvalancheSceneTests.AIAdvancesAtItsActualOffsetWaypoint () [0x00123] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckAvalancheEscape\Tests\Editor\AvalancheSceneTests.cs:17
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

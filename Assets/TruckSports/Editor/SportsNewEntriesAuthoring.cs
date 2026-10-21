@@ -35,6 +35,9 @@ namespace LWS.TruckSports.Editor
             Add(front,"whackamole","WHACK-A-MOLE","TRUCK WHACK-A-MOLE","Bumper-whack animated moles. Chase golden stars. Dodge explosive decoys.","TruckWhackAMole");
             Add(front,"kingofthehill","KING OF THE HILL","TRUCK KING OF THE HILL","Shove rivals off the crown. Five connected mountain plateaus. Hold60seconds to win.","TruckKingOfTheHill");
             Add(front,"seesaw","SEESAW","TRUCK SEESAW","Four trucks. One physical wobble board. Shift weight above a giant quarry.","TruckSeesaw");
+            Add(front,"frogger","FROGGER","TRUCK FROGGER","Traffic, trains, river barges and heavy machinery. Five one-life crossing challenges.","TruckFrogger");
+            Add(front,"avalanche","AVALANCHE ESCAPE","TRUCK AVALANCHE ESCAPE","Twelve trucks. An advancing snow wall. Pick your route and escape the mountain.","TruckAvalancheEscape");
+            Add(front,"ninjawarrior","NINJA WARRIOR","TRUCK NINJA WARRIOR","Six real game-show obstacles. Squat, jump and bumper-strike the victory bell.","TruckNinjaWarrior");
             Add(front,"hideandseek","HIDE & SEEK","TRUCK HIDE & SEEK","One original seeker. Seven hiding trucks. Stop your engine. Search the industrial night.","TruckHideAndSeek");
             Add(front,"hungryhaulers","HUNGRY HAULERS","HUNGRY HUNGRY HAULERS","Scoop real bouncing balls. Fill your hopper. Bank your cargo. Beware the fuse balls.","TruckHungryHaulers");
             Add(front,"sheepherding","SHEEP HERDING","TRUCK SHEEP HERDING","Gentle driving. Big horns. Guide the animated flock into your color pen.","TruckSheepHerding");

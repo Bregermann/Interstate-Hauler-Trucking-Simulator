@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-21 05:48:20Z" end-time="2026-10-21 05:48:22Z" duration="1.5990606">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2868" result="Failed" site="Child" start-time="2026-10-21 05:48:20Z" end-time="2026-10-21 05:48:22Z" duration="1.599061" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2321" name="LWS.TruckSports.Ninja.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.Ninja.EditModeTests.dll" runstate="Runnable" testcasecount="32" result="Failed" site="Child" start-time="2026-10-21 05:48:20Z" end-time="2026-10-21 05:48:22Z" duration="1.561905" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="53348" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="2310" name="NinjaSceneTests" fullname="NinjaSceneTests" classname="NinjaSceneTests" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2026-10-21 05:48:20Z" end-time="2026-10-21 05:48:22Z" duration="1.560123" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="2318" name="WeightDrivenDecksDoNotIntersectUnconnectedStaticGeometry" fullname="NinjaSceneTests.WeightDrivenDecksDoNotIntersectUnconnectedStaticGeometry" methodname="WeightDrivenDecksDoNotIntersectUnconnectedStaticGeometry" classname="NinjaSceneTests" runstate="Runnable" seed="1053325739" result="Failed" start-time="2026-10-21 05:48:22Z" end-time="2026-10-21 05:48:22Z" duration="0.015525" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Genuine weight-driven seesaw bridge intersects Actual full-sized physical obstacle deck at (0.00, 11.50, 368.00) depth=1.1 normal=(0.00, -1.00, 0.00)
+Genuine weight-driven seesaw bridge intersects Actual full-sized physical obstacle deck at (0.00, 11.50, 449.00) depth=1.1 normal=(0.00, -1.00, 0.00)
+  Expected: <empty>
+  But was:  < "Genuine weight-driven seesaw bridge intersects Actual full-sized physical obstacle deck at (0.00, 11.50, 368.00) depth=1.1 normal=(0.00, -1.00, 0.00)", "Genuine weight-driven seesaw bridge intersects Actual full-sized physical obstacle deck at (0.00, 11.50, 449.00) depth=1.1 normal=(0.00, -1.00, 0.00)" >
+]]></message>
+            <stack-trace><![CDATA[at NinjaSceneTests.WeightDrivenDecksDoNotIntersectUnconnectedStaticGeometry () [0x0020e] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckNinjaWarrior\Tests\Editor\NinjaSceneTests.cs:19
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

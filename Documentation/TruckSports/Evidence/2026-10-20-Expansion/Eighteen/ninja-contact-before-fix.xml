@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-21 05:31:01Z" end-time="2026-10-21 05:31:03Z" duration="1.587465">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2867" result="Failed" site="Child" start-time="2026-10-21 05:31:01Z" end-time="2026-10-21 05:31:03Z" duration="1.587465" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2320" name="LWS.TruckSports.Ninja.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.Ninja.EditModeTests.dll" runstate="Runnable" testcasecount="31" result="Failed" site="Child" start-time="2026-10-21 05:31:01Z" end-time="2026-10-21 05:31:03Z" duration="1.522070" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="49352" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="2310" name="NinjaSceneTests" fullname="NinjaSceneTests" classname="NinjaSceneTests" runstate="Runnable" testcasecount="9" result="Failed" site="Child" start-time="2026-10-21 05:31:01Z" end-time="2026-10-21 05:31:03Z" duration="1.520060" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="2316" name="StartingDeckDoesNotPenetrateTheFirstTiltingStep" fullname="NinjaSceneTests.StartingDeckDoesNotPenetrateTheFirstTiltingStep" methodname="StartingDeckDoesNotPenetrateTheFirstTiltingStep" classname="NinjaSceneTests" runstate="Runnable" seed="18376926" result="Failed" start-time="2026-10-21 05:31:03Z" end-time="2026-10-21 05:31:03Z" duration="0.015282" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Unloaded moving step intersects solid starting deck: depth=1 normal=(0.00, -1.00, 0.00)
+  Expected: False
+  But was:  True
+]]></message>
+            <stack-trace><![CDATA[at NinjaSceneTests.StartingDeckDoesNotPenetrateTheFirstTiltingStep () [0x000a4] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckNinjaWarrior\Tests\Editor\NinjaSceneTests.cs:17
+]]></stack-trace>
+          </failure>
+        </test-case>
+        <test-case id="2317" name="WeightDrivenDecksAreJointedToTheirOwnCollisionIsolatedSupports" fullname="NinjaSceneTests.WeightDrivenDecksAreJointedToTheirOwnCollisionIsolatedSupports" methodname="WeightDrivenDecksAreJointedToTheirOwnCollisionIsolatedSupports" classname="NinjaSceneTests" runstate="Runnable" seed="66049266" result="Failed" start-time="2026-10-21 05:31:03Z" end-time="2026-10-21 05:31:03Z" duration="0.003346" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Weight-tilting giant step 0 needs its own hinge support rather than collisions between the deck and interlocking static support.
+  Expected: not null
+  But was:  null
+]]></message>
+            <stack-trace><![CDATA[at NinjaSceneTests.WeightDrivenDecksAreJointedToTheirOwnCollisionIsolatedSupports () [0x00080] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckNinjaWarrior\Tests\Editor\NinjaSceneTests.cs:18
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,58 @@
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+using System;
+using System.Collections;
+using System.IO;
+using System.Text;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
+using LWS.TruckSports;
+using LWS.TruckBowling;
+namespace LWS.TruckNinjaWarrior
+{
+ public sealed class NinjaProbe:MonoBehaviour
+ {
+  const string Folder="Logs/TruckSports/EighteenSports/Ninja";readonly StringBuilder report=new StringBuilder();IDisposable preferences;NinjaMatch match;int checks,errors;float deadline;Gamepad[] pads;InputSettings.BackgroundBehavior background;
+#if UNITY_EDITOR
+ InputSettings.EditorInputBehaviorInPlayMode editorInput;
+#endif
+  [RuntimeInitializeOnLoadMethod]static void Boot(){bool run=Array.IndexOf(Environment.GetCommandLineArgs(),"-tsNinja")>=0;
+#if UNITY_EDITOR
+   run|=UnityEditor.SessionState.GetBool("Sports.Ninja.Probe",false);UnityEditor.SessionState.SetBool("Sports.Ninja.Probe",false);
+#endif
+   if(run){var g=new GameObject("Explicit physical Ninja acceptance");DontDestroyOnLoad(g);g.AddComponent<SportsProbeInputIsolation>();g.AddComponent<NinjaProbe>();}}
+  void Check(bool yes,string message){checks++;if(!yes)errors++;report.AppendLine((yes?"PASS ":"FAIL ")+message);File.WriteAllText(Folder+"/progress.txt",report.ToString());}
+  void Error(string message,string stack,LogType type){if(type==LogType.Error||type==LogType.Exception){errors++;report.AppendLine("ERROR "+message+"\n"+stack);}}
+  void Update(){if(deadline>0&&Time.realtimeSinceStartup>deadline){deadline=0;Check(false,"bounded physical Ninja probe deadline");StopAllCoroutines();match?.SetupScreen();Complete();}if(match!=null&&match.Paused&&match.DevicesReady){match.Resume();Time.timeScale=1;}}
+  IEnumerator Start()
+  {
+   Directory.CreateDirectory(Folder);preferences=SportsPrefs.IsolateValidation("Ninja");background=InputSystem.settings.backgroundBehavior;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
+#if UNITY_EDITOR
+ editorInput=InputSystem.settings.editorInputBehaviorInPlayMode;InputSystem.settings.editorInputBehaviorInPlayMode=InputSettings.EditorInputBehaviorInPlayMode.AllDeviceInputAlwaysGoesToGameView;
+#endif
+Application.logMessageReceived+=Error;deadline=Time.realtimeSinceStartup+500;yield return SportsProbeScene.Ensure<NinjaMatch>("TruckNinjaWarrior");yield return null;match=FindAnyObjectByType<NinjaMatch>();var m=match;Check(m!=null&&m.course.obstacles.Length==6&&m.trucks.Length==8,"saved full six-obstacle scene and eight actual NWH athletes");if(m==null){Complete();yield break;}
+   m.atmosphere.presets.Select(Array.Find(m.atmosphere.presets.entries,p=>p.legacyKind==SportsWeatherKind.Clear).id);m.setup.count=1;m.option=0;m.AllBots();m.setup.players[0].difficulty=BowlingDifficulty.Hard;Check(m.StartMatch(),"actual AI timed run starts through setup");Time.timeScale=1;float until=Time.realtimeSinceStartup+240,next=0,nextTrajectory=0;bool captured=false,unloadedChecked=false;var unloadedPlatforms=Array.FindAll(m.course.movingBodies,p=>p.GetComponent<ConfigurableJoint>()!=null&&(p.name.Contains("step")||p.name.Contains("seesaw")));var unloadedRotations=Array.ConvertAll(unloadedPlatforms,p=>p.rotation);
+#if UNITY_EDITOR
+   if(UnityEditor.SessionState.GetBool("Sports.Ninja.WallDiagnostic",false)){UnityEditor.SessionState.SetBool("Sports.Ninja.WallDiagnostic",false);report.AppendLine("FOCUSED WARPED WALL DIAGNOSTIC ONLY; prior checkpoints injected, not full-course acceptance.");while(m.rules.Phase==NinjaPhase.Countdown)yield return null;for(int i=1;i<=5;i++)m.rules.Clear(0,i);m.trucks[0].Prepare(new Vector3(0,12.65f,580),Quaternion.identity);Physics.SyncTransforms();until=Time.realtimeSinceStartup+35;while(!m.Finished&&Time.realtimeSinceStartup<until){if(m.rules.Clock>=next){next=m.rules.Clock+.2f;report.AppendLine("WALL time="+m.rules.Clock+" position="+m.trucks[0].body.position+" velocity="+m.trucks[0].body.linearVelocity+" forward="+m.trucks[0].transform.forward+" command="+m.trucks[0].command+" charge="+m.athletes[0].Compression+" "+m.DriveTelemetry);File.WriteAllText(Folder+"/progress.txt",report.ToString());}yield return null;}Check(m.rules.finished[0]&&m.ActualBells==1,"focused real warped-wall drive, jump and bell contact");Complete();yield break;}
+#endif
+   while(!m.Finished&&Time.realtimeSinceStartup<until){if(!unloadedChecked&&m.rules.Phase==NinjaPhase.Running&&m.rules.Clock>.4f){unloadedChecked=true;bool stable=true;for(int i=0;i<unloadedPlatforms.Length;i++){var platform=unloadedPlatforms[i];var joint=platform.GetComponent<ConfigurableJoint>();stable&=!platform.isKinematic&&Quaternion.Angle(platform.rotation,unloadedRotations[i])<.5f&&joint.connectedBody!=null&&Vector3.Distance(platform.transform.TransformPoint(joint.anchor),joint.connectedBody.transform.TransformPoint(joint.connectedAnchor))<.05f;}Check(stable,"unloaded steps and seesaw release level at their actual anchors without overlap impulses");}if(m.athletes[0].Jumps==1&&m.ActualRecoveries==0&&m.rules.Clock>=nextTrajectory){nextTrajectory=m.rules.Clock+.1f;report.AppendLine("TRAJECTORY time="+m.rules.Clock+" position="+m.trucks[0].body.position+" velocity="+m.trucks[0].body.linearVelocity); }if(Time.realtimeSinceStartup>next){next=Time.realtimeSinceStartup+5;report.AppendLine("PHYSICAL_RUN time="+m.rules.Clock+" checkpoint="+m.rules.Checkpoint+" position="+m.trucks[0].body.position+" speed="+m.trucks[0].body.linearVelocity+" jumps="+m.athletes[0].Jumps+" super="+m.athletes[0].SuperJumps+" falls="+m.ActualRecoveries+" command="+m.trucks[0].command+" grounded="+m.athletes[0].Grounded+" charge="+m.athletes[0].Compression+" "+m.DriveTelemetry);File.WriteAllText(Folder+"/progress.txt",report.ToString());}if(!captured&&m.rules.Clock>7){captured=true;float captureScale=Time.timeScale;Time.timeScale=0;yield return SportsWindowCapture.Save(1280,720,Folder+"/course-720.png");yield return SportsWindowCapture.Save(1920,1080,Folder+"/course-1080.png");Time.timeScale=captureScale;}yield return null;}
+   Time.timeScale=1;Check(m.Finished,"timed attempt reaches results without a softlock");Check(m.rules.finished[0]&&m.ActualBells==1,"AI physically clears all six obstacles and strikes the actual bell");Check(m.athletes[0].Jumps>0&&m.athletes[0].SuperJumps>0,"AI uses actual grounded jump and charged suspension abilities");Check(m.rules.cleared[0]==6,"every actual ordered checkpoint is cleared");yield return SportsWindowCapture.Save(1280,720,Folder+"/results-720.png");string resultBefore=m.Results;m.ExtraAction("watchninja");yield return new WaitForSecondsRealtime(.2f);Check(m.review.Playing,"actual full-course highlight replay starts");yield return SportsWindowCapture.Save(1280,720,Folder+"/replay-720.png");m.ExtraAction("replayskip");Check(m.Results==resultBefore,"replay cannot change actual times, penalties or bell results");m.SetupScreen();
+   Check(m.StartMatch()&&m.rules.Checkpoint==0&&m.ActualRecoveries==0,"rematch resets timer, obstacle state, penalties and checkpoints");Time.timeScale=4;while(m.rules.Phase==NinjaPhase.Countdown)yield return null;var t=m.trucks[0];t.Prepare(new Vector3(0,-1,-40),Quaternion.identity);Physics.SyncTransforms();float end=Time.realtimeSinceStartup+3;while(m.ActualRecoveries==0&&Time.realtimeSinceStartup<end)yield return null;Check(m.ActualRecoveries==1&&m.rules.falls[0]==1&&m.rules.Penalty==5,"real water fall applies exactly one five-second penalty and checkpoint recovery");Check(t.body.position.y>10,"water recovery physically returns to the latest safe platform");m.SetupScreen();
+   Check(m.StartMatch(),"constrained beached-truck recovery fixture starts through setup");Time.timeScale=1;while(m.rules.Phase==NinjaPhase.Countdown)yield return null;var jammed=m.trucks[0];var originalConstraints=jammed.body.constraints;try{jammed.Prepare(m.course.movingBodies[1].position+Vector3.up*3.5f,Quaternion.Euler(0,0,180));jammed.body.constraints=originalConstraints|RigidbodyConstraints.FreezeRotation|RigidbodyConstraints.FreezePositionX|RigidbodyConstraints.FreezePositionZ;Physics.SyncTransforms();end=Time.realtimeSinceStartup+14;while(m.ActualRecoveries==0&&Time.realtimeSinceStartup<end)yield return null;}finally{jammed.body.constraints=originalConstraints;}Check(m.ActualRecoveries==1&&m.rules.falls[0]==1&&m.rules.Penalty==5,"actual jammed NWH truck recovers once with exactly one five-second penalty");Check(m.rules.Checkpoint==0&&jammed.transform.up.y>.9f&&jammed.body.position.z<m.course.start.z+15,"stuck recovery returns upright to the earned checkpoint without granting progress");m.SetupScreen();
+   pads=new Gamepad[4];for(int i=0;i<4;i++)pads[i]=InputSystem.AddDevice<Gamepad>("Ninja independent source "+i);
+   for(int humans=1;humans<=4;humans++){m.setup.count=4;m.AllBots();for(int i=0;i<humans;i++){m.setup.players[i].source=BowlingSource.WholeController;m.setup.players[i].pad=pads[i];InputSystem.QueueStateEvent(pads[i],new GamepadState());}Check(m.StartMatch(),humans+" human alternating timed match starts");m.drivingViews.Select(2);yield return new WaitForSeconds(.2f);Check(m.cameras.Length==1&&m.cameras[0].rect==new Rect(0,0,1,1)&&m.drivingViews.rally.owners[0]==m.rules.Active,"active athlete owns the full-screen cab without duplicate AI viewports");Time.timeScale=4;while(m.rules.Phase==NinjaPhase.Countdown)yield return null;if(humans==1)Check(!m.Status.Contains("SPLASH")&&!m.Status.Contains("STUCK RECOVERY")&&m.rules.Penalty==0,"rematch clears prior fall announcements as well as the penalty clock");InputSystem.QueueStateEvent(pads[0],new GamepadState().WithButton(GamepadButton.East));yield return new WaitForSeconds(.35f);Check(m.athletes[0].Compression>.65f,"assigned controller compression lowers actual NWH spring travel");InputSystem.QueueStateEvent(pads[0],new GamepadState().WithButton(GamepadButton.South));yield return new WaitForSeconds(.15f);Check(m.athletes[0].SuperJumps==1&&m.trucks[0].body.linearVelocity.y>2,"assigned jump plus compression release produces a real super-jump");InputSystem.QueueStateEvent(pads[0],new GamepadState{rightTrigger=.8f});yield return new WaitForSeconds(.12f);bool isolated=m.commands[0].y>.5f;for(int i=1;i<humans;i++)isolated&=m.commands[i]==Vector2.zero;Check(isolated,"human drive sources remain independently owned during alternating attempts");InputSystem.QueueStateEvent(pads[0],new GamepadState());if(humans==4)yield return SportsWindowCapture.Save(1280,720,Folder+"/cab-720.png");m.SetupScreen();Time.timeScale=1;}
+   Complete();
+  }
+  void Complete(){report.AppendLine("CHECKS="+checks+" ERRORS="+errors+"; platform="+Application.platform+"; actual NWH physics, no hardware or human-playtest certification.");File.WriteAllText(Folder+"/result.txt",report.ToString());Application.logMessageReceived-=Error;
+#if UNITY_EDITOR
+   if(Application.isEditor)UnityEditor.EditorApplication.isPlaying=false;else
+#endif
+   Application.Quit(errors==0?0:2);}
+  void OnDestroy(){Application.logMessageReceived-=Error;if(pads!=null)foreach(var pad in pads)if(pad!=null&&pad.added)InputSystem.RemoveDevice(pad);InputSystem.settings.backgroundBehavior=background;
+#if UNITY_EDITOR
+ InputSystem.settings.editorInputBehaviorInPlayMode=editorInput;
+#endif
+ preferences?.Dispose();SportsParticipantRegistry.ForgetCache();Time.timeScale=1;}
+ }
+}
+#endif

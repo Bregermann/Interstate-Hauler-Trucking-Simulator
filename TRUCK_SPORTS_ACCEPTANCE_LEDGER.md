@@ -6,7 +6,7 @@ Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED
 
 ## Active work
 
-Git reconciliation is verified (LD-004); public main is synchronized and local/private work is recoverable. The new18-sport expansion is now active, in the original request's recommended vertical-slice order. Source requirements and UI addendum are preserved in Documentation/TruckSports/Requests/. Earlier focused-sprint implementation/evidence remains recorded; its human/device/listening limits have not disappeared.
+Git reconciliation is verified (LD-004); public main is synchronized and local/private work is recoverable. All18requested expansion sports are implemented and integrated in the60-scene Windows build. The individual entries retain automated evidence separately from outstanding human, physical-device, listening and extended-soak acceptance. Source requirements and UI addendum are preserved in Documentation/TruckSports/Requests/. Earlier focused-sprint implementation/evidence remains recorded; its human/device/listening limits have not disappeared.
 
 Expansion order: Red Light Green Light, Hot Potato, Balloon Battle, Whack-a-Mole, King of the Hill; Seesaw, Floor Is Lava, Tetherball, Jousting, Magnet Mayhem; Volleyball, Freeze Tag, Hungry Hungry Haulers, Sheep Herding; Hide and Seek, Frogger, Avalanche Escape, Ninja Warrior. Do not create18empty scenes or count registry entries as gameplay.
 
@@ -1636,20 +1636,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 4 (TRUCK FROGGER), including all confirmed design decisions. |
 | Acceptance Criteria | All five challenges must be independently selectable and completable. One life per attempt. Fastest successful run receives the point. Five-challenge championship correctly determines the winner. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckFrogger/Scripts/FrogRules.cs; Tests/Editor/FrogRulesTests.cs. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local first runtime/authoring draft now covers five independent challenges, real UTS traffic, train/barge/industrial movers, alternating one-life timing, physical gates, cameras and targeted probes. Not compiled or accepted yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | All five challenges must be independently selectable and completable. One life per attempt. Fastest successful run receives the point. Five-challenge championship correctly determines the winner. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | No Frogger runtime/world/scene integration yet. Rules tests are written but not executed. |
-| Last Verification Date | None |
-| Remaining Work | Integrate genuine UTS/rail/platform/industrial challenges, physical event ordering, hazard-aware AI, UI, scene and native/Windows validation. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX04-AI
@@ -1660,20 +1660,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 4 (TRUCK FROGGER), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX04-ENV
@@ -1684,20 +1684,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 4 (TRUCK FROGGER), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX04-LOGO
@@ -1708,20 +1708,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Assets/TruckSports/Art/Logos/TruckFrogger.png; Tools/TruckSports/ArtworkSources/TruckFrogger.json. |
-| Implementation Evidence | Local first runtime/authoring draft now covers five independent challenges, real UTS traffic, train/barge/industrial movers, alternating one-life timing, physical gates, cameras and targeted probes. Not compiled or accepted yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Unity import, actual setup/menu/venue assignment and Windows readability are not yet accepted. Existing logos were not changed. |
-| Last Verification Date | None |
-| Remaining Work | Import artwork, assign to the completed scene and menu, inspect actual 720p/1080p output. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Optional human aesthetic review. Original imported PNG and actual gameplay preview were rendered and checked in the built menu. |
 
 
 #### EX04-PREVIEW
@@ -1732,20 +1732,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Optional human aesthetic review. Original imported PNG and actual gameplay preview were rendered and checked in the built menu. |
 
 
 #### EX04-SETUP
@@ -1756,20 +1756,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX04-HUD
@@ -1780,20 +1780,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX04-FX
@@ -1804,20 +1804,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX04-RESULTS
@@ -1828,20 +1828,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX04-QA
@@ -1852,20 +1852,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK FROGGER |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity |
+| Relevant Scripts | Assets/TruckFrogger/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH tractor/cab, UTS public CarWalkPath/MovePath/CarAIController/CarMove via LwsUtsTrafficApi, EasyRoads/LWS road baking, ShipContainerPack, owned Sky Tow expedition hull, purchased city/industrial models, existing Fishing water material, Vista pines, Weather Maker/Weatherade, Heat/TMP/DOTween. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Five independent one-life crossings and a five-challenge championship; actual UTS wheeled traffic, physical freight trains, container machinery, forklifts and moving river barges; ordered full-body gates and finish, fastest successful win point, tied replays, participant inputs/cabs, countdown, result highlights and rematch. Root causes: Kinematic speculative contacts after relocation created remote phantom train impacts. Moving obstacles now use ordinary Discrete contact with sufficiently thick collision geometry; genuine solid train contact still eliminates. Wheel.Initialize was rejected because it did not fix the contacts and invalidated replay wheel references. Normal-speed validation also exposed a second traffic lane 28m beyond the first: AI gap prediction and rear-body crossing clearance now cover both directions, with four regression cases. The parked-truck collision fixture now leaves NWH suspension powered and supplies neutral keyboard input, rather than disabling the motor and letting the body sink beneath the train chassis. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsFrog48/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Frog-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 ### EX05 — TRUCK NINJA WARRIOR
@@ -1879,20 +1879,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 5 (TRUCK NINJA WARRIOR), including all confirmed design decisions. |
 | Acceptance Criteria | The complete course must be physically traversable. Test every obstacle using player input. Verify jump/compression combinations, checkpoint penalties, timing, AI runs, and the warped-wall finish. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Original PNG, pure checkpoint/penalty/time rules and prepared reflection tests exist locally; no authored scene or executed acceptance. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | The complete course must be physically traversable. Test every obstacle using player input. Verify jump/compression combinations, checkpoint penalties, timing, AI runs, and the warped-wall finish. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX05-AI
@@ -1903,20 +1903,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 5 (TRUCK NINJA WARRIOR), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX05-ENV
@@ -1927,20 +1927,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 5 (TRUCK NINJA WARRIOR), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX05-LOGO
@@ -1951,20 +1951,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Original PNG, pure checkpoint/penalty/time rules and prepared reflection tests exist locally; no authored scene or executed acceptance. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Optional human aesthetic review. Original imported PNG and actual gameplay preview were rendered and checked in the built menu. |
 
 
 #### EX05-PREVIEW
@@ -1975,20 +1975,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Optional human aesthetic review. Original imported PNG and actual gameplay preview were rendered and checked in the built menu. |
 
 
 #### EX05-SETUP
@@ -1999,20 +1999,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX05-HUD
@@ -2023,20 +2023,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX05-FX
@@ -2047,20 +2047,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX05-RESULTS
@@ -2071,20 +2071,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX05-QA
@@ -2095,20 +2095,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity |
+| Relevant Scripts | Assets/TruckNinjaWarrior/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Full NWH vehicles and public wheel-spring/damage APIs; working Limbo compression and shared bounded assembly-velocity jump foundations; PhysX ConfigurableJoint/HingeJoint and existing cable rendering; existing Field Goal/Hot Potato optimized posed crowd and audio; Fishing URP water/result chime; Cinemachine, Heat/TMP/DOTween, Weather Maker/Weatherade and Sports replay. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Six physical obstacles: weight-driven tilting decks, rotating traction logs, three jointed wrecking balls, a seesaw bridge, spinning discs and a curved warped wall ending in an actual hinged bumper-struck bell. Normal/charged jumps and NWH spring compression, limited air correction, timed alternating athletes, six ordered checkpoints, +5-second physical fall recovery, stuck recovery, rankings/records, a 1,350-spectator stadium, result replay and rematch. Root causes: Downward contact velocity was omitted from jump correction, cancelling takeoff on descending platforms; bounded takeoff delta now accounts for signed incoming vertical speed, with three regression tests. Earlier launch points overshot or lacked run-up; grounded obstacle timing now uses measured motion. The elevated finish deck started before the curved ramp ended, creating a raised collision lip; their edges/heights now match with a dedicated regression. The AI used to brake for its required landing/bell; those real rigidbodies use the existing permitted-contact target API, preserving collision authority. A focused real-physics diagnostic proved that the curved ramp itself became a false solid-wall obstacle in the AI sphere cast: desired speed dropped from12m/s to0 before takeoff. The existing LWS driving adapter now accepts an explicit authored planned-ground collider for this obstacle only, while ordinary walls still stop the AI and all physical ramp collision remains enabled. Saved-scene binding and navigation/collision regressions cover both sides of this distinction. The focused wall trace is labelled as a partial fixture, not complete-course acceptance; full-course and Windows probes separately require every checkpoint and actual bell contact. Repeated acceptance exposed velocity-jitter stall detection: recovery now uses meaningful body displacement, with four regressions and a constrained physical recovery fixture. First takeoff targets the platform centre. Measured1m start/step and1.1m seesaw/pad penetrations were removed; joints connect to their own kinematic supports with only connected-part collision disabled. Safe recovery uses earned checkpoint positions, and the seesaw departure uses the existing charged jump. All weighted platforms are checked for nonconnected static overlap and level release before truck contact. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsNinja36/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Ninja-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 ### EX06 — TRUCK FLOOR IS LAVA
@@ -2365,20 +2365,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 7 (TRUCK AVALANCHE ESCAPE), including all confirmed design decisions. |
 | Acceptance Criteria | Test a complete mountain race, genuinely approaching avalanche, physical snow contact, brief escapes, burial, branching routes, and AI navigation. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Original PNG, pure rules and first runtime coordination draft exist locally; no authored scene or executed acceptance. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Test a complete mountain race, genuinely approaching avalanche, physical snow contact, brief escapes, burial, branching routes, and AI navigation. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX07-AI
@@ -2389,20 +2389,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 7 (TRUCK AVALANCHE ESCAPE), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX07-ENV
@@ -2413,20 +2413,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 7 (TRUCK AVALANCHE ESCAPE), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX07-LOGO
@@ -2437,20 +2437,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Original PNG, pure rules and first runtime coordination draft exist locally; no authored scene or executed acceptance. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Optional human aesthetic review. Original imported PNG and actual gameplay preview were rendered and checked in the built menu. |
 
 
 #### EX07-PREVIEW
@@ -2461,20 +2461,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Optional human aesthetic review. Original imported PNG and actual gameplay preview were rendered and checked in the built menu. |
 
 
 #### EX07-SETUP
@@ -2485,20 +2485,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX07-HUD
@@ -2509,20 +2509,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX07-FX
@@ -2533,20 +2533,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX07-RESULTS
@@ -2557,20 +2557,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 #### EX07-QA
@@ -2581,20 +2581,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity |
+| Relevant Scripts | Assets/TruckAvalancheEscape/Scripts/, Editor/ and Tests/Editor/. |
+| Prefabs or Assets | Owned clone of existing Sky Tow Arctic TerrainData, Vista/NWH terrain layers and pine models, EasyRoads meshes and published LWS road APIs, Toon Gas Station rock clusters, purchased city cabins/lodge, NWH public damage/vehicle APIs, Weatherade road materials/traces, Weather Maker thunder/noise texture, Cinemachine noise profile, existing Sports review/HUD/spectators. |
+| Implementation Evidence | Saved scene, imported logo/preview, registered menu and 60-scene Windows build; Evidence/2026-10-20-Expansion/Eighteen/. |
+| Implementation Notes | Twelve simultaneous NWH trucks race down a 2.4km Arctic mountain; broad road, risky cliff gap and frozen-river alternative, tunnel, bridge and rescue finish. Actual moving snow contacts push and reduce grip before a 4.5-second escape window and sustained burial; terrain-following settled-snow volumes prevent survival after the thin front has passed. Physical debris, pooled visible burial mounds, recorded snow ridge, rumble/shake, ordered finish rankings, human-only or optional AI viewports, replay and rematch. Root causes: Initial AI converged on the same staging centre and blocked each other until buried. Staging lanes, bounded route offsets and mode-specific route tuning let real trucks escape. A final terrain audit found all twelve starts inside the coarse cloned terrain above the staging deck. The sport-owned heightmap is now kept below the existing road geometry, with blended shoulders and preserved ravine cuts. A subsequent solid-contact audit proved that baked vertical spline overshoot also put the road surfaces1.9m above the flat platform, penetrating the chassis; owned mesh heights now match the intended flat start and downhill grade. Baked road smoothing also disagreed with the bridge and AI route coordinates. The owned road meshes now come from EasyRoads public StraightXZ controls, matching the authoritative routes; actual NWH braking anticipates bends. Packed-snow road color is overridden locally for contrast. A real curved takeoff mesh makes the risky cliff gap traversable without scripted launch forces, and full-race acceptance checks a real finisher on each of the three routes. Actual pre-GO grounded-wheel and twelve-truck forward-start checks plus terrain-clearance regressions cover this cause. Recovery uses the authored road height rather than placing a truck below its road mesh. The snow front initially sampled an unrelated high mountain peak at x=0; it now follows the actual route elevation. Snow history uses real trailing trigger contacts and replay records visible ridge/mounds rather than depending only on particles. The actual Windows broad-road stall was reproduced by a failing offset-waypoint regression: advancement checked the centreline rather than the assigned15m lane offset. The fixed route evaluates the actual offset waypoint, and recovery repairs genuine vehicle damage through NWH. The setup artwork now uses the shared scene-object naming convention. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
-| Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Automated Verification | Final native EditMode331/331passed. Actual final WindowsAvalanche41/0; same DLLbab2a1fed553025efc4563091c294bdd08f2e868cc76b3725d622b117e902c36; shared adapter, all 18 snow and menu checks recorded in windows-processes.json. |
+| Runtime Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-result.txt; genuine NWH physics and software-controlled1–4human input fixtures; replay/rematch assertions. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Eighteen/Avalanche-*.png; actual Windows composed-frame720p/1080p captures. |
+| Human Verification | Not human-playtested or physically controlled in this acceptance pass. |
+| Known Issues | Physical controllers/wheels, subjective audio/balance and extended soak acceptance remain unverified. Performance.json contains measured development-build telemetry, not a hardware certification. Easy/Normal complete races and long multi-round alternating tournaments were not exhaustively rerun. |
+| Last Verification Date | 2026-10-21T06:20:50.619280+00:00 |
+| Remaining Work | Human playtest and physical-device/listening acceptance; review measured performance and extended severe-weather/multi-round balance. No unimplemented core gameplay item is being substituted with a menu entry. |
 
 
 ### EX08 — TRUCK FREEZE TAG
