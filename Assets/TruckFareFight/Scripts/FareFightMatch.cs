@@ -49,13 +49,13 @@ namespace LWS.TruckFareFight {
   public Vector3 Goal(int slot)=>rules.Carrier==slot&&rules.Destination>=0?district.stops[rules.Destination].position:rules.Carrier>=0?trucks[rules.Carrier].body.position:rules.PickupLocation>=0?district.stops[rules.PickupLocation].position:trucks[slot].body.position;
   public string ObjectiveState(int slot)=>recoverAt[slot]>0?"RECOVER TRUCK":routes[slot].Reversing?"RECOVER BLOCKED PATH":rules.Carrier==slot?"DELIVER PASSENGER":rules.Carrier>=0?"STEAL PASSENGER":"SEEK PASSENGER";
   protected override void BeginGame(){
-   for(int slot=0;slot<routes.Length;slot++){routes[slot].useGoalProgressRecovery=true;routes[slot].useRoadConnectors=true;routes[slot].stallSeconds=2;routes[slot].reverseSeconds=1.4f;routes[slot].obstacleRadius=Mathf.Clamp(trucks[slot].shape.size.x*trucks[slot].transform.lossyScale.x*.45f,.8f,1.8f);}
+   for(int slot=0;slot<routes.Length;slot++){routes[slot].useGoalProgressRecovery=true;routes[slot].useRoadConnectors=true;routes[slot].stallSeconds=2;routes[slot].reverseSeconds=1.4f;routes[slot].minimumReverseDistance=3;routes[slot].obstacleRadius=Mathf.Clamp(trucks[slot].shape.size.x*trucks[slot].transform.lossyScale.x*.45f,.8f,1.8f);}
    worldReset?.Restore();matchSeed=UnityEngine.Random.Range(1,int.MaxValue);random=new System.Random(matchSeed);rematchSerial++;
    rules.Start(setup.count,option==0?3:option==2?10:5,option==3?300:0,option==4);PhysicalContacts=Recoveries=0;events.Clear();lastRevision=-1;lastPickup=lastDestination=-1;Intro=3;
    atmosphere.ConfigurePreset(presets.Resolve(matchSeed),matchSeed);
    AssignFare();Physics.SyncTransforms();float separation=12;foreach(var truck in trucks)separation=Mathf.Max(separation,truck.shape.size.z*truck.transform.lossyScale.z+3);
    if(!startingGrid.TryBuild(district.graph,district.stops[rules.PickupLocation].position,setup.count,separation,rematchSerial-1,fairPositions,fairForwards,InitialRouteDistances,ClearStartingRoad))throw new InvalidOperationException("Fare Fight cannot find separated, clear, equal-road-distance starts: "+startingGrid.Diagnostic);
-   for(int i=0;i<4;i++){routes[i].Reset();recoverAt[i]=badTime[i]=0;if(i>=setup.count){trucks[i].Park(new Vector3(0,-100-i*12,0));trucks[i].gameObject.SetActive(false);continue;}trucks[i].tractorMotor.Configure();trucks[i].Prepare(fairPositions[i],Quaternion.LookRotation(fairForwards[i]));trucks[i].body.isKinematic=true;previous[i]=trucks[i].body.position;}
+   for(int i=0;i<4;i++){routes[i].Reset();recoverAt[i]=badTime[i]=0;if(i>=setup.count){trucks[i].Park(new Vector3(0,-100-i*12,0));trucks[i].gameObject.SetActive(false);continue;}trucks[i].tractorMotor.Configure();RepairTruck(trucks[i]);trucks[i].Prepare(fairPositions[i],Quaternion.LookRotation(fairForwards[i]));trucks[i].body.isKinematic=true;previous[i]=trucks[i].body.position;}
    if(traffic!=null){traffic.SetRegionAvailability(InitialPopulationAllowed);traffic.Initialize();if(rematchSerial>1)traffic.ResetTraffic();traffic.SetWeatherCaution(1-atmosphere.Grip);}
    if(pedestrians!=null){pedestrians.SetRegionAvailability(InitialPopulationAllowed);pedestrians.Initialize();if(rematchSerial>1)pedestrians.ResetPopulation();}
    hazards?.ResetMatch();interactions?.ResetMatch();navigation?.ResetMatch();drivingViews.Layout();CompactViewHUD();
@@ -70,7 +70,11 @@ namespace LWS.TruckFareFight {
    for(int i=0;i<setup.count;i++){
     var truck=trucks[i];var body=truck.body;
     if(recoverAt[i]>0){if(Time.time>=recoverAt[i])Recover(i);previous[i]=body.position;continue;}
-    if(!district.Contains(body.position)){Queue(FareFightEventKind.CarrierReset,i,1);BeginRecovery(i,"OUT OF BOUNDS");}
+    // NWH damage can destroy a powertrain while the chassis remains upright.
+    // Use the same announced recovery/passenger reset for humans and AI;
+    // repeatedly reversing a destroyed engine can never free a blocked truck.
+    if(truck.tractorMotor.vehicle.powertrain.engine.Damage>=1||truck.tractorMotor.vehicle.powertrain.transmission.Damage>=1)DestroyTruck(i);
+    else if(!district.Contains(body.position)){Queue(FareFightEventKind.CarrierReset,i,1);BeginRecovery(i,"OUT OF BOUNDS");}
     else if(body.position.y<-3){badTime[i]+=dt;if(badTime[i]>2.5f){Queue(FareFightEventKind.CarrierReset,i,1);BeginRecovery(i,"UNRECOVERABLE WATER");}}
     else if(Vector3.Dot(body.rotation*Vector3.up,Vector3.up)<.2f&&body.linearVelocity.magnitude<1){badTime[i]+=dt;if(badTime[i]>6){Queue(FareFightEventKind.CarrierReset,i,1);BeginRecovery(i,"OVERTURNED");}}
     else badTime[i]=0;
@@ -90,7 +94,10 @@ namespace LWS.TruckFareFight {
   public void Contact(int first,int second,float speed,Vector3 point){if(!Live||Intro>0||rules.Carrier<0)return;PhysicalContacts++;int thief=rules.Carrier==first?second:rules.Carrier==second?first:-1;if(thief<0)return;int carrier=rules.Carrier;Vector3 path=trucks[carrier].body.position-previous[carrier];float fraction=path.sqrMagnitude>.0001f?Mathf.Clamp01(Vector3.Dot(point-previous[carrier],path)/path.sqrMagnitude):.5f;Queue(FareFightEventKind.Theft,thief,fraction,carrier,speed);}
   void Changed(){lastRevision=rules.Revision;notice=rules.LastEvent+(rules.Carrier>=0?" · "+setup.players[rules.Carrier].name:"");noticeUntil=Time.time+2;feedback.Play(rules.LastEvent=="DELIVERED"?5:2,0,true);menus.Dirty();}
   void BeginRecovery(int slot,string reason){if(recoverAt[slot]>0)return;recoverAt[slot]=Time.time+2;trucks[slot].Power(false);notice=setup.players[slot].name+" · "+reason;noticeUntil=Time.time+2;}
-  void Recover(int slot){var body=trucks[slot].body;Vector3 nearest=district.startingPositions[0];float distance=float.PositiveInfinity;foreach(var node in district.graph.nodes){float d=(node.position-body.position).sqrMagnitude;if(d<distance){nearest=node.position;distance=d;}}Quaternion rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(trucks[slot].transform.forward,Vector3.up).normalized);trucks[slot].Prepare(nearest+Vector3.up*.3f,rotation);recoverAt[slot]=badTime[slot]=0;previous[slot]=trucks[slot].body.position;routes[slot].Reset();Recoveries++;}
+  // Repair at lifecycle boundaries through the vendor API. Do not change
+  // damage tuning or silently heal impacts during active competition.
+  static void RepairTruck(SportsEventTruck truck)=>truck.GetComponent<NWH.VehiclePhysics2.Damage.DamageHandler>()?.Repair();
+  void Recover(int slot){var body=trucks[slot].body;Vector3 nearest=district.startingPositions[0];float distance=float.PositiveInfinity;foreach(var node in district.graph.nodes){float d=(node.position-body.position).sqrMagnitude;if(d<distance){nearest=node.position;distance=d;}}Quaternion rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(trucks[slot].transform.forward,Vector3.up).normalized);RepairTruck(trucks[slot]);trucks[slot].Prepare(nearest+Vector3.up*.3f,rotation);recoverAt[slot]=badTime[slot]=0;previous[slot]=trucks[slot].body.position;routes[slot].Reset();Recoveries++;}
   public void DestroyTruck(int slot){if(!Live||recoverAt[slot]>0)return;Queue(FareFightEventKind.CarrierReset,slot,1);BeginRecovery(slot,"WRECKED · PASSENGER RESET");}
   public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
   public override string ControlCaption(int slot)=>Controls(slot);

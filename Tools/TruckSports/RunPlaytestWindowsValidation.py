@@ -21,6 +21,7 @@ def main():
     parser.add_argument("--mode")
     parser.add_argument("--result-file")
     parser.add_argument("--extra-arg", action="append", default=[])
+    parser.add_argument("--legacy-errors-only", action="store_true", help="Accept an explicit legacy ERRORS=N. footer and count its actual PASS/FAIL check lines.")
     args = parser.parse_args()
     exe = ROOT / "Builds/TruckSportsCamera/TruckSports.exe"
     dll = exe.parent / "TruckSports_Data/Managed/Assembly-CSharp.dll"
@@ -54,14 +55,18 @@ def main():
         raise ValueError("Acceptance result must remain inside this workspace")
     evidence = result.read_text(encoding="utf-8-sig") if result.is_file() and result.stat().st_mtime >= wall_start else ""
     terminal = re.search(r"CHECKS=(\d+)\s+ERRORS=(\d+)", evidence)
+    legacy = re.search(r"ERRORS=(\d+)\. Actual NWH/PhysX", evidence) if args.legacy_errors_only and not terminal else None
+    checks = int(terminal[1]) if terminal else len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE)) if legacy else None
+    errors = int(terminal[2]) if terminal else int(legacy[1]) if legacy else None
+    completed = bool(terminal) or bool(legacy and checks)
     if args.result_file and evidence:
         shutil.copy2(result, folder / "result.txt")
-    receipt = dict(pid=process.pid, exit=code, seconds=round(time.monotonic()-start, 2), managedSha256=digest, unchangedManaged=hashlib.sha256(dll.read_bytes()).hexdigest()==digest, completedEvidence=bool(terminal), checks=int(terminal[1]) if terminal else None, errors=int(terminal[2]) if terminal else None)
+    receipt = dict(pid=process.pid, exit=code, seconds=round(time.monotonic()-start, 2), managedSha256=digest, unchangedManaged=hashlib.sha256(dll.read_bytes()).hexdigest()==digest, completedEvidence=completed, checks=checks, errors=errors, legacyErrorsOnly=bool(legacy))
     (folder / "process.json").write_text(json.dumps(receipt, indent=2))
     print(json.dumps(receipt), flush=True)
     if evidence:
         print("\n".join(evidence.splitlines()[-3:]), flush=True)
-    raise SystemExit(code or (0 if terminal and int(terminal[2])==0 and receipt["unchangedManaged"] else 1))
+    raise SystemExit(code or (0 if completed and errors==0 and receipt["unchangedManaged"] else 1))
 
 
 if __name__ == "__main__":

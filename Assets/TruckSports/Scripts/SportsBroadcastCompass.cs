@@ -1,6 +1,7 @@
 using CompassNavigatorPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 namespace LWS.TruckSports
 {
@@ -11,6 +12,7 @@ namespace LWS.TruckSports
     {
         public CompassProPOI[] permittedTargets;
         public float iconPixels=28,labelFontSize=16,labelWidth=150;
+        bool pausedIndicatorTweens;
         bool Permitted(CompassProPOI poi)
         {if(permittedTargets==null)return false;foreach(var target in permittedTargets)if(target==poi)return true;return false;}
         protected override void ComputePOIViewportPos(CompassProPOI poi)
@@ -21,6 +23,29 @@ namespace LWS.TruckSports
             // POI registry. Other participants' GPS indicators remain untouched.
             for(int i=pois.Count-1;i>=0;i--)if(pois[i]==null||!Permitted(pois[i]))pois.RemoveAt(i);
             base.UpdateIndicators();
+            // CNP owns placement/visibility. Its scale entrance uses scaled time,
+            // so a newly enabled objective stayed at zero scale in paused views.
+            // Complete only that presentation animation with the UI clock.
+            if(Time.timeScale!=0)
+            {
+                if(pausedIndicatorTweens){DOTween.Kill(this);pausedIndicatorTweens=false;}
+            }
+            else if(permittedTargets!=null)
+            {
+                foreach(var target in permittedTargets)
+                {
+                    if(target==null||!target.isActiveAndEnabled)continue;
+                    var state=target.GetState(compassGroup);var widget=state.indicatorRT;
+                    if(widget==null||!widget.gameObject.activeInHierarchy||state.indicatorCanvasGroup==null||state.indicatorCanvasGroup.alpha<=0)continue;
+                    bool edge=state.indicatorArrowRT!=null&&state.indicatorArrowRT.gameObject.activeSelf;
+                    float scale=(edge?offScreenIndicatorScale:onScreenIndicatorScale)*target.onScreenIndicatorScale;
+                    if(widget.localScale.x<scale*.98f&&!DOTween.IsTweening(widget,true))
+                    {
+                        widget.DOScale(new Vector3(scale,scale,1),.2f).SetEase(Ease.OutCubic).SetUpdate(true).SetId(this).SetLink(widget.gameObject,LinkBehaviour.KillOnDisable);
+                        pausedIndicatorTweens=true;
+                    }
+                }
+            }
         }
         protected override GameObject CreateIndicator(CompassProPOI poi)
         {

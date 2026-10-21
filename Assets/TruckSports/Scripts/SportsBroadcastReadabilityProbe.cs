@@ -45,6 +45,15 @@ namespace LWS.TruckSports
             SportsCameraOptions.Set(false);
         }
         IEnumerator Settle(float seconds=1.5f){yield return new WaitForSecondsRealtime(seconds);yield return new WaitForEndOfFrame();}
+        static bool RenderedCue(SportsBroadcastGuidance guidance,CompassNavigatorPro.CompassProPOI marker)
+        {
+            if(guidance==null||guidance.compass==null||!guidance.compass.isActiveAndEnabled||marker==null||!marker.gameObject.activeInHierarchy)return false;
+            var state=marker.GetState(guidance.compass.compassGroup);var widget=state.indicatorRT;
+            if(widget==null||!widget.gameObject.activeInHierarchy||widget.lossyScale.x<.05f||state.indicatorCanvasGroup==null||state.indicatorCanvasGroup.alpha<.1f||state.indicatorArrowRT==null||!state.indicatorArrowRT.gameObject.activeInHierarchy)return false;
+            var canvas=widget.GetComponentInParent<Canvas>();if(canvas==null||!canvas.enabled)return false;
+            var screen=RectTransformUtility.WorldToScreenPoint(canvas.renderMode==RenderMode.ScreenSpaceOverlay?null:canvas.worldCamera,widget.position);
+            return screen.x>2&&screen.y>2&&screen.x<Screen.width-2&&screen.y<Screen.height-2;
+        }
         void Measure(string scene,string stage,SportsBroadcastFraming framing,int humans)
         {
             var camera=framing.cameraRig.view;var bounds=framing.TruckBounds(framing.Primary);var rect=framing.ProjectedTruckRect(camera,framing.Primary);
@@ -116,7 +125,17 @@ namespace LWS.TruckSports
                 Check(center.z>0&&center.x>.02f&&center.x<.98f&&center.y>.04f&&center.y<.96f,scene+" primary truck is actually inside viewport");
                 Check(float.IsFinite(framing.cameraRig.transform.position.y)&&framing.cameraRig.view.fieldOfView<=75,scene+" finite bounded lens and position");
                 if(scene==SportsNavigation.Hill){var zone=SportsCameraFit.Projected(framing.cameraRig.view,framing.action.objective);Check(zone.xMin>=.03f&&zone.xMax<=.97f&&zone.yMin>=.16f&&zone.yMax<=.94f,scene+" complete active ring stays clear of the bottom HUD "+zone);}
-                if(new[]{SportsNavigation.Kickball,SportsNavigation.Magnet,SportsNavigation.Keepaway,SportsNavigation.Volley}.Contains(scene))Check(framing.ObjectiveVisible,scene+" normal-play objective remains inside the action shot");
+                if(new[]{SportsNavigation.Kickball,SportsNavigation.Magnet,SportsNavigation.Keepaway,SportsNavigation.Volley}.Contains(scene))
+                {
+                    float length=Mathf.Max(2,Mathf.Max(framing.PrimaryBounds.size.x,framing.PrimaryBounds.size.z));
+                    bool distant=Vector3.Distance(framing.PrimaryBounds.center,framing.action.objective.center)>=length*framing.Configuration.objectiveRangeInTruckLengths;
+                    if(scene==SportsNavigation.Keepaway&&!framing.ObjectiveVisible&&distant)
+                    {
+                        var guide=framing.GetComponent<SportsBroadcastGuidance>();
+                        Check(guide!=null&&guide.targets.Length>0&&Vector3.Distance(guide.targets[0].transform.position,framing.action.objective.center)<.1f&&RenderedCue(guide,guide.targets[0]),scene+" distant ball beyond the configured action range has an actual visible, screen-safe CNP arrow without shrinking the human truck");
+                    }
+                    else Check(framing.ObjectiveVisible,scene+" normal-play objective remains inside the action shot");
+                }
                 int remote=-1;for(int i=0;i<framing.SubjectCount;i++)if(i!=framing.Primary&&framing.Valid(i)){remote=i;break;}
                 if(remote>=0)
                 {
@@ -159,7 +178,7 @@ namespace LWS.TruckSports
             for(int slot=0;slot<4;slot++)if(slot!=framing.Primary)
             {
                 var position=framing.Body(slot).position;
-                Check(guidance.targets.Any(p=>p.gameObject.activeInHierarchy&&Vector3.Distance(p.transform.position,position)<.1f),"offscreen human has their own actual CNP cue slot="+slot);
+                Check(guidance.targets.Any(p=>p.gameObject.activeInHierarchy&&Vector3.Distance(p.transform.position,position)<.1f&&RenderedCue(guidance,p)),"offscreen human has their own visibly rendered, screen-safe CNP cue slot="+slot);
             }
             Check(guidance.ActiveCues>=3&&guidance.compass.gameObject.activeInHierarchy,"all three distant human competitors remain represented without zooming out");
             yield return ViewCapture(SportsNavigation.Magnet,"four-human-offscreen-cues");

@@ -168,3 +168,71 @@ VENDOR SOURCE MODIFIED: None.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: None; existing pooled playback, settings,
 NWH physics and DOTween remain authorities. No new vendor payload; thump already
 tracked. Scene/physics/scoring/branding preserved; human listening not claimed.
+
+
+### Fare Fight native damage recovery
+
+VENDOR ASSETS AUDITED: NWH DamageHandler.Repair, powertrain damage and automatic
+DNR behavior; existing Ninja checkpoint repair adapter; Fare Fight route,
+announced wreck recovery, rules and actual full-match diagnostic state.
+VENDOR ASSETS USED: Public DamageHandler.Repair restores native meshes, engine,
+transmission and wheel damage at Fare lifecycle boundaries. NWH continues
+to own powertrain health and propulsion; original passenger state machine
+continues to own ordered reset/theft/delivery events.
+RELEVANT ASSETS NOT USED: No new recovery, input or vehicle physics framework.
+NWH reverse timing is not retuned without evidence; existing route planner
+(including the private pending host version) remains untouched.
+CUSTOM SYSTEMS CREATED: Fare-specific destroyed-powertrain observation feeding
+existing announced wreck recovery; targeted native health/possession fixtures
+and read-only prolonged-stall telemetry in the existing Windows match probe.
+VENDOR SOURCE MODIFIED: None.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: None.
+
+
+### Keepaway expanded destructible arena (implementation in progress)
+
+VENDOR ASSETS AUDITED: Core-Collapse Collapser/Support, bundled EzySlice
+SlicerExtensions/SlicedHull and shatter examples; existing PlowBreakable pooled
+fragments/reset; current modeled Keepaway props, NWH event wheels, rounded
+boards, terrain layers and shared Cinemachine/CNP broadcast profile.
+VENDOR ASSETS USED: Core-Collapse damage/support through existing PlowBreakable;
+EzySlice authoring-time cuts of the actual barrel/crate/tire/timber/barrier
+meshes; original installed model/material sources, NWH wheel physics and
+existing fixed-pool fragments; current shared camera profile retained.
+RELEVANT ASSETS NOT USED: Generic prefractured masonry debris would visually
+replace wooden/rubber/metal prop silhouettes. Use the installed EzySlice tool
+to cut their actual geometry instead. No runtime fracture engine or redundant
+weather/road/camera system is justified. Existing terrain is already finished
+and textured; resize its owned mesh, without replacing it with new terrain.
+CUSTOM SYSTEMS CREATED: Keepaway-only destruction-to-navigation/reset adapter,
+explicit idempotent saved-scene expansion migration and targeted tests.
+VENDOR SOURCE MODIFIED: None.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: None; no new damage or mesh-cut authority.
+
+
+Keepaway authoring dependency accounting: EzySlice is an installed pending
+vendor directory outside the public source scope. Unchanged source/meta hashes
+are recorded privately in keepaway-private-authoring-tool.json; authoring uses
+its public Slice/SlicedHull methods through optional reflection. Existing
+pre-cut scenes compile and run without the authoring tool. No raw EzySlice
+source, manual or unrelated vendor file is staged/published. Core-Collapse
+Support/Collapser and original prop models were already tracked. The only
+shared runtime edit is a project-owned PlowBreakable kinematic velocity guard,
+with reset tests passed in both original Plowing scenes.
+
+
+### Paused broadcast objective widget correction
+
+VENDOR ASSETS AUDITED: CNP public POI group state, indicator factory, animation
+scale settings and per-widget CanvasGroup; its read-only indicator source
+confirmed scale entrance uses Time.deltaTime. DOTween unscaled update/link/ID
+lifecycle API and existing project presentation use were reviewed.
+VENDOR ASSETS USED: CNP owns actual indicator creation, projection, opacity,
+visibility and registration; DOTween animates only the missing paused entrance
+in the existing owned SportsBroadcastCompass adapter. No CNP edit.
+RELEVANT ASSETS NOT USED: No custom arrow/projection framework, global time
+manipulation or replacement compass. Existing vendor fields and widgets suffice.
+CUSTOM SYSTEMS CREATED: Small paused-presentation coordination in existing
+adapter; regression requiring the actual rendered widget (not just active POI).
+VENDOR SOURCE MODIFIED: None.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: None; CNP plus DOTween remain authorities.

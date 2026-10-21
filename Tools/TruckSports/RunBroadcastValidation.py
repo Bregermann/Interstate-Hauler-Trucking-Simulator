@@ -64,7 +64,7 @@ def run(name, arguments):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
@@ -93,6 +93,22 @@ def main():
         run("field-goal-holder-repair", ["-quit", "-executeMethod", "LWS.TruckFieldGoal.Editor.FieldGoalPlaytestRepairAuthoring.UpgradeHolder"])
     elif args.stage == "field-audio":
         run("field-goal-audio-repair", ["-quit", "-executeMethod", "LWS.TruckFieldGoal.Editor.FieldGoalPlaytestRepairAuthoring.UpgradeAudio"])
+    elif args.stage == "keepaway-arena":
+        # Author with the installed owned tool without adding its pending vendor
+        # source to this task's public Git payload. Public authoring references
+        # it optionally through reflection; saved precut meshes need no slicer.
+        vendor = ROOT / "Assets/CoreCollapse/EzySlice"
+        copied = []
+        for source in vendor.rglob("*"):
+            if source.is_file() and (source.suffix == ".cs" or source.name.endswith(".meta")):
+                relative = source.relative_to(ROOT)
+                target = CLEAN / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, target)
+                copied.append(dict(path=relative.as_posix(), sha256=hashlib.sha256(source.read_bytes()).hexdigest()))
+        (LOG / "keepaway-private-authoring-tool.json").write_text(json.dumps(copied, indent=2))
+        run("keepaway-arena-repair", ["-quit", "-executeMethod", "LWS.TruckKeepaway.Editor.KeepawayArenaRepairAuthoring.Upgrade"])
+        shutil.copy2(CLEAN / "Logs/TruckSports/PlaytestRepair/keepaway-arena-migration.txt", LOG / "keepaway-arena-migration.txt")
     elif args.stage == "tests":
         run(args.test_name, ["-runTests", "-testPlatform", args.test_platform, "-testFilter", args.test_filter, "-testResults", str(LOG / (args.test_name+".xml"))])
         result = ET.parse(LOG / (args.test_name + ".xml")).getroot()

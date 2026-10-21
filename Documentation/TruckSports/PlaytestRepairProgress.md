@@ -517,3 +517,147 @@ implementation is the real prolonged Fare Fight recovery failure (HPR-8-4),
 not a re-audit of the entire backlog. Still inspect actual NWH engine/damage/
 gear/wheel state before editing; transient reverse timing or damage are hypotheses,
 not confirmed causes. Hockey goal report remains unreproduced/open.
+
+
+## Field Goal preservation and Fare Fight damage reproduction
+
+Field Goal accepted build348e00165f235bb7fd2791552b2ff79f83321cfccbca49fbcb4ac9b8607fbe1f
+was promoted with all545companion files hash-verified; prior49384retained in Recovery.
+Scoped commit1afcb77e pushed successfully to both main and
+codex/truck-sports-seven-events. All925unrelated pending paths preserved.
+
+Fare damage tests before repair failed0/2: both rematch and the existing announced
+DestroyTruck/recovery left actual NWH engine Damage=1. A120real-second native
+four-Normal-AI first-to-ten diagnostic (roughly480simseconds) did NOT reproduce
+the original prolonged immobilization. It recorded actual engine/transmission
+damage, gears, torque and wheel contacts; this is diagnostic evidence, not a
+complete-match pass or proof of the original AI stall's cause.
+
+Fare-only lifecycle repair now calls native DamageHandler.Repair at new-match
+and announced recovery boundaries. Actual fully destroyed engine/transmission
+uses the existing two-second wreck/passenger-reset path equally for humans
+and AI. No active-match silent healing, free deliveries, route-planner changes,
+vendor edits or reverse-timing retune. First corrected original tests2/2passed.
+Additional carrier-reset tests initially passed AI but failed human fixture
+initialization (headless Input System keyboard was disabled by focus policy).
+These failures are retained; fixture now follows the established Goddess
+IgnoreFocus/device-isolation pattern. Full corrected bundle and exact Windows
+match acceptance still pending. HPR-8-4 remains PARTIAL.
+
+
+Fare corrected damage bundle4/4passed after using the existing Goddess
+IgnoreFocus/physical-input-isolation fixture policy. Rules preservation22/22
+passed. Candidate2f062f156c0f2657e4ec8c03ccd3eae48610e16ad7cbac11d22e2b7d76b92c31
+is currently running actual Windows default first-to-five, with per-slot engine,
+transmission, gear and60-second no-displacement telemetry. Canonical348e stays
+accepted until this candidate is verified; no new completion claim yet.
+
+Keepaway HPR-19-1/2/3 implementation is now underway in ROOT only, outside
+the currently running candidate. Existing32x18rounded-footprint constants and
+fixed33x19navigation grid proved the physical expansion was missing. Existing
+static crates/ramps/sweepers and loose tires have no destruction adapter.
+Planned explicit versioned migration retains both authored scenes and models,
+scales horizontal geometry bysqrt(3), retains count for1/3density, expands
+navigation/spawns and uses existing Core-Collapse/PlowBreakable lifecycle with
+vendor EzySlice offline cuts of actual prop meshes. No auto-build migration
+or scene regeneration. These changes are uncompiled/unverified until the
+current Windows player finishes; never sync CLEAN during its exclusive turn.
+
+
+## Fare full-match failure and isolated backing evidence
+
+FareDamageDefaultFive on exact2f062f156c0f2657e4ec8c03ccd3eae48610e16ad7cbac11d22e2b7d76b92c31
+completed a genuine first-to-five match, rematch/menu in700.38real seconds,
+15/16checks passed. The new recovery gate FAILED: slot0 stayed within2m for
+60.20691simseconds (other maxima17.03662/9.088867/6.966797). Match seed1965199365,
+two actual announced recoveries, all competitors earned deliveries. Failure
+retained; candidate not promoted, canonical348e unchanged. Actual healthy
+engine/transmission telemetry distinguishes the remaining stall from destroyed
+powertrain health.
+
+New native moving-carrier/wall regression0/1failed: recovery steering flipped
+from-1to+1while the same reverse maneuver was active. Fix locks its chosen
+steering until the bounded maneuver ends. Additional real full-NWH static-wall
+fixture (no scoring/teleport/heal/artificial forces) measured only2.426857m
+backward clearance before the first forward retry under the old1.4s timer;
+0/1behavior failure retained. First invocation had a test-only Component.enabled
+compile typo, corrected to Behaviour; not a gameplay failure.
+
+Fare now opts into3mminimum backing distance, with the original1.4sminimum
+time and a hard4smaximum. Actual backward travel, rather than a presumed
+instant automatic DNR shift, governs early completion. Other users default
+to0minimum-distance and retain original behavior; no Taxi/vendor changes.
+Corrected five-test native health/possession/physical-clearance bundle running.
+A fresh corrected Windows acceptance remains required; HPR-8-4still PARTIAL.
+
+
+## Corrected native acceptance and saved Keepaway migration
+
+Fare native health/possession/real-NWH-clearance5/5passed; actual backing before
+forward retry3.051567m. Fare EditMode preservation23/23passed, including the
+previously failing moving-goal steering lock. Corrected Windows full-match
+acceptance remains pending; no promotion of failed2f candidate.
+
+Keepaway explicit migration first hit an editor-only Unity fake-null/??
+Rigidbody lookup failure, corrected with the explicit Unity object-null check;
+no scene was saved by that failed invocation. Corrected migration succeeded
+in both existing scenes: actual projected surface area2268.726to6805.251,
+ratio2.999591,22potential props retained, density ratio0.3333788. Ground mesh
+and collider match; boards, spawns, navigation, prop distribution and perimeter
+dressing expanded horizontally; shared camera profile/rules/UI preserved.
+85owned generated meshes total16943374bytes. EzySlice tool sources copied
+unchanged into private validation project for authoring only, with checksum
+manifest; none added to public Git scope. Optional reflected authoring dependency
+keeps pre-cut scene/build compilation independent of that licensed tool source.
+
+Targeted Keepaway PlayMode3/3passed: both saved physical areas/connected starts/
+all22actual-model fracture references; genuine truck collision breaks obstacle
+and rematch restores it; existing shared Core-Collapse/Plowing adapter still
+breaks/resets in both original Plowing scenes. One shared project-owned guard
+avoids writing velocity to kinematic intact bodies; no vendor edits.
+
+Exported both saved scenes,85mesh assets+metas, and five new source metas to
+ROOT. Related review manifest199paths/31194680bytes excludes every pending
+vendor source and all925unrelated host paths (hashes verified unchanged).
+Corrected60-scene candidate building with114scoped sources. Next Windows runs:
+expanded Keepaway full matches/rematches and rendered720p/1080p; focused two-
+scene broadcast/split ownership; corrected Fare default first-to-five with
+healthy-stall gate. Canonical348e remains accepted until those pass.
+
+
+## Expanded Windows matches and newly reproduced paused-indicator defect
+
+Candidateff39c3e39914b6ef37ffea3c813d127900d94a90b028d4f523b9eb39606f53df
+compiled60scenes/114scoped sources. KeepawayExpandedMatches25/0in56.85s: two
+complete four-AI first-to-thirty matches, natural pickups/steals/explosions and
+actual obstacle breaks, restored rematches and menu cleanup. Actual720p/1080p
+Arena/cab-AI-broadcast images inspected; existing modeled props and close
+readable trucks render, sparse terrain/nav expansion integrated. No human claim.
+
+KeepawayExpandedCamera54checks/1failure onff39retained. Primary readable11%,
+but the expanded one-human spawn put the ball beyond the configured objective
+range. The old fixture unconditionally required the ball onscreen; that ignores
+the requested readability/offscreen-indicator policy. Inspection also found a
+REAL independent indicator defect: after toggling framing at Time.timeScale=0,
+CNP created its widget at zero scale and never animated it, despite the POI
+being registered and its opacity nonzero. Native paused-widget regression0/1
+failed at scale0. This reopens GBC-05 indicator acceptance; marker registration
+alone was insufficient prior evidence.
+
+Owned SportsBroadcastCompass now uses DOTween SetUpdate(true) only to finish
+new-widget scale entrances while simulation is frozen; CNP still owns placement,
+visibility, group membership and lifetime. Tweens link to widget disable and
+are killed by this adapter's ID on resume. Vendor source unchanged. Native
+final DOTween widget test1/1passed; broadcast projection preservation9/9passed.
+Readability probe now checks actual widget scale, opacity, arrow, screen bounds
+and objective association for a legitimately distant Keepaway ball; nearby
+objectives still must stay onscreen. Three distant-human cues also require
+actual visible widgets, not only active markers.
+
+New115-source/60-scene candidate1f9ac32f4251ecc8fa2f505f6644a307f3c5fbf0ade2f8ed53321e60b449daa4
+built in210.58s. Current sequential Windows acceptance: ExpandedCamera33,
+existing Keepaway mixed-input/default60s/rain-snow/nameplate/regression probe,
+then corrected Fare default first-to-five healthy-stall gate. Tools runner
+explicitly supports the existing Keepaway ERRORS=N. footer, counting its actual
+PASS/FAIL lines and retaining fresh-file/process/hash checks; strict default
+CHECKS parsing unchanged. These runs are pending; canonical348e stays accepted.

@@ -5357,10 +5357,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | When important competitors leave the camera view, use subtle directional indicators instead of zooming out excessively. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section5. |
 | Acceptance Criteria | All observable requirements and acceptance in source section5; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
-| Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Implementation Evidence | CNP-owned actual cues with owned SportsBroadcastCompass DOTween unscaled entrance on paused views; lifetime linked to widget and resumed scaled vendor animation. No vendor source changes. |
+| Automated Verification | Earlier33-scene fixtures checked marker activity. Expanded ff39camera53/54 exposed far-start/paused-widget issue; native widget0/1before (scale0), final DOTween1/1after plus projection9/9passed. Full corrected Windows actual-widget acceptance pending. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+| Remaining Work | Verify corrected actual visible/screen-safe widgets across33bound scenes and all-human cue fixtures; physical-device/human visual preference remains unverified. |
 
 ### GBC-06 — TRUCK KICKBALL — SPECIFIC CAMERA REPAIR
 
@@ -5917,10 +5917,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | AI currently drives aimlessly and collides with walls instead of pursuing the current goal. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section8.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | FareFightRoadAccess, FareFightRoute progress-based recovery and match objective states; sampled road join plus authored opposing-edge handling, original shared planner retained. |
-| Automated Verification | Fare22/22native; Windows FairRoutesFull2 first-to-three15/0; exact c8 FareDefaultFive15/0 complete default first-to-five real four-AI match in545.41seconds, actual NWH pickup/theft/delivery, rematch/menu. Full trace retained; one competitor remained stuck for a prolonged interval. |
+| Implementation Evidence | FareFightRoadAccess retains shared planner and actual road joins; native damage repair at match/recovery boundaries; destroyed powertrain enters announced reset equally for humans/AI. New steering-lock and distance-aware bounded backing fixes in progress. |
+| Automated Verification | Earlier Fare22/22; corrected damage/possession4/4. Exact2f Windows full default match completed in700.38s but FAILED stall gate15/16: one60.20691s pocket, two real recoveries. Moving-goal reverse-steering regression0/1failed before; actual NWH backing fixture0/1failed at2.426857m before forward retry. Corrected backing validation pending. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Repair the prolonged single-competitor recovery failure observed in the default match; severe-weather, physical-device and human driving acceptance unperformed. |
+| Remaining Work | Pass corrected physical recovery and full-match liveness acceptance; integrate/preserve tested changes. Severe-weather, physical-device and human driving acceptance unperformed. |
 
 ### HPR-8-5 — Fair Initial Passenger Distances
 
@@ -6378,11 +6378,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Triple the Playable Arena Area |
 | Original Request | Increase the actual physical playable surface area to approximately 3× the current baseline, not simply the camera zoom. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section19.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Both existing saved scenes migrated explicitly/idempotently: measured actual ground/collision area2268.726to6805.251 (2.999591x); expanded boards, spawns, navigation, dressing; no shared-camera-profile change. |
+| Automated Verification | Native expanded arena3/3; ff39Windows25/0 includes two full first-to-thirty AI matches/rematches, connected1405navigation cells and actual720p/1080p images inspected. Corrected UI candidate full camera/default-match acceptance pending. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Finish current exact-candidate camera/default60s/mixed-input Windows pass; human playtest unavailable. |
 
 ### HPR-19-2 — Reduce Obstacle Density to Approximately One-Third
 
@@ -6392,11 +6392,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Reduce Obstacle Density to Approximately One-Third |
 | Original Request | Three times less dense means aim for approximately one-third the prior obstacle density per unit of playable area. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section19.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | 22potential props retained,18active at Lively; horizontal distribution scaled bysqrt(3), giving0.3333788baseline density with wider open chase lanes. |
+| Automated Verification | Native count/area/reference checks pass; ff39Windows25/0 confirms eighteen active Lively props and complete matches in both variants. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Confirm current candidate broader regression; human density/route preference acceptance unavailable. |
 
 ### HPR-19-3 — MAKE ALL GAMEPLAY OBSTACLES DESTRUCTIBLE
 
@@ -6406,11 +6406,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | MAKE ALL GAMEPLAY OBSTACLES DESTRUCTIBLE |
 | Original Request | NEW REQUIREMENT: Every obstacle placed within the active arena should be capable of reacting to and being destroyed by sufficient physical contact. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section19.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | All22existing barrels/crates/tires/ramps/sweepers use existing Core-Collapse/PlowBreakable pool, actual-model EzySlice precuts and mode-only navigation/reset adapter. Structural floor/boards retained. |
+| Automated Verification | Native3/3 includes genuine truck collision breaking a prop, both scene references and complete restoration; original Plowing adapter break/reset passed in both scenes. ff39Windows25/0 includes natural obstacle breaks and restored rematches in both variants. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Finish current exact-candidate broader gameplay/camera regression; human feel/destruction presentation acceptance unavailable. |
 
 ### HPR-19-4 — Preserve Existing Keepaway Mechanics
 
@@ -6420,11 +6420,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Existing Keepaway Mechanics |
 | Original Request | Maintain: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section19.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing scoring/contact/ball/sheep/weather/crew/UI/camera systems preserved; bounded nav refresh reacts to moving/broken obstacles. Shared compass paused entrance corrected through DOTween/CNP. |
+| Automated Verification | Native3/3; ff39Windows25/0 complete two four-AI matches/rematches and rendering. Focused camera54/1 exposed paused widget issue; corrected native1/1 and projection9/9pass, broader Windows rerun pending. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Current candidate mixed-human/default60s/rain-snow/cab/nameplate regression and33-scene camera pass pending; no physical hardware or human acceptance claim. |
 
 ### HPR-20-1 — Reduce Wind Intensity by Approximately 30%
 

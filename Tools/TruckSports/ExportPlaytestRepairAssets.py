@@ -20,6 +20,7 @@ paths += ["Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity"]
 paths += ["Assets/TruckTrailerPlug/Models/" + name + suffix for name in ["Open Quarry Floor", "Quarry Pedestrian Navigation"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Art/" + name + part + suffix for name in ["Arctic standard gate", "Arctic precision gold gate"] for part in ["", " body", " inset"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Materials/Arctic gate snow chips.mat" + suffix for suffix in ["", ".meta"]]
+paths += [str(p.relative_to(CLEAN)).replace("\\", "/") for p in (CLEAN / "Assets/TruckKeepaway/Materials").glob("Expanded *") if p.is_file()]
 records = []
 for relative in paths:
     assert relative not in baseline, "Preserve unrelated pending work: " + relative
