@@ -48,12 +48,16 @@ namespace LWS.TruckTrailerPlug
             if(mode=="mixed"){keyboard=InputSystem.AddDevice<Keyboard>("Trailer Plug injected keyboard");match.setup.players[0].source=BowlingSource.Keyboard;}
             Check(match.StartMatch(), mode=="mixed"?"injected human and three AI competitors start with independent source ownership":"four alternating AI competitors start without controllers");
             Time.timeScale = 4; float deadline = Time.realtimeSinceStartup + 400, next = 0;
-            bool captured = false, paused = false; int priorRelease = 0; float maxCable = 0, maximumVisualSeparation = 0;
-            var renderModel = match.rig.trailer.transform.Find("Cargo Trailer Render Model");
-            Check(renderModel != null && match.rig.trailer.GetComponentsInChildren<Rigidbody>(true).Length == 1, "owned trailer art has exactly one authoritative Rigidbody and no nested vehicle controller");
+            bool captured = false, paused = false; int priorRelease = 0, hitchSamples = 0; float maxCable = 0, maximumHitchSeparation = 0;
+            Check(match.rig.tractorHitch != null && match.rig.trailerModule != null && match.rig.trailer.GetComponentsInChildren<Rigidbody>(true).Length == 1,
+                "matched native models retain NWH hitch/trailer modules and one authoritative trailer Rigidbody");
+            Check(match.rig.truck.transform.localScale == Vector3.one && match.rig.trailer.transform.localScale == Vector3.one,
+                "both NWH physics roots keep their supported unit scale");
+            Check(match.openingRadii.x > 2.4f && match.openingRadii.y > 6, "actual opening is enlarged for the matched articulated vehicle dimensions");
             while (!match.Finished && Time.realtimeSinceStartup < deadline && errors == 0)
             {
-                if (renderModel != null) maximumVisualSeparation = Mathf.Max(maximumVisualSeparation, renderModel.localPosition.magnitude);
+                if (match.Phase == TrailerPlugPhase.Swing && match.rig.Attached)
+                { hitchSamples++; maximumHitchSeparation = Mathf.Max(maximumHitchSeparation, match.rig.HitchSeparation); }
                 if(mode=="mixed"){
                     if(match.Phase==TrailerPlugPhase.Swing&&match.rules.Participant==0){InputSystem.QueueStateEvent(keyboard,match.Age>8?new KeyboardState(Key.W,Key.Space):match.Age>1?new KeyboardState(Key.W):new KeyboardState());}
                     else InputSystem.QueueStateEvent(keyboard,new KeyboardState());
@@ -91,9 +95,9 @@ namespace LWS.TruckTrailerPlug
             Check(match.PhysicalReleases == 12, "exactly twelve physical releases, three per participant");
             for (int i = 0; i < 4; i++) Check(match.rules.attempts[i] == 3, "participant " + i + " receives exactly three scored drops");
             Check(match.PhysicalHits > 0, "falling trailers physically activate shared Taxi ragdolls and once-only impact scores");
-            Check(maximumVisualSeparation < .1f,"visible cargo model stays at its physical root for the entire match (render interpolation is intentionally permitted)");
+            Check(hitchSamples > 100 && maximumHitchSeparation < .5f, "real NWH attachment points remain physically aligned throughout all swings, max=" + maximumHitchSeparation);
             Check(maxCable < 72, "actual bungee remains bounded through all deliveries");
-            report.AppendLine("PHYSICAL releases=" + match.PhysicalReleases + " hits=" + match.PhysicalHits + " settled=" + match.SettledAttempts + " maxCable=" + maxCable);
+            report.AppendLine("PHYSICAL releases=" + match.PhysicalReleases + " hits=" + match.PhysicalHits + " settled=" + match.SettledAttempts + " maxCable=" + maxCable + " hitchSamples=" + hitchSamples + " maxHitchSeparation=" + maximumHitchSeparation);
             match.SetupScreen(); Check(match.StartMatch() && match.rules.Round == 1 && match.rules.score[0] == 0 && match.PhysicalReleases == 0,
                 "rematch restores hitch, crowd pool, turn counts and scores");
             yield return null; match.SetupScreen(); SportsNavigation.FrontEnd(); yield return null; yield return null;

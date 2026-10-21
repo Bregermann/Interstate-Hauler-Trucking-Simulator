@@ -366,3 +366,66 @@ Reviewed staging scope:250allowlisted paths,190changed files before this final
 document update; exact90source hashes match the tested candidate.925unrelated
 pre-existing pending paths remain outside scope, plus two already-captured current
 request documents intentionally included. Private navigation source excluded.
+
+
+## Preserved milestone and next repair
+
+Commit72f68e8aad23850335a9f9b7d5458c1c4315964e pushed successfully to
+main and codex/truck-sports-seven-events. Windows c8 candidate promoted to
+Builds/TruckSports/TruckSports.exe after verifying all544companion files. Previous
+accepted build preserved at.sports-validation/Recovery/AcceptedBuildBeforeCamera-
+20261021-152858. Exact receipt:canonical-build-promotion.json.
+FareDefaultFive15/0 completed in545.41real seconds: five real deliveries, rematch
+and menu return. One AI remained stuck for a prolonged period; HPR-8-4reopened
+asPARTIAL rather than hiding that defect behind match completion.
+
+Trailer baseline dimensions measured natively: matched source tractor4.8516m
+long / trailer11.6578m, original sport tractor3m / trailer16mwith mismatched
+axis scales. Both native models now share uniform factor2.801609; physics roots
+and wheel controllers stay unit scale. Targeted scene migrationv2retains the
+quarry, shared crowd, scoring and pumping, uses NWH public AttachTrailer/
+DetachTrailer and its actual kingpin, keeps velocity/angular momentum, and
+resizes the floor/liquid/navigation to openingradii(2.55,11.10). All1019scene
+dependencies are already tracked; no new vendor payload needed. Native first
+integration4/4failed due wheel-controller local scaling and stale serialized
+snow wheel references after replacement; corrected in owned authoring and
+rerunning. No assertion suppression/vendor edits. New native test also verifies
+three repeated countdowns/attachments/releases. A real centered/off-center drop
+fixture now accounts for the original native trailer's front-biased pivot, rather
+than mistakenly placing its kingpin over the hole. This is a geometric fixture,
+not evidence of a naturally earned human/AI delivery.
+
+
+Trailer final native PlayMode5/5and EditMode16/16passed. The remaining repeat
+fixture failure was stale interpolation from the previous delivery: cleared only
+while the entire countdown assembly is kinematic, restored atGO; no active flight
+velocity reset. Actual vendor anchors align, three repeat starts/releases retain
+linear/angular momentum, centered real collider drop seals once and off-center
+drop cannot seal. Camera test measures the larger assembly's rendered projection.
+
+Candidate managedSHA49384f873d2384090f1f6e73ae1eee0b4c9a46e352dc398af10355d980ed4306
+built60scenes, zeroerrors/69warnings; native builder206.61seconds. Exact97-source
+snapshot retained. Actual720/1080Windows images inspected: matched truck/trailer
+and enlarged true hole visible, no obvious missing materials. TrailerMatchedAI
+is still running; impacts and partial plugs observed but completion not yet
+claimed. Canonical build remains verifiedc8until this candidate passes acceptance.
+
+
+## Trailer Plug Windows acceptance
+
+Exact49384f873d23candidate completed TrailerMatchedAI17/0in146.70seconds:
+12releases,35physical impacts,12settled,13605hitch samples, max0.02414798m
+separation and62.07059mmax cable. TrailerMatchedMixed20/0in135.44seconds:
+12releases,3impacts,12settled,11456hitch samples, max0.02414394mseparation;
+software keyboard controls, recorded replay angle/speed/rewind/skip and fresh
+turn input exercised. Both rematch and scene/menu cleanup passed; no extra
+listeners, exceptions, or altered managed assembly.720p/1080p actual images
+visually inspected. HPR-7-1through7-4are objectively VERIFIED COMPLETE, with
+human feel/listening/physical-controller fields explicitly unverified.
+Canonical promotion is preserving the precedingc8build and copying/verifying all
+companion files. Follow-up scope is18owned source/scene/test/doc/tool paths,
+zero new vendor files; all97source hashes and exported assets match the candidate.
+Next implementation: Field Goal broken post-kick audio, holder alignment and
+confirmed-goal celebration (HPR-1-1through1-4); source/vendor audit begun only.
+Fare's prolonged single-AI recovery failure and Hockey's unreproduced legal-goal
+report remain open. Do not mark the rest of the HPR/GBC directive complete.

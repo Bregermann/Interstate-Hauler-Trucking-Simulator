@@ -61,7 +61,8 @@ public sealed class GoddessPhysicsTests {
   yield return null;
   // Explicit physical fixture: place the detached real trailer for a vertical drop.
   // This does not represent a naturally earned human or AI delivery.
-  body.position=position;body.rotation=Quaternion.identity;body.linearVelocity=body.angularVelocity=Vector3.zero;body.WakeUp();Physics.SyncTransforms();
+  body.rotation=Quaternion.identity;var boundsField=rig.GetType().GetField("trailerLocalBounds");var center=boundsField==null?Vector3.zero:((Bounds)boundsField.GetValue(rig)).center;
+  body.position=position-body.rotation*center;body.linearVelocity=body.angularVelocity=Vector3.zero;body.WakeUp();Physics.SyncTransforms();
   deadline=Time.realtimeSinceStartup+12;while(Get(match,"Phase").ToString()!="AttemptResult"&&Time.realtimeSinceStartup<deadline)yield return null;
   Assert.That(Get(match,"Phase").ToString(),Is.EqualTo("AttemptResult"));
  }

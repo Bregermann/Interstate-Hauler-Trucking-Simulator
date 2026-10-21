@@ -5,6 +5,7 @@ import json
 import shutil
 import subprocess
 import time
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -16,7 +17,12 @@ UNITY = "C:/Program Files/Unity/Hub/Editor/6000.4.10f1/Editor/Unity.exe"
 def sync():
     baseline = {p["path"] for p in json.loads((LOG / "host-pending-baseline.json").read_text())}
     changed = set(filter(None, (subprocess.check_output(["git", "diff", "--name-only", "-z", "HEAD"], cwd=ROOT, stderr=subprocess.PIPE) + subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "-z"], cwd=ROOT)).decode().split("\0")))
-    sources = sorted(p for p in changed - baseline if p.startswith("Assets/Truck") and p.endswith(".cs"))
+    # A scoped milestone commit must not make the next build forget which
+    # already-tested repair sources it contains. Retain immutable prior inputs.
+    known = set()
+    for manifest in LOG.glob("build-*-sources.json"):
+        known.update(v["path"] for v in json.loads(manifest.read_text()))
+    sources = sorted(p for p in (changed | known) - baseline if p.startswith("Assets/Truck") and p.endswith(".cs"))
     for relative in sources:
         source, target = ROOT / relative, CLEAN / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -32,6 +38,11 @@ def run(name, arguments):
         history = LOG / "History"
         history.mkdir(exist_ok=True)
         shutil.copy2(previous_log, history / (name + "-" + str(time.time_ns()) + ".log"))
+    previous_xml = LOG / (name + ".xml")
+    if previous_xml.exists():
+        history = LOG / "History"
+        history.mkdir(exist_ok=True)
+        shutil.copy2(previous_xml, history / (name + "-" + str(time.time_ns()) + ".xml"))
     command = [UNITY, "-batchmode", "-projectPath", str(CLEAN), *arguments, "-logFile", str(LOG / (name + ".log"))]
     process = subprocess.Popen(command, cwd=ROOT)
     print(name, "Editor PID", process.pid, flush=True)
@@ -53,7 +64,7 @@ def run(name, arguments):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["bind", "repair-author", "sky-author", "fare-author", "mine-author", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
@@ -72,8 +83,15 @@ def main():
         run("farefight-repair-authoring", ["-quit", "-executeMethod", "LWS.TruckFareFight.Editor.FareFightRepairAuthoring.Upgrade"])
     elif args.stage == "mine-author":
         run("minefield-repair-authoring", ["-quit", "-executeMethod", "LWS.TruckMinefield.Editor.MinefieldPlaytestRepairAuthoring.Upgrade"])
+    elif args.stage == "trailer-audit":
+        run("trailer-geometry-audit", ["-quit", "-executeMethod", "LWS.TruckTrailerPlug.Editor.TrailerPlugRepairAuthoring.Audit"])
+    elif args.stage == "trailer-author":
+        run("trailer-rig-repair-authoring", ["-quit", "-executeMethod", "LWS.TruckTrailerPlug.Editor.TrailerPlugRepairAuthoring.Upgrade"])
     elif args.stage == "tests":
         run(args.test_name, ["-runTests", "-testPlatform", args.test_platform, "-testFilter", args.test_filter, "-testResults", str(LOG / (args.test_name+".xml"))])
+        result = ET.parse(LOG / (args.test_name + ".xml")).getroot()
+        assert int(result.attrib.get("passed", 0)) > 0 and int(result.attrib.get("failed", 0)) == 0, result.attrib
+        print("Native test result", result.attrib, flush=True)
     elif args.stage == "build":
         run("camera-build", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsBuilder.BuildFocused", "-tsBuildOutput", "Builds/TruckSportsCamera/TruckSports.exe"])
 

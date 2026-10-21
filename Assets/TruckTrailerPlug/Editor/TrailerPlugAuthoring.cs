@@ -234,6 +234,19 @@ namespace LWS.TruckTrailerPlug.Editor
             if (data == null) throw new InvalidOperationException("Quarry pedestrian navigation failed.");
             AssetDatabase.CreateAsset(data, "Assets/" + Folder + "/Models/Quarry Pedestrian Navigation.asset"); surface.navMeshData = data; surface.AddData();
         }
+        public static void RebakeNavigation()
+        {
+            var surface = UnityEngine.Object.FindAnyObjectByType<NavMeshSurface>();
+            if (surface == null || surface.navMeshData == null) throw new InvalidOperationException("Preserve the authored quarry navigation asset.");
+            var sources = new List<NavMeshBuildSource>();
+            var bounds = new Bounds(Vector3.zero, new Vector3(180, 30, 180));
+            NavMeshBuilder.CollectSources(bounds, 1, NavMeshCollectGeometry.PhysicsColliders, 0, new List<NavMeshBuildMarkup>(), sources);
+            var settings = NavMesh.GetSettingsByID(0); settings.agentRadius = .4f; settings.agentHeight = 1.8f;
+            settings.overrideVoxelSize = true; settings.voxelSize = .18f;
+            surface.RemoveData();
+            if (!NavMeshBuilder.UpdateNavMeshData(surface.navMeshData, settings, sources, bounds)) throw new InvalidOperationException("Quarry opening navigation rebake failed.");
+            surface.AddData(); EditorUtility.SetDirty(surface.navMeshData);
+        }
         public static void Validate()
         {
             var m = UnityEngine.Object.FindAnyObjectByType<TrailerPlugMatch>();

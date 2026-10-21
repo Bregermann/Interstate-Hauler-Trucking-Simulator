@@ -5818,11 +5818,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Correct Vehicle and Trailer Scale |
 | Original Request | The truck and trailer dimensions currently look inconsistent. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section7.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section7.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | TrailerPlugRepairAuthoring explicit v2saved-scene upgrade; matched native NWH models at common2.801609uniform geometry factor with unit controller scales, public vendor AttachTrailer/DetachTrailer, deferred joint retirement and stationary countdown interpolation reset, real free-wheel suspension, openingradii2.55/11.10matching owned floor/liquid/navigation. Existing quarry/crowd/scoring/pump/replay preserved. |
+| Automated Verification | Native PlayMode5/5: native proportions/floor agreement, three repeated attachment/release cycles with exact momentum preservation, real centered seal once/off-center miss and camera projection. Existing EditMode rules16/16. Exact49384f873d23Windows: TrailerMatchedAI17/0,12releases/35physical impacts/12settled; TrailerMatchedMixed20/0,12releases/3physical impacts/12settled, injected keyboard/replay/turn gating, rematch and clean menu exit. Max real hitch separation0.02415m across25061samples. Actual720p/1080p images inspected. |
+| Human Verification | No human playtest, physical controller or listening acceptance claimed. Supplied original observations addressed by the recorded automated physical/visual evidence. |
+| Remaining Work | No known implementation defect in this scoped requirement; human feel/listening and physical-device acceptance remain unperformed. |
 
 ### HPR-7-2 — Use Proper Hitch Attachment
 
@@ -5832,11 +5832,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Use Proper Hitch Attachment |
 | Original Request | Reuse the existing trailer hookup and detachment infrastructure from Interstate: Hauler. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section7.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section7.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | TrailerPlugRepairAuthoring explicit v2saved-scene upgrade; matched native NWH models at common2.801609uniform geometry factor with unit controller scales, public vendor AttachTrailer/DetachTrailer, deferred joint retirement and stationary countdown interpolation reset, real free-wheel suspension, openingradii2.55/11.10matching owned floor/liquid/navigation. Existing quarry/crowd/scoring/pump/replay preserved. |
+| Automated Verification | Native PlayMode5/5: native proportions/floor agreement, three repeated attachment/release cycles with exact momentum preservation, real centered seal once/off-center miss and camera projection. Existing EditMode rules16/16. Exact49384f873d23Windows: TrailerMatchedAI17/0,12releases/35physical impacts/12settled; TrailerMatchedMixed20/0,12releases/3physical impacts/12settled, injected keyboard/replay/turn gating, rematch and clean menu exit. Max real hitch separation0.02415m across25061samples. Actual720p/1080p images inspected. |
+| Human Verification | No human playtest, physical controller or listening acceptance claimed. Supplied original observations addressed by the recorded automated physical/visual evidence. |
+| Remaining Work | No known implementation defect in this scoped requirement; human feel/listening and physical-device acceptance remain unperformed. |
 
 ### HPR-7-3 — Enlarge the Hole
 
@@ -5846,11 +5846,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Enlarge the Hole |
 | Original Request | The sinkhole is currently too small to receive or be sealed by the trailer. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section7.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section7.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | TrailerPlugRepairAuthoring explicit v2saved-scene upgrade; matched native NWH models at common2.801609uniform geometry factor with unit controller scales, public vendor AttachTrailer/DetachTrailer, deferred joint retirement and stationary countdown interpolation reset, real free-wheel suspension, openingradii2.55/11.10matching owned floor/liquid/navigation. Existing quarry/crowd/scoring/pump/replay preserved. |
+| Automated Verification | Native PlayMode5/5: native proportions/floor agreement, three repeated attachment/release cycles with exact momentum preservation, real centered seal once/off-center miss and camera projection. Existing EditMode rules16/16. Exact49384f873d23Windows: TrailerMatchedAI17/0,12releases/35physical impacts/12settled; TrailerMatchedMixed20/0,12releases/3physical impacts/12settled, injected keyboard/replay/turn gating, rematch and clean menu exit. Max real hitch separation0.02415m across25061samples. Actual720p/1080p images inspected. |
+| Human Verification | No human playtest, physical controller or listening acceptance claimed. Supplied original observations addressed by the recorded automated physical/visual evidence. |
+| Remaining Work | No known implementation defect in this scoped requirement; human feel/listening and physical-device acceptance remain unperformed. |
 
 ### HPR-7-4 — Preserve Working Mechanics
 
@@ -5860,11 +5860,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Working Mechanics |
 | Original Request | Keep: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section7.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section7.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | TrailerPlugRepairAuthoring explicit v2saved-scene upgrade; matched native NWH models at common2.801609uniform geometry factor with unit controller scales, public vendor AttachTrailer/DetachTrailer, deferred joint retirement and stationary countdown interpolation reset, real free-wheel suspension, openingradii2.55/11.10matching owned floor/liquid/navigation. Existing quarry/crowd/scoring/pump/replay preserved. |
+| Automated Verification | Native PlayMode5/5: native proportions/floor agreement, three repeated attachment/release cycles with exact momentum preservation, real centered seal once/off-center miss and camera projection. Existing EditMode rules16/16. Exact49384f873d23Windows: TrailerMatchedAI17/0,12releases/35physical impacts/12settled; TrailerMatchedMixed20/0,12releases/3physical impacts/12settled, injected keyboard/replay/turn gating, rematch and clean menu exit. Max real hitch separation0.02415m across25061samples. Actual720p/1080p images inspected. |
+| Human Verification | No human playtest, physical controller or listening acceptance claimed. Supplied original observations addressed by the recorded automated physical/visual evidence. |
+| Remaining Work | No known implementation defect in this scoped requirement; human feel/listening and physical-device acceptance remain unperformed. |
 
 ### HPR-8-1 — Objective Direction Arrow
 
@@ -5916,11 +5916,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Completely Repair AI Objective Pursuit |
 | Original Request | AI currently drives aimlessly and collides with walls instead of pursuing the current goal. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section8.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | PARTIAL |
 | Implementation Evidence | FareFightRoadAccess, FareFightRoute progress-based recovery and match objective states; sampled road join plus authored opposing-edge handling, original shared planner retained. |
-| Automated Verification | FareFight22/22native; Windows FareFightFairRoutesFull2 candidate5869909c15/0 complete first-to-three real AI match, actual pickups/thefts/deliveries, rematch and menu. |
+| Automated Verification | Fare22/22native; Windows FairRoutesFull2 first-to-three15/0; exact c8 FareDefaultFive15/0 complete default first-to-five real four-AI match in545.41seconds, actual NWH pickup/theft/delivery, rematch/menu. Full trace retained; one competitor remained stuck for a prolonged interval. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Default first-to-five full match currently running; severe weather, physical devices and human driving acceptance remain unperformed. FinalFareCabViews30/0 establishes four software-human isolation and contact/arrow integration. |
+| Remaining Work | Repair the prolonged single-competitor recovery failure observed in the default match; severe-weather, physical-device and human driving acceptance unperformed. |
 
 ### HPR-8-5 — Fair Initial Passenger Distances
 
@@ -5932,9 +5932,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section8.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | FareFightStartingGrid; actual initial footprint clearance; comparable sampled road distances with rotated slot assignment; traffic/population and hazards avoid countdown truck poses. |
-| Automated Verification | Native every20authored pickup supports four separated fair starts; actual Windows full match starts at250.01m road distance for all four competitors, initialized truck bounds do not overlap. |
+| Automated Verification | Native all20authored pickup positions support four non-overlapping equal-route starts; c8 FareDefaultFive15/0 confirms250.01m actual starting routes, complete first-to-five and rematch. FinalFareCabViews30/0 covers four software-human input/view isolation. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Default first-to-five full match currently running; severe weather, physical devices and human driving acceptance remain unperformed. FinalFareCabViews30/0 establishes four software-human isolation and contact/arrow integration. |
+| Remaining Work | Human fairness/varied-weather acceptance unperformed; AI recovery is separately open under HPR-8-4. |
 
 ### HPR-8-6 — Preserve Existing Gameplay
 
@@ -7418,11 +7418,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckTrailerPlug |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing alternating precision bungee/cinematic camera retained; focus uses actual matched assembly/physical trailer center and recorded ghost center, scale-appropriate bounded offsets. No all-competitor framing or replay/cab override. |
+| Automated Verification | Native camera/proportion/hitch/seal PlayMode5/5; Windows TrailerMatchedAI17/0 and TrailerMatchedMixed20/0 on49384f873d23,720p/1080p frames visually inspected with readable tractor/trailer and hole. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human framing acceptance unperformed; this alternating precision sport retains its existing shot authority rather than binding the shared multi-actor director. |
 
 #### GBC-SPORT-TruckFareFight
 

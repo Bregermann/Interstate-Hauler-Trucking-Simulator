@@ -119,3 +119,29 @@ small road-access/fair-grid adapters, owned gate mesh correction and targeted te
 VENDOR SOURCE MODIFIED: none.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: none; no replacement physics, route search,
 weather renderer, compass projection or UI tween framework.
+
+
+### Trailer Plug matched-vehicle repair
+
+VENDOR ASSETS AUDITED: Installed GR3D SemiTruck/SemiTrailer prefabs, NWH
+TrailerHitchModule/TrailerModule wrappers and public AttachTrailer/DetachTrailer,
+WheelController unit-scale requirements, LwsNwhTrailerCouplingAdapter, existing
+BungeeSwingForces, PlowCrowdFactory/Plow ragdoll context, SportsMotionReplay,
+Weatherade scene snow adapter and NavMeshSurface.
+VENDOR ASSETS USED: The matched NWH source models, original compound physics
+bodies/cab joint, vendor-created hitch, native freely rolling trailer wheels,
+original materials and existing owned URP conversions. Same uniform geometry
+factor2.801609applied to both, with unit-scale controller transforms. Existing
+PhysX bungee pump/replay, shared Plowing crowd and Weatherade bindings retained.
+RELEVANT ASSETS NOT USED: LwsNwhTrailerCouplingAdapter routes manual road-hitch
+input; this countdown needs the same underlying public NWH attachment API
+directly. Original stretched render-only trailer remains on disk for history,
+removed from the active scene. No new terrain/road framework was warranted.
+CUSTOM SYSTEMS CREATED: Only LWS sport lifecycle coordination, deferred attach
+after joint retirement, countdown interpolation reset, geometric coverage-center
+adaptation and explicit versioned scene upgrade/regression tests. Existing custom
+hitch construction was removed from the active runtime.
+VENDOR SOURCE MODIFIED: None.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: None; NWH owns coupling and free-wheel
+physics. All1019saved-scene dependencies were already tracked, with no new vendor
+payload required for this repair.

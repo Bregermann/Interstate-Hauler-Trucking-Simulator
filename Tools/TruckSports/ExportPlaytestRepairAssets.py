@@ -15,6 +15,8 @@ paths += ["Assets/TruckFishing/Prefabs/" + name + ".prefab" for name in ["Small 
 paths += ["Assets/TruckFishing/Models/" + name + suffix for name in ["Winding playtest riverbanks", "Winding playtest river surface"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Scenes/TruckSkyTow.unity"]
 paths += ["Assets/TruckMinefield/Scenes/TruckMinefield.unity"]
+paths += ["Assets/TruckTrailerPlug/Scenes/TruckTrailerPlug.unity"]
+paths += ["Assets/TruckTrailerPlug/Models/" + name + suffix for name in ["Open Quarry Floor", "Quarry Pedestrian Navigation"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Art/" + name + part + suffix for name in ["Arctic standard gate", "Arctic precision gold gate"] for part in ["", " body", " inset"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Materials/Arctic gate snow chips.mat" + suffix for suffix in ["", ".meta"]]
 records = []
@@ -26,4 +28,4 @@ for relative in paths:
     shutil.copy2(source, target)
     records.append(dict(path=relative, sha256=hashlib.sha256(target.read_bytes()).hexdigest()))
 (LOG / "playtest-exported-assets.json").write_text(json.dumps(records, indent=2))
-print("Preserved", len(paths), "explicit Fishing/Sky Tow scene/art paths; original vendor assets and unrelated scenes unchanged.")
+print("Preserved", len(paths), "explicit Fishing/Sky Tow/Minefield/Trailer Plug scene/art paths; original vendor assets and unrelated scenes unchanged.")

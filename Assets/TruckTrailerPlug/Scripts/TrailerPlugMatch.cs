@@ -83,7 +83,7 @@ namespace LWS.TruckTrailerPlug
         {
             var body = rig.trailer; float skill = (int)setup.players[rules.Participant].difficulty;
             float time = (body.linearVelocity.y + Mathf.Sqrt(body.linearVelocity.y * body.linearVelocity.y + 2 * 9.81f * Mathf.Max(0, body.position.y))) / 9.81f;
-            var predicted = body.position + Vector3.ProjectOnPlane(body.linearVelocity, Vector3.up) * time;
+            var predicted = rig.TrailerCenter + Vector3.ProjectOnPlane(body.linearVelocity, Vector3.up) * time;
             Vector3 desired = hole.position - predicted;
             float error = Mathf.Sin((rules.Round * 11 + rules.Participant * 7) * .77f) * (2.5f - skill * .85f);
             desired.x += error; desired.z += error * .6f;
@@ -136,13 +136,14 @@ namespace LWS.TruckTrailerPlug
             {
                 var origin = hole.position + new Vector3(point.x, -.3f, point.y);
                 foreach (var collider in rig.trailer.GetComponentsInChildren<Collider>())
-                    if (collider.enabled && collider.Raycast(new Ray(origin, Vector3.up), out _, 6)) { covered++; break; }
+                    if (collider.enabled && !collider.isTrigger && collider.Raycast(new Ray(origin, Vector3.up), out _,
+                        Mathf.Max(6, rig.trailerLocalBounds.size.y + 1))) { covered++; break; }
             }
             return coverageSamples.Count == 0 ? 0 : covered / (float)coverageSamples.Count;
         }
         void Resolve(bool stable)
         {
-            float coverage = MeasureCoverage(); float center = Vector3.ProjectOnPlane(rig.trailer.position - hole.position, Vector3.up).magnitude;
+            float coverage = MeasureCoverage(); float center = Vector3.ProjectOnPlane(rig.TrailerCenter - hole.position, Vector3.up).magnitude;
             if (!rules.Resolve(coverage, rig.Supported, stable, center, Vector3.Dot(rig.trailer.rotation * Vector3.up, Vector3.up))) return;
             if (stable) SettledAttempts++;
             announcement = rules.Sealed ? rules.Perfect ? "PERFECT SEAL!" : "HOLE PLUGGED!" : rules.Coverage > 0 ? "PARTIAL PLUG · " + Mathf.RoundToInt(rules.Coverage * 100) + "%" : "MISSED THE PLUG";
@@ -154,9 +155,9 @@ namespace LWS.TruckTrailerPlug
         void NextAttempt()
         { if (!rules.Next()) { Phase = TrailerPlugPhase.Complete; EndMatch(); } else BeginAttempt(); }
         void BeginReplay()
-        { rig.Hold(); rig.truck.visuals.gameObject.SetActive(false); foreach (var renderer in rig.trailer.GetComponentsInChildren<Renderer>()) renderer.enabled = false; replay.Begin(Mathf.Max(0, replay.Duration - 14)); Phase = TrailerPlugPhase.Replay; }
+        { rig.Hold(); foreach (var renderer in rig.truck.visuals.GetComponentsInChildren<Renderer>()) renderer.enabled = false; foreach (var renderer in rig.trailer.GetComponentsInChildren<Renderer>()) renderer.enabled = false; replay.Begin(Mathf.Max(0, replay.Duration - 14)); Phase = TrailerPlugPhase.Replay; }
         void StopReplay()
-        { replay.End(); rig.truck.visuals.gameObject.SetActive(true); foreach (var renderer in rig.trailer.GetComponentsInChildren<Renderer>()) renderer.enabled = true; }
+        { replay.End(); foreach (var renderer in rig.truck.visuals.GetComponentsInChildren<Renderer>()) renderer.enabled = true; foreach (var renderer in rig.trailer.GetComponentsInChildren<Renderer>()) renderer.enabled = true; }
         public override void ExtraAction(string key)
         {
             if (Phase != TrailerPlugPhase.Replay) return;
@@ -168,11 +169,14 @@ namespace LWS.TruckTrailerPlug
         protected override void Present(float dt)
         {
             if (broadcast == null || rig == null) return;
-            Vector3 focus = !Running ? new Vector3(0, 22, -5) : Phase == TrailerPlugPhase.Swing || Phase == TrailerPlugPhase.CountIn ?
-                Vector3.Lerp(rig.truck.body.position, hole.position, .4f) : Phase == TrailerPlugPhase.Replay ? replay.Position(1) : rig.trailer.position;
+            bool swinging = Phase == TrailerPlugPhase.Swing || Phase == TrailerPlugPhase.CountIn;
+            Vector3 assemblyCenter = (rig.truck.transform.TransformPoint(rig.truck.shape.center) + rig.TrailerCenter) * .5f;
+            Vector3 focus = !Running ? new Vector3(0, 22, -5) : swinging ?
+                Vector3.Lerp(assemblyCenter, hole.position, .2f) : Phase == TrailerPlugPhase.Replay ? replay.ghosts[1].TransformPoint(rig.trailerLocalBounds.center) : rig.TrailerCenter;
             focus.y = Mathf.Max(2, focus.y);
-            Vector3 offset = Phase == TrailerPlugPhase.Swing || Phase == TrailerPlugPhase.CountIn ? new Vector3(30, 15, -40) : new Vector3(21, 16, -24);
+            Vector3 offset = swinging ? new Vector3(42, 31, -60) : new Vector3(21, 16, -24);
             if (Phase == TrailerPlugPhase.Replay) offset = replay.Angle == 1 ? new Vector3(-18, 12, 22) : replay.Angle == 2 ? new Vector3(2, 38, -8) : offset;
+            if (!swinging && Running) offset *= Mathf.Sqrt(Mathf.Max(1, rig.trailerLocalBounds.size.z / 16));
             broadcast.Pose(focus, offset, 65);
         }
         protected override void SetPaused(bool pause) { atmosphere?.Pause(pause); if (pause) voice?.Pause(); else voice?.UnPause(); }
