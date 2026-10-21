@@ -907,20 +907,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 1 (TRUCK HIDE & SEEK), including all confirmed design decisions. |
 | Acceptance Criteria | Verify actual hiding, engine shutdown, restart delay, radar clues, seeker navigation, physical tagging, correct spectating, and timed victory. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Verify actual hiding, engine shutdown, restart delay, radar clues, seeker navigation, physical tagging, correct spectating, and timed victory. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
-| Last Verification Date | None |
-| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest, listening, physical devices, difficulty balance and long-run profiling. Preserve focused automated acceptance; no claim of human-certified release readiness. |
 
 
 #### EX01-AI
@@ -931,20 +931,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Actual difficulty-aware sport-specific AI under the same rules;1–4local humans and AI-only viewing where practical. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 1 (TRUCK HIDE & SEEK), including all confirmed design decisions. |
 | Acceptance Criteria | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Observe genuine objective actions, fair physical interactions, appropriate difficulty and complete autonomous matches; no invented scores. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
-| Last Verification Date | None |
-| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest, listening, physical devices, difficulty balance and long-run profiling. Preserve focused automated acceptance; no claim of human-certified release readiness. |
 
 
 #### EX01-ENV
@@ -955,20 +955,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Detailed sport-specific modeled environment using audited owned assets. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 1 (TRUCK HIDE & SEEK), including all confirmed design decisions. |
 | Acceptance Criteria | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Connected reachable play space meets the requested setting/scale; no final grayboxes, invisible blockers or empty floating arenas; actual render and performance inspection. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
-| Last Verification Date | None |
-| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest, listening, physical devices, difficulty balance and long-run profiling. Preserve focused automated acceptance; no claim of human-certified release readiness. |
 
 
 #### EX01-LOGO
@@ -979,20 +979,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Assets/TruckSports/Art/Logos/TruckHideAndSeek.png; Tools/TruckSports/ArtworkSources/TruckHideAndSeek.json. |
-| Implementation Evidence | Original grungy late-1990s/early-2000s console-style transparent raster artwork generated and copied unchanged into the project. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Unity import, actual setup/menu/venue assignment and Windows readability are not yet accepted. Existing logos were not changed. |
-| Last Verification Date | None |
-| Remaining Work | Import artwork, assign to the completed scene and menu, inspect actual 720p/1080p output. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review; PNG and actual gameplay preview are installed and rendered in Windows. |
 
 
 #### EX01-PREVIEW
@@ -1003,20 +1003,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Actual representative gameplay screenshot in the menu selection card. |
 | Acceptance Criteria | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Status | MISSING |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | VERIFIED COMPLETE |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Capture current actual scene gameplay; assign imported image; inspect normal menu rendering and source provenance. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | Requirement not implemented. |
-| Last Verification Date | None |
-| Remaining Work | Implement, integrate and execute this acceptance requirement. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human aesthetic review; PNG and actual gameplay preview are installed and rendered in Windows. |
 
 
 #### EX01-SETUP
@@ -1027,20 +1027,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Polished match setup: relevant options, AI levels, names, weather, cameras and controller ownership. |
 | Acceptance Criteria | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Existing Heat/shared components, no debug setup; options apply, identities persist, real input prompts and normal menu launch work. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
-| Last Verification Date | None |
-| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest, listening, physical devices, difficulty balance and long-run profiling. Preserve focused automated acceptance; no claim of human-certified release readiness. |
 
 
 #### EX01-HUD
@@ -1051,20 +1051,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Complete polished viewport-safe gameplay HUD and sport-appropriate countdown/start. |
 | Acceptance Criteria | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Attractive identity/portrait panels, scores/timer/progress and mode information;1–4human layouts, AI camera policy and readable720p/1080p output. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
-| Last Verification Date | None |
-| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest, listening, physical devices, difficulty balance and long-run profiling. Preserve focused automated acceptance; no claim of human-certified release readiness. |
 
 
 #### EX01-FX
@@ -1075,20 +1075,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Animated scoring, eliminations, bonuses and notable-event feedback. |
 | Acceptance Criteria | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Actual authoritative events trigger bounded coherent DOTween/audio/visual feedback once, correctly attributed; pause/reset clean up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
-| Last Verification Date | None |
-| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest, listening, physical devices, difficulty balance and long-run profiling. Preserve focused automated acceptance; no claim of human-certified release readiness. |
 
 
 #### EX01-RESULTS
@@ -1099,20 +1099,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Polished victory, defeat, placements/statistics, recorded replay/rematch and menu return. |
 | Acceptance Criteria | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Complete match resolves valid outcome, displays actual identities/statistics, replays preserve results, rematch resets objects/scores and exit cleans up. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
-| Last Verification Date | None |
-| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest, listening, physical devices, difficulty balance and long-run profiling. Preserve focused automated acceptance; no claim of human-certified release readiness. |
 
 
 #### EX01-QA
@@ -1123,20 +1123,20 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK HIDE & SEEK |
 | Original Request | Targeted EditMode/PlayMode, actual matches, multiplayer/render/performance and regressions. |
 | Acceptance Criteria | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Status | PARTIAL |
-| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity (authoring pending; not in accepted build) |
-| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/ prepared locally; not yet compiled or scene-integrated. |
-| Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Local HideRules, HideKnowledge, HidePerception, HideEngine, HideMatch and targeted scene authoring/acceptance source. This draft is excluded from the fourteen-sport delivery. |
-| Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Relevant Unity Scene | Assets/TruckHideAndSeek/Scenes/TruckHideAndSeek.unity |
+| Relevant Scripts | Assets/TruckHideAndSeek/Scripts/ and Editor/; shared opt-in NWH audio, view grouping, listener focus and road-snow contact adapters. |
+| Prefabs or Assets | Existing Snake Vista/EasyRoads world cloned without its game systems; Hivemind modular warehouse, Leartes shelves/crates/cabinets, ShipContainerPack, full NWH tractors/cabs, stock CNP, original grungy PNG. |
+| Implementation Evidence | Saved scene, menu/build registration and Evidence/2026-10-20-Expansion/Fifteen/. |
+| Implementation Notes | Eight real trucks, original seeker only,30s hide/180s seek, engine shutdown/headlights/delayed restart, genuine LOS and spatial engine audio/coarse CNP clues, physical one-time tags, found spectators, role rotation,35 truck-clear route-connected hiding places across measured2.53square-mile terrain, genuine open hangars, moonlit supported fixtures, results/review/rematch. |
 | Test Procedure | Execute all original sport acceptance scenarios plus720p/1080p, full AI match, physical scenarios and repeated rematches; record measured outcomes, errors and exact hardware/human limitations. |
-| Automated Verification | Not executed. |
-| Runtime Evidence | Not executed. |
-| Screenshot/Video Evidence | None yet. |
+| Automated Verification | Native253/253rules; actual native Hide47/0 and prior-mode adapter42/0. Final Windows Hide47/0, adapter42/0, accumulating snow/real tracks48/0 and menu365/0; exit0, same managed SHA256 c8bcb67b8063fe09371702f1b40786064b5eb698cb21856cfdb08cf9c866ae6e. |
+| Runtime Evidence | Complete eight-AI round, isolated real AI tag, body-contact/no-duplicate tag, wall occlusion, delayed engine restart, one–four software-human inputs/cabs, coarse clue viewport isolation, eight-role transition fixture, replay and rematch. Normal snow and exposed-road tracks tested. Hardware/listening/human acceptance not performed. |
+| Screenshot/Video Evidence | Evidence/2026-10-20-Expansion/Fifteen/ actual Windows composed-frame720p/1080p gameplay/cabs/replay/snow. |
 | Human Verification | No human playtest of this new sport. |
-| Known Issues | No saved Hide & Seek scene or executed acceptance yet. Actual warehouse clearance, route connectivity, stealth audio, AI and view ownership remain unverified. |
-| Last Verification Date | None |
-| Remaining Work | Compile/import the prepared source, author and inspect the actual world, run native/physical tests, capture gameplay, install guarded menu entry and validate Windows. |
+| Known Issues | No physical-device, subjective listening, human balance or isolated CPU/GPU profiling acceptance. Full normal-duration eight-role rotation is not claimed; all role transitions used an explicitly short fixture. Local split-screen remains an honor-system game. Severe-weather replay readability/long-run performance need follow-up. |
+| Last Verification Date | 2026-10-20 |
+| Remaining Work | Human playtest, listening, physical devices, difficulty balance and long-run profiling. Preserve focused automated acceptance; no claim of human-certified release readiness. |
 
 
 ### EX02 — TRUCK RED LIGHT, GREEN LIGHT
@@ -1640,7 +1640,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Assets/TruckFrogger/Scripts/FrogRules.cs; Tests/Editor/FrogRulesTests.cs. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | Prepared finite alternating one-life challenge authority, five independent selections/championship, real timing inputs, one-point winner, equivalent seeds and explicit physical tiebreak flow. Not compiled or playable yet. |
+| Implementation Evidence | Local first runtime/authoring draft now covers five independent challenges, real UTS traffic, train/barge/industrial movers, alternating one-life timing, physical gates, cameras and targeted probes. Not compiled or accepted yet. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | All five challenges must be independently selectable and completable. One life per attempt. Fastest successful run receives the point. Five-challenge championship correctly determines the winner. |
 | Automated Verification | Not executed. |
@@ -1712,7 +1712,7 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Relevant Unity Scene | Assets/TruckFrogger/Scenes/TruckFrogger.unity (authoring pending; not in accepted build) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Assets/TruckSports/Art/Logos/TruckFrogger.png; Tools/TruckSports/ArtworkSources/TruckFrogger.json. |
-| Implementation Evidence | Original grungy late-1990s/early-2000s console-style transparent raster artwork generated and copied unchanged into the project. |
+| Implementation Evidence | Local first runtime/authoring draft now covers five independent challenges, real UTS traffic, train/barge/industrial movers, alternating one-life timing, physical gates, cameras and targeted probes. Not compiled or accepted yet. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
 | Automated Verification | Not executed. |
@@ -1879,11 +1879,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 5 (TRUCK NINJA WARRIOR), including all confirmed design decisions. |
 | Acceptance Criteria | The complete course must be physically traversable. Test every obstacle using player input. Verify jump/compression combinations, checkpoint penalties, timing, AI runs, and the warped-wall finish. |
-| Status | MISSING |
+| Status | PARTIAL |
 | Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Original PNG, pure checkpoint/penalty/time rules and prepared reflection tests exist locally; no authored scene or executed acceptance. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | The complete course must be physically traversable. Test every obstacle using player input. Verify jump/compression combinations, checkpoint penalties, timing, AI runs, and the warped-wall finish. |
 | Automated Verification | Not executed. |
@@ -1951,11 +1951,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK NINJA WARRIOR |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | MISSING |
+| Status | PARTIAL |
 | Relevant Unity Scene | Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity (not yet created) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Original PNG, pure checkpoint/penalty/time rules and prepared reflection tests exist locally; no authored scene or executed acceptance. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
 | Automated Verification | Not executed. |
@@ -2365,11 +2365,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Complete playable rules and genuine physical gameplay. Documentation/TruckSports/Requests/2026-10-20-Eighteen-Sports.md, GAME 7 (TRUCK AVALANCHE ESCAPE), including all confirmed design decisions. |
 | Acceptance Criteria | Test a complete mountain race, genuinely approaching avalanche, physical snow contact, brief escapes, burial, branching routes, and AI navigation. |
-| Status | MISSING |
+| Status | PARTIAL |
 | Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Original PNG, pure rules and first runtime coordination draft exist locally; no authored scene or executed acceptance. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Test a complete mountain race, genuinely approaching avalanche, physical snow contact, brief escapes, burial, branching routes, and AI navigation. |
 | Automated Verification | Not executed. |
@@ -2437,11 +2437,11 @@ Source SHA256: `5a8abd9b6d2856c2252570fe186bfbe0fee38eff355cc382ba26447b08a8e56d
 | Sport/System | TRUCK AVALANCHE ESCAPE |
 | Original Request | Unique original PNG logo/icon with cohesive PS1/PS2-era Truck Sports art direction. |
 | Acceptance Criteria | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
-| Status | MISSING |
+| Status | PARTIAL |
 | Relevant Unity Scene | Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity (not yet created) |
 | Relevant Scripts | Not yet implemented; inspect existing shared SportsEventSession/NWH/Heat adapters before coding. |
 | Prefabs or Assets | Audit appropriate installed vendor assets; no placeholder delivery. |
-| Implementation Evidence | None yet. |
+| Implementation Evidence | Original PNG, pure rules and first runtime coordination draft exist locally; no authored scene or executed acceptance. |
 | Implementation Notes | Keep one game-rule authority; reuse input, identity, weather, cameras and UI. |
 | Test Procedure | Real imported artwork assigned in menu/setup and suitable venue presentation; inspect readability, alpha, aspect and distinctness at720p/1080p. |
 | Automated Verification | Not executed. |

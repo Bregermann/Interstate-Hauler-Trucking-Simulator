@@ -10,10 +10,10 @@ def git(*args):
 parser = argparse.ArgumentParser()
 parser.add_argument("--stage", action="store_true")
 args = parser.parse_args()
-folders = [f"Assets/{name}/" for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw", "TruckFloorIsLava", "TruckTetherball", "TruckJousting", "TruckMagnetMayhem", "TruckVolleyball", "TruckFreezeTag", "TruckHungryHaulers", "TruckSheepHerding")]
+folders = [f"Assets/{name}/" for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw", "TruckFloorIsLava", "TruckTetherball", "TruckJousting", "TruckMagnetMayhem", "TruckVolleyball", "TruckFreezeTag", "TruckHungryHaulers", "TruckSheepHerding", "TruckHideAndSeek")]
 folders += ["Documentation/TruckSports/Evidence/2026-10-20-Expansion/"]
 files = {"TRUCK_SPORTS_ACCEPTANCE_LEDGER.md", "Assets/TruckSports/BUILD-INFO.md", "Assets/TruckSports/Scenes/TruckSports.unity", "Assets/TruckSports/Art/Logos/Catalogue.json"}
-for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw", "TruckFloorIsLava", "TruckTetherball", "TruckJousting", "TruckMagnetMayhem", "TruckVolleyball", "TruckFreezeTag", "TruckHungryHaulers", "TruckSheepHerding"):
+for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", "TruckWhackAMole", "TruckKingOfTheHill", "TruckSeesaw", "TruckFloorIsLava", "TruckTetherball", "TruckJousting", "TruckMagnetMayhem", "TruckVolleyball", "TruckFreezeTag", "TruckHungryHaulers", "TruckSheepHerding", "TruckHideAndSeek"):
     files.add(f"Assets/{name}.meta")
     for section in ("Logos", "Previews"):
         for suffix in (".png", ".png.meta"):
@@ -23,7 +23,7 @@ for name in ("TruckRedLightGreenLight", "TruckHotPotato", "TruckBalloonBattle", 
     files.add(f"Tools/TruckSports/ArtworkSources/{name}.json")
 for name in ("SportsBuilder", "SportsMenuArtAuthoring", "SportsNewEntriesAuthoring"):
     files.add(f"Assets/TruckSports/Editor/{name}.cs")
-for name in ("SportsEventSession", "SportsBroadcastScores", "SportsCameraFit", "SportsFrontEnd", "SportsNavigation", "SportsMenuPresentationProbe", "SportsWindowCapture", "SportsRecordedReview", "SportsExpansionCameraAcceptance", "SportsExpansionViewHud", "SportsExpansionSpectators", "SportsExpansionSnowProbe"):
+for name in ("SportsNwhTractorMotor", "SportsRallyViews", "SportsMatchAudioAnchor", "SportsSnowSurface", "SportsEventSession", "SportsBroadcastScores", "SportsCameraFit", "SportsFrontEnd", "SportsNavigation", "SportsMenuPresentationProbe", "SportsWindowCapture", "SportsRecordedReview", "SportsExpansionCameraAcceptance", "SportsExpansionViewHud", "SportsExpansionSpectators", "SportsExpansionSnowProbe"):
     files.add(f"Assets/TruckSports/Scripts/{name}.cs")
     if name in ("SportsRecordedReview", "SportsExpansionCameraAcceptance", "SportsExpansionViewHud", "SportsExpansionSpectators", "SportsExpansionSnowProbe"):
         files.add(f"Assets/TruckSports/Scripts/{name}.cs.meta")
@@ -32,11 +32,11 @@ files.add("Assets/TruckFareFight/Scripts/FareFightRoute.cs")
 for name in ("SportsDrivingSurfaceAuthoring", "ExpansionSnowJobs"):
     files.add(f"Assets/TruckSports/Editor/{name}.cs")
     files.add(f"Assets/TruckSports/Editor/{name}.cs.meta")
-for name in ("EighteenSportsProgress.md", "EighteenSportsVendorAudit.md", "EighteenSportsDelivery.md", "EighteenSportsFiveSportDelivery.md", "EighteenSportsSixSportDelivery.md", "EighteenSportsSevenSportDelivery.md", "EighteenSportsNineSportDelivery.md", "EighteenSportsTenSportDelivery.md", "EighteenSportsTwelveSportDelivery.md", "EighteenSportsFourteenSportDelivery.md"):
+for name in ("EighteenSportsProgress.md", "EighteenSportsVendorAudit.md", "EighteenSportsDelivery.md", "EighteenSportsFiveSportDelivery.md", "EighteenSportsSixSportDelivery.md", "EighteenSportsSevenSportDelivery.md", "EighteenSportsNineSportDelivery.md", "EighteenSportsTenSportDelivery.md", "EighteenSportsTwelveSportDelivery.md", "EighteenSportsFourteenSportDelivery.md", "EighteenSportsFifteenSportDelivery.md"):
     files.add("Documentation/TruckSports/" + name)
 for name in ("2026-10-20-Eighteen-Sports.md", "2026-10-20-Eighteen-Sports-UI-Addendum.md"):
     files.add("Documentation/TruckSports/Requests/" + name)
-for name in ("CaptureEighteenSportExpansion.py", "RunExpansionWindowsAcceptance.py", "UpdateExpansionEvidence.py", "SyncExpansionAssets.py", "PrepareExpansionScope.py"):
+for name in ("RecordFifteenSportDelivery.py", "CaptureEighteenSportExpansion.py", "RunExpansionWindowsAcceptance.py", "UpdateExpansionEvidence.py", "SyncExpansionAssets.py", "PrepareExpansionScope.py"):
     files.add("Tools/TruckSports/" + name)
 changed = set(filter(None, (git("diff", "--name-only", "-z", "HEAD") + git("ls-files", "--others", "--exclude-standard", "-z")).decode("utf-8").split("\0")))
 selected = sorted(path for path in changed if path in files or any(path.startswith(folder) for folder in folders))

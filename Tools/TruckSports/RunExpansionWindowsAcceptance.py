@@ -9,9 +9,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 LOG = ROOT / "Logs/TruckSports/EighteenSports"
-MODES = {"hauler":"-tsHauler", "herd":"-tsHerd", "volley": "-tsVolley", "freeze": "-tsFreeze", "magnet": "-tsMagnet", "hot-potato": "-tsHotPotato", "red-light": "-tsRedLight", "balloon": "-tsBalloon", "whack": "-tsWhack", "hill": "-tsHill", "seesaw": "-tsSeesaw", "lava": "-tsLava", "tether": "-tsTether", "joust": "-tsJoust", "snow": "-tsExpansionSnow", "menu": "-tsRetroMenu"}
+MODES = {"hide":"-tsHide", "hide-adapters":"-tsHideAdapters", "hauler":"-tsHauler", "herd":"-tsHerd", "volley": "-tsVolley", "freeze": "-tsFreeze", "magnet": "-tsMagnet", "hot-potato": "-tsHotPotato", "red-light": "-tsRedLight", "balloon": "-tsBalloon", "whack": "-tsWhack", "hill": "-tsHill", "seesaw": "-tsSeesaw", "lava": "-tsLava", "tether": "-tsTether", "joust": "-tsJoust", "snow": "-tsExpansionSnow", "menu": "-tsRetroMenu"}
 
-RESULTS = {mode: LOG / folder / "result.txt" for mode,folder in {"hauler":"Hauler","herd":"Herd","volley":"Volley","freeze":"Freeze","magnet":"Magnet","hot-potato":"HotPotato","red-light":"RedLight","balloon":"Balloon","whack":"Whack","hill":"Hill","seesaw":"Seesaw","lava":"Lava","tether":"Tether","joust":"Joust","snow":"Snow"}.items()}
+RESULTS = {mode: LOG / folder / "result.txt" for mode,folder in {"hide":"Hide","hide-adapters":"HideAdapters","hauler":"Hauler","herd":"Herd","volley":"Volley","freeze":"Freeze","magnet":"Magnet","hot-potato":"HotPotato","red-light":"RedLight","balloon":"Balloon","whack":"Whack","hill":"Hill","seesaw":"Seesaw","lava":"Lava","tether":"Tether","joust":"Joust","snow":"Snow"}.items()}
 RESULTS["menu"] = ROOT / "Logs/TruckSports/PresentationSprint/Menu/result.txt"
 
 
