@@ -16,6 +16,20 @@ paths += ["Assets/TruckFishing/Prefabs/" + name + ".prefab" for name in ["Small 
 paths += ["Assets/TruckFishing/Models/" + name + suffix for name in ["Winding playtest riverbanks", "Winding playtest river surface"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Scenes/TruckSkyTow.unity"]
 paths += ["Assets/TruckMinefield/Scenes/TruckMinefield.unity"]
+billiards_scene = CLEAN / "Assets/TruckBilliards/Scenes/TruckBilliards.unity"
+if "LWS.TruckBilliards.BilliardsHudPresentation" in billiards_scene.read_text(encoding="utf-8-sig"):
+    paths += ["Assets/TruckBilliards/Scenes/TruckBilliards.unity"]
+mine = CLEAN / "Assets/TruckMinefield"
+if (mine / "Materials/West meadow and Vista mountains.asset").is_file():
+    for name in ["West", "East"]:
+        paths += ["Assets/TruckMinefield/Materials/" + name + " meadow and Vista mountains.asset" + suffix for suffix in ["", ".meta"]]
+    paths += ["Assets/TruckMinefield/Prefabs/Outer mountain pine.prefab" + suffix for suffix in ["", ".meta"]]
+    if (mine / "Materials/Seamless mountain landing runout.asset").is_file():
+        paths += ["Assets/TruckMinefield/Materials/Seamless mountain landing runout.asset" + suffix for suffix in ["", ".meta"]]
+        for name in ["Range meadow grass", "Range exposed rock"]:
+            paths += ["Assets/TruckMinefield/Materials/" + name + ".terrainlayer" + suffix for suffix in ["", ".meta"]]
+    if not (ROOT / "Assets/TruckMinefield/Prefabs.meta").exists():
+        paths += ["Assets/TruckMinefield/Prefabs.meta"]
 paths += ["Assets/TruckTrailerPlug/Scenes/TruckTrailerPlug.unity"]
 paths += ["Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity"]
 bay_material = "Assets/TruckMusicalParking/Materials/Reflective bay paint.mat"

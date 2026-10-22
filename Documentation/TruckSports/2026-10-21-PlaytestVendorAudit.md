@@ -379,3 +379,22 @@ RELEVANT ASSETS NOT USED: Core-Collapse procedural runtime slicing is unnecessar
 CUSTOM SYSTEMS CREATED: explicit sport-owned model authoring/preview and verification fixtures;small bounded contact-context handoff between existing Bungee adapters. Repeated middle storeys preserve facade proportions.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO;vendor slicing,damage,support and prefab fracture remain authoritative. LWS owns contact attribution,momentum handoff,scoring and lifecycle.
+
+
+### Minefield outer mountain ranges
+
+VENDOR ASSETS AUDITED: Vista TerrainGraph, TerrainGenerationConfigs, HeightOutputNode, DataPool/GraphRenderTexture lifecycle, installed mountain graph, sample pine/grass/rock layers, existing Minefield terrain/scoring integration and NWH authority.
+VENDOR ASSETS USED: Vista ExecuteImmediate through owned terrain variants; sample pine/terrain layers through sport-owned variants; native TerrainData, TerrainCollider and tree instancing/LOD. Existing NWH, Weather Maker, Weatherade and camera/UI systems remain authoritative.
+RELEVANT ASSETS NOT USED: Separate cliff meshes would approximate the continuous colliding range already provided by Vista terrain. No new roads, weather, vehicle, input or streaming framework is needed.
+CUSTOM SYSTEMS CREATED: Explicit course-preserving terrain integration, runout-edge stitching and focused native/Windows verification. No runtime terrain/noise generator.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+### Billiards graphical gameplay HUD
+
+VENDOR ASSETS AUDITED: Installed Heat ProgressBar and TMP fonts; shared broadcast theme, truck portrait and rounded plates; DOTween; existing Billiards HUD/session/input/rules.
+VENDOR ASSETS USED: Heat ProgressBar, existing Heat-derived heading font, uGUI/TMP, built-in round UI sprites, shared portrait/rounded plate, DOTween turn-marker animation.
+RELEVANT ASSETS NOT USED: No replacement menu framework, camera system or logo generation is needed for this HUD pass.
+CUSTOM SYSTEMS CREATED: Read-only HUD presentation adapter, explicit additive authoring tool and focused verification. Existing HUD refresh remains the sole update authority.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

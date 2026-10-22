@@ -5918,9 +5918,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section8.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
 | Implementation Evidence | FareFightRoadAccess retains shared planner and actual road joins; native damage repair at match/recovery boundaries; destroyed powertrain enters announced reset equally for humans/AI. New steering-lock and distance-aware bounded backing fixes in progress. |
-| Automated Verification | Current payload6c5b4e08 FareCurrentRecordedSeedNormal16/0,551.25s: actual first-to-five four-AI Normal match,seed616736539,rematch/menu and native diagnostics. Longest2m pockets16.016/11.414/10.581/9.109simsec;4announced recoveries. Earlier e343same-seed16/0 retained. Old958 failure508.676simsec immobility retained; that log has no RPM/generated-power telemetry,so engine failure is a hypothesis. |
+| Automated Verification | FareRecordedSeedHardWindows16/0 on acceptedf70add93,488.95realseconds,seed616736539,actualfirst-to-fivefour-AIHardmatch,pause,rematch/menu. Longest2mpockets12.292/10.414/6.767/9.515simsec,6announcedrecoveries. CurrentNormal6c5b4e08andearliere343same-seed16/0retained. Old958508.676simsecimmobilityretained;oldloghasnoRPM/powertelemetry,soenginefailureisunproven. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Original intermittent immobility has not recurred in latest two recorded-seed full matches. Capture complete body/input/powertrain state if it recurs; do not label it a confirmed zero-RPM fault or claim a speculative engine fix. |
+| Remaining Work | Intermittent original immobility has not recurred in three latest recorded-seed full matches. Capture complete body/input/powertrain state if it recurs;do not claim a confirmed zero-RPM cause or speculative engine fix. |
 
 ### HPR-8-5 — Fair Initial Passenger Distances
 
@@ -6042,11 +6042,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Minimal Polished HUD |
 | Original Request | Normal gameplay should show only: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section10.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | MinefieldMatch live typed score cards/minimal view text; existing SportsExpansionViewHud gains optional Rally roster/minimal portrait mode, assigned by targeted MinefieldPlaytestRepairAuthoring. Empty Mine details no longer turn into READY. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalMineProgressHUD:52/0; actual grounded pre-blast progress, once-only nonzero last-valid-ground outside finalization, supported rest/backward slide/secondary blasts, rematch/menu.720p/1080p compact portrait+distance HUD inspected. Native final-camera-mine-gate EditMode11/11. |
+| Automated Verification | Exact f4a39ad0 Windows: final-rest/progress 52/0; complete eight-AI physical match 23/0 across 13 heats, 143 blasts, 100 rest locks, one genuine escape retaining its actual last valid grounded distance and zero supported timer locks; landscape/ordinary-round/rematch 14/0. Native EditMode 4/0 and PlayMode 1/0. Current 720p/1080p Windows portrait/distance output inspected. Earlier failed probe classification is retained and corrected; production scoring unchanged. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human boundary/gameplay acceptance and repeated full normal matches; mountain/environment requirement remains separate and open. |
+| Remaining Work | No additional implementation defect identified in the tested scope. Human gameplay/boundary approval and physical-controller verification remain unperformed; this is automated acceptance, not human-verified. |
 
 ### HPR-10-2 — Correct Cumulative Distance
 
@@ -6056,11 +6056,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Correct Cumulative Distance |
 | Original Request | NEW CRITICAL CORRECTION: Distance currently appears to begin counting only after an explosion. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section10.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | MinefieldRacer.CurrentDistance and MinefieldMatch use live starting-line progression before explosions; authoritative final-rest Distance remains separate. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalMineProgressHUD:52/0; actual grounded pre-blast progress, once-only nonzero last-valid-ground outside finalization, supported rest/backward slide/secondary blasts, rematch/menu.720p/1080p compact portrait+distance HUD inspected. Native final-camera-mine-gate EditMode11/11. |
+| Automated Verification | Exact f4a39ad0 Windows: final-rest/progress 52/0; complete eight-AI physical match 23/0 across 13 heats, 143 blasts, 100 rest locks, one genuine escape retaining its actual last valid grounded distance and zero supported timer locks; landscape/ordinary-round/rematch 14/0. Native EditMode 4/0 and PlayMode 1/0. Current 720p/1080p Windows portrait/distance output inspected. Earlier failed probe classification is retained and corrected; production scoring unchanged. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human boundary/gameplay acceptance and repeated full normal matches; mountain/environment requirement remains separate and open. |
+| Remaining Work | No additional implementation defect identified in the tested scope. Human gameplay/boundary approval and physical-controller verification remain unperformed; this is automated acceptance, not human-verified. |
 
 ### HPR-10-3 — Out-of-Bounds Distance
 
@@ -6070,11 +6070,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Out-of-Bounds Distance |
 | Original Request | If the truck falls beyond the map, finalize the score at the last valid grounded course position. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section10.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | MinefieldRacer records actual NWH-grounded/static-supported valid position; falling beyond terrain finalizes once at that position. No last-blast teleport, arbitrary falling distance or zeroing. Normal backward rest scoring preserved. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalMineProgressHUD:52/0; actual grounded pre-blast progress, once-only nonzero last-valid-ground outside finalization, supported rest/backward slide/secondary blasts, rematch/menu.720p/1080p compact portrait+distance HUD inspected. Native final-camera-mine-gate EditMode11/11. |
+| Automated Verification | Exact f4a39ad0 Windows: final-rest/progress 52/0; complete eight-AI physical match 23/0 across 13 heats, 143 blasts, 100 rest locks, one genuine escape retaining its actual last valid grounded distance and zero supported timer locks; landscape/ordinary-round/rematch 14/0. Native EditMode 4/0 and PlayMode 1/0. Current 720p/1080p Windows portrait/distance output inspected. Earlier failed probe classification is retained and corrected; production scoring unchanged. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human boundary/gameplay acceptance and repeated full normal matches; mountain/environment requirement remains separate and open. |
+| Remaining Work | No additional implementation defect identified in the tested scope. Human gameplay/boundary approval and physical-controller verification remain unperformed; this is automated acceptance, not human-verified. |
 
 ### HPR-10-4 — Map Width and Side Mountains
 
@@ -6084,11 +6084,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Map Width and Side Mountains |
 | Original Request | Ensure the earlier physical map improvements exist: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section10.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | MinefieldSideRangeAuthoring uses the installed Vista mountain graph through ExecuteImmediate and owned side TerrainData variants. The physical 614 m width and 8.4 km length are retained. Peaks reach 161.08/190.61 m, with continuous outer crests and 2,500 native grounded pines per side. The original mine course and inner meadow heights remain unchanged to native quantization. An owned runout copy stitches its outer 17 m margins; the central 80 m corridor is retained. Builds and Play Mode never regenerate terrain. |
+| Automated Verification | Exact f4a39ad0 Windows: landscape/ordinary round 14/0, full 13-heat eight-AI match 23/0, rest regression 52/0. Native EditMode 4/0 and PlayMode 1/0. Peaks 161.08/190.61 m, 2,500 grounded native pines per side, terrain collision matched, 14.01911 m seam reduced to 0.000458 m. Original course/inner heights retained. Repeat authoring preserves all saved assets. Evidence: Documentation/TruckSports/Evidence/2026-10-22-Minefield-Ranges. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human terrain/art-direction approval remains unperformed. Vendor sample texture repetition remains visible in wide landscape fixtures; no blanket landscape-art certification is claimed. |
 
 ### HPR-10-5 — Preserve Gameplay
 
@@ -6098,11 +6098,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Gameplay |
 | Original Request | Minefield is otherwise satisfactory. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section10.5. |
 | Acceptance Criteria | All observable requirements and acceptance in source section10.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | All original mine course, truck, mine-force, handling, rule, camera and UI objects are retained. Scene changes are confined to terrain/collider references, native tree/terrain view settings and sampled height-only offsets for existing tree/rock roots. Original vendor and terrain assets remain untouched. |
+| Automated Verification | All 16,700 original scene documents retained; only reviewed terrain/scenery settings change. The 925 unrelated-file SHA guard passes. Exact f4a39ad0 Minefield Windows 89/0, complete match and rematch/menu covered. Existing forces, mine/vehicle rules and camera/UI authority remain unchanged. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human playtesting and physical controllers remain unperformed. Preserve this scope during subsequent repairs. |
 
 ### HPR-11 — TRUCK BOWLING
 
@@ -6126,11 +6126,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | TRUCK BILLIARDS |
 | Original Request | Perform a full polished HUD pass. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section12. |
 | Acceptance Criteria | All observable requirements and acceptance in source section12; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | BilliardsHUD delegates presentation to BilliardsHudPresentation at its existing 10 Hz cadence. Explicit BilliardsHudAuthoring adds two portrait/color/series-score cards, graphical ball objectives, current turn/result and Heat shot-power/MPH/actual-input prompts. Existing raw HUD objects and references are retained but hidden. No gameplay, physics, table, truck, camera or menu replacement. |
+| Automated Verification | Native EditMode 1/0, PlayMode 1/0 and 50 existing rule assertions. Exact f4a39ad0 Windows BilliardsGraphicalHudWindows 18/0: all cards screen-safe at 720p, 1080p, ultrawide and 4:3; independent objectives, practice, Heat fractional power, pause/resume, complete physical AI rack (eight strikes/eight resolutions), results, rematch and menu cleanup. All 1,782 original scene documents retained. Repeat authoring preserves scene bytes. Evidence: Documentation/TruckSports/Evidence/2026-10-22-Billiards-HUD. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human usability, physical-controller and listening acceptance remain unperformed. Existing controls/rules are preserved; no claim of human-verified acceptance. |
 
 ### HPR-13-1 — CRITICAL: FIX BROKEN GOAL DETECTION FIRST
 

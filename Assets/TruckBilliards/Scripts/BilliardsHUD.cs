@@ -6,6 +6,7 @@ namespace LWS.TruckBilliards
  public sealed class BilliardsHUD:MonoBehaviour
  {
   public BilliardsMatch match;public TMPro.TMP_Text banner,status,playerPanel,aiPanel,notice,speed,controls,scoreboard;
+  public BilliardsHudPresentation presentation;
   // Legacy fields kept to preserve serialized compatibility; upgraded menus own their replacement.
   public GameObject overlay;public TMPro.TMP_Text overlayTitle,overlayBody;public ButtonManager playButton;
   public void Play(){if(match.session!=null)match.session.StartMatch();else match.FreshMatch();}
@@ -19,6 +20,12 @@ namespace LWS.TruckBilliards
    if(session==null)return;
    bool running=session.InMatch;
    bool display=running&&session.Screen==BilliardsScreen.Match;
+   if(presentation!=null)
+   {
+    foreach(var text in liveTexts)if(text!=null)text.gameObject.SetActive(false);
+    if(status!=null)status.gameObject.SetActive(false);if(controls!=null)controls.gameObject.SetActive(false);
+    presentation.Refresh(display);return;
+   }
    foreach(var text in liveTexts)if(text!=null)text.gameObject.SetActive(display);
    if(status!=null)status.gameObject.SetActive(false);if(controls!=null)controls.gameObject.SetActive(false);if(scoreboard!=null)scoreboard.text=session.IsPractice?"PRACTICE":session.series.Wins[0]+" : "+session.series.Wins[1]+" • RACK "+session.series.RackNumber+" • FIRST TO "+session.series.Required;if(session.IsPractice)aiPanel.gameObject.SetActive(false);
    banner.text=running?r.Phase==MatchPhase.Ended?session.Name(r.Winner)+" WINS":session.IsPractice?"PRACTICE":session.Name(r.Turn).ToUpper()+" — TURN":"TRUCK BILLIARDS";
