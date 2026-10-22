@@ -12,6 +12,7 @@ using LWS.TruckBowling;
 using LWS.TruckBaseJumping;
 using LWS.TruckMattressRacing;
 using LWS.TruckWifeCarrying;
+using LWS.TruckSnake;
 
 namespace LWS.TruckSports
 {
@@ -39,7 +40,7 @@ namespace LWS.TruckSports
             preferences=SportsPrefs.IsolateValidation("CompactHudWindows");background=InputSystem.settings.backgroundBehavior;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
             Application.logMessageReceived+=Error;for(int i=0;i<4;i++){pads[i]=InputSystem.AddDevice<Gamepad>();InputSystem.EnableDevice(pads[i]);}
             File.WriteAllText(Path.Combine(folder,"result.txt"),"RUNNING "+DateTime.UtcNow.ToString("o"));
-            foreach(string scene in new[]{"TruckBaseJumping","TruckMattressRacing","TruckTargetLaunch","TruckWifeCarrying"})
+            foreach(string scene in new[]{"TruckBaseJumping","TruckMattressRacing","TruckTargetLaunch","TruckWifeCarrying","TruckSnake"})
             {
                 freeze=false;Time.timeScale=1;SportsNavigation.LoadSport(scene);yield return new WaitForSecondsRealtime(.8f);match=FindAnyObjectByType<SportsEventSession>();
                 Check(match!=null,scene+" actual saved scene loads");if(match==null)continue;
@@ -93,6 +94,7 @@ namespace LWS.TruckSports
                 }
                 else if(match is MattressMatch mattress)yield return ManualReset(mattress);
                 else if(match is WifeMatch wife)yield return WifeGuidance(wife);
+                else if(match is SnakeMatch snake)yield return SnakeGuidance(snake);
             }
             match=null;freeze=false;Time.timeScale=1;SportsNavigation.FrontEnd();yield return new WaitForSecondsRealtime(.5f);Check(FindAnyObjectByType<SportsEventSession>()==null,"menu releases scene authorities");
             report.AppendLine("CHECKS="+checks+" ERRORS="+errors+". Actual Windows rendering and software-controller fixtures; no human, listening, hardware or performance acceptance claim.");File.WriteAllText(Path.Combine(folder,"result.txt"),report.ToString());Application.logMessageReceived-=Error;Application.Quit(errors==0?0:2);
@@ -114,6 +116,39 @@ namespace LWS.TruckSports
                 Check(valid,"four native checkpoint widgets retain correct owner/viewport "+size);ScreenCapture.CaptureScreenshot(Path.Combine(folder,"Wife-checkpoint-cues-"+size.x+".png"));yield return new WaitForSecondsRealtime(.2f);
             }
             freeze=false;Time.timeScale=1;wife.SetupScreen();yield return null;Check(guide.compasses.All(c=>!c.gameObject.activeSelf),"Wife checkpoint widgets clear after leaving race");
+        }
+        IEnumerator SnakeGuidance(SnakeMatch snake)
+        {
+            snake.AllBots();SportsCameraOptions.Set(false);for(int slot=0;slot<4;slot++){snake.setup.players[slot].source=BowlingSource.WholeController;snake.setup.players[slot].pad=pads[slot];}
+            snake.drivingViews.Select(1);Check(snake.StartMatch(),"four human Snake objective fixture starts");yield return new WaitForSecondsRealtime(3.5f);freeze=true;Time.timeScale=0;
+            var guide=snake.GetComponent<SnakePickupGuidance>();Check(guide!=null,"Snake actual saved scene binds existing CNP prefab");if(guide==null)yield break;
+            foreach(var size in new[]{new Vector2Int(1280,720),new Vector2Int(1920,1080)})
+            {
+                Screen.SetResolution(size.x,size.y,false);yield return new WaitForSecondsRealtime(.4f);yield return new WaitForEndOfFrame();bool valid=true;
+                for(int view=0;view<4;view++)
+                {
+                    var selected=guide.Objective(view);var compass=guide.compasses[view];var marker=guide.targets[view];var widget=marker.GetState(compass.compassGroup).indicatorRT;
+                    valid&=selected!=null&&selected.Live&&compass.isActiveAndEnabled&&compass.cameraMain==snake.cameras[view]&&compass.viewportRect==snake.cameras[view].rect&&widget!=null&&widget.gameObject.activeInHierarchy;
+                    if(widget!=null){var point=RectTransformUtility.WorldToScreenPoint(null,widget.position);var viewport=snake.cameras[view].pixelRect;valid&=point.x>=viewport.xMin&&point.x<=viewport.xMax&&point.y>=viewport.yMin&&point.y<=viewport.yMax;}
+                    var card=snake.menus.viewPanels[view].Find("Compact owned viewport score");var detail=card.Find("Race status").GetComponent<TMP_Text>();var telemetry=card.Find("Driving telemetry").GetComponent<TMP_Text>();valid&=detail.text.Contains("TRAILER")&&detail.text.Contains("MPH")&&telemetry.text.Contains("BEST")&&!detail.isTextTruncated&&!telemetry.isTextTruncated;
+                }
+                Check(valid,"Snake four CNP objectives and complete telemetry stay in owned views "+size);ScreenCapture.CaptureScreenshot(Path.Combine(folder,"Snake-objective-cues-"+size.x+".png"));yield return new WaitForSecondsRealtime(.2f);
+            }
+            var prior=guide.Objective(0);Check(prior!=null,"Snake marker has a real selected gate before pickup retirement");if(prior!=null){prior.Dormant();yield return new WaitForSecondsRealtime(.25f);Check(guide.Objective(0)!=prior,"Snake retired pickup immediately releases its objective marker");}
+            report.AppendLine("OBSERVED Snake maximum throttled route-selection group="+guide.MaxQueryMilliseconds.ToString("F2")+"ms queries="+guide.RouteQueries+". This is a targeted measurement, not GPU or dense-world performance acceptance.");
+            report.AppendLine("OBSERVED existing UTS traffic logical="+snake.traffic.LogicalCount+" live="+snake.traffic.ActiveCount+" fullPhysics="+snake.traffic.FullPhysicsCount+" target="+snake.traffic.TargetCount+"; pedestrians logical="+snake.pedestrians.LogicalCount+" live="+snake.pedestrians.ActiveCount+" fullPhysics="+snake.pedestrians.FullPhysicsCount+" target="+snake.pedestrians.TargetCount);
+            Check(snake.traffic.LogicalCount>0&&snake.traffic.ActiveCount>0,"Snake actual native traffic exists; a configured population target alone is insufficient");
+            var infill=GameObject.Find("Owned Snake roadside town infill");Check(infill!=null&&infill.transform.childCount==44,"actual Snake saved scene includes32owned trees and12road-clear properties");
+            if(infill!=null)
+            {
+                var property=infill.transform.Cast<Transform>().First(t=>t.name.StartsWith("Connected roadside property"));var selected=snake.cameras[0];snake.enabled=false;guide.enabled=false;foreach(var camera in snake.cameras)camera.enabled=camera==selected;selected.rect=new Rect(0,0,1,1);
+                // Aim outside the front facade: targeting the building's solid
+                // center made Cinemachine's occlusion solver pull this test
+                // camera indoors. This is a scenery fixture, not gameplay.
+                var rig=snake.drivingViews.rally.views[0];var framing=rig.broadcastFraming;bool framed=framing!=null&&framing.enabled;if(framing!=null)framing.enabled=false;
+                rig.PoseRaw(property.position+property.forward*18+Vector3.up*5,property.forward*40+property.right*25+Vector3.up*24,70,true);yield return new WaitForSecondsRealtime(.25f);yield return new WaitForEndOfFrame();Check(Vector3.Distance(selected.transform.position,property.position)>24,"explicit scenery camera remains outside the property");string file=Path.Combine(folder,"Snake-town-infill-camera-fixture.png");ScreenCapture.CaptureScreenshot(file);yield return new WaitForSecondsRealtime(.2f);Check(File.Exists(file),"actual owned roadside models captured with an explicitly positioned scenery camera");if(framing!=null)framing.enabled=framed;guide.enabled=true;snake.enabled=true;
+            }
+            freeze=false;Time.timeScale=1;snake.SetupScreen();yield return null;Check(guide.compasses.All(c=>!c.gameObject.activeSelf),"Snake objective widgets clear on menu/rematch setup");
         }
         IEnumerator ManualReset(MattressMatch mattress)
         {

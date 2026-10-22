@@ -1,6 +1,7 @@
 """Export only explicitly upgraded, sport-owned assets from the validation project."""
 import hashlib
 import json
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -17,6 +18,12 @@ paths += ["Assets/TruckSkyTow/Scenes/TruckSkyTow.unity"]
 paths += ["Assets/TruckMinefield/Scenes/TruckMinefield.unity"]
 paths += ["Assets/TruckTrailerPlug/Scenes/TruckTrailerPlug.unity"]
 paths += ["Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity"]
+snake_guide = CLEAN / "Assets/TruckSnake/Scripts/SnakePickupGuidance.cs.meta"
+if snake_guide.is_file():
+    guid = re.search(r"^guid: ([a-f0-9]+)", snake_guide.read_text(), re.M).group(1)
+    assert guid in (CLEAN / "Assets/TruckSnake/Scenes/TruckSnake.unity").read_text(), "Export only the explicitly integrated Snake scene"
+    paths += ["Assets/TruckSnake/Scenes/TruckSnake.unity"]
+    paths += ["Assets/TruckSnake/Configuration/World population.asset"]
 if (CLEAN / "Logs/TruckSports/PlaytestRepair/wife-checkpoint-guidance.txt").is_file():
     paths += ["Assets/TruckWifeCarrying/Scenes/TruckWifeCarrying.unity"]
 if (CLEAN / "Assets/TruckBaseJumping/Prefabs/Flare Smoke.prefab").is_file():

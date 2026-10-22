@@ -323,3 +323,19 @@ RELEVANT ASSETS NOT USED: No replacement texture, shader, VFX framework or new c
 CUSTOM SYSTEMS CREATED: Explicit migration of only the known stock broken owned adaptation. Enabled/custom authored flipbooks/materials are retained. Native base-smoke-flipbook-native1/0passed6×5 animation, white multiplicative base, actual emission and pool/rematch cleanup. Windows visual repair acceptance pending rebuild.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+### Wife startup sightline / Snake pickups, HUD, steering and town
+
+VENDOR ASSETS AUDITED: Existing Cinemachine Transposer chase settings; Compass Navigator Pro4 public POI/camera/viewport lifecycle and owned compass prefab; NWH Vehicle Physics2 steering/powertrain public configuration and existing LWS TruckTaxiVehicleHandlingOverride; existing LwsRoutePlanner road access/query code inspected read-only, with private pending host planner excluded from public validation; Heat/TMP/DOTween compact viewport presentation; existing UTS traffic/pedestrian adapters and sport-owned World population profile; tracked JC_LP_MegaCity Tree03/Tree07, Commercial03 and House04_V1 prefabs/material dependencies.
+VENDOR ASSETS USED: Wife saved Cinemachine stock-only offset override. Snake continues actual NWH steering/engine/brake authority; only owned instance handling fields change, with bounded human turn-speed target trimming. Existing shared route planner determines pickup accessibility. Four saved CNP prefab instances render shared/split objectives. Shared Heat/TMP/portrait/plate/DOTween HUD gains an optional telemetry row. Existing UTS profile increases logical counts while retaining live simulation budgets. Thirty-two owned asset trees and twelve actual asset buildings added beyond reserved roads using the established model fitting helper.
+RELEVANT ASSETS NOT USED: No Vista/EasyRoads scene regeneration, replacement navigation/traffic, new weather, custom projection or separate UI framework required. Existing authored five-region terrain/roads and convoy physics remain intact.
+CUSTOM SYSTEMS CREATED: Small old-pickup retirement predicate over the existing finite pool; read-only Snake telemetry/objective adapter, exposing the existing AI route query for legitimate objective selection; explicit idempotent sport-owned authoring and targeted native/Windows fixtures. No independent pathfinding algorithm, camera, weather or physics implementation.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+Traffic follow-up: the existing interstate lane builder rejects LocalRoad classes by design. Snake now restores the reused Fare/Taxi district authored loops through its sport-owned authoring adapter, and uses the existing ResetTraffic/ResetPopulation APIs for rematches. Native actual traffic59logical/58live/50moving observed; subsequent reset validation pending. Public CNP distance booleans disable metric labels in this mode. No vendor or shared Taxi source changes.
+
+
+October22 final acceptance: exact545-file Windows payload85d6770a passed320assertions. Actual UTS traffic59logical/56live and four rematch starter fixtures passed. NWH owned shiftDuration.18 plus stock-only handling tuning measured4.40s to3.40s to20MPH in cold native comparisons. SnakeRouteAI retains existing planner/avoidance authority; only missed-objective replanning and stale-detour reset corrected. CNP/Heat/TMP/DOTween presentation reused. No vendor source or original Truck Taxi source modified; no duplicate vendor framework created. Human/controller/listening and isolated profiling remain unverified.

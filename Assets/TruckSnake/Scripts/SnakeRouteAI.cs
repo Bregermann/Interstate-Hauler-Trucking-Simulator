@@ -13,19 +13,17 @@ namespace LWS.TruckSnake {
   public void Reset(){route=null;target=null;detour=null;AvoidancePlans=0;cursor=0;nextPlan=nextReaction=0;command=Vector2.zero;}
   public Vector2 Drive(SnakeMatch match,int slot,float dt,out bool requestJump){
    int skill=(int)match.setup.players[slot].difficulty;var truck=match.trucks[slot];Vector3 position=truck.body.position,forward=Vector3.ProjectOnPlane(truck.transform.forward,Vector3.up).normalized;
-   if(target==null||!target.Live||Time.time>=nextPlan&&OffRoute(position)){
-    nextPlan=Time.time+8;target=null;float best=float.PositiveInfinity;for(int pickupIndex=0;pickupIndex<match.pickups.Length;pickupIndex++){var pickup=match.pickups[pickupIndex];if(pickup.Live){var delta=pickup.transform.position-position;float cost=delta.magnitude*(Vector3.Dot(delta.normalized,forward)<-.2f?3:1)/(pickup.Golden&&skill>0?1.1f:1);cost*=1+.15f*Mathf.Sin(slot*4+pickupIndex*7);if(cost<best){best=cost;target=pickup;}}}
-    if(target!=null){
-     var graph=match.world.graph;string origin=null,incoming=null,incomingA=null,incomingB=null;planning.graphId=graph.graphId+".forward."+slot;planning.nodes=graph.nodes.FindAll(n=>!n.nodeId.StartsWith("taxi.stop"));planning.edges.Clear();foreach(var edge in graph.edges)if(!edge.fromNodeId.StartsWith("taxi.stop")&&!edge.toNodeId.StartsWith("taxi.stop"))planning.edges.Add(edge);
-     if(LwsRoadGraphQuery.TryFindNearestRoad(planning,position,40,out var road))foreach(var edge in graph.edges)if(edge.edgeId==road.EdgeId){bool along=Vector3.Dot(road.Forward,forward)>=0;origin=along?edge.toNodeId:edge.fromNodeId;incoming=edge.edgeId;incomingA=edge.fromNodeId;incomingB=edge.toNodeId;break;}
-     if(origin==null){float nearest=2000;foreach(var node in graph.nodes){var delta=Vector3.ProjectOnPlane(node.position-position,Vector3.up);float along=Vector3.Dot(delta,forward),side=Mathf.Abs(Vector3.Dot(delta,Vector3.Cross(Vector3.up,forward)));if(along>4&&along<nearest&&side<14&&Mathf.Abs(node.position.y-position.y)<8){nearest=along;origin=node.nodeId;}}}
-     // Reuse the existing planner with a per-request edge view. A continuously
-     // moving road train must reach its next junction, not reverse down the
-     // edge it is already traversing. The shared authored graph is untouched.
-     planning.edges.RemoveAll(edge=>edge.fromNodeId==incomingA&&edge.toNodeId==incomingB||edge.fromNodeId==incomingB&&edge.toNodeId==incomingA);
-     route=null;string destination=null;if(LwsRoadGraphQuery.TryFindNearestRoad(graph,target.transform.position,35,out var terminal)){var edge=graph.edges.Find(e=>e.edgeId==terminal.EdgeId);if(edge!=null){bool same=edge.edgeId==incoming;bool forwardTravel=origin==edge.toNodeId;if(same&&LwsRoadGraphQuery.TryFindNearestRoad(graph,position,40,out var start)&&start.EdgeId==terminal.EdgeId&&(terminal.DistanceAlongSegmentMeters-start.DistanceAlongSegmentMeters)*(forwardTravel?1:-1)>1){route=new LwsRouteResult{succeeded=true,message="Forward pickup access along the actual road samples."};route.waypoints.Add(position);AppendSamples(route.waypoints,edge,start.DistanceAlongSegmentMeters,terminal.DistanceAlongSegmentMeters);route.waypoints.Add(terminal.NearestPosition);}else{destination="snake.target."+slot;planning.nodes.Add(new LwsRoadNode{nodeId=destination,position=terminal.NearestPosition});AddTerminal(edge,false,terminal.DistanceAlongSegmentMeters,terminal.NearestPosition,destination,slot);if(!edge.oneWay&&(!same||!forwardTravel))AddTerminal(edge,true,terminal.DistanceAlongSegmentMeters,terminal.NearestPosition,destination,slot);}}}if(route==null)route=planner.PlanRoute(new LwsRouteRequest{originNodeId=origin,useOriginWorldPosition=origin==null,originWorldPosition=position,destinationNodeId=destination,useDestinationWorldPosition=destination==null,destinationWorldPosition=target.transform.position,truckRouteRequired=true},planning);cursor=0;routeStart=position;
-     if(route.succeeded&&origin!=null&&route.message!="Forward pickup access along the actual road samples."){foreach(var node in graph.nodes)if(node.nodeId==origin){route.waypoints.Insert(0,node.position);break;}}
-    }
+   var deltaToTarget=target!=null?Vector3.ProjectOnPlane(target.transform.position-position,Vector3.up):Vector3.zero;
+   bool missed=target!=null&&target.Live&&deltaToTarget.sqrMagnitude>36&&deltaToTarget.sqrMagnitude<35*35&&Vector3.Dot(deltaToTarget.normalized,forward)<-.3f;
+   if(target==null||!target.Live||missed||Time.time>=nextPlan&&OffRoute(position)){
+    nextPlan=Time.time+8;var previousTarget=target;target=null;objectives.Clear();
+    foreach(var pickup in match.pickups)if(pickup.Live&&(!missed||pickup!=previousTarget))objectives.Add(pickup);
+    // A continuously moving train must move on after missing a gate. The old
+    // Euclidean selection repeatedly demanded U-turns back into its own tail.
+    System.Func<SnakePickup,float> cost=pickup=>{var delta=pickup.transform.position-position;float value=delta.magnitude;if(Vector3.Dot(delta.normalized,forward)<.1f)value+=10000;return value/(pickup.Golden&&skill>0?1.1f:1)*(1+.10f*Mathf.Sin(slot*4+System.Array.IndexOf(match.pickups,pickup)*7));};
+    objectives.Sort((a,b)=>cost(a).CompareTo(cost(b)));
+    int attempts=0;foreach(var pickup in objectives){if(++attempts>8)break;if(TryPlanPickup(match,slot,pickup))break;target=null;}
+    if(target!=previousTarget)detour=null;
    }
    if(Time.time<nextReaction){requestJump=false;return command;}nextReaction=Time.time+(skill==0?.28f:skill==1?.18f:.10f);jump=false;
    Vector3 aim=position+forward*35;
@@ -71,6 +69,31 @@ namespace LWS.TruckSnake {
    // Explicitly authored stunt-ramp jump windows use the same action as humans.
    if(truck.Grounded&&target!=null&&target.Golden&&aim.y-position.y>2&&direction.magnitude<22)jump=true;
    if(truck.Grounded&&Vector3.ProjectOnPlane(position-match.world.jumpLaunch,Vector3.up).magnitude<18&&Vector3.Dot(forward,match.world.jumpDirection)>.6f)jump=true;requestJump=jump;return command;
+  }
+  // Shared route query for AI and the CNP objective adapter. The existing
+  // planner owns reachability, elevation and legal road access; no straight
+  // line assumption is used for a player-facing objective marker.
+  public bool TryPlanPickup(SnakeMatch match,int slot,SnakePickup pickup){
+   target=pickup;route=null;if(target==null||!target.Live||!match.world.Contains(target.transform.position)||!LwsRoadGraphQuery.TryFindNearestRoad(match.world.graph,target.transform.position,8,out var access)||Mathf.Abs(access.NearestPosition.y-target.transform.position.y)>3)return false;
+   var position=match.trucks[slot].body.position;var forward=Vector3.ProjectOnPlane(match.trucks[slot].transform.forward,Vector3.up).normalized;
+     var graph=match.world.graph;string origin=null,incoming=null,incomingA=null,incomingB=null;planning.graphId=graph.graphId+".forward."+slot;planning.nodes=graph.nodes.FindAll(n=>!n.nodeId.StartsWith("taxi.stop"));planning.edges.Clear();foreach(var edge in graph.edges)if(!edge.fromNodeId.StartsWith("taxi.stop")&&!edge.toNodeId.StartsWith("taxi.stop"))planning.edges.Add(edge);
+     if(LwsRoadGraphQuery.TryFindNearestRoad(planning,position,40,out var road))foreach(var edge in graph.edges)if(edge.edgeId==road.EdgeId){bool along=Vector3.Dot(road.Forward,forward)>=0;origin=along?edge.toNodeId:edge.fromNodeId;incoming=edge.edgeId;incomingA=edge.fromNodeId;incomingB=edge.toNodeId;break;}
+     if(origin==null){float nearest=2000;foreach(var node in graph.nodes){var delta=Vector3.ProjectOnPlane(node.position-position,Vector3.up);float along=Vector3.Dot(delta,forward),side=Mathf.Abs(Vector3.Dot(delta,Vector3.Cross(Vector3.up,forward)));if(along>4&&along<nearest&&side<14&&Mathf.Abs(node.position.y-position.y)<8){nearest=along;origin=node.nodeId;}}}
+     // Reuse the existing planner with a per-request edge view. A continuously
+     // moving road train must reach its next junction, not reverse down the
+     // edge it is already traversing. The shared authored graph is untouched.
+     planning.edges.RemoveAll(edge=>edge.fromNodeId==incomingA&&edge.toNodeId==incomingB||edge.fromNodeId==incomingB&&edge.toNodeId==incomingA);
+     route=null;string destination=null;if(LwsRoadGraphQuery.TryFindNearestRoad(graph,target.transform.position,35,out var terminal)){var edge=graph.edges.Find(e=>e.edgeId==terminal.EdgeId);if(edge!=null){bool same=edge.edgeId==incoming;bool forwardTravel=origin==edge.toNodeId;if(same&&LwsRoadGraphQuery.TryFindNearestRoad(graph,position,40,out var start)&&start.EdgeId==terminal.EdgeId&&(terminal.DistanceAlongSegmentMeters-start.DistanceAlongSegmentMeters)*(forwardTravel?1:-1)>1){route=new LwsRouteResult{succeeded=true,message="Forward pickup access along the actual road samples."};route.waypoints.Add(position);AppendSamples(route.waypoints,edge,start.DistanceAlongSegmentMeters,terminal.DistanceAlongSegmentMeters);route.waypoints.Add(terminal.NearestPosition);}else{destination="snake.target."+slot;planning.nodes.Add(new LwsRoadNode{nodeId=destination,position=terminal.NearestPosition});AddTerminal(edge,false,terminal.DistanceAlongSegmentMeters,terminal.NearestPosition,destination,slot);if(!edge.oneWay&&(!same||!forwardTravel))AddTerminal(edge,true,terminal.DistanceAlongSegmentMeters,terminal.NearestPosition,destination,slot);}}}if(route==null)route=planner.PlanRoute(new LwsRouteRequest{originNodeId=origin,useOriginWorldPosition=origin==null,originWorldPosition=position,destinationNodeId=destination,useDestinationWorldPosition=destination==null,destinationWorldPosition=target.transform.position,truckRouteRequired=true},planning);cursor=0;routeStart=position;
+     if(route.succeeded&&origin!=null&&route.message!="Forward pickup access along the actual road samples."){foreach(var node in graph.nodes)if(node.nodeId==origin){route.waypoints.Insert(0,node.position);break;}}
+   return route!=null&&route.succeeded;
+  }
+  readonly System.Collections.Generic.List<SnakePickup> objectives=new System.Collections.Generic.List<SnakePickup>();
+  public SnakePickup NearestReachablePickup(SnakeMatch match,int slot){
+   var position=match.trucks[slot].body.position;objectives.Clear();
+   foreach(var pickup in match.pickups)if(pickup.Live)objectives.Add(pickup);
+   objectives.Sort((a,b)=>(a.transform.position-position).sqrMagnitude.CompareTo((b.transform.position-position).sqrMagnitude));
+   foreach(var pickup in objectives)if(TryPlanPickup(match,slot,pickup))return pickup;
+   target=null;return null;
   }
   static float Extent(Bounds bounds,Vector3 axis)=>Vector3.Dot(bounds.extents,new Vector3(Mathf.Abs(axis.x),Mathf.Abs(axis.y),Mathf.Abs(axis.z)));
   static bool OnRoad(LwsRoadGraph graph,Vector3 position){

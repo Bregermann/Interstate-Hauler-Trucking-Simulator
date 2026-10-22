@@ -13,7 +13,7 @@ namespace LWS.TruckSports
         sealed class Card
         {
             public RectTransform root;
-            public TMP_Text name,score,detail;
+            public TMP_Text name,score,detail,telemetry;
             public UnityEngine.UI.Image portrait,stripe;
             public string previous;
             public RectTransform promptRoot;public TMP_Text prompt;public CanvasGroup promptAlpha;
@@ -48,13 +48,14 @@ namespace LWS.TruckSports
             card.name=Text(card.root,"Participant name",old,new Vector2(12,-4),new Vector2(246,26),22);card.name.fontStyle=FontStyles.Bold;
             card.score=Text(card.root,"Owned score",old,new Vector2(53,-29),new Vector2(94,28),25);card.score.fontStyle=FontStyles.Bold;
             card.detail=Text(card.root,"Race status",old,new Vector2(151,-32),new Vector2(108,34),17);
+            card.telemetry=Text(card.root,"Driving telemetry",old,new Vector2(12,-87),new Vector2(316,23),17);card.telemetry.gameObject.SetActive(false);
             return cards[view]=card;
         }
         void Context(Card card,string value,Vector2 anchor,int view)
         {
             if(string.IsNullOrEmpty(value)){if(card.promptRoot!=null){card.promptAlpha.DOKill();card.promptRoot.gameObject.SetActive(false);}return;}
             if(card.promptRoot==null){var image=Image(card.root,"Contextual action",Vector2.zero,new Vector2(270,54));image.color=SportsBroadcastCanvas.Ink;image.gameObject.AddComponent<SportsBroadcastPlate>().cut=10;card.promptRoot=image.rectTransform;card.promptAlpha=image.gameObject.AddComponent<CanvasGroup>();card.prompt=Text(card.promptRoot,"Assigned action",menus.viewTexts[view],new Vector2(12,-5),new Vector2(246,44),20);card.prompt.alignment=TextAlignmentOptions.Center;card.promptRoot.gameObject.SetActive(false);}
-            card.promptRoot.pivot=anchor.y<.5f?Vector2.zero:new Vector2(0,1);card.promptRoot.anchoredPosition=anchor.y<.5f?new Vector2(0,8):new Vector2(0,-84);card.prompt.text=value;
+            card.promptRoot.pivot=anchor.y<.5f?Vector2.zero:new Vector2(0,1);card.promptRoot.anchoredPosition=anchor.y<.5f?new Vector2(0,8):new Vector2(0,-card.root.sizeDelta.y-8);card.prompt.text=value;
             if(!card.promptRoot.gameObject.activeSelf){card.promptRoot.gameObject.SetActive(true);card.promptAlpha.alpha=0;card.promptAlpha.DOFade(1,.12f).SetUpdate(true).SetLink(card.promptRoot.gameObject);}
         }
         void LateUpdate()
@@ -67,7 +68,8 @@ namespace LWS.TruckSports
                 bool active=menus.Screen==SportsEventScreen.Play&&match.MultiViewHUD&&view<match.cameras.Length&&match.cameras[view]!=null&&match.cameras[view].enabled&&match.TryReadViewportCard(view,out owner,out score,out detail)&&owner>=0&&owner<match.setup.count;
                 if(!active){if(cards[view]!=null)cards[view].root.gameObject.SetActive(false);continue;}
                 var card=cards[view]??Build(view);card.root.gameObject.SetActive(true);
-                bool hasDetail=!string.IsNullOrEmpty(detail);card.root.sizeDelta=hasDetail?new Vector2(270,76):new Vector2(230,72);card.name.rectTransform.sizeDelta=new Vector2(hasDetail?246:206,26);card.score.rectTransform.sizeDelta=new Vector2(hasDetail?94:166,28);
+                string telemetry=match.ViewportTelemetry(view);bool hasTelemetry=!string.IsNullOrEmpty(telemetry);
+                bool hasDetail=!string.IsNullOrEmpty(detail);card.root.sizeDelta=hasTelemetry?new Vector2(340,116):hasDetail?new Vector2(270,76):new Vector2(230,72);card.name.rectTransform.sizeDelta=new Vector2(hasTelemetry?316:hasDetail?246:206,26);card.score.rectTransform.sizeDelta=new Vector2(hasDetail?94:166,28);card.detail.rectTransform.sizeDelta=new Vector2(hasTelemetry?178:108,hasTelemetry?48:34);card.telemetry.text=telemetry;card.telemetry.gameObject.SetActive(hasTelemetry);
                 menus.viewTexts[view].gameObject.SetActive(false);var obsolete=menus.viewPanels[view].Find("View data backing");if(obsolete!=null)obsolete.gameObject.SetActive(false);
                 var anchor=InnerAnchor(match.cameras[view].rect);card.root.anchorMin=card.root.anchorMax=card.root.pivot=anchor;
                 card.root.anchoredPosition=new Vector2(anchor.x<.01f?10:anchor.x>.99f?-10:0,anchor.y<.01f?10:anchor.y>.99f?-10:0);

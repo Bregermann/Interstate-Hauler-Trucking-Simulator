@@ -11,6 +11,7 @@ namespace LWS.TruckSnake {
   public readonly SnakePathHistory history=new SnakePathHistory();
   public int ActiveCount=>active;public int Pending=>pending;public float Length=>active*spacing;
   public int SweepCount{get;private set;}
+  public string LastSpawnBlocker{get;private set;}
   sealed class Segment {public Rigidbody body;public BoxCollider shape;public Transform visual;public LineRenderer coupling;public float protectedUntil;public Vector3 previousPosition;public Quaternion previousRotation;}
   readonly Dictionary<Material,Material> materials=new Dictionary<Material,Material>();
   readonly List<Segment> pool=new List<Segment>(64);readonly RaycastHit[] hits=new RaycastHit[64];readonly Collider[] overlaps=new Collider[64];int active,pending;Vector3 previousHitch;Collider[] tractorSolids;Collider[][] competitorSolids;bool collisionCacheReady;
@@ -23,16 +24,17 @@ namespace LWS.TruckSnake {
    // follows the real route driven by the tractor, including delayed jumps.
    var hitch=tractor.transform.TransformPoint(tractorHitch);
    history.Reset(hitch,tractor.transform.rotation,frontOffset+7);
-   if(!Pose(0,out var p,out var q)||!SpawnClear(p,q))throw new System.InvalidOperationException("Truck Snake starter trailer bay is obstructed for participant "+(slot+1));
+   if(!Pose(0,out var p,out var q)||!SpawnClear(p,q))throw new System.InvalidOperationException("Truck Snake starter trailer bay is obstructed for participant "+(slot+1)+" · "+LastSpawnBlocker);
    // Require support beneath front and rear, rather than inventing a path over a gap.
    for(int end=-1;end<=1;end+=2){var foot=p+q*(Vector3.forward*end*5);bool supported=false;foreach(var hit in Physics.RaycastAll(foot+Vector3.up*2,Vector3.down,4,~0,QueryTriggerInteraction.Ignore))if(IsRoadSupport(hit.collider)&&Mathf.Abs(hit.point.y-p.y)<.65f){supported=true;break;}if(!supported)throw new System.InvalidOperationException("Truck Snake starter trailer lacks a level road bay for participant "+(slot+1));}
    pending=SnakeRules.StartingTrailers;AttachPending();
    if(active!=SnakeRules.StartingTrailers)throw new System.InvalidOperationException("Truck Snake could not attach its starter trailer.");
   }
   bool SpawnClear(Vector3 p,Quaternion q){
+   LastSpawnBlocker=null;
    int count=Physics.OverlapBoxNonAlloc(p+q*Vector3.up*1.6f,new Vector3(1.3f,1.55f,6.7f),overlaps,q,~0,QueryTriggerInteraction.Ignore);
    var candidates=count==overlaps.Length?Physics.OverlapBox(p+q*Vector3.up*1.6f,new Vector3(1.3f,1.55f,6.7f),q,~0,QueryTriggerInteraction.Ignore):overlaps;if(count==overlaps.Length)count=candidates.Length;
-   for(int i=0;i<count;i++)if(candidates[i]!=null&&candidates[i].bounds.max.y>p.y+.45f)return false;return true;
+   for(int i=0;i<count;i++)if(candidates[i]!=null&&candidates[i].bounds.max.y>p.y+.45f){LastSpawnBlocker=candidates[i].name+" at "+candidates[i].bounds.center;return false;}return true;
   }
   void AttachPending(){while(pending>0&&Pose(active,out var p,out var q)&&SpawnClear(p,q)){
    var segment=Ensure(active);segment.body.transform.SetPositionAndRotation(p,q);segment.body.gameObject.SetActive(true);IgnoreCompetitors(segment.shape);segment.body.position=p;segment.body.rotation=q;segment.previousPosition=p;segment.previousRotation=q;Physics.SyncTransforms();segment.coupling.gameObject.SetActive(true);segment.coupling.SetPosition(0,p+q*new Vector3(0,1.15f,6.75f));segment.coupling.SetPosition(1,active==0?tractor.transform.TransformPoint(tractorHitch):pool[active-1].body.position+pool[active-1].body.rotation*new Vector3(0,1.15f,-6.75f));segment.protectedUntil=Time.time+1;active++;pending--;

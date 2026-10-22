@@ -26,6 +26,7 @@ namespace LWS.TruckSports {
  public virtual string ViewportCardLabel(int view,int participant)=>setup.players[participant].name;
  public virtual Color ViewportCardColor(int view,int participant)=>setup.players[participant].color;
  public virtual string ViewportContextPrompt(int view)=>null;
+ public virtual string ViewportTelemetry(int view)=>null;
  public virtual bool TryReadViewportCard(int view,out int participant,out string score,out string detail){participant=-1;score=detail=null;return false;}
  public virtual int ScoreCardCount=>setup.count;public virtual string ScoreCardLabel(int card)=>setup.players[card].name;public virtual int ScoreCardSource(int card)=>card;public virtual Color ScoreCardColor(int card)=>setup.players[ScoreCardSource(card)].color;public virtual float ParticipantProgress(int slot)=>-1;public virtual bool ParticipantLocked(int slot)=>false;
  // Read-only presentation values. Each race retains its existing countdown,

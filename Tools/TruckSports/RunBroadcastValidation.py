@@ -102,7 +102,7 @@ def run(name, arguments):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
@@ -111,7 +111,17 @@ def main():
     # Call only when this project has no other owned Editor/player. The caller
     # establishes the exclusive turn; no process-killing or project-lock bypass.
     sync()
-    if args.stage == "compass-margin":
+    if args.stage == "snake-traffic":
+        run("snake-original-traffic-lanes-authoring", ["-quit", "-executeMethod", "LWS.TruckSnake.Editor.SnakePlaytestRepairAuthoring.UpgradeTraffic"])
+    elif args.stage == "snake-town":
+        run("snake-town-infill-authoring", ["-quit", "-executeMethod", "LWS.TruckSnake.Editor.SnakePlaytestRepairAuthoring.UpgradeTown"])
+    elif args.stage == "snake-handling":
+        run("snake-mode-handling-authoring", ["-quit", "-executeMethod", "LWS.TruckSnake.Editor.SnakePlaytestRepairAuthoring.UpgradeHandling"])
+    elif args.stage == "snake-guidance":
+        run("snake-pickup-guidance-authoring", ["-quit", "-executeMethod", "LWS.TruckSnake.Editor.SnakePlaytestRepairAuthoring.UpgradeGuidance"])
+    elif args.stage == "wife-camera":
+        run("wife-start-camera-authoring", ["-quit", "-executeMethod", "LWS.TruckWifeCarrying.Editor.WifeHudRepairAuthoring.UpgradeStartupCamera"])
+    elif args.stage == "compass-margin":
         run("camera-compass-margin", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsBroadcastCameraAuthoring.UpgradeCompassMargin"])
     elif args.stage == "bind":
         run("camera-bind", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsBroadcastCameraAuthoring.Bind"])

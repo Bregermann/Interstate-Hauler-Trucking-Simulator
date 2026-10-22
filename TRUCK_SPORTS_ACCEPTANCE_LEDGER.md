@@ -5958,11 +5958,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Complete HUD Modernization |
 | Original Request | Replace the existing poor interface with polished player information. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section9.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SnakeMatch supplies typed owner/score/trailer/MPH/distance/time/combo/best values to shared Heat/TMP SportsCompactViewportHud. Optional telemetry row preserves existing compact sports geometry. Obsolete multiline data and split header hidden. |
+| Automated Verification | Exact payload85d6770a: Windows compact234/0 at720p/1080p, complete AI match26/0,62-trailer natural cadence10/0,58-trailer delayed jump11/0. Native final24EditMode,14combined PlayMode,4control regressions and1complete AI lifecycle passed. Receipts under Logs/TruckSports/PlaytestRepair; no human/controller acceptance claimed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human visual/handling review and physical-controller acceptance; isolated profiling not performed. |
 
 ### HPR-9-2 — Fix Eliminated AI Cameras
 
@@ -5972,11 +5972,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Fix Eliminated AI Cameras |
 | Original Request | AI cameras behave wildly after their trucks are eliminated. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section9.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing retired-view adapter releases crashed Snake cab/chase targets and preserves owner/input and Show AI Cameras preference; commit11651d08 retains the earlier corrected spectator integration. |
+| Automated Verification | Full33scene Windows697/0 and asset-bound ColoredCnpAssetBoundFinal67/0 include retired Snake AI cab views; payload7cc. Current SnakeExistingPickupBaseline26/0 completes an actual AI match and rematches. |
+| Human Verification | Automated software-controller/agent visual evidence only; developer and physical-controller acceptance pending. |
+| Remaining Work | No unresolved automated retired-target camera defect; developer review pending. |
 
 ### HPR-9-3 — Faster Acceleration and Better Turning
 
@@ -5986,11 +5986,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Faster Acceleration and Better Turning |
 | Original Request | Apply mode-specific improvements to: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section9.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved Snake-only NWH handling50/36degree locks,response500,smoothing.015,launch4.2/2.8,shift.18. Positive minimum4.5m/s; human reverse input trims cruise to minimum and full-lock turn scale.65. AI replans missed gates, prefers ahead objectives and clears stale detours; original AI speed/avoidance policy preserved. Shared Taxi/vendor sources untouched. |
+| Automated Verification | Exact payload85d6770a: Windows compact234/0 at720p/1080p, complete AI match26/0,62-trailer natural cadence10/0,58-trailer delayed jump11/0. Native final24EditMode,14combined PlayMode,4control regressions and1complete AI lifecycle passed. Receipts under Logs/TruckSports/PlaytestRepair; no human/controller acceptance claimed. Cold same-seed fresh-scene handling4.40s to3.40s to20MPH;60degree turn15.22m to14.56m,upright. Final native AI55contacts/max31trailers; Windows20contacts/max20trailers. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human handling feel and physical-controller acceptance; no isolated benchmark claim. |
 
 ### HPR-9-4 — Populate the Town
 
@@ -6000,11 +6000,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Populate the Town |
 | Original Request | Add more: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section9.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Saved32owned JC trees/12buildings with road/terrain checks. Sport-owned UTS profile210pedestrians/59traffic, unchanged full budgets. Empty lane root cause: interstate builder rejected LocalRoads. Restored4original Taxi/Fare district UTS loops; creation fallback fixed. BeginGame uses public ResetTraffic/ResetPopulation so rematches clear old NPCs before starter attachment. |
+| Automated Verification | Exact payload85d6770a: Windows compact234/0 at720p/1080p, complete AI match26/0,62-trailer natural cadence10/0,58-trailer delayed jump11/0. Native final24EditMode,14combined PlayMode,4control regressions and1complete AI lifecycle passed. Receipts under Logs/TruckSports/PlaytestRepair; no human/controller acceptance claimed. Actual Windows59logical/56live traffic/full46 and210logical/80live pedestrians; scenery fixture renders actual JC storefront/tree assets. Saved scene retains original serialized objects. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human town-density/aesthetic review; four-view severe-weather and isolated performance profiling unverified. |
 
 ### HPR-9-5 — Respawning Trailer Pickups
 
@@ -6014,11 +6014,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Respawning Trailer Pickups |
 | Original Request | Keep new pickups spawning throughout the round. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.5. |
 | Acceptance Criteria | All observable requirements and acceptance in source section9.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | SnakeMatch retires old gates only beyond900m from every survivor and outside displayed cameras; existing finite pool, weighted gold/green spawn, road clearance and0.5s refill remain authoritative. SnakePickup exposes read-only age. |
+| Automated Verification | Exact payload85d6770a: Windows compact234/0 at720p/1080p, complete AI match26/0,62-trailer natural cadence10/0,58-trailer delayed jump11/0. Native final24EditMode,14combined PlayMode,4control regressions and1complete AI lifecycle passed. Receipts under Logs/TruckSports/PlaytestRepair; no human/controller acceptance claimed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human visual/handling review and physical-controller acceptance; isolated profiling not performed. |
 
 ### HPR-9-6 — Nearest-Pickup Arrow
 
@@ -6028,11 +6028,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Nearest-Pickup Arrow |
 | Original Request | Add a clear directional indicator toward the nearest reachable trailer pickup. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section9.6. |
 | Acceptance Criteria | All observable requirements and acceptance in source section9.6; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Four saved SnakePickupGuidance CNP prefab references. Shared and owned views use existing SnakeRouteAI/LwsRoutePlanner reachability, throttled1.25s; immediate release of collected gates. No independent projection/GPS framework. |
+| Automated Verification | Exact payload85d6770a: Windows compact234/0 at720p/1080p, complete AI match26/0,62-trailer natural cadence10/0,58-trailer delayed jump11/0. Native final24EditMode,14combined PlayMode,4control regressions and1complete AI lifecycle passed. Receipts under Logs/TruckSports/PlaytestRepair; no human/controller acceptance claimed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human visual/handling review and physical-controller acceptance; isolated profiling not performed. |
 
 ### HPR-10-1 — Minimal Polished HUD
 
@@ -6141,10 +6141,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | NEW HIGH-PRIORITY REGRESSION: The puck can enter the goal without registering a goal. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section13.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section13.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Implementation Evidence | Existing HockeyRules completed-step swept crossing and HockeyMatch goal/celebration/faceoff authority retained; no speculative production scoring change. New HockeyPhysicalGoalTests uses real saved rink/puck/frame bounds. |
+| Automated Verification | Native14/0 includes18real PhysX center/98percent-clear frame passages,both goals,2/8/16m/s,once-only correct team score and faceoff. Exact final payload85d6770a Windows39/0 physical center/outside-net/celebration/faceoff/rematch checks passed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human reported miss remains unreproduced. Preserve this open human finding; no actual production scoring root-cause fix claimed. Follow up when reproduction is isolated. |
 
 ### HPR-13-2 — Complete UI Modernization
 
@@ -6560,11 +6560,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Apply the Latest Minimal Racing HUD |
 | Original Request | The mode has been referred to as Wife Carrying and Wife Racing in the notes. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section23.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section23.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | WifeMatch read-only RunningPlace/Clock/FinishTime adapter; own pair name/color retained across grouped views. Four saved WifeCheckpointGuidance CNP instances point to existing ordered gates; additive authoring preserves environment and race physics. |
-| Automated Verification | Native13/0 includes Wife1–4human/optionalAI ownership and four native CNP widgets. Payload7cc Windows182/0 actual720p/1080p UI; WifeCompactFullHardSeries6/0:12physical finishes in3races, rematch/menu/clock preservation. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing compact Wife HUD/checkpoint refs preserved. Explicit WifeHudRepairAuthoring.UpgradeStartupCamera migrates only stock groundOffset(0,6,-13) to(0,6,-9); original Cinemachine rig/FOV/look-ahead and race geometry/physics unchanged. Designer alternatives retained. |
+| Automated Verification | Original saved camera failed18passenger sightlines. Native repeated-start/rematch checks now pass; exact final payload85d6770a Windows234/0 includes actual720p/1080p clear startup captures,1–4software-human HUD/CNP ownership and fitting. Earlier full Hard series6/0 with12physical finishes retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Startup chase view is occluded by existing finish banner (GBC-SPORT-TruckWifeCarrying); human/controller review unperformed. Do not equate successful matches with camera clearance acceptance. |
+| Remaining Work | Human and physical-controller review unperformed; actual startup Windows images inspected with finish banner clear of passenger sightlines. |
 
 ### HPR-23-2 — BASE Jumping-Style Split-Screen Layout
 
@@ -7096,11 +7096,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckWifeCarrying |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing compact Wife HUD/checkpoint refs preserved. Explicit WifeHudRepairAuthoring.UpgradeStartupCamera migrates only stock groundOffset(0,6,-13) to(0,6,-9); original Cinemachine rig/FOV/look-ahead and race geometry/physics unchanged. Designer alternatives retained. |
+| Automated Verification | Original saved camera failed18passenger sightlines. Native repeated-start/rematch checks now pass; exact final payload85d6770a Windows234/0 includes actual720p/1080p clear startup captures,1–4software-human HUD/CNP ownership and fitting. Earlier full Hard series6/0 with12physical finishes retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Agent visual finding in205c0bf4 Wife-checkpoint-cues-1280.png: existing finish banner crosses the starting chase sightline. Four cameras/owned markers work, but inspect this occlusion using existing Cinemachine before claiming overall Wife camera presentation complete. |
+| Remaining Work | Human and physical-controller review unperformed; actual startup Windows images inspected with finish banner clear of passenger sightlines. |
 
 #### GBC-SPORT-TruckMusicalParking
 

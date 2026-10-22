@@ -10,6 +10,21 @@ namespace LWS.TruckWifeCarrying.Editor
 {
     public static class WifeHudRepairAuthoring
     {
+        public static void UpgradeStartupCamera()
+        {
+            var scene=EditorSceneManager.OpenScene("Assets/TruckWifeCarrying/Scenes/TruckWifeCarrying.unity");
+            var match=UnityEngine.Object.FindAnyObjectByType<WifeMatch>();
+            if(match==null||match.views==null)throw new InvalidOperationException("Saved Wife Carrying chase rig required");
+            // The old offset placed the camera behind the render-only banner
+            // even though the carried trucks started past it. Keep the native
+            // Cinemachine rig and preserve any designer-authored alternative.
+            if(match.views.groundOffset==new Vector3(0,6,-13)&&Mathf.Approximately(match.views.groundLookAhead,4))
+            {
+                match.views.groundOffset=new Vector3(0,6,-9);
+                EditorUtility.SetDirty(match.views);EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
+            }
+            Debug.Log("WIFE_START_CAMERA saved mode-only chase offset="+match.views.groundOffset);
+        }
         // Add references to the existing scene; never call its world generator.
         public static void Upgrade()
         {
