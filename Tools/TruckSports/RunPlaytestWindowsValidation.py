@@ -68,6 +68,7 @@ def main():
             "-tsSwingFocused": r"ERRORS=(\d+)\. Real PhysX joints, torque, release velocity, flight and contact; synthetic commands/virtual sources; camera-only renders\.",
             "-tsLegacyLook": r"ERRORS=(\d+)\. Native saved modes and injected pad/mouse input, steering/cursor policies and controlled UI renders;",
             "-tsWallProduction": r"ERRORS=(\d+)\. Labelled spawn fixture, injected keyboard opening and actual NWH/PhysX 4v4 match/volleys, controlled UI captures\.",
+            "-tsPongFocused": r"ERRORS=(\d+)\. Physical seeded fixtures and actual injected human controls are distinguished above;",
         }
         signature = protected_footers.get(args.flag)
         if signature:

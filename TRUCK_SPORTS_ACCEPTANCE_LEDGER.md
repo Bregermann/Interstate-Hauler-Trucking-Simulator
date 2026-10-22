@@ -6958,11 +6958,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckWallball |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Original strategic whole-court camera retained. WallballPresentation restores authored1–8 slot markers; runtime previously expanded them into unbounded full names across the court. Full crew data/setup/active-turn feedback and team results unchanged. See2026-10-22-Remaining-Precision.md and exact evidence. |
+| Automated Verification | First physical11/0 on1363d34f rejected visually for overlapping names. Corrected54634dd9 Windows WallballReadableLabelsWindows11/0,49.41real seconds: complete ordinary4v4 result11:7,46shots,28physical/19legal returns,maxvolley4; first keyboard drive, pause, rematch/Scrap menu. Controlled720p/1080p before/after inspected; no normal-window or complete-human-match claim. Native remaining-precision-camera-native3/0 covers Limbo ownership, Field Goal geometry and protected Curling banks. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human camera/readability approval, physical controllers/wheels, listening and isolated profiling remain unperformed. Camera-only/controlled render limits and original/final payloads remain explicit; preserve working gameplay. |
 
 #### GBC-SPORT-TruckCornhole
 
@@ -7238,11 +7238,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckFieldGoal |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Original contact-kick camera and embedded world stadium board retained; native field/board alignment regression preserved. See2026-10-22-Remaining-Precision.md and exact evidence. |
+| Automated Verification | Windows FieldGoalProtectedCameraWindows57/0 on1363d34f,91.96real seconds: complete four-AI20attempt bumper-kick match across five distances, real goals/runoff, embedded replay controls, two rematches and menu. Actual windows at720p/1080p/other ratios; entire board in longest-kick view,186.3234pixels high at720p. Source and scene unchanged in final54634dd9. Native remaining-precision-camera-native3/0 covers Limbo ownership, Field Goal geometry and protected Curling banks. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human camera/readability approval, physical controllers/wheels, listening and isolated profiling remain unperformed. Camera-only/controlled render limits and original/final payloads remain explicit; preserve working gameplay. |
 
 #### GBC-SPORT-TruckBeerPong
 
@@ -7252,11 +7252,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckBeerPong |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing precision approach/flight/replay camera retained. No shared broadcast director or gameplay replacement. See2026-10-22-Remaining-Precision.md and exact evidence. |
+| Automated Verification | Windows PongProtectedCameraWindows89/0 on1363d34f,33.33real seconds: seeded physical shot/input ownership/reconnect/aftertouch/practice/replay fixtures and camera-only720p/1080p/other ratios. Not a complete ordinary match or normal composed UI capture. Source and scene unchanged in final54634dd9. Native remaining-precision-camera-native3/0 covers Limbo ownership, Field Goal geometry and protected Curling banks. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human camera/readability approval, physical controllers/wheels, listening and isolated profiling remain unperformed. Camera-only/controlled render limits and original/final payloads remain explicit; preserve working gameplay. |
 
 #### GBC-SPORT-TruckPoker
 
@@ -7406,11 +7406,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckLimbo |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing simultaneous owned chase/cab layouts and shared floor-safe recorded replay retained. See2026-10-22-Remaining-Precision.md and exact evidence. |
+| Automated Verification | Windows LimboProtectedCameraWindows35/0 on1363d34f,18.34real seconds: four software-keyboard humans, physical whole-truck clears/lower-bar contacts, actual suspension compression, floor-safe replay3angles, reset/menu. Controlled720p/1080p images, not human or normal composed-frame acceptance. Native ownership test passed in targeted3/0 suite. Source and scene unchanged in final54634dd9. Native remaining-precision-camera-native3/0 covers Limbo ownership, Field Goal geometry and protected Curling banks. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human camera/readability approval, physical controllers/wheels, listening and isolated profiling remain unperformed. Camera-only/controlled render limits and original/final payloads remain explicit; preserve working gameplay. |
 
 #### GBC-SPORT-TruckSkyTow
 

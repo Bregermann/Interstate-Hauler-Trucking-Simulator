@@ -1071,3 +1071,7 @@ See2026-10-22-Fare-Preserved.md: fresh46/0Windows checks, complete first-to-five
 ## October22 — stealth, pendulum and precision camera checks accepted
 
 See2026-10-22-Protected-Cameras.md: fresh114/0Windows checks, native replay-floor1/0, source/scene preservation, legal Hide clues/occlusion/ownership, actual Swing release/replay and five-mode cab look. No new gameplay or human/hardware/listening/profile approval claimed. Remaining current requirements stay open; Q22-SKY then Q22-CARNIVAL remain queued.
+
+## October22 — remaining precision views and compact Wallball markers accepted
+
+See2026-10-22-Remaining-Precision.md. Retained181older-payload Windows checks, native3/0 and fresh final-payload Wallball11/0; first11/0 was rejected visually before the world-marker correction. Scene/physics/rules/identity data preserved. Human/hardware/listening/profiling remain unperformed. HPR8-4/HPR13-1 remain unreproduced; Tug remains deferred. Q22-SKY then Q22-CARNIVAL remain queued.
