@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Failed(Child)" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 17:46:47Z" end-time="2026-10-22 17:47:08Z" duration="21.4306756">
+  <test-suite type="TestSuite" id="1379" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="265" result="Failed" site="Child" start-time="2026-10-22 17:46:47Z" end-time="2026-10-22 17:47:08Z" duration="21.430676" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1263" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="98" result="Failed" site="Child" start-time="2026-10-22 17:46:47Z" end-time="2026-10-22 17:47:08Z" duration="21.409540" total="3" passed="2" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="33976" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1157" name="DockBubbleTimingTraceTests" fullname="DockBubbleTimingTraceTests" classname="DockBubbleTimingTraceTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 17:46:47Z" end-time="2026-10-22 17:46:52Z" duration="5.221124" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1158" name="TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" fullname="DockBubbleTimingTraceTests.TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" methodname="TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" classname="DockBubbleTimingTraceTests" runstate="Runnable" seed="548698833" result="Passed" start-time="2026-10-22 17:46:47Z" end-time="2026-10-22 17:46:52Z" duration="5.203210" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+samples=120 afterCameraMeanError=11.175 afterCameraMaxError=23.118 actualJerkRms=0.044 postCameraTargetJerkRms=12.722
+Actual native flight; no score, camera or physics modification.
+
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1159" name="DockSpectatorLifeTests" fullname="DockSpectatorLifeTests" classname="DockSpectatorLifeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 17:46:52Z" end-time="2026-10-22 17:46:56Z" duration="4.526639" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1160" name="ActualCompatibleCrowdPosesAnimatePhotoGestureStaysBoundedAndPauseStopsIt" fullname="DockSpectatorLifeTests.ActualCompatibleCrowdPosesAnimatePhotoGestureStaysBoundedAndPauseStopsIt" methodname="ActualCompatibleCrowdPosesAnimatePhotoGestureStaysBoundedAndPauseStopsIt" classname="DockSpectatorLifeTests" runstate="Runnable" seed="1456452567" result="Passed" start-time="2026-10-22 17:46:52Z" end-time="2026-10-22 17:46:56Z" duration="4.512520" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1161" name="DockVenueLifecycleTests" fullname="DockVenueLifecycleTests" classname="DockVenueLifecycleTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-22 17:46:56Z" end-time="2026-10-22 17:47:08Z" duration="11.652370" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1162" name="RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" fullname="DockVenueLifecycleTests.RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" methodname="RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" classname="DockVenueLifecycleTests" runstate="Runnable" seed="401060319" result="Failed" start-time="2026-10-22 17:46:56Z" end-time="2026-10-22 17:47:08Z" duration="11.649413" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Expected: greater than 0.800000012f
+  But was:  0.424386352f
+]]></message>
+            <stack-trace><![CDATA[at DockVenueLifecycleTests+<RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch>d__2.MoveNext () [0x007fc] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\DockVenueLifecycleTests.cs:41
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+DOCK_ATTEMPT slot=0 round=1 valid=True inches=2090 timing=PERFECT
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -2,7 +2,7 @@
 
 ## Current state — October21/22 continuation
 
-Accepted Windows executable: Builds/TruckSports/TruckSports.exe; Dance-Off payloadb3813fe215a01dc3f59d3ef4ef676169bb61f877b7be2cde32111c0d964169e4; native41/0 and focused Windows39/0. Derby and prior accepted payloads retained. Newly reported Dock platform/calm-water/animated-crowd follow-up is in progress; other active HPR/GBC work remains.
+Accepted Windows executable: Builds/TruckSports/TruckSports.exe; Dock pool/life payloadc6fcbca8381b44bbd3e89b3d2333b505c3feffd872f3100273addad49f845e33; native6/0 and Windows45/0. Prior Dance-Off/Derby accepted payloads retained; other current HPR/GBC work remains open.
 
 Parking numbered bays5197c076,Hockey/Parking36f50402 and Snake/Wife5c0a7c03 deliveries remain pushed to both authorized branches with their own exact build identities and retained failed candidates.925unrelated pending files/private planner remain protected.
 
@@ -1039,3 +1039,7 @@ See2026-10-22-Derby-Damage-HUD.md and actual evidence. Preserve original rules/p
 ## October22 — Dance-Off concert and timing accepted
 
 See2026-10-22-Dance-Concert.md and actual evidence. Original choreography/charts/input/HUD retained. Newly recorded Dock human feedback reopens HPR-18-2/4 and adds HPR-18-6; do not treat earlier automated acceptance as current developer approval.
+
+## October22 — Dock human follow-up accepted by automated checks
+
+See2026-10-22-Dock-Pool-Life.md. Rejected intermediate visuals retained; final evidence covers right platform, calm impact-responsive pool, animated crowd/photo behavior, real matches and rematches. No developer/hardware/listening/profile acceptance claimed. Continue the current open HPR/GBC requirements.

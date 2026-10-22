@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 18:32:04Z" end-time="2026-10-22 18:32:23Z" duration="19.2002836">
+  <test-suite type="TestSuite" id="1381" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="266" result="Passed" start-time="2026-10-22 18:32:04Z" end-time="2026-10-22 18:32:23Z" duration="19.200284" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1265" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="99" result="Passed" start-time="2026-10-22 18:32:04Z" end-time="2026-10-22 18:32:23Z" duration="19.172781" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="70324" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1157" name="DockBubbleTimingTraceTests" fullname="DockBubbleTimingTraceTests" classname="DockBubbleTimingTraceTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 18:32:04Z" end-time="2026-10-22 18:32:10Z" duration="5.988674" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1158" name="TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" fullname="DockBubbleTimingTraceTests.TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" methodname="TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" classname="DockBubbleTimingTraceTests" runstate="Runnable" seed="180462968" result="Passed" start-time="2026-10-22 18:32:04Z" end-time="2026-10-22 18:32:10Z" duration="5.969730" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+samples=120 afterCameraMeanError=11.226 afterCameraMaxError=23.548 actualJerkRms=0.057 postCameraTargetJerkRms=14.734
+Actual native flight; no score, camera or physics modification.
+
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1159" name="DockSpectatorLifeTests" fullname="DockSpectatorLifeTests" classname="DockSpectatorLifeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 18:32:10Z" end-time="2026-10-22 18:32:15Z" duration="4.880823" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1160" name="ActualCompatibleCrowdPosesAnimatePhotoGestureStaysBoundedAndPauseStopsIt" fullname="DockSpectatorLifeTests.ActualCompatibleCrowdPosesAnimatePhotoGestureStaysBoundedAndPauseStopsIt" methodname="ActualCompatibleCrowdPosesAnimatePhotoGestureStaysBoundedAndPauseStopsIt" classname="DockSpectatorLifeTests" runstate="Runnable" seed="1497029662" result="Passed" start-time="2026-10-22 18:32:10Z" end-time="2026-10-22 18:32:15Z" duration="4.871381" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1161" name="DockVenueLifecycleTests" fullname="DockVenueLifecycleTests" classname="DockVenueLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 18:32:15Z" end-time="2026-10-22 18:32:22Z" duration="7.227889" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1162" name="RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" fullname="DockVenueLifecycleTests.RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" methodname="RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" classname="DockVenueLifecycleTests" runstate="Runnable" seed="1605210544" result="Passed" start-time="2026-10-22 18:32:15Z" end-time="2026-10-22 18:32:22Z" duration="7.221645" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+DOCK_ATTEMPT slot=0 round=1 valid=True inches=1820 timing=GOOD
+DOCK_CREST_DIAGNOSTIC live=1 replay=0 sharedEntries=1 phase=Splash energy=976.5101 speed=12.75742 strength=1.275742 observedPeak=6.816684
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1163" name="DockWorldLetteringTests" fullname="DockWorldLetteringTests" classname="DockWorldLetteringTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 18:32:22Z" end-time="2026-10-22 18:32:23Z" duration="1.062129" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1164" name="ActualSavedWorldFontIsOccludedBySolidGeometry" fullname="DockWorldLetteringTests.ActualSavedWorldFontIsOccludedBySolidGeometry" methodname="ActualSavedWorldFontIsOccludedBySolidGeometry" classname="DockWorldLetteringTests" runstate="Runnable" seed="592873813" result="Passed" start-time="2026-10-22 18:32:22Z" end-time="2026-10-22 18:32:23Z" duration="1.054752" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+DOCK_WORLD_LETTER_DEPTH visibleDark=1121 occludedDark=0
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

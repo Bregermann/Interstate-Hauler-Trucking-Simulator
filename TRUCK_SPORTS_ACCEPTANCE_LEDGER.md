@@ -6309,10 +6309,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | Populate the stands substantially more densely. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | VERIFIED COMPLETE |
-| Implementation Evidence | DockAudiencePresentation.cs, DockVenueRepairAuthoring.cs and the saved validation scene: 464 placements, eight inspected clothed UTS variants (six female/two male), 24 live rigs, sixteen bounded runtime poses for 440 distant fans, shared existing FieldGoalCrowd reactions and four render-only novelty trucks. Original 48 identical spectators retained inactive. No new raw vendor geometry published. |
-| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
-| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
-| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
+| Implementation Evidence | Eight original clothed UTS models/464 fans;33 compatible clips,24 live social/dance/photo/walk rigs,16 animated shared destination meshes +8 reusable buffers. Original FieldGoalCrowd reactions preserved. Depth-tested lettering fixes through-body artifacts. See2026-10-22-Dock-Pool-Life.md. |
+| Automated Verification | Final native2 EditMode +4 PlayMode pass; exact-payload Windows45/0:29 mixed-source plus16 eight-AI checks. Actual composed images agent-reviewed; earlier visual candidates retained. See2026-10-22-Dock-Pool-Life.md and Evidence/2026-10-22-Dock-Pool-Life. |
+| Human Verification | October22 developer feedback reopened the exposed approach and river-like water requirements and requested lively spectators. Current acceptance is automated/agent-visual only; no new developer, hardware or listening acceptance. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated profiling remain unperformed; no full fluid simulation or new simultaneous split-screen mode claimed. |
 
 ### HPR-18-2 — Enclose and Complete the Pool
 
@@ -6322,11 +6322,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Enclose and Complete the Pool |
 | Original Request | The pool has visible unfinished areas, particularly toward the back. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved far pool wall/coping, rear grandstands, owned fence enclosure, pool administration building and existing original sport-logo signage. Existing launch/side-wall/first-water trigger geometry retained. Existing top-less wall mesh prevents overlapping coping faces. |
-| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
-| Human Verification | October22 screenshot/playtest: right side of the driving approach leaves the near pool edge exposed; developer requests a finished platform. Supersedes prior automated enclosure acceptance for this newly reported view. |
-| Remaining Work | Add a coherent right-hand approach platform/enclosure outside the diving corridor; inspect actual approach and replay views and verify collision/reset behavior. Preserve accepted far enclosure and original launch/scoring geometry. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Finished right-hand service platform with owned timber/fences and solid collider; closed near pool wall; accepted far enclosure retained. Original physical documents unchanged. |
+| Automated Verification | Final native2 EditMode +4 PlayMode pass; exact-payload Windows45/0:29 mixed-source plus16 eight-AI checks. Actual composed images agent-reviewed; earlier visual candidates retained. See2026-10-22-Dock-Pool-Life.md and Evidence/2026-10-22-Dock-Pool-Life. |
+| Human Verification | October22 developer feedback reopened the exposed approach and river-like water requirements and requested lively spectators. Current acceptance is automated/agent-visual only; no new developer, hardware or listening acceptance. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated profiling remain unperformed; no full fluid simulation or new simultaneous split-screen mode claimed. |
 
 ### HPR-18-3 — Replace Placeholder Run-Up Art
 
@@ -6338,9 +6338,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section18.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | VERIFIED COMPLETE |
 | Implementation Evidence | Original primitive approach renderer disabled while retaining its original collider; installed Construction Props timber models and MegaCity railings/cladding finish the run-up. New environment assets remain outside the existing drive/water envelopes. |
-| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
-| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
-| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
+| Automated Verification | Final native2 EditMode +4 PlayMode pass; exact-payload Windows45/0:29 mixed-source plus16 eight-AI checks. Actual composed images agent-reviewed; earlier visual candidates retained. See2026-10-22-Dock-Pool-Life.md and Evidence/2026-10-22-Dock-Pool-Life. |
+| Human Verification | October22 developer feedback reopened the exposed approach and river-like water requirements and requested lively spectators. Current acceptance is automated/agent-visual only; no new developer, hardware or listening acceptance. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated profiling remain unperformed; no full fluid simulation or new simultaneous split-screen mode claimed. |
 
 ### HPR-18-4 — Animated Water and Splashes
 
@@ -6350,11 +6350,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Animated Water and Splashes |
 | Original Request | Find and reuse appropriate existing water assets. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Audited static URP pool had no animation component/probe, while existing shared SportsWaterInteraction already supplied eight sprays and 48 rings. Add the existing FishingWaterFlow/DOTween material adapter and one bounded 128px reflection probe; preserve original NWH water/first-contact scoring and shared spray/ripple/audio. |
-| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
-| Human Verification | October22 developer rejects rapid river-like scrolling. Requests gently bobbing/swaying pool water, truck-impact-driven surface response and a huge natural cannonball-style splash. |
-| Remaining Work | Replace Dock-only river scrolling; reuse owned water/VFX assets for calm ambient movement, impact-energy-scaled splash and spreading waves. Validate actual truck impacts, replay, rematch and cleanup; do not claim full fluid simulation for a visual response. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Dock-only calm6369-vertex surface and correct bounded BaseMap UV motion; recorded actual mass/velocity drive capped ballistic spray/textured water film/spreading waves; replay clock respected. Legacy stacked sprite layer hidden only in Dock; valid splash framed through existing camera. Original scoring/vehicle physics unchanged. |
+| Automated Verification | Final native2 EditMode +4 PlayMode pass; exact-payload Windows45/0:29 mixed-source plus16 eight-AI checks. Actual composed images agent-reviewed; earlier visual candidates retained. See2026-10-22-Dock-Pool-Life.md and Evidence/2026-10-22-Dock-Pool-Life. |
+| Human Verification | October22 developer feedback reopened the exposed approach and river-like water requirements and requested lively spectators. Current acceptance is automated/agent-visual only; no new developer, hardware or listening acceptance. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated profiling remain unperformed; no full fluid simulation or new simultaneous split-screen mode claimed. |
 
 ### HPR-18-5 — Stabilize Airborne Speech Bubbles
 
@@ -6366,9 +6366,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section18.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | VERIFIED COMPLETE |
 | Implementation Evidence | DockSlang now follows the displayed truck transform after composition with a bounded configurable tracking filter and snap-on-owner/viewport/camera-cut; original owner, Canadian phrases, DOTween fades/scale, one-per-launch and pause/reset semantics preserved. Baseline timing measurement passed raw 5.060px RMS jitter directly into captions; filtered real native flight measured 0.010px RMS (raw target 4.820px), with intentional modest tracking lag. Camera-order mismatch was not established by the baseline. |
-| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
-| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
-| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
+| Automated Verification | Final native2 EditMode +4 PlayMode pass; exact-payload Windows45/0:29 mixed-source plus16 eight-AI checks. Actual composed images agent-reviewed; earlier visual candidates retained. See2026-10-22-Dock-Pool-Life.md and Evidence/2026-10-22-Dock-Pool-Life. |
+| Human Verification | October22 developer feedback reopened the exposed approach and river-like water requirements and requested lively spectators. Current acceptance is automated/agent-visual only; no new developer, hardware or listening acceptance. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated profiling remain unperformed; no full fluid simulation or new simultaneous split-screen mode claimed. |
 
 ### HPR-18-6 — Varied Animated Spectator Life
 
@@ -6378,11 +6378,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Dock Diving crowd |
 | Original Request | October22: animate the crowd; have spectators move around, laugh, dance, talk and take phone pictures. Audit owned humanoid animation packs and use a large variety. |
 | Acceptance Criteria | Existing varied character appearances remain; multiple recognizable social/dance/cheer/photo behaviors occur with staggered cadence; spectator movement stays inside stands/aisles and out of the playable pool/approach. Reactions, pause, rematches and scene cleanup work in the Windows build. Record reused clips and any unsupported behavior honestly. |
-| Status | MISSING |
-| Implementation Evidence | Existing DockAudiencePresentation has24 live rigs and440 distant static pose renderers; expansion not yet implemented. |
-| Automated Verification | Not yet run for this follow-up. Previous crowd acceptance does not establish these new behaviors. |
-| Human Verification | Developer requests more visible activity after inspecting the current build. |
-| Remaining Work | Audit compatible owned humanoid clips; implement varied animation, phone props and safe movement; check actual rendering and bounded resource use. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Eight original clothed UTS models/464 fans;33 compatible clips,24 live social/dance/photo/walk rigs,16 animated shared destination meshes +8 reusable buffers. Original FieldGoalCrowd reactions preserved. Depth-tested lettering fixes through-body artifacts. See2026-10-22-Dock-Pool-Life.md. |
+| Automated Verification | Final native2 EditMode +4 PlayMode pass; exact-payload Windows45/0:29 mixed-source plus16 eight-AI checks. Actual composed images agent-reviewed; earlier visual candidates retained. See2026-10-22-Dock-Pool-Life.md and Evidence/2026-10-22-Dock-Pool-Life. |
+| Human Verification | October22 developer feedback reopened the exposed approach and river-like water requirements and requested lively spectators. Current acceptance is automated/agent-visual only; no new developer, hardware or listening acceptance. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated profiling remain unperformed; no full fluid simulation or new simultaneous split-screen mode claimed. |
 
 ### HPR-19-1 — Triple the Playable Arena Area
 
