@@ -5764,11 +5764,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Repair Camera Jitter |
 | Original Request | The camera is extremely jerky. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section6.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section6.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | SkyTowMatch.Present removed a second competing camera evaluation; existing spline camera is sole pose owner. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human smoothness, difficulty, visual and listening acceptance; physical controller checks unperformed. |
+| Automated Verification | Earlier evidence retained: Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. Current accepted12f9edb4:34Windows/0;26EditMode/0 and1PlayMode/0. Full four-tow courses, ordinary26-27/30,19404camera samples/0duplicates/0outside centers, replay/rematch/menu.720p/1080p actual turns inspected. See2026-10-22-SkyTow-Reviewed.md and its exact receipts. |
+| Human Verification | Original October21 feedback retained; automated current Windows rendering/physics acceptance only. No new developer playtest, physical-device or listening approval claimed. |
+| Remaining Work | No known scoped automated camera/gate/towing defect in exercised Clear-weather courses. Human smoothness/difficulty/art approval, physical controllers, listening, weather matrix and isolated profiling remain unperformed. Later Carnival animated rings and queued sky/time overhaul remain separate. |
 
 ### HPR-6-2 — Fix Ring Difficulty
 
@@ -5778,11 +5778,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Fix Ring Difficulty |
 | Original Request | Current ring alignment is excessively difficult. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section6.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section6.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | SkyTowCourse delayed spline nominal/ring alignment; ordinary8m vs gold4.8m, matching whole-truck swept clearance; real cable/forces/course preserved. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human smoothness, difficulty, visual and listening acceptance; physical controller checks unperformed. |
+| Automated Verification | Earlier evidence retained: Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. Current accepted12f9edb4:34Windows/0;26EditMode/0 and1PlayMode/0. Full four-tow courses, ordinary26-27/30,19404camera samples/0duplicates/0outside centers, replay/rematch/menu.720p/1080p actual turns inspected. See2026-10-22-SkyTow-Reviewed.md and its exact receipts. |
+| Human Verification | Original October21 feedback retained; automated current Windows rendering/physics acceptance only. No new developer playtest, physical-device or listening approval claimed. |
+| Remaining Work | No known scoped automated camera/gate/towing defect in exercised Clear-weather courses. Human smoothness/difficulty/art approval, physical controllers, listening, weather matrix and isolated profiling remain unperformed. Later Carnival animated rings and queued sky/time overhaul remain separate. |
 
 ### HPR-6-3 — Replace Ring Assets
 
@@ -5792,11 +5792,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Replace Ring Assets |
 | Original Request | Find high-quality existing ring models and suitable effects from the project asset collection. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section6.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section6.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | Owned segmented/inset gate meshes, chevrons with valid separate front/back/side normals; existing Arctic materials; four pooled Weatherade-based snow-chip effects. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human smoothness, difficulty, visual and listening acceptance; physical controller checks unperformed. |
+| Automated Verification | Earlier evidence retained: Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. Current accepted12f9edb4:34Windows/0;26EditMode/0 and1PlayMode/0. Full four-tow courses, ordinary26-27/30,19404camera samples/0duplicates/0outside centers, replay/rematch/menu.720p/1080p actual turns inspected. See2026-10-22-SkyTow-Reviewed.md and its exact receipts. |
+| Human Verification | Original October21 feedback retained; automated current Windows rendering/physics acceptance only. No new developer playtest, physical-device or listening approval claimed. |
+| Remaining Work | No known scoped automated camera/gate/towing defect in exercised Clear-weather courses. Human smoothness/difficulty/art approval, physical controllers, listening, weather matrix and isolated profiling remain unperformed. Later Carnival animated rings and queued sky/time overhaul remain separate. |
 
 ### HPR-6-4 — Fix Boat Turns and Ring Alignment
 
@@ -5806,11 +5806,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Fix Boat Turns and Ring Alignment |
 | Original Request | The towing boat currently makes turns that throw the airborne truck far outside the intended ring path. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section6.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section6.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | SkyTowCourse delayed nominal spline frame follows actual tow lag through bends; SkyTowMatch is sole camera pose owner; existing real boat/cable/forces retained. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human smoothness, difficulty, visual and listening acceptance; physical controller checks unperformed. |
+| Automated Verification | Earlier evidence retained: Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalSkyGateNormals:10/0; complete four-tow physical course, all finish, ordinary gates25-26/30, no duplicate camera poses/outside centers;720p/1080p images visually inspected, invalid-normal glare and black triangles gone. Native Sky26/26. Current accepted12f9edb4:34Windows/0;26EditMode/0 and1PlayMode/0. Full four-tow courses, ordinary26-27/30,19404camera samples/0duplicates/0outside centers, replay/rematch/menu.720p/1080p actual turns inspected. See2026-10-22-SkyTow-Reviewed.md and its exact receipts. |
+| Human Verification | Original October21 feedback retained; automated current Windows rendering/physics acceptance only. No new developer playtest, physical-device or listening approval claimed. |
+| Remaining Work | No known scoped automated camera/gate/towing defect in exercised Clear-weather courses. Human smoothness/difficulty/art approval, physical controllers, listening, weather matrix and isolated profiling remain unperformed. Later Carnival animated rings and queued sky/time overhaul remain separate. |
 
 ### HPR-7-1 — Correct Vehicle and Trailer Scale
 

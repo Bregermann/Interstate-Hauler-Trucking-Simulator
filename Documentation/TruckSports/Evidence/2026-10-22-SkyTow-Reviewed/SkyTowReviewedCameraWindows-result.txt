@@ -1,0 +1,15 @@
+PASS real four-tow scene starts with four optional AI cameras
+PASS complete physical four-truck Arctic run reaches results
+PASS each rendered Sky Tow camera has exactly one pose evaluation per frame samples=19404 duplicates=0
+PASS actual truck centers remain inside their own camera during flight outside=0
+PASS no abrupt camera orientation flips; observed peak degrees/real-second=47.8296
+FLIGHT slot=0 hits=29 score=3475 failed=False maximumCable=36.75474
+FLIGHT slot=1 hits=27 score=3110 failed=False maximumCable=36.74837
+FLIGHT slot=2 hits=28 score=3390 failed=False maximumCable=36.80815
+FLIGHT slot=3 hits=28 score=3290 failed=False maximumCable=36.81225
+PASS actual ordinary gates are regularly reachable on the full turning tow route slot=0 hit=27/30
+PASS actual ordinary gates are regularly reachable on the full turning tow route slot=1 hit=26/30
+PASS actual ordinary gates are regularly reachable on the full turning tow route slot=2 hit=26/30
+PASS actual ordinary gates are regularly reachable on the full turning tow route slot=3 hit=26/30
+PASS AI-only rematch restores one functional spectator view
+CHECKS=10 ERRORS=0; actual four-tow flight at stated accelerated simulation; no human/controller/listening or GPU benchmark acceptance
