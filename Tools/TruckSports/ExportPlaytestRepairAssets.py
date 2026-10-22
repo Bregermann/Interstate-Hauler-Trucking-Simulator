@@ -88,6 +88,10 @@ if dock_presentation.is_dir():
     # These fitted owned timber/fence/building material copies are new to this
     # venue. Leave all existing user-authored Dock materials unchanged.
     paths += [p.relative_to(CLEAN).as_posix() for p in (CLEAN / "Assets/TruckDockDiving/Materials").glob("Imported *") if p.is_file() and not (ROOT / p.relative_to(CLEAN)).exists()]
+derby_scene = "Assets/TruckDemolitionDerby/Scenes/TruckDemolitionDerby.unity"
+if "LWS.TruckDerby.DerbyDamageHud" in (CLEAN / derby_scene).read_text(encoding="utf-8-sig"):
+    paths += [derby_scene]
+    paths += ["Assets/TruckDemolitionDerby/Materials/Original Derby venue logo.mat" + suffix for suffix in ["", ".meta"]]
 records = []
 for relative in paths:
     assert relative not in baseline, "Preserve unrelated pending work: " + relative

@@ -5,6 +5,12 @@ public sealed class DerbyMatch:SportsEventSession {
  readonly int[] cameraSpectators={-1,-1,-1,-1};
  Vector3 LiveSpectatorFocus(int view,Vector3 previousCamera){int target=cameraSpectators[view];if(target<0||target>=setup.count||fighters[target].Eliminated){target=-1;float distance=float.PositiveInfinity;for(int i=0;i<setup.count;i++)if(!fighters[i].Eliminated){float d=(fighters[i].body.position-previousCamera).sqrMagnitude;if(d<distance){distance=d;target=i;}}cameraSpectators[view]=target;}return target>=0?fighters[target].body.position:Vector3.zero;}
  public override bool BroadcastParticipantActive(int slot)=>!fighters[slot].Eliminated;
+ public override int CompactScoreColumns=>4;
+ public override bool CompactViewportHud=>true;
+ public int ViewParticipant(int view)=>view>=0&&view<humans?owners[view]:-1;
+ public override bool TryReadScoreCard(int card,out string value,out string detail){value=rules.wins[card]+"/3";detail=rules.alive[card]?"":"OUT";return true;}
+ public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail){participant=ViewParticipant(view);score=detail=null;if(participant<0)return false;score=rules.wins[participant]+"/3";detail=rules.alive[participant]?Mathf.Max(0,rules.Remaining-1)+" rivals":"OUT";return true;}
+ public override string ViewportContextPrompt(int view){int slot=ViewParticipant(view);return slot>=0&&rules.alive[slot]&&fighters[slot].motion.Stopped>1?"MOVE! "+Mathf.Max(0,5-fighters[slot].motion.Stopped).ToString("F1")+"s":null;}
  [Range(.25f,4)] public float derbyDamageMultiplier=2;
  public DerbyFighter[] fighters;public DerbyProps props;public DerbyFxReplay fxHistory;public SportsMotionReplay replay;public DerbyDamageReplay dents;public SportsEventCamera broadcast;public Camera[] cabCameras;public SportsCabLook[] looks;public SportsCameraFit fit;public DerbyRules rules=new DerbyRules();public DerbyStage Stage{get;private set;}public float Clock{get;private set;}public float Timer{get;private set;}public int Hits{get;private set;}public int Explosions{get;private set;}public int Draws{get;private set;}public float PeakImpact{get;private set;}
  readonly string[] elimination=new string[8];readonly Vector2[] bot=new Vector2[8];readonly float[] think=new float[8],reverse=new float[8],nextDisengage=new float[8],escape=new float[8];readonly int[] owners=new int[4];readonly StringBuilder text=new StringBuilder(900);int humans;bool skip;string notice="";Vector3 cameraFocus;float replayAge;

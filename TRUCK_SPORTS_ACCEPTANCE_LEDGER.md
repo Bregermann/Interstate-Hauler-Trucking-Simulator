@@ -6686,11 +6686,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Repair Clipped Damage Percentages |
 | Original Request | The HUD currently clips the damage percentages. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section27.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section27.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | DerbyDamageHud/DerbyHudAuthoring, two existing vendor icons and original Derby PNG in saved scene; shared cards/compact viewports reused; six read-only DerbyMatch API additions; original physical/gameplay authority preserved. See2026-10-22-Derby-Damage-HUD.md. |
+| Automated Verification | Native EditMode1/0, PlayMode1/0; exact full payload 2f1059f01175072383a21c491284d526ed5e8772efca8d0264498b3794218fed, Windows96/0 (57 health/layout +39 physical original match checks). Agent inspected actual composed frames; first visual candidate rejected and retained. |
+| Human Verification | No new developer playtest, physical-device or listening acceptance; automated/agent-visual findings are separate. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated CPU/GPU profiling remain unperformed. No unresolved implementation defect found in this focused validation. |
 
 ### HPR-27-2 — Remove Redundant Side Text
 
@@ -6700,11 +6700,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Remove Redundant Side Text |
 | Original Request | Remove the large: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section27.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section27.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | DerbyDamageHud/DerbyHudAuthoring, two existing vendor icons and original Derby PNG in saved scene; shared cards/compact viewports reused; six read-only DerbyMatch API additions; original physical/gameplay authority preserved. See2026-10-22-Derby-Damage-HUD.md. |
+| Automated Verification | Native EditMode1/0, PlayMode1/0; exact full payload 2f1059f01175072383a21c491284d526ed5e8772efca8d0264498b3794218fed, Windows96/0 (57 health/layout +39 physical original match checks). Agent inspected actual composed frames; first visual candidate rejected and retained. |
+| Human Verification | No new developer playtest, physical-device or listening acceptance; automated/agent-visual findings are separate. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated CPU/GPU profiling remain unperformed. No unresolved implementation defect found in this focused validation. |
 
 ### HPR-27-3 — Add Prominent Arena Branding
 
@@ -6714,11 +6714,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Add Prominent Arena Branding |
 | Original Request | Place a large, polished Demolition Derby / Truck Sports: Party! logo inside the actual arena. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section27.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section27.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | DerbyDamageHud/DerbyHudAuthoring, two existing vendor icons and original Derby PNG in saved scene; shared cards/compact viewports reused; six read-only DerbyMatch API additions; original physical/gameplay authority preserved. See2026-10-22-Derby-Damage-HUD.md. |
+| Automated Verification | Native EditMode1/0, PlayMode1/0; exact full payload 2f1059f01175072383a21c491284d526ed5e8772efca8d0264498b3794218fed, Windows96/0 (57 health/layout +39 physical original match checks). Agent inspected actual composed frames; first visual candidate rejected and retained. |
+| Human Verification | No new developer playtest, physical-device or listening acceptance; automated/agent-visual findings are separate. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated CPU/GPU profiling remain unperformed. No unresolved implementation defect found in this focused validation. |
 
 ### HPR-27-4 — Preserve Existing Derby Features
 
@@ -6728,11 +6728,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Existing Derby Features |
 | Original Request | Do not undo: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section27.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section27.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | DerbyDamageHud/DerbyHudAuthoring, two existing vendor icons and original Derby PNG in saved scene; shared cards/compact viewports reused; six read-only DerbyMatch API additions; original physical/gameplay authority preserved. See2026-10-22-Derby-Damage-HUD.md. |
+| Automated Verification | Native EditMode1/0, PlayMode1/0; exact full payload 2f1059f01175072383a21c491284d526ed5e8772efca8d0264498b3794218fed, Windows96/0 (57 health/layout +39 physical original match checks). Agent inspected actual composed frames; first visual candidate rejected and retained. |
+| Human Verification | No new developer playtest, physical-device or listening acceptance; automated/agent-visual findings are separate. |
+| Remaining Work | Developer playtest, physical-device/listening and isolated CPU/GPU profiling remain unperformed. No unresolved implementation defect found in this focused validation. |
 
 ### HPR-28-1 — Correct Sport-Specific Logo
 

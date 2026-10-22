@@ -59,7 +59,7 @@ def main():
         raise ValueError("Acceptance result must remain inside this workspace")
     evidence = result.read_text(encoding="utf-8-sig") if result.is_file() and result.stat().st_mtime >= wall_start else ""
     terminal = re.search(r"CHECKS=(\d+)\s+ERRORS=(\d+)", evidence)
-    legacy = re.search(r"ERRORS=(\d+)\. (?:Actual NWH/PhysX|Generated ramp and real NWH/PhysX flights|Core-Collapse native physics/support slice|Software-injected sources and native physical workload)", evidence) if args.legacy_errors_only and not terminal else None
+    legacy = re.search(r"ERRORS=(\d+)\. (?:Actual NWH/PhysX|Generated ramp and real NWH/PhysX flights|Core-Collapse native physics/support slice|Software-injected sources and native physical workload|Separate pure rule fixtures and actual native NWH/PhysX full autonomous matches)", evidence) if args.legacy_errors_only and not terminal else None
     checks = int(terminal[1]) if terminal else len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE)) if legacy else None
     errors = int(terminal[2]) if terminal else int(legacy[1]) if legacy else None
     completed = bool(terminal) or bool(legacy and checks)
