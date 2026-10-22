@@ -5920,9 +5920,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section8.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
 | Implementation Evidence | FareFightRoadAccess retains shared planner and actual road joins; native damage repair at match/recovery boundaries; destroyed powertrain enters announced reset equally for humans/AI. New steering-lock and distance-aware bounded backing fixes in progress. |
-| Automated Verification | FareRecordedSeedHardWindows16/0 on acceptedf70add93,488.95realseconds,seed616736539,actualfirst-to-fivefour-AIHardmatch,pause,rematch/menu. Longest2mpockets12.292/10.414/6.767/9.515simsec,6announcedrecoveries. CurrentNormal6c5b4e08andearliere343same-seed16/0retained. Old958508.676simsecimmobilityretained;oldloghasnoRPM/powertelemetry,soenginefailureisunproven. |
+| Automated Verification | FareRecordedSeedHardWindows16/0 on acceptedf70add93,488.95realseconds,seed616736539,actualfirst-to-fivefour-AIHardmatch,pause,rematch/menu. Longest2mpockets12.292/10.414/6.767/9.515simsec,6announcedrecoveries. CurrentNormal6c5b4e08andearliere343same-seed16/0retained. Old958508.676simsecimmobilityretained;oldloghasnoRPM/powertelemetry,soenginefailureisunproven. Fresh accepted1363d34f recorded-seed Normal full match16/0,523.94real seconds; longest pockets7.767578/6.981491/10.83057/9.048828simsec,7recoveries. Fourth latest recorded-seed full match also does not reproduce the original immobility. No speculative engine fix. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Intermittent original immobility has not recurred in three latest recorded-seed full matches. Capture complete body/input/powertrain state if it recurs;do not claim a confirmed zero-RPM cause or speculative engine fix. |
+| Remaining Work | Original intermittent immobility has not recurred in four latest recorded-seed full matches. Preserve the human finding and complete body/input/powertrain telemetry for recurrence; no confirmed zero-RPM cause or new engine fix claimed. |
 
 ### HPR-8-5 — Fair Initial Passenger Distances
 
@@ -5946,11 +5946,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Existing Gameplay |
 | Original Request | Passenger pickup, delivery, and stealing already work and must remain intact. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section8.6. |
 | Acceptance Criteria | All observable requirements and acceptance in source section8.6; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Original Fare Fight saved district, passenger authority, NWH drivers, GPS, traffic, crowd and input systems preserved. Exact scene/mode-script comparison and current acceptance in 2026-10-22-Fare-Preserved.md. |
+| Automated Verification | Fresh exact Windows1363d34f: complete recorded-seed616736539 Normal first-to-five four-AI match16/0 in523.94real seconds; no two-metre pocket longer than10.83057simsec,7announced recoveries. Independent four-software-human keyboard/pad/shared-stick, actual driving/GPS/camera/ragdoll, reconnect/rematch/menu30/0 in17.57real seconds. Earlier native5/0 retained; no redundant new native test claimed for unchanged gameplay. |
+| Human Verification | No new human driving, physical-controller or listening acceptance performed. Existing human AI complaint remains open separately under HPR-8-4. |
+| Remaining Work | No failure observed in exercised preservation scope. HPR-8-4 intermittent original immobility is still unconfirmed; human/controller/listening/dense-weather performance acceptance remains unperformed. |
 
 ### HPR-9-1 — Complete HUD Modernization
 
@@ -6902,11 +6902,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckBilliards |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | The original strategic table camera and private handoff/menu priority remain authoritative. Implementation and visual evidence: 2026-10-22-Billiards-HUD-Repair.md. Current scene and mode scripts match that accepted checkpoint; see Evidence/2026-10-22-Reviewed-Camera-Exceptions/preservation.json. |
+| Automated Verification | Retained actual earlier acceptance: 18 Windows checks, ordinary physical AI rack, 720p/1080p/4:3/ultrawide; native 1 EditMode and 1 PlayMode. Not rerun in this ledger reconciliation; exact original payload/test limitations are recorded in the linked report. Current shared HUD timer repair separately passed targeted native/Windows regressions. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval and physical devices/listening/profiling remain unperformed. Do not force this protected sport-owned camera into an unrelated shared director or claim this source comparison is a new full-match test. |
 
 #### GBC-SPORT-TruckHockey
 
@@ -6944,11 +6944,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckAirHockey |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | The original fixed rink view remains authoritative; no unnecessary group tracking replaces it. Implementation and visual evidence: 2026-10-22-Air-Hockey-Scrap-Repair.md. Current scene and mode scripts match that accepted checkpoint; see Evidence/2026-10-22-Reviewed-Camera-Exceptions/preservation.json. |
+| Automated Verification | Retained actual earlier acceptance: 63 Windows checks, complete ordinary physical AI first-to-seven match and rematch, four resolutions; native 2 EditMode and 2 PlayMode. Not rerun in this ledger reconciliation; exact original payload/test limitations are recorded in the linked report. Current shared HUD timer repair separately passed targeted native/Windows regressions. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval and physical devices/listening/profiling remain unperformed. Do not force this protected sport-owned camera into an unrelated shared director or claim this source comparison is a new full-match test. |
 
 #### GBC-SPORT-TruckWallball
 
@@ -7000,11 +7000,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckDockDiving |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | The owned launch/flight/splash/replay framing remains authoritative; the right apron and bounded splash preserve visibility. Implementation and visual evidence: 2026-10-22-Dock-Pool-Life.md. Current scene and mode scripts match that accepted checkpoint; see Evidence/2026-10-22-Reviewed-Camera-Exceptions/preservation.json. |
+| Automated Verification | Retained actual earlier acceptance: 45 Windows checks, complete mixed/AI matches, 720p/1080p crowd/water/replay images; native 2 EditMode and 4 PlayMode. Not rerun in this ledger reconciliation; exact original payload/test limitations are recorded in the linked report. Current shared HUD timer repair separately passed targeted native/Windows regressions. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval and physical devices/listening/profiling remain unperformed. Do not force this protected sport-owned camera into an unrelated shared director or claim this source comparison is a new full-match test. |
 
 #### GBC-SPORT-TruckKeepaway
 
@@ -7098,11 +7098,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckMattressRacing |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing racer/retired-spectator cameras and the approved central four-player HUD remain intact. The controlled pillow capture is not new HUD acceptance. Implementation and visual evidence: 2026-10-22-Mattress-Preserved.md. Current scene and mode scripts match that accepted checkpoint; see Evidence/2026-10-22-Reviewed-Camera-Exceptions/preservation.json. |
+| Automated Verification | Retained actual earlier acceptance: 64 Windows checks, complete ordinary eight-AI three-race series, actual physical pillows/tree/sheep fixtures and replay; native 1 PlayMode plus the shared compact-card suite. Not rerun in this ledger reconciliation; exact original payload/test limitations are recorded in the linked report. Current shared HUD timer repair separately passed targeted native/Windows regressions. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval and physical devices/listening/profiling remain unperformed. Do not force this protected sport-owned camera into an unrelated shared director or claim this source comparison is a new full-match test. |
 
 #### GBC-SPORT-TruckWifeCarrying
 
@@ -7196,11 +7196,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckFishing |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | The fixed individual stream/net cameras remain readable and independent. Their orthographic fishing presentation is intentionally preserved. Implementation and visual evidence: 2026-10-22-Fishing-Streams.md. Current scene and mode scripts match that accepted checkpoint; see Evidence/2026-10-22-Reviewed-Camera-Exceptions/preservation.json. |
+| Automated Verification | Retained actual earlier acceptance: 385 Windows checks, complete four-AI Easy/Normal/Hard matches, real net crossings, software-input QTE, offscreen fish births and four resolutions; native 12 EditMode and 1 PlayMode. Not rerun in this ledger reconciliation; exact original payload/test limitations are recorded in the linked report. Current shared HUD timer repair separately passed targeted native/Windows regressions. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval and physical devices/listening/profiling remain unperformed. Do not force this protected sport-owned camera into an unrelated shared director or claim this source comparison is a new full-match test. |
 
 #### GBC-SPORT-TruckSumo
 
@@ -7392,11 +7392,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckDanceOff |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | DanceConcertCamera supplies four bounded musical shots, framed for visible choreography and existing rhythm HUD. Implementation and visual evidence: 2026-10-22-Dance-Concert.md. Current scene and mode scripts match that accepted checkpoint; see Evidence/2026-10-22-Reviewed-Camera-Exceptions/preservation.json. |
+| Automated Verification | Retained actual earlier acceptance: 39 Windows checks, software rhythm inputs and complete mixed/AI concert, actual four musical shots at720p/1080p; native 40 EditMode and 1 PlayMode. Not rerun in this ledger reconciliation; exact original payload/test limitations are recorded in the linked report. Current shared HUD timer repair separately passed targeted native/Windows regressions. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval and physical devices/listening/profiling remain unperformed. Do not force this protected sport-owned camera into an unrelated shared director or claim this source comparison is a new full-match test. |
 
 #### GBC-SPORT-TruckLimbo
 
@@ -7420,11 +7420,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckSkyTow |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | The spline-relative sole camera writer follows the actual trailing truck and delayed gate path, preserving the Arctic route. Implementation and visual evidence: 2026-10-22-SkyTow-Reviewed.md. Current scene and mode scripts match that accepted checkpoint; see Evidence/2026-10-22-Reviewed-Camera-Exceptions/preservation.json. |
+| Automated Verification | Retained actual earlier acceptance: 34 Windows checks, complete actual tether courses/replay, 19,404 camera samples with zero duplicate poses/offscreen truck centers; native 26 EditMode and 1 PlayMode. Not rerun in this ledger reconciliation; exact original payload/test limitations are recorded in the linked report. Current shared HUD timer repair separately passed targeted native/Windows regressions. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval and physical devices/listening/profiling remain unperformed. Do not force this protected sport-owned camera into an unrelated shared director or claim this source comparison is a new full-match test. |
 
 #### GBC-SPORT-TruckTrailerPlug
 

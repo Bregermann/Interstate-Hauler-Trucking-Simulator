@@ -1,0 +1,34 @@
+PASS exclusive keyboard, whole pad and two independent shared-stick sources accepted
+PASS whole controller cannot overlap its assigned left stick
+PASS four injected human sources start a simultaneous match
+PASS four human camera viewports remain when AI views are disabled
+PASS correct actual Taxi cab owner 0
+PASS independent CNP route/camera binding 0
+PASS large objective indicator uses only its actual participant goal and legal vendor group 0
+PASS correct actual Taxi cab owner 1
+PASS independent CNP route/camera binding 1
+PASS large objective indicator uses only its actual participant goal and legal vendor group 1
+PASS correct actual Taxi cab owner 2
+PASS independent CNP route/camera binding 2
+PASS large objective indicator uses only its actual participant goal and legal vendor group 2
+PASS correct actual Taxi cab owner 3
+PASS independent CNP route/camera binding 3
+PASS large objective indicator uses only its actual participant goal and legal vendor group 3
+PASS source 0 actually drives its own full NWH tractor
+PASS source 1 actually drives its own full NWH tractor
+PASS source 2 actually drives its own full NWH tractor
+PASS source 3 actually drives its own full NWH tractor
+PASS one participant changes camera without replacing the other three views
+PASS existing Taxi crowd supplies an actual jointed pedestrian for the contact regression
+PEDESTRIAN FIXTURE ragdoll=True full=True impact=8.183167 impulse=(0.00, 70.00, 327.33) target=(-0.02, 0.14, -101.13) truck=(0.00, 0.23, -103.69)
+CONTACTS Fare Fight Taxi Tractor count=1 last=contact intro=-0.01999731 ragdoll=False incoming=(0.00, -0.98, 8.12) relative=(0.00, 0.98, -8.12)
+CONTACTS Cab count=0 last=
+PASS real NWH bumper collision activates the existing Taxi ragdoll with forward impact impulse
+PASS pedestrian collision awards no passenger-delivery points
+PASS disconnect of one whole pad pauses the shared simulation
+PASS disconnect preserves clock, passenger, attempt and physical bodies
+PASS held reconnect input cannot leak through confirmation
+PASS neutral then fresh controller driving is restored
+PASS rematch preserves the shared-stick assignment and independent crew slots
+PASS scene exit removes all participant drivers, GPS and action handlers
+CHECKS=30 ERRORS=0 · injected Input System devices and real NWH simulation; no physical controllers or human playtesting.
