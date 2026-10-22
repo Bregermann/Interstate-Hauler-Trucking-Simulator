@@ -6380,9 +6380,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section19.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | VERIFIED COMPLETE |
 | Implementation Evidence | Both existing saved scenes migrated explicitly/idempotently: measured actual ground/collision area2268.726to6805.251 (2.999591x); expanded boards, spawns, navigation, dressing; no shared-camera-profile change. |
-| Automated Verification | keepaway-arena-native3/3; ff39 Windows25/0; final7810634d Windows KeepawayExpandedDefaultFinal111/0,154.92s: both complete default60s matches, actual Rain/Snow registry selection, genuine contact/theft, blocked recovery, cab ownership, rematches and menu. Actual area6805.251m2 /2268.726m2=2.999591,22precut breakable references inspected. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | No known implementation gap for this specific requirement. Human playtest not yet recorded. Canonical combined build promotion awaits the remaining global acceptance gates. |
+| Automated Verification | Current accepted full payload 5b12d4c0bab3bd7f2fe17a68e80304078fd1dfcefc257dc4bade9f4a8888e727: four native tests passed; Windows 245/0 across Keepaway111 + composed54 + Terrier12-truck21 + compact59. Complete matches, rematches, current rendered images. See2026-10-22-Keepaway-Terrier-Regression.md. |
+| Human Verification | No new developer playtest or physical-device/listening acceptance; automated/agent-visual evidence is separate. |
+| Remaining Work | Human playtest and physical controller/wheel/listening acceptance remain unperformed. No additional implementation defect found for this requirement in these targeted runs. |
 
 ### HPR-19-2 — Reduce Obstacle Density to Approximately One-Third
 
@@ -6394,9 +6394,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section19.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | VERIFIED COMPLETE |
 | Implementation Evidence | 22potential props retained,18active at Lively; horizontal distribution scaled bysqrt(3), giving0.3333788baseline density with wider open chase lanes. |
-| Automated Verification | keepaway-arena-native3/3; ff39 Windows25/0; final7810634d Windows KeepawayExpandedDefaultFinal111/0,154.92s: both complete default60s matches, actual Rain/Snow registry selection, genuine contact/theft, blocked recovery, cab ownership, rematches and menu. Actual area6805.251m2 /2268.726m2=2.999591,22precut breakable references inspected. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | No known implementation gap for this specific requirement. Human playtest not yet recorded. Canonical combined build promotion awaits the remaining global acceptance gates. |
+| Automated Verification | Current accepted full payload 5b12d4c0bab3bd7f2fe17a68e80304078fd1dfcefc257dc4bade9f4a8888e727: four native tests passed; Windows 245/0 across Keepaway111 + composed54 + Terrier12-truck21 + compact59. Complete matches, rematches, current rendered images. See2026-10-22-Keepaway-Terrier-Regression.md. |
+| Human Verification | No new developer playtest or physical-device/listening acceptance; automated/agent-visual evidence is separate. |
+| Remaining Work | Human playtest and physical controller/wheel/listening acceptance remain unperformed. No additional implementation defect found for this requirement in these targeted runs. |
 
 ### HPR-19-3 — MAKE ALL GAMEPLAY OBSTACLES DESTRUCTIBLE
 
@@ -6408,9 +6408,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section19.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | VERIFIED COMPLETE |
 | Implementation Evidence | All22existing barrels/crates/tires/ramps/sweepers use existing Core-Collapse/PlowBreakable pool, actual-model EzySlice precuts and mode-only navigation/reset adapter. Structural floor/boards retained. |
-| Automated Verification | keepaway-arena-native3/3; ff39 Windows25/0; final7810634d Windows KeepawayExpandedDefaultFinal111/0,154.92s: both complete default60s matches, actual Rain/Snow registry selection, genuine contact/theft, blocked recovery, cab ownership, rematches and menu. Actual area6805.251m2 /2268.726m2=2.999591,22precut breakable references inspected. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | No known implementation gap for this specific requirement. Human playtest not yet recorded. Canonical combined build promotion awaits the remaining global acceptance gates. |
+| Automated Verification | Current accepted full payload 5b12d4c0bab3bd7f2fe17a68e80304078fd1dfcefc257dc4bade9f4a8888e727: four native tests passed; Windows 245/0 across Keepaway111 + composed54 + Terrier12-truck21 + compact59. Complete matches, rematches, current rendered images. See2026-10-22-Keepaway-Terrier-Regression.md. |
+| Human Verification | No new developer playtest or physical-device/listening acceptance; automated/agent-visual evidence is separate. |
+| Remaining Work | Human playtest and physical controller/wheel/listening acceptance remain unperformed. No additional implementation defect found for this requirement in these targeted runs. |
 
 ### HPR-19-4 — Preserve Existing Keepaway Mechanics
 
@@ -6420,11 +6420,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Existing Keepaway Mechanics |
 | Original Request | Maintain: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section19.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | Existing scoring/contact/ball/sheep/weather/crew/UI/camera systems preserved; bounded nav refresh reacts to moving/broken obstacles. Shared compass paused entrance corrected through DOTween/CNP. |
-| Automated Verification | Native3/3; ff39Windows25/0 complete two four-AI matches/rematches and rendering. Focused camera54/1 exposed paused widget issue; corrected native1/1 and projection9/9pass, broader Windows rerun pending. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Current candidate mixed-human/default60s/rain-snow/cab/nameplate regression and33-scene camera pass pending; no physical hardware or human acceptance claim. |
+| Automated Verification | Current accepted full payload 5b12d4c0bab3bd7f2fe17a68e80304078fd1dfcefc257dc4bade9f4a8888e727: four native tests passed; Windows 245/0 across Keepaway111 + composed54 + Terrier12-truck21 + compact59. Complete matches, rematches, current rendered images. See2026-10-22-Keepaway-Terrier-Regression.md. |
+| Human Verification | No new developer playtest or physical-device/listening acceptance; automated/agent-visual evidence is separate. |
+| Remaining Work | Human playtest and physical controller/wheel/listening acceptance remain unperformed. No additional implementation defect found for this requirement in these targeted runs. |
 
 ### HPR-20-1 — Reduce Wind Intensity by Approximately 30%
 
@@ -6434,11 +6434,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Reduce Wind Intensity by Approximately 30% |
 | Original Request | Apply a mode-specific weather wind-force multiplier of approximately: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section20.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section20.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | TerrierCourse.windForceMultiplier default0.70; existing TerrierRacer wind AddForce uses this one mode-specific multiplier. No race speed/ramp/steering changes. |
-| Automated Verification | Native wind response 1/1: default/old ratio0.70, unchanged authoritative weather; Windows TerrierWindFullTwelve21/0,31heats/31locks to first-to-five on7810634d. No physical-controller or human claim. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human assessment of airborne wind feel; next candidate must retain race behavior. |
+| Automated Verification | Current accepted full payload 5b12d4c0bab3bd7f2fe17a68e80304078fd1dfcefc257dc4bade9f4a8888e727: four native tests passed; Windows 245/0 across Keepaway111 + composed54 + Terrier12-truck21 + compact59. Complete matches, rematches, current rendered images. See2026-10-22-Keepaway-Terrier-Regression.md. |
+| Human Verification | No new developer playtest or physical-device/listening acceptance; automated/agent-visual evidence is separate. |
+| Remaining Work | Human playtest and physical controller/wheel/listening acceptance remain unperformed. No additional implementation defect found for this requirement in these targeted runs. |
 
 ### HPR-20-2 — Do Not Rework Racing Physics
 
@@ -6448,11 +6448,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Do Not Rework Racing Physics |
 | Original Request | Do not unnecessarily adjust: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section20.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section20.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing11651d08 adds only TerrierCourse.windForceMultiplier=.70 and applies it to the existing racer wind force. Original acceleration, ramp speed, jump impulse, geometry, aftertouch and propulsion remain unchanged; no further movement change in this continuation. |
+| Automated Verification | Current accepted full payload 5b12d4c0bab3bd7f2fe17a68e80304078fd1dfcefc257dc4bade9f4a8888e727: four native tests passed; Windows 245/0 across Keepaway111 + composed54 + Terrier12-truck21 + compact59. Complete matches, rematches, current rendered images. See2026-10-22-Keepaway-Terrier-Regression.md. |
+| Human Verification | No new developer playtest or physical-device/listening acceptance; automated/agent-visual evidence is separate. |
+| Remaining Work | Human playtest and physical controller/wheel/listening acceptance remain unperformed. No additional implementation defect found for this requirement in these targeted runs. |
 
 ### HPR-20-3 — Replace the HUD with BASE Jumping-Style Compact Score Presentation
 
@@ -6464,9 +6464,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section20.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | VERIFIED COMPLETE |
 | Implementation Evidence | TerrierMatch read-only viewSlots/wins and compact four-card human/leader broadcast selection; SportsCompactViewportHud, SportsBroadcastScores. |
-| Automated Verification | Native compact/manual6/0 includes Terrier1–4human/optionalAI ownership and duplicate-name-safe shared leaders. Windows e343 TerrierWindCompactViewsFinal59/0: actual720p/1080p full-window captures, viewport bounds, owner/score, rematches/menu. Four-human720p image manually inspected. |
-| Human Verification | Pending developer playtest; no physical-controller or human acceptance claimed. |
-| Remaining Work | No unresolved automated HUD defect in e343. Human aesthetic/gameplay review remains separate. |
+| Automated Verification | Current accepted full payload 5b12d4c0bab3bd7f2fe17a68e80304078fd1dfcefc257dc4bade9f4a8888e727: four native tests passed; Windows 245/0 across Keepaway111 + composed54 + Terrier12-truck21 + compact59. Complete matches, rematches, current rendered images. See2026-10-22-Keepaway-Terrier-Regression.md. |
+| Human Verification | No new developer playtest or physical-device/listening acceptance; automated/agent-visual evidence is separate. |
+| Remaining Work | Human playtest and physical controller/wheel/listening acceptance remain unperformed. No additional implementation defect found for this requirement in these targeted runs. |
 
 ### HPR-21-1 — Add Smoke to Flares
 

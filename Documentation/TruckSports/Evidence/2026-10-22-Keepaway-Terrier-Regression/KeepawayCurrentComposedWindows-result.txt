@@ -1,0 +1,66 @@
+platform=WindowsPlayer; explicit camera fixtures; software devices only; full-match acceptance is separate
+PASS TruckKeepaway saved scene has explicit existing authority and framing bindings
+PASS TruckKeepaway real setup starts with human plus AI
+PASS TruckKeepaway shared camera has valid live target
+PASS TruckKeepaway actual render resolution (1280, 720)
+MEASURE TruckKeepaway before height=0.0454 primary=0 included=1 objective=False
+PASS TruckKeepaway actual render resolution (1920, 1080)
+MEASURE TruckKeepaway before height=0.0454 primary=0 included=1 objective=False
+PASS TruckKeepaway actual render resolution (1280, 720)
+MEASURE TruckKeepaway after height=0.1100 primary=0 included=1 objective=False
+PASS TruckKeepaway actual render resolution (1920, 1080)
+MEASURE TruckKeepaway after height=0.1100 primary=0 included=1 objective=False
+PASS TruckKeepaway legacy Update cannot overwrite active director readability
+PASS TruckKeepaway actual primary renderer height meets configured minimum within10% tolerance 0.1100001
+PASS TruckKeepaway primary truck is actually inside viewport
+PASS TruckKeepaway finite bounded lens and position
+PASS TruckKeepaway distant ball beyond the configured action range has an actual visible, screen-safe CNP arrow without shrinking the human truck
+PASS TruckKeepaway far irrelevant AI cannot force unlimited zoom
+PASS TruckKeepaway invalid target releases immediately
+PASS TruckKeepaway AI-only rematch starts
+PASS TruckKeepaway AI-only OFF has a rendered spectator view
+PASS TruckKeepawayFirstPerson saved scene has explicit existing authority and framing bindings
+PASS TruckKeepawayFirstPerson real setup starts with human plus AI
+PASS TruckKeepawayFirstPerson shared camera has valid live target
+PASS TruckKeepawayFirstPerson actual render resolution (1280, 720)
+MEASURE TruckKeepawayFirstPerson after height=0.1175 primary=3 included=4 objective=True
+PASS TruckKeepawayFirstPerson actual render resolution (1920, 1080)
+MEASURE TruckKeepawayFirstPerson after height=0.1175 primary=3 included=4 objective=True
+PASS TruckKeepawayFirstPerson legacy Update cannot overwrite active director readability
+PASS TruckKeepawayFirstPerson actual primary renderer height meets configured minimum within10% tolerance 0.117432
+PASS TruckKeepawayFirstPerson primary truck is actually inside viewport
+PASS TruckKeepawayFirstPerson finite bounded lens and position
+PASS TruckKeepawayFirstPerson far irrelevant AI cannot force unlimited zoom
+PASS TruckKeepawayFirstPerson invalid target releases immediately
+PASS TruckKeepawayFirstPerson AI-only rematch starts
+PASS TruckKeepawayFirstPerson AI-only OFF has a rendered spectator view
+PASS Hockey saved legacy camera has read-only framing source
+PASS Hockey real human/AI setup starts
+PASS TruckHockey actual render resolution (1280, 720)
+MEASURE TruckHockey before height=0.0511 primary=0 included=4 objective=True
+PASS TruckHockey actual render resolution (1920, 1080)
+MEASURE TruckHockey before height=0.0511 primary=0 included=4 objective=True
+PASS TruckHockey actual render resolution (1280, 720)
+MEASURE TruckHockey after height=0.1094 primary=0 included=4 objective=True
+PASS TruckHockey actual render resolution (1920, 1080)
+MEASURE TruckHockey after height=0.1094 primary=0 included=4 objective=True
+PASS Hockey real renderer projection meets readability minimum
+PASS Hockey physical puck remains visible
+PASS Hockey actual AI-only rematch starts
+PASS Hockey AI-only director follows valid action
+PASS Snake uses the existing spectator authority, not a second camera pose writer
+PASS Snake real cab match starts for retirement fixture humans=0
+PASS Retirement fixture selects a real AI-owned viewport
+PASS Eliminating AI never changes viewport/input ownership
+PASS Retired AI camera follows a living truck
+PASS Retired AI interior is disabled in spectator view
+PASS Retired AI camera does not chase the flying wreck
+PASS Spectated living truck stays readable in the actual quarter viewport
+PASS Snake real cab match starts for retirement fixture humans=1
+PASS Retirement fixture selects a real AI-owned viewport
+PASS Eliminating AI never changes viewport/input ownership
+PASS Retired AI camera follows a living truck
+PASS Retired AI interior is disabled in spectator view
+PASS Retired AI camera does not chase the flying wreck
+PASS Spectated living truck stays readable in the actual quarter viewport
+CHECKS=54 ERRORS=0

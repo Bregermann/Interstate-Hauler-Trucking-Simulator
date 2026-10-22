@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 15:47:42Z" end-time="2026-10-22 15:47:51Z" duration="9.1671068">
+  <test-suite type="TestSuite" id="1373" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="262" result="Passed" start-time="2026-10-22 15:47:42Z" end-time="2026-10-22 15:47:51Z" duration="9.167107" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1257" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="95" result="Passed" start-time="2026-10-22 15:47:42Z" end-time="2026-10-22 15:47:51Z" duration="9.151471" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="55740" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1181" name="KeepawayArenaRepairTests" fullname="KeepawayArenaRepairTests" classname="KeepawayArenaRepairTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-22 15:47:42Z" end-time="2026-10-22 15:47:48Z" duration="6.032211" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1182" name="BothSavedVariantsHaveThreeTimesPhysicalAreaAndCategoryCompleteDestruction" fullname="KeepawayArenaRepairTests.BothSavedVariantsHaveThreeTimesPhysicalAreaAndCategoryCompleteDestruction" methodname="BothSavedVariantsHaveThreeTimesPhysicalAreaAndCategoryCompleteDestruction" classname="KeepawayArenaRepairTests" runstate="Runnable" seed="1290294693" result="Passed" start-time="2026-10-22 15:47:42Z" end-time="2026-10-22 15:47:45Z" duration="2.756092" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+]]></output>
+        </test-case>
+        <test-case id="1183" name="PhysicalTruckImpactBreaksTheActualModelAndRematchRestoresIt" fullname="KeepawayArenaRepairTests.PhysicalTruckImpactBreaksTheActualModelAndRematchRestoresIt" methodname="PhysicalTruckImpactBreaksTheActualModelAndRematchRestoresIt" classname="KeepawayArenaRepairTests" runstate="Runnable" seed="1606250727" result="Passed" start-time="2026-10-22 15:47:45Z" end-time="2026-10-22 15:47:46Z" duration="1.164572" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+]]></output>
+        </test-case>
+        <test-case id="1184" name="SharedPooledDamageAdapterStillResetsInBothOriginalPlowingScenes" fullname="KeepawayArenaRepairTests.SharedPooledDamageAdapterStillResetsInBothOriginalPlowingScenes" methodname="SharedPooledDamageAdapterStillResetsInBothOriginalPlowingScenes" classname="KeepawayArenaRepairTests" runstate="Runnable" seed="2012817489" result="Passed" start-time="2026-10-22 15:47:46Z" end-time="2026-10-22 15:47:48Z" duration="2.096506" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1208" name="TerrierWindResponseTests" fullname="TerrierWindResponseTests" classname="TerrierWindResponseTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 15:47:48Z" end-time="2026-10-22 15:47:51Z" duration="3.113351" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1209" name="ActualAirborneWindResponseIsSeventyPercentWithoutChangingWeatherOrTruckTuning" fullname="TerrierWindResponseTests.ActualAirborneWindResponseIsSeventyPercentWithoutChangingWeatherOrTruckTuning" methodname="ActualAirborneWindResponseIsSeventyPercentWithoutChangingWeatherOrTruckTuning" classname="TerrierWindResponseTests" runstate="Runnable" seed="652500685" result="Passed" start-time="2026-10-22 15:47:48Z" end-time="2026-10-22 15:47:51Z" duration="3.110853" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=72887 hash=262864943 length=176 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=72887
+Actual wind-tunnel velocities old response=0.11 default=0.07699997 disabled=0
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
