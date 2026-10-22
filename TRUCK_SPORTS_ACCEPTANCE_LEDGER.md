@@ -6142,9 +6142,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section13.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
 | Implementation Evidence | Existing HockeyRules completed-step swept crossing and HockeyMatch goal/celebration/faceoff authority retained; no speculative production scoring change. New HockeyPhysicalGoalTests uses real saved rink/puck/frame bounds. |
-| Automated Verification | Native14/0 includes18real PhysX center/98percent-clear frame passages,both goals,2/8/16m/s,once-only correct team score and faceoff. Exact final payload85d6770a Windows39/0 physical center/outside-net/celebration/faceoff/rematch checks passed. |
+| Automated Verification | Current payload6c5b4e08 Windows39/0 physical center shots,both goals,2/8/16m/s,once-only correct scores,goal/faceoff/outside-net/rematch; plus two autonomous six-AI physical matches under567/0 UI acceptance. Earlier native18center/98percent-clear edge shots passed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Human reported miss remains unreproduced. Preserve this open human finding; no actual production scoring root-cause fix claimed. Follow up when reproduction is isolated. |
+| Remaining Work | Human-reported miss remains unreproduced. No production goal-rule fix claimed. Preserve this open human finding and investigate a recurrence. |
 
 ### HPR-13-2 — Complete UI Modernization
 
@@ -6154,11 +6154,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Complete UI Modernization |
 | Original Request | After goal detection is repaired, overhaul: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section13.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section13.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | HockeyPresentation/HockeyPresentationAuthoring integrate a saved compact team score/clock bug, fixed team accents, six actual truck portrait/crew-color cards in one bottom row, quieter phase notices, six setup backings/portraits, authoritative pause summary and result team panels. Existing Heat actions, global crew identities, rules, physics and camera preserved. Empty legacy HUD docks retired after moving their referenced text. DOTween scoring/phase feedback reused. |
+| Automated Verification | Final Windows payload6c5b4e08: Hockey UI567/0 with actual720p/1080p/2560x1080 setup/countdown/pause/results and two complete physical six-AI matches/rematch; physical-goal39/0. Latest targeted native3/0, preceding cross-sport4/0 and EditMode2/0. Saved scene retains all3509original documents;252new UI documents; no physics/camera/environment changes. Evidence: Documentation/TruckSports/Evidence/2026-10-22-Hockey-Parking/acceptance.json. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human aesthetics, physical-controller/reconnect and listening acceptance unperformed. Existing help/settings/input pages retain original behavior; no claim of hardware validation. Human missed-goal finding remains separately open under13-1. |
 
 ### HPR-14 — TRUCK AIR HOCKEY
 
@@ -6616,11 +6616,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Remove the Obstructive Top Bar |
 | Original Request | Remove the unnecessary shared-view top information bar. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section24.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | ParkingMatch opts into the existing shared SportsBroadcastScores elimination presentation. All eight actual competitor portrait/name/color cards remain visible in shared and split views, with gray OUT icons for eliminated slots, existing capture progress and red penalty-lock glyphs. A single camera uses a compact bottom row; multiple cameras use one small central group. Obstructive header/status strips and repeated viewport text are hidden. No parking rules, AI, cameras, handling or ownership changes. |
+| Automated Verification | Current exact payload6c5b4e08 Windows1081/0:20actual720p/1080p shared/1–4software-human configurations with AI views OFF/ON,all8icons,gray eliminated states,no repeated viewport blocks,screen bounds,correct single/multiple-view anchors. Actual eight-AI Hard match:7rounds,28physical captures,winner7,seed53876; rematch/menu cleanup passed. Native final UI fixture passed. Curated PNG/receipt under Documentation/TruckSports/Evidence/2026-10-22-Hockey-Parking. |
+| Human Verification | Automated software-device and rendered output acceptance passed. No human or physical-controller approval claimed. |
+| Remaining Work | No unresolved automated defect in these three HUD requirements. Human/controller review pending; bay presentation remains separately open under24-2. |
 
 ### HPR-24-4 — Redesign the Bottom UI
 
@@ -6630,11 +6630,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Redesign the Bottom UI |
 | Original Request | The bottom strip should no longer consume the entire screen width. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section24.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | ParkingMatch opts into the existing shared SportsBroadcastScores elimination presentation. All eight actual competitor portrait/name/color cards remain visible in shared and split views, with gray OUT icons for eliminated slots, existing capture progress and red penalty-lock glyphs. A single camera uses a compact bottom row; multiple cameras use one small central group. Obstructive header/status strips and repeated viewport text are hidden. No parking rules, AI, cameras, handling or ownership changes. |
+| Automated Verification | Current exact payload6c5b4e08 Windows1081/0:20actual720p/1080p shared/1–4software-human configurations with AI views OFF/ON,all8icons,gray eliminated states,no repeated viewport blocks,screen bounds,correct single/multiple-view anchors. Actual eight-AI Hard match:7rounds,28physical captures,winner7,seed53876; rematch/menu cleanup passed. Native final UI fixture passed. Curated PNG/receipt under Documentation/TruckSports/Evidence/2026-10-22-Hockey-Parking. |
+| Human Verification | Automated software-device and rendered output acceptance passed. No human or physical-controller approval claimed. |
+| Remaining Work | No unresolved automated defect in these three HUD requirements. Human/controller review pending; bay presentation remains separately open under24-2. |
 
 ### HPR-24-5 — NEW: Shared-View Leaderboard Must Exist in Split-Screen
 
@@ -6644,11 +6644,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | NEW: Shared-View Leaderboard Must Exist in Split-Screen |
 | Original Request | The polished shared-view leaderboard currently disappears or is not properly represented in split-screen. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.5. |
 | Acceptance Criteria | All observable requirements and acceptance in source section24.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | ParkingMatch opts into the existing shared SportsBroadcastScores elimination presentation. All eight actual competitor portrait/name/color cards remain visible in shared and split views, with gray OUT icons for eliminated slots, existing capture progress and red penalty-lock glyphs. A single camera uses a compact bottom row; multiple cameras use one small central group. Obstructive header/status strips and repeated viewport text are hidden. No parking rules, AI, cameras, handling or ownership changes. |
+| Automated Verification | Current exact payload6c5b4e08 Windows1081/0:20actual720p/1080p shared/1–4software-human configurations with AI views OFF/ON,all8icons,gray eliminated states,no repeated viewport blocks,screen bounds,correct single/multiple-view anchors. Actual eight-AI Hard match:7rounds,28physical captures,winner7,seed53876; rematch/menu cleanup passed. Native final UI fixture passed. Curated PNG/receipt under Documentation/TruckSports/Evidence/2026-10-22-Hockey-Parking. |
+| Human Verification | Automated software-device and rendered output acceptance passed. No human or physical-controller approval claimed. |
+| Remaining Work | No unresolved automated defect in these three HUD requirements. Human/controller review pending; bay presentation remains separately open under24-2. |
 
 ### HPR-25 — TRUCK TARGET LAUNCH
 
@@ -6812,11 +6812,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Four-Player Layout |
 | Original Request | For a standard 2×2 split-screen: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section29.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. |
-| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. Parking now uses the same shared card foundation with eight elimination icons,gray OUT states,lock/capture cues,one full-screen bottom row or one central multi-view group. |
+| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. Current exact payload6c5b4e08 adds Parking1081/0 and shared five-sport234/0 at720p/1080p. Previous Terrier59/0 retained; no unrelated full-collection revalidation claimed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Musical Parking elimination-icon variation remains unimplemented; final current-payload visual acceptance and human/hardware review remain separate. |
+| Remaining Work | Musical Parking icon variation is implemented and Windows-verified. Human visual/physical-controller acceptance remains unperformed; no human-verified or whole-collection completion claim. |
 
 ### HPR-29-2 — Vary Contents by Sport
 
@@ -6826,11 +6826,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Vary Contents by Sport |
 | Original Request | BASE Jumping - Name. - Truck icon. - Score. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section29.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. |
-| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. Parking now uses the same shared card foundation with eight elimination icons,gray OUT states,lock/capture cues,one full-screen bottom row or one central multi-view group. |
+| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. Current exact payload6c5b4e08 adds Parking1081/0 and shared five-sport234/0 at720p/1080p. Previous Terrier59/0 retained; no unrelated full-collection revalidation claimed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Musical Parking elimination-icon variation remains unimplemented; final current-payload visual acceptance and human/hardware review remain separate. |
+| Remaining Work | Musical Parking icon variation is implemented and Windows-verified. Human visual/physical-controller acceptance remains unperformed; no human-verified or whole-collection completion claim. |
 
 ### HPR-29-3 — Other Player Counts
 
@@ -6840,11 +6840,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Other Player Counts |
 | Original Request | Adapt layouts for: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section29.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. |
-| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. Parking now uses the same shared card foundation with eight elimination icons,gray OUT states,lock/capture cues,one full-screen bottom row or one central multi-view group. |
+| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. Current exact payload6c5b4e08 adds Parking1081/0 and shared five-sport234/0 at720p/1080p. Previous Terrier59/0 retained; no unrelated full-collection revalidation claimed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Musical Parking elimination-icon variation remains unimplemented; final current-payload visual acceptance and human/hardware review remain separate. |
+| Remaining Work | Musical Parking icon variation is implemented and Windows-verified. Human visual/physical-controller acceptance remains unperformed; no human-verified or whole-collection completion claim. |
 
 ### HPR-29-4 — UI Visual Quality
 
@@ -6854,11 +6854,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | UI Visual Quality |
 | Original Request | Match polished existing Truck Sports games. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section29.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. |
-| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. Parking now uses the same shared card foundation with eight elimination icons,gray OUT states,lock/capture cues,one full-screen bottom row or one central multi-view group. |
+| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. Current exact payload6c5b4e08 adds Parking1081/0 and shared five-sport234/0 at720p/1080p. Previous Terrier59/0 retained; no unrelated full-collection revalidation claimed. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Musical Parking elimination-icon variation remains unimplemented; final current-payload visual acceptance and human/hardware review remain separate. |
+| Remaining Work | Musical Parking icon variation is implemented and Windows-verified. Human visual/physical-controller acceptance remains unperformed; no human-verified or whole-collection completion claim. |
 
 ### HPR-BUNGEE — Bungee Destruction
 

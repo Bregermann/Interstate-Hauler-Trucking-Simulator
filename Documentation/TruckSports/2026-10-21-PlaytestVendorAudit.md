@@ -339,3 +339,23 @@ Traffic follow-up: the existing interstate lane builder rejects LocalRoad classe
 
 
 October22 final acceptance: exact545-file Windows payload85d6770a passed320assertions. Actual UTS traffic59logical/56live and four rematch starter fixtures passed. NWH owned shiftDuration.18 plus stock-only handling tuning measured4.40s to3.40s to20MPH in cold native comparisons. SnakeRouteAI retains existing planner/avoidance authority; only missed-objective replanning and stale-detour reset corrected. CNP/Heat/TMP/DOTween presentation reused. No vendor source or original Truck Taxi source modified; no duplicate vendor framework created. Human/controller/listening and isolated profiling remain unverified.
+
+
+### Hockey presentation continuation
+
+VENDOR ASSETS AUDITED: Heat ButtonManager public text/navigation/input references at Assets/Heat - Complete Modern UI/Scripts/UI Elements/ButtonManager.cs; existing SportsUIAuthoring/SportsBroadcastCanvas/Plate/Page/Scores, TMP fonts, saved Hockey six-slot menu hierarchy and DOTween public punch/tween lifetime APIs.
+VENDOR ASSETS USED: Existing Heat setup/pause/rematch actions, existing owned Heat-derived heading/body fonts, actual broadcast truck portrait, SportsBroadcastPlate rounded geometry and DOTween feedback. No new generic UI framework; HockeyPresentation only binds read-only HockeyRules/player data to the existing menu.
+RELEVANT ASSETS NOT USED: No camera/physics/traffic/weather replacement needed for this UI repair. Existing sport-specific Hockey rules and cameras intentionally retained.
+CUSTOM SYSTEMS CREATED: Small Hockey presentation adapter, explicit additive saved-scene authoring, targeted native/Windows verification fixtures.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+### Musical Parking elimination display
+
+VENDOR ASSETS AUDITED: Existing SportsBroadcastScores card hierarchy, SportsEventMenus viewport roots, Heat-derived TMP fonts, actual truck portrait, red lock and capture glyphs, shared camera/input preferences and ParkingMatch active/secured/capture/penalty authority.
+VENDOR ASSETS USED: Same shared rounded cards, portraits, fonts and existing lock/progress components. New opt-in semantic values are supplied by ParkingMatch; no independent HUD framework or duplicate camera/physics system.
+RELEVANT ASSETS NOT USED: No new art generator, navigation, physics or weather package required for icon-based elimination presentation. Existing parking rules/AI intentionally preserved.
+CUSTOM SYSTEMS CREATED: Small elimination-layout extension to the established shared score-card adapter and targeted verification fixtures.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

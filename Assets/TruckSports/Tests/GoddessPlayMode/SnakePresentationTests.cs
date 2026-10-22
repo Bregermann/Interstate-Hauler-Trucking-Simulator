@@ -16,6 +16,15 @@ public sealed class SnakePresentationTests
     static object Call(object value,string name,params object[] args)=>value.GetType().GetMethod(name).Invoke(value,args);
     static string Text(Transform root)=> (string)Property(root.GetComponent(Type.GetType("TMPro.TMP_Text, Unity.TextMeshPro",true)),"text");
     static Rect Bounds(RectTransform rect){var c=new Vector3[4];rect.GetWorldCorners(c);var a=RectTransformUtility.WorldToScreenPoint(null,c[0]);var b=RectTransformUtility.WorldToScreenPoint(null,c[2]);return Rect.MinMaxRect(a.x,a.y,b.x,b.y);}
+    static IEnumerator Countdown(object match)
+    {
+        // Real-time sleeps can expire before three simulated countdown seconds
+        // under Editor import/graphics load. Freeze only after the actual GO.
+        float until=Time.realtimeSinceStartup+8;
+        while((float)Property(match,"Intro")>0&&Time.realtimeSinceStartup<until)yield return null;
+        Assert.That((float)Property(match,"Intro"),Is.LessThanOrEqualTo(0),"The real Snake countdown must release before testing live objectives.");
+        Time.timeScale=0;yield return new WaitForSecondsRealtime(.45f);
+    }
 
     [UnityTest]
     public IEnumerator SavedSnakeHudAndCnpObjectivesKeepActualViewportOwnersAndReset()
@@ -37,7 +46,7 @@ public sealed class SnakePresentationTests
                 {
                     Call(match,"SetupScreen");Call(match,"AllBots");cameraOptions.GetMethod("Set").Invoke(null,new object[]{false});var players=(Array)Field(Field(match,"setup"),"players");
                     for(int i=0;i<humans;i++){var player=players.GetValue(i);var source=player.GetType().GetField("source");source.SetValue(player,Enum.Parse(source.FieldType,"WholeController"));player.GetType().GetField("pad").SetValue(player,pads[i]);}
-                    Call(driving,"Select",1);Assert.That((bool)Call(match,"StartMatch"),Is.True);Time.timeScale=3;yield return new WaitForSecondsRealtime(1.2f);Time.timeScale=0;yield return new WaitForSecondsRealtime(.3f);Canvas.ForceUpdateCanvases();
+                    Call(driving,"Select",1);Assert.That((bool)Call(match,"StartMatch"),Is.True);Time.timeScale=3;yield return Countdown(match);Canvas.ForceUpdateCanvases();
                     var cameras=(Camera[])Field(match,"cameras");var panels=(Array)Field(menus,"viewPanels");var compasses=(Array)Field(guide,"compasses");var targets=(Array)Field(guide,"targets");Assert.That(cameras.Length,Is.EqualTo(humans));
                     for(int view=0;view<humans;view++)
                     {
@@ -49,7 +58,7 @@ public sealed class SnakePresentationTests
                     }
                     Call(match,"SetupScreen");yield return null;foreach(Component compass in compasses)Assert.That(compass.gameObject.activeSelf,Is.False);
                 }
-                Call(match,"AllBots");Call(driving,"Select",0);Assert.That((bool)Call(match,"StartMatch"),Is.True);Time.timeScale=3;yield return new WaitForSecondsRealtime(1.2f);Time.timeScale=0;yield return new WaitForSecondsRealtime(.3f);
+                Call(match,"AllBots");Call(driving,"Select",0);Assert.That((bool)Call(match,"StartMatch"),Is.True);Time.timeScale=3;yield return Countdown(match);
                 Assert.That(((Camera[])Field(match,"cameras")).Single().enabled,Is.True);Assert.That(Call(guide,"Objective",0),Is.Not.Null,"AI-only shared spectator also receives a reachable objective.");
                 Assert.That((int)Property(guide,"RouteQueries"),Is.LessThan(45),"Road searches must be throttled, never performed every rendered frame.");Debug.Log("SNAKE_OBJECTIVE maximum query group milliseconds="+Property(guide,"MaxQueryMilliseconds"));
             }

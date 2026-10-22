@@ -21,6 +21,8 @@ namespace LWS.TruckSports {
  public virtual void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing){}
  public virtual bool TryReadScoreCard(int card,out string value,out string detail){value=detail=null;return false;}
  public virtual int CompactScoreColumns=>0;
+ public virtual bool CompactEliminationHud=>false;
+ public virtual string EliminationHudStatus=>Header;
  // Read-only viewport presentation. Camera/input owners remain sport-owned.
  public virtual bool CompactViewportHud=>false;
  public virtual string ViewportCardLabel(int view,int participant)=>setup.players[participant].name;
