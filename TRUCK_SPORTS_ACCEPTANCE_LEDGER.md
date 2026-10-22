@@ -6322,11 +6322,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Enclose and Complete the Pool |
 | Original Request | The pool has visible unfinished areas, particularly toward the back. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | VERIFIED COMPLETE |
+| Status | PARTIAL |
 | Implementation Evidence | Saved far pool wall/coping, rear grandstands, owned fence enclosure, pool administration building and existing original sport-logo signage. Existing launch/side-wall/first-water trigger geometry retained. Existing top-less wall mesh prevents overlapping coping faces. |
 | Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
-| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
-| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
+| Human Verification | October22 screenshot/playtest: right side of the driving approach leaves the near pool edge exposed; developer requests a finished platform. Supersedes prior automated enclosure acceptance for this newly reported view. |
+| Remaining Work | Add a coherent right-hand approach platform/enclosure outside the diving corridor; inspect actual approach and replay views and verify collision/reset behavior. Preserve accepted far enclosure and original launch/scoring geometry. |
 
 ### HPR-18-3 — Replace Placeholder Run-Up Art
 
@@ -6350,11 +6350,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Animated Water and Splashes |
 | Original Request | Find and reuse appropriate existing water assets. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | VERIFIED COMPLETE |
+| Status | PARTIAL |
 | Implementation Evidence | Audited static URP pool had no animation component/probe, while existing shared SportsWaterInteraction already supplied eight sprays and 48 rings. Add the existing FishingWaterFlow/DOTween material adapter and one bounded 128px reflection probe; preserve original NWH water/first-contact scoring and shared spray/ripple/audio. |
 | Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
-| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
-| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
+| Human Verification | October22 developer rejects rapid river-like scrolling. Requests gently bobbing/swaying pool water, truck-impact-driven surface response and a huge natural cannonball-style splash. |
+| Remaining Work | Replace Dock-only river scrolling; reuse owned water/VFX assets for calm ambient movement, impact-energy-scaled splash and spreading waves. Validate actual truck impacts, replay, rematch and cleanup; do not claim full fluid simulation for a visual response. |
 
 ### HPR-18-5 — Stabilize Airborne Speech Bubbles
 
@@ -6369,6 +6369,20 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
 | Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
 | Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
+
+### HPR-18-6 — Varied Animated Spectator Life
+
+| Field | Record |
+|---|---|
+| Requirement ID | HPR-18-6 |
+| Sport/System | Dock Diving crowd |
+| Original Request | October22: animate the crowd; have spectators move around, laugh, dance, talk and take phone pictures. Audit owned humanoid animation packs and use a large variety. |
+| Acceptance Criteria | Existing varied character appearances remain; multiple recognizable social/dance/cheer/photo behaviors occur with staggered cadence; spectator movement stays inside stands/aisles and out of the playable pool/approach. Reactions, pause, rematches and scene cleanup work in the Windows build. Record reused clips and any unsupported behavior honestly. |
+| Status | MISSING |
+| Implementation Evidence | Existing DockAudiencePresentation has24 live rigs and440 distant static pose renderers; expansion not yet implemented. |
+| Automated Verification | Not yet run for this follow-up. Previous crowd acceptance does not establish these new behaviors. |
+| Human Verification | Developer requests more visible activity after inspecting the current build. |
+| Remaining Work | Audit compatible owned humanoid clips; implement varied animation, phone props and safe movement; check actual rendering and bounded resource use. |
 
 ### HPR-19-1 — Triple the Playable Arena Area
 
@@ -6742,11 +6756,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Correct Sport-Specific Logo |
 | Original Request | Replace the incorrect or generic displayed logo with the dedicated Truck Dance-Off logo. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section28.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Saved original Dance-Off logo and four front-facing bases; DanceConcertCamera through existing Cinemachine rig; match120/210ms GREAT/GOOD and45ms PERFECT. Original choreography, audio/charts/input/HUD unchanged. See2026-10-22-Dance-Concert.md. |
+| Automated Verification | Native40 EditMode +1 PlayMode passed; exact-payload Windows39/0 (complete actual DSP song21, mixed sources9, input/reconnect9). Actual720p/1080p musical-shot and result images agent-reviewed. |
+| Human Verification | No new developer playtest, physical-device, listening or latency-calibration acceptance. Automated observations are distinct. |
+| Remaining Work | Developer/device/listening acceptance and isolated profiling unperformed; no unresolved defect found in this targeted pass. |
 
 ### HPR-28-2 — Make Rhythm Inputs More Forgiving
 
@@ -6756,11 +6770,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Make Rhythm Inputs More Forgiving |
 | Original Request | Current button timing is too strict. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section28.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Saved original Dance-Off logo and four front-facing bases; DanceConcertCamera through existing Cinemachine rig; match120/210ms GREAT/GOOD and45ms PERFECT. Original choreography, audio/charts/input/HUD unchanged. See2026-10-22-Dance-Concert.md. |
+| Automated Verification | Native40 EditMode +1 PlayMode passed; exact-payload Windows39/0 (complete actual DSP song21, mixed sources9, input/reconnect9). Actual720p/1080p musical-shot and result images agent-reviewed. |
+| Human Verification | No new developer playtest, physical-device, listening or latency-calibration acceptance. Automated observations are distinct. |
+| Remaining Work | Developer/device/listening acceptance and isolated profiling unperformed; no unresolved defect found in this targeted pass. |
 
 ### HPR-28-3 — Make Trucks Face the Screen
 
@@ -6770,11 +6784,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Make Trucks Face the Screen |
 | Original Request | The dancing trucks should be oriented toward the primary gameplay/broadcast camera. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section28.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Saved original Dance-Off logo and four front-facing bases; DanceConcertCamera through existing Cinemachine rig; match120/210ms GREAT/GOOD and45ms PERFECT. Original choreography, audio/charts/input/HUD unchanged. See2026-10-22-Dance-Concert.md. |
+| Automated Verification | Native40 EditMode +1 PlayMode passed; exact-payload Windows39/0 (complete actual DSP song21, mixed sources9, input/reconnect9). Actual720p/1080p musical-shot and result images agent-reviewed. |
+| Human Verification | No new developer playtest, physical-device, listening or latency-calibration acceptance. Automated observations are distinct. |
+| Remaining Work | Developer/device/listening acceptance and isolated profiling unperformed; no unresolved defect found in this targeted pass. |
 
 ### HPR-28-4 — Improve Camera Work
 
@@ -6784,11 +6798,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Improve Camera Work |
 | Original Request | Add more interesting cinematic presentation: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section28.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Saved original Dance-Off logo and four front-facing bases; DanceConcertCamera through existing Cinemachine rig; match120/210ms GREAT/GOOD and45ms PERFECT. Original choreography, audio/charts/input/HUD unchanged. See2026-10-22-Dance-Concert.md. |
+| Automated Verification | Native40 EditMode +1 PlayMode passed; exact-payload Windows39/0 (complete actual DSP song21, mixed sources9, input/reconnect9). Actual720p/1080p musical-shot and result images agent-reviewed. |
+| Human Verification | No new developer playtest, physical-device, listening or latency-calibration acceptance. Automated observations are distinct. |
+| Remaining Work | Developer/device/listening acceptance and isolated profiling unperformed; no unresolved defect found in this targeted pass. |
 
 ### HPR-28-5 — Preserve Cute Truck Animations
 
@@ -6798,11 +6812,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Cute Truck Animations |
 | Original Request | Keep: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section28.5. |
 | Acceptance Criteria | All observable requirements and acceptance in source section28.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Saved original Dance-Off logo and four front-facing bases; DanceConcertCamera through existing Cinemachine rig; match120/210ms GREAT/GOOD and45ms PERFECT. Original choreography, audio/charts/input/HUD unchanged. See2026-10-22-Dance-Concert.md. |
+| Automated Verification | Native40 EditMode +1 PlayMode passed; exact-payload Windows39/0 (complete actual DSP song21, mixed sources9, input/reconnect9). Actual720p/1080p musical-shot and result images agent-reviewed. |
+| Human Verification | No new developer playtest, physical-device, listening or latency-calibration acceptance. Automated observations are distinct. |
+| Remaining Work | Developer/device/listening acceptance and isolated profiling unperformed; no unresolved defect found in this targeted pass. |
 
 ### HPR-29-1 — Four-Player Layout
 

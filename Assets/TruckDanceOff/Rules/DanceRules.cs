@@ -16,6 +16,9 @@ namespace LWS.TruckDanceOff
     public sealed class DanceRules
     {
         public const double PerfectWindow = .045, GreatWindow = .09, GoodWindow = .16, HoldGrace = .08;
+        readonly double greatWindow,goodWindow;
+        public double AcceptedGreatWindow=>greatWindow;
+        public double AcceptedGoodWindow=>goodWindow;
         readonly DanceNote[] notes;
         readonly byte[] state;
         readonly int[] partial;
@@ -39,9 +42,12 @@ namespace LWS.TruckDanceOff
         public event Action<int, DanceGrade> Judged;
         public event Action<int> Freestyled;
 
-        public DanceRules(DanceNote[] chart)
+        public DanceRules(DanceNote[] chart) : this(chart,GreatWindow,GoodWindow) { }
+        public DanceRules(DanceNote[] chart,double greatTolerance,double goodTolerance)
         {
             if (chart == null) throw new ArgumentNullException(nameof(chart));
+            if(double.IsNaN(greatTolerance)||double.IsInfinity(greatTolerance)||double.IsNaN(goodTolerance)||double.IsInfinity(goodTolerance)||greatTolerance<PerfectWindow||goodTolerance<greatTolerance||goodTolerance>.35)throw new ArgumentException("Dance timing windows must be finite, ordered PERFECT <= GREAT <= GOOD, and GOOD <= 350ms.");
+            greatWindow=greatTolerance;goodWindow=goodTolerance;
             notes = (DanceNote[])chart.Clone(); state = new byte[notes.Length]; partial = new int[notes.Length];
             grade = new DanceGrade[notes.Length]; firstPress = new double[notes.Length]; missingSince = new double[notes.Length];
             for (int i = 0; i < notes.Length; i++)
@@ -69,7 +75,7 @@ namespace LWS.TruckDanceOff
             {
                 if (state[i] >= 2) continue;
                 var note = notes[i];
-                if (state[i] == 0 && songTime - note.time > GoodWindow + .0000001) { Resolve(i, DanceGrade.Miss); continue; }
+                if (state[i] == 0 && songTime - note.time > goodWindow + .0000001) { Resolve(i, DanceGrade.Miss); continue; }
                 if (state[i] != 1) continue;
                 if (songTime >= note.time + note.duration - .055) { Resolve(i, grade[i]); continue; }
                 if ((held & note.mask) == note.mask) missingSince[i] = double.NaN;
@@ -79,7 +85,7 @@ namespace LWS.TruckDanceOff
             for (int lane = 1; lane <= 8; lane <<= 1)
             {
                 if ((presses & lane) == 0) continue;
-                int best = -1; double error = GoodWindow + .0000001;
+                int best = -1; double error = goodWindow + .0000001;
                 for (int i = 0; i < notes.Length; i++)
                 {
                     if (state[i] != 0 || (notes[i].mask & lane) == 0 || (partial[i] & lane) != 0) continue;
@@ -95,7 +101,7 @@ namespace LWS.TruckDanceOff
                 }
                 if (double.IsNaN(firstPress[best])) firstPress[best] = songTime;
                 else if (songTime - firstPress[best] > HoldGrace) { Resolve(best, DanceGrade.Miss); continue; }
-                DanceGrade value = error <= PerfectWindow + .0000001 ? DanceGrade.Perfect : error <= GreatWindow + .0000001 ? DanceGrade.Great : DanceGrade.Good;
+                DanceGrade value = error <= PerfectWindow + .0000001 ? DanceGrade.Perfect : error <= greatWindow + .0000001 ? DanceGrade.Great : DanceGrade.Good;
                 if (value > grade[best]) grade[best] = value;
                 partial[best] |= lane;
                 if (partial[best] != notes[best].mask) continue;
@@ -108,7 +114,7 @@ namespace LWS.TruckDanceOff
         {
             if (songTime < start || songTime >= end || beatSeconds <= 0 || mask < 1 || mask > 15) return false;
             double grid = songTime / (beatSeconds * .5); long tick = (long)Math.Round(grid);
-            if (Math.Abs(grid - tick) * beatSeconds * .5 > GoodWindow || tick == lastFreestyleTick) return false;
+            if (Math.Abs(grid - tick) * beatSeconds * .5 > goodWindow || tick == lastFreestyleTick) return false;
             lastFreestyleTick = tick;
             repeatedFreestyle = mask == previousFreestyleMask ? repeatedFreestyle + 1 : 0;
             previousFreestyleMask = mask;

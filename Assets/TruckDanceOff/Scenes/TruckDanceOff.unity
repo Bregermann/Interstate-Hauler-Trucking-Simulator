@@ -550,7 +550,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 12422515}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_LocalPosition: {x: -15, y: 1.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11598,6 +11598,7 @@ GameObject:
   - component: {fileID: 284463176}
   - component: {fileID: 284463177}
   - component: {fileID: 284463178}
+  - component: {fileID: 284463179}
   m_Layer: 0
   m_Name: TruckDanceOff Authority
   m_TagString: Untagged
@@ -11718,6 +11719,8 @@ MonoBehaviour:
   songChoice: {fileID: 0}
   formatChoice: {fileID: 425999243}
   calibrationText: {fileID: 1951486190}
+  greatTimingWindow: 0.12
+  goodTimingWindow: 0.21
 --- !u!82 &284463169
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12144,6 +12147,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckBaseJumping.BaseJumpRendering
   pipeline: {fileID: 11400000, guid: c8ae09a1d3bd49848a5592e69522055c, type: 2}
+--- !u!114 &284463179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284463167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c8a5a839ff7688409ca917289a9f864, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckDanceOff.DanceConcertCamera
+  match: {fileID: 284463168}
+  cameraRig: {fileID: 1559703223}
+  minimumShotSeconds: 7
+  transitionSeconds: 1.2
 --- !u!1 &287691798
 GameObject:
   m_ObjectHideFlags: 0
@@ -19676,7 +19695,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 425648637}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_LocalPosition: {x: 5, y: 1.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -37152,7 +37171,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 802538922}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_LocalPosition: {x: 15, y: 1.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -54818,8 +54837,8 @@ Transform:
   m_GameObject: {fileID: 1116732405}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 6.5, z: 16.4}
-  m_LocalScale: {x: 18, y: 6, z: 1}
+  m_LocalPosition: {x: 0, y: 8.6, z: 16.4}
+  m_LocalScale: {x: 18, y: 12.005859, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1826886183}
@@ -54849,7 +54868,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7a46d8d3e52669e4896fdd720c615d9a, type: 2}
+  - {fileID: 2100000, guid: 6039986a95069f24384fba8eb44f7aa0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -58812,7 +58831,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1161383252}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   m_LocalPosition: {x: -5, y: 1.12, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -85229,6 +85248,7 @@ MonoBehaviour:
   follow: {fileID: 1653796316}
   target: {fileID: 1469870367}
   aim: {fileID: 319643317}
+  broadcastFraming: {fileID: 0}
 --- !u!4 &1559703224
 Transform:
   m_ObjectHideFlags: 0

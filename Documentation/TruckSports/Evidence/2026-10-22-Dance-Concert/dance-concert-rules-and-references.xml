@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="40" result="Passed" total="40" passed="40" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:40Z" duration="6.9179624">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2932" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:40Z" duration="6.917962" total="40" passed="40" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1864" name="LWS.TruckDanceOff.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckDanceOff.EditModeTests.dll" runstate="Runnable" testcasecount="39" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:34Z" duration="0.065146" total="39" passed="39" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="62676" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="1865" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="39" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:34Z" duration="0.064000" total="39" passed="39" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1866" name="TruckDanceOff" fullname="LWS.TruckDanceOff" runstate="Runnable" testcasecount="39" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:34Z" duration="0.063268" total="39" passed="39" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1867" name="Tests" fullname="LWS.TruckDanceOff.Tests" runstate="Runnable" testcasecount="39" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:34Z" duration="0.062528" total="39" passed="39" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1821" name="DancePartyTimingTests" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.046468" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1831" name="ClearlyLateAndWrongLaneStillMissWithoutFreePoints" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.ClearlyLateAndWrongLaneStillMissWithoutFreePoints" methodname="ClearlyLateAndWrongLaneStillMissWithoutFreePoints" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="170589442" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.015119" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1833" name="InvalidWindowConfigurationFailsClearly" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.InvalidWindowConfigurationFailsClearly" methodname="InvalidWindowConfigurationFailsClearly" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="199927057" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.004625" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1832" name="LegacyStrictDefaultsAndIndependentConfigurationsRemainSupported" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.LegacyStrictDefaultsAndIndependentConfigurationsRemainSupported" methodname="LegacyStrictDefaultsAndIndependentConfigurationsRemainSupported" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="981890202" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.001283" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1830" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.008855" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1822" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(0.04d,Perfect)" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(0.04d,Perfect)" methodname="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="899948462" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.002013" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1823" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(-0.04d,Perfect)" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(-0.04d,Perfect)" methodname="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="1773386319" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000206" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1824" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(0.115d,Great)" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(0.115d,Great)" methodname="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="1843046896" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000137" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1825" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(-0.115d,Great)" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(-0.115d,Great)" methodname="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="2083389900" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000127" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1826" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(0.19d,Good)" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(0.19d,Good)" methodname="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="1106449555" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000124" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1827" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(-0.19d,Good)" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(-0.19d,Good)" methodname="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="1451709763" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000128" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1828" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(0.21d,Good)" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(0.21d,Good)" methodname="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="2066492426" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000133" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1829" name="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(-0.21d,Good)" fullname="LWS.TruckDanceOff.Tests.DancePartyTimingTests.PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput(-0.21d,Good)" methodname="PartyWindowsKeepNarrowPerfectAndAllowOrdinaryEarlyLateInput" classname="LWS.TruckDanceOff.Tests.DancePartyTimingTests" runstate="Runnable" seed="32071550" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000130" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+            <test-suite type="TestFixture" id="1834" name="DanceRuleTests" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" testcasecount="28" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:34Z" duration="0.014205" total="28" passed="28" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1854" name="BriefReleaseWithinGraceCanRecover" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.BriefReleaseWithinGraceCanRecover" methodname="BriefReleaseWithinGraceCanRecover" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1661250579" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000432" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1853" name="BrokenHoldCannotScoreOnLaterTail" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.BrokenHoldCannotScoreOnLaterTail" methodname="BrokenHoldCannotScoreOnLaterTail" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1928265387" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000268" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1849" name="ChordAllowsSmallInputSpread" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.ChordAllowsSmallInputSpread" methodname="ChordAllowsSmallInputSpread" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1937550090" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000211" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1857" name="ClockCannotRewindScoring" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.ClockCannotRewindScoring" methodname="ClockCannotRewindScoring" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="103328840" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000327" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1856" name="ClosestSameLaneNoteOwnsThePress" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.ClosestSameLaneNoteOwnsThePress" methodname="ClosestSameLaneNoteOwnsThePress" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="786196252" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000338" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1858" name="DenseAndSparseFrameUpdatesGiveSameTimedHits" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.DenseAndSparseFrameUpdatesGiveSameTimedHits" methodname="DenseAndSparseFrameUpdatesGiveSameTimedHits" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="823774176" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000478" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1847" name="DuplicatePressCannotScoreTwice" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.DuplicatePressCannotScoreTwice" methodname="DuplicatePressCannotScoreTwice" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1091340567" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.001596" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1859" name="FreestyleRejectsOutOfSectionAndRepeatedTick" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.FreestyleRejectsOutOfSectionAndRepeatedTick" methodname="FreestyleRejectsOutOfSectionAndRepeatedTick" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1796035287" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000933" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1860" name="FreestyleRewardsVarietyInsteadOfOneLaneMashing" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.FreestyleRewardsVarietyInsteadOfOneLaneMashing" methodname="FreestyleRewardsVarietyInsteadOfOneLaneMashing" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1694099085" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000165" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1852" name="HoldScoresOnlyAtItsTail" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.HoldScoresOnlyAtItsTail" methodname="HoldScoresOnlyAtItsTail" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="943947555" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000176" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1861" name="InvalidChartsFailClearly" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.InvalidChartsFailClearly" methodname="InvalidChartsFailClearly" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1804828492" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000861" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1846" name="MissingNoteExpiresExactlyOnce" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.MissingNoteExpiresExactlyOnce" methodname="MissingNoteExpiresExactlyOnce" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="46114050" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000203" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1862" name="OriginalChartCannotMutateRunningRound" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.OriginalChartCannotMutateRunningRound" methodname="OriginalChartCannotMutateRunningRound" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="216588923" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000179" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1851" name="PartialChordDoesNotReceiveFullPoints" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.PartialChordDoesNotReceiveFullPoints" methodname="PartialChordDoesNotReceiveFullPoints" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="783116121" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000151" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1863" name="SeparateCompetitorsNeverShareScoreOrCombo" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.SeparateCompetitorsNeverShareScoreOrCombo" methodname="SeparateCompetitorsNeverShareScoreOrCombo" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1407985571" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000182" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1848" name="SimultaneousChordResolvesOnceWithTwoLaneValue" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.SimultaneousChordResolvesOnceWithTwoLaneValue" methodname="SimultaneousChordResolvesOnceWithTwoLaneValue" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="902548907" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:33Z" duration="0.000173" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="1845" name="TimestampDeterminesGrade" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" testcasecount="10" result="Passed" start-time="2026-10-22 16:54:33Z" end-time="2026-10-22 16:54:34Z" duration="0.002649" total="10" passed="10" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1835" name="TimestampDeterminesGrade(0,Perfect)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(0,Perfect)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="190569909" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000223" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1836" name="TimestampDeterminesGrade(0.04d,Perfect)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(0.04d,Perfect)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="241550663" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000094" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1837" name="TimestampDeterminesGrade(-0.04d,Perfect)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(-0.04d,Perfect)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1241590165" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000082" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1838" name="TimestampDeterminesGrade(0.08d,Great)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(0.08d,Great)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="2014212351" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000083" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1839" name="TimestampDeterminesGrade(-0.08d,Great)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(-0.08d,Great)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1237101913" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000083" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1840" name="TimestampDeterminesGrade(0.14d,Good)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(0.14d,Good)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1083039922" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000095" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1841" name="TimestampDeterminesGrade(-0.14d,Good)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(-0.14d,Good)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="754938260" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000084" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1842" name="TimestampDeterminesGrade(0.045d,Perfect)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(0.045d,Perfect)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="518146040" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000084" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1843" name="TimestampDeterminesGrade(0.09d,Great)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(0.09d,Great)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="187590535" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000080" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1844" name="TimestampDeterminesGrade(0.16d,Good)" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.TimestampDeterminesGrade(0.16d,Good)" methodname="TimestampDeterminesGrade" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="68934409" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000090" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+              </test-suite>
+              <test-case id="1850" name="WidelySeparatedChordIsMissed" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.WidelySeparatedChordIsMissed" methodname="WidelySeparatedChordIsMissed" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="891523949" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000157" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1855" name="WrongLaneDoesNotClaimNote" fullname="LWS.TruckDanceOff.Tests.DanceRuleTests.WrongLaneDoesNotClaimNote" methodname="WrongLaneDoesNotClaimNote" classname="LWS.TruckDanceOff.Tests.DanceRuleTests" runstate="Runnable" seed="1877863972" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:34Z" duration="0.000188" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2418" name="LWS.TruckSports.PresentationEditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.PresentationEditModeTests.dll" runstate="Runnable" testcasecount="35" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:40Z" duration="6.753722" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="62676" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="2381" name="DanceConcertReferenceTests" fullname="DanceConcertReferenceTests" classname="DanceConcertReferenceTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:40Z" duration="6.751067" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2382" name="DedicatedArtworkFrontFacingRigsAndExistingCinemachineAreSavedWithoutRebuilding" fullname="DanceConcertReferenceTests.DedicatedArtworkFrontFacingRigsAndExistingCinemachineAreSavedWithoutRebuilding" methodname="DedicatedArtworkFrontFacingRigsAndExistingCinemachineAreSavedWithoutRebuilding" classname="DanceConcertReferenceTests" runstate="Runnable" seed="826070096" result="Passed" start-time="2026-10-22 16:54:34Z" end-time="2026-10-22 16:54:40Z" duration="6.750222" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[DANCE_REPAIR_PRESERVED saved customization.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

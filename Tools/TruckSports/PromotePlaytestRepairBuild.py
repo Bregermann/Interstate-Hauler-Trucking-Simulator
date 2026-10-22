@@ -31,12 +31,18 @@ def main():
     expected = args.sha
     assert re.fullmatch(r"[a-f0-9]{64}", args.content_sha)
     assert snapshot(ROOT / "Builds/TruckSportsCamera")[0] == args.content_sha
-    running = subprocess.check_output([
+    processes = subprocess.check_output([
         "powershell", "-NoProfile", "-Command",
-        "Get-Process | Where-Object { $_.ProcessName -in @('Unity','TruckSports') } | Select-Object -ExpandProperty Id",
+        "Get-CimInstance Win32_Process | Where-Object { $_.Name -in @('Unity.exe','TruckSports.exe') } | Select-Object ProcessId,Name,ExecutablePath | ConvertTo-Json -Compress",
     ], text=True).strip()
+    observed = json.loads(processes) if processes else []
+    if isinstance(observed, dict):
+        observed = [observed]
+    # A manually launched archived build elsewhere does not hold these files.
+    # Never close it. Unknown paths and any Editor still conservatively block.
+    running = [p for p in observed if p['Name'] == 'Unity.exe' or not p.get('ExecutablePath') or Path(p['ExecutablePath']).resolve().is_relative_to(ROOT.resolve())]
     if running:
-        raise RuntimeError("Wait for the owned Editor/player to close before promotion: " + running)
+        raise RuntimeError("Wait for the workspace Editor/player to close before promotion: " + json.dumps(running))
     runs = [("FinalCamera33", 693), ("FinalSkyGateNormals", 10), ("FinalFareCabViews", 30), ("FinalMineProgressHUD", 52)]
     if args.run:
         assert all(re.fullmatch(r"[A-Za-z0-9_-]+:[1-9][0-9]*", item) for item in args.run)

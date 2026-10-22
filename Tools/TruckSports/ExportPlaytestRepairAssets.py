@@ -92,6 +92,10 @@ derby_scene = "Assets/TruckDemolitionDerby/Scenes/TruckDemolitionDerby.unity"
 if "LWS.TruckDerby.DerbyDamageHud" in (CLEAN / derby_scene).read_text(encoding="utf-8-sig"):
     paths += [derby_scene]
     paths += ["Assets/TruckDemolitionDerby/Materials/Original Derby venue logo.mat" + suffix for suffix in ["", ".meta"]]
+dance_scene = "Assets/TruckDanceOff/Scenes/TruckDanceOff.unity"
+if "LWS.TruckDanceOff.DanceConcertCamera" in (CLEAN / dance_scene).read_text(encoding="utf-8-sig"):
+    paths += [dance_scene]
+    paths += ["Assets/TruckDanceOff/Materials/Dedicated Dance-Off stage logo.mat" + suffix for suffix in ["", ".meta"]]
 records = []
 for relative in paths:
     assert relative not in baseline, "Preserve unrelated pending work: " + relative

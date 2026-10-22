@@ -2,7 +2,7 @@
 
 ## Current state — October21/22 continuation
 
-Accepted Windows executable: Builds/TruckSports/TruckSports.exe; Derby full payload2f1059f01175072383a21c491284d526ed5e8772efca8d0264498b3794218fed, managed217eaeddde7006cabc96ae34a8dba41c782cbdad72a08ce254a734ebec47901f;60scenes/240 exact sources, native2/0 and focused Windows96/0. Previous Dock38/0 build retained; current Keepaway/Terrier245/0 evidence preserved. No human/hardware/listening/profile claim.
+Accepted Windows executable: Builds/TruckSports/TruckSports.exe; Dance-Off payloadb3813fe215a01dc3f59d3ef4ef676169bb61f877b7be2cde32111c0d964169e4; native41/0 and focused Windows39/0. Derby and prior accepted payloads retained. Newly reported Dock platform/calm-water/animated-crowd follow-up is in progress; other active HPR/GBC work remains.
 
 Parking numbered bays5197c076,Hockey/Parking36f50402 and Snake/Wife5c0a7c03 deliveries remain pushed to both authorized branches with their own exact build identities and retained failed candidates.925unrelated pending files/private planner remain protected.
 
@@ -1035,3 +1035,7 @@ See2026-10-22-Dock-Venue-Repair.md and its actual native/Windows evidence. Prese
 ## October22 — Derby health and branding accepted
 
 See2026-10-22-Derby-Damage-HUD.md and actual evidence. Preserve original rules/physics/replays and925unrelated files. First57/0 candidate rejected visually before correction; current exact-payload layout and physical matches passed. Next: current Dance-Off requirements and other open HPR/GBC entries. No whole-backlog completion claim.
+
+## October22 — Dance-Off concert and timing accepted
+
+See2026-10-22-Dance-Concert.md and actual evidence. Original choreography/charts/input/HUD retained. Newly recorded Dock human feedback reopens HPR-18-2/4 and adds HPR-18-6; do not treat earlier automated acceptance as current developer approval.
