@@ -1059,3 +1059,7 @@ Fishing22a058fc, Mattress6c9ab0fc and SkyTow4bd5d493 are committed/pushed. Canon
 ## October22 — precision camera and Windows sky repair accepted by automated checks
 
 See2026-10-22-Precision-Cameras.md and exact evidence. Both reproduced sky defects and the shared stale-card layout are corrected; saved scenes and925unrelated files are preserved. Prior rejected candidates and harness failures remain recorded. Human/hardware/listening/profiling and other current HPR/GBC entries remain open. Q22-SKY then Q22-CARNIVAL remain queued after existing work. No entire-backlog completion claim.
+
+## October22 — Musical Parking gameplay preservation accepted by automated checks
+
+See2026-10-22-Parking-Preserved.md: unchanged scene/scripts, fresh1093/0Windows checks and complete eight-AI match, rematch and menu. No human/hardware/listening/profile acceptance claimed. Continue existing work; Q22-SKY then Q22-CARNIVAL remain queued.

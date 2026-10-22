@@ -6604,11 +6604,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Working Gameplay |
 | Original Request | The developer likes the current game mechanics. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section24.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Original Musical Parking scene and gameplay scripts preserved; existing eight numbered bay graphics, shared/owned cameras, compact elimination cards and actual NWH captures retained. See 2026-10-22-Parking-Preserved.md. |
+| Automated Verification | Fresh exact Windows1363d34f: ParkingPreservationFinalWindows1093/0, PID65828,64.36real seconds. Twenty software-human/AI-camera/resolution configurations, explicit graphical fixtures, complete ordinary eight-AI match7rounds/28captures/winner7, rematch/menu. Earlier native parking-bay-final-native4/0 remains separately recorded under HPR-24-2; no new native test claimed for unchanged gameplay. |
+| Human Verification | Developer previously approved the working mechanics. No human playtest, physical-controller, listening or subjective visual approval of this exact build was performed. |
+| Remaining Work | No failure observed in the exercised preservation scope. Human/controller/listening and isolated profiling remain unperformed; protected gameplay was not redesigned. |
 
 ### HPR-24-2 — Improve Parking Bay Presentation
 
