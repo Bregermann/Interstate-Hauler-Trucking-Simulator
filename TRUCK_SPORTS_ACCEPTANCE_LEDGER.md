@@ -8,6 +8,8 @@ Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED
 
 Current priority (October21): Global broadcast-camera action/readability repair first, then the attached master human-playtest repairs in P0–P4 order. The protected Bowling/Poker/Cheese/Terrier/Fare Fight mechanics and deferred Tug of War decision take precedence over historical requests. Source directives: Requests/2026-10-21-GlobalBroadcastCamera.md and Requests/2026-10-21-HumanPlaytestRepair.md. The completed eighteen-sport delivery below remains the baseline.
 
+October22 queue addition: finish that existing work first, then execute Q22-SKY (global sky/time/scoring/results), then Q22-CARNIVAL (Carnival of Chaos). Both full attachments are archived verbatim in Requests and linked below. They do not interrupt the active Fishing validation or reopen completed earlier repairs. Carnival's explicit protected-scene exceptions and newer rules supersede conflicts when that queued pass begins.
+
 Git reconciliation is verified (LD-004); public main is synchronized and local/private work is recoverable. All18requested expansion sports are implemented and integrated in the60-scene Windows build. The individual entries retain automated evidence separately from outstanding human, physical-device, listening and extended-soak acceptance. Source requirements and UI addendum are preserved in Documentation/TruckSports/Requests/. Earlier focused-sprint implementation/evidence remains recorded; its human/device/listening limits have not disappeared.
 
 Expansion order: Red Light Green Light, Hot Potato, Balloon Battle, Whack-a-Mole, King of the Hill; Seesaw, Floor Is Lava, Tetherball, Jousting, Magnet Mayhem; Volleyball, Freeze Tag, Hungry Hungry Haulers, Sheep Herding; Hide and Seek, Frogger, Avalanche Escape, Ninja Warrior. Do not create18empty scenes or count registry entries as gameplay.
@@ -5552,11 +5554,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Restore Actual Fish Catching |
 | Original Request | Investigate: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section2.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
-| Implementation Evidence | FishingStream.Progress/Advance aligns visible movement and analytic moving-net crossing; original1.1m hoop radius and score authority retained. |
-| Automated Verification | FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Rerun corrected Windows ten-catch fixture and complete survival/rematches after the speed/river update. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing saved Fishing scene, river, three130% sport-owned fish prefabs, net/scoring/director/QTE integration retained; FishingSavedNetTests and explicit development-probe setup diagnostics/guard. See2026-10-22-Fishing-Streams.md. |
+| Automated Verification | Earlier evidence retained: FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. Latest: Latest native12EditMode/1PlayMode0failures; final exact Windows385/0 including real crossings, measured movement, Easy/Normal/Hard complete survival, four mixed owned sources, offscreen births, debris/QTE, pause, spectator, rematch and exit. Evidence/2026-10-22-Fishing-Streams retains prior failure and exact code/asset manifests. |
+| Human Verification | Original October21 findings revalidated by actual Windows simulation/rendering; no subsequent developer playtest, physical-device, subjective listening or hardware acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after exercised automated/visual acceptance. Human gameplay/difficulty approval, physical controllers/wheels, listening, exhaustive weather and isolated profiling remain unperformed. Carnival water/wildlife are separate queued requests. |
 
 ### HPR-2-2 — Correct Fish Movement Speed
 
@@ -5566,11 +5568,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Correct Fish Movement Speed |
 | Original Request | The previous requests for much faster fish have not produced the desired result. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section2.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
-| Implementation Evidence | FishingDirector baseline2.0x,+0.5per30seconds, configurable6xcap, deterministic per-fish tempo variation; Match passes actual arrival-clock offset. |
-| Automated Verification | FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Windows measured motion/speed, full human/AI rounds and difficulty balance remain to verify. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing saved Fishing scene, river, three130% sport-owned fish prefabs, net/scoring/director/QTE integration retained; FishingSavedNetTests and explicit development-probe setup diagnostics/guard. See2026-10-22-Fishing-Streams.md. |
+| Automated Verification | Earlier evidence retained: FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. Latest: Latest native12EditMode/1PlayMode0failures; final exact Windows385/0 including real crossings, measured movement, Easy/Normal/Hard complete survival, four mixed owned sources, offscreen births, debris/QTE, pause, spectator, rematch and exit. Evidence/2026-10-22-Fishing-Streams retains prior failure and exact code/asset manifests. |
+| Human Verification | Original October21 findings revalidated by actual Windows simulation/rendering; no subsequent developer playtest, physical-device, subjective listening or hardware acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after exercised automated/visual acceptance. Human gameplay/difficulty approval, physical controllers/wheels, listening, exhaustive weather and isolated profiling remain unperformed. Carnival water/wildlife are separate queued requests. |
 
 ### HPR-2-3 — Redesign the Waterway
 
@@ -5580,11 +5582,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Redesign the Waterway |
 | Original Request | Reduce the horizontal fish-travel area to approximately half its current width. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section2.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
-| Implementation Evidence | FishingRepairAuthoring.Upgrade version1; saved Fishing scene with half-width fish/net area, winding240m owned water mesh/Terrain, installed JC trees and existing grass/boulders, clear pier apron. |
-| Automated Verification | FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect rendered banks/bend at720p/1080p and offscreen births, validate all streams/rematches. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing saved Fishing scene, river, three130% sport-owned fish prefabs, net/scoring/director/QTE integration retained; FishingSavedNetTests and explicit development-probe setup diagnostics/guard. See2026-10-22-Fishing-Streams.md. |
+| Automated Verification | Earlier evidence retained: FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. Latest: Latest native12EditMode/1PlayMode0failures; final exact Windows385/0 including real crossings, measured movement, Easy/Normal/Hard complete survival, four mixed owned sources, offscreen births, debris/QTE, pause, spectator, rematch and exit. Evidence/2026-10-22-Fishing-Streams retains prior failure and exact code/asset manifests. |
+| Human Verification | Original October21 findings revalidated by actual Windows simulation/rendering; no subsequent developer playtest, physical-device, subjective listening or hardware acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after exercised automated/visual acceptance. Human gameplay/difficulty approval, physical controllers/wheels, listening, exhaustive weather and isolated profiling remain unperformed. Carnival water/wildlife are separate queued requests. |
 
 ### HPR-2-4 — Increase Fish Size by 30%
 
@@ -5594,11 +5596,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Increase Fish Size by 30% |
 | Original Request | Increase the actual fish models to approximately 130% of their current size. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section2.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
-| Implementation Evidence | Three sport-owned fish prefab roots set to130%scale by versioned scene migration; original Layer Lab source models/materials/rigs unchanged. |
-| Automated Verification | FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Validate rendered scale/clearances and catch boundaries in the new player. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing saved Fishing scene, river, three130% sport-owned fish prefabs, net/scoring/director/QTE integration retained; FishingSavedNetTests and explicit development-probe setup diagnostics/guard. See2026-10-22-Fishing-Streams.md. |
+| Automated Verification | Earlier evidence retained: FishingCrossingRegression12/12; Windows FishingRiverAndTiming343/0; complete Easy/Normal rounds plus FishingHardCompletion350/0 (620.12match seconds, fourAI,396/389/376/372catches, no overflow); real rematch reset and720p/1080p river screenshots inspected. Hardware/human/listening acceptance unperformed. Latest: Latest native12EditMode/1PlayMode0failures; final exact Windows385/0 including real crossings, measured movement, Easy/Normal/Hard complete survival, four mixed owned sources, offscreen births, debris/QTE, pause, spectator, rematch and exit. Evidence/2026-10-22-Fishing-Streams retains prior failure and exact code/asset manifests. |
+| Human Verification | Original October21 findings revalidated by actual Windows simulation/rendering; no subsequent developer playtest, physical-device, subjective listening or hardware acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after exercised automated/visual acceptance. Human gameplay/difficulty approval, physical controllers/wheels, listening, exhaustive weather and isolated profiling remain unperformed. Carnival water/wildlife are separate queued requests. |
 
 ### HPR-2-5 — Preserve Other Fishing Features
 
@@ -5608,11 +5610,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Other Fishing Features |
 | Original Request | Retain: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section2.5. |
 | Acceptance Criteria | All observable requirements and acceptance in source section2.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing saved Fishing scene, river, three130% sport-owned fish prefabs, net/scoring/director/QTE integration retained; FishingSavedNetTests and explicit development-probe setup diagnostics/guard. See2026-10-22-Fishing-Streams.md. |
+| Automated Verification | Latest native12EditMode/1PlayMode0failures; final exact Windows385/0 including real crossings, measured movement, Easy/Normal/Hard complete survival, four mixed owned sources, offscreen births, debris/QTE, pause, spectator, rematch and exit. Evidence/2026-10-22-Fishing-Streams retains prior failure and exact code/asset manifests. |
+| Human Verification | Original October21 findings revalidated by actual Windows simulation/rendering; no subsequent developer playtest, physical-device, subjective listening or hardware acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after exercised automated/visual acceptance. Human gameplay/difficulty approval, physical controllers/wheels, listening, exhaustive weather and isolated profiling remain unperformed. Carnival water/wildlife are separate queued requests. |
 
 ### HPR-3-1 — Reduce Negative Targets
 
@@ -7717,3 +7719,37 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
+
+
+## Queued October 22 directives — execute after existing work
+
+### Q22-SKY — Global sky, lighting, time of day, scoring and results presentation
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY |
+| Sport/System | Global sky, lighting, time of day, scoring and results presentation |
+| Original Request | Preserve the current task order; run this full attached prompt to completion directly after earlier work. Exact specification: [2026-10-22-Global-Sky-Time-Scoring.md](Documentation/TruckSports/Requests/2026-10-22-Global-Sky-Time-Scoring.md). |
+| Acceptance Criteria | After the existing gameplay repair work; before code-quality stabilization. Extend installed weather/lighting/UI foundations, retain authoritative gameplay and specialized presentations. All numbered requirements and acceptance tests in the exact archived directive apply. |
+| Status | MISSING |
+| Implementation Evidence | Exact original attachment archived; SHA-256 `af2fb0ccf2ca70b3066854f2e079161154fa7b91292351b64d81aa98fb1731da`, 24123 bytes. This queue record does not claim implementation. |
+| Automated Verification | None for this new directive. Existing Fishing validation continues independently. |
+| Human Verification | New work requested, no acceptance claimed. |
+| Remaining Work | All implementation and acceptance work in the attached directive; add grouped permanent child IDs when execution begins, retaining this source ID and full specification. Activation follows the user-specified queue order. |
+
+
+## Queued October 22 directives — execute after existing work
+
+### Q22-CARNIVAL — Carnival of Chaos master implementation, customization and repair pass
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-CARNIVAL |
+| Sport/System | Carnival of Chaos master implementation, customization and repair pass |
+| Original Request | Preserve the current task order; run this full attached prompt to completion directly after earlier work. Exact specification: [2026-10-22-Carnival-of-Chaos.md](Documentation/TruckSports/Requests/2026-10-22-Carnival-of-Chaos.md). |
+| Acceptance Criteria | After Q22-SKY and existing work. Inspect authoritative version before assigning Alpha 0.6.0; retain Carnival of Chaos release name. Execute the complete archived directive, bounded parallel-agent assignments, permanent per-requirement evidence and requested patch notes. Preserve explicitly protected mechanics and presentation. |
+| Status | MISSING |
+| Implementation Evidence | Exact original attachment archived; SHA-256 `e25ccb8320414dedb3da5dd5c3ceb961abedc2578d80b7af0c4935580acf421d`, 50336 bytes. This queue record does not claim implementation. |
+| Automated Verification | None for this new directive. Existing Fishing validation continues independently. |
+| Human Verification | New work requested, no acceptance claimed. |
+| Remaining Work | All implementation and acceptance work in the attached directive; add grouped permanent child IDs when execution begins, retaining this source ID and full specification. Activation follows the user-specified queue order. |

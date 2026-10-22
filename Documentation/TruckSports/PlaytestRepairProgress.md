@@ -1047,3 +1047,7 @@ See2026-10-22-Dock-Pool-Life.md. Rejected intermediate visuals retained; final e
 ## October22 — Kickball waiting cameras and pacing accepted by automated checks
 
 See2026-10-22-Kickball-Waiting.md and exact native/Windows evidence. Existing gameplay preserved; rejected intermediate presentation retained. No human/hardware/listening or entire-backlog completion claim. Continue the current open HPR/GBC requirements.
+
+## October22 — Fishing saved nets and preserved features accepted by automated checks
+
+See2026-10-22-Fishing-Streams.md and exact native/Windows evidence. Current HPR/GBC work continues; newly supplied Q22-SKY then Q22-CARNIVAL directives are archived verbatim and queued after existing work. Human/hardware/listening/profiling remain unperformed.
