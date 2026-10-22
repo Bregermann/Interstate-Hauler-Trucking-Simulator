@@ -5918,9 +5918,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section8.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
 | Implementation Evidence | FareFightRoadAccess retains shared planner and actual road joins; native damage repair at match/recovery boundaries; destroyed powertrain enters announced reset equally for humans/AI. New steering-lock and distance-aware bounded backing fixes in progress. |
-| Automated Verification | Existing native backing5/5, safe placement/recovery tests pass. Windows e343 FareRecordedSeedFullPowertrain16/0,443.73s: full first-to-five, same seed616736539, actual deliveries/recovery/rematch/menu; pockets9.229/7.647/14.232/9.249simsec. Prior958 full-match508.676simsec stall retained as failure, no root-cause fix claimed from a non-reproduction. |
+| Automated Verification | Current payload6c5b4e08 FareCurrentRecordedSeedNormal16/0,551.25s: actual first-to-five four-AI Normal match,seed616736539,rematch/menu and native diagnostics. Longest2m pockets16.016/11.414/10.581/9.109simsec;4announced recoveries. Earlier e343same-seed16/0 retained. Old958 failure508.676simsec immobility retained; that log has no RPM/generated-power telemetry,so engine failure is a hypothesis. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Intermittent healthy zero-power stall root cause remains unproven; capture engine component/connection activity on a recurrence. One successful full match is not proof that the old intermittent defect is eliminated. |
+| Remaining Work | Original intermittent immobility has not recurred in latest two recorded-seed full matches. Capture complete body/input/powertrain state if it recurs; do not label it a confirmed zero-RPM fault or claim a speculative engine fix. |
 
 ### HPR-8-5 — Fair Initial Passenger Distances
 
@@ -6602,11 +6602,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Improve Parking Bay Presentation |
 | Original Request | Replace default-looking markers and plain text with attractive: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section24.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section24.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | ParkingBayAppearance/ParkingBayAppearanceAuthoring and saved TruckMusicalParking scene: eight numbered rounded ground decals on one shared canvas,closed/open/secured graphics,actual owner names/portraits/colors,DOTween feedback,thicker original outlines and owned Reflective bay paint material. Additive explicit migration preserves authored customizations; no normal build/Play regeneration. |
+| Automated Verification | parking-bay-final-native PlayMode4/0. Actual Windows ParkingBayAppearanceWindows1093/0,full payload541e5c98:20software-human/AI-camera fixtures at720p/1080p,three world states,real cab view,full8-AI match7rounds/28captures,rematch/menu. Before-fix TMP test reproduced truncation; corrected font fitting visibly renders01–07. Scene review retains4343original documents,zero removals,all original physics/cameras/rules unchanged. Evidence/2026-10-22-Parking-Bays/acceptance.json. |
+| Human Verification | Windows screenshots inspected by agent; no human playtest,physical-controller,listening or subjective paint approval inferred. |
+| Remaining Work | No observed failure in exercised saved bay graphics/state/reset acceptance. Physical-human/controller testing and subjective visual approval remain unperformed. |
 
 ### HPR-24-3 — Remove the Obstructive Top Bar
 

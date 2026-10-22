@@ -102,7 +102,7 @@ def run(name, arguments):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["hockey-hud", "snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["parking-bays", "hockey-hud", "snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
@@ -111,7 +111,9 @@ def main():
     # Call only when this project has no other owned Editor/player. The caller
     # establishes the exclusive turn; no process-killing or project-lock bypass.
     sync()
-    if args.stage == "hockey-hud":
+    if args.stage == "parking-bays":
+        run("parking-bay-appearance-authoring", ["-quit", "-executeMethod", "LWS.TruckMusicalParking.Editor.ParkingBayAppearanceAuthoring.Upgrade"])
+    elif args.stage == "hockey-hud":
         run("hockey-presentation-authoring", ["-quit", "-executeMethod", "LWS.TruckHockey.Editor.HockeyPresentationAuthoring.Upgrade"])
     elif args.stage == "snake-traffic":
         run("snake-original-traffic-lanes-authoring", ["-quit", "-executeMethod", "LWS.TruckSnake.Editor.SnakePlaytestRepairAuthoring.UpgradeTraffic"])

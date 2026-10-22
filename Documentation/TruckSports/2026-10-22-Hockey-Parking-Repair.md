@@ -37,7 +37,7 @@ Hockey images below are real Windows gameplay/setup/results. Parking's four-view
 
 Windows x64 development build: **Builds/TruckSports/TruckSports.exe**,545companion files,60scenes. Managed SHA`a6785b396911e80b7ae8b141ed40c5320f7d159a98eb9818339aafeb9e5feba3`. Full payload SHA`6c5b4e088e1ea961f626fb60f6a1a5fd970b15dd9c86bc8182f8f81fa19aa0cd`. Exact163source snapshot is retained in Logs/TruckSports/PlaytestRepair/build-6c5b4e088e1ea961f626fb60f6a1a5fd970b15dd9c86bc8182f8f81fa19aa0cd-sources.zip. Portable test receipt: Evidence/2026-10-22-Hockey-Parking/acceptance.json. The reviewed scoped source commit contains this report; post-commit branch verification is retained separately in Logs/TruckSports/PlaytestRepair.
 
-Original human Hockey missed-goal report remains unreproduced; no production goal-rule correction claimed. Parking bay artwork24-2,Fare's intermittent healthy zero-power stall and other active requirements remain open. No physical-controller,listening,human-playtest or isolated performance certification claimed. Existing help/settings behavior retained; hardware/reconnect acceptance still requires actual devices.
+Original human Hockey missed-goal report remains unreproduced; no production goal-rule correction claimed. Parking bay artwork24-2,Fare's intermittent immobility (engine cause unproven) and other active requirements remain open. No physical-controller,listening,human-playtest or isolated performance certification claimed. Existing help/settings behavior retained; hardware/reconnect acceptance still requires actual devices.
 
 **TUG OF WAR:** Brainstorm additional mechanics with the developer and ChatGPT. Current gameplay is too dependent on holding reverse. No changes were authorized during this pass.
 

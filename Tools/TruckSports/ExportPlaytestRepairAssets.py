@@ -18,6 +18,9 @@ paths += ["Assets/TruckSkyTow/Scenes/TruckSkyTow.unity"]
 paths += ["Assets/TruckMinefield/Scenes/TruckMinefield.unity"]
 paths += ["Assets/TruckTrailerPlug/Scenes/TruckTrailerPlug.unity"]
 paths += ["Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity"]
+bay_material = "Assets/TruckMusicalParking/Materials/Reflective bay paint.mat"
+if (CLEAN / bay_material).is_file():
+    paths += [bay_material, bay_material + ".meta"]
 snake_guide = CLEAN / "Assets/TruckSnake/Scripts/SnakePickupGuidance.cs.meta"
 if snake_guide.is_file():
     guid = re.search(r"^guid: ([a-f0-9]+)", snake_guide.read_text(), re.M).group(1)

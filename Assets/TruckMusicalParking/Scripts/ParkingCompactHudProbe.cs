@@ -37,6 +37,7 @@ namespace LWS.TruckMusicalParking
                     match.active[1]=false;yield return new WaitForSecondsRealtime(.2f);CheckCards();yield return Capture("icons-"+size.x+"-humans"+humans+"-ai"+ai);
                 }
             }
+            yield return BayGraphics();
             uiFixtures=false;match.SetupScreen();match.AllBots();match.drivingViews.Select(0);foreach(var p in match.setup.players)p.difficulty=BowlingDifficulty.Hard;
             Check(match.StartMatch(),"actual eight-AI match starts without presentation fixtures");Time.timeScale=4;float until=Time.realtimeSinceStartup+220;int last=0;
             while(!match.Finished&&Time.realtimeSinceStartup<until){if(last!=match.Round){last=match.Round;yield return new WaitForEndOfFrame();CheckCards();}yield return null;}
@@ -58,6 +59,34 @@ namespace LWS.TruckMusicalParking
             Check(match.menus.viewTexts.All(t=>!t.gameObject.activeInHierarchy),"no duplicated player-text blocks in split views");
         }
         IEnumerator Capture(string name){yield return new WaitForEndOfFrame();ScreenCapture.CaptureScreenshot(Path.Combine(folder,name+".png"));yield return new WaitForSecondsRealtime(.1f);}
+        IEnumerator BayGraphics()
+        {
+            Check(match.bays.All(b=>b.GetComponent<ParkingBayAppearance>()!=null),"actual saved scene binds all eight numbered bay graphics");
+            if(match.bays.Any(b=>b.GetComponent<ParkingBayAppearance>()==null))yield break;
+            Screen.SetResolution(1920,1080,false);match.SetupScreen();match.AllBots();match.drivingViews.Select(0);Check(match.StartMatch(),"world bay presentation fixture starts");Time.timeScale=0;
+            // These direct bay states exercise graphics, not competitor captures.
+            match.bays[0].SetOpen(true);match.bays[1].Secure(2,match.setup.players[2].color,match.setup.players[2].name);yield return new WaitForSecondsRealtime(.3f);
+            Check(match.bays[0].GetComponent<ParkingBayAppearance>().stateText.text=="OPEN"&&match.bays[1].GetComponent<ParkingBayAppearance>().stateText.text=="SECURED"&&match.bays[2].GetComponent<ParkingBayAppearance>().stateText.text=="CLOSED","world open/secured/closed graphics follow authoritative bay states");
+            Check(match.transform.Find("Parking world bay graphics").GetComponentsInChildren<Canvas>(true).Length==1,"all eight world markers share one canvas");
+            Check(match.bays.All(b=>b.GetComponentsInChildren<Collider>(true).Length==0),"visual bay upgrades add no collisions or capture obstacles");yield return Capture("bay-shared-normal-1920");
+            var framing=match.arenaCamera.broadcastFraming;bool framed=framing!=null&&framing.enabled;bool fitted=match.framing!=null&&match.framing.enabled;bool enabled=match.enabled,ortho=match.arenaCamera.view.orthographic;
+            try
+            {
+                match.enabled=false;if(framing!=null)framing.enabled=false;if(match.framing!=null)match.framing.enabled=false;
+                match.arenaCamera.view.orthographic=false;match.arenaCamera.PoseRaw(new Vector3(0,.12f,-11.45f),new Vector3(0,18,-18),50,true);yield return new WaitForSecondsRealtime(.2f);
+                foreach(var bay in match.bays.Take(3))
+                {
+                    var p=bay.GetComponent<ParkingBayAppearance>();var corners=new Vector3[4];p.plate.GetWorldCorners(corners);var projected=corners.Select(v=>match.arenaCamera.view.WorldToViewportPoint(v)).ToArray();float width=projected.Max(v=>v.x)-projected.Min(v=>v.x);
+                    Check(projected.All(v=>v.z>0&&v.x>=0&&v.x<=1&&v.y>=0&&v.y<=1)&&width*Screen.width>=80,"explicit close-up camera frames readable world bay "+p.number);
+                }
+                yield return Capture("bay-world-graphics-camera-fixture-1920");
+            }
+            finally{match.arenaCamera.view.orthographic=ortho;if(match.framing!=null)match.framing.enabled=fitted;if(framing!=null)framing.enabled=framed;match.enabled=enabled;}
+            match.SetupScreen();match.AllBots();match.setup.players[0].source=BowlingSource.WholeController;match.setup.players[0].pad=pads[0];SportsCameraOptions.Set(false);match.drivingViews.Select(2);Check(match.StartMatch(),"actual cab camera starts bay-visibility fixture");Time.timeScale=0;
+            var first=match.bays[0];first.SetOpen(true);match.trucks[0].Prepare(first.transform.position-first.transform.forward*18+Vector3.up*.55f,Quaternion.LookRotation(first.transform.forward),false);match.trucks[0].body.isKinematic=true;Physics.SyncTransforms();match.drivingViews.Tick(1);yield return new WaitForSecondsRealtime(.3f);
+            var point=match.cameras[0].WorldToViewportPoint(first.GetComponent<ParkingBayAppearance>().plate.position);Check(point.z>0&&point.x>0&&point.x<1&&point.y>0&&point.y<1,"numbered bay marker projects inside the actual owned cab view");yield return Capture("bay-cab-approach-camera-fixture-1920");
+            match.SetupScreen();Check(match.StartMatch(),"bay graphics rematch starts");Time.timeScale=0;yield return new WaitForSecondsRealtime(.2f);Check(match.bays.Where(b=>b.gameObject.activeSelf).All(b=>b.Owner<0&&!b.Open&&b.GetComponent<ParkingBayAppearance>().stateText.text=="CLOSED"),"rematch restores all live bay graphics and clears prior ownership");
+        }
         void Update(){
             // These explicitly frozen software-human fixtures inspect rendering,
             // not focus-loss behavior. Keep real gameplay focus policy intact;

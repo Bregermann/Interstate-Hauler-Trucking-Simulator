@@ -359,3 +359,13 @@ RELEVANT ASSETS NOT USED: No new art generator, navigation, physics or weather p
 CUSTOM SYSTEMS CREATED: Small elimination-layout extension to the established shared score-card adapter and targeted verification fixtures.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+### Parking numbered bay presentation (work in progress)
+
+VENDOR ASSETS AUDITED: installed JC_LP_MegaCity public subset, RoadPropsPack/URP/Prefabs/RoadSign_URP.prefab availability,existing Parking bay paint/markings,Heat/TMP fonts/shared portrait/rounded plate and DOTween state feedback.
+VENDOR ASSETS USED: existing SportsUIAuthoring and Heat-derived theme,shared truck portrait,SportsBroadcastPlate,DOTween,original painted boundary geometry and a sport-owned clone of stock Bay marking enamel. One shared WorldSpace canvas for all8markers; no new physics/UI framework.
+RELEVANT ASSETS NOT USED: vertical RoadProps signage is unnecessary for readable painted bay-state identifiers and would add objects around the capture area. No new vendor raw assets introduced. Existing UI foundation covers presentation; LWS only binds ParkingBay ownership/open state.
+CUSTOM SYSTEMS CREATED: small read-only ParkingBayAppearance adapter,explicit additive editor authoring and focused verification fixture.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
