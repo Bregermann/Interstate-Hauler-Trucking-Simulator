@@ -1067,3 +1067,7 @@ See2026-10-22-Parking-Preserved.md: unchanged scene/scripts, fresh1093/0Windows 
 ## October22 — Fare Fight gameplay preservation accepted by automated checks
 
 See2026-10-22-Fare-Preserved.md: fresh46/0Windows checks, complete first-to-five recorded-seed match, four software-input sources/GPS/cab/reconnect/rematch, unchanged mode scene/scripts. HPR-8-4 remains open: original intermittent immobility has not recurred in four latest full matches. Other current requirements remain open; Q22-SKY then Q22-CARNIVAL stay queued.
+
+## October22 — stealth, pendulum and precision camera checks accepted
+
+See2026-10-22-Protected-Cameras.md: fresh114/0Windows checks, native replay-floor1/0, source/scene preservation, legal Hide clues/occlusion/ownership, actual Swing release/replay and five-mode cab look. No new gameplay or human/hardware/listening/profile approval claimed. Remaining current requirements stay open; Q22-SKY then Q22-CARNIVAL remain queued.

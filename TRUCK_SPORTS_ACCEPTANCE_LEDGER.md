@@ -7042,11 +7042,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckCurling |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | The original cab and strategic target inset remain authoritative; the board, target, rules and cameras are unchanged. Existing SportsLegacyCabLook preserves player-owned free look and visible steering input. See2026-10-22-Protected-Cameras.md and exact evidence. |
+| Automated Verification | Fresh exact1363d34f LegacyPrecisionLookFinalWindows41/0,62.4real seconds across Bowling/Cornhole/Curling/KeepawayCab/Terrier. Assigned pad/mouse look after LateUpdate, other-camera isolation, steering wheels, cursor/pause and repeated menu exits passed. Curling actual window dimensions verified at720p/1080p/1440x900/4:3/ultrawide. These are camera/control fixtures, not a full Curling match. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval, physical controllers/wheels, listening and isolated profiling remain unperformed. Preserve the protected camera/gameplay design. Current evidence is bounded to the explicitly exercised cases. |
 
 #### GBC-SPORT-TruckBaseJumping
 
@@ -7140,11 +7140,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckGiantSwing |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing SwingMatch ReplayFocus/ReplayGroundHeight/ClearReplayCamera retain the single owned pendulum/release/replay camera; recorded low focuses are raised, real ground/collider clearance is enforced after posing. No shared director was forced into the turn-based shot. See2026-10-22-Protected-Cameras.md and exact evidence. |
+| Automated Verification | Fresh exact1363d34f Windows26/0,22.48real seconds: actual PhysX pump/release velocity, bounded aftertouch, ground contact, locked scoring, recorded replay controls/paint, input/reconnect and rematch/menu. Images are explicitly camera-only. Native saved-scene1/0 exercises15low/extreme pose-angle combinations against actual ground, overlap clearance and camera aim; no all-trajectory or human camera-feel claim. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability/smoothness approval, physical controllers/wheels, listening and isolated profiling remain unperformed. Preserve the protected camera/gameplay design. Current evidence is bounded to the explicitly exercised cases. |
 
 #### GBC-SPORT-TruckBuzkashi
 
@@ -7672,11 +7672,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckHideAndSeek |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Original seeker broadcast, assigned cab cameras, controlled blind phase and broad seeker-only CNP clue groups preserved. No generic broadcast target list exposes hidden participants. See2026-10-22-Protected-Cameras.md and exact evidence. |
+| Automated Verification | Fresh exact1363d34f Windows47/0,96.45real seconds: full normal eight-AI hide/search round, real occlusion and physical tagging, recorded replay, four software-player layouts/ownership, blind seeker while hiding, no exact location knowledge through walls, seeker-only broad clues after camera rebuilding, AI-only OFF/ON and eight-role reset/rematch. Actual720p/1080p images inspected. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Stealth/privacy exception: never expose hidden players or add hidden-player POIs. Audit existing legal seeker/spectator view only. |
+| Remaining Work | Human readability/smoothness approval, physical controllers/wheels, listening and isolated profiling remain unperformed. Preserve the protected camera/gameplay design. Current evidence is bounded to the explicitly exercised cases. |
 
 #### GBC-SPORT-TruckFrogger
 

@@ -61,6 +61,17 @@ def main():
     evidence = result.read_text(encoding="utf-8-sig") if result.is_file() and result.stat().st_mtime >= wall_start else ""
     terminal = re.search(r"CHECKS=(\d+)\s+ERRORS=(\d+)", evidence)
     legacy = re.search(r"ERRORS=(\d+)\. (?:Actual NWH/PhysX|Generated ramp and real NWH/PhysX flights|Core-Collapse native physics/support slice|Software-injected sources and native physical workload|Separate pure rule fixtures and actual native NWH/PhysX full autonomous matches|Actual PhysX/NWH-disabled gravity platforms and AI weight controls|Labelled initial poses/velocities followed by actual PhysX triggers|Automated posed fixtures and actual Unity runtime)", evidence) if args.legacy_errors_only and not terminal else None
+    if args.legacy_errors_only and not terminal and not legacy:
+        # Accept only the explicitly requested existing probe's own terminal
+        # signature. Never treat an arbitrary ERRORS=0 line as completion.
+        protected_footers = {
+            "-tsSwingFocused": r"ERRORS=(\d+)\. Real PhysX joints, torque, release velocity, flight and contact; synthetic commands/virtual sources; camera-only renders\.",
+            "-tsLegacyLook": r"ERRORS=(\d+)\. Native saved modes and injected pad/mouse input, steering/cursor policies and controlled UI renders;",
+            "-tsWallProduction": r"ERRORS=(\d+)\. Labelled spawn fixture, injected keyboard opening and actual NWH/PhysX 4v4 match/volleys, controlled UI captures\.",
+        }
+        signature = protected_footers.get(args.flag)
+        if signature:
+            legacy = re.search(signature, evidence)
     checks = int(terminal[1]) if terminal else len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE)) if legacy else None
     errors = int(terminal[2]) if terminal else int(legacy[1]) if legacy else None
     completed = bool(terminal) or bool(legacy and checks)
