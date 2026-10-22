@@ -1,0 +1,66 @@
+PASS whole pad and separately owned opposite sticks assigned
+PASS four independent humans and four AI accepted
+PASS four own driver panes start in saved scene
+PASS all private card UI begins with no face data
+KEY_DIAG current=15 expected=15 held=True enabled=True allowed=True gate=True
+PASS keyboard hold reveals only assigned own pane
+PASS actual private card ranks have visible TMP geometry
+PASS no private faces in world or reflected world geometry
+PASS peeking cannot bet or advance turn
+PASS actual visible public/private cards stay in owner viewport four-pane-own-peek view=0 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane-own-peek view=1 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane-own-peek view=2 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane-own-peek view=3 capture=Windows composed framebuffer
+PASS release clears IDs, text, character metadata and rendered geometry
+PASS whole-controller peek belongs only to assigned seat
+PASS controller private ranks have actual visible geometry
+PASS actual visible public/private cards stay in owner viewport controller-peek view=0 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport controller-peek view=1 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport controller-peek view=2 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport controller-peek view=3 capture=Windows composed framebuffer
+PASS left shared-stick click cannot reveal right-stick owner's cards
+PASS right shared-stick click cannot reveal left-stick owner's cards
+PASS unassigned controller cannot peek any hand
+PASS whole-pad right stick moves only its owner camera
+PASS cab stays in stable truck basis while camera turns inside
+PASS shared-stick cameras remain fixed
+MOUSE_DIAG current=16 expected=16 enabled=True yaw=16.8
+PASS one assigned mouse rotates one keyboard camera
+PASS private hand visible before pause test
+PASS pause immediately clears every private display
+PASS pause preserves authoritative hand, actor and pot
+PASS held peek through resume cannot reveal without release
+PASS fresh peek after resume restores only own hand
+PASS actual software source removal hides hands and requires reconnect
+PASS explicit replacement retains seat ownership
+PASS replacement resumes exact existing hand
+PASS actual visible public/private cards stay in owner viewport four-pane view=0 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=1 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=2 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=3 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=0 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=1 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=2 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=3 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=0 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=1 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=2 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=3 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=0 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=1 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=2 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=3 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=0 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=1 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=2 capture=Windows composed framebuffer
+PASS actual visible public/private cards stay in owner viewport four-pane view=3 capture=Windows composed framebuffer
+PASS hot seat shares a controller with explicit private handoff
+PASS cannot peek during private handoff
+PASS handoff acknowledgement does not leak held peek
+PASS fresh hot-seat peek reveals current owner only
+PASS bet passes turn and clears the previous owner's private state immediately
+PASS held old confirmation cannot acknowledge next handoff
+PASS actual visible public/private cards stay in owner viewport hotseat-handoff view=0 capture=Windows composed framebuffer
+PASS simultaneous whole-controller duplicate ownership rejected
+PASS rematch resets deck lifecycle and tournament state
+CHECKS=63 ERRORS=0. Injected sources, saved Unity scene, actual table lifecycle. Capture kind=Windows composed framebuffer; platform=WindowsPlayer. No human/physical-controller or listening claim.

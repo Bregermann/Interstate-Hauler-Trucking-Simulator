@@ -28,6 +28,9 @@ if "LWS.TruckAirHockey.AirHockeyPresentation" in air_scene.read_text(encoding="u
 front_scene = CLEAN / "Assets/TruckSports/Scenes/TruckSports.unity"
 if "Scrap gameplay preview" in front_scene.read_text(encoding="utf-8-sig"):
     paths += ["Assets/TruckSports/Scenes/TruckSports.unity"]
+poker_scene = CLEAN / "Assets/TruckPoker/Scenes/TruckPoker.unity"
+if "LWS.TruckPoker.PokerTableHud" in poker_scene.read_text(encoding="utf-8-sig"):
+    paths += ["Assets/TruckPoker/Scenes/TruckPoker.unity"]
 mine = CLEAN / "Assets/TruckMinefield"
 if (mine / "Materials/West meadow and Vista mountains.asset").is_file():
     for name in ["West", "East"]:

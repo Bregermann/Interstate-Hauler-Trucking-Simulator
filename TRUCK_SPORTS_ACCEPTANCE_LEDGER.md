@@ -6196,11 +6196,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve the Excellent Core Game |
 | Original Request | The game itself is excellent. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section16.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section16.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Additive PokerTableHud/Authoring and safe PokerTablePresence preserve original cards, betting routes, privacy, dealer and core. Public chip/button/actor/pot panels and viewport-owned lower thirds reuse Heat/TMP/DOTween. Report: 2026-10-22-Poker-Table-Presentation.md. |
+| Automated Verification | Native EditMode 3/0, PlayMode 3/0 (new presence/reset plus two existing dealer regressions), 505 original core assertions. Exact Windows e4ab7c47: 123 presentation/full-tournament and 63 independent privacy/input checks, zero failures. All 9,482 original scene documents retained; original core/cards/dealer unchanged. Actual 720p/1080p/ultrawide/4:3 images inspected. Evidence/2026-10-22-Poker-Table. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | No implementation blocker in tested scope. Human playtest, physical-controller, listening and isolated GPU-performance acceptance remain unperformed; no human-verified claim. |
 
 ### HPR-16-2 — PS2 World Series of Poker-Inspired UI
 
@@ -6210,11 +6210,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | PS2 World Series of Poker-Inspired UI |
 | Original Request | Research visual references from the PlayStation 2-era World Series of Poker games, particularly World Series of Poker and World Series of Poker: Tournament of Champions. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section16.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section16.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Additive PokerTableHud/Authoring and safe PokerTablePresence preserve original cards, betting routes, privacy, dealer and core. Public chip/button/actor/pot panels and viewport-owned lower thirds reuse Heat/TMP/DOTween. Report: 2026-10-22-Poker-Table-Presentation.md. |
+| Automated Verification | Native EditMode 3/0, PlayMode 3/0 (new presence/reset plus two existing dealer regressions), 505 original core assertions. Exact Windows e4ab7c47: 123 presentation/full-tournament and 63 independent privacy/input checks, zero failures. All 9,482 original scene documents retained; original core/cards/dealer unchanged. Actual 720p/1080p/ultrawide/4:3 images inspected. Evidence/2026-10-22-Poker-Table. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | No implementation blocker in tested scope. Human playtest, physical-controller, listening and isolated GPU-performance acceptance remain unperformed; no human-verified claim. |
 
 ### HPR-16-3 — Animate AI Trucks
 
@@ -6224,11 +6224,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Animate AI Trucks |
 | Original Request | The AI trucks are completely stiff during poker. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section16.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section16.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Additive PokerTableHud/Authoring and safe PokerTablePresence preserve original cards, betting routes, privacy, dealer and core. Public chip/button/actor/pot panels and viewport-owned lower thirds reuse Heat/TMP/DOTween. Report: 2026-10-22-Poker-Table-Presentation.md. |
+| Automated Verification | Native EditMode 3/0, PlayMode 3/0 (new presence/reset plus two existing dealer regressions), 505 original core assertions. Exact Windows e4ab7c47: 123 presentation/full-tournament and 63 independent privacy/input checks, zero failures. All 9,482 original scene documents retained; original core/cards/dealer unchanged. Actual 720p/1080p/ultrawide/4:3 images inspected. Evidence/2026-10-22-Poker-Table. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | No implementation blocker in tested scope. Human playtest, physical-controller, listening and isolated GPU-performance acceptance remain unperformed; no human-verified claim. |
 
 ### HPR-16-4 — Preserve Previous Poker Presentation Features
 
@@ -6238,11 +6238,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Previous Poker Presentation Features |
 | Original Request | Maintain: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section16.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section16.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Additive PokerTableHud/Authoring and safe PokerTablePresence preserve original cards, betting routes, privacy, dealer and core. Public chip/button/actor/pot panels and viewport-owned lower thirds reuse Heat/TMP/DOTween. Report: 2026-10-22-Poker-Table-Presentation.md. |
+| Automated Verification | Native EditMode 3/0, PlayMode 3/0 (new presence/reset plus two existing dealer regressions), 505 original core assertions. Exact Windows e4ab7c47: 123 presentation/full-tournament and 63 independent privacy/input checks, zero failures. All 9,482 original scene documents retained; original core/cards/dealer unchanged. Actual 720p/1080p/ultrawide/4:3 images inspected. Evidence/2026-10-22-Poker-Table. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | No implementation blocker in tested scope. Human playtest, physical-controller, listening and isolated GPU-performance acceptance remain unperformed; no human-verified claim. |
 
 ### HPR-17-1 — Replace Placeholder Explosion VFX
 

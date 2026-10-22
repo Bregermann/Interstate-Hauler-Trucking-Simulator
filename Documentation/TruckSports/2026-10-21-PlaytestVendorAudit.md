@@ -416,3 +416,12 @@ RELEVANT ASSETS NOT USED: No replacement physics, camera, input or artwork-gener
 CUSTOM SYSTEMS CREATED: Read-only presentation adapter/display clock, explicit saved-UI/category authoring and focused verification.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+### Poker table presentation
+
+VENDOR ASSETS AUDITED: Heat buttons/fonts, DOTween public API, existing original card/vector-suit renderers, private panes, source handlers, mobile dealer, restaurant and broadcast presentation.
+VENDOR ASSETS USED: Existing Heat/uGUI/TMP, original portrait/font/rounded plates, DOTween public gaze interpolation and original action/award/dealer animation.
+RELEVANT ASSETS NOT USED: No replacement poker engine, card renderer, input framework, physical controller or new artwork is required.
+CUSTOM SYSTEMS CREATED: Public-only read-only HUD/award captions, safe ambient visual pivots, explicit idempotent authoring and targeted tests/probe.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
