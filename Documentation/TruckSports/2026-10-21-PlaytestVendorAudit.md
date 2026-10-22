@@ -439,3 +439,17 @@ CUSTOM SYSTEMS CREATED: Small visual adapters, explicit idempotent authoring, ow
 VENDOR SOURCE MODIFIED: NO.
 
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+### Dock finished venue and stable bubbles
+
+VENDOR ASSETS AUDITED: Existing UTS clothed female/male prefabs, exact generic Bip01 rigs and original controller clips; Construction Props timber, MegaCity fences/building, installed Weather Maker normals and existing shared water/reflection/URP integration, Heat/TMP/DOTween, NWH, existing FieldGoalCrowd and SportsAudienceAuthoring.
+
+VENDOR ASSETS USED: Eight owned UTS clothed models with their compatible idle/dance/applause clips and textures; Construction Props and MegaCity art; existing original logo, Heat/TMP/uGUI, DOTween water/fades, shared water spray/ripple/audio/replay, Unity ReflectionProbe/BakeMesh and original NWH driving.
+
+RELEVANT ASSETS NOT USED: UTS traffic brains/ragdoll/nav components are unnecessary for protected render-only spectators. FieldGoal run-on antics are not introduced into Dock scoring. No replacement water/vehicle/weather/input engine or new logo is needed; the existing URP-compatible normal/flow and shared interaction systems are reused.
+
+CUSTOM SYSTEMS CREATED: One bounded runtime pose-bake/binding adapter over existing crowd reactions, explicit saved venue authoring, focused bubble anchor filter and targeted diagnostics/tests. Pool/enclosure semantics remain LWS-owned.
+
+VENDOR SOURCE MODIFIED: NO.
+
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

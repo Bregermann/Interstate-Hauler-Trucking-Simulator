@@ -2,7 +2,7 @@
 
 ## Current state — October21/22 continuation
 
-Accepted Windows executable: Builds/TruckSports/TruckSports.exe. Cheese HPR-17 full545-file payload 3769c3a1f5e081a611c37b55ece12d808bacb5a70b351d3f9884d9ca7777a794, managed 98f54b470a7b678fa91b878a676700e38e21ec3ac4e8e1317716137fb5b7200a;60 scenes/227 exact owned source inputs. Eight native tests and 427/0 exact-payload Windows checks; actual full physical AI matches, repeated grounded starts, forty camera/input layouts, owned animated cats and layered VFX. Human/hardware/listening and isolated profiling acceptance not claimed.
+Accepted Windows executable: Builds/TruckSports/TruckSports.exe. Dock HPR-18 full545-file payload 5b12d4c0bab3bd7f2fe17a68e80304078fd1dfcefc257dc4bade9f4a8888e727, managed f8654bd4e41dc1ac7da9dab5dc5b245542e930a7b2ea3449380fe2849972ff6d;60 scenes/235 exact scoped source inputs. Four native tests and 38/0 exact Windows checks, complete mixed-source/eight-AI matches,464-person owned crowd and finished pool. Previous Cheese427/0 build retained in Recovery. Human/hardware/listening and isolated profiling acceptance not claimed.
 
 Parking numbered bays5197c076,Hockey/Parking36f50402 and Snake/Wife5c0a7c03 deliveries remain pushed to both authorized branches with their own exact build identities and retained failed candidates.925unrelated pending files/private planner remain protected.
 
@@ -1027,3 +1027,7 @@ HPR-16-1 through HPR-16-4 now retain the approved original engine/cards/dealer w
 ## October22 — Cheese presentation accepted
 
 See 2026-10-22-Cheese-Presentation.md and its recorded evidence. Original course/physics/scoring/boost preserved, licensed intake remains private, all925 unrelated pending files retained. Next active area: HPR-18 Dock Diving; other open HPR/GBC entries remain open. No entire-backlog completion claim.
+
+## October22 — Dock venue accepted
+
+See2026-10-22-Dock-Venue-Repair.md and its actual native/Windows evidence. Preserve all925 unrelated files, original gameplay and all10672 original scene documents. Next active area: HPR-19 Keepaway and remaining current HPR/GBC entries. No entire-backlog completion claim.

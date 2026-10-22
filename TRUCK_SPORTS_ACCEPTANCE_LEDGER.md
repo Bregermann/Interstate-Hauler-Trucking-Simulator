@@ -6308,11 +6308,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Denser, More Varied Crowds |
 | Original Request | Populate the stands substantially more densely. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | DockAudiencePresentation.cs, DockVenueRepairAuthoring.cs and the saved validation scene: 464 placements, eight inspected clothed UTS variants (six female/two male), 24 live rigs, sixteen bounded runtime poses for 440 distant fans, shared existing FieldGoalCrowd reactions and four render-only novelty trucks. Original 48 identical spectators retained inactive. No new raw vendor geometry published. |
+| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
+| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
+| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
 
 ### HPR-18-2 — Enclose and Complete the Pool
 
@@ -6322,11 +6322,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Enclose and Complete the Pool |
 | Original Request | The pool has visible unfinished areas, particularly toward the back. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Saved far pool wall/coping, rear grandstands, owned fence enclosure, pool administration building and existing original sport-logo signage. Existing launch/side-wall/first-water trigger geometry retained. Existing top-less wall mesh prevents overlapping coping faces. |
+| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
+| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
+| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
 
 ### HPR-18-3 — Replace Placeholder Run-Up Art
 
@@ -6336,11 +6336,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Replace Placeholder Run-Up Art |
 | Original Request | The approach section should look like a finished sporting venue. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Original primitive approach renderer disabled while retaining its original collider; installed Construction Props timber models and MegaCity railings/cladding finish the run-up. New environment assets remain outside the existing drive/water envelopes. |
+| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
+| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
+| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
 
 ### HPR-18-4 — Animated Water and Splashes
 
@@ -6350,11 +6350,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Animated Water and Splashes |
 | Original Request | Find and reuse appropriate existing water assets. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Audited static URP pool had no animation component/probe, while existing shared SportsWaterInteraction already supplied eight sprays and 48 rings. Add the existing FishingWaterFlow/DOTween material adapter and one bounded 128px reflection probe; preserve original NWH water/first-contact scoring and shared spray/ripple/audio. |
+| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
+| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
+| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
 
 ### HPR-18-5 — Stabilize Airborne Speech Bubbles
 
@@ -6364,11 +6364,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Stabilize Airborne Speech Bubbles |
 | Original Request | NEW REQUIREMENT: The speech/text bubbles shake excessively inside their small display area. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section18.5. |
 | Acceptance Criteria | All observable requirements and acceptance in source section18.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | DockSlang now follows the displayed truck transform after composition with a bounded configurable tracking filter and snap-on-owner/viewport/camera-cut; original owner, Canadian phrases, DOTween fades/scale, one-per-launch and pause/reset semantics preserved. Baseline timing measurement passed raw 5.060px RMS jitter directly into captions; filtered real native flight measured 0.010px RMS (raw target 4.820px), with intentional modest tracking lag. Camera-order mismatch was not established by the baseline. |
+| Automated Verification | Two EditMode and two PlayMode tests passed; native actual pose/UV/physics/jitter checks; exact-payload Windows 38/0, complete mixed-source and eight-AI matches, reconnect/rematch, actual images and cleanup. See2026-10-22-Dock-Venue-Repair.md and Evidence/2026-10-22-Dock-Venue. |
+| Human Verification | No new human/hardware/listening acceptance; original October21 feedback retained and automated observations recorded separately. |
+| Remaining Work | Human playtest, physical-controller/listening acceptance and isolated CPU/GPU benchmark remain unperformed. No simultaneous split-screen mode was added to this existing turn-based sport. |
 
 ### HPR-19-1 — Triple the Playable Arena Area
 

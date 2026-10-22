@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 15:30:15Z" end-time="2026-10-22 15:30:26Z" duration="11.4594554">
+  <test-suite type="TestSuite" id="1373" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="262" result="Passed" start-time="2026-10-22 15:30:15Z" end-time="2026-10-22 15:30:26Z" duration="11.459455" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1257" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="95" result="Passed" start-time="2026-10-22 15:30:15Z" end-time="2026-10-22 15:30:26Z" duration="11.443864" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="51392" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1153" name="DockBubbleTimingTraceTests" fullname="DockBubbleTimingTraceTests" classname="DockBubbleTimingTraceTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 15:30:15Z" end-time="2026-10-22 15:30:20Z" duration="4.948446" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1154" name="TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" fullname="DockBubbleTimingTraceTests.TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" methodname="TraceActualFlightBubbleAfterFinalBroadcastCameraWithoutChangingGameRules" classname="DockBubbleTimingTraceTests" runstate="Runnable" seed="1614618316" result="Passed" start-time="2026-10-22 15:30:15Z" end-time="2026-10-22 15:30:20Z" duration="4.934401" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+samples=120 afterCameraMeanError=10.744 afterCameraMaxError=21.829 actualJerkRms=0.044 postCameraTargetJerkRms=10.748
+Actual native flight; no score, camera or physics modification.
+
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1155" name="DockVenueLifecycleTests" fullname="DockVenueLifecycleTests" classname="DockVenueLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-22 15:30:20Z" end-time="2026-10-22 15:30:26Z" duration="6.489557" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1156" name="RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" fullname="DockVenueLifecycleTests.RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" methodname="RealCrowdPosesAndWaterAnimatePauseAndReuseAcrossRematch" classname="DockVenueLifecycleTests" runstate="Runnable" seed="1945337827" result="Passed" start-time="2026-10-22 15:30:20Z" end-time="2026-10-22 15:30:26Z" duration="6.480715" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

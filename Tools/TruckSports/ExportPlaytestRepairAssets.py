@@ -79,6 +79,15 @@ paths += ["Assets/TruckTrailerPlug/Models/" + name + suffix for name in ["Open Q
 paths += ["Assets/TruckSkyTow/Art/" + name + part + suffix for name in ["Arctic standard gate", "Arctic precision gold gate"] for part in ["", " body", " inset"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Materials/Arctic gate snow chips.mat" + suffix for suffix in ["", ".meta"]]
 paths += [str(p.relative_to(CLEAN)).replace("\\", "/") for p in (CLEAN / "Assets/TruckKeepaway/Materials").glob("Expanded *") if p.is_file()]
+dock_presentation = CLEAN / "Assets/TruckDockDiving/Presentation"
+if dock_presentation.is_dir():
+    paths += ["Assets/TruckDockDiving/Scenes/TruckDockDiving.unity"]
+    paths += [p.relative_to(CLEAN).as_posix() for p in dock_presentation.rglob("*") if p.is_file()]
+    if not (ROOT / "Assets/TruckDockDiving/Presentation.meta").exists():
+        paths += ["Assets/TruckDockDiving/Presentation.meta"]
+    # These fitted owned timber/fence/building material copies are new to this
+    # venue. Leave all existing user-authored Dock materials unchanged.
+    paths += [p.relative_to(CLEAN).as_posix() for p in (CLEAN / "Assets/TruckDockDiving/Materials").glob("Imported *") if p.is_file() and not (ROOT / p.relative_to(CLEAN)).exists()]
 records = []
 for relative in paths:
     assert relative not in baseline, "Preserve unrelated pending work: " + relative
