@@ -21,6 +21,14 @@ paths += ["Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity"]
 bay_material = "Assets/TruckMusicalParking/Materials/Reflective bay paint.mat"
 if (CLEAN / bay_material).is_file():
     paths += [bay_material, bay_material + ".meta"]
+bungee = CLEAN / "Assets/TruckBungeeDemolition"
+if (bungee / "Prefabs/Owned city demolition annex v2.prefab").is_file():
+    paths += ["Assets/TruckBungeeDemolition/Scenes/TruckBungeeDemolition.unity"]
+    for name in ["Owned city demolition annex v2", "Owned hotel demolition tower v2"]:
+        paths += ["Assets/TruckBungeeDemolition/Prefabs/" + name + ".prefab" + suffix for suffix in ["", ".meta"]]
+    paths += ["Assets/TruckBungeeDemolition/Prefabs/Owned city fractures v2.meta"]
+    paths += [p.relative_to(CLEAN).as_posix() for p in (bungee / "Prefabs/Owned city fractures v2").glob("*.prefab*") if p.is_file()]
+    paths += [p.relative_to(CLEAN).as_posix() for p in (bungee / "Models").glob("Precut v2 *.asset*") if p.is_file()]
 snake_guide = CLEAN / "Assets/TruckSnake/Scripts/SnakePickupGuidance.cs.meta"
 if snake_guide.is_file():
     guid = re.search(r"^guid: ([a-f0-9]+)", snake_guide.read_text(), re.M).group(1)

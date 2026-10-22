@@ -11,9 +11,27 @@ public sealed class BungeeBay:MonoBehaviour {
  public float restLength=48,springStrength=180,damping=12,pumpAcceleration=5.5f,tugCooldown=3.5f;
  public int Score{get;private set;}public int Maximum{get;private set;}public int Collapses{get;private set;}public int Recoveries{get;private set;}public float Cooldown{get;private set;}public float Extension{get;private set;}public float RecoveryTime{get;private set;}
  public Vector3 IncomingVelocity{get;private set;}public Vector3 IncomingAngular{get;private set;}public Vector3 IncomingCenter{get;private set;}
+ public float TransferredImpactImpulse{get;private set;}
+ bool transferringImpact;Vector3 impactPoint,impactVelocity;float remainingImpactImpulse;
+ // Preserve a bounded share of real contact momentum when the vendor replaces
+ // a static structural module with dynamic fragments. Finale/support-only
+ // releases have no impact context and receive no artificial blast.
+ internal void DamageFromImpact(CollapserPrefrag core,float damage,Vector3 point,Vector3 velocity,float mass)
+ {
+  transferringImpact=true;impactPoint=point;impactVelocity=Vector3.ClampMagnitude(velocity*.35f,12);remainingImpactImpulse=Mathf.Min(150,Mathf.Max(0,mass)*velocity.magnitude*.5f);
+  try{core.ReceiveDamage(damage);}finally{transferringImpact=false;remainingImpactImpulse=0;}
+ }
+ internal void TransferImpactTo(Rigidbody body)
+ {
+  if(!transferringImpact||!AcceptScore||remainingImpactImpulse<=0)return;
+  float distance=Vector3.Distance(body.worldCenterOfMass,impactPoint);float weight=Mathf.Clamp01(1-distance/12);
+  var impulse=Vector3.ClampMagnitude(impactVelocity*body.mass*weight,remainingImpactImpulse);if(impulse.sqrMagnitude<.0001f)return;
+  remainingImpactImpulse-=impulse.magnitude;TransferredImpactImpulse+=impulse.magnitude;
+  body.AddForceAtPosition(impulse,body.worldCenterOfMass+Vector3.ClampMagnitude(impactPoint-body.worldCenterOfMass,2),ForceMode.Impulse);
+ }
  public bool AcceptScore=>match!=null&&match.Scoring;public bool RopeToolkitIntegrated=>false;
  public readonly List<BungeeDebris> debris=new List<BungeeDebris>(64);public BungeeModule[] modules=Array.Empty<BungeeModule>();GameObject tower,expansion;float stuck,tug;Vector3 prior;bool released;
- public void ResetBay(){Clear();dust?.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);Score=Maximum=Collapses=Recoveries=0;Cooldown=RecoveryTime=stuck=tug=0;released=false;tower=Instantiate(towerPrefab,towerMount.position,towerMount.rotation,transform);if(expansionPrefab!=null){expansion=Instantiate(expansionPrefab,transform);expansion.transform.localPosition=Vector3.zero;expansion.transform.localRotation=Quaternion.identity;}var pieces=new List<BungeeModule>(tower.GetComponentsInChildren<BungeeModule>(true));if(expansion!=null)pieces.AddRange(expansion.GetComponentsInChildren<BungeeModule>(true));modules=pieces.ToArray();foreach(var m in modules){m.bay=this;Maximum+=m.budget;}truck.Prepare(craneAnchor.position+new Vector3(-7,-3,-10),Quaternion.Euler(0,35,0),false);truck.body.isKinematic=true;truck.body.maxLinearVelocity=40;truck.body.maxAngularVelocity=7;spring.maxDistance=restLength;spring.minDistance=0;spring.spring=springStrength;spring.damper=damping;prior=truck.body.position;}
+ public void ResetBay(){Clear();transferringImpact=false;remainingImpactImpulse=TransferredImpactImpulse=0;dust?.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);Score=Maximum=Collapses=Recoveries=0;Cooldown=RecoveryTime=stuck=tug=0;released=false;tower=Instantiate(towerPrefab,towerMount.position,towerMount.rotation,transform);if(expansionPrefab!=null){expansion=Instantiate(expansionPrefab,transform);expansion.transform.localPosition=Vector3.zero;expansion.transform.localRotation=Quaternion.identity;}var pieces=new List<BungeeModule>(tower.GetComponentsInChildren<BungeeModule>(true));if(expansion!=null)pieces.AddRange(expansion.GetComponentsInChildren<BungeeModule>(true));modules=pieces.ToArray();foreach(var m in modules){m.bay=this;Maximum+=m.budget;}truck.Prepare(craneAnchor.position+new Vector3(-7,-3,-10),Quaternion.Euler(0,35,0),false);truck.body.isKinematic=true;truck.body.maxLinearVelocity=40;truck.body.maxAngularVelocity=7;spring.maxDistance=restLength;spring.minDistance=0;spring.spring=springStrength;spring.damper=damping;prior=truck.body.position;}
  public void Release(){released=true;truck.body.isKinematic=false;truck.body.WakeUp();}
  void FixedUpdate(){if(truck==null||truck.body==null)return;var b=truck.body;IncomingVelocity=b.linearVelocity;IncomingAngular=b.angularVelocity;IncomingCenter=b.worldCenterOfMass;}
  public void Tick(Vector2 input,bool action,float dt){Cooldown=Mathf.Max(0,Cooldown-dt);if(!released)return;if(RecoveryTime>0)return;

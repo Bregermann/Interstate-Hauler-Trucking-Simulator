@@ -369,3 +369,13 @@ RELEVANT ASSETS NOT USED: vertical RoadProps signage is unnecessary for readable
 CUSTOM SYSTEMS CREATED: small read-only ParkingBayAppearance adapter,explicit additive editor authoring and focused verification fixture.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+### Bungee city buildings and contact momentum (in progress)
+
+VENDOR ASSETS AUDITED: Assets/CoreCollapse/Core-Collapse.pdf baseline;Scripts/Structural/CollapserPrefrag.cs,Collapser.cs,Support.cs,Pushable.cs;EzySlice/SlicerExtensions.cs and SlicedHull.cs;JC_LP_MegaCity building prefab bounds/materials;existing Bungee module/support/force/drop/debris lifecycle.
+VENDOR ASSETS USED: Core-Collapse prefractured damage/support APIs and EzySlice offline cutting;JC_LP_MegaCity House_06_V1,Hotel_01,House_04_V1 models and authored materials;existing NWH trucks,SpringJoint/cable,Heat UI,Cinemachine cameras and installed audio.
+RELEVANT ASSETS NOT USED: Core-Collapse procedural runtime slicing is unnecessary when pre-cut owned model assets avoid runtime slicing cost. Pushable models a radial push and initializes on Start;this correction hands off actual incoming contact momentum during prefab replacement in Awake. Existing vendor damage/fracture remains authoritative. Rope Toolkit remains unavailable;established explicit fallback retained. No new rope/physics framework.
+CUSTOM SYSTEMS CREATED: explicit sport-owned model authoring/preview and verification fixtures;small bounded contact-context handoff between existing Bungee adapters. Repeated middle storeys preserve facade proportions.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO;vendor slicing,damage,support and prefab fracture remain authoritative. LWS owns contact attribution,momentum handoff,scoring and lifecycle.

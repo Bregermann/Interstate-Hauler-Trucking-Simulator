@@ -6868,11 +6868,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Bungee Destruction |
 | Original Request | Master directive P1 item14 and final directive: building replacements and responsiveness; actual building destruction. Preserve established swing controls. |
 | Acceptance Criteria | Appropriate owned buildings physically break on valid impacts; responsive existing controls; full attempts, reset and rematch preserve them. |
-| Status | PARTIAL |
-| Implementation Evidence | Existing Bungee scene/assets to inspect. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | New master directive requests this correction. |
-| Remaining Work | Audit current destruction, reproduce and repair without rebuilding working swing controls. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | BungeeBuildingRepairAuthoring explicitly authors owned city/hotel v2 variants,11precut mesh assets and45matching fracture prefabs using Core-Collapse EzySlice. Repeated middle storeys preserve entry/roof and natural window proportions. Original85module structural graphs,budgets,HP,colliders,swing forces and camera profile retained. BungeeModule/Bay/Debris hand off bounded actual contact momentum;no artificial impulse for non-impact/finale releases. |
+| Automated Verification | EditMode1/0 structural comparison;PlayMode1/0 actual contact,falling textured rubble,once-only score,existing pump/reel response and resets. Exact Windows f70add93:12/0 full four-AI three-round match,27/0 physical drop/support/finale checks,38/0 software input/reconnect/cross-bay/four-view workload.77total/0;720p/1080p/4:3/ultrawide camera evidence.60real-second four-camera workload6420frames/25680automatic renders,mean9.351ms,p9512.524ms,GC0zero.3210scene documents preserved;only4bay prefab-reference documents changed. Evidence/2026-10-22-Bungee-City/acceptance.json. |
+| Human Verification | Actual Windows captures inspected by agent. No human/physical-controller/listening acceptance inferred. |
+| Remaining Work | No observed failure in exercised building/contact/control/match/rematch acceptance. Human balance/visual approval,physical hardware,listening and isolated GPU certification remain unperformed. Other active HPR/GBC requirements remain open. |
 
 ### GBC sport-by-sport camera acceptance
 
