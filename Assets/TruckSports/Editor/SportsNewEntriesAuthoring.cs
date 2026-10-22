@@ -47,9 +47,10 @@ namespace LWS.TruckSports.Editor
             Add(front,"jousting","JOUSTING","TRUCK JOUSTING","Two medieval semi-trucks. Aim the real lance. Strike the shield. Brace for impact.","TruckJousting");
             Add(front,"tetherball","TETHERBALL","TRUCK TETHERBALL","Two trucks. One huge tetherball. Strike, reverse and wind the real cable.","TruckTetherball");
             Add(front,"floorislava","FLOOR IS LAVA","TRUCK FLOOR IS LAVA","Jump. Shove. Escape. Finite collapsing platforms above a giant volcano.","TruckFloorIsLava");
+            SportsScrapHeapAuthoring.Apply(front);
             int count = front.catalogue.cards.Length;
             front.pages[0].transform.Find("Collection").GetComponent<TMP_Text>().text = count + " PLAYABLE TRUCK SPORTS. ONE COLLECTION.\nLocal humans, shared controllers and autonomous AI.";
-            front.pages[1].transform.Find("Subtitle").GetComponent<TMP_Text>().text = count + " playable entries · Offline local play · Experimental Wallball in Scrap Heap";
+            front.pages[1].transform.Find("Subtitle").GetComponent<TMP_Text>().text = count + " playable entries · Offline local play · Additional games in Scrap Heap";
             front.catalogue.Step(0);
             if(System.IO.Directory.Exists("Assets/TruckSports/Art/Previews"))SportsMenuArtAuthoring.InstallInto(front);
         }

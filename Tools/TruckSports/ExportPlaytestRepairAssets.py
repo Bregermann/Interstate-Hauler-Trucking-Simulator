@@ -22,6 +22,12 @@ if "LWS.TruckBilliards.BilliardsHudPresentation" in billiards_scene.read_text(en
 bowling_scene = CLEAN / "Assets/TruckBowling/Scenes/TruckBowling.unity"
 if "LWS.TruckBowling.BowlingHudPresentation" in bowling_scene.read_text(encoding="utf-8-sig"):
     paths += ["Assets/TruckBowling/Scenes/TruckBowling.unity"]
+air_scene = CLEAN / "Assets/TruckAirHockey/Scenes/TruckAirHockey.unity"
+if "LWS.TruckAirHockey.AirHockeyPresentation" in air_scene.read_text(encoding="utf-8-sig"):
+    paths += ["Assets/TruckAirHockey/Scenes/TruckAirHockey.unity"]
+front_scene = CLEAN / "Assets/TruckSports/Scenes/TruckSports.unity"
+if "Scrap gameplay preview" in front_scene.read_text(encoding="utf-8-sig"):
+    paths += ["Assets/TruckSports/Scenes/TruckSports.unity"]
 mine = CLEAN / "Assets/TruckMinefield"
 if (mine / "Materials/West meadow and Vista mountains.asset").is_file():
     for name in ["West", "East"]:

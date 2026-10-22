@@ -6168,11 +6168,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | TRUCK AIR HOCKEY |
 | Original Request | Perform a substantial release-quality menu and HUD redesign. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section14. |
 | Acceptance Criteria | All observable requirements and acceptance in source section14; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | AirHockeyPresentationAuthoring adds saved original-logo setup, independent driver cards, a compact live score/play clock, server/goal feedback, paused scores and paired graphical results. Existing controls, menu buttons, focus/reconnect routes and first-to-seven physics/rules are retained. MatchSeconds is a read-only display statistic accumulated only during existing Live physics steps and reset by StartMatch; it never ends or changes a match. |
+| Automated Verification | Native EditMode 2/0, PlayMode 2/0 and 26 existing Air Hockey rule assertions. Exact Windows 040a0a1d: 63/0, ordinary physical AI match 3–7, six software-input configurations, four resolutions, goal/pause/results/rematch, both preserved Scrap launches and Back. Scene-document preservation and repeated authoring checked. Evidence/2026-10-22-Air-Hockey-Scrap. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | No implementation blocker in tested scope. Human playtesting, physical controllers and listening acceptance remain unperformed; not represented as human-verified. |
 
 ### HPR-15 — SCRAP HEAP
 
@@ -6182,11 +6182,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | SCRAP HEAP |
 | Original Request | Move these two sports into the project's existing Scrap Heap category: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section15. |
 | Acceptance Criteria | All observable requirements and acceptance in source section15; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | SportsScrapHeapAuthoring reparents the existing Log Rolling and Trampoline Dodgeball cards into the existing Scrap Heap page alongside Wallball. Main catalogue references exclude all three Scrap cards. Original scene/action/PNG assets remain; existing logos and gameplay previews are reused. Explicit menu regeneration reuses preserved card identities and reapplies curation, while normal builds never regenerate the menu. |
+| Automated Verification | Native EditMode 2/0, PlayMode 2/0 and 26 existing Air Hockey rule assertions. Exact Windows 040a0a1d: 63/0, ordinary physical AI match 3–7, six software-input configurations, four resolutions, goal/pause/results/rematch, both preserved Scrap launches and Back. Scene-document preservation and repeated authoring checked. Evidence/2026-10-22-Air-Hockey-Scrap. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | No implementation blocker in tested scope. Human playtesting, physical controllers and listening acceptance remain unperformed; not represented as human-verified. |
 
 ### HPR-16-1 — Preserve the Excellent Core Game
 

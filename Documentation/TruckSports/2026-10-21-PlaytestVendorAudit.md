@@ -407,3 +407,12 @@ RELEVANT ASSETS NOT USED: Replacement environments, physics and cameras are outs
 CUSTOM SYSTEMS CREATED: Read-only lane HUD adapter, explicit saved-UI authoring and targeted verification. Existing BowlingMenus remains the refresh/lifecycle authority.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+### Air Hockey and Scrap Heap
+
+VENDOR ASSETS AUDITED: Existing Heat controls/fonts, DOTween, broadcast theme/portrait/rounded plates, source/focus/reconnect handlers and catalogue.
+VENDOR ASSETS USED: Existing Heat/uGUI/TMP UI, DOTween, shared portrait/rounded plates and original PNG logos/gameplay screenshots.
+RELEVANT ASSETS NOT USED: No replacement physics, camera, input or artwork-generation framework required.
+CUSTOM SYSTEMS CREATED: Read-only presentation adapter/display clock, explicit saved-UI/category authoring and focused verification.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

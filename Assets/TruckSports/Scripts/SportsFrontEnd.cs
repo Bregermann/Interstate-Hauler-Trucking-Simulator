@@ -3,7 +3,23 @@ using UnityEngine.InputSystem;
 namespace LWS.TruckSports {
 public sealed class SportsFrontEnd:SportsMenuView {
  public SportsCatalogue catalogue;
- public override void Focus(){base.Focus();if(Page!=1||pages.Length<2)return;var items=pages[1].GetComponentsInChildren<UnityEngine.UI.Selectable>();foreach(var item in items){var navigation=item.navigation;navigation.selectOnUp=Neighbour(item,items,Vector2.up)??navigation.selectOnUp;navigation.selectOnDown=Neighbour(item,items,Vector2.down)??navigation.selectOnDown;navigation.selectOnLeft=Neighbour(item,items,Vector2.left)??navigation.selectOnLeft;navigation.selectOnRight=Neighbour(item,items,Vector2.right)??navigation.selectOnRight;item.navigation=navigation;var heat=item.GetComponent<Michsky.UI.Heat.ButtonManager>();if(heat!=null){heat.selectOnUp=navigation.selectOnUp?.gameObject;heat.selectOnDown=navigation.selectOnDown?.gameObject;heat.selectOnLeft=navigation.selectOnLeft?.gameObject;heat.selectOnRight=navigation.selectOnRight?.gameObject;}}
+ void FocusScrap()
+ {
+  var actions=pages[4].GetComponentsInChildren<SportsMenuAction>();
+  var cards=System.Array.FindAll(actions,a=>a.action=="wallball"||a.action=="logrolling"||a.action=="dodgeball");
+  System.Array.Sort(cards,(a,b)=>a.transform.position.x.CompareTo(b.transform.position.x));
+  var back=System.Array.Find(actions,a=>a.action=="scrapback");if(cards.Length==0||back==null)return;
+  void Link(UnityEngine.UI.Selectable item,UnityEngine.UI.Selectable up,UnityEngine.UI.Selectable down,UnityEngine.UI.Selectable left,UnityEngine.UI.Selectable right)
+  {
+   item.navigation=new UnityEngine.UI.Navigation{mode=UnityEngine.UI.Navigation.Mode.Explicit,selectOnUp=up,selectOnDown=down,selectOnLeft=left,selectOnRight=right};
+   var heat=item.GetComponent<Michsky.UI.Heat.ButtonManager>();if(heat!=null){heat.navigationMode=UnityEngine.UI.Navigation.Mode.Explicit;heat.selectOnUp=up.gameObject;heat.selectOnDown=down.gameObject;heat.selectOnLeft=left.gameObject;heat.selectOnRight=right.gameObject;}
+  }
+  var returnButton=back.GetComponent<UnityEngine.UI.Selectable>();
+  for(int i=0;i<cards.Length;i++){var button=cards[i].GetComponent<UnityEngine.UI.Selectable>();Link(button,button,returnButton,cards[(i+cards.Length-1)%cards.Length].GetComponent<UnityEngine.UI.Selectable>(),cards[(i+1)%cards.Length].GetComponent<UnityEngine.UI.Selectable>());}
+  var first=cards[0].GetComponent<UnityEngine.UI.Selectable>();Link(returnButton,cards[cards.Length/2].GetComponent<UnityEngine.UI.Selectable>(),first,first,cards[cards.Length-1].GetComponent<UnityEngine.UI.Selectable>());
+  if(UnityEngine.EventSystems.EventSystem.current!=null)UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(first.gameObject);
+ }
+ public override void Focus(){base.Focus();if(Page==4){FocusScrap();return;}if(Page!=1||pages.Length<2)return;var items=pages[1].GetComponentsInChildren<UnityEngine.UI.Selectable>();foreach(var item in items){var navigation=item.navigation;navigation.selectOnUp=Neighbour(item,items,Vector2.up)??navigation.selectOnUp;navigation.selectOnDown=Neighbour(item,items,Vector2.down)??navigation.selectOnDown;navigation.selectOnLeft=Neighbour(item,items,Vector2.left)??navigation.selectOnLeft;navigation.selectOnRight=Neighbour(item,items,Vector2.right)??navigation.selectOnRight;item.navigation=navigation;var heat=item.GetComponent<Michsky.UI.Heat.ButtonManager>();if(heat!=null){heat.selectOnUp=navigation.selectOnUp?.gameObject;heat.selectOnDown=navigation.selectOnDown?.gameObject;heat.selectOnLeft=navigation.selectOnLeft?.gameObject;heat.selectOnRight=navigation.selectOnRight?.gameObject;}}
   // The legacy hierarchy lists Back before the catalogue. Page changes should
   // enter the newly visible sport grid and update its actual showcase.
   if(catalogue!=null&&UnityEngine.EventSystems.EventSystem.current!=null)foreach(var card in catalogue.cards){if(!card.activeInHierarchy)continue;var choice=card.GetComponentInChildren<SportsCatalogueChoice>();if(choice!=null)UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(choice.gameObject);break;}

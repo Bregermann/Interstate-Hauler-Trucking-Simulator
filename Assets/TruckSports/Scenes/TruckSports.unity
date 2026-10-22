@@ -6365,7 +6365,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &120585514
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6384,12 +6384,14 @@ RectTransform:
   - {fileID: 1680597396}
   - {fileID: 1268400648}
   - {fileID: 325720010}
-  m_Father: {fileID: 515381630}
+  - {fileID: 641831127}
+  - {fileID: 738520401}
+  m_Father: {fileID: 1093402887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -188, y: 71}
-  m_SizeDelta: {x: 324, y: 138}
+  m_AnchoredPosition: {x: 0, y: 20}
+  m_SizeDelta: {x: 430, y: 430}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &120585515
 MonoBehaviour:
@@ -6403,7 +6405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 928ec12a0096f4f4a89795f99f33e742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
-  cut: 18
+  cut: 16
   accent: 1
 --- !u!114 &120585516
 MonoBehaviour:
@@ -6419,7 +6421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.025, g: 0.035, b: 0.065, a: 0.94}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -9605,6 +9607,81 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &183138917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 183138918}
+  - component: {fileID: 183138920}
+  - component: {fileID: 183138919}
+  m_Layer: 0
+  m_Name: Scrap sport logo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &183138918
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183138917}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1099176908}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 145}
+  m_SizeDelta: {x: 400, y: 120}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &183138919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183138917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: f7c9eda49ea7e744ea444b1d31a23b73, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &183138920
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 183138917}
+  m_CullTransparentMesh: 1
 --- !u!1 &183523247
 GameObject:
   m_ObjectHideFlags: 0
@@ -9721,8 +9798,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 92, y: -64}
-  m_SizeDelta: {x: 100, y: 36}
+  m_AnchoredPosition: {x: 0, y: -172}
+  m_SizeDelta: {x: 390, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &184737122
 MonoBehaviour:
@@ -9938,7 +10015,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 363771a1264d1e744b8fa684d936ef0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsCatalogueChoice
-  hero: {fileID: 1428539506}
+  hero: {fileID: 0}
   logo: {fileID: 21300000, guid: f7c9eda49ea7e744ea444b1d31a23b73, type: 3}
   preview: {fileID: 21300000, guid: 816d2549bc1462142bbad61a499f847e, type: 3}
   scene: TruckWallball
@@ -17016,8 +17093,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -48}
-  m_SizeDelta: {x: 304, y: 32}
+  m_AnchoredPosition: {x: 0, y: -172}
+  m_SizeDelta: {x: 390, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &325720011
 MonoBehaviour:
@@ -17233,7 +17310,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 363771a1264d1e744b8fa684d936ef0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsCatalogueChoice
-  hero: {fileID: 1428539506}
+  hero: {fileID: 0}
   logo: {fileID: 21300000, guid: dc6e27b857076a14da0424f9c693236f, type: 3}
   preview: {fileID: 21300000, guid: 61e71abd13be39e4cbdf6e95162c7595, type: 3}
   scene: TruckLogRolling
@@ -19529,7 +19606,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "CHOOSE YOUR NEXT BAD IDEA \xB7 LOCAL PLAY \xB7 YOUR CREW, YOUR RULES"
+  m_text: "55 active sports \xB7 Additional games in Scrap Heap \xB7 Offline local
+    play"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -20967,7 +21045,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &406065747
 RectTransform:
   m_ObjectHideFlags: 0
@@ -25009,6 +25087,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 452726928}
   m_CullTransparentMesh: 1
+--- !u!1 &456888275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 456888276}
+  - component: {fileID: 456888278}
+  - component: {fileID: 456888277}
+  m_Layer: 0
+  m_Name: Scrap gameplay preview
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &456888276
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456888275}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 944708362}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 5}
+  m_SizeDelta: {x: 400, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &456888277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456888275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 17f124ece2c888d4abb65d5b329cf9aa, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &456888278
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456888275}
+  m_CullTransparentMesh: 1
 --- !u!1 &458951340
 GameObject:
   m_ObjectHideFlags: 0
@@ -27077,8 +27230,6 @@ RectTransform:
   - {fileID: 129625607}
   - {fileID: 1903360220}
   - {fileID: 56593183}
-  - {fileID: 120585514}
-  - {fileID: 944708362}
   - {fileID: 783756834}
   - {fileID: 752961758}
   - {fileID: 1631294180}
@@ -27157,8 +27308,6 @@ MonoBehaviour:
   - {fileID: 129625606}
   - {fileID: 1903360219}
   - {fileID: 56593182}
-  - {fileID: 120585513}
-  - {fileID: 944708361}
   - {fileID: 783756833}
   - {fileID: 1631294179}
   - {fileID: 1839389901}
@@ -29573,8 +29722,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -112}
-  m_SizeDelta: {x: 300, y: 38}
+  m_AnchoredPosition: {x: 0, y: -104}
+  m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &583528489
 MonoBehaviour:
@@ -29596,7 +29745,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "EXPERIMENTAL / UNFINISHED\nManual play \xB7 Help us test the volleys"
+  m_text: Wall volleys and truck returns.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -29628,8 +29777,8 @@ MonoBehaviour:
   m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 15
-  m_fontSizeMax: 18
+  m_fontSizeMin: 18
+  m_fontSizeMax: 22
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -31825,6 +31974,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639635437}
+  m_CullTransparentMesh: 1
+--- !u!1 &641831126
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 641831127}
+  - component: {fileID: 641831129}
+  - component: {fileID: 641831128}
+  m_Layer: 0
+  m_Name: Scrap sport logo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &641831127
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641831126}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 120585514}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 145}
+  m_SizeDelta: {x: 400, y: 120}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &641831128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641831126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: dc6e27b857076a14da0424f9c693236f, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &641831129
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 641831126}
   m_CullTransparentMesh: 1
 --- !u!1 &642537811
 GameObject:
@@ -35324,6 +35548,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736417399}
+  m_CullTransparentMesh: 1
+--- !u!1 &738520400
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 738520401}
+  - component: {fileID: 738520403}
+  - component: {fileID: 738520402}
+  m_Layer: 0
+  m_Name: Scrap gameplay preview
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &738520401
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738520400}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 120585514}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 5}
+  m_SizeDelta: {x: 400, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &738520402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738520400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 61e71abd13be39e4cbdf6e95162c7595, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &738520403
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738520400}
   m_CullTransparentMesh: 1
 --- !u!1 &739426720
 GameObject:
@@ -45151,7 +45450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &944708362
 RectTransform:
   m_ObjectHideFlags: 0
@@ -45170,12 +45469,14 @@ RectTransform:
   - {fileID: 700793449}
   - {fileID: 1723718361}
   - {fileID: 1408716931}
-  m_Father: {fileID: 515381630}
+  - {fileID: 1695664742}
+  - {fileID: 456888276}
+  m_Father: {fileID: 1093402887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -525, y: -80}
-  m_SizeDelta: {x: 324, y: 138}
+  m_AnchoredPosition: {x: 470, y: 20}
+  m_SizeDelta: {x: 430, y: 430}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &944708363
 MonoBehaviour:
@@ -45189,7 +45490,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 928ec12a0096f4f4a89795f99f33e742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
-  cut: 18
+  cut: 16
   accent: 1
 --- !u!114 &944708364
 MonoBehaviour:
@@ -45205,7 +45506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.025, g: 0.035, b: 0.065, a: 0.94}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -50699,6 +51000,8 @@ RectTransform:
   - {fileID: 2023287585}
   - {fileID: 1875445471}
   - {fileID: 1099176908}
+  - {fileID: 120585514}
+  - {fileID: 944708362}
   m_Father: {fileID: 34385532}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -51172,12 +51475,14 @@ RectTransform:
   - {fileID: 1578847617}
   - {fileID: 406065747}
   - {fileID: 184737121}
+  - {fileID: 183138918}
+  - {fileID: 1640220379}
   m_Father: {fileID: 1093402887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 80}
-  m_SizeDelta: {x: 330, y: 286}
+  m_AnchoredPosition: {x: -470, y: 20}
+  m_SizeDelta: {x: 430, y: 430}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1099176909
 MonoBehaviour:
@@ -51193,7 +51498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.025, g: 0.035, b: 0.065, a: 0.94}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -51229,7 +51534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 928ec12a0096f4f4a89795f99f33e742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsBroadcastPlate
-  cut: 18
+  cut: 16
   accent: 1
 --- !u!114 &1099176912
 MonoBehaviour:
@@ -54174,7 +54479,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1159488782
 RectTransform:
   m_ObjectHideFlags: 0
@@ -54191,8 +54496,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -112}
-  m_SizeDelta: {x: 300, y: 38}
+  m_AnchoredPosition: {x: 0, y: -104}
+  m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1159488783
 MonoBehaviour:
@@ -54214,8 +54519,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Bounce. Strike. Return the live ball.\nTeams of1\u20134 \xB7 first to
-    three."
+  m_text: Trampoline jumps and physical dodgeball.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -54247,8 +54551,8 @@ MonoBehaviour:
   m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 15
-  m_fontSizeMax: 18
+  m_fontSizeMin: 18
+  m_fontSizeMax: 22
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -54617,13 +54921,13 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 
   m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
-  m_isOrthographic: 0
+  m_isOrthographic: 1
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
   m_verticalMapping: 0
@@ -55673,6 +55977,7 @@ MonoBehaviour:
   worldWidth: 32
   worldHeight: 20.5
   arenaFit: 0
+  broadcastFraming: {fileID: 0}
   arenaBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -57327,13 +57632,13 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
-  m_ActiveFontFeatures: 00000000
+  m_ActiveFontFeatures: 
   m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_EmojiFallbackSupport: 1
   m_parseCtrlCharacters: 1
-  m_isOrthographic: 0
+  m_isOrthographic: 1
   m_isCullingEnabled: 0
   m_horizontalMapping: 0
   m_verticalMapping: 0
@@ -58658,7 +58963,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1268400648
 RectTransform:
   m_ObjectHideFlags: 0
@@ -64477,8 +64782,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -48}
-  m_SizeDelta: {x: 304, y: 32}
+  m_AnchoredPosition: {x: 0, y: -172}
+  m_SizeDelta: {x: 390, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1408716932
 MonoBehaviour:
@@ -64694,7 +64999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 363771a1264d1e744b8fa684d936ef0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsCatalogueChoice
-  hero: {fileID: 1428539506}
+  hero: {fileID: 0}
   logo: {fileID: 21300000, guid: b64c72cf3da03774bbcf5fac2043001b, type: 3}
   preview: {fileID: 21300000, guid: 17f124ece2c888d4abb65d5b329cf9aa, type: 3}
   scene: TruckTrampolineDodgeball
@@ -65670,7 +65975,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1441444812
 RectTransform:
   m_ObjectHideFlags: 0
@@ -71682,7 +71987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1578847617
 RectTransform:
   m_ObjectHideFlags: 0
@@ -74232,6 +74537,81 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &1640220378
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1640220379}
+  - component: {fileID: 1640220381}
+  - component: {fileID: 1640220380}
+  m_Layer: 0
+  m_Name: Scrap gameplay preview
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1640220379
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640220378}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1099176908}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 5}
+  m_SizeDelta: {x: 400, y: 150}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1640220380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640220378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 816d2549bc1462142bbad61a499f847e, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1640220381
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640220378}
+  m_CullTransparentMesh: 1
 --- !u!1 &1641071942
 GameObject:
   m_ObjectHideFlags: 0
@@ -76865,6 +77245,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1693531067}
   m_CullTransparentMesh: 1
+--- !u!1 &1695664741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1695664742}
+  - component: {fileID: 1695664744}
+  - component: {fileID: 1695664743}
+  m_Layer: 0
+  m_Name: Scrap sport logo
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1695664742
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695664741}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 944708362}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 145}
+  m_SizeDelta: {x: 400, y: 120}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1695664743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695664741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: b64c72cf3da03774bbcf5fac2043001b, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1695664744
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1695664741}
+  m_CullTransparentMesh: 1
 --- !u!1 &1702191596
 GameObject:
   m_ObjectHideFlags: 0
@@ -78498,7 +78953,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1723718361
 RectTransform:
   m_ObjectHideFlags: 0
@@ -93523,7 +93978,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2014245007
 RectTransform:
   m_ObjectHideFlags: 0
@@ -93540,8 +93995,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -112}
-  m_SizeDelta: {x: 300, y: 38}
+  m_AnchoredPosition: {x: 0, y: -104}
+  m_SizeDelta: {x: 400, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2014245008
 MonoBehaviour:
@@ -93563,7 +94018,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Balance. Brace. Bump into the water.\nTwo to four \xB7 first to five."
+  m_text: Balance, roll and battle on the log.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
@@ -93595,8 +94050,8 @@ MonoBehaviour:
   m_fontSizeBase: 26
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 15
-  m_fontSizeMax: 18
+  m_fontSizeMin: 18
+  m_fontSizeMax: 22
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -94104,7 +94559,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '57 PLAYABLE TRUCK SPORTS. ONE COLLECTION.
+  m_text: '55 PLAYABLE TRUCK SPORTS. ONE COLLECTION.
 
     Local humans, shared controllers
     and autonomous AI.'
@@ -94245,7 +94700,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Experimental / unfinished \xB7 Manual play only"
+  m_text: "Preserved collection games \xB7 Select a sport to play"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: be1034cebd9fa3643a48d11ef76e4708, type: 2}
   m_sharedMaterial: {fileID: -7304394381272760782, guid: 8e8f97682e668e94cb30d2e6b8e13d84,
