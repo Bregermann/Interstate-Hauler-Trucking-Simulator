@@ -6562,11 +6562,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Existing Mattress Systems |
 | Original Request | Keep: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section22.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section22.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing Mattress scene, physics, sixteen player-colored pillows, obstacles, race/spectator/weather/control systems retained without modification. See2026-10-22-Mattress-Preserved.md. |
+| Automated Verification | Current accepted Windows64/0: complete physical eight-AI three-race series, independent loose pillows and seeded world/destruction/replay cleanup. Native1/0 saved-scene Rain and first-finisher spectator/clock preservation. Controlled720p/1080p pillow captures inspected, not asserted as HUD acceptance. Evidence/2026-10-22-Mattress-Preserved. |
+| Human Verification | Original October21 feedback preserved; no subsequent developer playtest, physical-device or listening approval claimed. |
+| Remaining Work | No known scoped preservation defect in exercised automated cases. Human feel, controllers/wheels, listening, exhaustive weather and isolated profiling remain unperformed. Approved four-player HUD unchanged; later Carnival presentation remains queued. |
 
 ### HPR-23-1 — Apply the Latest Minimal Racing HUD
 
