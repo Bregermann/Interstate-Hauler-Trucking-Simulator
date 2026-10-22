@@ -4,6 +4,8 @@ namespace LWS.TruckTerrierRacing {
 public sealed class TerrierCourse:MonoBehaviour {
  public Transform geometry;public Transform[] sideRails;public MeshFilter groundMesh;public MeshCollider groundCollider;
  public Transform[] hurdles,ramps,patches,gates;public Transform finish;public SportsChaosWeather weather;
+ [Range(0,1.5f),Tooltip("Terrier-only wind force response. Weather visuals and other sports retain their own wind.")]
+ public float windForceMultiplier=.70f;
  [field:SerializeField]public float Length{get;private set;}=168;public int Seed{get;private set;}public int LayoutHash{get;private set;}
  Mesh runtimeGround;
  public Quaternion DrivingRotation=>geometry.rotation;

@@ -7,6 +7,9 @@ import shutil
 import subprocess
 import time
 from pathlib import Path
+import sys
+sys.dont_write_bytecode = True
+from BuildIdentity import snapshot
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -26,6 +29,7 @@ def main():
     exe = ROOT / "Builds/TruckSportsCamera/TruckSports.exe"
     dll = exe.parent / "TruckSports_Data/Managed/Assembly-CSharp.dll"
     digest = hashlib.sha256(dll.read_bytes()).hexdigest()
+    content, _ = snapshot(exe.parent)
     folder = ROOT / "Logs/TruckSports/PlaytestRepair" / args.name
     folder.mkdir(parents=True, exist_ok=True)
     command = [str(exe), args.flag]
@@ -43,7 +47,7 @@ def main():
     start = time.monotonic()
     wall_start = time.time()
     process = subprocess.Popen(command, cwd=ROOT, startupinfo=info)
-    print("Owned Windows player", process.pid, "build", digest, flush=True)
+    print("Owned Windows player", process.pid, "managed", digest, "full content", content, flush=True)
     try:
         code = process.wait(timeout=args.timeout)
     except subprocess.TimeoutExpired:
@@ -55,18 +59,18 @@ def main():
         raise ValueError("Acceptance result must remain inside this workspace")
     evidence = result.read_text(encoding="utf-8-sig") if result.is_file() and result.stat().st_mtime >= wall_start else ""
     terminal = re.search(r"CHECKS=(\d+)\s+ERRORS=(\d+)", evidence)
-    legacy = re.search(r"ERRORS=(\d+)\. Actual NWH/PhysX", evidence) if args.legacy_errors_only and not terminal else None
+    legacy = re.search(r"ERRORS=(\d+)\. (?:Actual NWH/PhysX|Generated ramp and real NWH/PhysX flights)", evidence) if args.legacy_errors_only and not terminal else None
     checks = int(terminal[1]) if terminal else len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE)) if legacy else None
     errors = int(terminal[2]) if terminal else int(legacy[1]) if legacy else None
     completed = bool(terminal) or bool(legacy and checks)
     if args.result_file and evidence:
         shutil.copy2(result, folder / "result.txt")
-    receipt = dict(pid=process.pid, exit=code, seconds=round(time.monotonic()-start, 2), managedSha256=digest, unchangedManaged=hashlib.sha256(dll.read_bytes()).hexdigest()==digest, completedEvidence=completed, checks=checks, errors=errors, legacyErrorsOnly=bool(legacy))
+    receipt = dict(pid=process.pid, exit=code, seconds=round(time.monotonic()-start, 2), managedSha256=digest, buildContentSha256=content, unchangedBuildContent=snapshot(exe.parent)[0]==content, unchangedManaged=hashlib.sha256(dll.read_bytes()).hexdigest()==digest, completedEvidence=completed, checks=checks, errors=errors, legacyErrorsOnly=bool(legacy))
     (folder / "process.json").write_text(json.dumps(receipt, indent=2))
     print(json.dumps(receipt), flush=True)
     if evidence:
         print("\n".join(evidence.splitlines()[-3:]), flush=True)
-    raise SystemExit(code or (0 if completed and errors==0 and receipt["unchangedManaged"] else 1))
+    raise SystemExit(code or (0 if completed and errors==0 and receipt["unchangedManaged"] and receipt["unchangedBuildContent"] else 1))
 
 
 if __name__ == "__main__":

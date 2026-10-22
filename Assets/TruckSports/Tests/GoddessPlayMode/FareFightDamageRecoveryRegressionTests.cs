@@ -175,12 +175,13 @@ public sealed class FareFightDamageRecoveryRegressionTests
                 { var difficulty = player.GetType().GetField("difficulty"); difficulty.SetValue(player, Enum.Parse(difficulty.FieldType, "Normal")); }
                 match.GetType().GetField("option").SetValue(match, 2);
                 UnityEngine.Random.InitState(20261021);
+                match.GetType().GetField("validationSeed").SetValue(match,616736539);
                 Assert.That((bool)Call(match, "StartMatch"), Is.True); yield return null;
                 log.AppendLine("REAL MATCH seed=" + Field(match, "matchSeed") + "; normal AI, first-to-ten, four real NWH vehicles. Diagnostic, not complete-match acceptance.");
                 var trucks = (Array)Field(match, "trucks"); var routes = (Array)Field(match, "routes");
                 var prior = new Vector3[4]; var moved = new float[4];
                 for (int i = 0; i < 4; i++) { prior[i] = ((Rigidbody)Field(trucks.GetValue(i), "body")).position; moved[i] = Time.time; }
-                Time.timeScale = 4; float deadline = Time.realtimeSinceStartup + 120, next = 0; bool observed = false;
+                Time.timeScale = 3; float deadline = Time.realtimeSinceStartup + 120, next = 0; bool observed = false;
                 while (Time.realtimeSinceStartup < deadline && !(bool)match.GetType().GetProperty("Finished").GetValue(match))
                 {
                     for (int i = 0; i < 4; i++)
@@ -198,8 +199,8 @@ public sealed class FareFightDamageRecoveryRegressionTests
                             var truck = trucks.GetValue(i); var body = (Rigidbody)Field(truck, "body"); var vehicle = Field(Field(truck, "tractorMotor"), "vehicle");
                             var powertrain = Field(vehicle, "powertrain"); var engine = Field(powertrain, "engine"); var transmission = Field(powertrain, "transmission");
                             log.AppendLine("slot=" + i + " position=" + body.position.ToString("F3") + " velocity=" + body.linearVelocity.ToString("F3") + " facing=" + body.rotation.eulerAngles + " command=" + Field(truck, "command") + " engineDamage=" + Damage(engine) + " running=" + engine.GetType().GetProperty("IsRunning").GetValue(engine) + " RPM=" + engine.GetType().GetProperty("OutputRPM").GetValue(engine) + " gear=" + transmission.GetType().GetProperty("Gear").GetValue(transmission) + " transmissionDamage=" + transmission.GetType().GetProperty("Damage").GetValue(transmission) + " torque=" + Field(engine, "outputTorque") + " reversals=" + routes.GetValue(i).GetType().GetProperty("RecoveryStarts").GetValue(routes.GetValue(i)));
-                            foreach (Component wheel in (Array)Field(truck, "wheels"))
-                                log.AppendLine(" wheel=" + wheel.name + " grounded=" + wheel.GetType().GetProperty("IsGrounded").GetValue(wheel) + " motor=" + wheel.GetType().GetProperty("MotorTorque").GetValue(wheel) + " brake=" + wheel.GetType().GetProperty("BrakeTorque").GetValue(wheel));
+                            var input=Field(vehicle,"input");log.AppendLine(" enabled="+((Behaviour)vehicle).enabled+" sleeping="+body.IsSleeping()+" constraints="+body.constraints+" powertrain="+powertrain.GetType().GetProperty("IsActive").GetValue(powertrain)+" actualThrottle="+input.GetType().GetProperty("Throttle").GetValue(input)+" actualBrakes="+input.GetType().GetProperty("Brakes").GetValue(input)+" handbrake="+input.GetType().GetProperty("Handbrake").GetValue(input));
+                            foreach(var component in (IEnumerable)Field(powertrain,"wheels")){var wheel=(Component)Field(component,"wheelUAPI");log.AppendLine(" wheel="+wheel.name+" grounded="+wheel.GetType().GetProperty("IsGrounded").GetValue(wheel)+" motor="+wheel.GetType().GetProperty("MotorTorque").GetValue(wheel)+" brake="+wheel.GetType().GetProperty("BrakeTorque").GetValue(wheel)+" damage="+wheel.GetType().GetProperty("Damage").GetValue(wheel));}
                         }
                         File.WriteAllText(path, log.ToString());
                     }

@@ -15,6 +15,9 @@ namespace LWS.TruckFareFight {
   public Transform pickupMarker,destinationMarker,carrierMarker;public GameObject passengerVisual;
   public FareFightHazards hazards;public FareFightActions interactions;public FareFightNavigation navigation;
   public FareFightReview review;public SportsMotionReplay replay;public int matchSeed;
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+  [NonSerialized]public int validationSeed;
+#endif
   public float triggerRadius=16;
   public readonly FareFightRules rules=new FareFightRules();
   public readonly FareFightRoute[] routes={new FareFightRoute(),new FareFightRoute(),new FareFightRoute(),new FareFightRoute()};
@@ -29,6 +32,7 @@ namespace LWS.TruckFareFight {
   public string PassengerName=>new[]{"Margo","Eddie","Jules","Finley","Robin","Pat","Sasha","Cameron"}[(Mathf.Max(1,rules.Passenger)-1)%8];
   readonly StringBuilder text=new StringBuilder();readonly List<FareFightEvent> events=new List<FareFightEvent>(24);
   readonly Vector3[] previous=new Vector3[4];readonly float[] recoverAt=new float[4],badTime=new float[4];
+  readonly Bounds[] recoveryBounds=new Bounds[4];bool recoveryBoundsReady;
   readonly FareFightStartingGrid startingGrid=new FareFightStartingGrid();
   readonly Vector3[] fairPositions=new Vector3[4],fairForwards=new Vector3[4];
   public readonly float[] InitialRouteDistances=new float[4];
@@ -49,8 +53,13 @@ namespace LWS.TruckFareFight {
   public Vector3 Goal(int slot)=>rules.Carrier==slot&&rules.Destination>=0?district.stops[rules.Destination].position:rules.Carrier>=0?trucks[rules.Carrier].body.position:rules.PickupLocation>=0?district.stops[rules.PickupLocation].position:trucks[slot].body.position;
   public string ObjectiveState(int slot)=>recoverAt[slot]>0?"RECOVER TRUCK":routes[slot].Reversing?"RECOVER BLOCKED PATH":rules.Carrier==slot?"DELIVER PASSENGER":rules.Carrier>=0?"STEAL PASSENGER":"SEEK PASSENGER";
   protected override void BeginGame(){
+   if(!recoveryBoundsReady){for(int i=0;i<trucks.Length;i++)recoveryBounds[i]=RecoveryBounds(trucks[i]);recoveryBoundsReady=true;}
    for(int slot=0;slot<routes.Length;slot++){routes[slot].useGoalProgressRecovery=true;routes[slot].useRoadConnectors=true;routes[slot].stallSeconds=2;routes[slot].reverseSeconds=1.4f;routes[slot].minimumReverseDistance=3;routes[slot].obstacleRadius=Mathf.Clamp(trucks[slot].shape.size.x*trucks[slot].transform.lossyScale.x*.45f,.8f,1.8f);}
-   worldReset?.Restore();matchSeed=UnityEngine.Random.Range(1,int.MaxValue);random=new System.Random(matchSeed);rematchSerial++;
+   worldReset?.Restore();matchSeed=UnityEngine.Random.Range(1,int.MaxValue);
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+   if(validationSeed>0)matchSeed=validationSeed;
+#endif
+   random=new System.Random(matchSeed);rematchSerial++;
    rules.Start(setup.count,option==0?3:option==2?10:5,option==3?300:0,option==4);PhysicalContacts=Recoveries=0;events.Clear();lastRevision=-1;lastPickup=lastDestination=-1;Intro=3;
    atmosphere.ConfigurePreset(presets.Resolve(matchSeed),matchSeed);
    AssignFare();Physics.SyncTransforms();float separation=12;foreach(var truck in trucks)separation=Mathf.Max(separation,truck.shape.size.z*truck.transform.lossyScale.z+3);
@@ -97,7 +106,43 @@ namespace LWS.TruckFareFight {
   // Repair at lifecycle boundaries through the vendor API. Do not change
   // damage tuning or silently heal impacts during active competition.
   static void RepairTruck(SportsEventTruck truck)=>truck.GetComponent<NWH.VehiclePhysics2.Damage.DamageHandler>()?.Repair();
-  void Recover(int slot){var body=trucks[slot].body;Vector3 nearest=district.startingPositions[0];float distance=float.PositiveInfinity;foreach(var node in district.graph.nodes){float d=(node.position-body.position).sqrMagnitude;if(d<distance){nearest=node.position;distance=d;}}Quaternion rotation=Quaternion.LookRotation(Vector3.ProjectOnPlane(trucks[slot].transform.forward,Vector3.up).normalized);RepairTruck(trucks[slot]);trucks[slot].Prepare(nearest+Vector3.up*.3f,rotation);recoverAt[slot]=badTime[slot]=0;previous[slot]=trucks[slot].body.position;routes[slot].Reset();Recoveries++;}
+  // Cache the complete authored assembly while upright, before the first race.
+  // Include compound cab/chassis colliders, not just the event chassis box.
+  static Bounds RecoveryBounds(SportsEventTruck truck){
+   var bounds=new Bounds(truck.shape.center,truck.shape.size);
+   foreach(var collider in truck.GetComponentsInChildren<Collider>(true)){
+    if(collider.isTrigger)continue;
+    Bounds local;var box=collider as BoxCollider;var mesh=collider as MeshCollider;
+    if(box!=null)local=new Bounds(box.center,box.size);
+    else if(mesh!=null&&mesh.sharedMesh!=null)local=mesh.sharedMesh.bounds;
+    else{if(!collider.enabled||collider.bounds.size.sqrMagnitude<.001f)continue;var world=collider.bounds;for(int corner=0;corner<8;corner++)bounds.Encapsulate(truck.transform.InverseTransformPoint(world.center+Vector3.Scale(world.extents,new Vector3((corner&1)==0?-1:1,(corner&2)==0?-1:1,(corner&4)==0?-1:1))));continue;}
+    for(int corner=0;corner<8;corner++)bounds.Encapsulate(truck.transform.InverseTransformPoint(collider.transform.TransformPoint(local.center+Vector3.Scale(local.extents,new Vector3((corner&1)==0?-1:1,(corner&2)==0?-1:1,(corner&4)==0?-1:1)))));
+   }return bounds;
+  }
+  bool ClearRecoveryRoad(int slot,Vector3 point,Quaternion rotation){
+   var truck=trucks[slot];var scale=truck.transform.lossyScale;var envelope=recoveryBounds[slot];var half=Vector3.Scale(envelope.extents,scale)+new Vector3(.35f,.15f,.5f);var center=point+rotation*Vector3.Scale(envelope.center,scale);
+   for(int corner=0;corner<4;corner++)if(!district.Contains(center+rotation*new Vector3((corner&1)==0?-half.x:half.x,0,(corner&2)==0?-half.z:half.z)))return false;
+   // A recovery never grants an immediate pickup/delivery by materializing in
+   // its trigger. The passenger's assigned destination remains authoritative.
+   if(rules.PickupLocation>=0&&Vector3.Distance(point,district.stops[rules.PickupLocation].position)<triggerRadius+half.z)return false;
+   if(rules.Destination>=0&&Vector3.Distance(point,district.stops[rules.Destination].position)<triggerRadius+half.z)return false;
+   int count=Physics.OverlapBoxNonAlloc(center,half,spawnContacts,rotation,~0,QueryTriggerInteraction.Ignore);if(count==spawnContacts.Length)return false;
+   for(int i=0;i<count;i++){var hit=spawnContacts[i];if(hit.transform.IsChildOf(truck.transform)||hit.bounds.max.y<=point.y+.1f)continue;return false;}return true;
+  }
+  bool RecoveryPose(int slot,out Vector3 point,out Quaternion rotation){
+   point=default;rotation=Quaternion.identity;float nearest=float.PositiveInfinity;var origin=trucks[slot].body.position;
+   // Existing original-town authored road samples own placement and heading.
+   // Opposing one-way edges supply both legal directions; no new road graph.
+   foreach(var edge in district.graph.edges){bool allowed=true;if(edge.restrictions!=null)foreach(var restriction in edge.restrictions)if(restriction!=null&&!restriction.truckAllowed)allowed=false;if(!allowed||edge.samples==null)continue;
+    for(int i=0;i<edge.samples.Count;i++){var sample=edge.samples[i];var forward=Vector3.ProjectOnPlane(sample.forward,Vector3.up).normalized;if(forward.sqrMagnitude<.9f&&i+1<edge.samples.Count)forward=Vector3.ProjectOnPlane(edge.samples[i+1].position-sample.position,Vector3.up).normalized;if(forward.sqrMagnitude<.9f)continue;
+     var candidate=sample.position+Vector3.Cross(Vector3.up,forward)*2+Vector3.up*.2f;float distance=(candidate-origin).sqrMagnitude;if(distance>=nearest)continue;var facing=Quaternion.LookRotation(forward);if(!ClearRecoveryRoad(slot,candidate,facing))continue;nearest=distance;point=candidate;rotation=facing;
+    }
+   }return !float.IsPositiveInfinity(nearest);
+  }
+  void Recover(int slot){
+   Physics.SyncTransforms();if(!RecoveryPose(slot,out var point,out var rotation)){recoverAt[slot]=Time.time+.5f;return;}
+   RepairTruck(trucks[slot]);trucks[slot].Prepare(point,rotation);recoverAt[slot]=badTime[slot]=0;previous[slot]=trucks[slot].body.position;routes[slot].Reset();Recoveries++;
+  }
   public void DestroyTruck(int slot){if(!Live||recoverAt[slot]>0)return;Queue(FareFightEventKind.CarrierReset,slot,1);BeginRecovery(slot,"WRECKED · PASSENGER RESET");}
   public override void ExtraAction(string key){if(key=="drivingview")drivingViews.Cycle();else review?.Action(key);}
   public override string ControlCaption(int slot)=>Controls(slot);

@@ -1,5 +1,18 @@
 # October21 active repair pass — continuation checkpoint
 
+## Current state — October21/22 continuation
+
+Accepted Windows executable: Builds/TruckSports/TruckSports.exe. Managed SHA205c0bf4dc1056a5e4b504095e9963c2a3bbf40b5a2f09cc441926fb04bc31c0; FULL545-file content SHA7cc60afd0715e235814db23a492f843965d3e815d6d61826699f277adf8d3b0f.60scenes,139exact scoped source inputs archived by full content identity. Promoted after fresh asset-bound acceptance. Prior e343 accepted build preserved in .sports-validation/Recovery/AcceptedBuildBeforeCamera-20261021-214428; older348e preserved in ...-205728.
+
+Current full-payload Windows passes: CompactFourSportsTransparentFinal182/0 (BASE/Mattress/Wife/Target actual720p/1080p owned HUDs and smoke); ColoredCnpAssetBoundFinal67/0; WifeCompactFullHardSeries6/0 with12physical finishes; TargetCompactFullThreeLevels18/0 with complete five-launch Easy/Normal/Hard matches. Native shared compact/recovery/CNP/wind13/0, current smoke configuration/emission1/0, camera/Fare rules32/0. Actual smoke close-up inspected: complete atlas and square specular ghosts corrected through owned6x5flipbook/alpha material, original NWH source untouched.
+
+Earlier same-scope e343 evidence:33scene camera697/0; Terrier window views59/0; full twelve-truck match21/0; Keepaway complete Rain/Snow matches111/0; Fare same-seed full first-to-five16/0 with longest2m pocket14.232simsec. Underlying FareMatch physics source is unchanged between e343 and current205; diagnostics were extended. No human, physical-controller, listening or isolated performance acceptance claimed.
+
+Open findings: intermittent Fare healthy zero-power stall root cause unproven (earlier508.676simsec failure retained, not reproduced in latest full match); Wife startup chase sightline crosses existing finish banner. Other active HPR items remain in permanent ledger.925unrelated pending files and private route planner preserved byte-for-byte. Scoped Sports delivery is recorded by the commit containing this checkpoint; branch remotes provide current push status. Prior delivered milestone78b0ff5a. No claim of entire-backlog completion.
+
+The dated notes below are execution history; the permanent acceptance ledger remains the requirements authority.
+
+
 This is active implementation, not a completion report. Both supplied requests are preserved in Requests/2026-10-21-GlobalBroadcastCamera.md and Requests/2026-10-21-HumanPlaytestRepair.md. Permanent ledger IDs: GBC-*, GBC-SPORT-<scene>, HPR-*.113directive entries and59per-scene camera entries were added; no historical requests silently imported.
 
 ## Execution order
@@ -661,3 +674,214 @@ then corrected Fare default first-to-five healthy-stall gate. Tools runner
 explicitly supports the existing Keepaway ERRORS=N. footer, counting its actual
 PASS/FAIL lines and retaining fresh-file/process/hash checks; strict default
 CHECKS parsing unchanged. These runs are pending; canonical348e stays accepted.
+
+
+## Source preservation and all-human cue binding correction
+
+Scoped implementation commit78b0ff5a0f3ced0e84710b8a4be0f65f6fe253a6 (204paths)
+was pushed and both main and codex/truck-sports-seven-events remote hashes verified.
+No925unrelated path or raw EzySlice source was staged. Canonical348e unchanged.
+
+ExpandedCamera33 on1f9completed693checks in404.75s,692passed/1failed. Stronger
+actual-widget check exposed missing third distant-human cue; other camera
+checks, including the expanded Keepaway far-ball arrow, passed. Sequential
+script stopped on this failure, so Legacy Keepaway/Fare were NOT run.
+
+Native four-human diagnostic0/1failed: third marker active but group4state
+had no widget and viewport0. Saved Magnet scene proves guide targets7 while
+compass prefab override permittedTargets.Array.size=3. Owned Guidance now
+binds its compass allowlist to the actual authoritative targets array and
+uses CNP's public POIRegister only when an active legitimate target is absent.
+Authoring records prefab property modifications, including its existing-
+capacity early-return path; no destructive scene regeneration or vendor edit.
+
+First corrected native diagnostic still failed for a separate fixture mistake:
+one diagonal world-distant human projected INSIDE the perspective frustum
+(viewport0.52,0.87), where hiding an offscreen arrow is correct. The revised
+fixture places all three remote humans behind the actual camera, explicitly
+asserts out-of-frustum positions, tests reference equality of the complete
+allowlist and requires actual visible/screen-safe vendor widgets. This does
+not weaken the offscreen requirement or add unnecessary onscreen labels.
+Final native bundle2/2passed; all three arrows have actual visible widgets,
+opacity0.9, correct positions and screen bounds. Paused entrance still passes.
+
+115-source corrected candidate rebuilding. Next run independent Keepaway
+default60s/mixed-input regression and Fare full default match, then final
+33-scene actual-widget acceptance; retain failures without skipping unrelated
+validation. Do not promote the1f9candidate whose camera gate failed.
+
+
+Future HPR-20-1 work prepared in ROOT only, outside the current115-source
+candidate: TerrierCourse editable windForceMultiplier default0.70, used only
+in TerrierRacer's existing wind AddForce. Existing0.15ground/0.55air response,
+NWH propulsion, jump6.2, air-control, course geometry and shared weather
+visuals remain unchanged. Controlled real-body wind-response test authored,
+not yet executed. Course/Racer/test are NOT included in the pending camera/
+Keepaway/Fare candidate. Verify this feature in its next dedicated build.
+
+
+Current ad7abc22c9af30a0604b54a2de47efd1438e5d51838ee89d068fa9b49563f077
+Windows sequence: KeepawayExpandedDefault60 completed109checks/1failure
+in185.34s. BOTH full default60s natural-hazard games passed: scores
+39.24071/60/45.42085/40.16073 and38.08068/53.36103/60/36.38064. Mixed input,
+pause,3.54707m actual bounded recovery, cab/nameplate checks and menu passed.
+One isolated actor3-to-thief0 test ended with thief owning the ball but zero
+steals, indicating a loose-ball pickup rather than the intended controlled
+theft. The fixture left explosive sheep active. Preserve this failed gate;
+do not assume an AI/scoring defect from it. ROOT test-only follow-up makes
+sheep dormant in the isolated collision cases, logs carrier/pickup/steal/blast
+state, and selects actual registry Clear/Rain/Snow profiles instead of relying
+on obsolete weatherChoice integers. Natural full-match hazard tests stay active.
+That follow-up is NOT yet compiled/in this ad7candidate; rerun in next build.
+Fare full default match is running independently; final33camera pass follows.
+
+
+October21 continued acceptance: ad7 candidate final33 camera run completed
+697 checks/7 failures, all in the deliberately displaced four-human Magnet
+fixture: its own frustum assertions failed. Actual saved-scene readability,
+all other camera checks passed. Screenshot shows an empty gray field during
+paused countdown; investigate NWH interpolated Rigidbody-only fixture teleports
+before changing production framing. ROOT fixture now writes physics AND render
+transform together and records both poses, camera, lead and viewport.
+
+FareRecoveryDefaultFive ad7 completed first-to-five, rematch and menu in402.62s,
+16 checks/1 failure: one healthy truck remained in a2m pocket114.0912 simulation
+seconds. Ten announced recoveries occurred. Not accepted/promoted. Source also
+proved unsafe nearest-node recovery: actual native fare-safe-road-before0/1
+failed because recovered chassis penetrated another full NWH competitor. New
+mode-owned placement samples existing truck-allowed road lanes and heading,
+checks complete authored compound bounds against solid occupants, excludes
+pickup/delivery triggers, and retries if blocked. fare-safe-road-after1/1 passed.
+A separate native chassis-high-centering fixture is pending; do not yet claim
+that this placement fix resolves all long physical stalls.
+
+Terrier HPR20.1 actual native wind-tunnel test passed1/1: same NWH body and
+actual Racer.Step produced old response0.11m/s,0.70 response0.07699997m/s,
+disabled0. Existing authoritative weather Flow remained unchanged. This is
+force response verification, not full race/weather visual acceptance.
+
+
+Integrated native follow-up fare-safe-recovery-combined-native10/10 passed:
+occupied-node exclusion, authored-road heading, all-roads-blocked retry with
+no fallback teleport, existing chassis-support-to-wreck recovery, actual NWH
+backing clearance, human/AI engine damage recovery, rematch repair, paused
+objective and three-human CNP widgets, Terrier force response. The chassis
+fixture recovered through existing physical damage/rollover handling; it did
+NOT reproduce the long healthy-truck stall and justifies no new high-centering
+rule. Fare probe now records rotation, actual grounded wheel count and nearby
+solid collider names/heights after10s without displacement. Continue actual
+full match diagnosis. fare-safe-recovery-edit23/23 passed. An earlier wrong
+namespace filter ran0tests and was rejected by the wrapper; corrected actual
+class filters ran23. No zero-test acceptance claimed.
+
+All925 unrelated pending file hashes remain identical to the host baseline.
+The isolated Editor is sequentially saving corrected CNP allowlist references
+before the next Windows candidate. Candidate acceptance remains open.
+
+
+958751b6e0f5d80bd2d6c41fd73796bb79f8a043c3c3ffd4f491dc19f535085a
+Windows targeted CNP run67checks/7failures (47.89s) and Fare first-to-five
+16checks/1failure (435.53s) retained. Fare seed616736539: slot1 healthy,
+4grounded wheels, no neighboring solid collider, longest pocket508.6762simsec;
+other slots7.887695/6.746582/6.616364,8announced recoveries. First-to-five,
+rematch and menu succeeded. Safe placement alone is not full AI acceptance.
+Warm and cold actual NWH turning fixtures at the observed pose passed;
+therefore no guessed new steering/physics tuning was justified. Probe now
+adds actual input, powertrain/wheel torque/brake, RPM, sleep and constraints.
+
+Actual camera cause isolated in native reproduction including legacy camera
+comparison, distant-AI teleport, target retirement, then repeated split/shared
+switches. Camera-owned primary bounds became~359m across, despite a normal
+6m truck. Logs identify enabled ZERO-SCALE pooled wreck meshes at old scene
+positions around(-301,-8,-301), with zero-size render bounds. These invisible
+points inflated both group bounds and sampled corner projections. Production
+SportsBroadcastFraming now excludes meshes with effectively zero world scale
+or zero-size bounds from BOTH measurements. Existing Cinemachine composition,
+profile settings, CNP presentation and gameplay remain unchanged. Before native
+camera test failed; camera-hidden-mesh-fix-and-hud4/4passed afterwards. Actual
+compact Terrier HUD also passed1/1 covering1/2/3/4software-human views and
+1human+3AI views, ownership, one score group, no overlapping viewport bounds,
+score update and repeated rematches at native640x480. Cold slot1 turn1/1
+passed separately. Windows resolution/render validation remains pending.
+
+Future ROOT TerrierGoddess views probe now adds actual player-window screenshots
+and geometric/ownership checks at1280x720 and1920x1080 for all those layouts;
+not yet executed. It distinguishes Windows from controlled Editor captures.
+All changes after958751b6remain source-only pending next build.
+
+
+Current Windows candidate7810634d310fabaf7a0dad3e494c50f3bd891da6e0760a592a62a789bfb169f2
+built60scenes from125exact scoped sources. CnpHiddenWreckTarget67/0,49.64s:
+actual arena restored, primary truck readable, all3offscreen human widgets
+visible after repeated switches. Screenshot manually inspected. Further visual
+finding: bottom-edge arrows overlap the compact score row; future CNP authoring
+migration raises only the old stock margin0.075to0.17, preserving deliberate
+designer overrides. Actual arrow-vs-scoreboard clearance regression prepared,
+not yet run/migrated/included in this candidate.
+
+FareRecordedSeedPowertrain13/0,51.81s: real pickup/delivery/rematch/menu with
+recorded seed616736539; observed pockets2.4/2.4/2.5/6.1simsec in this SHORT
+run. Not long-match acceptance. A preceding native120real-second same-seed
+instrumented diagnostic did NOT reproduce prolonged stall; do not call the
+remaining full-match AI requirement complete from that diagnostic.
+
+KeepawayExpandedDefaultFinal111/0,154.92s: controlled fixture sheep isolation
+resolved its contaminated theft test, actual default60s games in registry
+Rain/Snow, all existing regression checks and rematches/menu passed. The three
+specific area/density/destructibility requirements now have automated verified
+status, with human verification still pending.
+
+TerrierWindCompactViews retained as FAILED/incomplete: some actual window HUD
+bounds/ownership checks passed for1/2/3humans at720p/1080p, but relative
+ScreenCapture paths were interpreted under player_Data and failed; then normal
+focus/resolution pause stalled its scaled wait. Owned watchdog ended at300.18s.
+Source-only harness follow-up uses absolute evidence paths, realtime waits and
+acknowledges focus pauses through the existing Resume flow only during isolated
+software-device layouts. Real gameplay focus/reconnect behavior unchanged.
+
+ExpandedCameraHiddenWreck33 retained as FAILED/incomplete: software-human starts
+failed after scene switches, then the harness incorrectly attempted to measure
+an unstarted Hockey match, causing Primary=-1 bounds access. Verified owned
+PID51652 was stopped at477.95s; unrelated user Build20 PID58240 was preserved.
+Root-only harness follow-up sets InputSystem IgnoreFocus, enables its OWN
+synthetic devices at setup, records rejection reasons and guards failed starts.
+No production participant validation was weakened. Current sequence proceeds
+to the independent actual twelve-truck Terrier match.
+
+Future ROOT work outside7810634d: BASE Jumping compact score adapter and
+explicit Show AI Cameras support over its already-existing4-view selection;
+NWH ExhaustSmoke owned prefab-variant authoring/lifecycle for the existing4
+pooled flares (authoring NOT run, scene/variant NOT created yet); generic
+BASE/Terrier viewport test; Mattress manual-reset physical reproduction tests
+(NOT run, automatic reset production behavior NOT changed yet). Preserve these
+pending changes; do not report them as complete.
+
+
+### Compact HUD, flare smoke and manual recovery — current tests
+
+Native compact-hud-manual-reset-flare-cue: 7 passed / 2 failed. Passed BASE four-flare native NWH smoke emission/rematch cleanup; BASE and Terrier compact HUD layouts for 1–4 software humans and optional AI views; duplicate-name-safe four-card Terrier broadcast leaders; paused objective widget; native 0.70 wind response. Mattress AI recovery passed. Human no-auto-reset/body-dynamic assertions passed, but fresh software-key confirmation still failed and is instrumented rather than declared fixed. CNP arrow clearance failed: original existing-capacity authoring returned before invoking the prefab migration. Explicit owned-prefab migration has now run (no scene regeneration); fresh cue/manual-input tests pending.
+
+BASE uses an owned variant of NWH ExhaustSmoke in the existing four-flare/24-object pool. Authoring added four references, not a duplicate pool. World-space native particle force uses the existing wind field. Source-only Windows compact HUD capture probe now covers BASE/Mattress at 720p/1080p; not yet built or run. Mattress compact HUD reads actual running place/time and exposes an assigned-action contextual reset popup. Physical reset fixture now also checks actual popup geometry and assigned control. Full backlog remains open.
+
+
+Native manual-reset-and-compact-final6/0passed: human keeps inverted dynamic physics while action is held; neutral+fresh assigned keyboard press invokes exactly one original5s recovery, actual popup stays within viewport and displays assigned action; AI recovery unchanged. Test-only keyboard failure isolated to InputSettings.editorInputBehaviorInPlayMode: batch Editor routed keyboard events to editor despite IgnoreFocus. Fixture now temporarily selects AllDeviceInputAlwaysGoesToGameView and restores it. No production input workaround. Actual queued held-key assertion now passes. BASE/Terrier/Mattress each passed1–4human and optionalAI ownership/bounds/rematch tests; Terrier shared four-card leaders keep duplicate display names separate. Running-place test uses physical progress, not series points. CNP actual arrow clearance2/0passed after explicit prefab migration. Windows acceptance still pending.
+
+
+Windows candidate e3433d137e2a752933dd21291be356ac3ee0aeffca45fd81e0740dfcc7f28102 built60scenes from134 exact scoped sources. CompactHudBaseMattressFinal94/0,50.12s: actual720p/1080p captures for1–4humans and optionalAI views in both modes; actual smoke emission/clear pool, physical human inversion/held-action protection/fresh-pad confirmation, one5s recovery, reset popup geometry, rematch/menu. Manually inspected BASE/Mattress four-player720p and Mattress reset1080p screenshots. TerrierWindCompactViewsFinal59/0,69.92s: real window1–4human/optionalAI cab HUDs at720p/1080p, native takeoff, weather fixtures and menu. Prior failed harness evidence preserved. Full33camera pass currently running on same candidate; Fare long-match acceptance still open.
+
+Future ROOT-only next slice (OUTSIDE e343): Target Launch and Wife compact data adapters over existing owners/rules/pair progress; additive Wife per-viewport CNP checkpoint authoring/source prepared but NOT executed. Additional native ownership tests prepared, not run. No new game rules or physics changes.
+
+
+Promoted e343 candidate after697/94/59/16passing Windows checks and verified545files. Original accepted348e build preserved in dated recovery folder. Same-seed Fare full match completed actual first-to-five with pockets9.229/7.647/14.232/9.249seconds,7announced recoveries, no recurring zero-power case. HPR8-4 remains open: non-reproduction is not root-cause resolution. Next compile adds engine component/connection/ignition/stall/throttle diagnostics without changing propulsion.
+
+
+Next source slice compiled/authored successfully. Native compact-five-sports-cnp-checkpoints-native13/0passed: all BASE/Terrier/Mattress/Wife/Target compact layouts, duplicate-name Terrier leaders, actual four independently owned CNP checkpoint widgets, small colored glyph checks, original human/AI recovery and smoke/wind regressions. Wife migration second run leaves saved scene SHA256 identical. Only additive owned references exported;925unrelated pending files rechecked unchanged. Next candidate build in progress, canonical e343 remains available.
+
+
+Windows205c0bf4 CompactFourSportsCheckpointFinal182/0passed actual layouts/ownership and four Wife native checkpoint widgets; however MANUAL smoke close-up visual acceptance FAILED. BASE-native-smoke-camera-fixture.png shows an entire30-cell atlas on each billboard. Installed NWH ExhaustSmoke prefab disables UV module and retains stale5x5tiles while its actual SmokeTextureSheet has6x5cells (source image inspected). No vendor edit. Owned variant repair now enables native6x5 lifetime flipbook and uses owned material copy with normal multiplicative white base instead of subtractive soot tint. New exact configuration assertions prepared; migration/test/rebuild pending. Do not claim visual acceptance or promote205from automated182checks alone. Current CNP205targeted pass is running independently.
+
+
+Asset-only smoke rebuild retained gameplay DLL205c0bf4, exposing a validation provenance gap: managed SHA alone cannot identify scene/material payloads. Tools now fingerprint every executable/dependency/asset file, bind fresh receipts to buildContentSha256 and require unchanged full content for promotion. Source archives/manifests now use full-content key; existing conflicting archive keys are rejected rather than silently reused. Current corrected payload13804d9fbaddaf9d30193f31acd9a5aa7917832bb2d2d7c18161311d3a569ab8,545files,139source inputs. Targeted Python regression passed unchanged-code/changed-asset and timestamp-only cases. Full fresh Windows UI/smoke and CNP receipts required; older205code-only receipts cannot approve the revised assets. Native flipbook1/0passed.
+
+
+Full payload7cc60afd accepted and promoted:182/67/6/18fresh Windows checks, all with unchanged545-file fingerprints. FullTarget Easy/Normal/Hard totals45/135/160/100 in Hard final (all5attempts), actual recorded replay/rematch/pause/menu passed. Wife12finishes, no drops, three-race scores12/9/6/3, rematch and menu passed. Actual smoke screenshot after normal alpha repair shows no square glossy billboard silhouettes. Native renderer migration used public UnityEditor.BaseShaderGUI.SetupMaterialBlendMode; initial incorrect helper namespace compile failure retained in history and corrected. No vendor source modified.

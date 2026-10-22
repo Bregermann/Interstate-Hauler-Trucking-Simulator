@@ -6,6 +6,9 @@ using LWS.TruckBowling;
 namespace LWS.TruckBaseJumping {
 public enum BaseJumpPhase {Intro,Flight,RoundResult,Complete}
 public sealed class BaseJumpMatch:SportsEventSession {
+ public override bool CompactViewportHud=>true;
+ public override bool SupportsSplitAIViews=>true;
+ public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail){participant=-1;score=detail=null;if(view<0||view>=cameras.Length||view>=viewSlots.Length)return false;participant=viewSlots[view];if(participant<0||participant>=totals.Length)return false;score=totals[participant].ToString();detail="";return true;}
  public BaseSkyField skyField;public BaseJumpTransport transport;public BaseJumper[] jumpers;public SportsEventCamera[] views;public BaseJumpWeather weatherField;public Collider ground;public Transform target,helicopter,mainRotor,tailRotor;public AudioSource rotorAudio;public float targetRadius=16;public int seed=4757;
  public BaseJumpPhase Phase{get;private set;}public int Round{get;private set;}public int Winner{get;private set;}=-1;public float AirTime{get;private set;}public int LandingLocks{get;private set;}public int RoundLocks{get;private set;}public int[] totals=new int[4],totalErrors=new int[4],totalTimes=new int[4];public readonly int[] viewSlots={0,1,2,3};public int ViewCount{get;private set;}public bool Spectating{get;private set;}
  readonly BaseLanding[] roundResults=new BaseLanding[4];readonly int[] order=new int[4];readonly float[] deployHeight=new float[4],reactionAt=new float[4];readonly Vector2[] aiCommand=new Vector2[4],aimBias=new Vector2[4],windBias=new Vector2[4];readonly float[] responseGain=new float[4];readonly bool[] aiDeploy=new bool[4],aiHeld=new bool[4];float timer;readonly StringBuilder text=new StringBuilder(1200);

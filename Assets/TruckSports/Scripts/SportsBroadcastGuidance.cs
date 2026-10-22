@@ -13,6 +13,10 @@ namespace LWS.TruckSports
         public int ActiveCues{get;private set;}
         void LateUpdate()
         {
+            // Older prefab overrides retained the original three-element list
+            // after the scene's guide expanded to objective + all local humans.
+            // Keep this read-only presentation allowlist bound to its authority.
+            if(compass.permittedTargets!=targets)compass.permittedTargets=targets;
             bool active=framing!=null&&framing.OwnsShot&&framing.Configuration.offscreenObjective;
             if(compass.gameObject.activeSelf!=active)compass.gameObject.SetActive(active);
             ActiveCues=0;
@@ -35,6 +39,7 @@ namespace LWS.TruckSports
         {
             var target=targets[index];target.transform.position=position;target.title=title;target.tintColor=color;
             if(target.gameObject.activeSelf!=active)target.gameObject.SetActive(active);
+            if(active&&!compass.POIisRegistered(target))compass.POIRegister(target);
             if(active){var viewport=framing.cameraRig.view.WorldToViewportPoint(position);if(viewport.z<=0||viewport.x<0||viewport.x>1||viewport.y<0||viewport.y>1)ActiveCues++;}
         }
     }

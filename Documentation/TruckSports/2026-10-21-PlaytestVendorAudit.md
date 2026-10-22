@@ -236,3 +236,90 @@ CUSTOM SYSTEMS CREATED: Small paused-presentation coordination in existing
 adapter; regression requiring the actual rendered widget (not just active POI).
 VENDOR SOURCE MODIFIED: None.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: None; CNP plus DOTween remain authorities.
+
+
+All-human cue follow-up: inspected saved prefab overrides and CNP's public
+POIisRegistered/POIRegister API. The scene guide had7targets while the prefab
+allowlist retained3. LWS now binds those arrays and records prefab overrides
+through Unity editor APIs, retaining CNP registration/filtering ownership.
+No registration/projection framework added, no vendor source changed. Final
+native2/2proves actual paused objective and three genuinely offscreen human
+widgets; an initial diagonal fixture was corrected because it was onscreen.
+
+
+### Terrier wind-only repair (ROOT preparation, unverified)
+
+VENDOR ASSETS AUDITED: Existing NWH/WheelController TerrierRacer Step and
+AirControl, shared SportsChaosWeather authoritative Flow, Weather Maker
+preset application and Weatherade presentation. Existing code applied full
+Flow with0.15ground/0.55air coupling and had no requested0.70mode multiplier.
+VENDOR ASSETS USED: Existing weather Flow and native AddForce acceleration;
+original weather, NWH driving/jump/stabilization/course systems retained.
+RELEVANT ASSETS NOT USED: No new weather/flight/vehicle framework is needed.
+CUSTOM SYSTEMS CREATED: Only an editable TerrierCourse response multiplier
+and a controlled native-body wind-response test (not yet executed).
+VENDOR SOURCE MODIFIED: None.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: None.
+
+
+### Safe road recovery and wind response verification
+
+VENDOR ASSETS AUDITED: Native NWH compound truck colliders, existing original
+Taxi district LwsRoadGraph samples/restrictions, Physics overlap queries,
+DamageHandler.Repair, CNP registration/indicator widgets and DOTween.
+VENDOR ASSETS USED: Existing authored road samples/headings and NWH lifecycle;
+PhysX checks the complete cached assembly envelope. No parallel road planner.
+RELEVANT ASSETS NOT USED: No new vehicle, road, weather or navigation package
+is needed for a mode-owned safe recovery placement decision.
+CUSTOM SYSTEMS CREATED: FareFightMatch placement/clearance helpers and native
+regressions; stalled-run diagnostics. Wind response native1/1 now passed
+(old/default/disabled velocities0.11/0.07699997/0), not full race acceptance.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+### Hidden wreck bounds and compact viewport presentation
+
+VENDOR ASSETS AUDITED: Existing Core/SportsFragmentRig real-mesh wreck pool
+hides meshes with zero scale; Unity Renderer bounds; Cinemachine TargetGroup/
+GroupComposer/Collider; current Heat-backed SportsBroadcastCanvas and TMP
+fonts, Broadcast truck portrait, SportsBroadcastPlate, and DOTween score punch.
+VENDOR ASSETS USED: Same Cinemachine composition and CNP POI/widget lifecycle;
+existing Heat/TMP styling/resources and DOTween.DOPunchScale.SetUpdate(true).
+RELEVANT ASSETS NOT USED: No replacement camera, projection, UI framework,
+font, portrait or destruction system. Existing assets cover these capabilities.
+CUSTOM SYSTEMS CREATED: Tiny rendered-mesh eligibility filter; opt-in read-only
+SportsCompactViewportHud layout over existing viewport roots. Terrier supplies
+its own authoritative viewSlots/wins/status; camera/input ownership unchanged.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+### BASE flare smoke and human Mattress recovery
+
+VENDOR ASSETS AUDITED: NWH Vehicle Physics2 Effects/Prefabs/ExhaustSmoke.prefab and its native ParticleSystem/Renderer/material, URP ParticlesLit shader/texture dependencies, existing24-object BASE sky pool, SportsRallyViews/SportsCameraOptions, Heat/TMP/portrait/plate and DOTween presentation, Unity InputSystem1.19.0 installed editor focus behavior (actual package source inspected).
+VENDOR ASSETS USED: Owned Flare Smoke prefab VARIANT of NWH ExhaustSmoke; four existing flares only. Native world-space particles/inherited velocity/wind force module; StopEmittingAndClear on pool retirement/reset. Existing PhysX mattress recovery/penalty; existing participant source routing and input gate. Shared read-only compact viewport adapter with DOTween contextual fade.
+RELEVANT ASSETS NOT USED: No new particle, physics, input, camera or UI framework required; existing assets cover each responsibility.
+CUSTOM SYSTEMS CREATED: Additive BASE reference migration, mode-owned human recovery choice and score-data adapters; explicit development-only Windows rendering fixtures. Native smoke1/1, compact/manual recovery6/0; actual Windows acceptance pending.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+### Wife/Target compact presentation and owned checkpoint views
+
+VENDOR ASSETS AUDITED: Existing SportsRallyViews grouped driver/passenger ownership, TargetMatch.Owners/TargetRules.totals, WifePair ordered Checkpoint/Progress/FinishTime, Compass Navigator Pro4 public cameraMain/viewportRect/follow/POIRegister, installed GizmoElements/outlined icon-arrow-white PNG, Heat/TMP viewport roots and DOTween. Vendor private indicator source inspected read-only to confirm its stock100px arrow and coordinate rotation.
+VENDOR ASSETS USED: Same shared compact adapter and truck portrait/plate/fonts; four saved CNP prefab instances for Wife checkpoints, individual allowlists/cameras/viewports; existing native CNP projection/edge placement. Smaller28px participant-colored outlined arrows use the installed CNP sprite. Native13/0passed all five sports compact views, actual four owned checkpoint widgets, earlier recovery/smoke/wind regressions. Wife additive authoring repeated with identical scene SHA256. Windows follow-up pending.
+RELEVANT ASSETS NOT USED: No alternative GPS, UI, camera, route planner or physics system needed. Wife guidance only reads its existing next ordered gate; no road search or scoring authority added.
+CUSTOM SYSTEMS CREATED: Read-only Wife/Target presentation adapters, tiny Wife checkpoint-to-CNP binder, additive scene-reference tool and focused verification fixtures.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+
+### Flare smoke visual root cause and owned flipbook repair
+
+VENDOR ASSETS AUDITED: NWH ExhaustSmoke prefab UVModule disabled/stale5x5 settings, ExhaustSmoke.mat URP ParticlesLit/subtractive color keyword, actual SmokeTextureSheet.png6columns×5rows. Source atlas and actual Windows close-up inspected.
+VENDOR ASSETS USED: Original NWH prefab through owned variant, original smoke texture and URP shader; native textureSheetAnimation Grid/WholeSheet/Lifetime6×5 and existing renderer/particle pool. Owned Flare smoke.mat copy changes tint/color mode without touching vendor material.
+RELEVANT ASSETS NOT USED: No replacement texture, shader, VFX framework or new commercial package needed.
+CUSTOM SYSTEMS CREATED: Explicit migration of only the known stock broken owned adaptation. Enabled/custom authored flipbooks/materials are retained. Native base-smoke-flipbook-native1/0passed6×5 animation, white multiplicative base, actual emission and pool/rematch cleanup. Windows visual repair acceptance pending rebuild.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

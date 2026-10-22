@@ -7,6 +7,9 @@ import shutil
 import subprocess
 import time
 from pathlib import Path
+import sys
+sys.dont_write_bytecode = True
+from BuildIdentity import snapshot
 
 ROOT = Path(__file__).resolve().parents[2]
 LOG = ROOT / "Logs/TruckSports/PlaytestRepair"
@@ -21,10 +24,13 @@ def digest(path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--sha", default=EXPECTED)
+    parser.add_argument("--content-sha", required=True, help="Exact full executable/dependency/asset fingerprint")
     parser.add_argument("--run", action="append", help="Exact completed acceptance run Name:CheckCount")
     args = parser.parse_args()
     assert re.fullmatch(r"[a-f0-9]{64}", args.sha)
     expected = args.sha
+    assert re.fullmatch(r"[a-f0-9]{64}", args.content_sha)
+    assert snapshot(ROOT / "Builds/TruckSportsCamera")[0] == args.content_sha
     running = subprocess.check_output([
         "powershell", "-NoProfile", "-Command",
         "Get-Process | Where-Object { $_.ProcessName -in @('Unity','TruckSports') } | Select-Object -ExpandProperty Id",
@@ -40,6 +46,7 @@ def main():
     for name, checks in runs:
         receipt = json.loads((LOG / name / "process.json").read_text())
         assert receipt["managedSha256"] == expected and receipt["exit"] == 0
+        assert receipt.get("buildContentSha256") == args.content_sha and receipt.get("unchangedBuildContent") is True, "Fresh acceptance for the exact code AND asset payload is required"
         assert receipt["unchangedManaged"] and receipt["completedEvidence"] and receipt["checks"] == checks and receipt["errors"] == 0
     source = ROOT / "Builds/TruckSportsCamera"
     destination = ROOT / "Builds/TruckSports"
@@ -67,8 +74,9 @@ def main():
             backup.rename(destination)
         raise
     assert digest(destination / "TruckSports_Data/Managed/Assembly-CSharp.dll") == expected
-    receipt = dict(managedSha256=expected, verifiedFiles=count, destination=str(destination), priorBuild=str(backup), source=str(source), acceptanceRuns=runs)
-    (LOG / ("canonical-build-promotion-" + expected + ".json")).write_text(json.dumps(receipt, indent=2))
+    assert snapshot(destination)[0] == args.content_sha
+    receipt = dict(managedSha256=expected, buildContentSha256=args.content_sha, verifiedFiles=count, destination=str(destination), priorBuild=str(backup), source=str(source), acceptanceRuns=runs)
+    (LOG / ("canonical-build-promotion-" + args.content_sha + ".json")).write_text(json.dumps(receipt, indent=2))
     (LOG / "canonical-build-promotion.json").write_text(json.dumps(receipt, indent=2))
     print(json.dumps(receipt), flush=True)
 

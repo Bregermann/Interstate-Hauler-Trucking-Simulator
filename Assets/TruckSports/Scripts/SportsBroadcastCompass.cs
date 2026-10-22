@@ -2,6 +2,7 @@ using CompassNavigatorPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using System.Collections.Generic;
 
 namespace LWS.TruckSports
 {
@@ -12,6 +13,8 @@ namespace LWS.TruckSports
     {
         public CompassProPOI[] permittedTargets;
         public float iconPixels=28,labelFontSize=16,labelWidth=150;
+        public float arrowPixels=28,arrowOffset=32;
+        readonly Dictionary<CompassProPOI,Image> arrows=new Dictionary<CompassProPOI,Image>();
         bool pausedIndicatorTweens;
         bool Permitted(CompassProPOI poi)
         {if(permittedTargets==null)return false;foreach(var target in permittedTargets)if(target==poi)return true;return false;}
@@ -23,6 +26,7 @@ namespace LWS.TruckSports
             // POI registry. Other participants' GPS indicators remain untouched.
             for(int i=pois.Count-1;i>=0;i--)if(pois[i]==null||!Permitted(pois[i]))pois.RemoveAt(i);
             base.UpdateIndicators();
+            foreach(var arrow in arrows)if(arrow.Key!=null&&arrow.Value!=null)arrow.Value.color=arrow.Key.tintColor;
             // CNP owns placement/visibility. Its scale entrance uses scaled time,
             // so a newly enabled objective stayed at zero scale in paused views.
             // Complete only that presentation animation with the UI clock.
@@ -56,6 +60,15 @@ namespace LWS.TruckSports
                 elements.titleText.fontSize=labelFontSize;elements.titleText.outlineWidth=.25f;elements.titleText.outlineColor=Color.black;
                 elements.titleText.rectTransform.sizeDelta=new Vector2(labelWidth,28);elements.titleText.enableAutoSizing=true;elements.titleText.fontSizeMin=12;elements.titleText.fontSizeMax=labelFontSize;
                 elements.distanceText.gameObject.SetActive(false);
+                var arrow=elements.arrowPivot.GetComponentInChildren<Image>(true);
+                if(arrow!=null)
+                {
+                    // Reuse the installed outlined white arrow so participant
+                    // colors stay recognizable. CNP rotates its own pivot.
+                    var source=Resources.Load<Sprite>("CNPro/Sprites/icon-arrow-white");
+                    if(source!=null){arrow.sprite=source;arrow.rectTransform.localRotation=Quaternion.Euler(0,0,90);}
+                    arrow.rectTransform.sizeDelta=Vector2.one*arrowPixels;arrow.rectTransform.anchoredPosition=Vector2.right*arrowOffset;arrow.preserveAspect=true;arrow.color=poi.tintColor;arrows[poi]=arrow;
+                }
             }
             foreach(var graphic in widget.GetComponentsInChildren<UnityEngine.UI.Graphic>(true))graphic.raycastTarget=false;
             return widget;

@@ -2,6 +2,14 @@ using System;using System.Text;using UnityEngine;using TMPro;using LWS.TruckSpor
 namespace LWS.TruckWifeCarrying {
 public enum WifePhase {Countdown,Race,RaceResult,Complete}
 public sealed class WifeMatch:SportsEventSession {
+ public override bool CompactViewportHud=>true;
+ public override bool SupportsSplitAIViews=>true;
+ public override string ViewportCardLabel(int view,int participant)=>teams[views.owners[view]];
+ public override Color ViewportCardColor(int view,int participant)=>setup.players[views.owners[view]].color;
+ public int RunningPlace(int pair){var self=pairs[pair];int place=1;for(int i=0;i<pairs.Length;i++){if(i==pair)continue;var other=pairs[i];if(other.State==WifeState.DNF||other.State==WifeState.Inactive)continue;if(other.State==WifeState.Finished){if(self.State!=WifeState.Finished||other.FinishTime<self.FinishTime-.0001f)place++;}else if(self.State!=WifeState.Finished&&other.Progress>self.Progress+.01f)place++;}return place;}
+ public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail){participant=-1;score=detail=null;if(views==null||view<0||view>=views.Humans)return false;int pair=views.owners[view];participant=DriverRole(pair);var racer=pairs[pair];score=racer.State==WifeState.DNF||racer.State==WifeState.Inactive?"OUT":Phase==WifePhase.Countdown?"READY":"#"+RunningPlace(pair);detail=(racer.State==WifeState.Finished?racer.FinishTime:Clock).ToString("F1")+"s";return true;}
+ public override string ViewportContextPrompt(int view){if(views==null||view<0||view>=views.Humans)return null;var pair=pairs[views.owners[view]];return pair.State==WifeState.Dropped?"PARTNER DOWN\nSTOP WITHIN 16 FT":pair.State==WifeState.Pickup?"LIFTING PARTNER":pair.State==WifeState.Penalty?"RECOVERY\n"+pair.PenaltyRemaining.ToString("F1")+"s":null;}
+
  public override bool SupportsRaceCountdown=>true;public override float RaceCountdownSeconds=>Phase==WifePhase.Countdown?Mathf.Max(0,3-age):-1;public override float RaceStartSeconds=>Phase==WifePhase.Race?Clock:-1;
  public WifePair[] pairs;public WifeCourse course;public SportsRallyViews views;public TextMesh[] identities;public TMP_InputField[] teamInputs;public TMP_Text[] roleLabels;public GameObject swapButton;public string[] teams={"Double Trouble","Roof Riders","Precious Cargo","Carry On"};public SportsRaceSeries series=new SportsRaceSeries();public WifePhase Phase{get;private set;}public float Clock{get;private set;}public bool Swapped{get;private set;}public int Seed{get;private set;}float age;int focus;readonly float[] times=new float[4],reaction=new float[4];readonly Vector2[] aiDrive=new Vector2[4];readonly int[] groups={0,1,2,3,0,1,2,3};readonly StringBuilder text=new StringBuilder(1400);
  [Serializable]sealed class Names {public string[] teams;}

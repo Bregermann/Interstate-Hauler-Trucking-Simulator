@@ -99,16 +99,20 @@ namespace LWS.TruckSports
         {
             Bounds result=default;bool found=false;
             if(renderers==null)CacheRenderers();
-            foreach(var renderer in renderers[slot])if(renderer!=null&&renderer.enabled&&renderer.gameObject.activeInHierarchy&&renderer is not ParticleSystemRenderer&&renderer is not TrailRenderer&&renderer is not LineRenderer)
+            foreach(var renderer in renderers[slot])if(RenderedMesh(renderer))
             {if(!found){result=renderer.bounds;found=true;}else result.Encapsulate(renderer.bounds);}
             return found?result:Shape(slot).bounds;
         }
         bool Excluded(Renderer renderer){foreach(var root in excludedSubjectRoots)if(root!=null&&renderer.transform.IsChildOf(root))return true;return false;}
+        // Existing wreck pools hide real meshes at zero scale. Their renderers
+        // stay enabled, and Unity retains a zero-size bound at the old wreck
+        // position. That invisible point must not enlarge a living tractor.
+        static bool RenderedMesh(Renderer renderer)=>renderer!=null&&renderer.enabled&&renderer.gameObject.activeInHierarchy&&renderer.transform.lossyScale.sqrMagnitude>1e-8f&&renderer.bounds.size.sqrMagnitude>1e-8f;
         void CacheRenderers(){renderers=new Renderer[SubjectCount][];worldCorners=new Vector3[SubjectCount][];for(int i=0;i<SubjectCount;i++){var all=Model(i)!=null?Model(i).GetComponentsInChildren<Renderer>(true):Array.Empty<Renderer>();var meshes=new System.Collections.Generic.List<Renderer>(all.Length);foreach(var renderer in all)if((renderer is MeshRenderer||renderer is SkinnedMeshRenderer)&&!Excluded(renderer)&&renderer.GetComponent<TextMesh>()==null&&renderer.GetComponent<TMPro.TMP_Text>()==null)meshes.Add(renderer);renderers[i]=meshes.ToArray();worldCorners[i]=new Vector3[Mathf.Max(8,renderers[i].Length*8)];}}
         int SampleCorners(int slot)
         {
             if(renderers==null)CacheRenderers();int count=0;
-            foreach(var renderer in renderers[slot])if(renderer!=null&&renderer.enabled&&renderer.gameObject.activeInHierarchy&&renderer is not ParticleSystemRenderer&&renderer is not TrailRenderer&&renderer is not LineRenderer)
+            foreach(var renderer in renderers[slot])if(RenderedMesh(renderer))
             {
                 var bounds=renderer.localBounds;var matrix=renderer.localToWorldMatrix;
                 for(int i=0;i<8;i++)worldCorners[slot][count++]=matrix.MultiplyPoint3x4(bounds.center+Vector3.Scale(bounds.extents,new Vector3((i&1)==0?-1:1,(i&2)==0?-1:1,(i&4)==0?-1:1)));

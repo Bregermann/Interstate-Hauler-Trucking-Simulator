@@ -5302,9 +5302,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section1; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+| Remaining Work | Reopened Windows rematch fixture: zero-scale pooled wreck meshes inflated living-truck bounds by hundreds of metres. Actual native before failure reproduced; RenderedMesh filter applied to bounds AND corners; native camera-hidden-mesh-fix-and-hud4/4 passed. New Windows/full33 acceptance pending; no accepted-build promotion yet. |
 
 ### GBC-02 — ADD A MAXIMUM BROADCAST CAMERA DISTANCE / ZOOM LIMIT
 
@@ -5316,9 +5316,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section2; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+| Remaining Work | Reopened Windows rematch fixture: zero-scale pooled wreck meshes inflated living-truck bounds by hundreds of metres. Actual native before failure reproduced; RenderedMesh filter applied to bounds AND corners; native camera-hidden-mesh-fix-and-hud4/4 passed. New Windows/full33 acceptance pending; no accepted-build promotion yet. |
 
 ### GBC-03 — STOP TRYING TO KEEP EVERY TRUCK VISIBLE AT ALL TIMES
 
@@ -5330,7 +5330,7 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section3; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
 | Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
 
@@ -5344,7 +5344,7 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section4; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
 | Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
 
@@ -5358,9 +5358,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section5; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | CNP-owned actual cues with owned SportsBroadcastCompass DOTween unscaled entrance on paused views; lifetime linked to widget and resumed scaled vendor animation. No vendor source changes. |
-| Automated Verification | Earlier33-scene fixtures checked marker activity. Expanded ff39camera53/54 exposed far-start/paused-widget issue; native widget0/1before (scale0), final DOTween1/1after plus projection9/9passed. Full corrected Windows actual-widget acceptance pending. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Verify corrected actual visible/screen-safe widgets across33bound scenes and all-human cue fixtures; physical-device/human visual preference remains unverified. |
+| Remaining Work | Reopened Windows rematch fixture: zero-scale pooled wreck meshes inflated living-truck bounds by hundreds of metres. Actual native before failure reproduced; RenderedMesh filter applied to bounds AND corners; native camera-hidden-mesh-fix-and-hud4/4 passed. New Windows/full33 acceptance pending; no accepted-build promotion yet. |
 
 ### GBC-06 — TRUCK KICKBALL — SPECIFIC CAMERA REPAIR
 
@@ -5372,7 +5372,7 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section6; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
 | Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
 
@@ -5386,9 +5386,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section7; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+| Remaining Work | Reopened Windows rematch fixture: zero-scale pooled wreck meshes inflated living-truck bounds by hundreds of metres. Actual native before failure reproduced; RenderedMesh filter applied to bounds AND corners; native camera-hidden-mesh-fix-and-hud4/4 passed. New Windows/full33 acceptance pending; no accepted-build promotion yet. |
 
 ### GBC-08 — FIX ALL OTHER APPLICABLE SPORTS
 
@@ -5400,7 +5400,7 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section8; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
 | Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
 | Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
 
@@ -5414,7 +5414,7 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section9; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
 | Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
 
@@ -5918,9 +5918,9 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Acceptance Criteria | All observable requirements and acceptance in source section8.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
 | Implementation Evidence | FareFightRoadAccess retains shared planner and actual road joins; native damage repair at match/recovery boundaries; destroyed powertrain enters announced reset equally for humans/AI. New steering-lock and distance-aware bounded backing fixes in progress. |
-| Automated Verification | Earlier Fare22/22; corrected damage/possession4/4. Exact2f Windows full default match completed in700.38s but FAILED stall gate15/16: one60.20691s pocket, two real recoveries. Moving-goal reverse-steering regression0/1failed before; actual NWH backing fixture0/1failed at2.426857m before forward retry. Corrected backing validation pending. |
+| Automated Verification | Existing native backing5/5, safe placement/recovery tests pass. Windows e343 FareRecordedSeedFullPowertrain16/0,443.73s: full first-to-five, same seed616736539, actual deliveries/recovery/rematch/menu; pockets9.229/7.647/14.232/9.249simsec. Prior958 full-match508.676simsec stall retained as failure, no root-cause fix claimed from a non-reproduction. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Pass corrected physical recovery and full-match liveness acceptance; integrate/preserve tested changes. Severe-weather, physical-device and human driving acceptance unperformed. |
+| Remaining Work | Intermittent healthy zero-power stall root cause remains unproven; capture engine component/connection activity on a recurrence. One successful full match is not proof that the old intermittent defect is eliminated. |
 
 ### HPR-8-5 — Fair Initial Passenger Distances
 
@@ -6378,11 +6378,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Triple the Playable Arena Area |
 | Original Request | Increase the actual physical playable surface area to approximately 3× the current baseline, not simply the camera zoom. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section19.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | Both existing saved scenes migrated explicitly/idempotently: measured actual ground/collision area2268.726to6805.251 (2.999591x); expanded boards, spawns, navigation, dressing; no shared-camera-profile change. |
-| Automated Verification | Native expanded arena3/3; ff39Windows25/0 includes two full first-to-thirty AI matches/rematches, connected1405navigation cells and actual720p/1080p images inspected. Corrected UI candidate full camera/default-match acceptance pending. |
+| Automated Verification | keepaway-arena-native3/3; ff39 Windows25/0; final7810634d Windows KeepawayExpandedDefaultFinal111/0,154.92s: both complete default60s matches, actual Rain/Snow registry selection, genuine contact/theft, blocked recovery, cab ownership, rematches and menu. Actual area6805.251m2 /2268.726m2=2.999591,22precut breakable references inspected. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Finish current exact-candidate camera/default60s/mixed-input Windows pass; human playtest unavailable. |
+| Remaining Work | No known implementation gap for this specific requirement. Human playtest not yet recorded. Canonical combined build promotion awaits the remaining global acceptance gates. |
 
 ### HPR-19-2 — Reduce Obstacle Density to Approximately One-Third
 
@@ -6392,11 +6392,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Reduce Obstacle Density to Approximately One-Third |
 | Original Request | Three times less dense means aim for approximately one-third the prior obstacle density per unit of playable area. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section19.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | 22potential props retained,18active at Lively; horizontal distribution scaled bysqrt(3), giving0.3333788baseline density with wider open chase lanes. |
-| Automated Verification | Native count/area/reference checks pass; ff39Windows25/0 confirms eighteen active Lively props and complete matches in both variants. |
+| Automated Verification | keepaway-arena-native3/3; ff39 Windows25/0; final7810634d Windows KeepawayExpandedDefaultFinal111/0,154.92s: both complete default60s matches, actual Rain/Snow registry selection, genuine contact/theft, blocked recovery, cab ownership, rematches and menu. Actual area6805.251m2 /2268.726m2=2.999591,22precut breakable references inspected. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Confirm current candidate broader regression; human density/route preference acceptance unavailable. |
+| Remaining Work | No known implementation gap for this specific requirement. Human playtest not yet recorded. Canonical combined build promotion awaits the remaining global acceptance gates. |
 
 ### HPR-19-3 — MAKE ALL GAMEPLAY OBSTACLES DESTRUCTIBLE
 
@@ -6406,11 +6406,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | MAKE ALL GAMEPLAY OBSTACLES DESTRUCTIBLE |
 | Original Request | NEW REQUIREMENT: Every obstacle placed within the active arena should be capable of reacting to and being destroyed by sufficient physical contact. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section19.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section19.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | VERIFIED COMPLETE |
 | Implementation Evidence | All22existing barrels/crates/tires/ramps/sweepers use existing Core-Collapse/PlowBreakable pool, actual-model EzySlice precuts and mode-only navigation/reset adapter. Structural floor/boards retained. |
-| Automated Verification | Native3/3 includes genuine truck collision breaking a prop, both scene references and complete restoration; original Plowing adapter break/reset passed in both scenes. ff39Windows25/0 includes natural obstacle breaks and restored rematches in both variants. |
+| Automated Verification | keepaway-arena-native3/3; ff39 Windows25/0; final7810634d Windows KeepawayExpandedDefaultFinal111/0,154.92s: both complete default60s matches, actual Rain/Snow registry selection, genuine contact/theft, blocked recovery, cab ownership, rematches and menu. Actual area6805.251m2 /2268.726m2=2.999591,22precut breakable references inspected. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Finish current exact-candidate broader gameplay/camera regression; human feel/destruction presentation acceptance unavailable. |
+| Remaining Work | No known implementation gap for this specific requirement. Human playtest not yet recorded. Canonical combined build promotion awaits the remaining global acceptance gates. |
 
 ### HPR-19-4 — Preserve Existing Keepaway Mechanics
 
@@ -6434,11 +6434,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Reduce Wind Intensity by Approximately 30% |
 | Original Request | Apply a mode-specific weather wind-force multiplier of approximately: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section20.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section20.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | TerrierCourse.windForceMultiplier default0.70; existing TerrierRacer wind AddForce uses this one mode-specific multiplier. No race speed/ramp/steering changes. |
+| Automated Verification | Native wind response 1/1: default/old ratio0.70, unchanged authoritative weather; Windows TerrierWindFullTwelve21/0,31heats/31locks to first-to-five on7810634d. No physical-controller or human claim. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human assessment of airborne wind feel; next candidate must retain race behavior. |
 
 ### HPR-20-2 — Do Not Rework Racing Physics
 
@@ -6462,11 +6462,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Replace the HUD with BASE Jumping-Style Compact Score Presentation |
 | Original Request | Remove the oversized repeated scoreboard/status layout. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section20.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section20.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | TerrierMatch read-only viewSlots/wins and compact four-card human/leader broadcast selection; SportsCompactViewportHud, SportsBroadcastScores. |
+| Automated Verification | Native compact/manual6/0 includes Terrier1–4human/optionalAI ownership and duplicate-name-safe shared leaders. Windows e343 TerrierWindCompactViewsFinal59/0: actual720p/1080p full-window captures, viewport bounds, owner/score, rematches/menu. Four-human720p image manually inspected. |
+| Human Verification | Pending developer playtest; no physical-controller or human acceptance claimed. |
+| Remaining Work | No unresolved automated HUD defect in e343. Human aesthetic/gameplay review remains separate. |
 
 ### HPR-21-1 — Add Smoke to Flares
 
@@ -6476,11 +6476,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Add Smoke to Flares |
 | Original Request | The existing flares need visible smoke. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section21.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section21.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Existing four-flare pool uses owned NWH ExhaustSmoke variant and Flare smoke.mat; native6x5 lifetime flipbook, normal alpha blending, bounded world-space drift. Vendor source unchanged. |
+| Automated Verification | Native smoke1/0 includes texture-sheet/blend assertions and actual emission/rematch cleanup. Full payload7cc60afd: CompactFourSportsTransparentFinal182/0, actual Windows smoke close-up manually inspected with no atlas grid or square specular silhouettes. Full content unchanged before/after run. |
+| Human Verification | Agent visually inspected actual Windows capture; developer playtest, listening, hardware and isolated performance acceptance unperformed. |
+| Remaining Work | No unresolved automated/agent-visual smoke defect in7cc60afd. Developer review/performance profiling remain separate. |
 
 ### HPR-21-2 — REMOVE THE MASSIVE TOP HUD BAR
 
@@ -6490,11 +6490,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | REMOVE THE MASSIVE TOP HUD BAR |
 | Original Request | The large top scoreboard/status bar must be removed completely. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section21.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section21.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | SportsCompactViewportHud hides original multiline view text/backing; existing MultiViewHUD hides header rail. Actual BASE scene uses compact owner/name/portrait/score. |
+| Automated Verification | Native BASE1–4human/optionalAI test passed; Windows CompactHudBaseMattressFinal94/0 explicitly checks absent header/old text at720p/1080p. Four-human image manually inspected. |
+| Human Verification | Pending developer review. |
+| Remaining Work | No unresolved automated top-bar defect in e343; human visual review pending. |
 
 ### HPR-21-3 — ONE CENTRAL SPLIT-SCREEN SCOREBOARD
 
@@ -6504,11 +6504,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | ONE CENTRAL SPLIT-SCREEN SCOREBOARD |
 | Original Request | For four-player split-screen: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section21.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section21.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | BaseJumpMatch opt-in SportsCompactViewportHud uses actual viewSlots/totals, name/portrait/score once, no repeated text. |
+| Automated Verification | Native1–4human/optionalAI bounds, unique owner and score/rematch tests passed. Windows e343 CompactHudBaseMattressFinal94/0 includes actual720p/1080p screenshots for every layout. BASE four-human720p manually inspected. |
+| Human Verification | Pending developer playtest; software-controller fixtures only. |
+| Remaining Work | No unresolved automated layout defect in e343. Full human/gameplay acceptance remains separate. |
 
 ### HPR-22-1 — NO AUTOMATIC FLIP RESET
 
@@ -6518,11 +6518,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | NO AUTOMATIC FLIP RESET |
 | Original Request | NEW REQUIREMENT: When a player flips their truck, do not automatically reset it. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section22.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section22.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | MattressRacer offers human NeedsReset without teleport/freeze, fresh assigned-action confirmation; AI retains automatic recovery. Small DOTween contextual popup via shared compact adapter. |
+| Automated Verification | Native manual-reset-and-compact-final6/0. Windows e343 CompactHudBaseMattressFinal94/0: inverted human stays dynamic under held action, owned reset popup720p/1080p, fresh pad press confirms exactly one existing5s recovery, no held-repeat, rematch clears state. Actual reset1080p image manually inspected. |
+| Human Verification | Pending developer keyboard/controller playtest; no physical hardware claim. |
+| Remaining Work | No unresolved automated human-reset defect in e343. Human handling/UX review pending. |
 
 ### HPR-22-2 — Use the BASE Jumping HUD Layout
 
@@ -6532,11 +6532,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Use the BASE Jumping HUD Layout |
 | Original Request | Apply the same compact central split-screen presentation. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section22.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section22.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | MattressMatch supplies actual running-place/time through shared SportsCompactViewportHud; assigned-action reset popup appears only when eligible. |
+| Automated Verification | Native compact/manual6/0: Mattress1–4human/optionalAI bounds/ownership, physical-progress rank comparison. Windows e343 CompactHudBaseMattressFinal94/0 verifies all layouts at720p/1080p; four-human720p and running-time/reset1080p captures manually inspected. |
+| Human Verification | Pending developer review. |
+| Remaining Work | No unresolved automated compact-layout defect in e343; human review remains separate. |
 
 ### HPR-22-3 — Preserve Existing Mattress Systems
 
@@ -6561,10 +6561,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | The mode has been referred to as Wife Carrying and Wife Racing in the notes. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section23.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section23.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Implementation Evidence | WifeMatch read-only RunningPlace/Clock/FinishTime adapter; own pair name/color retained across grouped views. Four saved WifeCheckpointGuidance CNP instances point to existing ordered gates; additive authoring preserves environment and race physics. |
+| Automated Verification | Native13/0 includes Wife1–4human/optionalAI ownership and four native CNP widgets. Payload7cc Windows182/0 actual720p/1080p UI; WifeCompactFullHardSeries6/0:12physical finishes in3races, rematch/menu/clock preservation. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Startup chase view is occluded by existing finish banner (GBC-SPORT-TruckWifeCarrying); human/controller review unperformed. Do not equate successful matches with camera clearance acceptance. |
 
 ### HPR-23-2 — BASE Jumping-Style Split-Screen Layout
 
@@ -6574,11 +6574,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | BASE Jumping-Style Split-Screen Layout |
 | Original Request | Use the same compact central split-screen information arrangement as Mattress Racing. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section23.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section23.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Shared SportsCompactViewportHud uses Wife pair ownership for inner-corner position/time groups; small contextual partner retrieval/penalty prompts preserve necessary interaction feedback. |
+| Automated Verification | Native13/0. Payload7cc Windows CompactFourSportsTransparentFinal182/0:1–4human/optionalAI bounds/ownership, real screenshot pairs720p/1080p and four independent checkpoint widgets. Wife full Hard series6/0,12finishes, reset/menu. |
+| Human Verification | Agent inspected actual Windows four-way layouts. Developer/controller review pending; startup banner camera issue tracked separately. |
+| Remaining Work | No unresolved automated compact-layout defect. Separate startup camera occlusion and human UX review remain open. |
 
 ### HPR-24-1 — Preserve Working Gameplay
 
@@ -6658,11 +6658,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | TRUCK TARGET LAUNCH |
 | Original Request |  Use the BASE Jumping Compact Split-Screen HUD Standard Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section25. |
 | Acceptance Criteria | All observable requirements and acceptance in source section25; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | TargetMatch opts into shared compact owner/name/portrait/current-score interface over existing Owners and TargetRules.totals; existing camera selection supports selectable AI views. No launch/landing/rules/physics edits. |
+| Automated Verification | Native13/0 includes Target1–4human/optionalAI data/bounds tests. Payload7cc Windows182/0 UI and TargetCompactFullThreeLevels18/0:complete five-launch Easy/Normal/Hard matches, real nonzero top landings, replays, attempts, rematch, pause and menu cleanup. |
+| Human Verification | Agent inspected actual Windows four-way720p layout; human/physical-controller/listening/performance acceptance unperformed. |
+| Remaining Work | No unresolved automated HUD/gameplay regression in7cc payload; human review remains separate. |
 
 ### HPR-26 — TRUCK TUG OF WAR
 
@@ -6813,10 +6813,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | For a standard 2×2 split-screen: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section29.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. |
+| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Musical Parking elimination-icon variation remains unimplemented; final current-payload visual acceptance and human/hardware review remain separate. |
 
 ### HPR-29-2 — Vary Contents by Sport
 
@@ -6827,10 +6827,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | BASE Jumping - Name. - Truck icon. - Score. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section29.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. |
+| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Musical Parking elimination-icon variation remains unimplemented; final current-payload visual acceptance and human/hardware review remain separate. |
 
 ### HPR-29-3 — Other Player Counts
 
@@ -6841,10 +6841,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | Adapt layouts for: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section29.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. |
+| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Musical Parking elimination-icon variation remains unimplemented; final current-payload visual acceptance and human/hardware review remain separate. |
 
 ### HPR-29-4 — UI Visual Quality
 
@@ -6855,10 +6855,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | Match polished existing Truck Sports games. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section29.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section29.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Implementation Evidence | Shared SportsCompactViewportHud over existing Heat/TMP viewport roots, branded plate/portrait/player colors and DOTween. Actual owner/name/score/time data adapters in BASE, Terrier, Mattress, Wife and Target. Wife retains pair identity, checkpoint CNP and critical retrieval prompts. |
+| Automated Verification | Native13/0 includes1–4human/optionalAI ownership, score update, viewport bounds and rematches across five sports. Windows182/0 covers BASE/Mattress/Wife/Target actual720p/1080p; Terrier59/0 separately. Manual smoke visual defect and owned material fixes are recorded separately. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Musical Parking elimination-icon variation remains unimplemented; final current-payload visual acceptance and human/hardware review remain separate. |
 
 ### HPR-BUNGEE — Bungee Destruction
 
@@ -6902,7 +6902,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7000,7 +7000,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7014,7 +7014,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7056,7 +7056,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7100,7 +7100,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
 | Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Agent visual finding in205c0bf4 Wife-checkpoint-cues-1280.png: existing finish banner crosses the starting chase sightline. Four cameras/owned markers work, but inspect this occlusion using existing Cinemachine before claiming overall Wife camera presentation complete. |
 
 #### GBC-SPORT-TruckMusicalParking
 
@@ -7112,7 +7112,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7140,7 +7140,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7168,7 +7168,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; existing replay/precision authority preserved. Exact scene name verified against camera-scene-bindings.txt. |
-| Automated Verification | Windows c8 FinalCamera33:693/0 across33bound scenes, actual720p/1080p projected vehicle size/objective/zoom bounds, human cues,1-4software-human ownership, AI-only rematch and spectator retirement. Targeted camera/render fixtures, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness and physical-controller acceptance unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7196,7 +7196,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7294,7 +7294,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7308,7 +7308,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; existing replay/precision authority preserved. Exact scene name verified against camera-scene-bindings.txt. |
-| Automated Verification | Windows c8 FinalCamera33:693/0 across33bound scenes, actual720p/1080p projected vehicle size/objective/zoom bounds, human cues,1-4software-human ownership, AI-only rematch and spectator retirement. Targeted camera/render fixtures, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness and physical-controller acceptance unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7322,7 +7322,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; existing replay/precision authority preserved. Exact scene name verified against camera-scene-bindings.txt. |
-| Automated Verification | Windows c8 FinalCamera33:693/0 across33bound scenes, actual720p/1080p projected vehicle size/objective/zoom bounds, human cues,1-4software-human ownership, AI-only rematch and spectator retirement. Targeted camera/render fixtures, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness and physical-controller acceptance unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7336,7 +7336,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7350,7 +7350,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7364,7 +7364,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7434,7 +7434,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7448,7 +7448,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7462,7 +7462,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7476,7 +7476,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7490,7 +7490,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7504,7 +7504,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7518,7 +7518,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7532,7 +7532,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7546,7 +7546,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7560,7 +7560,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7574,7 +7574,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7588,7 +7588,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7602,7 +7602,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7616,7 +7616,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7630,7 +7630,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7644,7 +7644,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7672,7 +7672,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7686,7 +7686,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |
 
@@ -7700,6 +7700,6 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | Saved scene binding and shared SportsBroadcastFraming/Profile/Guidance; protected precision/cab views retain their own camera authority. |
-| Automated Verification | Exact Windows build c8b0b9c1aed9. Logs/TruckSports/PlaytestRepair/FinalCamera33:693/0 across33bound scenes; actual720p/1080p projected vehicle size, objective/zoom bounds, all-human cues,1-4software-human ownership, AI-only rematch and spectator retirement. This is targeted camera/rendering acceptance, not complete human matches for all scenes. |
+| Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 includes this saved scene: actual720p/1080p truck bounds, bounded framing, distant/invalid targets and rematch/selected view ownership. Dedicated cab variants preserve their own cockpit authority. Additional CNP205targeted67/0 and native13/0 cover compact/colored cues; full-asset current-payload acceptance remains separately recorded. These are camera fixtures, not complete human matches. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Human readability/smoothness acceptance and physical controllers unperformed; unrelated gameplay requirements remain separate. |

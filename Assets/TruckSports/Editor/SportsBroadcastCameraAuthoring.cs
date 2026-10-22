@@ -22,7 +22,12 @@ namespace LWS.TruckSports.Editor
         }
         static GameObject CompassPrefab()
         {
-            var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(CompassPath);if(prefab!=null)return prefab;
+            var prefab=AssetDatabase.LoadAssetAtPath<GameObject>(CompassPath);if(prefab!=null){
+                var saved=new SerializedObject(prefab.GetComponent<CompassPro>());var margin=saved.FindProperty("_offScreenIndicatorMargin");
+                // Migrate only our old stock value; keep designer overrides.
+                if(margin!=null&&Mathf.Abs(margin.floatValue-.075f)<.00001f){margin.floatValue=.17f;saved.ApplyModifiedPropertiesWithoutUndo();PrefabUtility.SavePrefabAsset(prefab);}
+                return prefab;
+            }
             var source=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Plugins/Kronnect/CompassNavigatorPro/Resources/CNPro/Prefabs/CompassNavigatorPro.prefab");
             if(source==null)throw new InvalidOperationException("Installed Compass Navigator Pro prefab missing");
             var copy=UnityEngine.Object.Instantiate(source);copy.SetActive(false);copy.name="Broadcast objective compass";
@@ -32,7 +37,7 @@ namespace LWS.TruckSports.Editor
                 var settings=new SerializedObject(compass);
                 foreach(string field in new[]{"_showCompassBar","_showMiniMap","_showOnScreenIndicators","_offScreenIndicatorShowDistance"})settings.FindProperty(field).boolValue=false;
                 settings.FindProperty("_showOffScreenIndicators").boolValue=true;settings.FindProperty("_compassGroup").intValue=4;
-                settings.FindProperty("_offScreenIndicatorMargin").floatValue=.075f;settings.FindProperty("_offScreenIndicatorAlpha").floatValue=.9f;
+                settings.FindProperty("_offScreenIndicatorMargin").floatValue=.17f;settings.FindProperty("_offScreenIndicatorAlpha").floatValue=.9f;
                 settings.FindProperty("_offScreenIndicatorScale").floatValue=.8f;settings.ApplyModifiedPropertiesWithoutUndo();
                 foreach(var scaler in copy.GetComponentsInChildren<UnityEngine.UI.CanvasScaler>(true)){scaler.uiScaleMode=UnityEngine.UI.CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1920,1080);scaler.screenMatchMode=UnityEngine.UI.CanvasScaler.ScreenMatchMode.Expand;}
                 foreach(var canvas in copy.GetComponentsInChildren<Canvas>(true)){canvas.overrideSorting=true;canvas.sortingOrder=34;}
@@ -44,7 +49,7 @@ namespace LWS.TruckSports.Editor
         {
             var guide=framing.GetComponent<SportsBroadcastGuidance>();
             int capacity=Mathf.Min(7,framing.SubjectCount+1);
-            if(guide!=null&&guide.targets!=null&&guide.targets.Length>=capacity)return;
+            if(guide!=null&&guide.targets!=null&&guide.targets.Length>=capacity){BindGuidanceTargets(guide);return;}
             if(guide==null)guide=framing.gameObject.AddComponent<SportsBroadcastGuidance>();guide.framing=framing;
             var owner=framing.session!=null?framing.session.transform:framing.source.transform;
             if(guide.compass==null){var root=(GameObject)PrefabUtility.InstantiatePrefab(CompassPrefab());root.transform.SetParent(owner,false);root.SetActive(false);guide.compass=root.GetComponent<SportsBroadcastCompass>();}
@@ -56,7 +61,12 @@ namespace LWS.TruckSports.Editor
                 var poi=marker.AddComponent<CompassProPOI>();poi.canBeVisited=false;poi.hideWhenVisited=false;poi.dontDestroyOnLoad=false;poi.showOnScreenIndicator=false;poi.showOffScreenIndicator=true;poi.ignoreAreaOfInterest=true;poi.playAudioClipWhenVisited=false;poi.radius=0;poi.compassGroupMask=1<<3;
                 poi.iconNonVisited=i==0?AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd"):AssetDatabase.LoadAssetAtPath<Sprite>("Assets/TruckSports/Resources/Broadcast truck portrait.png");guide.targets[i]=poi;
             }
-            guide.compass.permittedTargets=guide.targets;EditorUtility.SetDirty(guide);
+            BindGuidanceTargets(guide);EditorUtility.SetDirty(guide);
+        }
+        static void BindGuidanceTargets(SportsBroadcastGuidance guide)
+        {
+            if(guide.compass==null)return;guide.compass.permittedTargets=guide.targets;EditorUtility.SetDirty(guide.compass);
+            if(PrefabUtility.IsPartOfPrefabInstance(guide.compass))PrefabUtility.RecordPrefabInstancePropertyModifications(guide.compass);
         }
         static void Hockey()
         {
@@ -77,8 +87,10 @@ namespace LWS.TruckSports.Editor
             var fit=camera.GetComponent<SportsCameraFit>();fit.broadcastFraming=framing;Guidance(framing);EditorUtility.SetDirty(framing);EditorUtility.SetDirty(fit);EditorUtility.SetDirty(source);
         }
         static readonly string[] ApplyTo={"TruckLogRolling","TruckTrampolineDodgeball","TruckBungeeDemolition","TruckTerrierRacing","TruckKickball","TruckMagnetMayhem","TruckKeepaway","TruckKeepawayFirstPerson","TruckHotPotato","TruckVolleyball","TruckKingOfTheHill","TruckBalloonBattle","TruckRedLightGreenLight","TruckWhackAMole","TruckSeesaw","TruckFloorIsLava","TruckTetherball","TruckJousting","TruckFreezeTag","TruckHungryHaulers","TruckSheepHerding","TruckFrogger","TruckAvalancheEscape","TruckNinjaWarrior","TruckFareFight","TruckSnake","TruckMusicalParking","TruckSumo","TruckDemolitionDerby","TruckBuzkashi","TruckPedestrianPlowing","TruckPedestrianPlowingFirstPerson"};
+        public static void UpgradeCompassMargin(){CompassPrefab();AssetDatabase.SaveAssets();}
         public static void Bind()
         {
+            UpgradeCompassMargin();
             var report=new StringBuilder("Targeted camera bindings; no environment regeneration.\n");
             foreach(var path in SportsBuilder.SceneList())
             {

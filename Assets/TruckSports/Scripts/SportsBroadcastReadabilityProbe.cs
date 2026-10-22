@@ -34,13 +34,14 @@ namespace LWS.TruckSports
         readonly List<Measurement> measurements=new List<Measurement>();
         readonly StringBuilder log=new StringBuilder();
         readonly Gamepad[] pads=new Gamepad[4];
-        string folder;int checks,errors;bool finished;IDisposable preferences;float deadline;
+        string folder;int checks,errors;bool finished;IDisposable preferences;float deadline;InputSettings.BackgroundBehavior previousBackground;
         static readonly string[] Core={SportsNavigation.Kickball,SportsNavigation.Magnet,SportsNavigation.Keepaway,SportsNavigation.HotPotato,SportsNavigation.Volley,SportsNavigation.Hill};
         static readonly string[] Others={SportsNavigation.LogRolling,SportsNavigation.Dodgeball,SportsNavigation.Bungee,SportsNavigation.Terrier,SportsNavigation.Balloon,SportsNavigation.RedLight,SportsNavigation.Whack,SportsNavigation.Seesaw,SportsNavigation.Lava,SportsNavigation.Tether,SportsNavigation.Joust,SportsNavigation.Freeze,SportsNavigation.Hauler,SportsNavigation.Herd,SportsNavigation.Frog,SportsNavigation.Avalanche,SportsNavigation.Ninja,SportsNavigation.FareFight,SportsNavigation.Snake,SportsNavigation.Parking,SportsNavigation.Sumo,SportsNavigation.Derby,SportsNavigation.Buzkashi,SportsNavigation.PedestrianPlowing,SportsNavigation.PedestrianPlowingCab,SportsNavigation.KeepawayCab};
         void Check(bool value,string message){checks++;log.AppendLine((value?"PASS ":"FAIL ")+message);if(!value)errors++;File.WriteAllText(Path.Combine(folder,"progress.txt"),log.ToString());}
         void Exception(string message,string stack,LogType type){if(type!=LogType.Exception&&type!=LogType.Error)return;errors++;log.AppendLine("ERROR "+message+"\n"+stack);File.WriteAllText(Path.Combine(folder,"progress.txt"),log.ToString());}
         void Configure(SportsEventSession match,int humans)
         {
+            for(int i=0;i<humans;i++)if(pads[i]!=null&&pads[i].added&&!pads[i].enabled){InputSystem.EnableDevice(pads[i]);log.AppendLine("SOFTWARE SETUP re-enables owned fixture pad "+i);}
             for(int i=0;i<match.setup.players.Length;i++){var p=match.setup.players[i];p.source=i<humans?BowlingSource.WholeController:BowlingSource.AI;p.pad=i<humans?pads[i]:null;}
             SportsCameraOptions.Set(false);
         }
@@ -74,12 +75,12 @@ namespace LWS.TruckSports
         }
         IEnumerator Start()
         {
-            deadline=Time.realtimeSinceStartup+900;preferences=SportsPrefs.IsolateValidation("BroadcastReadability");
+            deadline=Time.realtimeSinceStartup+900;preferences=SportsPrefs.IsolateValidation("BroadcastReadability");previousBackground=InputSystem.settings.backgroundBehavior;InputSystem.settings.backgroundBehavior=InputSettings.BackgroundBehavior.IgnoreFocus;
             var args=Environment.GetCommandLineArgs();int output=Array.IndexOf(args,"-tsBroadcastOutput");
             folder=output>=0?Path.GetFullPath(args[output+1]):SportsEvidencePaths.Folder("PlaytestRepair/Broadcast");Directory.CreateDirectory(folder);
             log.AppendLine("platform="+Application.platform+"; explicit camera fixtures; software devices only; full-match acceptance is separate");
             Application.logMessageReceived+=Exception;
-            for(int i=0;i<4;i++)pads[i]=InputSystem.AddDevice<Gamepad>("Broadcast camera test pad "+i);
+            for(int i=0;i<4;i++){pads[i]=InputSystem.AddDevice<Gamepad>("Broadcast camera test pad "+i);InputSystem.EnableDevice(pads[i]);}
             bool quick=Array.IndexOf(args,"quick")>=0;
             var scenes=quick?Core.Take(2).ToArray():Core.Concat(Others).ToArray();
             int subset=Array.IndexOf(args,"-tsBroadcastScenes");if(subset>=0)scenes=args[subset+1].Split(',');
@@ -95,7 +96,7 @@ namespace LWS.TruckSports
                 // Cab-only ownership is checked separately; a disabled arena view
                 // must not be expected to run its broadcast director.
                 if(match is LWS.TruckPedestrianPlowing.PlowMatch plow)plow.option=0;
-                bool started=match.StartMatch();Check(started,scene+" real setup starts with human plus AI");if(!started)continue;
+                bool started=match.StartMatch();Check(started,scene+" real setup starts with human plus AI");if(!started){match.ValidateSources(out var reason);log.AppendLine("START REJECTED "+scene+" reason="+reason+" focused="+Application.isFocused);for(int i=0;i<pads.Length;i++)log.AppendLine("  software pad="+i+" added="+(pads[i]!=null&&pads[i].added)+" enabled="+(pads[i]!=null&&pads[i].enabled));continue;}
                 yield return new WaitForSecondsRealtime(4);Time.timeScale=0;yield return Settle();
                 if(match is LWS.TruckPedestrianPlowing.PlowCabMatch)
                 {
@@ -153,7 +154,7 @@ namespace LWS.TruckSports
                 {
                     foreach(int humans in new[]{1,2,3,4})
                     {
-                        if(humans>match.MaximumPlayers)continue;match.SetupScreen();Configure(match,humans);driving.Select(1);Check(match.StartMatch(),scene+" split rematch "+humans);yield return Settle(.3f);
+                        if(humans>match.MaximumPlayers)continue;match.SetupScreen();Configure(match,humans);driving.Select(1);bool splitStarted=match.StartMatch();Check(splitStarted,scene+" split rematch "+humans);if(!splitStarted)continue;yield return Settle(.3f);
                         int expected=Math.Min(humans,match.setup.count);Check(match.cameras.Length==expected&&driving.rally.owners.Take(expected).Distinct().Count()==expected,scene+" human-only viewport ownership "+humans);
                         Check(!framing.OwnsShot,scene+" shared framing does not override chase/cab cameras");
                         SportsCameraOptions.Set(true);driving.Layout();yield return Settle(.15f);
@@ -170,19 +171,26 @@ namespace LWS.TruckSports
         IEnumerator SharedHumanGuidance(SportsEventSession match,SportsBroadcastFraming framing,SportsDrivingViews driving)
         {
             Time.timeScale=1;match.SetupScreen();Configure(match,4);driving.Select(0);
-            Check(match.StartMatch(),"four-human shared camera guidance fixture starts");yield return Settle(.3f);Time.timeScale=0;
-            var positions=new Vector3[4];for(int slot=0;slot<4;slot++){positions[slot]=framing.Body(slot).position;framing.Body(slot).position=new Vector3((slot&1)==0?-60:60,positions[slot].y,(slot&2)==0?-60:60);}
+            bool started=match.StartMatch();Check(started,"four-human shared camera guidance fixture starts");if(!started)yield break;yield return Settle(.3f);Time.timeScale=0;
+            var positions=new Vector3[4];for(int slot=0;slot<4;slot++)positions[slot]=framing.Body(slot).position;
+            int lead=framing.Primary;Check(lead>=0&&lead<4,"shared human guidance fixture focuses an actual local human");if(lead<0||lead>=4)lead=0;
+            var camera=framing.cameraRig.view;var behind=Vector3.ProjectOnPlane(-camera.transform.forward,Vector3.up).normalized;var right=Vector3.ProjectOnPlane(camera.transform.right,Vector3.up).normalized;
+            // These real NWH bodies interpolate. With physics deliberately
+            // paused, write the render transform too: there is no next physics
+            // step to commit a Rigidbody-only teleport to its renderer bounds.
+            int remote=0;for(int slot=0;slot<4;slot++)if(slot!=lead){var body=framing.Body(slot);var at=positions[lead]+behind*200+right*((remote++-1)*150);body.position=at;body.transform.position=at;}
             Physics.SyncTransforms();yield return Settle(1.8f);
             var guidance=framing.GetComponent<SportsBroadcastGuidance>();
             Check(guidance!=null&&guidance.targets.Length>=5,"shared cue capacity covers objective plus every local human");
             for(int slot=0;slot<4;slot++)if(slot!=framing.Primary)
             {
                 var position=framing.Body(slot).position;
+                var viewport=camera.WorldToViewportPoint(position);log.AppendLine("CUE FIXTURE lead="+lead+" primary="+framing.Primary+" slot="+slot+" body="+position+" render="+framing.Body(slot).transform.position+" camera="+camera.transform.position+" viewport="+viewport);Check(viewport.z<=0||viewport.x<0||viewport.x>1||viewport.y<0||viewport.y>1,"human guidance fixture actually leaves the rendered frustum slot="+slot);
                 Check(guidance.targets.Any(p=>p.gameObject.activeInHierarchy&&Vector3.Distance(p.transform.position,position)<.1f&&RenderedCue(guidance,p)),"offscreen human has their own visibly rendered, screen-safe CNP cue slot="+slot);
             }
             Check(guidance.ActiveCues>=3&&guidance.compass.gameObject.activeInHierarchy,"all three distant human competitors remain represented without zooming out");
             yield return ViewCapture(SportsNavigation.Magnet,"four-human-offscreen-cues");
-            for(int slot=0;slot<4;slot++)framing.Body(slot).position=positions[slot];Physics.SyncTransforms();Time.timeScale=1;match.SetupScreen();
+            for(int slot=0;slot<4;slot++){framing.Body(slot).position=positions[slot];framing.Body(slot).transform.position=positions[slot];}Physics.SyncTransforms();Time.timeScale=1;match.SetupScreen();
         }
         IEnumerator Hockey()
         {
@@ -191,7 +199,7 @@ namespace LWS.TruckSports
             Check(match!=null&&framing!=null&&framing.source!=null,"Hockey saved legacy camera has read-only framing source");if(match==null||framing==null)yield break;
             var camera=framing.cameraRig.view;Vector3 originalPosition=camera.transform.position;Quaternion originalRotation=camera.transform.rotation;float originalOrtho=camera.orthographicSize;
             match.mode=LWS.TruckHockey.HockeyMode.AIVsAI;match.Configure();match.mode=LWS.TruckHockey.HockeyMode.Custom;match.players[0].source=LWS.TruckHockey.HockeySource.WholeController;match.players[0].pad=pads[0];match.Configure();
-            Check(match.StartMatch(),"Hockey real human/AI setup starts");yield return Settle(4);Time.timeScale=0;yield return Settle();
+            if(pads[0].added&&!pads[0].enabled)InputSystem.EnableDevice(pads[0]);bool started=match.StartMatch();Check(started,"Hockey real human/AI setup starts");if(!started)yield break;yield return Settle(4);Time.timeScale=0;yield return Settle();
             framing.enabled=false;camera.transform.SetPositionAndRotation(originalPosition,originalRotation);camera.orthographicSize=originalOrtho;yield return Settle(.3f);yield return Capture(scene,"before",framing);
             framing.enabled=true;yield return Settle(2);yield return Capture(scene,"after",framing);
             Check(framing.ProjectedTruckRect(camera,framing.Primary).height>=framing.Configuration.minimumTruckHeight*.9f,"Hockey real renderer projection meets readability minimum");Check(framing.ObjectiveVisible,"Hockey physical puck remains visible");
@@ -227,10 +235,10 @@ namespace LWS.TruckSports
         {
             if(finished)return;finished=true;Time.timeScale=1;Application.logMessageReceived-=Exception;
             foreach(var pad in pads)if(pad!=null&&pad.added)InputSystem.RemoveDevice(pad);
-            preferences?.Dispose();log.AppendLine("CHECKS="+checks+" ERRORS="+errors);File.WriteAllText(Path.Combine(folder,"result.txt"),log.ToString());
+            preferences?.Dispose();InputSystem.settings.backgroundBehavior=previousBackground;log.AppendLine("CHECKS="+checks+" ERRORS="+errors);File.WriteAllText(Path.Combine(folder,"result.txt"),log.ToString());
             Application.Quit(errors==0?0:1);
         }
-        void OnDestroy(){if(!finished){Time.timeScale=1;preferences?.Dispose();}}
+        void OnDestroy(){if(!finished){Time.timeScale=1;preferences?.Dispose();InputSystem.settings.backgroundBehavior=previousBackground;}}
     }
 }
 #endif

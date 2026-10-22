@@ -152105,7 +152105,7 @@ PrefabInstance:
     - target: {fileID: 1823867625304845945, guid: 678b4b690849c6b46b56aad099b0b656,
         type: 3}
       propertyPath: permittedTargets.Array.size
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 1823867625304845945, guid: 678b4b690849c6b46b56aad099b0b656,
         type: 3}
@@ -152122,6 +152122,26 @@ PrefabInstance:
       propertyPath: 'permittedTargets.Array.data[2]'
       value: 
       objectReference: {fileID: 1591330976}
+    - target: {fileID: 1823867625304845945, guid: 678b4b690849c6b46b56aad099b0b656,
+        type: 3}
+      propertyPath: 'permittedTargets.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2102937126}
+    - target: {fileID: 1823867625304845945, guid: 678b4b690849c6b46b56aad099b0b656,
+        type: 3}
+      propertyPath: 'permittedTargets.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1115858461}
+    - target: {fileID: 1823867625304845945, guid: 678b4b690849c6b46b56aad099b0b656,
+        type: 3}
+      propertyPath: 'permittedTargets.Array.data[5]'
+      value: 
+      objectReference: {fileID: 1476167675}
+    - target: {fileID: 1823867625304845945, guid: 678b4b690849c6b46b56aad099b0b656,
+        type: 3}
+      propertyPath: 'permittedTargets.Array.data[6]'
+      value: 
+      objectReference: {fileID: 1181141672}
     - target: {fileID: 1866379243971494687, guid: 678b4b690849c6b46b56aad099b0b656,
         type: 3}
       propertyPath: m_Name
@@ -277121,6 +277141,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsExpansionViewHud
   match: {fileID: 1909899354}
   views: {fileID: 1909899357}
+  rally: {fileID: 0}
+  minimalDistance: 0
 --- !u!114 &1909899372
 MonoBehaviour:
   m_ObjectHideFlags: 0

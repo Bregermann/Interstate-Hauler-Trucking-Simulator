@@ -6,12 +6,53 @@ import shutil
 import subprocess
 import time
 import xml.etree.ElementTree as ET
+import zipfile
+import sys
+sys.dont_write_bytecode = True
+from BuildIdentity import snapshot
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 CLEAN = ROOT / ".sports-validation/TruckSportsPublicValidation"
 LOG = ROOT / "Logs/TruckSports/PlaytestRepair"
 UNITY = "C:/Program Files/Unity/Hub/Editor/6000.4.10f1/Editor/Unity.exe"
+
+
+def retain_sources(digest):
+    """Keep the exact compiled owned sources, even while ROOT work continues."""
+    manifest = LOG / ("build-" + digest + "-sources.json")
+    entries = json.loads(manifest.read_text(encoding="utf-8"))
+    archive = LOG / ("build-" + digest + "-sources.zip")
+    if archive.exists():
+        with zipfile.ZipFile(archive) as prior:
+            assert prior.read("inputs.json") == manifest.read_bytes(), "Never reuse an archive key for different source inputs"
+        return
+    payloads = []
+    for item in entries:
+        relative = Path(item["path"])
+        assert relative.as_posix().startswith("Assets/Truck") and relative.suffix == ".cs"
+        source = (CLEAN / relative).resolve()
+        assert source.is_relative_to(CLEAN.resolve())
+        data = source.read_bytes()
+        assert hashlib.sha256(data).hexdigest() == item["sha256"], relative
+        payloads.append((relative.as_posix(), data))
+    with zipfile.ZipFile(archive, "x", compression=zipfile.ZIP_DEFLATED) as output:
+        output.writestr("inputs.json", manifest.read_bytes())
+        for relative, data in payloads:
+            output.writestr(relative, data)
+    print("Retained", len(payloads), "exact compiled source files", archive.name, flush=True)
+
+
+def record_build():
+    folder = ROOT / "Builds/TruckSportsCamera"
+    managed = hashlib.sha256((folder / "TruckSports_Data/Managed/Assembly-CSharp.dll").read_bytes()).hexdigest()
+    content, files = snapshot(folder)
+    (LOG / ("build-" + content + "-files.json")).write_text(json.dumps(files, indent=2), encoding="utf-8")
+    shutil.copy2(LOG / "camera-source-sync.json", LOG / ("build-" + content + "-sources.json"))
+    retain_sources(content)
+    identity = dict(managedSha256=managed, buildContentSha256=content, files=len(files))
+    (LOG / "current-camera-build.json").write_text(json.dumps(identity, indent=2), encoding="utf-8")
+    print("Exact code AND asset build identity", json.dumps(identity), flush=True)
 
 
 def sync():
@@ -56,15 +97,12 @@ def run(name, arguments):
     if code:
         raise SystemExit(code)
     if name == "camera-build":
-        dll = ROOT / "Builds/TruckSportsCamera/TruckSports_Data/Managed/Assembly-CSharp.dll"
-        digest = hashlib.sha256(dll.read_bytes()).hexdigest()
-        shutil.copy2(LOG / "camera-source-sync.json", LOG / ("build-" + digest + "-sources.json"))
-        print("Retained exact build/source snapshot", digest, flush=True)
+        record_build()
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
@@ -73,12 +111,18 @@ def main():
     # Call only when this project has no other owned Editor/player. The caller
     # establishes the exclusive turn; no process-killing or project-lock bypass.
     sync()
-    if args.stage == "bind":
+    if args.stage == "compass-margin":
+        run("camera-compass-margin", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsBroadcastCameraAuthoring.UpgradeCompassMargin"])
+    elif args.stage == "bind":
         run("camera-bind", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsBroadcastCameraAuthoring.Bind"])
     elif args.stage == "repair-author":
         run("repair-authoring", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsPlaytestRepairAuthoring.Apply"])
     elif args.stage == "sky-author":
         run("skytow-repair-authoring", ["-quit", "-executeMethod", "LWS.TruckSkyTow.Editor.SkyTowRepairAuthoring.Upgrade"])
+    elif args.stage == "wife-hud":
+        run("wife-compact-checkpoint-authoring", ["-quit", "-executeMethod", "LWS.TruckWifeCarrying.Editor.WifeHudRepairAuthoring.Upgrade"])
+    elif args.stage == "base-author":
+        run("base-flare-smoke-authoring", ["-quit", "-executeMethod", "LWS.TruckBaseJumping.Editor.BaseJumpPlaytestRepairAuthoring.Upgrade"])
     elif args.stage == "fare-author":
         run("farefight-repair-authoring", ["-quit", "-executeMethod", "LWS.TruckFareFight.Editor.FareFightRepairAuthoring.Upgrade"])
     elif args.stage == "mine-author":

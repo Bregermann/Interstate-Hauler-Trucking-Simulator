@@ -17,6 +17,15 @@ paths += ["Assets/TruckSkyTow/Scenes/TruckSkyTow.unity"]
 paths += ["Assets/TruckMinefield/Scenes/TruckMinefield.unity"]
 paths += ["Assets/TruckTrailerPlug/Scenes/TruckTrailerPlug.unity"]
 paths += ["Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity"]
+if (CLEAN / "Logs/TruckSports/PlaytestRepair/wife-checkpoint-guidance.txt").is_file():
+    paths += ["Assets/TruckWifeCarrying/Scenes/TruckWifeCarrying.unity"]
+if (CLEAN / "Assets/TruckBaseJumping/Prefabs/Flare Smoke.prefab").is_file():
+    paths += ["Assets/TruckBaseJumping/Scenes/TruckBaseJumping.unity"]
+    paths += ["Assets/TruckBaseJumping/Prefabs/Flare Smoke.prefab" + suffix for suffix in ["", ".meta"]]
+    if (CLEAN / "Assets/TruckBaseJumping/Materials/Flare smoke.mat").is_file():
+        paths += ["Assets/TruckBaseJumping/Materials/Flare smoke.mat" + suffix for suffix in ["", ".meta"]]
+    if not (ROOT / "Assets/TruckBaseJumping/Prefabs.meta").exists():
+        paths += ["Assets/TruckBaseJumping/Prefabs.meta"]
 paths += ["Assets/TruckTrailerPlug/Models/" + name + suffix for name in ["Open Quarry Floor", "Quarry Pedestrian Navigation"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Art/" + name + part + suffix for name in ["Arctic standard gate", "Arctic precision gold gate"] for part in ["", " body", " inset"] for suffix in [".asset", ".asset.meta"]]
 paths += ["Assets/TruckSkyTow/Materials/Arctic gate snow chips.mat" + suffix for suffix in ["", ".meta"]]

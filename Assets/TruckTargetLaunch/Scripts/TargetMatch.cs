@@ -2,6 +2,10 @@ using System;using System.Text;using UnityEngine;using LWS.TruckSports;using LWS
 namespace LWS.TruckTargetLaunch {
 public enum TargetStage{Countdown,Playing,Settling,Replay,RoundResult}
 public sealed class TargetMatch:SportsEventSession {
+ public override bool CompactViewportHud=>true;
+ public override bool SupportsSplitAIViews=>true;
+ public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail){participant=-1;score=detail=null;if(view<0||view>=HumanViews||view>=Owners.Length)return false;participant=Owners[view];if(participant<0||participant>=setup.count)return false;score=rules.totals[participant].ToString();detail="";return true;}
+
  public TargetVolcano volcano;public TargetScoreFeedback scoreFeedback;
  public TargetCameras director;public TargetRacer[] racers;public Transform target,precisionZones;public Transform[] landingMarkers;public Collider targetCollider,missGround;public SportsEventCamera[] playerCameras;public SportsEventCamera broadcast;public SportsMotionReplay replay;public SportsChaosWeather atmosphere;public TargetRules rules=new TargetRules();public int seed=42761;public TargetStage Stage{get;private set;}public float Clock{get;private set;}public float Timer{get;private set;}public Vector3 CurrentWind{get;private set;}public int HumanViews{get;private set;}public int[] Owners{get;private set;}=new int[4];public bool RoundLive=>Stage==TargetStage.Playing||Stage==TargetStage.Settling;
  readonly Vector3[] aim=new Vector3[4];readonly float[] speed=new float[4],think=new float[4];readonly Vector2[] ai=new Vector2[4];readonly bool[] dive=new bool[4];readonly StringBuilder text=new StringBuilder(600);int display=-1;float recordTime,awardUntil;string awardNotice="";

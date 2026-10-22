@@ -6,6 +6,16 @@ using LWS.TruckBowling;
 namespace LWS.TruckTerrierRacing {
 public enum TerrierPhase {Countdown,Race,Replay,HeatResult,Complete}
 public sealed class TerrierMatch:SportsEventSession {
+ public override bool CompactViewportHud=>true;
+ public override bool BroadcastHeaderVisible=>Phase==TerrierPhase.Replay||Phase==TerrierPhase.HeatResult||Phase==TerrierPhase.Complete;
+ public override bool BroadcastStatusVisible=>BroadcastHeaderVisible||Phase==TerrierPhase.Race&&HeatWinner>=0;
+ readonly int[] broadcastCards=new int[4];int cardsFrame=-1;
+ void SelectBroadcastCards(){if(cardsFrame==Time.frameCount)return;cardsFrame=Time.frameCount;int count=0;for(int i=0;i<setup.count&&count<broadcastCards.Length;i++)if(setup.players[i].source!=BowlingSource.AI)broadcastCards[count++]=i;while(count<broadcastCards.Length&&count<setup.count){int best=-1;for(int i=0;i<setup.count;i++){bool used=false;for(int j=0;j<count;j++)if(broadcastCards[j]==i)used=true;if(!used&&(best<0||wins[i]>wins[best]))best=i;}if(best<0)break;broadcastCards[count++]=best;}}
+ public override int ScoreCardCount=>Mathf.Min(4,setup.count);
+ public override int ScoreCardSource(int card){SelectBroadcastCards();return broadcastCards[card];}
+ public override string ScoreCardLabel(int card)=>setup.players[ScoreCardSource(card)].name;
+ public override bool TryReadScoreCard(int card,out string value,out string detail){value=detail=null;if(card<0||card>=ScoreCardCount)return false;int slot=ScoreCardSource(card);var racer=racers[slot];value=wins[slot]+"/5";detail=racer.Finished?"FINISHED":!racer.Alive?"OUT":"HEAT "+Heat+" · RACING";return true;}
+ public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail){participant=-1;score=detail=null;if(view<0||view>=HumanViews||view>=viewSlots.Length)return false;participant=viewSlots[view];if(participant<0||participant>=racers.Length)return false;var racer=racers[participant];score=wins[participant]+" / 5";detail=Phase==TerrierPhase.Countdown?"HEAT "+Heat:racer.Finished?"FINISHED · LOCKED":!racer.Alive?"OUT · SPECTATING":"HEAT "+Heat+" · "+Mathf.Max(0,course.Length-course.TruckBounds(racer.truck.shape).max.z).ToString("F0")+"m";return true;}
  public override bool BroadcastParticipantActive(int slot)=>racers[slot].Alive&&!racers[slot].Finished;
  public override void DescribeBroadcast(SportsBroadcastAction action,SportsBroadcastFraming framing){int human=framing.Nearest(framing.RequestedFocus,true);action.primary=human>=0?human:framing.Nearest(framing.RequestedFocus);action.reason="LOCAL RACE ACTION / LEADING LIVE TRUCK";}
  public override bool SupportsRaceCountdown=>true;public override float RaceCountdownSeconds=>Phase==TerrierPhase.Countdown?Mathf.Max(0,3-phaseAge):-1;public override float RaceStartSeconds=>Phase==TerrierPhase.Race?HeatTime:-1;
