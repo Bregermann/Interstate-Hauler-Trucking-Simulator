@@ -5428,11 +5428,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | CAMERA SAFETY AND SMOOTHING |
 | Original Request | Preserve functional camera movement. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section10. |
 | Acceptance Criteria | All observable requirements and acceptance in source section10; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
+| Status | PARTIAL |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
-| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. |
+| Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. October22 current diagnosis: exact24fc8b5d Minefield camera ownership117/0 passed logically, but actual four-view720p/1080p sky triangles rejected visually. Broader layouts stopped on a stale Target card assertion. Native transition reproduces100ms shared-menu layout delay; Show now resets nextHUD and regression1/0 plus compact HUD6/0 pass. Native HDR offscreen targets do not reproduce the Windows backbuffer sky artifact; public vendor reload/reprojection/downsample/post isolation pending. Logs/TruckSports/PlaytestRepair holds all failed receipts and History XML. No corrected sky claim. Superseding October22 evidence: 2026-10-22-Precision-Cameras.md records the proven shared HUD throttle repair, two saved-scene sky repairs, targeted native tests and exact Windows rendered validation. Magenta clear proved missing background coverage; disabling MSAA/post/temporal and switching D3D12 did not fix it. Vendor documented Skybox/AfterSkybox path fixes both reproduced scenes. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Complete-match/action coverage beyond the targeted33-scene fixtures; human driving, visual-preference and physical-device acceptance remain unperformed. Protected precision/strategic views are not blanket-certified. |
+| Remaining Work | Current reproduced Minefield/Cornhole sky coverage and Target card transition defects repaired and promoted. Continue other open sport-specific current HPR/GBC requirements; human/device/listening/performance acceptance remains separate. New Q22-SKY and Q22-CARNIVAL remain queued. |
 
 ### GBC-11 — CONFIGURABLE SHARED CAMERA SETTINGS
 
@@ -6930,11 +6930,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckBowling |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Protected by newer master directive: camera/gameplay unchanged; only UI/text cleanup authorized. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckAirHockey
 
@@ -6972,11 +6972,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckCornhole |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckCheeseRolling
 
@@ -6986,11 +6986,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckCheeseRolling |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckDockDiving
 
@@ -7056,11 +7056,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckBaseJumping |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckTerrierRacing
 
@@ -7084,11 +7084,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckMinefield |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckMattressRacing
 
@@ -7168,11 +7168,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckBogSnorkelling |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckBungeeDemolition
 
@@ -7224,11 +7224,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckTargetLaunch |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckFieldGoal
 
@@ -7266,11 +7266,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckPoker |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckTugOfWar
 
@@ -7294,11 +7294,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | TruckSkeeBall |
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Existing sport-owned precision/cab/strategic cameras preserved under GBC section8 exception; shared SportsEventMenus.Show resets its HUD layout timer. Minefield and Cornhole explicitly use the documented Weather Maker Skybox/AfterSkybox path through the owned installed-algorithm geometry adapter. See 2026-10-22-Precision-Cameras.md. |
+| Automated Verification | October22 native projection9/0, focused saved sky/rematch/storm/HUD4/0 and earlier owned-card/shared compact8/0. Exact Windows 1363d34f2710: PrecisionCameraFinalWindows 843/0, PrecisionSkyFinalWindows 295/0, MinefieldSkyFinalD3D12 117/0. Saved one-to-four software-human and AI-only layouts, AI views OFF/ON, ownership, rematches, menu return and actual720p/1080p captures. These are presentation fixtures; prior complete gameplay evidence remains separate. Earlier visually rejected logical passes are retained. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
-| Remaining Work | Inspect actual scene rendering, apply shared framing if appropriate, measure, validate relevant controls and record evidence. |
+| Remaining Work | Human readability and camera-feel acceptance, physical controllers/wheels, listening and isolated performance profiling remain unperformed. Protected camera/gameplay designs retained; no unsupported full-match or collection-wide completion claim. |
 
 #### GBC-SPORT-TruckLogRolling
 
@@ -7735,7 +7735,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Implementation Evidence | Exact original attachment archived; SHA-256 `af2fb0ccf2ca70b3066854f2e079161154fa7b91292351b64d81aa98fb1731da`, 24123 bytes. This queue record does not claim implementation. |
 | Automated Verification | None for this new directive. Existing Fishing validation continues independently. |
 | Human Verification | New work requested, no acceptance claimed. |
-| Remaining Work | All implementation and acceptance work in the attached directive; add grouped permanent child IDs when execution begins, retaining this source ID and full specification. Activation follows the user-specified queue order. |
+| Remaining Work | All implementation and acceptance work in the attached directive; add grouped permanent child IDs when execution begins, retaining this source ID and full specification. Activation follows the user-specified queue order. Observed during the short camera sequence: prior snow remains visible in the following Minefield Hurricane capture; verify precipitation transition and particle lifetimes before weather acceptance. |
 
 
 ## Queued October 22 directives — execute after existing work

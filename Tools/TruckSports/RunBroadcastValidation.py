@@ -102,7 +102,7 @@ def run(name, arguments):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["parking-bays", "hockey-hud", "snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["parking-bays", "hockey-hud", "snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "mine-sky", "corn-sky", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
@@ -141,6 +141,10 @@ def main():
         run("farefight-repair-authoring", ["-quit", "-executeMethod", "LWS.TruckFareFight.Editor.FareFightRepairAuthoring.Upgrade"])
     elif args.stage == "mine-author":
         run("minefield-repair-authoring", ["-quit", "-executeMethod", "LWS.TruckMinefield.Editor.MinefieldPlaytestRepairAuthoring.Upgrade"])
+    elif args.stage == "mine-sky":
+        run("minefield-viewport-sky-authoring", ["-quit", "-executeMethod", "LWS.TruckMinefield.Editor.MinefieldPlaytestRepairAuthoring.UpgradeViewportSky"])
+    elif args.stage == "corn-sky":
+        run("cornhole-viewport-sky-authoring", ["-quit", "-executeMethod", "LWS.TruckCornhole.Editor.CornholeWeatherAuthoring.UpgradeViewportSky"])
     elif args.stage == "trailer-audit":
         run("trailer-geometry-audit", ["-quit", "-executeMethod", "LWS.TruckTrailerPlug.Editor.TrailerPlugRepairAuthoring.Audit"])
     elif args.stage == "trailer-author":

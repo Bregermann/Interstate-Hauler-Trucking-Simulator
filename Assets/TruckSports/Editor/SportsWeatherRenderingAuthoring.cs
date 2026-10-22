@@ -8,6 +8,22 @@ using DigitalRuby.WeatherMaker;
 namespace LWS.TruckSports.Editor {
 // Opt-in installation. Never mutate a host/shared renderer or change other sports.
 public static class SportsWeatherRenderingAuthoring {
+ // Explicit repair for saved scenes with reproduced split-screen sky coverage
+ // defects. This does not enable a second weather authority or rebuild a venue.
+ public static void UseViewportSkybox(GameObject owner,Camera[] cameras,string folder){
+  var weather=owner.GetComponent<SportsChaosWeather>();
+  if(weather==null||weather.clouds==null||cameras==null||cameras.Length==0||cameras.Any(camera=>camera==null))throw new System.InvalidOperationException("Existing scene-owned Weather Maker and camera bindings are required.");
+  var shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/TruckSports/Resources/Viewport Weather Maker Skybox.shader");
+  if(shader==null)throw new System.InvalidOperationException("Install the owned Weather Maker skybox geometry adapter first.");
+  string path="Assets/"+folder+"/Materials/Weather Maker viewport sky.mat";
+  var material=AssetDatabase.LoadAssetAtPath<Material>(path);
+  if(material==null){material=new Material(shader){name="Weather Maker viewport sky"};AssetDatabase.CreateAsset(material,path);}
+  else if(material.shader!=shader)throw new System.InvalidOperationException("Preserve the existing hand-authored material: "+path);
+  // Weather Maker's documented alternative: Unity covers the viewport; its
+  // installed shader include computes the sky and its clouds run AfterSkybox.
+  RenderSettings.skybox=material;weather.clouds.RenderQueue=UnityEngine.Rendering.CameraEvent.AfterSkybox;EditorUtility.SetDirty(weather.clouds);
+  foreach(var camera in cameras){camera.clearFlags=CameraClearFlags.Skybox;EditorUtility.SetDirty(camera);}
+ }
  public static void Install(SportsEventSession match,string folder)=>Install(match.gameObject,match.cameras,folder);
  public static void Install(GameObject owner,Camera[] cameras,string folder){
   var weather=owner.GetComponent<SportsChaosWeather>();

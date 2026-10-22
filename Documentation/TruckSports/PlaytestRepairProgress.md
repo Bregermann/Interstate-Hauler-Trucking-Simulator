@@ -1051,3 +1051,11 @@ See2026-10-22-Kickball-Waiting.md and exact native/Windows evidence. Existing ga
 ## October22 — Fishing saved nets and preserved features accepted by automated checks
 
 See2026-10-22-Fishing-Streams.md and exact native/Windows evidence. Current HPR/GBC work continues; newly supplied Q22-SKY then Q22-CARNIVAL directives are archived verbatim and queued after existing work. Human/hardware/listening/profiling remain unperformed.
+
+## October22 — current camera candidate held for actual sky rendering diagnosis
+
+Fishing22a058fc, Mattress6c9ab0fc and SkyTow4bd5d493 are committed/pushed. Canonical Windows12f9edb4 remains accepted. Camera-only candidate ec035d99 stopped on a legacy Minefield name-in-ViewText assertion; approved HUD is portrait/color plus distance. Revised24fc8b5d passed Minefield117/0, but actual four-view720p/1080p captures show black sky triangles. Its next eight-sport run stopped on a Target Launch compact card assertion. Native diagnosis traced shared menu viewport layout to the100ms HUD throttle; resetting nextHUD in Show gives1/0 transition and6/0 compact regressions. Native diagnostic setup had corrected ambiguous Show overload, unsupported batchmode WaitForEndOfFrame and missing-import failures; failed XML/logs retained. Clear-weather HDR Camera.Render does not reproduce the backbuffer triangles. Next: build the public Weather Maker reload/temporal/downsample/post isolation probe, inspect actual Windows phases, fix only proven cause. No vendor source/scene rebuild. Q22-SKY then Q22-CARNIVAL remain queued after current work. Do not promote24fc8b5d or claim sky fixed.
+
+## October22 — precision camera and Windows sky repair accepted by automated checks
+
+See2026-10-22-Precision-Cameras.md and exact evidence. Both reproduced sky defects and the shared stale-card layout are corrected; saved scenes and925unrelated files are preserved. Prior rejected candidates and harness failures remain recorded. Human/hardware/listening/profiling and other current HPR/GBC entries remain open. Q22-SKY then Q22-CARNIVAL remain queued after existing work. No entire-backlog completion claim.

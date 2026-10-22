@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--output-flag", default="-tsBroadcastOutput")
     parser.add_argument("--timeout", type=int, default=1200)
     parser.add_argument("--mode")
+    parser.add_argument("--graphics-api", choices=["d3d11", "d3d12"], default="d3d11", help="Explicit Windows rendering backend for the recorded acceptance or diagnostic run.")
     parser.add_argument("--result-file")
     parser.add_argument("--extra-arg", action="append", default=[])
     parser.add_argument("--legacy-errors-only", action="store_true", help="Accept an explicit legacy ERRORS=N. footer and count its actual PASS/FAIL check lines.")
@@ -36,7 +37,7 @@ def main():
     if args.mode:
         command += [args.mode]
     command += args.extra_arg
-    command += [args.output_flag, str(folder), "-force-d3d11", "-screen-fullscreen", "0", "-screen-width", "1280", "-screen-height", "720", "-logFile", str(folder / "player.log")]
+    command += [args.output_flag, str(folder), "-force-" + args.graphics_api, "-screen-fullscreen", "0", "-screen-width", "1280", "-screen-height", "720", "-logFile", str(folder / "player.log")]
     if args.scenes:
         command += ["-tsBroadcastScenes", args.scenes]
     info = subprocess.STARTUPINFO()
@@ -65,7 +66,7 @@ def main():
     completed = bool(terminal) or bool(legacy and checks)
     if args.result_file and evidence:
         shutil.copy2(result, folder / "result.txt")
-    receipt = dict(pid=process.pid, exit=code, seconds=round(time.monotonic()-start, 2), managedSha256=digest, buildContentSha256=content, unchangedBuildContent=snapshot(exe.parent)[0]==content, unchangedManaged=hashlib.sha256(dll.read_bytes()).hexdigest()==digest, completedEvidence=completed, checks=checks, errors=errors, legacyErrorsOnly=bool(legacy))
+    receipt = dict(pid=process.pid, exit=code, seconds=round(time.monotonic()-start, 2), requestedGraphicsAPI=args.graphics_api, managedSha256=digest, buildContentSha256=content, unchangedBuildContent=snapshot(exe.parent)[0]==content, unchangedManaged=hashlib.sha256(dll.read_bytes()).hexdigest()==digest, completedEvidence=completed, checks=checks, errors=errors, legacyErrorsOnly=bool(legacy))
     (folder / "process.json").write_text(json.dumps(receipt, indent=2))
     print(json.dumps(receipt), flush=True)
     if evidence:

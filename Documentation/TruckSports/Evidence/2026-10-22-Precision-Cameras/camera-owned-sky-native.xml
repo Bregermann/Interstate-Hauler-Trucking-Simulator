@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="8" result="Passed" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 22:07:20Z" end-time="2026-10-22 22:07:46Z" duration="25.7355087">
+  <test-suite type="TestSuite" id="1389" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="271" result="Passed" start-time="2026-10-22 22:07:20Z" end-time="2026-10-22 22:07:46Z" duration="25.735509" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1273" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="104" result="Passed" start-time="2026-10-22 22:07:20Z" end-time="2026-10-22 22:07:46Z" duration="25.716901" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="72476" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1140" name="CameraLayoutDiagnosisTests" fullname="CameraLayoutDiagnosisTests" classname="CameraLayoutDiagnosisTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-22 22:07:20Z" end-time="2026-10-22 22:07:27Z" duration="6.986192" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1142" name="MinefieldSavedSkyboxSurvivesWeatherAndRematches" fullname="CameraLayoutDiagnosisTests.MinefieldSavedSkyboxSurvivesWeatherAndRematches" methodname="MinefieldSavedSkyboxSurvivesWeatherAndRematches" classname="CameraLayoutDiagnosisTests" runstate="Runnable" seed="724276177" result="Passed" start-time="2026-10-22 22:07:20Z" end-time="2026-10-22 22:07:26Z" duration="5.450645" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SAVED SKY REMATCH: Clear, four human cameras, vendor AfterSkybox, stable material and authoritative selected preset.
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED SKY REMATCH: Heavy Rain, four human cameras, vendor AfterSkybox, stable material and authoritative selected preset.
+Changing weather profile WeatherMakerProfile_HeavyRain (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED SKY REMATCH: Snow, four human cameras, vendor AfterSkybox, stable material and authoritative selected preset.
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED SKY REMATCH: Blizzard, four human cameras, vendor AfterSkybox, stable material and authoritative selected preset.
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to Hurricane weather (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED SKY REMATCH: Hurricane, four human cameras, vendor AfterSkybox, stable material and authoritative selected preset.
+Changing weather profile Hurricane weather (Sports runtime clone) to Hurricane weather (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+        </test-case>
+        <test-case id="1141" name="TargetOwnedCardsFollowRematchLayoutsAfterRenderedLateUpdate" fullname="CameraLayoutDiagnosisTests.TargetOwnedCardsFollowRematchLayoutsAfterRenderedLateUpdate" methodname="TargetOwnedCardsFollowRematchLayoutsAfterRenderedLateUpdate" classname="CameraLayoutDiagnosisTests" runstate="Runnable" seed="1906950267" result="Passed" start-time="2026-10-22 22:07:26Z" end-time="2026-10-22 22:07:27Z" duration="1.520049" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+BEFORE RENDER humans=0 ai=False 
+AFTER RENDER humans=0 ai=False 
+BEFORE RENDER humans=0 ai=True view=0 owner=0 rootActive=True name=Player 1;view=1 owner=1 rootActive=True name=Player 2;view=2 owner=2 rootActive=True name=Player 3;view=3 owner=3 rootActive=True name=Player 4
+AFTER RENDER humans=0 ai=True view=0 owner=0 rootActive=True name=Player 1;view=1 owner=1 rootActive=True name=Player 2;view=2 owner=2 rootActive=True name=Player 3;view=3 owner=3 rootActive=True name=Player 4
+BEFORE RENDER humans=1 ai=False view=0 owner=3 rootActive=True name=Player 4
+AFTER RENDER humans=1 ai=False view=0 owner=3 rootActive=True name=Player 4
+BEFORE RENDER humans=1 ai=True view=0 owner=3 rootActive=True name=Player 4;view=1 owner=0 rootActive=True name=Player 1;view=2 owner=1 rootActive=True name=Player 2;view=3 owner=2 rootActive=True name=Player 3
+AFTER RENDER humans=1 ai=True view=0 owner=3 rootActive=True name=Player 4;view=1 owner=0 rootActive=True name=Player 1;view=2 owner=1 rootActive=True name=Player 2;view=3 owner=2 rootActive=True name=Player 3
+BEFORE RENDER humans=2 ai=False view=0 owner=2 rootActive=True name=Player 3;view=1 owner=3 rootActive=True name=Player 4
+AFTER RENDER humans=2 ai=False view=0 owner=2 rootActive=True name=Player 3;view=1 owner=3 rootActive=True name=Player 4
+BEFORE RENDER humans=2 ai=True view=0 owner=2 rootActive=True name=Player 3;view=1 owner=3 rootActive=True name=Player 4;view=2 owner=0 rootActive=True name=Player 1;view=3 owner=1 rootActive=True name=Player 2
+AFTER RENDER humans=2 ai=True view=0 owner=2 rootActive=True name=Player 3;view=1 owner=3 rootActive=True name=Player 4;view=2 owner=0 rootActive=True name=Player 1;view=3 owner=1 rootActive=True name=Player 2
+BEFORE RENDER humans=3 ai=False view=0 owner=1 rootActive=True name=Player 2;view=1 owner=2 rootActive=True name=Player 3;view=2 owner=3 rootActive=True name=Player 4
+AFTER RENDER humans=3 ai=False view=0 owner=1 rootActive=True name=Player 2;view=1 owner=2 rootActive=True name=Player 3;view=2 owner=3 rootActive=True name=Player 4
+BEFORE RENDER humans=3 ai=True view=0 owner=1 rootActive=True name=Player 2;view=1 owner=2 rootActive=True name=Player 3;view=2 owner=3 rootActive=True name=Player 4;view=3 owner=0 rootActive=True name=Player 1
+AFTER RENDER humans=3 ai=True view=0 owner=1 rootActive=True name=Player 2;view=1 owner=2 rootActive=True name=Player 3;view=2 owner=3 rootActive=True name=Player 4;view=3 owner=0 rootActive=True name=Player 1
+BEFORE RENDER humans=4 ai=False view=0 owner=0 rootActive=True name=Player 1;view=1 owner=1 rootActive=True name=Player 2;view=2 owner=2 rootActive=True name=Player 3;view=3 owner=3 rootActive=True name=Player 4
+AFTER RENDER humans=4 ai=False view=0 owner=0 rootActive=True name=Player 1;view=1 owner=1 rootActive=True name=Player 2;view=2 owner=2 rootActive=True name=Player 3;view=3 owner=3 rootActive=True name=Player 4
+BEFORE RENDER humans=4 ai=True view=0 owner=0 rootActive=True name=Player 1;view=1 owner=1 rootActive=True name=Player 2;view=2 owner=2 rootActive=True name=Player 3;view=3 owner=3 rootActive=True name=Player 4
+AFTER RENDER humans=4 ai=True view=0 owner=0 rootActive=True name=Player 1;view=1 owner=1 rootActive=True name=Player 2;view=2 owner=2 rootActive=True name=Player 3;view=3 owner=3 rootActive=True name=Player 4
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1150" name="CompactViewportHudTests" fullname="CompactViewportHudTests" classname="CompactViewportHudTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-22 22:07:27Z" end-time="2026-10-22 22:07:46Z" duration="18.721381" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1153" name="BaseJumpingOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" fullname="CompactViewportHudTests.BaseJumpingOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" methodname="BaseJumpingOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" classname="CompactViewportHudTests" runstate="Runnable" seed="510709699" result="Passed" start-time="2026-10-22 22:07:27Z" end-time="2026-10-22 22:07:31Z" duration="3.505575" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Actual rendered TruckBaseJumping compact views humans=1 AI=False owners=0 screen=640x480
+Actual rendered TruckBaseJumping compact views humans=2 AI=False owners=0,1 screen=640x480
+Actual rendered TruckBaseJumping compact views humans=3 AI=False owners=0,1,2 screen=640x480
+Actual rendered TruckBaseJumping compact views humans=4 AI=False owners=0,1,2,3 screen=640x480
+Actual rendered TruckBaseJumping compact views humans=1 AI=True owners=0,1,2,3 screen=640x480
+]]></output>
+        </test-case>
+        <test-case id="1154" name="MattressOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" fullname="CompactViewportHudTests.MattressOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" methodname="MattressOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" classname="CompactViewportHudTests" runstate="Runnable" seed="2028356081" result="Passed" start-time="2026-10-22 22:07:31Z" end-time="2026-10-22 22:07:35Z" duration="3.696903" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Actual rendered TruckMattressRacing compact views humans=1 AI=False owners=0 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual rendered TruckMattressRacing compact views humans=2 AI=False owners=0,1 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual rendered TruckMattressRacing compact views humans=3 AI=False owners=0,1,2 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual rendered TruckMattressRacing compact views humans=4 AI=False owners=0,1,2,3 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual rendered TruckMattressRacing compact views humans=1 AI=True owners=0,1,2,3 screen=640x480
+]]></output>
+        </test-case>
+        <test-case id="1155" name="TargetLaunchOneToFourHumanCardsReadTheirOwnAuthoritativeScores" fullname="CompactViewportHudTests.TargetLaunchOneToFourHumanCardsReadTheirOwnAuthoritativeScores" methodname="TargetLaunchOneToFourHumanCardsReadTheirOwnAuthoritativeScores" classname="CompactViewportHudTests" runstate="Runnable" seed="1777090209" result="Passed" start-time="2026-10-22 22:07:35Z" end-time="2026-10-22 22:07:38Z" duration="3.489421" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Actual rendered TruckTargetLaunch compact views humans=1 AI=False owners=0 screen=640x480
+Actual rendered TruckTargetLaunch compact views humans=2 AI=False owners=0,1 screen=640x480
+Actual rendered TruckTargetLaunch compact views humans=3 AI=False owners=0,1,2 screen=640x480
+Actual rendered TruckTargetLaunch compact views humans=4 AI=False owners=0,1,2,3 screen=640x480
+Actual rendered TruckTargetLaunch compact views humans=1 AI=True owners=0,1,2,3 screen=640x480
+]]></output>
+        </test-case>
+        <test-case id="1152" name="TerrierOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" fullname="CompactViewportHudTests.TerrierOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" methodname="TerrierOneToFourHumanCardsStayInsideTheirOwnedViewsWithoutDuplicateScores" classname="CompactViewportHudTests" runstate="Runnable" seed="1321588438" result="Passed" start-time="2026-10-22 22:07:38Z" end-time="2026-10-22 22:07:42Z" duration="4.012493" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=425902 hash=262112390 length=176 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=425902
+Actual rendered TruckTerrierRacing compact views humans=1 AI=False owners=0 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=762109 hash=268549389 length=176 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=762109
+Actual rendered TruckTerrierRacing compact views humans=2 AI=False owners=0,1 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=680096 hash=253719916 length=160 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=680096
+Actual rendered TruckTerrierRacing compact views humans=3 AI=False owners=0,1,2 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=22529 hash=254815952 length=168 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=22529
+Actual rendered TruckTerrierRacing compact views humans=4 AI=False owners=0,1,2,3 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=966110 hash=250504700 length=160 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=966110
+Actual rendered TruckTerrierRacing compact views humans=1 AI=True owners=0,1,2,3 screen=640x480
+]]></output>
+        </test-case>
+        <test-case id="1151" name="TerrierSharedCardsShowLocalHumansAndLeadersWithoutDuplicatingDisplayNameScores" fullname="CompactViewportHudTests.TerrierSharedCardsShowLocalHumansAndLeadersWithoutDuplicatingDisplayNameScores" methodname="TerrierSharedCardsShowLocalHumansAndLeadersWithoutDuplicatingDisplayNameScores" classname="CompactViewportHudTests" runstate="Runnable" seed="1503635741" result="Passed" start-time="2026-10-22 22:07:42Z" end-time="2026-10-22 22:07:43Z" duration="1.299269" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_ClearWindy (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=673335 hash=271450259 length=176 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=673335
+]]></output>
+        </test-case>
+        <test-case id="1156" name="WifeOneToFourHumanCardsReadTheirOwnPairPositionAndTime" fullname="CompactViewportHudTests.WifeOneToFourHumanCardsReadTheirOwnPairPositionAndTime" methodname="WifeOneToFourHumanCardsReadTheirOwnPairPositionAndTime" classname="CompactViewportHudTests" runstate="Runnable" seed="1956668922" result="Passed" start-time="2026-10-22 22:07:43Z" end-time="2026-10-22 22:07:46Z" duration="2.713344" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Actual rendered TruckWifeCarrying compact views humans=1 AI=False owners=0 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual rendered TruckWifeCarrying compact views humans=2 AI=False owners=0,1 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual rendered TruckWifeCarrying compact views humans=3 AI=False owners=0,1,2 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual rendered TruckWifeCarrying compact views humans=4 AI=False owners=0,1,2,3 screen=640x480
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual rendered TruckWifeCarrying compact views humans=1 AI=True owners=0,1,2,3 screen=640x480
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
