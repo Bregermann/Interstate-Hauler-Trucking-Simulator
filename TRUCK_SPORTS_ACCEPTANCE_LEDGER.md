@@ -6112,11 +6112,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | TRUCK BOWLING |
 | Original Request |  LATEST INSTRUCTION OVERRIDES EARLIER BOWLING REQUESTS Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section11. |
 | Acceptance Criteria | All observable requirements and acceptance in source section11; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | BowlingMenus retains its existing refresh/lane lifecycle and delegates HUD presentation to optional BowlingHudPresentation. Explicit BowlingHudAuthoring edits only original lane header/footer/result UI and adds truck portraits, resolved totals, frame/delivery/rack labels, Heat frame progress and bounded DOTween score feedback. No alley, pinsetter, truck, physics, camera or scoring changes. |
+| Automated Verification | Exact 56b740d8 Windows BowlingCompactHudWindows 67/0. Twenty zero-through-four-human software layouts with AI cameras OFF/ON at 720p/1080p; correct lane ownership and screen-safe cards. Actual four-AI ten-frame match totals 99/114/136/95, deliveries 20/19/21/20; results, clean rematch, pause and menu cleanup. Native EditMode 1/0, PlayMode 1/0 and 32 existing score/control assertions. All 6,058 original documents retained; only reviewed UI documents change. Repeat authoring preserves saved scene bytes. Evidence: Documentation/TruckSports/Evidence/2026-10-22-Bowling-HUD. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human usability, physical-controller and listening acceptance remain unperformed. The original result-page transition was exercised but its initial-fade capture does not certify settled-menu readability. No alley, gameplay, pinsetter, camera or physics redesign was performed. |
 
 ### HPR-12 — TRUCK BILLIARDS
 

@@ -398,3 +398,12 @@ RELEVANT ASSETS NOT USED: No replacement menu framework, camera system or logo g
 CUSTOM SYSTEMS CREATED: Read-only HUD presentation adapter, explicit additive authoring tool and focused verification. Existing HUD refresh remains the sole update authority.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+### Bowling HUD-only modernization
+
+VENDOR ASSETS AUDITED: Heat ProgressBar/font assets, DOTween, existing broadcast theme/portrait/rounded plates, saved Bowling HUD/lane ownership and existing scoring/control fixtures.
+VENDOR ASSETS USED: Heat ProgressBar, existing Heat-derived TMP font/truck portrait, uGUI, shared rounded plate and DOTween bounded score feedback. Existing NWH, alley art, cameras, replay and pinsetter are unchanged.
+RELEVANT ASSETS NOT USED: Replacement environments, physics and cameras are outside the approved UI-only scope. No new logo artwork is needed.
+CUSTOM SYSTEMS CREATED: Read-only lane HUD adapter, explicit saved-UI authoring and targeted verification. Existing BowlingMenus remains the refresh/lifecycle authority.
+VENDOR SOURCE MODIFIED: NO.
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

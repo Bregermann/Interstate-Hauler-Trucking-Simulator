@@ -19,6 +19,9 @@ paths += ["Assets/TruckMinefield/Scenes/TruckMinefield.unity"]
 billiards_scene = CLEAN / "Assets/TruckBilliards/Scenes/TruckBilliards.unity"
 if "LWS.TruckBilliards.BilliardsHudPresentation" in billiards_scene.read_text(encoding="utf-8-sig"):
     paths += ["Assets/TruckBilliards/Scenes/TruckBilliards.unity"]
+bowling_scene = CLEAN / "Assets/TruckBowling/Scenes/TruckBowling.unity"
+if "LWS.TruckBowling.BowlingHudPresentation" in bowling_scene.read_text(encoding="utf-8-sig"):
+    paths += ["Assets/TruckBowling/Scenes/TruckBowling.unity"]
 mine = CLEAN / "Assets/TruckMinefield"
 if (mine / "Materials/West meadow and Vista mountains.asset").is_file():
     for name in ["West", "East"]:
