@@ -121,3 +121,10 @@ analytics.local.json.meta
 
 # Isolated public-source Sports validation, kept inside this project.
 /.sports-validation/
+
+# Owned commercial animation source is imported locally by the Sports intake
+# tool and bundled in the playable build; never publish the raw vendor files.
+/Assets/TruckCheeseRolling/PrivateLicensedAnimations/
+/Assets/TruckCheeseRolling/PrivateLicensedAnimations.meta
+/Assets/TruckCheeseRolling/PrivateLicensedVfx/
+/Assets/TruckCheeseRolling/PrivateLicensedVfx.meta

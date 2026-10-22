@@ -425,3 +425,17 @@ RELEVANT ASSETS NOT USED: No replacement poker engine, card renderer, input fram
 CUSTOM SYSTEMS CREATED: Public-only read-only HUD/award captions, safe ambient visual pivots, explicit idempotent authoring and targeted tests/probe.
 VENDOR SOURCE MODIFIED: NO.
 DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.
+
+### Cheese Rolling owned presentation
+
+VENDOR ASSETS AUDITED: Milo the Cat/MalberS owned installation and actual rig/clips; GAPH Particle Ingredient Pack examples/materials/textures; Core-Collapse example layers; existing Heat/TMP/DOTween, NWH, Cheese physics/Weather Maker/accumulation integration.
+
+VENDOR ASSETS USED: Owned Milo avatar/four clips; GAPH Explosion3 artwork with project-owned URP conversion; existing Heat fonts, original truck portrait, uGUI/TMP, DOTween and Unity Animator/ParticleSystem APIs; original NWH race and existing weather.
+
+RELEVANT ASSETS NOT USED: Core-Collapse's inspected example emphasizes shockwave/dust; the owned GAPH example supplies the requested distinct fire/smoke/spark layers. No replacement vehicle, damage, weather, navigation or UI framework is needed. Cat walking/running does not replace stable scenery colliders.
+
+CUSTOM SYSTEMS CREATED: Small visual adapters, explicit idempotent authoring, owner-only licensed intake scripts, saved HUD configuration and targeted tests/probes. No custom animation rig, particle engine or vehicle physics.
+
+VENDOR SOURCE MODIFIED: NO.
+
+DUPLICATE VENDOR FUNCTIONALITY CREATED: NO.

@@ -31,6 +31,11 @@ if "Scrap gameplay preview" in front_scene.read_text(encoding="utf-8-sig"):
 poker_scene = CLEAN / "Assets/TruckPoker/Scenes/TruckPoker.unity"
 if "LWS.TruckPoker.PokerTableHud" in poker_scene.read_text(encoding="utf-8-sig"):
     paths += ["Assets/TruckPoker/Scenes/TruckPoker.unity"]
+cheese_scene = CLEAN / "Assets/TruckCheeseRolling/Scenes/TruckCheeseRolling.unity"
+if "LWS.TruckCheeseRolling.CheeseCatPresentation" in cheese_scene.read_text(encoding="utf-8-sig"):
+    paths += ["Assets/TruckCheeseRolling/Scenes/TruckCheeseRolling.unity"]
+    paths += ["Assets/TruckCheeseRolling/Prefabs/Animated owned cat.prefab" + suffix for suffix in ["", ".meta"]]
+    paths += ["Assets/TruckCheeseRolling/Art/Animals/Scenery cat gestures.controller" + suffix for suffix in ["", ".meta"]]
 mine = CLEAN / "Assets/TruckMinefield"
 if (mine / "Materials/West meadow and Vista mountains.asset").is_file():
     for name in ["West", "East"]:
@@ -82,5 +87,22 @@ for relative in paths:
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, target)
     records.append(dict(path=relative, sha256=hashlib.sha256(target.read_bytes()).hexdigest()))
+# Keep generated licensed VFX available locally without adding vendor-derived
+# source to the public payload. Never replace differing owner edits.
+private_vfx = "Assets/TruckCheeseRolling/PrivateLicensedVfx"
+private_copies = []
+for folder in ["Resources", "Materials"]:
+    for source in (CLEAN / private_vfx / folder).rglob("*"):
+        if not source.is_file():
+            continue
+        relative = source.relative_to(CLEAN); target = ROOT / relative
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        if target.exists() and hashlib.sha256(target.read_bytes()).hexdigest() != digest:
+            raise RuntimeError("Preserve differing licensed owner customization: " + str(relative))
+        private_copies.append((source, target))
+for source, target in private_copies:
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if not target.exists():
+        shutil.copy2(source, target)
 (LOG / "playtest-exported-assets.json").write_text(json.dumps(records, indent=2))
 print("Preserved", len(paths), "explicit Fishing/Sky Tow/Minefield/Trailer Plug scene/art paths; original vendor assets and unrelated scenes unchanged.")

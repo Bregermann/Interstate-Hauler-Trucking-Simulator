@@ -6252,11 +6252,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Replace Placeholder Explosion VFX |
 | Original Request | Search existing owned assets for suitable explosion effects. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section17.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section17.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Eight existing pool entries now wrap the owned six-layer GAPH explosion using CheeseExplosionPresentation.cs and explicit CheeseExplosionPresentationAuthoring.cs; all raw licensed inputs/generated VFX stay ignored. Original damage/force/sound/recovery authority remains unchanged. |
+| Automated Verification | Five EditMode and three PlayMode tests passed, original 3520 rule assertions; exact-payload Windows 427/0 across presentation and repeated real starts/full physical matches. Evidence: Evidence/2026-10-22-Cheese-Presentation and 2026-10-22-Cheese-Presentation.md. |
+| Human Verification | No new human/hardware/listening acceptance performed; October21 report retained. Automated native and actual Windows evidence recorded separately. |
+| Remaining Work | Human playtest and physical-controller/listening acceptance remain unperformed; no isolated CPU/GPU benchmark claim. Owner licensed raw inputs/generated VFX remain ignored and reproducible with documented intake tools. |
 
 ### HPR-17-2 — Complete HUD Overhaul
 
@@ -6266,11 +6266,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Complete HUD Overhaul |
 | Original Request | Modernize: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section17.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section17.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | CheeseHudPresentation.cs, CheeseHudPresentationAuthoring.cs and saved Cheese scene: source-owned portraits/colors/catches, distance-based chase order, actual MPH/time, existing countdown/boost feedback, dark outlined locator backing and graphical result cards. |
+| Automated Verification | Five EditMode and three PlayMode tests passed, original 3520 rule assertions; exact-payload Windows 427/0 across presentation and repeated real starts/full physical matches. Evidence: Evidence/2026-10-22-Cheese-Presentation and 2026-10-22-Cheese-Presentation.md. |
+| Human Verification | No new human/hardware/listening acceptance performed; October21 report retained. Automated native and actual Windows evidence recorded separately. |
+| Remaining Work | Human playtest and physical-controller/listening acceptance remain unperformed; no isolated CPU/GPU benchmark claim. Owner licensed raw inputs/generated VFX remain ignored and reproducible with documented intake tools. |
 
 ### HPR-17-3 — Use Owned Animated Cat Models
 
@@ -6280,11 +6280,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Use Owned Animated Cat Models |
 | Original Request | NEW REQUIREMENT: The developer owns animated cat models. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section17.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section17.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Four original cat props use actual owned Milo generic rig and idle/look/scratch/yawn clips via CheeseCatPresentation.cs, saved nested prefab and controller. Existing orange material, placement and capsule colliders retained. |
+| Automated Verification | Five EditMode and three PlayMode tests passed, original 3520 rule assertions; exact-payload Windows 427/0 across presentation and repeated real starts/full physical matches. Evidence: Evidence/2026-10-22-Cheese-Presentation and 2026-10-22-Cheese-Presentation.md. |
+| Human Verification | No new human/hardware/listening acceptance performed; October21 report retained. Automated native and actual Windows evidence recorded separately. |
+| Remaining Work | Human playtest and physical-controller/listening acceptance remain unperformed; no isolated CPU/GPU benchmark claim. Owner licensed raw inputs/generated VFX remain ignored and reproducible with documented intake tools. |
 
 ### HPR-17-4 — Preserve Racing Gameplay
 
@@ -6294,11 +6294,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Preserve Racing Gameplay |
 | Original Request | The underlying Cheese Rolling gameplay is good. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section17.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section17.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Original CheeseMatch/Truck/Rules/Camera/Wheel/Sheep/Weather/StartBoost source bytes preserved. All 5574 original scene documents retained; original physical transform values and colliders unchanged. Only ambient reset hook and UI read adapter added. |
+| Automated Verification | Five EditMode and three PlayMode tests passed, original 3520 rule assertions; exact-payload Windows 427/0 across presentation and repeated real starts/full physical matches. Evidence: Evidence/2026-10-22-Cheese-Presentation and 2026-10-22-Cheese-Presentation.md. |
+| Human Verification | No new human/hardware/listening acceptance performed; October21 report retained. Automated native and actual Windows evidence recorded separately. |
+| Remaining Work | Human playtest and physical-controller/listening acceptance remain unperformed; no isolated CPU/GPU benchmark claim. Owner licensed raw inputs/generated VFX remain ignored and reproducible with documented intake tools. |
 
 ### HPR-18-1 — Denser, More Varied Crowds
 

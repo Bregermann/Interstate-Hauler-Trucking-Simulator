@@ -2,7 +2,7 @@
 
 ## Current state — October21/22 continuation
 
-Accepted Windows executable: Builds/TruckSports/TruckSports.exe. Latest full545-file payloadf70add935a387ee1a040f366f5c9673de66907c131c66e5f0569440a9e54b0c0,managedcc6cfe91ad39485c445a2f82ae595324da35459446bd16eaee63d70d57630713.60scenes/173exact owned C#inputs. Bungee Windows77/0 across3owned processes,EditMode1/0,PlayMode1/0. Complete three-round four-AI match,actual structural support/drop/finale tests,software-device ownership/reconnect and60real-second four-camera workload. Previous accepted541e5c98 Parking build retained under Recovery. Bungee138-file scoped milestone201c3fa10516701599c71ab7b084281459ff89eb is committed and atomically pushed to both authorized branches;hashes verified in bungee-city-git-delivery.json.
+Accepted Windows executable: Builds/TruckSports/TruckSports.exe. Cheese HPR-17 full545-file payload 3769c3a1f5e081a611c37b55ece12d808bacb5a70b351d3f9884d9ca7777a794, managed 98f54b470a7b678fa91b878a676700e38e21ec3ac4e8e1317716137fb5b7200a;60 scenes/227 exact owned source inputs. Eight native tests and 427/0 exact-payload Windows checks; actual full physical AI matches, repeated grounded starts, forty camera/input layouts, owned animated cats and layered VFX. Human/hardware/listening and isolated profiling acceptance not claimed.
 
 Parking numbered bays5197c076,Hockey/Parking36f50402 and Snake/Wife5c0a7c03 deliveries remain pushed to both authorized branches with their own exact build identities and retained failed candidates.925unrelated pending files/private planner remain protected.
 
@@ -1023,3 +1023,7 @@ HPR-14/15 delivered with native EditMode 2/0, PlayMode 2/0, 26 existing rules as
 ## October 22 — Poker table presentation accepted
 
 HPR-16-1 through HPR-16-4 now retain the approved original engine/cards/dealer while adding public chip/button/actor panels, owned viewport lower thirds, public-only hand-rank feedback and bounded render-only AI presence. Original action/winner animations remain. Six native tests and 505 original core assertions pass. Exact Windows e4ab7c47 passes 186 checks with zero failures: twenty layouts/four resolutions, visible chip glyphs, actual projected-logo clearance, ordinary conserved eight-AI tournament, private input ownership/disconnect/handoff, rematch and collection return. Intermediate visual and test-fixture failures are retained. All 9,482 original scene documents and 925 unrelated pending files remain intact. Human/hardware/listening acceptance is unperformed. Continue remaining current-directive work.
+
+## October22 — Cheese presentation accepted
+
+See 2026-10-22-Cheese-Presentation.md and its recorded evidence. Original course/physics/scoring/boost preserved, licensed intake remains private, all925 unrelated pending files retained. Next active area: HPR-18 Dock Diving; other open HPR/GBC entries remain open. No entire-backlog completion claim.

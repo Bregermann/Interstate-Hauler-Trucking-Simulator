@@ -16,8 +16,8 @@ public sealed class CheeseStartProbe:MonoBehaviour {
  run|=UnityEditor.SessionState.GetBool("Sports.CheeseStartProbe",false);UnityEditor.SessionState.SetBool("Sports.CheeseStartProbe",false);
 #endif
  if(!run)return;var g=new GameObject("Cheese start explicit reproduction");DontDestroyOnLoad(g);if(!SportsProbeInputIsolation.Active)g.AddComponent<SportsProbeInputIsolation>();g.AddComponent<CheeseStartProbe>();}
- readonly StringBuilder log=new StringBuilder();int errors;string folder;bool done;Keyboard keyboard;
- void Check(bool ok,string what){log.AppendLine((ok?"PASS ":"FAIL ")+what);if(!ok)errors++;}
+ readonly StringBuilder log=new StringBuilder();int checks,errors;string folder;bool done;Keyboard keyboard;
+ void Check(bool ok,string what){checks++;log.AppendLine((ok?"PASS ":"FAIL ")+what);if(!ok)errors++;}
  void Error(string message,string stack,LogType type){if(type==LogType.Exception||type==LogType.Error){errors++;log.AppendLine("RUNTIME ERROR "+message+"\n"+stack);}}
  IEnumerator Start(){folder=Path.GetFullPath(Path.Combine(Application.dataPath,Application.isEditor?"..":"../../..","Logs","TruckSports","Party","Cheese",Application.isEditor?"Native":"Windows"));Directory.CreateDirectory(folder);File.WriteAllText(folder+"/result.txt","RUNNING");Application.logMessageReceived+=Error;
   string mode=Mode();log.AppendLine("CHEESE_START_RUN mode="+mode+" editor="+Application.isEditor+" pid="+System.Diagnostics.Process.GetCurrentProcess().Id+" build="+Application.buildGUID);
@@ -45,7 +45,7 @@ public sealed class CheeseStartProbe:MonoBehaviour {
   }
   m.ChangeSetup();log.AppendLine("REPRODUCED_FLOATING_DROP="+reproduced+"/12");
   if(mode=="verify")yield return Driving(m);
-  done=true;log.AppendLine("ERRORS="+errors);File.WriteAllText(folder+"/result.txt",log.ToString());if(!Application.isEditor)Application.Quit(errors==0?0:2);
+  done=true;log.AppendLine("CHECKS="+checks+" ERRORS="+errors);File.WriteAllText(folder+"/result.txt",log.ToString());if(!Application.isEditor)Application.Quit(errors==0?0:2);
  }
  IEnumerator Driving(CheeseMatch m){
   m.startJump=5;m.startForward=4;
