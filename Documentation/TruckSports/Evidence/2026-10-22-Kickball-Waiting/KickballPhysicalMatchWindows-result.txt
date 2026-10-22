@@ -1,0 +1,31 @@
+PASS saved scene owns twelve separate physical NWH trucks
+PASS twelve-AI match starts without a controller or human confirmation
+PASS six-a-side and correct starting half
+RENDER startup 1280x720 turfFraction=0.214 position=(24.38, 22.65, 3.90)
+PASS startup actual player framebuffer contains the stadium, not a fullscreen sky pass
+PASS pause preserves actual truck pose, ball state and match clock
+PASS recorded replay retains the weather-compatible perspective projection
+RENDER first-replay 1280x720 turfFraction=0.463 position=(18.55, 13.04, 46.72)
+RENDER broadcast-after-replay 1280x720 turfFraction=0.652 position=(20.98, 21.24, 7.56)
+PASS broadcast-after-replay actual player framebuffer contains the stadium, not a fullscreen sky pass
+PASS AI physically moves and rolls real pitches
+PASS actual bumper contact produces a real kick
+PASS physical truck motion produces ordered base-pad crossings
+PASS actual front contact secures the visible ball
+PASS complete actual three-inning match including necessary extra innings
+PASS reused stadium audience responds to actual runs or outs without scoring authority
+MATCH difficulty=1 pitches=34 kicks=33 catches=156 throws=125 bases=90 plays=33 innings=3 scores=8,6
+PASS rematch clears scores, runners, outs, possession and replay
+PASS real match enters a recorded highlight and restores broadcast rendering
+RENDER rematch-1280x720 1280x720 turfFraction=0.293 position=(24.34, 22.92, 3.89)
+PASS rematch-1280x720 actual player framebuffer contains the stadium, not a fullscreen sky pass
+RENDER rematch-1920x1080 1920x1080 turfFraction=0.293 position=(24.40, 22.98, 3.89)
+PASS rematch-1920x1080 actual player framebuffer contains the stadium, not a fullscreen sky pass
+RENDER rematch-1440x900 1440x900 turfFraction=0.262 position=(24.40, 22.98, 3.89)
+PASS rematch-1440x900 actual player framebuffer contains the stadium, not a fullscreen sky pass
+RENDER rematch-1280x960 1280x960 turfFraction=0.214 position=(24.40, 22.98, 3.89)
+PASS rematch-1280x960 actual player framebuffer contains the stadium, not a fullscreen sky pass
+RENDER rematch-2560x1080 2560x1080 turfFraction=0.362 position=(24.40, 22.98, 3.89)
+PASS rematch-2560x1080 actual player framebuffer contains the stadium, not a fullscreen sky pass
+PASS menu return removes trucks, cameras, replay and extra listeners
+PID=50024 CHECKS=21 ERRORS=0. Real NWH/PhysX simulation and software test orchestration, not human or controller hardware validation.

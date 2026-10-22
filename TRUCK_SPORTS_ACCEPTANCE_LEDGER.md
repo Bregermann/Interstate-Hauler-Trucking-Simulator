@@ -5692,11 +5692,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Broadcast Camera Position |
 | Original Request | Maintain the shared-camera distance standard established by Truck Keepaway. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.1. |
 | Acceptance Criteria | All observable requirements and acceptance in source section5.1; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | 2026-10-22-Kickball-Waiting.md; existing saved Kickball scene, rules/cameras/celebration retained. KickballWaitingAuthoring v2, KickballAIPlayback, waiting-only owned look, compact viewport cards and runner/base action selection. |
+| Automated Verification | Final native35/0 EditMode and5/0 PlayMode; exact Windows87/0 across owned waiting input, preference restart, physical home-run fixtures, complete twelve-AI match and broadcast acceptance. Exact asset/source identity and per-run receipts in Evidence/2026-10-22-Kickball-Waiting. Initial keyboard-fixture failures and rejected overlapping setup capture retained. |
+| Human Verification | October21 findings repaired/revalidated in actual Windows rendering; no subsequent developer playtest, physical-device or subjective listening acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after automated/visual acceptance. Developer taste/gameplay, physical controllers/wheels, listening and isolated profiling remain unperformed; other HPR/GBC entries remain open. |
 
 ### HPR-5-2 — Fix Home-Run Resolution
 
@@ -5706,11 +5706,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Fix Home-Run Resolution |
 | Original Request | Current bug: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.2. |
 | Acceptance Criteria | All observable requirements and acceptance in source section5.2; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
-| Implementation Evidence | KickballRules.HomeRun atomically credits pending/active eligible runs, clears live runners and rejects repeat/third-out credit. Match parks ball and suspends interactions during3.4second sealed celebration before existing replay/next-plate restoration. |
-| Automated Verification | New before-fix native2/2fail with zero awarded runs. kickball-after.xml33/33pass, including grand slam, immediate single, late tags, duplicate denial and previous rules. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Run actual Windows fence-crossing fixture, complete match/rematch and targeted PlayMode gameplay tests. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Earlier stage retained: KickballRules.HomeRun atomically credits pending/active eligible runs, clears live runners and rejects repeat/third-out credit. Match parks ball and suspends interactions during3.4second sealed celebration before existing replay/next-plate restoration. Latest: 2026-10-22-Kickball-Waiting.md; existing saved Kickball scene, rules/cameras/celebration retained. KickballWaitingAuthoring v2, KickballAIPlayback, waiting-only owned look, compact viewport cards and runner/base action selection. |
+| Automated Verification | Earlier stage retained: New before-fix native2/2fail with zero awarded runs. kickball-after.xml33/33pass, including grand slam, immediate single, late tags, duplicate denial and previous rules. Latest: Final native35/0 EditMode and5/0 PlayMode; exact Windows87/0 across owned waiting input, preference restart, physical home-run fixtures, complete twelve-AI match and broadcast acceptance. Exact asset/source identity and per-run receipts in Evidence/2026-10-22-Kickball-Waiting. Initial keyboard-fixture failures and rejected overlapping setup capture retained. |
+| Human Verification | October21 findings repaired/revalidated in actual Windows rendering; no subsequent developer playtest, physical-device or subjective listening acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after automated/visual acceptance. Developer taste/gameplay, physical controllers/wheels, listening and isolated profiling remain unperformed; other HPR/GBC entries remain open. |
 
 ### HPR-5-3 — Add Home-Run Celebration
 
@@ -5720,11 +5720,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Add Home-Run Celebration |
 | Original Request | Use: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.3. |
 | Acceptance Criteria | All observable requirements and acceptance in source section5.3; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | IMPLEMENTED / UNVERIFIED |
-| Implementation Evidence | Saved Kickball HUD banner, DOTween entrance/cab flourish, existing stadium crowd/audio reaction; celebration uses sealed score and existing action director. |
-| Automated Verification | KickballRepairAuthoring bound banner in the real scene. Windows rendering, animation/audio subjective acceptance pending. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Verify banner at720p/1080p, camera, cleanup, next-play control ownership and human/listening acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Earlier stage retained: Saved Kickball HUD banner, DOTween entrance/cab flourish, existing stadium crowd/audio reaction; celebration uses sealed score and existing action director. Latest: 2026-10-22-Kickball-Waiting.md; existing saved Kickball scene, rules/cameras/celebration retained. KickballWaitingAuthoring v2, KickballAIPlayback, waiting-only owned look, compact viewport cards and runner/base action selection. |
+| Automated Verification | Earlier stage retained: KickballRepairAuthoring bound banner in the real scene. Windows rendering, animation/audio subjective acceptance pending. Latest: Final native35/0 EditMode and5/0 PlayMode; exact Windows87/0 across owned waiting input, preference restart, physical home-run fixtures, complete twelve-AI match and broadcast acceptance. Exact asset/source identity and per-run receipts in Evidence/2026-10-22-Kickball-Waiting. Initial keyboard-fixture failures and rejected overlapping setup capture retained. |
+| Human Verification | October21 findings repaired/revalidated in actual Windows rendering; no subsequent developer playtest, physical-device or subjective listening acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after automated/visual acceptance. Developer taste/gameplay, physical controllers/wheels, listening and isolated profiling remain unperformed; other HPR/GBC entries remain open. |
 
 ### HPR-5-4 — Waiting-Line Camera Freedom
 
@@ -5734,11 +5734,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Waiting-Line Camera Freedom |
 | Original Request | When a human player is waiting to bat: Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.4. |
 | Acceptance Criteria | All observable requirements and acceptance in source section5.4; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | 2026-10-22-Kickball-Waiting.md; existing saved Kickball scene, rules/cameras/celebration retained. KickballWaitingAuthoring v2, KickballAIPlayback, waiting-only owned look, compact viewport cards and runner/base action selection. |
+| Automated Verification | Final native35/0 EditMode and5/0 PlayMode; exact Windows87/0 across owned waiting input, preference restart, physical home-run fixtures, complete twelve-AI match and broadcast acceptance. Exact asset/source identity and per-run receipts in Evidence/2026-10-22-Kickball-Waiting. Initial keyboard-fixture failures and rejected overlapping setup capture retained. |
+| Human Verification | October21 findings repaired/revalidated in actual Windows rendering; no subsequent developer playtest, physical-device or subjective listening acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after automated/visual acceptance. Developer taste/gameplay, physical controllers/wheels, listening and isolated profiling remain unperformed; other HPR/GBC entries remain open. |
 
 ### HPR-5-5 — Fast-Forward to Next At-Bat
 
@@ -5748,11 +5748,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | Fast-Forward to Next At-Bat |
 | Original Request | Add an option to fast-forward AI-controlled play until the user's next batting opportunity. Full authoritative scope: Requests/2026-10-21-HumanPlaytestRepair.md, section5.5. |
 | Acceptance Criteria | All observable requirements and acceptance in source section5.5; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
-| Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | 2026-10-22-Kickball-Waiting.md; existing saved Kickball scene, rules/cameras/celebration retained. KickballWaitingAuthoring v2, KickballAIPlayback, waiting-only owned look, compact viewport cards and runner/base action selection. |
+| Automated Verification | Final native35/0 EditMode and5/0 PlayMode; exact Windows87/0 across owned waiting input, preference restart, physical home-run fixtures, complete twelve-AI match and broadcast acceptance. Exact asset/source identity and per-run receipts in Evidence/2026-10-22-Kickball-Waiting. Initial keyboard-fixture failures and rejected overlapping setup capture retained. |
+| Human Verification | October21 findings repaired/revalidated in actual Windows rendering; no subsequent developer playtest, physical-device or subjective listening acceptance claimed. |
+| Remaining Work | No known scoped implementation defect after automated/visual acceptance. Developer taste/gameplay, physical controllers/wheels, listening and isolated profiling remain unperformed; other HPR/GBC entries remain open. |
 
 ### HPR-6-1 — Repair Camera Jitter
 

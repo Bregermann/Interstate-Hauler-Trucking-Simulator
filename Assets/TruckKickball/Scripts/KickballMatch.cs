@@ -18,6 +18,23 @@ namespace LWS.TruckKickball
             action.primary=pitch?rules.Batter:Carrier>=0?Carrier:framing.Nearest(ball.body.position);
             if(pitch)action.Objective(agents[Pitcher].truck.body.position,1.5f);else action.Objective(ball.body.position,ball.shape.radius);
             action.preferHuman=false;action.reason=pitch?"FIRST-BASE BOOTH / PITCHER AND KICKER":rules.Phase==KickballPhase.HomeRun?"HOME RUN BALL TRACK":"LIVE BALL / INVOLVED FIELDER AND RUNNER";
+            if (!pitch && rules.Phase == KickballPhase.Live && Carrier >= 0)
+            {
+                // When defense has secured the ball, the threatened runner/base
+                // is the action. Do not keep following an idle distant carrier.
+                int runner = -1; float nearest = float.PositiveInfinity;
+                for (int i = 0; i < setup.count; i++) if (rules.Runner(i) && !Safe(i))
+                {
+                    float distance = (agents[i].truck.body.position - ball.body.position).sqrMagnitude;
+                    if (distance < nearest) { nearest = distance; runner = i; }
+                }
+                if (runner >= 0)
+                {
+                    action.primary = runner;
+                    int next = rules.TagRequired[runner] ? rules.Base[runner] : rules.Base[runner] + 1;
+                    action.Objective(BasePosition(next), 3.2f); action.reason = "FIRST-BASE BOOTH / RUNNER AND NEXT BASE";
+                }
+            }
         }
         public KickballAgent[] agents;
         public KickballBall ball;
@@ -27,6 +44,10 @@ namespace LWS.TruckKickball
         public SportsChaosWeather atmosphere;
         public SportsWeatherPresets weatherPresets;
         public TMPro.TMP_Text viewChoice, scoreboard;
+        public TMPro.TMP_Text pauseViewChoice, paceChoice, pausePaceChoice;
+        public KickballAIPlayback aiPlayback;
+        public int waitingPresentationVersion;
+        public bool WaitingToBat(int slot) => Live && slot >= 0 && slot < setup.count && rules.TeamSize > 0 && !BroadcastParticipantActive(slot);
         public FieldGoalFlightModel contactModel = new FieldGoalFlightModel();
         public readonly KickballRules rules = new KickballRules();
         public static readonly Vector3[] Bases = { Vector3.zero, new Vector3(27, 0, 27), new Vector3(0, 0, 54), new Vector3(-27, 0, 27), Vector3.zero };
@@ -51,10 +72,10 @@ namespace LWS.TruckKickball
         public override int WeatherCount => 1;
         public override string OptionLabel => (3 + option % 4) + " v " + (3 + option % 4) + " · " + Innings + " INNINGS";
         public override bool ReplayControls => replaying;
-        public override string SourcePolicy => "BLUE: first half of roster · ORANGE: second half. Up to four humans; all other trucks use AI.\n" + base.SourcePolicy;
+        public override string SourcePolicy => "BLUE: left column · ORANGE: right column · Max 4 humans · Whole pads own one player; split sticks may share.\nWaiting in Chase/Cab: your keys/stick look · Full pad: right stick · First keyboard: hold RMB.\nAI 2× stops for every human kicker, runner or fielder. Camera and pacing are also available in Pause.";
         public override string Help => "Six-a-side by default; choose 3v3 through 6v6 and 1/3/5/7 innings. Four local humans maximum. Blue kicks first. Pitcher: steer to aim, throttle/brake select speed, ACTION rolls the real ball. Kicker: drive your bumper into the pitch; approach speed and contact offset determine power, loft and spin. Three strikes retire a kicker; four balls award a walk. Fouls count only up to two strikes.\n\nAfter a fair kick, physically drive HOME → FIRST → SECOND → THIRD → HOME. Runners wait at their bases until the kick. Touch each large pad in order. Defenders secure the ball by actual front-cup contact and carry it visibly. Face a base or teammate and press ACTION to throw. Touch a forced base while holding the ball for a force out; collide with an unsafe runner for a tag. Fly catches retire the kicker; runners must return and tag their original base before advancing. A third force out cancels runs from that play. Three outs swap teams. Tied regulation games continue into extras.\n\nA fair airborne ball clearing the outfield fence is a home run; all entitled runs are credited immediately and defensive play ends for a short celebration. A grounded ball leaving the fenced field awards a ground-rule double, also driven physically. Walks use the same NWH controls to assist forced advancement. Three-a-side bases-loaded play remains live until a runner frees a kicking slot: no ghost runners.\n\nChoose Broadcast, Chase or Taxi Cab. Human-only split screens are default; Show AI Cameras is optional. Cab free look and animated steering respect device ownership. Highlights record actual motion, with angle, slow/fast, rewind and skip; scoring stays locked. Pause/reconnect preserves the match. Genuine 60-second unresolved loose-ball or out-of-world recovery never awards invented runs. Offline only.";
         public override string Header => Title + " · " + (rules.BattingTeam == 0 ? "TOP " : "BOTTOM ") + rules.Inning + " · BLUE " + rules.Scores[0] + " : " + rules.Scores[1] + " ORANGE";
-        public override string Status => replaying ? "RECORDED HIGHLIGHT · SEALED RESULT" : transition > 0 ? notice : notice + " · " + rules.Outs + " OUT · " + rules.Balls + " BALL / " + rules.Strikes + " STRIKE";
+        public override string Status => (aiPlayback != null && aiPlayback.Accelerating ? "AI PLAY 2× · " : "") + (replaying ? "RECORDED HIGHLIGHT · SEALED RESULT" : transition > 0 ? notice : notice + " · " + rules.Outs + " OUT · " + rules.Balls + " BALL / " + rules.Strikes + " STRIKE");
         public override string Standings => "BLUE " + rules.Scores[0] + "   ORANGE " + rules.Scores[1] + "\n" + (rules.Complete ? "FINAL" : setup.players[rules.Batter].name + " KICKING");
         public override string Results => (rules.Winner == 0 ? "BLUE BANDITS" : "ORANGE OUTLAWS") + " WIN\n\nBLUE " + rules.Scores[0] + " : " + rules.Scores[1] + " ORANGE\n" + rules.Inning + " innings · " + PhysicalKicks + " physical kicks · " + PhysicalCatches + " catches\n" + PhysicalBaseTouches + " ordered base touches";
         public override int ScoreCardCount => 2;
@@ -63,13 +84,35 @@ namespace LWS.TruckKickball
         public override Color ScoreCardColor(int card) => card == 0 ? new Color(.15f, .65f, 1) : new Color(1, .45f, .12f);
         public override bool TryReadScoreCard(int card, out string value, out string detail)
         { value = rules.Scores[card].ToString(); detail = card == rules.BattingTeam ? rules.Outs + " OUT · KICKING" : "FIELDING"; return true; }
-        public override string ControlCaption(int slot) => Controls(slot);
+        public override string ControlCaption(int slot) => WaitingToBat(slot) ? Controls(slot) + " · LOOK WHILE WAITING" : Controls(slot);
         public override string ViewText(int view)
         {
             int slot = views.owners[view];
-            return setup.players[slot].name + " · " + Role(slot) + "\n" + Standings + "\n" + Status + "\n" + Controls(slot);
+            return setup.players[slot].name + " · " + Role(slot) + "\n" + Standings + "\n" + Status + "\n" + ControlCaption(slot);
         }
         public override bool MultiViewHUD => ViewMode != 0 && views.Humans > 0 && !replaying;
+        public override bool CompactViewportHud => true;
+        static readonly string[] BaseLabels = { "HOME", "FIRST", "SECOND", "THIRD", "HOME" };
+        public override bool TryReadViewportCard(int view, out int participant, out string score, out string detail)
+        {
+            participant = -1; score = detail = null;
+            if (views == null || view < 0 || view >= views.Humans) return false;
+            participant = views.owners[view]; int team = rules.Team(participant);
+            score = rules.Scores[team] + " RUNS";
+            detail = WaitingToBat(participant) ? "DUGOUT" : rules.Runner(participant) ? "RUNNER" : participant == rules.Batter ? "KICKER" : "FIELDING";
+            return true;
+        }
+        public override string ViewportContextPrompt(int view)
+        {
+            if (views == null || view < 0 || view >= views.Humans) return null;
+            int slot = views.owners[view]; var player = setup.players[slot];
+            if (player.source == BowlingSource.AI || HomeRunCelebrating || ReplayControls) return null;
+            string controls = Controls(slot);
+            if (WaitingToBat(slot)) return "LOOK · " + (player.source == BowlingSource.WholeController ? "RIGHT STICK" : controls.Substring(0, controls.IndexOf('·')).Trim());
+            if (slot == rules.Batter) return "BUMPER KICK";
+            if (slot == Pitcher && rules.Phase == KickballPhase.PitchReady) return "ROLL PITCH\n" + controls.Substring(controls.LastIndexOf('·') + 1).Trim();
+            return rules.Runner(slot) ? (rules.TagRequired[slot] ? "TAG UP · " : "RUN TO ") + BaseLabels[Mathf.Clamp(rules.Base[slot] + (rules.TagRequired[slot] ? 0 : 1), 0, 4)] : null;
+        }
 
         readonly bool[] tags = new bool[12];
         readonly StringBuilder scoreText = new StringBuilder(100);
@@ -103,7 +146,9 @@ namespace LWS.TruckKickball
         }
         public override void RefreshExtraUI()
         {
-            if (viewChoice != null) viewChoice.text = "CAMERA · " + new[] { "BROADCAST", "CHASE", "TAXI CAB" }[ViewMode];
+            string viewLabel = "CAMERA · " + new[] { "BROADCAST", "CHASE", "TAXI CAB" }[ViewMode];
+            Caption(viewChoice, viewLabel); Caption(pauseViewChoice, viewLabel);
+            Caption(paceChoice, KickballAIPlayback.Label); Caption(pausePaceChoice, KickballAIPlayback.Label);
             if (menus == null || menus.rows == null) return;
             menus.countText.transform.parent.gameObject.SetActive(false);
             int size = 3 + option % 4;
@@ -112,6 +157,7 @@ namespace LWS.TruckKickball
         }
         public override void ExtraAction(string key)
         {
+            if (key == "aipace" && aiPlayback != null) { aiPlayback.Cycle(); return; }
             if (key == "view") { ViewMode = (ViewMode + 1) % 3; SportsPrefs.SetInt("TruckKickball.View", ViewMode); SportsPrefs.Save(); RefreshExtraUI(); }
             if (!replaying) return;
             if (key == "replayangle") replay.Angle = (replay.Angle + 1) % 3;
@@ -119,9 +165,16 @@ namespace LWS.TruckKickball
             if (key == "replayrewind") replay.Seek(Mathf.Max(0, replay.Cursor - 3));
             if (key == "replayskip") FinishReplay();
         }
+        static void Caption(TMPro.TMP_Text text, string value)
+        {
+            if (text == null) return;
+            var button = text.GetComponentInParent<Michsky.UI.Heat.ButtonManager>(true);
+            if (button != null) button.SetText(value); else text.text = value;
+        }
 
         protected override void BeginGame()
         {
+            aiPlayback?.Release();
             random = new System.Random(Environment.TickCount); rules.Reset(setup.count / 2, Innings);
             audience=GetComponent<LWS.TruckFieldGoal.FieldGoalCrowd>();audience?.ResetAttempt();audienceRuns=audienceOuts=0;
             ClearHomeRunPresentation();HomeRunCelebrations=0;
@@ -225,6 +278,7 @@ namespace LWS.TruckKickball
 
         protected override void Simulate(float dt)
         {
+            aiPlayback?.Tick();
             Clock += dt;
             if (replaying) { if (replay.Step(dt)) FinishReplay(); return; }
             if(homeRunCelebration>0){homeRunCelebration=Mathf.Max(0,homeRunCelebration-dt);if(homeRunCelebration<=0){ClearHomeRunPresentation();FinishPlay();}return;}
@@ -435,6 +489,7 @@ namespace LWS.TruckKickball
         }
         protected override void Present(float dt)
         {
+            aiPlayback?.Tick();
             if (!Running) return;
             atmosphere.Tick(dt); presentation.Tick(dt);
             if (scoreboard != null && Time.unscaledTime >= nextScoreboard)
@@ -445,6 +500,7 @@ namespace LWS.TruckKickball
         protected override void StopSounds() { if (agents != null) foreach (var a in agents) a.truck.StopSound(); }
         protected override void StopGame()
         {
+            aiPlayback?.Release();
             ClearHomeRunPresentation();
             audience?.ResetAttempt();
             if (replay != null) replay.End(); replaying = false;
@@ -453,5 +509,6 @@ namespace LWS.TruckKickball
             { agent.truck.Power(false); agent.truck.body.isKinematic = true; }
             if (ball != null) ball.body.isKinematic = true;
         }
+        protected override void SetPaused(bool paused) { if (paused) aiPlayback?.Release(); }
     }
 }

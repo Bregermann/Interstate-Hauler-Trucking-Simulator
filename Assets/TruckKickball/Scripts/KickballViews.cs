@@ -102,16 +102,28 @@ namespace LWS.TruckKickball
             }
             foreach (var v in rally.views) v.view.orthographic = false;
             rally.Follow(dt);
-            if (lastMode != 2) return;
+            int mouseView = -1;
+            for (int v = 0; v < rally.Humans; v++)
+                if (match.setup.players[rally.owners[v]].source == LWS.TruckBowling.BowlingSource.Keyboard) { mouseView = v; break; }
             for (int v = 0; v < rally.Humans; v++)
             {
                 int slot = rally.owners[v]; var truck = match.agents[slot].truck;
+                bool waiting = match.WaitingToBat(slot);
+                Vector2? lookInput = waiting ? match.ReadDrive(slot) : (Vector2?)null;
+                if (lastMode != 2)
+                {
+                    if (waiting)
+                        rally.views[v].view.transform.rotation = looks[v].Apply(rally.views[v].view.transform.rotation,
+                            match.setup.players[slot], slot, v == mouseView, match.Live, SportsLookOptions.Sensitivity, SportsLookOptions.InvertY, lookInput);
+                    else looks[v].ResetLook();
+                    continue;
+                }
                 var forward = Vector3.ProjectOnPlane(truck.transform.forward, Vector3.up);
                 if (forward.sqrMagnitude > .01f && Vector3.Dot(truck.transform.up, Vector3.up) > .2f)
                     headings[v] = Quaternion.Slerp(headings[v], Quaternion.LookRotation(forward), 1 - Mathf.Exp(-dt * 9));
                 var camera = rally.views[v].view;
                 camera.transform.position = truck.body.position + headings[v] * new Vector3(-.17f, 1.3f, .65f);
-                camera.transform.rotation = looks[v].Apply(headings[v], match.setup.players[slot], slot, v == 0, match.Live, SportsLookOptions.Sensitivity, SportsLookOptions.InvertY);
+                camera.transform.rotation = looks[v].Apply(headings[v], match.setup.players[slot], slot, v == mouseView, match.Live, SportsLookOptions.Sensitivity, SportsLookOptions.InvertY, lookInput);
                 camera.fieldOfView = 78; camera.nearClipPlane = .025f;
                 rally.views[v].cabSteering.Bind(truck);
             }

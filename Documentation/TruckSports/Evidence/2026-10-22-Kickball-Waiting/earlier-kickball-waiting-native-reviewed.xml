@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Failed(Child)" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 19:24:02Z" end-time="2026-10-22 19:24:41Z" duration="38.7245184">
+  <test-suite type="TestSuite" id="1383" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="267" result="Failed" site="Child" start-time="2026-10-22 19:24:02Z" end-time="2026-10-22 19:24:41Z" duration="38.724518" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1122" name="LWS.TruckKickball.PlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckKickball.PlayModeTests.dll" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-22 19:24:02Z" end-time="2026-10-22 19:24:28Z" duration="25.718944" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="67116" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1123" name="LWS" fullname="LWS" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-22 19:24:02Z" end-time="2026-10-22 19:24:28Z" duration="25.716605" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1124" name="TruckKickball" fullname="LWS.TruckKickball" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-22 19:24:02Z" end-time="2026-10-22 19:24:28Z" duration="25.715975" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="1125" name="Tests" fullname="LWS.TruckKickball.Tests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-22 19:24:02Z" end-time="2026-10-22 19:24:28Z" duration="25.715359" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1117" name="KickballSceneTests" fullname="LWS.TruckKickball.Tests.KickballSceneTests" classname="LWS.TruckKickball.Tests.KickballSceneTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-22 19:24:02Z" end-time="2026-10-22 19:24:28Z" duration="25.713842" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1119" name="ActualNwhAndPhysxProducePitchKickAndBaseProgress" fullname="LWS.TruckKickball.Tests.KickballSceneTests.ActualNwhAndPhysxProducePitchKickAndBaseProgress" methodname="ActualNwhAndPhysxProducePitchKickAndBaseProgress" classname="LWS.TruckKickball.Tests.KickballSceneTests" runstate="Runnable" seed="1724537324" result="Passed" start-time="2026-10-22 19:24:02Z" end-time="2026-10-22 19:24:18Z" duration="16.049489" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+              </test-case>
+              <test-case id="1121" name="InitializedBaseRunnerDoesNotStealDuringRealPitch" fullname="LWS.TruckKickball.Tests.KickballSceneTests.InitializedBaseRunnerDoesNotStealDuringRealPitch" methodname="InitializedBaseRunnerDoesNotStealDuringRealPitch" classname="LWS.TruckKickball.Tests.KickballSceneTests" runstate="Runnable" seed="1590306511" result="Passed" start-time="2026-10-22 19:24:18Z" end-time="2026-10-22 19:24:22Z" duration="4.253240" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+              </test-case>
+              <test-case id="1120" name="PauseDuringActualFlightPreservesBodiesAndClock" fullname="LWS.TruckKickball.Tests.KickballSceneTests.PauseDuringActualFlightPreservesBodiesAndClock" methodname="PauseDuringActualFlightPreservesBodiesAndClock" classname="LWS.TruckKickball.Tests.KickballSceneTests" runstate="Runnable" seed="1639714647" result="Passed" start-time="2026-10-22 19:24:22Z" end-time="2026-10-22 19:24:25Z" duration="3.286037" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+              </test-case>
+              <test-case id="1118" name="SavedSceneSupportsAllFourRealTeamSizes" fullname="LWS.TruckKickball.Tests.KickballSceneTests.SavedSceneSupportsAllFourRealTeamSizes" methodname="SavedSceneSupportsAllFourRealTeamSizes" classname="LWS.TruckKickball.Tests.KickballSceneTests" runstate="Runnable" seed="1011608309" result="Passed" start-time="2026-10-22 19:24:25Z" end-time="2026-10-22 19:24:28Z" duration="2.107597" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="1267" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="100" result="Failed" site="Child" start-time="2026-10-22 19:24:28Z" end-time="2026-10-22 19:24:41Z" duration="12.988441" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="67116" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1193" name="KickballWaitingCameraTests" fullname="KickballWaitingCameraTests" classname="KickballWaitingCameraTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-22 19:24:28Z" end-time="2026-10-22 19:24:41Z" duration="12.982680" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1194" name="FourOwnedWaitingInputsPauseReconnectAndRealAITurnHandoff" fullname="KickballWaitingCameraTests.FourOwnedWaitingInputsPauseReconnectAndRealAITurnHandoff" methodname="FourOwnedWaitingInputsPauseReconnectAndRealAITurnHandoff" classname="KickballWaitingCameraTests" runstate="Runnable" seed="108904888" result="Failed" start-time="2026-10-22 19:24:28Z" end-time="2026-10-22 19:24:41Z" duration="12.981411" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Expected: 0
+  But was:  1
+]]></message>
+            <stack-trace><![CDATA[at KickballWaitingCameraTests+<FourOwnedWaitingInputsPauseReconnectAndRealAITurnHandoff>d__0.MoveNext () [0x000e8] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\KickballWaitingCameraTests.cs:21
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

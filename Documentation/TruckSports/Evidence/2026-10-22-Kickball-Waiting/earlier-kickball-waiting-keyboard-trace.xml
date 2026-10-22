@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 19:22:00Z" end-time="2026-10-22 19:22:15Z" duration="15.5303591">
+  <test-suite type="TestSuite" id="1383" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="267" result="Failed" site="Child" start-time="2026-10-22 19:22:00Z" end-time="2026-10-22 19:22:15Z" duration="15.530359" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1267" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="100" result="Failed" site="Child" start-time="2026-10-22 19:22:00Z" end-time="2026-10-22 19:22:15Z" duration="15.513719" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="69492" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1193" name="KickballWaitingCameraTests" fullname="KickballWaitingCameraTests" classname="KickballWaitingCameraTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-22 19:22:00Z" end-time="2026-10-22 19:22:15Z" duration="15.507815" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1194" name="FourOwnedWaitingInputsPauseReconnectAndRealAITurnHandoff" fullname="KickballWaitingCameraTests.FourOwnedWaitingInputsPauseReconnectAndRealAITurnHandoff" methodname="FourOwnedWaitingInputsPauseReconnectAndRealAITurnHandoff" classname="KickballWaitingCameraTests" runstate="Runnable" seed="354055373" result="Failed" start-time="2026-10-22 19:22:00Z" end-time="2026-10-22 19:22:15Z" duration="15.491366" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Expected: 0
+  But was:  1
+]]></message>
+            <stack-trace><![CDATA[at KickballWaitingCameraTests+<FourOwnedWaitingInputsPauseReconnectAndRealAITurnHandoff>d__0.MoveNext () [0x000e8] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\KickballWaitingCameraTests.cs:21
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

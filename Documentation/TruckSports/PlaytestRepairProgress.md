@@ -1043,3 +1043,7 @@ See2026-10-22-Dance-Concert.md and actual evidence. Original choreography/charts
 ## October22 — Dock human follow-up accepted by automated checks
 
 See2026-10-22-Dock-Pool-Life.md. Rejected intermediate visuals retained; final evidence covers right platform, calm impact-responsive pool, animated crowd/photo behavior, real matches and rematches. No developer/hardware/listening/profile acceptance claimed. Continue the current open HPR/GBC requirements.
+
+## October22 — Kickball waiting cameras and pacing accepted by automated checks
+
+See2026-10-22-Kickball-Waiting.md and exact native/Windows evidence. Existing gameplay preserved; rejected intermediate presentation retained. No human/hardware/listening or entire-backlog completion claim. Continue the current open HPR/GBC requirements.
