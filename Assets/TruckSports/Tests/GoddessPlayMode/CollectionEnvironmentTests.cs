@@ -15,7 +15,7 @@ public sealed class CollectionEnvironmentTests
 {
     const BindingFlags Any = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
     static Type Runtime(string name) => Type.GetType("LWS.TruckSports." + name + ", Assembly-CSharp", true);
-    static object Get(object owner, string name) => owner.GetType().GetField(name, Any)?.GetValue(owner) ?? owner.GetType().GetProperty(name, Any).GetValue(owner);
+    static object Get(object owner, string name) => owner.GetType().GetField(name, Any) is FieldInfo field ? field.GetValue(owner) : owner.GetType().GetProperty(name, Any).GetValue(owner);
     static object Call(object owner, string name, params object[] values) => owner.GetType().GetMethods(Any).Single(method => method.Name == name && method.GetParameters().Length == values.Length).Invoke(owner, values);
     static void Set(object owner, string name, object value) => owner.GetType().GetField(name, Any).SetValue(owner, value);
 
@@ -28,6 +28,70 @@ public sealed class CollectionEnvironmentTests
     static readonly string[] NewlyIntegrated = { "TruckDockDiving", "TruckBuzkashi", "TruckBungeeDemolition", "TruckFishing", "TruckSumo", "TruckLogRolling", "TruckTrampolineDodgeball", "TruckDemolitionDerby" };
     static readonly string[] RemainingIntegration = { "TruckCurling", "TruckSkeeBall", "TruckBungeeDemolition", "TruckFishing" };
     static bool PresentationOwned(string name) => NewlyIntegrated.Contains(name) || RemainingIntegration.Contains(name);
+    [UnityTest, Timeout(150000)]
+    public IEnumerator LegacyCourtsKeepTheirRulesAndUseOneSavedWeatherClock()
+    {
+        var lease = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "LegacyCourtEnvironment" });
+        var isolation = new GameObject("Explicit legacy court environment regression"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation"));
+        Component match = null;
+        try
+        {
+            foreach (string name in new[] { "TruckHockey", "TruckWallball" })
+            {
+                EditorSceneManager.LoadSceneInPlayMode("Assets/" + name + "/Scenes/" + name + ".unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+                bool hockey = name == "TruckHockey";
+                var type = Type.GetType(hockey ? "LWS.TruckHockey.HockeyMatch, Assembly-CSharp" : "LWS.TruckWallball.WallballMatch, Assembly-CSharp", true);
+                match = (Component)UnityEngine.Object.FindAnyObjectByType(type);
+                if (!hockey) { Set(match, "blueSize", 4); Set(match, "orangeSize", 4); }
+                var mode = Enum.Parse(match.GetType().GetField("mode").FieldType, "AIVsAI");
+                if (hockey) { Set(match, "mode", mode); Call(match, "Configure"); } else Call(match, "Configure", mode);
+                Assert.That((bool)Get(match, hockey ? "AIOnly" : "AllAI"), Is.True, name + " actual all-AI ownership");
+                var weather = match.GetComponent(Runtime("SportsChaosWeather")); Assert.That(weather, Is.Not.Null, name);
+                Assert.That(Get(weather, "alternateSession"), Is.SameAs(match)); Assert.That(Get(weather, "session"), Is.Null, "No replacement SportsEventSession");
+                Assert.That(UnityEngine.Object.FindObjectsByType(Runtime("SportsChaosWeather"), FindObjectsSortMode.None).Length, Is.EqualTo(1));
+                Assert.That(UnityEngine.Object.FindObjectsByType(Type.GetType("LWS.TruckBaseJumping.BaseJumpRendering, Assembly-CSharp", true), FindObjectsSortMode.None).Length, Is.EqualTo(1));
+                var binding = (Component)Get(weather, "matchTime"); var menus = (Component)Get(match, "menus");
+                var pickers = menus.GetComponentsInChildren(Runtime("SportsWeatherPicker"), true).Cast<Component>().ToArray();
+                var clock = pickers.Single(picker => (bool)Get(picker, "timeOfDay")); var forecast = pickers.Single(picker => !(bool)Get(picker, "timeOfDay"));
+                var entries = ((Array)Get(Get(forecast, "catalog"), "entries")).Cast<object>().ToArray();
+                foreach (var picker in pickers)
+                {
+                    Assert.That(picker.gameObject.activeInHierarchy, Is.True, name + " saved Heat setup selector");
+                    var box = WorldRect(picker.GetComponent<RectTransform>());
+                    foreach (var button in picker.transform.parent.GetComponentsInChildren(Runtime("SportsMenuAction"), true).Cast<Component>().Where(button => button.gameObject.activeInHierarchy))
+                        Assert.That(box.Overlaps(WorldRect(button.GetComponent<RectTransform>())), Is.False, name + " selector must not cover " + button.name);
+                }
+                string priorMatch = null;
+                foreach (var condition in new[] { "Clear|Day", "Rain|Evening", "Snow|Morning", "Blizzard|Night" })
+                {
+                    string[] choice = condition.Split('|');
+                    int entry = Array.FindIndex(entries, value => (string)Get(value, "displayName") == choice[0]); Assert.That(entry, Is.GreaterThanOrEqualTo(0));
+                    Call(forecast, "Choose", entry + 1); Call(clock, "Choose", (int)Enum.Parse(Runtime("SportsTimeChoice"), choice[1]));
+                    Assert.That((bool)Call(match, "StartMatch", false), Is.True); yield return new WaitForSeconds(.4f); yield return null;
+                    string matchId = (string)Get(match, "WeatherMatchId"); Assert.That(matchId, Is.Not.Empty.And.Not.EqualTo(priorMatch)); priorMatch = matchId;
+                    Assert.That(Get(binding, "Applied").ToString(), Is.EqualTo(choice[1]), name + " actual vendor time");
+                    Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[entry], "id")), name + " actual selected profile");
+                    Assert.That(((Light)Get(binding, "daylightFill")).enabled, Is.False, "Single vendor outdoor sun/moon");
+                    Assert.That(Convert.ToSingle(Get(Get(binding, "cycle"), "Speed")), Is.Zero); Assert.That(Convert.ToSingle(Get(Get(binding, "cycle"), "NightSpeed")), Is.Zero);
+                    Assert.That(((Light[])Get(binding, "nightLights")).Length, Is.EqualTo(4));
+                    bool night = choice[1] == "Night" || choice[1] == "Evening";
+                    Assert.That(((Light[])Get(binding, "nightLights")).All(light => (light.intensity > 0) == night), Is.True);
+                    var headlights = match.GetComponent(Runtime("SportsNightHeadlights")); Assert.That(Get(headlights, "alternateSession"), Is.SameAs(match));
+                    var beams = ((Array)Get(headlights, "beams")).Cast<object>().ToArray(); Assert.That(beams.Length, Is.EqualTo(hockey ? 6 : 8));
+                    Assert.That(beams.All(beam => ((Light)Get(beam, "light")).enabled == night), Is.True, name + " existing court truck lights");
+                    int revision = (int)Get(binding, "Revision"); string preset = (string)Get(weather, "PresetId");
+                    Call(match, "Pause", false); yield return null;
+                    var points = ((int[])Get(Get(match, "rules"), "Score")).ToArray(); yield return new WaitForSecondsRealtime(.1f);
+                    CollectionAssert.AreEqual(points, (int[])Get(Get(match, "rules"), "Score"), "Weather pause cannot change points");
+                    Call(match, "Resume"); yield return null;
+                    Assert.That(Get(binding, "Revision"), Is.EqualTo(revision)); Assert.That(Get(weather, "PresetId"), Is.EqualTo(preset));
+                    Call(match, "ChangeSetup"); yield return null;
+                }
+                TestContext.WriteLine("LEGACY_COURT_TIME " + name + " four actual forecast/time starts with maximum AI roster"); match = null;
+            }
+        }
+        finally { if (match != null) Call(match, "ChangeSetup"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); Time.timeScale = 1; }
+    }
     IEnumerator VerifyVenues(bool newlyIntegratedOnly, string[] selection = null)
     {
         var lease = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "CollectionEnvironment" });

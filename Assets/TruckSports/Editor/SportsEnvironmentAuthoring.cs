@@ -157,6 +157,98 @@ namespace LWS.TruckSports.Editor
                 foreach (var rendering in All<LWS.TruckBaseJumping.BaseJumpRendering>(scene)) output.WriteLine("PIPELINE " + AssetDatabase.GetAssetPath(rendering.pipeline));
             }
         }
+        public static void InstallLegacyCourtWeather()
+        {
+            foreach (string name in new[] { "TruckHockey", "TruckWallball" })
+            {
+                var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
+                var hockey = All<LWS.TruckHockey.HockeyMatch>(scene).SingleOrDefault();
+                var wall = All<LWS.TruckWallball.WallballMatch>(scene).SingleOrDefault();
+                MonoBehaviour match = hockey != null ? (MonoBehaviour)hockey : wall;
+                if (match == null) throw new InvalidOperationException("Missing existing court match authority.");
+                var menus = hockey != null ? (SportsMenuView)hockey.menus : wall.menus;
+                var cameras = All<Camera>(scene).Where(camera => camera.cameraType == CameraType.Game).ToArray();
+                var existing = All<SportsChaosWeather>(scene);
+                if (existing.Length != 0)
+                {
+                    if (existing.Length != 1 || existing[0].alternateSession != match) throw new InvalidOperationException("Do not replace an existing court weather authority.");
+                    continue; // Do not overwrite subsequent designer setup/lighting edits.
+                }
+                if (All<WeatherMakerScript>(scene).Length != 0) throw new InvalidOperationException("Unexpected existing vendor weather owner.");
+                var previousPipeline = UnityEngine.QualitySettings.renderPipeline != null ? UnityEngine.QualitySettings.renderPipeline : UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline;
+                var weather = SportsChaosAuthoring.Weather(match.gameObject, cameras, name);
+                weather.alternateSession = match; weather.presets = SportsWeatherPresetsAuthoring.EnsureCatalog();
+                var rendering = All<LWS.TruckBaseJumping.BaseJumpRendering>(scene).Single();
+                if (previousPipeline != null) rendering.pipeline = previousPipeline;
+                SportsWeatherRenderingAuthoring.Install(match.gameObject, cameras, name, rendering);
+                var binding = match.gameObject.AddComponent<SportsMatchTime>();
+                binding.cycle = weather.vendor.GetComponentInChildren<WeatherMakerDayNightCycleManagerScript>(true); binding.clouds = weather.clouds;
+                binding.daylightFill = All<Light>(scene).Single(light => light.type == LightType.Directional && light.GetComponentInParent<WeatherMakerScript>() == null);
+                BindThreeDimensionalSky(weather, binding); BindSkyProfile(weather, binding);
+                SportsWeatherRenderingAuthoring.UseViewportSkybox(weather.gameObject, cameras, name);
+                InstallAuditedOutdoorLamps(scene, binding);
+                var headlights = match.gameObject.AddComponent<SportsNightHeadlights>(); headlights.time = binding; headlights.alternateSession = match;
+                var root = new GameObject("Night vehicle light presentation").transform; root.SetParent(binding.transform, false);
+                var trucks = hockey != null ? hockey.trucks.Select(truck => truck.transform).ToArray() : wall.trucks.Select(truck => truck.transform).ToArray();
+                headlights.beams = trucks.Select(truck =>
+                {
+                    var shape = truck.GetComponent<BoxCollider>();
+                    if (shape == null) throw new InvalidOperationException("Retain the existing court truck collider.");
+                    var light = new GameObject("Authored court night low-beam").AddComponent<Light>(); light.transform.SetParent(root, false);
+                    light.type = LightType.Spot; light.range = 28; light.spotAngle = 80; light.innerSpotAngle = 60;
+                    light.intensity = 90; light.color = new Color(1, .98f, .93f); light.shadows = LightShadows.None; light.enabled = false;
+                    return new SportsNightHeadlights.Beam { target = truck, light = light, position = shape.center + new Vector3(0, shape.size.y * .2f, shape.size.z * .49f), rotation = Quaternion.identity };
+                }).ToArray();
+                weather.matchTime = binding;
+                var page = menus.pages[0].transform; var picker = SportsWeatherPickerAuthoring.Install(page, weather.presets, new Vector2(0, 337)); InstallTimePicker(picker);
+                foreach (var selector in page.GetComponentsInChildren<SportsWeatherPicker>(true))
+                {
+                    var rect = selector.GetComponent<RectTransform>(); rect.anchoredPosition = new Vector2(selector.timeOfDay ? 165 : -165, 337); rect.sizeDelta = new Vector2(300, 54);
+                    selector.dropdown.panelSize = 220; selector.dropdown.enableScrollbar = true;
+                    var scroll = selector.GetComponentInChildren<UnityEngine.UI.ScrollRect>(true);
+                    if (scroll != null) scroll.verticalScrollbarVisibility = UnityEngine.UI.ScrollRect.ScrollbarVisibility.AutoHide;
+                    EditorUtility.SetDirty(selector.dropdown); EditorUtility.SetDirty(rect);
+                }
+                var title = page.Find("Title").GetComponent<TMPro.TMP_Text>(); title.rectTransform.anchoredPosition = new Vector2(0, 430); title.rectTransform.sizeDelta = new Vector2(1350, 58); title.fontSizeMax = 44;
+                page.Find("Subtitle").gameObject.SetActive(false); page.Find("Weather selection explanation").gameObject.SetActive(false);
+                binding.setupLayoutVersion = 6;
+                RefineCourtFixtureLayout(scene, binding);
+                EditorUtility.SetDirty(title); EditorUtility.SetDirty(title.rectTransform); EditorUtility.SetDirty(binding); EditorUtility.SetDirty(weather); EditorUtility.SetDirty(headlights);
+                EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            }
+            AssetDatabase.SaveAssets();
+        }
+        public static void RefineLegacyCourtLights()
+        {
+            foreach (string name in new[] { "TruckHockey", "TruckWallball" })
+            {
+                var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
+                var binding = All<SportsMatchTime>(scene).Single();
+                RefineCourtFixtureLayout(scene, binding);
+                EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            }
+            AssetDatabase.SaveAssets();
+        }
+        static void RefineCourtFixtureLayout(Scene scene, SportsMatchTime binding)
+        {
+                string name = scene.name;
+                var floor = All<MeshRenderer>(scene).Single(renderer => renderer.name == (name == "TruckHockey" ? "Arena floor" : "Court floor")).bounds;
+                var poles = binding.transform.Find("Authored night venue lamps").Cast<Transform>().ToArray();
+                if (poles.Length != 4) throw new InvalidOperationException("Retain four owned court fixtures.");
+                foreach (var pole in poles)
+                {
+                    pole.position = new Vector3(floor.center.x + Mathf.Sign(pole.position.x - floor.center.x) * (floor.extents.x - .25f), floor.max.y, floor.center.z + Mathf.Sign(pole.position.z - floor.center.z) * (floor.extents.z - .25f));
+                    var model = pole.Cast<Transform>().Single(child => child.name.StartsWith("Installed ", StringComparison.Ordinal));
+                    // One explicit correction; a marker makes this safe to rerun.
+                    if (!model.name.EndsWith(" · court scale", StringComparison.Ordinal)) { model.localScale *= .35f; model.localPosition *= .35f; model.name += " · court scale"; }
+                    float top = model.GetComponentsInChildren<Renderer>(true).Max(renderer => renderer.bounds.max.y);
+                    var light = pole.GetComponentInChildren<Light>(); light.transform.position = new Vector3(pole.position.x, top - .15f, pole.position.z);
+                    light.transform.rotation = Quaternion.LookRotation(new Vector3(floor.center.x, floor.max.y, floor.center.z) - light.transform.position);
+                    light.intensity = 50; light.range = 45;
+                    EditorUtility.SetDirty(pole); EditorUtility.SetDirty(model); EditorUtility.SetDirty(model.gameObject); EditorUtility.SetDirty(light); EditorUtility.SetDirty(light.transform);
+                }
+                foreach (var beam in binding.GetComponent<SportsNightHeadlights>().beams) { beam.light.intensity = 8; beam.light.range = 14; EditorUtility.SetDirty(beam.light); }
+        }
         public static void RefineNewOutdoorLamps()
         {
             foreach (string name in new[] { "TruckDockDiving", "TruckDemolitionDerby" })
@@ -568,6 +660,13 @@ namespace LWS.TruckSports.Editor
                     float z = Mathf.Lerp(sheet.min.z, sheet.max.z, fraction);
                     AddLamp(new Vector3(side * 16, sheet.max.y, z), new Vector3(0, sheet.max.y, z), 22, 115, 2000);
                 }
+            }
+            else if (scene.name == "TruckHockey" || scene.name == "TruckWallball")
+            {
+                string floorName = scene.name == "TruckHockey" ? "Arena floor" : "Court floor";
+                var floor = All<MeshRenderer>(scene).Single(renderer => renderer.name == floorName).bounds;
+                foreach (int side in new[] { -1, 1 }) foreach (int end in new[] { -1, 1 })
+                    AddLamp(new Vector3(floor.center.x + side * (floor.extents.x - 1), floor.max.y, floor.center.z + end * (floor.extents.z - 1)), new Vector3(floor.center.x, floor.max.y, floor.center.z), 12, 60, 1000);
             }
             else
             {

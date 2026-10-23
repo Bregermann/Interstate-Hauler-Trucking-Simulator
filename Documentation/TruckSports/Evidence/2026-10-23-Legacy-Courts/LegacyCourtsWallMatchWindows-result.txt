@@ -1,0 +1,13 @@
+PASS eight-participant first rally starts
+PASS all eight spawn centres are distinct with full-truck clearance, min=3.4
+PASS fresh opening input moves the real NWH truck before any point, travel=7.131854 motor=3.6 intent=1 neutralArmed=True serveReleased=True points=0 keyboardCurrent=True
+PASS autonomous 4v4 match starts
+PASS pause preserves actual ball and truck simulation
+PASS real autonomous eight-truck match reaches a locked win-by-two result
+PASS real eligible contacts produce legal wall returns
+PASS focused sustained volley reaches at least four actual strikes, max=4
+MATCH shots=33 physicalReturns=20 legalReturns=12 maxVolley=4 score=11:2 neutralReplays=0
+PASS rematch resets first-rally physical release
+PASS Wallball is manually available only in Experimental Scrap Heap
+PASS experimental submenu opens
+ERRORS=0. Labelled spawn fixture, injected keyboard opening and actual NWH/PhysX 4v4 match/volleys, controlled UI captures. Experimental; no human/hardware or normal-window/performance claim.

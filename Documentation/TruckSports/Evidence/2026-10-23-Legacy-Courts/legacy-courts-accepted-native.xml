@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 08:20:45Z" end-time="2026-10-23 08:20:51Z" duration="6.7929043">
+  <test-suite type="TestSuite" id="1405" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="281" result="Passed" start-time="2026-10-23 08:20:45Z" end-time="2026-10-23 08:20:51Z" duration="6.792904" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1289" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="114" result="Passed" start-time="2026-10-23 08:20:45Z" end-time="2026-10-23 08:20:51Z" duration="6.778769" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="63248" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1151" name="CollectionEnvironmentTests" fullname="CollectionEnvironmentTests" classname="CollectionEnvironmentTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-23 08:20:45Z" end-time="2026-10-23 08:20:51Z" duration="6.773322" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1155" name="LegacyCourtsKeepTheirRulesAndUseOneSavedWeatherClock" fullname="CollectionEnvironmentTests.LegacyCourtsKeepTheirRulesAndUseOneSavedWeatherClock" methodname="LegacyCourtsKeepTheirRulesAndUseOneSavedWeatherClock" classname="CollectionEnvironmentTests" runstate="Runnable" seed="162701847" result="Passed" start-time="2026-10-23 08:20:45Z" end-time="2026-10-23 08:20:51Z" duration="6.759879" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="150000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumRain (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+LEGACY_COURT_TIME TruckHockey four actual forecast/time starts with maximum AI roster
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumRain (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+LEGACY_COURT_TIME TruckWallball four actual forecast/time starts with maximum AI roster
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

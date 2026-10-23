@@ -17,6 +17,7 @@ namespace LWS.TruckSports
         public SportsEventTruck[] trucks = System.Array.Empty<SportsEventTruck>();
         public Light[] wheelOnlyBeams = System.Array.Empty<Light>();
         public Beam[] beams = System.Array.Empty<Beam>();
+        public MonoBehaviour alternateSession;
         [HideInInspector] public int layoutVersion;
         float nextRefresh;
 
@@ -30,6 +31,9 @@ namespace LWS.TruckSports
             nextRefresh = Time.unscaledTime + .2f;
             bool night = time != null && time.Revision > 0 &&
                 (time.Applied == SportsTimeChoice.Night || time.Applied == SportsTimeChoice.Evening);
+            if (alternateSession is ISportsWeatherLifecycle alternate)
+                foreach (var beam in beams)
+                    if (beam.light != null) beam.light.enabled = night && alternate.WeatherMatchActive && beam.target != null && beam.target.gameObject.activeInHierarchy;
             for (int i = 0; i < trucks.Length; i++)
             {
                 var truck = trucks[i];
@@ -53,6 +57,7 @@ namespace LWS.TruckSports
         void OnDisable()
         {
             for (int i = 0; i < trucks.Length; i++) Apply(i, false);
+            if (alternateSession != null) foreach (var beam in beams) if (beam.light != null) beam.light.enabled = false;
         }
     }
 }

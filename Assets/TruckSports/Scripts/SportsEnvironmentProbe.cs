@@ -54,6 +54,10 @@ namespace LWS.TruckSports
             {
                 yield return LegacyScenes(); Finish(); yield break;
             }
+            if (Array.IndexOf(arguments, "legacy-courts") >= 0)
+            {
+                yield return LegacyCourts(); Finish(); yield break;
+            }
             int scenesIndex = Array.IndexOf(arguments, "-tsEnvironmentScenes");
             string[] scenes = scenesIndex >= 0 && scenesIndex + 1 < arguments.Length
                 ? arguments[scenesIndex + 1].Split(',')
@@ -171,6 +175,48 @@ namespace LWS.TruckSports
             }
             SportsNavigation.FrontEnd(); yield return null; yield return null;
             Check(SceneManager.GetActiveScene().name == SportsNavigation.Front, "legacy clocks return to real sport selection");
+        }
+        IEnumerator LegacyCourts()
+        {
+            foreach (string scene in new[] { "TruckHockey", "TruckWallball" })
+            {
+                yield return SceneManager.LoadSceneAsync(scene); yield return null; yield return null;
+                var hockey = FindAnyObjectByType<LWS.TruckHockey.HockeyMatch>(); var wall = FindAnyObjectByType<LWS.TruckWallball.WallballMatch>();
+                MonoBehaviour owner = hockey != null ? (MonoBehaviour)hockey : wall;
+                var lifecycle = (ISportsWeatherLifecycle)owner; var weather = owner.GetComponent<SportsChaosWeather>(); var binding = weather.matchTime;
+                SportsMenuView menus = hockey != null ? (SportsMenuView)hockey.menus : wall.menus;
+                if (hockey != null) { hockey.mode = LWS.TruckHockey.HockeyMode.AIVsAI; hockey.Configure(); hockey.menus.RefreshSetup(); }
+                else { wall.blueSize = wall.orangeSize = 4; wall.Configure(LWS.TruckWallball.WallballMode.AIVsAI); }
+                Check(hockey != null ? hockey.AIOnly : wall.AllAI, scene + " actual maximum roster is entirely AI, independently of menu captions");
+                var pickers = menus.GetComponentsInChildren<SportsWeatherPicker>(true); var clock = pickers.Single(picker => picker.timeOfDay); var forecast = pickers.Single(picker => !picker.timeOfDay);
+                Check(pickers.Length == 2 && pickers.All(picker => picker.gameObject.activeInHierarchy), scene + " saved independent Heat selectors");
+                Check(weather.alternateSession == owner && weather.session == null && FindObjectsByType<SportsChaosWeather>(FindObjectsSortMode.None).Length == 1, scene + " existing legacy match retains authority");
+                yield return Capture(scene + "-court-setup"); string priorId = null;
+                foreach (string condition in new[] { "Clear|Day", "Rain|Evening", "Snow|Morning", "Blizzard|Night" })
+                {
+                    string[] choice = condition.Split('|'); int entry = Array.FindIndex(forecast.catalog.entries, value => value.displayName == choice[0]);
+                    Check(entry >= 0, scene + " installed " + choice[0]); if (entry < 0) continue;
+                    forecast.Choose(entry + 1); clock.Choose((int)Enum.Parse<SportsTimeChoice>(choice[1]));
+                    Check(hockey != null ? hockey.StartMatch() : wall.StartMatch(), scene + " actual maximum-AI start " + condition); yield return new WaitForSeconds(2);
+                    Check(!string.IsNullOrEmpty(lifecycle.WeatherMatchId) && lifecycle.WeatherMatchId != priorId, scene + " fresh match identity " + condition); priorId = lifecycle.WeatherMatchId;
+                    Check(binding.Applied.ToString() == choice[1] && Mathf.Abs(binding.cycle.TimeOfDay - SportsTimeOfDay.Seconds(binding.Applied)) < .01f, scene + " vendor clock " + condition);
+                    Check(weather.PresetId == forecast.catalog.entries[entry].id && weather.vendor.LastLocalProfile != null, scene + " real vendor preset " + condition);
+                    Check(!binding.daylightFill.enabled && binding.cycle.Speed == 0 && binding.cycle.NightSpeed == 0, scene + " single frozen vendor sun/moon");
+                    var beams = owner.GetComponent<SportsNightHeadlights>().beams; bool night = choice[1] == "Night" || choice[1] == "Evening";
+                    Check(beams.Length == (hockey != null ? 6 : 8) && beams.All(beam => beam.light.enabled == night), scene + " active legacy truck headlights " + condition);
+                    Check(binding.nightLights.Length == 4 && binding.nightLights.All(light => (light.intensity > 0) == night), scene + " scene-owned venue lights " + condition);
+                    int revision = binding.Revision; string preset = weather.PresetId;
+                    if (hockey != null) hockey.Pause(); else wall.Pause(); yield return new WaitForSecondsRealtime(.1f);
+                    if (hockey != null) hockey.Resume(); else wall.Resume(); yield return null;
+                    Check(binding.Revision == revision && weather.PresetId == preset, scene + " pause/resume retains selected instance " + condition);
+                    var samples = new List<float>(60); for (int frame = 0; frame < 60; frame++) { yield return null; samples.Add(Time.unscaledDeltaTime * 1000); }
+                    samples.Sort(); log.AppendLine("FRAME_TIME " + scene + " Court-" + condition.Replace('|', '-') + " medianMs=" + samples[30].ToString("F2") + " p95Ms=" + samples[56].ToString("F2") + " samples=60; short whole-player intervals, not sustained CPU/GPU profiling.");
+                    yield return Capture(scene + "-court-" + condition.Replace('|', '-'));
+                    if (hockey != null) hockey.ChangeSetup(); else wall.ChangeSetup(); yield return null;
+                }
+            }
+            SportsNavigation.FrontEnd(); yield return null; yield return null;
+            Check(SceneManager.GetActiveScene().name == SportsNavigation.Front, "legacy courts return to actual sport selection");
         }
         IEnumerator Capture(string label)
         {

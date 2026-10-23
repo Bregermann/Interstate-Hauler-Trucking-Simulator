@@ -16,7 +16,12 @@ public enum HockeySource {AI,Keyboard,WholeController,LeftStick,RightStick}
  [NonSerialized]public Gamepad pad;[NonSerialized]public bool released;
  public bool controller{get=>source>=HockeySource.WholeController;set{source=value?HockeySource.WholeController:HockeySource.Keyboard;}}
 }
-[DefaultExecutionOrder(-100)] public sealed class HockeyMatch:MonoBehaviour {
+[DefaultExecutionOrder(-100)] public sealed class HockeyMatch:MonoBehaviour,ISportsWeatherLifecycle {
+ public string WeatherMatchId=>participantMatchId;
+ public bool WeatherMatchActive=>InMatch&&rules.Phase!=HockeyPhase.Finished;
+ public bool WeatherPaused=>WeatherMatchActive&&MenuOpen;
+ public bool WeatherAudible=>WeatherMatchActive&&!MenuOpen;
+ public float WeatherSfx=>settings.sfx;
  LWS.TruckSports.SportsParticipantBinding participantBinding;string participantMatchId;
  public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(players);else participantBinding.Refresh(saveEdits);}
  void RecordParticipants(string summary,int count){LWS.TruckSports.SportsParticipantRegistry.Record(participantMatchId,SetupKey,summary,players,count);}
