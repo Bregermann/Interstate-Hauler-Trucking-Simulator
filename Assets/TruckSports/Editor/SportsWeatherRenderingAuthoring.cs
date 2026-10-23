@@ -30,8 +30,11 @@ public static class SportsWeatherRenderingAuthoring {
  }
  public static void Install(SportsEventSession match,string folder)=>Install(match.gameObject,match.cameras,folder);
  public static void Install(GameObject owner,Camera[] cameras,string folder){
-  var weather=owner.GetComponent<SportsChaosWeather>();
   var binding=owner.GetComponent<LWS.TruckBaseJumping.BaseJumpRendering>();
+  Install(owner,cameras,folder,binding);
+ }
+ public static void Install(GameObject owner,Camera[] cameras,string folder,LWS.TruckBaseJumping.BaseJumpRendering binding){
+  var weather=owner.GetComponent<SportsChaosWeather>();
   if(weather==null||binding==null)throw new System.InvalidOperationException("Scene-owned Weather Maker and scoped pipeline are required.");
   string directory="Assets/"+folder+"/Rendering";Directory.CreateDirectory(directory);AssetDatabase.Refresh();
   string pipelinePath=directory+"/Weather pipeline.asset",rendererPath=directory+"/Weather renderer.asset";

@@ -20,7 +20,11 @@ public sealed class CollectionEnvironmentTests
     static void Set(object owner, string name, object value) => owner.GetType().GetField(name, Any).SetValue(owner, value);
 
     [UnityTest, Timeout(240000)]
-    public IEnumerator CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters()
+    public IEnumerator CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters() => VerifyVenues(false);
+    [UnityTest, Timeout(150000)]
+    public IEnumerator NewlyIntegratedOutdoorVenuesRetainRenderersAndMatchLifecycle() => VerifyVenues(true);
+    static readonly string[] NewlyIntegrated = { "TruckDockDiving", "TruckBuzkashi", "TruckBungeeDemolition", "TruckFishing", "TruckSumo", "TruckLogRolling", "TruckTrampolineDodgeball", "TruckDemolitionDerby" };
+    IEnumerator VerifyVenues(bool newlyIntegratedOnly)
     {
         var lease = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "CollectionEnvironment" });
         var isolation = new GameObject("Explicit outdoor environment regression");
@@ -38,12 +42,21 @@ public sealed class CollectionEnvironmentTests
             {
                 string name = Path.GetFileNameWithoutExtension(path);
                 if (name.StartsWith("TruckPedestrianPlowing", StringComparison.Ordinal)) continue;
+                if (newlyIntegratedOnly && !NewlyIntegrated.Contains(name)) continue;
                 EditorSceneManager.LoadSceneInPlayMode(path, new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
                 match = UnityEngine.Object.FindObjectsByType(Runtime("SportsEventSession"), FindObjectsSortMode.None).Cast<Component>().SingleOrDefault();
                 if (match == null) continue;
                 var weather = match.GetComponent(Runtime("SportsChaosWeather"));
                 if (weather == null) { match = null; continue; }
                 var binding = Get(weather, "matchTime"); Assert.That(binding, Is.Not.Null, name);
+                if (NewlyIntegrated.Contains(name))
+                {
+                    Assert.That(Get(match, "presentationWeather"), Is.SameAs(weather), name + " single opt-in lifecycle owner");
+                    Assert.That(UnityEngine.Object.FindObjectsByType(Runtime("SportsChaosWeather"), FindObjectsSortMode.None).Length, Is.EqualTo(1), name + " no duplicate weather");
+                    Assert.That(UnityEngine.Object.FindObjectsByType(Type.GetType("LWS.TruckBaseJumping.BaseJumpRendering, Assembly-CSharp", true), FindObjectsSortMode.None).Length, Is.EqualTo(1), name + " single render pipeline scope");
+                    Assert.That(((Light[])Get(binding, "nightLights")).Length, Is.GreaterThan(0), name + " authored night venue fixtures");
+                    if (name == "TruckDockDiving" || name == "TruckLogRolling") AssertRetainedWaterRenderer(name);
+                }
                 Set(Get(match, "setup"), "count", (int)Get(match, "MaximumPlayers"));
                 if ((bool)Get(match, "TeamSport")) { Set(match, "teamA", 4); Set(match, "teamB", 4); }
                 Call(match, "AllBots"); Call(match, "SetupScreen");
@@ -61,6 +74,7 @@ public sealed class CollectionEnvironmentTests
                 {
                     var box = WorldRect(topActions[i].GetComponent<RectTransform>());
                     if (headingBox.Overlaps(box)) layoutErrors.Add(name + " heading overlaps " + topActions[i].name);
+                    if (NewlyIntegrated.Contains(name) && box.Overlaps(RenderedTextRect((Component)Get(menus, "setupInfo")))) layoutErrors.Add(name + " control-help text overlaps " + topActions[i].name);
                     var caption = (Component)Get(Get(topActions[i], "button"), "normalTextObj");
                     if (caption != null)
                     {
@@ -89,6 +103,15 @@ public sealed class CollectionEnvironmentTests
                     var cloudGradient = (Gradient)Get(Get(weather, "clouds"), "GlobalAmbientMultiplierGradient");
                     Assert.That(cloudGradient.Evaluate(1).a, Is.EqualTo(choice == "Night" ? (float)Get(binding, "nightCloudAmbientMultiplier") : 1).Within(.001f), name + " cloud ambient follows the selected match time without mutating source weather profiles");
                     Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[clear], "id")), name);
+                    if (NewlyIntegrated.Contains(name))
+                    {
+                        int revision = (int)Get(binding, "Revision"); int seed = (int)Get(weather, "Seed");
+                        Call(match, "Pause", 0, false); yield return null;
+                        Assert.That((bool)Get(match, "Paused"), Is.True, name + " pauses without replacing the weather owner");
+                        Call(match, "Resume"); yield return null;
+                        Assert.That(Get(weather, "Seed"), Is.EqualTo(seed), name + " resume retains selected weather instance");
+                        Assert.That(Get(binding, "Revision"), Is.EqualTo(revision), name + " resume keeps frozen time");
+                    }
                     var headlights = match.GetComponent(Runtime("SportsNightHeadlights"));
                     if (name == "TruckHideAndSeek") Assert.That(headlights, Is.Null, "Tactical manual headlights retain their existing owner.");
                     else
@@ -114,6 +137,12 @@ public sealed class CollectionEnvironmentTests
                     Assert.That(Get(profile, "NightTexture"), Is.Not.Null, name + " authored vendor star texture");
                     Assert.That((float)Get(profile, "NightIntensity"), Is.GreaterThan(.1f), name);
                     var camera = vendor.GetType().GetField("AllowCameras").GetValue(vendor) as System.Collections.IEnumerable;
+                    if (NewlyIntegrated.Contains(name))
+                    {
+                        var allowed = camera.Cast<Camera>().ToArray();
+                        foreach (var rig in UnityEngine.Object.FindObjectsByType(Runtime("SportsEventCamera"), FindObjectsSortMode.None).Cast<Component>())
+                            Assert.That(allowed, Does.Contain((Camera)Get(rig, "view")), name + " includes authored spectator, replay and driving camera " + rig.name);
+                    }
                     var view = camera.Cast<Camera>().First(item => item != null && item.enabled);
                     var target = RenderTexture.GetTemporary(320, 180, 24, RenderTextureFormat.ARGBHalf); var prior = view.targetTexture;
                     try { view.targetTexture = target; view.Render(); }
@@ -123,10 +152,28 @@ public sealed class CollectionEnvironmentTests
                 tested++; TestContext.WriteLine("SAVED_OUTDOOR_TIME " + name + " maxRoster=" + Get(Get(match, "setup"), "count"));
                 Call(match, "SetupScreen"); match = null;
             }
-            Assert.That(tested, Is.EqualTo(35), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
+            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? 8 : 43), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
             Assert.That(layoutErrors, Is.Empty, string.Join("\n", layoutErrors));
         }
         finally { if (match != null) Call(match, "SetupScreen"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); Time.timeScale = 1; }
+    }
+    static void AssertRetainedWaterRenderer(string name)
+    {
+        string sourcePath = name == "TruckDockDiving" ? "Assets/TruckSports/Rendering/Dock local water pipeline.asset" : "Assets/TruckBogSnorkelling/Rendering/Bog pipeline.asset";
+        var original = AssetDatabase.LoadMainAssetAtPath(sourcePath);
+        var scope = UnityEngine.Object.FindObjectsByType(Type.GetType("LWS.TruckBaseJumping.BaseJumpRendering, Assembly-CSharp", true), FindObjectsSortMode.None).Single();
+        var current = (UnityEngine.Object)Get(scope, "pipeline");
+        string[] Features(UnityEngine.Object pipeline)
+        {
+            var serialized = new SerializedObject(pipeline); int index = serialized.FindProperty("m_DefaultRendererIndex").intValue;
+            var data = serialized.FindProperty("m_RendererDataList").GetArrayElementAtIndex(index).objectReferenceValue;
+            return ((System.Collections.IEnumerable)Get(data, "rendererFeatures")).Cast<UnityEngine.Object>().Select(feature => feature.GetType().FullName).ToArray();
+        }
+        Assert.That(AssetDatabase.GetAssetPath(current), Is.EqualTo("Assets/" + name + "/Rendering/Weather pipeline.asset"), name + " owns cloned renderer configuration");
+        var before = Features(original); var after = Features(current);
+        Assert.That(before, Is.Not.Empty, name + " original water feature baseline");
+        foreach (string feature in before) Assert.That(after, Does.Contain(feature), name + " retained " + feature);
+        Assert.That(after, Does.Contain("DigitalRuby.WeatherMaker.WeatherMakerURPRenderFeatureScript"), name + " vendor weather added beside water");
     }
     static Rect WorldRect(RectTransform rect)
     {

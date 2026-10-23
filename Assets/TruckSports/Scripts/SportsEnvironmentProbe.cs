@@ -60,6 +60,7 @@ namespace LWS.TruckSports
                 : new[] { SportsNavigation.Keepaway, SportsNavigation.FieldGoal, SportsNavigation.SkyTow, SportsNavigation.Terrier, SportsNavigation.Snake };
             bool maximumRoster = Array.IndexOf(arguments, "maximum-rosters") >= 0;
             bool allWeather = Array.IndexOf(arguments, "all-weather") >= 0;
+            bool weatherTimeMatrix = Array.IndexOf(arguments, "weather-time-matrix") >= 0;
             foreach (string scene in scenes)
             {
                 SportsNavigation.LoadSport(scene); yield return null; yield return null;
@@ -77,7 +78,7 @@ namespace LWS.TruckSports
                 match.AllBots(); SportsCameraOptions.Set(false);
                 yield return Capture(scene + "-setup");
                 if (scene == SportsNavigation.FieldGoal) yield return MenuNavigation(clock, forecast);
-                var cases = allWeather ? forecast.catalog.entries.Select(entry => entry.displayName + "|Night").ToArray() : scene == SportsNavigation.FieldGoal
+                var cases = allWeather ? forecast.catalog.entries.Select(entry => entry.displayName + "|Night").ToArray() : weatherTimeMatrix || scene == SportsNavigation.FieldGoal
                     ? new[] { "Clear|Morning", "Clear|Day", "Clear|Evening", "Clear|Night", "Rain|Evening", "Thunderstorm|Night", "Snow|Morning", "Blizzard|Night", "Hurricane|Day" }
                     : new[] { "Clear|Day", "Clear|Night" };
                 foreach (string combination in cases)
@@ -175,10 +176,21 @@ namespace LWS.TruckSports
         {
             foreach (var size in new[] { new Vector2Int(1280, 720), new Vector2Int(1920, 1080) })
             {
-                Screen.SetResolution(size.x, size.y, false); yield return new WaitForSecondsRealtime(.35f); yield return new WaitForEndOfFrame();
-                var texture = ScreenCapture.CaptureScreenshotAsTexture();
-                Check(texture.width == size.x && texture.height == size.y, label + " actual Windows backbuffer " + size.x + "x" + size.y);
-                File.WriteAllBytes(Path.Combine(folder, label + "-" + size.x + "x" + size.y + ".png"), texture.EncodeToPNG()); Destroy(texture);
+                Screen.SetResolution(size.x, size.y, false); yield return new WaitForSecondsRealtime(.35f);
+                Texture2D texture = null;
+                // Windows can commit the resize after the initial end-of-frame,
+                // even when Screen.width already reports the requested value.
+                // Inspect the real swap-chain capture; never rescale an image or
+                // substitute a camera render for actual window evidence.
+                for (int attempt = 0; attempt < 10; attempt++)
+                {
+                    yield return new WaitForEndOfFrame(); texture = ScreenCapture.CaptureScreenshotAsTexture();
+                    if (texture.width == size.x && texture.height == size.y) break;
+                    log.AppendLine("CAPTURE_RESIZE_RETRY " + label + " requested=" + size + " actual=" + texture.width + "x" + texture.height + " attempt=" + (attempt + 1));
+                    Destroy(texture); texture = null; yield return new WaitForSecondsRealtime(.15f);
+                }
+                Check(texture != null, label + " actual Windows backbuffer " + size.x + "x" + size.y);
+                if (texture != null) { File.WriteAllBytes(Path.Combine(folder, label + "-" + size.x + "x" + size.y + ".png"), texture.EncodeToPNG()); Destroy(texture); }
             }
         }
         IEnumerator MenuNavigation(SportsWeatherPicker clock, SportsWeatherPicker forecast)
