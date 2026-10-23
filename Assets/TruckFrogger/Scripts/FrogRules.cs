@@ -8,6 +8,7 @@ namespace LWS.TruckFrogger
   [Serializable]public sealed class Attempt{public int participant,challenge,seed;public float seconds;public string reason;public bool success,tiebreak;}
   public int Players{get;private set;}public int Course{get;private set;}public int Active{get;private set;}public int Seed{get;private set;}public int CourseSeed=>unchecked(Seed+Course*4099+tiePass*131);public float Clock{get;private set;}public float TimeLimit{get;private set;}public FrogPhase Phase{get;private set;}public bool Complete=>Phase==FrogPhase.Complete;public bool Tiebreak=>tiePass>0;public int Winner{get;private set;}=-1;public string Announcement{get;private set;}="";
   public readonly int[] points=new int[8];public readonly float[,] times=new float[5,8];public IReadOnlyList<Attempt> History=>history;
+  public event Action<string,int,int,int> Awarded;
   readonly List<Attempt> history=new List<Attempt>();readonly List<int> order=new List<int>();readonly float[] thisPass=new float[8];int selection,courseIndex,cursor,tiePass;bool matchTiebreak;
   public void Reset(int players,int option,int seed,float timeLimit=180)
   {
@@ -32,7 +33,7 @@ namespace LWS.TruckFrogger
   void ResolveCourse()
   {
    float best=float.PositiveInfinity;var tied=new List<int>();foreach(int slot in order){float t=thisPass[slot];if(t<best-.0001f){best=t;tied.Clear();tied.Add(slot);}else if(float.IsFinite(t)&&Math.Abs(t-best)<=.0001f)tied.Add(slot);}
-   if(tied.Count==1){if(matchTiebreak){Winner=tied[0];Announcement="PHYSICAL TIEBREAK WINNER";Phase=FrogPhase.Complete;return;}points[tied[0]]++;AdvanceCourse();return;}
+   if(tied.Count==1){if(matchTiebreak){Winner=tied[0];Announcement="PHYSICAL TIEBREAK WINNER";Phase=FrogPhase.Complete;return;}points[tied[0]]++;Awarded?.Invoke("course:"+Course+":winner",tied[0],1,points[tied[0]]);AdvanceCourse();return;}
    if(tied.Count>1||matchTiebreak||Tiebreak)
    {
     if(++tiePass>3){Announcement="SHARED DRAW · TIEBREAK ATTEMPTS EXHAUSTED";if(matchTiebreak)Phase=FrogPhase.Complete;else AdvanceCourse();return;}if(tied.Count>1){order.Clear();order.AddRange(tied);}cursor=0;Array.Fill(thisPass,float.PositiveInfinity);NextTurn();return;

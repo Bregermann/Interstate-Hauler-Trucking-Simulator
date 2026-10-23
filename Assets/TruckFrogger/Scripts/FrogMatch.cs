@@ -26,6 +26,9 @@ namespace LWS.TruckFrogger
   public override bool TryReadScoreCard(int i,out string value,out string detail){value=rules.points[i].ToString();detail=i==rules.Active?rules.Phase==FrogPhase.Driving?rules.Clock.ToString("F1")+"s":"NEXT / ACTIVE":"WAITING";return i<setup.count;}
   readonly StringBuilder text=new StringBuilder(800);public override string Standings{get{text.Clear();for(int i=0;i<setup.count;i++){text.Append('#').Append(rules.Place(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.points[i]).Append(" WINS · ");for(int c=0;c<5;c++)if(option==0||c==option-1)text.Append(float.IsFinite(rules.times[c,i])?rules.times[c,i].ToString("F2")+"s":"DNF").Append("  ");text.AppendLine();}return text.ToString();}}public override string Results=>"CROSSING CHAMPIONSHIP\n\n"+Standings+"\n"+rules.Announcement;
   int gate,preparedActor=-1,preparedSeed,preparedCourse;float elapsed,motionAge,retireHeld,impact=float.PositiveInfinity,stepClock;string impactReason;Vector3 previous;Bounds previousBounds;readonly FareFightRoute driver=new FareFightRoute();
+  protected override void Awake(){base.Awake();rules.Awarded+=ConfirmAward;}
+  protected override void OnDestroy(){if(rules!=null)rules.Awarded-=ConfirmAward;base.OnDestroy();}
+  void ConfirmAward(string id,int slot,int delta,int total){ConfirmScore(id,slot,delta,total,"FASTEST SUCCESSFUL CROSSING",SportsScoreTier.RoundWinner,unit:"WINS",roundEnded:true);}
   protected override void BeginGame()
   {
    seed=Environment.TickCount;rules.Reset(setup.count,option,seed,attemptLimit);rules.Begin();CompletedCrossings=ActualImpacts=WaitDecisions=0;elapsed=0;preparedActor=-1;atmosphere.Configure(seed,0,1);

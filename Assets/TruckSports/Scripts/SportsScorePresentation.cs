@@ -17,8 +17,8 @@ namespace LWS.TruckSports
         public CanvasGroup visibility;
         public Image portrait, accent;
         public Animator notificationAnimator;
-        [Tooltip("Non-blocking notification between the existing results heading and standings.")]
-        public Vector2 resultPosition = new Vector2(0, -184), resultSize = new Vector2(1120, 76);
+        [Tooltip("Non-blocking notification in the upper screen margin above the standard results card.")]
+        public Vector2 resultPosition = new Vector2(0, -8), resultSize = new Vector2(1120, 76);
         sealed class Pending
         {
             public SportsScoreEvent latest;

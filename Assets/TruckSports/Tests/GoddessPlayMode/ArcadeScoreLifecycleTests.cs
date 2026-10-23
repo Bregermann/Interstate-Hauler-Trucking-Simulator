@@ -97,6 +97,28 @@ public sealed class ArcadeScoreLifecycleTests
             foreach (var action in page.GetComponentsInChildren(Runtime("SportsMenuAction"), true).Cast<Component>())
                 Assert.That(Bounds(presenter.GetComponent<RectTransform>()).Overlaps(Bounds(action.GetComponent<RectTransform>())), Is.False, "Notification must not overlap results/replay button " + action.name);
             Assert.That(Bounds(presenter.GetComponent<RectTransform>()).Overlaps(Bounds(((Component)Get(menus, "result")).GetComponent<RectTransform>())), Is.False, "Notification must not cover standings.");
+            foreach (string heading in new[] { "Title", "Subtitle" })
+            {
+                var label = page.transform.Find(heading); Assert.That(label, Is.Not.Null);
+                Assert.That(Bounds(presenter.GetComponent<RectTransform>()).Overlaps(Bounds(label.GetComponent<RectTransform>())), Is.False, "Notification must not cover results heading " + heading);
+            }
+            // The Editor's default Game View can have another aspect ratio.
+            // Reuse the existing controlled renderer to inspect actual layout
+            // at the two requested dimensions; this is not a Windows capture.
+            var capture = Runtime("SportsControlledCapture").GetMethods().Single(method => method.Name == "Save" && method.GetParameters().Length == 6);
+            foreach (int width in new[] { 1280, 1920 })
+            {
+                int height = width == 1280 ? 720 : 1080;
+                Action<Camera> inspect = camera =>
+                {
+                    foreach (string heading in new[] { "Title", "Subtitle" })
+                    {
+                        var label = page.transform.Find(heading);
+                        Assert.That(Bounds(presenter.GetComponent<RectTransform>()).Overlaps(Bounds(label.GetComponent<RectTransform>())), Is.False, "Controlled " + width + "x" + height + " notification covers results heading " + heading);
+                    }
+                };
+                capture.Invoke(null, new object[] { menus.GetComponent<Canvas>(), Get(match, "cameras"), width, height, "Logs/TruckSports/PlaytestRepair/ResultsHeading-" + height + ".png", inspect });
+            }
             ((Behaviour)match).enabled = true; Call(match, "SetupScreen"); Assert.That(Call(match, "StartMatch"), Is.True); yield return null;
             Assert.That(Get(Get(match, "ScoreJournal"), "Count"), Is.Zero); Assert.That(Get(presenter, "Presented"), Is.Zero);
             Assert.That(presenter.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-112), "Rematch restores the authored gameplay placement.");

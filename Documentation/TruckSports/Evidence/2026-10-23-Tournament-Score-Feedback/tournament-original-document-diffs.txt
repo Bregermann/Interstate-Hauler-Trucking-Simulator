@@ -1,0 +1,92 @@
+--- TruckJousting:414223217
++++ additive
+@@ -18,6 +18,7 @@
+   - {fileID: 764987777}
+   - {fileID: 711882128}
+   - {fileID: 415474303}
++  - {fileID: 1119995360}
+   m_Father: {fileID: 0}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 0}
+--- TruckJousting:1460303637
++++ additive
+@@ -10,6 +10,7 @@
+   m_Script: {fileID: 11500000, guid: f4419955cab90ae4e90c6fa114e0b45c, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckJousting.JoustMatch
++  presentationWeather: {fileID: 0}
+   setup:
+     mode: 0
+     count: 2
+--- TruckJousting:1460303638
++++ additive
+@@ -25,3 +25,4 @@
+   sun: {fileID: 1705017357923579522}
+   ambience: {fileID: 1460303639}
+   matchTime: {fileID: 1460303656}
++  alternateSession: {fileID: 0}
+--- TruckJousting:1460303656
++++ additive
+@@ -12,6 +12,8 @@
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsMatchTime
+   cycle: {fileID: 1710977317732426548}
+   clouds: {fileID: 1711044944536233824}
++  skySphere: {fileID: 0}
++  coordinateGroundColor: 0
+   nightCloudAmbientMultiplier: 0.18
+   perspectiveSun: {fileID: 1711285573756369152}
+   orthographicSun: {fileID: 1086703971}
+--- TruckJousting:1460303658
++++ additive
+@@ -34,4 +34,5 @@
+     light: {fileID: 2065742223}
+     position: {x: 0.6588734, y: 2.1448998, z: 2.3815536}
+     rotation: {x: 0, y: 0, z: 0, w: 1}
++  alternateSession: {fileID: 0}
+   layoutVersion: 2
+--- TruckFrogger:260553190
++++ additive
+@@ -10,6 +10,7 @@
+   m_Script: {fileID: 11500000, guid: 0820e52cf5500f54b9da83e1a0736cc8, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckFrogger.FrogMatch
++  presentationWeather: {fileID: 0}
+   setup:
+     mode: 1
+     count: 4
+--- TruckFrogger:260553191
++++ additive
+@@ -25,3 +25,4 @@
+   sun: {fileID: 5243640250719140310}
+   ambience: {fileID: 260553192}
+   matchTime: {fileID: 260553208}
++  alternateSession: {fileID: 0}
+--- TruckFrogger:260553208
++++ additive
+@@ -12,6 +12,8 @@
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsMatchTime
+   cycle: {fileID: 5247172847785563312}
+   clouds: {fileID: 5247244861054849252}
++  skySphere: {fileID: 0}
++  coordinateGroundColor: 0
+   nightCloudAmbientMultiplier: 0.18
+   perspectiveSun: {fileID: 5246862891576708740}
+   orthographicSun: {fileID: 1065371187}
+--- TruckFrogger:260553210
++++ additive
+@@ -94,4 +94,5 @@
+     light: {fileID: 236439035}
+     position: {x: 0.6588745, y: 2.1448998, z: 2.3815536}
+     rotation: {x: 0, y: 0, z: 0, w: 1}
++  alternateSession: {fileID: 0}
+   layoutVersion: 2
+--- TruckFrogger:1963759676
++++ additive
+@@ -18,6 +18,7 @@
+   - {fileID: 1647833585}
+   - {fileID: 675154608}
+   - {fileID: 1867723406}
++  - {fileID: 420546996}
+   m_Father: {fileID: 0}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 0}

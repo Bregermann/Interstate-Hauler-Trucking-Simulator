@@ -1,0 +1,41 @@
+PASS saved tournament scene has two NWH tractors, physical compound tips and shield zones
+PASS actual AI three-pass tournament starts through normal setup
+PASS trucks settle upright and stationary with real lances held through countdown
+ACTUAL_JOUST pass=1 t=0 strikes=0 points=0,0 positions=(-3.99, 0.11, -115.01) / (3.99, 0.11, 115.01)
+PASS pause freezes tournament clock and actual trucks
+PASS saved sport uses the existing Heat confirmed-score presenter
+PASS real committed award reaches the Heat animation
+PASS visible score presentation leaves gameplay/menu inputs unblocked
+PASS opaque notification backing protects score text from bright venue artwork
+ACTUAL_JOUST pass=1 t=11.02006 strikes=2 points=3,3 positions=(-8.64, 1.09, 16.03) / (9.33, 1.09, -2.89)
+ACTUAL_JOUST pass=2 t=0 strikes=2 points=3,3 positions=(-4.00, 0.65, -115.00) / (4.00, 0.65, 115.00)
+ACTUAL_JOUST pass=2 t=10.02004 strikes=4 points=5,5 positions=(-4.00, 0.11, 28.18) / (4.00, 0.11, -21.17)
+ACTUAL_JOUST pass=3 t=0 strikes=4 points=5,5 positions=(-4.00, 0.65, -115.00) / (4.00, 0.65, 115.00)
+ACTUAL_JOUST pass=3 t=10.00004 strikes=6 points=7,6 positions=(-4.00, 0.11, 28.35) / (4.00, 0.11, -20.90)
+PASS every confirmed award has one semantic ID, correct participant and consistent total; receipts=8
+PASS confirmed award deltas account exactly for the authoritative scores or completed control milestones
+PASS actual lance award captured at720p/1080p
+PASS actual AI driving and lance aiming complete all three tournament passes
+PASS real physical lance-tip contacts earn all hit points exactly once
+PASS Core Collapse lances release actual pooled physical oak splinters and readable score feedback
+ACTUAL_RESULTS
+#1 Player 1 · 7P · 3 HITS / 2 CENTRAL / 1 KNOCKDOWNS
+#2 Player 2 · 6P · 3 HITS / 1 CENTRAL / 1 KNOCKDOWNS
+
+PASS actual truck/lance/splinter replay starts
+PASS replay preserves tournament points and shared/winning placement
+PASS 1 human-controller rematch resets all scores, lances and splinters
+PASS 1 human-only cab cameras have correct ownership and clean pass state
+PASS real assigned controller adjusts physical lance height/angle without changing the other player's input
+AIM_DRIVE_DIAG humans=1 moved=4.589816 command=(0.00, 1.00) applied=(0.00, 1.00) caption=LEFT STICK · RT/LT · SOUTH TOGGLE LANCE AIM · DRIVE: STEER / ACCELERATE paused=False speed=(0.11, 0.07, 5.01) throttle=1 handbrake=0
+PASS leaving aim mode restores responsive actual NWH acceleration
+PASS AI camera preference changes only presentation, leaving both competitors active
+PASS 2 human-controller rematch resets all scores, lances and splinters
+PASS 2 human-only cab cameras have correct ownership and clean pass state
+PASS real assigned controller adjusts physical lance height/angle without changing the other player's input
+AIM_DRIVE_DIAG humans=2 moved=4.753139 command=(0.00, 1.00) applied=(0.00, 1.00) caption=LEFT STICK · RT/LT · SOUTH TOGGLE LANCE AIM · DRIVE: STEER / ACCELERATE paused=False speed=(0.05, 0.00, 5.42) throttle=1 handbrake=0
+PASS leaving aim mode restores responsive actual NWH acceleration
+PASS AI camera preference changes only presentation, leaving both competitors active
+PASS AI-only spectator rematch starts
+PASS AI-only cameras OFF retains a functional broadcast
+CHECKS=28 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; actual NWH/PhysX lance contacts and software input; no human/device/listening certification.

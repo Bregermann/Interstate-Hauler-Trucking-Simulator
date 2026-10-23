@@ -1,6 +1,7 @@
 using System;
 namespace LWS.TruckJousting
 {
+    public enum JoustAwardKind { Armor, Central, Knockdown }
     // One score authority per pass. Actual lance contacts supply the hit, never proximity.
     [Serializable] public sealed class JoustRules
     {
@@ -8,6 +9,7 @@ namespace LWS.TruckJousting
         public bool Live{get;private set;} public bool PassClosed{get;private set;} public bool Complete{get;private set;}
         public float Clock{get;private set;} public int Winner{get;private set;}=-1;
         public readonly int[] points=new int[2],passPoints=new int[2],hits=new int[2],centralHits=new int[2],knockdowns=new int[2];
+        public event Action<JoustAwardKind,string,int,int,int> Awarded;
         readonly bool[] struck=new bool[2],down=new bool[2];
         public float MinimumImpact=6;public int ArmorPoints=1,CentralPoints=2,KnockdownPoints=3;
         public void Reset(int passes)
@@ -24,12 +26,12 @@ namespace LWS.TruckJousting
         {
             if(attacker<0||attacker>1||!Live||Complete||struck[attacker]||float.IsNaN(incomingNormalSpeed)||float.IsInfinity(incomingNormalSpeed)||incomingNormalSpeed<MinimumImpact)return false;
             struck[attacker]=true;hits[attacker]++;if(central)centralHits[attacker]++;
-            passPoints[attacker]=central?CentralPoints:ArmorPoints;points[attacker]+=passPoints[attacker];return true;
+            passPoints[attacker]=central?CentralPoints:ArmorPoints;points[attacker]+=passPoints[attacker];Awarded?.Invoke(central?JoustAwardKind.Central:JoustAwardKind.Armor,"pass:"+Pass+":hit:"+attacker,attacker,passPoints[attacker],points[attacker]);return true;
         }
         public bool Knockdown(int victim)
         {
             if(victim<0||victim>1||!Live||Complete||down[victim]||!struck[1-victim])return false;
-            down[victim]=true;int attacker=1-victim;int delta=Math.Max(0,KnockdownPoints-passPoints[attacker]);points[attacker]+=delta;passPoints[attacker]+=delta;knockdowns[attacker]++;return true;
+            down[victim]=true;int attacker=1-victim;int delta=Math.Max(0,KnockdownPoints-passPoints[attacker]);points[attacker]+=delta;passPoints[attacker]+=delta;knockdowns[attacker]++;if(delta!=0)Awarded?.Invoke(JoustAwardKind.Knockdown,"pass:"+Pass+":knockdown:"+victim,attacker,delta,points[attacker]);return true;
         }
         public bool EndPass()
         {

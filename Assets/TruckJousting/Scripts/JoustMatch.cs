@@ -33,6 +33,9 @@ namespace LWS.TruckJousting
         public override string ViewText(int view){int slot=drivingViews.rally.owners[view];TryReadScoreCard(slot,out var score,out var detail);return setup.players[slot].name+" · "+score+"\n"+detail+"\n"+ControlCaption(slot);}
         public override string Standings{get{text.Clear();for(int i=0;i<2;i++)text.Append('#').Append(rules.points[1-i]>rules.points[i]?2:1).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.points[i]).Append("P · ").Append(rules.hits[i]).Append(" HITS / ").Append(rules.centralHits[i]).Append(" CENTRAL / ").Append(rules.knockdowns[i]).Append(" KNOCKDOWNS\n");return text.ToString();}}
         public override string Results=>(rules.Winner>=0?setup.players[rules.Winner].name+" WINS THE JOUST!":"SHARED TOURNAMENT PLACING")+"\n\n"+Standings;
+        protected override void Awake(){base.Awake();rules.Awarded+=ConfirmAward;}
+        protected override void OnDestroy(){if(rules!=null)rules.Awarded-=ConfirmAward;base.OnDestroy();}
+        void ConfirmAward(JoustAwardKind kind,string id,int slot,int delta,int total){ConfirmScore(id,slot,delta,total,kind==JoustAwardKind.Knockdown?"CREDITED KNOCKDOWN":kind==JoustAwardKind.Central?"CENTRAL SHIELD":"ARMOR HIT",kind==JoustAwardKind.Armor?SportsScoreTier.Small:SportsScoreTier.Major);}
         protected override void BeginGame()
         {
             if(review==null){review=gameObject.AddComponent<SportsRecordedReview>();review.match=this;review.trucks=trucks;review.fragments=fragments;review.drivingViews=drivingViews;review.broadcast=broadcast;review.framing=framing;review.atmosphere=atmosphere;review.watchAction="watchjoust";review.extras=new[]{debrisGroup};}

@@ -17,6 +17,20 @@ namespace LWS.TruckSports.Editor
         public static void InstallSurvivalAwards() => InstallScenes(new[] { "TruckHotPotato", "TruckSeesaw", "TruckKingOfTheHill" });
         public static void InstallTeamAwards() => InstallScenes(new[] { "TruckVolleyball", "TruckFreezeTag" });
         public static void InstallSurvivalDepositAwards() => InstallScenes(new[] { "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers" });
+        public static void InstallTournamentAwards() => InstallScenes(new[] { "TruckJousting", "TruckFrogger" });
+        public static void UpgradeAwardResultSpacing()
+        {
+            var names = new[] { "TruckSumo", "TruckBalloonBattle", "TruckWhackAMole", "TruckTetherball", "TruckMagnetMayhem", "TruckSheepHerding", "TruckHotPotato", "TruckSeesaw", "TruckKingOfTheHill", "TruckVolleyball", "TruckFreezeTag", "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers", "TruckJousting", "TruckFrogger" };
+            foreach (string name in names)
+            {
+                var scene = EditorSceneManager.OpenScene("Assets/" + name + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
+                var presenter = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsScorePresentation>(true)).Single();
+                presenter.resultPosition = new Vector2(0, -8);
+                EditorUtility.SetDirty(presenter); EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+                Debug.Log("RESULT_SCORE_SPACING: " + name + " uses upper margin; original play placement and result content retained.");
+            }
+            AssetDatabase.SaveAssets();
+        }
         public static void RefineArcadeAwardBackgrounds()
         {
             foreach (string name in ArcadeScenes)

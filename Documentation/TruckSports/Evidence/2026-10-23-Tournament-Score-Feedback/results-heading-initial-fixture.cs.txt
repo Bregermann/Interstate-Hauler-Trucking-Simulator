@@ -1,0 +1,113 @@
+#if UNITY_EDITOR
+using System;
+using System.Collections;
+using System.Linq;
+using System.Reflection;
+using NUnit.Framework;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+
+public sealed class ArcadeScoreLifecycleTests
+{
+    const BindingFlags Any = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+    static Type Runtime(string name) => Type.GetType("LWS.TruckSports." + name + ", Assembly-CSharp", true);
+    static object Get(object owner, string name) => owner.GetType().GetField(name, Any) is FieldInfo field ? field.GetValue(owner) : owner.GetType().GetProperty(name, Any).GetValue(owner);
+    static object Call(object owner, string name, params object[] values) => owner.GetType().GetMethods(Any).Single(method => method.Name == name && method.GetParameters().Length == values.Length).Invoke(owner, values);
+    static Component Session() => (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsEventSession"));
+    static Rect Bounds(RectTransform rect)
+    {
+        var corners = new Vector3[4]; rect.GetWorldCorners(corners);
+        return Rect.MinMaxRect(corners.Min(value => value.x), corners.Min(value => value.y), corners.Max(value => value.x), corners.Max(value => value.y));
+    }
+
+    [UnityTest, Timeout(60000)]
+    public IEnumerator PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder() => RapidReceiptOrder(true);
+    [UnityTest, Timeout(60000)]
+    public IEnumerator PresentationOnlyWinnerCannotPrecedeItsEarlierAward() => RapidReceiptOrder(false);
+    IEnumerator RapidReceiptOrder(bool queuedThird)
+    {
+        var scope = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "ScoreQueuePresentationOnly" });
+        var isolation = new GameObject("Explicit synthetic receipt presentation fixture"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation"));
+        Component match = null;
+        try
+        {
+            EditorSceneManager.LoadSceneInPlayMode("Assets/TruckWhackAMole/Scenes/TruckWhackAMole.unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+            match = Session(); Call(match, "AllBots"); Assert.That(Call(match, "StartMatch"), Is.True);
+            // Presentation-only fixture: pause the game component and inject
+            // receipts, not rule awards. These are not actual gameplay points.
+            ((Behaviour)match).enabled = false; var scores = (int[])Get(Get(match, "rules"), "scores"); var before = scores.ToArray();
+            var tier = Runtime("SportsScoreTier");
+            Call(match, "ConfirmScore", "fixture:ordinary:1", 0, 1d, 1d, "ORDINARY", Enum.Parse(tier, "Small"), "PTS", null, false, false);
+            Call(match, "ConfirmScore", "fixture:winner", 0, 3d, 4d, "ROUND WINNER", Enum.Parse(tier, "RoundWinner"), "PTS", null, true, false);
+            bool thirdSent = queuedThird;
+            if (queuedThird) Call(match, "ConfirmScore", "fixture:ordinary:2", 0, 1d, 5d, "ORDINARY", Enum.Parse(tier, "Small"), "PTS", null, false, false);
+            var presenter = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsScorePresentation"));
+            var totals = new System.Collections.Generic.List<double>(); int shown = 0; float until = Time.realtimeSinceStartup + 15;
+            while (totals.Count < 3 && Time.realtimeSinceStartup < until)
+            {
+                if ((int)Get(presenter, "Presented") != shown) { shown = (int)Get(presenter, "Presented"); totals.Add((double)Get(Get(presenter, "LastPresented"), "Total")); }
+                if (!thirdSent && totals.Count == 2) { thirdSent = true; Call(match, "ConfirmScore", "fixture:ordinary:2", 0, 1d, 5d, "ORDINARY", Enum.Parse(tier, "Small"), "PTS", null, false, false); }
+                yield return null;
+            }
+            CollectionAssert.AreEqual(before, scores, "Synthetic presentation receipts cannot create gameplay points.");
+            CollectionAssert.AreEqual(new[] { 1d, 4d, 5d }, totals, "Winner priority and aggregation must preserve this recipient's actual commit order.");
+            TestContext.WriteLine("SYNTHETIC_PRESENTATION_ONLY receipt sequence1/4/5; no gameplay score was assigned or awarded; Heat displayed commit order.");
+        }
+        finally { if (match != null) { ((Behaviour)match).enabled = true; Call(match, "SetupScreen"); } Time.timeScale = 1; UnityEngine.Object.DestroyImmediate(isolation); scope.Dispose(); }
+    }
+
+    [UnityTest, Timeout(120000)]
+    public IEnumerator ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition()
+    {
+        var scope = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "ArcadeScoreContact" });
+        var isolation = new GameObject("Explicit arcade scoring validation"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation"));
+        Component match = null;
+        try
+        {
+            EditorSceneManager.LoadSceneInPlayMode("Assets/TruckWhackAMole/Scenes/TruckWhackAMole.unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+            match = Session(); Call(match, "AllBots"); Assert.That(Call(match, "StartMatch"), Is.True);
+            var presenter = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsScorePresentation")); Assert.That(presenter, Is.Not.Null);
+            var journal = Get(match, "ScoreJournal"); Time.timeScale = 4;
+            float deadline = Time.realtimeSinceStartup + 50;
+            while ((int)Get(journal, "Count") == 0 && !(bool)Get(match, "Finished") && Time.realtimeSinceStartup < deadline) yield return new WaitForFixedUpdate();
+            Assert.That((int)Get(journal, "Count"), Is.GreaterThan(0), "AI must physically drive an NWH bumper into a live target; the fixture never calls rules.Hit to manufacture points.");
+            Assert.That(Get(journal, "Count"), Is.EqualTo(Get(match, "PhysicalHits")));
+            var receipt = Get(journal, "Latest"); int slot = (int)Get(receipt, "Slot");
+            var scores = (int[])Get(Get(match, "rules"), "scores");
+            Assert.That(Get(receipt, "Total"), Is.EqualTo((double)scores[slot]));
+            string eventId = (string)Get(receipt, "EventId"); int hole = int.Parse(eventId.Split(':')[1]);
+            int count = (int)Get(journal, "Count"); var sealedScores = scores.ToArray();
+            ((Behaviour)match).enabled = false;
+            Call(match, "Contact", slot, hole, 10f);
+            Assert.That(Get(journal, "Count"), Is.EqualTo(count), "A duplicate report against the already claimed exposure cannot publish another receipt.");
+            CollectionAssert.AreEqual(sealedScores, scores);
+            // Labelled lifecycle fixture: end the actual match immediately after
+            // its real contact, reproducing a final award and results in one frame.
+            Call(match, "EndMatch"); Time.timeScale = 1;
+            deadline = Time.realtimeSinceStartup + 15;
+            while ((Get(presenter, "LastPresented") == null || (string)Get(Get(presenter, "LastPresented"), "EventId") != eventId) && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.That(Get(presenter, "LastPresented"), Is.Not.Null);
+            Assert.That(Get(Get(presenter, "LastPresented"), "EventId"), Is.EqualTo(eventId));
+            Assert.That(((CanvasGroup)Get(presenter, "visibility")).alpha, Is.EqualTo(1), "A confirmed final award remains visible on the real results page.");
+            CollectionAssert.AreEqual(sealedScores, scores, "Heat/DOTween presentation never changes authoritative points.");
+            Canvas.ForceUpdateCanvases();
+            var menus = (Component)Get(match, "menus"); var page = ((GameObject[])Get(menus, "pages"))[6];
+            foreach (var action in page.GetComponentsInChildren(Runtime("SportsMenuAction"), true).Cast<Component>())
+                Assert.That(Bounds(presenter.GetComponent<RectTransform>()).Overlaps(Bounds(action.GetComponent<RectTransform>())), Is.False, "Notification must not overlap results/replay button " + action.name);
+            Assert.That(Bounds(presenter.GetComponent<RectTransform>()).Overlaps(Bounds(((Component)Get(menus, "result")).GetComponent<RectTransform>())), Is.False, "Notification must not cover standings.");
+            foreach (string heading in new[] { "Title", "Subtitle" })
+            {
+                var label = page.transform.Find(heading); Assert.That(label, Is.Not.Null);
+                Assert.That(Bounds(presenter.GetComponent<RectTransform>()).Overlaps(Bounds(label.GetComponent<RectTransform>())), Is.False, "Notification must not cover results heading " + heading);
+            }
+            ((Behaviour)match).enabled = true; Call(match, "SetupScreen"); Assert.That(Call(match, "StartMatch"), Is.True); yield return null;
+            Assert.That(Get(Get(match, "ScoreJournal"), "Count"), Is.Zero); Assert.That(Get(presenter, "Presented"), Is.Zero);
+            Assert.That(presenter.GetComponent<RectTransform>().anchoredPosition.y, Is.EqualTo(-112), "Rematch restores the authored gameplay placement.");
+            TestContext.WriteLine("ACTUAL_MOLE_SCORE " + eventId + " slot=" + slot + " delta=" + Get(receipt, "Delta") + "; explicit early-results fixture after actual PhysX/NWH hit, not a complete-match claim.");
+        }
+        finally { if (match != null) { ((Behaviour)match).enabled = true; Call(match, "SetupScreen"); } Time.timeScale = 1; UnityEngine.Object.DestroyImmediate(isolation); scope.Dispose(); }
+    }
+}
+#endif
