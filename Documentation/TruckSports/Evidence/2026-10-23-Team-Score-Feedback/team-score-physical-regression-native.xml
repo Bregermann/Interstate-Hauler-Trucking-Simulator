@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 13:37:08Z" end-time="2026-10-23 13:37:31Z" duration="22.7850678">
+  <test-suite type="TestSuite" id="1412" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="285" result="Passed" start-time="2026-10-23 13:37:08Z" end-time="2026-10-23 13:37:31Z" duration="22.785068" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1296" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="118" result="Passed" start-time="2026-10-23 13:37:08Z" end-time="2026-10-23 13:37:31Z" duration="22.763764" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="72792" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1129" name="ArcadeScoreLifecycleTests" fullname="ArcadeScoreLifecycleTests" classname="ArcadeScoreLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 13:37:08Z" end-time="2026-10-23 13:37:14Z" duration="5.718550" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1130" name="ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" fullname="ArcadeScoreLifecycleTests.ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" methodname="ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="124383154" result="Passed" start-time="2026-10-23 13:37:08Z" end-time="2026-10-23 13:37:14Z" duration="5.704427" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="120000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_MOLE_SCORE mole:33:1 slot=0 delta=10; explicit early-results fixture after actual PhysX/NWH hit, not a complete-match claim.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1239" name="SumoScorePresentationTests" fullname="SumoScorePresentationTests" classname="SumoScorePresentationTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 13:37:14Z" end-time="2026-10-23 13:37:22Z" duration="8.165710" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1240" name="RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" fullname="SumoScorePresentationTests.RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" methodname="RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" classname="SumoScorePresentationTests" runstate="Runnable" seed="1731978025" result="Passed" start-time="2026-10-23 13:37:14Z" end-time="2026-10-23 13:37:22Z" duration="8.140372" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="90000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+ownedKeyboard=1/True current=1/True held=True drive=(0.00, 1.00) command=(0.00, 1.00) pusher=(0.00, 0.36, 9.20) victim=(0.00, 0.30, 12.21) contacts=26 paused=False stage=Fight
+Changing weather profile WeatherMakerProfile_HeavySleet (Sports runtime clone) to WeatherMakerProfile_LightSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightSnow (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1241" name="SurvivalScoreLifecycleTests" fullname="SurvivalScoreLifecycleTests" classname="SurvivalScoreLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 13:37:22Z" end-time="2026-10-23 13:37:29Z" duration="6.926354" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1242" name="RealGroundedHillOccupationPublishesMilestonesWithoutChangingFractionalControl" fullname="SurvivalScoreLifecycleTests.RealGroundedHillOccupationPublishesMilestonesWithoutChangingFractionalControl" methodname="RealGroundedHillOccupationPublishesMilestonesWithoutChangingFractionalControl" classname="SurvivalScoreLifecycleTests" runstate="Runnable" seed="222640479" result="Passed" start-time="2026-10-23 13:37:22Z" end-time="2026-10-23 13:37:29Z" duration="6.923442" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="120000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+GROUNDED_HILL_MILESTONES actual NWH/terrain supported occupation; no assigned score or clock; two ten-second notifications, pause and fresh rematch.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1243" name="TeamScoreLifecycleTests" fullname="TeamScoreLifecycleTests" classname="TeamScoreLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 13:37:29Z" end-time="2026-10-23 13:37:31Z" duration="1.940109" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1244" name="ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" fullname="TeamScoreLifecycleTests.ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" methodname="ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" classname="TeamScoreLifecycleTests" runstate="Runnable" seed="1714555979" result="Passed" start-time="2026-10-23 13:37:29Z" end-time="2026-10-23 13:37:31Z" duration="1.921819" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="120000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_TEAM_SCORE real court/ball contact; one blue team receipt without player credit; duplicate-name crew, results, late lock and fresh rematch.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

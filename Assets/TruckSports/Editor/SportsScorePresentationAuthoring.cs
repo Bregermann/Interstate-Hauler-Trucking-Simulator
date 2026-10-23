@@ -15,6 +15,7 @@ namespace LWS.TruckSports.Editor
         public static void InstallSumo() => InstallScenes(new[] { "TruckSumo" });
         public static void InstallArcadeAwards() => InstallScenes(ArcadeScenes);
         public static void InstallSurvivalAwards() => InstallScenes(new[] { "TruckHotPotato", "TruckSeesaw", "TruckKingOfTheHill" });
+        public static void InstallTeamAwards() => InstallScenes(new[] { "TruckVolleyball", "TruckFreezeTag" });
         public static void RefineArcadeAwardBackgrounds()
         {
             foreach (string name in ArcadeScenes)

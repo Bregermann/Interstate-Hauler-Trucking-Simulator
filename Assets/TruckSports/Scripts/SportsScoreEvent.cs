@@ -9,9 +9,9 @@ namespace LWS.TruckSports
     // Immutable presentation receipt. Gameplay owns the award and supplied total.
     public sealed class SportsScoreEvent
     {
-        public readonly string SportId, MatchId, EventId, ParticipantId, DisplayName, TeamId, Reason, Unit;
+        public readonly string SportId, MatchId, EventId, RecipientId, ParticipantId, DisplayName, TeamId, Reason, Unit;
         public readonly Color Color;
-        public readonly bool IsAI, RoundEnded, MatchEnded;
+        public readonly bool IsAI, IsTeam, RoundEnded, MatchEnded;
         public readonly int Slot;
         public readonly double Delta, Total;
         public readonly SportsScoreTier Tier;
@@ -19,8 +19,17 @@ namespace LWS.TruckSports
             double delta, double total, string reason, SportsScoreTier tier, string unit, string team, bool roundEnded, bool matchEnded)
         {
             SportId = sport; MatchId = match; EventId = id; ParticipantId = player.ParticipantId;
+            RecipientId = "participant:" + ParticipantId; IsTeam = false;
             DisplayName = player.DisplayName; Color = player.ParticipantColor; IsAI = player.IsBot; Slot = slot;
             Delta = delta; Total = total; Reason = reason; Tier = tier; Unit = unit; TeamId = team;
+            RoundEnded = roundEnded; MatchEnded = matchEnded;
+        }
+        internal SportsScoreEvent(string sport, string match, string id, string team, string name, Color color,
+            double delta, double total, string reason, SportsScoreTier tier, string unit, bool roundEnded, bool matchEnded)
+        {
+            SportId = sport; MatchId = match; EventId = id; TeamId = team; RecipientId = "team:" + team;
+            ParticipantId = null; Slot = -1; IsTeam = true; IsAI = false;
+            DisplayName = name; Color = color; Delta = delta; Total = total; Reason = reason; Tier = tier; Unit = unit;
             RoundEnded = roundEnded; MatchEnded = matchEnded;
         }
     }
@@ -52,5 +61,17 @@ namespace LWS.TruckSports
             return true;
         }
         public void Close() => closed = true;
+        public bool TryConfirmTeam(string eventId, string team, string name, Color color, double delta, double total,
+            string reason, SportsScoreTier tier, string unit, bool roundEnded, bool matchEnded, out SportsScoreEvent receipt)
+        {
+            receipt = null;
+            if (closed) return false;
+            if (string.IsNullOrWhiteSpace(eventId) || string.IsNullOrWhiteSpace(team) || string.IsNullOrWhiteSpace(name) ||
+                double.IsNaN(delta) || double.IsInfinity(delta) || double.IsNaN(total) || double.IsInfinity(total) || string.IsNullOrWhiteSpace(reason))
+                throw new ArgumentException("Confirmed team scores require an event ID, stable team identity/name, finite values and a reason.");
+            if (!confirmed.Add(eventId)) return false;
+            receipt = Latest = new SportsScoreEvent(sport, match, eventId, team, name, color, delta, total, reason, tier, unit, roundEnded, matchEnded);
+            return true;
+        }
     }
 }

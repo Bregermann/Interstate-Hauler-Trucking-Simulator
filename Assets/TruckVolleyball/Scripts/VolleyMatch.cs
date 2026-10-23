@@ -22,6 +22,9 @@ namespace LWS.TruckVolleyball
   public override string Results=>(rules.Winner<0?"VOLLEYBALL RESULTS":(rules.Winner==0?"BLUE":"ORANGE")+" WINS!")+"\n\n"+Standings;
   readonly FareFightRoute[] drivers=new FareFightRoute[8];readonly float[] jumpAt=new float[8],stalled=new float[8];readonly int[] hits=new int[8];float elapsed,after;Vector3 previous;bool pointPending;
   public override bool ValidateSources(out string reason){if(!base.ValidateSources(out reason))return false;int humans=0;for(int i=0;i<setup.count;i++)if(setup.players[i].source!=BowlingSource.AI)humans++;if(humans<=4)return true;reason="Up to four local humans; remaining positions use AI.";return false;}
+  protected override void Awake(){base.Awake();rules.PointAwarded+=ConfirmRally;}
+  protected override void OnDestroy(){if(rules!=null)rules.PointAwarded-=ConfirmRally;base.OnDestroy();}
+  void ConfirmRally(int team,string reason)=>ConfirmTeamScore("rally:"+rules.Rally,team==0?"blue":"orange",team==0?"BLUE TEAM":"ORANGE TEAM",team==0?new Color(.025f,.58f,.76f):SportsBroadcastCanvas.Orange,1,rules.points[team],reason,rules.Complete?SportsScoreTier.MatchChampion:SportsScoreTier.Major,roundEnded:true,matchEnded:rules.Complete);
   protected override void BeginGame()
   {
    if(review==null){review=gameObject.AddComponent<SportsRecordedReview>();review.match=this;review.trucks=trucks;review.fragments=fragments;review.drivingViews=drivingViews;review.broadcast=broadcast;review.framing=framing;review.atmosphere=atmosphere;review.watchAction="watchvolley";review.extras=new[]{ball.transform};}

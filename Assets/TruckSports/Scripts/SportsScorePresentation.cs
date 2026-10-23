@@ -52,7 +52,7 @@ namespace LWS.TruckSports
             // Combine rapid awards only when their actual identities, reason,
             // unit and tier agree. Names may deliberately be identical.
             foreach (var item in pending)
-                if (receipt.Tier <= SportsScoreTier.Major && item.latest.ParticipantId == receipt.ParticipantId && item.latest.Reason == receipt.Reason && item.latest.Tier == receipt.Tier && item.latest.Unit == receipt.Unit)
+                if (receipt.Tier <= SportsScoreTier.Major && item.latest.RecipientId == receipt.RecipientId && item.latest.Reason == receipt.Reason && item.latest.Tier == receipt.Tier && item.latest.Unit == receipt.Unit)
                 { item.delta += receipt.Delta; item.count++; item.latest = receipt; return; }
             int position = pending.Count;
             if (receipt.Tier >= SportsScoreTier.RoundWinner)

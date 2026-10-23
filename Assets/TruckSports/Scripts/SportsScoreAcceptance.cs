@@ -12,6 +12,35 @@ namespace LWS.TruckSports
     public static class SportsScoreAcceptance
     {
         public static bool CaptureOnly => Array.IndexOf(Environment.GetCommandLineArgs(), "-tsScoreOnly") >= 0;
+        public sealed class TeamTally : IDisposable
+        {
+            readonly SportsEventSession match;
+            readonly double[] totals = new double[2];
+            readonly HashSet<string> ids = new HashSet<string>();
+            string matchId; int count, invalid;
+            public TeamTally(SportsEventSession owner) { match = owner; match.ScoreConfirmed += Record; }
+            void CurrentMatch()
+            {
+                if (matchId == match.MatchId) return;
+                matchId = match.MatchId; Array.Clear(totals, 0, totals.Length); ids.Clear(); count = invalid = 0;
+            }
+            void Record(SportsScoreEvent receipt)
+            {
+                CurrentMatch(); count++;
+                int team = receipt.TeamId == "blue" ? 0 : receipt.TeamId == "orange" ? 1 : -1;
+                if (receipt.MatchId != matchId || !ids.Add(receipt.EventId) || !receipt.IsTeam || receipt.Slot != -1 || receipt.ParticipantId != null || team < 0) { invalid++; return; }
+                if (receipt.RecipientId != "team:" + receipt.TeamId || receipt.DisplayName != (team == 0 ? "BLUE TEAM" : "ORANGE TEAM")) invalid++;
+                totals[team] += receipt.Delta;
+                if (Math.Abs(totals[team] - receipt.Total) > .001) invalid++;
+            }
+            public void Verify(int[] expected, Action<bool, string> check)
+            {
+                CurrentMatch();
+                check(invalid == 0 && match.ScoreJournal != null && match.ScoreJournal.Count == count, "every team award has one semantic ID and a team recipient without fictitious player credit; receipts=" + count);
+                check(Math.Abs(totals[0] - expected[0]) < .001 && Math.Abs(totals[1] - expected[1]) < .001, "confirmed team award deltas exactly reconstruct both authoritative team totals");
+            }
+            public void Dispose() { if (match != null) match.ScoreConfirmed -= Record; }
+        }
         public sealed class Tally : IDisposable
         {
             readonly SportsEventSession match;

@@ -20,6 +20,9 @@ namespace LWS.TruckFreezeTag
   public override string Results=>(rules.Winner<0?"SHARED FIRST PLACE":(rules.Winner==0?"BLUE":"ORANGE")+" WINS FREEZE TAG!")+"\n\n"+Standings;
   readonly StringBuilder text=new StringBuilder(900);readonly FareFightRoute[] drivers=new FareFightRoute[8];readonly float[] shotAt=new float[8],flashUntil=new float[8],stalled=new float[8];readonly bool[] appliedIce=new bool[8];readonly int[] targets=new int[8];readonly RaycastHit[] castHits=new RaycastHit[64];float elapsed,aftermath,announcementUntil;string announcement="";
   public override bool ValidateSources(out string reason){if(!base.ValidateSources(out reason))return false;int humans=0;for(int i=0;i<setup.count;i++)if(setup.players[i].source!=BowlingSource.AI)humans++;if(humans<=4)return true;reason="Up to four local humans; assign remaining competitors to AI.";return false;}
+  protected override void Awake(){base.Awake();rules.RoundAwarded+=ConfirmRound;}
+  protected override void OnDestroy(){if(rules!=null)rules.RoundAwarded-=ConfirmRound;base.OnDestroy();}
+  void ConfirmRound(int team)=>ConfirmTeamScore("round:"+rules.Round,team==0?"blue":"orange",team==0?"BLUE TEAM":"ORANGE TEAM",team==0?new Color(.03f,.3f,.9f):SportsBroadcastCanvas.Orange,1,rules.wins[team],team==rules.Freezers?"ALL RUNNERS FROZEN":"SURVIVED THE CLOCK",rules.Complete&&rules.Winner==team?SportsScoreTier.MatchChampion:SportsScoreTier.RoundWinner,"ROUNDS",true,rules.Complete);
   protected override void BeginGame()
   {
    if(review==null){review=gameObject.AddComponent<SportsRecordedReview>();review.match=this;review.trucks=trucks;review.fragments=fragments;review.drivingViews=drivingViews;review.broadcast=broadcast;review.framing=framing;review.atmosphere=atmosphere;review.watchAction="watchfreeze";review.extras=Array.ConvertAll(shells,s=>s.transform);}

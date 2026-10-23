@@ -14,6 +14,11 @@ namespace LWS.TruckSports {
   if(!ScoreJournal.TryConfirm(eventId,setup.players[slot],slot,delta,total,reason,tier,unit,team,roundEnded,matchEnded,out var receipt))return false;
   ScoreConfirmed?.Invoke(receipt);return true;
  }
+ protected bool ConfirmTeamScore(string eventId,string teamId,string teamName,Color teamColor,double delta,double total,string reason,SportsScoreTier tier=SportsScoreTier.Major,string unit="PTS",bool roundEnded=false,bool matchEnded=false){
+  if(!Running||Finished||ScoreJournal==null)return false;
+  if(!ScoreJournal.TryConfirmTeam(eventId,teamId,teamName,teamColor,delta,total,reason,tier,unit,roundEnded,matchEnded,out var receipt))return false;
+  ScoreConfirmed?.Invoke(receipt);return true;
+ }
 
  public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}
  void RecordParticipants(string summary,int count){LWS.TruckSports.SportsParticipantRegistry.Record(participantMatchId,PreferenceKey,summary,setup.players,count);}
