@@ -26,7 +26,7 @@ namespace LWS.TruckSports
                         finished ? avalanche.rules.finishTime[i] : avalanche.rules.distance[i], finished ? "SEC" : "M",
                         finished ? "WHOLE TRUCK ESCAPED" : avalanche.rules.reason[i], format: finished ? "0.000" : "0"));
                 }
-                snapshot = new SportsResultsSnapshot(escaped > 0 ? "MOUNTAIN CONQUERED" : "FURTHEST SURVIVORS", escaped + " / " + session.setup.count + " ESCAPED · ACTUAL FINISH TIMES & SURVIVAL DISTANCE", rows);
+                snapshot = new SportsResultsSnapshot(escaped > 0 ? "MOUNTAIN CONQUERED" : "FURTHEST SURVIVORS", escaped + " / " + session.setup.count + " ESCAPED · FINISH TIMES & DISTANCE", rows);
                 return true;
             }
             if (session is NinjaMatch ninja)
@@ -35,11 +35,12 @@ namespace LWS.TruckSports
                 for (int i = 0; i < session.setup.count; i++)
                 {
                     bool finished = ninja.rules.finished[i]; anyFinish |= finished; int place = ninja.rules.Place(i);
-                    string detail = ninja.rules.cleared[i] + " / " + ninja.rules.Obstacles + " OBSTACLES · " + ninja.rules.falls[i] + " FALLS · +" + (ninja.rules.falls[i] * 5) + " SEC PENALTIES";
+                    int falls = ninja.rules.falls[i];
+                    string detail = ninja.rules.cleared[i] + " / " + ninja.rules.Obstacles + " OBSTACLES · " + falls + (falls == 1 ? " FALL" : " FALLS") + " · +" + (falls * 5) + " SEC";
                     rows.Add(new SportsResultRow(session.setup.players[i], i, place, place == 1,
                         finished ? (double?)ninja.rules.adjustedTime[i] : null, "SEC", detail, "COURSE INCOMPLETE", "0.000"));
                 }
-                snapshot = new SportsResultsSnapshot(anyFinish ? "COURSE CHAMPIONS" : "FURTHEST ATHLETES", "ADJUSTED TIME INCLUDES THE ORIGINAL FIVE-SECOND FALL PENALTY", rows);
+                snapshot = new SportsResultsSnapshot(anyFinish ? "COURSE CHAMPIONS" : "FURTHEST ATHLETES", "FINISH TIME + 5 SECONDS PER FALL", rows);
                 return true;
             }
             return false;

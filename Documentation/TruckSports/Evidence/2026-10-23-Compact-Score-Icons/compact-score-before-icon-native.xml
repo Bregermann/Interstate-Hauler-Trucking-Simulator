@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 17:49:13Z" end-time="2026-10-23 17:49:18Z" duration="4.9015569">
+  <test-suite type="TestSuite" id="1432" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="301" result="Failed" site="Child" start-time="2026-10-23 17:49:13Z" end-time="2026-10-23 17:49:18Z" duration="4.901557" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1316" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="134" result="Failed" site="Child" start-time="2026-10-23 17:49:13Z" end-time="2026-10-23 17:49:18Z" duration="4.887429" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="73768" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1161" name="CompactScoreIconLayoutTests" fullname="CompactScoreIconLayoutTests" classname="CompactScoreIconLayoutTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-23 17:49:13Z" end-time="2026-10-23 17:49:18Z" duration="4.882308" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1162" name="EightCardValuesStayClearOfTheLockedHumanIcon" fullname="CompactScoreIconLayoutTests.EightCardValuesStayClearOfTheLockedHumanIcon" methodname="EightCardValuesStayClearOfTheLockedHumanIcon" classname="CompactScoreIconLayoutTests" runstate="Runnable" seed="1035306645" result="Failed" label="Error" start-time="2026-10-23 17:49:13Z" end-time="2026-10-23 17:49:17Z" duration="3.329429" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.
+  ----> NUnit.Framework.AssertionException :   The locked state must not cover the actual time/score suffix.
+  Expected: False
+  But was:  True
+]]></message>
+            <stack-trace><![CDATA[  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00083] in <f713e1c3c5f545ce9b1df47230f4f853>:0 
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <f713e1c3c5f545ce9b1df47230f4f853>:0 
+  at CompactScoreIconLayoutTests+<Inspect>d__8.MoveNext () [0x003b1] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\CompactScoreIconLayoutTests.cs:46 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44 
+--AssertionException
+  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression, System.String message, System.Object[] args) [0x00039] in <f577cd9686154d6ab10efd7e65e64366>:0 
+  at CompactScoreIconLayoutTests+<>c__DisplayClass8_0.<Inspect>b__0 (UnityEngine.Camera camera) [0x00035] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\CompactScoreIconLayoutTests.cs:39 
+  at LWS.TruckSports.SportsControlledCapture.Save (UnityEngine.Canvas canvas, UnityEngine.Camera[] cameras, System.Int32 width, System.Int32 height, System.String path, System.Action`1[T] inspect) [0x002ff] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Scripts\SportsControlledCapture.cs:7 
+  at LWS.TruckSports.SportsControlledCapture.Save (LWS.TruckSports.SportsEventSession match, System.Int32 width, System.Int32 height, System.String path, System.Action`1[T] inspect) [0x00000] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Scripts\SportsControlledCapture.cs:6 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <f713e1c3c5f545ce9b1df47230f4f853>:0 ]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightCloudsScattered (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+]]></output>
+        </test-case>
+        <test-case id="1163" name="TwelveCardValuesStayClearOfTheLockedHumanIcon" fullname="CompactScoreIconLayoutTests.TwelveCardValuesStayClearOfTheLockedHumanIcon" methodname="TwelveCardValuesStayClearOfTheLockedHumanIcon" classname="CompactScoreIconLayoutTests" runstate="Runnable" seed="669811436" result="Failed" label="Error" start-time="2026-10-23 17:49:17Z" end-time="2026-10-23 17:49:18Z" duration="1.538563" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.
+  ----> NUnit.Framework.AssertionException :   The locked state must not cover the actual time/score suffix.
+  Expected: False
+  But was:  True
+]]></message>
+            <stack-trace><![CDATA[  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00083] in <f713e1c3c5f545ce9b1df47230f4f853>:0 
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <f713e1c3c5f545ce9b1df47230f4f853>:0 
+  at CompactScoreIconLayoutTests+<Inspect>d__8.MoveNext () [0x003b1] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\CompactScoreIconLayoutTests.cs:46 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44 
+--AssertionException
+  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression, System.String message, System.Object[] args) [0x00039] in <f577cd9686154d6ab10efd7e65e64366>:0 
+  at CompactScoreIconLayoutTests+<>c__DisplayClass8_0.<Inspect>b__0 (UnityEngine.Camera camera) [0x00035] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\CompactScoreIconLayoutTests.cs:39 
+  at LWS.TruckSports.SportsControlledCapture.Save (UnityEngine.Canvas canvas, UnityEngine.Camera[] cameras, System.Int32 width, System.Int32 height, System.String path, System.Action`1[T] inspect) [0x002ff] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Scripts\SportsControlledCapture.cs:7 
+  at LWS.TruckSports.SportsControlledCapture.Save (LWS.TruckSports.SportsEventSession match, System.Int32 width, System.Int32 height, System.String path, System.Action`1[T] inspect) [0x00000] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Scripts\SportsControlledCapture.cs:6 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <f713e1c3c5f545ce9b1df47230f4f853>:0 ]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
