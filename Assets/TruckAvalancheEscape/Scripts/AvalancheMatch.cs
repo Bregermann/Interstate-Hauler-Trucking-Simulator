@@ -20,6 +20,9 @@ namespace LWS.TruckAvalancheEscape
   public override bool TryReadScoreCard(int i,out string value,out string detail){value=rules.finished[i]?rules.finishTime[i].ToString("F1")+"s":rules.distance[i].ToString("F0")+"m";detail=rules.finished[i]?"FIN #"+rules.Place(i):!rules.alive[i]?"OUT":rules.caughtFor[i]>0?"ESC "+Mathf.Max(0,burialGrace-rules.caughtFor[i]).ToString("F1")+"s":"RACING";return i<setup.count;}
   readonly StringBuilder text=new StringBuilder(1000);public override string Standings{get{text.Clear();for(int i=0;i<setup.count;i++)text.Append('#').Append(rules.Place(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.finished[i]?rules.finishTime[i].ToString("F2")+"s":rules.distance[i].ToString("F0")+"m · "+rules.reason[i]).AppendLine();return text.ToString();}}public override string Results=>"MOUNTAIN ESCAPE RESULTS\n\n"+Standings;
   readonly FareFightRoute[] drivers=new FareFightRoute[12];readonly int[] route=new int[12],segment=new int[12];readonly float[] lastSnow=new float[12],recoverAt=new float[12],stuckFor=new float[12];readonly Vector3[] previous=new Vector3[12];readonly float[] previousRear=new float[12];readonly bool[] wasCaught=new bool[12];float announcementUntil;string announcement="";
+  protected override void Awake(){base.Awake();rules.FinishConfirmed+=ConfirmFinish;}
+  protected override void OnDestroy(){rules.FinishConfirmed-=ConfirmFinish;base.OnDestroy();}
+  void ConfirmFinish(int slot,float seconds){if(float.IsFinite(seconds)&&seconds>=0)ConfirmOutcome("finish:"+slot,slot,seconds,"AVALANCHE ESCAPED");}
   protected override void BeginGame()
   {
    announcement="";announcementUntil=0;feedback.StopAll();foreach(var mound in burialMounds)mound.localScale=Vector3.zero;rules.Reset(setup.count,world.length,burialGrace,300);rules.Begin();PhysicalSnowContacts=ActualBurials=ActualEscapes=0;front.speed=new[]{12f,14,16}[option];front.ResetFront();

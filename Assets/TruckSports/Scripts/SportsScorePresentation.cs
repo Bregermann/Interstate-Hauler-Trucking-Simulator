@@ -57,7 +57,7 @@ namespace LWS.TruckSports
                 if (item.latest.RecipientId != receipt.RecipientId) continue;
                 // Do not merge a later ordinary award into one queued before
                 // this recipient's winner/other event. Totals follow commits.
-                if (receipt.Tier <= SportsScoreTier.Major && item.latest.Reason == receipt.Reason && item.latest.Tier == receipt.Tier && item.latest.Unit == receipt.Unit)
+                if (receipt.Kind == SportsScoreKind.Points && item.latest.Kind == SportsScoreKind.Points && receipt.Tier <= SportsScoreTier.Major && item.latest.Reason == receipt.Reason && item.latest.Tier == receipt.Tier && item.latest.Unit == receipt.Unit)
                 { item.delta += receipt.Delta; item.count++; item.latest = receipt; return; }
                 break;
             }
@@ -103,8 +103,11 @@ namespace LWS.TruckSports
             Color color = receipt.Color;
             accent.color = color; portrait.color = Color.Lerp(color, Color.white, .4f);
             string delta = (item.delta >= 0 ? "+" : "") + item.delta.ToString("0.##", CultureInfo.InvariantCulture);
+            string measurement = receipt.Kind == SportsScoreKind.Outcome
+                ? "<size=140%><b>" + receipt.OutcomeValue.ToString("0.000", CultureInfo.InvariantCulture) + "</b></size> " + Escape(receipt.Unit)
+                : "<size=140%><b>" + delta + "</b></size> " + Escape(receipt.Unit) + "     " + receipt.Total.ToString("0.##", CultureInfo.InvariantCulture) + " TOTAL" + (item.count > 1 ? "  ·  " + item.count + " AWARDS" : "");
             notification.notificationText = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + "><b>" + Escape(receipt.DisplayName) + "</b></color>  ·  " + Escape(receipt.Reason)
-                + "\n<size=140%><b>" + delta + "</b></size> " + Escape(receipt.Unit) + "     " + receipt.Total.ToString("0.##", CultureInfo.InvariantCulture) + " TOTAL" + (item.count > 1 ? "  ·  " + item.count + " AWARDS" : "");
+                + "\n" + measurement;
             notification.minimizeAfter = receipt.Tier == SportsScoreTier.Small ? .85f : receipt.Tier == SportsScoreTier.Major ? 1.35f : 2;
             notification.UpdateUI(); notification.ExpandNotification();
             portrait.transform.DOKill(); portrait.transform.localScale = Vector3.one;

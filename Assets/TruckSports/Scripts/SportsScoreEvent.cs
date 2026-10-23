@@ -5,6 +5,7 @@ using UnityEngine;
 namespace LWS.TruckSports
 {
     public enum SportsScoreTier { Small, Major, RoundWinner, MatchChampion }
+    public enum SportsScoreKind { Points, Outcome }
 
     // Immutable presentation receipt. Gameplay owns the award and supplied total.
     public sealed class SportsScoreEvent
@@ -15,6 +16,9 @@ namespace LWS.TruckSports
         public readonly int Slot;
         public readonly double Delta, Total;
         public readonly SportsScoreTier Tier;
+        public readonly SportsScoreKind Kind;
+        // Only Outcome receipts carry this non-score measurement.
+        public readonly double OutcomeValue;
         internal SportsScoreEvent(string sport, string match, string id, ISportsParticipantSlot player, int slot,
             double delta, double total, string reason, SportsScoreTier tier, string unit, string team, bool roundEnded, bool matchEnded)
         {
@@ -32,6 +36,10 @@ namespace LWS.TruckSports
             DisplayName = name; Color = color; Delta = delta; Total = total; Reason = reason; Tier = tier; Unit = unit;
             RoundEnded = roundEnded; MatchEnded = matchEnded;
         }
+        internal SportsScoreEvent(string sport, string match, string id, ISportsParticipantSlot player, int slot,
+            double value, string reason, SportsScoreTier tier, string unit, bool roundEnded, bool matchEnded)
+            : this(sport, match, id, player, slot, 0, 0, reason, tier, unit, null, roundEnded, matchEnded)
+        { Kind = SportsScoreKind.Outcome; OutcomeValue = value; }
     }
 
     // Match-local semantics, independent of rendering and score storage. A receipt
@@ -58,6 +66,18 @@ namespace LWS.TruckSports
                 throw new ArgumentException("Confirmed scores require an event ID, stable participant identity, finite values and a reason.");
             if (!confirmed.Add(eventId)) return false;
             receipt = Latest = new SportsScoreEvent(sport, match, eventId, player, slot, delta, total, reason, tier, unit, team, roundEnded, matchEnded);
+            return true;
+        }
+        public bool TryConfirmOutcome(string eventId, ISportsParticipantSlot player, int slot, double value,
+            string reason, SportsScoreTier tier, string unit, bool roundEnded, bool matchEnded, out SportsScoreEvent receipt)
+        {
+            receipt = null;
+            if (closed) return false;
+            if (string.IsNullOrWhiteSpace(eventId) || player == null || string.IsNullOrWhiteSpace(player.ParticipantId) || slot < 0 ||
+                double.IsNaN(value) || double.IsInfinity(value) || value < 0 || string.IsNullOrWhiteSpace(reason) || string.IsNullOrWhiteSpace(unit))
+                throw new ArgumentException("Confirmed outcomes require an event ID, stable identity, finite nonnegative measurement, reason and unit.");
+            if (!confirmed.Add(eventId)) return false;
+            receipt = Latest = new SportsScoreEvent(sport, match, eventId, player, slot, value, reason, tier, unit, roundEnded, matchEnded);
             return true;
         }
         public void Close() => closed = true;

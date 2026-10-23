@@ -12,7 +12,8 @@ namespace LWS.TruckAvalancheEscape
   bool Eligible(int slot)=>Phase==AvalanchePhase.Racing&&slot>=0&&slot<Players&&alive[slot]&&!finished[slot];
   public bool Progress(int slot,float metres){if(!Eligible(slot)||!float.IsFinite(metres))return false;distance[slot]=Math.Max(distance[slot],Math.Clamp(metres,0,Length));return true;}
   public bool SnowContact(int slot,float dt,bool engulfed){if(!Eligible(slot)||!float.IsFinite(dt)||dt<=0)return false;caughtFor[slot]=Math.Clamp(caughtFor[slot]+(engulfed?dt:-dt*2),0,Grace);return engulfed&&caughtFor[slot]>=Grace&&Eliminate(slot,"BURIED IN THE AVALANCHE");}
-  public bool Finish(int slot,float seconds){if(!Eligible(slot)||!float.IsFinite(seconds)||seconds<0||seconds>Clock+.05f)return false;finished[slot]=true;finishTime[slot]=seconds;distance[slot]=Length;reason[slot]="ESCAPED";Resolve();return true;}
+  public event Action<int,float> FinishConfirmed;
+  public bool Finish(int slot,float seconds){if(!Eligible(slot)||!float.IsFinite(seconds)||seconds<0||seconds>Clock+.05f)return false;finished[slot]=true;finishTime[slot]=seconds;distance[slot]=Length;reason[slot]="ESCAPED";Resolve();FinishConfirmed?.Invoke(slot,seconds);return true;}
   public bool Eliminate(int slot,string why){if(!Eligible(slot))return false;alive[slot]=false;reason[slot]=why;Resolve();return true;}
   void Resolve(){if(Phase!=AvalanchePhase.Racing)return;for(int i=0;i<Players;i++)if(alive[i]&&!finished[i])return;Phase=AvalanchePhase.Complete;}
   public int Place(int slot){int result=1;for(int i=0;i<Players;i++)if(i!=slot&&(finished[i]&&!finished[slot]||finished[i]&&finished[slot]&&finishTime[i]<finishTime[slot]-.001f||!finished[i]&&!finished[slot]&&distance[i]>distance[slot]+.01f))result++;return result;}

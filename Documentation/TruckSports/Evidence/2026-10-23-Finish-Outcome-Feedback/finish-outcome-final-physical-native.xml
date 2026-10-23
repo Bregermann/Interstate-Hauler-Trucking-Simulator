@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="7" result="Passed" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 16:42:56Z" end-time="2026-10-23 16:45:00Z" duration="123.7974438">
+  <test-suite type="TestSuite" id="1425" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="296" result="Passed" start-time="2026-10-23 16:42:56Z" end-time="2026-10-23 16:45:00Z" duration="123.797444" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1309" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="129" result="Passed" start-time="2026-10-23 16:42:56Z" end-time="2026-10-23 16:45:00Z" duration="123.779660" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="71508" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1129" name="ArcadeScoreLifecycleTests" fullname="ArcadeScoreLifecycleTests" classname="ArcadeScoreLifecycleTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-23 16:42:56Z" end-time="2026-10-23 16:43:17Z" duration="21.379030" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1132" name="ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" fullname="ArcadeScoreLifecycleTests.ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" methodname="ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="946670170" result="Passed" start-time="2026-10-23 16:42:56Z" end-time="2026-10-23 16:43:04Z" duration="7.686393" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="120000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_HeavyRain (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_MOLE_SCORE mole:6:1 slot=5 delta=10; explicit early-results fixture after actual PhysX/NWH hit, not a complete-match claim.
+]]></output>
+        </test-case>
+        <test-case id="1130" name="PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" fullname="ArcadeScoreLifecycleTests.PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" methodname="PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="1993517588" result="Passed" start-time="2026-10-23 16:43:04Z" end-time="2026-10-23 16:43:10Z" duration="6.954853" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+SYNTHETIC_PRESENTATION_ONLY receipt sequence1/4/5; no gameplay score was assigned or awarded; Heat displayed commit order.
+]]></output>
+        </test-case>
+        <test-case id="1131" name="PresentationOnlyWinnerCannotPrecedeItsEarlierAward" fullname="ArcadeScoreLifecycleTests.PresentationOnlyWinnerCannotPrecedeItsEarlierAward" methodname="PresentationOnlyWinnerCannotPrecedeItsEarlierAward" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="317394397" result="Passed" start-time="2026-10-23 16:43:10Z" end-time="2026-10-23 16:43:17Z" duration="6.721040" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightMediumClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SYNTHETIC_PRESENTATION_ONLY receipt sequence1/4/5; no gameplay score was assigned or awarded; Heat displayed commit order.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1199" name="FinishOutcomeLifecycleTests" fullname="FinishOutcomeLifecycleTests" classname="FinishOutcomeLifecycleTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-23 16:43:17Z" end-time="2026-10-23 16:44:58Z" duration="100.422365" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1200" name="ActualLegalSignalRaceFinishPublishesItsRecordedMeasurement" fullname="FinishOutcomeLifecycleTests.ActualLegalSignalRaceFinishPublishesItsRecordedMeasurement" methodname="ActualLegalSignalRaceFinishPublishesItsRecordedMeasurement" classname="FinishOutcomeLifecycleTests" runstate="Runnable" seed="875477149" result="Passed" start-time="2026-10-23 16:43:17Z" end-time="2026-10-23 16:43:48Z" duration="30.689525" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="210000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_FINISH_OUTCOME TruckRedLightGreenLight actual AI/NWH route at3x game time; recorded seconds=85.62906; no score, crossing, clock or position injection; rematch cleared.
+]]></output>
+        </test-case>
+        <test-case id="1201" name="ActualMountainEscapePublishesItsRecordedMeasurement" fullname="FinishOutcomeLifecycleTests.ActualMountainEscapePublishesItsRecordedMeasurement" methodname="ActualMountainEscapePublishesItsRecordedMeasurement" classname="FinishOutcomeLifecycleTests" runstate="Runnable" seed="2054560023" result="Passed" start-time="2026-10-23 16:43:48Z" end-time="2026-10-23 16:44:51Z" duration="63.076755" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="210000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_FINISH_OUTCOME TruckAvalancheEscape actual AI/NWH route at3x game time; recorded seconds=182.265; no score, crossing, clock or position injection; rematch cleared.
+]]></output>
+        </test-case>
+        <test-case id="1202" name="SyntheticMixedReceiptsKeepMeasurementsDistinctFromPointChanges" fullname="FinishOutcomeLifecycleTests.SyntheticMixedReceiptsKeepMeasurementsDistinctFromPointChanges" methodname="SyntheticMixedReceiptsKeepMeasurementsDistinctFromPointChanges" classname="FinishOutcomeLifecycleTests" runstate="Runnable" seed="1134435603" result="Passed" start-time="2026-10-23 16:44:51Z" end-time="2026-10-23 16:44:58Z" duration="6.636050" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SYNTHETIC_OUTCOME_FORMAT same recipient/reason/tier/unit; point1, measured42.125, point2 remain distinct and ordered; game points unchanged.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1253" name="TeamScoreLifecycleTests" fullname="TeamScoreLifecycleTests" classname="TeamScoreLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 16:44:58Z" end-time="2026-10-23 16:45:00Z" duration="1.968278" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1254" name="ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" fullname="TeamScoreLifecycleTests.ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" methodname="ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" classname="TeamScoreLifecycleTests" runstate="Runnable" seed="1003218571" result="Passed" start-time="2026-10-23 16:44:58Z" end-time="2026-10-23 16:45:00Z" duration="1.948272" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="120000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightRain (Sports runtime clone) to WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_TEAM_SCORE real court/ball contact; one blue team receipt without player credit; duplicate-name crew, results, late lock and fresh rematch.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,138 @@
+--- Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:388248230:before
++++ Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:388248230:after
+@@ -10,6 +10,7 @@
+   m_Script: {fileID: 11500000, guid: 5fd69f6c851067b4e8bc8b779112236f, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckRedLightGreenLight.RedLightMatch
++  presentationWeather: {fileID: 0}
+   setup:
+     mode: 0
+     count: 12
+--- Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:388248232:before
++++ Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:388248232:after
+@@ -25,3 +25,4 @@
+   sun: {fileID: 8435835055558851178}
+   ambience: {fileID: 388248233}
+   matchTime: {fileID: 388248252}
++  alternateSession: {fileID: 0}
+--- Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:388248252:before
++++ Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:388248252:after
+@@ -12,6 +12,8 @@
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsMatchTime
+   cycle: {fileID: 8432585306548983564}
+   clouds: {fileID: 8432648532325405528}
++  skySphere: {fileID: 0}
++  coordinateGroundColor: 0
+   nightCloudAmbientMultiplier: 0.18
+   perspectiveSun: {fileID: 8432891686074010936}
+   orthographicSun: {fileID: 745913418}
+--- Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:388248254:before
++++ Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:388248254:after
+@@ -134,4 +134,5 @@
+     light: {fileID: 1618832266}
+     position: {x: 0.6588726, y: 2.1448998, z: 2.3815556}
+     rotation: {x: 0, y: 0, z: 0, w: 1}
++  alternateSession: {fileID: 0}
+   layoutVersion: 2
+--- Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:942055196:before
++++ Assets/TruckRedLightGreenLight/Scenes/TruckRedLightGreenLight.unity:942055196:after
+@@ -18,6 +18,7 @@
+   - {fileID: 2081373968}
+   - {fileID: 1889713248}
+   - {fileID: 1853152185}
++  - {fileID: 635080006}
+   m_Father: {fileID: 0}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 0}
+--- Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:106297511:before
++++ Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:106297511:after
+@@ -10,6 +10,7 @@
+   m_Script: {fileID: 11500000, guid: e471f6028a5303843b29314511718be1, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckAvalancheEscape.AvalancheMatch
++  presentationWeather: {fileID: 0}
+   setup:
+     mode: 0
+     count: 12
+--- Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:106297512:before
++++ Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:106297512:after
+@@ -25,3 +25,4 @@
+   sun: {fileID: 2579255401650291653}
+   ambience: {fileID: 106297513}
+   matchTime: {fileID: 106297531}
++  alternateSession: {fileID: 0}
+--- Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:106297531:before
++++ Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:106297531:after
+@@ -12,6 +12,8 @@
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsMatchTime
+   cycle: {fileID: 2585013402993110691}
+   clouds: {fileID: 2584935892153625335}
++  skySphere: {fileID: 0}
++  coordinateGroundColor: 0
+   nightCloudAmbientMultiplier: 0.18
+   perspectiveSun: {fileID: 2584756234691916951}
+   orthographicSun: {fileID: 2141227813}
+--- Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:106297533:before
++++ Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:106297533:after
+@@ -134,4 +134,5 @@
+     light: {fileID: 999131672}
+     position: {x: 0.6588726, y: 2.1448975, z: 2.3815536}
+     rotation: {x: 0, y: 0, z: 0, w: 1}
++  alternateSession: {fileID: 0}
+   layoutVersion: 2
+--- Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:529049424:before
++++ Assets/TruckAvalancheEscape/Scenes/TruckAvalancheEscape.unity:529049424:after
+@@ -18,6 +18,7 @@
+   - {fileID: 1496344726}
+   - {fileID: 1024330617}
+   - {fileID: 344372992}
++  - {fileID: 2060423187}
+   m_Father: {fileID: 0}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 0}
+--- Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:162649589:before
++++ Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:162649589:after
+@@ -18,6 +18,7 @@
+   - {fileID: 1305091487}
+   - {fileID: 1835172623}
+   - {fileID: 1709060099}
++  - {fileID: 1330783176}
+   m_Father: {fileID: 0}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0, y: 0}
+--- Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:733618520:before
++++ Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:733618520:after
+@@ -10,6 +10,7 @@
+   m_Script: {fileID: 11500000, guid: 70a1ed0a210149a4391ec231df134fcb, type: 3}
+   m_Name: 
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckNinjaWarrior.NinjaMatch
++  presentationWeather: {fileID: 0}
+   setup:
+     mode: 1
+     count: 4
+--- Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:733618521:before
++++ Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:733618521:after
+@@ -25,3 +25,4 @@
+   sun: {fileID: 8011639255362771826}
+   ambience: {fileID: 733618522}
+   matchTime: {fileID: 733618538}
++  alternateSession: {fileID: 0}
+--- Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:733618538:before
++++ Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:733618538:after
+@@ -12,6 +12,8 @@
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsMatchTime
+   cycle: {fileID: 8015171028858811924}
+   clouds: {fileID: 8015243041128313408}
++  skySphere: {fileID: 0}
++  coordinateGroundColor: 0
+   nightCloudAmbientMultiplier: 0.18
+   perspectiveSun: {fileID: 8014914689889676320}
+   orthographicSun: {fileID: 705594916}
+--- Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:733618540:before
++++ Assets/TruckNinjaWarrior/Scenes/TruckNinjaWarrior.unity:733618540:after
+@@ -94,4 +94,5 @@
+     light: {fileID: 1324837081}
+     position: {x: 0.6588745, y: 2.1448994, z: 2.3815536}
+     rotation: {x: 0, y: 0, z: 0, w: 1}
++  alternateSession: {fileID: 0}
+   layoutVersion: 2

@@ -79,7 +79,9 @@ namespace LWS.TruckRedLightGreenLight
         Bounds recentExplosions;
         Sequence masterShake;
 
-        protected override void Awake() { base.Awake(); tint = new MaterialPropertyBlock(); }
+        protected override void Awake() { base.Awake(); tint = new MaterialPropertyBlock(); rules.FinishConfirmed+=ConfirmFinish; }
+        protected override void OnDestroy(){rules.FinishConfirmed-=ConfirmFinish;base.OnDestroy();}
+        void ConfirmFinish(int slot,float seconds){if(float.IsFinite(seconds)&&seconds>=0)ConfirmOutcome("finish:"+slot,slot,seconds,"FINISHED");}
 
         public Vector3 Grid(int slot) => new Vector3((slot % 6 - 2.5f) * 11, startY, -slot / 6 * 14);
         static float Rear(SportsEventTruck truck) => truck.shape.bounds.min.z;

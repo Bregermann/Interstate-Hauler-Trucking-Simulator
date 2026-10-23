@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 16:36:02Z" end-time="2026-10-23 16:36:58Z" duration="56.528168">
+  <test-suite type="TestSuite" id="1425" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="296" result="Failed" site="Child" start-time="2026-10-23 16:36:02Z" end-time="2026-10-23 16:36:58Z" duration="56.528168" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1309" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="129" result="Failed" site="Child" start-time="2026-10-23 16:36:02Z" end-time="2026-10-23 16:36:58Z" duration="56.514167" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="11600" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1199" name="FinishOutcomeLifecycleTests" fullname="FinishOutcomeLifecycleTests" classname="FinishOutcomeLifecycleTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-23 16:36:02Z" end-time="2026-10-23 16:36:58Z" duration="56.508618" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1201" name="ActualMountainEscapePublishesItsRecordedMeasurement" fullname="FinishOutcomeLifecycleTests.ActualMountainEscapePublishesItsRecordedMeasurement" methodname="ActualMountainEscapePublishesItsRecordedMeasurement" classname="FinishOutcomeLifecycleTests" runstate="Runnable" seed="978622719" result="Failed" start-time="2026-10-23 16:36:02Z" end-time="2026-10-23 16:36:58Z" duration="56.495376" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="210000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  An actual AI/NWH route must reach its accepted whole-truck finish; no finish/clock/position is injected.
+  Expected: 1
+  But was:  0
+]]></message>
+            <stack-trace><![CDATA[at FinishOutcomeLifecycleTests+<ActualFinish>d__7.MoveNext () [0x00339] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\FinishOutcomeLifecycleTests.cs:43
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+AVALANCHE_ROUTE_SAMPLE option=0 phase=Countdown clock=0 position=(-19.50, 430.65, -38.00) speed=0 alive=True distance=0 reason= limiter=False
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+AVALANCHE_ROUTE_SAMPLE option=0 phase=Racing clock=20.44027 position=(8.54, 397.25, 205.38) speed=20.7968 alive=True distance=205.0101 reason= limiter=False
+AVALANCHE_ROUTE_SAMPLE option=0 phase=Racing clock=44.46082 position=(234.47, 345.16, 530.96) speed=18.18501 alive=True distance=530.6042 reason= limiter=False
+AVALANCHE_ROUTE_SAMPLE option=0 phase=Racing clock=68.48051 position=(105.40, 292.49, 860.12) speed=12.90739 alive=True distance=860.0089 reason= limiter=False
+AVALANCHE_ROUTE_SAMPLE option=0 phase=Racing clock=92.47649 position=(-226.27, 250.34, 1123.54) speed=16.52887 alive=True distance=1123.275 reason= limiter=False
+AVALANCHE_ROUTE_SAMPLE option=0 phase=Racing clock=116.4925 position=(-125.05, 203.54, 1416.09) speed=21.71082 alive=True distance=1415.851 reason= limiter=False
+AVALANCHE_ROUTE_SAMPLE option=0 phase=Racing clock=140.5132 position=(-2.09, 157.52, 1541.59) speed=6.270871 alive=True distance=1541.55 reason= limiter=True
+AVALANCHE_ROUTE_SAMPLE option=0 phase=Complete clock=158.137 position=(83.36, 157.52, 1549.00) speed=0 alive=False distance=1549.066 reason=BURIED IN THE AVALANCHE limiter=False
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

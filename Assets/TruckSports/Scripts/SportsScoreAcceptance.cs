@@ -28,7 +28,7 @@ namespace LWS.TruckSports
             {
                 CurrentMatch(); count++;
                 int team = receipt.TeamId == "blue" ? 0 : receipt.TeamId == "orange" ? 1 : -1;
-                if (receipt.MatchId != matchId || !ids.Add(receipt.EventId) || !receipt.IsTeam || receipt.Slot != -1 || receipt.ParticipantId != null || team < 0) { invalid++; return; }
+                if (receipt.Kind != SportsScoreKind.Points || receipt.MatchId != matchId || !ids.Add(receipt.EventId) || !receipt.IsTeam || receipt.Slot != -1 || receipt.ParticipantId != null || team < 0) { invalid++; return; }
                 if (receipt.RecipientId != "team:" + receipt.TeamId || receipt.DisplayName != (team == 0 ? "BLUE TEAM" : "ORANGE TEAM")) invalid++;
                 totals[team] += receipt.Delta;
                 if (Math.Abs(totals[team] - receipt.Total) > .001) invalid++;
@@ -38,6 +38,40 @@ namespace LWS.TruckSports
                 CurrentMatch();
                 check(invalid == 0 && match.ScoreJournal != null && match.ScoreJournal.Count == count, "every team award has one semantic ID and a team recipient without fictitious player credit; receipts=" + count);
                 check(Math.Abs(totals[0] - expected[0]) < .001 && Math.Abs(totals[1] - expected[1]) < .001, "confirmed team award deltas exactly reconstruct both authoritative team totals");
+            }
+            public void Dispose() { if (match != null) match.ScoreConfirmed -= Record; }
+        }
+        public sealed class OutcomeTally : IDisposable
+        {
+            readonly SportsEventSession match;
+            readonly Dictionary<int, SportsScoreEvent> finishes = new Dictionary<int, SportsScoreEvent>();
+            readonly HashSet<string> ids = new HashSet<string>();
+            string matchId; int count, invalid;
+            public OutcomeTally(SportsEventSession owner) { match = owner; match.ScoreConfirmed += Record; }
+            void CurrentMatch()
+            {
+                if (matchId == match.MatchId) return;
+                matchId = match.MatchId; finishes.Clear(); ids.Clear(); count = invalid = 0;
+            }
+            void Record(SportsScoreEvent receipt)
+            {
+                CurrentMatch(); count++;
+                if (receipt.MatchId != matchId || !ids.Add(receipt.EventId) || receipt.Slot < 0 || receipt.Slot >= match.setup.count || finishes.ContainsKey(receipt.Slot)) { invalid++; return; }
+                if (receipt.Kind != SportsScoreKind.Outcome || receipt.IsTeam || receipt.Delta != 0 || receipt.Total != 0 || receipt.Unit != "SEC" || receipt.EventId != "finish:" + receipt.Slot ||
+                    receipt.ParticipantId != ((ISportsParticipantSlot)match.setup.players[receipt.Slot]).ParticipantId || receipt.OutcomeValue < 0 || double.IsNaN(receipt.OutcomeValue) || double.IsInfinity(receipt.OutcomeValue)) invalid++;
+                finishes[receipt.Slot] = receipt;
+            }
+            public void Verify(Func<int, bool> completed, Func<int, double> measured, Action<bool, string> check)
+            {
+                CurrentMatch(); bool correct = true; int actual = 0;
+                for (int slot = 0; slot < match.setup.count; slot++)
+                {
+                    bool has = finishes.TryGetValue(slot, out var receipt); bool finished = completed(slot); if (finished) actual++;
+                    correct &= has == finished;
+                    if (has && finished) correct &= Math.Abs(receipt.OutcomeValue - measured(slot)) < .001;
+                }
+                check(invalid == 0 && match.ScoreJournal != null && match.ScoreJournal.Count == count, "finish receipts have unique semantic IDs, stable participants and explicit non-score measurements; receipts=" + count);
+                check(correct && count == actual, "every actual successful finish has its exact recorded time and failed/unfinished attempts create no receipt");
             }
             public void Dispose() { if (match != null) match.ScoreConfirmed -= Record; }
         }
@@ -57,7 +91,7 @@ namespace LWS.TruckSports
             void Record(SportsScoreEvent receipt)
             {
                 CurrentMatch(); count++;
-                if (receipt.MatchId != matchId || !ids.Add(receipt.EventId) || receipt.Slot < 0 || receipt.Slot >= match.setup.count) { invalid++; return; }
+                if (receipt.Kind != SportsScoreKind.Points || receipt.MatchId != matchId || !ids.Add(receipt.EventId) || receipt.Slot < 0 || receipt.Slot >= match.setup.count) { invalid++; return; }
                 if (receipt.ParticipantId != ((ISportsParticipantSlot)match.setup.players[receipt.Slot]).ParticipantId) invalid++;
                 totals[receipt.Slot] += receipt.Delta;
                 double difference = receipt.Total - totals[receipt.Slot];

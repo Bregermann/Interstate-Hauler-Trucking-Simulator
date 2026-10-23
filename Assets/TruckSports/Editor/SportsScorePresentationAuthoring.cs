@@ -18,6 +18,7 @@ namespace LWS.TruckSports.Editor
         public static void InstallTeamAwards() => InstallScenes(new[] { "TruckVolleyball", "TruckFreezeTag" });
         public static void InstallSurvivalDepositAwards() => InstallScenes(new[] { "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers" });
         public static void InstallTournamentAwards() => InstallScenes(new[] { "TruckJousting", "TruckFrogger" });
+        public static void InstallFinishOutcomes() => InstallScenes(new[] { "TruckRedLightGreenLight", "TruckAvalancheEscape", "TruckNinjaWarrior" });
         public static void UpgradeAwardResultSpacing()
         {
             var names = new[] { "TruckSumo", "TruckBalloonBattle", "TruckWhackAMole", "TruckTetherball", "TruckMagnetMayhem", "TruckSheepHerding", "TruckHotPotato", "TruckSeesaw", "TruckKingOfTheHill", "TruckVolleyball", "TruckFreezeTag", "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers", "TruckJousting", "TruckFrogger" };

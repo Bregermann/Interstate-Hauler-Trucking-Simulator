@@ -96,11 +96,13 @@ namespace LWS.TruckRedLightGreenLight
             outcomes[slot] = RedLightOutcome.Eliminated; reasons[slot] = reason; return true;
         }
 
+        public event Action<int,float> FinishConfirmed;
         public bool Finish(int slot, float crossingTime)
         {
             if (Phase == RedLightPhase.Countdown || Phase == RedLightPhase.Complete || outcomes[slot] != RedLightOutcome.Racing) return false;
             outcomes[slot] = RedLightOutcome.Finished; finishTimes[slot] = crossingTime;
             if (Winner < 0 || crossingTime < finishTimes[Winner]) { Winner = slot; firstFinish = Elapsed; }
+            FinishConfirmed?.Invoke(slot,crossingTime);
             return true;
         }
 

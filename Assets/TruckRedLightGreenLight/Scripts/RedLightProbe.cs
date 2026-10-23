@@ -63,6 +63,8 @@ namespace LWS.TruckRedLightGreenLight
             bool humanOnly = Array.IndexOf(Environment.GetCommandLineArgs(), "-tsRedLightHuman") >= 0;
             if (!humanOnly)
             {
+            using var outcomeTally = new SportsScoreAcceptance.OutcomeTally(m);
+            bool outcomeCaptured = false;
             m.setup.count = 12; m.NormalizeSetup(); m.AllBots();
             for (int i = 0; i < 12; i++) m.setup.players[i].difficulty = BowlingDifficulty.Hard;
             Check(m.StartMatch(), "complete twelve-AI match starts through normal setup lifecycle");
@@ -70,6 +72,7 @@ namespace LWS.TruckRedLightGreenLight
             var previousPhase = m.rules.Phase;
             while (!m.Finished && Time.realtimeSinceStartup < deadline)
             {
+                if (!outcomeCaptured && m.ScoreJournal.Count > 0) { outcomeCaptured = true; yield return SportsScoreAcceptance.CaptureAward(m, Check, Folder); }
                 frameCount++; frameTotal += Time.unscaledDeltaTime;
                 for (int i = 0; i < 12; i++) furthest = Mathf.Max(furthest, m.trucks[i].body.position.z);
                 if (m.rules.Phase != previousPhase)
@@ -91,6 +94,9 @@ namespace LWS.TruckRedLightGreenLight
                 yield return null;
             }
             Time.timeScale = 1;
+            if (!outcomeCaptured && m.ScoreJournal.Count > 0) { outcomeCaptured = true; yield return SportsScoreAcceptance.CaptureAward(m, Check, Folder); }
+            outcomeTally.Verify(slot => m.rules.outcomes[slot] == RedLightOutcome.Finished, slot => m.rules.finishTimes[slot], Check);
+            Check(outcomeCaptured, "actual legal-finish measurement captured at720p/1080p without invented points");
             report.AppendLine("FINAL phase=" + m.rules.Phase + " elapsed=" + m.rules.Elapsed.ToString("F3") + " realDeadline=" + (Time.realtimeSinceStartup >= deadline));
             for (int i = 0; i < 12; i++) report.AppendLine("FINAL_TRUCK " + i + " position=" + m.trucks[i].body.position + " outcome=" + m.rules.outcomes[i] + " reason=" + m.rules.reasons[i]);
             Check(checkedStart && paused && captured && furthest > 15, "actual trucks accelerate and genuine warning/pause/render scenarios execute");
