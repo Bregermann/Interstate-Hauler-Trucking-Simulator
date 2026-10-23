@@ -48,7 +48,8 @@ namespace LWS.TruckTetherball
         float elapsed,aftermath;
         public override bool TryReadScoreCard(int slot,out string value,out string detail){value=rules.wins[slot]+" / "+(rules.BestOf/2+1);detail=(slot==0?"CCW · ":"CW · ")+(rules.Progress(slot)*100).ToString("F0")+"% WOUND";return slot<2;}
         public override string ViewText(int view){int slot=drivingViews.rally.owners[view];TryReadScoreCard(slot,out var score,out var detail);return setup.players[slot].name+" · "+score+"\n"+detail+"\n"+ControlCaption(slot);}
-        public override string Standings{get{text.Clear();for(int i=0;i<2;i++)text.Append('#').Append(rules.wins[1-i]>rules.wins[i]?2:1).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.wins[i]).Append(" ROUND WINS · ").Append(i==0?"COUNTERCLOCKWISE":"CLOCKWISE").Append('\n');return text.ToString();}}
+        public int ResultPlace(int slot)=>rules.wins[1-slot]>rules.wins[slot]?2:1;
+        public override string Standings{get{text.Clear();for(int i=0;i<2;i++)text.Append('#').Append(ResultPlace(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.wins[i]).Append(" ROUND WINS · ").Append(i==0?"COUNTERCLOCKWISE":"CLOCKWISE").Append('\n');return text.ToString();}}
         public override string Results=>(rules.Winner>=0?setup.players[rules.Winner].name+" WINS TETHERBALL!":"TETHERBALL RESULTS")+"\n\n"+Standings;
         protected override void BeginGame()
         {

@@ -1,0 +1,55 @@
+PASS saved stadium has two NWH tractors, unit-scale physical ball and64pooled render-only rope segments
+PASS actual mixed-difficulty AI best-of-three match starts
+PASS real trucks settle upright and ball/rope/scoring remain held during countdown
+ACTUAL_TETHER round=0 t=0.0 net=0.0 contacts=0 ball=(22.91, 4.00, 0.00) rope=27.94
+PASS pause freezes actual ball, winding and match clock
+ACTUAL_TETHER round=0 t=15.0 net=190.0 contacts=9 ball=(-15.99, 3.00, -2.90) rope=25.29
+ACTUAL_TETHER round=0 t=30.0 net=288.5 contacts=9 ball=(5.32, 3.00, -15.87) rope=23.91
+ACTUAL_TETHER round=0 t=45.0 net=331.4 contacts=10 ball=(11.34, 3.00, -6.17) rope=23.31
+ACTUAL_TETHER round=0 t=60.0 net=342.6 contacts=11 ball=(12.69, 3.00, -3.98) rope=23.16
+ACTUAL_TETHER round=0 t=75.0 net=343.6 contacts=11 ball=(6.80, 3.00, -2.00) rope=23.14
+ACTUAL_TETHER round=0 t=90.1 net=343.3 contacts=11 ball=(3.98, 3.00, -1.19) rope=23.15
+ACTUAL_TETHER round=0 t=105.1 net=532.9 contacts=14 ball=(-11.83, 3.23, 1.28) rope=20.50
+PASS saved sport uses the existing Heat confirmed-score presenter
+PASS real committed award reaches the Heat animation
+PASS visible score presentation leaves gameplay/menu inputs unblocked
+PASS opaque notification backing protects score text from bright venue artwork
+ACTUAL_TETHER round=1 t=0.0 net=0.0 contacts=15 ball=(22.91, 4.00, 0.00) rope=27.94
+ACTUAL_TETHER round=1 t=15.0 net=-110.6 contacts=17 ball=(-6.56, 3.00, -17.47) rope=26.40
+ACTUAL_TETHER round=1 t=30.0 net=-326.4 contacts=20 ball=(13.53, 3.00, 8.77) rope=23.38
+ACTUAL_TETHER round=2 t=0.0 net=0.0 contacts=21 ball=(22.91, 4.00, 0.00) rope=27.94
+ACTUAL_TETHER round=2 t=15.0 net=235.4 contacts=27 ball=(-10.10, 3.00, -14.74) rope=24.65
+PASS confirmed award receipts match actual physical scoring events: 3
+PASS last actual award retains the match and stable participant identity
+PASS actual award animation captured at720p/1080p
+PASS actual AI strikes complete the full best-of-three match without forced wraps or invented timeout points
+PASS actual ball trajectory completes the required winding after genuine physical truck contacts
+PASS real constrained rope remains bounded through impacts, wraps and reversals; maximum extension=0.145
+ACTUAL_RESULTS
+#1 Player 1 · 2 ROUND WINS · COUNTERCLOCKWISE
+#2 Player 2 · 1 ROUND WINS · CLOCKWISE
+
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS actual truck/ball/individual-cable-segment replay starts
+PASS replay cannot change round wins or results
+PASS 1 software humans start a clean rematch with all wraps/wins reset
+PASS 1 human-only cab views and reset rope state have correct owners
+PASS actual software accelerator ownership stays isolated
+PASS optional AI view adds only a camera, never removes a competitor
+PASS 2 software humans start a clean rematch with all wraps/wins reset
+PASS 2 human-only cab views and reset rope state have correct owners
+PASS actual software accelerator ownership stays isolated
+PASS optional AI view adds only a camera, never removes a competitor
+PASS AI-only spectator rematch starts
+PASS AI-only with AI cameras OFF shows actual broadcast instead of black screen
+CHECKS=37 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; actual NWH/PhysX ball/rope and software input; no human/device/listening certification.

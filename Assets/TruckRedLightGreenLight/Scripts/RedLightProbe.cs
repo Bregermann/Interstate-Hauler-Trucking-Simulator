@@ -101,7 +101,7 @@ namespace LWS.TruckRedLightGreenLight
             for (int i = 0; i < 12; i++) report.AppendLine("FINAL_TRUCK " + i + " position=" + m.trucks[i].body.position + " outcome=" + m.rules.outcomes[i] + " reason=" + m.rules.reasons[i]);
             Check(checkedStart && paused && captured && furthest > 15, "actual trucks accelerate and genuine warning/pause/render scenarios execute");
             Check(m.Finished && m.LegalFinishes > 0 && m.rules.Winner >= 0, "real Hard AI brake, survive and legally finish a complete match");
-            string resultBeforeReplay = m.Results;
+            yield return SportsResultsAcceptance.Capture(m,Check,Folder,m.ResultPlace,slot=>m.rules.outcomes[slot]==RedLightOutcome.Finished?(double?)m.rules.finishTimes[slot]:null,slot=>m.rules.Winner==slot);string resultBeforeReplay = m.Results;
             m.ExtraAction("watchredlight");
             Check(m.review != null && m.review.Playing && m.review.record.Playing && Time.timeScale == 0, "recorded match-end replay starts without running live physics");
             if (m.review.Playing)

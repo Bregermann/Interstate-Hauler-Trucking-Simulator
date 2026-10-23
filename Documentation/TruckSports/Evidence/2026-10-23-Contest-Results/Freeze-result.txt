@@ -1,0 +1,68 @@
+PASS saved winter stadium has eight full NWH trucks, cannons, persistent ice and pooled shatter effects
+PASS all six genuine stacked-container cover silhouettes match their solid collision and block roof-height spray
+PASS default four-versus-four four-round asymmetric AI match starts
+PASS all eight settle upright with freezing disabled during countdown
+ACTUAL_FREEZE round=0 t=0 sprayHits=0 ice=0 rescues=0 wins=0,0
+PASS pause freezes timer, driving and freeze progression
+ACTUAL_FREEZE round=0 t=37.84068 sprayHits=4 ice=0 rescues=0 wins=0,0
+ACTUAL_FREEZE round=0 t=77.83895 sprayHits=4 ice=0 rescues=0 wins=0,0
+PASS saved sport uses the existing Heat confirmed-score presenter
+PASS real committed award reaches the Heat animation
+PASS visible score presentation leaves gameplay/menu inputs unblocked
+PASS opaque notification backing protects score text from bright venue artwork
+PASS real score notification identifies the team without claiming a player award
+ACTUAL_FREEZE round=1 t=18.58023 sprayHits=9 ice=1 rescues=0 wins=0,1
+ACTUAL_FREEZE round=1 t=58.60115 sprayHits=12 ice=2 rescues=1 wins=0,1
+ACTUAL_FREEZE round=2 t=2.539998 sprayHits=15 ice=4 rescues=1 wins=1,1
+ACTUAL_FREEZE round=2 t=42.52078 sprayHits=23 ice=6 rescues=2 wins=1,1
+ACTUAL_FREEZE round=2 t=82.55816 sprayHits=25 ice=6 rescues=3 wins=1,1
+ACTUAL_FREEZE round=3 t=26.52042 sprayHits=29 ice=6 rescues=3 wins=1,2
+ACTUAL_FREEZE round=3 t=66.52085 sprayHits=33 ice=8 rescues=4 wins=1,2
+PASS every team award has one semantic ID and a team recipient without fictitious player credit; receipts=4
+PASS confirmed team award deltas exactly reconstruct both authoritative team totals
+PASS real team award captured at720p/1080p
+PASS actual default four-round AI match reaches final team standings
+PASS all pooled snow/shatter transforms survive actual rescues and remain replayable
+PASS AI genuinely aims and freezes through actual unoccluded physical casts
+PASS actual cannon ownership switches sides between rounds
+PASS each round awards exactly one team win, including timer survival
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS recorded truck/ice highlight replay starts
+PASS replay preserves team wins and final placing
+PASS controlled real cannon and rescue fixture starts through normal setup
+PASS actual solid cover blocks the cannon; no through-wall freeze
+PHYSICAL_ICE_FIXTURE origin=(-0.03, 4.37, -19.83) victim=Center: (-0.01, 1.73, 0.08), Extents: (1.11, 1.33, 2.44) buildup=100 castHits=3
+PASS actual assigned fire input builds ice and freezes the visible physical truck
+PASS frozen truck remains frozen with no automatic thaw
+PASS teammate physically drives into ice, shatters it once and restores actual NWH control
+PASS actual rescue grants a brief refreeze protection window
+PASS 1 humans plus asymmetric AI start a clean rematch
+PASS 1 human-only cab viewports have distinct correct owners
+PASS assigned acceleration stays isolated to its participant
+PASS optional AI views preserve all eight active trucks
+PASS 2 humans plus asymmetric AI start a clean rematch
+PASS 2 human-only cab viewports have distinct correct owners
+PASS assigned acceleration stays isolated to its participant
+PASS optional AI views preserve all eight active trucks
+PASS 3 humans plus asymmetric AI start a clean rematch
+PASS 3 human-only cab viewports have distinct correct owners
+PASS assigned acceleration stays isolated to its participant
+PASS optional AI views preserve all eight active trucks
+PASS 4 humans plus asymmetric AI start a clean rematch
+PASS 4 human-only cab viewports have distinct correct owners
+PASS assigned acceleration stays isolated to its participant
+PASS optional AI views preserve all eight active trucks
+PASS AI-only rematch clears every ice shell, score and role state
+PASS AI-only cameras OFF has a working broadcast
+PASS final rematch has no stale team receipts
+CHECKS=56 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; actual NWH/PhysX freezing, impact rescue and software input; no human/device/listening certification.

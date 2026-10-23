@@ -62,7 +62,7 @@ namespace LWS.TruckBalloonBattle
             Check(captured && paused && m.PhysicalPops == m.rules.Pops, "every scored pop is routed through actual spike/balloon PhysX contact");
             if (m.Finished)
             {
-                string result = m.Results; m.drivingViews.Select(2); m.ExtraAction("watchballoon"); yield return new WaitForSecondsRealtime(.4f);
+                yield return SportsResultsAcceptance.Capture(m,Check,Folder,slot=>m.rules.Winner==slot?1:0,slot=>(double?)m.rules.scores[slot],slot=>m.rules.Winner==slot);string result = m.Results; m.drivingViews.Select(2); m.ExtraAction("watchballoon"); yield return new WaitForSecondsRealtime(.4f);
                 Check(m.review.Playing && m.atmosphere.vendor.AllowCameras.Count == 1 && m.atmosphere.vendor.AllowCameras.Contains(m.broadcast.view), "recorded replay switches weather allowance from split cabs to broadcast");
                 yield return SportsWindowCapture.Save(1280, 720, Folder + "/replay-720.png"); m.ExtraAction("replayskip"); Check(!m.review.Playing && result == m.Results, "replay skip cannot change scores");
             }

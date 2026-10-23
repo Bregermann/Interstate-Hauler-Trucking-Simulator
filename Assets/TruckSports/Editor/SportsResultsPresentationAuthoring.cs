@@ -10,6 +10,7 @@ namespace LWS.TruckSports.Editor
     {
         public static void InstallMountainAndNinja() => InstallScenes(new[] { "TruckAvalancheEscape", "TruckNinjaWarrior" });
         public static void InstallScoredBatch() => InstallScenes(new[] { "TruckWhackAMole", "TruckMagnetMayhem", "TruckSheepHerding", "TruckSeesaw", "TruckKingOfTheHill", "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers" });
+        public static void InstallContestBatch() => InstallScenes(new[] { "TruckHotPotato", "TruckBalloonBattle", "TruckTetherball", "TruckJousting", "TruckFrogger", "TruckRedLightGreenLight", "TruckVolleyball", "TruckFreezeTag" });
         static void InstallScenes(string[] names)
         {
             foreach (string name in names)

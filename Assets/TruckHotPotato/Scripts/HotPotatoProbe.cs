@@ -62,7 +62,7 @@ namespace LWS.TruckHotPotato
             Time.timeScale = 1;
             scoreTally.Verify(slot=>m.rules.scores[slot],Check);Check(scoreCaptured,"actual confirmed award captured at720p/1080p");Check(m.Finished && m.rules.Complete && m.rules.Winner >= 0 && m.Explosions == 7 && m.rules.AliveCount() == 1, "actual full match resolves seven bomb eliminations and one survivor");
             Check(traveled > 20 && m.rules.Transfers > 0 && captured && paused, "AI genuinely drives, flees and passes through physical truck contact; passes=" + m.rules.Transfers + " traveled=" + traveled.ToString("F1"));
-            string result = m.Results; m.ExtraAction("watchpotato"); yield return new WaitForSecondsRealtime(.4f);
+            yield return SportsResultsAcceptance.Capture(m,Check,Folder,slot=>m.rules.Winner==slot?1:0,slot=>(double?)m.rules.scores[slot],slot=>m.rules.Winner==slot);string result = m.Results; m.ExtraAction("watchpotato"); yield return new WaitForSecondsRealtime(.4f);
             Check(m.review.Playing && Time.timeScale == 0, "recorded match-end replay runs with frozen live physics");
             if (m.review.Playing)
             {

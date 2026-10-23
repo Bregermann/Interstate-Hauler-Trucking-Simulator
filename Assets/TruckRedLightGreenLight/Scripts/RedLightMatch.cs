@@ -85,6 +85,8 @@ namespace LWS.TruckRedLightGreenLight
 
         public Vector3 Grid(int slot) => new Vector3((slot % 6 - 2.5f) * 11, startY, -slot / 6 * 14);
         static float Rear(SportsEventTruck truck) => truck.shape.bounds.min.z;
+        public int ResultPlace(int slot) => rules.outcomes[slot] == RedLightOutcome.Finished ? Place(slot) : 0;
+        public int ResultPoints(int slot) => Points(slot);
         int Place(int slot) { int place = 1; for (int i = 0; i < setup.count; i++) if (rules.outcomes[i] == RedLightOutcome.Finished && rules.finishTimes[i] < rules.finishTimes[slot] - .0001f) place++; return place; }
         int Points(int slot) => rules.outcomes[slot] == RedLightOutcome.Finished ? Mathf.Max(10, 100 - (Place(slot) - 1) * 10) : 0;
         string State(int slot) => rules.outcomes[slot] == RedLightOutcome.Finished ? "#" + Place(slot) + " · " + Points(slot) + "PTS · " + rules.finishTimes[slot].ToString("F2") + "s" : rules.outcomes[slot] == RedLightOutcome.Eliminated ? "OUT · " + rules.reasons[slot] : rules.Phase == RedLightPhase.Complete ? "DID NOT FINISH" : "RACING";

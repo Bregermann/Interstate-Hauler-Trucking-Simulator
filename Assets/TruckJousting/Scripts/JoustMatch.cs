@@ -31,7 +31,8 @@ namespace LWS.TruckJousting
         public override string ControlCaption(int slot)=>base.ControlCaption(slot).Replace(" ACTION"," TOGGLE LANCE AIM")+" · "+(aiming[slot]?"DIRECTIONS: HEIGHT / ANGLE":"DRIVE: STEER / ACCELERATE");
         public override bool TryReadScoreCard(int slot,out string value,out string detail){value=rules.points[slot]+"P";detail=lances[slot].Broken?"LANCE BROKEN · +"+rules.passPoints[slot]:"LANCE "+height[slot].ToString("F1")+"m · "+yaw[slot].ToString("F0")+"deg";return slot<2;}
         public override string ViewText(int view){int slot=drivingViews.rally.owners[view];TryReadScoreCard(slot,out var score,out var detail);return setup.players[slot].name+" · "+score+"\n"+detail+"\n"+ControlCaption(slot);}
-        public override string Standings{get{text.Clear();for(int i=0;i<2;i++)text.Append('#').Append(rules.points[1-i]>rules.points[i]?2:1).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.points[i]).Append("P · ").Append(rules.hits[i]).Append(" HITS / ").Append(rules.centralHits[i]).Append(" CENTRAL / ").Append(rules.knockdowns[i]).Append(" KNOCKDOWNS\n");return text.ToString();}}
+        public int ResultPlace(int slot)=>rules.points[1-slot]>rules.points[slot]?2:1;
+        public override string Standings{get{text.Clear();for(int i=0;i<2;i++)text.Append('#').Append(ResultPlace(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.points[i]).Append("P · ").Append(rules.hits[i]).Append(" HITS / ").Append(rules.centralHits[i]).Append(" CENTRAL / ").Append(rules.knockdowns[i]).Append(" KNOCKDOWNS\n");return text.ToString();}}
         public override string Results=>(rules.Winner>=0?setup.players[rules.Winner].name+" WINS THE JOUST!":"SHARED TOURNAMENT PLACING")+"\n\n"+Standings;
         protected override void Awake(){base.Awake();rules.Awarded+=ConfirmAward;}
         protected override void OnDestroy(){if(rules!=null)rules.Awarded-=ConfirmAward;base.OnDestroy();}
