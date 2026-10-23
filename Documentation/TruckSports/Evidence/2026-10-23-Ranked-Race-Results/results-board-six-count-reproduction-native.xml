@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 17:27:21Z" end-time="2026-10-23 17:27:24Z" duration="2.7940329">
+  <test-suite type="TestSuite" id="1429" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="299" result="Failed" site="Child" start-time="2026-10-23 17:27:21Z" end-time="2026-10-23 17:27:24Z" duration="2.794033" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1313" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="132" result="Failed" site="Child" start-time="2026-10-23 17:27:21Z" end-time="2026-10-23 17:27:24Z" duration="2.779197" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="74796" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1233" name="ResultsBoardLifecycleTests" fullname="ResultsBoardLifecycleTests" classname="ResultsBoardLifecycleTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-23 17:27:21Z" end-time="2026-10-23 17:27:24Z" duration="2.773374" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1236" name="SyntheticSixAthleteResultsLeaveReplayNavigationClear" fullname="ResultsBoardLifecycleTests.SyntheticSixAthleteResultsLeaveReplayNavigationClear" methodname="SyntheticSixAthleteResultsLeaveReplayNavigationClear" classname="ResultsBoardLifecycleTests" runstate="Runnable" seed="649358142" result="Failed" label="Error" start-time="2026-10-23 17:27:21Z" end-time="2026-10-23 17:27:24Z" duration="2.759892" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.
+  ----> NUnit.Framework.AssertionException :   Ranked rows must not cover rematch/replay navigation.
+  Expected: False
+  But was:  True
+]]></message>
+            <stack-trace><![CDATA[  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00083] in <f713e1c3c5f545ce9b1df47230f4f853>:0 
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <f713e1c3c5f545ce9b1df47230f4f853>:0 
+  at ResultsBoardLifecycleTests+<Inspect>d__9.MoveNext () [0x00825] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\ResultsBoardLifecycleTests.cs:79 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44 
+--AssertionException
+  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression, System.String message, System.Object[] args) [0x00039] in <f577cd9686154d6ab10efd7e65e64366>:0 
+  at ResultsBoardLifecycleTests+<>c__DisplayClass9_0.<Inspect>b__4 (UnityEngine.Camera camera) [0x001c5] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\ResultsBoardLifecycleTests.cs:73 
+  at LWS.TruckSports.SportsControlledCapture.Save (UnityEngine.Canvas canvas, UnityEngine.Camera[] cameras, System.Int32 width, System.Int32 height, System.String path, System.Action`1[T] inspect) [0x002ff] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Scripts\SportsControlledCapture.cs:7 
+  at LWS.TruckSports.SportsControlledCapture.Save (LWS.TruckSports.SportsEventSession match, System.Int32 width, System.Int32 height, System.String path, System.Action`1[T] inspect) [0x00000] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Scripts\SportsControlledCapture.cs:6 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <f713e1c3c5f545ce9b1df47230f4f853>:0 ]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,97 @@
+using System;
+using System.Globalization;
+using DG.Tweening;
+using TMPro;
+using UnityEngine;
+
+namespace LWS.TruckSports
+{
+    // Opt-in saved results board. Heat retains the page/buttons/navigation;
+    // DOTween animates only UI. No physics, input or game values are written.
+    public sealed class SportsResultsPresentation : MonoBehaviour
+    {
+        [Serializable] public sealed class RowView
+        {
+            public RectTransform rect;
+            public CanvasGroup visibility;
+            public UnityEngine.UI.Image backing, portrait, accent;
+            public TMP_Text place, name, control, value, detail;
+        }
+        public SportsFinishResultsSource source;
+        public SportsEventMenus menus;
+        public CanvasGroup visibility;
+        public TMP_Text heading, summary;
+        public RowView[] rows = Array.Empty<RowView>();
+        string shownMatch;
+        bool legacyEnabled;
+        public SportsResultsSnapshot Snapshot { get; private set; }
+        public bool Displaying => Snapshot != null && visibility.alpha > .99f;
+        void OnEnable() { shownMatch = null; Snapshot = null; if (menus != null) legacyEnabled = menus.result.enabled; if (visibility != null) visibility.alpha = 0; }
+        void OnDisable()
+        {
+            foreach (var row in rows) { row.rect.DOKill(); row.visibility.DOKill(); row.value.DOKill(); }
+            if (visibility != null) visibility.DOKill();
+            if (menus != null && menus.result != null) menus.result.enabled = legacyEnabled;
+            Snapshot = null;
+        }
+        void LateUpdate()
+        {
+            if (source == null || menus == null || source.session == null || menus.Screen != SportsEventScreen.Result || !source.session.Finished || shownMatch == source.session.MatchId) return;
+            if (!source.TryCapture(out var snapshot) || snapshot.Rows.Count > rows.Length) return;
+            Render(snapshot); shownMatch = source.session.MatchId;
+        }
+        public void CompleteAnimations()
+        {
+            foreach (var row in rows) { row.rect.DOComplete(); row.visibility.DOComplete(); row.value.DOComplete(); }
+            visibility.DOComplete();
+        }
+        void Render(SportsResultsSnapshot snapshot)
+        {
+            Snapshot = snapshot; menus.result.enabled = false;
+            heading.text = Escape(snapshot.Heading); summary.text = Escape(snapshot.Summary);
+            bool winners = false; foreach (var entry in snapshot.Rows) winners |= entry.Winner;
+            heading.color = winners ? new Color(1, .8f, .28f) : SportsBroadcastCanvas.Cream;
+            int columns = snapshot.Rows.Count > 6 ? 2 : 1; float width = columns == 1 ? 1320 : 650;
+            bool compact = snapshot.Rows.Count > 10; float height = compact ? 50 : 58, step = compact ? 54 : 64;
+            for (int i = 0; i < rows.Length; i++)
+            {
+                var view = rows[i]; view.rect.gameObject.SetActive(i < snapshot.Rows.Count); if (i >= snapshot.Rows.Count) continue;
+                var entry = snapshot.Rows[i];
+                view.rect.DOKill(); view.visibility.DOKill(); view.value.DOKill();
+                view.rect.sizeDelta = new Vector2(width, height);
+                view.name.rectTransform.sizeDelta = new Vector2(width - 360, compact ? 23 : 28);
+                view.detail.rectTransform.sizeDelta = new Vector2(width - 225, compact ? 21 : 24);
+                view.detail.rectTransform.anchoredPosition = new Vector2(200, compact ? -27 : -32);
+                view.control.rectTransform.anchoredPosition = new Vector2(130, compact ? -27 : -32);
+                view.control.rectTransform.sizeDelta = new Vector2(64, compact ? 21 : 22);
+                view.portrait.rectTransform.sizeDelta = Vector2.one * (compact ? 42 : 48);
+                view.portrait.rectTransform.anchoredPosition = new Vector2(72, compact ? -4 : -5);
+                view.place.rectTransform.anchoredPosition = new Vector2(12, compact ? -3 : -6);
+                view.accent.rectTransform.sizeDelta = new Vector2(4, compact ? 42 : 50);
+                view.value.rectTransform.anchoredPosition = new Vector2(width - 216, compact ? -4 : -7);
+                view.backing.color = entry.Winner ? new Color(.16f, .12f, .045f, 1) : SportsBroadcastCanvas.Raised;
+                view.accent.color = entry.Winner ? new Color(1, .76f, .16f) : entry.Color;
+                view.portrait.color = Color.Lerp(entry.Color, Color.white, .35f);
+                view.place.text = entry.Place > 0 ? "#" + entry.Place : "OUT";
+                view.place.color = entry.Winner ? new Color(1, .8f, .28f) : SportsBroadcastCanvas.Cream;
+                view.name.text = Escape(entry.DisplayName); view.name.color = entry.Color;
+                view.control.text = entry.IsAI ? "AI" : "HUMAN";
+                view.detail.text = Escape(entry.Detail);
+                view.value.text = Escape(entry.Value);
+                Vector2 target = Position(i, columns, step), initial = Position(entry.Slot, columns, step);
+                view.rect.anchoredPosition = initial + new Vector2(22, 0); view.visibility.alpha = 0;
+                view.visibility.DOFade(1, .2f).SetDelay(i * .04f).SetUpdate(true).SetLink(view.rect.gameObject);
+                view.rect.DOAnchorPos(target, .55f).SetDelay(.12f + i * .04f).SetEase(Ease.OutCubic).SetUpdate(true).SetLink(view.rect.gameObject);
+                if (entry.Measurement.HasValue)
+                {
+                    double number = 0;
+                    DOTween.To(() => number, value => { number = value; view.value.text = value.ToString(entry.Format, CultureInfo.InvariantCulture) + (entry.Unit.Length > 0 ? " " + Escape(entry.Unit) : ""); }, entry.Measurement.Value, .65f)
+                        .SetDelay(.12f + i * .04f).SetEase(Ease.OutCubic).SetUpdate(true).SetTarget(view.value).SetLink(view.rect.gameObject);
+                }
+            }
+            visibility.DOKill(); visibility.alpha = 0; visibility.DOFade(1, .18f).SetUpdate(true).SetLink(gameObject);
+        }
+        static Vector2 Position(int position, int columns, float step) => new Vector2(-660 + position % columns * 670, 120 - position / columns * step);
+        static string Escape(string value) => (value ?? "").Replace("<", "‹").Replace(">", "›");
+    }
+}
