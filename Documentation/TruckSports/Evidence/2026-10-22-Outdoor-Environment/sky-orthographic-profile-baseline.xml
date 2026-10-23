@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 01:46:41Z" end-time="2026-10-23 01:46:44Z" duration="2.8076541">
+  <test-suite type="TestSuite" id="1396" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="275" result="Failed" site="Child" start-time="2026-10-23 01:46:41Z" end-time="2026-10-23 01:46:44Z" duration="2.807654" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1280" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="108" result="Failed" site="Child" start-time="2026-10-23 01:46:41Z" end-time="2026-10-23 01:46:44Z" duration="2.794186" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="65392" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1209" name="OrthographicSkyProfileTests" fullname="OrthographicSkyProfileTests" classname="OrthographicSkyProfileTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-23 01:46:41Z" end-time="2026-10-23 01:46:44Z" duration="2.789594" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1210" name="OrthographicArenaRenderUsesItsOwnVendorSkyProfile" fullname="OrthographicSkyProfileTests.OrthographicArenaRenderUsesItsOwnVendorSkyProfile" methodname="OrthographicArenaRenderUsesItsOwnVendorSkyProfile" classname="OrthographicSkyProfileTests" runstate="Runnable" seed="1802513390" result="Failed" start-time="2026-10-23 01:46:41Z" end-time="2026-10-23 01:46:44Z" duration="2.774843" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="90000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Actual arena rendering must upload its vendor sky state rather than inherit globals from the previous scene/lens.
+  Expected: 0.0f +/- 9.99999975E-05f
+  But was:  -321.0f
+]]></message>
+            <stack-trace><![CDATA[at OrthographicSkyProfileTests+<OrthographicArenaRenderUsesItsOwnVendorSkyProfile>d__4.MoveNext () [0x0029e] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\OrthographicSkyProfileTests.cs:48
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

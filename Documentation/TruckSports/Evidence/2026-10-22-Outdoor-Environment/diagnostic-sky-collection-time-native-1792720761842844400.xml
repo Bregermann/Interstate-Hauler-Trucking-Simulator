@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 01:57:59Z" end-time="2026-10-23 01:58:03Z" duration="4.2363371">
+  <test-suite type="TestSuite" id="1398" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="276" result="Failed" site="Child" start-time="2026-10-23 01:57:59Z" end-time="2026-10-23 01:58:03Z" duration="4.236337" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1282" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="109" result="Failed" site="Child" start-time="2026-10-23 01:57:59Z" end-time="2026-10-23 01:58:03Z" duration="4.222886" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="24824" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1151" name="CollectionEnvironmentTests" fullname="CollectionEnvironmentTests" classname="CollectionEnvironmentTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-23 01:57:59Z" end-time="2026-10-23 01:58:03Z" duration="4.217487" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1152" name="CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" fullname="CollectionEnvironmentTests.CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" methodname="CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" classname="CollectionEnvironmentTests" runstate="Runnable" seed="2124459719" result="Failed" start-time="2026-10-23 01:57:59Z" end-time="2026-10-23 01:58:03Z" duration="4.203915" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[Unhandled log message: '[Error] PPtr cast failed when dereferencing! Casting from PrefabInstance to Prefab at FileID 100100000!'. Use UnityEngine.TestTools.LogAssert.Expect]]></message>
+            <stack-trace><![CDATA[
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+[IH Dev UI] Service registered
+[IH Dev UI] Runtime host created
+PPtr cast failed when dereferencing! Casting from PrefabInstance to Prefab at FileID 100100000!
+PPtr cast failed when dereferencing! Casting from PrefabInstance to Prefab at FileID 100100000!
+NullReferenceException: Object reference not set to an instance of an object
+NWH.VehiclePhysics2.Powertrain.TransmissionComponent.ShiftInto (System.Int32 targetGear, System.Boolean instant) (at Assets/NWH/Vehicle Physics 2/Scripts/VehicleController/Powertrain/TransmissionComponent.cs:726)
+LWS.InterstateHauler.LwsNwh18SpeedTransmissionAdapter.TryShiftInto (System.Int32 nwhGearIndex, System.Boolean instant, System.String& message) (at Assets/LWS/InterstateHauler/Vehicles/Transmission/NWH/LwsNwh18SpeedTransmissionAdapter.cs:185)
+LWS.InterstateHauler.Lws18SpeedTransmissionController.EngageNeutral (LWS.InterstateHauler.Lws18SpeedTransmissionDefinition activeDefinition) (at Assets/LWS/InterstateHauler/Vehicles/Transmission/Lws18SpeedTransmissionController.cs:945)
+LWS.InterstateHauler.Lws18SpeedTransmissionController.TrySwitchAutomaticMode (System.Boolean enabled, System.String& message) (at Assets/LWS/InterstateHauler/Vehicles/Transmission/Lws18SpeedTransmissionController.cs:277)
+LWS.InterstateHauler.Lws18SpeedTransmissionController.TrySetAutomaticMode (System.String& message) (at Assets/LWS/InterstateHauler/Vehicles/Transmission/Lws18SpeedTransmissionController.cs:212)
+LWS.InterstateHauler.LwsKeyboardGamepadTruckInputSource.TrySetInputMode (LWS.InterstateHauler.LwsTruckInputMode mode, System.String& message) (at Assets/LWS/InterstateHauler/Input/LwsKeyboardGamepadTruckInputSource.cs:87)
+DeadAir.DeadAirVehicleAdapter.ConfigureDeadAirTruckRig (LWS.InterstateHauler.Lws18SpeedTransmissionDefinition transmissionDefinition, System.String& message) (at Assets/DeadAir/Scripts/Vehicle/DeadAirVehicleAdapter.cs:158)
+DeadAir.DeadAirStartRigController.InitializeRig () (at Assets/DeadAir/Scripts/Vehicle/DeadAirStartRigController.cs:82)
+DeadAir.DeadAirSceneBootstrapper.EnsurePlayerTruck (DeadAir.DeadAirStartRigController startRig) (at Assets/DeadAir/Scripts/Core/DeadAirSceneBootstrapper.cs:154)
+DeadAir.DeadAirSceneBootstrapper.Awake () (at Assets/DeadAir/Scripts/Core/DeadAirSceneBootstrapper.cs:79)
+
+NullReferenceException: Object reference not set to an instance of an object
+NWH.VehiclePhysics2.Powertrain.TransmissionComponent.ShiftInto (System.Int32 targetGear, System.Boolean instant) (at Assets/NWH/Vehicle Physics 2/Scripts/VehicleController/Powertrain/TransmissionComponent.cs:726)
+LWS.InterstateHauler.LwsNwh18SpeedTransmissionAdapter.TryShiftInto (System.Int32 nwhGearIndex, System.Boolean instant, System.String& message) (at Assets/LWS/InterstateHauler/Vehicles/Transmission/NWH/LwsNwh18SpeedTransmissionAdapter.cs:185)
+LWS.InterstateHauler.Lws18SpeedTransmissionController.EngageNeutral (LWS.InterstateHauler.Lws18SpeedTransmissionDefinition activeDefinition) (at Assets/LWS/InterstateHauler/Vehicles/Transmission/Lws18SpeedTransmissionController.cs:945)
+LWS.InterstateHauler.Lws18SpeedTransmissionController.TrySwitchAutomaticMode (System.Boolean enabled, System.String& message) (at Assets/LWS/InterstateHauler/Vehicles/Transmission/Lws18SpeedTransmissionController.cs:277)
+LWS.InterstateHauler.Lws18SpeedTransmissionController.TrySetAutomaticMode (System.String& message) (at Assets/LWS/InterstateHauler/Vehicles/Transmission/Lws18SpeedTransmissionController.cs:212)
+LWS.InterstateHauler.LwsKeyboardGamepadTruckInputSource.TrySetInputMode (LWS.InterstateHauler.LwsTruckInputMode mode, System.String& message) (at Assets/LWS/InterstateHauler/Input/LwsKeyboardGamepadTruckInputSource.cs:87)
+DeadAir.DeadAirVehicleAdapter.ConfigureDeadAirTruckRig (LWS.InterstateHauler.Lws18SpeedTransmissionDefinition transmissionDefinition, System.String& message) (at Assets/DeadAir/Scripts/Vehicle/DeadAirVehicleAdapter.cs:158)
+DeadAir.DeadAirStartRigController.InitializeRig () (at Assets/DeadAir/Scripts/Vehicle/DeadAirStartRigController.cs:82)
+DeadAir.DeadAirGameManager.BeginRun () (at Assets/DeadAir/Scripts/Core/DeadAirGameManager.cs:80)
+DeadAir.DeadAirGameManager.Start () (at Assets/DeadAir/Scripts/Core/DeadAirGameManager.cs:65)
+
+[IH Cab GPS] Bound world-space GPS to IH_CabAnchor_GpsMount; local pos (0.00, 0.00, 0.00); local euler (0.00, 180.00, 0.00); scale 0.00042; approx size 0.27m x 0.17m.
+[IH HUD] HUD minimap hidden for camera Cockpit; persistent DEV/transmission HUD remains enabled.
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+There are 2 audio listeners in the scene. Please ensure there is always exactly one audio listener in the scene.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

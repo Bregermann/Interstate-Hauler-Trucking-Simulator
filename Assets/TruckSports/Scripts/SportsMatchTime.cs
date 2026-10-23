@@ -8,6 +8,8 @@ namespace LWS.TruckSports
     public sealed class SportsMatchTime : MonoBehaviour
     {
         public WeatherMakerDayNightCycleManagerScript cycle;
+        public WeatherMakerFullScreenCloudsScript clouds;
+        [Range(0, 1)] public float nightCloudAmbientMultiplier = .18f;
         public WeatherMakerCelestialObjectScript perspectiveSun, orthographicSun;
         [Tooltip("Legacy fixed directional fill, replaced by the vendor sun/moon outdoors.")]
         public Light daylightFill;
@@ -22,6 +24,7 @@ namespace LWS.TruckSports
         string matchId;
         float[] daylightIntensity;
         bool fillWasEnabled;
+        Gradient previousCloudAmbient, ownedCloudAmbient;
 
         public void Configure(int seed, string currentMatchId)
         {
@@ -31,6 +34,7 @@ namespace LWS.TruckSports
             if (ownedProfile == null)
             {
                 previousProfile = cycle.DayNightProfile;
+                previousCloudAmbient = clouds != null ? clouds.GlobalAmbientMultiplierGradient : null;
                 fillWasEnabled = daylightFill != null && daylightFill.enabled;
                 ownedProfile = Instantiate(previousProfile);
                 ownedProfile.name = previousProfile.name + " (Sports match time)";
@@ -43,6 +47,20 @@ namespace LWS.TruckSports
             Applied = SportsTimeOfDay.Resolve(seed); matchId = currentMatchId; Revision++;
             ownedProfile.Speed = ownedProfile.NightSpeed = 0;
             ownedProfile.TimeOfDay = SportsTimeOfDay.Seconds(Applied);
+            if (clouds != null)
+            {
+                // The installed cloud profiles use a constant ambient gain of1.
+                // At night an inactive sun's gradient lookup also returns1.
+                // Coordinate the frozen match time through the vendor's public
+                // ambient control, preserving the authored gradient and profiles.
+                var original = previousCloudAmbient ?? new Gradient();
+                var keys = original.alphaKeys;
+                float gain = Applied == SportsTimeChoice.Night ? nightCloudAmbientMultiplier : Applied == SportsTimeChoice.Evening ? .55f : Applied == SportsTimeChoice.Morning ? .7f : 1;
+                for (int i = 0; i < keys.Length; i++) keys[i].alpha *= gain;
+                ownedCloudAmbient = new Gradient(); ownedCloudAmbient.mode = original.mode;
+                ownedCloudAmbient.SetKeys(original.colorKeys, keys);
+                clouds.GlobalAmbientMultiplierGradient = ownedCloudAmbient;
+            }
             if (preserveInteriorAmbient) ownedProfile.AmbientColorMode = WeatherMakerDayNightAmbientColorMode.UnityAmbientSettings;
             // No live shadow proliferation or reflection-probe refresh per frame.
             bool lampsOn = Applied == SportsTimeChoice.Night || Applied == SportsTimeChoice.Evening;
@@ -62,6 +80,7 @@ namespace LWS.TruckSports
         void OnDestroy()
         {
             if (cycle != null && cycle.DayNightProfile == ownedProfile) cycle.DayNightProfile = previousProfile;
+            if (clouds != null && clouds.GlobalAmbientMultiplierGradient == ownedCloudAmbient) clouds.GlobalAmbientMultiplierGradient = previousCloudAmbient;
             if (ownedProfile != null && daylightFill != null) daylightFill.enabled = fillWasEnabled;
             if (ownedProfile != null) Destroy(ownedProfile);
         }

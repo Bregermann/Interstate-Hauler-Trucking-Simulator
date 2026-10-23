@@ -7520,6 +7520,38 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 14704950}
   m_Mesh: {fileID: 4300000, guid: 6ae69a91e2c6ace4e95721ea13ac7e09, type: 2}
+--- !u!1 &16135289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 16135290}
+  m_Layer: 0
+  m_Name: Night vehicle light presentation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &16135290
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16135289}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1390266771}
+  m_Father: {fileID: 1537190142}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &16736361
 GameObject:
   m_ObjectHideFlags: 0
@@ -281317,6 +281349,103 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1389246826}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1390266770
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1390266771}
+  - component: {fileID: 1390266772}
+  m_Layer: 0
+  m_Name: Authored night low-beam0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1390266771
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390266770}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.00000023841858, y: 1.8001518, z: -25.53}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 16135290}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!108 &1390266772
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1390266770}
+  m_Enabled: 0
+  serializedVersion: 13
+  m_Type: 0
+  m_Color: {r: 1, g: 0.98, b: 0.93, a: 1}
+  m_Intensity: 90
+  m_Range: 36
+  m_SpotAngle: 80
+  m_InnerSpotAngle: 60
+  m_CookieSize2D: {x: 0.5, y: 0.5}
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShapeRadius: 0.025
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!1 &1390481102
 GameObject:
   m_ObjectHideFlags: 0
@@ -306845,6 +306974,8 @@ GameObject:
   - component: {fileID: 1537190150}
   - component: {fileID: 1537190152}
   - component: {fileID: 1537190153}
+  - component: {fileID: 1537190154}
+  - component: {fileID: 1537190155}
   m_Layer: 0
   m_Name: TruckFieldGoal Authority
   m_TagString: Untagged
@@ -307328,6 +307459,7 @@ Transform:
   - {fileID: 143062132}
   - {fileID: 1369568637}
   - {fileID: 324608665}
+  - {fileID: 16135290}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1537190143
@@ -346278,6 +346410,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsMatchTime
   cycle: {fileID: 1652528098606882479}
+  clouds: {fileID: 1652454982532651771}
+  nightCloudAmbientMultiplier: 0.18
   perspectiveSun: {fileID: 1652781942201779355}
   orthographicSun: {fileID: 1739695554}
   daylightFill: {fileID: 1971945594}
@@ -346288,6 +346422,45 @@ MonoBehaviour:
   - {fileID: 1864210617}
   - {fileID: 653461604}
   - {fileID: 1000565797}
+--- !u!114 &1537190154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537190131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7e063c526bfa974781ca26a097269d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsOrthographicSky
+  weather: {fileID: 1652199978534164745}
+  commands: {fileID: 1648335866849176021}
+  sphere: {fileID: 1648328576947430719}
+  sun: {fileID: 1652781942201779355}
+--- !u!114 &1537190155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537190131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 659a4dc5f567e8043adb680fbf70f3e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsNightHeadlights
+  time: {fileID: 1537190153}
+  trucks:
+  - {fileID: 1130475296}
+  wheelOnlyBeams:
+  - {fileID: 1390266772}
+  beams:
+  - target: {fileID: 1130475292}
+    light: {fileID: 1390266772}
+    position: {x: 0.00000023841858, y: 1.1001518, z: 1.4699993}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+  layoutVersion: 2
 --- !u!1 &1537585534
 GameObject:
   m_ObjectHideFlags: 0
@@ -587225,7 +587398,7 @@ MonoBehaviour:
   UVMode: 0
   lastUVMode: 0
   AutoCreateAsset: 0
-  SkySphereProfile: {fileID: 11400000, guid: 10fa67b638ca7974d947810e93396361, type: 2}
+  SkySphereProfile: {fileID: 11400000, guid: 9202f4675c184874f858d3fa53cc14f0, type: 2}
   AtmosphereLookupMaterial: {fileID: 2100000, guid: e267e73e4724d304a977609bd6934dab,
     type: 2}
   AtmosphereComputeShader: {fileID: 7200000, guid: 0b5a2fce356fe914c87eb974928e7044,

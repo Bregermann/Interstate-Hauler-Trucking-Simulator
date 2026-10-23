@@ -7765,8 +7765,8 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Independent saved Random/Morning/Day/Evening/Night selection in established setup UI. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Selection persists across reloads and sports; weather remains independently selected; keyboard/controller navigation works. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
-| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
+| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
 | Human Verification | Not performed; no acceptance claimed. |
 | Remaining Work | Extend saved setup controls to remaining applicable sports; preserve indoor/concert exceptions and designer customizations. Five-scene controls/persistence verified within the recorded software/visual scope; physical devices untested. |
 
@@ -7779,8 +7779,8 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Frozen short-match time, stable random choice within a match, appropriate rematch selection. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Vendor sun/moon/ambient reflect selection without mutating source profiles; heat/attempt changes do not reroll; rematch starts a new match. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
-| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
+| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
 | Human Verification | Not performed; no acceptance claimed. |
 | Remaining Work | Bind remaining scene/legacy weather adapters and verify their heat/rematch lifecycles. Existing five scenes preserve vendor source profiles and active match time; broader integration remains open. |
 
@@ -7793,8 +7793,8 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | All installed suitable weather presets use convincing vendor sky/cloud/fog/storm presentation. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Actual clear/rain/storm/snow/blizzard/hurricane sky and precipitation visuals match selected weather and time. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
-| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
+| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
 | Human Verification | Not performed; no acceptance claimed. |
 | Remaining Work | All registered weather variants and remaining outdoor scenes; richer cloud/sunset/stars/moon artistic acceptance. Corrected static-blue Arctic night demonstrated; short weather captures do not certify all sky or snow accumulation requirements. |
 
@@ -7807,10 +7807,10 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Scene-specific sun/ambient/artificial lighting; retain indoor and concert lighting and protected Plowing mood. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Night venues remain readable; authored indoor/show lights preserved; appropriate existing lamps/headlights activate; no excessive shadow lights or per-frame reflection updates. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
-| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
+| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
 | Human Verification | Not performed; no acceptance claimed. |
-| Remaining Work | Remaining venue-specific lights/headlights, indoor/show exceptions, volcanic/urban/arctic artistic adjustments and performance acceptance. Four budgeted lamps each are implemented in Keepaway/FieldGoal only. |
+| Remaining Work | Remaining venue/street/building/lava lighting, reflections/exposure, legacy/indoor exceptions and night replay/performance acceptance.35 scenes have time-aware truck lighting; Hide retains manual control. |
 
 ### Q22-SKY-SCORE-01 — Confirmed score event presentation
 
@@ -7849,7 +7849,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Representative weather/time combinations, multiplayer, scoring/results evidence and meaningful frame-time measurements. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Inspect actual Windows rendering and targeted native tests; distinguish human/hardware/listening acceptance; preserve accepted build until a candidate passes. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
-| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
+| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
 | Human Verification | Not performed; no acceptance claimed. |
 | Remaining Work | Broader maximum-roster/split-screen/performance acceptance, additional venue/weather combinations, score/results tests and human/device/listening checks. Whole-player frame samples are not isolatedCPU/GPU profiling. |

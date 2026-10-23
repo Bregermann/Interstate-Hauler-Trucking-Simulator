@@ -13,6 +13,48 @@ namespace LWS.TruckSports.Editor
     {
         static readonly string[] Representative = { "TruckKeepaway", "TruckFieldGoal", "TruckSkyTow", "TruckTerrierRacing", "TruckSnake", "TruckPoker" };
         static T[] All<T>(Scene scene) where T : Component => scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<T>(true)).ToArray();
+        [Serializable] sealed class VenueAudit
+        {
+            public string scene, session, skyMaterial, skyShader, skyProfile, nightTexture;
+            public int weatherAdapters, legacyWeatherAdapters, clocks, perspectiveViews, orthographicViews, fixedDirectionalLights, pointOrSpotLights, weatherPickers, timePickers;
+            public float starIntensity;
+            public bool hasMatchTime;
+        }
+        [Serializable] sealed class EnvironmentAudit
+        {
+            public VenueAudit[] venues;
+            public string[] weatherProfiles;
+        }
+        public static void AuditCollection()
+        {
+            var venues = new System.Collections.Generic.List<VenueAudit>();
+            foreach (string path in SportsBuilder.SceneList())
+            {
+                var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+                var weather = All<SportsChaosWeather>(scene);
+                var sky = All<WeatherMakerSkySphereScript>(scene).FirstOrDefault();
+                var views = All<Camera>(scene).Where(camera => camera.cameraType == CameraType.Game).ToArray();
+                var fixedLights = All<Light>(scene).Where(light => light.GetComponentInParent<WeatherMakerScript>() == null).ToArray();
+                var pickers = All<SportsWeatherPicker>(scene);
+                venues.Add(new VenueAudit
+                {
+                    scene = path, session = All<SportsEventSession>(scene).FirstOrDefault()?.GetType().FullName,
+                    skyMaterial = AssetDatabase.GetAssetPath(RenderSettings.skybox), skyShader = RenderSettings.skybox != null ? RenderSettings.skybox.shader.name : null,
+                    skyProfile = sky != null ? AssetDatabase.GetAssetPath(sky.SkySphereProfile) : null,
+                    nightTexture = sky != null && sky.SkySphereProfile != null ? AssetDatabase.GetAssetPath(sky.SkySphereProfile.NightTexture) : null,
+                    starIntensity = sky != null && sky.SkySphereProfile != null ? sky.SkySphereProfile.NightIntensity : 0,
+                    weatherAdapters = weather.Length,
+                    legacyWeatherAdapters = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<MonoBehaviour>(true)).Count(component => component != null && component.GetType().Name.EndsWith("Weather") && !(component is SportsChaosWeather)),
+                    clocks = All<WeatherMakerDayNightCycleManagerScript>(scene).Length,
+                    perspectiveViews = views.Count(camera => !camera.orthographic), orthographicViews = views.Count(camera => camera.orthographic),
+                    fixedDirectionalLights = fixedLights.Count(light => light.type == LightType.Directional), pointOrSpotLights = fixedLights.Count(light => light.type == LightType.Point || light.type == LightType.Spot),
+                    weatherPickers = pickers.Count(picker => !picker.timeOfDay), timePickers = pickers.Count(picker => picker.timeOfDay), hasMatchTime = All<SportsMatchTime>(scene).Length != 0
+                });
+            }
+            var registry = AssetDatabase.LoadAssetAtPath<SportsWeatherPresets>(SportsWeatherPresetsAuthoring.CatalogPath);
+            Directory.CreateDirectory("Logs/TruckSports/Environment");
+            File.WriteAllText("Logs/TruckSports/Environment/collection-audit.json", JsonUtility.ToJson(new EnvironmentAudit { venues = venues.ToArray(), weatherProfiles = registry.entries.Select(entry => entry.displayName + " | " + AssetDatabase.GetAssetPath(entry.profile) + " | sky=" + AssetDatabase.GetAssetPath(entry.profile.SkyProfile)).ToArray() }, true));
+        }
         public static void Audit()
         {
             Directory.CreateDirectory("Logs/TruckSports/Environment");
@@ -29,33 +71,174 @@ namespace LWS.TruckSports.Editor
             }
         }
         // Explicit migration only; normal builds and Play Mode never rewrite setup choices.
-        public static void InstallRepresentative()
+        public static void InstallRepresentative() => InstallPaths(SportsBuilder.SceneList().Where(path => Representative.Contains(Path.GetFileNameWithoutExtension(path))), false);
+        public static void InstallApplicable()
+        {
+            // Preserve the two specifically protected Plowing moods and the legacy
+            // lifecycle adapters. Their integration requires a separate review.
+            InstallPaths(SportsBuilder.SceneList().Where(path => !Representative.Contains(Path.GetFileNameWithoutExtension(path)) && !Path.GetFileName(path).StartsWith("TruckPedestrianPlowing", StringComparison.Ordinal)), true);
+        }
+        static void InstallPaths(System.Collections.Generic.IEnumerable<string> paths, bool collection)
         {
             Directory.CreateDirectory("Logs/TruckSports/Environment");
-            using (var output = new StreamWriter("Logs/TruckSports/Environment/representative-install.txt"))
-            foreach (string path in SportsBuilder.SceneList().Where(path => Representative.Contains(Path.GetFileNameWithoutExtension(path))))
+            using (var output = new StreamWriter("Logs/TruckSports/Environment/" + (collection ? "collection-install.txt" : "representative-install.txt")))
+            foreach (string path in paths)
             {
                 var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
                 var weather = All<SportsChaosWeather>(scene).SingleOrDefault();
-                if (weather == null) { output.WriteLine(path + ": indoor venue, no Weather Maker world; original lighting retained without an inert selector."); continue; }
+                if (weather == null || weather.session == null) { output.WriteLine(path + ": no shared outdoor session/weather lifecycle; retained for separate indoor/legacy review."); continue; }
                 var binding = weather.GetComponent<SportsMatchTime>() ?? weather.gameObject.AddComponent<SportsMatchTime>();
                 if (weather.presets == null) weather.presets = SportsWeatherPresetsAuthoring.EnsureCatalog();
                 binding.cycle = weather.vendor.GetComponentInChildren<WeatherMakerDayNightCycleManagerScript>(true);
+                binding.clouds = weather.clouds;
                 BindThreeDimensionalSky(weather, binding);
+                BindSkyProfile(weather, binding);
                 binding.daylightFill = All<Light>(scene).SingleOrDefault(light => light.type == LightType.Directional && light.GetComponentInParent<WeatherMakerScript>() == null);
                 var cameras = All<SportsEventCamera>(scene).Select(rig => rig.view).Where(camera => camera != null).Distinct().ToArray();
-                SportsWeatherRenderingAuthoring.UseViewportSkybox(weather.gameObject, cameras, Path.GetFileNameWithoutExtension(path));
+                string folder = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(path)));
+                SportsWeatherRenderingAuthoring.UseViewportSkybox(weather.gameObject, cameras, folder);
                 InstallVenueLamps(scene, binding);
+                InstallHeadlights(scene, binding);
                 weather.matchTime = binding;
                 var picker = All<SportsWeatherPicker>(scene).FirstOrDefault(p => !p.timeOfDay);
-                if (picker == null) picker = SportsWeatherPickerAuthoring.Install(weather.session, SportsWeatherPresetsAuthoring.EnsureCatalog(), new Vector2(0, 336));
+                if (picker == null) picker = SportsWeatherPickerAuthoring.Install(weather.session, weather.presets, new Vector2(0, 336));
                 InstallTimePicker(picker);
-                PolishSetup(scene, binding, picker);
+                if (collection && !scene.name.StartsWith("TruckKeepaway", StringComparison.Ordinal)) PolishCollectionSetup(binding, picker);
+                else PolishSetup(scene, binding, picker);
                 EditorUtility.SetDirty(binding); EditorUtility.SetDirty(weather);
                 EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
                 output.WriteLine(path + ": explicit Weather Maker time binding; saved Heat weather/time pair; fixed directional fill superseded by vendor sun/moon.");
             }
             AssetDatabase.SaveAssets();
+        }
+        static void InstallHeadlights(Scene scene, SportsMatchTime binding)
+        {
+            // Hide & Seek owns tactical manual headlight/engine state. Its existing
+            // NWH adapter and lighting input remain the only authority there.
+            if (scene.name == "TruckHideAndSeek") return;
+            var coordinator = binding.GetComponent<SportsNightHeadlights>();
+            if (coordinator != null) { if (coordinator.layoutVersion < 1) DetachRecordedHierarchyLights(binding, coordinator); TuneOwnedHeadlights(coordinator); return; }
+            var trucks = All<SportsEventTruck>(scene);
+            coordinator = binding.gameObject.AddComponent<SportsNightHeadlights>(); coordinator.time = binding;
+            coordinator.trucks = trucks; coordinator.wheelOnlyBeams = new Light[trucks.Length];
+            for (int i = 0; i < trucks.Length; i++)
+            {
+                var truck = trucks[i];
+                var manager = truck.tractorMotor != null && truck.tractorMotor.vehicle != null ? truck.tractorMotor.vehicle.effectsManager.lightsManager : null;
+                if (manager != null && manager.lowBeamLights.lightSources.Any(source => source.light != null)) continue;
+                int[] sides = manager != null ? new[] { -1, 1 } : new[] { 0 };
+                foreach (int side in sides)
+                {
+                    var light = new GameObject("Authored night low-beam" + side).AddComponent<Light>(); light.transform.SetParent(truck.transform, false);
+                    var shape = truck.shape; light.transform.localPosition = shape.center + new Vector3(side * shape.size.x * .3f, shape.size.y * .2f, shape.size.z * .49f);
+                    light.type = LightType.Spot; light.range = Mathf.Clamp(shape.size.z * 12, 25, 100); light.spotAngle = 80; light.innerSpotAngle = 60;
+                    light.intensity = manager != null ? 1000 : 750; light.color = new Color(1, .93f, .76f); light.shadows = LightShadows.None; light.enabled = false;
+                    if (manager != null) manager.lowBeamLights.lightSources.Add(new NWH.VehiclePhysics2.Effects.LightSource { type = NWH.VehiclePhysics2.Effects.LightSource.LightType.Light, light = light, emissionColor = light.color });
+                    else coordinator.wheelOnlyBeams[i] = light;
+                }
+                if (manager != null) EditorUtility.SetDirty(truck.tractorMotor.vehicle);
+            }
+            DetachRecordedHierarchyLights(binding, coordinator);
+            TuneOwnedHeadlights(coordinator);
+            EditorUtility.SetDirty(coordinator);
+        }
+        static void TuneOwnedHeadlights(SportsNightHeadlights coordinator)
+        {
+            if (coordinator.layoutVersion >= 2) return;
+            foreach (var beam in coordinator.beams)
+            {
+                beam.light.color = new Color(1, .98f, .93f);
+                var truck = beam.target.GetComponent<SportsEventTruck>();
+                beam.light.intensity = truck.tractorMotor != null ? 180 : 90;
+                EditorUtility.SetDirty(beam.light);
+            }
+            coordinator.layoutVersion = 2; EditorUtility.SetDirty(coordinator);
+        }
+        static void DetachRecordedHierarchyLights(SportsMatchTime binding, SportsNightHeadlights coordinator)
+        {
+            var root = binding.transform.Find("Night vehicle light presentation");
+            if (root == null) { root = new GameObject("Night vehicle light presentation").transform; root.SetParent(binding.transform, false); }
+            var beams = new System.Collections.Generic.List<SportsNightHeadlights.Beam>();
+            foreach (var truck in coordinator.trucks)
+            foreach (var light in truck.GetComponentsInChildren<Light>(true).Where(light => light.name.StartsWith("Authored night low-beam", StringComparison.Ordinal)).ToArray())
+            {
+                beams.Add(new SportsNightHeadlights.Beam { target = truck.transform, light = light, position = truck.transform.InverseTransformPoint(light.transform.position), rotation = Quaternion.Inverse(truck.transform.rotation) * light.transform.rotation });
+                light.transform.SetParent(root, true); EditorUtility.SetDirty(light.transform);
+            }
+            coordinator.beams = beams.ToArray(); coordinator.layoutVersion = 1; EditorUtility.SetDirty(coordinator);
+        }
+        static void PolishCollectionSetup(SportsMatchTime binding, SportsWeatherPicker weather)
+        {
+            if (binding.setupLayoutVersion >= 6) return;
+            var parent = weather.transform.parent;
+            var session = binding.GetComponent<SportsChaosWeather>().session;
+            foreach (var action in parent.GetComponentsInChildren<SportsMenuAction>(true))
+                if (action.action == "weather" || action.action == "chaosweather") { action.gameObject.SetActive(false); EditorUtility.SetDirty(action.gameObject); }
+            if (session.TeamSport)
+            {
+                foreach (var action in parent.GetComponentsInChildren<SportsMenuAction>(true))
+                {
+                    var rect = action.GetComponent<RectTransform>();
+                    if (action.action == "option") { rect.anchoredPosition = new Vector2(0, 285); rect.sizeDelta = new Vector2(1100, 34); session.menus.optionText.rectTransform.sizeDelta = new Vector2(1082, 26); EditorUtility.SetDirty(session.menus.optionText.rectTransform); EditorUtility.SetDirty(rect); }
+                    if (action.action == "teamA" || action.action == "teamB") { rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, 235); EditorUtility.SetDirty(rect); }
+                }
+            }
+            if (binding.gameObject.scene.name == "TruckBogSnorkelling")
+            {
+                // Original Bog authoring moved the caption instead of its button,
+                // leaving a blank choice and putting its text at the screen edge.
+                var caption = session.menus.optionText.rectTransform; caption.anchoredPosition = Vector2.zero;
+                caption.sizeDelta = caption.parent.GetComponent<RectTransform>().sizeDelta - new Vector2(18, 8); EditorUtility.SetDirty(caption);
+            }
+            if (binding.setupLayoutVersion >= 4) { binding.setupLayoutVersion = 6; return; }
+            var title = parent.Find("Title").GetComponent<TMPro.TMP_Text>();
+            title.rectTransform.anchoredPosition = new Vector2(0, 430); title.rectTransform.sizeDelta = new Vector2(1350, 58);
+            title.fontSizeMax = 44; EditorUtility.SetDirty(title); EditorUtility.SetDirty(title.rectTransform);
+            var time = parent.GetComponentsInChildren<SportsWeatherPicker>(true).Single(picker => picker.timeOfDay);
+            foreach (var picker in new[] { weather, time })
+            {
+                var rect = picker.GetComponent<RectTransform>(); rect.anchoredPosition = new Vector2(picker.timeOfDay ? 165 : -165, 337); rect.sizeDelta = new Vector2(300, 54); EditorUtility.SetDirty(rect);
+            }
+            foreach (string name in new[] { "Weather selection label", "Time of day selection label" })
+            {
+                var label = parent.Find(name).GetComponent<RectTransform>(); label.gameObject.SetActive(true); label.anchoredPosition = new Vector2(name.StartsWith("Time") ? 165 : -165, 381); label.sizeDelta = new Vector2(300, 30); EditorUtility.SetDirty(label); EditorUtility.SetDirty(label.gameObject);
+            }
+            var explanation = parent.Find("Weather selection explanation");
+            if (explanation != null) { explanation.gameObject.SetActive(false); EditorUtility.SetDirty(explanation.gameObject); }
+            foreach (var action in parent.GetComponentsInChildren<SportsMenuAction>(true))
+            {
+                if (action.action == "drivingview") { var rect = action.GetComponent<RectTransform>(); rect.anchoredPosition = new Vector2(0, -245); EditorUtility.SetDirty(rect); }
+            }
+            time.dropdown.panelSize = 220; time.dropdown.enableScrollbar = true;
+            var scroll = time.GetComponentInChildren<UnityEngine.UI.ScrollRect>(true);
+            if (scroll != null) { scroll.verticalScrollbarVisibility = UnityEngine.UI.ScrollRect.ScrollbarVisibility.AutoHide; EditorUtility.SetDirty(scroll); }
+            EditorUtility.SetDirty(time.dropdown); binding.setupLayoutVersion = 6;
+        }
+        static void BindSkyProfile(SportsChaosWeather weather, SportsMatchTime binding)
+        {
+            const string path = "Assets/TruckSports/Settings/Sports atmospheric sky.asset";
+            var profile = AssetDatabase.LoadAssetAtPath<WeatherMakerSkyProfileScript>(path);
+            if (profile == null)
+            {
+                var source = AssetDatabase.LoadAssetAtPath<WeatherMakerSkyProfileScript>("Assets/WeatherMaker/Prefab/Profiles/Sky/WeatherMakerSkyProfile_ProceduralMilkyWayPhysicallyBased.asset");
+                profile = UnityEngine.Object.Instantiate(source);
+                profile.name = "Sports atmospheric sky";
+                var stars = AssetDatabase.LoadAssetAtPath<WeatherMakerSkyProfileScript>("Assets/WeatherMaker/Prefab/Profiles/Sky/WeatherMakerSkyProfile_ProceduralMilkyWay.asset");
+                profile.NightTexture = stars.NightTexture;
+                profile.NightIntensity = .65f;
+                profile.NightTwinkleSpeed = 1.1f;
+                profile.NightTwinkleVariance = .12f;
+                profile.NightTwinkleRandomness = .25f;
+                AssetDatabase.CreateAsset(profile, path);
+            }
+            var sphere = weather.vendor.GetComponentInChildren<WeatherMakerSkySphereScript>(true);
+            // Do not replace a designer's later sport-specific profile on rerun.
+            string original = AssetDatabase.GetAssetPath(sphere.SkySphereProfile);
+            if (original.StartsWith("Assets/WeatherMaker/", StringComparison.Ordinal)) sphere.SkySphereProfile = profile;
+            var adapter = weather.GetComponent<SportsOrthographicSky>() ?? weather.gameObject.AddComponent<SportsOrthographicSky>();
+            adapter.weather = weather.vendor; adapter.commands = weather.vendor.GetComponentInChildren<WeatherMakerCommandBufferManagerScript>(true);
+            adapter.sphere = sphere; adapter.sun = binding.perspectiveSun;
+            EditorUtility.SetDirty(sphere); EditorUtility.SetDirty(adapter);
         }
         static void InstallVenueLamps(Scene scene, SportsMatchTime binding)
         {
@@ -95,7 +278,7 @@ namespace LWS.TruckSports.Editor
                 if (scroll != null) { scroll.verticalScrollbarVisibility = UnityEngine.UI.ScrollRect.ScrollbarVisibility.AutoHide; EditorUtility.SetDirty(scroll); }
                 EditorUtility.SetDirty(time.dropdown);
             }
-            if (scene.name == "TruckKeepaway" && binding.setupLayoutVersion < 1)
+            if (scene.name.StartsWith("TruckKeepaway", StringComparison.Ordinal) && binding.setupLayoutVersion < 1)
             {
                 // The preserved Keepaway setup has a custom title/options layout.
                 // Use its spare header row instead of the ordinary setup coordinates.

@@ -14,6 +14,11 @@ public sealed class SportsCameraSetupControl:MonoBehaviour {
   var copy=Instantiate(template.gameObject,menu.pages[0].transform);copy.name="Show AI Cameras";var a=copy.GetComponent<SportsMenuAction>();a.action="aicameras";
   var rect=copy.GetComponent<RectTransform>();rect.anchorMin=rect.anchorMax=rect.pivot=new Vector2(.5f,.5f);var heading=menu.pages[0].transform.Find("Title") as RectTransform;float headingY=heading!=null?heading.anchoredPosition.y:365;rect.anchoredPosition=new Vector2(500,headingY);rect.sizeDelta=new Vector2(350,46);
   var title=menu.pages[0].transform.Find("Title") as RectTransform;if(title!=null){title.anchoredPosition=new Vector2(-205,headingY);title.sizeDelta=new Vector2(900,title.sizeDelta.y);}
+  // Opt-in environment layouts already reserve a real sport-logo region.
+  // Keep long headings between that artwork and this control, rather than
+  // applying the legacy left-shift across the logo. Other menus retain theirs.
+  var artwork=menu.pages[0].transform.Find("Original sport title artwork") as RectTransform;
+  if(title!=null&&artwork!=null&&sport!=null&&sport.GetComponent<SportsMatchTime>()!=null){float left=artwork.anchoredPosition.x+artwork.rect.width*.5f+24;float right=rect.anchoredPosition.x-rect.rect.width*.5f-24;title.anchoredPosition=new Vector2((left+right)*.5f,headingY);title.sizeDelta=new Vector2(right-left,title.sizeDelta.y);}
   var control=copy.AddComponent<SportsCameraSetupControl>();control.menu=menu;control.button=a.button;control.bowling=bowling;control.cornhole=corn;control.cheese=cheese;control.sport=sport;
   foreach(var label in copy.GetComponentsInChildren<TMPro.TMP_Text>(true)){label.enableAutoSizing=true;label.fontSizeMax=23;label.fontSizeMin=18;}
   control.Refresh();return control;

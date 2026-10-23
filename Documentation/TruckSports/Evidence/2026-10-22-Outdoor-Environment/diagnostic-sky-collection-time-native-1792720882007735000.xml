@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 01:59:50Z" end-time="2026-10-23 01:59:52Z" duration="1.4171604">
+  <test-suite type="TestSuite" id="1398" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="276" result="Failed" site="Child" start-time="2026-10-23 01:59:50Z" end-time="2026-10-23 01:59:52Z" duration="1.417160" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1282" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="109" result="Failed" site="Child" start-time="2026-10-23 01:59:50Z" end-time="2026-10-23 01:59:52Z" duration="1.404127" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="72000" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1151" name="CollectionEnvironmentTests" fullname="CollectionEnvironmentTests" classname="CollectionEnvironmentTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-23 01:59:50Z" end-time="2026-10-23 01:59:52Z" duration="1.398516" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1152" name="CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" fullname="CollectionEnvironmentTests.CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" methodname="CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" classname="CollectionEnvironmentTests" runstate="Runnable" seed="1845695141" result="Failed" start-time="2026-10-23 01:59:50Z" end-time="2026-10-23 01:59:52Z" duration="1.384464" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.
+  Expected: 35
+  But was:  0
+]]></message>
+            <stack-trace><![CDATA[at CollectionEnvironmentTests+<CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters>d__5.MoveNext () [0x009e7] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\CollectionEnvironmentTests.cs:82
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

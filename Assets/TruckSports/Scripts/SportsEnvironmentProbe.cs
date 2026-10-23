@@ -50,7 +50,13 @@ namespace LWS.TruckSports
                 Check(SportsTimeOfDay.Selection == SportsTimeChoice.Night, "saved independent time preference survives a fresh Windows process");
                 Finish(); yield break;
             }
-            foreach (string scene in new[] { SportsNavigation.Keepaway, SportsNavigation.FieldGoal, SportsNavigation.SkyTow, SportsNavigation.Terrier, SportsNavigation.Snake })
+            int scenesIndex = Array.IndexOf(arguments, "-tsEnvironmentScenes");
+            string[] scenes = scenesIndex >= 0 && scenesIndex + 1 < arguments.Length
+                ? arguments[scenesIndex + 1].Split(',')
+                : new[] { SportsNavigation.Keepaway, SportsNavigation.FieldGoal, SportsNavigation.SkyTow, SportsNavigation.Terrier, SportsNavigation.Snake };
+            bool maximumRoster = Array.IndexOf(arguments, "maximum-rosters") >= 0;
+            bool allWeather = Array.IndexOf(arguments, "all-weather") >= 0;
+            foreach (string scene in scenes)
             {
                 SportsNavigation.LoadSport(scene); yield return null; yield return null;
                 var match = FindAnyObjectByType<SportsEventSession>(); var weather = match.GetComponent<SportsChaosWeather>();
@@ -59,10 +65,15 @@ namespace LWS.TruckSports
                 var pickers = match.menus.GetComponentsInChildren<SportsWeatherPicker>(true);
                 Check(pickers.Count(picker => picker.timeOfDay) == 1 && pickers.Count(picker => !picker.timeOfDay) == 1, scene + " one actual Heat weather control and one time control");
                 var clock = pickers.Single(picker => picker.timeOfDay); var forecast = pickers.Single(picker => !picker.timeOfDay);
+                if (maximumRoster)
+                {
+                    match.setup.count = match.MaximumPlayers;
+                    if (match.TeamSport) match.teamA = match.teamB = 4;
+                }
                 match.AllBots(); SportsCameraOptions.Set(false);
                 yield return Capture(scene + "-setup");
                 if (scene == SportsNavigation.FieldGoal) yield return MenuNavigation(clock, forecast);
-                var cases = scene == SportsNavigation.FieldGoal
+                var cases = allWeather ? forecast.catalog.entries.Select(entry => entry.displayName + "|Night").ToArray() : scene == SportsNavigation.FieldGoal
                     ? new[] { "Clear|Morning", "Clear|Day", "Clear|Evening", "Clear|Night", "Rain|Evening", "Thunderstorm|Night", "Snow|Morning", "Blizzard|Night", "Hurricane|Day" }
                     : new[] { "Clear|Day", "Clear|Night" };
                 foreach (string combination in cases)
