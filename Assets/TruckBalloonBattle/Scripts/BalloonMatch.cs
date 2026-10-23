@@ -21,6 +21,7 @@ namespace LWS.TruckBalloonBattle
         public LWS.TruckFieldGoal.FieldGoalCrowd crowd;
         public SportsRecordedReview review;
         public BalloonRules rules = new BalloonRules();
+        readonly int[] scoreBeforeStep = new int[8];
         public float Countdown { get; private set; }
         public int PhysicalPops { get; private set; }
         readonly float[] stuck = new float[8], reverseUntil = new float[8], recoverAfter = new float[8];
@@ -82,7 +83,10 @@ namespace LWS.TruckBalloonBattle
             atmosphere.Tick(rules.Clock);
             if (Countdown > 0) { Countdown = Mathf.Max(0, Countdown - dt); for (int i = 0; i < setup.count; i++) { Hold(trucks[i]); for (int b = 0; b < 3; b++) targets[i * 3 + b].Follow(dt); } return; }
             if (rules.Complete) { aftermath -= dt; review.Capture(rules.Clock + 6 - aftermath); if (aftermath <= 0) { review.focusSlot = rules.Winner; EndMatch(); } return; }
+            Array.Copy(rules.scores, scoreBeforeStep, setup.count);
             rules.Step(dt);
+            if (rules.Complete && rules.Winner >= 0)
+                ConfirmScore("last-truck-standing", rules.Winner, rules.scores[rules.Winner] - scoreBeforeStep[rules.Winner], rules.scores[rules.Winner], "LAST TRUCK STANDING", SportsScoreTier.RoundWinner, roundEnded: true, matchEnded: true);
             for (int i = 0; i < setup.count; i++)
             {
                 if (rules.Alive(i) && !rules.Complete)
@@ -106,7 +110,10 @@ namespace LWS.TruckBalloonBattle
         // Only BalloonTarget's actual PhysX trigger invokes this gameplay path.
         internal void Contact(int attacker, int victim, int balloon)
         {
-            if (!Live || Countdown > 0 || !rules.Pop(attacker, victim, balloon, rules.AttackSequence(attacker))) return;
+            if (!Live || Countdown > 0 || attacker < 0 || attacker >= setup.count) return;
+            int previousScore = rules.scores[attacker];
+            if (!rules.Pop(attacker, victim, balloon, rules.AttackSequence(attacker))) return;
+            ConfirmScore("balloon:" + victim + ":" + balloon, attacker, rules.scores[attacker] - previousScore, rules.scores[attacker], rules.Alive(victim) ? "BALLOON POP" : "BALLOON ELIMINATION", rules.Alive(victim) ? SportsScoreTier.Small : SportsScoreTier.Major);
             var target = targets[victim * 3 + balloon]; var position = target.body.position; target.Hide(); PhysicalPops++;
             confetti[victim].transform.position = position; confetti[victim].Emit(rules.Alive(victim) ? 22 : 150);
             feedback.PlayAt(5, position, 0, true); Pulse(attacker, .6f, .18f); Pulse(victim, .4f, .15f);

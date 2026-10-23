@@ -59,8 +59,8 @@ namespace LWS.TruckMagnetMayhem
    for(int item=0;item<scrap.Length;item++)
    {
     var actor=scrap[item];if(rules.owners[item]>=0)continue;int zone=-1;for(int bay=0;bay<setup.count;bay++)if(bays[bay].Contains(actor.shape)){zone=bay;break;}
-    if(!rules.Observe(item,zone,zone>=0,actor.body.linearVelocity.magnitude,actor.body.angularVelocity.magnitude,dt))continue;
-    actor.body.linearVelocity=actor.body.angularVelocity=Vector3.zero;actor.body.isKinematic=true;actor.Colorize(setup.players[zone].color);ActualDeposits++;announcement=setup.players[zone].name+" SECURED +"+actor.points+"!";announceUntil=elapsed+2;feedback.PlayAt(5,actor.body.position,0,true);Pulse(zone,.5f,.15f);
+    int previousScore=zone>=0?rules.points[zone]:0;if(!rules.Observe(item,zone,zone>=0,actor.body.linearVelocity.magnitude,actor.body.angularVelocity.magnitude,dt))continue;
+    ConfirmScore("scrap:"+item,zone,rules.points[zone]-previousScore,rules.points[zone],"SCRAP SECURED",actor.points>=5?SportsScoreTier.Major:SportsScoreTier.Small);actor.body.linearVelocity=actor.body.angularVelocity=Vector3.zero;actor.body.isKinematic=true;actor.Colorize(setup.players[zone].color);ActualDeposits++;announcement=setup.players[zone].name+" SECURED +"+actor.points+"!";announceUntil=elapsed+2;feedback.PlayAt(5,actor.body.position,0,true);Pulse(zone,.5f,.15f);
    }
    if(rules.Complete){review.focusSlot=0;for(int i=1;i<setup.count;i++)if(rules.points[i]>rules.points[review.focusSlot])review.focusSlot=i;EndMatch();}
   }

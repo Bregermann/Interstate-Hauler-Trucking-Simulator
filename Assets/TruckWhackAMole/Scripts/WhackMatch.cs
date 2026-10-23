@@ -90,7 +90,11 @@ namespace LWS.TruckWhackAMole
         int Leader() { int slot = 0; for (int i = 1; i < setup.count; i++) if (rules.scores[i] > rules.scores[slot]) slot = i; return slot; }
         internal void Contact(int slot, int hole, float speed)
         {
-            if (!Live || Countdown > 0 || !rules.Hit(slot, hole, rules.generations[hole], speed)) return;
+            if (!Live || Countdown > 0 || slot < 0 || slot >= setup.count || hole < 0 || hole >= rules.generations.Length) return;
+            int previousScore = rules.scores[slot];
+            if (!rules.Hit(slot, hole, rules.generations[hole], speed)) return;
+            var kind = rules.kinds[hole];
+            ConfirmScore("mole:" + hole + ":" + rules.generations[hole], slot, rules.scores[slot] - previousScore, rules.scores[slot], kind == MoleKind.Decoy ? "DECOY PENALTY" : kind == MoleKind.Golden ? "GOLDEN MOLE" : "MOLE HIT", kind == MoleKind.Golden ? SportsScoreTier.Major : SportsScoreTier.Small);
             PhysicalHits++; moles[hole].Tick(); var position = moles[hole].transform.position + Vector3.up * 1.5f;
             var effect = dirt[hole]; effect.transform.position = position; effect.Play(); feedback.PlayAt(5, position, 0, true); Pulse(slot, .5f, .2f);
             if (rules.kinds[hole] == MoleKind.Decoy)

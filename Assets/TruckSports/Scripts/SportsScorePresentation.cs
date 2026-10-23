@@ -17,6 +17,8 @@ namespace LWS.TruckSports
         public CanvasGroup visibility;
         public Image portrait, accent;
         public Animator notificationAnimator;
+        [Tooltip("Non-blocking notification between the existing results heading and standings.")]
+        public Vector2 resultPosition = new Vector2(0, -184), resultSize = new Vector2(1120, 76);
         sealed class Pending
         {
             public SportsScoreEvent latest;
@@ -26,8 +28,17 @@ namespace LWS.TruckSports
         readonly List<Pending> pending = new List<Pending>();
         string match;
         float next;
+        RectTransform layout;
+        Vector2 playAnchorMin, playAnchorMax, playPivot, playPosition, playSize;
+        bool resultLayout;
         public int Presented { get; private set; }
         public SportsScoreEvent LastPresented { get; private set; }
+        void Awake()
+        {
+            layout = (RectTransform)transform;
+            playAnchorMin = layout.anchorMin; playAnchorMax = layout.anchorMax; playPivot = layout.pivot;
+            playPosition = layout.anchoredPosition; playSize = layout.sizeDelta;
+        }
         void OnEnable() { if (session != null) session.ScoreConfirmed += Accept; }
         void OnDisable()
         {
@@ -43,7 +54,13 @@ namespace LWS.TruckSports
             foreach (var item in pending)
                 if (receipt.Tier <= SportsScoreTier.Major && item.latest.ParticipantId == receipt.ParticipantId && item.latest.Reason == receipt.Reason && item.latest.Tier == receipt.Tier && item.latest.Unit == receipt.Unit)
                 { item.delta += receipt.Delta; item.count++; item.latest = receipt; return; }
-            pending.Add(new Pending { latest = receipt, delta = receipt.Delta, count = 1 });
+            int position = pending.Count;
+            if (receipt.Tier >= SportsScoreTier.RoundWinner)
+            {
+                position = 0;
+                while (position < pending.Count && pending[position].latest.Tier >= receipt.Tier) position++;
+            }
+            pending.Insert(position, new Pending { latest = receipt, delta = receipt.Delta, count = 1 });
         }
         void ResetMatch(string id)
         {
@@ -54,9 +71,21 @@ namespace LWS.TruckSports
         {
             if (session == null || notification == null) return;
             if (match != session.MatchId) ResetMatch(session.MatchId);
-            bool showing = session.Running && !session.Paused && !session.Finished && session.menus.Screen == SportsEventScreen.Play;
+            bool result = session.Finished && session.menus.Screen == SportsEventScreen.Result;
+            bool showing = session.Running && !session.Paused && (result || !session.Finished && session.menus.Screen == SportsEventScreen.Play);
             visibility.alpha = showing ? 1 : 0;
-            if (!session.Running || session.Finished) { pending.Clear(); return; }
+            if (layout != null && resultLayout != result)
+            {
+                resultLayout = result;
+                layout.anchorMin = result ? new Vector2(.5f, 1) : playAnchorMin;
+                layout.anchorMax = result ? new Vector2(.5f, 1) : playAnchorMax;
+                layout.pivot = result ? new Vector2(.5f, 1) : playPivot;
+                layout.anchoredPosition = result ? resultPosition : playPosition;
+                layout.sizeDelta = result ? resultSize : playSize;
+            }
+            // A final physical deposit can close the match in the same step.
+            // Its already-confirmed receipt still belongs on the results page.
+            if (!session.Running) { pending.Clear(); return; }
             if (!showing || Time.time < next || pending.Count == 0) return;
             var item = pending[0]; pending.RemoveAt(0); var receipt = item.latest;
             if (receipt.MatchId != session.MatchId) return;

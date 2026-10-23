@@ -47,16 +47,18 @@ namespace LWS.TruckBalloonBattle
             bool settled = true; float planarDrift = 0, verticalSettle = 0;
             for (int i = 0; i < 8; i++) { var delta = m.trucks[i].body.position - starts[i]; planarDrift = Mathf.Max(planarDrift, Vector3.ProjectOnPlane(delta, Vector3.up).magnitude); verticalSettle = Mathf.Max(verticalSettle, Mathf.Abs(delta.y)); settled &= m.trucks[i].tractorMotor.Grounded && Vector3.Dot(m.trucks[i].transform.up, Vector3.up) > .95f; }
             Check(m.Countdown > 0 && settled && planarDrift < .3f && m.PhysicalPops == 0, "countdown holds all eight upright grounded tractors; planar drift=" + planarDrift.ToString("F3") + " suspension settling=" + verticalSettle.ToString("F3"));
-            Time.timeScale = 4; float deadline = Time.realtimeSinceStartup + 190; bool captured = false, paused = false; int lastPops = 0;
+            Time.timeScale = 4; float deadline = Time.realtimeSinceStartup + 190; bool scoreCaptured = false, captured = false, paused = false; int lastPops = 0;
             while (!m.Finished && Time.realtimeSinceStartup < deadline)
             {
+                if(!scoreCaptured&&m.ScoreJournal.Count>0){scoreCaptured=true;yield return SportsScoreAcceptance.CaptureAward(m,Check,Folder);if(SportsScoreAcceptance.CaptureOnly){SportsScoreAcceptance.Journal(m,m.PhysicalPops + (m.rules.Winner >= 0 ? 1 : 0),Check);Check(true,"focused first-award capture; full-match evidence is recorded separately");m.SetupScreen();Check(m.StartMatch()&&m.ScoreJournal.Count==0,"focused scoring rematch starts with an empty journal");yield return null;m.SetupScreen();Complete();yield break;}}
+
                 if (!paused && m.rules.Clock > 2) { paused = true; float clock = m.rules.Clock; var p = m.targets[0].body.position; m.Pause(); yield return new WaitForSecondsRealtime(.15f); Check(m.rules.Clock == clock && p == m.targets[0].body.position, "pause freezes attack clock, tractors and tether motion"); m.Resume(); Time.timeScale = 4; }
                 if (!captured && m.rules.Clock > 6) { captured = true; yield return SportsWindowCapture.Save(1280, 720, Folder + "/gameplay-720.png"); yield return SportsWindowCapture.Save(1920, 1080, Folder + "/gameplay-1080.png"); }
                 if (lastPops != m.rules.Pops) { lastPops = m.rules.Pops; report.AppendLine("PHYSICAL_POP clock=" + m.rules.Clock.ToString("F1") + " total=" + lastPops + " alive=" + m.AliveCount()); File.WriteAllText(Folder + "/progress.txt", report.ToString()); }
                 yield return null;
             }
             Time.timeScale = 1;
-            Check(m.Finished && m.rules.Complete && m.AliveCount() <= 1 && m.PhysicalPops >= 21, "actual AI attacks eliminate seven trucks and resolve a full match; pops=" + m.PhysicalPops + " alive=" + m.AliveCount());
+            SportsScoreAcceptance.Journal(m,m.PhysicalPops + (m.rules.Winner >= 0 ? 1 : 0),Check);Check(scoreCaptured,"actual award animation captured at720p/1080p");Check(m.Finished && m.rules.Complete && m.AliveCount() <= 1 && m.PhysicalPops >= 21, "actual AI attacks eliminate seven trucks and resolve a full match; pops=" + m.PhysicalPops + " alive=" + m.AliveCount());
             Check(captured && paused && m.PhysicalPops == m.rules.Pops, "every scored pop is routed through actual spike/balloon PhysX contact");
             if (m.Finished)
             {

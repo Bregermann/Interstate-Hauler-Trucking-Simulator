@@ -76,7 +76,7 @@ namespace LWS.TruckTetherball
                 foreach(var truck in trucks)Hold(truck);cable.Draw(rules.NetDegrees);aftermath+=dt;
                 if(aftermath>=3){if(rules.Complete){review.focusSlot=rules.Winner;EndMatch();}else{rules.NextRound();ResetRound();}}return;
             }
-            var radial=ball.position-cable.poleTop.position;rules.Sample(Mathf.Atan2(radial.z,radial.x)*Mathf.Rad2Deg,new Vector2(radial.x,radial.z).magnitude,dt);cable.Tick(rules.NetDegrees);if(rules.RoundWinner>=0)feedback.PlayAt(5,ball.position,0,true);
+            var radial=ball.position-cable.poleTop.position;rules.Sample(Mathf.Atan2(radial.z,radial.x)*Mathf.Rad2Deg,new Vector2(radial.x,radial.z).magnitude,dt);cable.Tick(rules.NetDegrees);if(rules.RoundWinner>=0){int winner=rules.RoundWinner;ConfirmScore("tether-round:"+rules.Round,winner,1,rules.wins[winner],"TETHER ROUND WON",SportsScoreTier.RoundWinner,"ROUNDS",roundEnded:true,matchEnded:rules.Complete);feedback.PlayAt(5,ball.position,0,true);}
             var relative=atmosphere.Flow-ball.linearVelocity;var drag=relative*Mathf.Min(relative.magnitude,50)*(1.225f*.47f*Mathf.PI*cable.ballRadius*cable.ballRadius*.5f);ball.AddForce(Vector3.ClampMagnitude(drag,15000),ForceMode.Force);
             for(int i=0;i<2;i++)
             {

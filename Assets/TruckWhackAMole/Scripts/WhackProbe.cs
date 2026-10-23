@@ -43,9 +43,11 @@ namespace LWS.TruckWhackAMole
             Check(authored, "every pooled mole has actual authored emergence/look/dive/hit animation controllers");
             SportsCameraOptions.Set(false); m.drivingViews.Select(0); m.setup.count = 8; m.option = 0; m.AllBots(); for (int i = 0; i < 8; i++) m.setup.players[i].difficulty = LWS.TruckBowling.BowlingDifficulty.Hard;
             Check(m.StartMatch(), "complete eight-truck timed AI match starts"); Time.timeScale = 4;
-            float deadline = Time.realtimeSinceStartup + 190; bool captured = false, paused = false, movingMole = false; int lastHits = 0;
+            float deadline = Time.realtimeSinceStartup + 190; bool scoreCaptured = false, captured = false, paused = false, movingMole = false; int lastHits = 0;
             while (!m.Finished && Time.realtimeSinceStartup < deadline)
             {
+                if(!scoreCaptured&&m.ScoreJournal.Count>0){scoreCaptured=true;yield return SportsScoreAcceptance.CaptureAward(m,Check,Folder);if(SportsScoreAcceptance.CaptureOnly){SportsScoreAcceptance.Journal(m,m.PhysicalHits,Check);Check(true,"focused first-award capture; full-match evidence is recorded separately");m.SetupScreen();Check(m.StartMatch()&&m.ScoreJournal.Count==0,"focused scoring rematch starts with an empty journal");yield return null;m.SetupScreen();Complete();yield break;}}
+
                 foreach (var mole in m.moles) if (m.rules.Phase(mole.hole) == MolePhase.Emerging) { var rig = mole.models[(int)m.rules.kinds[mole.hole]].Find("Rig"); movingMole |= rig.localPosition.y > -4.9f && rig.localPosition.y < -.1f; }
                 if (!paused && m.rules.Clock > 2) { paused = true; float clock = m.rules.Clock; var p = m.trucks[0].body.position; m.Pause(); yield return new WaitForSecondsRealtime(.15f); Check(m.rules.Clock == clock && p == m.trucks[0].body.position, "pause freezes match clock and physical truck movement"); m.Resume(); Time.timeScale = 4; }
                 if (!captured && m.PhysicalHits > 2) { captured = true; yield return SportsWindowCapture.Save(1280, 720, Folder + "/gameplay-720.png"); yield return SportsWindowCapture.Save(1920, 1080, Folder + "/gameplay-1080.png"); }
@@ -54,7 +56,7 @@ namespace LWS.TruckWhackAMole
             }
             Time.timeScale = 1;
             report.AppendLine("ACTUAL_AI_RESULTS\n" + m.Standings);
-            Check(m.Finished && m.rules.Complete && m.rules.Clock == 120, "actual timed match reaches results without softlock");
+            SportsScoreAcceptance.Journal(m,m.PhysicalHits,Check);Check(scoreCaptured,"actual award animation captured at720p/1080p");Check(m.Finished && m.rules.Complete && m.rules.Clock == 120, "actual timed match reaches results without softlock");
             Check(m.PhysicalHits > 8 && m.PhysicalHits == m.rules.Contacts && captured, "AI genuinely drives into emerged targets; all scoring comes from physical bumper contacts; hits=" + m.PhysicalHits);
             Check(movingMole, "actual Animator moves model through intermediate emergence heights rather than teleporting");
             if (m.Finished) { string result = m.Results; m.ExtraAction("watchwhack"); yield return new WaitForSecondsRealtime(.4f); Check(m.review.Playing, "recorded tractor and actual animated-mole replay starts"); yield return SportsWindowCapture.Save(1280, 720, Folder + "/replay-720.png"); m.ExtraAction("replayskip"); Check(!m.review.Playing && result == m.Results, "replay skip preserves points and shared placings"); }
@@ -80,6 +82,7 @@ namespace LWS.TruckWhackAMole
                 m.trucks[0].Prepare(origin, Quaternion.identity); Physics.SyncTransforms(); m.Resume(); m.trucks[0].tractorMotor.AddAssemblyVelocity(Vector3.forward * 2);
                 deadline = Time.realtimeSinceStartup + 2; while (m.DecoyExplosions == 0 && Time.realtimeSinceStartup < deadline) yield return null;
                 Check(m.DecoyExplosions == 1 && m.rules.scores[0] == -25 && m.trucks[0].body.linearVelocity.y > 2, "real decoy bumper contact deducts25and physically launches the actual tractor");
+                SportsScoreAcceptance.Journal(m,m.PhysicalHits,Check);Check(m.ScoreJournal.Latest!=null&&m.ScoreJournal.Latest.Delta==-25&&m.ScoreJournal.Latest.Total==-25,"confirmed decoy receipt preserves the real negative score");
                 int hits = m.PhysicalHits; yield return new WaitForSeconds(.2f); Check(m.PhysicalHits == hits, "repeated overlap with a claimed exposure cannot duplicate points");
             }
             m.SetupScreen(); yield return SportsExpansionCameraAcceptance.Run(m, m.drivingViews, Check, Folder); Complete();

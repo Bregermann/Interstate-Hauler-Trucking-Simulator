@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 10:05:42Z" end-time="2026-10-23 10:05:56Z" duration="13.7863961">
+  <test-suite type="TestSuite" id="1408" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="283" result="Passed" start-time="2026-10-23 10:05:42Z" end-time="2026-10-23 10:05:56Z" duration="13.786396" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1292" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="116" result="Passed" start-time="2026-10-23 10:05:42Z" end-time="2026-10-23 10:05:56Z" duration="13.771373" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="53896" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1129" name="ArcadeScoreLifecycleTests" fullname="ArcadeScoreLifecycleTests" classname="ArcadeScoreLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 10:05:42Z" end-time="2026-10-23 10:05:48Z" duration="5.598579" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1130" name="ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" fullname="ArcadeScoreLifecycleTests.ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" methodname="ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="99444360" result="Passed" start-time="2026-10-23 10:05:42Z" end-time="2026-10-23 10:05:48Z" duration="5.584553" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="120000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_MediumSleet (Sports runtime clone) to WeatherMakerProfile_LightCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_MOLE_SCORE mole:31:1 slot=7 delta=10; explicit early-results fixture after actual PhysX/NWH hit, not a complete-match claim.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1239" name="SumoScorePresentationTests" fullname="SumoScorePresentationTests" classname="SumoScorePresentationTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 10:05:48Z" end-time="2026-10-23 10:05:56Z" duration="8.165599" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1240" name="RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" fullname="SumoScorePresentationTests.RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" methodname="RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" classname="SumoScorePresentationTests" runstate="Runnable" seed="892679790" result="Passed" start-time="2026-10-23 10:05:48Z" end-time="2026-10-23 10:05:56Z" duration="8.139374" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="90000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyFog (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+ownedKeyboard=1/True current=1/True held=True drive=(0.00, 1.00) command=(0.00, 1.00) pusher=(0.00, 0.36, 9.20) victim=(0.00, 0.30, 12.21) contacts=26 paused=False stage=Fight
+Changing weather profile WeatherMakerProfile_HeavyFog (Sports runtime clone) to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

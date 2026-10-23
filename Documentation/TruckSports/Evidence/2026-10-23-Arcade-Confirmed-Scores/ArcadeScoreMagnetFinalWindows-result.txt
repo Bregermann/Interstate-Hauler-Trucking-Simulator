@@ -1,0 +1,23 @@
+PASS saved scrapyard has eight NWH trucks and forty actual owned scrap models with matching colliders
+PASS eight AI competitors begin a normal three-minute physical scrapyard match
+HARNESS_STATE focused=True paused=False ready=True scale=1 clock=0
+PASS all eight settle grounded with fields and sorting hazards disarmed during countdown
+ACTUAL_MAGNET t=0 deposits=0 forces=0 maxN=0 points=0,0,0,0,0,0,0,0
+TRUCK 0 p=(0.00, 0.11, 76.96) speed=0.001532362 pole=0
+TRUCK 1 p=(54.42, 0.11, 54.42) speed=0.001640066 pole=0
+TRUCK 2 p=(76.96, 0.11, 0.00) speed=0.001545058 pole=0
+TRUCK 3 p=(54.42, 0.11, -54.42) speed=0.001643452 pole=0
+TRUCK 4 p=(0.00, 0.11, -76.96) speed=0.001657645 pole=0
+TRUCK 5 p=(-54.42, 0.11, -54.42) speed=0.00152375 pole=0
+TRUCK 6 p=(-76.96, 0.11, 0.00) speed=0.001766786 pole=0
+TRUCK 7 p=(-54.42, 0.11, 54.42) speed=0.00176647 pole=0
+PASS pause freezes clock, fields, trucks and metal
+PASS saved sport uses the existing Heat confirmed-score presenter
+PASS real committed award reaches the Heat animation
+PASS visible score presentation leaves gameplay/menu inputs unblocked
+PASS opaque notification backing protects score text from bright venue artwork
+PASS confirmed award receipts match actual physical scoring events: 6
+PASS last actual award retains the match and stable participant identity
+PASS focused first-award capture; full-match evidence is recorded separately
+PASS focused scoring rematch starts with an empty journal
+CHECKS=12 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; actual NWH/PhysX scrap hauling, field and software input tests; no human/device/listening certification.

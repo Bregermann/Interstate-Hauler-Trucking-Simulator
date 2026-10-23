@@ -1,0 +1,45 @@
+PASS saved stadium has two NWH tractors, unit-scale physical ball and64pooled render-only rope segments
+PASS actual mixed-difficulty AI best-of-three match starts
+PASS real trucks settle upright and ball/rope/scoring remain held during countdown
+ACTUAL_TETHER round=0 t=0.0 net=0.0 contacts=0 ball=(22.91, 4.00, 0.00) rope=27.94
+PASS pause freezes actual ball, winding and match clock
+ACTUAL_TETHER round=0 t=15.0 net=201.9 contacts=2 ball=(-17.15, 3.00, -6.95) rope=25.12
+ACTUAL_TETHER round=0 t=30.0 net=210.5 contacts=3 ball=(-12.66, 3.00, -7.46) rope=25.00
+ACTUAL_TETHER round=0 t=45.0 net=230.8 contacts=3 ball=(-11.33, 3.00, -13.92) rope=24.72
+ACTUAL_TETHER round=0 t=60.0 net=271.3 contacts=3 ball=(0.40, 3.00, -17.16) rope=24.15
+ACTUAL_TETHER round=0 t=75.0 net=303.7 contacts=3 ball=(9.17, 3.00, -13.74) rope=23.70
+ACTUAL_TETHER round=0 t=90.1 net=354.8 contacts=3 ball=(15.39, 3.00, -1.39) rope=22.99
+ACTUAL_TETHER round=0 t=105.1 net=652.9 contacts=5 ball=(4.32, 4.46, -9.82) rope=18.82
+PASS saved sport uses the existing Heat confirmed-score presenter
+PASS real committed award reaches the Heat animation
+PASS visible score presentation leaves gameplay/menu inputs unblocked
+ACTUAL_TETHER round=1 t=0.0 net=0.0 contacts=5 ball=(22.91, 4.00, 0.00) rope=27.94
+ACTUAL_TETHER round=1 t=15.0 net=-121.2 contacts=7 ball=(-10.39, 3.00, -17.10) rope=26.25
+ACTUAL_TETHER round=1 t=30.0 net=-230.9 contacts=11 ball=(-12.18, 4.69, 15.14) rope=24.72
+ACTUAL_TETHER round=1 t=45.0 net=-459.7 contacts=11 ball=(-2.29, 3.00, -13.03) rope=21.52
+ACTUAL_TETHER round=2 t=0.0 net=0.0 contacts=12 ball=(22.91, 4.00, 0.00) rope=27.94
+ACTUAL_TETHER round=2 t=15.0 net=228.6 contacts=14 ball=(-11.85, 3.00, -13.56) rope=24.75
+ACTUAL_TETHER round=2 t=30.0 net=620.0 contacts=16 ball=(-1.50, 3.00, -9.07) rope=19.28
+PASS confirmed award receipts match actual physical scoring events: 3
+PASS last actual award retains the match and stable participant identity
+PASS actual award animation captured at720p/1080p
+PASS actual AI strikes complete the full best-of-three match without forced wraps or invented timeout points
+PASS actual ball trajectory completes the required winding after genuine physical truck contacts
+PASS real constrained rope remains bounded through impacts, wraps and reversals; maximum extension=0.114
+ACTUAL_RESULTS
+#1 Player 1 · 2 ROUND WINS · COUNTERCLOCKWISE
+#2 Player 2 · 1 ROUND WINS · CLOCKWISE
+
+PASS actual truck/ball/individual-cable-segment replay starts
+PASS replay cannot change round wins or results
+PASS 1 software humans start a clean rematch with all wraps/wins reset
+PASS 1 human-only cab views and reset rope state have correct owners
+PASS actual software accelerator ownership stays isolated
+PASS optional AI view adds only a camera, never removes a competitor
+PASS 2 software humans start a clean rematch with all wraps/wins reset
+PASS 2 human-only cab views and reset rope state have correct owners
+PASS actual software accelerator ownership stays isolated
+PASS optional AI view adds only a camera, never removes a competitor
+PASS AI-only spectator rematch starts
+PASS AI-only with AI cameras OFF shows actual broadcast instead of black screen
+CHECKS=25 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; actual NWH/PhysX ball/rope and software input; no human/device/listening certification.

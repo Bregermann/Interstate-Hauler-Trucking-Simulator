@@ -62,7 +62,7 @@ namespace LWS.TruckSheepHerding
   }
   public bool Secure(HerdSheep animal,int owner)
   {
-   if(!Live||Countdown>0||animal==null||owner<0||owner>=setup.count||!pens[owner].ContainsWhole(animal)||!rules.Secure(animal.id,owner))return false;ActualSecured++;animal.Stop();announcement=setup.players[owner].name+" HERDED +1!";announcementUntil=rules.Clock+1.8f;feedback.PlayAt(5,animal.body.position,0,true);Pulse(owner,.35f,.12f);return true;
+   if(!Live||Countdown>0||animal==null||owner<0||owner>=setup.count||!pens[owner].ContainsWhole(animal)||!rules.Secure(animal.id,owner))return false;ConfirmScore("sheep:"+animal.id,owner,1,rules.points[owner],"SHEEP HERDED",SportsScoreTier.Small,"SHEEP");ActualSecured++;animal.Stop();announcement=setup.players[owner].name+" HERDED +1!";announcementUntil=rules.Clock+1.8f;feedback.PlayAt(5,animal.body.position,0,true);Pulse(owner,.35f,.12f);return true;
   }
   public void QueueExplosion(int id){if(!Live||Countdown>0||id<0||id>=sheep.Length||!sheep[id].explosive||!float.IsPositiveInfinity(explodeAt[id])||rules.detonated[id])return;explodeAt[id]=rules.Clock+.7f;announcement="WARNING SHEEP · CLEAR THE FLOCK!";announcementUntil=rules.Clock+1.5f;feedback.PlayAt(2,sheep[id].body.position,0,true);}
   void Explode(int id)
