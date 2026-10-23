@@ -69,6 +69,7 @@ def main():
             "-tsLegacyLook": r"ERRORS=(\d+)\. Native saved modes and injected pad/mouse input, steering/cursor policies and controlled UI renders;",
             "-tsWallProduction": r"ERRORS=(\d+)\. Labelled spawn fixture, injected keyboard opening and actual NWH/PhysX 4v4 match/volleys, controlled UI captures\.",
             "-tsPongFocused": r"ERRORS=(\d+)\. Physical seeded fixtures and actual injected human controls are distinguished above;",
+            "-tsSumo": r"ERRORS=(\d+)\. Native NWH/PhysX match simulation; no human, hardware, audio or sustained GPU acceptance claimed\.",
         }
         signature = protected_footers.get(args.flag)
         if signature:

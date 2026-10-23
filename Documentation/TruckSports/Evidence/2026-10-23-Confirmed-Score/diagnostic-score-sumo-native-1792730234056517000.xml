@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 04:34:50Z" end-time="2026-10-23 04:34:51Z" duration="0.984886">
+  <test-suite type="TestSuite" id="1402" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="278" result="Failed" site="Child" start-time="2026-10-23 04:34:50Z" end-time="2026-10-23 04:34:51Z" duration="0.984886" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1286" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="111" result="Failed" site="Child" start-time="2026-10-23 04:34:50Z" end-time="2026-10-23 04:34:51Z" duration="0.970829" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="58124" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1233" name="SumoScorePresentationTests" fullname="SumoScorePresentationTests" classname="SumoScorePresentationTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-23 04:34:50Z" end-time="2026-10-23 04:34:51Z" duration="0.965957" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1234" name="RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" fullname="SumoScorePresentationTests.RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" methodname="RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate" classname="SumoScorePresentationTests" runstate="Runnable" seed="880027861" result="Failed" start-time="2026-10-23 04:34:50Z" end-time="2026-10-23 04:34:51Z" duration="0.953369" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="90000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Fixture keyboard=1 enabled=False added=True
+  Expected: True
+  But was:  False
+]]></message>
+            <stack-trace><![CDATA[at SumoScorePresentationTests+<RealKeyboardBumperPushPublishesOneStableReceiptAndHeatSurvivalStaysSeparate>d__4.MoveNext () [0x00345] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\SumoScorePresentationTests.cs:44
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

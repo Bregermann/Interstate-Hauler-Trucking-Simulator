@@ -7,6 +7,14 @@ namespace LWS.TruckSports {
 [DefaultExecutionOrder(-100)]public abstract class SportsEventSession:MonoBehaviour {
  LWS.TruckSports.SportsParticipantBinding participantBinding;string participantMatchId;
  public string MatchId=>participantMatchId;
+ public SportsScoreJournal ScoreJournal{get;private set;}
+ public event Action<SportsScoreEvent> ScoreConfirmed;
+ protected bool ConfirmScore(string eventId,int slot,double delta,double total,string reason,SportsScoreTier tier=SportsScoreTier.Small,string unit="PTS",string team=null,bool roundEnded=false,bool matchEnded=false){
+  if(!Running||Finished||ScoreJournal==null||slot<0||slot>=setup.count)return false;
+  if(!ScoreJournal.TryConfirm(eventId,setup.players[slot],slot,delta,total,reason,tier,unit,team,roundEnded,matchEnded,out var receipt))return false;
+  ScoreConfirmed?.Invoke(receipt);return true;
+ }
+
  public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}
  void RecordParticipants(string summary,int count){LWS.TruckSports.SportsParticipantRegistry.Record(participantMatchId,PreferenceKey,summary,setup.players,count);}
 
@@ -58,9 +66,9 @@ namespace LWS.TruckSports {
  public virtual bool ValidateSources(out string reason){if(!setup.Validate(out reason))return false;if(!UsesAction)return true;for(int i=0;i<setup.count;i++){var p=setup.players[i];if(p.source!=BowlingSource.Keyboard)continue;var k=actionKeys[i];if(k==Key.None||k==Key.Escape){reason="Assign an action key; Escape is reserved.";return false;}for(int j=0;j<setup.count;j++){var q=setup.players[j];if(q.source!=BowlingSource.Keyboard||setup.mode==BowlingMode.HotSeat&&setup.sharedHotSeat&&i!=j)continue;if(k==q.forward||k==q.back||k==q.left||k==q.right||i!=j&&k==actionKeys[j]){reason="Action key conflicts with slot "+(j+1);return false;}}}return true;}
  public bool DevicesReady{get{if(!ValidateSources(out _))return false;for(int i=0;i<setup.count;i++)if(!Ready(i))return false;return true;}}public bool AllAI{get{for(int i=0;i<setup.count;i++)if(setup.players[i].source!=BowlingSource.AI)return false;return true;}}
  public void Save(){RefreshParticipants(true);NormalizeSetup();LWS.TruckSports.SportsPrefs.SetString(PreferenceKey,JsonUtility.ToJson(new Saved{setup=setup,actionKeys=actionKeys,option=option,optionVersion=OptionVersion,teamA=teamA,teamB=teamB,weather=weather}));LWS.TruckSports.SportsPrefs.Save();menus?.Dirty();}
- public bool StartMatch(){NormalizeSetup();if(!DevicesReady){menus.Show(SportsEventScreen.Join);return false;}Save();participantMatchId=System.Guid.NewGuid().ToString("N");Time.timeScale=1;Running=true;Paused=Finished=false;BeginGame();Gate();menus.Show(SportsEventScreen.Play);return true;}
- public void EndMatch(){if(Finished)return;StopGame();Finished=true;RecordParticipants(Results,setup.count);feedback.StopAll();StopSounds();menus.Show(SportsEventScreen.Result);feedback.Play(6,0,true);}
- public void SetupScreen(){SetPaused(false);StopGame();Running=Paused=Finished=false;Array.Clear(replacementSources,0,replacementSources.Length);Time.timeScale=1;Gate();StopSounds();feedback.StopAll();menus.Show(SportsEventScreen.Setup);}
+ public bool StartMatch(){NormalizeSetup();if(!DevicesReady){menus.Show(SportsEventScreen.Join);return false;}Save();ScoreJournal?.Close();participantMatchId=System.Guid.NewGuid().ToString("N");ScoreJournal=new SportsScoreJournal(gameObject.scene.name,participantMatchId);Time.timeScale=1;Running=true;Paused=Finished=false;BeginGame();Gate();menus.Show(SportsEventScreen.Play);return true;}
+ public void EndMatch(){if(Finished)return;ScoreJournal?.Close();StopGame();Finished=true;RecordParticipants(Results,setup.count);feedback.StopAll();StopSounds();menus.Show(SportsEventScreen.Result);feedback.Play(6,0,true);}
+ public void SetupScreen(){ScoreJournal?.Close();SetPaused(false);StopGame();Running=Paused=Finished=false;Array.Clear(replacementSources,0,replacementSources.Length);Time.timeScale=1;Gate();StopSounds();feedback.StopAll();menus.Show(SportsEventScreen.Setup);}
  public void AllBots(){Array.Clear(replacementSources,0,replacementSources.Length);for(int i=0;i<setup.count;i++){setup.players[i].source=BowlingSource.AI;setup.players[i].pad=null;}Save();}
  public void RequestReplacement(int slot){if(slot<0||slot>=setup.count||!setup.players[slot].Controller)return;if(setup.players[slot].pad!=null)replacementSources[slot]=setup.players[slot].pad;setup.players[slot].pad=null;Gate();menus.Dirty();}
  public bool Assign(int slot,Gamepad pad){if(slot<0||slot>=setup.count||!setup.players[slot].Controller||pad==null||!pad.added||!pad.enabled)return false;var p=setup.players[slot];var old=p.pad??replacementSources[slot];int changed=1<<slot,nulls=0;if(old!=null&&setup.mode==BowlingMode.HotSeat&&setup.sharedHotSeat)for(int i=0;i<setup.count;i++)if(setup.players[i].Controller&&(setup.players[i].pad==old||setup.players[i].pad==null&&replacementSources[i]==old))changed|=1<<i;for(int i=0;i<setup.count;i++)if((changed&(1<<i))!=0){if(setup.players[i].pad==null)nulls|=1<<i;setup.players[i].pad=pad;}if(!ValidateSources(out _)){for(int i=0;i<setup.count;i++)if((changed&(1<<i))!=0)setup.players[i].pad=(nulls&(1<<i))!=0?null:old;return false;}for(int i=0;i<setup.count;i++)if((changed&(1<<i))!=0)replacementSources[i]=null;input.Forget(pad);Gate();menus.Dirty();return true;}
@@ -79,7 +87,7 @@ namespace LWS.TruckSports {
  public void Pause(int owner=0,bool disconnected=false){if(!Live)return;modalOwner=Mathf.Clamp(owner,0,setup.count-1);Paused=true;Time.timeScale=0;SetPaused(true);Gate();feedback.StopAll();StopSounds();menus.Show(disconnected?SportsEventScreen.Join:SportsEventScreen.Pause);}
  public void Resume(){if(!Running){StartMatch();return;}if(!DevicesReady){menus.Show(SportsEventScreen.Join);return;}SetPaused(false);Paused=false;Time.timeScale=1;Gate();menus.Show(SportsEventScreen.Play);}
  public void Pulse(int slot,float amount,float seconds){var p=setup.players[slot];if(p.source==BowlingSource.WholeController)feedback.Pulse(p.pad,amount,seconds);}
- protected virtual void OnEnable(){InputSystem.onDeviceChange+=Changed;}protected virtual void OnDisable(){InputSystem.onDeviceChange-=Changed;feedback.StopAll();StopSounds();}protected virtual void OnDestroy(){Time.timeScale=1;}
+ protected virtual void OnEnable(){InputSystem.onDeviceChange+=Changed;}protected virtual void OnDisable(){InputSystem.onDeviceChange-=Changed;feedback.StopAll();StopSounds();}protected virtual void OnDestroy(){ScoreJournal?.Close();Time.timeScale=1;}
  void Changed(InputDevice device,InputDeviceChange change){if(LWS.TruckSports.SportsFocusPolicy.Suspended(device,change))return;menus.Dirty();for(int i=0;i<setup.count;i++)if(setup.players[i].pad==device){input.Forget((Gamepad)device);Gate();if(change==InputDeviceChange.Removed||change==InputDeviceChange.Disconnected||change==InputDeviceChange.Disabled)Pause(i,true);break;}}
  void OnApplicationFocus(bool focus){if(!focus){feedback.StopAll();StopSounds();}}
  void Update(){input.Sample();if(menus.Screen==SportsEventScreen.Join)foreach(var pad in Gamepad.all)if(input.Down(pad,2))for(int i=0;i<setup.count;i++)if(setup.players[i].Controller&&!Ready(i)&&Assign(i,pad))break;

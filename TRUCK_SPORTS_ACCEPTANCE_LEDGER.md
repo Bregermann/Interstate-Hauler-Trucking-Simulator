@@ -7820,11 +7820,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | Confirmed score event presentation |
 | Original Request | Animated participant/team score attribution from authoritative gameplay, stable IDs and event deduplication. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Actual scored values/reasons displayed once; rapid events aggregate; no points awarded by presentation; reset clears stale events. |
-| Status | MISSING |
-| Implementation Evidence | Existing presentation infrastructure to extend; specialized Poker/Bowling/Kickball sequences remain protected. |
-| Automated Verification | None for this child implementation yet unless explicitly noted above. |
+| Status | PARTIAL |
+| Implementation Evidence | Documentation/TruckSports/2026-10-23-Confirmed-Score-Presentation.md and Evidence/2026-10-23-Confirmed-Score/; shared immutable score journal, stable-ID authoritative Sumo hooks and actual saved Heat/DOTween banner integration. |
+| Automated Verification | 3 native EditMode tests and final2PlayMode tests passed, including actual NWH keyboard bumper/survival/Heat/replay/rematch and representative shared lifecycle/time checks. Final Windows physical35/0 and complete four-AI first-to-five match12/0 on the exact promoted payload; actual controlled720p/1080p banners retained. Failed focus/input fixtures and earlier natural-toast capture timing retained. No human/hardware/listening acceptance claimed. |
 | Human Verification | Not performed; no acceptance claimed. |
-| Remaining Work | Audit actual score events, implement shared adapters and appropriate sport integrations, native and rendered tests. |
+| Remaining Work | Remaining registered-sport authoritative publishers, continuous/team-score pacing, full-tier visual acceptance and performance/device/human acceptance. Specialized Poker/Bowling/Kickball sequences must remain intact. Full results integration remains under Q22-SKY-RESULT-01. |
 
 ### Q22-SKY-RESULT-01 — Round and match results
 

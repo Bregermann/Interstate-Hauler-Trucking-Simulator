@@ -124,11 +124,16 @@ def main():
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
     parser.add_argument("--defer-sources", help="Explicit owned WIP paths; existing CLEAN inputs must match the preceding frozen build.")
+    parser.add_argument("--execute-owned", help="Explicit additional LWS.TruckSports.Editor method for focused additive authoring; use with stage sync.")
     args = parser.parse_args()
     LOG.mkdir(parents=True, exist_ok=True)
     # Call only when this project has no other owned Editor/player. The caller
     # establishes the exclusive turn; no process-killing or project-lock bypass.
     sync(args.defer_sources)
+    if args.execute_owned:
+        assert args.stage == "sync" and args.execute_owned.startswith("LWS.TruckSports.Editor."), "Only an explicit owned authoring method is accepted here"
+        run("score-presentation-authoring", ["-quit", "-executeMethod", args.execute_owned])
+        return
     if args.stage == "time-legacy-audit":
         run("sky-legacy-layout-audit", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsEnvironmentAuthoring.AuditLegacy"])
     if args.stage == "parking-bays":
