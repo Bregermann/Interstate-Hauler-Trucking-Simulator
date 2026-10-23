@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 09:37:49Z" end-time="2026-10-23 09:38:10Z" duration="20.8188583">
+  <test-suite type="TestSuite" id="1406" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="282" result="Passed" start-time="2026-10-23 09:37:49Z" end-time="2026-10-23 09:38:10Z" duration="20.818858" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1290" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="115" result="Passed" start-time="2026-10-23 09:37:49Z" end-time="2026-10-23 09:38:10Z" duration="20.803438" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="72548" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1245" name="WeatherTransitionTests" fullname="WeatherTransitionTests" classname="WeatherTransitionTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 09:37:49Z" end-time="2026-10-23 09:38:10Z" duration="20.798569" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1246" name="SnowToHurricaneStopsSnowEmissionAndRetiresExistingFlakes" fullname="WeatherTransitionTests.SnowToHurricaneStopsSnowEmissionAndRetiresExistingFlakes" methodname="SnowToHurricaneStopsSnowEmissionAndRetiresExistingFlakes" classname="WeatherTransitionTests" runstate="Runnable" seed="1145969010" result="Passed" start-time="2026-10-23 09:37:49Z" end-time="2026-10-23 09:38:10Z" duration="20.784539" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavySleet (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Blizzard after +0.35s snowIntensity=0.7639793 rainIntensity=0 snowParticles=290 lifetimes=8,3,4,2
+Blizzard after +0.65s snowIntensity=0.7639793 rainIntensity=0 snowParticles=2948 lifetimes=8,3,4,2
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Blizzard after +2s snowIntensity=0.7639793 rainIntensity=0 snowParticles=6333 lifetimes=8,3,4,2
+Blizzard after +6s snowIntensity=0.7639793 rainIntensity=0 snowParticles=13117 lifetimes=8,3,4,2
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to Hurricane weather (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Hurricane after +0.35s snowIntensity=0 rainIntensity=0.8062679 snowParticles=12551 lifetimes=8,3,4,2
+Hurricane after +0.65s snowIntensity=0 rainIntensity=0.8062679 snowParticles=10750 lifetimes=8,3,4,2
+Hurricane after +2s snowIntensity=0 rainIntensity=0.8062679 snowParticles=7079 lifetimes=8,3,4,2
+Hurricane after +6s snowIntensity=0 rainIntensity=0.8062679 snowParticles=0 lifetimes=8,3,4,2
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

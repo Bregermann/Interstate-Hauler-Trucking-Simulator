@@ -1,0 +1,66 @@
+PASS combined startup front
+PASS 16 truck pool and sheep hazards
+PASS actual imported SheepV5 renderers
+PASS single listener
+PASS sport owns isolated mushroom pipeline
+PASS pooled trees rocks cats wolves
+PASS start 4 scoring participants
+PASS seeded tall grass patches 4
+GRID=10,15,3,6,8,5,12,9,7,13,2,14,11,4,0,1 SCENERY=652282828 GRASS=329
+PASS actual keyboard timing eligibility 0
+TRACE round=1 phase=Racing cheese=(2.03, 286.80, 28.09) v=(3.18, -3.67, 1.26) P0=(-15.00, 294.14, -4.00) scores=0,0,0,0 explosions=0 recover=0
+PASS GO applies jump only to timed held press 0
+PASS start 4 scoring participants
+PASS seeded tall grass patches 4
+GRID=10,15,3,6,8,5,12,9,7,13,2,14,11,4,0,1 SCENERY=652282828 GRASS=329
+PASS actual keyboard timing eligibility 1
+TRACE round=1 phase=Racing cheese=(2.03, 286.87, 28.13) v=(3.13, -3.50, 1.40) P0=(-15.00, 294.24, -3.92) scores=0,0,0,0 explosions=0 recover=0
+PASS GO applies jump only to timed held press 1
+PASS timed GO produces actual upward jump momentum
+PASS start 4 scoring participants
+PASS seeded tall grass patches 4
+GRID=10,15,3,6,8,5,12,9,7,13,2,14,11,4,0,1 SCENERY=652282828 GRASS=329
+PASS actual keyboard timing eligibility 2
+TRACE round=1 phase=Racing cheese=(2.03, 286.87, 28.13) v=(3.13, -3.50, 1.40) P0=(-15.00, 294.14, -4.00) scores=0,0,0,0 explosions=0 recover=0
+PASS GO applies jump only to timed held press 2
+PASS start 4 scoring participants
+PASS seeded tall grass patches 4
+GRID=10,15,3,6,8,5,12,9,7,13,2,14,11,4,0,1 SCENERY=652282828 GRASS=329
+TRACE round=1 phase=Racing cheese=(2.03, 286.87, 28.13) v=(3.13, -3.50, 1.40) P0=(-15.00, 294.14, -4.00) scores=0,0,0,0 explosions=0 recover=0
+PASS unstruck tree roots support the upright body
+TREE_CONTACT pos=(24.00, 5.00, 220.00) up=(0.00, 1.00, 0.00) velocity=(0.00, 0.00, 0.00) angular=(0.00, 0.00, 0.00)
+TRACE round=1 phase=Racing cheese=(11.47, 268.29, 40.88) v=(3.31, -14.35, 7.14) P0=(24.00, 5.39, 217.89) scores=0,0,0,0 explosions=0 recover=0
+PASS truck impact physically topples trunk
+PASS truck impact leaves a fully fallen collidable tree
+PASS reset tree anchor and interpolated pose agree
+TREE_BLAST count=1 prior=0 up=(-0.13, -0.68, 0.72) position=(-28.27, 15.10, 237.89)
+PASS one isolated sheep detonation uproots each tree once
+PASS blast physically topples tree rigidbody fully
+TRACE round=1 phase=Racing cheese=(21.60, 208.21, 75.80) v=(3.76, -28.07, 15.44) P0=(23.99, 5.40, 213.75) scores=0,0,0,0 explosions=1 recover=0
+PASS start 4 scoring participants
+PASS seeded tall grass patches 4
+GRID=10,15,3,6,8,5,12,9,7,13,2,14,11,4,0,1 SCENERY=652282828 GRASS=329
+PASS next round restores pooled rooted trees
+PASS start 4 scoring participants
+PASS seeded tall grass patches 4
+GRID=10,15,3,6,8,5,12,9,7,13,2,14,11,4,0,1 SCENERY=652282828 GRASS=329
+TRACE round=1 phase=Racing cheese=(2.03, 286.87, 28.13) v=(3.13, -3.50, 1.40) P0=(-15.00, 294.14, -4.00) scores=0,0,0,0 explosions=0 recover=0
+PASS one explosion damages multi-collider NWH body exactly once
+PASS disabled truck retains physical flight and momentum
+PASS start 4 scoring participants
+PASS seeded tall grass patches 4
+GRID=10,15,3,6,8,5,12,9,7,13,2,14,11,4,0,1 SCENERY=652282828 GRASS=329
+TRACE round=1 phase=Racing cheese=(2.03, 286.87, 28.13) v=(3.13, -3.50, 1.40) P0=(-15.00, 294.14, -4.00) scores=0,0,0,0 explosions=0 recover=0
+PASS pause-menu recovery works while race physics is paused
+PASS paused recovery stays behind progress and cheese
+PASS paused recovery needs separation and cooldown
+PASS WASD source does not leak into arrows participant
+PASS arrows source does not leak into WASD participant
+PASS mushroom low setting
+PASS mushroom off setting
+PASS mushroom full restored
+PASS guard scene exit restores pipeline
+PASS guard runtime clean
+CHECKS 46
+WORST hurricane_four_view_multiple_blast_frames=0 max_active_effects=1 max_gust=0
+FRAMES=625 mean_ms=16.56332674101 p95_ms=18.7952 p99_ms=25.0368 max_ms=81.2572 device=NVIDIA GeForce GTX 1660 Ti

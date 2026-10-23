@@ -54,6 +54,10 @@ namespace LWS.TruckSports
             {
                 yield return LegacyScenes(); Finish(); yield break;
             }
+            if (Array.IndexOf(arguments, "legacy-forecasts") >= 0)
+            {
+                yield return LegacyScenes(true); Finish(); yield break;
+            }
             if (Array.IndexOf(arguments, "legacy-courts") >= 0)
             {
                 yield return LegacyCourts(); Finish(); yield break;
@@ -127,9 +131,9 @@ namespace LWS.TruckSports
             Check(SceneManager.GetActiveScene().name == SportsNavigation.Front, "returns to the real sport-selection menu after repeated weather/time matches");
             Finish();
         }
-        IEnumerator LegacyScenes()
+        IEnumerator LegacyScenes(bool fullForecasts = false)
         {
-            foreach (string scene in new[] { "TruckCornhole", "TruckCheeseRolling", "TruckBaseJumping" })
+            foreach (string scene in fullForecasts ? new[] { "TruckCheeseRolling", "TruckBaseJumping" } : new[] { "TruckCornhole", "TruckCheeseRolling", "TruckBaseJumping" })
             {
                 SportsNavigation.LoadSport(scene); yield return null; yield return null;
                 var corn = FindAnyObjectByType<LWS.TruckCornhole.CornholeMatch>();
@@ -142,6 +146,9 @@ namespace LWS.TruckSports
                 setup.count = 4;
                 if (corn != null) corn.AllAI(); else if (cheese != null) cheese.AllAI(); else jumper.AllBots();
                 var clock = menus.GetComponentsInChildren<SportsWeatherPicker>(true).Single(picker => picker.timeOfDay);
+                var forecast = menus.GetComponentsInChildren<SportsWeatherPicker>(true).SingleOrDefault(picker => !picker.timeOfDay);
+                var weather = cheese != null ? cheese.weather.presentation : jumper != null ? jumper.weatherField.presentation : corn.atmosphere;
+                if (fullForecasts) Check(forecast != null && forecast.gameObject.activeInHierarchy, scene + " actual independent installed forecast selector");
                 Check(clock.gameObject.activeInHierarchy, scene + " actual Heat clock visible");
                 yield return Capture(scene + "-legacy-setup");
                 string priorId = null;
@@ -149,6 +156,8 @@ namespace LWS.TruckSports
                 {
                     if (corn != null) corn.ChangeSetup(); else if (cheese != null) cheese.ChangeSetup(); else jumper.SetupScreen();
                     clock.Choose((int)choice);
+                    string forecastName = choice == SportsTimeChoice.Morning ? "Snow" : choice == SportsTimeChoice.Day ? "Clear" : choice == SportsTimeChoice.Evening ? "Rain" : "Blizzard";
+                    if (fullForecasts) { int at = Array.FindIndex(forecast.catalog.entries, entry => entry.displayName == forecastName); Check(at >= 0, scene + " installed " + forecastName); if (at < 0) continue; forecast.Choose(at + 1); }
                     Check(corn != null ? corn.StartMatch() : cheese != null ? cheese.StartMatch() : jumper.StartMatch(), scene + " actual four-AI start " + choice);
                     yield return new WaitForSeconds(2);
                     string id = corn != null ? corn.MatchId : cheese != null ? cheese.MatchId : jumper.MatchId;
@@ -158,6 +167,15 @@ namespace LWS.TruckSports
                     Check(RenderSettings.skybox.shader.name == "LWS/TruckSports/Weather Maker Viewport Skybox", scene + " runtime sky owner keeps vendor material " + choice);
                     int revision = binding.Revision; binding.Configure(-458, id);
                     Check(binding.Revision == revision, scene + " attempt seed keeps match time " + choice);
+                    if (fullForecasts)
+                    {
+                        var profile = weather.vendor.LastLocalProfile; int seed = weather.Seed;
+                        Check(weather.Description == forecastName.ToUpperInvariant() && profile != null, scene + " actual vendor forecast " + forecastName);
+                        if (cheese != null) cheese.weather.Select(seed + 1); else jumper.weatherField.Select((jumper.option + 1) % 3, seed + 997);
+                        yield return null;
+                        Check(weather.vendor.LastLocalProfile == profile && weather.Seed == seed && binding.Revision == revision, scene + " round refresh retains actual forecast and clock " + choice);
+                        var snow = FindAnyObjectByType<SportsSnowSurface>(); Check(snow.weather == weather && snow.Falling == (forecastName == "Snow" || forecastName == "Blizzard"), scene + " snow follows actual forecast " + choice);
+                    }
                     var samples = new List<float>(60);
                     for (int frame = 0; frame < 60; frame++) { yield return null; samples.Add(Time.unscaledDeltaTime * 1000); }
                     samples.Sort(); log.AppendLine("FRAME_TIME " + scene + " Legacy-" + choice + " medianMs=" + samples[30].ToString("F2") + " p95Ms=" + samples[56].ToString("F2") + " samples=60; whole-player short-start interval, not isolated GPU/CPU or full-match profiling.");

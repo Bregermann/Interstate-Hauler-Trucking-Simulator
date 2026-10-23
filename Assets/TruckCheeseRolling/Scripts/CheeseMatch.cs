@@ -6,7 +6,12 @@ using LWS.TruckSports;
 using LWS.TruckBowling;
 namespace LWS.TruckCheeseRolling {
 public enum CheesePhase {Countdown,HeadStart,Racing,Result,Complete,Settling}
-[DefaultExecutionOrder(-100)]public sealed class CheeseMatch:MonoBehaviour {
+[DefaultExecutionOrder(-100)]public sealed class CheeseMatch:MonoBehaviour,ISportsWeatherLifecycle {
+ public string WeatherMatchId=>MatchId;
+ public bool WeatherMatchActive=>InMatch&&!Finished;
+ public bool WeatherPaused=>WeatherMatchActive&&Paused;
+ public bool WeatherAudible=>WeatherMatchActive&&!Paused;
+ public float WeatherSfx=>settings.sfx;
  LWS.TruckSports.SportsParticipantBinding participantBinding;string participantMatchId;
  public string MatchId=>participantMatchId;
  public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}
@@ -41,7 +46,7 @@ public enum CheesePhase {Countdown,HeadStart,Racing,Result,Complete,Settling}
  void OnApplicationFocus(bool focus){if(!focus)feedback.StopAll();}
  public void Pulse(int slot,float strength,float seconds){var p=setup.players[slot];if(p.source==BowlingSource.WholeController)feedback.Pulse(p.pad,strength,seconds);}
  public void Catch(CheeseTruck t){if(!Live)return;if(!t.Scoring){BackgroundContacts++;return;}if(t.CatchArmed)contacts|=1u<<t.index;}
- void NewRound(){blastQueue.Clear();contacts=0;timer=RaceTime=lastProgress=0;startBeat=0;Array.Clear(startBoosts,0,startBoosts.Length);var startRandom=new System.Random(seed+Round*3571);for(int i=0;i<16;i++){int difficulty=i<setup.count?(int)setup.players[i].difficulty:1;aiThrottleAt[i]=1.45f+((float)startRandom.NextDouble()-.5f)*(difficulty==0?2.6f:difficulty==1?1.5f:.7f);}bestDistance=9999;Winner=-1;Phase=CheesePhase.Settling;weather.Select(seed+Round-1);WeatherMask|=1<<(int)weather.Kind;Notice="ONLY MARKED RACERS SCORE · "+weather.Kind.ToString().ToUpper();cheese.body.isKinematic=false;cheese.body.position=CheeseRules.Surface(Mathf.Sin((seed+Round)*.73f)*2,27,2);cheese.body.rotation=Quaternion.Euler(0,0,90);cheese.body.linearVelocity=cheese.body.angularVelocity=Vector3.zero;cheese.body.isKinematic=true;
+ void NewRound(){blastQueue.Clear();contacts=0;timer=RaceTime=lastProgress=0;startBeat=0;Array.Clear(startBoosts,0,startBoosts.Length);var startRandom=new System.Random(seed+Round*3571);for(int i=0;i<16;i++){int difficulty=i<setup.count?(int)setup.players[i].difficulty:1;aiThrottleAt[i]=1.45f+((float)startRandom.NextDouble()-.5f)*(difficulty==0?2.6f:difficulty==1?1.5f:.7f);}bestDistance=9999;Winner=-1;Phase=CheesePhase.Settling;weather.Select(seed+Round-1);WeatherMask|=1<<(int)weather.Kind;Notice="ONLY MARKED RACERS SCORE · "+weather.Description;cheese.body.isKinematic=false;cheese.body.position=CheeseRules.Surface(Mathf.Sin((seed+Round)*.73f)*2,27,2);cheese.body.rotation=Quaternion.Euler(0,0,90);cheese.body.linearVelocity=cheese.body.angularVelocity=Vector3.zero;cheese.body.isKinematic=true;
   scenery.Randomize(seed+Round*977);Grid=CheeseRules.StarterGrid(seed,Round);var block=new MaterialPropertyBlock();for(int i=0;i<trucks.Length;i++){bool active=i<setup.count||i>=4;var t=trucks[i];t.gameObject.SetActive(active);if(!active)continue;int slot=Grid[i];float x=(slot%8-3.5f)*10,z=slot<8?8:-4;t.ResetTruck(CheeseRules.Surface(x,z,t.StartLift),Quaternion.identity);block.SetColor("_BaseColor",i<setup.count?setup.players[i].color:Color.HSVToRGB((i*.137f)%1,.55f,.65f));t.paint.SetPropertyBlock(block);t.marker.gameObject.SetActive(i<setup.count);if(i<setup.count)t.marker.GetComponent<TMPro.TMP_Text>().text="P"+(i+1);}
   var rng=new System.Random(seed+Round*977);foreach(var s in sheep){float x,z;int attempts=0;do{x=(float)(rng.NextDouble()*82-41);z=(float)(rng.NextDouble()*215+40);attempts++;}while(attempts<30&&(z<60&&Mathf.Abs(x)<12));s.ResetHazard(CheeseRules.Surface(x,z,.8f));}foreach(var bit in debris){bit.body.isKinematic=true;bit.gameObject.SetActive(false);}foreach(var fx in explosions)fx.Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);Physics.SyncTransforms();foreach(var c in cameras)c.ResetView();Dirty();
  }

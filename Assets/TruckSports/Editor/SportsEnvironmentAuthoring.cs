@@ -218,6 +218,64 @@ namespace LWS.TruckSports.Editor
             }
             AssetDatabase.SaveAssets();
         }
+        public static void InstallLegacyForecastCatalog()
+        {
+            foreach (string name in new[] { "TruckCheeseRolling", "TruckBaseJumping" })
+            {
+                var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
+                var cheese = All<LWS.TruckCheeseRolling.CheeseWeather>(scene).SingleOrDefault();
+                var jumper = All<LWS.TruckBaseJumping.BaseJumpWeather>(scene).SingleOrDefault();
+                var owner = cheese != null ? cheese.gameObject : jumper.gameObject;
+                var vendor = cheese != null ? cheese.vendor : jumper.vendor;
+                // The original Cheese adapter intentionally disabled full-screen
+                // clouds when it only controlled precipitation. Installed profiles
+                // transition through the vendor cloud manager and require it.
+                var profileClouds = vendor.GetComponentInChildren<WeatherMakerFullScreenCloudsScript>(true);
+                if (profileClouds != null && !profileClouds.enabled) { profileClouds.enabled = true; EditorUtility.SetDirty(profileClouds); }
+                var existing = owner.GetComponent<SportsChaosWeather>();
+                if (existing != null)
+                {
+                    if (existing.vendor != vendor || (cheese != null ? cheese.presentation : jumper.presentation) != existing) throw new InvalidOperationException("Do not replace an existing legacy visual authority.");
+                    var retainedSnow = All<SportsSnowSurface>(scene).SingleOrDefault();
+                    if (retainedSnow != null && retainedSnow.weather != existing) { retainedSnow.weather = existing; EditorUtility.SetDirty(retainedSnow); }
+                    EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+                    continue; // Preserve later designer changes to rosters, UI and physics.
+                }
+                var presentation = owner.AddComponent<SportsChaosWeather>();
+                presentation.vendor = vendor; presentation.presets = SportsWeatherPresetsAuthoring.EnsureCatalog();
+                presentation.session = jumper != null ? jumper.match : null; presentation.alternateSession = cheese != null ? cheese.match : null;
+                presentation.precipitation = cheese != null ? cheese.precipitation : jumper.precipitation;
+                presentation.clouds = vendor.GetComponentInChildren<WeatherMakerFullScreenCloudsScript>(true);
+                presentation.wind = vendor.GetComponentInChildren<WeatherMakerWindScript>(true);
+                presentation.sun = cheese != null ? cheese.sun : jumper.sun;
+                presentation.ambience = cheese != null ? cheese.ambience : jumper.ambience;
+                presentation.matchTime = cheese != null ? cheese.matchTime : jumper.matchTime;
+                var snow = All<SportsSnowSurface>(scene).SingleOrDefault();
+                if (snow != null) { snow.weather = presentation; EditorUtility.SetDirty(snow); }
+                SportsMenuView menus;
+                if (cheese != null) { cheese.presentation = presentation; menus = cheese.match.menus; EditorUtility.SetDirty(cheese); }
+                else { jumper.presentation = presentation; menus = jumper.match.menus; InstallHeadlights(scene, presentation.matchTime); EditorUtility.SetDirty(jumper); }
+                var page = menus.pages[0].transform;
+                var oldExplanation = page.Find("Weather selection explanation"); if (oldExplanation != null) { oldExplanation.name = "Retained legacy time explanation"; EditorUtility.SetDirty(oldExplanation.gameObject); }
+                var forecast = SportsWeatherPickerAuthoring.Install(page, presentation.presets, new Vector2(-165, 337));
+                foreach (var picker in page.GetComponentsInChildren<SportsWeatherPicker>(true))
+                {
+                    var rect = picker.GetComponent<RectTransform>(); rect.anchoredPosition = new Vector2(picker.timeOfDay ? 165 : -165, 337); rect.sizeDelta = new Vector2(300, 54);
+                    picker.dropdown.panelSize = 220; picker.dropdown.enableScrollbar = true;
+                    var scroll = picker.GetComponentInChildren<UnityEngine.UI.ScrollRect>(true); if (scroll != null) scroll.verticalScrollbarVisibility = UnityEngine.UI.ScrollRect.ScrollbarVisibility.AutoHide;
+                    EditorUtility.SetDirty(picker.dropdown); EditorUtility.SetDirty(rect);
+                }
+                foreach (string label in new[] { "Weather selection label", "Time of day selection label" })
+                {
+                    var rect = page.Find(label).GetComponent<RectTransform>(); rect.anchoredPosition = new Vector2(label.StartsWith("Time", StringComparison.Ordinal) ? 165 : -165, 381); rect.sizeDelta = new Vector2(300, 30); EditorUtility.SetDirty(rect);
+                }
+                page.Find("Weather selection explanation").gameObject.SetActive(false);
+                presentation.matchTime.setupLayoutVersion = 101;
+                EditorUtility.SetDirty(presentation); EditorUtility.SetDirty(presentation.matchTime);
+                EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            }
+            AssetDatabase.SaveAssets();
+        }
         public static void RefineLegacyCourtLights()
         {
             foreach (string name in new[] { "TruckHockey", "TruckWallball" })

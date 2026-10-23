@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 09:15:03Z" end-time="2026-10-23 09:15:26Z" duration="22.9169844">
+  <test-suite type="TestSuite" id="1406" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="282" result="Passed" start-time="2026-10-23 09:15:03Z" end-time="2026-10-23 09:15:26Z" duration="22.916984" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1290" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="115" result="Passed" start-time="2026-10-23 09:15:03Z" end-time="2026-10-23 09:15:26Z" duration="22.894590" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="71740" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1129" name="BaseFlareSmokeTests" fullname="BaseFlareSmokeTests" classname="BaseFlareSmokeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 09:15:03Z" end-time="2026-10-23 09:15:05Z" duration="1.980265" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1130" name="AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" fullname="BaseFlareSmokeTests.AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" methodname="AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" classname="BaseFlareSmokeTests" runstate="Runnable" seed="909133336" result="Passed" start-time="2026-10-23 09:15:03Z" end-time="2026-10-23 09:15:05Z" duration="1.966340" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to Hurricane weather (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Native flare=Telegraphed sky projectile 20 particles=31 material=Flare smoke
+Native flare=Telegraphed sky projectile 21 particles=31 material=Flare smoke
+Native flare=Telegraphed sky projectile 22 particles=31 material=Flare smoke
+Native flare=Telegraphed sky projectile 23 particles=31 material=Flare smoke
+Changing weather profile Hurricane weather (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1147" name="CheeseHudLifecycleTests" fullname="CheeseHudLifecycleTests" classname="CheeseHudLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 09:15:05Z" end-time="2026-10-23 09:15:06Z" duration="1.392035" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1148" name="OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" fullname="CheeseHudLifecycleTests.OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" methodname="OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" classname="CheeseHudLifecycleTests" runstate="Runnable" seed="1463061222" result="Passed" start-time="2026-10-23 09:15:05Z" end-time="2026-10-23 09:15:06Z" duration="1.386908" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile None to WeatherMakerProfile_Sandstorm (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Sandstorm (Sports runtime clone) to WeatherMakerProfile_HeavyFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1151" name="CollectionEnvironmentTests" fullname="CollectionEnvironmentTests" classname="CollectionEnvironmentTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-23 09:15:06Z" end-time="2026-10-23 09:15:18Z" duration="12.213999" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1155" name="LegacyForecastCatalogUsesEveryInstalledPresetAndRetainsMatchChoice" fullname="CollectionEnvironmentTests.LegacyForecastCatalogUsesEveryInstalledPresetAndRetainsMatchChoice" methodname="LegacyForecastCatalogUsesEveryInstalledPresetAndRetainsMatchChoice" classname="CollectionEnvironmentTests" runstate="Runnable" seed="1322785078" result="Passed" start-time="2026-10-23 09:15:06Z" end-time="2026-10-23 09:15:18Z" duration="12.193428" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_ClearWindy (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_ClearWindy (Sports runtime clone) to WeatherMakerProfile_HeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyClouds (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightClouds (Sports runtime clone) to WeatherMakerProfile_LightCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightMediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightMediumClouds (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_MediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumClouds (Sports runtime clone) to WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone) to WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone) to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_OvercastClouds (Sports runtime clone) to WeatherMakerProfile_HeavyFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyFog (Sports runtime clone) to WeatherMakerProfile_LightFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightFog (Sports runtime clone) to WeatherMakerProfile_MediumFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumFog (Sports runtime clone) to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_Sandstorm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Sandstorm (Sports runtime clone) to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_AcidRain (Sports runtime clone) to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyRain (Sports runtime clone) to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightRain (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumRain (Sports runtime clone) to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Storm (Sports runtime clone) to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavySleet (Sports runtime clone) to WeatherMakerProfile_LightSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightSleet (Sports runtime clone) to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumSleet (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to WeatherMakerProfile_HeavySnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavySnow (Sports runtime clone) to WeatherMakerProfile_LightSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightSnow (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to Hurricane weather (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile Hurricane weather (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+LEGACY_FULL_FORECASTS TruckCheeseRolling installed=33 roundRefreshes=99
+There can be only one active Event System.
+Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_ClearWindy (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_ClearWindy (Sports runtime clone) to WeatherMakerProfile_HeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyClouds (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightClouds (Sports runtime clone) to WeatherMakerProfile_LightCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightMediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightMediumClouds (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_MediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumClouds (Sports runtime clone) to WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone) to WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone) to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_OvercastClouds (Sports runtime clone) to WeatherMakerProfile_HeavyFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyFog (Sports runtime clone) to WeatherMakerProfile_LightFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightFog (Sports runtime clone) to WeatherMakerProfile_MediumFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumFog (Sports runtime clone) to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_Sandstorm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Sandstorm (Sports runtime clone) to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_AcidRain (Sports runtime clone) to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyRain (Sports runtime clone) to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightRain (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumRain (Sports runtime clone) to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Storm (Sports runtime clone) to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavySleet (Sports runtime clone) to WeatherMakerProfile_LightSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightSleet (Sports runtime clone) to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumSleet (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to WeatherMakerProfile_HeavySnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavySnow (Sports runtime clone) to WeatherMakerProfile_LightSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightSnow (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to Hurricane weather (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile Hurricane weather (Sports runtime clone) to WeatherMakerProfile_HeavySnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavySnow (Sports runtime clone) to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+LEGACY_FULL_FORECASTS TruckBaseJumping installed=33 roundRefreshes=99
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1208" name="LegacyMatchTimeTests" fullname="LegacyMatchTimeTests" classname="LegacyMatchTimeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 09:15:18Z" end-time="2026-10-23 09:15:26Z" duration="7.293244" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1209" name="ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" fullname="LegacyMatchTimeTests.ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" methodname="ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" classname="LegacyMatchTimeTests" runstate="Runnable" seed="1511425324" result="Passed" start-time="2026-10-23 09:15:18Z" end-time="2026-10-23 09:15:26Z" duration="7.281026" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightMediumClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightMediumClouds (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Morning => Morning match=bda80ce2d4f24824be39aacc9588dfcf seconds=29700
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Storm (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Day => Day match=f6031fe621094dee9ed13bdacca6f46e seconds=46800
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightSleet (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Evening => Evening match=0fa427c90aae4ee88576ed13e4ae9dfa seconds=68400
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_HeavyFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyFog (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Night => Night match=bd899c31655c4e89a4d88e99a343e75b seconds=82800
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightRain (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Random => Morning match=64d67137d3434f4290e827e38c700471 seconds=29700
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TruckCheeseRolling Morning => Morning match=de9d7f0813034ffbb6cba86f8d6dcac2 seconds=29700
+Changing weather profile WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone) to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCheeseRolling Day => Day match=3e35508abf624f7789b32ffc7e58582e seconds=46800
+Changing weather profile WeatherMakerProfile_AcidRain (Sports runtime clone) to WeatherMakerProfile_LightSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCheeseRolling Evening => Evening match=4639d84a8bfe48e19c49b20ced830c00 seconds=68400
+Changing weather profile WeatherMakerProfile_LightSleet (Sports runtime clone) to WeatherMakerProfile_MediumFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCheeseRolling Night => Night match=ef845bf6981248caa8390667e794e026 seconds=82800
+Changing weather profile WeatherMakerProfile_MediumFog (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCheeseRolling Random => Evening match=fa67b896c28a4ca086929b771c7a5287 seconds=68400
+There can be only one active Event System.
+Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TruckBaseJumping Morning => Morning match=af48be5af5574c5b9f71a81d6f2dd6ea seconds=29700
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckBaseJumping Day => Day match=296d76137370426b86b11419c42d79f0 seconds=46800
+Changing weather profile WeatherMakerProfile_MediumSleet (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckBaseJumping Evening => Evening match=c25d1a03dd0e464c9497aa4b55dbf7c1 seconds=68400
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckBaseJumping Night => Night match=8f283fb6e5ec45f798b31c8909e17566 seconds=82800
+Changing weather profile WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_MediumFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckBaseJumping Random => Night match=0ab1dbb9bd374a5e9cb15f114a6d89e1 seconds=82800
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

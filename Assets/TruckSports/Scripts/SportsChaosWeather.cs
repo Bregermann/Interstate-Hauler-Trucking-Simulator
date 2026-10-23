@@ -15,7 +15,7 @@ public sealed class SportsChaosWeather:MonoBehaviour {
  public bool PresetDriven{get;private set;}public string PresetId{get;private set;}
  public SportsMatchTime matchTime;
  public MonoBehaviour alternateSession;
- string alternateMatchId;bool alternatePaused;
+ string alternateMatchId,configuredMatchId;bool alternatePaused;
  string CurrentMatchId=>session!=null?session.MatchId:cornhole!=null?cornhole.MatchId:(alternateSession as ISportsWeatherLifecycle)?.WeatherMatchId;
  WeatherMakerProfileScript activeProfile;float windUnitScale=.44704f;WeatherMakerLightningBoltScript[] lightning;WeatherMakerThunderAndLightningScript thunder;
  public void ConfigurePreset(SportsWeatherPresets.Entry preset,int seed){
@@ -28,7 +28,13 @@ public sealed class SportsChaosWeather:MonoBehaviour {
  }
  float phase,strength;ParticleSystem[] systems;bool[] playing;
  void Awake(){if(vendor==null)return;vendor.IsPermanent=false;lightning=vendor.GetComponentsInChildren<WeatherMakerLightningBoltScript>(true);foreach(var bolt in lightning)bolt.MultiThreaded=false;thunder=vendor.GetComponentInChildren<WeatherMakerThunderAndLightningScript>(true);BindLightningCamera();systems=vendor.GetComponentsInChildren<ParticleSystem>(true);playing=new bool[systems.Length];}
- public void Configure(int seed,int choice,int chaos){if(presets!=null){ConfigurePreset(presets.Resolve(seed,reduceSnowRandom),seed);return;}PresetDriven=false;PresetId=null;Seed=seed;var random=new System.Random(seed);Kind=(SportsWeatherKind)(choice==0?random.Next(5):Mathf.Clamp(choice-1,0,4));phase=(float)random.NextDouble()*40;strength=Mathf.Lerp(.65f,1.25f,Mathf.Clamp01(chaos*.5f));Description=Kind==SportsWeatherKind.Hurricane?"HURRICANE GUSTS":Kind==SportsWeatherKind.Blizzard?"BLIZZARD":Kind.ToString().ToUpperInvariant();Grip=Kind==SportsWeatherKind.Clear?1:Kind==SportsWeatherKind.Rain?.78f:Kind==SportsWeatherKind.Snow?.72f:Kind==SportsWeatherKind.Blizzard?.64f:.82f;
+ public void Configure(int seed,int choice,int chaos){if(presets!=null){
+  string id=CurrentMatchId;
+  // A heat/attempt can refresh its own wind semantics; the selected match
+  // forecast must not silently reroll. Direct ConfigurePreset stays explicit.
+  if(id!=null&&id==configuredMatchId&&PresetDriven&&activeProfile!=null){matchTime?.Configure(seed,id);return;}
+  ConfigurePreset(presets.Resolve(seed,reduceSnowRandom),seed);configuredMatchId=id;return;
+ }PresetDriven=false;PresetId=null;Seed=seed;var random=new System.Random(seed);Kind=(SportsWeatherKind)(choice==0?random.Next(5):Mathf.Clamp(choice-1,0,4));phase=(float)random.NextDouble()*40;strength=Mathf.Lerp(.65f,1.25f,Mathf.Clamp01(chaos*.5f));Description=Kind==SportsWeatherKind.Hurricane?"HURRICANE GUSTS":Kind==SportsWeatherKind.Blizzard?"BLIZZARD":Kind.ToString().ToUpperInvariant();Grip=Kind==SportsWeatherKind.Clear?1:Kind==SportsWeatherKind.Rain?.78f:Kind==SportsWeatherKind.Snow?.72f:Kind==SportsWeatherKind.Blizzard?.64f:.82f;
   precipitation.PrecipitationChangeDuration=0;precipitation.Precipitation=Kind==SportsWeatherKind.Clear?WeatherMakerPrecipitationType.None:Kind==SportsWeatherKind.Snow||Kind==SportsWeatherKind.Blizzard?WeatherMakerPrecipitationType.Snow:WeatherMakerPrecipitationType.Rain;precipitation.PrecipitationIntensity=Kind==SportsWeatherKind.Clear?0:Mathf.Clamp01((Kind==SportsWeatherKind.Blizzard||Kind==SportsWeatherKind.Hurricane?.85f:.65f)*strength);if(clouds!=null&&cloudProfiles!=null&&cloudProfiles.Length==3){clouds.CloudSeed=seed;clouds.ShowCloudsAnimated(cloudProfiles[Kind==SportsWeatherKind.Clear?0:Kind==SportsWeatherKind.Snow?2:1],0,.6f);}if(sun!=null)sun.intensity=Kind==SportsWeatherKind.Clear?1.8f:Kind==SportsWeatherKind.Hurricane?.7f:1.1f;Tick(0);matchTime?.Configure(seed,CurrentMatchId);
  }
  public void Tick(float age){if(PresetDriven){float scale=wind!=null&&wind.WindProfile!=null?wind.WindProfile.WindMainMultiplier:0;Flow=scale>.00001f?Vector3.ProjectOnPlane(wind.CurrentWindVelocity,Vector3.up)*(windUnitScale/scale):Vector3.zero;return;}float gust=Mathf.Sin(age*.61f+phase)+.4f*Mathf.Sin(age*1.27f+phase*.17f);float speed=Kind==SportsWeatherKind.Hurricane?10:Kind==SportsWeatherKind.Blizzard?6:Kind==SportsWeatherKind.Clear?1.5f:3;Flow=new Vector3(Mathf.Sin(phase)*speed+gust*speed*.35f,0,Mathf.Cos(phase)*speed*.5f+Mathf.Sin(age*.3f+phase)*speed*.2f)*strength;if(wind!=null){wind.WindIntensity=Mathf.Clamp01(Flow.magnitude/14);if(wind.WindZone!=null){wind.WindZone.transform.rotation=Quaternion.LookRotation(Flow.sqrMagnitude>.01f?Flow:Vector3.forward);wind.WindZone.windMain=Flow.magnitude*.12f;}}}

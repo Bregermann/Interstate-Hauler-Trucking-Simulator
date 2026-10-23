@@ -28,6 +28,62 @@ public sealed class CollectionEnvironmentTests
     static readonly string[] NewlyIntegrated = { "TruckDockDiving", "TruckBuzkashi", "TruckBungeeDemolition", "TruckFishing", "TruckSumo", "TruckLogRolling", "TruckTrampolineDodgeball", "TruckDemolitionDerby" };
     static readonly string[] RemainingIntegration = { "TruckCurling", "TruckSkeeBall", "TruckBungeeDemolition", "TruckFishing" };
     static bool PresentationOwned(string name) => NewlyIntegrated.Contains(name) || RemainingIntegration.Contains(name);
+    [UnityTest, Timeout(240000)]
+    public IEnumerator LegacyForecastCatalogUsesEveryInstalledPresetAndRetainsMatchChoice()
+    {
+        var lease = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "LegacyForecastCatalog" });
+        var isolation = new GameObject("Explicit legacy forecast catalog regression"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation"));
+        Component match = null; bool modern = false;
+        try
+        {
+            foreach (string name in new[] { "TruckCheeseRolling", "TruckBaseJumping" })
+            {
+                EditorSceneManager.LoadSceneInPlayMode("Assets/" + name + "/Scenes/" + name + ".unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+                modern = name == "TruckBaseJumping";
+                var type = Type.GetType(modern ? "LWS.TruckBaseJumping.BaseJumpMatch, Assembly-CSharp" : "LWS.TruckCheeseRolling.CheeseMatch, Assembly-CSharp", true);
+                match = (Component)UnityEngine.Object.FindAnyObjectByType(type);
+                var setup = Get(match, "setup"); Set(setup, "count", 4); Call(match, modern ? "AllBots" : "AllAI");
+                var legacy = (Component)Get(match, modern ? "weatherField" : "weather"); var presentation = (Component)Get(legacy, "presentation");
+                Assert.That(presentation, Is.Not.Null); Assert.That(Get(legacy, "vendor"), Is.SameAs(Get(presentation, "vendor")), "Reuse the original single vendor world");
+                Assert.That(UnityEngine.Object.FindObjectsByType(((Component)Get(presentation, "vendor")).GetType(), FindObjectsSortMode.None).Length, Is.EqualTo(1));
+                var snow = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsSnowSurface")); Assert.That(Get(snow, "weather"), Is.SameAs(presentation), "Accumulation follows the selected visual forecast rather than the old wind option");
+                var pickers = ((Component)Get(match, "menus")).GetComponentsInChildren(Runtime("SportsWeatherPicker"), true).Cast<Component>().ToArray();
+                Assert.That(pickers.Length, Is.EqualTo(2));
+                var forecast = pickers.Single(picker => !(bool)Get(picker, "timeOfDay")); var clock = pickers.Single(picker => (bool)Get(picker, "timeOfDay"));
+                Assert.That(forecast.gameObject.activeInHierarchy && clock.gameObject.activeInHierarchy, Is.True);
+                Assert.That(WorldRect(forecast.GetComponent<RectTransform>()).Overlaps(WorldRect(clock.GetComponent<RectTransform>())), Is.False);
+                foreach (var picker in pickers)
+                foreach (var action in picker.transform.parent.GetComponentsInChildren(Runtime("SportsMenuAction"), true).Cast<Component>().Where(action => action.gameObject.activeInHierarchy))
+                    Assert.That(WorldRect(picker.GetComponent<RectTransform>()).Overlaps(WorldRect(action.GetComponent<RectTransform>())), Is.False, name + " selector covers " + action.name);
+                var entries = ((Array)Get(Get(forecast, "catalog"), "entries")).Cast<object>().ToArray(); Assert.That(entries.Length, Is.GreaterThan(3));
+                Call(clock, "Choose", (int)Enum.Parse(Runtime("SportsTimeChoice"), "Day"));
+                for (int entry = 0; entry < entries.Length; entry++)
+                {
+                    Call(forecast, "Choose", entry + 1); Assert.That((bool)Call(match, "StartMatch"), Is.True); yield return new WaitForSeconds(.12f); yield return null;
+                    Assert.That(Get(presentation, "PresetId"), Is.EqualTo(Get(entries[entry], "id")), name + " installed " + Get(entries[entry], "displayName"));
+                    string kind = Get(presentation, "Kind").ToString(); Assert.That((bool)Get(snow, "Falling"), Is.EqualTo(kind == "Snow" || kind == "Blizzard"));
+                    var binding = Get(presentation, "matchTime"); int revision = (int)Get(binding, "Revision"); int seed = (int)Get(presentation, "Seed");
+                    var profile = Get(Get(presentation, "vendor"), "LastLocalProfile");
+                    for (int refresh = 0; refresh < 3; refresh++)
+                    {
+                        if (modern) Call(legacy, "Select", refresh, seed + 997 * (refresh + 1)); else Call(legacy, "Select", seed + refresh + 1);
+                        yield return null;
+                        Assert.That(Get(presentation, "PresetId"), Is.EqualTo(Get(entries[entry], "id")));
+                        Assert.That(Get(presentation, "Seed"), Is.EqualTo(seed), "Round refresh must not reroll the match forecast");
+                        Assert.That(Get(Get(presentation, "vendor"), "LastLocalProfile"), Is.SameAs(profile)); Assert.That(Get(binding, "Revision"), Is.EqualTo(revision));
+                    }
+                    Call(match, modern ? "SetupScreen" : "ChangeSetup"); yield return null;
+                }
+                Call(forecast, "Choose", 0); Assert.That((bool)Call(match, "StartMatch"), Is.True); yield return null;
+                string previousMatch = (string)Get(match, "MatchId"); var previousProfile = Get(Get(presentation, "vendor"), "LastLocalProfile");
+                Call(match, modern ? "SetupScreen" : "ChangeSetup"); Assert.That((bool)Call(match, "StartMatch"), Is.True); yield return null;
+                Assert.That(Get(match, "MatchId"), Is.Not.EqualTo(previousMatch)); Assert.That(Get(Get(presentation, "vendor"), "LastLocalProfile"), Is.Not.SameAs(previousProfile), "Random resolves for the new match; identical choices remain legal");
+                TestContext.WriteLine("LEGACY_FULL_FORECASTS " + name + " installed=" + entries.Length + " roundRefreshes=" + (entries.Length * 3));
+                Call(match, modern ? "SetupScreen" : "ChangeSetup"); match = null;
+            }
+        }
+        finally { if (match != null) Call(match, modern ? "SetupScreen" : "ChangeSetup"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); Time.timeScale = 1; }
+    }
     [UnityTest, Timeout(150000)]
     public IEnumerator LegacyCourtsKeepTheirRulesAndUseOneSavedWeatherClock()
     {
@@ -242,7 +298,7 @@ public sealed class CollectionEnvironmentTests
                 tested++; TestContext.WriteLine("SAVED_OUTDOOR_TIME " + name + " maxRoster=" + Get(Get(match, "setup"), "count"));
                 Call(match, "SetupScreen"); match = null;
             }
-            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? (selection ?? NewlyIntegrated).Length : 45), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
+            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? (selection ?? NewlyIntegrated).Length : 46), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
             Assert.That(layoutErrors, Is.Empty, string.Join("\n", layoutErrors));
         }
         finally { if (match != null) Call(match, "SetupScreen"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); Time.timeScale = 1; }

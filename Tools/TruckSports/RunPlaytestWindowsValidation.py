@@ -77,9 +77,23 @@ def main():
     checks = int(terminal[1]) if terminal else len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE)) if legacy else None
     errors = int(terminal[2]) if terminal else int(legacy[1]) if legacy else None
     completed = bool(terminal) or bool(legacy and checks)
+    # These original probes predate CHECKS=/ERRORS= footers. Require their
+    # specific terminal evidence, real process exit and failure-free transcript;
+    # an arbitrary PASS or an old results file cannot establish completion.
+    if args.legacy_errors_only and not completed and evidence:
+        actual_checks = len(re.findall(r"^(?:PASS|FAIL) ", evidence, re.MULTILINE))
+        actual_errors = len(re.findall(r"^(?:FAIL |ERROR |RUNTIME ERROR |INTERRUPTED)", evidence, re.MULTILINE))
+        if args.flag in {"-tsCheese", "-tsCheeseGuards", "-tsCheeseForecast"}:
+            count = re.search(r"^CHECKS (\d+)$", evidence, re.MULTILINE)
+            player_log = (folder / "player.log").read_text(encoding="utf-8-sig", errors="replace")
+            completed = bool(count and int(count[1]) == actual_checks and "CHEESE_SMOKE_FINISHED code=0" in player_log and code == 0)
+        elif args.flag == "-tsBase":
+            completed = evidence.rstrip().endswith("PASS Base Jumping returns cleanly and scoped weather pipeline restores") and code == 0
+        if completed:
+            checks, errors = actual_checks, actual_errors
     if args.result_file and evidence:
         shutil.copy2(result, folder / "result.txt")
-    receipt = dict(pid=process.pid, exit=code, seconds=round(time.monotonic()-start, 2), requestedGraphicsAPI=args.graphics_api, managedSha256=digest, buildContentSha256=content, unchangedBuildContent=snapshot(exe.parent)[0]==content, unchangedManaged=hashlib.sha256(dll.read_bytes()).hexdigest()==digest, completedEvidence=completed, checks=checks, errors=errors, legacyErrorsOnly=bool(legacy))
+    receipt = dict(pid=process.pid, exit=code, seconds=round(time.monotonic()-start, 2), requestedGraphicsAPI=args.graphics_api, managedSha256=digest, buildContentSha256=content, unchangedBuildContent=snapshot(exe.parent)[0]==content, unchangedManaged=hashlib.sha256(dll.read_bytes()).hexdigest()==digest, completedEvidence=completed, checks=checks, errors=errors, legacyErrorsOnly=bool(args.legacy_errors_only and not terminal and completed))
     (folder / "process.json").write_text(json.dumps(receipt, indent=2))
     print(json.dumps(receipt), flush=True)
     if evidence:
