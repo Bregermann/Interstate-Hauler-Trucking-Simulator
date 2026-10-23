@@ -9,12 +9,14 @@ namespace LWS.TruckSports {
 public sealed class SportsWeatherPicker:MonoBehaviour,ISubmitHandler {
  public SportsWeatherPresets catalog;
  public Michsky.UI.Heat.Dropdown dropdown;
+ public bool timeOfDay;
  bool initialized,expanded;ScrollRect scroll;GameObject priorSelected;readonly Vector3[] corners=new Vector3[4];UnityEngine.InputSystem.InputAction cancelAction;
  void Awake(){
-  catalog.ValidateCatalog();dropdown.initOnEnable=false;dropdown.updateOnEnable=false;dropdown.invokeOnEnable=false;dropdown.saveSelected=false;dropdown.navigationMode=Navigation.Mode.Automatic;
-  dropdown.items.Clear();dropdown.items.Add(new Michsky.UI.Heat.Dropdown.Item{itemName="Random · installed presets"});
-  foreach(var preset in catalog.entries)dropdown.items.Add(new Michsky.UI.Heat.Dropdown.Item{itemName=preset.displayName});
-  dropdown.selectedItemIndex=Mathf.Max(0,catalog.Find(catalog.Selection)+1);
+  if(!timeOfDay)catalog.ValidateCatalog();dropdown.initOnEnable=false;dropdown.updateOnEnable=false;dropdown.invokeOnEnable=false;dropdown.saveSelected=false;dropdown.navigationMode=Navigation.Mode.Automatic;
+  dropdown.items.Clear();
+  if(timeOfDay){foreach(string name in System.Enum.GetNames(typeof(SportsTimeChoice)))dropdown.items.Add(new Michsky.UI.Heat.Dropdown.Item{itemName=name});}
+  else{dropdown.items.Add(new Michsky.UI.Heat.Dropdown.Item{itemName="Random"});foreach(var preset in catalog.entries)dropdown.items.Add(new Michsky.UI.Heat.Dropdown.Item{itemName=preset.displayName});}
+  dropdown.selectedItemIndex=SelectedIndex;
  }
  void Start(){dropdown.Initialize();ApplyStyle();scroll=dropdown.GetComponentInChildren<ScrollRect>(true);initialized=true;Refresh();dropdown.onValueChanged.AddListener(Choose);var module=EventSystem.current!=null?EventSystem.current.GetComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>():null;cancelAction=module!=null&&module.cancel!=null?module.cancel.action:null;if(cancelAction!=null)cancelAction.performed+=Cancel;}
  public void OnSubmit(BaseEventData data){if(isActiveAndEnabled&&dropdown.isInteractable&&EventSystem.current!=null&&EventSystem.current.currentSelectedGameObject==dropdown.gameObject)dropdown.Animate();}
@@ -33,8 +35,9 @@ public sealed class SportsWeatherPicker:MonoBehaviour,ISubmitHandler {
   }
  }
  void OnEnable(){if(initialized)Refresh();expanded=false;}
- void Refresh(){dropdown.SetDropdownIndex(Mathf.Max(0,catalog.Find(catalog.Selection)+1));}
- public void Choose(int index){if(index<0||index>catalog.entries.Length)throw new System.ArgumentOutOfRangeException(nameof(index));catalog.Select(index==0?SportsWeatherPresets.RandomId:catalog.entries[index-1].id);}
+ int SelectedIndex=>timeOfDay?(int)SportsTimeOfDay.Selection:Mathf.Max(0,catalog.Find(catalog.Selection)+1);
+ void Refresh(){dropdown.SetDropdownIndex(SelectedIndex);}
+ public void Choose(int index){if(timeOfDay){SportsTimeOfDay.Select((SportsTimeChoice)index);return;}if(index<0||index>catalog.entries.Length)throw new System.ArgumentOutOfRangeException(nameof(index));catalog.Select(index==0?SportsWeatherPresets.RandomId:catalog.entries[index-1].id);}
  void LateUpdate(){
   if(!initialized)return;var system=EventSystem.current;if(system==null)return;
   if(expanded==dropdown.isOn){if(expanded)KeepSelectionVisible(system.currentSelectedGameObject);return;}expanded=dropdown.isOn;priorSelected=null;

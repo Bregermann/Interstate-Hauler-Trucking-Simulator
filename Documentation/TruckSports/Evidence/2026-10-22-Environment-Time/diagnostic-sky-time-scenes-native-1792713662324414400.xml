@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-22 23:59:43Z" end-time="2026-10-22 23:59:47Z" duration="3.740337">
+  <test-suite type="TestSuite" id="1394" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="274" result="Failed" site="Child" start-time="2026-10-22 23:59:43Z" end-time="2026-10-22 23:59:47Z" duration="3.740337" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1278" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="107" result="Failed" site="Child" start-time="2026-10-22 23:59:43Z" end-time="2026-10-22 23:59:47Z" duration="3.725596" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="62600" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1202" name="MatchTimeIntegrationTests" fullname="MatchTimeIntegrationTests" classname="MatchTimeIntegrationTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-22 23:59:43Z" end-time="2026-10-22 23:59:47Z" duration="3.720542" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1203" name="RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" fullname="MatchTimeIntegrationTests.RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" methodname="RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" classname="MatchTimeIntegrationTests" runstate="Runnable" seed="46814206" result="Failed" start-time="2026-10-22 23:59:43Z" end-time="2026-10-22 23:59:47Z" duration="3.705680" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="150000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  TruckKeepaway vendor sun orientation must change
+  Expected: greater than 45
+  But was:  0.0f
+]]></message>
+            <stack-trace><![CDATA[at MatchTimeIntegrationTests+<RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting>d__5.MoveNext () [0x00563] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\MatchTimeIntegrationTests.cs:49
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+TruckKeepaway Morning vendorSun=42.7585 intensity=1 ambient=RGBA(0.530, 0.620, 0.700, 1.000) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+TruckKeepaway Day vendorSun=42.7585 intensity=1 ambient=RGBA(0.530, 0.620, 0.700, 1.000) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=10185 hash=1003796935 connected=1402
+TruckKeepaway Evening vendorSun=42.7585 intensity=1 ambient=RGBA(0.530, 0.620, 0.700, 1.000) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=11182 hash=1086049196 connected=1402
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,14 +1,14 @@
 # Truck Sports: Party! — permanent requirements and acceptance ledger
 
-Authoritative active-work record from October 20, 2026. Current authorization: completed presentation sprint and Git reconciliation, followed by the18new sports and their complete UI/logo addendum. Historical work is deferred unless the user reactivates it or it directly affects these requirements.
+Authoritative active-work record from October 20, 2026. Current authorization: Q22-SKY environment/time/scoring/results implementation, followed by Q22-CARNIVAL. Earlier presentation, eighteen-sport, camera and human-playtest repairs remain the delivered baseline with their individual unresolved acceptance limits. Historical work is deferred unless the user reactivates it or it directly affects these requirements.
 
 Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED. October20 expansion standardizes the two equivalent prior labels without changing their evidence or human-verification meaning. Automated completion and human verification are separate. Human verification is never inferred from software input, scripts or screenshots. IDs remain permanent; superseded/cancelled entries retain their record.
 
 ## Active work
 
-Current priority (October21): Global broadcast-camera action/readability repair first, then the attached master human-playtest repairs in P0–P4 order. The protected Bowling/Poker/Cheese/Terrier/Fare Fight mechanics and deferred Tug of War decision take precedence over historical requests. Source directives: Requests/2026-10-21-GlobalBroadcastCamera.md and Requests/2026-10-21-HumanPlaytestRepair.md. The completed eighteen-sport delivery below remains the baseline.
+October21 repair implementation milestones are delivered through f5ceb372. Unreproduced Fare immobility and Hockey goal observations remain explicitly open; human/device/listening/performance acceptance has not been inferred. The protected Bowling/Poker/Cheese/Terrier/Fare Fight mechanics and deferred Tug of War decision remain in force. Source directives: Requests/2026-10-21-GlobalBroadcastCamera.md and Requests/2026-10-21-HumanPlaytestRepair.md.
 
-October22 queue addition: finish that existing work first, then execute Q22-SKY (global sky/time/scoring/results), then Q22-CARNIVAL (Carnival of Chaos). Both full attachments are archived verbatim in Requests and linked below. They do not interrupt the active Fishing validation or reopen completed earlier repairs. Carnival's explicit protected-scene exceptions and newer rules supersede conflicts when that queued pass begins.
+October22 active work: Q22-SKY (global sky/time/scoring/results), then Q22-CARNIVAL (Carnival of Chaos). Both full attachments are archived verbatim in Requests and linked below. Existing Fishing and other delivered repairs are preserved; no unrelated historical re-audit is required. Carnival's explicit protected-scene exceptions and newer rules supersede conflicts when that queued pass begins.
 
 Git reconciliation is verified (LD-004); public main is synchronized and local/private work is recoverable. All18requested expansion sports are implemented and integrated in the60-scene Windows build. The individual entries retain automated evidence separately from outstanding human, physical-device, listening and extended-soak acceptance. Source requirements and UI addendum are preserved in Documentation/TruckSports/Requests/. Earlier focused-sprint implementation/evidence remains recorded; its human/device/listening limits have not disappeared.
 
@@ -5401,10 +5401,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | Audit every registered Truck Sports mode that uses: Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section8. |
 | Acceptance Criteria | All observable requirements and acceptance in source section8; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
+| Implementation Evidence | 33 explicitly bound shared action-camera scenes plus protected precision/strategic exceptions reviewed individually. Documentation/TruckSports/2026-10-22-Precision-Cameras.md; 2026-10-22-Reviewed-Camera-Exceptions preservation evidence; 2026-10-22-Protected-Cameras.md; 2026-10-22-Remaining-Precision.md; prior sport-specific reports retained. |
 | Automated Verification | Windows e343 ExpandedCameraHiddenWreck33Final697/0 across33targeted scenes: actual720p/1080p projected bounds, camera limits, far/retired actors, rematches, human/AI views, all three actual offscreen-human widgets. Native camera/rules32/0 and paused cue2/0. Prior failed reproductions retained. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | No new reproduced common-camera repair is pending. Unconfirmed human findings, physical devices, complete-match coverage gaps and subjective camera-feel acceptance remain open. Tug changes are explicitly deferred; Plowing variants were not exercised or enhanced in this repair pass. |
 
 ### GBC-09 — SUPPORT HUMAN-ONLY AND AI CAMERA OPTIONS
 
@@ -5428,11 +5428,11 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Sport/System | CAMERA SAFETY AND SMOOTHING |
 | Original Request | Preserve functional camera movement. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section10. |
 | Acceptance Criteria | All observable requirements and acceptance in source section10; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
+| Status | IMPLEMENTED / UNVERIFIED |
 | Implementation Evidence | SportsBroadcastFraming/Settings/Guidance/Compass; SportsBroadcastCameraAuthoring;33explicitly bound saved scenes; Cinemachine and CNP adapters. See PlaytestRepairProgress.md for mode-specific limits. |
 | Automated Verification | Native broadcast9/9; exact Windows Full4 candidate b47e7720:693checks/0errors, actual720p/1080p captures, projected truck bounds, objective/zoom limits, all-human cue coverage, ownership and rematches. October22 current diagnosis: exact24fc8b5d Minefield camera ownership117/0 passed logically, but actual four-view720p/1080p sky triangles rejected visually. Broader layouts stopped on a stale Target card assertion. Native transition reproduces100ms shared-menu layout delay; Show now resets nextHUD and regression1/0 plus compact HUD6/0 pass. Native HDR offscreen targets do not reproduce the Windows backbuffer sky artifact; public vendor reload/reprojection/downsample/post isolation pending. Logs/TruckSports/PlaytestRepair holds all failed receipts and History XML. No corrected sky claim. Superseding October22 evidence: 2026-10-22-Precision-Cameras.md records the proven shared HUD throttle repair, two saved-scene sky repairs, targeted native tests and exact Windows rendered validation. Magenta clear proved missing background coverage; disabling MSAA/post/temporal and switching D3D12 did not fix it. Vendor documented Skybox/AfterSkybox path fixes both reproduced scenes. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Current reproduced Minefield/Cornhole sky coverage and Target card transition defects repaired and promoted. Continue other open sport-specific current HPR/GBC requirements; human/device/listening/performance acceptance remains separate. New Q22-SKY and Q22-CARNIVAL remain queued. |
+| Remaining Work | Reproduced framing, pooled-wreck bounds, viewport sky coverage and HUD transition defects are repaired and delivered. Human camera-feel/device acceptance and broader performance measurements remain unverified. The separate Q22-SKY pass is now active; Q22-CARNIVAL follows it. |
 
 ### GBC-11 — CONFIGURABLE SHARED CAMERA SETTINGS
 
@@ -5457,10 +5457,10 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Original Request | This issue is fundamentally visual. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section12. |
 | Acceptance Criteria | All observable requirements and acceptance in source section12; relevant complete match, rematch, input and rendered output at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Precision-Cameras.md; 2026-10-22-Reviewed-Camera-Exceptions preservation evidence; 2026-10-22-Protected-Cameras.md; 2026-10-22-Remaining-Precision.md; prior sport-specific reports retained. |
+| Automated Verification | Actual Windows 720p/1080p captures and targeted full matches are recorded per sport, with rejected visual candidates retained. Latest continuation recorded 2700 accepted Windows checks across several exact build payloads; this is not 2700 unique requirements or a full rerun on final Wallball-only bytes. Camera-only captures, controlled poses and normal rendered gameplay are explicitly distinguished in each report. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Human gameplay/camera-preference acceptance, physical input devices, listening and isolated CPU/GPU profiling were not performed. Do not certify those from software input fixtures. Preserve explicit unconfirmed HPR Fare/Hockey findings. |
 
 ### GBC-13 — BEFORE-AND-AFTER EVIDENCE
 
@@ -5483,12 +5483,12 @@ Permanent IDs below preserve both supplied directives. Initial PARTIAL means a r
 | Requirement ID | GBC-14 |
 | Sport/System | UPDATE THE PERMANENT ACCEPTANCE LEDGER |
 | Original Request | Create or update the shared broadcast-camera requirements in the existing Truck Sports ledger. Full authoritative scope: Requests/2026-10-21-GlobalBroadcastCamera.md, section14. |
-| Acceptance Criteria | All observable requirements and acceptance in source section14; relevant complete match, rematch, input and rendered output at720p/1080p. |
-| Status | PARTIAL |
-| Implementation Evidence | Current scene/scripts to inspect; no new repair claimed. |
-| Automated Verification | Not run for this directive yet. |
+| Acceptance Criteria | Permanent camera IDs remain individually tracked with implementation, actual verification, human feedback and remaining work; failed candidates and evidence are preserved, with precise limits instead of unsupported completion claims. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | TRUCK_SPORTS_ACCEPTANCE_LEDGER.md; tracked per-sport reports/evidence; original GBC/HPR directives retained. October22 camera milestones ab276600, 09c03a6a, 274d230f, 5eed98d9, f5ceb372 pushed to both authorized branches. |
+| Automated Verification | Ledger entries reconciled against the saved reports, exact build identities, native XML and Windows receipts. Requirement IDs retained; no failed test history deleted or hardware/human acceptance inferred. |
 | Human Verification | Supplied October21 playtest observations take precedence over earlier completion claims. |
-| Remaining Work | Inspect, reproduce where applicable, implement missing behavior, run targeted tests and actual Windows visual/gameplay acceptance. |
+| Remaining Work | Continue updating the same ledger as implementation and new playtest evidence arrive. This administrative acceptance does not certify every sport or close open human findings. |
 
 ### HPR-1-1 — Fix the Broken Audio After Kicking
 
@@ -7281,8 +7281,8 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Audit and correct unreadable shared/broadcast framing without altering cab, precision or protected gameplay. |
 | Acceptance Criteria | Relevant action readable; actual projected renderer size; objective visible or legitimate offscreen cue; bounded smooth shot; valid targets and viewport ownership at720p/1080p. |
 | Status | PARTIAL |
-| Implementation Evidence | Saved scene and existing camera path under investigation. Common runtime: SportsBroadcastFraming/SportsEventCamera/SportsCameraFit; explicit sport-owned selectors where applicable. |
-| Automated Verification | New projection math6/6passed; not yet per-scene acceptance. First Windows Kickball/Magnet reproduction recorded under Logs/TruckSports/PlaytestRepair/Quick; overshoot found and repair in progress. |
+| Implementation Evidence | Existing sport-owned strategic camera and scene preserved; newer HPR26 explicitly defers gameplay changes and requests a later design discussion. |
+| Automated Verification | No new Tug runtime or camera acceptance claimed in this pass. Earlier generic Kickball/Magnet fixtures are not evidence for Tug and have been removed from this entry. |
 | Human Verification | User reports numerous shared views far too distant. No human approval of new framing yet. |
 | Remaining Work | Newer directive prohibits changes in this pass; retain future design discussion. |
 
@@ -7731,11 +7731,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | Global sky, lighting, time of day, scoring and results presentation |
 | Original Request | Preserve the current task order; run this full attached prompt to completion directly after earlier work. Exact specification: [2026-10-22-Global-Sky-Time-Scoring.md](Documentation/TruckSports/Requests/2026-10-22-Global-Sky-Time-Scoring.md). |
 | Acceptance Criteria | After the existing gameplay repair work; before code-quality stabilization. Extend installed weather/lighting/UI foundations, retain authoritative gameplay and specialized presentations. All numbered requirements and acceptance tests in the exact archived directive apply. |
-| Status | MISSING |
-| Implementation Evidence | Exact original attachment archived; SHA-256 `af2fb0ccf2ca70b3066854f2e079161154fa7b91292351b64d81aa98fb1731da`, 24123 bytes. This queue record does not claim implementation. |
-| Automated Verification | None for this new directive. Existing Fishing validation continues independently. |
+| Status | PARTIAL |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
+| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
 | Human Verification | New work requested, no acceptance claimed. |
-| Remaining Work | All implementation and acceptance work in the attached directive; add grouped permanent child IDs when execution begins, retaining this source ID and full specification. Activation follows the user-specified queue order. Observed during the short camera sequence: prior snow remains visible in the following Minefield Hurricane capture; verify precipitation transition and particle lifetimes before weather acceptance. |
+| Remaining Work | Full registered-scene and individual weather-variant integration, artistic sky/venue lighting, authoritative score event animation and results integration; required full-roster/split performance and human acceptance. Carnival remains queued after this scope. |
 
 
 ## Queued October 22 directives — execute after existing work
@@ -7753,3 +7753,103 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Automated Verification | None for this new directive. Existing Fishing validation continues independently. |
 | Human Verification | New work requested, no acceptance claimed. |
 | Remaining Work | All implementation and acceptance work in the attached directive; add grouped permanent child IDs when execution begins, retaining this source ID and full specification. Activation follows the user-specified queue order. |
+
+## Active October 22 sky/time/scoring implementation
+
+### Q22-SKY-TIME-01 — Shared setup preference
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-TIME-01 |
+| Sport/System | Shared setup preference |
+| Original Request | Independent saved Random/Morning/Day/Evening/Night selection in established setup UI. Full source: Q22-SKY archived directive. |
+| Acceptance Criteria | Selection persists across reloads and sports; weather remains independently selected; keyboard/controller navigation works. |
+| Status | PARTIAL |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
+| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Human Verification | Not performed; no acceptance claimed. |
+| Remaining Work | Extend saved setup controls to remaining applicable sports; preserve indoor/concert exceptions and designer customizations. Five-scene controls/persistence verified within the recorded software/visual scope; physical devices untested. |
+
+### Q22-SKY-TIME-02 — Weather Maker time coordination
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-TIME-02 |
+| Sport/System | Weather Maker time coordination |
+| Original Request | Frozen short-match time, stable random choice within a match, appropriate rematch selection. Full source: Q22-SKY archived directive. |
+| Acceptance Criteria | Vendor sun/moon/ambient reflect selection without mutating source profiles; heat/attempt changes do not reroll; rematch starts a new match. |
+| Status | PARTIAL |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
+| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Human Verification | Not performed; no acceptance claimed. |
+| Remaining Work | Bind remaining scene/legacy weather adapters and verify their heat/rematch lifecycles. Existing five scenes preserve vendor source profiles and active match time; broader integration remains open. |
+
+### Q22-SKY-SKY-01 — Weather-responsive sky variants
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SKY-01 |
+| Sport/System | Weather-responsive sky variants |
+| Original Request | All installed suitable weather presets use convincing vendor sky/cloud/fog/storm presentation. Full source: Q22-SKY archived directive. |
+| Acceptance Criteria | Actual clear/rain/storm/snow/blizzard/hurricane sky and precipitation visuals match selected weather and time. |
+| Status | PARTIAL |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
+| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Human Verification | Not performed; no acceptance claimed. |
+| Remaining Work | All registered weather variants and remaining outdoor scenes; richer cloud/sunset/stars/moon artistic acceptance. Corrected static-blue Arctic night demonstrated; short weather captures do not certify all sky or snow accumulation requirements. |
+
+### Q22-SKY-LIGHT-01 — Venue lighting and artistic exceptions
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-LIGHT-01 |
+| Sport/System | Venue lighting and artistic exceptions |
+| Original Request | Scene-specific sun/ambient/artificial lighting; retain indoor and concert lighting and protected Plowing mood. Full source: Q22-SKY archived directive. |
+| Acceptance Criteria | Night venues remain readable; authored indoor/show lights preserved; appropriate existing lamps/headlights activate; no excessive shadow lights or per-frame reflection updates. |
+| Status | PARTIAL |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
+| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Human Verification | Not performed; no acceptance claimed. |
+| Remaining Work | Remaining venue-specific lights/headlights, indoor/show exceptions, volcanic/urban/arctic artistic adjustments and performance acceptance. Four budgeted lamps each are implemented in Keepaway/FieldGoal only. |
+
+### Q22-SKY-SCORE-01 — Confirmed score event presentation
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-01 |
+| Sport/System | Confirmed score event presentation |
+| Original Request | Animated participant/team score attribution from authoritative gameplay, stable IDs and event deduplication. Full source: Q22-SKY archived directive. |
+| Acceptance Criteria | Actual scored values/reasons displayed once; rapid events aggregate; no points awarded by presentation; reset clears stale events. |
+| Status | MISSING |
+| Implementation Evidence | Existing presentation infrastructure to extend; specialized Poker/Bowling/Kickball sequences remain protected. |
+| Automated Verification | None for this child implementation yet unless explicitly noted above. |
+| Human Verification | Not performed; no acceptance claimed. |
+| Remaining Work | Audit actual score events, implement shared adapters and appropriate sport integrations, native and rendered tests. |
+
+### Q22-SKY-RESULT-01 — Round and match results
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-RESULT-01 |
+| Sport/System | Round and match results |
+| Original Request | Attractive actual winners, tied placings, scores, real statistics, shared results and rematch flow. Full source: Q22-SKY archived directive. |
+| Acceptance Criteria | Correct rules determine ranking/ties; no private information leaks or generic replacement of specialized celebrations. |
+| Status | MISSING |
+| Implementation Evidence | Existing results remain the baseline; no replacement claimed. |
+| Automated Verification | None for this child implementation yet unless explicitly noted above. |
+| Human Verification | Not performed; no acceptance claimed. |
+| Remaining Work | Integrate and verify sport-specific results and winner presentation. |
+
+### Q22-SKY-ACCEPT-01 — Rendered acceptance and performance
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-ACCEPT-01 |
+| Sport/System | Rendered acceptance and performance |
+| Original Request | Representative weather/time combinations, multiplayer, scoring/results evidence and meaningful frame-time measurements. Full source: Q22-SKY archived directive. |
+| Acceptance Criteria | Inspect actual Windows rendering and targeted native tests; distinguish human/hardware/listening acceptance; preserve accepted build until a candidate passes. |
+| Status | PARTIAL |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
+| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Human Verification | Not performed; no acceptance claimed. |
+| Remaining Work | Broader maximum-roster/split-screen/performance acceptance, additional venue/weather combinations, score/results tests and human/device/listening checks. Whole-player frame samples are not isolatedCPU/GPU profiling. |

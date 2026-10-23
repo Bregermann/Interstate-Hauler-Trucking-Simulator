@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 01:17:42Z" end-time="2026-10-23 01:18:12Z" duration="30.6080626">
+  <test-suite type="TestSuite" id="1394" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="274" result="Failed" site="Child" start-time="2026-10-23 01:17:42Z" end-time="2026-10-23 01:18:12Z" duration="30.608063" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1278" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="107" result="Failed" site="Child" start-time="2026-10-23 01:17:42Z" end-time="2026-10-23 01:18:12Z" duration="30.592700" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="70348" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1202" name="MatchTimeIntegrationTests" fullname="MatchTimeIntegrationTests" classname="MatchTimeIntegrationTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-23 01:17:42Z" end-time="2026-10-23 01:17:53Z" duration="11.242506" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1203" name="RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" fullname="MatchTimeIntegrationTests.RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" methodname="RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" classname="MatchTimeIntegrationTests" runstate="Runnable" seed="1590272649" result="Failed" start-time="2026-10-23 01:17:42Z" end-time="2026-10-23 01:17:53Z" duration="11.229447" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="150000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  TruckTerrierRacing selector label must not overlap the heading.
+  Expected: False
+  But was:  True
+]]></message>
+            <stack-trace><![CDATA[at MatchTimeIntegrationTests+<RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting>d__5.MoveNext () [0x0049c] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\MatchTimeIntegrationTests.cs:51
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+TruckKeepaway Morning vendorSun=4.791823 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+TruckKeepaway Day vendorSun=42.52172 intensity=1 ambient=RGBA(0.382, 0.403, 0.500, 0.500) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=10185 hash=1003796935 connected=1402
+TruckKeepaway Evening vendorSun=4.821731 intensity=1 ambient=RGBA(0.248, 0.154, 0.047, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=11182 hash=1086049196 connected=1402
+TruckKeepaway Night vendorSun=324.0253 intensity=0 ambient=RGBA(0.145, 0.146, 0.250, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_OvercastClouds (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=12179 hash=309219607 connected=1405
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to Hurricane weather (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TruckFieldGoal Morning vendorSun=4.791823 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile Hurricane weather (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckFieldGoal Day vendorSun=42.52172 intensity=1 ambient=RGBA(0.382, 0.403, 0.500, 0.500) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_MediumRain (Sports runtime clone) to WeatherMakerProfile_LightSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckFieldGoal Evening vendorSun=4.821731 intensity=1 ambient=RGBA(0.248, 0.154, 0.047, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_LightSnow (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckFieldGoal Night vendorSun=324.0253 intensity=0 ambient=RGBA(0.145, 0.146, 0.250, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TruckSkyTow Morning vendorSun=4.791823 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckSkyTow Day vendorSun=42.52172 intensity=1 ambient=RGBA(0.382, 0.403, 0.500, 0.500) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_LightRain (Sports runtime clone) to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckSkyTow Evening vendorSun=4.821731 intensity=1 ambient=RGBA(0.248, 0.154, 0.047, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_MediumSleet (Sports runtime clone) to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckSkyTow Night vendorSun=324.0253 intensity=0 ambient=RGBA(0.145, 0.146, 0.250, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_MediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1233" name="WeatherTransitionTests" fullname="WeatherTransitionTests" classname="WeatherTransitionTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 01:17:53Z" end-time="2026-10-23 01:18:12Z" duration="19.343153" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1234" name="SnowToHurricaneStopsSnowEmissionAndRetiresExistingFlakes" fullname="WeatherTransitionTests.SnowToHurricaneStopsSnowEmissionAndRetiresExistingFlakes" methodname="SnowToHurricaneStopsSnowEmissionAndRetiresExistingFlakes" classname="WeatherTransitionTests" runstate="Runnable" seed="1928060074" result="Passed" start-time="2026-10-23 01:17:53Z" end-time="2026-10-23 01:18:12Z" duration="19.336761" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavySleet (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Blizzard after +0.35s snowIntensity=0.8107922 rainIntensity=0 snowParticles=596 lifetimes=8,3,4,2
+Blizzard after +0.65s snowIntensity=0.8107922 rainIntensity=0 snowParticles=2471 lifetimes=8,3,4,2
+Blizzard after +2s snowIntensity=0.8107922 rainIntensity=0 snowParticles=6382 lifetimes=8,3,4,2
+Blizzard after +6s snowIntensity=0.8107922 rainIntensity=0 snowParticles=13955 lifetimes=8,3,4,2
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to Hurricane weather (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Hurricane after +0.35s snowIntensity=0 rainIntensity=0.7775488 snowParticles=13316 lifetimes=8,3,4,2
+Hurricane after +0.65s snowIntensity=0 rainIntensity=0.7775488 snowParticles=11420 lifetimes=8,3,4,2
+Hurricane after +2s snowIntensity=0 rainIntensity=0.7775488 snowParticles=7511 lifetimes=8,3,4,2
+Hurricane after +6s snowIntensity=0 rainIntensity=0.7775488 snowParticles=0 lifetimes=8,3,4,2
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

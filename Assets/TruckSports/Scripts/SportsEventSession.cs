@@ -6,6 +6,7 @@ namespace LWS.TruckSports {
 // Shared local-event lifecycle and source routing. Each sport retains its own physics/rules owner.
 [DefaultExecutionOrder(-100)]public abstract class SportsEventSession:MonoBehaviour {
  LWS.TruckSports.SportsParticipantBinding participantBinding;string participantMatchId;
+ public string MatchId=>participantMatchId;
  public void RefreshParticipants(bool saveEdits=false){if(participantBinding==null||!participantBinding.Matches(setup.players))participantBinding=new LWS.TruckSports.SportsParticipantBinding(setup.players);else participantBinding.Refresh(saveEdits);}
  void RecordParticipants(string summary,int count){LWS.TruckSports.SportsParticipantRegistry.Record(participantMatchId,PreferenceKey,summary,setup.players,count);}
 

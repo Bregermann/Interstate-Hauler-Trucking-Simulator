@@ -102,7 +102,7 @@ def run(name, arguments):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["parking-bays", "hockey-hud", "snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "mine-sky", "corn-sky", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["parking-bays", "hockey-hud", "snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "mine-sky", "corn-sky", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "time-audit", "time-author", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
@@ -171,6 +171,10 @@ def main():
         (LOG / "keepaway-private-authoring-tool.json").write_text(json.dumps(copied, indent=2))
         run("keepaway-arena-repair", ["-quit", "-executeMethod", "LWS.TruckKeepaway.Editor.KeepawayArenaRepairAuthoring.Upgrade"])
         shutil.copy2(CLEAN / "Logs/TruckSports/PlaytestRepair/keepaway-arena-migration.txt", LOG / "keepaway-arena-migration.txt")
+    elif args.stage == "time-audit":
+        run("time-environment-audit", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsEnvironmentAuthoring.Audit"])
+    elif args.stage == "time-author":
+        run("time-representative-install", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsEnvironmentAuthoring.InstallRepresentative"])
     elif args.stage == "tests":
         run(args.test_name, ["-runTests", "-testPlatform", args.test_platform, "-testFilter", args.test_filter, "-testResults", str(LOG / (args.test_name+".xml"))])
         result = ET.parse(LOG / (args.test_name + ".xml")).getroot()

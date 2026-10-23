@@ -1,11 +1,12 @@
 using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 namespace LWS.TruckSports.Editor {
 public static class SportsWeatherPickerAuthoring {
  public static SportsWeatherPicker Install(SportsEventSession match,SportsWeatherPresets catalog,Vector2 position)=>Install(match.menus.pages[0].transform,catalog,position);
  public static SportsWeatherPicker Install(Transform parent,SportsWeatherPresets catalog,Vector2 position){
-  var existing=parent.GetComponentInChildren<SportsWeatherPicker>(true);if(existing!=null){existing.catalog=catalog;existing.dropdown.navigationMode=UnityEngine.UI.Navigation.Mode.Automatic;EditorUtility.SetDirty(existing.dropdown);EditorUtility.SetDirty(existing);return existing;}
+  var existing=parent.GetComponentsInChildren<SportsWeatherPicker>(true).FirstOrDefault(p=>!p.timeOfDay);if(existing!=null){existing.catalog=catalog;existing.dropdown.navigationMode=UnityEngine.UI.Navigation.Mode.Automatic;EditorUtility.SetDirty(existing.dropdown);EditorUtility.SetDirty(existing);return existing;}
   var prefab=AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Heat - Complete Modern UI/Prefabs/UI Elements/Dropdown/Dropdown.prefab");
   if(prefab==null)throw new System.InvalidOperationException("Installed Heat production dropdown is required.");
   var root=(GameObject)PrefabUtility.InstantiatePrefab(prefab,parent);PrefabUtility.UnpackPrefabInstance(root,PrefabUnpackMode.Completely,InteractionMode.AutomatedAction);root.name="Weather · installed profile selector";

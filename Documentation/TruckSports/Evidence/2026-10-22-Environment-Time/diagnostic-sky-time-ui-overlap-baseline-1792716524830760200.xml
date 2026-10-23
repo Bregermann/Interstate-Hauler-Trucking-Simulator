@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 00:46:53Z" end-time="2026-10-23 00:46:55Z" duration="1.947692">
+  <test-suite type="TestSuite" id="1394" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="274" result="Failed" site="Child" start-time="2026-10-23 00:46:53Z" end-time="2026-10-23 00:46:55Z" duration="1.947692" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1278" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="107" result="Failed" site="Child" start-time="2026-10-23 00:46:53Z" end-time="2026-10-23 00:46:55Z" duration="1.933527" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="72208" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1202" name="MatchTimeIntegrationTests" fullname="MatchTimeIntegrationTests" classname="MatchTimeIntegrationTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-23 00:46:53Z" end-time="2026-10-23 00:46:55Z" duration="1.928239" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1203" name="RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" fullname="MatchTimeIntegrationTests.RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" methodname="RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" classname="MatchTimeIntegrationTests" runstate="Runnable" seed="1521632960" result="Failed" label="Error" start-time="2026-10-23 00:46:53Z" end-time="2026-10-23 00:46:55Z" duration="1.914611" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="150000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[System.InvalidOperationException : Sequence contains no matching element]]></message>
+            <stack-trace><![CDATA[  at System.Linq.Enumerable.First[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`2[T,TResult] predicate) [0x00011] in <101642b95873440bbf9fec45cfcaa487>:0 
+  at MatchTimeIntegrationTests+<RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting>d__5.MoveNext () [0x003a0] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\MatchTimeIntegrationTests.cs:44 
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44 ]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>
