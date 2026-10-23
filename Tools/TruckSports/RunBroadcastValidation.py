@@ -55,7 +55,7 @@ def record_build():
     print("Exact code AND asset build identity", json.dumps(identity), flush=True)
 
 
-def sync():
+def sync(deferred_path=None):
     baseline = {p["path"] for p in json.loads((LOG / "host-pending-baseline.json").read_text())}
     changed = set(filter(None, (subprocess.check_output(["git", "diff", "--name-only", "-z", "HEAD"], cwd=ROOT, stderr=subprocess.PIPE) + subprocess.check_output(["git", "ls-files", "--others", "--exclude-standard", "-z"], cwd=ROOT)).decode().split("\0")))
     # A scoped milestone commit must not make the next build forget which
@@ -64,11 +64,28 @@ def sync():
     for manifest in LOG.glob("build-*-sources.json"):
         known.update(v["path"] for v in json.loads(manifest.read_text()))
     sources = sorted(p for p in (changed | known) - baseline if p.startswith("Assets/Truck") and p.endswith(".cs"))
+    deferred = set(json.loads(Path(deferred_path).read_text())) if deferred_path else set()
+    if deferred:
+        # Preserve a frozen tested source slice while the user-authorized next
+        # feature is being edited in ROOT. Existing deferred inputs must still
+        # match the exact prior build; never silently reuse unknown CLEAN code.
+        identity = json.loads((LOG / "current-camera-build.json").read_text())
+        previous = {item["path"]: item["sha256"] for item in json.loads((LOG / ("build-" + identity["buildContentSha256"] + "-sources.json")).read_text())}
+        for relative in deferred:
+            if relative in previous:
+                assert hashlib.sha256((CLEAN / relative).read_bytes()).hexdigest() == previous[relative], relative
+            else:
+                assert not (CLEAN / relative).exists(), relative
+        sources = [relative for relative in sources if relative not in deferred or relative in previous]
     for relative in sources:
+        if relative in deferred:
+            continue
         source, target = ROOT / relative, CLEAN / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, target)
-    (LOG / "camera-source-sync.json").write_text(json.dumps([dict(path=p, sha256=hashlib.sha256((ROOT / p).read_bytes()).hexdigest()) for p in sources], indent=2))
+    (LOG / "camera-source-sync.json").write_text(json.dumps([dict(path=p, sha256=hashlib.sha256((CLEAN / p).read_bytes()).hexdigest()) for p in sources], indent=2))
+    if deferred:
+        (LOG / "deferred-source-slice.json").write_text(json.dumps(sorted(deferred), indent=2))
     print("Synced", len(sources), "scoped sources; excluded pre-existing pending work.", flush=True)
 
 
@@ -102,15 +119,18 @@ def run(name, arguments):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("stage", choices=["parking-bays", "hockey-hud", "snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "mine-sky", "corn-sky", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "time-audit", "time-collection-audit", "time-author", "time-all-author", "tests", "build", "sync"])
+    parser.add_argument("stage", choices=["parking-bays", "hockey-hud", "snake-traffic", "snake-town", "snake-handling", "snake-guidance", "wife-camera", "compass-margin", "bind", "repair-author", "sky-author", "fare-author", "mine-author", "mine-sky", "corn-sky", "trailer-audit", "trailer-author", "field-audit", "field-holder", "field-audio", "keepaway-arena", "base-author", "wife-hud", "time-audit", "time-collection-audit", "time-author", "time-all-author", "time-legacy-audit", "time-legacy-author", "tests", "build", "sync"])
     parser.add_argument("--test-filter", default="LWS.TruckSports.Tests.BroadcastReadabilityTests")
     parser.add_argument("--test-name", default="camera-editmode")
     parser.add_argument("--test-platform", choices=["EditMode", "PlayMode"], default="EditMode")
+    parser.add_argument("--defer-sources", help="Explicit owned WIP paths; existing CLEAN inputs must match the preceding frozen build.")
     args = parser.parse_args()
     LOG.mkdir(parents=True, exist_ok=True)
     # Call only when this project has no other owned Editor/player. The caller
     # establishes the exclusive turn; no process-killing or project-lock bypass.
-    sync()
+    sync(args.defer_sources)
+    if args.stage == "time-legacy-audit":
+        run("sky-legacy-layout-audit", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsEnvironmentAuthoring.AuditLegacy"])
     if args.stage == "parking-bays":
         run("parking-bay-appearance-authoring", ["-quit", "-executeMethod", "LWS.TruckMusicalParking.Editor.ParkingBayAppearanceAuthoring.Upgrade"])
     elif args.stage == "hockey-hud":
@@ -179,6 +199,8 @@ def main():
         run("time-representative-install", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsEnvironmentAuthoring.InstallRepresentative"])
     elif args.stage == "time-all-author":
         run("time-collection-install", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsEnvironmentAuthoring.InstallApplicable"])
+    elif args.stage == "time-legacy-author":
+        run("sky-legacy-time-install", ["-quit", "-executeMethod", "LWS.TruckSports.Editor.SportsEnvironmentAuthoring.InstallLegacyTime"])
     elif args.stage == "tests":
         run(args.test_name, ["-runTests", "-testPlatform", args.test_platform, "-testFilter", args.test_filter, "-testResults", str(LOG / (args.test_name+".xml"))])
         result = ET.parse(LOG / (args.test_name + ".xml")).getroot()

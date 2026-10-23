@@ -9,6 +9,9 @@ namespace LWS.TruckSports
     {
         public WeatherMakerDayNightCycleManagerScript cycle;
         public WeatherMakerFullScreenCloudsScript clouds;
+        public WeatherMakerSkySphereScript skySphere;
+        [Tooltip("Elevated legacy venues: freeze the vendor ground gradient at the selected match time, including when its sun lookup is inactive.")]
+        public bool coordinateGroundColor;
         [Range(0, 1)] public float nightCloudAmbientMultiplier = .18f;
         public WeatherMakerCelestialObjectScript perspectiveSun, orthographicSun;
         [Tooltip("Legacy fixed directional fill, replaced by the vendor sun/moon outdoors.")]
@@ -25,6 +28,7 @@ namespace LWS.TruckSports
         float[] daylightIntensity;
         bool fillWasEnabled;
         Gradient previousCloudAmbient, ownedCloudAmbient;
+        WeatherMakerSkyProfileScript previousSkyProfile, ownedSkyProfile;
 
         public void Configure(int seed, string currentMatchId)
         {
@@ -45,6 +49,22 @@ namespace LWS.TruckSports
             cycle.DayNightProfile = ownedProfile;
             if (!preserveInteriorAmbient && daylightFill != null && daylightFill.GetComponent<WeatherMakerCelestialObjectScript>() == null) daylightFill.enabled = false;
             Applied = SportsTimeOfDay.Resolve(seed); matchId = currentMatchId; Revision++;
+            if (coordinateGroundColor)
+            {
+                if (skySphere == null || skySphere.SkySphereProfile == null) throw new System.InvalidOperationException("Bind the elevated venue's Weather Maker sky profile.");
+                if (ownedSkyProfile == null)
+                {
+                    previousSkyProfile = skySphere.SkySphereProfile;
+                    ownedSkyProfile = Instantiate(previousSkyProfile); ownedSkyProfile.name = previousSkyProfile.name + " (Sports match horizon)"; ownedSkyProfile.hideFlags = HideFlags.DontSave;
+                }
+                // The inactive night sun reports a gradient lookup of1. Freeze
+                // only the public ground tint using the already selected clock;
+                // all atmospheric/star rendering remains Weather Maker-owned.
+                float lookup = Applied == SportsTimeChoice.Night ? 0 : Applied == SportsTimeChoice.Evening ? .5f : Applied == SportsTimeChoice.Morning ? .55f : 1;
+                Color ground = previousSkyProfile.SkyGroundGradient.Evaluate(lookup);
+                var gradient = new Gradient(); gradient.SetKeys(new[] { new GradientColorKey(ground, 0), new GradientColorKey(ground, 1) }, new[] { new GradientAlphaKey(ground.a, 0), new GradientAlphaKey(ground.a, 1) });
+                ownedSkyProfile.SkyGroundGradient = gradient; skySphere.SkySphereProfile = ownedSkyProfile;
+            }
             ownedProfile.Speed = ownedProfile.NightSpeed = 0;
             ownedProfile.TimeOfDay = SportsTimeOfDay.Seconds(Applied);
             if (clouds != null)
@@ -83,6 +103,8 @@ namespace LWS.TruckSports
             if (clouds != null && clouds.GlobalAmbientMultiplierGradient == ownedCloudAmbient) clouds.GlobalAmbientMultiplierGradient = previousCloudAmbient;
             if (ownedProfile != null && daylightFill != null) daylightFill.enabled = fillWasEnabled;
             if (ownedProfile != null) Destroy(ownedProfile);
+            if (skySphere != null && skySphere.SkySphereProfile == ownedSkyProfile) skySphere.SkySphereProfile = previousSkyProfile;
+            if (ownedSkyProfile != null) Destroy(ownedSkyProfile);
         }
     }
 }

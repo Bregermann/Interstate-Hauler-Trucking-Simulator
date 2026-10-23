@@ -12,7 +12,11 @@ public static class SportsWeatherRenderingAuthoring {
  // defects. This does not enable a second weather authority or rebuild a venue.
  public static void UseViewportSkybox(GameObject owner,Camera[] cameras,string folder){
   var weather=owner.GetComponent<SportsChaosWeather>();
-  if(weather==null||weather.clouds==null||cameras==null||cameras.Length==0||cameras.Any(camera=>camera==null))throw new System.InvalidOperationException("Existing scene-owned Weather Maker and camera bindings are required.");
+  if(weather==null)throw new System.InvalidOperationException("Existing scene-owned Weather Maker bindings are required.");
+  UseViewportSkybox(weather.clouds,cameras,folder);
+ }
+ public static void UseViewportSkybox(WeatherMakerFullScreenCloudsScript clouds,Camera[] cameras,string folder){
+  if(clouds==null||cameras==null||cameras.Length==0||cameras.Any(camera=>camera==null))throw new System.InvalidOperationException("Existing scene-owned Weather Maker and camera bindings are required.");
   var shader=AssetDatabase.LoadAssetAtPath<Shader>("Assets/TruckSports/Resources/Viewport Weather Maker Skybox.shader");
   if(shader==null)throw new System.InvalidOperationException("Install the owned Weather Maker skybox geometry adapter first.");
   string path="Assets/"+folder+"/Materials/Weather Maker viewport sky.mat";
@@ -21,7 +25,7 @@ public static class SportsWeatherRenderingAuthoring {
   else if(material.shader!=shader)throw new System.InvalidOperationException("Preserve the existing hand-authored material: "+path);
   // Weather Maker's documented alternative: Unity covers the viewport; its
   // installed shader include computes the sky and its clouds run AfterSkybox.
-  RenderSettings.skybox=material;weather.clouds.RenderQueue=UnityEngine.Rendering.CameraEvent.AfterSkybox;EditorUtility.SetDirty(weather.clouds);
+  RenderSettings.skybox=material;clouds.RenderQueue=UnityEngine.Rendering.CameraEvent.AfterSkybox;EditorUtility.SetDirty(clouds);
   foreach(var camera in cameras){camera.clearFlags=CameraClearFlags.Skybox;EditorUtility.SetDirty(camera);}
  }
  public static void Install(SportsEventSession match,string folder)=>Install(match.gameObject,match.cameras,folder);
@@ -36,6 +40,15 @@ public static class SportsWeatherRenderingAuthoring {
   var settings=new SerializedObject(pipeline);var list=settings.FindProperty("m_RendererDataList");var previous=new SerializedObject(binding.pipeline).FindProperty("m_RendererDataList");for(int n=0;n<previous.arraySize;n++){if(n==new SerializedObject(binding.pipeline).FindProperty("m_DefaultRendererIndex").intValue)continue;var extra=previous.GetArrayElementAtIndex(n).objectReferenceValue;if(extra==null)continue;bool exists=false;for(int j=0;j<list.arraySize;j++)exists|=list.GetArrayElementAtIndex(j).objectReferenceValue==extra;if(!exists){int last=list.arraySize;list.arraySize++;list.GetArrayElementAtIndex(last).objectReferenceValue=extra;}}int index=settings.FindProperty("m_DefaultRendererIndex").intValue;
   var data=AssetDatabase.LoadAssetAtPath<UniversalRendererData>(rendererPath);
   if(data==null){AssetDatabase.CopyAsset(AssetDatabase.GetAssetPath(list.GetArrayElementAtIndex(index).objectReferenceValue),rendererPath);data=AssetDatabase.LoadAssetAtPath<UniversalRendererData>(rendererPath);}
+  EnableVendorWeather(data);
+  data.SetDirty();EditorUtility.SetDirty(data);list.GetArrayElementAtIndex(index).objectReferenceValue=data;settings.ApplyModifiedPropertiesWithoutUndo();binding.pipeline=pipeline;EditorUtility.SetDirty(binding);var snow=owner.GetComponent<SportsSnowSurface>();if(snow!=null){var depth=AssetDatabase.LoadAssetAtPath<ScriptableRendererData>("Assets/NOT_Lonely/Weatherade SRS/Resources/SRS_DepthRenderer.asset");for(int n=0;n<list.arraySize;n++)if(list.GetArrayElementAtIndex(n).objectReferenceValue==depth)snow.depthRenderer=n;EditorUtility.SetDirty(snow);}
+  // Weather Maker draws this mesh through its camera command buffer. Enabling the
+  // ordinary renderer draws its ZTest Always material over foreground geometry.
+  var sky=weather.vendor.GetComponentInChildren<WeatherMakerSkySphereScript>(true);if(sky!=null){sky.gameObject.SetActive(true);sky.enabled=true;var renderer=sky.GetComponent<MeshRenderer>();if(renderer!=null){renderer.enabled=false;EditorUtility.SetDirty(renderer);}EditorUtility.SetDirty(sky);}
+  foreach(var camera in cameras){camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;camera.farClipPlane=Mathf.Max(10000,camera.farClipPlane);EditorUtility.SetDirty(camera);}
+  AssetDatabase.SaveAssets();
+ }
+ public static void EnableVendorWeather(UniversalRendererData data){
 #if UNITY_URP
   if(!data.rendererFeatures.OfType<WeatherMakerURPRenderFeatureScript>().Any()){
    var feature=ScriptableObject.CreateInstance<WeatherMakerURPRenderFeatureScript>();feature.name="Weather Maker vendor Render Graph weather";AssetDatabase.AddObjectToAsset(feature,data);data.rendererFeatures.Add(feature);feature.SetActive(true);EditorUtility.SetDirty(feature);
@@ -43,14 +56,10 @@ public static class SportsWeatherRenderingAuthoring {
 #else
   throw new System.InvalidOperationException("Enable the installed Weather Maker URP support before installing its renderer feature.");
 #endif
-  // Vendor fog is authoritative; avoid a second deferred fog path. Match vendor demo's intermediate texture requirement.
+  // Preserve existing effects. Vendor fog is authoritative; use its documented
+  // forward/intermediate target configuration instead of a second fog path.
   var rendererSettings=new SerializedObject(data);rendererSettings.FindProperty("m_RenderingMode").intValue=0;rendererSettings.FindProperty("m_IntermediateTextureMode").intValue=1;rendererSettings.ApplyModifiedPropertiesWithoutUndo();
-  data.SetDirty();EditorUtility.SetDirty(data);list.GetArrayElementAtIndex(index).objectReferenceValue=data;settings.ApplyModifiedPropertiesWithoutUndo();binding.pipeline=pipeline;EditorUtility.SetDirty(binding);var snow=owner.GetComponent<SportsSnowSurface>();if(snow!=null){var depth=AssetDatabase.LoadAssetAtPath<ScriptableRendererData>("Assets/NOT_Lonely/Weatherade SRS/Resources/SRS_DepthRenderer.asset");for(int n=0;n<list.arraySize;n++)if(list.GetArrayElementAtIndex(n).objectReferenceValue==depth)snow.depthRenderer=n;EditorUtility.SetDirty(snow);}
-  // Weather Maker draws this mesh through its camera command buffer. Enabling the
-  // ordinary renderer draws its ZTest Always material over foreground geometry.
-  var sky=weather.vendor.GetComponentInChildren<WeatherMakerSkySphereScript>(true);if(sky!=null){sky.gameObject.SetActive(true);sky.enabled=true;var renderer=sky.GetComponent<MeshRenderer>();if(renderer!=null){renderer.enabled=false;EditorUtility.SetDirty(renderer);}EditorUtility.SetDirty(sky);}
-  foreach(var camera in cameras){camera.clearFlags=CameraClearFlags.SolidColor;camera.backgroundColor=Color.clear;camera.farClipPlane=Mathf.Max(10000,camera.farClipPlane);EditorUtility.SetDirty(camera);}
-  AssetDatabase.SaveAssets();
+  data.SetDirty();EditorUtility.SetDirty(data);
  }
 }
 }

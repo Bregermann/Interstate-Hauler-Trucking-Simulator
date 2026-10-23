@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Passed" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 03:47:17Z" end-time="2026-10-23 03:48:56Z" duration="99.1905006">
+  <test-suite type="TestSuite" id="1400" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="277" result="Passed" start-time="2026-10-23 03:47:17Z" end-time="2026-10-23 03:48:56Z" duration="99.190501" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1284" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="110" result="Passed" start-time="2026-10-23 03:47:17Z" end-time="2026-10-23 03:48:56Z" duration="99.167097" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="41884" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1129" name="BaseFlareSmokeTests" fullname="BaseFlareSmokeTests" classname="BaseFlareSmokeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 03:47:17Z" end-time="2026-10-23 03:47:19Z" duration="1.837839" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1130" name="AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" fullname="BaseFlareSmokeTests.AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" methodname="AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" classname="BaseFlareSmokeTests" runstate="Runnable" seed="1947074320" result="Passed" start-time="2026-10-23 03:47:17Z" end-time="2026-10-23 03:47:19Z" duration="1.824295" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Native flare=Telegraphed sky projectile 20 particles=32 material=Flare smoke
+Native flare=Telegraphed sky projectile 21 particles=32 material=Flare smoke
+Native flare=Telegraphed sky projectile 22 particles=32 material=Flare smoke
+Native flare=Telegraphed sky projectile 23 particles=32 material=Flare smoke
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1147" name="CheeseHudLifecycleTests" fullname="CheeseHudLifecycleTests" classname="CheeseHudLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 03:47:19Z" end-time="2026-10-23 03:47:20Z" duration="1.234216" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1148" name="OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" fullname="CheeseHudLifecycleTests.OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" methodname="OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" classname="CheeseHudLifecycleTests" runstate="Runnable" seed="2135072441" result="Passed" start-time="2026-10-23 03:47:19Z" end-time="2026-10-23 03:47:20Z" duration="1.231861" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1151" name="CollectionEnvironmentTests" fullname="CollectionEnvironmentTests" classname="CollectionEnvironmentTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 03:47:20Z" end-time="2026-10-23 03:48:31Z" duration="70.635474" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1152" name="CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" fullname="CollectionEnvironmentTests.CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" methodname="CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters" classname="CollectionEnvironmentTests" runstate="Runnable" seed="801666835" result="Passed" start-time="2026-10-23 03:47:20Z" end-time="2026-10-23 03:48:31Z" duration="70.628255" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckAvalancheEscape maxRoster=12
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckBalloonBattle maxRoster=8
+There can be only one active Event System.
+Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckBogSnorkelling maxRoster=4
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 28, observed startup 28, multiplier 1.5, target/cap 42/42.
+TAXI PEDESTRIANS: UTS baseline 0, graph nodes 4720, target 150, initial 0.
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 4720, target 150, initial 24.
+SAVED_OUTDOOR_TIME TruckFareFight maxRoster=4
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckFieldGoal maxRoster=4
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckFloorIsLava maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckFreezeTag maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckFrogger maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckGiantSwing maxRoster=8
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckHideAndSeek maxRoster=8
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckHotPotato maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckHungryHaulers maxRoster=4
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckJousting maxRoster=2
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+SAVED_OUTDOOR_TIME TruckKeepaway maxRoster=4
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+SAVED_OUTDOOR_TIME TruckKeepawayFirstPerson maxRoster=4
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckKickball maxRoster=12
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckKingOfTheHill maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckLimbo maxRoster=8
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckMagnetMayhem maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckMattressRacing maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckMinefield maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckNinjaWarrior maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckRedLightGreenLight maxRoster=12
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckSeesaw maxRoster=4
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckSheepHerding maxRoster=4
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckSkyTow maxRoster=4
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 36, observed startup 35, multiplier 1.65, target/cap 59/60.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+SAVED_OUTDOOR_TIME TruckSnake maxRoster=4
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckTargetLaunch maxRoster=4
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=969536 hash=268460137 length=176 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=969536
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=228249 hash=262241802 length=176 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=228249
+SAVED_OUTDOOR_TIME TruckTerrierRacing maxRoster=12
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckTetherball maxRoster=2
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckTrailerPlug maxRoster=4
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckTugOfWar maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckVolleyball maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckWhackAMole maxRoster=8
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckWifeCarrying maxRoster=8
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1204" name="LegacyMatchTimeTests" fullname="LegacyMatchTimeTests" classname="LegacyMatchTimeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 03:48:31Z" end-time="2026-10-23 03:48:38Z" duration="6.781480" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1205" name="ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" fullname="LegacyMatchTimeTests.ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" methodname="ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" classname="LegacyMatchTimeTests" runstate="Runnable" seed="521682831" result="Passed" start-time="2026-10-23 03:48:31Z" end-time="2026-10-23 03:48:38Z" duration="6.778012" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Storm (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Morning => Morning match=f1bf1f69634840888d6a014e7909c2a8 seconds=29700
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Can't find a camera with a 'MainCamera' tag. The Follow Target feature will be disabled.
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Day => Day match=3e685ccd22804700a6f3389a1157e1c8 seconds=46800
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Evening => Evening match=9754ae2f7c2b429380022c9927162a7c seconds=68400
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyRain (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Night => Night match=869fe011138a487abac5e6f1eaaf644e seconds=82800
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Random => Day match=c3c7c69d5d37403c9a659a401d3cb456 seconds=46800
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+TruckCheeseRolling Morning => Morning match=158c1100c0484eaaa8868992e1e791fd seconds=29700
+TruckCheeseRolling Day => Day match=d3950a4dd1be4ce5b4753631cbd2ab92 seconds=46800
+TruckCheeseRolling Evening => Evening match=1b44e8ab53e04adeaba3877990f74b30 seconds=68400
+TruckCheeseRolling Night => Night match=31412d4dda244198b395b0db277d76f2 seconds=82800
+TruckCheeseRolling Random => Night match=58f25f45582d47989898dc727c1283d1 seconds=82800
+There can be only one active Event System.
+Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+TruckBaseJumping Morning => Morning match=2fc3a29c470f48b49567dd703f3b1f1f seconds=29700
+TruckBaseJumping Day => Day match=3af74573a7d34918a2aa6fa9f222b528 seconds=46800
+TruckBaseJumping Evening => Evening match=e258d8415db145deaabaeb84ec6f8a64 seconds=68400
+TruckBaseJumping Night => Night match=3d85201ea6634a76bf84c3618885c054 seconds=82800
+TruckBaseJumping Random => Evening match=47b14aefcc364e84a9ac23d11f2888e1 seconds=68400
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1206" name="MatchTimeIntegrationTests" fullname="MatchTimeIntegrationTests" classname="MatchTimeIntegrationTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 03:48:38Z" end-time="2026-10-23 03:48:55Z" duration="17.240222" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1207" name="RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" fullname="MatchTimeIntegrationTests.RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" methodname="RepresentativeScenesUseSavedTimeControlsAndStableMatchLighting" classname="MatchTimeIntegrationTests" runstate="Runnable" seed="91901189" result="Passed" start-time="2026-10-23 03:48:38Z" end-time="2026-10-23 03:48:55Z" duration="17.238093" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="150000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+TruckKeepaway Morning vendorSun=4.791823 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+TruckKeepaway Day vendorSun=42.52172 intensity=1 ambient=RGBA(0.382, 0.403, 0.500, 0.500) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=10185 hash=1003796935 connected=1402
+TruckKeepaway Evening vendorSun=4.821731 intensity=1 ambient=RGBA(0.248, 0.154, 0.047, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone) to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=11182 hash=1086049196 connected=1402
+TruckKeepaway Night vendorSun=324.0253 intensity=0 ambient=RGBA(0.145, 0.146, 0.250, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_OvercastClouds (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=12179 hash=309219607 connected=1405
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TruckFieldGoal Morning vendorSun=4.791823 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_LightRain (Sports runtime clone) to WeatherMakerProfile_MediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckFieldGoal Day vendorSun=42.52172 intensity=1 ambient=RGBA(0.382, 0.403, 0.500, 0.500) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_MediumClouds (Sports runtime clone) to WeatherMakerProfile_HeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckFieldGoal Evening vendorSun=4.821731 intensity=1 ambient=RGBA(0.248, 0.154, 0.047, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyClouds (Sports runtime clone) to WeatherMakerProfile_HeavySnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckFieldGoal Night vendorSun=324.0253 intensity=0 ambient=RGBA(0.145, 0.146, 0.250, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavySnow (Sports runtime clone) to WeatherMakerProfile_LightClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TruckSkyTow Morning vendorSun=4.791823 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_MediumClouds (Sports runtime clone) to WeatherMakerProfile_LightCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckSkyTow Day vendorSun=42.52172 intensity=1 ambient=RGBA(0.382, 0.403, 0.500, 0.500) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_LightCloudsScattered (Sports runtime clone) to WeatherMakerProfile_HeavyFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckSkyTow Evening vendorSun=4.821731 intensity=1 ambient=RGBA(0.248, 0.154, 0.047, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyFog (Sports runtime clone) to WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckSkyTow Night vendorSun=324.0253 intensity=0 ambient=RGBA(0.145, 0.146, 0.250, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone) to WeatherMakerProfile_LightFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=546016 hash=244823944 length=160 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=546016
+TruckTerrierRacing Morning vendorSun=4.791823 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_MediumSleet (Sports runtime clone) to WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=330207 hash=253828757 length=160 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=330207
+TruckTerrierRacing Day vendorSun=42.52172 intensity=1 ambient=RGBA(0.382, 0.403, 0.500, 0.500) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone) to WeatherMakerProfile_LightSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=735897 hash=268716444 length=176 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=735897
+TruckTerrierRacing Evening vendorSun=4.821731 intensity=1 ambient=RGBA(0.248, 0.154, 0.047, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_LightSnow (Sports runtime clone) to WeatherMakerProfile_LightClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=324813 hash=256372913 length=160 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=324813
+TruckTerrierRacing Night vendorSun=324.0253 intensity=0 ambient=RGBA(0.145, 0.146, 0.250, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_LightClouds (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=584050 hash=256971188 length=160 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=584050
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 36, observed startup 35, multiplier 1.65, target/cap 59/60.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+TruckSnake Morning vendorSun=4.791823 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_LightClouds (Sports runtime clone) to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+TruckSnake Day vendorSun=42.52172 intensity=1 ambient=RGBA(0.248, 0.154, 0.046, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+TruckSnake Evening vendorSun=4.821731 intensity=1 ambient=RGBA(0.382, 0.403, 0.500, 0.500) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_HeavyClouds (Sports runtime clone) to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+TruckSnake Night vendorSun=324.0253 intensity=0 ambient=RGBA(0.248, 0.154, 0.047, 0.250) profile=WeatherMakerDayNightCycleProfile_Default(Clone)(Clone)(Clone) (Sports match time)
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1213" name="OrthographicSkyProfileTests" fullname="OrthographicSkyProfileTests" classname="OrthographicSkyProfileTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 03:48:55Z" end-time="2026-10-23 03:48:56Z" duration="1.422074" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1214" name="OrthographicArenaRenderUsesItsOwnVendorSkyProfile" fullname="OrthographicSkyProfileTests.OrthographicArenaRenderUsesItsOwnVendorSkyProfile" methodname="OrthographicArenaRenderUsesItsOwnVendorSkyProfile" classname="OrthographicSkyProfileTests" runstate="Runnable" seed="417618014" result="Passed" start-time="2026-10-23 03:48:55Z" end-time="2026-10-23 03:48:56Z" duration="1.417751" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="90000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -7732,8 +7732,8 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Preserve the current task order; run this full attached prompt to completion directly after earlier work. Exact specification: [2026-10-22-Global-Sky-Time-Scoring.md](Documentation/TruckSports/Requests/2026-10-22-Global-Sky-Time-Scoring.md). |
 | Acceptance Criteria | After the existing gameplay repair work; before code-quality stabilization. Extend installed weather/lighting/UI foundations, retain authoritative gameplay and specialized presentations. All numbered requirements and acceptance tests in the exact archived directive apply. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Environment-Time-Foundation.md and Evidence/2026-10-22-Environment-Time/; five representative saved outdoor scenes, shared vendor/Heat adapters; original other venues preserved. |
-| Automated Verification | 3EditMode preference tests during implementation; final2PlayMode tests passed. Exact Windows EnvironmentFiveMenusFinalWindows171/0 and separate restart1/0; actual720p/1080p and software menu input. Rejected logical passes/failed native reproductions retained; no physical-device or human acceptance inferred. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and 2026-10-22-Legacy-Time-Integration.md with their tracked evidence; 35 compatible outdoor scenes plus Cornhole/Cheese/Base now share saved time and vendor skies. Full visual/scoring/results acceptance remains open. |
+| Automated Verification | Outdoor milestone: 3 final PlayMode tests and exact Windows 1,054/0. Legacy milestone: 6 targeted PlayMode tests, then 3 focused tests after horizon/night-tint fixes; final exact Windows 122/0. Separate immutable payloads and rejected visual iterations recorded. Actual 720p/1080p and software sources; no human/device/full-match acceptance inferred. |
 | Human Verification | New work requested, no acceptance claimed. |
 | Remaining Work | Full registered-scene and individual weather-variant integration, artistic sky/venue lighting, authoritative score event animation and results integration; required full-roster/split performance and human acceptance. Carnival remains queued after this scope. |
 
@@ -7765,10 +7765,10 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Independent saved Random/Morning/Day/Evening/Night selection in established setup UI. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Selection persists across reloads and sports; weather remains independently selected; keyboard/controller navigation works. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
-| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Legacy-Time-Integration.md and Evidence/2026-10-22-Legacy-Time/ extend the delivered 35-scene Outdoor-Environment milestone to Cornhole, Cheese and Base; existing vendor/render and physics owners retained. |
+| Automated Verification | Legacy milestone: 6 native PlayMode tests passed, including existing outdoor regressions; exact Windows payload 122 checks/0 errors, 36 actual 720p/1080p captures, 12 short frame-interval blocks and a fresh-process preference check. Previous 35-scene Windows evidence remains in its original report. No complete-match/hardware/human acceptance inferred. |
 | Human Verification | Not performed; no acceptance claimed. |
-| Remaining Work | Extend saved setup controls to remaining applicable sports; preserve indoor/concert exceptions and designer customizations. Five-scene controls/persistence verified within the recorded software/visual scope; physical devices untested. |
+| Remaining Work | Remaining applicable venues and artistic exceptions; full registry forecast choices for legacy Cheese/Base; physical-device and human acceptance. Shared controls and persistence now verified in the documented 38-scene software/visual scope. |
 
 ### Q22-SKY-TIME-02 — Weather Maker time coordination
 
@@ -7779,10 +7779,10 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Frozen short-match time, stable random choice within a match, appropriate rematch selection. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Vendor sun/moon/ambient reflect selection without mutating source profiles; heat/attempt changes do not reroll; rematch starts a new match. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
-| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Legacy-Time-Integration.md and Evidence/2026-10-22-Legacy-Time/ extend the delivered 35-scene Outdoor-Environment milestone to Cornhole, Cheese and Base; existing vendor/render and physics owners retained. |
+| Automated Verification | Legacy milestone: 6 native PlayMode tests passed, including existing outdoor regressions; exact Windows payload 122 checks/0 errors, 36 actual 720p/1080p captures, 12 short frame-interval blocks and a fresh-process preference check. Previous 35-scene Windows evidence remains in its original report. No complete-match/hardware/human acceptance inferred. |
 | Human Verification | Not performed; no acceptance claimed. |
-| Remaining Work | Bind remaining scene/legacy weather adapters and verify their heat/rematch lifecycles. Existing five scenes preserve vendor source profiles and active match time; broader integration remains open. |
+| Remaining Work | Remaining applicable outdoor lifecycle adapters; expanded forecast choices for legacy Cheese/Base; venue-specific and human/device acceptance. Cornhole/Cheese/Base now preserve time across actual forecast/attempt refreshes and new match identities. |
 
 ### Q22-SKY-SKY-01 — Weather-responsive sky variants
 
@@ -7793,10 +7793,10 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | All installed suitable weather presets use convincing vendor sky/cloud/fog/storm presentation. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Actual clear/rain/storm/snow/blizzard/hurricane sky and precipitation visuals match selected weather and time. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
-| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Legacy-Time-Integration.md and Evidence/2026-10-22-Legacy-Time/ extend the delivered 35-scene Outdoor-Environment milestone to Cornhole, Cheese and Base; existing vendor/render and physics owners retained. |
+| Automated Verification | Legacy milestone: 6 native PlayMode tests passed, including existing outdoor regressions; exact Windows payload 122 checks/0 errors, 36 actual 720p/1080p captures, 12 short frame-interval blocks and a fresh-process preference check. Previous 35-scene Windows evidence remains in its original report. No complete-match/hardware/human acceptance inferred. |
 | Human Verification | Not performed; no acceptance claimed. |
-| Remaining Work | All registered weather variants and remaining outdoor scenes; richer cloud/sunset/stars/moon artistic acceptance. Corrected static-blue Arctic night demonstrated; short weather captures do not certify all sky or snow accumulation requirements. |
+| Remaining Work | Remaining applicable outdoor scenes, artistic clouds/horizon/surroundings/venue illumination, sunset/stars/moon and snow/track acceptance. Corrected legacy ground masks/tint are implemented; they do not establish finished scenery. |
 
 ### Q22-SKY-LIGHT-01 — Venue lighting and artistic exceptions
 
@@ -7849,7 +7849,7 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Representative weather/time combinations, multiplayer, scoring/results evidence and meaningful frame-time measurements. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Inspect actual Windows rendering and targeted native tests; distinguish human/hardware/listening acceptance; preserve accepted build until a candidate passes. |
 | Status | PARTIAL |
-| Implementation Evidence | Documentation/TruckSports/2026-10-22-Outdoor-Environment-Integration.md and Evidence/2026-10-22-Outdoor-Environment/;35 saved compatible outdoor scenes, owned vendor sky/star profile, orthographic upload bridge, cloud ambient and replay-safe NWH/headlight adapters. |
-| Automated Verification | Final3PlayMode tests passed across35 saved maximum-roster setups and repeated day/night starts. Exact final Windows1,054 checks/0 errors,298 actual720p/1080p captures,33 installed nighttime profiles, software menu input and a fresh-process persistence check. Whole-player frame intervals are not isolated profiling or human/hardware acceptance. |
+| Implementation Evidence | Documentation/TruckSports/2026-10-22-Legacy-Time-Integration.md and Evidence/2026-10-22-Legacy-Time/ extend the delivered 35-scene Outdoor-Environment milestone to Cornhole, Cheese and Base; existing vendor/render and physics owners retained. |
+| Automated Verification | Legacy milestone: 6 native PlayMode tests passed, including existing outdoor regressions; exact Windows payload 122 checks/0 errors, 36 actual 720p/1080p captures, 12 short frame-interval blocks and a fresh-process preference check. Previous 35-scene Windows evidence remains in its original report. No complete-match/hardware/human acceptance inferred. |
 | Human Verification | Not performed; no acceptance claimed. |
 | Remaining Work | Broader maximum-roster/split-screen/performance acceptance, additional venue/weather combinations, score/results tests and human/device/listening checks. Whole-player frame samples are not isolatedCPU/GPU profiling. |

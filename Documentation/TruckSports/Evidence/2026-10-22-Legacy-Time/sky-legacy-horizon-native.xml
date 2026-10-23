@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 04:13:30Z" end-time="2026-10-23 04:13:40Z" duration="10.21021">
+  <test-suite type="TestSuite" id="1400" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="277" result="Passed" start-time="2026-10-23 04:13:30Z" end-time="2026-10-23 04:13:40Z" duration="10.210210" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1284" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="110" result="Passed" start-time="2026-10-23 04:13:30Z" end-time="2026-10-23 04:13:40Z" duration="10.193294" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="16824" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1129" name="BaseFlareSmokeTests" fullname="BaseFlareSmokeTests" classname="BaseFlareSmokeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 04:13:30Z" end-time="2026-10-23 04:13:31Z" duration="1.825270" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1130" name="AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" fullname="BaseFlareSmokeTests.AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" methodname="AllFourExistingFlaresReuseNativeSmokeAndClearTheSamePoolOnRematch" classname="BaseFlareSmokeTests" runstate="Runnable" seed="1539793508" result="Passed" start-time="2026-10-23 04:13:30Z" end-time="2026-10-23 04:13:31Z" duration="1.811245" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Native flare=Telegraphed sky projectile 20 particles=31 material=Flare smoke
+Native flare=Telegraphed sky projectile 21 particles=31 material=Flare smoke
+Native flare=Telegraphed sky projectile 22 particles=31 material=Flare smoke
+Native flare=Telegraphed sky projectile 23 particles=31 material=Flare smoke
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1147" name="CheeseHudLifecycleTests" fullname="CheeseHudLifecycleTests" classname="CheeseHudLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 04:13:31Z" end-time="2026-10-23 04:13:33Z" duration="1.223162" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1148" name="OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" fullname="CheeseHudLifecycleTests.OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" methodname="OriginalRaceOwnsScoresPosePauseAndRematchWhileHudOnlyReads" classname="CheeseHudLifecycleTests" runstate="Runnable" seed="572071845" result="Passed" start-time="2026-10-23 04:13:31Z" end-time="2026-10-23 04:13:33Z" duration="1.219962" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1204" name="LegacyMatchTimeTests" fullname="LegacyMatchTimeTests" classname="LegacyMatchTimeTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 04:13:33Z" end-time="2026-10-23 04:13:40Z" duration="7.135421" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1205" name="ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" fullname="LegacyMatchTimeTests.ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" methodname="ExistingLegacyMatchesLatchVendorTimeAcrossAttemptsAndRematches" classname="LegacyMatchTimeTests" runstate="Runnable" seed="454054537" result="Passed" start-time="2026-10-23 04:13:33Z" end-time="2026-10-23 04:13:40Z" duration="7.127371" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyRain (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Morning => Morning match=49a0548f782b4eeab083b2cafb5888f2 seconds=29700
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Day => Day match=a670da46e92d4a62a902d180c868f2f1 seconds=46800
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_ClearWindy (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_ClearWindy (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Evening => Evening match=c65aa522e4b640efb70f8818b7361a69 seconds=68400
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_AcidRain (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Night => Night match=ebc5e5afb292465abe16f1a76d2080c8 seconds=82800
+Changing weather profile WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumSleet (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TruckCornhole Random => Morning match=15a2965665154457888baef378fda9dd seconds=29700
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+TruckCheeseRolling Morning => Morning match=464fc13a67a54e9783fb3fcd0e2d121c seconds=29700
+TruckCheeseRolling Day => Day match=5be2329a0a6347f8a50e0f1fe3ac62a6 seconds=46800
+TruckCheeseRolling Evening => Evening match=4bc6817b604644658ee821fe7bd97003 seconds=68400
+TruckCheeseRolling Night => Night match=b9a3afb9960f4a2a9f027e42ccc54e17 seconds=82800
+TruckCheeseRolling Random => Night match=77bda1347cb84abeb42e705700bc8853 seconds=82800
+Detected one or more triangles where the distance between any 2 vertices is greater than 500 units. The resulting Triangle Mesh can impact simulation and query stability. It is recommended to tessellate meshes that have large triangles. Source mesh name: Transport Helicopter — open cargo body (owned derivative)
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+TruckBaseJumping Morning => Morning match=7e73413af3444802a09ecf44fc0713fc seconds=29700
+TruckBaseJumping Day => Day match=5cfdc43abe2944aaa4078edced189076 seconds=46800
+TruckBaseJumping Evening => Evening match=3e0b5ff1608d4e958ef73ceda8ac7f58 seconds=68400
+TruckBaseJumping Night => Night match=0329dca0665b4d9e877a57f214b0eae4 seconds=82800
+TruckBaseJumping Random => Morning match=cf676a14a50e4ac5bd5c53570cc6baf6 seconds=29700
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

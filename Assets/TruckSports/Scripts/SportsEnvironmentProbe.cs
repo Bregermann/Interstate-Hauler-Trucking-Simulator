@@ -50,6 +50,10 @@ namespace LWS.TruckSports
                 Check(SportsTimeOfDay.Selection == SportsTimeChoice.Night, "saved independent time preference survives a fresh Windows process");
                 Finish(); yield break;
             }
+            if (Array.IndexOf(arguments, "legacy-time") >= 0)
+            {
+                yield return LegacyScenes(); Finish(); yield break;
+            }
             int scenesIndex = Array.IndexOf(arguments, "-tsEnvironmentScenes");
             string[] scenes = scenesIndex >= 0 && scenesIndex + 1 < arguments.Length
                 ? arguments[scenesIndex + 1].Split(',')
@@ -117,6 +121,55 @@ namespace LWS.TruckSports
             SportsTimeOfDay.Select(SportsTimeChoice.Night); SportsNavigation.FrontEnd(); yield return null; yield return null;
             Check(SceneManager.GetActiveScene().name == SportsNavigation.Front, "returns to the real sport-selection menu after repeated weather/time matches");
             Finish();
+        }
+        IEnumerator LegacyScenes()
+        {
+            foreach (string scene in new[] { "TruckCornhole", "TruckCheeseRolling", "TruckBaseJumping" })
+            {
+                SportsNavigation.LoadSport(scene); yield return null; yield return null;
+                var corn = FindAnyObjectByType<LWS.TruckCornhole.CornholeMatch>();
+                var cheese = FindAnyObjectByType<LWS.TruckCheeseRolling.CheeseMatch>();
+                var jumper = FindAnyObjectByType<LWS.TruckBaseJumping.BaseJumpMatch>();
+                var binding = FindAnyObjectByType<SportsMatchTime>();
+                Check(binding != null, scene + " saved legacy time binding"); if (binding == null) continue;
+                SportsMenuView menus = corn != null ? corn.menus : cheese != null ? cheese.menus : jumper.menus;
+                var setup = corn != null ? corn.setup : cheese != null ? cheese.setup : jumper.setup;
+                setup.count = 4;
+                if (corn != null) corn.AllAI(); else if (cheese != null) cheese.AllAI(); else jumper.AllBots();
+                var clock = menus.GetComponentsInChildren<SportsWeatherPicker>(true).Single(picker => picker.timeOfDay);
+                Check(clock.gameObject.activeInHierarchy, scene + " actual Heat clock visible");
+                yield return Capture(scene + "-legacy-setup");
+                string priorId = null;
+                foreach (SportsTimeChoice choice in new[] { SportsTimeChoice.Morning, SportsTimeChoice.Day, SportsTimeChoice.Evening, SportsTimeChoice.Night })
+                {
+                    if (corn != null) corn.ChangeSetup(); else if (cheese != null) cheese.ChangeSetup(); else jumper.SetupScreen();
+                    clock.Choose((int)choice);
+                    Check(corn != null ? corn.StartMatch() : cheese != null ? cheese.StartMatch() : jumper.StartMatch(), scene + " actual four-AI start " + choice);
+                    yield return new WaitForSeconds(2);
+                    string id = corn != null ? corn.MatchId : cheese != null ? cheese.MatchId : jumper.MatchId;
+                    Check(!string.IsNullOrEmpty(id) && id != priorId, scene + " fresh rematch identity " + choice); priorId = id;
+                    Check(binding.Applied == choice && Mathf.Abs(binding.cycle.TimeOfDay - SportsTimeOfDay.Seconds(choice)) < .01f, scene + " actual vendor time " + choice);
+                    Check(!binding.daylightFill.enabled && binding.cycle.Speed == 0 && binding.cycle.NightSpeed == 0, scene + " fixed noon fill superseded by vendor " + choice);
+                    Check(RenderSettings.skybox.shader.name == "LWS/TruckSports/Weather Maker Viewport Skybox", scene + " runtime sky owner keeps vendor material " + choice);
+                    int revision = binding.Revision; binding.Configure(-458, id);
+                    Check(binding.Revision == revision, scene + " attempt seed keeps match time " + choice);
+                    var samples = new List<float>(60);
+                    for (int frame = 0; frame < 60; frame++) { yield return null; samples.Add(Time.unscaledDeltaTime * 1000); }
+                    samples.Sort(); log.AppendLine("FRAME_TIME " + scene + " Legacy-" + choice + " medianMs=" + samples[30].ToString("F2") + " p95Ms=" + samples[56].ToString("F2") + " samples=60; whole-player short-start interval, not isolated GPU/CPU or full-match profiling.");
+                    yield return Capture(scene + "-legacy-" + choice);
+                }
+                if (corn != null) corn.ChangeSetup(); else if (cheese != null) cheese.ChangeSetup(); else jumper.SetupScreen();
+                setup.players[0].source = setup.players[1].source = LWS.TruckBowling.BowlingSource.Keyboard;
+                SportsCameraOptions.Set(false); SportsTimeOfDay.Select(SportsTimeChoice.Night);
+                Check(corn != null ? corn.StartMatch() : cheese != null ? cheese.StartMatch() : jumper.StartMatch(), scene + " two software-keyboard human night views start");
+                yield return new WaitForSeconds(1);
+                var cameras = corn != null ? corn.courses.Select(course => course.chase.view).ToArray() : cheese != null ? cheese.cameras.Select(rig => rig.view).ToArray() : jumper.views.Select(rig => rig.view).ToArray();
+                Check(cameras.Count(view => view.enabled) == 2, scene + " AI cameras OFF leaves two human views");
+                yield return Capture(scene + "-legacy-two-software-humans-night");
+                if (corn != null) corn.ChangeSetup(); else if (cheese != null) cheese.ChangeSetup(); else jumper.SetupScreen();
+            }
+            SportsNavigation.FrontEnd(); yield return null; yield return null;
+            Check(SceneManager.GetActiveScene().name == SportsNavigation.Front, "legacy clocks return to real sport selection");
         }
         IEnumerator Capture(string label)
         {
