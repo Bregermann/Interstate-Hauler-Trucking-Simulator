@@ -14,6 +14,10 @@ public sealed class SportsProbeInputIsolation:MonoBehaviour {
  void Mute(InputDevice device){if(!device.native||!device.enabled||muted.Contains(device))return;muted.Add(device);InputSystem.DisableDevice(device);}
  void Changed(InputDevice device,InputDeviceChange change){if(change==InputDeviceChange.Added||change==InputDeviceChange.Reconnected)Mute(device);}
  void OnDestroy(){Application.runInBackground=previousBackground;InputSystem.onDeviceChange-=Changed;foreach(var device in muted)if(device.added&&!device.enabled)InputSystem.EnableDevice(device);}
+#else
+ // Production builds never activate development input isolation. Runtime callers
+ // still need a stable query when diagnostic components compile to an inert shell.
+ public static bool Active=>false;
 #endif
 }
 }

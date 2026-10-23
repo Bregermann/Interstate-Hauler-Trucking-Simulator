@@ -1,0 +1,12 @@
+{
+  "path": "Assets/TruckSports/Scripts/SportsProbeInputIsolation.cs",
+  "beforeSha256": "8603d8a6146228057e9be4ecb18b1453c0279292548f5d6fb0b912157a731a3c",
+  "afterSha256": "58ca3d96c7abdaebf25b06e601d9f44d3b66bdf36653203c1ec8173b9ae8f301",
+  "reason": "Non-development player CS0117 from DerbyMirrors; Active only existed inside diagnostic compile condition.",
+  "scope": "Release-only false query; existing Editor/development statements unchanged.",
+  "verified": "Direct PE metadata inspection of actual ROOT non-development player assembly: get_Active IL162A = ldc.i4.0;ret. C# release compilation passed; full DeadAir build still processing shaders.",
+  "diff": "--- \n+++ \n@@ -14,6 +14,10 @@\n  void Mute(InputDevice device){if(!device.native||!device.enabled||muted.Contains(device))return;muted.Add(device);InputSystem.DisableDevice(device);}\n  void Changed(InputDevice device,InputDeviceChange change){if(change==InputDeviceChange.Added||change==InputDeviceChange.Reconnected)Mute(device);}\n  void OnDestroy(){Application.runInBackground=previousBackground;InputSystem.onDeviceChange-=Changed;foreach(var device in muted)if(device.added&&!device.enabled)InputSystem.EnableDevice(device);}\n+#else\n+ // Production builds never activate development input isolation. Runtime callers\n+ // still need a stable query when diagnostic components compile to an inert shell.\n+ public static bool Active=>false;\n #endif\n }\n }\n",
+  "developmentSourceUnchanged": true,
+  "actualReleaseAssembly": "Library/Bee/PlayerScriptAssemblies/Assembly-CSharp.dll",
+  "actualReleaseAssemblySha256": "b9520bcc4d7224a89b83a124bd6fa59b870f36a9db2dfef8d6303e808e5910bb"
+}

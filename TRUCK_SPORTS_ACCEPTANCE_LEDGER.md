@@ -8014,8 +8014,8 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | Shared Sports diagnostic compile boundary / production player build |
 | Original Request | Preserve unrelated work and keep both Sports and Dead Air progressing; repair a concrete Sports compiler blocker exposed by the related production Windows build. |
 | Acceptance Criteria | Non-development player compilation can resolve SportsProbeInputIsolation.Active; production value is always false; existing Editor/development isolation and Derby mirror behavior remain intact. |
-| Status | IMPLEMENTED / UNVERIFIED |
-| Implementation Evidence | SportsProbeInputIsolation.cs adds only a release-branch false query. No vendor source, input mappings or actual vehicle behavior changed. This pending repair is separate from the frozen14da results candidate. |
-| Automated Verification | Dead Air Windows build01 exposed CS0117 in DerbyMirrors.cs. Source branch inspected; actual repaired release-build compilation pending. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | SportsProbeInputIsolation.cs adds only a release-branch false query. Documentation/TruckSports/2026-10-23-Release-Probe-Query.md and Evidence/2026-10-23-Release-Probe-Query/compiled-query-proof.json retain actual compiled evidence. No vendor source, mappings, mirror, vehicle or scoring behavior changed. This logical source dependency is separate from frozen14da results payload. |
+| Automated Verification | Dead Air Windows build01 exposed CS0117 in DerbyMirrors.cs. Actual build02 passed C# compilation; direct PE-metadata inspection of ROOT Library/Bee/PlayerScriptAssemblies/Assembly-CSharp.dll found get_Active IL162A (ldc.i4.0;ret). Source proof removes only the added release branch and reproduces the exact original development source hash. Full Dead Air build still processing shaders at verification; no complete executable/runtime acceptance inferred. |
 | Human Verification | Not performed. |
-| Remaining Work | Run actual production player compilation, record evidence, include the repair in the next scoped source/build delivery. |
+| Remaining Work | None for the exercised missing production query/unchanged diagnostic branch. Next Sports build incorporates this source dependency; canonical14da development payload remains the separately verified prior snapshot. Full Dead Air build/runtime/hardware acceptance belongs to its independent task. |
