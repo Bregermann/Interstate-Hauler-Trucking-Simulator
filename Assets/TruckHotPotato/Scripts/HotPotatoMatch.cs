@@ -70,10 +70,16 @@ namespace LWS.TruckHotPotato
         public override string ViewText(int view) { int slot = drivingViews.rally.owners[view]; TryReadScoreCard(slot, out string score, out string detail); return setup.players[slot].name + " · " + score + "\n" + detail + "\n" + (ParticipantLocked(slot) ? "SPECTATOR · " : "") + Status; }
         protected override void Awake()
         {
-            base.Awake(); glow = new MaterialPropertyBlock();
+            base.Awake(); glow = new MaterialPropertyBlock(); rules.Awarded += ConfirmAward;
             propPositions = new Vector3[breakables.Length]; propRotations = new Quaternion[breakables.Length];
             for (int i = 0; i < breakables.Length; i++) { propPositions[i] = breakables[i].transform.position; propRotations[i] = breakables[i].transform.rotation; }
         }
+        void ConfirmAward(HotPotatoAwardKind kind, string id, int slot, int delta, int total)
+        {
+            bool winner = kind == HotPotatoAwardKind.LastStanding;
+            ConfirmScore(id, slot, delta, total, kind == HotPotatoAwardKind.Pass ? "BOMB PASSED" : winner ? "LAST TRUCK STANDING" : "BOMB CYCLE SURVIVED", winner ? SportsScoreTier.RoundWinner : SportsScoreTier.Small, roundEnded: kind != HotPotatoAwardKind.Pass, matchEnded: winner);
+        }
+        protected override void OnDestroy() { if (rules != null) rules.Awarded -= ConfirmAward; base.OnDestroy(); }
         public Vector3 Grid(int slot) { float angle = slot * Mathf.PI * 2 / Mathf.Max(2, setup.count); return new Vector3(Mathf.Sin(angle) * 42, .65f, Mathf.Cos(angle) * 42); }
 
         protected override void BeginGame()

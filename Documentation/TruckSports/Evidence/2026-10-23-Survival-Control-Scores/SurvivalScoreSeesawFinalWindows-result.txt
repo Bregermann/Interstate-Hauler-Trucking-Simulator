@@ -1,0 +1,70 @@
+PASS saved quarry scene has four full NWH tractors and a real constrained two-axis pivot
+PASS default three-heat physical four-truck AI match starts
+PASS all four trucks settle grounded and upright on the held board before clean release; drift=0.041
+ACTUAL_SEESAW heat=0 clock=0.0 tilt=0.00 impacts=0 scores=0,0,0,0
+PASS pause freezes the actual pivot, tractors and scoring clock
+PASS action broadcast owns a valid live primary truck
+PASS actual primary renderer meets configured readable height within10% tolerance; height=0.108
+PASS actual primary truck remains inside the action viewport
+PASS action camera retains finite position and bounded lens
+PASS saved sport uses the existing Heat confirmed-score presenter
+PASS real committed award reaches the Heat animation
+PASS visible score presentation leaves gameplay/menu inputs unblocked
+PASS opaque notification backing protects score text from bright venue artwork
+ACTUAL_SEESAW heat=0 clock=15.9 tilt=25.32 impacts=0 scores=1,1,1,1
+ACTUAL_SEESAW heat=0 clock=30.9 tilt=28.10 impacts=0 scores=2,2,2,2
+ACTUAL_SEESAW heat=0 clock=45.9 tilt=38.78 impacts=0 scores=3,3,3,3
+ACTUAL_SEESAW heat=0 clock=60.9 tilt=38.78 impacts=0 scores=4,4,4,4
+ACTUAL_SEESAW heat=0 clock=75.9 tilt=38.78 impacts=2 scores=5,4,4,5
+ACTUAL_SEESAW heat=1 clock=0.0 tilt=0.00 impacts=3 scores=10,4,4,5
+ACTUAL_SEESAW heat=1 clock=15.0 tilt=29.31 impacts=3 scores=11,5,5,6
+ACTUAL_SEESAW heat=1 clock=30.0 tilt=38.20 impacts=3 scores=12,6,6,7
+ACTUAL_SEESAW heat=1 clock=45.0 tilt=38.78 impacts=4 scores=12,7,6,8
+ACTUAL_SEESAW heat=2 clock=0.0 tilt=0.00 impacts=6 scores=12,12,6,8
+ACTUAL_SEESAW heat=2 clock=15.0 tilt=38.34 impacts=6 scores=13,13,7,9
+ACTUAL_SEESAW heat=2 clock=30.0 tilt=38.78 impacts=7 scores=14,14,7,10
+ACTUAL_SEESAW heat=2 clock=45.0 tilt=38.78 impacts=8 scores=15,15,7,10
+PASS every confirmed award has one semantic ID, correct participant and consistent total; receipts=40
+PASS confirmed award deltas account exactly for the authoritative scores or completed control milestones
+PASS actual confirmed award captured at720p/1080p
+PASS actual AI balance/ramming completes all three heats and final results
+PASS actual vehicle weights and movement produce visible physical platform tilt; peak=38.78
+ACTUAL_AI_RESULTS
+#1 Player 1 · 20PTS · 2 HEATS · 0 KNOCKOFFS · 0 SAVES
+#2 Player 2 · 15PTS · 1 HEATS · 0 KNOCKOFFS · 0 SAVES
+#4 Player 3 · 7PTS · 0 HEATS · 0 KNOCKOFFS · 0 SAVES
+#3 Player 4 · 10PTS · 0 HEATS · 0 KNOCKOFFS · 0 SAVES
+
+PASS actual board and tractor pose replay starts
+PASS replay preserves authoritative heat scores and final placing
+PASS physical mass-distribution fixture starts at axis 0
+PASS centered physical tractor leaves the two-axis platform nearly level; tilt=0.49
+PASS physical mass-distribution fixture starts at axis 1
+PASS actual NWH wheel weight lowers the occupied right edge; tilt=26.42 lowered=-0.445
+PASS physical mass-distribution fixture starts at axis 2
+PASS actual NWH wheel weight lowers the occupied forward edge; tilt=26.60 lowered=-0.448
+PASS driving fall/rematch restores a real unbroken tractor and level countdown
+PASS rematch after prior tilted/falling heats resets the rendered and physical deck and actual wheel support
+PASS software accelerator physically drives the tractor off the actual deck into a legitimate fall
+PASS the fallen physical truck hits the quarry and activates actual mesh destruction
+PASS 1 software-controller humans plus AI start through setup
+PASS 1 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 1-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 2 software-controller humans plus AI start through setup
+PASS 2 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 2-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 3 software-controller humans plus AI start through setup
+PASS 3 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 3-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS 4 software-controller humans plus AI start through setup
+PASS 4 human-only cab viewports have distinct correct owners and bounded nonoverlapping rectangles
+PASS 4-human input ownership isolates injected accelerator
+PASS Show AI Cameras fills only supported views after humans and leaves all trucks active
+PASS the four-truck sport clamps an unsupported fifth competitor through its real setup
+PASS AI-only spectator rematch starts
+PASS AI-only with AI cameras OFF has a live broadcast instead of a blank screen
+PASS AI-only with AI cameras ON has four correctly allocated views
+CHECKS=49 ERRORS=0; platform=WindowsPlayer; capture=Windows composed framebuffer; real NWH wheel reactions, joint physics and software input; no human/device/listening certification.

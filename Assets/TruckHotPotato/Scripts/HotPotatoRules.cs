@@ -2,6 +2,7 @@ using System;
 
 namespace LWS.TruckHotPotato
 {
+    public enum HotPotatoAwardKind { Pass, Survival, LastStanding }
     // One ownership/scoring authority. Contacts are reported by real truck
     // colliders; proximity, AI decisions and explosion damage cannot transfer.
     [Serializable]
@@ -19,6 +20,9 @@ namespace LWS.TruckHotPotato
         public bool Complete { get; private set; }
         public readonly bool[] alive = new bool[8];
         public readonly int[] scores = new int[8], passes = new int[8], survived = new int[8];
+        public event Action<HotPotatoAwardKind, string, int, int, int> Awarded;
+        void Award(HotPotatoAwardKind kind, string id, int slot, int amount)
+        { scores[slot] += amount; Awarded?.Invoke(kind, id, slot, amount, scores[slot]); }
         readonly bool[] creditedThisCycle = new bool[8];
         readonly float[,] lastContact = new float[8, 8];
         readonly bool[,] pending = new bool[8, 8];
@@ -60,7 +64,7 @@ namespace LWS.TruckHotPotato
                     int a = Math.Min(Carrier, other), b = Math.Max(Carrier, other);
                     if (other == Carrier || !alive[other] || !pending[a, b]) continue;
                     int prior = Carrier; Carrier = other; Transfers++; passes[prior]++;
-                    if (!creditedThisCycle[prior]) { scores[prior] += 10; creditedThisCycle[prior] = true; }
+                    if (!creditedThisCycle[prior]) { creditedThisCycle[prior] = true; Award(HotPotatoAwardKind.Pass, "cycle:" + Cycle + ":pass:" + prior, prior, 10); }
                     nextTransfer = Clock + transferCooldown; break;
                 }
             Array.Clear(pending, 0, pending.Length);
@@ -68,8 +72,8 @@ namespace LWS.TruckHotPotato
             if (Fuse > 0) return -1;
             int eliminated = Carrier; alive[eliminated] = false; Carrier = -1;
             int remaining = 0, survivor = -1;
-            for (int i = 0; i < Count; i++) if (alive[i]) { survived[i]++; scores[i] += 20; remaining++; survivor = i; }
-            if (remaining == 1) { Winner = survivor; scores[survivor] += 100; Complete = true; }
+            for (int i = 0; i < Count; i++) if (alive[i]) { survived[i]++; Award(HotPotatoAwardKind.Survival, "cycle:" + Cycle + ":survival:" + i, i, 20); remaining++; survivor = i; }
+            if (remaining == 1) { Winner = survivor; Award(HotPotatoAwardKind.LastStanding, "cycle:" + Cycle + ":winner:" + survivor, survivor, 100); Complete = true; }
             else NextCycle();
             return eliminated;
         }

@@ -1,6 +1,7 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Michsky.UI.Heat;
 using UnityEngine;
@@ -11,6 +12,37 @@ namespace LWS.TruckSports
     public static class SportsScoreAcceptance
     {
         public static bool CaptureOnly => Array.IndexOf(Environment.GetCommandLineArgs(), "-tsScoreOnly") >= 0;
+        public sealed class Tally : IDisposable
+        {
+            readonly SportsEventSession match;
+            readonly bool strictTotals;
+            readonly double[] totals = new double[12];
+            readonly HashSet<string> ids = new HashSet<string>();
+            string matchId; int count, invalid;
+            public Tally(SportsEventSession owner, bool strict = true) { match = owner; strictTotals = strict; match.ScoreConfirmed += Record; }
+            void CurrentMatch()
+            {
+                if (matchId == match.MatchId) return;
+                matchId = match.MatchId; Array.Clear(totals, 0, totals.Length); ids.Clear(); count = invalid = 0;
+            }
+            void Record(SportsScoreEvent receipt)
+            {
+                CurrentMatch(); count++;
+                if (receipt.MatchId != matchId || !ids.Add(receipt.EventId) || receipt.Slot < 0 || receipt.Slot >= match.setup.count) { invalid++; return; }
+                if (receipt.ParticipantId != ((ISportsParticipantSlot)match.setup.players[receipt.Slot]).ParticipantId) invalid++;
+                totals[receipt.Slot] += receipt.Delta;
+                double difference = receipt.Total - totals[receipt.Slot];
+                if (strictTotals ? Math.Abs(difference) > .001 : difference < -.001 || difference >= 10.001) invalid++;
+            }
+            public void Verify(Func<int, double> expected, Action<bool, string> check)
+            {
+                CurrentMatch();
+                check(invalid == 0 && match.ScoreJournal != null && match.ScoreJournal.Count == count, "every confirmed award has one semantic ID, correct participant and consistent total; receipts=" + count);
+                bool correct = true; for (int slot = 0; slot < match.setup.count; slot++) correct &= Math.Abs(totals[slot] - expected(slot)) < .001;
+                check(correct, "confirmed award deltas account exactly for the authoritative scores or completed control milestones");
+            }
+            public void Dispose() { if (match != null) match.ScoreConfirmed -= Record; }
+        }
         public static void Journal(SportsEventSession match, int expected, Action<bool, string> check)
         {
             check(match.ScoreJournal != null && match.ScoreJournal.Count == expected, "confirmed award receipts match actual physical scoring events: " + expected);

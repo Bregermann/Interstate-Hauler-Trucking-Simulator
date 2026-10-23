@@ -43,14 +43,17 @@ namespace LWS.TruckKingOfTheHill
             var m = FindAnyObjectByType<HillMatch>(); Check(m != null && m.sites.Length == 5 && m.trucks.Length == 8 && m.roads.Validate().IsValid, "saved five-plateau mountain and existing LWS road graph load with eight NWH tractors");
             if (m == null) { Complete(); yield break; }
             if (hudOnly) { yield return Hud(m); Complete(); yield break; }
+            using var scoreTally = new SportsScoreAcceptance.Tally(m,false);
             SportsCameraOptions.Set(false); m.drivingViews.Select(0); m.setup.count = 8; m.option = 1; m.AllBots(); for (int i = 0; i < 8; i++) m.setup.players[i].difficulty = i == 7 ? LWS.TruckBowling.BowlingDifficulty.Hard : i == 6 ? LWS.TruckBowling.BowlingDifficulty.Normal : LWS.TruckBowling.BowlingDifficulty.Easy;
             Check(m.StartMatch() && m.rules.Target == 60, "default cumulative60-second control match starts with actual mixed-difficulty AI");
             var starts = Array.ConvertAll(m.trucks, t => t.body.position); yield return new WaitForSeconds(1.5f); bool grounded = true; float drift = 0;
             for (int i = 0; i < 8; i++) { drift = Mathf.Max(drift, Vector3.ProjectOnPlane(m.trucks[i].body.position - starts[i], Vector3.up).magnitude); grounded &= m.trucks[i].tractorMotor.Grounded && Vector3.Dot(m.trucks[i].transform.up, Vector3.up) > .95f; }
             Check(grounded && drift < .3f && m.rules.Clock == 0, "all eight countdown tractors are grounded/level on the central flat platform; drift=" + drift.ToString("F3"));
-            Time.timeScale = 4; float deadline = Time.realtimeSinceStartup + 260; bool captured = false, paused = false, warning = false, contested = false; int lastMove = -1; float nextTrace = 0;
+            Time.timeScale = 4; float deadline = Time.realtimeSinceStartup + 260; bool scoreCaptured = false, captured = false, paused = false, warning = false, contested = false; int lastMove = -1; float nextTrace = 0;
             while (!m.Finished && Time.realtimeSinceStartup < deadline)
             {
+                if(!scoreCaptured&&m.ScoreJournal.Count>0){scoreCaptured=true;yield return SportsScoreAcceptance.CaptureAward(m,Check,Folder);if(SportsScoreAcceptance.CaptureOnly){scoreTally.Verify(slot=>m.rules.Complete&&m.rules.Winner==slot?m.rules.control[slot]:Mathf.Floor(m.rules.control[slot]/10)*10,Check);Check(true,"focused first-award capture; full-match evidence is recorded separately");m.SetupScreen();Check(m.StartMatch()&&m.ScoreJournal.Count==0,"scoring rematch starts with an empty journal");yield return null;scoreTally.Verify(slot=>m.rules.Complete&&m.rules.Winner==slot?m.rules.control[slot]:Mathf.Floor(m.rules.control[slot]/10)*10,Check);m.SetupScreen();Complete();yield break;}}
+
                 contested |= m.rules.Occupants > 1;
                 if (!paused && m.rules.Clock > 2) { paused = true; float clock = m.rules.Clock; var p = m.trucks[0].body.position; m.Pause(); yield return new WaitForSecondsRealtime(.15f); Check(m.rules.Clock == clock && p == m.trucks[0].body.position, "pause freezes control clock and vehicle physics"); m.Resume(); Time.timeScale = 4; }
                 if (m.rules.Warning && m.nextRing.localScale.sqrMagnitude > 0 && Vector3.Distance(m.nextRing.position, m.sites[m.rules.NextZone]) < 1) warning = true;
@@ -58,7 +61,7 @@ namespace LWS.TruckKingOfTheHill
                 if (m.rules.Moves != lastMove || m.rules.Clock >= nextTrace) { lastMove = m.rules.Moves; nextTrace = m.rules.Clock + 20; report.AppendLine("ACTUAL_HILL clock=" + m.rules.Clock.ToString("F1") + " zone=" + m.rules.Zone + " occupants=" + m.rules.Occupants + " controller=" + m.rules.Controller + " control=" + string.Join(",", Array.ConvertAll(m.rules.control, value => value.ToString("F1"))) + " recoveries=" + m.Recoveries); File.WriteAllText(Folder + "/progress.txt", report.ToString()); }
                 yield return null;
             }
-            Time.timeScale = 1; Check(m.Finished && m.rules.Winner >= 0 && m.rules.control[m.rules.Winner] == 60, "actual AI navigation/control/ramming completes the full default match without awarding fake points");
+            Time.timeScale = 1; scoreTally.Verify(slot=>m.rules.Complete&&m.rules.Winner==slot?m.rules.control[slot]:Mathf.Floor(m.rules.control[slot]/10)*10,Check);Check(scoreCaptured,"actual confirmed award captured at720p/1080p");Check(m.Finished && m.rules.Winner >= 0 && m.rules.control[m.rules.Winner] == 60, "actual AI navigation/control/ramming completes the full default match without awarding fake points");
             Check(contested && warning && m.rules.Moves >= 1 && captured, "actual competition contests the ring, previews the next accessible site and relocates");
             report.AppendLine("ACTUAL_AI_RESULTS\n" + m.Standings);
             if (m.Finished) { string result = m.Results; m.ExtraAction("watchhill"); yield return new WaitForSecondsRealtime(.4f); Check(m.review.Playing, "recorded actual tractor and control-ring replay starts"); yield return SportsWindowCapture.Save(1280, 720, Folder + "/replay-720.png"); m.ExtraAction("replayskip"); Check(result == m.Results && !m.review.Playing, "replay preserves control totals and locked winner"); }

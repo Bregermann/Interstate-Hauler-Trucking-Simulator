@@ -57,6 +57,14 @@ namespace LWS.TruckSeesaw
         public override string Standings {get {text.Clear();for(int i=0;i<setup.count;i++)text.Append('#').Append(rules.Place(i)).Append(' ').Append(setup.players[i].name).Append(" · ").Append(rules.scores[i]).Append("PTS · ").Append(rules.heatWins[i]).Append(" HEATS · ").Append(rules.knockoffs[i]).Append(" KNOCKOFFS · ").Append(rules.recoveries[i]).Append(" SAVES\n");return text.ToString();}}
         public override string Results => "QUARRY WOBBLE RESULTS\n\n"+Standings;
         public Vector3 Grid(int slot) => platformOrigin+new Vector3(slot%2==0?-16:16,halfThickness+.65f,slot<2?-16:16);
+        protected override void Awake() { base.Awake(); rules.Awarded += ConfirmAward; }
+        protected override void OnDestroy() { if (rules != null) rules.Awarded -= ConfirmAward; base.OnDestroy(); }
+        void ConfirmAward(SeesawAwardKind kind, string id, int slot, int delta, int total)
+        {
+            bool winner = kind == SeesawAwardKind.HeatWinner;
+            string reason = winner ? "SEESAW HEAT WON" : kind == SeesawAwardKind.Knockoff ? "SEESAW KNOCKOFF" : kind == SeesawAwardKind.Balance ? "BALANCE RECOVERED" : "SEESAW SURVIVAL";
+            ConfirmScore(id, slot, delta, total, reason, winner ? SportsScoreTier.RoundWinner : kind == SeesawAwardKind.Knockoff ? SportsScoreTier.Major : SportsScoreTier.Small, roundEnded: winner, matchEnded: winner && rules.Complete);
+        }
         protected override void BeginGame()
         {
             if(review==null){review=gameObject.AddComponent<SportsRecordedReview>();review.match=this;review.trucks=trucks;review.fragments=fragments;review.drivingViews=drivingViews;review.broadcast=broadcast;review.framing=framing;review.atmosphere=atmosphere;review.watchAction="watchseesaw";review.extras=new[]{platform.transform};}

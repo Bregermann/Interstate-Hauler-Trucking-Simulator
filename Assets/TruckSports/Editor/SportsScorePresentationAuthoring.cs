@@ -14,6 +14,7 @@ namespace LWS.TruckSports.Editor
         // Deliberate additive installation. Normal Play Mode/builds never rebuild UI.
         public static void InstallSumo() => InstallScenes(new[] { "TruckSumo" });
         public static void InstallArcadeAwards() => InstallScenes(ArcadeScenes);
+        public static void InstallSurvivalAwards() => InstallScenes(new[] { "TruckHotPotato", "TruckSeesaw", "TruckKingOfTheHill" });
         public static void RefineArcadeAwardBackgrounds()
         {
             foreach (string name in ArcadeScenes)

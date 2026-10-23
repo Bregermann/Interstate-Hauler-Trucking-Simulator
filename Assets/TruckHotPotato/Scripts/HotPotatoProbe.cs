@@ -42,12 +42,15 @@ namespace LWS.TruckHotPotato
             yield return null;
             var m = FindAnyObjectByType<HotPotatoMatch>(); Check(m != null && m.trucks.Length == 8 && m.breakables.Length == 4, "authored eight-full-NWH-truck scene and existing Core-Collapse breakables load");
             if (m == null) { Complete(); yield break; }
+            using var scoreTally = new SportsScoreAcceptance.Tally(m);
             SportsCameraOptions.Set(false); m.drivingViews.Select(0);
             m.setup.count = 8; m.AllBots(); for (int i = 0; i < 8; i++) m.setup.players[i].difficulty = BowlingDifficulty.Hard;
             Check(m.StartMatch(), "complete autonomous eight-truck match starts through real setup"); Time.timeScale = 3;
-            float deadline = Time.realtimeSinceStartup + 180; bool captured = false, paused = false; float traveled = 0; int lastTransfers = 0;
+            float deadline = Time.realtimeSinceStartup + 180; bool scoreCaptured = false, captured = false, paused = false; float traveled = 0; int lastTransfers = 0;
             while (!m.Finished && Time.realtimeSinceStartup < deadline)
             {
+                if(!scoreCaptured&&m.ScoreJournal.Count>0){scoreCaptured=true;yield return SportsScoreAcceptance.CaptureAward(m,Check,Folder);if(SportsScoreAcceptance.CaptureOnly){scoreTally.Verify(slot=>m.rules.scores[slot],Check);Check(true,"focused first-award capture; full-match evidence is recorded separately");m.SetupScreen();Check(m.StartMatch()&&m.ScoreJournal.Count==0,"scoring rematch starts with an empty journal");yield return null;scoreTally.Verify(slot=>m.rules.scores[slot],Check);m.SetupScreen();Complete();yield break;}}
+
                 for (int i = 0; i < 8; i++) traveled = Mathf.Max(traveled, Vector3.Distance(m.trucks[i].body.position, m.Grid(i)));
                 if (!paused && m.rules.Clock > 2)
                 { paused = true; float clock = m.rules.Clock; var p = m.trucks[0].body.position; m.Pause(); yield return new WaitForSecondsRealtime(.15f); Check(m.rules.Clock == clock && m.trucks[0].body.position == p, "pause freezes bomb clock and vehicle physics"); m.Resume(); Time.timeScale = 3; }
@@ -57,7 +60,7 @@ namespace LWS.TruckHotPotato
                 yield return null;
             }
             Time.timeScale = 1;
-            Check(m.Finished && m.rules.Complete && m.rules.Winner >= 0 && m.Explosions == 7 && m.rules.AliveCount() == 1, "actual full match resolves seven bomb eliminations and one survivor");
+            scoreTally.Verify(slot=>m.rules.scores[slot],Check);Check(scoreCaptured,"actual confirmed award captured at720p/1080p");Check(m.Finished && m.rules.Complete && m.rules.Winner >= 0 && m.Explosions == 7 && m.rules.AliveCount() == 1, "actual full match resolves seven bomb eliminations and one survivor");
             Check(traveled > 20 && m.rules.Transfers > 0 && captured && paused, "AI genuinely drives, flees and passes through physical truck contact; passes=" + m.rules.Transfers + " traveled=" + traveled.ToString("F1"));
             string result = m.Results; m.ExtraAction("watchpotato"); yield return new WaitForSecondsRealtime(.4f);
             Check(m.review.Playing && Time.timeScale == 0, "recorded match-end replay runs with frozen live physics");

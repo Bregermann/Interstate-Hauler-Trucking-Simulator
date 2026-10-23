@@ -49,6 +49,7 @@ namespace LWS.TruckKingOfTheHill
         readonly bool[] present = new bool[8], eligible = new bool[8];
         readonly float[] stuck = new float[8], nextPlan = new float[8], fallenAt = new float[8];
         readonly int[] revisions = new int[8];
+        readonly float[] notifiedControl = new float[8];
         readonly FareFightRoute[] drivers = new FareFightRoute[8];
         readonly int[] combatTargets = new int[8];
         readonly bool[] committed = new bool[8];
@@ -72,7 +73,7 @@ namespace LWS.TruckKingOfTheHill
         protected override void BeginGame()
         {
             if (review == null) { review = gameObject.AddComponent<SportsRecordedReview>(); review.match = this; review.trucks = trucks; review.fragments = fragments; review.drivingViews = drivingViews; review.broadcast = broadcast; review.framing = framing; review.atmosphere = atmosphere; review.watchAction = "watchhill"; review.extras = new[] { ring, nextRing, beacon }; }
-            review.ResetRecord(); rules.Reset(setup.count, sites.Length, Environment.TickCount, new[] { 30f, 60f, 90f }[option], Mathf.Max(10, relocationSeconds)); Countdown = 3; Recoveries = 0;
+            review.ResetRecord(); rules.Reset(setup.count, sites.Length, Environment.TickCount, new[] { 30f, 60f, 90f }[option], Mathf.Max(10, relocationSeconds)); Array.Clear(notifiedControl, 0, notifiedControl.Length); Countdown = 3; Recoveries = 0;
             tint ??= new MaterialPropertyBlock();
             for (int i = 0; i < trucks.Length; i++)
             {
@@ -83,6 +84,20 @@ namespace LWS.TruckKingOfTheHill
             drivingViews.Layout(); atmosphere.Configure(Environment.TickCount, 0, 1);
         }
         static void Hold(SportsEventTruck truck) { var input = truck.tractorMotor.vehicle.input; input.states.throttle = input.states.throttleRaw = input.states.brakes = input.states.brakesRaw = 0; input.states.handbrake = input.states.handbrakeRaw = 1; }
+        void ConfirmControlMilestones()
+        {
+            // The rules remain authoritative for every fraction of control time.
+            // Present completed ten-second milestones, including a final remainder,
+            // without flooding the UI on each physics sample or altering totals.
+            for (int slot = 0; slot < setup.count; slot++)
+            {
+                bool winner = rules.Complete && rules.Winner == slot;
+                float completed = winner ? rules.control[slot] : Mathf.Floor(rules.control[slot] / 10) * 10;
+                if (completed <= notifiedControl[slot]) continue;
+                ConfirmScore("control:" + slot + ":" + Mathf.CeilToInt(completed / 10), slot, completed - notifiedControl[slot], rules.control[slot], winner ? "CONTROL TARGET REACHED" : "CONTROL MILESTONE", winner ? SportsScoreTier.RoundWinner : SportsScoreTier.Small, "SEC", roundEnded: winner, matchEnded: winner);
+                notifiedControl[slot] = completed;
+            }
+        }
         protected override void Simulate(float dt)
         {
             atmosphere.Tick(rules.Clock);
@@ -94,7 +109,7 @@ namespace LWS.TruckKingOfTheHill
                 present[i] = fallenAt[i] < 0 && truck.body.detectCollisions && Mathf.Abs(point.y - center.y) < 4.5f && Vector3.ProjectOnPlane(point - center, Vector3.up).sqrMagnitude <= radius * radius;
                 eligible[i] = present[i] && truck.tractorMotor.Grounded && Vector3.Dot(truck.transform.up, Vector3.up) > .55f;
             }
-            int oldZone = rules.Zone; rules.Step(dt, present, eligible); review.Capture(rules.Clock + 3);
+            int oldZone = rules.Zone; rules.Step(dt, present, eligible); ConfirmControlMilestones(); review.Capture(rules.Clock + 3);
             if (oldZone != rules.Zone) { feedback.PlayAt(5, sites[rules.Zone], 0, true); Array.Clear(present, 0, 8); Array.Clear(eligible, 0, 8); }
             if (rules.Complete) { review.focusSlot = rules.Winner; EndMatch(); return; }
             for (int i = 0; i < setup.count; i++)
