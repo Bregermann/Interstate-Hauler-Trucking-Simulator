@@ -1,0 +1,30 @@
+PASS physical Skee match starts case=4 competitors=1 hotseat=False
+PASS pause retains current flight/velocity/deliveries
+DELIVERY case=4 owner=0 number=1 score=0 total=0
+DELIVERY case=4 owner=0 number=2 score=0 total=0
+DELIVERY case=4 owner=0 number=3 score=0 total=0
+DELIVERY case=4 owner=0 number=4 score=0 total=0
+DELIVERY case=4 owner=0 number=5 score=0 total=0
+DELIVERY case=4 owner=0 number=6 score=30 total=30
+DELIVERY case=4 owner=0 number=7 score=20 total=50
+DELIVERY case=4 owner=0 number=8 score=40 total=90
+DELIVERY case=4 owner=0 number=9 score=0 total=90
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS actual complete solo match preserves the stored personal-best line
+PASS complete actual nine-launch match case=4
+PASS AI drives actual ramp and creates upward physical flights/replays
+PASS genuine whole-body open-ring entries observed case=4
+PASS every participant receives all nine launches before result
+MATCH case=4 winner=0 totals=90,0,0,0,0,0,0,0 attempts=9,0,0,0,0,0,0,0 physicalLaunches=9 genuineEntries=3 misses=6
+PASS rematch clears all delivery IDs/scores/replay/flight state
+ERRORS=0. Actual saved NWH/EasyRoads/PhysX ramp simulation and AI matches; no injected scores. No human/hardware or sustained rendered performance claim.

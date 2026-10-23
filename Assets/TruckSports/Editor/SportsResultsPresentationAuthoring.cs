@@ -11,6 +11,24 @@ namespace LWS.TruckSports.Editor
         public static void InstallMountainAndNinja() => InstallScenes(new[] { "TruckAvalancheEscape", "TruckNinjaWarrior" });
         public static void InstallScoredBatch() => InstallScenes(new[] { "TruckWhackAMole", "TruckMagnetMayhem", "TruckSheepHerding", "TruckSeesaw", "TruckKingOfTheHill", "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers" });
         public static void InstallContestBatch() => InstallScenes(new[] { "TruckHotPotato", "TruckBalloonBattle", "TruckTetherball", "TruckJousting", "TruckFrogger", "TruckRedLightGreenLight", "TruckVolleyball", "TruckFreezeTag" });
+        public static void InstallAttemptBatch() => InstallScenes(new[] { "TruckDockDiving", "TruckFieldGoal", "TruckTargetLaunch", "TruckSkeeBall", "TruckGiantSwing", "TruckTrailerPlug" });
+        public static void InstallAttemptReadability()
+        {
+            foreach (string name in new[] { "TruckDockDiving", "TruckFieldGoal", "TruckTargetLaunch", "TruckSkeeBall", "TruckGiantSwing", "TruckTrailerPlug" })
+            {
+                var scene = EditorSceneManager.OpenScene("Assets/" + name + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
+                var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();
+                var page = session.menus.pages[(int)SportsEventScreen.Result];
+                if (page.transform.Find("Results readability backing") != null) continue;
+                var backing = SportsUIAuthoring.Rect("Results readability backing", page.transform, Vector2.zero, Vector2.zero);
+                var rect = (RectTransform)backing.transform; SportsBroadcastCanvas.Stretch(rect); rect.SetAsFirstSibling();
+                var image = backing.AddComponent<UnityEngine.UI.Image>(); image.color = SportsBroadcastCanvas.Ink; image.raycastTarget = false;
+                var plate = backing.AddComponent<SportsBroadcastPlate>(); plate.cut = 18;
+                EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+                Debug.Log("SPORTS_RESULTS_READABILITY " + name + " saved rounded noninteractive backing over busy venue scenery.");
+            }
+            AssetDatabase.SaveAssets();
+        }
         static void InstallScenes(string[] names)
         {
             foreach (string name in names)

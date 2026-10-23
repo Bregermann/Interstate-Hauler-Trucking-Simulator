@@ -1,0 +1,14 @@
+{
+  "passed": 8,
+  "checks": [
+    "approved exact ROOT batch entry permitted",
+    "rejected wrong project",
+    "rejected wrong entry method",
+    "rejected interactive Editor",
+    "rejected missing quit",
+    "rejected player masquerading as Editor",
+    "different PID receives no exemption",
+    "completed build receives no exemption"
+  ],
+  "scope": "Pure Python process-identity guard checks; not a native build or player test."
+}

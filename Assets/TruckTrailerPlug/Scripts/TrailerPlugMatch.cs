@@ -60,7 +60,8 @@ namespace LWS.TruckTrailerPlug
         {
             get { text.Clear(); for (int i = 0; i < setup.count; i++) text.Append(setup.players[i].name).Append("  ").Append(rules.score[i]).Append(" PTS · ").Append(rules.attempts[i]).Append('/').Append(rules.Rounds).Append(" DROPS\n"); return text.ToString(); }
         }
-        public override string Results
+        public int ResultPlace(int slot)=>LWS.TruckSports.SportsResultPlacings.FromFinalTotals(slot,setup.count,rules.score);
+ public override string Results
         {
             get { text.Clear(); for (int i = 0; i < setup.count; i++) if (rules.winners[i]) text.Append(setup.players[i].name).Append("  "); return text.ToString() + "WIN THE QUARRY!\n\n" + Standings; }
         }

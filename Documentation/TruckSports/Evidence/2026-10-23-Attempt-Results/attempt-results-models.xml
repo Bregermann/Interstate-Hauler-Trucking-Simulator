@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="30" result="Passed" total="30" passed="30" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 19:54:04Z" end-time="2026-10-23 19:54:16Z" duration="12.1168769">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2970" result="Passed" start-time="2026-10-23 19:54:04Z" end-time="2026-10-23 19:54:16Z" duration="12.116877" total="30" passed="30" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2466" name="LWS.TruckSports.PresentationEditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.PresentationEditModeTests.dll" runstate="Runnable" testcasecount="73" result="Passed" start-time="2026-10-23 19:54:04Z" end-time="2026-10-23 19:54:16Z" duration="11.994207" total="14" passed="14" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="76688" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="2391" name="DockVenueReferenceTests" fullname="DockVenueReferenceTests" classname="DockVenueReferenceTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-23 19:54:04Z" end-time="2026-10-23 19:54:15Z" duration="11.150423" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2393" name="RepeatingVenueAuthoringPreservesSavedDesignerScene" fullname="DockVenueReferenceTests.RepeatingVenueAuthoringPreservesSavedDesignerScene" methodname="RepeatingVenueAuthoringPreservesSavedDesignerScene" classname="DockVenueReferenceTests" runstate="Runnable" seed="158666569" result="Passed" start-time="2026-10-23 19:54:04Z" end-time="2026-10-23 19:54:14Z" duration="10.251442" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[DOCK_VENUE_PRESERVED saved owner audience, water and venue selections.
+DOCK_POOL_LIFE_PRESERVED saved owner customization.
+]]></output>
+        </test-case>
+        <test-case id="2392" name="SavedVenueUsesEightOwnedClothedVariantsAndRetainsOriginalCourse" fullname="DockVenueReferenceTests.SavedVenueUsesEightOwnedClothedVariantsAndRetainsOriginalCourse" methodname="SavedVenueUsesEightOwnedClothedVariantsAndRetainsOriginalCourse" classname="DockVenueReferenceTests" runstate="Runnable" seed="496942517" result="Passed" start-time="2026-10-23 19:54:14Z" end-time="2026-10-23 19:54:15Z" duration="0.883543" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="2394" name="FinalTotalResultPlacingTests" fullname="FinalTotalResultPlacingTests" classname="FinalTotalResultPlacingTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-23 19:54:15Z" end-time="2026-10-23 19:54:16Z" duration="0.822272" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2397" name="DisplayOrderingCannotOverrideTheSportDeclaredWinner" fullname="FinalTotalResultPlacingTests.DisplayOrderingCannotOverrideTheSportDeclaredWinner" methodname="DisplayOrderingCannotOverrideTheSportDeclaredWinner" classname="FinalTotalResultPlacingTests" runstate="Runnable" seed="681287677" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.001057" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2396" name="ExistingTiebreakWinnerPrecedesEqualTotalsWithoutChangingScores" fullname="FinalTotalResultPlacingTests.ExistingTiebreakWinnerPrecedesEqualTotalsWithoutChangingScores" methodname="ExistingTiebreakWinnerPrecedesEqualTotalsWithoutChangingScores" classname="FinalTotalResultPlacingTests" runstate="Runnable" seed="1348824389" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000218" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2398" name="InvalidRosterReferencesAreRejected" fullname="FinalTotalResultPlacingTests.InvalidRosterReferencesAreRejected" methodname="InvalidRosterReferencesAreRejected" classname="FinalTotalResultPlacingTests" runstate="Runnable" seed="1418832591" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.002358" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2395" name="SharedFinalTotalsRetainCompetitionPlacingsAndNegativeValues" fullname="FinalTotalResultPlacingTests.SharedFinalTotalsRetainCompetitionPlacingsAndNegativeValues" methodname="SharedFinalTotalsRetainCompetitionPlacingsAndNegativeValues" classname="FinalTotalResultPlacingTests" runstate="Runnable" seed="1212465924" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000267" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="2426" name="ResultsSnapshotTests" fullname="ResultsSnapshotTests" classname="ResultsSnapshotTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.015707" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2427" name="AuthoritativeTiesAndDuplicateDisplayNamesKeepSeparateStableIdentities" fullname="ResultsSnapshotTests.AuthoritativeTiesAndDuplicateDisplayNamesKeepSeparateStableIdentities" methodname="AuthoritativeTiesAndDuplicateDisplayNamesKeepSeparateStableIdentities" classname="ResultsSnapshotTests" runstate="Runnable" seed="1304977273" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.005920" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2430" name="DuplicateIdentitiesOrSlotsCannotCreateAmbiguousResults" fullname="ResultsSnapshotTests.DuplicateIdentitiesOrSlotsCannotCreateAmbiguousResults" methodname="DuplicateIdentitiesOrSlotsCannotCreateAmbiguousResults" classname="ResultsSnapshotTests" runstate="Runnable" seed="1796503059" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000973" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2428" name="IncompleteAttemptsHaveNoInventedTimeOrChampion" fullname="ResultsSnapshotTests.IncompleteAttemptsHaveNoInventedTimeOrChampion" methodname="IncompleteAttemptsHaveNoInventedTimeOrChampion" classname="ResultsSnapshotTests" runstate="Runnable" seed="1900391538" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.002854" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="2434" name="InvalidMeasurementsAreRejected" fullname="ResultsSnapshotTests.InvalidMeasurementsAreRejected" classname="ResultsSnapshotTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.001918" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2431" name="InvalidMeasurementsAreRejected(double.NaN)" fullname="ResultsSnapshotTests.InvalidMeasurementsAreRejected(double.NaN)" methodname="InvalidMeasurementsAreRejected" classname="ResultsSnapshotTests" runstate="Runnable" seed="1076880711" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000496" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2432" name="InvalidMeasurementsAreRejected(double.PositiveInfinity)" fullname="ResultsSnapshotTests.InvalidMeasurementsAreRejected(double.PositiveInfinity)" methodname="InvalidMeasurementsAreRejected" classname="ResultsSnapshotTests" runstate="Runnable" seed="1431446892" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000177" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2433" name="InvalidMeasurementsAreRejected(double.NegativeInfinity)" fullname="ResultsSnapshotTests.InvalidMeasurementsAreRejected(double.NegativeInfinity)" methodname="InvalidMeasurementsAreRejected" classname="ResultsSnapshotTests" runstate="Runnable" seed="21917101" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000118" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="2429" name="SnapshotCopiesTheRosterAndSortsUnrankedEntriesLast" fullname="ResultsSnapshotTests.SnapshotCopiesTheRosterAndSortsUnrankedEntriesLast" methodname="SnapshotCopiesTheRosterAndSortsUnrankedEntriesLast" classname="ResultsSnapshotTests" runstate="Runnable" seed="1695888984" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000577" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2435" name="WinningStatusCannotBeAssignedToASecondPlaceRow" fullname="ResultsSnapshotTests.WinningStatusCannotBeAssignedToASecondPlaceRow" methodname="WinningStatusCannotBeAssignedToASecondPlaceRow" classname="ResultsSnapshotTests" runstate="Runnable" seed="268932693" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000279" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="4528" name="LWS.TruckTrailerPlug.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckTrailerPlug.EditModeTests.dll" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.010909" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="76688" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="4510" name="TrailerPlugRulesTests" fullname="TrailerPlugRulesTests" classname="TrailerPlugRulesTests" runstate="Runnable" testcasecount="16" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.009987" total="16" passed="16" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="4519" name="CompleteStableCenteredPlugAwardsSealAndPrecision" fullname="TrailerPlugRulesTests.CompleteStableCenteredPlugAwardsSealAndPrecision" methodname="CompleteStableCenteredPlugAwardsSealAndPrecision" classname="TrailerPlugRulesTests" runstate="Runnable" seed="1924683874" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.002149" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4513" name="ContactBeforeReleaseCannotScore" fullname="TrailerPlugRulesTests.ContactBeforeReleaseCannotScore" methodname="ContactBeforeReleaseCannotScore" classname="TrailerPlugRulesTests" runstate="Runnable" seed="1566886758" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000265" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4525" name="FourParticipantsReceiveExactlyThreeAttemptsEach" fullname="TrailerPlugRulesTests.FourParticipantsReceiveExactlyThreeAttemptsEach" methodname="FourParticipantsReceiveExactlyThreeAttemptsEach" classname="TrailerPlugRulesTests" runstate="Runnable" seed="455596589" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000392" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4511" name="HitchCanReleaseOnce" fullname="TrailerPlugRulesTests.HitchCanReleaseOnce" methodname="HitchCanReleaseOnce" classname="TrailerPlugRulesTests" runstate="Runnable" seed="1661084429" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000144" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4520" name="HoveringOverOpeningDoesNotSeal" fullname="TrailerPlugRulesTests.HoveringOverOpeningDoesNotSeal" methodname="HoveringOverOpeningDoesNotSeal" classname="TrailerPlugRulesTests" runstate="Runnable" seed="347587537" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000149" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="4518" name="InsufficientOrInvalidImpactCannotScore" fullname="TrailerPlugRulesTests.InsufficientOrInvalidImpactCannotScore" classname="TrailerPlugRulesTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.001877" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="4514" name="InsufficientOrInvalidImpactCannotScore(0)" fullname="TrailerPlugRulesTests.InsufficientOrInvalidImpactCannotScore(0)" methodname="InsufficientOrInvalidImpactCannotScore" classname="TrailerPlugRulesTests" runstate="Runnable" seed="1012133065" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000349" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="4515" name="InsufficientOrInvalidImpactCannotScore(1.99f)" fullname="TrailerPlugRulesTests.InsufficientOrInvalidImpactCannotScore(1.99f)" methodname="InsufficientOrInvalidImpactCannotScore" classname="TrailerPlugRulesTests" runstate="Runnable" seed="6520160" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000101" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="4516" name="InsufficientOrInvalidImpactCannotScore(float.NaN)" fullname="TrailerPlugRulesTests.InsufficientOrInvalidImpactCannotScore(float.NaN)" methodname="InsufficientOrInvalidImpactCannotScore" classname="TrailerPlugRulesTests" runstate="Runnable" seed="1670809593" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000078" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="4517" name="InsufficientOrInvalidImpactCannotScore(float.PositiveInfinity)" fullname="TrailerPlugRulesTests.InsufficientOrInvalidImpactCannotScore(float.PositiveInfinity)" methodname="InsufficientOrInvalidImpactCannotScore" classname="TrailerPlugRulesTests" runstate="Runnable" seed="2826026" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000076" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="4521" name="MovingTrailerCannotBankCoverage" fullname="TrailerPlugRulesTests.MovingTrailerCannotBankCoverage" methodname="MovingTrailerCannotBankCoverage" classname="TrailerPlugRulesTests" runstate="Runnable" seed="2056322372" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000169" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4522" name="PartialRestingPlugHasPartialPoints" fullname="TrailerPlugRulesTests.PartialRestingPlugHasPartialPoints" methodname="PartialRestingPlugHasPartialPoints" classname="TrailerPlugRulesTests" runstate="Runnable" seed="450658075" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000406" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4512" name="PedestrianCanScoreOnlyOnce" fullname="TrailerPlugRulesTests.PedestrianCanScoreOnlyOnce" methodname="PedestrianCanScoreOnlyOnce" classname="TrailerPlugRulesTests" runstate="Runnable" seed="109766786" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000206" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4526" name="RematchClearsHitsScoresAndTurnState" fullname="TrailerPlugRulesTests.RematchClearsHitsScoresAndTurnState" methodname="RematchClearsHitsScoresAndTurnState" classname="TrailerPlugRulesTests" runstate="Runnable" seed="102383100" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000233" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4524" name="ResolveIsAtomicAndFreezesFurtherContacts" fullname="TrailerPlugRulesTests.ResolveIsAtomicAndFreezesFurtherContacts" methodname="ResolveIsAtomicAndFreezesFurtherContacts" classname="TrailerPlugRulesTests" runstate="Runnable" seed="2130614264" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000203" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4523" name="TiltedSealCannotGetPrecisionBonus" fullname="TrailerPlugRulesTests.TiltedSealCannotGetPrecisionBonus" methodname="TiltedSealCannotGetPrecisionBonus" classname="TrailerPlugRulesTests" runstate="Runnable" seed="710238816" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000157" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="4527" name="WinnerUsesParticipantIdentityRatherThanNames" fullname="TrailerPlugRulesTests.WinnerUsesParticipantIdentityRatherThanNames" methodname="WinnerUsesParticipantIdentityRatherThanNames" classname="TrailerPlugRulesTests" runstate="Runnable" seed="495203870" result="Passed" start-time="2026-10-23 19:54:16Z" end-time="2026-10-23 19:54:16Z" duration="0.000177" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

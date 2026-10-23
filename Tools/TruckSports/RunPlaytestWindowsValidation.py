@@ -65,6 +65,9 @@ def main():
         # Accept only the explicitly requested existing probe's own terminal
         # signature. Never treat an arbitrary ERRORS=0 line as completion.
         protected_footers = {
+            "-tsSkeeSoloResults": r"ERRORS=(\d+)\. Actual saved NWH/EasyRoads/PhysX ramp simulation and AI matches; no injected scores\.",
+            "-tsSkee": r"ERRORS=(\d+)\. Actual saved NWH/EasyRoads/PhysX ramp simulation and AI matches; no injected scores\.",
+            "-tsSwing": r"ERRORS=(\d+)\. Actual PhysX pendulum torque/joints, inherited release and first contact; no human/hardware validation\.",
             "-tsSwingFocused": r"ERRORS=(\d+)\. Real PhysX joints, torque, release velocity, flight and contact; synthetic commands/virtual sources; camera-only renders\.",
             "-tsLegacyLook": r"ERRORS=(\d+)\. Native saved modes and injected pad/mouse input, steering/cursor policies and controlled UI renders;",
             "-tsWallProduction": r"ERRORS=(\d+)\. Labelled spawn fixture, injected keyboard opening and actual NWH/PhysX 4v4 match/volleys, controlled UI captures\.",

@@ -17,6 +17,10 @@ public sealed class DockMatch:SportsEventSession {
  public override string Header=>Title+"  ·  "+(extra?"TIEBREAK "+(Round-3):"ROUND "+Round+" / 3")+"  ·  "+setup.players[Active].name;
  public override string Status=>Phase==DockPhase.Approach?"BUILD SPEED  ·  ACTION near the edge  ·  "+Mathf.Max(0,edge-(truck.body.position.z+1.4f)).ToString("F1")+"m TO EDGE":Phase==DockPhase.Flight?Timing+"  ·  AIRBORNE  ·  LIMITED AFTERTOUCH":Phase==DockPhase.Replay?"REPLAY  ·  "+AngleNames[replay.Angle]+"  ·  "+replay.Speed.ToString("F2")+"×  ·  "+Format(LastInches):reason+"  ·  "+Format(LastInches)+(wasBest?"  ·  NEW BEST":"");
  public override string Standings{get{text.Clear();for(int i=0;i<setup.count;i++)text.Append(i==Active?"> ":"").Append(setup.players[i].name).Append("  ").Append(Format(best[i])).Append('\n');if(setup.count==1)text.Append("\nLOCAL SOLO RECORD  ").Append(Format(PersonalBest));return text.ToString();}}
+ public int ResultPlace(int slot)=>LWS.TruckSports.SportsResultPlacings.FromFinalTotals(slot,setup.count,best,Winner);
+ public bool ResultHadTiebreak=>extra;
+ public int ResultPersonalBest=>PersonalBest;
+ public int ResultWinningExtraInches=>extra&&Winner>=0&&Winner<setup.count?extraScores[Winner]:0;
  public override string Results{get{text.Clear().Append(setup.count==1?"PERSONAL-BEST CHALLENGE COMPLETE":setup.players[Winner].name+" WINS").Append("\n\n");for(int i=0;i<setup.count;i++){text.Append(setup.players[i].name).Append("   BEST ").Append(Format(best[i])).Append("   | ");for(int j=0;j<3;j++)text.Append("  ").Append(j+1).Append(": ").Append(Format(history[i,j]));text.Append('\n');}if(setup.count==1)text.Append("\nLOCAL SOLO RECORD  ").Append(Format(PersonalBest));if(extra)text.Append("\nExtra jumps resolved the first-place tie.");return text.ToString();}}
  public override bool ReplayControls=>Phase==DockPhase.Replay&&timer>1;
  public static int Inches(float metres)=>Mathf.Max(0,Mathf.RoundToInt(metres/.0254f));public static string Format(int inches)=>(inches/12)+"′ "+(inches%12)+"″";

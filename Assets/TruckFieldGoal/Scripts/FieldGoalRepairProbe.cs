@@ -45,7 +45,8 @@ public sealed class FieldGoalRepairProbe:MonoBehaviour {
     if(!captured&&m.Phase==FieldGoalPhase.Flight&&m.FlightAge>.2f){captured=true;log.AppendLine("ACTUAL_WEATHER_KICK "+name+" wind="+m.CurrentWind+" grip="+m.truck.grip+" launch="+m.football.LaunchVelocity);Time.timeScale=0;yield return new WaitForSecondsRealtime(.15f);if(Application.isEditor)SportsControlledCapture.Save(m,1280,720,folder+"/"+name+"-controlled.png");else{Screen.SetResolution(1280,720,false);yield return new WaitForSecondsRealtime(.3f);ScreenCapture.CaptureScreenshot(folder+"/"+name+"-window.png");yield return new WaitForSecondsRealtime(.2f);}Time.timeScale=8;}
     yield return null;
    }
-   Check(m.Finished&&m.rules.attempts.Take(2).All(n=>n>=5),"complete physical five-attempt weather game "+name);
+   if(m.Finished)yield return SportsResultsAcceptance.Capture(m,Check,folder,m.ResultPlace,slot=>(double?)m.rules.goals[slot],slot=>m.rules.Winner==slot);
+ Check(m.Finished&&m.rules.attempts.Take(2).All(n=>n>=5),"complete physical five-attempt weather game "+name);
    Check(launched&&m.rules.attempts.Sum()>=10,"weather game requires actual bumper launches "+name);Check(m.truck.grip<1.35f,"wet/snow preset applies equivalent NWH grip "+name);
    if(preset.Snow)Check(snowContact,"substantial actual snow coverage and grounded NWH tire contact observed "+name);
    log.AppendLine("WEATHER_MATCH "+name+" goals="+string.Join(",",m.rules.goals)+" attempts="+string.Join(",",m.rules.attempts)+" maximumRound="+maximumRound+" snowContact="+snowContact);Write();if(!m.Finished)break;

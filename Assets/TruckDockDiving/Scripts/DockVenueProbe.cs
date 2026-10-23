@@ -90,7 +90,8 @@ namespace LWS.TruckDockDiving
             }
             Time.timeScale = 1; Neutral(); Check(match.Finished && match.CompletedAttempts >= 24 && match.Launches == match.Locks, "complete mixed human/AI match resolves all real physical launches exactly once");
             Check(drove.All(v => v) && Enumerable.Range(0, 4).All(i => match.best[i] > 0), "keyboard, whole pad and both shared sticks each physically drive and land a valid scored attempt");
-            Check(speech && splash && audience.crowd.Reactions > 0, "real speech, water entry and crowd reactions occur during the competition"); yield return Capture("actual-mixed-match-results");
+            Check(speech && splash && audience.crowd.Reactions > 0, "real speech, water entry and crowd reactions occur during the competition"); yield return SportsResultsAcceptance.Capture(match,Check,folder,match.ResultPlace,slot=>(double?)match.best[slot]/12d,slot=>match.Winner==slot);
+ yield return Capture("actual-mixed-match-results");
             Check(pool.ReplayImpacts>0&&pool.MaximumDisplacement<=.651f&&pool.LastStrength>=.55f&&pool.LastStrength<=2.1f,"recorded entry replays restore the bounded impact response without changing scores");
             match.SetupScreen(); match.AllBots(); Check(match.StartMatch() && match.CompletedAttempts == 0 && audience.crowd.batches.Select(b => b.idle.GetInstanceID()).SequenceEqual(poseIds), "rematch restores original rules and reuses the same reusable crowd meshes"); yield return null; match.SetupScreen(); SportsNavigation.FrontEnd(); yield return null; yield return null;
             Check(FindAnyObjectByType<DockMatch>() == null && FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length == 1 && !Resources.FindObjectsOfTypeAll<Mesh>().Any(m => m.name.StartsWith("Owned runtime Dock audience pose")), "menu return cleans crowd meshes, water flow and original scene with one listener");

@@ -90,7 +90,8 @@ namespace LWS.TruckTrailerPlug
                 }
                 yield return null;
             }
-            Check(match.Finished && match.rules.Complete, "complete four-participant competition resolves through actual delivery physics");
+            if(match.Finished)yield return SportsResultsAcceptance.Capture(match,Check,folder,match.ResultPlace,slot=>(double?)match.rules.score[slot],slot=>match.rules.winners[slot]);
+ Check(match.Finished && match.rules.Complete, "complete four-participant competition resolves through actual delivery physics");
             if(mode=="mixed")Check(checkedReplay,"mixed match exercised replay and fresh-input turn transitions");
             Check(match.PhysicalReleases == 12, "exactly twelve physical releases, three per participant");
             for (int i = 0; i < 4; i++) Check(match.rules.attempts[i] == 3, "participant " + i + " receives exactly three scored drops");
