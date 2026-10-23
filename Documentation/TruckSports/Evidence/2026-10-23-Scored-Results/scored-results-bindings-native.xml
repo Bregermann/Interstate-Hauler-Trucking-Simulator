@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="7" result="Passed" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 18:25:37Z" end-time="2026-10-23 18:26:29Z" duration="52.0515235">
+  <test-suite type="TestSuite" id="1434" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="302" result="Passed" start-time="2026-10-23 18:25:37Z" end-time="2026-10-23 18:26:29Z" duration="52.051524" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1318" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="135" result="Passed" start-time="2026-10-23 18:25:37Z" end-time="2026-10-23 18:26:29Z" duration="52.030210" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="70932" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1129" name="ArcadeScoreLifecycleTests" fullname="ArcadeScoreLifecycleTests" classname="ArcadeScoreLifecycleTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-23 18:25:37Z" end-time="2026-10-23 18:25:58Z" duration="21.176137" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1132" name="ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" fullname="ArcadeScoreLifecycleTests.ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" methodname="ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="1468999377" result="Passed" start-time="2026-10-23 18:25:37Z" end-time="2026-10-23 18:25:44Z" duration="7.710029" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="120000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_AcidRain (Sports runtime clone) to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_MOLE_SCORE mole:33:1 slot=0 delta=-25; explicit early-results fixture after actual PhysX/NWH hit, not a complete-match claim.
+]]></output>
+        </test-case>
+        <test-case id="1130" name="PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" fullname="ArcadeScoreLifecycleTests.PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" methodname="PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="221174077" result="Passed" start-time="2026-10-23 18:25:44Z" end-time="2026-10-23 18:25:51Z" duration="6.739080" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightSnow (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+SYNTHETIC_PRESENTATION_ONLY receipt sequence1/4/5; no gameplay score was assigned or awarded; Heat displayed commit order.
+]]></output>
+        </test-case>
+        <test-case id="1131" name="PresentationOnlyWinnerCannotPrecedeItsEarlierAward" fullname="ArcadeScoreLifecycleTests.PresentationOnlyWinnerCannotPrecedeItsEarlierAward" methodname="PresentationOnlyWinnerCannotPrecedeItsEarlierAward" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="1356518470" result="Passed" start-time="2026-10-23 18:25:51Z" end-time="2026-10-23 18:25:58Z" duration="6.711850" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SYNTHETIC_PRESENTATION_ONLY receipt sequence1/4/5; no gameplay score was assigned or awarded; Heat displayed commit order.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1161" name="CompactScoreIconLayoutTests" fullname="CompactScoreIconLayoutTests" classname="CompactScoreIconLayoutTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-23 18:25:58Z" end-time="2026-10-23 18:26:04Z" duration="6.287368" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1162" name="EightCardValuesStayClearOfTheLockedHumanIcon" fullname="CompactScoreIconLayoutTests.EightCardValuesStayClearOfTheLockedHumanIcon" methodname="EightCardValuesStayClearOfTheLockedHumanIcon" classname="CompactScoreIconLayoutTests" runstate="Runnable" seed="2065073494" result="Passed" start-time="2026-10-23 18:25:58Z" end-time="2026-10-23 18:26:01Z" duration="3.293874" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SYNTHETIC_COMPACT_UI 8 actual saved gameplay HUD with software controller owner and explicit rule-finish state; time/lock separation, single icon and controlled720/1080 geometry. Not physical-match acceptance.
+]]></output>
+        </test-case>
+        <test-case id="1163" name="TwelveCardValuesStayClearOfTheLockedHumanIcon" fullname="CompactScoreIconLayoutTests.TwelveCardValuesStayClearOfTheLockedHumanIcon" methodname="TwelveCardValuesStayClearOfTheLockedHumanIcon" classname="CompactScoreIconLayoutTests" runstate="Runnable" seed="1823084005" result="Passed" start-time="2026-10-23 18:26:01Z" end-time="2026-10-23 18:26:04Z" duration="2.974260" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SYNTHETIC_COMPACT_UI 12 actual saved gameplay HUD with software controller owner and explicit rule-finish state; time/lock separation, single icon and controlled720/1080 geometry. Not physical-match acceptance.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1240" name="ScoredResultsLifecycleTests" fullname="ScoredResultsLifecycleTests" classname="ScoredResultsLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 18:26:04Z" end-time="2026-10-23 18:26:27Z" duration="22.556199" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1241" name="SyntheticEightSportBindingsPreserveTheirOwnRanksMetricsAndReset" fullname="ScoredResultsLifecycleTests.SyntheticEightSportBindingsPreserveTheirOwnRanksMetricsAndReset" methodname="SyntheticEightSportBindingsPreserveTheirOwnRanksMetricsAndReset" classname="ScoredResultsLifecycleTests" runstate="Runnable" seed="50932672" result="Passed" start-time="2026-10-23 18:26:04Z" end-time="2026-10-23 18:26:27Z" duration="22.527762" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone) to WeatherMakerProfile_LightCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_SCORED_RESULTS TruckWhackAMole count=8: explicit synthetic rule values, actual saved Heat/DOTween result board; original ranks/ties/metrics/IDs, controlled720/1080 bounds/TMP and rematch. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavySnow (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavySnow (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_SCORED_RESULTS TruckMagnetMayhem count=8: explicit synthetic rule values, actual saved Heat/DOTween result board; original ranks/ties/metrics/IDs, controlled720/1080 bounds/TMP and rematch. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightSnow (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightSnow (Sports runtime clone) to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_SCORED_RESULTS TruckSheepHerding count=4: explicit synthetic rule values, actual saved Heat/DOTween result board; original ranks/ties/metrics/IDs, controlled720/1080 bounds/TMP and rematch. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumFog (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumFog (Sports runtime clone) to WeatherMakerProfile_LightMediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_SCORED_RESULTS TruckSeesaw count=4: explicit synthetic rule values, actual saved Heat/DOTween result board; original ranks/ties/metrics/IDs, controlled720/1080 bounds/TMP and rematch. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone) to Hurricane weather (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_SCORED_RESULTS TruckKingOfTheHill count=8: explicit synthetic rule values, actual saved Heat/DOTween result board; original ranks/ties/metrics/IDs, controlled720/1080 bounds/TMP and rematch. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_SCORED_RESULTS TruckFloorIsLava count=8: explicit synthetic rule values, actual saved Heat/DOTween result board; original ranks/ties/metrics/IDs, controlled720/1080 bounds/TMP and rematch. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_HeavyClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_SCORED_RESULTS TruckHideAndSeek count=8: explicit synthetic rule values, actual saved Heat/DOTween result board; original ranks/ties/metrics/IDs, controlled720/1080 bounds/TMP and rematch. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_SCORED_RESULTS TruckHungryHaulers count=4: explicit synthetic rule values, actual saved Heat/DOTween result board; original ranks/ties/metrics/IDs, controlled720/1080 bounds/TMP and rematch. Not physical-match acceptance.
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1262" name="TeamScoreLifecycleTests" fullname="TeamScoreLifecycleTests" classname="TeamScoreLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-23 18:26:27Z" end-time="2026-10-23 18:26:29Z" duration="1.997351" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <output><![CDATA[<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+]]></output>
+        <test-case id="1263" name="ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" fullname="TeamScoreLifecycleTests.ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" methodname="ActualCourtContactCreditsTheTeamAndRetainsItsIdentityThroughResults" classname="TeamScoreLifecycleTests" runstate="Runnable" seed="2004614737" result="Passed" start-time="2026-10-23 18:26:27Z" end-time="2026-10-23 18:26:29Z" duration="1.950687" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="120000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightFog (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightFog (Sports runtime clone) to WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_TEAM_SCORE real court/ball contact; one blue team receipt without player credit; duplicate-name crew, results, late lock and fresh rematch.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

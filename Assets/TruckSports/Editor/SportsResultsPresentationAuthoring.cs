@@ -8,9 +8,11 @@ namespace LWS.TruckSports.Editor
 {
     public static class SportsResultsPresentationAuthoring
     {
-        public static void InstallMountainAndNinja()
+        public static void InstallMountainAndNinja() => InstallScenes(new[] { "TruckAvalancheEscape", "TruckNinjaWarrior" });
+        public static void InstallScoredBatch() => InstallScenes(new[] { "TruckWhackAMole", "TruckMagnetMayhem", "TruckSheepHerding", "TruckSeesaw", "TruckKingOfTheHill", "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers" });
+        static void InstallScenes(string[] names)
         {
-            foreach (string name in new[] { "TruckAvalancheEscape", "TruckNinjaWarrior" })
+            foreach (string name in names)
             {
                 var scene = EditorSceneManager.OpenScene("Assets/" + name + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
                 var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();

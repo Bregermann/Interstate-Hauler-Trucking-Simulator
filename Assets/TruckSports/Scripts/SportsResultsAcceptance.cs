@@ -12,7 +12,7 @@ namespace LWS.TruckSports
     public static class SportsResultsAcceptance
     {
         public static IEnumerator Capture(SportsEventSession session, Action<bool, string> check, string folder,
-            Func<int, int> actualPlace, Func<int, double?> actualMeasurement)
+            Func<int, int> actualPlace, Func<int, double?> actualMeasurement, Func<int, bool> actualWinner = null)
         {
             var board = session.menus.GetComponentInChildren<SportsResultsPresentation>(true);
             check(session.Finished && session.menus.Screen == SportsEventScreen.Result, "physical match reaches the original results lifecycle before inspecting ranked cards");
@@ -25,12 +25,12 @@ namespace LWS.TruckSports
             {
                 var player = session.setup.players[entry.Slot];
                 identities &= entry.ParticipantId == player.participantId && entry.DisplayName == player.name && entry.Color == player.color && entry.IsAI == (player.source == LWS.TruckBowling.BowlingSource.AI);
-                ranks &= entry.Place == actualPlace(entry.Slot) && entry.Winner == (actualPlace(entry.Slot) == 1);
+                ranks &= entry.Place == actualPlace(entry.Slot) && entry.Winner == (actualWinner != null ? actualWinner(entry.Slot) : actualPlace(entry.Slot) == 1);
                 measurements &= entry.Measurement == actualMeasurement(entry.Slot);
             }
             check(identities && snapshot.Rows.Select(row => row.ParticipantId).Distinct().Count() == snapshot.Rows.Count, "result identities, names, colors and AI flags match the actual roster independently of names");
-            check(ranks, "displayed ranks and all tied leaders match the original rules");
-            check(measurements, "final displayed measurements match actual finish times, distances or incomplete states");
+            check(ranks, "displayed ranks and declared winners match the original rules");
+            check(measurements, "final displayed measurements match the authoritative completed-match statistics");
             check(!session.menus.result.enabled, "only the accepted typed board hides the original text; original result data remains intact");
             foreach (var size in new[] { new Vector2Int(1280, 720), new Vector2Int(1920, 1080) })
             {

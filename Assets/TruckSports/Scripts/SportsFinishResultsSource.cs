@@ -43,7 +43,7 @@ namespace LWS.TruckSports
                 snapshot = new SportsResultsSnapshot(anyFinish ? "COURSE CHAMPIONS" : "FURTHEST ATHLETES", "FINISH TIME + 5 SECONDS PER FALL", rows);
                 return true;
             }
-            return false;
+            return SportsScoredResults.TryCapture(session, out snapshot);
         }
     }
 }

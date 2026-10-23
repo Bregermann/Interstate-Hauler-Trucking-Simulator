@@ -7836,8 +7836,8 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Original Request | Attractive actual winners, tied placings, scores, real statistics, shared results and rematch flow. Full source: Q22-SKY archived directive. |
 | Acceptance Criteria | Correct rules determine ranking/ties; no private information leaks or generic replacement of specialized celebrations. |
 | Status | PARTIAL |
-| Implementation Evidence | Saved ranked Heat/DOTween result boards for Avalanche Escape and Ninja Warrior, using immutable stable-identity snapshots and their authoritative rules. Original navigation/replay/rematch and specialized Poker/Bowling results remain intact. See 2026-10-23-Ranked-Race-Results.md and matching evidence. |
-| Automated Verification | First two-mode result milestone:51 EditMode/7 final PlayMode tests pass, all20 supported roster sizes exercised with42 controlled renders. Final exactdbaa00308413... Windows full probes113/0 (Avalanche59/Ninja54); four final Windows and six selected controlled result frames inspected. Failed/initial candidates retained and corrected. |
+| Implementation Evidence | Saved ranked Heat/DOTween result boards for Avalanche Escape and Ninja Warrior, using immutable stable-identity snapshots and their authoritative rules. Original navigation/replay/rematch and specialized Poker/Bowling results remain intact. See 2026-10-23-Ranked-Race-Results.md and matching evidence. Eight additional scored-mode saved boards now use the same read-only architecture; see 2026-10-23-Scored-Results.md and Q22-SKY-RESULT-SCORED-01. |
+| Automated Verification | First two-mode result milestone:51 EditMode/7 final PlayMode tests pass, all20 supported roster sizes exercised with42 controlled renders. Final exactdbaa00308413... Windows full probes113/0 (Avalanche59/Ninja54); four final Windows and six selected controlled result frames inspected. Failed/initial candidates retained and corrected. Eight-mode milestone adds147 EditMode/7 PlayMode passes and478 exact Windows checks/0 errors, with16 fresh result frames inspected. |
 | Human Verification | Not performed; no acceptance claimed. |
 | Remaining Work | Integrate remaining applicable sports and richer sport-specific winner/round presentation; retain existing Poker/Bowling/Kickball overrides. Broader aspects, performance and human/device/listening acceptance remain separate. |
 
@@ -7961,3 +7961,17 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Automated Verification | Old-renderer2-test native reproduction failed both8/12 value/lock assertions (4.9016s), retained with exact fixture/source and before images. Candidate7/7 passed (34.5880s): synthetic controlled8/12 HUD/one-icon/TMP checks, six-athlete result-copy UI, real mole/court contacts and queue regressions. Exact395fa335a22d... Windows full matches98/0: Avalanche59 (261.47s), HotPotato39 (57.14s). Four actual award and two updated Avalanche result frames inspected at720p/1080p, plus four controlled HUD and two controlled Ninja-copy frames. Hot retains its existing grid; no all-eight-sports single-row redesign claim. |
 | Human Verification | Not performed. |
 | Remaining Work | No observed failure in exercised icon/value cases. Remaining global presentation, other registered-sport results and broader human/device/listening/performance acceptance retain their parent statuses. |
+
+### Q22-SKY-RESULT-SCORED-01 — Eight scored-mode result boards
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-RESULT-SCORED-01 |
+| Sport/System | Whack-a-Mole, Magnet Mayhem, Sheep Herding, Seesaw, King of the Hill, Floor Is Lava, Hide and Seek, Hungry Haulers |
+| Original Request | Present actual winners, placements, identities, colored truck portraits, final scores and relevant statistics with animated results while preserving original rules and navigation. |
+| Acceptance Criteria | Every row uses the existing rule Place method and actual final arrays; preserve negative points, shared placements, Herd delivery-time tiebreak, Hill fractional control and declared winner, and Lava survival-first ordering. Eight saved boards must fit 720p/1080p, retain replay/rematch/menu actions, clear on rematch, and match genuine completed Windows matches. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | SportsScoredResults read-only adapters, existing SportsResultsSnapshot/Presentation and Heat/DOTween; additive saved scene changes. Original scene documents preserved except one ResultsPage child reference per scene; 925 unrelated pending files unchanged. |
+| Automated Verification | 147 targeted native EditMode tests passed (1.4207s). scored-results-bindings-native:7 passed,0 failed (52.0515s), including explicit synthetic values in eight saved scenes plus compact HUD, arcade/queue and team-contact regressions. Exact final51fbaa270be7... Windows payload passed478/0: Whack54, Magnet56, Herd70, Seesaw60, Hill51, Lava59, Hide65, Hauler63. All16 fresh Windows720p/1080p result frames and all8 controlled720p plus selected1080p boards inspected. Original complete autonomous matches and separate software-input/contact/replay/rematch fixtures retained. |
+| Human Verification | Not performed. |
+| Remaining Work | No observed failure in exercised eight-mode result bindings, completed-match boards or rematch cleanup. Broader player/input/aspect combinations, human/device/listening and isolated performance acceptance remain unperformed. Remaining global result coverage and richer winner/round celebrations stay under the PARTIAL parent entries. |
