@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 13:57:52Z" end-time="2026-10-23 13:58:09Z" duration="17.2547853">
+  <test-suite type="TestSuite" id="1413" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="286" result="Failed" site="Child" start-time="2026-10-23 13:57:52Z" end-time="2026-10-23 13:58:09Z" duration="17.254785" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1297" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="119" result="Failed" site="Child" start-time="2026-10-23 13:57:52Z" end-time="2026-10-23 13:58:09Z" duration="17.241220" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="68040" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1129" name="ArcadeScoreLifecycleTests" fullname="ArcadeScoreLifecycleTests" classname="ArcadeScoreLifecycleTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-23 13:57:52Z" end-time="2026-10-23 13:58:09Z" duration="17.236026" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1130" name="PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" fullname="ArcadeScoreLifecycleTests.PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" methodname="PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder" classname="ArcadeScoreLifecycleTests" runstate="Runnable" seed="531684364" result="Failed" start-time="2026-10-23 13:57:52Z" end-time="2026-10-23 13:58:09Z" duration="17.222660" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Winner priority and aggregation must preserve this recipient's actual commit order.
+  Expected is <System.Double[3]>, actual is <System.Collections.Generic.List`1[System.Double]> with 2 elements
+  Values differ at index [0]
+  Expected: 1.0d
+  But was:  4.0d
+]]></message>
+            <stack-trace><![CDATA[at NUnit.Framework.CollectionAssert.AreEqual (System.Collections.IEnumerable expected, System.Collections.IEnumerable actual, System.String message, System.Object[] args) [0x00007] in <f577cd9686154d6ab10efd7e65e64366>:0
+at ArcadeScoreLifecycleTests+<PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder>d__6.MoveNext () [0x003e6] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\ArcadeScoreLifecycleTests.cs:50
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

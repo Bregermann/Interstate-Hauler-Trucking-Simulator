@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 14:56:29Z" end-time="2026-10-23 14:56:31Z" duration="2.2201245">
+  <test-suite type="TestSuite" id="1417" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="290" result="Failed" site="Child" start-time="2026-10-23 14:56:29Z" end-time="2026-10-23 14:56:31Z" duration="2.220125" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1301" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="123" result="Failed" site="Child" start-time="2026-10-23 14:56:29Z" end-time="2026-10-23 14:56:31Z" duration="2.204975" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="68732" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1243" name="SurvivalScoreLifecycleTests" fullname="SurvivalScoreLifecycleTests" classname="SurvivalScoreLifecycleTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-10-23 14:56:29Z" end-time="2026-10-23 14:56:31Z" duration="2.199665" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1245" name="LavaRematchClearsInterruptedEngineRevLimiter" fullname="SurvivalScoreLifecycleTests.LavaRematchClearsInterruptedEngineRevLimiter" methodname="LavaRematchClearsInterruptedEngineRevLimiter" classname="SurvivalScoreLifecycleTests" runstate="Runnable" seed="249093198" result="Failed" start-time="2026-10-23 14:56:29Z" end-time="2026-10-23 14:56:31Z" duration="2.186219" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  A fresh attempt must not inherit the stopped limiter coroutine's power restriction.
+  Expected: False
+  But was:  True
+]]></message>
+            <stack-trace><![CDATA[at SurvivalScoreLifecycleTests+<LavaRematchClearsInterruptedEngineRevLimiter>d__6.MoveNext () [0x00306] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\SurvivalScoreLifecycleTests.cs:60
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+LAVA_REMATCH_INTERRUPTED_LIMITER active=True
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

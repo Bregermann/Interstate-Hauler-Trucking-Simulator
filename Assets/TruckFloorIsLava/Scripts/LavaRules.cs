@@ -2,6 +2,7 @@ using System;
 namespace LWS.TruckFloorIsLava
 {
     public enum LavaPlatformState { Untouched, Warning, Falling }
+    public enum LavaAwardKind { Survival, Knockoff, LastStanding }
     [Serializable] public sealed class LavaRules
     {
         public int Count { get; private set; }
@@ -13,6 +14,8 @@ namespace LWS.TruckFloorIsLava
         public readonly bool[] alive=new bool[8];
         public readonly int[] scores=new int[8],knockoffs=new int[8];
         public readonly float[] survived=new float[8];
+        public event Action<LavaAwardKind,string,int,int,int> Awarded;
+        void Award(LavaAwardKind kind,string id,int slot,int amount){scores[slot]+=amount;Awarded?.Invoke(kind,id,slot,amount,scores[slot]);}
         public LavaPlatformState[] platforms { get; private set; }=Array.Empty<LavaPlatformState>();
         float[] duration,deadline;readonly int[] hitter=new int[8];readonly float[] hitAt=new float[8];
         public void Reset(int count,float[] warningSeconds)
@@ -40,13 +43,13 @@ namespace LWS.TruckFloorIsLava
             for(int i=0;i<platforms.Length;i++)if(platforms[i]==LavaPlatformState.Warning&&Clock>=deadline[i]){platforms[i]=LavaPlatformState.Falling;Collapses++;}
             for(int i=0;i<Count;i++)if(alive[i])
             {
-                survived[i]=Clock;scores[i]+=(int)(Clock/15)-(int)(before/15);
-                if((genuineLavaMask&(1<<i))!=0){alive[i]=false;int credit=hitter[i];if(credit>=0&&Clock-hitAt[i]<=4){scores[credit]++;knockoffs[credit]++;}}
+                survived[i]=Clock;int milestone=(int)(Clock/15),delta=milestone-(int)(before/15);if(delta!=0)Award(LavaAwardKind.Survival,"survival:"+i+":"+milestone,i,delta);
+                if((genuineLavaMask&(1<<i))!=0){alive[i]=false;int credit=hitter[i];if(credit>=0&&Clock-hitAt[i]<=4){knockoffs[credit]++;Award(LavaAwardKind.Knockoff,"knockoff:"+i,credit,1);}}
             }
             int remaining=0,last=-1;for(int i=0;i<Count;i++)if(alive[i]){remaining++;last=i;}
             // Resolve the whole completed physics sample before declaring a
             // survivor, so callback order cannot invent a winner in a tie.
-            if(remaining==0||Count>1&&remaining==1){Complete=true;if(remaining==1){Winner=last;scores[last]+=5;}}
+            if(remaining==0||Count>1&&remaining==1){Complete=true;if(remaining==1){Winner=last;Award(LavaAwardKind.LastStanding,"last-standing:"+last,last,5);}}
         }
         public int Place(int slot){int place=1;for(int i=0;i<Count;i++)if(survived[i]>survived[slot]+.0001f||i==Winner&&slot!=Winner&&Math.Abs(survived[i]-survived[slot])<=.0001f)place++;return place;}
         public int Available(){int count=0;foreach(var state in platforms)if(state!=LavaPlatformState.Falling)count++;return count;}

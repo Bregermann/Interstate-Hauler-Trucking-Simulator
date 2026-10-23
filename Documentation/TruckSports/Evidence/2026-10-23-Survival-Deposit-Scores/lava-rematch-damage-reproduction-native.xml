@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-23 14:24:54Z" end-time="2026-10-23 14:24:57Z" duration="2.0604479">
+  <test-suite type="TestSuite" id="1416" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="289" result="Failed" site="Child" start-time="2026-10-23 14:24:54Z" end-time="2026-10-23 14:24:57Z" duration="2.060448" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1300" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="122" result="Failed" site="Child" start-time="2026-10-23 14:24:54Z" end-time="2026-10-23 14:24:57Z" duration="2.044215" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="21652" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1243" name="SurvivalScoreLifecycleTests" fullname="SurvivalScoreLifecycleTests" classname="SurvivalScoreLifecycleTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-10-23 14:24:54Z" end-time="2026-10-23 14:24:57Z" duration="2.038609" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1244" name="LavaRematchRepairsActualPowertrainAndWheelDamage" fullname="SurvivalScoreLifecycleTests.LavaRematchRepairsActualPowertrainAndWheelDamage" methodname="LavaRematchRepairsActualPowertrainAndWheelDamage" classname="SurvivalScoreLifecycleTests" runstate="Runnable" seed="1767816998" result="Failed" start-time="2026-10-23 14:24:54Z" end-time="2026-10-23 14:24:57Z" duration="2.024533" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="60000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  A fresh lava attempt must restore the real NWH powertrain after prior destruction.
+  Expected: 0.0f
+  But was:  1.0f
+]]></message>
+            <stack-trace><![CDATA[at SurvivalScoreLifecycleTests+<LavaRematchRepairsActualPowertrainAndWheelDamage>d__5.MoveNext () [0x002d0] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\SurvivalScoreLifecycleTests.cs:35
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_AcidRain (Sports runtime clone) to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+LAVA_REMATCH_DAMAGE engine=1 transmission=0.9 wheel=0.8
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -18,9 +18,9 @@ public sealed class SurvivalAwardAccountingTests
     }
     static object Get(object owner, string name) => owner.GetType().GetField(name) is FieldInfo field ? field.GetValue(owner) : owner.GetType().GetProperty(name).GetValue(owner);
     static object Call(object owner, string name, params object[] args) => owner.GetType().GetMethods().Single(method => method.Name == name && method.GetParameters().Length == args.Length).Invoke(owner, args);
-    void ExactAccounting(object rules)
+    void ExactAccounting(object rules, string field = "scores")
     {
-        var scores = (int[])Get(rules, "scores"); var running = new int[scores.Length]; var ids = new HashSet<string>();
+        var scores = (int[])Get(rules, field); var running = new int[scores.Length]; var ids = new HashSet<string>();
         foreach (var change in changes)
         {
             Assert.That(ids.Add(change.id), Is.True, "Each semantic award identity is unique within the match: " + change.id);
@@ -62,6 +62,27 @@ public sealed class SurvivalAwardAccountingTests
         Assert.That(Call(rules, "NextHeat"), Is.True); Call(rules, "Step", 15f, 0, recovered); Call(rules, "Step", .02f, 14, recovered);
         Assert.That(Get(rules, "Complete"), Is.True); ExactAccounting(rules);
         changes.Clear(); Call(rules, "Reset", 4, 2, 90f); Assert.That(changes, Is.Empty); ExactAccounting(rules);
+    }
+    [Test]
+    public void LavaMilestonesCreditedKnockoffAndSurvivorHaveExactIndependentReceipts()
+    {
+        var rules = Watch("LWS.TruckFloorIsLava.LavaRules"); Call(rules, "Reset", 3, Enumerable.Repeat(30f, 8).ToArray()); Call(rules, "Begin");
+        Call(rules, "Step", 15f, 0); Call(rules, "RecordPush", 0, 1, 4f); Call(rules, "Step", .02f, 6);
+        Assert.That(Get(rules, "Complete"), Is.True); ExactAccounting(rules);
+        Assert.That(changes.Count(change => change.kind == "Survival"), Is.EqualTo(3)); Assert.That(changes.Count(change => change.kind == "Knockoff"), Is.EqualTo(1)); Assert.That(changes.Count(change => change.kind == "LastStanding"), Is.EqualTo(1));
+        int count = changes.Count; Call(rules, "Step", 2f, 6); Assert.That(changes.Count, Is.EqualTo(count));
+        changes.Clear(); Call(rules, "Reset", 3, Enumerable.Repeat(30f, 8).ToArray()); ExactAccounting(rules); Assert.That(changes, Is.Empty);
+    }
+    [Test]
+    public void HideTagsSweepAndSurvivorsPublishOnceAcrossRoundTransitions()
+    {
+        var rules = Watch("LWS.TruckHideAndSeek.HideRules"); Call(rules, "Reset", 3, 2, .1f, 10f); Call(rules, "Begin"); Call(rules, "Tick", .1f);
+        Assert.That(Call(rules, "Tag", 0, 1), Is.True); Assert.That(Call(rules, "Tag", 0, 1), Is.False); Assert.That(Call(rules, "Tag", 0, 2), Is.True); ExactAccounting(rules, "points");
+        Call(rules, "Tick", 2.5f); Call(rules, "Tick", .1f); Call(rules, "Tick", 10f); Call(rules, "Tick", 2.5f);
+        Assert.That(Get(rules, "Complete"), Is.True); ExactAccounting(rules, "points");
+        Assert.That(changes.Count(change => change.kind == "Found"), Is.EqualTo(2)); Assert.That(changes.Count(change => change.kind == "Sweep"), Is.EqualTo(1)); Assert.That(changes.Count(change => change.kind == "Survival"), Is.EqualTo(2));
+        int count = changes.Count; Call(rules, "Tick", 5f); Assert.That(changes.Count, Is.EqualTo(count));
+        changes.Clear(); Call(rules, "Reset", 3, 2, .1f, 10f); ExactAccounting(rules, "points"); Assert.That(changes, Is.Empty);
     }
 }
 #endif

@@ -18,6 +18,86 @@ public sealed class SurvivalScoreLifecycleTests
     static void Set(object owner, string name, object value) => owner.GetType().GetField(name, Any).SetValue(owner, value);
     static object Call(object owner, string name, params object[] args) => owner.GetType().GetMethods(Any).Single(method => method.Name == name && method.GetParameters().Length == args.Length).Invoke(owner, args);
 
+    [UnityTest, Timeout(60000)]
+    public IEnumerator LavaRematchRepairsActualPowertrainAndWheelDamage()
+    {
+        var scope = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "LavaDriveRematch" });
+        var isolation = new GameObject("Explicit actual NWH damage/reset fixture"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation")); Component match = null;
+        try
+        {
+            EditorSceneManager.LoadSceneInPlayMode("Assets/TruckFloorIsLava/Scenes/TruckFloorIsLava.unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+            match = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsEventSession")); Set(Get(match, "setup"), "count", 2); Call(match, "AllBots"); Assert.That(Call(match, "StartMatch"), Is.True);
+            var truck = ((Array)Get(match, "trucks")).GetValue(0); var powertrain = Get(Get(Get(truck, "tractorMotor"), "vehicle"), "powertrain");
+            var engine = Get(powertrain, "engine"); var transmission = Get(powertrain, "transmission"); var wheel = ((Array)Get(truck, "wheels")).GetValue(0);
+            engine.GetType().GetProperty("Damage", Any).SetValue(engine, 1f); transmission.GetType().GetProperty("Damage", Any).SetValue(transmission, .9f); wheel.GetType().GetProperty("Damage", Any).SetValue(wheel, .8f);
+            Call(match, "SetupScreen"); Assert.That(Call(match, "StartMatch"), Is.True);
+            TestContext.WriteLine("LAVA_REMATCH_DAMAGE engine=" + Get(engine, "Damage") + " transmission=" + Get(transmission, "Damage") + " wheel=" + Get(wheel, "Damage"));
+            Assert.That(Get(engine, "Damage"), Is.EqualTo(0f), "A fresh lava attempt must restore the real NWH powertrain after prior destruction.");
+            Assert.That(Get(transmission, "Damage"), Is.EqualTo(0f)); Assert.That(Get(wheel, "Damage"), Is.EqualTo(0f));
+        }
+        finally { if (match != null) Call(match, "SetupScreen"); Time.timeScale = 1; UnityEngine.Object.DestroyImmediate(isolation); scope.Dispose(); }
+    }
+
+    [UnityTest, Timeout(60000)]
+    public IEnumerator LavaRematchClearsInterruptedEngineRevLimiter() { yield return RematchClearsInterruptedLimiter("TruckFloorIsLava"); }
+
+    [UnityTest, Timeout(60000)]
+    public IEnumerator HaulerRematchClearsInterruptedEngineRevLimiter() { yield return RematchClearsInterruptedLimiter("TruckHungryHaulers"); }
+
+    static IEnumerator RematchClearsInterruptedLimiter(string scene)
+    {
+        var scope = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "LavaLimiterRematch" });
+        var isolation = new GameObject("Controlled real NWH rev-limiter interruption fixture"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation")); Component match = null;
+        try
+        {
+            EditorSceneManager.LoadSceneInPlayMode("Assets/" + scene + "/Scenes/" + scene + ".unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+            match = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsEventSession")); Set(Get(match, "setup"), "count", 2); Call(match, "AllBots"); Assert.That(Call(match, "StartMatch"), Is.True);
+            var truck = ((Array)Get(match, "trucks")).GetValue(0); var engine = Get(Get(Get(truck, "tractorMotor"), "vehicle"), "powertrain"); engine = Get(engine, "engine");
+            // Explicit engine-state fixture: let NWH itself enter its real limiter,
+            // then interrupt it using the ordinary sport lifecycle. No score injection.
+            yield return new WaitForFixedUpdate(); Set(engine, "revLimiterCutoffDuration", 2f);
+            Set(engine, "outputAngularVelocity", (float)Get(engine, "revLimiterRPM") * Mathf.PI / 30f * 1.02f);
+            float until = Time.realtimeSinceStartup + 3;
+            while (!(bool)Get(engine, "revLimiterActive") && Time.realtimeSinceStartup < until) yield return new WaitForFixedUpdate();
+            Assert.That(Get(engine, "revLimiterActive"), Is.True, "NWH must actually enter the limiter before its coroutine is interrupted.");
+            Call(match, "SetupScreen"); Assert.That(Call(match, "StartMatch"), Is.True);
+            TestContext.WriteLine(scene + "_REMATCH_INTERRUPTED_LIMITER active=" + Get(engine, "revLimiterActive"));
+            Assert.That(Get(engine, "revLimiterActive"), Is.False, "A fresh attempt must not inherit the stopped limiter coroutine's power restriction.");
+        }
+        finally { if (match != null) Call(match, "SetupScreen"); Time.timeScale = 1; UnityEngine.Object.DestroyImmediate(isolation); scope.Dispose(); }
+    }
+
+    [UnityTest, Timeout(120000)]
+    public IEnumerator RealAiCargoCollectionScoresOnlyAfterActualBankingAndResetsItsReceipt()
+    {
+        var scope = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "ActualCargoScore" });
+        var isolation = new GameObject("Explicit actual cargo score fixture"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation")); Component match = null;
+        try
+        {
+            EditorSceneManager.LoadSceneInPlayMode("Assets/TruckHungryHaulers/Scenes/TruckHungryHaulers.unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+            match = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsEventSession")); Set(Get(match, "setup"), "count", 4); Call(match, "AllBots");
+            var catalog = Get(Get(match, "atmosphere"), "presets"); var entries = ((Array)Get(catalog, "entries")).Cast<object>();
+            Call(catalog, "Select", Get(entries.Single(entry => (string)Get(entry, "displayName") == "Clear"), "id")); Assert.That(Call(match, "StartMatch"), Is.True); Time.timeScale = 4;
+            var journal = Get(match, "ScoreJournal"); var points = (int[])Get(Get(match, "rules"), "points"); bool collectedWithoutPoints = false; float until = Time.realtimeSinceStartup + 60;
+            while ((int)Get(journal, "Count") == 0 && !(bool)Get(match, "Finished") && Time.realtimeSinceStartup < until)
+            {
+                if ((int)Get(match, "ActualCollections") > 0 && (int)Get(match, "ActualDeposits") == 0) { collectedWithoutPoints = true; Assert.That(points.All(value => value == 0), Is.True); }
+                yield return new WaitForFixedUpdate();
+            }
+            Assert.That(collectedWithoutPoints, Is.True, "Actual physical scoop collection must not fabricate scoring receipts or points.");
+            Assert.That((int)Get(match, "ActualDeposits"), Is.GreaterThan(0)); Assert.That((int)Get(journal, "Count"), Is.GreaterThan(0), "AI must physically drive real collected cargo to its own bank.");
+            var receipt = Get(journal, "Latest"); int slot = (int)Get(receipt, "Slot"); Assert.That(Get(receipt, "IsTeam"), Is.False); Assert.That(Get(receipt, "Total"), Is.EqualTo((double)points[slot])); Assert.That(Get(receipt, "Reason"), Is.EqualTo("CARGO BANKED"));
+            ((Behaviour)match).enabled = false; Time.timeScale = 1; var before = points.ToArray();
+            var presenter = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsScorePresentation")); until = Time.realtimeSinceStartup + 8;
+            while (Get(presenter, "LastPresented") == null && Time.realtimeSinceStartup < until) yield return null;
+            Assert.That(Get(presenter, "LastPresented"), Is.Not.Null); CollectionAssert.AreEqual(before, points, "Presentation does not change banked values.");
+            ((Behaviour)match).enabled = true; Call(match, "SetupScreen"); Assert.That(Call(match, "StartMatch"), Is.True); yield return null;
+            Assert.That(Get(Get(match, "ScoreJournal"), "Count"), Is.Zero); Assert.That(points.All(value => value == 0), Is.True); Assert.That(Get(presenter, "Presented"), Is.Zero);
+            TestContext.WriteLine("ACTUAL_CARGO_SCORE genuine AI/NWH scoop collection and settled banking; no placement, rule-score or clock injection; fresh rematch.");
+        }
+        finally { if (match != null) { ((Behaviour)match).enabled = true; Call(match, "SetupScreen"); } Time.timeScale = 1; UnityEngine.Object.DestroyImmediate(isolation); scope.Dispose(); }
+    }
+
     [UnityTest, Timeout(120000)]
     public IEnumerator RealGroundedHillOccupationPublishesMilestonesWithoutChangingFractionalControl()
     {

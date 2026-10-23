@@ -22,6 +22,42 @@ public sealed class ArcadeScoreLifecycleTests
         return Rect.MinMaxRect(corners.Min(value => value.x), corners.Min(value => value.y), corners.Max(value => value.x), corners.Max(value => value.y));
     }
 
+    [UnityTest, Timeout(60000)]
+    public IEnumerator PresentationOnlyRapidAwardsKeepOneRecipientsCommitOrder() => RapidReceiptOrder(true);
+    [UnityTest, Timeout(60000)]
+    public IEnumerator PresentationOnlyWinnerCannotPrecedeItsEarlierAward() => RapidReceiptOrder(false);
+    IEnumerator RapidReceiptOrder(bool queuedThird)
+    {
+        var scope = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "ScoreQueuePresentationOnly" });
+        var isolation = new GameObject("Explicit synthetic receipt presentation fixture"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation"));
+        Component match = null;
+        try
+        {
+            EditorSceneManager.LoadSceneInPlayMode("Assets/TruckWhackAMole/Scenes/TruckWhackAMole.unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+            match = Session(); Call(match, "AllBots"); Assert.That(Call(match, "StartMatch"), Is.True);
+            // Presentation-only fixture: pause the game component and inject
+            // receipts, not rule awards. These are not actual gameplay points.
+            ((Behaviour)match).enabled = false; var scores = (int[])Get(Get(match, "rules"), "scores"); var before = scores.ToArray();
+            var tier = Runtime("SportsScoreTier");
+            Call(match, "ConfirmScore", "fixture:ordinary:1", 0, 1d, 1d, "ORDINARY", Enum.Parse(tier, "Small"), "PTS", null, false, false);
+            Call(match, "ConfirmScore", "fixture:winner", 0, 3d, 4d, "ROUND WINNER", Enum.Parse(tier, "RoundWinner"), "PTS", null, true, false);
+            bool thirdSent = queuedThird;
+            if (queuedThird) Call(match, "ConfirmScore", "fixture:ordinary:2", 0, 1d, 5d, "ORDINARY", Enum.Parse(tier, "Small"), "PTS", null, false, false);
+            var presenter = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsScorePresentation"));
+            var totals = new System.Collections.Generic.List<double>(); int shown = 0; float until = Time.realtimeSinceStartup + 15;
+            while (totals.Count < 3 && Time.realtimeSinceStartup < until)
+            {
+                if ((int)Get(presenter, "Presented") != shown) { shown = (int)Get(presenter, "Presented"); totals.Add((double)Get(Get(presenter, "LastPresented"), "Total")); }
+                if (!thirdSent && totals.Count == 2) { thirdSent = true; Call(match, "ConfirmScore", "fixture:ordinary:2", 0, 1d, 5d, "ORDINARY", Enum.Parse(tier, "Small"), "PTS", null, false, false); }
+                yield return null;
+            }
+            CollectionAssert.AreEqual(before, scores, "Synthetic presentation receipts cannot create gameplay points.");
+            CollectionAssert.AreEqual(new[] { 1d, 4d, 5d }, totals, "Winner priority and aggregation must preserve this recipient's actual commit order.");
+            TestContext.WriteLine("SYNTHETIC_PRESENTATION_ONLY receipt sequence1/4/5; no gameplay score was assigned or awarded; Heat displayed commit order.");
+        }
+        finally { if (match != null) { ((Behaviour)match).enabled = true; Call(match, "SetupScreen"); } Time.timeScale = 1; UnityEngine.Object.DestroyImmediate(isolation); scope.Dispose(); }
+    }
+
     [UnityTest, Timeout(120000)]
     public IEnumerator ActualAiMoleContactRetainsItsReceiptThroughTheResultsTransition()
     {

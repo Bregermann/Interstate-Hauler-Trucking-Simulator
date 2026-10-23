@@ -51,14 +51,25 @@ namespace LWS.TruckSports
             if (match != receipt.MatchId) ResetMatch(receipt.MatchId);
             // Combine rapid awards only when their actual identities, reason,
             // unit and tier agree. Names may deliberately be identical.
-            foreach (var item in pending)
-                if (receipt.Tier <= SportsScoreTier.Major && item.latest.RecipientId == receipt.RecipientId && item.latest.Reason == receipt.Reason && item.latest.Tier == receipt.Tier && item.latest.Unit == receipt.Unit)
+            for (int i = pending.Count - 1; i >= 0; i--)
+            {
+                var item = pending[i];
+                if (item.latest.RecipientId != receipt.RecipientId) continue;
+                // Do not merge a later ordinary award into one queued before
+                // this recipient's winner/other event. Totals follow commits.
+                if (receipt.Tier <= SportsScoreTier.Major && item.latest.Reason == receipt.Reason && item.latest.Tier == receipt.Tier && item.latest.Unit == receipt.Unit)
                 { item.delta += receipt.Delta; item.count++; item.latest = receipt; return; }
+                break;
+            }
             int position = pending.Count;
             if (receipt.Tier >= SportsScoreTier.RoundWinner)
             {
                 position = 0;
                 while (position < pending.Count && pending[position].latest.Tier >= receipt.Tier) position++;
+                // Prioritize across recipients while preserving the winner's
+                // earlier committed awards, including real negative changes.
+                for (int i = position; i < pending.Count; i++)
+                    if (pending[i].latest.RecipientId == receipt.RecipientId) position = i + 1;
             }
             pending.Insert(position, new Pending { latest = receipt, delta = receipt.Delta, count = 1 });
         }

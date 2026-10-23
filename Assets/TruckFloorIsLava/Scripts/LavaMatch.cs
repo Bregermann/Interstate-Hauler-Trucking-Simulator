@@ -60,7 +60,9 @@ namespace LWS.TruckFloorIsLava
         readonly FareFightRoute[] drivers=new FareFightRoute[8];
         readonly StringBuilder text=new StringBuilder(650);
         int pendingLava;float aftermath;
-        protected override void Awake(){base.Awake();Array.Fill(current,-1);Array.Fill(target,-1);}
+        protected override void Awake(){base.Awake();Array.Fill(current,-1);Array.Fill(target,-1);rules.Awarded+=ConfirmAward;}
+        protected override void OnDestroy(){if(rules!=null)rules.Awarded-=ConfirmAward;base.OnDestroy();}
+        void ConfirmAward(LavaAwardKind kind,string id,int slot,int delta,int total){bool winner=kind==LavaAwardKind.LastStanding;ConfirmScore(id,slot,delta,total,winner?"LAST TRUCK STANDING":kind==LavaAwardKind.Knockoff?"LAVA KNOCKOFF":"LAVA SURVIVAL",winner?SportsScoreTier.RoundWinner:kind==LavaAwardKind.Knockoff?SportsScoreTier.Major:SportsScoreTier.Small,roundEnded:winner,matchEnded:winner);}
         int AliveCount(){int count=0;for(int i=0;i<setup.count;i++)if(rules.alive[i])count++;return count;}
         public override bool ValidateSources(out string reason){if(!base.ValidateSources(out reason))return false;int humans=0;for(int i=0;i<setup.count;i++)if(setup.players[i].source!=BowlingSource.AI)humans++;if(humans<=4)return true;reason="Up to four local humans; assign the remaining trucks to AI.";return false;}
         public override bool TryReadScoreCard(int slot,out string value,out string detail){value=rules.scores[slot]+"P";detail=rules.survived[slot].ToString("F0")+"s · "+(rules.alive[slot]?"LIVE":"LAVA")+" · K"+rules.knockoffs[slot];return slot<setup.count;}
@@ -77,7 +79,12 @@ namespace LWS.TruckFloorIsLava
             {
                 drivers[i]??=new FareFightRoute(new LwsNavigationTuning{routeConnectorToleranceMeters=.5f});drivers[i].Reset();current[i]=target[i]=-1;jumpAt[i]=0;
                 fragments[i].ResetBody();blasts[i].Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);splashes[i].Stop(true,ParticleSystemStopBehavior.StopEmittingAndClear);trucks[i].gameObject.SetActive(i<setup.count);if(i>=setup.count)continue;
-                trucks[i].tractorMotor.Configure();trucks[i].Prepare(Grid(i),Quaternion.Euler(0,slotHeading(i),0));previousBottom[i]=trucks[i].shape.bounds.min.y;Hold(trucks[i]);
+                trucks[i].tractorMotor.Configure();trucks[i].Prepare(Grid(i),Quaternion.Euler(0,slotHeading(i),0));
+                var damage=trucks[i].GetComponent<NWH.VehiclePhysics2.Damage.DamageHandler>();if(damage!=null)damage.Repair();else{trucks[i].tractorMotor.vehicle.powertrain.Repair();foreach(var wheel in trucks[i].wheels)wheel.Damage=0;}
+                // Destruction disables NWH and stops its limiter coroutine before
+                // that coroutine can clear this transient power-cut flag.
+                var engine=trucks[i].tractorMotor.vehicle.powertrain.engine;engine.revLimiterActive=false;engine.flyingStartEnabled=true;engine.StartEngine();
+                previousBottom[i]=trucks[i].shape.bounds.min.y;Hold(trucks[i]);
             }
             Physics.SyncTransforms();drivingViews.Layout();atmosphere.Configure(Environment.TickCount,0,1);
         }
