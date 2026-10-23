@@ -71,12 +71,52 @@ namespace LWS.TruckSports.Editor
             }
         }
         static readonly string[] NewOutdoors = { "TruckDockDiving", "TruckBuzkashi", "TruckBungeeDemolition", "TruckFishing", "TruckSumo", "TruckLogRolling", "TruckTrampolineDodgeball", "TruckDemolitionDerby" };
+        static readonly string[] RemainingSharedOutdoors = { "TruckCurling", "TruckSkeeBall" };
         // Explicit additive authoring after the venue audit. Never called by a
         // build, scene load or Play Mode; existing designers' choices survive.
-        public static void InstallNewOutdoors()
+        public static void InstallNewOutdoors() => InstallWeatherlessOutdoors(NewOutdoors);
+        public static void InstallRemainingSharedOutdoors() => InstallWeatherlessOutdoors(RemainingSharedOutdoors);
+        public static void InstallRemainingOutdoorsAndGroundFixtures()
         {
-            var paths = SportsBuilder.SceneList().Where(path => NewOutdoors.Contains(Path.GetFileNameWithoutExtension(path))).ToArray();
-            if (paths.Length != NewOutdoors.Length) throw new InvalidOperationException("Missing audited outdoor scene.");
+            InstallRemainingSharedOutdoors();
+            GroundAuthoredVenueFixtures();
+            RefineRemainingOutdoorLamps();
+            AssetDatabase.SaveAssets();
+        }
+        public static void RefineRemainingOutdoorLamps()
+        {
+            foreach (string name in new[] { "TruckSkeeBall", "TruckFishing" })
+            {
+                var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
+                var binding = All<SportsMatchTime>(scene).Single();
+                if (name == "TruckSkeeBall")
+                {
+                    var poles = binding.transform.Find("Authored night venue lamps").Cast<Transform>().ToArray();
+                    if (poles.Length != 16) throw new InvalidOperationException("Retain four authored fixtures per Skee lane.");
+                    int index = 0;
+                    foreach (var course in All<LWS.TruckSkeeBall.SkeeRunner>(scene).OrderBy(course => course.lane))
+                    foreach (bool board in new[] { false, true }) foreach (int side in new[] { -1, 1 })
+                    {
+                        var pole = poles[index++];
+                        var floor = course.target.parent.Find("Course miss floor").GetComponent<MeshRenderer>().bounds;
+                        pole.position = new Vector3(floor.center.x + side * (floor.extents.x - 1.5f), floor.max.y, board ? course.target.position.z - 16 : 8);
+                        var light = pole.GetComponentInChildren<Light>();
+                        light.transform.localPosition = Vector3.up * 29;
+                        var target = board ? course.target.TransformPoint(new Vector3(0, 17.5f, 0)) : new Vector3(course.target.position.x, 0, 24);
+                        light.transform.rotation = Quaternion.LookRotation(target - light.transform.position);
+                        light.range = board ? 80 : 100; light.intensity = board ? 800 : 1200;
+                        EditorUtility.SetDirty(pole); EditorUtility.SetDirty(light); EditorUtility.SetDirty(light.transform);
+                    }
+                }
+                else foreach (var light in binding.nightLights) { light.intensity = 1200; EditorUtility.SetDirty(light); }
+                EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            }
+            AssetDatabase.SaveAssets();
+        }
+        static void InstallWeatherlessOutdoors(string[] names)
+        {
+            var paths = SportsBuilder.SceneList().Where(path => names.Contains(Path.GetFileNameWithoutExtension(path))).ToArray();
+            if (paths.Length != names.Length) throw new InvalidOperationException("Missing audited outdoor scene.");
             foreach (string path in paths)
             {
                 var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
@@ -140,6 +180,23 @@ namespace LWS.TruckSports.Editor
             var button = session.menus.pages[0].GetComponentsInChildren<SportsMenuAction>(true).Single(action => action.action == "teamsetup").GetComponent<RectTransform>();
             button.anchoredPosition = new Vector2(0, -225); EditorUtility.SetDirty(button);
             EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+        }
+        public static void GroundAuthoredVenueFixtures()
+        {
+            foreach (string name in new[] { "TruckBungeeDemolition", "TruckFishing" })
+            {
+                var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
+                var binding = All<SportsMatchTime>(scene).Single();
+                string anchor = name == "TruckBungeeDemolition" ? "Independent demolition bay" : "Equivalent independent river";
+                float ground = scene.GetRootGameObjects().Where(item => item.name.StartsWith(anchor, StringComparison.Ordinal)).Select(item => item.transform.position.y).Distinct().Single();
+                var fixtures = binding.transform.Find("Authored night venue lamps");
+                foreach (Transform pole in fixtures)
+                {
+                    if (!pole.name.StartsWith("Venue night fixture ", StringComparison.Ordinal)) throw new InvalidOperationException("Unexpected owned fixture layout.");
+                    var position = pole.position; position.y = ground; pole.position = position; EditorUtility.SetDirty(pole);
+                }
+                EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            }
         }
         public static void InstallLegacyTime()
         {
@@ -285,7 +342,7 @@ namespace LWS.TruckSports.Editor
                 BindSkyProfile(weather, binding);
                 binding.daylightFill = All<Light>(scene).SingleOrDefault(light => light.type == LightType.Directional && light.GetComponentInParent<WeatherMakerScript>() == null);
                 var cameras = All<SportsEventCamera>(scene).Select(rig => rig.view).Where(camera => camera != null).Distinct().ToArray();
-                if (NewOutdoors.Contains(scene.name))
+                if (weather.session.presentationWeather == weather)
                 {
                     // These modes replace session.cameras during spectator,
                     // split-screen and replay transitions. Bind the authored
@@ -327,8 +384,8 @@ namespace LWS.TruckSports.Editor
                 foreach (int side in sides)
                 {
                     var light = new GameObject("Authored night low-beam" + side).AddComponent<Light>(); light.transform.SetParent(truck.transform, false);
-                    var shape = truck.shape; light.transform.localPosition = shape.center + new Vector3(side * shape.size.x * .3f, shape.size.y * .2f, shape.size.z * .49f);
-                    light.type = LightType.Spot; light.range = Mathf.Clamp(shape.size.z * 12, 25, 100); light.spotAngle = 80; light.innerSpotAngle = 60;
+                    var bounds = AuthoredTruckBounds(truck); light.transform.localPosition = bounds.center + new Vector3(side * bounds.size.x * .3f, bounds.size.y * .2f, bounds.size.z * .49f);
+                    light.type = LightType.Spot; light.range = Mathf.Clamp(bounds.size.z * 12, 25, 100); light.spotAngle = 80; light.innerSpotAngle = 60;
                     light.intensity = manager != null ? 1000 : 750; light.color = new Color(1, .93f, .76f); light.shadows = LightShadows.None; light.enabled = false;
                     if (manager != null) manager.lowBeamLights.lightSources.Add(new NWH.VehiclePhysics2.Effects.LightSource { type = NWH.VehiclePhysics2.Effects.LightSource.LightType.Light, light = light, emissionColor = light.color });
                     else coordinator.wheelOnlyBeams[i] = light;
@@ -338,6 +395,27 @@ namespace LWS.TruckSports.Editor
             DetachRecordedHierarchyLights(binding, coordinator);
             TuneOwnedHeadlights(coordinator);
             EditorUtility.SetDirty(coordinator);
+        }
+        static Bounds AuthoredTruckBounds(SportsEventTruck truck)
+        {
+            if (truck.shape != null) return new Bounds(truck.shape.center, truck.shape.size);
+            // Curling deliberately uses a circular MeshCollider. Locate visual
+            // lamps without replacing that sport's authored collision footprint.
+            var renderers = truck.visuals.GetComponentsInChildren<Renderer>(true);
+            if (renderers.Length == 0) throw new InvalidOperationException("Missing authored truck visuals: " + truck.name);
+            var bounds = new Bounds(); bool initialized = false;
+            foreach (var renderer in renderers)
+            {
+                var local = renderer.localBounds;
+                foreach (int x in new[] { -1, 1 }) foreach (int y in new[] { -1, 1 }) foreach (int z in new[] { -1, 1 })
+                {
+                    var corner = local.center + Vector3.Scale(local.extents, new Vector3(x, y, z));
+                    var point = truck.transform.InverseTransformPoint(renderer.transform.TransformPoint(corner));
+                    if (!initialized) { bounds = new Bounds(point, Vector3.zero); initialized = true; }
+                    else bounds.Encapsulate(point);
+                }
+            }
+            return bounds;
         }
         static void TuneOwnedHeadlights(SportsNightHeadlights coordinator)
         {
@@ -443,7 +521,7 @@ namespace LWS.TruckSports.Editor
         }
         static void InstallVenueLamps(Scene scene, SportsMatchTime binding)
         {
-            if (NewOutdoors.Contains(scene.name)) { InstallAuditedOutdoorLamps(scene, binding); return; }
+            if (NewOutdoors.Contains(scene.name) || RemainingSharedOutdoors.Contains(scene.name)) { InstallAuditedOutdoorLamps(scene, binding); return; }
             bool stadium = scene.name == "TruckFieldGoal", arena = scene.name == "TruckKeepaway";
             if (!stadium && !arena) return;
             Transform parent = stadium ? All<LWS.TruckFieldGoal.FieldGoalStadiumBoard>(scene).Single().fieldAssembly : binding.transform;
@@ -480,9 +558,20 @@ namespace LWS.TruckSports.Editor
             {
                 foreach (float z in new[] { -25f, 45f, 115f }) foreach (int side in new[] { -1, 1 }) AddLamp(new Vector3(side * 29, 0, z), new Vector3(0, 0, z), 22, 110, 1800);
             }
+            else if (scene.name == "TruckCurling")
+            {
+                // Side fixtures illuminate the full extended sheet instead of
+                // leaving its middle beyond four corner spotlights' coverage.
+                var sheet = scene.GetRootGameObjects().Single(item => item.name == "Extra slippery curling sheet").GetComponent<MeshRenderer>().bounds;
+                foreach (float fraction in new[] { .12f, .5f, .88f }) foreach (int side in new[] { -1, 1 })
+                {
+                    float z = Mathf.Lerp(sheet.min.z, sheet.max.z, fraction);
+                    AddLamp(new Vector3(side * 16, sheet.max.y, z), new Vector3(0, sheet.max.y, z), 22, 115, 2000);
+                }
+            }
             else
             {
-                string anchor = scene.name == "TruckBuzkashi" ? "Broad physical grass field" : scene.name == "TruckBungeeDemolition" ? "Independent demolition bay" : scene.name == "TruckFishing" ? "Equivalent independent river" : scene.name == "TruckSumo" ? "Surrounding arena floor" : scene.name == "TruckLogRolling" ? "Installed NWH pond mesh" : "Structural arena rubber floor";
+                string anchor = scene.name == "TruckBuzkashi" ? "Broad physical grass field" : scene.name == "TruckBungeeDemolition" ? "Independent demolition bay" : scene.name == "TruckFishing" ? "Equivalent independent river" : scene.name == "TruckSumo" ? "Surrounding arena floor" : scene.name == "TruckLogRolling" ? "Installed NWH pond mesh" : scene.name == "TruckCurling" ? "Extra slippery curling sheet" : scene.name == "TruckSkeeBall" ? "Equivalent giant arcade Skee course" : "Structural arena rubber floor";
                 var anchors = scene.GetRootGameObjects().Where(item => item.name.StartsWith(anchor, StringComparison.Ordinal)).ToArray();
                 if (anchors.Length == 0) throw new InvalidOperationException("Missing audited lamp boundary: " + scene.name);
                 foreach (var item in anchors)
@@ -493,10 +582,14 @@ namespace LWS.TruckSports.Editor
                     float height = Mathf.Clamp(Mathf.Max(bounds.extents.x, bounds.extents.z) * .55f, 14, 30);
                     float range = Mathf.Clamp(bounds.extents.magnitude * 2.2f + height, 50, 240);
                     float power = Mathf.Clamp(height * height * 6, 1500, 5400);
+                    // Assembly bounds include towers and trees. Their top is
+                    // not the ground. These audited venue roots author the
+                    // floor elevation; flat sheet/pit anchors use their surface.
+                    float ground = scene.name == "TruckSkeeBall" ? item.transform.Find("Course miss floor").GetComponent<MeshRenderer>().bounds.max.y : scene.name == "TruckBungeeDemolition" || scene.name == "TruckFishing" ? item.transform.position.y : bounds.max.y;
                     // Fixtures sit outside the authored footprint. No new physics
                     // geometry, supports, or colliders enter the playing routes.
                     foreach (int x in new[] { -1, 1 }) foreach (int z in new[] { -1, 1 })
-                        AddLamp(new Vector3(bounds.center.x + x * (bounds.extents.x + 3), bounds.max.y, bounds.center.z + z * (bounds.extents.z + 3)), new Vector3(bounds.center.x, bounds.max.y, bounds.center.z), height, range, power);
+                        AddLamp(new Vector3(bounds.center.x + x * (bounds.extents.x + 3), ground, bounds.center.z + z * (bounds.extents.z + 3)), new Vector3(bounds.center.x, ground, bounds.center.z), height, range, power);
                 }
             }
             binding.nightLights = lights.ToArray();

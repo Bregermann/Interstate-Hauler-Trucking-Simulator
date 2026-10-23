@@ -23,8 +23,12 @@ public sealed class CollectionEnvironmentTests
     public IEnumerator CompatibleOutdoorVenuesKeepIndependentTimeAndAccessibleMaximumRosters() => VerifyVenues(false);
     [UnityTest, Timeout(150000)]
     public IEnumerator NewlyIntegratedOutdoorVenuesRetainRenderersAndMatchLifecycle() => VerifyVenues(true);
+    [UnityTest, Timeout(150000)]
+    public IEnumerator RemainingSharedVenuesAndGroundedFixturesRetainMatchLifecycle() => VerifyVenues(true, RemainingIntegration);
     static readonly string[] NewlyIntegrated = { "TruckDockDiving", "TruckBuzkashi", "TruckBungeeDemolition", "TruckFishing", "TruckSumo", "TruckLogRolling", "TruckTrampolineDodgeball", "TruckDemolitionDerby" };
-    IEnumerator VerifyVenues(bool newlyIntegratedOnly)
+    static readonly string[] RemainingIntegration = { "TruckCurling", "TruckSkeeBall", "TruckBungeeDemolition", "TruckFishing" };
+    static bool PresentationOwned(string name) => NewlyIntegrated.Contains(name) || RemainingIntegration.Contains(name);
+    IEnumerator VerifyVenues(bool newlyIntegratedOnly, string[] selection = null)
     {
         var lease = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "CollectionEnvironment" });
         var isolation = new GameObject("Explicit outdoor environment regression");
@@ -42,20 +46,42 @@ public sealed class CollectionEnvironmentTests
             {
                 string name = Path.GetFileNameWithoutExtension(path);
                 if (name.StartsWith("TruckPedestrianPlowing", StringComparison.Ordinal)) continue;
-                if (newlyIntegratedOnly && !NewlyIntegrated.Contains(name)) continue;
+                if (newlyIntegratedOnly && !(selection ?? NewlyIntegrated).Contains(name)) continue;
                 EditorSceneManager.LoadSceneInPlayMode(path, new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
                 match = UnityEngine.Object.FindObjectsByType(Runtime("SportsEventSession"), FindObjectsSortMode.None).Cast<Component>().SingleOrDefault();
                 if (match == null) continue;
                 var weather = match.GetComponent(Runtime("SportsChaosWeather"));
                 if (weather == null) { match = null; continue; }
                 var binding = Get(weather, "matchTime"); Assert.That(binding, Is.Not.Null, name);
-                if (NewlyIntegrated.Contains(name))
+                if (PresentationOwned(name))
                 {
                     Assert.That(Get(match, "presentationWeather"), Is.SameAs(weather), name + " single opt-in lifecycle owner");
                     Assert.That(UnityEngine.Object.FindObjectsByType(Runtime("SportsChaosWeather"), FindObjectsSortMode.None).Length, Is.EqualTo(1), name + " no duplicate weather");
                     Assert.That(UnityEngine.Object.FindObjectsByType(Type.GetType("LWS.TruckBaseJumping.BaseJumpRendering, Assembly-CSharp", true), FindObjectsSortMode.None).Length, Is.EqualTo(1), name + " single render pipeline scope");
                     Assert.That(((Light[])Get(binding, "nightLights")).Length, Is.GreaterThan(0), name + " authored night venue fixtures");
                     if (name == "TruckDockDiving" || name == "TruckLogRolling") AssertRetainedWaterRenderer(name);
+                    if (name == "TruckBungeeDemolition" || name == "TruckFishing") AssertGroundedFixtures(name, (Component)binding);
+                    if (name == "TruckSkeeBall")
+                    {
+                        var floors = match.gameObject.scene.GetRootGameObjects().Where(root => root.name.StartsWith("Equivalent giant arcade Skee course ", StringComparison.Ordinal)).Select(root => root.transform.Find("Course miss floor").GetComponent<MeshRenderer>().bounds).ToArray();
+                        Assert.That(floors.Select(floor => floor.max.y).Distinct().Count(), Is.EqualTo(1), "Equivalent lowered return floors");
+                        foreach (Transform fixture in ((Component)binding).transform.Find("Authored night venue lamps"))
+                        {
+                            Assert.That(fixture.position.y, Is.EqualTo(floors[0].max.y).Within(.01f), "Skee fixture rests on the actual lowered floor, not the assembly origin");
+                            Assert.That(floors.Any(floor => fixture.position.x >= floor.min.x && fixture.position.x <= floor.max.x && fixture.position.z >= floor.min.z && fixture.position.z <= floor.max.z), Is.True, "Skee fixture has a floor beneath it");
+                        }
+                    }
+                    if (name == "TruckCurling")
+                    {
+                        var trucks = UnityEngine.Object.FindObjectsByType(Runtime("SportsEventTruck"), FindObjectsInactive.Include, FindObjectsSortMode.None).Cast<Component>().ToArray();
+                        Assert.That(trucks.Length, Is.EqualTo(16), "All authored circular stones retained");
+                        foreach (var truck in trucks)
+                        {
+                            Assert.That(truck.GetComponent<BoxCollider>(), Is.Null, "Lighting must not replace Curling's circular collision footprint");
+                            Assert.That(truck.GetComponent<MeshCollider>(), Is.Not.Null);
+                        }
+                        Assert.That(((Light[])Get(binding, "nightLights")).Length, Is.EqualTo(6), "Full sheet side lighting");
+                    }
                 }
                 Set(Get(match, "setup"), "count", (int)Get(match, "MaximumPlayers"));
                 if ((bool)Get(match, "TeamSport")) { Set(match, "teamA", 4); Set(match, "teamB", 4); }
@@ -74,7 +100,7 @@ public sealed class CollectionEnvironmentTests
                 {
                     var box = WorldRect(topActions[i].GetComponent<RectTransform>());
                     if (headingBox.Overlaps(box)) layoutErrors.Add(name + " heading overlaps " + topActions[i].name);
-                    if (NewlyIntegrated.Contains(name) && box.Overlaps(RenderedTextRect((Component)Get(menus, "setupInfo")))) layoutErrors.Add(name + " control-help text overlaps " + topActions[i].name);
+                    if (PresentationOwned(name) && box.Overlaps(RenderedTextRect((Component)Get(menus, "setupInfo")))) layoutErrors.Add(name + " control-help text overlaps " + topActions[i].name);
                     var caption = (Component)Get(Get(topActions[i], "button"), "normalTextObj");
                     if (caption != null)
                     {
@@ -103,7 +129,7 @@ public sealed class CollectionEnvironmentTests
                     var cloudGradient = (Gradient)Get(Get(weather, "clouds"), "GlobalAmbientMultiplierGradient");
                     Assert.That(cloudGradient.Evaluate(1).a, Is.EqualTo(choice == "Night" ? (float)Get(binding, "nightCloudAmbientMultiplier") : 1).Within(.001f), name + " cloud ambient follows the selected match time without mutating source weather profiles");
                     Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[clear], "id")), name);
-                    if (NewlyIntegrated.Contains(name))
+                    if (PresentationOwned(name))
                     {
                         int revision = (int)Get(binding, "Revision"); int seed = (int)Get(weather, "Seed");
                         Call(match, "Pause", 0, false); yield return null;
@@ -137,7 +163,7 @@ public sealed class CollectionEnvironmentTests
                     Assert.That(Get(profile, "NightTexture"), Is.Not.Null, name + " authored vendor star texture");
                     Assert.That((float)Get(profile, "NightIntensity"), Is.GreaterThan(.1f), name);
                     var camera = vendor.GetType().GetField("AllowCameras").GetValue(vendor) as System.Collections.IEnumerable;
-                    if (NewlyIntegrated.Contains(name))
+                    if (PresentationOwned(name))
                     {
                         var allowed = camera.Cast<Camera>().ToArray();
                         foreach (var rig in UnityEngine.Object.FindObjectsByType(Runtime("SportsEventCamera"), FindObjectsSortMode.None).Cast<Component>())
@@ -152,10 +178,19 @@ public sealed class CollectionEnvironmentTests
                 tested++; TestContext.WriteLine("SAVED_OUTDOOR_TIME " + name + " maxRoster=" + Get(Get(match, "setup"), "count"));
                 Call(match, "SetupScreen"); match = null;
             }
-            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? 8 : 43), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
+            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? (selection ?? NewlyIntegrated).Length : 45), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
             Assert.That(layoutErrors, Is.Empty, string.Join("\n", layoutErrors));
         }
         finally { if (match != null) Call(match, "SetupScreen"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); Time.timeScale = 1; }
+    }
+    static void AssertGroundedFixtures(string name, Component binding)
+    {
+        string prefix = name == "TruckBungeeDemolition" ? "Independent demolition bay" : "Equivalent independent river";
+        float ground = binding.gameObject.scene.GetRootGameObjects().Where(root => root.name.StartsWith(prefix, StringComparison.Ordinal)).Select(root => root.transform.position.y).Distinct().Single();
+        var fixtures = binding.transform.Find("Authored night venue lamps");
+        Assert.That(fixtures, Is.Not.Null);
+        foreach (Transform fixture in fixtures)
+            Assert.That(fixture.position.y, Is.EqualTo(ground).Within(.01f), name + " fixture base rests at authored ground, not tree/tower bounds");
     }
     static void AssertRetainedWaterRenderer(string name)
     {
