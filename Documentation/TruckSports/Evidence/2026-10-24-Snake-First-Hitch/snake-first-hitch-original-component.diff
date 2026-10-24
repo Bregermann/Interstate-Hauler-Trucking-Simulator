@@ -1,0 +1,68 @@
+--- before/58576350
++++ authored/58576350
+@@ -19,3 +19,5 @@
+   frontOffset: 7
+   minimumSample: 0.3
+   tractorHitch: {x: 0, y: 0.9, z: -3.3}
++  firstTractorAttachment: {fileID: 189373318}
++  firstTrailerAttachment: {x: 0.018646386, y: 0.9872041, z: 5.9814553}
+--- before/929577846
++++ authored/929577846
+@@ -10,6 +10,7 @@
+   m_Script: {fileID: 11500000, guid: ab93587a85fbf984bb3b0aba7e7b2ecf, type: 3}
+   m_Name:
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSnake.SnakeMatch
++  presentationWeather: {fileID: 0}
+   setup:
+     mode: 0
+     count: 4
+--- before/929577847
++++ authored/929577847
+@@ -25,3 +25,4 @@
+   sun: {fileID: 2124441107}
+   ambience: {fileID: 929577848}
+   matchTime: {fileID: 929577864}
++  alternateSession: {fileID: 0}
+--- before/929577864
++++ authored/929577864
+@@ -12,6 +12,8 @@
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckSports.SportsMatchTime
+   cycle: {fileID: 1189082737557083744}
+   clouds: {fileID: 1189019514207851060}
++  skySphere: {fileID: 0}
++  coordinateGroundColor: 0
+   nightCloudAmbientMultiplier: 0.18
+   perspectiveSun: {fileID: 1189321475156151380}
+   orthographicSun: {fileID: 2091236654}
+--- before/929577866
++++ authored/929577866
+@@ -54,4 +54,5 @@
+     light: {fileID: 1900992358}
+     position: {x: 0.65887356, y: 2.1448998, z: 2.3815556}
+     rotation: {x: 0, y: 0, z: 0, w: 1}
++  alternateSession: {fileID: 0}
+   layoutVersion: 2
+--- before/961628592
++++ authored/961628592
+@@ -19,3 +19,5 @@
+   frontOffset: 7
+   minimumSample: 0.3
+   tractorHitch: {x: 0, y: 0.9, z: -3.3}
++  firstTractorAttachment: {fileID: 632470371}
++  firstTrailerAttachment: {x: 0.018646386, y: 0.9872041, z: 5.9814553}
+--- before/1017401061
++++ authored/1017401061
+@@ -19,3 +19,5 @@
+   frontOffset: 7
+   minimumSample: 0.3
+   tractorHitch: {x: 0, y: 0.9, z: -3.3}
++  firstTractorAttachment: {fileID: 2100281976}
++  firstTrailerAttachment: {x: 0.018646386, y: 0.9872041, z: 5.9814553}
+--- before/1799026370
++++ authored/1799026370
+@@ -19,3 +19,5 @@
+   frontOffset: 7
+   minimumSample: 0.3
+   tractorHitch: {x: 0, y: 0.9, z: -3.3}
++  firstTractorAttachment: {fileID: 572010072}
++  firstTrailerAttachment: {x: 0.018646386, y: 0.9872041, z: 5.9814553}

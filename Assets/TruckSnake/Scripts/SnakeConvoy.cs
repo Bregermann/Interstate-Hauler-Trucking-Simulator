@@ -8,6 +8,13 @@ namespace LWS.TruckSnake {
  public sealed class SnakeConvoy:MonoBehaviour {
   public SportsEventTruck tractor;public GameObject trailerPrefab;public SnakeMatch match;public int slot;
   public float spacing=15,frontOffset=7,minimumSample=.3f;public Vector3 tractorHitch=new Vector3(0,.9f,-3.3f);
+  [Tooltip("The existing NWH tractor fifth-wheel point; bound by the targeted sport authoring tool.")]
+  public Transform firstTractorAttachment;
+  [Tooltip("NWH trailer kingpin mapped into the existing normalized cargo body's coordinates.")]
+  public Vector3 firstTrailerAttachment=new Vector3(0,.9f,5.35f);
+  Transform resolvedFirstHitch;
+  public Vector3 FirstTractorCouplingWorld{get{if(resolvedFirstHitch==null){resolvedFirstHitch=firstTractorAttachment;if(resolvedFirstHitch==null){var vendor=tractor.GetComponentInChildren<NWH.VehiclePhysics2.Modules.Trailer.TrailerHitchModuleWrapper>(true);if(vendor!=null)resolvedFirstHitch=vendor.module.attachmentPoint;}if(resolvedFirstHitch==null)throw new System.InvalidOperationException("Truck Snake needs the tractor's authored NWH fifth wheel.");}return resolvedFirstHitch.position;}}
+  public Vector3 FirstTrailerCouplingWorld=>active==0?FirstTractorCouplingWorld:pool[0].body.transform.TransformPoint(firstTrailerAttachment)+pool[0].visual.position-pool[0].body.transform.TransformPoint(Vector3.up*1.6f);
   public readonly SnakePathHistory history=new SnakePathHistory();
   public int ActiveCount=>active;public int Pending=>pending;public float Length=>active*spacing;
   public int SweepCount{get;private set;}
@@ -15,7 +22,7 @@ namespace LWS.TruckSnake {
   sealed class Segment {public Rigidbody body;public BoxCollider shape;public Transform visual;public LineRenderer coupling;public float protectedUntil;public Vector3 previousPosition;public Quaternion previousRotation;}
   readonly Dictionary<Material,Material> materials=new Dictionary<Material,Material>();
   readonly List<Segment> pool=new List<Segment>(64);readonly RaycastHit[] hits=new RaycastHit[64];readonly Collider[] overlaps=new Collider[64];int active,pending;Vector3 previousHitch;Collider[] tractorSolids;Collider[][] competitorSolids;bool collisionCacheReady;
-  public void ResetConvoy(){collisionCacheReady=false;ApplyColor();tractorSolids=System.Array.FindAll(tractor.GetComponentsInChildren<Collider>(true),c=>!c.isTrigger);for(int i=0;i<pool.Count;i++){pool[i].body.gameObject.SetActive(false);pool[i].coupling.gameObject.SetActive(false);}active=pending=SweepCount=0;Vector3 hitch=tractor.transform.TransformPoint(tractorHitch);history.Reset(hitch,tractor.transform.rotation);previousHitch=hitch;}
+  public void ResetConvoy(){resolvedFirstHitch=null;collisionCacheReady=false;ApplyColor();tractorSolids=System.Array.FindAll(tractor.GetComponentsInChildren<Collider>(true),c=>!c.isTrigger);for(int i=0;i<pool.Count;i++){pool[i].body.gameObject.SetActive(false);pool[i].coupling.gameObject.SetActive(false);}active=pending=SweepCount=0;Vector3 hitch=tractor.transform.TransformPoint(tractorHitch);history.Reset(hitch,tractor.transform.rotation);previousHitch=hitch;}
   void ApplyColor(){foreach(var pair in materials)if(pair.Key.name.Contains("TRLR-trailer")){var color=Color.Lerp(Color.white,match.setup.players[slot].color,.55f);if(pair.Value.HasProperty("_BaseColor"))pair.Value.SetColor("_BaseColor",color);if(pair.Value.HasProperty("_Color"))pair.Value.SetColor("_Color",color);}}
   void OnDestroy(){foreach(var copy in materials.Values)if(copy!=null)Destroy(copy);materials.Clear();}
   public int SharedMaterialCount=>materials.Count;
@@ -24,20 +31,20 @@ namespace LWS.TruckSnake {
    // follows the real route driven by the tractor, including delayed jumps.
    var hitch=tractor.transform.TransformPoint(tractorHitch);
    history.Reset(hitch,tractor.transform.rotation,frontOffset+7);
-   if(!Pose(0,out var p,out var q)||!SpawnClear(p,q))throw new System.InvalidOperationException("Truck Snake starter trailer bay is obstructed for participant "+(slot+1)+" · "+LastSpawnBlocker);
+   if(!Pose(0,out var p,out var q)||!SpawnClear(p,q,true))throw new System.InvalidOperationException("Truck Snake starter trailer bay is obstructed for participant "+(slot+1)+" · "+LastSpawnBlocker);
    // Require support beneath front and rear, rather than inventing a path over a gap.
    for(int end=-1;end<=1;end+=2){var foot=p+q*(Vector3.forward*end*5);bool supported=false;foreach(var hit in Physics.RaycastAll(foot+Vector3.up*2,Vector3.down,4,~0,QueryTriggerInteraction.Ignore))if(IsRoadSupport(hit.collider)&&Mathf.Abs(hit.point.y-p.y)<.65f){supported=true;break;}if(!supported)throw new System.InvalidOperationException("Truck Snake starter trailer lacks a level road bay for participant "+(slot+1));}
    pending=SnakeRules.StartingTrailers;AttachPending();
    if(active!=SnakeRules.StartingTrailers)throw new System.InvalidOperationException("Truck Snake could not attach its starter trailer.");
   }
-  bool SpawnClear(Vector3 p,Quaternion q){
+  bool SpawnClear(Vector3 p,Quaternion q,bool first=false){
    LastSpawnBlocker=null;
    int count=Physics.OverlapBoxNonAlloc(p+q*Vector3.up*1.6f,new Vector3(1.3f,1.55f,6.7f),overlaps,q,~0,QueryTriggerInteraction.Ignore);
    var candidates=count==overlaps.Length?Physics.OverlapBox(p+q*Vector3.up*1.6f,new Vector3(1.3f,1.55f,6.7f),q,~0,QueryTriggerInteraction.Ignore):overlaps;if(count==overlaps.Length)count=candidates.Length;
-   for(int i=0;i<count;i++)if(candidates[i]!=null&&candidates[i].bounds.max.y>p.y+.45f){LastSpawnBlocker=candidates[i].name+" at "+candidates[i].bounds.center;return false;}return true;
+   for(int i=0;i<count;i++)if(candidates[i]!=null&&!(first&&candidates[i].transform.IsChildOf(tractor.transform))&&candidates[i].bounds.max.y>p.y+.45f){LastSpawnBlocker=candidates[i].name+" at "+candidates[i].bounds.center;return false;}return true;
   }
-  void AttachPending(){while(pending>0&&Pose(active,out var p,out var q)&&SpawnClear(p,q)){
-   var segment=Ensure(active);segment.body.transform.SetPositionAndRotation(p,q);segment.body.gameObject.SetActive(true);IgnoreCompetitors(segment.shape);segment.body.position=p;segment.body.rotation=q;segment.previousPosition=p;segment.previousRotation=q;Physics.SyncTransforms();segment.coupling.gameObject.SetActive(true);segment.coupling.SetPosition(0,p+q*new Vector3(0,1.15f,6.75f));segment.coupling.SetPosition(1,active==0?tractor.transform.TransformPoint(tractorHitch):pool[active-1].body.position+pool[active-1].body.rotation*new Vector3(0,1.15f,-6.75f));segment.protectedUntil=Time.time+1;active++;pending--;
+  void AttachPending(){while(pending>0&&Pose(active,out var p,out var q)&&SpawnClear(p,q,active==0)){
+   var segment=Ensure(active);if(active==0)segment.visual.localPosition=Vector3.up*1.6f;segment.body.transform.SetPositionAndRotation(p,q);segment.body.gameObject.SetActive(true);IgnoreCompetitors(segment.shape);segment.body.position=p;segment.body.rotation=q;segment.previousPosition=p;segment.previousRotation=q;Physics.SyncTransforms();segment.coupling.gameObject.SetActive(true);segment.coupling.SetPosition(0,p+q*(active==0?firstTrailerAttachment:new Vector3(0,1.15f,6.75f)));segment.coupling.SetPosition(1,active==0?FirstTractorCouplingWorld:pool[active-1].body.position+pool[active-1].body.rotation*new Vector3(0,1.15f,-6.75f));segment.protectedUntil=Time.time+1;active++;pending--;
    }match.rules.SetAttached(slot,active);
   }
   public void Grow(int count){if(count>0)pending+=count;}
@@ -66,13 +73,23 @@ namespace LWS.TruckSnake {
     // Meaningful mature-tail overlap still fails through one authoritative rule.
     if(Time.time>=segment.protectedUntil)for(int owner=0;owner<match.trucks.Length;owner++){if(!match.rules.Playing(owner)||owner==slot&&i<2)continue;var truck=match.trucks[owner];var delta=truck.body.worldCenterOfMass-(position+rotation*Vector3.up*1.6f);if(delta.sqrMagnitude>=14*14)continue;foreach(var solid in competitorSolids[owner]){if(solid==null||!solid.enabled)continue;if(Physics.ComputePenetration(solid,solid.transform.position,solid.transform.rotation,segment.shape,position,rotation,out var away,out float depth)&&depth>.06f){float closing=Mathf.Max(0,-Vector3.Dot(truck.body.linearVelocity-movement/Mathf.Max(.001f,dt),away));if(closing>=5){match.Fail(owner,owner==slot?"HIT YOUR OWN TRAILER "+(i+1):"HIT "+match.setup.players[slot].name+"'S TRAILER "+(i+1));if(owner==slot)return;break;}}}}
     segment.body.MovePosition(position);segment.body.MoveRotation(rotation);segment.previousPosition=position;segment.previousRotation=rotation;
-    Vector3 front=position+rotation*new Vector3(0,1.15f,6.75f);Vector3 back=i==0?hitch:pool[i-1].body.position+pool[i-1].body.rotation*new Vector3(0,1.15f,-6.75f);segment.coupling.SetPosition(0,front);segment.coupling.SetPosition(1,back);
+    Vector3 front=position+rotation*(i==0?firstTrailerAttachment:new Vector3(0,1.15f,6.75f));Vector3 back=i==0?FirstTractorCouplingWorld:pool[i-1].body.position+pool[i-1].body.rotation*new Vector3(0,1.15f,-6.75f);segment.coupling.SetPosition(0,front);segment.coupling.SetPosition(1,back);
    }
    history.Trim((active+pending+4)*spacing+80);
   }
+  void LateUpdate(){
+   if(active==0||!pool[0].body.gameObject.activeInHierarchy)return;
+   // NWH and the follower both interpolate rigidbody poses. Correct only the
+   // first render model's sub-frame anchor drift; never write the tractor or
+   // physics body's Transform here, and leave every subsequent model untouched.
+   var first=pool[0];Vector3 hitch=FirstTractorCouplingWorld;
+   Vector3 correction=hitch-first.body.transform.TransformPoint(firstTrailerAttachment);
+   first.visual.position=first.body.transform.TransformPoint(Vector3.up*1.6f)+correction;
+   first.coupling.SetPosition(0,hitch);first.coupling.SetPosition(1,hitch);
+  }
   static bool IsRoadSupport(Collider c)=>c is TerrainCollider||c.GetComponent<LWS.InterstateHauler.LwsRoadSurface>()!=null||c.GetComponent<LWS.TruckTaxi.TruckTaxiSurface>() is LWS.TruckTaxi.TruckTaxiSurface surface&&surface.isRoad;
   public bool SegmentPose(int index,out Vector3 position,out Quaternion rotation){position=default;rotation=Quaternion.identity;if(index<0||index>=active)return false;position=pool[index].body.position;rotation=pool[index].body.rotation;return true;}
-  bool Pose(int index,out Vector3 position,out Quaternion rotation){float center=frontOffset+index*spacing;position=default;rotation=Quaternion.identity;if(!history.TryBehind(center,out var sample)||!history.TryBehind(Mathf.Max(0,center-5),out var front)||!history.TryBehind(center+5,out var back))return false;position=sample.position-Vector3.up*.9f;Vector3 direction=front.position-back.position;if(direction.sqrMagnitude<.1f)return false;Vector3 up=sample.rotation*Vector3.up;if(Vector3.Dot(up,Vector3.up)<.4f)up=Vector3.up;rotation=Quaternion.LookRotation(direction,up);return true;}
+  bool Pose(int index,out Vector3 position,out Quaternion rotation){float center=frontOffset+index*spacing;position=default;rotation=Quaternion.identity;if(!history.TryBehind(center,out var sample)||!history.TryBehind(Mathf.Max(0,center-5),out var front)||!history.TryBehind(center+5,out var back))return false;position=sample.position-Vector3.up*.9f;Vector3 direction=front.position-back.position;if(direction.sqrMagnitude<.1f)return false;Vector3 up=sample.rotation*Vector3.up;if(Vector3.Dot(up,Vector3.up)<.4f)up=Vector3.up;rotation=Quaternion.LookRotation(direction,up);if(index==0)position=FirstTractorCouplingWorld-rotation*firstTrailerAttachment;return true;}
   public void TractorContact(int index,float normalSpeed){if(index<2||index>=active||normalSpeed<5||Time.time<pool[index].protectedUntil)return;match.Fail(slot,"HIT YOUR OWN TRAILER "+(index+1));}
   public bool IsOwn(Collider collider,out int index){var hit=collider.GetComponentInParent<SnakeTrailerContact>();index=hit!=null?hit.index:-1;return hit!=null&&hit.convoy==this;}
   public void Freeze(){for(int i=0;i<active;i++)pool[i].body.isKinematic=true;}
