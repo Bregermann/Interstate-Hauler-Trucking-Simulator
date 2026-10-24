@@ -17,6 +17,8 @@ namespace LWS.TruckSports
         public CanvasGroup visibility;
         public Image portrait, accent;
         public Animator notificationAnimator;
+        [Tooltip("-1 keeps shared broadcast feedback. Otherwise show only the actual participant owning this camera viewport.")]
+        public int viewport = -1;
         [Tooltip("Non-blocking notification in the upper screen margin above the standard results card.")]
         public Vector2 resultPosition = new Vector2(0, -8), resultSize = new Vector2(1120, 76);
         sealed class Pending
@@ -31,6 +33,9 @@ namespace LWS.TruckSports
         RectTransform layout;
         Vector2 playAnchorMin, playAnchorMax, playPivot, playPosition, playSize;
         bool resultLayout;
+        int viewportOwner = -1;
+        float audienceReady;
+        public int ViewportOwner => viewportOwner;
         public int Presented { get; private set; }
         public SportsScoreEvent LastPresented { get; private set; }
         void Awake()
@@ -49,6 +54,7 @@ namespace LWS.TruckSports
         {
             if (receipt.MatchId != session.MatchId) return;
             if (match != receipt.MatchId) ResetMatch(receipt.MatchId);
+            if (viewport >= 0 && (!RefreshAudience() || receipt.IsTeam || receipt.Slot != viewportOwner)) return;
             // Combine rapid awards only when their actual identities, reason,
             // unit and tier agree. Names may deliberately be identical.
             for (int i = pending.Count - 1; i >= 0; i--)
@@ -77,15 +83,41 @@ namespace LWS.TruckSports
         {
             match = id; pending.Clear(); Presented = 0; LastPresented = null;
             notification.MinimizeNotification(); next = Time.time + .7f;
+            if (viewport >= 0) { viewportOwner = -1; WaitForAudience(); }
+        }
+        void WaitForAudience()
+        {
+            // Keep Heat active through its public Out transition. Disabling its
+            // GameObject early would interrupt the vendor's internal reset.
+            pending.Clear(); Presented = 0; LastPresented = null;
+            notification.MinimizeNotification();
+            audienceReady = Time.time + HeatUIInternalTools.GetAnimatorClipLength(notificationAnimator, "Notification_Out") + .15f;
+            next = Mathf.Max(next, audienceReady);
+            visibility.alpha = 0;
+        }
+        bool RefreshAudience()
+        {
+            int owner = -1;
+            bool valid = viewport < session.cameras.Length && session.cameras[viewport] != null && session.cameras[viewport].enabled
+                && session.TryReadViewportCard(viewport, out owner, out _, out _);
+            if (!valid) owner = -1;
+            if (owner != viewportOwner) { viewportOwner = owner; WaitForAudience(); }
+            if (valid && layout != null)
+            {
+                var view = session.cameras[viewport].rect;
+                layout.anchorMin = layout.anchorMax = new Vector2(view.center.x, view.yMax);
+            }
+            return valid;
         }
         void LateUpdate()
         {
             if (session == null || notification == null) return;
             if (match != session.MatchId) ResetMatch(session.MatchId);
-            bool result = session.Finished && session.menus.Screen == SportsEventScreen.Result;
-            bool showing = session.Running && !session.Paused && (result || !session.Finished && session.menus.Screen == SportsEventScreen.Play);
+            bool audience = viewport < 0 || RefreshAudience();
+            bool result = viewport < 0 && session.Finished && session.menus.Screen == SportsEventScreen.Result;
+            bool showing = audience && (viewport < 0 || Time.time >= audienceReady) && session.Running && !session.Paused && (result || !session.Finished && session.menus.Screen == SportsEventScreen.Play);
             visibility.alpha = showing ? 1 : 0;
-            if (layout != null && resultLayout != result)
+            if (viewport < 0 && layout != null && resultLayout != result)
             {
                 resultLayout = result;
                 layout.anchorMin = result ? new Vector2(.5f, 1) : playAnchorMin;
@@ -105,16 +137,20 @@ namespace LWS.TruckSports
             string delta = (item.delta >= 0 ? "+" : "") + item.delta.ToString("0.##", CultureInfo.InvariantCulture);
             string measurement = receipt.Kind == SportsScoreKind.Outcome
                 ? "<size=140%><b>" + receipt.OutcomeValue.ToString("0.000", CultureInfo.InvariantCulture) + "</b></size> " + Escape(receipt.Unit)
-                : "<size=140%><b>" + delta + "</b></size> " + Escape(receipt.Unit) + "     " + receipt.Total.ToString("0.##", CultureInfo.InvariantCulture) + " TOTAL" + (item.count > 1 ? "  ·  " + item.count + " AWARDS" : "");
+                : "<size=140%><b>" + delta + "</b></size> " + Escape(CountUnit(receipt.Unit, item.delta)) + "     " + receipt.Total.ToString("0.##", CultureInfo.InvariantCulture) + " TOTAL" + (item.count > 1 ? "  ·  " + item.count + " AWARDS" : "");
             notification.notificationText = "<color=#" + ColorUtility.ToHtmlStringRGB(color) + "><b>" + Escape(receipt.DisplayName) + "</b></color>  ·  " + Escape(receipt.Reason)
                 + "\n" + measurement;
-            notification.minimizeAfter = receipt.Tier == SportsScoreTier.Small ? .85f : receipt.Tier == SportsScoreTier.Major ? 1.35f : 2;
+            float readableHold = receipt.Tier == SportsScoreTier.Small ? .85f : receipt.Tier == SportsScoreTier.Major ? 1.35f : 2;
+            // Heat starts its minimize timer with In. Keep the full authored
+            // animation, then give the actual score its intended reading time.
+            notification.minimizeAfter = HeatUIInternalTools.GetAnimatorClipLength(notificationAnimator, "Notification_In") + readableHold;
             notification.UpdateUI(); notification.ExpandNotification();
             portrait.transform.DOKill(); portrait.transform.localScale = Vector3.one;
             portrait.transform.DOPunchScale(Vector3.one * (receipt.Tier == SportsScoreTier.Small ? .12f : .24f), .45f, 3, .4f).SetUpdate(true).SetLink(portrait.gameObject);
             next = Time.time + notification.minimizeAfter + HeatUIInternalTools.GetAnimatorClipLength(notificationAnimator, "Notification_Out") + .15f;
             LastPresented = receipt; Presented++;
         }
+        static string CountUnit(string unit, double amount) => System.Math.Abs(amount) == 1 ? unit == "CUPS" ? "CUP" : unit == "FARES" ? "FARE" : unit : unit;
         static string Escape(string value) => (value ?? "").Replace("<", "‹").Replace(">", "›");
     }
 }

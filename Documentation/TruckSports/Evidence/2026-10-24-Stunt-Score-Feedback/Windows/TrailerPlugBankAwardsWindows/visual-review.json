@@ -1,0 +1,62 @@
+{
+  "name": "TrailerPlugBankAwardsWindows",
+  "receipt": {
+    "pid": 22148,
+    "exit": 0,
+    "seconds": 152.44,
+    "requestedGraphicsAPI": "d3d11",
+    "managedSha256": "3e1eaf472e302ddd175e3125ce3c50bd286a132015cf3814cac86a84f4ca0a77",
+    "buildContentSha256": "292c78f33b2fa9807ad3c24e42d968d7a62e974b10477be25ab6c5aebb01bfc2",
+    "unchangedBuildContent": true,
+    "unchangedManaged": true,
+    "completedEvidence": true,
+    "checks": 36,
+    "errors": 0,
+    "legacyErrorsOnly": false
+  },
+  "images": [
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/TrailerPlugBankAwardsWindows/Actual/quarry-1280x720.png",
+      "sha256": "a4eed54017be79a7b2ef28445bd044358f3c7084582478113f003e0e97fab433",
+      "personallyInspected": true,
+      "kind": "controlled Windows RenderTexture with HUD",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/TrailerPlugBankAwardsWindows/Actual/quarry-1920x1080.png",
+      "sha256": "e9f3ffc1da41c30a617fdcccfeae5fc8e3cebf1a2fdbc69a270dcebf438b538e",
+      "personallyInspected": true,
+      "kind": "controlled Windows RenderTexture with HUD",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/TrailerPlugBankAwardsWindows/Actual/ranked-results-1080.png",
+      "sha256": "127a5f032096b00ba1d7d83ad3adbc20949a5b6190793adca196f173b8eaf9ac",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/TrailerPlugBankAwardsWindows/Actual/ranked-results-720.png",
+      "sha256": "ab6f4db9964c8b6acc4d412d70034162702e828737e69c3b937e113ab35d33c4",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/TrailerPlugBankAwardsWindows/Actual/confirmed-score/confirmed-award-1080.png",
+      "sha256": "1f0ac7de9c53149dae4abc3ce28fe9d885de0a55201dc1a94ada5de1a2414892",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/TrailerPlugBankAwardsWindows/Actual/confirmed-score/confirmed-award-720.png",
+      "sha256": "eeb48aa71f221ca347903779dd0327a44e37a3d832f5dab9575b67f50b626d99",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    }
+  ],
+  "limitations": "Original autonomous physical matches; venue/replay capture helper uses RenderTextures while confirmed-award/ranked-results use the actual Windows backbuffer. No human/device/listening/isolated profiling acceptance."
+}

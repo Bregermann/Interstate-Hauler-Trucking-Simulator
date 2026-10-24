@@ -1,0 +1,11 @@
+{
+  "requirementId": "Q22-SKY-SCORE-AIR-CARD-01",
+  "sportSystem": "Dock Diving and Giant Swing participant HUD",
+  "originalRequest": "Q22-SKY: correct participant scores/attribution. Actual native captures with duplicate names repeat the first Dock best and all-zero Swing cards after a real100pointlanding.",
+  "acceptanceCriteria": "Actual card slot reads original best/points/attempts directly, without name parsing; names may match; original values remain unchanged; detail fits720/1080.",
+  "status": "VERIFIED COMPLETE",
+  "implementationEvidence": "Documentation/TruckSports/2026-10-24-Air-Attempt-Score-Feedback.md",
+  "automatedVerification": "2initialphysical+2finaltypednative/5EditPASS; initial4bad-cardimages retained/superseded; exactWindows108checks0errors;8controllednative+11actualWindows images inspected; exact408-source payload promoted.",
+  "humanVerification": "Not performed.",
+  "remainingWork": "Merge permanent-ID delta after142-file main-ledger freeze; scoped commit/publication pending. Human/device/listening/split-view/isolated profiling/weather-art acceptance unperformed; broaderQ22/0.6/0.7 incomplete."
+}

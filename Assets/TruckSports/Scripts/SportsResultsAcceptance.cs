@@ -48,6 +48,9 @@ namespace LWS.TruckSports
                 }
                 check(bounds, size.x + "x" + size.y + " ranked cards remain screen-safe and clear of headings, other rows and original controls");
                 check(text, size.x + "x" + size.y + " result names, values and real statistics have no TMP overflow");
+                bool values = active.Length == snapshot.Rows.Count;
+                for (int i = 0; i < active.Length && i < snapshot.Rows.Count; i++) values &= active[i].value.text == snapshot.Rows[i].Value;
+                check(values, size.x + "x" + size.y + " completed animated metric labels match the immutable result display values");
             }
         }
         static Rect Bounds(RectTransform rect)

@@ -144,8 +144,11 @@ namespace LWS.TruckTrailerPlug
         }
         void Resolve(bool stable)
         {
+            int slot = rules.Participant, prior = rules.score[rules.Participant];
             float coverage = MeasureCoverage(); float center = Vector3.ProjectOnPlane(rig.TrailerCenter - hole.position, Vector3.up).magnitude;
             if (!rules.Resolve(coverage, rig.Supported, stable, center, Vector3.Dot(rig.trailer.rotation * Vector3.up, Vector3.up))) return;
+            int earned = rules.score[slot] - prior;
+            if (earned > 0) ConfirmScore("drop:" + rules.Round + ":" + slot, slot, earned, rules.score[slot], rules.Perfect ? "PERFECT SEAL" : rules.Sealed ? "HOLE SEALED" : rules.Coverage > 0 ? "PARTIAL PLUG" : "TRAILER IMPACTS", rules.Sealed ? SportsScoreTier.RoundWinner : SportsScoreTier.Major);
             if (stable) SettledAttempts++;
             announcement = rules.Sealed ? rules.Perfect ? "PERFECT SEAL!" : "HOLE PLUGGED!" : rules.Coverage > 0 ? "PARTIAL PLUG · " + Mathf.RoundToInt(rules.Coverage * 100) + "%" : "MISSED THE PLUG";
             announcement += " · " + rules.DistinctHits + " IMPACTS · +" + rules.AttemptPoints;

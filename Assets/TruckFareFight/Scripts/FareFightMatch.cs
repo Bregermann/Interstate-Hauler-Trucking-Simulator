@@ -95,9 +95,19 @@ namespace LWS.TruckFareFight {
     routes[i].Update(district,body.position,Goal(i),rules.Revision,Time.time,false,truck.transform.forward);
     Vector2 drive=setup.players[i].source==BowlingSource.AI?routes[i].Drive(body,truck.transform,(int)setup.players[i].difficulty,dt,atmosphere.Grip,rules.Carrier>=0&&rules.Carrier!=i?trucks[rules.Carrier].body:null):commands[i];truck.TickDrive(drive);previous[i]=body.position;
    }
-   int revision=rules.Revision;rules.Advance(dt,events);events.Clear();if(rules.Revision!=revision)Changed();
+   int revision=rules.Revision;int before0=rules.score[0],before1=rules.score[1],before2=rules.score[2],before3=rules.score[3];rules.Advance(dt,events);events.Clear();ConfirmDeliveries(before0,before1,before2,before3);if(rules.Revision!=revision)Changed();
    interactions?.Tick(dt);navigation?.Tick(dt);review?.Capture(rules.Clock);
    if(rules.Phase==FareFightPhase.Complete)EndMatch();
+  }
+  // Compare committed results only after the original atomic event resolver.
+  // Four stack locals avoid allocating a snapshot on every physics step.
+  void ConfirmDeliveries(int before0,int before1,int before2,int before3){
+   for(int slot=0;slot<setup.count;slot++){
+    int before=slot==0?before0:slot==1?before1:slot==2?before2:before3;
+    if(rules.score[slot]<=before)continue;
+    bool finished=rules.Phase==FareFightPhase.Complete;
+    ConfirmScore("delivery:"+rules.Deliveries+":"+slot,slot,rules.score[slot]-before,rules.score[slot],"PASSENGER DELIVERED",finished&&rules.winners[slot]?SportsScoreTier.MatchChampion:SportsScoreTier.Major,"FARES",null,false,finished);
+   }
   }
   void Queue(FareFightEventKind kind,int slot,float fraction,int victim=-1,float speed=0){events.Add(new FareFightEvent{kind=kind,participant=slot,victim=victim,fraction=fraction,normalSpeed=speed,passenger=rules.Passenger});}
   public void Contact(int first,int second,float speed,Vector3 point){if(!Live||Intro>0||rules.Carrier<0)return;PhysicalContacts++;int thief=rules.Carrier==first?second:rules.Carrier==second?first:-1;if(thief<0)return;int carrier=rules.Carrier;Vector3 path=trucks[carrier].body.position-previous[carrier];float fraction=path.sqrMagnitude>.0001f?Mathf.Clamp01(Vector3.Dot(point-previous[carrier],path)/path.sqrMagnitude):.5f;Queue(FareFightEventKind.Theft,thief,fraction,carrier,speed);}

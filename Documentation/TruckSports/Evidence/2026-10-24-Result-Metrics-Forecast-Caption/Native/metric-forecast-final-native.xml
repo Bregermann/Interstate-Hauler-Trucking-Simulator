@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 11:56:44Z" end-time="2026-10-24 11:56:54Z" duration="10.3423669">
+  <test-suite type="TestSuite" id="1471" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="327" result="Passed" start-time="2026-10-24 11:56:44Z" end-time="2026-10-24 11:56:54Z" duration="10.342367" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1355" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="160" result="Passed" start-time="2026-10-24 11:56:44Z" end-time="2026-10-24 11:56:54Z" duration="10.327554" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="24932" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1240" name="MetricAndForecastCaptionTests" fullname="MetricAndForecastCaptionTests" classname="MetricAndForecastCaptionTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-24 11:56:44Z" end-time="2026-10-24 11:56:54Z" duration="10.321707" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1242" name="BogCaptionFollowsSelectedInstalledForecastRatherThanLegacyChoice" fullname="MetricAndForecastCaptionTests.BogCaptionFollowsSelectedInstalledForecastRatherThanLegacyChoice" methodname="BogCaptionFollowsSelectedInstalledForecastRatherThanLegacyChoice" classname="MetricAndForecastCaptionTests" runstate="Runnable" seed="956940493" result="Passed" start-time="2026-10-24 11:56:44Z" end-time="2026-10-24 11:56:52Z" duration="7.919251" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_AcidRain (Sports runtime clone) to WeatherMakerProfile_HeavySnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Actual installed Clear/Rain/Snow profile selection and saved header binding; legacy choice intentionally differs. Caption-only preview, no weather-art, complete race, physical-controller or human acceptance.
+]]></output>
+        </test-case>
+        <test-case id="1241" name="SyntheticMetricRowsKeepRealDataAndAnimatedLabelsConsistent" fullname="MetricAndForecastCaptionTests.SyntheticMetricRowsKeepRealDataAndAnimatedLabelsConsistent" methodname="SyntheticMetricRowsKeepRealDataAndAnimatedLabelsConsistent" classname="MetricAndForecastCaptionTests" runstate="Runnable" seed="198997217" result="Passed" start-time="2026-10-24 11:56:52Z" end-time="2026-10-24 11:56:54Z" duration="2.388373" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Explicit synthetic result UI fixture only; original saved Heat/DOTween board, eight stable identities, original Unit/Measurement retained, actual rendered count labels. No physical match or human claim.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 10:35:43Z" end-time="2026-10-24 10:36:25Z" duration="41.9379485">
+  <test-suite type="TestSuite" id="1465" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="323" result="Passed" start-time="2026-10-24 10:35:43Z" end-time="2026-10-24 10:36:25Z" duration="41.937949" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1349" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="156" result="Passed" start-time="2026-10-24 10:35:43Z" end-time="2026-10-24 10:36:25Z" duration="41.924250" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="12980" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1152" name="CargoPossessionScoreLifecycleTests" fullname="CargoPossessionScoreLifecycleTests" classname="CargoPossessionScoreLifecycleTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-24 10:35:43Z" end-time="2026-10-24 10:36:25Z" duration="41.917961" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1154" name="ActualDodgeballRoundCreditsOnlySurvivingTeam" fullname="CargoPossessionScoreLifecycleTests.ActualDodgeballRoundCreditsOnlySurvivingTeam" methodname="ActualDodgeballRoundCreditsOnlySurvivingTeam" classname="CargoPossessionScoreLifecycleTests" runstate="Runnable" seed="1198324927" result="Passed" start-time="2026-10-24 10:35:43Z" end-time="2026-10-24 10:35:50Z" duration="7.407409" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="300000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+ACTUAL_CARGO_PROGRESS TruckTrampolineDodgeball TRAMPOLINE DODGEBALL · ROUND 1 · 0 : 0 · 3 READY TO BOUNCE
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone) to WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_CARGO_POSSESSION_AWARD TruckTrampolineDodgeball original autonomous contacts, original totals, duplicate names, readable720/1080 and clean rematch. Early lifecycle check; no full-match, human/device/listening or Windows claim.
+]]></output>
+        </test-case>
+        <test-case id="1153" name="ActualWholeCargoDeliveryUsesConfiguredTeamName" fullname="CargoPossessionScoreLifecycleTests.ActualWholeCargoDeliveryUsesConfiguredTeamName" methodname="ActualWholeCargoDeliveryUsesConfiguredTeamName" classname="CargoPossessionScoreLifecycleTests" runstate="Runnable" seed="1965316602" result="Passed" start-time="2026-10-24 10:35:50Z" end-time="2026-10-24 10:36:03Z" duration="12.251160" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="420000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Sandstorm (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+ACTUAL_CARGO_PROGRESS TruckBuzkashi TRUCK BUZKASHI | Cargo Crew Alpha  0 : 0  Cargo Crew Omega | 300s 3
+BUZ_DELIVERY team=0 score=1:0 clock=32.02054
+Changing weather profile WeatherMakerProfile_Sandstorm (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_CARGO_POSSESSION_AWARD TruckBuzkashi original autonomous contacts, original totals, duplicate names, readable720/1080 and clean rematch. Early lifecycle check; no full-match, human/device/listening or Windows claim.
+]]></output>
+        </test-case>
+        <test-case id="1155" name="ArenaPossessionCelebratesOriginalSeconds" fullname="CargoPossessionScoreLifecycleTests.ArenaPossessionCelebratesOriginalSeconds" methodname="ArenaPossessionCelebratesOriginalSeconds" classname="CargoPossessionScoreLifecycleTests" runstate="Runnable" seed="2097531019" result="Passed" start-time="2026-10-24 10:36:03Z" end-time="2026-10-24 10:36:14Z" duration="11.647867" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="300000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+ACTUAL_CARGO_PROGRESS TruckKeepaway KEEPAWAY · ARENA VIEW  ·  FIRST TO 60s TOTAL POSSESSION CHASE THE BALL · ROCKY MUD · NO WEATHER
+KEEPAWAY_OWNERSHIP carrier=3 former=-1 steal=False
+KEEPAWAY_OWNERSHIP carrier=1 former=3 steal=True
+KEEPAWAY_OWNERSHIP carrier=3 former=-1 steal=False
+KEEPAWAY_OWNERSHIP carrier=1 former=3 steal=True
+KEEPAWAY_OWNERSHIP carrier=2 former=1 steal=True
+KEEPAWAY_OWNERSHIP carrier=3 former=2 steal=True
+KEEPAWAY_OWNERSHIP carrier=0 former=3 steal=True
+KEEPAWAY_OWNERSHIP carrier=1 former=0 steal=True
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+ACTUAL_CARGO_POSSESSION_AWARD TruckKeepaway original autonomous contacts, original totals, duplicate names, readable720/1080 and clean rematch. Early lifecycle check; no full-match, human/device/listening or Windows claim.
+]]></output>
+        </test-case>
+        <test-case id="1156" name="CabPossessionCelebratesOriginalSeconds" fullname="CargoPossessionScoreLifecycleTests.CabPossessionCelebratesOriginalSeconds" methodname="CabPossessionCelebratesOriginalSeconds" classname="CargoPossessionScoreLifecycleTests" runstate="Runnable" seed="1334977436" result="Passed" start-time="2026-10-24 10:36:14Z" end-time="2026-10-24 10:36:25Z" duration="10.596376" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="300000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+ACTUAL_CARGO_PROGRESS TruckKeepawayFirstPerson KEEPAWAY · FIRST PERSON  ·  FIRST TO 60s TOTAL POSSESSION CHASE THE BALL · ROCKY MUD · NO WEATHER
+KEEPAWAY_OWNERSHIP carrier=3 former=-1 steal=False
+KEEPAWAY_OWNERSHIP carrier=1 former=3 steal=True
+KEEPAWAY_OWNERSHIP carrier=3 former=-1 steal=False
+KEEPAWAY_OWNERSHIP carrier=2 former=3 steal=True
+KEEPAWAY_OWNERSHIP carrier=1 former=2 steal=True
+KEEPAWAY_OWNERSHIP carrier=3 former=1 steal=True
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+ACTUAL_CARGO_POSSESSION_AWARD TruckKeepawayFirstPerson original autonomous contacts, original totals, duplicate names, readable720/1080 and clean rematch. Early lifecycle check; no full-match, human/device/listening or Windows claim.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

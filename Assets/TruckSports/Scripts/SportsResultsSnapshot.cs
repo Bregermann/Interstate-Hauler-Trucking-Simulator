@@ -26,7 +26,18 @@ namespace LWS.TruckSports
             IsAI = participant.IsBot; Slot = slot; Place = place; Winner = winner; Measurement = measurement;
             Unit = unit ?? ""; Detail = detail ?? ""; FallbackValue = fallbackValue ?? "—"; Format = format ?? "0.###";
         }
-        public string Value => Measurement.HasValue ? Measurement.Value.ToString(Format, CultureInfo.InvariantCulture) + (Unit.Length > 0 ? " " + Unit : "") : FallbackValue;
+        // Display grammar only; retain the rules owner's original unit and value.
+        public string DisplayUnit => Measurement == 1 ? Unit switch
+        {
+            "WINS" => "WIN",
+            "TEAM WINS" => "TEAM WIN",
+            "TEAM DELIVERIES" => "TEAM DELIVERY",
+            "CUPS HIT" => "CUP HIT",
+            "TEAM CUPS HIT" => "TEAM CUP HIT",
+            "FARES" => "FARE",
+            _ => Unit
+        } : Unit;
+        public string Value => Measurement.HasValue ? Measurement.Value.ToString(Format, CultureInfo.InvariantCulture) + (DisplayUnit.Length > 0 ? " " + DisplayUnit : "") : FallbackValue;
     }
 
     public sealed class SportsResultsSnapshot

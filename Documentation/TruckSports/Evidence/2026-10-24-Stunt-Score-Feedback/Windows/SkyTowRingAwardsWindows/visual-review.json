@@ -1,0 +1,76 @@
+{
+  "name": "SkyTowRingAwardsWindows",
+  "receipt": {
+    "pid": 31912,
+    "exit": 0,
+    "seconds": 42.01,
+    "requestedGraphicsAPI": "d3d11",
+    "managedSha256": "3e1eaf472e302ddd175e3125ce3c50bd286a132015cf3814cac86a84f4ca0a77",
+    "buildContentSha256": "292c78f33b2fa9807ad3c24e42d968d7a62e974b10477be25ab6c5aebb01bfc2",
+    "unchangedBuildContent": true,
+    "unchangedManaged": true,
+    "completedEvidence": true,
+    "checks": 43,
+    "errors": 0,
+    "legacyErrorsOnly": false
+  },
+  "images": [
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/SkyTowRingAwardsWindows/Actual/ranked-results-1080.png",
+      "sha256": "c6603a16d12614c751b65a67a5fefd83b3cb884a9785fbfa6cbee29fd05f824d",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/SkyTowRingAwardsWindows/Actual/ranked-results-720.png",
+      "sha256": "53a10e0f692b78ed9309261bf2e76a5b8228f208a62dd8a64ccfe6ca231956e1",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/SkyTowRingAwardsWindows/Actual/tow-1280x720.png",
+      "sha256": "8d2e169a9c6db5c26f2c59bf6cea77b8b215197021eaa6aa4d717898e7c740f4",
+      "personallyInspected": true,
+      "kind": "controlled Windows RenderTexture with HUD",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/SkyTowRingAwardsWindows/Actual/tow-1440x1080.png",
+      "sha256": "6fcf5082fb38e8d97d5ed7c5242408392d87837f7b1646d921c062c05ac88754",
+      "personallyInspected": true,
+      "kind": "controlled Windows RenderTexture with HUD",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/SkyTowRingAwardsWindows/Actual/tow-1920x1080.png",
+      "sha256": "cb5a75c50ab7564ecada9bfc2d7185c33764f58b3b80d322c20b1fa5460ebd1c",
+      "personallyInspected": true,
+      "kind": "controlled Windows RenderTexture with HUD",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/SkyTowRingAwardsWindows/Actual/tow-2560x1080.png",
+      "sha256": "52b9083d6016c5b3c1e6adde10ff9ccbc02e2c57e22759102ea7513f1cbbc603",
+      "personallyInspected": true,
+      "kind": "controlled Windows RenderTexture with HUD",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/SkyTowRingAwardsWindows/Actual/confirmed-score/confirmed-award-1080.png",
+      "sha256": "ae98f0daf6201495888e98a2139a22b8c7ea76c26667cce9e53eb83dd1111cc7",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/SkyTowRingAwardsWindows/Actual/confirmed-score/confirmed-award-720.png",
+      "sha256": "59967ccb83386476b40efefdf111e06a870c352cf988a044c1ffeff1a819cdf7",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Individually opened original event or results/venue rendering. Actual-window versus controlled-render evidence distinguished. No human/device/listening or subjective environment acceptance inferred."
+    }
+  ],
+  "limitations": "Original autonomous physical matches; venue/replay capture helper uses RenderTextures while confirmed-award/ranked-results use the actual Windows backbuffer. No human/device/listening/isolated profiling acceptance."
+}

@@ -46,6 +46,7 @@ namespace LWS.TruckTrailerPlug
             match.setup.count = 4; match.option = 0; match.NormalizeSetup(); match.AllBots();
             for (int i = 0; i < 4; i++) match.setup.players[i].difficulty = (BowlingDifficulty)Mathf.Min(i, 2);
             if(mode=="mixed"){keyboard=InputSystem.AddDevice<Keyboard>("Trailer Plug injected keyboard");match.setup.players[0].source=BowlingSource.Keyboard;}
+            var scoreTally=new SportsScoreAcceptance.Tally(match); bool awardCaptured=false;
             Check(match.StartMatch(), mode=="mixed"?"injected human and three AI competitors start with independent source ownership":"four alternating AI competitors start without controllers");
             Time.timeScale = 4; float deadline = Time.realtimeSinceStartup + 400, next = 0;
             bool captured = false, paused = false; int priorRelease = 0, hitchSamples = 0; float maxCable = 0, maximumHitchSeparation = 0;
@@ -56,6 +57,7 @@ namespace LWS.TruckTrailerPlug
             Check(match.openingRadii.x > 2.4f && match.openingRadii.y > 6, "actual opening is enlarged for the matched articulated vehicle dimensions");
             while (!match.Finished && Time.realtimeSinceStartup < deadline && errors == 0)
             {
+                if(!awardCaptured && match.ScoreJournal.Count>0){awardCaptured=true;yield return SportsScoreAcceptance.CaptureAward(match,Check,folder+"/confirmed-score");}
                 if (match.Phase == TrailerPlugPhase.Swing && match.rig.Attached)
                 { hitchSamples++; maximumHitchSeparation = Mathf.Max(maximumHitchSeparation, match.rig.HitchSeparation); }
                 if(mode=="mixed"){
@@ -90,7 +92,7 @@ namespace LWS.TruckTrailerPlug
                 }
                 yield return null;
             }
-            if(match.Finished)yield return SportsResultsAcceptance.Capture(match,Check,folder,match.ResultPlace,slot=>(double?)match.rules.score[slot],slot=>match.rules.winners[slot]);
+            scoreTally.Verify(slot=>match.rules.score[slot],Check);scoreTally.Dispose();if(match.Finished)yield return SportsResultsAcceptance.Capture(match,Check,folder,match.ResultPlace,slot=>(double?)match.rules.score[slot],slot=>match.rules.winners[slot]);
  Check(match.Finished && match.rules.Complete, "complete four-participant competition resolves through actual delivery physics");
             if(mode=="mixed")Check(checkedReplay,"mixed match exercised replay and fresh-input turn transitions");
             Check(match.PhysicalReleases == 12, "exactly twelve physical releases, three per participant");

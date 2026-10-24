@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="7" result="Passed" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 09:51:00Z" end-time="2026-10-24 09:51:12Z" duration="11.4407533">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2978" result="Passed" start-time="2026-10-24 09:51:00Z" end-time="2026-10-24 09:51:12Z" duration="11.440753" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2477" name="LWS.TruckSports.PresentationEditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.PresentationEditModeTests.dll" runstate="Runnable" testcasecount="73" result="Passed" start-time="2026-10-24 09:51:01Z" end-time="2026-10-24 09:51:12Z" duration="11.350847" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="17876" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="2382" name="BungeeBuildingAssetTests" fullname="BungeeBuildingAssetTests" classname="BungeeBuildingAssetTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-24 09:51:01Z" end-time="2026-10-24 09:51:02Z" duration="1.576096" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2383" name="SavedVariantsPreserveEveryStructuralBudgetColliderAndSupportLink" fullname="BungeeBuildingAssetTests.SavedVariantsPreserveEveryStructuralBudgetColliderAndSupportLink" methodname="SavedVariantsPreserveEveryStructuralBudgetColliderAndSupportLink" classname="BungeeBuildingAssetTests" runstate="Runnable" seed="987528530" result="Passed" start-time="2026-10-24 09:51:01Z" end-time="2026-10-24 09:51:02Z" duration="1.560848" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="2392" name="ConfirmedScoreReceiptTests" fullname="ConfirmedScoreReceiptTests" classname="ConfirmedScoreReceiptTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-24 09:51:02Z" end-time="2026-10-24 09:51:02Z" duration="0.012444" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2396" name="ClosingFreezesReceiptsAndFreshMatchesHaveIndependentDeduplication" fullname="ConfirmedScoreReceiptTests.ClosingFreezesReceiptsAndFreshMatchesHaveIndependentDeduplication" methodname="ClosingFreezesReceiptsAndFreshMatchesHaveIndependentDeduplication" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="237531465" result="Passed" start-time="2026-10-24 09:51:02Z" end-time="2026-10-24 09:51:02Z" duration="0.002812" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2397" name="MissingIdentityAndNonFiniteScoresCannotCreateReceipts" fullname="ConfirmedScoreReceiptTests.MissingIdentityAndNonFiniteScoresCannotCreateReceipts" methodname="MissingIdentityAndNonFiniteScoresCannotCreateReceipts" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="73474037" result="Passed" start-time="2026-10-24 09:51:02Z" end-time="2026-10-24 09:51:02Z" duration="0.004213" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2395" name="StableIdentitiesAndEventIdsKeepDuplicateNamesIndependent" fullname="ConfirmedScoreReceiptTests.StableIdentitiesAndEventIdsKeepDuplicateNamesIndependent" methodname="StableIdentitiesAndEventIdsKeepDuplicateNamesIndependent" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="1693822079" result="Passed" start-time="2026-10-24 09:51:02Z" end-time="2026-10-24 09:51:02Z" duration="0.000680" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2394" name="TeamReceiptsRejectInvalidDataFreezeAtEndAndResetPerMatch" fullname="ConfirmedScoreReceiptTests.TeamReceiptsRejectInvalidDataFreezeAtEndAndResetPerMatch" methodname="TeamReceiptsRejectInvalidDataFreezeAtEndAndResetPerMatch" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="96446747" result="Passed" start-time="2026-10-24 09:51:02Z" end-time="2026-10-24 09:51:02Z" duration="0.001624" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2393" name="TeamRecipientsNeverImpersonateAPlayerAndDuplicateNamesStaySeparate" fullname="ConfirmedScoreReceiptTests.TeamRecipientsNeverImpersonateAPlayerAndDuplicateNamesStaySeparate" methodname="TeamRecipientsNeverImpersonateAPlayerAndDuplicateNamesStaySeparate" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="2000721007" result="Passed" start-time="2026-10-24 09:51:02Z" end-time="2026-10-24 09:51:02Z" duration="0.000934" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="2400" name="DerbyHudReferenceTests" fullname="DerbyHudReferenceTests" classname="DerbyHudReferenceTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-24 09:51:02Z" end-time="2026-10-24 09:51:12Z" duration="9.757289" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2401" name="SavedDerbyUsesOwnedDamageAdapterOriginalIconsAndCollisionFreeOriginalLogos" fullname="DerbyHudReferenceTests.SavedDerbyUsesOwnedDamageAdapterOriginalIconsAndCollisionFreeOriginalLogos" methodname="SavedDerbyUsesOwnedDamageAdapterOriginalIconsAndCollisionFreeOriginalLogos" classname="DerbyHudReferenceTests" runstate="Runnable" seed="1870108995" result="Passed" start-time="2026-10-24 09:51:02Z" end-time="2026-10-24 09:51:12Z" duration="9.756295" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[DERBY_HUD_PRESERVED saved designer configuration.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

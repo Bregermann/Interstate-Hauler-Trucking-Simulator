@@ -1,0 +1,48 @@
+{
+  "name": "BuzCargoAwardsWindows",
+  "receipt": {
+    "pid": 35536,
+    "exit": 0,
+    "seconds": 92.27,
+    "requestedGraphicsAPI": "d3d11",
+    "managedSha256": "f466079bae7807e4644a2d1eb32c5f2d1cea8d739bba68d97ddd64e90c993b0a",
+    "buildContentSha256": "a9a5a8654d804d8364e8c45868135054e17e54bdeca214d569d28315364b7197",
+    "unchangedBuildContent": true,
+    "unchangedManaged": true,
+    "completedEvidence": true,
+    "checks": 24,
+    "errors": 0,
+    "legacyErrorsOnly": true
+  },
+  "images": [
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/BuzCargoAwardsWindows/Actual/ranked-results-1080.png",
+      "sha256": "6d7a7dfe1e3d04eb9b07b8e28de31e3b5a44c249c39052075651353a94444d58",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Original venue and participant HUD readable; real score receipt shown with correct team/participant, units and original total where captured; no clipping observed. AI-only broadcast does not establish human cab/split-screen acceptance."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/BuzCargoAwardsWindows/Actual/ranked-results-720.png",
+      "sha256": "9483fd87d1b6c9a33cf6f5a4b1a34a4b5811d37c0999ff462c82665bca029eb7",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Original venue and participant HUD readable; real score receipt shown with correct team/participant, units and original total where captured; no clipping observed. AI-only broadcast does not establish human cab/split-screen acceptance."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/BuzCargoAwardsWindows/Actual/cargo-award/confirmed-award-1080.png",
+      "sha256": "e7563c879c2fb3a6ac34a8e1f6366518923041688d26bd525e27ad1ddf9de939",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Original venue and participant HUD readable; real score receipt shown with correct team/participant, units and original total where captured; no clipping observed. AI-only broadcast does not establish human cab/split-screen acceptance."
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/BuzCargoAwardsWindows/Actual/cargo-award/confirmed-award-720.png",
+      "sha256": "22822cfdf4441c0bfb5f9a56bdf3dff6d6de12cfef1a2476db544a70c4394c9c",
+      "personallyInspected": true,
+      "kind": "actual Windows backbuffer",
+      "observation": "Original venue and participant HUD readable; real score receipt shown with correct team/participant, units and original total where captured; no clipping observed. AI-only broadcast does not establish human cab/split-screen acceptance."
+    }
+  ],
+  "limitations": "Actual autonomous/software checks only. No physical-controller, human playtest, listening or isolated profiler acceptance. Keepaway original venue captures are controlled renderings; award captures use actual backbuffers."
+}

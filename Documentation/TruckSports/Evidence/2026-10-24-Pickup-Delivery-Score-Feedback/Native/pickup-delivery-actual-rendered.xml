@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 08:26:16Z" end-time="2026-10-24 08:31:04Z" duration="288.3228709">
+  <test-suite type="TestSuite" id="1456" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="316" result="Passed" start-time="2026-10-24 08:26:16Z" end-time="2026-10-24 08:31:04Z" duration="288.322871" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1340" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="149" result="Passed" start-time="2026-10-24 08:26:16Z" end-time="2026-10-24 08:31:04Z" duration="288.307659" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="28312" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1243" name="PickupDeliveryScoreLifecycleTests" fullname="PickupDeliveryScoreLifecycleTests" classname="PickupDeliveryScoreLifecycleTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-24 08:26:16Z" end-time="2026-10-24 08:31:04Z" duration="288.301414" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1246" name="FinalPhysicalFareDeliveryKeepsItsWinnerReceiptOnResults" fullname="PickupDeliveryScoreLifecycleTests.FinalPhysicalFareDeliveryKeepsItsWinnerReceiptOnResults" methodname="FinalPhysicalFareDeliveryKeepsItsWinnerReceiptOnResults" classname="PickupDeliveryScoreLifecycleTests" runstate="Runnable" seed="1211643735" result="Passed" start-time="2026-10-24 08:26:16Z" end-time="2026-10-24 08:29:30Z" duration="193.932907" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="480000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 28, observed startup 27, multiplier 1.5, target/cap 42/42.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 4720, target 150, initial 24.
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_OvercastClouds (Sports runtime clone) to WeatherMakerProfile_MediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 4720, target 150, initial 24.
+ACTUAL_PICKUP_DELIVERY TruckFareFight practice=False fullMatch=True; natural scoring contact, original totals, stable identity, one receipt, actual first-to-three match completion, controlled720/1080, fresh rematch. No human/device/Windows/performance claim.
+]]></output>
+        </test-case>
+        <test-case id="1244" name="PhysicalCupAwardsKeepTeamAndPracticeRecipientsSeparate" fullname="PickupDeliveryScoreLifecycleTests.PhysicalCupAwardsKeepTeamAndPracticeRecipientsSeparate" methodname="PhysicalCupAwardsKeepTeamAndPracticeRecipientsSeparate" classname="PickupDeliveryScoreLifecycleTests" runstate="Runnable" seed="170040668" result="Passed" start-time="2026-10-24 08:29:30Z" end-time="2026-10-24 08:29:38Z" duration="8.084481" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+PONG_SHOT team=0 shooter=0 cup=4 outcome=IN THE BEER contacts=7 bounced=False
+ACTUAL_PICKUP_DELIVERY TruckBeerPong practice=False fullMatch=False; natural scoring contact, original totals, stable identity, one receipt, explicit early-results lifecycle, controlled720/1080, fresh rematch. No human/device/Windows/performance claim.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+PONG_SHOT team=0 shooter=0 cup=4 outcome=IN THE BEER contacts=7 bounced=False
+ACTUAL_PICKUP_DELIVERY TruckBeerPong practice=True fullMatch=False; natural scoring contact, original totals, stable identity, one receipt, explicit early-results lifecycle, controlled720/1080, fresh rematch. No human/device/Windows/performance claim.
+]]></output>
+        </test-case>
+        <test-case id="1245" name="PhysicalFareDeliveryUsesTheActualScorerAfterAtomicResolution" fullname="PickupDeliveryScoreLifecycleTests.PhysicalFareDeliveryUsesTheActualScorerAfterAtomicResolution" methodname="PhysicalFareDeliveryUsesTheActualScorerAfterAtomicResolution" classname="PickupDeliveryScoreLifecycleTests" runstate="Runnable" seed="1080784907" result="Passed" start-time="2026-10-24 08:29:38Z" end-time="2026-10-24 08:30:51Z" duration="73.556625" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 28, observed startup 27, multiplier 1.5, target/cap 42/42.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 4720, target 150, initial 24.
+Changing weather profile WeatherMakerProfile_Storm (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 0, graph nodes 4720, target 150, initial 24.
+ACTUAL_PICKUP_DELIVERY TruckFareFight practice=False fullMatch=False; natural scoring contact, original totals, stable identity, one receipt, explicit early-results lifecycle, controlled720/1080, fresh rematch. No human/device/Windows/performance claim.
+]]></output>
+        </test-case>
+        <test-case id="1247" name="PhysicalTrailerPickupReportsItsCommittedPointsOnce" fullname="PickupDeliveryScoreLifecycleTests.PhysicalTrailerPickupReportsItsCommittedPointsOnce" methodname="PhysicalTrailerPickupReportsItsCommittedPointsOnce" classname="PickupDeliveryScoreLifecycleTests" runstate="Runnable" seed="228437258" result="Passed" start-time="2026-10-24 08:30:51Z" end-time="2026-10-24 08:31:04Z" duration="12.711617" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+<b><color=#40b8ff>IH Weatherade Road Coverage (NOT_Lonely.Weatherade.SnowCoverage):</color></b> <color=white>GameObject 'SkidmarkContainer' has missing materials and will be ignored.</color>
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 1
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 2
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Central Park Plaza
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 8
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 4
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 3
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 7
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 5
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 0
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 9
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi Road 6
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Taxi bay
+Truck Taxi snow: road renderer is not Weatherade snow-compatible: Parking court
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 36, observed startup 35, multiplier 1.65, target/cap 59/60.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+Changing weather profile WeatherMakerProfile_HeavySleet (Sports runtime clone) to WeatherMakerProfile_HeavyFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+ACTUAL_PICKUP_DELIVERY TruckSnake practice=False fullMatch=False; natural scoring contact, original totals, stable identity, one receipt, explicit early-results lifecycle, controlled720/1080, fresh rematch. No human/device/Windows/performance claim.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 14:22:58Z" end-time="2026-10-24 14:24:05Z" duration="66.822437">
+  <test-suite type="TestSuite" id="1484" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="336" result="Passed" start-time="2026-10-24 14:22:58Z" end-time="2026-10-24 14:24:05Z" duration="66.822437" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1368" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="169" result="Passed" start-time="2026-10-24 14:22:58Z" end-time="2026-10-24 14:24:05Z" duration="66.807282" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="18652" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1269" name="RingKickScoreLifecycleTests" fullname="RingKickScoreLifecycleTests" classname="RingKickScoreLifecycleTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-24 14:22:58Z" end-time="2026-10-24 14:24:05Z" duration="66.801122" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1272" name="OriginalFieldGoalCrossingAwardsOneOriginalPoint" fullname="RingKickScoreLifecycleTests.OriginalFieldGoalCrossingAwardsOneOriginalPoint" methodname="OriginalFieldGoalCrossingAwardsOneOriginalPoint" classname="RingKickScoreLifecycleTests" runstate="Runnable" seed="1552369927" result="Passed" start-time="2026-10-24 14:22:58Z" end-time="2026-10-24 14:23:05Z" duration="7.453230" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="360000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+FIELD_GOAL_ACTUAL_KICK variant=Foot round=1 shooter=0 point=(0.02, 0.76, -0.46) queuedPhysicsResponse=true timing=0
+FIELD_GOAL_ACTUAL_POST_PHYSICS_LAUNCH velocity=(-0.82, 16.58, 23.95) truckProjectile=False
+FIELD_GOAL_RESULT variant=Foot round=1 shooter=0 good=True reason=GOOD! point=(-1.19, 14.50, 30.00)
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ORIGINAL_PHYSICAL_RING_KICK TruckFieldGoal hotSeat=False slot=0 earned=1 total=1 physical original rule commit, saved Heat, ownership, duplicate names, retained HUD and rematch. First-award lifecycle only; full Windows/hardware acceptance separate.
+]]></output>
+        </test-case>
+        <test-case id="1271" name="OriginalSkeeHotSeatSwitchNeverShowsThePreviousDriverAward" fullname="RingKickScoreLifecycleTests.OriginalSkeeHotSeatSwitchNeverShowsThePreviousDriverAward" methodname="OriginalSkeeHotSeatSwitchNeverShowsThePreviousDriverAward" classname="RingKickScoreLifecycleTests" runstate="Runnable" seed="274368870" result="Passed" start-time="2026-10-24 14:23:05Z" end-time="2026-10-24 14:23:59Z" duration="53.889730" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="360000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SKEE_RESULT owner=0 delivery=1 points=0 reason=OUTSIDE OPENING position=(-5.37, -2.16, 65.03) launch=(-2.30, 22.47, 11.03) aftertouch=0.8690779
+SKEE_RESULT owner=1 delivery=1 points=0 reason=OUTSIDE OPENING position=(0.00, 25.92, 88.73) launch=(0.28, 21.82, 12.62) aftertouch=0.3811829
+SKEE_RESULT owner=2 delivery=1 points=0 reason=OUTSIDE OPENING position=(0.70, 19.72, 82.84) launch=(-0.05, 21.93, 9.78) aftertouch=0.2606104
+SKEE_RESULT owner=3 delivery=1 points=0 reason=OUTSIDE OPENING position=(-0.05, 8.09, 75.88) launch=(0.01, 16.48, 9.56) aftertouch=0.2807908
+SKEE_RESULT owner=4 delivery=1 points=0 reason=GROUND MISS position=(-14.86, -1.71, 68.13) launch=(-2.33, 22.97, 10.89) aftertouch=0.9161085
+SKEE_RESULT owner=5 delivery=1 points=0 reason=OUTSIDE OPENING position=(-0.89, -2.03, 60.19) launch=(0.01, 23.41, 10.29) aftertouch=0.7593083
+SKEE_RESULT owner=6 delivery=1 points=0 reason=OUTSIDE OPENING position=(0.13, 19.60, 82.75) launch=(-0.08, 21.96, 9.70) aftertouch=0.3676063
+SKEE_RESULT owner=7 delivery=1 points=0 reason=OUTSIDE OPENING position=(-0.44, 1.55, 71.66) launch=(0.07, 15.47, 7.43) aftertouch=1.25
+SKEE_RESULT owner=0 delivery=2 points=0 reason=OUTSIDE OPENING position=(-9.91, -2.06, 64.63) launch=(-2.20, 21.72, 6.14) aftertouch=1.25
+SKEE_RESULT owner=1 delivery=2 points=0 reason=GROUND MISS position=(3.07, -1.79, 63.71) launch=(0.01, 23.21, 10.64) aftertouch=0.6416319
+SKEE_RESULT owner=2 delivery=2 points=0 reason=GROUND MISS position=(0.28, -1.41, 64.32) launch=(0.05, 21.20, 8.43) aftertouch=1.25
+SKEE_RESULT owner=3 delivery=2 points=0 reason=OUTSIDE OPENING position=(-0.17, 7.52, 74.28) launch=(0.00, 15.63, 9.17) aftertouch=0.2761755
+SKEE_RESULT owner=4 delivery=2 points=0 reason=GROUND MISS position=(17.71, -1.69, 75.02) launch=(2.23, 23.99, 11.04) aftertouch=0.5805424
+SKEE_RESULT owner=5 delivery=2 points=0 reason=OUTSIDE OPENING position=(9.73, -2.20, 64.53) launch=(-0.20, 23.45, 9.41) aftertouch=1.25
+SKEE_RESULT owner=6 delivery=2 points=0 reason=OUTSIDE OPENING position=(-0.49, 27.55, 86.22) launch=(0.14, 22.85, 11.19) aftertouch=0.4379399
+SKEE_RESULT owner=7 delivery=2 points=20 reason=OPENING CLEARED position=(-0.07, 9.19, 75.39) launch=(-0.03, 18.35, 7.93) aftertouch=1.25
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ORIGINAL_PHYSICAL_RING_KICK TruckSkeeBall hotSeat=True slot=7 earned=20 total=20 physical original rule commit, saved Heat, ownership, duplicate names, retained HUD and rematch. First-award lifecycle only; full Windows/hardware acceptance separate.
+]]></output>
+        </test-case>
+        <test-case id="1270" name="OriginalSkeeRingContactUsesItsActualSimultaneousLaneOwner" fullname="RingKickScoreLifecycleTests.OriginalSkeeRingContactUsesItsActualSimultaneousLaneOwner" methodname="OriginalSkeeRingContactUsesItsActualSimultaneousLaneOwner" classname="RingKickScoreLifecycleTests" runstate="Runnable" seed="732089608" result="Passed" start-time="2026-10-24 14:23:59Z" end-time="2026-10-24 14:24:05Z" duration="5.443381" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="360000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SKEE_RESULT owner=3 delivery=1 points=20 reason=OPENING CLEARED position=(114.04, 8.49, 75.32) launch=(0.01, 15.86, 9.31) aftertouch=0.1906685
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ORIGINAL_PHYSICAL_RING_KICK TruckSkeeBall hotSeat=False slot=3 earned=20 total=20 physical original rule commit, saved Heat, ownership, duplicate names, retained HUD and rematch. First-award lifecycle only; full Windows/hardware acceptance separate.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,40 @@
+PASS one pad has independently owned left/right sticks and triggers
+PASS whole-pad versus shared-stick conflict rejected
+PASS duplicate stick ownership rejected
+PASS two shared-pad participants plus two keyboard clusters create four stable views
+PASS software left and right sticks route independently
+PASS left trigger tugs only its assigned participant
+PASS pause preserves in-flight bodies, scoring, timer and scene
+PASS disconnect during real flight preserves match in reconnect modal
+PASS explicit replacement restores exclusive shared sticks
+PASS neutral replacement resumes without confirmation leakage
+PASS native 4-human-view camera render 1280x720; Canvas readability checked separately
+PASS native 4-human-view camera render 1920x1080; Canvas readability checked separately
+PASS native 4-human-view camera render 1440x900; Canvas readability checked separately
+PASS native 4-human-view camera render 1280x960; Canvas readability checked separately
+PASS native 4-human-view camera render 2560x1080; Canvas readability checked separately
+PASS long-name per-view HUD fits its authored rectangle
+PASS long-name per-view HUD fits its authored rectangle
+PASS long-name per-view HUD fits its authored rectangle
+PASS long-name per-view HUD fits its authored rectangle
+PASS one human plus three AI uses full screen
+PASS native 1-human-view camera render 1280x720; Canvas readability checked separately
+PASS native 1-human-view camera render 1920x1080; Canvas readability checked separately
+PASS two shared-pad humans plus two AI use stable two-way split
+PASS native 2-human-view camera render 1280x720; Canvas readability checked separately
+PASS native 2-human-view camera render 1920x1080; Canvas readability checked separately
+PASS rule fixture: tied leaders advance to extra round instead of arbitrary winner
+PASS rule fixture: only tied leaders receive equal twenty-second extra round
+PASS rule fixture: resolved extra round selects actual highest cumulative score
+PASS physics filter fixture: foreign rubble cannot influence another bay; own rubble remains physical
+PASS four-AI normal-speed camera workload starts
+PASS sixty real seconds with four ropes, towers, cameras and actual AI impacts
+PASS Windows workload includes automatic four-camera rendering
+PERF seconds=60.01164 frames=4448 renders=17792 meanMS=13.4965914271289 p95MS=18.7743 p99MS=24.9944 GC0=7 managedDelta=5361664 editorBatch=False
+PASS timer changes to a shared score-locked demolition broadcast
+PASS skip finishes vendor support release before advancing
+PASS skipped finale adds no points
+PASS repeated rematch resets authoritative round state
+PASS collection return cleans scene-owned truck, rope, camera and audio lifecycle
+PASS collection has one listener after exit
+ERRORS=0. Software-injected sources and native physical workload. Editor batch timing is not a GPU/player benchmark; no real hardware/human/audio acceptance.

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 15:17:57Z" end-time="2026-10-24 15:18:52Z" duration="55.04672">
+  <test-suite type="TestSuite" id="1488" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="339" result="Passed" start-time="2026-10-24 15:17:57Z" end-time="2026-10-24 15:18:52Z" duration="55.046720" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1372" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="172" result="Passed" start-time="2026-10-24 15:17:57Z" end-time="2026-10-24 15:18:52Z" duration="55.031094" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="1780" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1265" name="RaceEndScoreLifecycleTests" fullname="RaceEndScoreLifecycleTests" classname="RaceEndScoreLifecycleTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-24 15:17:57Z" end-time="2026-10-24 15:18:52Z" duration="55.024649" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1267" name="MattressActualFinishesPublishOnlyOriginalPlacementPoints" fullname="RaceEndScoreLifecycleTests.MattressActualFinishesPublishOnlyOriginalPlacementPoints" methodname="MattressActualFinishesPublishOnlyOriginalPlacementPoints" classname="RaceEndScoreLifecycleTests" runstate="Runnable" seed="93071225" result="Passed" start-time="2026-10-24 15:17:57Z" end-time="2026-10-24 15:18:22Z" duration="24.890700" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="420000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to Hurricane weather (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+MATTRESS_RACE_LOCK race=1 ranks=1,4,6,7,2,3,8,5 total=8,5,3,2,7,6,1,4
+Changing weather profile Hurricane weather (Sports runtime clone) to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ORIGINAL_RACE_END_SCORE TruckMattressRacing actual first physical race/heat resolution, receipts=8, original points=8,5,3,2,7,6,1,4, stable duplicate-name identity, saved Heat, pause and rematch. No injected scores, finishes, poses or forces. Full Windows/human/device acceptance separate.
+]]></output>
+        </test-case>
+        <test-case id="1266" name="MinefieldActualSupportedRestAwardsOnlyOriginalHeatLeaders" fullname="RaceEndScoreLifecycleTests.MinefieldActualSupportedRestAwardsOnlyOriginalHeatLeaders" methodname="MinefieldActualSupportedRestAwardsOnlyOriginalHeatLeaders" classname="RaceEndScoreLifecycleTests" runstate="Runnable" seed="1060734208" result="Passed" start-time="2026-10-24 15:18:22Z" end-time="2026-10-24 15:18:41Z" duration="19.083715" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="420000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+MINEFIELD_OUTSIDE_FINAL slot=4 lastValidGround=(-293.73, 90.83, 797.09) distance=7971
+Changing weather profile WeatherMakerProfile_HeavySleet (Sports runtime clone) to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ORIGINAL_RACE_END_SCORE TruckMinefield actual first physical race/heat resolution, receipts=1, original points=0,0,0,0,0,0,1,0, stable duplicate-name identity, saved Heat, pause and rematch. No injected scores, finishes, poses or forces. Full Windows/human/device acceptance separate.
+]]></output>
+        </test-case>
+        <test-case id="1268" name="TerrierActualLegalFinishPublishesOnlyOriginalHeatWin" fullname="RaceEndScoreLifecycleTests.TerrierActualLegalFinishPublishesOnlyOriginalHeatWin" methodname="TerrierActualLegalFinishPublishesOnlyOriginalHeatWin" classname="RaceEndScoreLifecycleTests" runstate="Runnable" seed="1096521684" result="Passed" start-time="2026-10-24 15:18:41Z" end-time="2026-10-24 15:18:52Z" duration="11.031942" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="420000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=430580 hash=251918238 length=168 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=430580
+TERRIER_WRECK slot=0 time=4.979996
+TERRIER_WRECK slot=1 time=4.979996
+TERRIER_WRECK slot=2 time=4.979996
+TERRIER_WRECK slot=3 time=4.979996
+TERRIER_WRECK slot=11 time=4.979996
+TERRIER_WRECK slot=5 time=7.359993
+TERRIER_WRECK slot=9 time=13.04011
+TERRIER_WRECK slot=8 time=15.18016
+TERRIER_FIRST_FINISH heat=1 winner=4 time=17.88022
+TERRIER_WRECK slot=10 time=18.62024
+TERRIER_WRECK slot=7 time=20.60028
+TERRIER_HEAT_LOCK heat=1 winner=4 time=25.8804 wins=0,0,0,0,1,0,0,0,0,0,0,0
+Changing weather profile WeatherMakerProfile_Storm (Sports runtime clone) to WeatherMakerProfile_LightSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TERRIER_LAYOUT seed=915703 hash=244628352 length=160 fallback=False
+TERRIER_HEAT_BEGIN heat=1 seed=915703
+ORIGINAL_RACE_END_SCORE TruckTerrierRacing actual first physical race/heat resolution, receipts=1, original points=0,0,0,0,1,0,0,0,0,0,0,0, stable duplicate-name identity, saved Heat, pause and rematch. No injected scores, finishes, poses or forces. Full Windows/human/device acceptance separate.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

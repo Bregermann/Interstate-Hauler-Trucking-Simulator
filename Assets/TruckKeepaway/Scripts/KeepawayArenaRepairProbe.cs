@@ -32,6 +32,7 @@ namespace LWS.TruckKeepaway
                 Check(field.breakableProps.Length==field.baselineObstacleCount&&field.breakableProps.All(p=>p!=null&&p.breakable.fragments.Length==2),"every existing physical obstacle has actual-model pooled fracture; count retained for one-third density");
                 match.AllBots();match.option=0;match.chaosLevel=1;match.weatherChoice=1;
                 foreach(var player in match.setup.players)player.difficulty=BowlingDifficulty.Normal;
+                var scoreTally=new SportsScoreAcceptance.Tally(match,false);bool awardCaptured=false;
                 Check(match.StartMatch(),"four-AI first-to-thirty starts in the actual saved "+(cab?"cab":"arena")+" scene");
                 Check(match.chaosField.ConnectedCells>1200,"expanded navigation covers the enlarged surface: "+match.chaosField.ConnectedCells);
                 Check(match.trucks.Take(match.setup.count).All(t=>field.Reachable(t.body.position)),"all actual initial truck poses connect to the ball");
@@ -39,6 +40,7 @@ namespace LWS.TruckKeepaway
                 Time.timeScale=4;float deadline=Time.realtimeSinceStartup+300,next=0;bool captured=false;
                 while(!match.Finished&&Time.realtimeSinceStartup<deadline)
                 {
+                    if(!awardCaptured&&match.ScoreJournal.Count>0){awardCaptured=true;yield return SportsScoreAcceptance.CaptureAward(match,Check,Path.Combine(folder,cab?"cab-award":"arena-award"));}
                     if(!captured&&match.Pickups>0)
                     {
                         captured=true;
@@ -48,6 +50,7 @@ namespace LWS.TruckKeepaway
                     yield return null;
                 }
                 Time.timeScale=1;
+                scoreTally.Verify(slot=>Mathf.FloorToInt(match.possession[slot]/10)*10,Check);scoreTally.Dispose();
                 Check(match.Finished&&match.Winner>=0&&match.possession[match.Winner]>=30,"actual complete possession match: "+string.Join(",",match.possession));
                 Check(match.Pickups>0&&match.Steals>0&&match.Blasts>=match.Steals,"physical pickup, theft and former-carrier explosion rules remain active");
                 Check(field.breakableProps.Any(p=>p.breakable.HasCollapsed),"ordinary physical match contact actually destroys at least one arena obstacle");

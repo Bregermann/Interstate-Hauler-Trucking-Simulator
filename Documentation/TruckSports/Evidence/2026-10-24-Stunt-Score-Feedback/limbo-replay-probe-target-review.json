@@ -1,0 +1,22 @@
+{
+  "cause": "Old fixture always inspected slot0/root0; original LimboReview.Play picks actual winner. This match ended round6 with slot0 eliminated and stationary, winner slot4. Replay mask correctly excludes eliminated roots.",
+  "evidence": "LimboClearAwardsWindows/result.txt: actual35pointreceipts and winner4; soleFAIL replayapproachslot0. Original runtime replay unchanged.",
+  "change": "Development fixture now inspects actual winner body/root at seek1 and compares same body after playback. Original threshold and physical workload retained.",
+  "runtimeReplayModified": false,
+  "beforeSha256": "7f5c81d28fbe65061c0c2851a135f2d773e5df971166e199d6178995a4dd2541",
+  "afterSha256": "659bf2fe17d19cdfd04d0f6301449c35fbf66686092ef4041158aa6f2daa6e5c",
+  "failedReceipt": {
+    "pid": 30668,
+    "exit": 2,
+    "seconds": 24.45,
+    "requestedGraphicsAPI": "d3d11",
+    "managedSha256": "78f02f0268c3debbb14c61d34997275a99a31180f8ab08ae8016e748a8a74b9e",
+    "buildContentSha256": "7c08eb4669de85ddb1ddff18643603d36487c8a5b617bb3d7bf78f045b0ff830",
+    "unchangedBuildContent": true,
+    "unchangedManaged": true,
+    "completedEvidence": true,
+    "checks": 54,
+    "errors": 1,
+    "legacyErrorsOnly": false
+  }
+}

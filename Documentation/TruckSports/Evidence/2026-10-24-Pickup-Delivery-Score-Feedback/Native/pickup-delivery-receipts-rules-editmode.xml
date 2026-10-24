@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="51" result="Passed" total="51" passed="51" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:17:00Z" duration="4.2618551">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2978" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:17:00Z" duration="4.261855" total="51" passed="51" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="1895" name="LWS.TruckFareFight.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckFareFight.EditModeTests.dll" runstate="Runnable" testcasecount="23" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.064414" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="29232" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="1875" name="FareFightRulesTests" fullname="FareFightRulesTests" classname="FareFightRulesTests" runstate="Runnable" testcasecount="18" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.060818" total="18" passed="18" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1879" name="CooldownPreventsImmediatePingPong" fullname="FareFightRulesTests.CooldownPreventsImmediatePingPong" methodname="CooldownPreventsImmediatePingPong" classname="FareFightRulesTests" runstate="Runnable" seed="846153127" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.024604" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1890" name="DeliveryScoresOnceAndFreezesUntilNextPassenger" fullname="FareFightRulesTests.DeliveryScoresOnceAndFreezesUntilNextPassenger" methodname="DeliveryScoresOnceAndFreezesUntilNextPassenger" classname="FareFightRulesTests" runstate="Runnable" seed="1127381078" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.001276" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1885" name="DestroyedCarrierResetsSamePassengerAndDestination" fullname="FareFightRulesTests.DestroyedCarrierResetsSamePassengerAndDestination" methodname="DestroyedCarrierResetsSamePassengerAndDestination" classname="FareFightRulesTests" runstate="Runnable" seed="340414128" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000272" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1886" name="EarlierDeliveryCannotBeRevokedByLaterCollision" fullname="FareFightRulesTests.EarlierDeliveryCannotBeRevokedByLaterCollision" methodname="EarlierDeliveryCannotBeRevokedByLaterCollision" classname="FareFightRulesTests" runstate="Runnable" seed="233306730" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000260" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1887" name="EarlierTheftPreventsOldCarrierDelivery" fullname="FareFightRulesTests.EarlierTheftPreventsOldCarrierDelivery" methodname="EarlierTheftPreventsOldCarrierDelivery" classname="FareFightRulesTests" runstate="Runnable" seed="766210882" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000232" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1877" name="ExactPickupTieUsesStableParticipantId" fullname="FareFightRulesTests.ExactPickupTieUsesStableParticipantId" methodname="ExactPickupTieUsesStableParticipantId" classname="FareFightRulesTests" runstate="Runnable" seed="880000083" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000186" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1876" name="FirstPhysicalPickupWinsAtomically" fullname="FareFightRulesTests.FirstPhysicalPickupWinsAtomically" methodname="FirstPhysicalPickupWinsAtomically" classname="FareFightRulesTests" runstate="Runnable" seed="802399559" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000185" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1891" name="FirstToFiveEndsAtFive" fullname="FareFightRulesTests.FirstToFiveEndsAtFive" methodname="FirstToFiveEndsAtFive" classname="FareFightRulesTests" runstate="Runnable" seed="1636987072" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.001232" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1878" name="MeaningfulPhysicalContactStealsWithoutChangingDestination" fullname="FareFightRulesTests.MeaningfulPhysicalContactStealsWithoutChangingDestination" methodname="MeaningfulPhysicalContactStealsWithoutChangingDestination" classname="FareFightRulesTests" runstate="Runnable" seed="1433940546" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000297" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1888" name="SimultaneousDestructionAndDeliveryUsesDocumentedResetPrecedence" fullname="FareFightRulesTests.SimultaneousDestructionAndDeliveryUsesDocumentedResetPrecedence" methodname="SimultaneousDestructionAndDeliveryUsesDocumentedResetPrecedence" classname="FareFightRulesTests" runstate="Runnable" seed="1180460162" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000244" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1894" name="SoloPracticeDoesNotEndAfterFiveDeliveries" fullname="FareFightRulesTests.SoloPracticeDoesNotEndAfterFiveDeliveries" methodname="SoloPracticeDoesNotEndAfterFiveDeliveries" classname="FareFightRulesTests" runstate="Runnable" seed="201098731" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.001689" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1889" name="StalePassengerEventsCannotAffectNextFare" fullname="FareFightRulesTests.StalePassengerEventsCannotAffectNextFare" methodname="StalePassengerEventsCannotAffectNextFare" classname="FareFightRulesTests" runstate="Runnable" seed="1818158994" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000343" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1892" name="TimedTieEntersSuddenDeath" fullname="FareFightRulesTests.TimedTieEntersSuddenDeath" methodname="TimedTieEntersSuddenDeath" classname="FareFightRulesTests" runstate="Runnable" seed="256080090" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000222" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1893" name="TimerRejectsLateDeliveryWhenLeaderAlreadyWon" fullname="FareFightRulesTests.TimerRejectsLateDeliveryWhenLeaderAlreadyWon" methodname="TimerRejectsLateDeliveryWhenLeaderAlreadyWon" classname="FareFightRulesTests" runstate="Runnable" seed="728777962" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000279" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="1884" name="TrafficAndUnknownSlotsCannotOwnPassenger" fullname="FareFightRulesTests.TrafficAndUnknownSlotsCannotOwnPassenger" methodname="TrafficAndUnknownSlotsCannotOwnPassenger" classname="FareFightRulesTests" runstate="Runnable" seed="1603588723" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000196" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="1883" name="WeakOverlapCannotSteal" fullname="FareFightRulesTests.WeakOverlapCannotSteal" classname="FareFightRulesTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.003153" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="1880" name="WeakOverlapCannotSteal(0)" fullname="FareFightRulesTests.WeakOverlapCannotSteal(0)" methodname="WeakOverlapCannotSteal" classname="FareFightRulesTests" runstate="Runnable" seed="868256448" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000381" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1881" name="WeakOverlapCannotSteal(1.49f)" fullname="FareFightRulesTests.WeakOverlapCannotSteal(1.49f)" methodname="WeakOverlapCannotSteal" classname="FareFightRulesTests" runstate="Runnable" seed="1626132854" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000085" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="1882" name="WeakOverlapCannotSteal(float.NaN)" fullname="FareFightRulesTests.WeakOverlapCannotSteal(float.NaN)" methodname="WeakOverlapCannotSteal" classname="FareFightRulesTests" runstate="Runnable" seed="1795890815" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.000076" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2055" name="LWS.TruckSnake.EditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSnake.EditModeTests.dll" runstate="Runnable" testcasecount="28" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:17:00Z" duration="3.841173" total="28" passed="28" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="29232" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="2024" name="SnakeFirstHitchGeometryTests" fullname="SnakeFirstHitchGeometryTests" classname="SnakeFirstHitchGeometryTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.217497" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="ParameterizedMethod" id="2029" name="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged" fullname="SnakeFirstHitchGeometryTests.LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged" classname="SnakeFirstHitchGeometryTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.216287" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2025" name="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged(0,False)" fullname="SnakeFirstHitchGeometryTests.LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged(0,False)" methodname="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged" classname="SnakeFirstHitchGeometryTests" runstate="Runnable" seed="749128489" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.198133" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+            <output><![CDATA[SYNTHETIC_HITCH turn=0 airborne=False gapMetres=0 localPin=(0.02, 0.99, 5.98) vendorHitch=(0.00, 0.90, -1.16)
+]]></output>
+          </test-case>
+          <test-case id="2026" name="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged(90,False)" fullname="SnakeFirstHitchGeometryTests.LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged(90,False)" methodname="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged" classname="SnakeFirstHitchGeometryTests" runstate="Runnable" seed="515224876" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.005727" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+            <output><![CDATA[SYNTHETIC_HITCH turn=90 airborne=False gapMetres=0 localPin=(0.02, 0.99, 5.98) vendorHitch=(0.00, 0.90, -1.16)
+]]></output>
+          </test-case>
+          <test-case id="2027" name="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged(180,False)" fullname="SnakeFirstHitchGeometryTests.LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged(180,False)" methodname="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged" classname="SnakeFirstHitchGeometryTests" runstate="Runnable" seed="1540089001" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.005117" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+            <output><![CDATA[SYNTHETIC_HITCH turn=180 airborne=False gapMetres=0 localPin=(0.02, 0.99, 5.98) vendorHitch=(0.00, 0.90, -1.16)
+]]></output>
+          </test-case>
+          <test-case id="2028" name="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged(90,True)" fullname="SnakeFirstHitchGeometryTests.LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged(90,True)" methodname="LeadKingpinStaysAtVendorHitchWhileLaterPathPosesRemainUnchanged" classname="SnakeFirstHitchGeometryTests" runstate="Runnable" seed="1408833023" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:56Z" duration="0.004802" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+            <output><![CDATA[SYNTHETIC_HITCH turn=90 airborne=True gapMetres=4.768372E-07 localPin=(0.02, 0.99, 5.98) vendorHitch=(0.00, 0.90, -1.16)
+]]></output>
+          </test-case>
+        </test-suite>
+      </test-suite>
+      <test-suite type="TestFixture" id="2030" name="SnakePathTests" fullname="SnakePathTests" classname="SnakePathTests" runstate="Runnable" testcasecount="24" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:17:00Z" duration="3.621831" total="24" passed="24" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2048" name="ActualPickupAccessGraphHasUniqueIdentifiersAndEndsAtPickup" fullname="SnakePathTests.ActualPickupAccessGraphHasUniqueIdentifiersAndEndsAtPickup" methodname="ActualPickupAccessGraphHasUniqueIdentifiersAndEndsAtPickup" classname="SnakePathTests" runstate="Runnable" seed="1578412225" result="Passed" start-time="2026-10-24 09:16:56Z" end-time="2026-10-24 09:16:57Z" duration="0.014728" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2033" name="ArcLengthSpacesFiftySegmentsWithoutJointDrift" fullname="SnakePathTests.ArcLengthSpacesFiftySegmentsWithoutJointDrift" methodname="ArcLengthSpacesFiftySegmentsWithoutJointDrift" classname="SnakePathTests" runstate="Runnable" seed="1394766963" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.001289" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2049" name="BridgeAndGroundRoutesRemainDistinct" fullname="SnakePathTests.BridgeAndGroundRoutesRemainDistinct" methodname="BridgeAndGroundRoutesRemainDistinct" classname="SnakePathTests" runstate="Runnable" seed="2130502387" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.001024" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2039" name="CapacityAndNonFiniteSamplesAreRejected" fullname="SnakePathTests.CapacityAndNonFiniteSamplesAreRejected" methodname="CapacityAndNonFiniteSamplesAreRejected" classname="SnakePathTests" runstate="Runnable" seed="1055011692" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.002060" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2044" name="ComboExpiresWithoutChangingLength" fullname="SnakePathTests.ComboExpiresWithoutChangingLength" methodname="ComboExpiresWithoutChangingLength" classname="SnakePathTests" runstate="Runnable" seed="229782439" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.001214" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2042" name="CrashFreezesThatParticipantsRewards" fullname="SnakePathTests.CrashFreezesThatParticipantsRewards" methodname="CrashFreezesThatParticipantsRewards" classname="SnakePathTests" runstate="Runnable" seed="732432523" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000432" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2035" name="CurvedHistoryInterpolatesActualRoute" fullname="SnakePathTests.CurvedHistoryInterpolatesActualRoute" methodname="CurvedHistoryInterpolatesActualRoute" classname="SnakePathTests" runstate="Runnable" seed="707786518" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000461" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2045" name="FailureDoesNotEndOtherCompetitors" fullname="SnakePathTests.FailureDoesNotEndOtherCompetitors" methodname="FailureDoesNotEndOtherCompetitors" classname="SnakePathTests" runstate="Runnable" seed="789637271" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000228" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2046" name="GenuineJumpHasBoundedBonus" fullname="SnakePathTests.GenuineJumpHasBoundedBonus" methodname="GenuineJumpHasBoundedBonus" classname="SnakePathTests" runstate="Runnable" seed="829133784" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000232" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2040" name="HistoryPruningPreservesLongTail" fullname="SnakePathTests.HistoryPruningPreservesLongTail" methodname="HistoryPruningPreservesLongTail" classname="SnakePathTests" runstate="Runnable" seed="342237468" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000877" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2053" name="PendingCargoCannotInflateAnyScoreReward" fullname="SnakePathTests.PendingCargoCannotInflateAnyScoreReward" methodname="PendingCargoCannotInflateAnyScoreReward" classname="SnakePathTests" runstate="Runnable" seed="1146604683" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000532" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2031" name="PickupArrowRejectsDisconnectedAndOffRoadObjectives" fullname="SnakePathTests.PickupArrowRejectsDisconnectedAndOffRoadObjectives" methodname="PickupArrowRejectsDisconnectedAndOffRoadObjectives" classname="SnakePathTests" runstate="Runnable" seed="117522549" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.010782" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2052" name="RealAttachedLengthMultipliesDistanceAndSurvival" fullname="SnakePathTests.RealAttachedLengthMultipliesDistanceAndSurvival" methodname="RealAttachedLengthMultipliesDistanceAndSurvival" classname="SnakePathTests" runstate="Runnable" seed="2098489694" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000366" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2037" name="ResetCannotReplayLastRunsTail" fullname="SnakePathTests.ResetCannotReplayLastRunsTail" methodname="ResetCannotReplayLastRunsTail" classname="SnakePathTests" runstate="Runnable" seed="1107160664" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000473" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2036" name="RingWrapRetainsTheNewestCorrectSamples" fullname="SnakePathTests.RingWrapRetainsTheNewestCorrectSamples" methodname="RingWrapRetainsTheNewestCorrectSamples" classname="SnakePathTests" runstate="Runnable" seed="1642102374" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:16:57Z" duration="0.000390" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2032" name="SavedRepairKeepsModelsClearAndPreservesLivePhysicsBudgets" fullname="SnakePathTests.SavedRepairKeepsModelsClearAndPreservesLivePhysicsBudgets" methodname="SavedRepairKeepsModelsClearAndPreservesLivePhysicsBudgets" classname="SnakePathTests" runstate="Runnable" seed="1789238649" result="Passed" start-time="2026-10-24 09:16:57Z" end-time="2026-10-24 09:17:00Z" duration="3.575246" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+SNAKE_SAVED_REPAIR native models/road clearance/terrain bases, four NWH overrides, unchanged live budgets and shared UTS profile validated.
+]]></output>
+        </test-case>
+        <test-case id="2050" name="SolidImpactUsesTheSameContactNormalAndSpeed" fullname="SnakePathTests.SolidImpactUsesTheSameContactNormalAndSpeed" methodname="SolidImpactUsesTheSameContactNormalAndSpeed" classname="SnakePathTests" runstate="Runnable" seed="2144451420" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000808" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2041" name="StandardAndGoldenAwardExactlyOneAndThree" fullname="SnakePathTests.StandardAndGoldenAwardExactlyOneAndThree" methodname="StandardAndGoldenAwardExactlyOneAndThree" classname="SnakePathTests" runstate="Runnable" seed="880560899" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000228" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2051" name="StarterCargoIsNotAnEarnedPickup" fullname="SnakePathTests.StarterCargoIsNotAnEarnedPickup" methodname="StarterCargoIsNotAnEarnedPickup" classname="SnakePathTests" runstate="Runnable" seed="883918333" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000240" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2038" name="StoppedSamplesDoNotConsumeHistory" fullname="SnakePathTests.StoppedSamplesDoNotConsumeHistory" methodname="StoppedSamplesDoNotConsumeHistory" classname="SnakePathTests" runstate="Runnable" seed="1451489342" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000245" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2054" name="TailLossReducesFutureEarningsAndRematchRestoresOne" fullname="SnakePathTests.TailLossReducesFutureEarningsAndRematchRestoresOne" methodname="TailLossReducesFutureEarningsAndRematchRestoresOne" classname="SnakePathTests" runstate="Runnable" seed="442006692" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000288" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2047" name="TailPenaltyNeverCreatesNegativeLength" fullname="SnakePathTests.TailPenaltyNeverCreatesNegativeLength" methodname="TailPenaltyNeverCreatesNegativeLength" classname="SnakePathTests" runstate="Runnable" seed="1434780000" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000171" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2034" name="ThreeDimensionalJumpIsDelayedDownTheTrain" fullname="SnakePathTests.ThreeDimensionalJumpIsDelayedDownTheTrain" methodname="ThreeDimensionalJumpIsDelayedDownTheTrain" classname="SnakePathTests" runstate="Runnable" seed="630204811" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000472" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2043" name="TimedTieSharesVictory" fullname="SnakePathTests.TimedTieSharesVictory" methodname="TimedTieSharesVictory" classname="SnakePathTests" runstate="Runnable" seed="488163191" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000161" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+    </test-suite>
+    <test-suite type="Assembly" id="2477" name="LWS.TruckSports.PresentationEditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.PresentationEditModeTests.dll" runstate="Runnable" testcasecount="73" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.190372" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="29232" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="2392" name="ConfirmedScoreReceiptTests" fullname="ConfirmedScoreReceiptTests" classname="ConfirmedScoreReceiptTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.008893" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2396" name="ClosingFreezesReceiptsAndFreshMatchesHaveIndependentDeduplication" fullname="ConfirmedScoreReceiptTests.ClosingFreezesReceiptsAndFreshMatchesHaveIndependentDeduplication" methodname="ClosingFreezesReceiptsAndFreshMatchesHaveIndependentDeduplication" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="280258489" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.002211" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2397" name="MissingIdentityAndNonFiniteScoresCannotCreateReceipts" fullname="ConfirmedScoreReceiptTests.MissingIdentityAndNonFiniteScoresCannotCreateReceipts" methodname="MissingIdentityAndNonFiniteScoresCannotCreateReceipts" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="524053894" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.001469" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2395" name="StableIdentitiesAndEventIdsKeepDuplicateNamesIndependent" fullname="ConfirmedScoreReceiptTests.StableIdentitiesAndEventIdsKeepDuplicateNamesIndependent" methodname="StableIdentitiesAndEventIdsKeepDuplicateNamesIndependent" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="386170690" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000731" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2394" name="TeamReceiptsRejectInvalidDataFreezeAtEndAndResetPerMatch" fullname="ConfirmedScoreReceiptTests.TeamReceiptsRejectInvalidDataFreezeAtEndAndResetPerMatch" methodname="TeamReceiptsRejectInvalidDataFreezeAtEndAndResetPerMatch" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="637325338" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.001745" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2393" name="TeamRecipientsNeverImpersonateAPlayerAndDuplicateNamesStaySeparate" fullname="ConfirmedScoreReceiptTests.TeamRecipientsNeverImpersonateAPlayerAndDuplicateNamesStaySeparate" methodname="TeamRecipientsNeverImpersonateAPlayerAndDuplicateNamesStaySeparate" classname="ConfirmedScoreReceiptTests" runstate="Runnable" seed="1608122151" result="Passed" start-time="2026-10-24 09:17:00Z" end-time="2026-10-24 09:17:00Z" duration="0.000890" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

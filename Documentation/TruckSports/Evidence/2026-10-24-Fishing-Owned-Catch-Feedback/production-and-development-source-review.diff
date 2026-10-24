@@ -1,0 +1,158 @@
+--- before/Assets/TruckSports/Editor/SportsScorePresentationAuthoring.cs
++++ after/Assets/TruckSports/Editor/SportsScorePresentationAuthoring.cs
+@@ -13,6 +13,7 @@
+         static readonly string[] ArcadeScenes = { "TruckBalloonBattle", "TruckWhackAMole", "TruckTetherball", "TruckMagnetMayhem", "TruckSheepHerding" };
+         // Deliberate additive installation. Normal Play Mode/builds never rebuild UI.
+         public static void InstallSumo() => InstallScenes(new[] { "TruckSumo" });
++        public static void InstallFishingAwards() => InstallScenes(new[] { "TruckFishing" }, true);
+         public static void InstallArcadeAwards() => InstallScenes(ArcadeScenes);
+         public static void InstallSurvivalAwards() => InstallScenes(new[] { "TruckHotPotato", "TruckSeesaw", "TruckKingOfTheHill" });
+         public static void InstallTeamAwards() => InstallScenes(new[] { "TruckVolleyball", "TruckFreezeTag" });
+@@ -50,14 +51,18 @@
+             }
+             AssetDatabase.SaveAssets();
+         }
+-        static void InstallScenes(string[] names)
++        static void InstallScenes(string[] names, bool perViewport = false)
+         {
+             foreach (string name in names)
+             {
+             var scene = EditorSceneManager.OpenScene("Assets/" + (name == "TruckKeepawayFirstPerson" ? "TruckKeepaway" : name) + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
+             var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();
+             if (session.menus.GetComponentInChildren<SportsScorePresentation>(true) != null) continue;
+-            var root = new GameObject("Confirmed scoring · shared Heat presentation", typeof(RectTransform), typeof(CanvasGroup), typeof(SportsScorePresentation));
++            for (int view = 0; view < (perViewport ? 4 : 1); view++)
++            {
++            // Keep the notification under the persistent menu Canvas. A hidden
++            // HUD page must not interrupt Heat's own minimize/reset coroutine.
++            var root = new GameObject(perViewport ? "Confirmed scoring · viewport " + view : "Confirmed scoring · shared Heat presentation", typeof(RectTransform), typeof(CanvasGroup), typeof(SportsScorePresentation));
+             root.layer = 5; root.transform.SetParent(session.menus.transform, false);
+             var rect = root.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, 1); rect.pivot = new Vector2(.5f, 1); rect.anchoredPosition = new Vector2(0, -112); rect.sizeDelta = new Vector2(760, 132);
+             var group = root.GetComponent<CanvasGroup>(); group.alpha = 0; group.interactable = group.blocksRaycasts = false;
+@@ -85,6 +90,8 @@
+             var stripeRect = stripe.GetComponent<RectTransform>(); stripeRect.anchorMin = Vector2.zero; stripeRect.anchorMax = new Vector2(1, 0); stripeRect.pivot = new Vector2(.5f, 0); stripeRect.offsetMin = new Vector2(10, 2); stripeRect.offsetMax = new Vector2(-10, 6);
+             var accent = stripe.GetComponent<UnityEngine.UI.Image>(); accent.raycastTarget = false;
+             var presentation = root.GetComponent<SportsScorePresentation>(); presentation.session = session; presentation.notification = notification; presentation.visibility = group; presentation.portrait = portrait; presentation.accent = accent; presentation.notificationAnimator = (Animator)settings.FindProperty("itemAnimator").objectReferenceValue;
++            if (perViewport) { presentation.viewport = view; rect.anchoredPosition = new Vector2(0, -105); rect.sizeDelta = new Vector2(650, 112); }
++            }
+             EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
+             Debug.Log("SCORE_PRESENTATION: additive saved " + name + " Heat notification. Original gameplay, scorecards, replay and result flows retained.");
+             }
+--- before/Assets/TruckSports/Scripts/SportsScorePresentation.cs
++++ after/Assets/TruckSports/Scripts/SportsScorePresentation.cs
+@@ -17,6 +17,8 @@
+         public CanvasGroup visibility;
+         public Image portrait, accent;
+         public Animator notificationAnimator;
++        [Tooltip("-1 keeps shared broadcast feedback. Otherwise show only the actual participant owning this camera viewport.")]
++        public int viewport = -1;
+         [Tooltip("Non-blocking notification in the upper screen margin above the standard results card.")]
+         public Vector2 resultPosition = new Vector2(0, -8), resultSize = new Vector2(1120, 76);
+         sealed class Pending
+@@ -31,6 +33,9 @@
+         RectTransform layout;
+         Vector2 playAnchorMin, playAnchorMax, playPivot, playPosition, playSize;
+         bool resultLayout;
++        int viewportOwner = -1;
++        float audienceReady;
++        public int ViewportOwner => viewportOwner;
+         public int Presented { get; private set; }
+         public SportsScoreEvent LastPresented { get; private set; }
+         void Awake()
+@@ -49,6 +54,7 @@
+         {
+             if (receipt.MatchId != session.MatchId) return;
+             if (match != receipt.MatchId) ResetMatch(receipt.MatchId);
++            if (viewport >= 0 && (!RefreshAudience() || receipt.IsTeam || receipt.Slot != viewportOwner)) return;
+             // Combine rapid awards only when their actual identities, reason,
+             // unit and tier agree. Names may deliberately be identical.
+             for (int i = pending.Count - 1; i >= 0; i--)
+@@ -77,15 +83,41 @@
+         {
+             match = id; pending.Clear(); Presented = 0; LastPresented = null;
+             notification.MinimizeNotification(); next = Time.time + .7f;
++            if (viewport >= 0) { viewportOwner = -1; WaitForAudience(); }
++        }
++        void WaitForAudience()
++        {
++            // Keep Heat active through its public Out transition. Disabling its
++            // GameObject early would interrupt the vendor's internal reset.
++            pending.Clear(); Presented = 0; LastPresented = null;
++            notification.MinimizeNotification();
++            audienceReady = Time.time + HeatUIInternalTools.GetAnimatorClipLength(notificationAnimator, "Notification_Out") + .15f;
++            next = Mathf.Max(next, audienceReady);
++            visibility.alpha = 0;
++        }
++        bool RefreshAudience()
++        {
++            int owner = -1;
++            bool valid = viewport < session.cameras.Length && session.cameras[viewport] != null && session.cameras[viewport].enabled
++                && session.TryReadViewportCard(viewport, out owner, out _, out _);
++            if (!valid) owner = -1;
++            if (owner != viewportOwner) { viewportOwner = owner; WaitForAudience(); }
++            if (valid && layout != null)
++            {
++                var view = session.cameras[viewport].rect;
++                layout.anchorMin = layout.anchorMax = new Vector2(view.center.x, view.yMax);
++            }
++            return valid;
+         }
+         void LateUpdate()
+         {
+             if (session == null || notification == null) return;
+             if (match != session.MatchId) ResetMatch(session.MatchId);
+-            bool result = session.Finished && session.menus.Screen == SportsEventScreen.Result;
+-            bool showing = session.Running && !session.Paused && (result || !session.Finished && session.menus.Screen == SportsEventScreen.Play);
++            bool audience = viewport < 0 || RefreshAudience();
++            bool result = viewport < 0 && session.Finished && session.menus.Screen == SportsEventScreen.Result;
++            bool showing = audience && (viewport < 0 || Time.time >= audienceReady) && session.Running && !session.Paused && (result || !session.Finished && session.menus.Screen == SportsEventScreen.Play);
+             visibility.alpha = showing ? 1 : 0;
+-            if (layout != null && resultLayout != result)
++            if (viewport < 0 && layout != null && resultLayout != result)
+             {
+                 resultLayout = result;
+                 layout.anchorMin = result ? new Vector2(.5f, 1) : playAnchorMin;
+--- before/Assets/TruckFishing/Scripts/FishingMatch.cs
++++ after/Assets/TruckFishing/Scripts/FishingMatch.cs
+@@ -18,10 +18,11 @@
+  public int ResultPlace(int slot)=>rules.Winner==slot?1:0; public double ResultSurvivalSeconds(int slot)=>rules.alive[slot]?Clock:eliminatedAt[slot]; public float ResultSurvivalBest=>SportsPrefs.GetFloat("TruckFishing.SurvivalPB",0); public int ResultCaughtBest=>SportsPrefs.GetInt("TruckFishing.CaughtPB",0);
+  public override string Results=>(setup.count==1?"SURVIVED "+eliminatedAt[0].ToString("F1")+"s":rules.Winner<0?"SIMULTANEOUS ELIMINATION · DRAW":setup.players[rules.Winner].name+" IS LAST SURVIVOR")+"\n\n"+Standings+"\nSOLO BEST "+SportsPrefs.GetFloat("TruckFishing.SurvivalPB",0).ToString("F1")+"s · "+SportsPrefs.GetInt("TruckFishing.CaughtPB",0)+" lb";
+  public override string ViewText(int view){int i=HumanViews==0?Spectator:Owners[view];return "<color=#"+ColorUtility.ToHtmlStringRGB(setup.players[i].color)+">"+setup.players[i].name+"</color> · "+(Countdown>0?Mathf.CeilToInt(Countdown).ToString():(rules.alive[i]?Clock:eliminatedAt[i]).ToString("F1")+"s")+" · "+rules.Remaining+" REMAIN\n"+rules.caught[i]+" LB CAUGHT  |  "+rules.missed[i]+" / 20 LB MISSED"+(!rules.alive[i]?" · "+rules.reason[i]:rules.missed[i]>=15?" · DANGER":"");}
++ public override bool TryReadViewportCard(int view,out int participant,out string score,out string detail){participant=-1;score=detail=null;if(cameras==null||view<0||view>=cameras.Length||cameras[view]==null||!cameras[view].enabled)return false;participant=HumanViews==0?Spectator:Owners[view];if(participant<0||participant>=setup.count)return false;score=rules.caught[participant].ToString();detail=rules.missed[participant]+" / 20 LB MISSED";return true;}
+  protected override void BeginGame(){rules.Reset(setup.count);Clock=0;Countdown=3;ScheduleCount=0;upcoming.Clear();events.Clear();director=new FishingDirector(seed){originalInitialSpeed=originalInitialSpeed,initialMultiplier=initialSpeedMultiplier,multiplierPerThirtySeconds=multiplierPerThirtySeconds,maximumMultiplier=maximumSpeedMultiplier,halfWidth=fishHalfWidth,speedClockOffset=EntryLeadSeconds,acceleration=fishAcceleration,minimumSpeed=minimumSpeed,maximumSpeed=maximumSpeed,density=density,maxNetSpeed=streams[0].netSpeed,challengeSeconds=challengeSeconds,poisonMaximum=poisonMaximum,burstSeconds=burstDuration,breakSeconds=breakDuration};next=EntryPlan(director.Next());for(int i=0;i<4;i++){streams[i].gameObject.SetActive(i<setup.count);if(i<setup.count)streams[i].ResetStream();brains[i]=new System.Random(seed+i*7919+31);think[i]=0;aim[i]=0;selected[i]=-1;eliminatedAt[i]=0;}Layout();for(int i=0;i<menus.viewTexts.Length;i++){var label=menus.viewTexts[i];label.rectTransform.sizeDelta=new Vector2(730,58);var backing=label.transform.parent.Find("View data backing").GetComponent<RectTransform>();backing.sizeDelta=new Vector2(750,76);}}
+  void Layout(){HumanViews=SportsCameraOptions.Select(setup,Owners);var enabled=new List<Camera>(4);for(int i=0;i<4;i++)streamCameras[i].view.enabled=false;if(HumanViews==0){Spectator=0;streamCameras[0].view.enabled=true;streamCameras[0].view.rect=new Rect(0,0,1,1);enabled.Add(streamCameras[0].view);}else for(int v=0;v<HumanViews;v++){int owner=Owners[v];streamCameras[owner].view.enabled=true;streamCameras[owner].view.rect=LWS.TruckCornhole.CornholeMatch.ViewRect(HumanViews,v);enabled.Add(streamCameras[owner].view);}cameras=enabled.ToArray();spectated=-1;}
+  protected override void Simulate(float dt){if(Countdown>0){Countdown=Mathf.Max(0,Countdown-dt);return;}Clock+=dt;events.Clear();while(next.Spawn<=Clock+9){upcoming.Add(next);next=EntryPlan(director.Next());if(upcoming.Count>64)throw new InvalidOperationException("Fishing director density exceeded its bounded warning queue");}for(int n=upcoming.Count-1;n>=0;n--)if(upcoming[n].Spawn<=Clock){var plan=upcoming[n];for(int i=0;i<setup.count;i++)if(rules.alive[i])streams[i].Spawn(plan);ScheduleCount++;upcoming.RemoveAt(n);}for(int i=0;i<setup.count;i++){if(!rules.alive[i])continue;float input=setup.players[i].source==BowlingSource.AI?AI(i):commands[i].x;bool blocked=streams[i].clearing.Active;streams[i].clearing.Tick(input,dt,setup.players[i].source==BowlingSource.AI,(int)setup.players[i].difficulty);if(blocked)streams[i].StopNet();else streams[i].MoveNet(input,dt);streams[i].Advance(Clock,dt,this);if(streams[i].Overflowed)throw new InvalidOperationException("Fishing model pool unexpectedly full");}
+- events.Sort((a,b)=>{int value=a.fraction.CompareTo(b.fraction);if(value!=0)return value;if(a.plan.kind==FishKind.Poison&&b.plan.kind!=FishKind.Poison)return -1;if(b.plan.kind==FishKind.Poison&&a.plan.kind!=FishKind.Poison)return 1;value=a.plan.id.CompareTo(b.plan.id);return value!=0?value:a.slot.CompareTo(b.slot);});foreach(var e in events){int missed=rules.missed[e.slot];bool was=rules.alive[e.slot];bool blocked=streams[e.slot].clearing.Active;if(!rules.Resolve(e.slot,e.plan.id,blocked?FishKind.Debris:e.plan.kind,e.caught))continue;if(blocked)continue;if(e.plan.kind==FishKind.Debris){if(e.caught){streams[e.slot].clearing.Begin(e.plan.id);streams[e.slot].CatchEffect();feedback.Play(2,0,true);}continue;}if(e.caught){streams[e.slot].CatchEffect();feedback.Play(e.plan.kind==FishKind.Small?0:e.plan.kind==FishKind.Large?1:3,0,true);Pulse(e.slot,.15f,.06f);}else if(e.plan.kind!=FishKind.Poison)feedback.Play(2,0,true);if(missed<15&&rules.missed[e.slot]>=15)feedback.Play(4,0,true);if(was&&!rules.alive[e.slot]){eliminatedAt[e.slot]=(float)Clock;streams[e.slot].HideFish();feedback.Play(3,0,true);}}
++ events.Sort((a,b)=>{int value=a.fraction.CompareTo(b.fraction);if(value!=0)return value;if(a.plan.kind==FishKind.Poison&&b.plan.kind!=FishKind.Poison)return -1;if(b.plan.kind==FishKind.Poison&&a.plan.kind!=FishKind.Poison)return 1;value=a.plan.id.CompareTo(b.plan.id);return value!=0?value:a.slot.CompareTo(b.slot);});foreach(var e in events){int caughtBefore=rules.caught[e.slot];int missed=rules.missed[e.slot];bool was=rules.alive[e.slot];bool blocked=streams[e.slot].clearing.Active;if(!rules.Resolve(e.slot,e.plan.id,blocked?FishKind.Debris:e.plan.kind,e.caught))continue;if(blocked)continue;int earned=rules.caught[e.slot]-caughtBefore;if(earned>0)ConfirmScore("catch:"+e.slot+":"+e.plan.id,e.slot,earned,rules.caught[e.slot],e.plan.kind==FishKind.Large?"BIG CATCH":"FISH CAUGHT",e.plan.kind==FishKind.Large?SportsScoreTier.Major:SportsScoreTier.Small,"LB");if(e.plan.kind==FishKind.Debris){if(e.caught){streams[e.slot].clearing.Begin(e.plan.id);streams[e.slot].CatchEffect();feedback.Play(2,0,true);}continue;}if(e.caught){streams[e.slot].CatchEffect();feedback.Play(e.plan.kind==FishKind.Small?0:e.plan.kind==FishKind.Large?1:3,0,true);Pulse(e.slot,.15f,.06f);}else if(e.plan.kind!=FishKind.Poison)feedback.Play(2,0,true);if(missed<15&&rules.missed[e.slot]>=15)feedback.Play(4,0,true);if(was&&!rules.alive[e.slot]){eliminatedAt[e.slot]=(float)Clock;streams[e.slot].HideFish();feedback.Play(3,0,true);}}
+  rules.FinishStep();if(rules.Complete){if(setup.count>1&&rules.Winner>=0)feedback.Play(5,0,true);if(setup.count==1){float survival=(float)Clock;if(survival>SportsPrefs.GetFloat("TruckFishing.SurvivalPB",0))SportsPrefs.SetFloat("TruckFishing.SurvivalPB",survival);if(rules.caught[0]>SportsPrefs.GetInt("TruckFishing.CaughtPB",0))SportsPrefs.SetInt("TruckFishing.CaughtPB",rules.caught[0]);SportsPrefs.Save();}EndMatch();}}
+  FishPlan EntryPlan(FishPlan p){p.entryLead=EntryLeadSeconds;p.arrival+=p.entryLead;if(p.id>8&&p.id%13==0&&p.kind!=FishKind.Poison)p.kind=FishKind.Debris;return p;}
+  public void Queue(int slot,FishPlan plan,bool caught,float fraction){events.Add(new CatchEvent{slot=slot,plan=plan,caught=caught,fraction=fraction});}
+--- before/Assets/TruckFishing/Scripts/FishingProbe.cs
++++ after/Assets/TruckFishing/Scripts/FishingProbe.cs
+@@ -7,10 +7,22 @@
+  run|=UnityEditor.SessionState.GetBool("LWS.FishingProbe",false);UnityEditor.SessionState.SetBool("LWS.FishingProbe",false);
+ #endif
+  if(run){var g=new GameObject("Fishing complete seeded four-AI survival acceptance");DontDestroyOnLoad(g);if(FindAnyObjectByType<SportsProbeInputIsolation>()==null)g.AddComponent<SportsProbeInputIsolation>();g.AddComponent<FishingProbe>();}}
+- FishingMatch m;string folder;int errors;readonly StringBuilder report=new StringBuilder();void Check(bool ok,string label){report.AppendLine((ok?"PASS ":"FAIL ")+label);if(!ok)errors++;File.WriteAllText(folder+"/progress.txt",report.ToString());}void Error(string s,string stack,LogType type){if(type==LogType.Error||type==LogType.Exception){errors++;report.AppendLine("ERROR "+s);}}
+- IEnumerator Start(){folder=SportsEvidencePaths.Folder("FishingEvidence");File.WriteAllText(folder+"/result.txt","RUNNING "+DateTime.UtcNow.ToString("O"));Application.logMessageReceived+=Error;yield return SportsProbeScene.Ensure<FishingMatch>("TruckFishing");m=FindAnyObjectByType<FishingMatch>();yield return null;for(int difficulty=0;difficulty<3;difficulty++){m.SetupScreen();m.setup.count=4;m.NormalizeSetup();m.AllBots();m.seed=17381+difficulty*8011;for(int i=0;i<4;i++)m.setup.players[i].difficulty=(BowlingDifficulty)difficulty;Check(m.StartMatch()&&m.HumanViews==0&&m.cameras.Length==1,"four AI streams start without controllers difficulty="+difficulty);var parked=Array.ConvertAll(m.streams,s=>s.truck.body.position);Time.timeScale=10;float until=Time.realtimeSinceStartup+240,next=0;bool paused=false;while(!m.Finished&&Time.realtimeSinceStartup<until){if(!paused&&m.Clock>10){paused=true;m.Pause();var net=m.streams[0].NetX;double clock=m.Clock;int weight=m.rules.caught[0];yield return new WaitForSecondsRealtime(.15f);Check(m.Paused&&m.Clock==clock&&m.rules.caught[0]==weight&&m.streams[0].NetX==net,"pause preserves fish clock, net and score difficulty="+difficulty);m.Resume();Time.timeScale=10;}if(Time.realtimeSinceStartup>=next){File.WriteAllText(folder+"/progress.txt",report+"LIVE difficulty="+difficulty+" time="+m.Clock+" caught="+string.Join(",",m.rules.caught)+" missed="+string.Join(",",m.rules.missed)+" remaining="+m.rules.Remaining+" schedule="+m.ScheduleCount+" errors="+errors);next=Time.realtimeSinceStartup+2;}yield return null;}if(m.Finished)yield return SportsResultsAcceptance.Capture(m,Check,folder,m.ResultPlace,slot=>(double?)m.rules.caught[slot],slot=>m.rules.Winner==slot);
+- Check(m.Finished&&m.rules.Complete&&m.rules.Remaining<=1,"complete actual seeded survival match difficulty="+difficulty);for(int i=0;i<4;i++){Check(m.streams[i].MaximumTravel>3&&m.rules.caught[i]>0,"same bounded AI net physically moves and catches generated fish slot="+i+" difficulty="+difficulty);Check(m.streams[i].truck.body.position==parked[i],"truck remains stationary while net moves slot="+i);Check(!m.streams[i].Overflowed,"bounded actor pool never drops fish slot="+i);}report.AppendLine("MATCH difficulty="+difficulty+" time="+m.Clock+" winner="+m.rules.Winner+" caught="+string.Join(",",m.rules.caught)+" missed="+string.Join(",",m.rules.missed)+" reasons="+string.Join(",",m.rules.reason));}Check(FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length==1,"one spectator/split-screen listener");m.SetupScreen();Check(m.StartMatch()&&m.rules.caught[0]==0&&m.Clock==0,"repeated rematch resets clock, weights, director and pools");m.SetupScreen();report.AppendLine("ERRORS="+errors+". Native fixed-step generated-fish/swept-net gameplay with autonomous AI; rule fixtures are separate. No real hardware/human playtest or GPU benchmark.");File.WriteAllText(folder+"/result.txt",report.ToString());Debug.Log("FISHING_PROBE_COMPLETE "+report);Application.logMessageReceived-=Error;Time.timeScale=1;if(!Application.isEditor)Application.Quit(errors==0?0:2);}
+- void OnDestroy(){Application.logMessageReceived-=Error;Time.timeScale=1;}
++ FishingMatch m;SportsScoreAcceptance.Tally tally;string folder;int errors;readonly StringBuilder report=new StringBuilder();void Check(bool ok,string label){report.AppendLine((ok?"PASS ":"FAIL ")+label);if(!ok)errors++;File.WriteAllText(folder+"/progress.txt",report.ToString());}void Error(string s,string stack,LogType type){if(type==LogType.Error||type==LogType.Exception){errors++;report.AppendLine("ERROR "+s);}}
++ IEnumerator Start(){folder=SportsEvidencePaths.Folder("FishingEvidence");File.WriteAllText(folder+"/result.txt","RUNNING "+DateTime.UtcNow.ToString("O"));Application.logMessageReceived+=Error;yield return SportsProbeScene.Ensure<FishingMatch>("TruckFishing");m=FindAnyObjectByType<FishingMatch>();yield return null;SportsCameraOptions.Set(false);for(int difficulty=0;difficulty<3;difficulty++){m.SetupScreen();m.setup.count=4;m.NormalizeSetup();m.AllBots();m.seed=17381+difficulty*8011;for(int i=0;i<4;i++)m.setup.players[i].difficulty=(BowlingDifficulty)difficulty;tally?.Dispose();tally=new SportsScoreAcceptance.Tally(m);bool captured=false;Check(m.StartMatch()&&m.HumanViews==0&&m.cameras.Length==1,"four AI streams start without controllers difficulty="+difficulty);var parked=Array.ConvertAll(m.streams,s=>s.truck.body.position);Time.timeScale=10;float until=Time.realtimeSinceStartup+240,next=0;bool paused=false;while(!m.Finished&&Time.realtimeSinceStartup<until){if(!captured&&m.Clock>23){yield return CaptureCatch("difficulty-"+difficulty);captured=true;}if(!paused&&m.Clock>10){paused=true;m.Pause();var net=m.streams[0].NetX;double clock=m.Clock;int weight=m.rules.caught[0];yield return new WaitForSecondsRealtime(.15f);Check(m.Paused&&m.Clock==clock&&m.rules.caught[0]==weight&&m.streams[0].NetX==net,"pause preserves fish clock, net and score difficulty="+difficulty);m.Resume();Time.timeScale=10;}if(Time.realtimeSinceStartup>=next){File.WriteAllText(folder+"/progress.txt",report+"LIVE difficulty="+difficulty+" time="+m.Clock+" caught="+string.Join(",",m.rules.caught)+" missed="+string.Join(",",m.rules.missed)+" remaining="+m.rules.Remaining+" schedule="+m.ScheduleCount+" errors="+errors);next=Time.realtimeSinceStartup+2;}yield return null;}tally.Verify(slot=>m.rules.caught[slot],Check);Check(captured,"actual owned catch feedback captured difficulty="+difficulty);if(m.Finished)yield return SportsResultsAcceptance.Capture(m,Check,folder,m.ResultPlace,slot=>(double?)m.rules.caught[slot],slot=>m.rules.Winner==slot);
++ Check(m.Finished&&m.rules.Complete&&m.rules.Remaining<=1,"complete actual seeded survival match difficulty="+difficulty);for(int i=0;i<4;i++){Check(m.streams[i].MaximumTravel>3&&m.rules.caught[i]>0,"same bounded AI net physically moves and catches generated fish slot="+i+" difficulty="+difficulty);Check(m.streams[i].truck.body.position==parked[i],"truck remains stationary while net moves slot="+i);Check(!m.streams[i].Overflowed,"bounded actor pool never drops fish slot="+i);}report.AppendLine("MATCH difficulty="+difficulty+" time="+m.Clock+" winner="+m.rules.Winner+" caught="+string.Join(",",m.rules.caught)+" missed="+string.Join(",",m.rules.missed)+" reasons="+string.Join(",",m.rules.reason));}tally.Dispose();tally=null;m.SetupScreen();SportsCameraOptions.Set(true);Check(m.StartMatch()&&m.HumanViews==4&&m.cameras.Length==4,"optional AI views use four real stream owners");Time.timeScale=4;float aiDeadline=Time.realtimeSinceStartup+35;while(m.Clock<18&&!m.Finished&&Time.realtimeSinceStartup<aiDeadline)yield return null;yield return CaptureCatch("four-AI-views");m.SetupScreen();SportsCameraOptions.Set(false);Check(FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length==1,"one spectator/split-screen listener");m.SetupScreen();Check(m.StartMatch()&&m.rules.caught[0]==0&&m.Clock==0,"repeated rematch resets clock, weights, director and pools");m.SetupScreen();report.AppendLine("ERRORS="+errors+". Native fixed-step generated-fish/swept-net gameplay with autonomous AI; rule fixtures are separate. No real hardware/human playtest or GPU benchmark.");File.WriteAllText(folder+"/result.txt",report.ToString());Debug.Log("FISHING_PROBE_COMPLETE "+report);Application.logMessageReceived-=Error;Time.timeScale=1;if(!Application.isEditor)Application.Quit(errors==0?0:2);}
++ IEnumerator CaptureCatch(string label){
++ var panels=m.menus.GetComponentsInChildren<SportsScorePresentation>(true);Check(panels.Length==4,"four saved owned Heat score panels "+label);var before=Array.ConvertAll(panels,p=>p.Presented);float scale=Time.timeScale;Time.timeScale=1;int fresh=-1;float deadline=Time.realtimeSinceStartup+28;
++ while(fresh<0&&!m.Finished&&Time.realtimeSinceStartup<deadline){yield return null;for(int i=0;i<panels.Length;i++)if(panels[i].Presented>before[i]){fresh=i;break;}}
++ Check(fresh>=0,"fresh real accepted catch reaches its viewport "+label);if(fresh<0){Time.timeScale=scale;yield break;}
++ bool enabled=m.enabled;m.enabled=false;
++ try{
++ yield return new WaitForSeconds(Michsky.UI.Heat.HeatUIInternalTools.GetAnimatorClipLength(panels[fresh].notificationAnimator,"Notification_In")+.03f);Time.timeScale=0;
++ foreach(var panel in panels){int view=panel.viewport;bool valid=m.TryReadViewportCard(view,out int owner,out _,out _);Check(valid?panel.ViewportOwner==owner:panel.visibility.alpha==0,"notification follows actual displayed owner view="+view+" "+label);if(panel.LastPresented!=null)Check(valid&&panel.LastPresented.Slot==owner&&panel.LastPresented.MatchId==m.MatchId&&panel.LastPresented.Unit=="LB","no other participant or prior-match catch shown view="+view+" "+label);}
++ Check(panels[fresh].visibility.alpha==1&&panels[fresh].notification.gameObject.activeInHierarchy,"actual owned catch is visible after the full Heat entrance "+label);
++ yield return SportsWindowCapture.Save(1280,720,folder+"/"+label+"-catch-720.png");yield return SportsWindowCapture.Save(1920,1080,folder+"/"+label+"-catch-1080.png");
++ }finally{m.enabled=enabled;Time.timeScale=scale;}
++ }
++ void OnDestroy(){tally?.Dispose();Application.logMessageReceived-=Error;Time.timeScale=1;}
+ #endif
+ }
+ }

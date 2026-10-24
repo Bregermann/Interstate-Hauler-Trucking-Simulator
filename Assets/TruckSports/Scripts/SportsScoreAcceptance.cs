@@ -16,9 +16,10 @@ namespace LWS.TruckSports
         {
             readonly SportsEventSession match;
             readonly double[] totals = new double[2];
+            readonly Func<int,string> teamName;
             readonly HashSet<string> ids = new HashSet<string>();
             string matchId; int count, invalid;
-            public TeamTally(SportsEventSession owner) { match = owner; match.ScoreConfirmed += Record; }
+            public TeamTally(SportsEventSession owner, Func<int,string> expectedTeamName = null) { match = owner; teamName = expectedTeamName; match.ScoreConfirmed += Record; }
             void CurrentMatch()
             {
                 if (matchId == match.MatchId) return;
@@ -29,7 +30,7 @@ namespace LWS.TruckSports
                 CurrentMatch(); count++;
                 int team = receipt.TeamId == "blue" ? 0 : receipt.TeamId == "orange" ? 1 : -1;
                 if (receipt.Kind != SportsScoreKind.Points || receipt.MatchId != matchId || !ids.Add(receipt.EventId) || !receipt.IsTeam || receipt.Slot != -1 || receipt.ParticipantId != null || team < 0) { invalid++; return; }
-                if (receipt.RecipientId != "team:" + receipt.TeamId || receipt.DisplayName != (team == 0 ? "BLUE TEAM" : "ORANGE TEAM")) invalid++;
+                if (receipt.RecipientId != "team:" + receipt.TeamId || receipt.DisplayName != (teamName != null ? teamName(team) : team == 0 ? "BLUE TEAM" : "ORANGE TEAM")) invalid++;
                 totals[team] += receipt.Delta;
                 if (Math.Abs(totals[team] - receipt.Total) > .001) invalid++;
             }
@@ -114,6 +115,36 @@ namespace LWS.TruckSports
             check(receipt.MatchId == match.MatchId && receipt.Slot >= 0 && receipt.Slot < match.setup.count && receipt.ParticipantId == ((ISportsParticipantSlot)match.setup.players[receipt.Slot]).ParticipantId, "last actual award retains the match and stable participant identity");
         }
 
+        public static IEnumerator CaptureViewportAward(SportsEventSession match, Action<bool, string> check, string folder)
+        {
+            var panels = match.menus.GetComponentsInChildren<SportsScorePresentation>(true);
+            check(panels.Length == 4 && panels.All(p => p.viewport >= 0), "four saved participant-owned Heat notifications");
+            var before = panels.Select(p => p.Presented).ToArray();
+            float scale = Time.timeScale; Time.timeScale = 1;
+            try
+            {
+                int fresh = -1; float deadline = Time.realtimeSinceStartup + 40;
+                while (fresh < 0 && !match.Finished && Time.realtimeSinceStartup < deadline)
+                {
+                    yield return null;
+                    for (int i = 0; i < panels.Length; i++) if (panels[i].Presented > before[i]) { fresh = i; break; }
+                }
+                check(fresh >= 0, "a fresh original score reaches its actual displayed participant");
+                if (fresh < 0) yield break;
+                yield return new WaitForSeconds(HeatUIInternalTools.GetAnimatorClipLength(panels[fresh].notificationAnimator, "Notification_In") + .03f);
+                Time.timeScale = 0;
+                foreach (var panel in panels)
+                {
+                    bool valid = match.TryReadViewportCard(panel.viewport, out int owner, out _, out _);
+                    check(valid ? panel.ViewportOwner == owner : panel.visibility.alpha == 0, "notification follows actual displayed course owner view=" + panel.viewport);
+                    if (panel.LastPresented != null) check(valid && panel.LastPresented.Slot == owner && panel.LastPresented.MatchId == match.MatchId, "no previous driver or other lane score leaks into view=" + panel.viewport);
+                }
+                check(panels[fresh].visibility.alpha == 1 && panels[fresh].notification.gameObject.activeInHierarchy, "actual owned award is visible after its authored Heat entrance");
+                yield return SportsWindowCapture.Save(1280, 720, folder + "/confirmed-award-720.png");
+                yield return SportsWindowCapture.Save(1920, 1080, folder + "/confirmed-award-1080.png");
+            }
+            finally { Time.timeScale = scale; }
+        }
         public static IEnumerator CaptureAward(SportsEventSession match, Action<bool, string> check, string folder)
         {
             var presenter = match.menus.GetComponentsInChildren<SportsScorePresentation>(true).SingleOrDefault();

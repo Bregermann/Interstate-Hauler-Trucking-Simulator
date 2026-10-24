@@ -6,6 +6,8 @@ Statuses: MISSING; PARTIAL; IMPLEMENTED / UNVERIFIED; VERIFIED COMPLETE; BLOCKED
 
 ## Active work
 
+October24 delivery update: the exact human-approved142-file Parking/weather/results candidate6b715100 is public on both requested branches; privatec9fb0b64 preserves local history. The prior ledger freeze is resolved. Later score-feedback milestones and observed follow-ups are recorded below with their actual automated/human status; Q22-SKY remains unfinished, followed by complete0.6 then0.7.
+
 October21 repair implementation milestones are delivered through f5ceb372. Unreproduced Fare immobility and Hockey goal observations remain explicitly open; human/device/listening/performance acceptance has not been inferred. The protected Bowling/Poker/Cheese/Terrier/Fare Fight mechanics and deferred Tug of War decision remain in force. Source directives: Requests/2026-10-21-GlobalBroadcastCamera.md and Requests/2026-10-21-HumanPlaytestRepair.md.
 
 October22 active work: Q22-SKY (global sky/time/scoring/results), then Q22-CARNIVAL (Carnival of Chaos). Both full attachments are archived verbatim in Requests and linked below. Existing Fishing and other delivered repairs are preserved; no unrelated historical re-audit is required. Carnival's explicit protected-scene exceptions and newer rules supersede conflicts when that queued pass begins.
@@ -8122,33 +8124,33 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Human Verification | Not performed; this is automated visual inspection of labeled synthetic final values. |
 | Remaining Work | This narrow automated results/neutral-label acceptance passed on exact995599b8:294Windows checks/0errors across all8original workloads; all28fresh actual720p/1080p frames inspected. Canonical549-file60-scene build promoted with priorceab backup. Native98models preceded the isolated neutral-label correction; final3rendered tests/24controlled images passed afterward. Human/device/listening/isolated profiling/soak acceptance is unperformed. Observed grammar remains separately open as Q22-SKY-RESULT-COPY-01; newly reported first-trailer hitch failure is SNK-HITCH-01 and is not repaired by these read-only result boards. See2026-10-24-Round-Results.md; scoped publication is a separate recorded step. ParentQ22/0.6/0.7 remain incomplete. |
 
-### Q22-SKY-RESULT-COPY-01 — Result-count wording
+### Q22-SKY-RESULT-COPY-01 — Shared result metric units
 
 | Field | Record |
-| --- | --- |
+|---|---|
 | Requirement ID | Q22-SKY-RESULT-COPY-01 |
-| Sport/System | Dance-Off, Demolition Derby, Fare Fight and Snake results copy |
-| Original Request | Polished accurate game-specific results under Q22-SKY. Actual Windows inspection exposes 1 SONGS, 1 WINS, 1 DRAWS and 1 FARES wording; the October24 hitch smoke capture additionally shows 1 JUMPS on the existing Snake results board. |
-| Acceptance Criteria | Singular and plural counts have correct, readable labels while retaining original round counts, wins, draws, cumulative points and final-song judgments. |
-| Status | VERIFIED COMPLETE |
-| Implementation Evidence | Active SportsRoundLegacyResults Count formatter and optional per-row unit fix singular/plural copy without changing score values, ranks or ownership. Extended existing LegacyRoundResultsLifecycleTests to14configurations. See 2026-10-24-Parking-Weather-Result-Copy.md. |
-| Automated Verification | Native14explicitly synthetic result configurations passed; all28result frames individually inspected including1SONG/1WIN/1DRAW/1FARE and0/1/plural Snake jumps. Exact f9f023f6 Windows Dance32/0, Snake37/0 and Parking48/0 retain actual completed outcomes; allrelevantfresh frames inspected. Derby/Fare singular final values are controlled native fixtures, not new physical Windows matches. |
+| Sport/System | Shared result metric units |
+| Original Request | Correct polished result-count wording. Prior stats corrections remain; subsequent actual Dodge/Log result images show1TEAMWINS/1WINS. |
+| Acceptance Criteria | Known count units render singular at one in both initial model value and animated saved board; raw Unit/Measurement/IDs/places remain unchanged; unknown/measurement units preserved. |
+| Status | PARTIAL |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Result-Metrics-Forecast-Caption.md |
+| Automated Verification | Before-fix failures retained; final2native/27Edit passes; exactWindows105checks0errors;8native+12actualWindows+5controlledWindows images inspected; exact405-source build promoted. Subsequent actual Windows Mattress result frames show an uncorrected hardcoded1RACEWINSstat phrase; the general known-count-unit formatter remains verified. |
 | Human Verification | Not performed. |
-| Remaining Work | Narrow automated acceptance passed; canonical549-file60-scene Windows build promoted with full priorc597 backup. Human/physical-device/listening/isolated profiling/soak acceptance is unperformed. Scoped publication is separately recorded. ParentQ22/Carnival0.6/Impossible0.7 remain incomplete. |
+| Remaining Work | Correct the Mattress single-race victory statistic to RACE WIN, then inspect its actual result board. Earlier known-count-unit corrections remain. No human/device/listening acceptance. Source/evidence publication for these later milestones remains pending. |
 
-### Q22-SKY-SCORE-COLLECT-01 — Physical cup, delivery and trailer-pickup celebrations
+### Q22-SKY-SCORE-COLLECT-01 — Beer Pong, Fare Fight and Truck Snake / existing shared score presentation
 
 | Field | Record |
-| --- | --- |
+|---|---|
 | Requirement ID | Q22-SKY-SCORE-COLLECT-01 |
 | Sport/System | Beer Pong, Fare Fight and Truck Snake / existing shared score presentation |
 | Original Request | Q22-SKY: celebrate actual meaningful points with participant/team identity, readable animation and no duplicate or invented points. |
 | Acceptance Criteria | Original physical cup claims report the correct team or solo-practice recipient; actual atomically resolved deliveries credit their true scorer, including the final delivery; actual trailer pickups report the original committed point delta. Heat/DOTween notifications stay readable at720p/1080p, preserve rules and clear on rematch. |
-| Status | MISSING |
-| Implementation Evidence | Prepared only under Logs/TruckSports/PlaytestRepair/PreparedPickupDeliveryScores: four insertion-only source drafts reuse existing ConfirmScore/ConfirmTeamScore, SportsScoreJournal and additive Heat notification authoring. Original scoring statements retained by reverse-edit proof. No active source, scene or build changes. |
-| Automated Verification | Standalone API compilation passed for four drafts and the three-method/four-scenario native fixture. Initial temporary-assembly type-identity compilation failure retained; compiling the two unchanged strongly typed collaborators resolves that preparation issue. No Unity import, actual contact, rendered or Windows acceptance yet. |
-| Human Verification | Not performed. |
-| Remaining Work | Activate after the current results delivery and Parking integration; author three saved scene bindings, run actual-contact/lifecycle and original full-match checks, inspect native/Windows output and publish scoped changes. Other continuous awards and remaining registered sports stay separately open under Q22-SKY-SCORE-01. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Pickup-Delivery-Score-Feedback.md |
+| Automated Verification | 51EditModePASS; final4PlayModePASS; actual Windows Pong42/Fare39/Snake43=124checks0errors; all22fresh actual and10controlled captures individually inspected. Full exact code+asset payload ff658bcb promoted. |
+| Human Verification | Not performed; no physical device, listening or isolated performance acceptance. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
 
 ### SNK-HITCH-01 — Keep the first trailer connected to the tractor
 
@@ -8163,3 +8165,245 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Automated Verification | Native CLEAN32628 reproduced4of4 unchanged-runtime geometry failures (37.78s): straight3.157887m,90-degree turn4.772202m,180-degree turn4.771467m,airborne turn5.461702m. Same cases passed in CLEAN30280 (43.93s), including unchanged index1–3 path poses. Author28496exit0/33.37s: four saved convoy documents gain only two measured bindings each, plus four existing-prefab transform references; all16578original documents/world/physics/results UI retained. Actual lifecycle32416exit2/58.52s and Clear/Day diagnostic30028exit2/56.25s both retain the unmet20ft action prerequisite. Diagnostic run physically drove160m/collected7trailers;2705actual late-frame first-hitch samples had maximum0.000136479m separation, but PhysicalJumps stayed0. These are not full lifecycle passes. Initial source/XML/logs and diagnostic source/XML/logs retained separately. Additional fresh-driver13080exit2/52.82s and route-diagnostic31572exit2/56.32s exposed Editor input resetting between injected events. Temporary cloned InputSettings with both IgnoreFocus and AllDeviceInputAlwaysGoesToGameView resolves the fixture routing without changing project input settings or runtime controls. CLEAN32776exit0/108.88s:1 lifecycle test passed across all four participant counts, actual NWH driving, assigned-keyboard jumps, steering, pauses and rematches. Maximum rendered kingpin gap0.0001726335m; lowest-truck clearances9.6165–9.6242m (20ft criterion retained). All8controlled720p/1080p frames personally inspected and retained. Exact Windows c5976166/d9bccf32 passed both unchanged original workloads: smoke32480exit0/52.45s/37checks0errors and fifty11156exit0/45.45s/11checks0errors. Convoy reached58attached trailers, drove over1km and cleared actual lowest-truck9.648955m/eleventh-trailer9.561103m with the delayed jump; rematch/menu cleanup passed. All7fresh actual720p/1080p captures individually inspected. BuildFocused920exit0/246.94s:60scenes,0BuildReporterrors90warnings; known Unsafe.dll import diagnostic retained. Canonical549files promoted after acceptance; whole previous995599payload retained in Recovery/AcceptedBuildBeforeCamera-20261024-023913. Six complete original rules/match/path/AI/smoke/convoy-probe sources equal public4511. |
 | Human Verification | Original October24 screenshot FAILED and was reproduced. The repair now passes automated native and target-Windows acceptance; no new human playtest or physical-controller acceptance has been performed. |
 | Remaining Work | No observed failure remains in this narrow automated hitch acceptance. Four native geometry cases, actual1–4 lifecycle driving/jump/turn/pause/rematch,48originalWindows checks,8controlled and7actual inspected images passed on the delivered candidate. Human/controller/listening/isolated long-convoy profiling remains unperformed; the straight-road gold-gate fixture is explicitly separate from autonomous navigation. Scoped Git publication is recorded separately. ParentQ22/0.6/0.7 remain incomplete. |
+
+## October24 scoring continuation and scoped delivery
+
+Only the explicitly implemented active Q22 milestones and directly observed follow-ups are reconciled here. Archived backlogs are not reopened. Historical reports retain their original publication/verification state; PUB-20261024-PARKING-01 records the resolved approval gate. Newer source/evidence publication remains separate.
+
+### Q22-SKY-SCORE-AIR-01 — Dock Diving and Giant Swing
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-AIR-01 |
+| Sport/System | Dock Diving and Giant Swing |
+| Original Request | Q22-SKY: meaningful physical jump/landing feedback identifies the participant and actual earned result, preserving established scoring. |
+| Acceptance Criteria | Valid Dock jumps publish exact original measured feet as non-score outcomes with zero point delta/total; fouls publish none. Swing publishes original positive first-contact zone points once. Unique global lock IDs survive tiebreaks; actual Heat bindings and rematches work. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Air-Attempt-Score-Feedback.md |
+| Automated Verification | 2initialphysical+2finaltypednative/5EditPASS; initial4bad-cardimages retained/superseded; exactWindows108checks0errors;8controllednative+11actualWindows images inspected; exact408-source payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-AIR-CARD-01 — Dock Diving and Giant Swing participant HUD
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-AIR-CARD-01 |
+| Sport/System | Dock Diving and Giant Swing participant HUD |
+| Original Request | Q22-SKY: correct participant scores/attribution. Actual native captures with duplicate names repeat the first Dock best and all-zero Swing cards after a real100pointlanding. |
+| Acceptance Criteria | Actual card slot reads original best/points/attempts directly, without name parsing; names may match; original values remain unchanged; detail fits720/1080. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Air-Attempt-Score-Feedback.md |
+| Automated Verification | 2initialphysical+2finaltypednative/5EditPASS; initial4bad-cardimages retained/superseded; exactWindows108checks0errors;8controllednative+11actualWindows images inspected; exact408-source payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-BOG-FORECAST-CAPTION-01 — Bog Snorkelling weather caption
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-BOG-FORECAST-CAPTION-01 |
+| Sport/System | Bog Snorkelling weather caption |
+| Original Request | Q22-SKY weather presentation must match actual selected shared preset. Current Header still reads legacy choice while Configure resolves the preset registry. |
+| Acceptance Criteria | Active saved header matches actual configured installed profile name for differing legacy choices, with unchanged preset/physics/time authority. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Result-Metrics-Forecast-Caption.md |
+| Automated Verification | Before-fix failures retained; final2native/27Edit passes; exactWindows105checks0errors;8native+12actualWindows+5controlledWindows images inspected; exact405-source build promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-DODGE-CAPTION-01 — Trampoline Dodgeball HUD readability
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-DODGE-CAPTION-01 |
+| Sport/System | Trampoline Dodgeball HUD readability |
+| Original Request | Q22-SKY readable game-specific score presentation; actual cargo acceptance revealed Orange cooldown text ellipsis. |
+| Acceptance Criteria | Correct actual-slot team/win/state retained; short cooldown and ready captions fit the unchanged participant card at720p/1080p. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Water-Contest-Score-Feedback.md |
+| Automated Verification | Native2initial+1Dodge+2finaltyped and5Edit passes; exact Windows149checks0errors; all18backbuffers+5controlled Windows+10controlled native images inspected, initial4bad-card views explicitly superseded; exact403-scoped-source60-scene payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-DODGE-CARD-01 — Trampoline Dodgeball participant HUD
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-DODGE-CARD-01 |
+| Sport/System | Trampoline Dodgeball participant HUD |
+| Original Request | Correct shared score presentation and stable participant identities, including duplicate display names. |
+| Acceptance Criteria | Each actual slot shows its own authoritative team, team wins and elimination/cooldown state even when display names duplicate. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Cargo-Possession-Score-Feedback.md |
+| Automated Verification | Native4initial+1typed-card and5Edit passes; exact Windows129checks0errors; all20actual backbuffers+4controlled Windows+10controlled native images individually inspected, pre-fix card views explicitly superseded;548-file60-scene401-scoped-source payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-CARGO-01 — Buzkashi / Trampoline Dodgeball / Keepaway arena and cab
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-CARGO-01 |
+| Sport/System | Buzkashi / Trampoline Dodgeball / Keepaway arena and cab |
+| Original Request | Q22-SKY meaningful confirmed animated score and objective feedback, preserving original sport rules and identities. |
+| Acceptance Criteria | Actual whole-cargo deliveries credit the real configured team; real Dodgeball round wins credit only their team; meaningful cumulative possession milestones show original seconds rather than inventing points. Both Keepaway variants preserve original ownership/physics; saved Heat bindings, stable IDs, reset/rematch and rendered/native/Windows evidence required. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Cargo-Possession-Score-Feedback.md |
+| Automated Verification | Native4initial+1typed-card and5Edit passes; exact Windows129checks0errors; all20actual backbuffers+4controlled Windows+10controlled native images individually inspected, pre-fix card views explicitly superseded;548-file60-scene401-scoped-source payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-FISH-01 — Fishing / shared optional viewport score presentation
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-FISH-01 |
+| Sport/System | Fishing / shared optional viewport score presentation |
+| Original Request | Q22-SKY: successful catch feedback, actual fish weight awarded, high-value catch celebration with correct local participant ownership. |
+| Acceptance Criteria | Original accepted small/large catch emits exactly actual 1/5 LB once. Each displayed view shows only its actual participant, including AI-only spectator changes and optional AI views; original net/QTE/catch rules and rich HUD remain. Feedback stays inside viewport, resets without stale owner receipts; old global score presentation remains valid. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Fishing-Owned-Catch-Feedback.md |
+| Automated Verification | Actual7-layout native1/1; globalphysical2/2; Edit5/5; exactWindows131/0;18controllednative+10actualWindows images individually inspected;409-source build byteverified. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-RACE-END-01 — Minefield, Mattress Racing and Terrier Racing
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-RACE-END-01 |
+| Sport/System | Minefield, Mattress Racing and Terrier Racing |
+| Original Request | Q22-SKY: meaningful actual scoring celebrations, correct identities/values and readable results without replacing established sport mechanics. |
+| Acceptance Criteria | Minefield emits the actual +1 for every original tied farthest-rest leader once per heat, or the original driven-mile finish as a non-score SEC outcome. Mattress emits exact original placement-total differences for successful finishers only. Terrier emits the original legal heat winner +1 win only. Shared saved Heat notification presents end-of-race awards during the existing broadcast replay/results, retaining racing input/cameras, original rules and scene objects. Rematch clears old feedback; duplicate display names never merge identities. |
+| Status | IMPLEMENTED / UNVERIFIED |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Race-End-Score-Feedback.md |
+| Automated Verification | Final3physical native, two targeted Mattress physical/UI passes and five+five existing contracts. Initial fixture2PASS/1FAIL preserved.10controlled native images individually inspected,4rejected/superseded. Exact Windows119/0;12actual+2controlled Windows images individually inspected; exact412-source payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | Narrow exercised automated score/UI acceptance passed. Unexercised driven-mile/tied-physical-landings branches and broaderQ22/0.6/0.7 remain explicit; no human/device/listening/isolated-profile claim. Prior142approval fulfilled/public6b715100; ledger reconciliation and separate scoped publication follow. Existing Minefield distance-label/replay framing and Mattress1RACEWINSstat-copy observations remain open. Actual exactly tied/instant-mile branches are unverified in these runs. |
+
+### Q22-SKY-SCORE-MATTRESS-CARD-01 — Mattress Racing broadcast scorecards
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-MATTRESS-CARD-01 |
+| Sport/System | Mattress Racing broadcast scorecards |
+| Original Request | Q22-SKY requires correctly attributed actual score presentation; duplicate-name human requirement remains preserved. |
+| Acceptance Criteria | Each broadcast card reads its original per-slot series total and rank/progress independently of display-name text parsing. Duplicate names may not copy the first participant score across every card. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Race-End-Score-Feedback.md |
+| Automated Verification | Final3physical native, two targeted Mattress physical/UI passes and five+five existing contracts. Initial fixture2PASS/1FAIL preserved.10controlled native images individually inspected,4rejected/superseded. Exact Windows119/0;12actual+2controlled Windows images individually inspected; exact412-source payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | Narrow exercised automated score/UI acceptance passed. Unexercised driven-mile/tied-physical-landings branches and broaderQ22/0.6/0.7 remain explicit; no human/device/listening/isolated-profile claim. Prior142approval fulfilled/public6b715100; ledger reconciliation and separate scoped publication follow. Existing Minefield distance-label/replay framing and Mattress1RACEWINSstat-copy observations remain open. Actual exactly tied/instant-mile branches are unverified in these runs. |
+
+### Q22-SKY-SCORE-RING-KICK-01 — Skee-Ball and Field Goal
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-RING-KICK-01 |
+| Sport/System | Skee-Ball and Field Goal |
+| Original Request | Q22-SKY: actual meaningful score celebrations identify the correct participant and earned value, preserving sport-specific physics, score authority, camera and established presentation. |
+| Acceptance Criteria | Original accepted Skee opening award emits its10..100points once per participant/delivery; misses emit none. Owned viewport follows the actual course owner through simultaneous and hot-seat play without hiding the existing four-line controls/aftertouch HUD. Field Goal emits only the original+1goodkick after original rule lock, unique through practice/extra attempts, retaining physical truck-football contact, stadium board, crowd, holder, replay and original rules. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Ring-Kick-Score-Feedback.md |
+| Automated Verification | Initial3nativephysical/5Edit; Fieldposition1native/5finalEditPASS. Initial2Fieldoverlapsrejected/superseded. ExactWindows234/0;8controllednative+32actualWindows+1controlledWindows images individually reviewed;411-source payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-HOLD-01 — Shared confirmed-score notification
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-HOLD-01 |
+| Sport/System | Shared confirmed-score notification |
+| Original Request | Q22-SKY requires readable animated feedback for every meaningful actual award. |
+| Acceptance Criteria | Preserve the installed Heat In/Out clips and actual receipt order; Small/Major/winner awards remain readable for0.85/1.35/2seconds after In finishes, clear on reset and never create gameplay points. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Pickup-Delivery-Score-Feedback.md |
+| Automated Verification | 51EditModePASS; final4PlayModePASS; actual Windows Pong42/Fare39/Snake43=124checks0errors; all22fresh actual and10controlled captures individually inspected. Full exact code+asset payload ff658bcb promoted. |
+| Human Verification | Not performed; no physical device, listening or isolated performance acceptance. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-STRUCTURE-01 — Bungee Demolition / Curling / Demolition Derby
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-STRUCTURE-01 |
+| Sport/System | Bungee Demolition / Curling / Demolition Derby |
+| Original Request | Q22-SKY confirmed animated feedback from actual scoring authorities, preserving established rules. |
+| Acceptance Criteria | One actual module-collapse receipt, team end receipt only for scored nonblank ends, one surviving heat-winner receipt; correct original totals, identities, locks, readable saved Heat presentation and rematch cleanup. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Structural-End-Score-Feedback.md |
+| Automated Verification | Native3PASS, Edit7PASS; exact Windows199checks0errors; all32backbuffers+9camera-only+6controlled captures individually inspected; exact549-file60-scene400-scoped-source payload promoted. Focused38checks includes software ownership/reconnect and60second four-camera raw telemetry, not hardware or split award-HUD visual acceptance. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-STUNT-01 — Limbo, Sky Tow, Trailer Plug
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-STUNT-01 |
+| Sport/System | Limbo, Sky Tow, Trailer Plug |
+| Original Request | Q22-SKY: every meaningful original award gets readable participant-colored feedback without changing rules or physics. |
+| Acceptance Criteria | Actual accepted bar, physical ring passage and banked trailer-drop deltas publish once with original total/stable participant; misses or provisional repeated contacts never create extra awards; existing Heat saved bindings and rematches work. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Stunt-Score-Feedback.md |
+| Automated Verification | 3actualnative/5EditPASS; initialLimbo54checks1fixturefailure retained, correctedtarget only; finalexactWindows133checks0errors;6controllednative+12actualWindows+9controlledWindows images inspected; exact406-source candidate promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-WATER-CARD-01 — Bog Snorkelling / Log Rolling participant HUD
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-WATER-CARD-01 |
+| Sport/System | Bog Snorkelling / Log Rolling participant HUD |
+| Original Request | Q22-SKY correct participant scoring/identity and readable UI. Actual initial native captures showed all duplicate-name cards reusing the first slot. |
+| Acceptance Criteria | Each actual slot shows its own authoritative points/wins and game status, independent of display names; rendered TMP agrees and fits. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Water-Contest-Score-Feedback.md |
+| Automated Verification | Native2initial+1Dodge+2finaltyped and5Edit passes; exact Windows149checks0errors; all18backbuffers+5controlled Windows+10controlled native images inspected, initial4bad-card views explicitly superseded; exact403-scoped-source60-scene payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### Q22-SKY-SCORE-WATER-01 — Bog Snorkelling / Log Rolling
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-SCORE-WATER-01 |
+| Sport/System | Bog Snorkelling / Log Rolling |
+| Original Request | Q22-SKY confirmed meaningful award presentation using actual existing scoring and identities. |
+| Acceptance Criteria | Bog publishes each actual locked placement delta and total, no DNF points; Log publishes only original survivor heat wins. Saved Heat bindings and actual gameplay/native/Windows/reset evidence. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Documentation/TruckSports/2026-10-24-Water-Contest-Score-Feedback.md |
+| Automated Verification | Native2initial+1Dodge+2finaltyped and5Edit passes; exact Windows149checks0errors; all18backbuffers+5controlled Windows+10controlled native images inspected, initial4bad-card views explicitly superseded; exact403-scoped-source60-scene payload promoted. |
+| Human Verification | Not performed. |
+| Remaining Work | The prior142-file publication gate is resolved (public6b715100); this delta is now merged. This later tested source/evidence milestone still needs its own scoped publication. Original limits and exact exercised configurations remain in the linked report; no new human/device/listening/isolated-profile or extended-soak acceptance. ParentQ22-SKY/fullCarnival0.6/Impossible0.7 remain open. |
+
+### PUB-20261024-PARKING-01 — Scoped Sports Git publication
+
+| Field | Record |
+|---|---|
+| Requirement ID | PUB-20261024-PARKING-01 |
+| Sport/System | Scoped Sports Git publication |
+| Original Request | Direct human approval: Approve this exact public payload — reviewed142-file candidate6b715100, to both existing public branches. |
+| Acceptance Criteria | Publish only the exact reviewed public commit to both refs without force; retain matching local private checkpoint, unrelated work and empty index. Never push private ancestry. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Public6b71510087273b8604d7349d1afd6ffcc01dd3af on main and codex/truck-sports-seven-events; matching privatec9fb0b644ac2ccb4c1a106ad47173bd006039584. Logs/TruckSports/PlaytestRepair/parking-copy-scoped-publication.json and stale-index-lock-recovery.json. |
+| Automated Verification | Exact142working hashes, scoped commit paths/parent and925protected files verified; atomic2-refpush and remote readback pass; scoped private commit, empty index and boundary verified. Proven old0byte index.lock was preserved by exact-path move after no-writer/exclusive-open checks. |
+| Human Verification | Human explicitly approved this exact commit/payload. This is delivery approval, not gameplay/hardware acceptance. |
+| Remaining Work | None for this exact approved142-file payload. Later score-feedback milestones remain separate local work until their own scoped publication. |
+
+### Q22-SKY-MINE-CARD-READABILITY-01 — Minefield compact distance cards
+
+| Field | Record |
+|---|---|
+| Requirement ID | Q22-SKY-MINE-CARD-READABILITY-01 |
+| Sport/System | Minefield compact distance cards |
+| Original Request | Q22-SKY requires readable accurate participant scoring/HUD presentation. |
+| Acceptance Criteria | Every compact Minefield distance label and its feet/miles unit fits its actual720p/1080p card; identity/color remains correct and actual authoritative distance is preserved. |
+| Status | MISSING |
+| Implementation Evidence | Observed in actual MinefieldRaceAwardsWindows confirmed-award720p/1080p images, retained under Documentation/TruckSports/Evidence/2026-10-24-Race-End-Score-Feedback/. Existing distance labels truncate with ellipses. |
+| Automated Verification | Actual Windows full Minefield43checks/0errors accepted original scoring, not this distance-label presentation. Visual inspection reproduced clipping; no correction applied in the immutable3912133d candidate. |
+| Human Verification | Not performed; agent visual observation is recorded separately. |
+| Remaining Work | Adjust the existing read-only compact distance presentation and verify both resolutions without changing mine forces, final-rest scoring or terrain. Existing replay tree occlusion is separately recorded as a limitation in the race report. |

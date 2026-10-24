@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 14:34:19Z" end-time="2026-10-24 14:34:27Z" duration="7.6197349">
+  <test-suite type="TestSuite" id="1484" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="336" result="Passed" start-time="2026-10-24 14:34:19Z" end-time="2026-10-24 14:34:27Z" duration="7.619735" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1368" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="169" result="Passed" start-time="2026-10-24 14:34:19Z" end-time="2026-10-24 14:34:27Z" duration="7.603664" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="34760" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1269" name="RingKickScoreLifecycleTests" fullname="RingKickScoreLifecycleTests" classname="RingKickScoreLifecycleTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-24 14:34:19Z" end-time="2026-10-24 14:34:27Z" duration="7.597156" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1272" name="OriginalFieldGoalCrossingAwardsOneOriginalPoint" fullname="RingKickScoreLifecycleTests.OriginalFieldGoalCrossingAwardsOneOriginalPoint" methodname="OriginalFieldGoalCrossingAwardsOneOriginalPoint" classname="RingKickScoreLifecycleTests" runstate="Runnable" seed="1832235300" result="Passed" start-time="2026-10-24 14:34:19Z" end-time="2026-10-24 14:34:27Z" duration="7.580209" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="360000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+FIELD_GOAL_ACTUAL_KICK variant=Foot round=1 shooter=0 point=(0.02, 0.76, -0.46) queuedPhysicsResponse=true timing=0
+FIELD_GOAL_ACTUAL_POST_PHYSICS_LAUNCH velocity=(-0.81, 16.58, 23.96) truckProjectile=False
+FIELD_GOAL_RESULT variant=Foot round=1 shooter=0 good=True reason=GOOD! point=(-1.04, 14.48, 30.00)
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ORIGINAL_PHYSICAL_RING_KICK TruckFieldGoal hotSeat=False slot=0 earned=1 total=1 physical original rule commit, saved Heat, ownership, duplicate names, retained HUD and rematch. First-award lifecycle only; full Windows/hardware acceptance separate.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

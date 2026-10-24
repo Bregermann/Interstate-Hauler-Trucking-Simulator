@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="27" result="Passed" total="27" passed="27" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 11:58:00Z" end-time="2026-10-24 11:58:01Z" duration="0.1614869">
+  <test-suite type="TestSuite" id="1000" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="2993" result="Passed" start-time="2026-10-24 11:58:00Z" end-time="2026-10-24 11:58:01Z" duration="0.161487" total="27" passed="27" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2496" name="LWS.TruckSports.PresentationEditModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.PresentationEditModeTests.dll" runstate="Runnable" testcasecount="88" result="Passed" start-time="2026-10-24 11:58:00Z" end-time="2026-10-24 11:58:01Z" duration="0.064950" total="27" passed="27" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="17632" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestFixture" id="2405" name="FinalTotalResultPlacingTests" fullname="FinalTotalResultPlacingTests" classname="FinalTotalResultPlacingTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-10-24 11:58:00Z" end-time="2026-10-24 11:58:01Z" duration="0.036349" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2408" name="DisplayOrderingCannotOverrideTheSportDeclaredWinner" fullname="FinalTotalResultPlacingTests.DisplayOrderingCannotOverrideTheSportDeclaredWinner" methodname="DisplayOrderingCannotOverrideTheSportDeclaredWinner" classname="FinalTotalResultPlacingTests" runstate="Runnable" seed="1115116405" result="Passed" start-time="2026-10-24 11:58:00Z" end-time="2026-10-24 11:58:01Z" duration="0.017291" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2407" name="ExistingTiebreakWinnerPrecedesEqualTotalsWithoutChangingScores" fullname="FinalTotalResultPlacingTests.ExistingTiebreakWinnerPrecedesEqualTotalsWithoutChangingScores" methodname="ExistingTiebreakWinnerPrecedesEqualTotalsWithoutChangingScores" classname="FinalTotalResultPlacingTests" runstate="Runnable" seed="1600943184" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000296" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2409" name="InvalidRosterReferencesAreRejected" fullname="FinalTotalResultPlacingTests.InvalidRosterReferencesAreRejected" methodname="InvalidRosterReferencesAreRejected" classname="FinalTotalResultPlacingTests" runstate="Runnable" seed="1394573911" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.003509" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2406" name="SharedFinalTotalsRetainCompetitionPlacingsAndNegativeValues" fullname="FinalTotalResultPlacingTests.SharedFinalTotalsRetainCompetitionPlacingsAndNegativeValues" methodname="SharedFinalTotalsRetainCompetitionPlacingsAndNegativeValues" classname="FinalTotalResultPlacingTests" runstate="Runnable" seed="806386872" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000220" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="2437" name="ResultMetricUnitTests" fullname="ResultMetricUnitTests" classname="ResultMetricUnitTests" runstate="Runnable" testcasecount="15" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.011493" total="15" passed="15" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="ParameterizedMethod" id="2448" name="NonSingularCountsRetainOriginalUnit" fullname="ResultMetricUnitTests.NonSingularCountsRetainOriginalUnit" classname="ResultMetricUnitTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.005656" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2445" name="NonSingularCountsRetainOriginalUnit(0)" fullname="ResultMetricUnitTests.NonSingularCountsRetainOriginalUnit(0)" methodname="NonSingularCountsRetainOriginalUnit" classname="ResultMetricUnitTests" runstate="Runnable" seed="1173853460" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.004238" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2446" name="NonSingularCountsRetainOriginalUnit(2)" fullname="ResultMetricUnitTests.NonSingularCountsRetainOriginalUnit(2)" methodname="NonSingularCountsRetainOriginalUnit" classname="ResultMetricUnitTests" runstate="Runnable" seed="823100304" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000278" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2447" name="NonSingularCountsRetainOriginalUnit(1.5d)" fullname="ResultMetricUnitTests.NonSingularCountsRetainOriginalUnit(1.5d)" methodname="NonSingularCountsRetainOriginalUnit" classname="ResultMetricUnitTests" runstate="Runnable" seed="326418257" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000147" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-suite type="ParameterizedMethod" id="2444" name="OneCountUsesReadableSingularWithoutChangingAuthoritativeData" fullname="ResultMetricUnitTests.OneCountUsesReadableSingularWithoutChangingAuthoritativeData" classname="ResultMetricUnitTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.002703" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2438" name="OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;WINS&quot;,&quot;WIN&quot;)" fullname="ResultMetricUnitTests.OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;WINS&quot;,&quot;WIN&quot;)" methodname="OneCountUsesReadableSingularWithoutChangingAuthoritativeData" classname="ResultMetricUnitTests" runstate="Runnable" seed="1339398753" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.001016" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2439" name="OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;TEAM WINS&quot;,&quot;TEAM WIN&quot;)" fullname="ResultMetricUnitTests.OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;TEAM WINS&quot;,&quot;TEAM WIN&quot;)" methodname="OneCountUsesReadableSingularWithoutChangingAuthoritativeData" classname="ResultMetricUnitTests" runstate="Runnable" seed="613020190" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000109" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2440" name="OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;TEAM DELIVERIES&quot;,&quot;TEAM DELIVERY&quot;)" fullname="ResultMetricUnitTests.OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;TEAM DELIVERIES&quot;,&quot;TEAM DELIVERY&quot;)" methodname="OneCountUsesReadableSingularWithoutChangingAuthoritativeData" classname="ResultMetricUnitTests" runstate="Runnable" seed="1525676815" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000089" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2441" name="OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;CUPS HIT&quot;,&quot;CUP HIT&quot;)" fullname="ResultMetricUnitTests.OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;CUPS HIT&quot;,&quot;CUP HIT&quot;)" methodname="OneCountUsesReadableSingularWithoutChangingAuthoritativeData" classname="ResultMetricUnitTests" runstate="Runnable" seed="135973869" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000087" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2442" name="OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;TEAM CUPS HIT&quot;,&quot;TEAM CUP HIT&quot;)" fullname="ResultMetricUnitTests.OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;TEAM CUPS HIT&quot;,&quot;TEAM CUP HIT&quot;)" methodname="OneCountUsesReadableSingularWithoutChangingAuthoritativeData" classname="ResultMetricUnitTests" runstate="Runnable" seed="470888459" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000084" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2443" name="OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;FARES&quot;,&quot;FARE&quot;)" fullname="ResultMetricUnitTests.OneCountUsesReadableSingularWithoutChangingAuthoritativeData(&quot;FARES&quot;,&quot;FARE&quot;)" methodname="OneCountUsesReadableSingularWithoutChangingAuthoritativeData" classname="ResultMetricUnitTests" runstate="Runnable" seed="1272531380" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000082" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-suite type="ParameterizedMethod" id="2455" name="UnitsAndUnknownTermsAreNotArbitrarilySingularized" fullname="ResultMetricUnitTests.UnitsAndUnknownTermsAreNotArbitrarilySingularized" classname="ResultMetricUnitTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.001752" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2449" name="UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;PTS&quot;)" fullname="ResultMetricUnitTests.UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;PTS&quot;)" methodname="UnitsAndUnknownTermsAreNotArbitrarilySingularized" classname="ResultMetricUnitTests" runstate="Runnable" seed="621318538" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000335" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2450" name="UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;MPH&quot;)" fullname="ResultMetricUnitTests.UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;MPH&quot;)" methodname="UnitsAndUnknownTermsAreNotArbitrarilySingularized" classname="ResultMetricUnitTests" runstate="Runnable" seed="1711707441" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000083" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2451" name="UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;SEC&quot;)" fullname="ResultMetricUnitTests.UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;SEC&quot;)" methodname="UnitsAndUnknownTermsAreNotArbitrarilySingularized" classname="ResultMetricUnitTests" runstate="Runnable" seed="1850979790" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000077" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2452" name="UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;LB&quot;)" fullname="ResultMetricUnitTests.UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;LB&quot;)" methodname="UnitsAndUnknownTermsAreNotArbitrarilySingularized" classname="ResultMetricUnitTests" runstate="Runnable" seed="1474178087" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000097" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2453" name="UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;SHEEP&quot;)" fullname="ResultMetricUnitTests.UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;SHEEP&quot;)" methodname="UnitsAndUnknownTermsAreNotArbitrarilySingularized" classname="ResultMetricUnitTests" runstate="Runnable" seed="1864392819" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000088" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2454" name="UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;UNRECOGNIZED&quot;)" fullname="ResultMetricUnitTests.UnitsAndUnknownTermsAreNotArbitrarilySingularized(&quot;UNRECOGNIZED&quot;)" methodname="UnitsAndUnknownTermsAreNotArbitrarilySingularized" classname="ResultMetricUnitTests" runstate="Runnable" seed="1293006045" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000080" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+      </test-suite>
+      <test-suite type="TestFixture" id="2456" name="ResultsSnapshotTests" fullname="ResultsSnapshotTests" classname="ResultsSnapshotTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.011885" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="2457" name="AuthoritativeTiesAndDuplicateDisplayNamesKeepSeparateStableIdentities" fullname="ResultsSnapshotTests.AuthoritativeTiesAndDuplicateDisplayNamesKeepSeparateStableIdentities" methodname="AuthoritativeTiesAndDuplicateDisplayNamesKeepSeparateStableIdentities" classname="ResultsSnapshotTests" runstate="Runnable" seed="1850966799" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.006302" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2460" name="DuplicateIdentitiesOrSlotsCannotCreateAmbiguousResults" fullname="ResultsSnapshotTests.DuplicateIdentitiesOrSlotsCannotCreateAmbiguousResults" methodname="DuplicateIdentitiesOrSlotsCannotCreateAmbiguousResults" classname="ResultsSnapshotTests" runstate="Runnable" seed="1471932520" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.001064" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2458" name="IncompleteAttemptsHaveNoInventedTimeOrChampion" fullname="ResultsSnapshotTests.IncompleteAttemptsHaveNoInventedTimeOrChampion" methodname="IncompleteAttemptsHaveNoInventedTimeOrChampion" classname="ResultsSnapshotTests" runstate="Runnable" seed="1639056984" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000623" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-suite type="ParameterizedMethod" id="2464" name="InvalidMeasurementsAreRejected" fullname="ResultsSnapshotTests.InvalidMeasurementsAreRejected" classname="ResultsSnapshotTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.001419" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-case id="2461" name="InvalidMeasurementsAreRejected(double.NaN)" fullname="ResultsSnapshotTests.InvalidMeasurementsAreRejected(double.NaN)" methodname="InvalidMeasurementsAreRejected" classname="ResultsSnapshotTests" runstate="Runnable" seed="757342179" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000317" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2462" name="InvalidMeasurementsAreRejected(double.PositiveInfinity)" fullname="ResultsSnapshotTests.InvalidMeasurementsAreRejected(double.PositiveInfinity)" methodname="InvalidMeasurementsAreRejected" classname="ResultsSnapshotTests" runstate="Runnable" seed="2038039472" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000117" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+          <test-case id="2463" name="InvalidMeasurementsAreRejected(double.NegativeInfinity)" fullname="ResultsSnapshotTests.InvalidMeasurementsAreRejected(double.NegativeInfinity)" methodname="InvalidMeasurementsAreRejected" classname="ResultsSnapshotTests" runstate="Runnable" seed="352383300" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000102" asserts="0">
+            <properties>
+              <property name="retryIteration" value="0" />
+              <property name="repeatIteration" value="0" />
+            </properties>
+          </test-case>
+        </test-suite>
+        <test-case id="2459" name="SnapshotCopiesTheRosterAndSortsUnrankedEntriesLast" fullname="ResultsSnapshotTests.SnapshotCopiesTheRosterAndSortsUnrankedEntriesLast" methodname="SnapshotCopiesTheRosterAndSortsUnrankedEntriesLast" classname="ResultsSnapshotTests" runstate="Runnable" seed="1128450922" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000543" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+        </test-case>
+        <test-case id="2465" name="WinningStatusCannotBeAssignedToASecondPlaceRow" fullname="ResultsSnapshotTests.WinningStatusCannotBeAssignedToASecondPlaceRow" methodname="WinningStatusCannotBeAssignedToASecondPlaceRow" classname="ResultsSnapshotTests" runstate="Runnable" seed="1089574362" result="Passed" start-time="2026-10-24 11:58:01Z" end-time="2026-10-24 11:58:01Z" duration="0.000305" asserts="0">
+          <properties>
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

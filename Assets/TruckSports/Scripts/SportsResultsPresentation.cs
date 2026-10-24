@@ -92,7 +92,7 @@ namespace LWS.TruckSports
                 if (entry.Measurement.HasValue)
                 {
                     double number = 0;
-                    DOTween.To(() => number, value => { number = value; view.value.text = value.ToString(entry.Format, CultureInfo.InvariantCulture) + (entry.Unit.Length > 0 ? " " + Escape(entry.Unit) : ""); }, entry.Measurement.Value, .65f)
+                    DOTween.To(() => number, value => { number = value; view.value.text = value.ToString(entry.Format, CultureInfo.InvariantCulture) + (entry.DisplayUnit.Length > 0 ? " " + Escape(entry.DisplayUnit) : ""); }, entry.Measurement.Value, .65f)
                         .SetDelay(.12f + i * .04f).SetEase(Ease.OutCubic).SetUpdate(true).SetTarget(view.value).SetLink(view.rect.gameObject);
                 }
             }

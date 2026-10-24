@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 08:56:57Z" end-time="2026-10-24 09:02:00Z" duration="303.6155702">
+  <test-suite type="TestSuite" id="1456" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="316" result="Failed" site="Child" start-time="2026-10-24 08:56:57Z" end-time="2026-10-24 09:02:00Z" duration="303.615570" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1340" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="149" result="Failed" site="Child" start-time="2026-10-24 08:56:57Z" end-time="2026-10-24 09:02:00Z" duration="303.590801" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="33052" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1243" name="PickupDeliveryScoreLifecycleTests" fullname="PickupDeliveryScoreLifecycleTests" classname="PickupDeliveryScoreLifecycleTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-10-24 08:56:57Z" end-time="2026-10-24 09:02:00Z" duration="303.581059" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1246" name="FinalPhysicalFareDeliveryKeepsItsWinnerReceiptOnResults" fullname="PickupDeliveryScoreLifecycleTests.FinalPhysicalFareDeliveryKeepsItsWinnerReceiptOnResults" methodname="FinalPhysicalFareDeliveryKeepsItsWinnerReceiptOnResults" classname="PickupDeliveryScoreLifecycleTests" runstate="Runnable" seed="342122111" result="Passed" start-time="2026-10-24 08:56:57Z" end-time="2026-10-24 09:01:53Z" duration="296.304304" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="720000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 28, observed startup 27, multiplier 1.5, target/cap 42/42.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 4720, target 150, initial 24.
+FARE_AWARD_SCENARIO seed=1632681558 Clear/Day first-to-three; existing FareFightProbe full-match600s watchdog; actual4AI expected.
+FARE_AWARD_PROGRESS clock=0 phase=Waiting scores=0,0,0,0 deliveries=0 receipts=0
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+FARE_AWARD_PROGRESS clock=49.52094 phase=Waiting scores=0,0,0,0 deliveries=0 receipts=0
+FARE_AWARD_PROGRESS clock=102.4748 phase=Carried scores=0,0,0,0 deliveries=0 receipts=0
+FARE_AWARD_PROGRESS clock=152.5358 phase=Carried scores=0,0,0,0 deliveries=0 receipts=0
+FARE_AWARD_PROGRESS clock=206.2472 phase=Carried scores=0,0,0,0 deliveries=0 receipts=0
+FARE_AWARD_PROGRESS clock=259.376 phase=Waiting scores=1,0,0,0 deliveries=1 receipts=1
+FARE_AWARD_PROGRESS clock=314.5257 phase=Waiting scores=1,0,0,0 deliveries=1 receipts=1
+FARE_AWARD_PROGRESS clock=364.1384 phase=Carried scores=1,0,0,0 deliveries=1 receipts=1
+FARE_AWARD_PROGRESS clock=423.186 phase=Carried scores=1,0,0,0 deliveries=1 receipts=1
+FARE_AWARD_PROGRESS clock=483.153 phase=Carried scores=1,0,1,0 deliveries=2 receipts=2
+FARE_AWARD_PROGRESS clock=542.7672 phase=Carried scores=1,0,1,0 deliveries=2 receipts=2
+FARE_AWARD_PROGRESS clock=602.7056 phase=Waiting scores=1,0,1,0 deliveries=2 receipts=2
+FARE_AWARD_PROGRESS clock=662.9244 phase=Carried scores=1,0,1,0 deliveries=2 receipts=2
+FARE_AWARD_PROGRESS clock=722.8428 phase=Carried scores=1,0,1,0 deliveries=2 receipts=2
+FARE_AWARD_PROGRESS clock=782.9214 phase=Waiting scores=1,1,1,0 deliveries=3 receipts=3
+FARE_AWARD_PROGRESS clock=842.7798 phase=Waiting scores=1,1,1,0 deliveries=3 receipts=3
+FARE_AWARD_PROGRESS clock=901.8174 phase=Carried scores=1,1,1,0 deliveries=3 receipts=3
+FARE_AWARD_PROGRESS clock=962.2364 phase=Waiting scores=2,1,1,0 deliveries=4 receipts=4
+FARE_AWARD_PROGRESS clock=1022.315 phase=Carried scores=2,1,1,0 deliveries=4 receipts=4
+FARE_AWARD_PROGRESS clock=1082.394 phase=Carried scores=2,1,1,0 deliveries=4 receipts=4
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 4720, target 150, initial 24.
+ACTUAL_PICKUP_DELIVERY TruckFareFight practice=False fullMatch=True; natural scoring contact, original totals, stable identity, one receipt, actual first-to-three match completion, controlled720/1080, fresh rematch. No human/device/Windows/performance claim.
+]]></output>
+        </test-case>
+        <test-case id="1247" name="PhysicalTrailerPickupReportsItsCommittedPointsOnce" fullname="PickupDeliveryScoreLifecycleTests.PhysicalTrailerPickupReportsItsCommittedPointsOnce" methodname="PhysicalTrailerPickupReportsItsCommittedPointsOnce" classname="PickupDeliveryScoreLifecycleTests" runstate="Runnable" seed="494738094" result="Failed" start-time="2026-10-24 09:01:53Z" end-time="2026-10-24 09:02:00Z" duration="7.257929" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="180000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[  Expected: less than 0.850000024f
+  But was:  0.863333285f
+]]></message>
+            <stack-trace><![CDATA[at PickupDeliveryScoreLifecycleTests+<Inspect>d__10.MoveNext () [0x00ba9] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\PickupDeliveryScoreLifecycleTests.cs:101
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 36, observed startup 35, multiplier 1.65, target/cap 59/60.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

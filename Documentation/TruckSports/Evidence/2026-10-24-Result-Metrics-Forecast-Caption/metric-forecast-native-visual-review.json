@@ -1,0 +1,68 @@
+{
+  "images": [
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/MetricForecastControlled/forecast-Clear-1080.png",
+      "sha256": "3f02ed879ab33142451886bab610460a16a277fe097378c31c63023ae6d03348",
+      "kind": "controlled native RenderTexture",
+      "personallyInspected": true,
+      "acceptance": "caption-only installed preset preview, not weather-art acceptance"
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/MetricForecastControlled/forecast-Clear-720.png",
+      "sha256": "a5e3ab69c008b4f1656108ae83cb57070e75d4fb475fe547bd4354ca0c9c818f",
+      "kind": "controlled native RenderTexture",
+      "personallyInspected": true,
+      "acceptance": "caption-only installed preset preview, not weather-art acceptance"
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/MetricForecastControlled/forecast-Rain-1080.png",
+      "sha256": "d8ad120b88d7543b6cad789ae29c4200b2aed58dc1318d9bcfccd0c3c1fb0fe4",
+      "kind": "controlled native RenderTexture",
+      "personallyInspected": true,
+      "acceptance": "caption-only installed preset preview, not weather-art acceptance"
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/MetricForecastControlled/forecast-Rain-720.png",
+      "sha256": "5c8685ae1ee85b6d2fc8218968d6baa250f988e5eba7a7c6c0a4ce61484e6fce",
+      "kind": "controlled native RenderTexture",
+      "personallyInspected": true,
+      "acceptance": "caption-only installed preset preview, not weather-art acceptance"
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/MetricForecastControlled/forecast-Snow-1080.png",
+      "sha256": "7b086fe5bf4825d5401dc6966532a35212e3d72c7d3ade29fd31ddda32d6894d",
+      "kind": "controlled native RenderTexture",
+      "personallyInspected": true,
+      "acceptance": "caption-only installed preset preview, not weather-art acceptance"
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/MetricForecastControlled/forecast-Snow-720.png",
+      "sha256": "c10a4abbedd5bf546303115ad997cfdf0b549600d63223e32eba398e7ee24332",
+      "kind": "controlled native RenderTexture",
+      "personallyInspected": true,
+      "acceptance": "caption-only installed preset preview, not weather-art acceptance"
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/MetricForecastControlled/synthetic-metric-rows-1080.png",
+      "sha256": "0696fd68f396750b7f02a46935413a24a8effc2d621182e8048da1788af9cfa4",
+      "kind": "controlled native RenderTexture",
+      "personallyInspected": true,
+      "acceptance": "explicit synthetic metric UI fixture, not physical gameplay"
+    },
+    {
+      "path": "Logs/TruckSports/PlaytestRepair/MetricForecastControlled/synthetic-metric-rows-720.png",
+      "sha256": "6ac316d52c86b00d3b45309bab38c6066a6b4100ac943a9bef3802e085d3fc00",
+      "kind": "controlled native RenderTexture",
+      "personallyInspected": true,
+      "acceptance": "explicit synthetic metric UI fixture, not physical gameplay"
+    }
+  ],
+  "observations": [
+    "Initial fixture overload ambiguity corrected before metric reproduction; first native XML retains the fixture error.",
+    "Corrected fixture reproduced 1 WINS before production fix.",
+    "Initial Bog reproduction expected CLEAR but displayed RAIN.",
+    "Final native2/2 and EditMode27/27 passed.",
+    "Actual selected profile captions are CLEAR, ACID RAIN, HEAVY SNOW. Previews do not establish weather visual quality.",
+    "Dark angular foliage is visible in the original Bog venue; not repaired or accepted as finished art by this label pass."
+  ]
+}

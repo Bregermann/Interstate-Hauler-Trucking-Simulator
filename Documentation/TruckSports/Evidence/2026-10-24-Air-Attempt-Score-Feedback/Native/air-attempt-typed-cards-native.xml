@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 13:08:36Z" end-time="2026-10-24 13:09:03Z" duration="26.8476567">
+  <test-suite type="TestSuite" id="1478" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="332" result="Passed" start-time="2026-10-24 13:08:36Z" end-time="2026-10-24 13:09:03Z" duration="26.847657" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1362" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="165" result="Passed" start-time="2026-10-24 13:08:36Z" end-time="2026-10-24 13:09:03Z" duration="26.831022" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="24568" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1126" name="AirAttemptScoreLifecycleTests" fullname="AirAttemptScoreLifecycleTests" classname="AirAttemptScoreLifecycleTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-24 13:08:36Z" end-time="2026-10-24 13:09:03Z" duration="26.824393" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1127" name="DockRealWaterDistanceNeverCreatesPoints" fullname="AirAttemptScoreLifecycleTests.DockRealWaterDistanceNeverCreatesPoints" methodname="DockRealWaterDistanceNeverCreatesPoints" classname="AirAttemptScoreLifecycleTests" runstate="Runnable" seed="1873958999" result="Passed" start-time="2026-10-24 13:08:36Z" end-time="2026-10-24 13:08:42Z" duration="6.085770" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="360000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+DOCK_ATTEMPT slot=0 round=1 valid=True inches=1172 timing=LATE
+Changing weather profile WeatherMakerProfile_HeavyClouds (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_AIR_AWARD TruckDockDiving original physical outcome, exact units/total, duplicate names, visible Heat and fresh rematch. Early lifecycle only; not full Windows/human/device acceptance.
+]]></output>
+        </test-case>
+        <test-case id="1128" name="SwingRealFirstContactUsesOriginalZonePoints" fullname="AirAttemptScoreLifecycleTests.SwingRealFirstContactUsesOriginalZonePoints" methodname="SwingRealFirstContactUsesOriginalZonePoints" classname="AirAttemptScoreLifecycleTests" runstate="Runnable" seed="195429869" result="Passed" start-time="2026-10-24 13:08:42Z" end-time="2026-10-24 13:09:03Z" duration="20.723786" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="360000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+SWING_RELEASE slot=0 angle=-33.76176 energy=3489.81 velocity=(0.00, 10.74, 16.28)
+SWING_FIRST_GROUND slot=0 round=1 point=(-1.89, 1.59, 54.74) zone=0
+SWING_RELEASE slot=1 angle=-35.17522 energy=3505.613 velocity=(0.00, 11.09, 15.94)
+SWING_FIRST_GROUND slot=1 round=1 point=(1.81, 1.82, 55.03) zone=50
+Changing weather profile WeatherMakerProfile_MediumHeavyClouds (Sports runtime clone) to WeatherMakerProfile_LightMediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_AIR_AWARD TruckGiantSwing original physical outcome, exact units/total, duplicate names, visible Heat and fresh rematch. Early lifecycle only; not full Windows/human/device acceptance.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

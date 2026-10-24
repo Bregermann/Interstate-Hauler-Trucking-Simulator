@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 11:11:59Z" end-time="2026-10-24 11:12:28Z" duration="28.696555">
+  <test-suite type="TestSuite" id="1468" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="325" result="Passed" start-time="2026-10-24 11:11:59Z" end-time="2026-10-24 11:12:28Z" duration="28.696555" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1352" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="158" result="Passed" start-time="2026-10-24 11:11:59Z" end-time="2026-10-24 11:12:28Z" duration="28.679067" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="10172" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1304" name="WaterContestScoreLifecycleTests" fullname="WaterContestScoreLifecycleTests" classname="WaterContestScoreLifecycleTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-24 11:11:59Z" end-time="2026-10-24 11:12:28Z" duration="28.672385" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1305" name="OriginalBogPlacementCommitsActualPoints" fullname="WaterContestScoreLifecycleTests.OriginalBogPlacementCommitsActualPoints" methodname="OriginalBogPlacementCommitsActualPoints" classname="WaterContestScoreLifecycleTests" runstate="Runnable" seed="1469402175" result="Passed" start-time="2026-10-24 11:11:59Z" end-time="2026-10-24 11:12:21Z" duration="21.979256" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="420000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavySleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+ACTUAL_WATER_PROGRESS TruckBogSnorkelling TRUCK BOG SNORKELLING | RACE 1 / 3 | CLEAR 3
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+ACTUAL_WATER_PROGRESS TruckBogSnorkelling TRUCK BOG SNORKELLING | RACE 1 / 3 | CLEAR HOLD ACTION TO DIVE · RELEASE TO SURFACE · 57.0s
+BOG_RACE_LOCK round=1 times=63.69814,59.89511,61.47539,59.87321 points=1,3,2,4,0,0,0,0
+Changing weather profile WeatherMakerProfile_HeavySleet (Sports runtime clone) to WeatherMakerProfile_HeavySnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_WATER_CONTEST_AWARD TruckBogSnorkelling original autonomous physical result, exact total, duplicate names, readable720/1080 and fresh rematch. Early lifecycle only; not full-match, human/device/listening or Windows acceptance.
+]]></output>
+        </test-case>
+        <test-case id="1306" name="OriginalLogWaterFallsCreditSoleSurvivor" fullname="WaterContestScoreLifecycleTests.OriginalLogWaterFallsCreditSoleSurvivor" methodname="OriginalLogWaterFallsCreditSoleSurvivor" classname="WaterContestScoreLifecycleTests" runstate="Runnable" seed="1753603878" result="Passed" start-time="2026-10-24 11:12:21Z" end-time="2026-10-24 11:12:28Z" duration="6.677676" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="300000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+ACTUAL_WATER_PROGRESS TruckLogRolling TRUCK LOG ROLLING · ROUND 1 · 3 FIND YOUR BALANCE
+Changing weather profile WeatherMakerProfile_MediumClouds (Sports runtime clone) to WeatherMakerProfile_MediumClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+ACTUAL_WATER_CONTEST_AWARD TruckLogRolling original autonomous physical result, exact total, duplicate names, readable720/1080 and fresh rematch. Early lifecycle only; not full-match, human/device/listening or Windows acceptance.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -13,11 +13,28 @@ namespace LWS.TruckSports.Editor
         static readonly string[] ArcadeScenes = { "TruckBalloonBattle", "TruckWhackAMole", "TruckTetherball", "TruckMagnetMayhem", "TruckSheepHerding" };
         // Deliberate additive installation. Normal Play Mode/builds never rebuild UI.
         public static void InstallSumo() => InstallScenes(new[] { "TruckSumo" });
+        public static void InstallRingKickAwards(){InstallScenes(new[] { "TruckSkeeBall" }, true, 145);InstallScenes(new[] { "TruckFieldGoal" });PlaceFieldGoalAwardBelowBoard();}
+        public static void PlaceFieldGoalAwardBelowBoard()
+        {
+            var scene = EditorSceneManager.OpenScene("Assets/TruckFieldGoal/Scenes/TruckFieldGoal.unity", OpenSceneMode.Single);
+            var presenter = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsScorePresentation>(true)).Single();
+            var rect = presenter.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = rect.pivot = new Vector2(.5f, 0); rect.anchoredPosition = new Vector2(0, 88);
+            EditorUtility.SetDirty(rect); EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
+            Debug.Log("FIELD_GOAL_SCORE_POSITION: new notification moved below the existing world-space stadium scoreboard; original venue untouched.");
+        }
+        public static void InstallRaceEndAwards() => InstallScenes(new[] { "TruckMinefield", "TruckMattressRacing", "TruckTerrierRacing" });
+        public static void InstallFishingAwards() => InstallScenes(new[] { "TruckFishing" }, true);
         public static void InstallArcadeAwards() => InstallScenes(ArcadeScenes);
         public static void InstallSurvivalAwards() => InstallScenes(new[] { "TruckHotPotato", "TruckSeesaw", "TruckKingOfTheHill" });
         public static void InstallTeamAwards() => InstallScenes(new[] { "TruckVolleyball", "TruckFreezeTag" });
         public static void InstallSurvivalDepositAwards() => InstallScenes(new[] { "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers" });
         public static void InstallTournamentAwards() => InstallScenes(new[] { "TruckJousting", "TruckFrogger" });
+        public static void InstallAirAttemptAwards() => InstallScenes(new[] { "TruckDockDiving", "TruckGiantSwing" });
+        public static void InstallStuntAwards() => InstallScenes(new[] { "TruckLimbo", "TruckSkyTow", "TruckTrailerPlug" });
+        public static void InstallWaterContestAwards() => InstallScenes(new[] { "TruckBogSnorkelling", "TruckLogRolling" });
+        public static void InstallCargoPossessionAwards() => InstallScenes(new[] { "TruckBuzkashi", "TruckTrampolineDodgeball", "TruckKeepaway", "TruckKeepawayFirstPerson" });
+        public static void InstallStructuralEndAwards() => InstallScenes(new[] { "TruckBungeeDemolition", "TruckCurling", "TruckDemolitionDerby" });
+        public static void InstallPickupDeliveryAwards() => InstallScenes(new[] { "TruckBeerPong", "TruckFareFight", "TruckSnake" });
         public static void InstallFinishOutcomes() => InstallScenes(new[] { "TruckRedLightGreenLight", "TruckAvalancheEscape", "TruckNinjaWarrior" });
         public static void UpgradeAwardResultSpacing()
         {
@@ -44,14 +61,18 @@ namespace LWS.TruckSports.Editor
             }
             AssetDatabase.SaveAssets();
         }
-        static void InstallScenes(string[] names)
+        static void InstallScenes(string[] names, bool perViewport = false, float viewportOffset = 105)
         {
             foreach (string name in names)
             {
-            var scene = EditorSceneManager.OpenScene("Assets/" + name + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
+            var scene = EditorSceneManager.OpenScene("Assets/" + (name == "TruckKeepawayFirstPerson" ? "TruckKeepaway" : name) + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
             var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();
             if (session.menus.GetComponentInChildren<SportsScorePresentation>(true) != null) continue;
-            var root = new GameObject("Confirmed scoring · shared Heat presentation", typeof(RectTransform), typeof(CanvasGroup), typeof(SportsScorePresentation));
+            for (int view = 0; view < (perViewport ? 4 : 1); view++)
+            {
+            // Keep the notification under the persistent menu Canvas. A hidden
+            // HUD page must not interrupt Heat's own minimize/reset coroutine.
+            var root = new GameObject(perViewport ? "Confirmed scoring · viewport " + view : "Confirmed scoring · shared Heat presentation", typeof(RectTransform), typeof(CanvasGroup), typeof(SportsScorePresentation));
             root.layer = 5; root.transform.SetParent(session.menus.transform, false);
             var rect = root.GetComponent<RectTransform>(); rect.anchorMin = rect.anchorMax = new Vector2(.5f, 1); rect.pivot = new Vector2(.5f, 1); rect.anchoredPosition = new Vector2(0, -112); rect.sizeDelta = new Vector2(760, 132);
             var group = root.GetComponent<CanvasGroup>(); group.alpha = 0; group.interactable = group.blocksRaycasts = false;
@@ -79,6 +100,8 @@ namespace LWS.TruckSports.Editor
             var stripeRect = stripe.GetComponent<RectTransform>(); stripeRect.anchorMin = Vector2.zero; stripeRect.anchorMax = new Vector2(1, 0); stripeRect.pivot = new Vector2(.5f, 0); stripeRect.offsetMin = new Vector2(10, 2); stripeRect.offsetMax = new Vector2(-10, 6);
             var accent = stripe.GetComponent<UnityEngine.UI.Image>(); accent.raycastTarget = false;
             var presentation = root.GetComponent<SportsScorePresentation>(); presentation.session = session; presentation.notification = notification; presentation.visibility = group; presentation.portrait = portrait; presentation.accent = accent; presentation.notificationAnimator = (Animator)settings.FindProperty("itemAnimator").objectReferenceValue;
+            if (perViewport) { presentation.viewport = view; rect.anchoredPosition = new Vector2(0, -viewportOffset); rect.sizeDelta = new Vector2(650, 112); }
+            }
             EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene); AssetDatabase.SaveAssets();
             Debug.Log("SCORE_PRESENTATION: additive saved " + name + " Heat notification. Original gameplay, scorecards, replay and result flows retained.");
             }
