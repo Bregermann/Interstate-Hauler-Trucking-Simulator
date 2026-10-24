@@ -71,6 +71,9 @@ namespace LWS.TruckSports
                 view.value.rectTransform.anchoredPosition = new Vector2(width - 216, -3);
                 view.value.rectTransform.sizeDelta = new Vector2(204, compact ? 23 : 28);
                 view.name.textWrappingMode = view.value.textWrappingMode = view.detail.textWrappingMode = TextWrappingModes.NoWrap;
+                // Keep long crew names inside their own column at the readable
+                // minimum type size; the snapshot and text retain the full name.
+                view.name.overflowMode = TextOverflowModes.Ellipsis;
                 view.backing.color = entry.Winner ? new Color(.16f, .12f, .045f, 1) : SportsBroadcastCanvas.Raised;
                 view.accent.color = entry.Winner ? new Color(1, .76f, .16f) : entry.Color;
                 view.portrait.color = Color.Lerp(entry.Color, Color.white, .35f);

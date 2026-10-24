@@ -1,0 +1,42 @@
+PASS saved scene owns twelve separate physical NWH trucks
+PASS twelve-AI match starts without a controller or human confirmation
+PASS six-a-side and correct starting half
+RENDER startup 1280x720 turfFraction=0.210 position=(24.29, 22.59, 3.90)
+PASS startup actual player framebuffer contains the stadium, not a fullscreen sky pass
+PASS pause preserves actual truck pose, ball state and match clock
+PASS recorded replay retains the weather-compatible perspective projection
+RENDER first-replay 1280x720 turfFraction=0.296 position=(-3.92, 6.22, 53.61)
+RENDER broadcast-after-replay 1280x720 turfFraction=0.319 position=(27.91, 23.77, 3.12)
+PASS broadcast-after-replay actual player framebuffer contains the stadium, not a fullscreen sky pass
+PASS AI physically moves and rolls real pitches
+PASS actual bumper contact produces a real kick
+PASS physical truck motion produces ordered base-pad crossings
+PASS actual front contact secures the visible ball
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS complete actual three-inning match including necessary extra innings
+PASS reused stadium audience responds to actual runs or outs without scoring authority
+MATCH difficulty=1 pitches=54 kicks=51 catches=260 throws=213 bases=155 plays=51 innings=3 scores=16,19
+PASS rematch clears scores, runners, outs, possession and replay
+PASS real match enters a recorded highlight and restores broadcast rendering
+RENDER rematch-1280x720 1280x720 turfFraction=0.290 position=(24.49, 23.04, 3.89)
+PASS rematch-1280x720 actual player framebuffer contains the stadium, not a fullscreen sky pass
+RENDER rematch-1920x1080 1920x1080 turfFraction=0.288 position=(24.41, 22.98, 3.89)
+PASS rematch-1920x1080 actual player framebuffer contains the stadium, not a fullscreen sky pass
+RENDER rematch-1440x900 1440x900 turfFraction=0.257 position=(24.41, 22.97, 3.89)
+PASS rematch-1440x900 actual player framebuffer contains the stadium, not a fullscreen sky pass
+RENDER rematch-1280x960 1280x960 turfFraction=0.209 position=(24.41, 22.97, 3.89)
+PASS rematch-1280x960 actual player framebuffer contains the stadium, not a fullscreen sky pass
+RENDER rematch-2560x1080 2560x1080 turfFraction=0.359 position=(24.41, 22.97, 3.89)
+PASS rematch-2560x1080 actual player framebuffer contains the stadium, not a fullscreen sky pass
+PASS menu return removes trucks, cameras, replay and extra listeners
+PID=67016 CHECKS=32 ERRORS=0. Real NWH/PhysX simulation and software test orchestration, not human or controller hardware validation.

@@ -1,0 +1,30 @@
+[
+  {
+    "path": "Assets/TruckBuzkashi/Scripts/BuzProbe.cs",
+    "beforeTextSha256": "80f82b3c95a35d6fdff138cee014e69b6c0b26f73582f5e64010cefebf4cc368",
+    "afterFileSha256": "1f48fd61b1ea52a329006607bf0c2905be363fa334b1c517c42ce79ac6af52d4",
+    "exactAddedHook": "if(m.Finished)yield return SportsResultsAcceptance.Capture(m,Check,folder,slot=>m.Winner<0?0:BuzRules.Team(slot)==m.Winner?1:2,slot=>(double?)m.score[BuzRules.Team(slot)],slot=>BuzRules.Team(slot)==m.Winner);\n ",
+    "originalProbeAssertionsAndSimulationTextUnchanged": true
+  },
+  {
+    "path": "Assets/TruckKeepaway/Scripts/KeepawayRegressionProbe.cs",
+    "beforeTextSha256": "295e8cded2a5c69e9f10576b7d3876ee120fbcf06ccfd0ab3615fc4aee663a5f",
+    "afterFileSha256": "e26e2bec08dd51e1579b6f0fff9d87b9009f546786d7b240375ded2e929f0f4f",
+    "exactAddedHook": "if(m.Finished)yield return SportsResultsAcceptance.Capture(m,Check,folder+\"/view-\"+view,slot=>m.Winner==slot?1:2+Enumerable.Range(0,m.setup.count).Count(other=>other!=m.Winner&&m.possession[other]>m.possession[slot]),slot=>(double?)m.possession[slot],slot=>m.Winner==slot);\n ",
+    "originalProbeAssertionsAndSimulationTextUnchanged": true
+  },
+  {
+    "path": "Assets/TruckKickball/Scripts/KickballProbe.cs",
+    "beforeTextSha256": "a896351f8097e72b8b60bda1815d73498a68b8dad75d38781d9828f1cf511cf0",
+    "afterFileSha256": "51b548664614827731d4b70c6be85d108ca325f4e458ea46a8b3eb687a3c4580",
+    "exactAddedHook": "if(match.Finished)yield return SportsResultsAcceptance.Capture(match,Check,folder,slot=>match.rules.Winner<0?0:match.rules.Team(slot)==match.rules.Winner?1:2,slot=>(double?)match.rules.Scores[match.rules.Team(slot)],slot=>match.rules.Team(slot)==match.rules.Winner);\n ",
+    "originalProbeAssertionsAndSimulationTextUnchanged": true
+  },
+  {
+    "path": "Assets/TruckTrampolineDodgeball/Scripts/DodgeProbe.cs",
+    "beforeTextSha256": "c098446334b4a71e67ef2b1955e74ec7c3cc5b95e831e9c6d701cf254169a41f",
+    "afterFileSha256": "d771ff60e9001074d47dd972cfbe2d70dd50fbda535308d95adac56c998c683b",
+    "exactAddedHook": "if(m.Finished)yield return SportsResultsAcceptance.Capture(m,Check,folder+\"/difficulty-\"+test,slot=>m.rules.Winner<0?0:m.rules.Team(slot)==m.rules.Winner?1:2,slot=>(double?)m.rules.wins[m.rules.Team(slot)],slot=>m.rules.Team(slot)==m.rules.Winner);\n ",
+    "originalProbeAssertionsAndSimulationTextUnchanged": true
+  }
+]

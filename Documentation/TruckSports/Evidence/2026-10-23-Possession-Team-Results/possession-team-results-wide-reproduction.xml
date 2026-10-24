@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 01:08:02Z" end-time="2026-10-24 01:08:33Z" duration="30.9300961">
+  <test-suite type="TestSuite" id="1445" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="308" result="Failed" site="Child" start-time="2026-10-24 01:08:02Z" end-time="2026-10-24 01:08:33Z" duration="30.930096" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1329" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="141" result="Failed" site="Child" start-time="2026-10-24 01:08:02Z" end-time="2026-10-24 01:08:33Z" duration="30.912005" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="70080" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1241" name="PossessionTeamResultsLifecycleTests" fullname="PossessionTeamResultsLifecycleTests" classname="PossessionTeamResultsLifecycleTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-24 01:08:02Z" end-time="2026-10-24 01:08:33Z" duration="30.904993" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1242" name="SyntheticTeamTotalsKeepIndividualIdentitiesAndRealTeamAssignments" fullname="PossessionTeamResultsLifecycleTests.SyntheticTeamTotalsKeepIndividualIdentitiesAndRealTeamAssignments" methodname="SyntheticTeamTotalsKeepIndividualIdentitiesAndRealTeamAssignments" classname="PossessionTeamResultsLifecycleTests" runstate="Runnable" seed="1795848390" result="Failed" label="Error" start-time="2026-10-24 01:08:02Z" end-time="2026-10-24 01:08:33Z" duration="30.885981" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[System.Reflection.TargetInvocationException : Exception has been thrown by the target of an invocation.
+  ----> NUnit.Framework.AssertionException :   Actual rendered name glyphs must remain clear of the actual result, including long TEAM units.
+  Expected: False
+  But was:  True
+]]></message>
+            <stack-trace><![CDATA[  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00083] in <f713e1c3c5f545ce9b1df47230f4f853>:0
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <f713e1c3c5f545ce9b1df47230f4f853>:0
+  at PossessionTeamResultsLifecycleTests+<Inspect>d__8.MoveNext () [0x00c9d] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\PossessionTeamResultsLifecycleTests.cs:126
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44
+--AssertionException
+  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression, System.String message, System.Object[] args) [0x00039] in <f577cd9686154d6ab10efd7e65e64366>:0
+  at PossessionTeamResultsLifecycleTests+<>c__DisplayClass8_0.<Inspect>b__2 (UnityEngine.Camera camera) [0x00283] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\PossessionTeamResultsLifecycleTests.cs:114
+  at LWS.TruckSports.SportsControlledCapture.Save (UnityEngine.Canvas canvas, UnityEngine.Camera[] cameras, System.Int32 width, System.Int32 height, System.String path, System.Action`1[T] inspect) [0x002ff] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Scripts\SportsControlledCapture.cs:7
+  at LWS.TruckSports.SportsControlledCapture.Save (LWS.TruckSports.SportsEventSession match, System.Int32 width, System.Int32 height, System.String path, System.Action`1[T] inspect) [0x00000] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Scripts\SportsControlledCapture.cs:6
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <f713e1c3c5f545ce9b1df47230f4f853>:0 ]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to Hurricane weather (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile Hurricane weather (Sports runtime clone) to WeatherMakerProfile_Storm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_POSSESSION_TEAM_RESULTS TruckBuzkashi count=6: explicit synthetic values; actual saved UI/identities/team assignments/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+SYNTHETIC_POSSESSION_TEAM_RESULTS TruckKeepaway count=4: explicit synthetic values; actual saved UI/identities/team assignments/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+SYNTHETIC_POSSESSION_TEAM_RESULTS TruckKeepawayFirstPerson count=4: explicit synthetic values; actual saved UI/identities/team assignments/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyFog (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyFog (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_POSSESSION_TEAM_RESULTS TruckKickball count=12: explicit synthetic values; actual saved UI/identities/team assignments/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to Hurricane weather (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile Hurricane weather (Sports runtime clone) to WeatherMakerProfile_Sandstorm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_POSSESSION_TEAM_RESULTS TruckTrampolineDodgeball count=8: explicit synthetic values; actual saved UI/identities/team assignments/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_None (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+KEEP_LAYOUT seed=8191 hash=-459582745 connected=1405
+Changing weather profile WeatherMakerProfile_None (Sports runtime clone) to WeatherMakerProfile_HeavyCloudsBright (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+KEEP_LAYOUT seed=9188 hash=1202529281 connected=1411
+SYNTHETIC_POSSESSION_TEAM_RESULTS TruckKeepaway count=2: explicit synthetic values; actual saved UI/identities/team assignments/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_HeavyRain (Sports runtime clone) to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_POSSESSION_TEAM_RESULTS TruckKickball count=6: explicit synthetic values; actual saved UI/identities/team assignments/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_ClearWindy (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_ClearWindy (Sports runtime clone) to WeatherMakerProfile_ClearWindy (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_POSSESSION_TEAM_RESULTS TruckTrampolineDodgeball count=4: explicit synthetic values; actual saved UI/identities/team assignments/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_MediumHeavyCloudsScattered (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

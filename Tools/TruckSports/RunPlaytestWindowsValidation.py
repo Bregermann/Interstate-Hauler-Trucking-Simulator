@@ -65,6 +65,8 @@ def main():
         # Accept only the explicitly requested existing probe's own terminal
         # signature. Never treat an arbitrary ERRORS=0 line as completion.
         protected_footers = {
+            "-tsBuzkashi": r"ERRORS=(\d+)\. Native NWH/PhysX six-truck five-minute play, physical cargo constraint and complete match; no human/hardware validation\.",
+            "-tsDodgeProbe": r"ERRORS=(\d+)\. Rule fixtures labelled separately from actual NWH/PhysX trampoline, strike and ball-contact matches\. No injected outcomes, human/hardware or rendered performance claim\.",
             "-tsBog": r"ERRORS=(\d+)\. Native NWH/PhysX buoyancy/drag/air/dive race series; no hardware/human playtest or frame-rate benchmark\.",
             "-tsFishing": r"ERRORS=(\d+)\. Native fixed-step generated-fish/swept-net gameplay with autonomous AI; rule fixtures are separate\.",
             "-tsLogProbe": r"ERRORS=(\d+)\. Actual vendor buoyancy and NWH/PhysX match simulation, no injected results\.",

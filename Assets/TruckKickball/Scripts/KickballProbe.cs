@@ -92,7 +92,8 @@ namespace LWS.TruckKickball
             Check(match.PhysicalKicks > 0, "actual bumper contact produces a real kick");
             Check(match.PhysicalBaseTouches > 0, "physical truck motion produces ordered base-pad crossings");
             Check(match.PhysicalCatches > 0, "actual front contact secures the visible ball");
-            if (mode.StartsWith("full")) Check(match.Finished && match.rules.Complete, "complete actual three-inning match including necessary extra innings");
+if(match.Finished)yield return SportsResultsAcceptance.Capture(match,Check,folder,slot=>match.rules.Winner<0?0:match.rules.Team(slot)==match.rules.Winner?1:2,slot=>(double?)match.rules.Scores[match.rules.Team(slot)],slot=>match.rules.Team(slot)==match.rules.Winner);
+             if (mode.StartsWith("full")) Check(match.Finished && match.rules.Complete, "complete actual three-inning match including necessary extra innings");
             else Check(match.rules.CompletedPlays >= 5, "five actual pitches/plays resolve without injected outs or scores");
             var audience=match.GetComponent<LWS.TruckFieldGoal.FieldGoalCrowd>();Check(audience!=null&&audience.Spectators>=2000&&audience.Reactions>0,"reused stadium audience responds to actual runs or outs without scoring authority");
             log.AppendLine("MATCH difficulty=" + difficulty + " pitches=" + match.rules.Pitches + " kicks=" + match.PhysicalKicks + " catches=" + match.PhysicalCatches + " throws=" + match.PhysicalThrows + " bases=" + match.PhysicalBaseTouches + " plays=" + match.rules.CompletedPlays + " innings=" + match.rules.Inning + " scores=" + string.Join(",", match.rules.Scores));

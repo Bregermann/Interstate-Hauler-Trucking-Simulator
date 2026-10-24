@@ -17,7 +17,7 @@ namespace LWS.TruckSports.Editor
         {
             foreach (string name in names)
             {
-                var scene = EditorSceneManager.OpenScene("Assets/" + name + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
+                var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => System.IO.Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
                 var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();
                 var page = session.menus.pages[(int)SportsEventScreen.Result];
                 if (page.transform.Find("Results readability backing") != null) continue;
@@ -40,11 +40,16 @@ namespace LWS.TruckSports.Editor
             var names = new[] { "TruckBaseJumping", "TruckBogSnorkelling", "TruckMattressRacing", "TruckTerrierRacing", "TruckWifeCarrying", "TruckSkyTow" };
             InstallScenes(names); InstallReadability(names);
         }
+        public static void InstallPossessionTeamBatch()
+        {
+            var names = new[] { "TruckBuzkashi", "TruckKeepaway", "TruckKeepawayFirstPerson", "TruckKickball", "TruckTrampolineDodgeball" };
+            InstallScenes(names); InstallReadability(names);
+        }
         static void InstallScenes(string[] names)
         {
             foreach (string name in names)
             {
-                var scene = EditorSceneManager.OpenScene("Assets/" + name + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
+                var scene = EditorSceneManager.OpenScene(SportsBuilder.SceneList().Single(path => System.IO.Path.GetFileNameWithoutExtension(path) == name), OpenSceneMode.Single);
                 var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();
                 var page = session.menus.pages[(int)SportsEventScreen.Result];
                 if (page.GetComponentInChildren<SportsResultsPresentation>(true) != null) continue;
