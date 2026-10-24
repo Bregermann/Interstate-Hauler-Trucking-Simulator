@@ -1,0 +1,178 @@
+PASS saved five-region world contains four full NWH tractors and Vista terrain tiles
+PASS editor clearance/slope raster verified at least two square miles of usable terrain
+PASS four autonomous competitors start without human confirmation
+PASS participant 0 has one actual starter trailer before GO, with no unearned pickup points
+PASS participant 1 has one actual starter trailer before GO, with no unearned pickup points
+PASS participant 2 has one actual starter trailer before GO, with no unearned pickup points
+PASS participant 3 has one actual starter trailer before GO, with no unearned pickup points
+PASS frequent road gates populate ahead of starts · live=55 within180m=15
+LIVE clock=0 pickups=0 jumps=0 lengths=1,1,1,1 points=0,0,0,0
+ slot=0 p=(-6.00, 0.35, -120.00) yaw=(0.00, 0.00, 0.00) up=(0.00, 1.00, 0.00) drive=(0.00, 0.00) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=False v=0.0 live=True visible=1 pending=0 history=14.0
+ slot=1 p=(6.00, 0.35, -90.00) yaw=(0.00, 0.00, 0.00) up=(0.00, 1.00, 0.00) drive=(0.00, 0.00) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=False v=0.0 live=True visible=1 pending=0 history=14.0
+ slot=2 p=(-6.00, 0.35, -60.00) yaw=(0.00, 0.00, 0.00) up=(0.00, 1.00, 0.00) drive=(0.00, 0.00) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=False v=0.0 live=True visible=1 pending=0 history=14.0
+ slot=3 p=(6.00, 0.35, -30.00) yaw=(0.00, 0.00, 0.00) up=(0.00, 1.00, 0.00) drive=(0.00, 0.00) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=False v=0.0 live=True visible=1 pending=0 history=14.0
+ route 0 target=none route=null steer=0.00 targetSpeed=0.0 obstacle=none avoidancePlans=0 detour=none look=(0.00, 0.00, 0.00) cursor=0 aim=none
+ route 1 target=none route=null steer=0.00 targetSpeed=0.0 obstacle=none avoidancePlans=0 detour=none look=(0.00, 0.00, 0.00) cursor=0 aim=none
+ route 2 target=none route=null steer=0.00 targetSpeed=0.0 obstacle=none avoidancePlans=0 detour=none look=(0.00, 0.00, 0.00) cursor=0 aim=none
+ route 3 target=none route=null steer=0.00 targetSpeed=0.0 obstacle=none avoidancePlans=0 detour=none look=(0.00, 0.00, 0.00) cursor=0 aim=none
+PASS participant 0 starter filters bind all runtime-created NWH wheel and hull colliders before physical driving
+PASS participant 1 starter filters bind all runtime-created NWH wheel and hull colliders before physical driving
+PASS participant 2 starter filters bind all runtime-created NWH wheel and hull colliders before physical driving
+PASS participant 3 starter filters bind all runtime-created NWH wheel and hull colliders before physical driving
+PASS pause preserves actual train poses, path history and clock
+LIVE clock=3.819997 pickups=1 jumps=0 lengths=1,1,1,2 points=4,4,4,114
+ slot=0 p=(-5.12, 0.25, -106.43) yaw=(358.88, 2.56, 0.00) up=(0.00, 1.00, -0.02) drive=(-0.01, 1.00) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=True v=10.7 live=True visible=1 pending=0 history=27.2
+ slot=1 p=(3.28, 0.25, -78.08) yaw=(359.11, 336.06, 1.16) up=(-0.01, 1.00, -0.02) drive=(0.12, 0.30) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=True v=9.0 live=True visible=1 pending=0 history=26.1
+ slot=2 p=(-2.70, 0.25, -48.08) yaw=(359.00, 5.21, 359.25) up=(0.01, 1.00, -0.02) drive=(-0.29, 0.30) contact=Box_Collider impact=none normal=(-0.10, 0.04, -0.99) normalSpeed=0.08159747 grounded=True v=8.0 live=True visible=1 pending=0 history=26.4
+ slot=3 p=(0.48, 0.26, -18.63) yaw=(358.94, 336.61, 1.39) up=(-0.01, 1.00, -0.03) drive=(0.36, 1.00) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=True v=9.5 live=True visible=1 pending=1 history=26.6
+ route 0 target=(-33.00, 0.30, 0.00) route=True:Route solved by LWS graph planner. steer=-0.01 targetSpeed=18.0 obstacle=none avoidancePlans=1 detour=none look=(-5.01, 0.31, -100.23) cursor=0 aim=(0.00, 0.15, 0.00)
+ route 1 target=(0.00, 0.30, 11.00) route=True:Route solved by LWS graph planner. steer=0.12 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 0@18.7 avoidancePlans=2 detour=none look=(2.29, 0.25, -54.80) cursor=0 aim=(0.00, 0.15, 0.00)
+ route 2 target=(33.00, 0.30, 0.00) route=True:Route solved by LWS graph planner. steer=-0.29 targetSpeed=7.7 obstacle=Box_Collider@1.3 avoidancePlans=2 detour=none look=(-6.01, 0.26, -37.33) cursor=0 aim=(0.00, 0.15, 0.00)
+ route 3 target=(0.00, 0.30, 11.00) route=True:Route solved by LWS graph planner. steer=0.36 targetSpeed=18.0 obstacle=none avoidancePlans=0 detour=none look=(0.00, 0.30, -11.00) cursor=0 aim=(0.00, 0.15, 0.00)
+LIVE clock=9.040016 pickups=3 jumps=0 lengths=1,1,1,4 points=15,14,14,773
+ slot=0 p=(-2.59, 0.24, -59.04) yaw=(359.21, 4.58, 0.10) up=(0.00, 1.00, -0.01) drive=(0.05, 0.30) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=True v=8.7 live=True visible=1 pending=0 history=75.0
+ slot=1 p=(1.49, 0.24, -32.02) yaw=(359.39, 6.06, 359.22) up=(0.01, 1.00, -0.01) drive=(-0.34, 1.00) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=True v=6.1 live=True visible=1 pending=0 history=72.9
+ slot=2 p=(-10.81, 0.26, -7.84) yaw=(359.21, 329.95, 358.69) up=(0.03, 1.00, 0.00) drive=(-0.46, -0.60) contact=Box_Collider impact=none normal=(-0.65, 0.04, -0.76) normalSpeed=1.077039 grounded=True v=8.4 live=True visible=1 pending=0 history=69.0
+ slot=3 p=(-0.10, 0.24, 38.03) yaw=(359.06, 359.97, 0.05) up=(0.00, 1.00, -0.02) drive=(0.01, 1.00) contact=Box_Collider impact=none normal=(0.98, 0.03, 0.19) normalSpeed=0.3488081 grounded=True v=16.4 live=True visible=4 pending=0 history=83.3
+ route 0 target=(-33.00, 0.30, 0.00) route=True:Route solved by LWS graph planner. steer=0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 0@13.3 avoidancePlans=11 detour=Pooled path-backed cargo trailer 0 look=(2.03, 0.24, -35.93) cursor=0 aim=(0.00, 0.15, 0.00)
+ route 1 target=(-33.00, 0.30, 0.00) route=True:Route solved by LWS graph planner. steer=-0.34 targetSpeed=18.0 obstacle=Pooled path-backed cargo trailer 3@5.8 avoidancePlans=11 detour=none look=(0.00, 0.20, -25.51) cursor=0 aim=(0.00, 0.15, 0.00)
+ route 2 target=(33.00, 0.30, 0.00) route=True:Route solved by LWS graph planner. steer=-0.46 targetSpeed=7.2 obstacle=Box_Collider@2.1 avoidancePlans=12 detour=Box_Collider look=(-19.46, 0.26, -2.76) cursor=0 aim=(0.00, 0.15, 0.00)
+ route 3 target=(0.00, 0.30, 77.00) route=True:Forward pickup access along the actual road samples. steer=0.01 targetSpeed=18.0 obstacle=none avoidancePlans=1 detour=none look=(0.00, 0.15, 49.66) cursor=1 aim=(0.00, 0.15, 40.00)
+LIVE clock=16.00018 pickups=7 jumps=0 lengths=1,1,2,7 points=28,27,141,3133
+ slot=0 p=(10.36, 0.25, -0.05) yaw=(359.34, 48.75, 0.45) up=(-0.01, 1.00, 0.00) drive=(0.15, 0.30) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=True v=8.8 live=True visible=1 pending=0 history=138.1
+ slot=1 p=(18.26, 0.12, 11.24) yaw=(358.82, 102.42, 1.71) up=(-0.01, 1.00, 0.03) drive=(0.55, 0.30) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=True v=8.3 live=True visible=1 pending=0 history=129.1
+ slot=2 p=(-47.91, 0.28, 8.80) yaw=(358.19, 241.60, 355.89) up=(-0.01, 1.00, 0.08) drive=(-0.73, 0.30) contact=Box_Collider impact=none normal=(-0.22, 0.03, -0.98) normalSpeed=1.128938 grounded=True v=6.3 live=True visible=2 pending=0 history=112.2
+ slot=3 p=(0.24, 0.25, 132.84) yaw=(359.08, 0.33, 359.98) up=(0.00, 1.00, -0.02) drive=(-0.01, 1.00) contact=Box_Collider impact=none normal=(1.00, -0.01, -0.02) normalSpeed=3.444676 grounded=True v=15.2 live=True visible=7 pending=0 history=178.2
+ route 0 target=(33.00, 0.30, 0.00) route=True:Route solved by LWS graph planner. steer=0.15 targetSpeed=9.0 obstacle=none avoidancePlans=20 detour=Imported city building look=(43.70, 0.25, 4.39) cursor=3 aim=(20.00, 0.15, 0.00)
+ route 1 target=(83.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=0.55 targetSpeed=7.9 obstacle=Box_Collider@48.0 avoidancePlans=20 detour=none look=(23.79, 0.15, 0.00) cursor=2 aim=(20.00, 0.15, 0.00)
+ route 2 target=(-55.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.73 targetSpeed=7.0 obstacle=none avoidancePlans=15 detour=none look=(-43.95, 0.15, 0.00) cursor=1 aim=(-40.00, 0.15, 0.00)
+ route 3 target=(11.00, 0.30, 160.00) route=True:Route solved by LWS graph planner. steer=-0.01 targetSpeed=18.0 obstacle=none avoidancePlans=2 detour=none look=(0.07, 0.19, 141.91) cursor=0 aim=(0.00, 0.15, 160.00)
+LIVE clock=22.02031 pickups=13 jumps=2 lengths=1,3,4,9 points=30,407,808,5868
+ slot=0 p=(61.14, -0.18, 20.01) yaw=(358.18, 186.70, 0.02) up=(0.00, 1.00, 0.03) drive=(0.41, 0.30) contact=Playable tile 1 1 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.006421052 grounded=True v=9.0 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(80.69, 7.05, 1.95) yaw=(0.43, 91.45, 3.33) up=(0.01, 1.00, 0.06) drive=(1.00, 0.30) contact=none impact=none normal=(0.00, 0.00, 0.00) normalSpeed=0 grounded=False v=15.4 live=True visible=3 pending=0 history=185.4
+ slot=2 p=(-83.02, 1.30, 2.51) yaw=(359.31, 265.38, 357.65) up=(0.01, 1.00, 0.04) drive=(-0.29, 1.00) contact=Box_Collider impact=none normal=(-0.22, 0.03, -0.98) normalSpeed=1.128938 grounded=True v=16.9 live=True visible=4 pending=0 history=161.5
+ slot=3 p=(-0.21, 0.26, 212.97) yaw=(359.21, 359.59, 0.02) up=(0.00, 1.00, -0.01) drive=(0.00, 0.30) contact=Box_Collider impact=none normal=(1.00, -0.01, -0.02) normalSpeed=3.444676 grounded=True v=17.4 live=True visible=9 pending=0 history=258.3
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(83.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=1.00 targetSpeed=14.5 obstacle=none avoidancePlans=20 detour=none look=(83.00, 0.30, 0.00) cursor=3 aim=(83.00, 0.15, 0.00)
+ route 2 target=(-99.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.29 targetSpeed=18.0 obstacle=Box_Collider@10.6 avoidancePlans=15 detour=none look=(-90.84, 0.15, 0.00) cursor=3 aim=(-90.00, 0.15, 0.00)
+ route 3 target=(0.00, 0.30, 243.00) route=True:Forward pickup access along the actual road samples. steer=0.00 targetSpeed=18.0 obstacle=none avoidancePlans=2 detour=none look=(0.00, 0.15, 225.44) cursor=2 aim=(0.00, 0.15, 220.00)
+LIVE clock=28.02045 pickups=20 jumps=2 lengths=1,6,4,13 points=30,2782,1328,13617
+ slot=0 p=(98.33, -0.18, 36.69) yaw=(358.20, 34.22, 0.05) up=(-0.02, 1.00, -0.03) drive=(0.41, 0.30) contact=Playable tile 1 1 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.000599485 grounded=True v=3.2 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(164.80, 0.27, -0.97) yaw=(358.73, 97.29, 358.22) up=(-0.03, 1.00, -0.03) drive=(-0.28, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.6422079 grounded=True v=7.1 live=True visible=6 pending=0 history=230.3
+ slot=2 p=(-110.57, 0.25, -2.75) yaw=(359.54, 96.07, 359.11) up=(-0.01, 1.00, -0.01) drive=(-0.28, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.64127 grounded=True v=8.0 live=True visible=4 pending=0 history=200.3
+ slot=3 p=(0.01, 0.28, 319.32) yaw=(359.46, 0.19, 0.00) up=(0.00, 1.00, -0.01) drive=(0.01, 1.00) contact=Box_Collider impact=none normal=(1.00, -0.01, -0.02) normalSpeed=3.444676 grounded=True v=12.3 live=True visible=13 pending=0 history=335.2
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(221.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.28 targetSpeed=18.0 obstacle=none avoidancePlans=20 detour=none look=(170.67, 0.15, 0.00) cursor=1 aim=(170.00, 0.15, 0.00)
+ route 2 target=(-99.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.28 targetSpeed=18.0 obstacle=none avoidancePlans=15 detour=none look=(-99.00, 0.30, 0.00) cursor=4 aim=(-99.00, 0.15, 0.00)
+ route 3 target=(0.00, 0.35, 331.00) route=True:Route solved by LWS graph planner. steer=0.01 targetSpeed=18.0 obstacle=none avoidancePlans=2 detour=none look=(0.00, 0.20, 330.75) cursor=2 aim=(0.00, 0.19, 329.66)
+LIVE clock=34.10059 pickups=25 jumps=3 lengths=1,7,5,16 points=30,3840,2581,21395
+ slot=0 p=(94.95, -0.18, 53.63) yaw=(358.20, 91.64, 0.05) up=(-0.03, 1.00, 0.00) drive=(0.41, 0.30) contact=Playable tile 1 1 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.00356017 grounded=True v=3.0 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(254.84, 0.26, -0.10) yaw=(359.17, 89.86, 0.01) up=(-0.01, 1.00, 0.00) drive=(0.00, 0.30) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.6422079 grounded=True v=18.1 live=True visible=7 pending=0 history=245.2
+ slot=2 p=(-49.50, 2.44, 1.01) yaw=(327.06, 264.23, 205.84) up=(-0.53, -0.76, 0.38) drive=(0.14, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.9176609 grounded=False v=3.3 live=True visible=5 pending=0 history=215.1
+ slot=3 p=(0.19, 0.86, 412.47) yaw=(359.01, 359.89, 359.93) up=(0.00, 1.00, -0.02) drive=(-0.01, 0.30) contact=Box_Collider impact=none normal=(1.00, -0.01, -0.02) normalSpeed=3.444676 grounded=True v=17.7 live=True visible=16 pending=0 history=366.0
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(303.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=0.00 targetSpeed=18.0 obstacle=none avoidancePlans=20 detour=none look=(268.56, 0.15, 0.00) cursor=5 aim=(260.00, 0.15, 0.00)
+ route 2 target=(-99.00, 0.30, 160.00) route=True:Route solved by LWS graph planner. steer=0.14 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@20.1 avoidancePlans=16 detour=Pooled path-backed cargo trailer 2 look=(-72.84, 2.38, -7.08) cursor=0 aim=(0.00, 0.15, 0.00)
+ route 3 target=(0.00, 0.93, 463.00) route=True:Forward pickup access along the actual road samples. steer=-0.01 targetSpeed=18.0 obstacle=none avoidancePlans=2 detour=none look=(0.00, 0.62, 425.91) cursor=1 aim=(0.00, 0.58, 416.55)
+LIVE clock=40.08073 pickups=28 jumps=3 lengths=1,8,5,18 points=30,5136,2611,27603
+ slot=0 p=(90.98, -0.18, 69.88) yaw=(358.20, 137.20, 0.05) up=(-0.02, 1.00, 0.02) drive=(0.41, 0.30) contact=Playable tile 1 1 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.003245121 grounded=True v=2.9 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(336.35, 0.39, 0.41) yaw=(358.67, 61.59, 359.03) up=(-0.01, 1.00, -0.03) drive=(-1.00, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.6422079 grounded=True v=4.9 live=True visible=8 pending=0 history=260.1
+ slot=2 p=(-49.06, 2.12, 1.92) yaw=(326.70, 265.24, 180.00) up=(-0.55, -0.84, -0.05) drive=(-0.05, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.0004753004 grounded=False v=0.0 live=True visible=5 pending=0 history=215.1
+ slot=3 p=(-0.21, 1.34, 509.48) yaw=(358.92, 0.01, 0.00) up=(0.00, 1.00, -0.02) drive=(0.00, 0.30) contact=Box_Collider impact=none normal=(1.00, -0.01, -0.02) normalSpeed=3.444676 grounded=True v=17.2 live=True visible=18 pending=0 history=405.3
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(320.00, 0.30, 77.00) route=True:Route solved by LWS graph planner. steer=-1.00 targetSpeed=7.0 obstacle=none avoidancePlans=20 detour=none look=(320.00, 0.15, 7.00) cursor=2 aim=(320.00, 0.15, 10.00)
+ route 2 target=(-143.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@19.5 avoidancePlans=17 detour=Pooled path-backed cargo trailer 2 look=(-73.51, 2.12, 6.32) cursor=2 aim=(-60.00, 0.15, 0.00)
+ route 3 target=(0.00, 1.32, 551.00) route=True:Forward pickup access along the actual road samples. steer=0.00 targetSpeed=18.0 obstacle=none avoidancePlans=2 detour=none look=(0.00, 1.04, 519.83) cursor=2 aim=(0.00, 1.01, 513.10)
+LIVE clock=46.04086 pickups=29 jumps=4 lengths=1,8,5,19 points=30,5224,2611,31028
+ slot=0 p=(87.13, -0.18, 85.89) yaw=(358.20, 175.47, 0.05) up=(0.00, 1.00, 0.03) drive=(0.41, 0.30) contact=Playable tile 1 1 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.002976793 grounded=True v=2.7 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(314.46, 8.16, 36.93) yaw=(358.35, 330.19, 11.55) up=(-0.16, 0.98, -0.12) drive=(0.86, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.6422079 grounded=False v=9.2 live=True visible=8 pending=0 history=260.3
+ slot=2 p=(-49.06, 2.12, 1.92) yaw=(326.76, 265.24, 180.00) up=(-0.55, -0.84, -0.05) drive=(-0.05, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.001979589 grounded=False v=0.0 live=False visible=5 pending=0 history=215.1
+ slot=3 p=(3.90, 4.33, 555.10) yaw=(53.47, 291.77, 261.46) up=(0.48, -0.09, 0.87) drive=(-0.58, 1.00) contact=Playable tile 1 1 impact=none normal=(0.05, 1.00, 0.02) normalSpeed=0.06912389 grounded=False v=0.5 live=True visible=19 pending=0 history=425.1
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(320.00, 0.30, 77.00) route=True:Forward pickup access along the actual road samples. steer=0.86 targetSpeed=8.3 obstacle=none avoidancePlans=20 detour=none look=(320.00, 0.15, 43.13) cursor=2 aim=(320.00, 0.15, 40.00)
+ route 2 target=(-143.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@19.5 avoidancePlans=17 detour=Pooled path-backed cargo trailer 2 look=(-73.51, 2.12, 6.32) cursor=2 aim=(-60.00, 0.15, 0.00)
+ route 3 target=(-10.96, 1.70, 600.88) route=True:Route solved by LWS graph planner. steer=-0.58 targetSpeed=12.3 obstacle=none avoidancePlans=2 detour=none look=(0.29, 2.75, 562.10) cursor=0 aim=(0.00, 1.39, 600.00)
+LIVE clock=52.241 pickups=29 jumps=4 lengths=1,8,5,19 points=30,5944,2611,31161
+ slot=0 p=(82.92, -0.18, 102.19) yaw=(358.20, 207.26, 0.05) up=(0.02, 1.00, 0.03) drive=(0.41, 0.30) contact=Movable construction barrier impact=none normal=(-0.88, 0.06, -0.48) normalSpeed=0.7161051 grounded=True v=2.6 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(310.80, 0.22, 53.05) yaw=(0.63, 182.06, 358.21) up=(-0.03, 1.00, -0.01) drive=(-0.15, 1.00) contact=Taxi Road 4 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.8917587 grounded=True v=2.8 live=True visible=8 pending=0 history=260.4
+ slot=2 p=(-49.06, 2.12, 1.92) yaw=(326.76, 265.24, 180.00) up=(-0.55, -0.84, -0.05) drive=(-0.05, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.001979589 grounded=False v=0.0 live=False visible=5 pending=0 history=215.1
+ slot=3 p=(5.44, 2.76, 554.04) yaw=(358.46, 299.81, 267.45) up=(0.50, -0.04, 0.87) drive=(-0.02, 1.00) contact=Playable tile 1 1 impact=none normal=(0.05, 1.00, -0.02) normalSpeed=0.0001301578 grounded=False v=0.0 live=True visible=19 pending=0 history=425.3
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(507.00, 1.00, 0.00) route=True:Route solved by LWS graph planner. steer=-0.15 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@11.6 avoidancePlans=22 detour=Pooled path-backed cargo trailer 2 look=(321.54, 0.23, 32.21) cursor=0 aim=(320.00, 0.15, 0.00)
+ route 2 target=(-143.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@19.5 avoidancePlans=17 detour=Pooled path-backed cargo trailer 2 look=(-73.51, 2.12, 6.32) cursor=2 aim=(-60.00, 0.15, 0.00)
+ route 3 target=(-10.96, 1.70, 600.88) route=True:Route solved by LWS graph planner. steer=-0.02 targetSpeed=10.5 obstacle=none avoidancePlans=2 detour=none look=(4.62, 2.55, 560.99) cursor=0 aim=(0.00, 1.39, 600.00)
+LIVE clock=58.30114 pickups=29 jumps=4 lengths=1,8,5,19 points=30,6024,2611,31161
+ slot=0 p=(77.70, -0.18, 117.86) yaw=(358.20, 173.50, 0.05) up=(0.00, 1.00, 0.03) drive=(0.41, 0.30) contact=Playable tile 1 1 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.003060156 grounded=True v=2.7 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(319.08, 0.30, 12.04) yaw=(358.85, 168.00, 359.04) up=(-0.02, 1.00, 0.02) drive=(-0.20, 0.30) contact=Box_Collider impact=none normal=(0.96, 0.00, 0.28) normalSpeed=0.3978531 grounded=True v=7.1 live=True visible=8 pending=0 history=260.1
+ slot=2 p=(-49.06, 2.12, 1.92) yaw=(326.76, 265.24, 180.00) up=(-0.55, -0.84, -0.05) drive=(-0.05, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.001979589 grounded=False v=0.0 live=False visible=5 pending=0 history=215.1
+ slot=3 p=(5.44, 2.76, 554.04) yaw=(358.46, 299.81, 267.45) up=(0.50, -0.04, 0.87) drive=(-0.02, 1.00) contact=Playable tile 1 1 impact=none normal=(0.05, 1.00, -0.02) normalSpeed=0.0003912018 grounded=False v=0.0 live=False visible=19 pending=0 history=425.3
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(507.00, 1.00, 0.00) route=True:Route solved by LWS graph planner. steer=-0.20 targetSpeed=7.0 obstacle=none avoidancePlans=29 detour=Box_Collider look=(322.80, 0.29, 4.00) cursor=0 aim=(320.00, 0.15, 0.00)
+ route 2 target=(-143.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@19.5 avoidancePlans=17 detour=Pooled path-backed cargo trailer 2 look=(-73.51, 2.12, 6.32) cursor=2 aim=(-60.00, 0.15, 0.00)
+ route 3 target=(-10.96, 1.70, 600.88) route=True:Route solved by LWS graph planner. steer=-0.02 targetSpeed=10.5 obstacle=none avoidancePlans=2 detour=none look=(4.62, 2.55, 560.99) cursor=0 aim=(0.00, 1.39, 600.00)
+LIVE clock=64.32122 pickups=29 jumps=4 lengths=1,8,5,19 points=30,6112,2611,31161
+ slot=0 p=(75.38, -0.18, 132.02) yaw=(358.20, 7.42, 0.05) up=(0.00, 1.00, -0.03) drive=(0.41, 0.30) contact=Playable tile 1 1 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.00274212 grounded=True v=2.4 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(357.43, 0.49, 0.78) yaw=(358.79, 90.52, 0.79) up=(-0.02, 1.00, 0.01) drive=(0.10, 1.00) contact=Box_Collider impact=none normal=(0.96, 0.00, 0.28) normalSpeed=0.3978531 grounded=True v=12.7 live=True visible=8 pending=0 history=260.2
+ slot=2 p=(-49.06, 2.12, 1.92) yaw=(326.76, 265.24, 180.00) up=(-0.55, -0.84, -0.05) drive=(-0.05, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.001979589 grounded=False v=0.0 live=False visible=5 pending=0 history=215.1
+ slot=3 p=(5.44, 2.76, 554.04) yaw=(358.46, 299.81, 267.45) up=(0.50, -0.04, 0.87) drive=(-0.02, 1.00) contact=Playable tile 1 1 impact=none normal=(0.05, 1.00, -0.02) normalSpeed=0.0003912018 grounded=False v=0.0 live=False visible=19 pending=0 history=425.3
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(507.00, 1.00, 0.00) route=True:Route solved by LWS graph planner. steer=0.10 targetSpeed=18.0 obstacle=none avoidancePlans=29 detour=none look=(369.04, 0.33, 0.00) cursor=6 aim=(368.72, 0.33, 0.00)
+ route 2 target=(-143.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@19.5 avoidancePlans=17 detour=Pooled path-backed cargo trailer 2 look=(-73.51, 2.12, 6.32) cursor=2 aim=(-60.00, 0.15, 0.00)
+ route 3 target=(-10.96, 1.70, 600.88) route=True:Route solved by LWS graph planner. steer=-0.02 targetSpeed=10.5 obstacle=none avoidancePlans=2 detour=none look=(4.62, 2.55, 560.99) cursor=0 aim=(0.00, 1.39, 600.00)
+LIVE clock=70.34021 pickups=29 jumps=4 lengths=1,8,5,19 points=30,6240,2611,31161
+ slot=0 p=(76.47, -0.18, 146.63) yaw=(358.20, 31.34, 0.05) up=(-0.02, 1.00, -0.03) drive=(0.41, 0.30) contact=Playable tile 1 1 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.002825916 grounded=True v=2.4 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(453.02, 1.01, 0.12) yaw=(358.75, 89.95, 0.02) up=(-0.02, 1.00, 0.00) drive=(0.00, 1.00) contact=Box_Collider impact=none normal=(0.96, 0.00, 0.28) normalSpeed=0.3978531 grounded=True v=15.3 live=True visible=8 pending=0 history=260.2
+ slot=2 p=(-49.06, 2.12, 1.92) yaw=(326.76, 265.24, 180.00) up=(-0.55, -0.84, -0.05) drive=(-0.05, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.001979589 grounded=False v=0.0 live=False visible=5 pending=0 history=215.1
+ slot=3 p=(5.44, 2.76, 554.04) yaw=(358.46, 299.81, 267.45) up=(0.50, -0.04, 0.87) drive=(-0.02, 1.00) contact=Playable tile 1 1 impact=none normal=(0.05, 1.00, -0.02) normalSpeed=0.0003912018 grounded=False v=0.0 live=False visible=19 pending=0 history=425.3
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(507.00, 1.00, 0.00) route=True:Route solved by LWS graph planner. steer=0.00 targetSpeed=18.0 obstacle=none avoidancePlans=29 detour=none look=(464.20, 0.69, 0.00) cursor=15 aim=(456.41, 0.66, 0.00)
+ route 2 target=(-143.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@19.5 avoidancePlans=17 detour=Pooled path-backed cargo trailer 2 look=(-73.51, 2.12, 6.32) cursor=2 aim=(-60.00, 0.15, 0.00)
+ route 3 target=(-10.96, 1.70, 600.88) route=True:Route solved by LWS graph planner. steer=-0.02 targetSpeed=10.5 obstacle=none avoidancePlans=2 detour=none look=(4.62, 2.55, 560.99) cursor=0 aim=(0.00, 1.39, 600.00)
+LIVE clock=76.31921 pickups=30 jumps=4 lengths=1,9,5,19 points=30,7265,2611,31161
+ slot=0 p=(75.09, -0.10, 150.98) yaw=(355.70, 357.90, 0.17) up=(0.00, 1.00, -0.07) drive=(0.41, 0.30) contact=Taxi Road 0 impact=none normal=(0.00, 1.00, -0.05) normalSpeed=0.002799355 grounded=True v=0.0 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(559.11, 1.45, 0.19) yaw=(359.09, 90.20, 0.05) up=(-0.02, 1.00, 0.00) drive=(0.01, -0.60) contact=Box_Collider impact=none normal=(0.96, 0.00, 0.28) normalSpeed=0.3978531 grounded=True v=18.6 live=True visible=9 pending=0 history=275.1
+ slot=2 p=(-49.06, 2.12, 1.92) yaw=(326.76, 265.24, 180.00) up=(-0.55, -0.84, -0.05) drive=(-0.05, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.001979589 grounded=False v=0.0 live=False visible=5 pending=0 history=215.1
+ slot=3 p=(5.44, 2.76, 554.04) yaw=(358.46, 299.81, 267.45) up=(0.50, -0.04, 0.87) drive=(-0.02, 1.00) contact=Playable tile 1 1 impact=none normal=(0.05, 1.00, -0.02) normalSpeed=0.0003912018 grounded=False v=0.0 live=False visible=19 pending=0 history=425.3
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(595.00, 1.33, 0.00) route=True:Forward pickup access along the actual road samples. steer=0.01 targetSpeed=8.3 obstacle=none avoidancePlans=29 detour=none look=(573.58, 1.10, 0.00) cursor=7 aim=(563.59, 1.07, 0.00)
+ route 2 target=(-143.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@19.5 avoidancePlans=17 detour=Pooled path-backed cargo trailer 2 look=(-73.51, 2.12, 6.32) cursor=2 aim=(-60.00, 0.15, 0.00)
+ route 3 target=(-10.96, 1.70, 600.88) route=True:Route solved by LWS graph planner. steer=-0.02 targetSpeed=10.5 obstacle=none avoidancePlans=2 detour=none look=(4.62, 2.55, 560.99) cursor=0 aim=(0.00, 1.39, 600.00)
+LIVE clock=82.35819 pickups=31 jumps=4 lengths=1,10,5,19 points=30,8492,2611,31161
+ slot=0 p=(75.09, -0.10, 150.98) yaw=(355.70, 357.90, 0.17) up=(0.00, 1.00, -0.07) drive=(0.41, 0.30) contact=Taxi Road 0 impact=none normal=(0.00, 1.00, -0.05) normalSpeed=0.002799355 grounded=True v=0.0 live=False visible=1 pending=0 history=152.4
+ slot=1 p=(651.72, 2.75, 3.07) yaw=(11.13, 121.34, 8.01) up=(0.24, 0.97, 0.02) drive=(-0.16, 1.00) contact=Playable tile 1 1 impact=none normal=(0.08, 1.00, -0.02) normalSpeed=1.121459 grounded=True v=10.9 live=True visible=10 pending=0 history=290.2
+ slot=2 p=(-49.06, 2.12, 1.92) yaw=(326.76, 265.24, 180.00) up=(-0.55, -0.84, -0.05) drive=(-0.05, 1.00) contact=Taxi Road 5 impact=none normal=(0.00, 1.00, 0.00) normalSpeed=0.001979589 grounded=False v=0.0 live=False visible=5 pending=0 history=215.1
+ slot=3 p=(5.44, 2.76, 554.04) yaw=(358.46, 299.81, 267.45) up=(0.50, -0.04, 0.87) drive=(-0.02, 1.00) contact=Playable tile 1 1 impact=none normal=(0.05, 1.00, -0.02) normalSpeed=0.0003912018 grounded=False v=0.0 live=False visible=19 pending=0 history=425.3
+ route 0 target=(-160.00, 0.30, 127.00) route=True:Forward pickup access along the actual road samples. steer=0.41 targetSpeed=8.7 obstacle=Pooled path-backed cargo trailer 0@2.0 avoidancePlans=21 detour=Chassis look=(37.34, 0.25, 1.37) cursor=1 aim=(20.00, 0.15, 0.00)
+ route 1 target=(700.00, 1.66, 33.00) route=True:Route solved by LWS graph planner. steer=-0.16 targetSpeed=18.0 obstacle=none avoidancePlans=29 detour=none look=(660.01, 1.57, -0.01) cursor=0 aim=(700.00, 1.58, 0.00)
+ route 2 target=(-143.00, 0.30, 0.00) route=True:Forward pickup access along the actual road samples. steer=-0.05 targetSpeed=9.0 obstacle=Pooled path-backed cargo trailer 2@19.5 avoidancePlans=17 detour=Pooled path-backed cargo trailer 2 look=(-73.51, 2.12, 6.32) cursor=2 aim=(-60.00, 0.15, 0.00)
+ route 3 target=(-10.96, 1.70, 600.88) route=True:Route solved by LWS graph planner. steer=-0.02 targetSpeed=10.5 obstacle=none avoidancePlans=2 detour=none look=(4.62, 2.55, 560.99) cursor=0 aim=(0.00, 1.39, 600.00)
+PASS all authoritative score multipliers match actual attached body counts at the end of the physical match
+PASS no unbounded tractor launch from kinematic cargo contacts · maximum=19.23m/s
+PASS actual NWH driving accelerates tractors continuously
+PASS actual reachable pickup contact adds visible collider-backed cargo length
+PASS first actual pickup occurs within fifteen seconds and autonomous trucks physically grow beyond their starters · firstPickup=3.819997s
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS complete real four-competitor timed or crash-resolved match
+PASS split-screen world retains one listener
+MATCH failures=Player 1  30 · 1 TRAILER · x1 · HIT Player 2'S TRAILER 1
+Player 2  8582 · 10 TRAILERS · x10 · HIT YOUR OWN TRAILER 3
+Player 3  2611 · 5 TRAILERS · x5 · MAJOR COLLISION · FORWARD ROUTE BLOCKED
+Player 4  31161 · 19 TRAILERS · x19 · MAJOR COLLISION · FORWARD ROUTE BLOCKED
+ clock=87.57732 distance=138.2364,953.6289,268.5344,592.3406 survived=17.54021,87.57732,40.16073,52.44101 pickups=31 jumps=4 maximumVisible=19 scores=30,8582,2611,31161
+PASS rematch clears previous cargo and scores, reseeds only the starting bay and restores exactly one attached trailer
+PASS participant count 1 starts only its own single-trailer convoys after rematch
+PASS participant count 2 starts only its own single-trailer convoys after rematch
+PASS participant count 3 starts only its own single-trailer convoys after rematch
+PASS participant count 4 starts only its own single-trailer convoys after rematch
+PASS menu transition cleans vehicles, world, train pools, effects and listeners
+CHECKS=37 ERRORS=0 · actual NWH/PhysX and autonomous AI; no human/hardware claim. Fifty-trailer/performance acceptance is a separate required run.

@@ -48,7 +48,8 @@ namespace LWS.TruckSports
             if (SportsAttemptResults.TryCapture(session, out snapshot)) return true;
             if (SportsSurvivalResults.TryCapture(session, out snapshot)) return true;
             if (SportsSeriesResults.TryCapture(session, out snapshot)) return true;
-            return SportsPossessionTeamResults.TryCapture(session, out snapshot);
+            if (SportsPossessionTeamResults.TryCapture(session, out snapshot)) return true;
+            return SportsRoundLegacyResults.TryCapture(session, out snapshot);
         }
     }
 }

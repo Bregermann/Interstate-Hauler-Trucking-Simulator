@@ -52,7 +52,8 @@ namespace LWS.TruckBungeeDemolition
                 if(Time.realtimeSinceStartup>=next){File.WriteAllText(Path.Combine(folder,"progress.txt"),report+"LIVE round="+match.Round+" phase="+match.Phase+" clock="+match.Clock+" scores="+string.Join(",",match.bays.Select(b=>b.Score))+" positions="+string.Join(" | ",match.bays.Select(b=>b.truck.body.position.ToString("F1")))+" errors="+errors);next=Time.realtimeSinceStartup+2;}
                 yield return null;
             }
-            Check(match.Finished&&match.Winner>=0&&match.CompletedRounds>=3,"complete physical three-round four-AI match,including real tiebreak if needed");
+if(match.Finished)yield return SportsResultsAcceptance.Capture(match,Check,folder,slot=>SportsResultPlacings.FromFinalTotals(slot,match.setup.count,match.total,match.Winner),slot=>(double?)match.total[slot],slot=>match.Winner==slot);
+             Check(match.Finished&&match.Winner>=0&&match.CompletedRounds>=3,"complete physical three-round four-AI match,including real tiebreak if needed");
             for(int i=0;i<4;i++)Check(physical[i]>0&&match.total[i]>0,"AI physically damages/collapses tower without hidden score slot="+i+" total="+match.total[i]);
             Check(match.FinaleScoreChanges==0,"all automatic finales preserve locked scores");Check(FindObjectsByType<AudioListener>(FindObjectsInactive.Exclude).Length==1,"one listener");
             match.SetupScreen();Check(match.StartMatch()&&match.Round==1&&match.total.All(x=>x==0)&&match.bays.All(b=>b.TransferredImpactImpulse==0),"rematch clears scores/contact momentum and restores all four building variants");

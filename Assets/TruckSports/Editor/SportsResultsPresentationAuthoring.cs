@@ -45,6 +45,11 @@ namespace LWS.TruckSports.Editor
             var names = new[] { "TruckBuzkashi", "TruckKeepaway", "TruckKeepawayFirstPerson", "TruckKickball", "TruckTrampolineDodgeball" };
             InstallScenes(names); InstallReadability(names);
         }
+        public static void InstallLegacyRoundBatch()
+        {
+            var names = new[] { "TruckBeerPong", "TruckBungeeDemolition", "TruckCurling", "TruckDanceOff", "TruckDemolitionDerby", "TruckFareFight", "TruckMusicalParking", "TruckSnake" };
+            InstallScenes(names); InstallReadability(names);
+        }
         static void InstallScenes(string[] names)
         {
             foreach (string name in names)

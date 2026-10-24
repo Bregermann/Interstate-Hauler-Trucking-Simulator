@@ -77,7 +77,9 @@ namespace LWS.TruckSports
                 view.backing.color = entry.Winner ? new Color(.16f, .12f, .045f, 1) : SportsBroadcastCanvas.Raised;
                 view.accent.color = entry.Winner ? new Color(1, .76f, .16f) : entry.Color;
                 view.portrait.color = Color.Lerp(entry.Color, Color.white, .35f);
-                view.place.text = entry.Place > 0 ? "#" + entry.Place : "OUT";
+                // An absent placing also covers practice and shared draws.
+                // The authoritative value separately identifies eliminations.
+                view.place.text = entry.Place > 0 ? "#" + entry.Place : "—";
                 view.place.color = entry.Winner ? new Color(1, .8f, .28f) : SportsBroadcastCanvas.Cream;
                 view.name.text = Escape(entry.DisplayName); view.name.color = entry.Color;
                 view.control.text = entry.IsAI ? "AI" : "HUMAN";

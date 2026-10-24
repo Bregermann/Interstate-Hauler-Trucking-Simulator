@@ -1,0 +1,20 @@
+{
+  "changedFiles": [
+    {
+      "path": "Assets/TruckSports/Scripts/SportsResultsPresentation.cs",
+      "beforeSha256": "443d125d779685712596b9e511fa56ef69b4eb9fdf68868582c259dcab665f92",
+      "afterSha256": "687c30cd729c5ef865f801e8be28784218016d960fd607a078b9515552d8b780",
+      "diff": "--- initial/Assets/TruckSports/Scripts/SportsResultsPresentation.cs\n+++ fixed/Assets/TruckSports/Scripts/SportsResultsPresentation.cs\n@@ -77,7 +77,9 @@\n                 view.backing.color = entry.Winner ? new Color(.16f, .12f, .045f, 1) : SportsBroadcastCanvas.Raised;\n                 view.accent.color = entry.Winner ? new Color(1, .76f, .16f) : entry.Color;\n                 view.portrait.color = Color.Lerp(entry.Color, Color.white, .35f);\n-                view.place.text = entry.Place > 0 ? \"#\" + entry.Place : \"OUT\";\n+                // An absent placing also covers practice and shared draws.\n+                // The authoritative value separately identifies eliminations.\n+                view.place.text = entry.Place > 0 ? \"#\" + entry.Place : \"\u2014\";\n                 view.place.color = entry.Winner ? new Color(1, .8f, .28f) : SportsBroadcastCanvas.Cream;\n                 view.name.text = Escape(entry.DisplayName); view.name.color = entry.Color;\n                 view.control.text = entry.IsAI ? \"AI\" : \"HUMAN\";\n"
+    },
+    {
+      "path": "Assets/TruckSports/Tests/GoddessPlayMode/LegacyRoundResultsLifecycleTests.cs",
+      "beforeSha256": "5ec573a5e3855cd1684dff63289b296c284120b50239be29770511b8ac194be9",
+      "afterSha256": "d8a6f1ae4330964b1eb05097a52d1cfd0c9b5a8f949878631d7dbd85e0638502",
+      "diff": "--- initial/Assets/TruckSports/Tests/GoddessPlayMode/LegacyRoundResultsLifecycleTests.cs\n+++ fixed/Assets/TruckSports/Tests/GoddessPlayMode/LegacyRoundResultsLifecycleTests.cs\n@@ -128,7 +128,9 @@\n                 foreach (string field in new[] { \"heading\", \"summary\" }) { var label = Get(board, field); Call(label, \"ForceMeshUpdate\", false, false); Assert.That(Get(label, \"isTextOverflowing\"), Is.False, scene + \" caption\"); }\n                 for (int i = 0; i < views.Length; i++)\n                 {\n-                    var view = views[i]; var row = Bounds((RectTransform)Get(view, \"rect\")); Assert.That(row.xMin, Is.GreaterThanOrEqualTo(canvas.xMin)); Assert.That(row.xMax, Is.LessThanOrEqualTo(canvas.xMax)); Assert.That(row.yMin, Is.GreaterThanOrEqualTo(canvas.yMin)); Assert.That(row.yMax, Is.LessThanOrEqualTo(canvas.yMax));\n+                    var view = views[i]; int rank = (int)Get(entries[i], \"Place\");\n+                    Assert.That(Get(Get(view, \"place\"), \"text\"), Is.EqualTo(rank > 0 ? \"#\" + rank : \"\u2014\"), \"Unranked practice/draw entries must not invent an elimination; explicit result values retain the actual outcome.\");\n+                    var row = Bounds((RectTransform)Get(view, \"rect\")); Assert.That(row.xMin, Is.GreaterThanOrEqualTo(canvas.xMin)); Assert.That(row.xMax, Is.LessThanOrEqualTo(canvas.xMax)); Assert.That(row.yMin, Is.GreaterThanOrEqualTo(canvas.yMin)); Assert.That(row.yMax, Is.LessThanOrEqualTo(canvas.yMax));\n                     foreach (var action in page.GetComponentsInChildren(Runtime(\"SportsMenuAction\"), true).Cast<Component>()) Assert.That(row.Overlaps(Bounds(action.GetComponent<RectTransform>())), Is.False);\n                     foreach (string heading in new[] { \"Title\", \"Subtitle\" }) Assert.That(row.Overlaps(Bounds(page.transform.Find(heading).GetComponent<RectTransform>())), Is.False);\n                     foreach (string field in new[] { \"name\", \"value\", \"detail\" }) { var label = Get(view, field); Call(label, \"ForceMeshUpdate\", false, false); Assert.That(Get(label, \"isTextOverflowing\"), Is.False, scene + \" / \" + field); }\n"
+    }
+  ],
+  "sourceCount": 393,
+  "protectedUnchanged": 925,
+  "scenesOrRulesModified": false,
+  "initialImagesRetained": 24
+}

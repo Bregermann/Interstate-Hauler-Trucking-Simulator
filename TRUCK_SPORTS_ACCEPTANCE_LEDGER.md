@@ -8093,3 +8093,73 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Automated Verification | Read-only saved-time-artistic-binding-inventory.json plus source inspection of ParkingAuthoring and SportsEnvironmentAuthoring. No new native integration or rendered acceptance. |
 | Human Verification | Not performed. |
 | Remaining Work | Integrate this specific outdoor omission using existing helpers after current results delivery, then verify saved setup bounds, real forecast/time rendering, night visibility, music/AI preservation, pause, elimination rounds and rematch. No new weather framework or gameplay redesign. |
+
+### Q22-SKY-RESULT-ROUND-01 — Turn, round and continuous-score results
+
+| Field | Record |
+| --- | --- |
+| Requirement ID | Q22-SKY-RESULT-ROUND-01 |
+| Sport/System | Beer Pong, Bungee Demolition, Curling, Dance-Off, Demolition Derby, Fare Fight, Musical Parking and Truck Snake |
+| Original Request | Q22-SKY requires attractive graphical results using actual winners, scores, statistics, stable crew identities and reliable original rematch/navigation. |
+| Acceptance Criteria | Eight existing saved scenes display original team/individual winners and actual statistics without changing game authority. Preserve Beer Pong practice, Curling team totals, Bungee solo records, Dance show totals, Derby heat wins, Fare deliveries/steals, Parking survivor status and Snake attached-trailer/multiplier/distance/survival/record facts. Avoid invented loser placings, hidden score changes and private-information regressions. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | SportsRoundLegacyResults adapter, additive author/dispatcher, twelve-scenario fixture and hooks on eight original physical workloads activated; existing Heat/TMP/DOTween result presentation reused. All eight saved scenes authored and exported after strict original-document preservation review. Preceding five-scene milestone delivered as public594e953c; eight saved result boards now pass the exact native and physical Windows acceptance; scoped commit/push remains separate. |
+| Automated Verification | Native CLEAN headless author70844 exited0. Each of eight scenes adds426 UI documents and changes exactly one original ResultsPage document, adding only the backing and results-root child references; all previous children/other fields retained. Original objects, physics and transforms retained. Newly serialized null/default fields inspected/restored, including Beer Pong SportsCameraFit null broadcastFraming. All925 protected pending hashes match. Native EditMode98passed/0failed/0skipped across all8 requested fixture classes; Editor12924exit0,159.058s tests/614.24s total including cold initialization and original saved Snake validation. Final3native rendered tests passed, including all12new configurations and prior shared-board regressions; all24main controlled frames inspected. Eight original Windows workloads294checks/0errors with all28actual frames individually inspected; complete physical matches/rematches retain their original rules. No human/hardware/listening/performance acceptance inferred. |
+| Human Verification | Not performed. |
+| Remaining Work | This narrow automated results/neutral-label acceptance passed on exact995599b8:294Windows checks/0errors across all8original workloads; all28fresh actual720p/1080p frames inspected. Canonical549-file60-scene build promoted with priorceab backup. Native98models preceded the isolated neutral-label correction; final3rendered tests/24controlled images passed afterward. Human/device/listening/isolated profiling/soak acceptance is unperformed. Observed grammar remains separately open as Q22-SKY-RESULT-COPY-01; newly reported first-trailer hitch failure is SNK-HITCH-01 and is not repaired by these read-only result boards. See2026-10-24-Round-Results.md; scoped publication is a separate recorded step. ParentQ22/0.6/0.7 remain incomplete. |
+
+### Q22-SKY-RESULT-UNRANKED-01 — Accurate unranked result labels
+
+| Field | Record |
+| --- | --- |
+| Requirement ID | Q22-SKY-RESULT-UNRANKED-01 |
+| Sport/System | Shared results presentation; Beer Pong practice and unranked entries |
+| Original Request | Q22-SKY requires attractive accurate results without invented loser placings. Visual inspection of the new solo practice fixture found an unranked participant incorrectly labeled OUT. |
+| Acceptance Criteria | An absent placing uses a neutral indicator; elimination/incompletion remains explicitly described by the authoritative result value. Actual numeric placings, winners, scores and full stored identities remain unchanged. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | SportsResultsPresentation.cs now uses a neutral emdash for absent placings; explicit authoritative elimination/incompletion result values remain unchanged. LegacyRoundResultsLifecycleTests asserts the displayed label against every actual snapshot placing. Initial24 controlled captures and both original source files retained under LegacyRoundInitialControlled; exact two-file source review recorded. No game/rule/scene/vendor changes. |
+| Automated Verification | Initial native twelve-scenario fixture passed1test/0fail but visual review caught the semantic label defect. Final native3tests/0fail on the correction (121.6407s tests,197.44s wall): twelve updated scenarios plus prior possession/team and six-athlete regressions. All24 fresh main720/1080images inspected; practice shows the neutral dash and Parking retains ELIMINATED. No score/placing/identity/rule changes. |
+| Human Verification | Not performed; this is automated visual inspection of labeled synthetic final values. |
+| Remaining Work | This narrow automated results/neutral-label acceptance passed on exact995599b8:294Windows checks/0errors across all8original workloads; all28fresh actual720p/1080p frames inspected. Canonical549-file60-scene build promoted with priorceab backup. Native98models preceded the isolated neutral-label correction; final3rendered tests/24controlled images passed afterward. Human/device/listening/isolated profiling/soak acceptance is unperformed. Observed grammar remains separately open as Q22-SKY-RESULT-COPY-01; newly reported first-trailer hitch failure is SNK-HITCH-01 and is not repaired by these read-only result boards. See2026-10-24-Round-Results.md; scoped publication is a separate recorded step. ParentQ22/0.6/0.7 remain incomplete. |
+
+### Q22-SKY-RESULT-COPY-01 — Result-count wording
+
+| Field | Record |
+| --- | --- |
+| Requirement ID | Q22-SKY-RESULT-COPY-01 |
+| Sport/System | Dance-Off, Demolition Derby and Fare Fight results copy |
+| Original Request | Polished accurate game-specific results under Q22-SKY. Actual Windows inspection exposes 1 SONGS, 1 WINS, 1 DRAWS and 1 FARES wording. |
+| Acceptance Criteria | Singular and plural counts have correct, readable labels while retaining original round counts, wins, draws, cumulative points and final-song judgments. |
+| Status | PARTIAL |
+| Implementation Evidence | Observed in the actual Dance and Derby720p/1080p Windows frames. Singular/plural display-copy correction staged in SportsRoundLegacyResults-SummaryCopy.cs.pending, with additional one-song and singular-win/draw rendered regression cases staged in LegacyRoundResultsLifecycleTests-SummaryCopy.cs.pending. API preflights pass; active393 source inputs/current Windows payload remain frozen for the acceptance pass. |
+| Automated Verification | Dance physical Windows32checks/0errors and both actual frames inspected. Derby physical Windows62checks/0errors across Easy/Normal/Hard complete matches and rematch; all6actual720p/1080p frames inspected. Data, ranking and layout pass, while the observed cosmetic wording is retained separately. Prepared correction has not run in Unity. |
+| Human Verification | Not performed. |
+| Remaining Work | Apply count-copy correction in the next Q22 presentation source window, verify singular/plural song, win and draw copy in native and actual Windows rendering, then close this retained ID. |
+
+### Q22-SKY-SCORE-COLLECT-01 — Physical cup, delivery and trailer-pickup celebrations
+
+| Field | Record |
+| --- | --- |
+| Requirement ID | Q22-SKY-SCORE-COLLECT-01 |
+| Sport/System | Beer Pong, Fare Fight and Truck Snake / existing shared score presentation |
+| Original Request | Q22-SKY: celebrate actual meaningful points with participant/team identity, readable animation and no duplicate or invented points. |
+| Acceptance Criteria | Original physical cup claims report the correct team or solo-practice recipient; actual atomically resolved deliveries credit their true scorer, including the final delivery; actual trailer pickups report the original committed point delta. Heat/DOTween notifications stay readable at720p/1080p, preserve rules and clear on rematch. |
+| Status | MISSING |
+| Implementation Evidence | Prepared only under Logs/TruckSports/PlaytestRepair/PreparedPickupDeliveryScores: four insertion-only source drafts reuse existing ConfirmScore/ConfirmTeamScore, SportsScoreJournal and additive Heat notification authoring. Original scoring statements retained by reverse-edit proof. No active source, scene or build changes. |
+| Automated Verification | Standalone API compilation passed for four drafts and the three-method/four-scenario native fixture. Initial temporary-assembly type-identity compilation failure retained; compiling the two unchanged strongly typed collaborators resolves that preparation issue. No Unity import, actual contact, rendered or Windows acceptance yet. |
+| Human Verification | Not performed. |
+| Remaining Work | Activate after the current results delivery and Parking integration; author three saved scene bindings, run actual-contact/lifecycle and original full-match checks, inspect native/Windows output and publish scoped changes. Other continuous awards and remaining registered sports stay separately open under Q22-SKY-SCORE-01. |
+
+### SNK-HITCH-01 — Keep the first trailer connected to the tractor
+
+| Field | Record |
+| --- | --- |
+| Requirement ID | SNK-HITCH-01 |
+| Sport/System | Truck Snake / first convoy trailer |
+| Original Request | October24 human screenshot: the first trailer floats away from its tractor. Make the first trailer attached; keep all later trailers' existing behavior. |
+| Acceptance Criteria | The lead trailer's kingpin stays at the actual tractor fifth-wheel attachment through starts, steering, elevation changes, jumps, pauses and rematches. Preserve the remaining path-following train, pickups, count-based scoring, collisions, AI and independent participant ownership. |
+| Status | PARTIAL |
+| Implementation Evidence | Current SnakeConvoy.Pose treats segment0 like every historical-path segment and uses a generic tractorHitch offset. A line is drawn between independent poses; it does not constrain the lead trailer to the tractor hitch. Existing NWH tractor prefab contains an authored TrailerHitchModule attachmentPoint for reuse. Exact pivot/visual calibration and runtime confirmation remain pending. |
+| Automated Verification | Existing995599 results candidate passed Snake37/0 and saved results layouts; those checks establish count/statistics/reset behavior, not fifth-wheel attachment. No hitch-specific acceptance yet. |
+| Human Verification | FAILED: supplied October24 gameplay image shows a clear first-trailer/tractor gap. This observation overrides any prior broad attachment-completion wording. |
+| Remaining Work | Current priority immediately after preserving/publishing the finished eight-results milestone: reproduce anchor separation, bind the first trailer to the authored hitch using the existing hybrid architecture, test turns/jumps/rematches and inspect actual Windows output. Do not change later trailers' following behavior. |

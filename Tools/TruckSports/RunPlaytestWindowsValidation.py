@@ -65,6 +65,8 @@ def main():
         # Accept only the explicitly requested existing probe's own terminal
         # signature. Never treat an arbitrary ERRORS=0 line as completion.
         protected_footers = {
+            "-tsPong": r"ERRORS=(\d+)\. Native physical NWH approach, charge/release, once-only spring, hollow cup contacts and penetration\. No human/hardware/GPU acceptance claim\.",
+            "-tsParking": r"ERRORS=(\d+)\. Actual NWH/PhysX, autonomous AI matches and native music/pause observation; no hardware/human or subjective audio validation\.",
             "-tsBuzkashi": r"ERRORS=(\d+)\. Native NWH/PhysX six-truck five-minute play, physical cargo constraint and complete match; no human/hardware validation\.",
             "-tsDodgeProbe": r"ERRORS=(\d+)\. Rule fixtures labelled separately from actual NWH/PhysX trampoline, strike and ball-contact matches\. No injected outcomes, human/hardware or rendered performance claim\.",
             "-tsBog": r"ERRORS=(\d+)\. Native NWH/PhysX buoyancy/drag/air/dive race series; no hardware/human playtest or frame-rate benchmark\.",
@@ -95,6 +97,8 @@ def main():
             count = re.search(r"^CHECKS (\d+)$", evidence, re.MULTILINE)
             player_log = (folder / "player.log").read_text(encoding="utf-8-sig", errors="replace")
             completed = bool(count and int(count[1]) == actual_checks and "CHEESE_SMOKE_FINISHED code=0" in player_log and code == 0)
+        elif args.flag == "-tsCurling":
+            completed = evidence.rstrip().endswith("PASS Curling returns cleanly to collection") and code == 0
         elif args.flag == "-tsBase":
             completed = evidence.rstrip().endswith("PASS Base Jumping returns cleanly and scoped weather pipeline restores") and code == 0
         if completed:

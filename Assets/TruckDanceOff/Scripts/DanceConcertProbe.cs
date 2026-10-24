@@ -48,7 +48,8 @@ namespace LWS.TruckDanceOff
                 }
                 yield return null;
             }
-            observing=false;Check(match.Finished&&match.Rules.All(r=>r.Resolved==r.Count),"complete original song resolves every real note and reaches results");
+if(match.Finished)yield return SportsResultsAcceptance.Capture(match,Check,folder,slot=>SportsResultPlacings.FromFinalTotals(slot,match.setup.count,match.total),slot=>(double?)match.total[slot],slot=>SportsResultPlacings.FromFinalTotals(slot,match.setup.count,match.total)==1);
+             observing=false;Check(match.Finished&&match.Rules.All(r=>r.Resolved==r.Count),"complete original song resolves every real note and reaches results");
             Check(match.total.All(v=>v>0)&&match.PhysicalRoutines>40,"actual AI timestamps produce scores and original authored truck dance moves");Check(seen.All(v=>v)&&captured.All(v=>v),"all four bounded musical shot styles render during ordinary DSP gameplay");Check(minimumHeight>.035f,"important truck stays recognizable during concert shots; minimum largest projected height="+minimumHeight.ToString("F4"));
             log.AppendLine("CAMERA peak observed frame displacement="+peakStep.ToString("F3")+"m; not a controlled performance benchmark.");
             yield return new WaitForSecondsRealtime(.5f);ScreenCapture.CaptureScreenshot(Path.Combine(folder,"actual-concert-results.png"));yield return new WaitForSecondsRealtime(.2f);
