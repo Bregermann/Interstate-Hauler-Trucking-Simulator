@@ -76,6 +76,42 @@ namespace LWS.TruckSports.Editor
         // build, scene load or Play Mode; existing designers' choices survive.
         public static void InstallNewOutdoors() => InstallWeatherlessOutdoors(NewOutdoors);
         public static void InstallRemainingSharedOutdoors() => InstallWeatherlessOutdoors(RemainingSharedOutdoors);
+        [MenuItem("Truck Sports/Environment/Complete Musical Parking Weather and Time")]
+        public static void InstallMusicalParkingOutdoorEnvironment()
+        {
+            // Explicit additive migration only; never called by play/build/load.
+            InstallWeatherlessOutdoors(new[] { "TruckMusicalParking" });
+            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            if (scene.name != "TruckMusicalParking") throw new InvalidOperationException("Open the registered saved Parking scene.");
+            var session = All<LWS.TruckMusicalParking.ParkingMatch>(scene).Single();
+            var weather = session.presentationWeather;
+            var binding = weather.GetComponent<SportsMatchTime>();
+            if (binding.nightLights.Length == 0)
+            {
+                // Reuse the six real authored lamp pools before adding/tuning
+                // any further light. Native night captures decide visibility.
+                var lamps = All<Light>(scene).Where(light => light.name == "Parking lamp warm pool").ToArray();
+                if (lamps.Length != 6) throw new InvalidOperationException("Preserve the six authored Parking lamp fixtures.");
+                binding.nightLights = lamps;
+                EditorUtility.SetDirty(binding);
+            }
+            var lot = All<MeshRenderer>(scene).Single(renderer => renderer.name == "Full 3D asphalt lot");
+            var marker = lot.GetComponent<LWS.TruckTaxi.TruckTaxiSurface>();
+            if (marker == null) marker = lot.gameObject.AddComponent<LWS.TruckTaxi.TruckTaxiSurface>();
+            marker.isRoad = false; EditorUtility.SetDirty(marker);
+            // Existing Weatherade/Taxi accumulation and actual NWH contact
+            // tracing; no independent snow implementation or physics changes.
+            SportsSnowAuthoring.InstallScene();
+            var snow = session.GetComponent<SportsSnowSurface>();
+            if (snow == null || snow.adapter == null) throw new InvalidOperationException("Bind the existing Sports snow adapter.");
+            var settings = new SerializedObject(snow.adapter);
+            settings.FindProperty("areaSizeMeters").floatValue = 104;
+            settings.FindProperty("areaDepthMeters").floatValue = 90;
+            settings.ApplyModifiedPropertiesWithoutUndo(); EditorUtility.SetDirty(snow.adapter);
+            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
+            AssetDatabase.SaveAssets();
+        }
+
         public static void InstallRemainingOutdoorsAndGroundFixtures()
         {
             InstallRemainingSharedOutdoors();

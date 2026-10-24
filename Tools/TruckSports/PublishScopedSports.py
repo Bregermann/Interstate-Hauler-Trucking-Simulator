@@ -36,7 +36,9 @@ def check_whitespace(repo, parent, paths, env):
         path = match[1]
         # Unity writes empty string fields with a space after the colon. Keep
         # the exact natively tested serialization instead of rewriting scenes.
-        if path.endswith(".unity") and re.fullmatch(r"\+ +[A-Za-z_][A-Za-z0-9_]*: +", added):
+        unity_yaml = path.endswith((".unity", ".asset", ".mat")) and (repo / path).read_bytes().startswith(b"%YAML")
+        unity_meta = path.startswith("Assets/") and path.endswith(".meta") and (repo / path).read_bytes().startswith(b"fileFormatVersion: 2")
+        if (unity_yaml or unity_meta) and re.fullmatch(r"\+ +[A-Za-z_][A-Za-z0-9_]*: +", added):
             review["unityEmptyFields"] += 1
         # Retain the exact difflib audit, including its unnamed-file headers.
         elif path.startswith("Documentation/TruckSports/Evidence/") and path.endswith("-original-document-diffs.txt") and added in ("+--- ", "++++ "):

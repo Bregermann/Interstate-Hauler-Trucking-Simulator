@@ -8088,11 +8088,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | Musical Parking / existing shared environment |
 | Original Request | Q22-SKY requires selectable shared weather/time and appropriate night illumination in compatible outdoor venues while preserving each sport's mechanics. |
 | Acceptance Criteria | Existing outdoor lot uses the established Weather Maker/shared forecast-time lifecycle and saved selectors; actual selected skies/precipitation and usable night lamps follow the match through pauses, elimination rounds and rematches. Preserve music timing, existing parking eligibility/AI, cameras, inputs, geometry and authored material choices. Relevant snow presentation must use the established shared accumulation foundation. |
-| Status | MISSING |
-| Implementation Evidence | Targeted saved-scene inventory finds50shared clock bindings across60built scenes. Parking has no SportsMatchTime binding; its existing outdoor asphalt lot and six authored lamp pools are present, but InstallPaths skips scenes without an existing SportsChaosWeather owner. Existing InstallWeatherlessOutdoors, Heat weather/time selectors and shared lighting/snow tooling provide the foundation. Indoor/artistic scenes without a shared clock are not automatically treated as defective. |
-| Automated Verification | Read-only saved-time-artistic-binding-inventory.json plus source inspection of ParkingAuthoring and SportsEnvironmentAuthoring. No new native integration or rendered acceptance. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | SportsEnvironmentAuthoring.InstallMusicalParkingOutdoorEnvironment explicitly binds the existing shared forecast/time/night/snow foundation in saved TruckMusicalParking.unity. Six original lamps, original geometry/physics/music/AI/camera framing retained. Seventeen owned dependencies added; no vendor edits. See 2026-10-24-Parking-Weather-Result-Copy.md. |
+| Automated Verification | Initial native3PASS, final targetedParking2PASS, preferenceEditMode3PASS;44controlled frames individually inspected. Exact f9f023f6 Windows:9weather/time conditions79checks/0; three8AI difficulty full matches/rematches48/0; Dance32/0 and Snake37/0 regression. All41fresh actual720/1080frames inspected. Saved-scene5174originaldocs retained/1016new/11reviewed changes;192functionalGUIDs resolve;7inactive inherited APV/debug refs retained with probe volumes off. |
 | Human Verification | Not performed. |
-| Remaining Work | Integrate this specific outdoor omission using existing helpers after current results delivery, then verify saved setup bounds, real forecast/time rendering, night visibility, music/AI preservation, pause, elimination rounds and rematch. No new weather framework or gameplay redesign. |
+| Remaining Work | Narrow automated acceptance passed; canonical549-file60-scene Windows build promoted with full priorc597 backup. Human/physical-device/listening/isolated profiling/soak acceptance is unperformed. Scoped publication is separately recorded. ParentQ22/Carnival0.6/Impossible0.7 remain incomplete. |
 
 ### Q22-SKY-RESULT-ROUND-01 — Turn, round and continuous-score results
 
@@ -8130,11 +8130,11 @@ Each permanent scene ID below tracks the actual registered variant separately. S
 | Sport/System | Dance-Off, Demolition Derby, Fare Fight and Snake results copy |
 | Original Request | Polished accurate game-specific results under Q22-SKY. Actual Windows inspection exposes 1 SONGS, 1 WINS, 1 DRAWS and 1 FARES wording; the October24 hitch smoke capture additionally shows 1 JUMPS on the existing Snake results board. |
 | Acceptance Criteria | Singular and plural counts have correct, readable labels while retaining original round counts, wins, draws, cumulative points and final-song judgments. |
-| Status | PARTIAL |
-| Implementation Evidence | Observed in the actual Dance and Derby720p/1080p Windows frames. Singular/plural display-copy correction staged in SportsRoundLegacyResults-SummaryCopy.cs.pending, with additional one-song and singular-win/draw rendered regression cases staged in LegacyRoundResultsLifecycleTests-SummaryCopy.cs.pending. API preflights pass; active393 source inputs/current Windows payload remain frozen for the acceptance pass. |
-| Automated Verification | Dance physical Windows32checks/0errors and both actual frames inspected. Derby physical Windows62checks/0errors across Easy/Normal/Hard complete matches and rematch; all6actual720p/1080p frames inspected. Data, ranking and layout pass, while the observed cosmetic wording is retained separately. Prepared correction has not run in Unity. |
+| Status | VERIFIED COMPLETE |
+| Implementation Evidence | Active SportsRoundLegacyResults Count formatter and optional per-row unit fix singular/plural copy without changing score values, ranks or ownership. Extended existing LegacyRoundResultsLifecycleTests to14configurations. See 2026-10-24-Parking-Weather-Result-Copy.md. |
+| Automated Verification | Native14explicitly synthetic result configurations passed; all28result frames individually inspected including1SONG/1WIN/1DRAW/1FARE and0/1/plural Snake jumps. Exact f9f023f6 Windows Dance32/0, Snake37/0 and Parking48/0 retain actual completed outcomes; allrelevantfresh frames inspected. Derby/Fare singular final values are controlled native fixtures, not new physical Windows matches. |
 | Human Verification | Not performed. |
-| Remaining Work | Apply count-copy correction in the next Q22 presentation source window, verify singular/plural song, win and draw copy in native and actual Windows rendering, then close this retained ID. |
+| Remaining Work | Narrow automated acceptance passed; canonical549-file60-scene Windows build promoted with full priorc597 backup. Human/physical-device/listening/isolated profiling/soak acceptance is unperformed. Scoped publication is separately recorded. ParentQ22/Carnival0.6/Impossible0.7 remain incomplete. |
 
 ### Q22-SKY-SCORE-COLLECT-01 — Physical cup, delivery and trailer-pickup celebrations
 

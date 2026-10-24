@@ -25,9 +25,84 @@ public sealed class CollectionEnvironmentTests
     public IEnumerator NewlyIntegratedOutdoorVenuesRetainRenderersAndMatchLifecycle() => VerifyVenues(true);
     [UnityTest, Timeout(150000)]
     public IEnumerator RemainingSharedVenuesAndGroundedFixturesRetainMatchLifecycle() => VerifyVenues(true, RemainingIntegration);
+    [UnityTest, Timeout(90000)]
+    public IEnumerator MusicalParkingOutdoorTimeKeepsMaximumRosterAndSavedSetup() => VerifyVenues(true, new[] { "TruckMusicalParking" });
+
+    [UnityTest, Timeout(240000)]
+    public IEnumerator MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist()
+    {
+        var lease = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "ParkingEnvironment" });
+        var isolation = new GameObject("Explicit actual Parking environment fixture"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation"));
+        var frame = isolation.AddComponent<ParkingEnvironmentLateCapture>();
+        Component match = null;
+        try
+        {
+            EditorSceneManager.LoadSceneInPlayMode("Assets/TruckMusicalParking/Scenes/TruckMusicalParking.unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
+            match = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsEventSession")); Set(Get(match, "setup"), "count", 8); Call(match, "AllBots");
+            var weather = match.GetComponent(Runtime("SportsChaosWeather")); var binding = match.GetComponent(Runtime("SportsMatchTime")); var snow = match.GetComponent(Runtime("SportsSnowSurface"));
+            Assert.That(weather, Is.Not.Null); Assert.That(binding, Is.Not.Null); Assert.That(snow, Is.Not.Null);
+            Assert.That(Get(match, "presentationWeather"), Is.SameAs(weather)); Assert.That(Get(snow, "weather"), Is.SameAs(weather));
+            Assert.That(((Light[])Get(binding, "nightLights")).Length, Is.EqualTo(6), "Retain the six original authored lamp pools before any visually justified tuning.");
+            var menus = (Component)Get(match, "menus"); var pickers = menus.GetComponentsInChildren(Runtime("SportsWeatherPicker"), true).Cast<Component>().ToArray();
+            var forecast = pickers.Single(p => !(bool)Get(p, "timeOfDay")); var clock = pickers.Single(p => (bool)Get(p, "timeOfDay"));
+            var entries = ((Array)Get(Get(forecast, "catalog"), "entries")).Cast<object>().ToArray();
+            var capture = Runtime("SportsControlledCapture").GetMethods().Single(m => m.Name == "Save" && m.GetParameters().Length == 5);
+            foreach (string condition in new[] { "Clear|Day", "Rain|Evening", "Snow|Night", "Blizzard|Morning" })
+            {
+                string[] choice = condition.Split('|'); Call(match, "SetupScreen");
+                int selected = Array.FindIndex(entries, entry => (string)Get(entry, "displayName") == choice[0]); Assert.That(selected, Is.GreaterThanOrEqualTo(0));
+                SelectVisiblePicker(forecast, selected + 1); SelectVisiblePicker(clock, (int)Enum.Parse(Runtime("SportsTimeChoice"), choice[1]));
+                yield return new WaitForSecondsRealtime(.35f); yield return null;
+                Assert.That(Get(Get(Get(forecast, "dropdown"), "headerText"), "text"), Is.EqualTo(choice[0]));
+                Assert.That(Get(Get(Get(clock, "dropdown"), "headerText"), "text"), Is.EqualTo(choice[1]));
+                frame.capture = () => { foreach (var size in new[] { new Vector2Int(1280,720), new Vector2Int(1920,1080) })
+                    capture.Invoke(null, new object[] { match,size.x,size.y,"Logs/TruckSports/PlaytestRepair/ParkingEnvironment/"+choice[0]+"-"+choice[1]+"-setup-"+size.y+".png",null }); };
+                while (frame.capture != null) yield return null; Assert.That(frame.error, Is.Null);
+                Assert.That((bool)Call(match, "StartMatch"), Is.True); yield return new WaitForSeconds(.4f); yield return null;
+                Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[selected], "id"))); Assert.That(Get(binding, "Applied").ToString(), Is.EqualTo(choice[1]));
+                Assert.That((bool)Get(snow, "Falling"), Is.EqualTo(choice[0] == "Snow" || choice[0] == "Blizzard"));
+                if ((bool)Get(snow, "Falling")) Assert.That((float)Get(snow, "Coverage"), Is.GreaterThanOrEqualTo(.68f), "Snow begins covered, not bare.");
+                bool lamps = choice[1] == "Night" || choice[1] == "Evening";
+                Assert.That(((Light[])Get(binding, "nightLights")).All(light => (light.intensity > 0) == lamps), Is.True);
+                float deadline = Time.realtimeSinceStartup + 7;
+                while (Get(match, "Phase").ToString() == "Countdown" && Time.realtimeSinceStartup < deadline) yield return null;
+                Assert.That(Get(match, "Phase").ToString(), Is.EqualTo("Music")); yield return new WaitForSeconds(1);
+                var music = (AudioSource)Get(match, "music"); Assert.That(music.isPlaying, Is.True, "Original music phase still plays; no listening claim.");
+                var trucks = ((Array)Get(match, "trucks")).Cast<Component>().ToArray();
+                Assert.That(trucks.Any(truck => ((Rigidbody)Get(truck, "body")).linearVelocity.magnitude > .5f), Is.True, "Actual NWH AI circulates without injecting a score or result.");
+                if ((bool)Get(snow, "Falling")) Assert.That((int)Get(snow, "Contacts"), Is.GreaterThan(0), "Snow traces use actual supported NWH wheel contacts.");
+                int revision = (int)Get(binding, "Revision"), seed = (int)Get(weather, "Seed");
+                Call(match, "Pause",0,false); int sample = music.timeSamples; var pose = ((Rigidbody)Get(trucks[0], "body")).position; yield return new WaitForSecondsRealtime(.2f);
+                Assert.That(((Rigidbody)Get(trucks[0], "body")).position, Is.EqualTo(pose)); Assert.That(music.timeSamples, Is.EqualTo(sample)); Call(match, "Resume"); yield return null;
+                Assert.That(Get(binding, "Revision"), Is.EqualTo(revision)); Assert.That(Get(weather, "Seed"), Is.EqualTo(seed));
+                if (choice[0] == "Snow")
+                {
+                    Time.timeScale = 4; deadline = Time.realtimeSinceStartup + 60;
+                    while ((int)Get(match, "Round") < 2 && Time.realtimeSinceStartup < deadline) yield return null;
+                    Time.timeScale = 1;
+                    Assert.That((int)Get(match, "Round"), Is.GreaterThanOrEqualTo(2), "An actual AI parking round completes; no forced eliminations.");
+                    Assert.That((int)Get(match, "TotalCaptures"), Is.GreaterThan(0));
+                    Assert.That(Get(binding, "Revision"), Is.EqualTo(revision)); Assert.That(Get(weather, "Seed"), Is.EqualTo(seed), "Elimination does not reroll or stop weather.");
+                    Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[selected], "id")));
+                }
+                yield return new WaitForSecondsRealtime(.2f); yield return null;
+                frame.capture = () => { foreach (var size in new[] { new Vector2Int(1280,720), new Vector2Int(1920,1080) })
+                    capture.Invoke(null, new object[] { match,size.x,size.y,"Logs/TruckSports/PlaytestRepair/ParkingEnvironment/"+choice[0]+"-"+choice[1]+"-actual-play-"+size.y+".png",null }); };
+                while (frame.capture != null) yield return null; Assert.That(frame.error, Is.Null);
+                Call(match, "SetupScreen"); Assert.That((bool)Call(match, "StartMatch"), Is.True); yield return null;
+                Assert.That((int)Get(match, "Round"), Is.EqualTo(1)); Assert.That((int)Get(match, "TotalCaptures"), Is.Zero);
+                Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[selected], "id"))); Assert.That(Get(binding, "Applied").ToString(), Is.EqualTo(choice[1]));
+                TestContext.WriteLine("PARKING_ACTUAL_ENVIRONMENT "+condition+": real8AI start/music/NWH contacts, pause, explicit forecast/time, snow and rematch. Controlled captures, not Windows/human/device/listening/performance acceptance.");
+            }
+        }
+        finally { Time.timeScale = 1; if (match != null) Call(match,"SetupScreen"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); }
+    }
+
     static readonly string[] NewlyIntegrated = { "TruckDockDiving", "TruckBuzkashi", "TruckBungeeDemolition", "TruckFishing", "TruckSumo", "TruckLogRolling", "TruckTrampolineDodgeball", "TruckDemolitionDerby" };
     static readonly string[] RemainingIntegration = { "TruckCurling", "TruckSkeeBall", "TruckBungeeDemolition", "TruckFishing" };
-    static bool PresentationOwned(string name) => NewlyIntegrated.Contains(name) || RemainingIntegration.Contains(name);
+    static void SelectVisiblePicker(Component picker, int index) { var dropdown=Get(picker,"dropdown"); Call(dropdown,"SetDropdownIndex",index); var changed=Get(dropdown,"onValueChanged"); changed.GetType().GetMethod("Invoke",new[] { typeof(int) }).Invoke(changed,new object[] { index }); }
+
+    static bool PresentationOwned(string name) => NewlyIntegrated.Contains(name) || RemainingIntegration.Contains(name) || name == "TruckMusicalParking";
     [UnityTest, Timeout(240000)]
     public IEnumerator LegacyForecastCatalogUsesEveryInstalledPresetAndRetainsMatchChoice()
     {
@@ -298,7 +373,7 @@ public sealed class CollectionEnvironmentTests
                 tested++; TestContext.WriteLine("SAVED_OUTDOOR_TIME " + name + " maxRoster=" + Get(Get(match, "setup"), "count"));
                 Call(match, "SetupScreen"); match = null;
             }
-            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? (selection ?? NewlyIntegrated).Length : 46), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
+            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? (selection ?? NewlyIntegrated).Length : 47), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
             Assert.That(layoutErrors, Is.Empty, string.Join("\n", layoutErrors));
         }
         finally { if (match != null) Call(match, "SetupScreen"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); Time.timeScale = 1; }
@@ -342,5 +417,11 @@ public sealed class CollectionEnvironmentTests
         var corners = new[] { bounds.min, bounds.max, new Vector3(bounds.min.x, bounds.max.y), new Vector3(bounds.max.x, bounds.min.y) }.Select(point => text.transform.TransformPoint(point)).ToArray();
         return Rect.MinMaxRect(corners.Min(point => point.x), corners.Min(point => point.y), corners.Max(point => point.x), corners.Max(point => point.y));
     }
+}
+[DefaultExecutionOrder(30000)]
+public sealed class ParkingEnvironmentLateCapture:MonoBehaviour
+{
+    public Action capture;public string error;
+    void LateUpdate(){var next=capture;capture=null;try{next?.Invoke();}catch(Exception failure){error=failure.ToString();}}
 }
 #endif

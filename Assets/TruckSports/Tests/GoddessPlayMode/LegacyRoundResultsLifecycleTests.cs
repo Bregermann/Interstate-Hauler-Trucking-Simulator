@@ -39,9 +39,11 @@ public sealed class LegacyRoundResultsLifecycleTests
         yield return Inspect("TruckBungeeDemolition", true);
         yield return Inspect("TruckSnake", wide: true);
         yield return Inspect("TruckDemolitionDerby", wide: true);
+        yield return Inspect("TruckDanceOff", singular: true);
+        yield return Inspect("TruckDemolitionDerby", singular: true);
     }
 
-    static IEnumerator Inspect(string scene, bool solo = false, bool wide = false)
+    static IEnumerator Inspect(string scene, bool solo = false, bool wide = false, bool singular = false)
     {
         var scope = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "SyntheticLegacyRoundResults" });
         var isolation = new GameObject("Explicit synthetic final values; real saved results UI"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation")); Component match = null;
@@ -80,14 +82,14 @@ public sealed class LegacyRoundResultsLifecycleTests
             }
             else if (dance)
             {
-                var totals = (int[])Get(match, "total"); original = totals; Set(match, "Round", 3);
+                var totals = (int[])Get(match, "total"); original = totals; Set(match, "Round", singular ? 1 : 3);
                 for (int i = 0; i < count; i++) { totals[i] = new[] { 400, 900, 900, 200 }[i]; expected[i] = totals[i]; winners[i] = i == 1 || i == 2; places[i] = new[] { 3, 1, 1, 4 }[i]; }
             }
             else if (derby)
             {
-                var wins = (int[])Get(owner, "wins"); original = wins; Set(owner, "Winner", 1); Set(owner, "Heat", 6); unit = "WINS";
+                var wins = (int[])Get(owner, "wins"); original = wins; Set(owner, "Winner", 1); Set(owner, "Heat", singular ? 1 : 6); if (singular) Set(match, "Draws", 1); unit = "WINS";
                 var alive = (bool[])Get(owner, "alive"); var reasons = (string[])Get(owner, "reasons");
-                for (int i = 0; i < count; i++) { wins[i] = i == 1 ? 3 : 0; expected[i] = wins[i]; winners[i] = alive[i] = i == 1; places[i] = winners[i] ? 1 : 2; reasons[i] = "PHYSICAL CRASH"; }
+                for (int i = 0; i < count; i++) { wins[i] = i == 1 ? 3 : singular && i == 2 ? 1 : 0; expected[i] = wins[i]; winners[i] = alive[i] = i == 1; places[i] = winners[i] ? 1 : singular ? (i == 2 ? 2 : 3) : 2; reasons[i] = "PHYSICAL CRASH"; }
             }
             else if (fare || snake)
             {
@@ -95,8 +97,8 @@ public sealed class LegacyRoundResultsLifecycleTests
                 for (int i = 0; i < count; i++) { scores[i] = (fare ? new[] { 5, 6, 1, 0 } : new[] { 1000, 2000, 2000, 500 })[i]; expected[i] = scores[i]; winners[i] = flags[i] = i == 1 || snake && i == 2; places[i] = (fare ? new[] { 2, 1, 3, 4 } : new[] { 3, 1, 1, 4 })[i]; }
                 if (snake)
                 {
-                    var attached = (int[])Get(owner, "attached"); var distance = (float[])Get(owner, "distance"); var survived = (float[])Get(owner, "survived");
-                    for (int i = 0; i < count; i++) { attached[i] = i == 1 ? 10 : 1; distance[i] = 350 + i * 10; survived[i] = 75; }
+                    var attached = (int[])Get(owner, "attached"); var distance = (float[])Get(owner, "distance"); var survived = (float[])Get(owner, "survived"); var jumps = (int[])Get(owner, "jumps");
+                    for (int i = 0; i < count; i++) { attached[i] = i == 1 ? 10 : 1; distance[i] = 350 + i * 10; survived[i] = 75; jumps[i] = i; }
                     recordKey = "TruckSnake.Best." + Get(((Array)Get(setup, "players")).GetValue(1), "participantId"); recordValue = 91234;
                 }
             }
@@ -113,11 +115,14 @@ public sealed class LegacyRoundResultsLifecycleTests
             foreach (var entry in entries)
             {
                 int slot = (int)Get(entry, "Slot"); Assert.That(Get(entry, "Place"), Is.EqualTo(places[slot])); Assert.That(Get(entry, "Winner"), Is.EqualTo(winners[slot]));
-                Assert.That(Get(entry, "Measurement"), Is.EqualTo(expected[slot])); Assert.That(Get(entry, "Unit"), Is.EqualTo(unit)); Assert.That(Get(entry, "DisplayName"), Is.EqualTo(wide ? new string('W', 40) : "Shared Name"));
+                Assert.That(Get(entry, "Measurement"), Is.EqualTo(expected[slot])); Assert.That(Get(entry, "Unit"), Is.EqualTo(expected[slot] == 1 && (derby || fare) ? (derby ? "WIN" : "FARE") : unit)); Assert.That(Get(entry, "DisplayName"), Is.EqualTo(wide ? new string('W', 40) : "Shared Name"));
                 if (parking) Assert.That(Get(entry, "Value"), Is.EqualTo(winners[slot] ? "LAST SPACE" : "ELIMINATED"));
                 if (dance) StringAssert.Contains("FINAL SONG", (string)Get(entry, "Detail"));
+                if (snake) StringAssert.Contains(slot + (slot == 1 ? " JUMP ·" : " JUMPS ·"), (string)Get(entry, "Detail"));
                 if (snake && slot == 1) { StringAssert.Contains("10 ATTACHED · x10", (string)Get(entry, "Detail")); StringAssert.Contains("BEST 91234", (string)Get(entry, "Detail")); }
             }
+            if (dance) StringAssert.StartsWith(singular ? "1 SONG ·" : "3 SONGS ·", (string)Get(snapshot, "Summary"));
+            if (derby && singular) { StringAssert.StartsWith("1 HEAT ·", (string)Get(snapshot, "Summary")); StringAssert.EndsWith("1 DRAW", (string)Get(snapshot, "Summary")); }
             if (bungee && solo) StringAssert.Contains("PERSONAL BEST 54321 PTS", (string)Get(snapshot, "Summary"));
             if (recordKey != null) Assert.That(Runtime("SportsPrefs").GetMethod("GetInt").Invoke(null, new object[] { recordKey, 0 }), Is.EqualTo(recordValue), "Results must retain the original record without writing it.");
             var menus = (Component)Get(match, "menus"); var page = ((GameObject[])Get(menus, "pages"))[6]; Assert.That(page.transform.Find("Results readability backing"), Is.Not.Null);
@@ -143,7 +148,7 @@ public sealed class LegacyRoundResultsLifecycleTests
             var save = Runtime("SportsControlledCapture").GetMethods().Single(method => method.Name == "Save" && method.GetParameters().Length == 5);
             foreach (var size in new[] { new Vector2Int(1280, 720), new Vector2Int(1920, 1080) })
             {
-                string path = "Logs/TruckSports/PlaytestRepair/LegacyRoundResults/" + scene + (solo ? "-solo" : wide ? "-wide-name" : "") + "-" + size.y + ".png";
+                string path = "Logs/TruckSports/PlaytestRepair/LegacyRoundResults/" + scene + (solo ? "-solo" : wide ? "-wide-name" : singular ? "-singular-copy" : "") + "-" + size.y + ".png";
                 try { save.Invoke(null, new object[] { match, size.x, size.y, path, inspect }); }
                 catch (TargetInvocationException)
                 {

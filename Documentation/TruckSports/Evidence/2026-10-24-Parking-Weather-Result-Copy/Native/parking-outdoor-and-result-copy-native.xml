@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 06:57:04Z" end-time="2026-10-24 06:58:55Z" duration="111.3194917">
+  <test-suite type="TestSuite" id="1451" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="312" result="Passed" start-time="2026-10-24 06:57:04Z" end-time="2026-10-24 06:58:55Z" duration="111.319492" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1335" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="145" result="Passed" start-time="2026-10-24 06:57:04Z" end-time="2026-10-24 06:58:55Z" duration="111.301117" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="9816" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestFixture" id="1158" name="CollectionEnvironmentTests" fullname="CollectionEnvironmentTests" classname="CollectionEnvironmentTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-10-24 06:57:04Z" end-time="2026-10-24 06:57:46Z" duration="41.754130" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1163" name="MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist" fullname="CollectionEnvironmentTests.MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist" methodname="MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist" classname="CollectionEnvironmentTests" runstate="Runnable" seed="1447619207" result="Passed" start-time="2026-10-24 06:57:04Z" end-time="2026-10-24 06:57:41Z" duration="36.706812" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Time.fixedDeltaTime of 0.01999999 detected. Recommended value is 0.01 (100Hz) or lower for best vehicle physics behaviour. On mobile games no higher than 0.02 (50Hz) is recommended. Higher physics update rate results in higher physics fidelity.
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+PARKING_ACTUAL_ENVIRONMENT Clear|Day: real8AI start/music/NWH contacts, pause, explicit forecast/time, snow and rematch. Controlled captures, not Windows/human/device/listening/performance acceptance.
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_MediumRain (Sports runtime clone) to WeatherMakerProfile_MediumRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+PARKING_ACTUAL_ENVIRONMENT Rain|Evening: real8AI start/music/NWH contacts, pause, explicit forecast/time, snow and rematch. Controlled captures, not Windows/human/device/listening/performance acceptance.
+Changing weather profile WeatherMakerProfile_MediumRain (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+PARKING_ROUND_LOCK round=1 eliminatedMask=16 remaining=7 replay=False captures=7
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to WeatherMakerProfile_MediumSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+PARKING_ACTUAL_ENVIRONMENT Snow|Night: real8AI start/music/NWH contacts, pause, explicit forecast/time, snow and rematch. Controlled captures, not Windows/human/device/listening/performance acceptance.
+Changing weather profile WeatherMakerProfile_MediumSnow (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Blizzard (Sports runtime clone) to WeatherMakerProfile_Blizzard (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+PARKING_ACTUAL_ENVIRONMENT Blizzard|Morning: real8AI start/music/NWH contacts, pause, explicit forecast/time, snow and rematch. Controlled captures, not Windows/human/device/listening/performance acceptance.
+]]></output>
+        </test-case>
+        <test-case id="1162" name="MusicalParkingOutdoorTimeKeepsMaximumRosterAndSavedSetup" fullname="CollectionEnvironmentTests.MusicalParkingOutdoorTimeKeepsMaximumRosterAndSavedSetup" methodname="MusicalParkingOutdoorTimeKeepsMaximumRosterAndSavedSetup" classname="CollectionEnvironmentTests" runstate="Runnable" seed="1851209864" result="Passed" start-time="2026-10-24 06:57:41Z" end-time="2026-10-24 06:57:46Z" duration="5.030792" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="90000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckMusicalParking maxRoster=8
+]]></output>
+        </test-case>
+      </test-suite>
+      <test-suite type="TestFixture" id="1228" name="LegacyRoundResultsLifecycleTests" fullname="LegacyRoundResultsLifecycleTests" classname="LegacyRoundResultsLifecycleTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-24 06:57:46Z" end-time="2026-10-24 06:58:55Z" duration="69.534761" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-case id="1229" name="SyntheticLegacyResultsPreserveOriginalWinnersRecordsAndStatistics" fullname="LegacyRoundResultsLifecycleTests.SyntheticLegacyResultsPreserveOriginalWinnersRecordsAndStatistics" methodname="SyntheticLegacyResultsPreserveOriginalWinnersRecordsAndStatistics" classname="LegacyRoundResultsLifecycleTests" runstate="Runnable" seed="1601765208" result="Passed" start-time="2026-10-24 06:57:46Z" end-time="2026-10-24 06:58:55Z" duration="69.529696" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckBeerPong count=4: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckBungeeDemolition count=4: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_AcidRain (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_AcidRain (Sports runtime clone) to WeatherMakerProfile_HeavyRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckCurling count=8: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckDanceOff count=4: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Changing weather profile None to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Changing weather profile WeatherMakerProfile_MediumSleet (Sports runtime clone) to WeatherMakerProfile_LightSnow (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckDemolitionDerby count=8: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 28, observed startup 28, multiplier 1.5, target/cap 42/42.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 4720, target 150, initial 24.
+Changing weather profile WeatherMakerProfile_HeavyCloudsScattered (Sports runtime clone) to WeatherMakerProfile_LightSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 0, graph nodes 4720, target 150, initial 24.
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckFareFight count=4: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Sandstorm (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckMusicalParking count=8: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 36, observed startup 35, multiplier 1.65, target/cap 59/60.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+Changing weather profile WeatherMakerProfile_OvercastClouds (Sports runtime clone) to WeatherMakerProfile_MediumSleet (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckSnake count=4: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckBeerPong count=1: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_LightClouds (Sports runtime clone) to WeatherMakerProfile_LightRain (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckBungeeDemolition count=1: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+The tree Original Vista pine couldn't be instanced because the prefab contains no valid mesh renderer.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_LightMediumClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+TAXI TRAFFIC: original cap 36, observed startup 35, multiplier 1.65, target/cap 59/60.
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+Changing weather profile WeatherMakerProfile_LightMediumClouds (Sports runtime clone) to WeatherMakerProfile_OvercastClouds (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+TAXI PEDESTRIANS: UTS baseline 13, graph nodes 5875, target 210, initial 24.
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckSnake count=4: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Changing weather profile None to WeatherMakerProfile_Smoky (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Changing weather profile WeatherMakerProfile_Smoky (Sports runtime clone) to WeatherMakerProfile_LightFog (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckDemolitionDerby count=8: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckDanceOff count=4: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Changing weather profile None to WeatherMakerProfile_LightClouds (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Setting angular velocity of a kinematic body is not supported.
+Setting linear velocity of a kinematic body is not supported.
+Changing weather profile WeatherMakerProfile_LightClouds (Sports runtime clone) to WeatherMakerProfile_LightMediumCloudsScattered (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SYNTHETIC_LEGACY_ROUND_RESULTS TruckDemolitionDerby count=8: explicit synthetic values; actual saved UI/identities/original winners/records/metrics/reset. Not physical-match acceptance.
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

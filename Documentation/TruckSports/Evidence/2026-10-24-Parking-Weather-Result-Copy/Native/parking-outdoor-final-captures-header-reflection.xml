@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-24 07:18:20Z" end-time="2026-10-24 07:18:26Z" duration="6.4537018">
+  <test-suite type="TestSuite" id="1451" name="Interstate Hauler" fullname="Interstate Hauler" runstate="Runnable" testcasecount="312" result="Failed" site="Child" start-time="2026-10-24 07:18:20Z" end-time="2026-10-24 07:18:26Z" duration="6.453702" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="1335" name="LWS.TruckSports.GoddessPlayModeTests.dll" fullname="F:/Unity Projects/Interstate-Hauler-Trucking-Simulator/.sports-validation/TruckSportsPublicValidation/Library/ScriptAssemblies/LWS.TruckSports.GoddessPlayModeTests.dll" runstate="Runnable" testcasecount="145" result="Failed" site="Child" start-time="2026-10-24 07:18:20Z" end-time="2026-10-24 07:18:26Z" duration="6.438077" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="27304" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestFixture" id="1158" name="CollectionEnvironmentTests" fullname="CollectionEnvironmentTests" classname="CollectionEnvironmentTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-10-24 07:18:20Z" end-time="2026-10-24 07:18:26Z" duration="6.429400" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-case id="1163" name="MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist" fullname="CollectionEnvironmentTests.MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist" methodname="MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist" classname="CollectionEnvironmentTests" runstate="Runnable" seed="44804052" result="Failed" label="Error" start-time="2026-10-24 07:18:20Z" end-time="2026-10-24 07:18:22Z" duration="1.851623" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="240000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <failure>
+            <message><![CDATA[System.InvalidOperationException : Sequence contains more than one matching element]]></message>
+            <stack-trace><![CDATA[  at System.Linq.Enumerable.Single[TSource] (System.Collections.Generic.IEnumerable`1[T] source, System.Func`2[T,TResult] predicate) [0x0004a] in <101642b95873440bbf9fec45cfcaa487>:0
+  at CollectionEnvironmentTests.Call (System.Object owner, System.String name, System.Object[] values) [0x00014] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\CollectionEnvironmentTests.cs:19
+  at CollectionEnvironmentTests.SelectVisiblePicker (UnityEngine.Component picker, System.Int32 index) [0x00027] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\CollectionEnvironmentTests.cs:103
+  at CollectionEnvironmentTests+<MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist>d__9.MoveNext () [0x00482] in F:\Unity Projects\Interstate-Hauler-Trucking-Simulator\.sports-validation\TruckSportsPublicValidation\Assets\TruckSports\Tests\GoddessPlayMode\CollectionEnvironmentTests.cs:54
+  at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in .\Library\PackageCache\com.unity.test-framework@996f223345ba\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:44 ]]></stack-trace>
+          </failure>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+]]></output>
+        </test-case>
+        <test-case id="1162" name="MusicalParkingOutdoorTimeKeepsMaximumRosterAndSavedSetup" fullname="CollectionEnvironmentTests.MusicalParkingOutdoorTimeKeepsMaximumRosterAndSavedSetup" methodname="MusicalParkingOutdoorTimeKeepsMaximumRosterAndSavedSetup" classname="CollectionEnvironmentTests" runstate="Runnable" seed="1242746409" result="Passed" start-time="2026-10-24 07:18:22Z" end-time="2026-10-24 07:18:26Z" duration="4.563126" asserts="0">
+          <properties>
+            <property name="_JOINTYPE" value="UnityCombinatorial" />
+            <property name="Timeout" value="90000" />
+            <property name="retryIteration" value="0" />
+            <property name="repeatIteration" value="0" />
+          </properties>
+          <output><![CDATA[SPORTS_PROBE_NATIVE_INPUT_MUTED count=0
+There can be only one active Event System.
+TB_HOST_HUD_SUPPRESSED 1
+Changing weather profile None to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.001, hold time: 3.402823E+38
+Changing weather profile WeatherMakerProfile_Clear (Sports runtime clone) to WeatherMakerProfile_Clear (Sports runtime clone), transition time: 0.2, hold time: 3.402823E+38
+SAVED_OUTDOOR_TIME TruckMusicalParking maxRoster=8
+Saving results to: C:/Users/Jeremy/AppData/LocalLow/Jeremy Bregermann/Interstate Hauler\TestResults.xml
+]]></output>
+        </test-case>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

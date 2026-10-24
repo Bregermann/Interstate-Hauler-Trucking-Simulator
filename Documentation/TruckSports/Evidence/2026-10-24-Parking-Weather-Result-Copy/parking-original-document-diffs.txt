@@ -1,0 +1,139 @@
+--- original/2
++++ candidate/2
+@@ -14,7 +14,7 @@
+   m_AmbientIntensity: 1
+   m_AmbientMode: 3
+   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
+-  m_SkyboxMaterial: {fileID: 2100000, guid: 7709e934510f48a4c81d25df4f366593, type: 2}
++  m_SkyboxMaterial: {fileID: 2100000, guid: a6b111ef2ff15af4786fb1b07eaa5cd5, type: 2}
+   m_HaloStrength: 0.5
+   m_FlareStrength: 1
+   m_FlareFadeSpeed: 3
+--- original/502239034
++++ candidate/502239034
+@@ -8,7 +8,7 @@
+   m_Enabled: 1
+   serializedVersion: 2
+   m_ClearFlags: 1
+-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
++  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+   m_projectionMatrixMode: 1
+   m_GateFitMode: 2
+   m_FOVAxisMode: 0
+@@ -30,7 +30,7 @@
+     width: 1
+     height: 1
+   near clip plane: 0.08
+-  far clip plane: 900
++  far clip plane: 10000
+   field of view: 58
+   orthographic: 1
+   orthographic size: 34.85112
+--- original/954556969
++++ candidate/954556969
+@@ -33,6 +33,11 @@
+   - {fileID: 1760157572}
+   - {fileID: 2044663776}
+   - {fileID: 2103051496}
++  - {fileID: 301145260821208632}
++  - {fileID: 937011041}
++  - {fileID: 1622386428}
++  - {fileID: 2115204043}
++  - {fileID: 100040166}
+   m_Father: {fileID: 409010266}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0.5, y: 0.5}
+--- original/1403397824
++++ candidate/1403397824
+@@ -10,6 +10,7 @@
+   - component: {fileID: 1403397827}
+   - component: {fileID: 1403397826}
+   - component: {fileID: 1403397825}
++  - component: {fileID: 1403397829}
+   m_Layer: 0
+   m_Name: Full 3D asphalt lot
+   m_TagString: Untagged
+--- original/1792539627
++++ candidate/1792539627
+@@ -17,6 +17,15 @@
+   - component: {fileID: 1792539637}
+   - component: {fileID: 1792539636}
+   - component: {fileID: 1792539638}
++  - component: {fileID: 1792539639}
++  - component: {fileID: 1792539641}
++  - component: {fileID: 1792539640}
++  - component: {fileID: 1792539642}
++  - component: {fileID: 1792539644}
++  - component: {fileID: 1792539643}
++  - component: {fileID: 1792539647}
++  - component: {fileID: 1792539646}
++  - component: {fileID: 1792539645}
+   m_Layer: 0
+   m_Name: TruckMusicalParking Authority
+   m_TagString: Untagged
+--- original/1792539628
++++ candidate/1792539628
+@@ -10,6 +10,7 @@
+   m_Script: {fileID: 11500000, guid: dbdd2e428a5cc0c41aafe3abb2db81ca, type: 3}
+   m_Name:
+   m_EditorClassIdentifier: Assembly-CSharp::LWS.TruckMusicalParking.ParkingMatch
++  presentationWeather: {fileID: 1792539639}
+   setup:
+     mode: 0
+     count: 8
+--- original/1792539634
++++ candidate/1792539634
+@@ -20,5 +20,14 @@
+   - {fileID: 1522718451}
+   - {fileID: 1199345814}
+   - {fileID: 84389138}
++  - {fileID: 632457701}
++  - {fileID: 1100048499}
++  - {fileID: 2142104873}
++  - {fileID: 1922558537}
++  - {fileID: 1635214701}
++  - {fileID: 654516280}
++  - {fileID: 860343837}
++  - {fileID: 846471419}
++  - {fileID: 665596873}
+   m_Father: {fileID: 0}
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- original/2034562473
++++ candidate/2034562473
+@@ -14,6 +14,6 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0.5, y: 0.5}
+   m_AnchorMax: {x: 0.5, y: 0.5}
+-  m_AnchoredPosition: {x: 140, y: 365}
+-  m_SizeDelta: {x: 1020, y: 78}
++  m_AnchoredPosition: {x: 0, y: 430}
++  m_SizeDelta: {x: 1350, y: 58}
+   m_Pivot: {x: 0.5, y: 0.5}
+--- original/2034562474
++++ candidate/2034562474
+@@ -51,7 +51,7 @@
+   m_fontWeight: 400
+   m_enableAutoSizing: 1
+   m_fontSizeMin: 38.4
+-  m_fontSizeMax: 48
++  m_fontSizeMax: 44
+   m_fontStyle: 0
+   m_HorizontalAlignment: 2
+   m_VerticalAlignment: 512
+--- original/2044663776
++++ candidate/2044663776
+@@ -15,6 +15,6 @@
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0.5, y: 0.5}
+   m_AnchorMax: {x: 0.5, y: 0.5}
+-  m_AnchoredPosition: {x: 0, y: 305}
++  m_AnchoredPosition: {x: 0, y: -245}
+   m_SizeDelta: {x: 650, y: 44}
+   m_Pivot: {x: 0.5, y: 0.5}
+--- original/9223372036854775807
++++ candidate/9223372036854775807
+@@ -119,3 +119,4 @@
+   - {fileID: 1680453933}
+   - {fileID: 282916581}
+   - {fileID: 1008214257}
++  - {fileID: 365241669683288098}

@@ -1,0 +1,306 @@
+diff --git a/Assets/TruckSports/Editor/SportsEnvironmentAuthoring.cs b/Assets/TruckSports/Editor/SportsEnvironmentAuthoring.cs
+index a5a8d521..68404e63 100644
+--- a/Assets/TruckSports/Editor/SportsEnvironmentAuthoring.cs
++++ b/Assets/TruckSports/Editor/SportsEnvironmentAuthoring.cs
+@@ -76,6 +76,42 @@ namespace LWS.TruckSports.Editor
+         // build, scene load or Play Mode; existing designers' choices survive.
+         public static void InstallNewOutdoors() => InstallWeatherlessOutdoors(NewOutdoors);
+         public static void InstallRemainingSharedOutdoors() => InstallWeatherlessOutdoors(RemainingSharedOutdoors);
++        [MenuItem("Truck Sports/Environment/Complete Musical Parking Weather and Time")]
++        public static void InstallMusicalParkingOutdoorEnvironment()
++        {
++            // Explicit additive migration only; never called by play/build/load.
++            InstallWeatherlessOutdoors(new[] { "TruckMusicalParking" });
++            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
++            if (scene.name != "TruckMusicalParking") throw new InvalidOperationException("Open the registered saved Parking scene.");
++            var session = All<LWS.TruckMusicalParking.ParkingMatch>(scene).Single();
++            var weather = session.presentationWeather;
++            var binding = weather.GetComponent<SportsMatchTime>();
++            if (binding.nightLights.Length == 0)
++            {
++                // Reuse the six real authored lamp pools before adding/tuning
++                // any further light. Native night captures decide visibility.
++                var lamps = All<Light>(scene).Where(light => light.name == "Parking lamp warm pool").ToArray();
++                if (lamps.Length != 6) throw new InvalidOperationException("Preserve the six authored Parking lamp fixtures.");
++                binding.nightLights = lamps;
++                EditorUtility.SetDirty(binding);
++            }
++            var lot = All<MeshRenderer>(scene).Single(renderer => renderer.name == "Full 3D asphalt lot");
++            var marker = lot.GetComponent<LWS.TruckTaxi.TruckTaxiSurface>();
++            if (marker == null) marker = lot.gameObject.AddComponent<LWS.TruckTaxi.TruckTaxiSurface>();
++            marker.isRoad = false; EditorUtility.SetDirty(marker);
++            // Existing Weatherade/Taxi accumulation and actual NWH contact
++            // tracing; no independent snow implementation or physics changes.
++            SportsSnowAuthoring.InstallScene();
++            var snow = session.GetComponent<SportsSnowSurface>();
++            if (snow == null || snow.adapter == null) throw new InvalidOperationException("Bind the existing Sports snow adapter.");
++            var settings = new SerializedObject(snow.adapter);
++            settings.FindProperty("areaSizeMeters").floatValue = 104;
++            settings.FindProperty("areaDepthMeters").floatValue = 90;
++            settings.ApplyModifiedPropertiesWithoutUndo(); EditorUtility.SetDirty(snow.adapter);
++            EditorSceneManager.MarkSceneDirty(scene); EditorSceneManager.SaveScene(scene);
++            AssetDatabase.SaveAssets();
++        }
++
+         public static void InstallRemainingOutdoorsAndGroundFixtures()
+         {
+             InstallRemainingSharedOutdoors();
+diff --git a/Assets/TruckSports/Scripts/SportsRoundLegacyResults.cs b/Assets/TruckSports/Scripts/SportsRoundLegacyResults.cs
+index 86113bec..83160307 100644
+--- a/Assets/TruckSports/Scripts/SportsRoundLegacyResults.cs
++++ b/Assets/TruckSports/Scripts/SportsRoundLegacyResults.cs
+@@ -27,37 +27,37 @@ namespace LWS.TruckSports
+                     bool winner = !pong.Practice && team == pong.rules.Winner;
+                     rows.Add(new SportsResultRow(session.setup.players[i], i, pong.Practice || pong.rules.Winner < 0 ? 0 : winner ? 1 : 2,
+                         winner, pong.rules.hits[team], pong.Practice ? "CUPS HIT" : "TEAM CUPS HIT",
+-                        (team == 0 ? "BLUE" : "ORANGE") + " · " + pong.rules.shots[team] + (pong.Practice ? " SHOTS · " : " TEAM SHOTS · ") + pong.rules.remaining[team] + " OWN CUPS LEFT", format: "0"));
++                        (team == 0 ? "BLUE" : "ORANGE") + " · " + Count(pong.rules.shots[team], pong.Practice ? "SHOT" : "TEAM SHOT", pong.Practice ? "SHOTS" : "TEAM SHOTS") + " · " + pong.rules.remaining[team] + " OWN CUPS LEFT", format: "0"));
+                 }
+                 snapshot = new SportsResultsSnapshot(pong.Practice ? "BEER PONG PRACTICE" : "BEER PONG RESULTS",
+-                    pong.Practice ? pong.rules.PracticeRacks + " RACKS COMPLETED" : pong.rules.Overtime + " OVERTIME PERIODS · SHARED TEAM STATISTICS", rows);
++                    pong.Practice ? Count(pong.rules.PracticeRacks, "RACK COMPLETED", "RACKS COMPLETED") : Count(pong.rules.Overtime, "OVERTIME PERIOD", "OVERTIME PERIODS") + " · SHARED TEAM STATISTICS", rows);
+             }
+             else if (session is BungeeMatch bungee)
+-                snapshot = Capture(session, "BUNGEE DEMOLITION RESULTS", bungee.CompletedRounds + " ROUNDS · BANKED DESTRUCTION POINTS"
++                snapshot = Capture(session, "BUNGEE DEMOLITION RESULTS", Count(bungee.CompletedRounds, "ROUND", "ROUNDS") + " · BANKED DESTRUCTION POINTS"
+                     + (session.setup.count == 1 ? " · PERSONAL BEST " + SportsPrefs.GetInt("TruckBungeeDemolition.PersonalBest", 0) + " PTS" : ""),
+                     i => SportsResultPlacings.FromFinalTotals(i, session.setup.count, bungee.total, bungee.Winner), i => bungee.Winner == i,
+                     i => bungee.total[i], "PTS", i => "FINAL ROUND " + bungee.bays[i].Score + " PTS");
+             else if (session is CurlingMatch curling)
+             {
+                 int winner = curling.scores[0] == curling.scores[1] ? -1 : curling.scores[0] > curling.scores[1] ? 0 : 1;
+-                snapshot = Capture(session, "CURLING TEAM RESULTS", curling.EndsScored + " ENDS · " + curling.GuardViolations + " GUARD-ZONE RESTORATIONS",
++                snapshot = Capture(session, "CURLING TEAM RESULTS", Count(curling.EndsScored, "END", "ENDS") + " · " + Count(curling.GuardViolations, "GUARD-ZONE RESTORATION", "GUARD-ZONE RESTORATIONS"),
+                     i => winner < 0 ? 0 : (i < curling.teamA ? 0 : 1) == winner ? 1 : 2,
+                     i => winner >= 0 && (i < curling.teamA ? 0 : 1) == winner,
+                     i => curling.scores[i < curling.teamA ? 0 : 1], "TEAM PTS", i => i < curling.teamA ? "BLUE TEAM" : "ORANGE TEAM");
+             }
+             else if (session is DanceMatch dance)
+-                snapshot = Capture(session, "DANCE-OFF RESULTS", dance.Round + " SONGS · TOTAL POINTS / FINAL SONG STATISTICS",
++                snapshot = Capture(session, "DANCE-OFF RESULTS", Count(dance.Round, "SONG", "SONGS") + " · TOTAL POINTS / FINAL SONG STATISTICS",
+                     i => SportsResultPlacings.FromFinalTotals(i, session.setup.count, dance.total),
+                     i => SportsResultPlacings.FromFinalTotals(i, session.setup.count, dance.total) == 1,
+                     i => dance.total[i], "PTS", i => DanceDetail(dance, i));
+             else if (session is DerbyMatch derby)
+-                snapshot = Capture(session, "DEMOLITION DERBY CHAMPION", derby.rules.Heat + " HEATS · " + derby.Hits + " QUALIFYING IMPACTS · " + derby.Explosions + " EXPLOSIONS · " + derby.Draws + " DRAWS",
++                snapshot = Capture(session, "DEMOLITION DERBY CHAMPION", Count(derby.rules.Heat, "HEAT", "HEATS") + " · " + Count(derby.Hits, "QUALIFYING IMPACT", "QUALIFYING IMPACTS") + " · " + Count(derby.Explosions, "EXPLOSION", "EXPLOSIONS") + " · " + Count(derby.Draws, "DRAW", "DRAWS"),
+                     i => SportsResultPlacings.FromFinalTotals(i, session.setup.count, derby.rules.wins, derby.rules.Winner), i => derby.rules.Winner == i,
+-                    i => derby.rules.wins[i], "WINS", i => "FINAL HEAT · " + (derby.rules.alive[i] ? "SURVIVED" : derby.rules.reasons[i]));
++                    i => derby.rules.wins[i], "WINS", i => "FINAL HEAT · " + (derby.rules.alive[i] ? "SURVIVED" : derby.rules.reasons[i]), i => derby.rules.wins[i] == 1 ? "WIN" : "WINS");
+             else if (session is FareFightMatch fare)
+                 snapshot = Capture(session, "FARE FIGHT RESULTS", fare.rules.Clock.ToString("F1") + " SEC PLAYED · SUCCESSFUL PASSENGER DELIVERIES",
+                     i => SportsResultPlacings.FromFinalTotals(i, session.setup.count, fare.rules.score), i => fare.rules.winners[i],
+-                    i => fare.rules.score[i], "FARES", i => fare.rules.steals[i] + " PASSENGER STEALS");
++                    i => fare.rules.score[i], "FARES", i => Count(fare.rules.steals[i], "PASSENGER STEAL", "PASSENGER STEALS"), i => fare.rules.score[i] == 1 ? "FARE" : "FARES");
+             else if (session is SnakeMatch snake)
+                 snapshot = Capture(session, "TRUCK SNAKE RESULTS", "ACTUALLY ATTACHED TRAILERS · FINAL SCORE MULTIPLIERS",
+                     i => SportsResultPlacings.FromFinalTotals(i, session.setup.count, snake.rules.score), i => snake.rules.winners[i],
+@@ -72,7 +72,7 @@ namespace LWS.TruckSports
+                         "FINAL ROUND · " + parking.Eligibility(i), winner ? "LAST SPACE" : "ELIMINATED"));
+                 }
+                 snapshot = new SportsResultsSnapshot(parking.Winner < 0 ? "NO PARKING SURVIVOR" : "MUSICAL PARKING CHAMPION",
+-                    parking.Round + " ROUNDS · " + parking.TotalCaptures + " PHYSICAL BAY CAPTURES", rows);
++                    Count(parking.Round, "ROUND", "ROUNDS") + " · " + Count(parking.TotalCaptures, "PHYSICAL BAY CAPTURE", "PHYSICAL BAY CAPTURES"), rows);
+             }
+             return snapshot != null;
+         }
+@@ -90,14 +90,15 @@ namespace LWS.TruckSports
+             return rules.attached[slot] + " ATTACHED · x" + rules.ScoreMultiplier(slot)
+                 + " · " + SportsMeasure.Feet(rules.distance[slot])
+                 + " · " + rules.survived[slot].ToString("F1") + " SEC"
+-                + " · " + rules.jumps[slot] + " JUMPS · BEST " + best;
++                + " · " + Count(rules.jumps[slot], "JUMP", "JUMPS") + " · BEST " + best;
+         }
++        static string Count(int value, string singular, string plural) => value + " " + (value == 1 ? singular : plural);
+         static SportsResultsSnapshot Capture(SportsEventSession session, string heading, string summary,
+-            Func<int, int> place, Func<int, bool> winner, Func<int, double> measurement, string unit, Func<int, string> detail)
++            Func<int, int> place, Func<int, bool> winner, Func<int, double> measurement, string unit, Func<int, string> detail, Func<int, string> unitAt = null)
+         {
+             var rows = new List<SportsResultRow>(session.setup.count);
+             for (int i = 0; i < session.setup.count; i++)
+-                rows.Add(new SportsResultRow(session.setup.players[i], i, place(i), winner(i), measurement(i), unit, detail(i), format: "0"));
++                rows.Add(new SportsResultRow(session.setup.players[i], i, place(i), winner(i), measurement(i), unitAt == null ? unit : unitAt(i), detail(i), format: "0"));
+             return new SportsResultsSnapshot(heading, summary, rows);
+         }
+     }
+diff --git a/Assets/TruckSports/Tests/GoddessPlayMode/CollectionEnvironmentTests.cs b/Assets/TruckSports/Tests/GoddessPlayMode/CollectionEnvironmentTests.cs
+index a1ec0a1c..ef1dcc4e 100644
+--- a/Assets/TruckSports/Tests/GoddessPlayMode/CollectionEnvironmentTests.cs
++++ b/Assets/TruckSports/Tests/GoddessPlayMode/CollectionEnvironmentTests.cs
+@@ -25,9 +25,84 @@ public sealed class CollectionEnvironmentTests
+     public IEnumerator NewlyIntegratedOutdoorVenuesRetainRenderersAndMatchLifecycle() => VerifyVenues(true);
+     [UnityTest, Timeout(150000)]
+     public IEnumerator RemainingSharedVenuesAndGroundedFixturesRetainMatchLifecycle() => VerifyVenues(true, RemainingIntegration);
++    [UnityTest, Timeout(90000)]
++    public IEnumerator MusicalParkingOutdoorTimeKeepsMaximumRosterAndSavedSetup() => VerifyVenues(true, new[] { "TruckMusicalParking" });
++
++    [UnityTest, Timeout(240000)]
++    public IEnumerator MusicalParkingActualForecastSnowMusicAndEliminationRoundPersist()
++    {
++        var lease = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "ParkingEnvironment" });
++        var isolation = new GameObject("Explicit actual Parking environment fixture"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation"));
++        var frame = isolation.AddComponent<ParkingEnvironmentLateCapture>();
++        Component match = null;
++        try
++        {
++            EditorSceneManager.LoadSceneInPlayMode("Assets/TruckMusicalParking/Scenes/TruckMusicalParking.unity", new LoadSceneParameters(LoadSceneMode.Single)); yield return null; yield return null;
++            match = (Component)UnityEngine.Object.FindAnyObjectByType(Runtime("SportsEventSession")); Set(Get(match, "setup"), "count", 8); Call(match, "AllBots");
++            var weather = match.GetComponent(Runtime("SportsChaosWeather")); var binding = match.GetComponent(Runtime("SportsMatchTime")); var snow = match.GetComponent(Runtime("SportsSnowSurface"));
++            Assert.That(weather, Is.Not.Null); Assert.That(binding, Is.Not.Null); Assert.That(snow, Is.Not.Null);
++            Assert.That(Get(match, "presentationWeather"), Is.SameAs(weather)); Assert.That(Get(snow, "weather"), Is.SameAs(weather));
++            Assert.That(((Light[])Get(binding, "nightLights")).Length, Is.EqualTo(6), "Retain the six original authored lamp pools before any visually justified tuning.");
++            var menus = (Component)Get(match, "menus"); var pickers = menus.GetComponentsInChildren(Runtime("SportsWeatherPicker"), true).Cast<Component>().ToArray();
++            var forecast = pickers.Single(p => !(bool)Get(p, "timeOfDay")); var clock = pickers.Single(p => (bool)Get(p, "timeOfDay"));
++            var entries = ((Array)Get(Get(forecast, "catalog"), "entries")).Cast<object>().ToArray();
++            var capture = Runtime("SportsControlledCapture").GetMethods().Single(m => m.Name == "Save" && m.GetParameters().Length == 5);
++            foreach (string condition in new[] { "Clear|Day", "Rain|Evening", "Snow|Night", "Blizzard|Morning" })
++            {
++                string[] choice = condition.Split('|'); Call(match, "SetupScreen");
++                int selected = Array.FindIndex(entries, entry => (string)Get(entry, "displayName") == choice[0]); Assert.That(selected, Is.GreaterThanOrEqualTo(0));
++                SelectVisiblePicker(forecast, selected + 1); SelectVisiblePicker(clock, (int)Enum.Parse(Runtime("SportsTimeChoice"), choice[1]));
++                yield return new WaitForSecondsRealtime(.35f); yield return null;
++                Assert.That(Get(Get(Get(forecast, "dropdown"), "headerText"), "text"), Is.EqualTo(choice[0]));
++                Assert.That(Get(Get(Get(clock, "dropdown"), "headerText"), "text"), Is.EqualTo(choice[1]));
++                frame.capture = () => { foreach (var size in new[] { new Vector2Int(1280,720), new Vector2Int(1920,1080) })
++                    capture.Invoke(null, new object[] { match,size.x,size.y,"Logs/TruckSports/PlaytestRepair/ParkingEnvironment/"+choice[0]+"-"+choice[1]+"-setup-"+size.y+".png",null }); };
++                while (frame.capture != null) yield return null; Assert.That(frame.error, Is.Null);
++                Assert.That((bool)Call(match, "StartMatch"), Is.True); yield return new WaitForSeconds(.4f); yield return null;
++                Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[selected], "id"))); Assert.That(Get(binding, "Applied").ToString(), Is.EqualTo(choice[1]));
++                Assert.That((bool)Get(snow, "Falling"), Is.EqualTo(choice[0] == "Snow" || choice[0] == "Blizzard"));
++                if ((bool)Get(snow, "Falling")) Assert.That((float)Get(snow, "Coverage"), Is.GreaterThanOrEqualTo(.68f), "Snow begins covered, not bare.");
++                bool lamps = choice[1] == "Night" || choice[1] == "Evening";
++                Assert.That(((Light[])Get(binding, "nightLights")).All(light => (light.intensity > 0) == lamps), Is.True);
++                float deadline = Time.realtimeSinceStartup + 7;
++                while (Get(match, "Phase").ToString() == "Countdown" && Time.realtimeSinceStartup < deadline) yield return null;
++                Assert.That(Get(match, "Phase").ToString(), Is.EqualTo("Music")); yield return new WaitForSeconds(1);
++                var music = (AudioSource)Get(match, "music"); Assert.That(music.isPlaying, Is.True, "Original music phase still plays; no listening claim.");
++                var trucks = ((Array)Get(match, "trucks")).Cast<Component>().ToArray();
++                Assert.That(trucks.Any(truck => ((Rigidbody)Get(truck, "body")).linearVelocity.magnitude > .5f), Is.True, "Actual NWH AI circulates without injecting a score or result.");
++                if ((bool)Get(snow, "Falling")) Assert.That((int)Get(snow, "Contacts"), Is.GreaterThan(0), "Snow traces use actual supported NWH wheel contacts.");
++                int revision = (int)Get(binding, "Revision"), seed = (int)Get(weather, "Seed");
++                Call(match, "Pause",0,false); int sample = music.timeSamples; var pose = ((Rigidbody)Get(trucks[0], "body")).position; yield return new WaitForSecondsRealtime(.2f);
++                Assert.That(((Rigidbody)Get(trucks[0], "body")).position, Is.EqualTo(pose)); Assert.That(music.timeSamples, Is.EqualTo(sample)); Call(match, "Resume"); yield return null;
++                Assert.That(Get(binding, "Revision"), Is.EqualTo(revision)); Assert.That(Get(weather, "Seed"), Is.EqualTo(seed));
++                if (choice[0] == "Snow")
++                {
++                    Time.timeScale = 4; deadline = Time.realtimeSinceStartup + 60;
++                    while ((int)Get(match, "Round") < 2 && Time.realtimeSinceStartup < deadline) yield return null;
++                    Time.timeScale = 1;
++                    Assert.That((int)Get(match, "Round"), Is.GreaterThanOrEqualTo(2), "An actual AI parking round completes; no forced eliminations.");
++                    Assert.That((int)Get(match, "TotalCaptures"), Is.GreaterThan(0));
++                    Assert.That(Get(binding, "Revision"), Is.EqualTo(revision)); Assert.That(Get(weather, "Seed"), Is.EqualTo(seed), "Elimination does not reroll or stop weather.");
++                    Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[selected], "id")));
++                }
++                yield return new WaitForSecondsRealtime(.2f); yield return null;
++                frame.capture = () => { foreach (var size in new[] { new Vector2Int(1280,720), new Vector2Int(1920,1080) })
++                    capture.Invoke(null, new object[] { match,size.x,size.y,"Logs/TruckSports/PlaytestRepair/ParkingEnvironment/"+choice[0]+"-"+choice[1]+"-actual-play-"+size.y+".png",null }); };
++                while (frame.capture != null) yield return null; Assert.That(frame.error, Is.Null);
++                Call(match, "SetupScreen"); Assert.That((bool)Call(match, "StartMatch"), Is.True); yield return null;
++                Assert.That((int)Get(match, "Round"), Is.EqualTo(1)); Assert.That((int)Get(match, "TotalCaptures"), Is.Zero);
++                Assert.That(Get(weather, "PresetId"), Is.EqualTo(Get(entries[selected], "id"))); Assert.That(Get(binding, "Applied").ToString(), Is.EqualTo(choice[1]));
++                TestContext.WriteLine("PARKING_ACTUAL_ENVIRONMENT "+condition+": real8AI start/music/NWH contacts, pause, explicit forecast/time, snow and rematch. Controlled captures, not Windows/human/device/listening/performance acceptance.");
++            }
++        }
++        finally { Time.timeScale = 1; if (match != null) Call(match,"SetupScreen"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); }
++    }
++
+     static readonly string[] NewlyIntegrated = { "TruckDockDiving", "TruckBuzkashi", "TruckBungeeDemolition", "TruckFishing", "TruckSumo", "TruckLogRolling", "TruckTrampolineDodgeball", "TruckDemolitionDerby" };
+     static readonly string[] RemainingIntegration = { "TruckCurling", "TruckSkeeBall", "TruckBungeeDemolition", "TruckFishing" };
+-    static bool PresentationOwned(string name) => NewlyIntegrated.Contains(name) || RemainingIntegration.Contains(name);
++    static void SelectVisiblePicker(Component picker, int index) { var dropdown=Get(picker,"dropdown"); Call(dropdown,"SetDropdownIndex",index); var changed=Get(dropdown,"onValueChanged"); changed.GetType().GetMethod("Invoke",new[] { typeof(int) }).Invoke(changed,new object[] { index }); }
++
++    static bool PresentationOwned(string name) => NewlyIntegrated.Contains(name) || RemainingIntegration.Contains(name) || name == "TruckMusicalParking";
+     [UnityTest, Timeout(240000)]
+     public IEnumerator LegacyForecastCatalogUsesEveryInstalledPresetAndRetainsMatchChoice()
+     {
+@@ -298,7 +373,7 @@ public sealed class CollectionEnvironmentTests
+                 tested++; TestContext.WriteLine("SAVED_OUTDOOR_TIME " + name + " maxRoster=" + Get(Get(match, "setup"), "count"));
+                 Call(match, "SetupScreen"); match = null;
+             }
+-            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? (selection ?? NewlyIntegrated).Length : 46), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
++            Assert.That(tested, Is.EqualTo(newlyIntegratedOnly ? (selection ?? NewlyIntegrated).Length : 47), "Actual compatible saved outdoor sessions; legacy/indoor/Plowing exceptions are accounted separately.");
+             Assert.That(layoutErrors, Is.Empty, string.Join("\n", layoutErrors));
+         }
+         finally { if (match != null) Call(match, "SetupScreen"); UnityEngine.Object.DestroyImmediate(isolation); lease.Dispose(); Time.timeScale = 1; }
+@@ -343,4 +418,10 @@ public sealed class CollectionEnvironmentTests
+         return Rect.MinMaxRect(corners.Min(point => point.x), corners.Min(point => point.y), corners.Max(point => point.x), corners.Max(point => point.y));
+     }
+ }
++[DefaultExecutionOrder(30000)]
++public sealed class ParkingEnvironmentLateCapture:MonoBehaviour
++{
++    public Action capture;public string error;
++    void LateUpdate(){var next=capture;capture=null;try{next?.Invoke();}catch(Exception failure){error=failure.ToString();}}
++}
+ #endif
+diff --git a/Assets/TruckSports/Tests/GoddessPlayMode/LegacyRoundResultsLifecycleTests.cs b/Assets/TruckSports/Tests/GoddessPlayMode/LegacyRoundResultsLifecycleTests.cs
+index f9c93c1b..09df5b5c 100644
+--- a/Assets/TruckSports/Tests/GoddessPlayMode/LegacyRoundResultsLifecycleTests.cs
++++ b/Assets/TruckSports/Tests/GoddessPlayMode/LegacyRoundResultsLifecycleTests.cs
+@@ -39,9 +39,11 @@ public sealed class LegacyRoundResultsLifecycleTests
+         yield return Inspect("TruckBungeeDemolition", true);
+         yield return Inspect("TruckSnake", wide: true);
+         yield return Inspect("TruckDemolitionDerby", wide: true);
++        yield return Inspect("TruckDanceOff", singular: true);
++        yield return Inspect("TruckDemolitionDerby", singular: true);
+     }
+
+-    static IEnumerator Inspect(string scene, bool solo = false, bool wide = false)
++    static IEnumerator Inspect(string scene, bool solo = false, bool wide = false, bool singular = false)
+     {
+         var scope = (IDisposable)Runtime("SportsPrefs").GetMethod("IsolateValidation").Invoke(null, new object[] { "SyntheticLegacyRoundResults" });
+         var isolation = new GameObject("Explicit synthetic final values; real saved results UI"); UnityEngine.Object.DontDestroyOnLoad(isolation); isolation.AddComponent(Runtime("SportsProbeInputIsolation")); Component match = null;
+@@ -80,14 +82,14 @@ public sealed class LegacyRoundResultsLifecycleTests
+             }
+             else if (dance)
+             {
+-                var totals = (int[])Get(match, "total"); original = totals; Set(match, "Round", 3);
++                var totals = (int[])Get(match, "total"); original = totals; Set(match, "Round", singular ? 1 : 3);
+                 for (int i = 0; i < count; i++) { totals[i] = new[] { 400, 900, 900, 200 }[i]; expected[i] = totals[i]; winners[i] = i == 1 || i == 2; places[i] = new[] { 3, 1, 1, 4 }[i]; }
+             }
+             else if (derby)
+             {
+-                var wins = (int[])Get(owner, "wins"); original = wins; Set(owner, "Winner", 1); Set(owner, "Heat", 6); unit = "WINS";
++                var wins = (int[])Get(owner, "wins"); original = wins; Set(owner, "Winner", 1); Set(owner, "Heat", singular ? 1 : 6); if (singular) Set(match, "Draws", 1); unit = "WINS";
+                 var alive = (bool[])Get(owner, "alive"); var reasons = (string[])Get(owner, "reasons");
+-                for (int i = 0; i < count; i++) { wins[i] = i == 1 ? 3 : 0; expected[i] = wins[i]; winners[i] = alive[i] = i == 1; places[i] = winners[i] ? 1 : 2; reasons[i] = "PHYSICAL CRASH"; }
++                for (int i = 0; i < count; i++) { wins[i] = i == 1 ? 3 : singular && i == 2 ? 1 : 0; expected[i] = wins[i]; winners[i] = alive[i] = i == 1; places[i] = winners[i] ? 1 : singular ? (i == 2 ? 2 : 3) : 2; reasons[i] = "PHYSICAL CRASH"; }
+             }
+             else if (fare || snake)
+             {
+@@ -95,8 +97,8 @@ public sealed class LegacyRoundResultsLifecycleTests
+                 for (int i = 0; i < count; i++) { scores[i] = (fare ? new[] { 5, 6, 1, 0 } : new[] { 1000, 2000, 2000, 500 })[i]; expected[i] = scores[i]; winners[i] = flags[i] = i == 1 || snake && i == 2; places[i] = (fare ? new[] { 2, 1, 3, 4 } : new[] { 3, 1, 1, 4 })[i]; }
+                 if (snake)
+                 {
+-                    var attached = (int[])Get(owner, "attached"); var distance = (float[])Get(owner, "distance"); var survived = (float[])Get(owner, "survived");
+-                    for (int i = 0; i < count; i++) { attached[i] = i == 1 ? 10 : 1; distance[i] = 350 + i * 10; survived[i] = 75; }
++                    var attached = (int[])Get(owner, "attached"); var distance = (float[])Get(owner, "distance"); var survived = (float[])Get(owner, "survived"); var jumps = (int[])Get(owner, "jumps");
++                    for (int i = 0; i < count; i++) { attached[i] = i == 1 ? 10 : 1; distance[i] = 350 + i * 10; survived[i] = 75; jumps[i] = i; }
+                     recordKey = "TruckSnake.Best." + Get(((Array)Get(setup, "players")).GetValue(1), "participantId"); recordValue = 91234;
+                 }
+             }
+@@ -113,11 +115,14 @@ public sealed class LegacyRoundResultsLifecycleTests
+             foreach (var entry in entries)
+             {
+                 int slot = (int)Get(entry, "Slot"); Assert.That(Get(entry, "Place"), Is.EqualTo(places[slot])); Assert.That(Get(entry, "Winner"), Is.EqualTo(winners[slot]));
+-                Assert.That(Get(entry, "Measurement"), Is.EqualTo(expected[slot])); Assert.That(Get(entry, "Unit"), Is.EqualTo(unit)); Assert.That(Get(entry, "DisplayName"), Is.EqualTo(wide ? new string('W', 40) : "Shared Name"));
++                Assert.That(Get(entry, "Measurement"), Is.EqualTo(expected[slot])); Assert.That(Get(entry, "Unit"), Is.EqualTo(expected[slot] == 1 && (derby || fare) ? (derby ? "WIN" : "FARE") : unit)); Assert.That(Get(entry, "DisplayName"), Is.EqualTo(wide ? new string('W', 40) : "Shared Name"));
+                 if (parking) Assert.That(Get(entry, "Value"), Is.EqualTo(winners[slot] ? "LAST SPACE" : "ELIMINATED"));
+                 if (dance) StringAssert.Contains("FINAL SONG", (string)Get(entry, "Detail"));
++                if (snake) StringAssert.Contains(slot + (slot == 1 ? " JUMP ·" : " JUMPS ·"), (string)Get(entry, "Detail"));
+                 if (snake && slot == 1) { StringAssert.Contains("10 ATTACHED · x10", (string)Get(entry, "Detail")); StringAssert.Contains("BEST 91234", (string)Get(entry, "Detail")); }
+             }
++            if (dance) StringAssert.StartsWith(singular ? "1 SONG ·" : "3 SONGS ·", (string)Get(snapshot, "Summary"));
++            if (derby && singular) { StringAssert.StartsWith("1 HEAT ·", (string)Get(snapshot, "Summary")); StringAssert.EndsWith("1 DRAW", (string)Get(snapshot, "Summary")); }
+             if (bungee && solo) StringAssert.Contains("PERSONAL BEST 54321 PTS", (string)Get(snapshot, "Summary"));
+             if (recordKey != null) Assert.That(Runtime("SportsPrefs").GetMethod("GetInt").Invoke(null, new object[] { recordKey, 0 }), Is.EqualTo(recordValue), "Results must retain the original record without writing it.");
+             var menus = (Component)Get(match, "menus"); var page = ((GameObject[])Get(menus, "pages"))[6]; Assert.That(page.transform.Find("Results readability backing"), Is.Not.Null);
+@@ -143,7 +148,7 @@ public sealed class LegacyRoundResultsLifecycleTests
+             var save = Runtime("SportsControlledCapture").GetMethods().Single(method => method.Name == "Save" && method.GetParameters().Length == 5);
+             foreach (var size in new[] { new Vector2Int(1280, 720), new Vector2Int(1920, 1080) })
+             {
+-                string path = "Logs/TruckSports/PlaytestRepair/LegacyRoundResults/" + scene + (solo ? "-solo" : wide ? "-wide-name" : "") + "-" + size.y + ".png";
++                string path = "Logs/TruckSports/PlaytestRepair/LegacyRoundResults/" + scene + (solo ? "-solo" : wide ? "-wide-name" : singular ? "-singular-copy" : "") + "-" + size.y + ".png";
+                 try { save.Invoke(null, new object[] { match, size.x, size.y, path, inspect }); }
+                 catch (TargetInvocationException)
+                 {
