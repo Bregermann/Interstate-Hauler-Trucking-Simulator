@@ -1,0 +1,26 @@
+PASS four physical all-AI pairs start
+PASS real roof joint with powered driver and unpowered smaller partner
+PASS excessive physical tilt dislodges the constrained partner once
+PASS stopped nearby pair retrieves with visible pickup and reattaches
+PASS retrieval never teleports driver forward or skips ordered gates
+PASS pause preserves constrained passenger clock and penalty
+PASS fixed five-second penalty elapses while other pairs continue
+PASS fresh complete mixed-difficulty series starts
+RACE 1 ranks=3,2,1,4,0,0,0,0 drops=0,0,0,0
+RACE 2 ranks=2,1,4,3,0,0,0,0 drops=0,0,0,0
+RACE 3 ranks=3,2,1,4,0,0,0,0 drops=0,0,0,0
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS complete physical three-race series with authoritative winner
+PASS all four pairs can finish together in carried state
+PASS automatic between-race role swaps preserve identity indices across ordinary and extra races
+MATCH races=3 winner=1 points=7,10,9,4,0,0,0,0 ERRORS=0. Actual NWH/PhysX, controlled drop/retrieval reproduction and AI; no human/hardware validation.

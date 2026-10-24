@@ -15,6 +15,7 @@ public sealed class MattressMatch:SportsEventSession {
  public override string Header=>Title+" | "+(series.round>3?"TIEBREAK":"RACE "+series.round+" / 3")+" | "+course.weather.Description;
  public override string Status=>Phase==MattressPhase.Countdown?Mathf.CeilToInt(3-age).ToString():Phase==MattressPhase.Replay?"RECORDED PHYSICAL HIGHLIGHT":Phase==MattressPhase.Race?"LEAN TO CARVE | HOLD ACTION TO BRACE | "+RaceTime.ToString("F1")+"s":"PLACEMENT POINTS LOCKED";
  public override string Standings{get{text.Clear();for(int i=0;i<8;i++)text.Append(setup.players[i].name).Append("  ").Append(series.total[i]).Append(" PTS").Append(Phase==MattressPhase.Race?"  "+racers[i].Checkpoint+"/8":series.ranks[i]>0?"  #"+series.ranks[i]:"  DNF").Append(i==7?"":"\n");return text.ToString();}}
+ public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,series.total,series.winner);
  public override string Results=>(series.winner>=0?setup.players[series.winner].name+" WINS THE SERIES\n\n":"TIED SERIES\n")+Standings;
  public override bool ValidateSources(out string reason){if(!base.ValidateSources(out reason))return false;int humans=0;for(int i=0;i<8;i++)if(setup.players[i].source!=BowlingSource.AI)humans++;if(humans>4){reason="At most four humans; AI fills the eight-racer field.";return false;}return true;}
  protected override void BeginGame(){Seed=UnityEngine.Random.Range(1,1000000);series.Reset(8,true);var colors=new Color[8];for(int i=0;i<8;i++)colors[i]=setup.players[i].color;replay.Colorize(colors);BeginRace();}

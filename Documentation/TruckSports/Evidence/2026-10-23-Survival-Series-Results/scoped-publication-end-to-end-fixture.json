@@ -1,0 +1,59 @@
+{
+  "passed": 20,
+  "checks": [
+    "run0: public parent preserved",
+    "run0: reviewed source included",
+    "run0: private file excluded",
+    "run0: private history excluded",
+    "run0: integration parent retained",
+    "run0: private file retained locally",
+    "run0: real index clean after integration",
+    "run0: both local and bare-origin refs advanced",
+    "run0: all 925 unrelated files unchanged",
+    "run0: completion journal and recovery ref retained",
+    "run1: public parent preserved",
+    "run1: reviewed source included",
+    "run1: private file excluded",
+    "run1: private history excluded",
+    "run1: integration parent retained",
+    "run1: private file retained locally",
+    "run1: real index clean after integration",
+    "run1: both local and bare-origin refs advanced",
+    "run1: all 925 unrelated files unchanged",
+    "run1: completion journal and recovery ref retained"
+  ],
+  "fixture": "F:\\Unity Projects\\Interstate-Hauler-Trucking-Simulator\\Logs\\TruckSports\\PlaytestRepair\\PublicationFixture\\EndToEnd-1792802746856203100",
+  "receipts": [
+    {
+      "publicCommit": "0f3a79919621d5154acbb58d2f3fefb2fe8247e8",
+      "publicParent": "e149206dbf45d95cabef2c977f757e9c4cb9c60e",
+      "localIntegrationCommit": "0cc971072da96daae172bb2e9d57337ce0ae3add",
+      "localIntegrationParent": "abcfd33eb967b376ebf657bf18fad0fd5fa2df00",
+      "integrationBranch": "codex/sports-dead-air-integration",
+      "files": [
+        "Assets/TruckSports/Scripts/Fixture.cs"
+      ],
+      "remote": "0f3a79919621d5154acbb58d2f3fefb2fe8247e8\trefs/heads/codex/truck-sports-seven-events\n0f3a79919621d5154acbb58d2f3fefb2fe8247e8\trefs/heads/main\n",
+      "buildContentSha256": "d947f24020d28e62cb19e04f29a646e30293d71ad1fc52f7ade43c94c561e04b",
+      "unrelatedFilesPreserved": 925,
+      "privateIntegrationHeadPushed": false,
+      "recoveryRef": "refs/codex/sports-publication/1792802757311564400"
+    },
+    {
+      "publicCommit": "101f43f013dbf6039b75fe794ebda11d5fba762c",
+      "publicParent": "0f3a79919621d5154acbb58d2f3fefb2fe8247e8",
+      "localIntegrationCommit": "d6a56aeb8031c85b369f0f187e3e5b44e0a9b7ba",
+      "localIntegrationParent": "0cc971072da96daae172bb2e9d57337ce0ae3add",
+      "integrationBranch": "codex/sports-dead-air-integration",
+      "files": [
+        "Assets/TruckSports/Scripts/Fixture.cs"
+      ],
+      "remote": "101f43f013dbf6039b75fe794ebda11d5fba762c\trefs/heads/codex/truck-sports-seven-events\n101f43f013dbf6039b75fe794ebda11d5fba762c\trefs/heads/main\n",
+      "buildContentSha256": "a28f41462a99577e535edb6ae6f43f0db3dc8d7ee64ae19c6e8d793ac4ba743d",
+      "unrelatedFilesPreserved": 925,
+      "privateIntegrationHeadPushed": false,
+      "recoveryRef": "refs/codex/sports-publication/1792802759590795800"
+    }
+  ],
+  "scope": "Two complete publications to a disposable local bare origin only. No external network, actual project index/ref changes, Unity runs or gameplay acceptance."
+}

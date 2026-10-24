@@ -11,6 +11,16 @@ public sealed class LimboRules {
   if(Round>=maximumRounds){Complete=true;Rank();return false;}
   for(int i=0;i<Count;i++){if(Format==LimboFormat.Elimination)active[i]&=cleared[i];done[i]=cleared[i]=false;}Round++;Height=initial-(Round-1)*step;RoundComplete=false;return true;
  }
+ // Read-only display order: preserve all declared winners, then the existing
+ // lowest-bar/point-tiebreak ordering. Never change winners or awarded points.
+ public int ResultPlace(int slot){
+  if(slot<0||slot>=Count)throw new ArgumentOutOfRangeException(nameof(slot));
+  if(winners[slot])return 1;
+  int place=1;for(int i=0;i<Count;i++){
+   if(winners[i]){place++;continue;}
+   if(best[i]<best[slot]-.0001f||Equal(best[i],best[slot])&&points[i]>points[slot])place++;
+  }return place;
+ }
  void Rank(){float lowest=float.PositiveInfinity;int score=-1;for(int i=0;i<Count;i++){if(best[i]<lowest-.0001f){lowest=best[i];score=points[i];}else if(Equal(best[i],lowest))score=Math.Max(score,points[i]);}for(int i=0;i<Count;i++)winners[i]=Equal(best[i],lowest)&&points[i]==score;}
  static bool Equal(float a,float b)=>a==b||Math.Abs(a-b)<.0001f;
  // Actual swept world bounds are supplied by the body's collider adapter.

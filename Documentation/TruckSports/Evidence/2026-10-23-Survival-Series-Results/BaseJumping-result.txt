@@ -1,0 +1,88 @@
+PASS saved four-payload scene
+PASS four injected-keyboard views start
+PASS four independent human camera mapping
+PASS equal actual release altitude 0
+PASS equal actual release altitude 1
+PASS equal actual release altitude 2
+PASS equal actual release altitude 3
+PASS pause preserves freefall and shared wind clock
+PASS injected whole-controller assignment
+PASS disconnect during flight opens preserved reconnect modal
+PASS disconnect freezes unchanged freefall
+PASS explicit replacement source accepted
+PASS four first contacts and one round finalization
+PASS early and normal actual canopy landings safe
+PASS too-late and missed deployments physically crash
+Deployment variant 0 SAFE · INSIDE TARGET errorMM=17 timeMS=45441 down=4.459095
+Deployment variant 1 SAFE · INSIDE TARGET errorMM=393 timeMS=20420 down=4.459095
+Deployment variant 2 CRASH · INVALID errorMM=73016 timeMS=8960 down=44.02813
+Deployment variant 3 CRASH · INVALID errorMM=76649 timeMS=8940 down=43.99029
+PASS post-contact motion cannot improve or repeat scoring
+PASS software layout for 1 humans
+PASS view routed to participant 0 of 1
+PASS software layout for 2 humans
+PASS view routed to participant 0 of 2
+PASS view routed to participant 1 of 2
+PASS software layout for 3 humans
+PASS view routed to participant 0 of 3
+PASS view routed to participant 1 of 3
+PASS view routed to participant 2 of 3
+PASS software layout for 4 humans
+PASS view routed to participant 0 of 4
+PASS view routed to participant 1 of 4
+PASS view routed to participant 2 of 4
+PASS view routed to participant 3 of 4
+PASS installed forecast Clear
+PASS all-AI wind-style match 0 starts
+PASS AI-only spectator without controller
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS all AI rounds lock exactly once 0
+PASS selected forecast and wind style permit actual safe AI landings 0
+Weather=0 rounds=3 totals=5,7,11,7 finalValid=4 winner=2
+PASS installed forecast Rain
+PASS all-AI wind-style match 1 starts
+PASS AI-only spectator without controller
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS all AI rounds lock exactly once 1
+PASS selected forecast and wind style permit actual safe AI landings 1
+Weather=1 rounds=3 totals=6,9,10,5 finalValid=4 winner=2
+PASS installed forecast Snow
+PASS all-AI wind-style match 2 starts
+PASS AI-only spectator without controller
+PASS physical match reaches the original results lifecycle before inspecting ranked cards
+PASS saved opt-in ranked results board exists
+PASS ranked cards finish their DOTween reveal for every participant
+PASS result identities, names, colors and AI flags match the actual roster independently of names
+PASS displayed ranks and declared winners match the original rules
+PASS final displayed measurements match the authoritative completed-match statistics
+PASS only the accepted typed board hides the original text; original result data remains intact
+PASS 1280x720 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1280x720 result names, values and real statistics have no TMP overflow
+PASS 1920x1080 ranked cards remain screen-safe and clear of headings, other rows and original controls
+PASS 1920x1080 result names, values and real statistics have no TMP overflow
+PASS all AI rounds lock exactly once 2
+PASS selected forecast and wind style permit actual safe AI landings 2
+Weather=2 rounds=3 totals=7,11,8,4 finalValid=4 winner=1
+PASS four-view rematch configuration preserved
+Four-view real-time sample frames=7488 meanMS=12.01917 p95=18.7393 p99=18.7684 max=125.0705 GPU=NVIDIA GeForce GTX 1660 Ti
+PASS Base Jumping returns cleanly and scoped weather pipeline restores

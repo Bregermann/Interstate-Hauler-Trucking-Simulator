@@ -12,9 +12,10 @@ namespace LWS.TruckSports.Editor
         public static void InstallScoredBatch() => InstallScenes(new[] { "TruckWhackAMole", "TruckMagnetMayhem", "TruckSheepHerding", "TruckSeesaw", "TruckKingOfTheHill", "TruckFloorIsLava", "TruckHideAndSeek", "TruckHungryHaulers" });
         public static void InstallContestBatch() => InstallScenes(new[] { "TruckHotPotato", "TruckBalloonBattle", "TruckTetherball", "TruckJousting", "TruckFrogger", "TruckRedLightGreenLight", "TruckVolleyball", "TruckFreezeTag" });
         public static void InstallAttemptBatch() => InstallScenes(new[] { "TruckDockDiving", "TruckFieldGoal", "TruckTargetLaunch", "TruckSkeeBall", "TruckGiantSwing", "TruckTrailerPlug" });
-        public static void InstallAttemptReadability()
+        public static void InstallAttemptReadability() => InstallReadability(new[] { "TruckDockDiving", "TruckFieldGoal", "TruckTargetLaunch", "TruckSkeeBall", "TruckGiantSwing", "TruckTrailerPlug" });
+        static void InstallReadability(string[] names)
         {
-            foreach (string name in new[] { "TruckDockDiving", "TruckFieldGoal", "TruckTargetLaunch", "TruckSkeeBall", "TruckGiantSwing", "TruckTrailerPlug" })
+            foreach (string name in names)
             {
                 var scene = EditorSceneManager.OpenScene("Assets/" + name + "/Scenes/" + name + ".unity", OpenSceneMode.Single);
                 var session = scene.GetRootGameObjects().SelectMany(root => root.GetComponentsInChildren<SportsEventSession>(true)).Single();
@@ -28,6 +29,16 @@ namespace LWS.TruckSports.Editor
                 Debug.Log("SPORTS_RESULTS_READABILITY " + name + " saved rounded noninteractive backing over busy venue scenery.");
             }
             AssetDatabase.SaveAssets();
+        }
+        public static void InstallSurvivalBatch()
+        {
+            var names = new[] { "TruckMinefield", "TruckFishing", "TruckSumo", "TruckLogRolling", "TruckLimbo" };
+            InstallScenes(names); InstallReadability(names);
+        }
+        public static void InstallSeriesBatch()
+        {
+            var names = new[] { "TruckBaseJumping", "TruckBogSnorkelling", "TruckMattressRacing", "TruckTerrierRacing", "TruckWifeCarrying", "TruckSkyTow" };
+            InstallScenes(names); InstallReadability(names);
         }
         static void InstallScenes(string[] names)
         {

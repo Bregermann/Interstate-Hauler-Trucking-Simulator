@@ -22,6 +22,7 @@ public sealed class MinefieldMatch:SportsEventSession {
  public bool Tumbling{get{foreach(var r in racers)if(r.Phase==MineAttempt.Launched&&r.TouchedSurface)return true;return false;}}
  public override string Standings{get{text.Clear();for(int i=0;i<8;i++)text.Append(setup.players[i].name).Append("  ").Append(points[i]).Append(" pts · ").Append(SportsMeasure.Feet(racers[i].CurrentDistance*.1f)).Append(i==7?"":"\n");return text.ToString();}}
 
+ public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,points,Winner);
  public override string Results=>(Winner>=0?setup.players[Winner].name+" WINS\n":"TIE\n")+Standings;
 
  public override bool ValidateSources(out string reason){if(!base.ValidateSources(out reason))return false;int humans=0;for(int i=0;i<8;i++)if(setup.players[i].source!=BowlingSource.AI)humans++;if(humans>4){reason="At most four local humans; AI fills the other competitors.";return false;}return true;}

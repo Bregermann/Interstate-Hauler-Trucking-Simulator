@@ -1,0 +1,116 @@
+{
+  "files": [
+    {
+      "path": "Assets/TruckBaseJumping/Scripts/BaseJumpMatch.cs",
+      "sourceSha256": "c79ac9cd32deed971d67c204d691a909d0b012398625da3d1e3ca32f89de59b3",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        " public int ResultPlace(int slot){if(slot<0||slot>=4)throw new ArgumentOutOfRangeException(nameof(slot));if(Winner==slot)return 1;int place=1;for(int i=0;i<4;i++){if(i==slot)continue;if(i==Winner||totals[i]>totals[slot]||totals[i]==totals[slot]&&(totalErrors[i]<totalErrors[slot]||totalErrors[i]==totalErrors[slot]&&totalTimes[i]<totalTimes[slot]))place++;}return place;} public BaseLanding ResultLanding(int slot)=>roundResults[slot];\n"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckBogSnorkelling/Scripts/BogMatch.cs",
+      "sourceSha256": "a9b6bc8a55992e3ee3e1ee575b2e109b52ac87655ad786995c15feacd4599e0d",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,series.total,series.winner);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckFishing/Scripts/FishingMatch.cs",
+      "sourceSha256": "98758cf9372ac6098ef98c49b70483053a63c4d7d4975dd57811ed70afe9bbda",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>rules.Winner==slot?1:0;",
+        "public double ResultSurvivalSeconds(int slot)=>rules.alive[slot]?Clock:eliminatedAt[slot];",
+        "public float ResultSurvivalBest=>SportsPrefs.GetFloat(\"TruckFishing.SurvivalPB\",0);",
+        "public int ResultCaughtBest=>SportsPrefs.GetInt(\"TruckFishing.CaughtPB\",0);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckLimbo/Rules/LimboRules.cs",
+      "sourceSha256": "5c4bf6a6916ba587f8d75d0d850ffbca595218a30737de8480fe74456581aa2e",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        " // Read-only display order: preserve all declared winners, then the existing\n // lowest-bar/point-tiebreak ordering. Never change winners or awarded points.\n public int ResultPlace(int slot){\n  if(slot<0||slot>=Count)throw new ArgumentOutOfRangeException(nameof(slot));\n  if(winners[slot])return 1;\n  int place=1;for(int i=0;i<Count;i++){\n   if(winners[i]){place++;continue;}\n   if(best[i]<best[slot]-.0001f||Equal(best[i],best[slot])&&points[i]>points[slot])place++;\n  }return place;\n }"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckLimbo/Scripts/LimboMatch.cs",
+      "sourceSha256": "ffbff488148bf109b44806242fd320ccc023a67c686fc69b5a71b332a4d5138e",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>rules.ResultPlace(slot);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckLogRolling/Scripts/LogMatch.cs",
+      "sourceSha256": "f1fad61310340e3e2c7713748e750eae2524cbb152f71a4593ebea9d0c83ac08",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,rules.wins,rules.Winner);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckMattressRacing/Scripts/MattressMatch.cs",
+      "sourceSha256": "a2706acc6eed8ca8b383e4bd86be5344cf01493592c169ce131e1b4d770e4209",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,series.total,series.winner);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckMinefield/Scripts/MinefieldMatch.cs",
+      "sourceSha256": "a0ebf63ce293bfe41ea39b4ae6640d478490ec65b000ffc58a1228586c35c869",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,points,Winner);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckSkyTow/Scripts/SkyTowMatch.cs",
+      "sourceSha256": "50abc41553ee56b99b6b2420853c085f14ea94f78df6950715d884b034152513",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,rules.score);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckSumo/Scripts/SumoMatch.cs",
+      "sourceSha256": "221ae967060af3f84c0e449017e844232acaba1df2f6c2a410383902077b0ba7",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,rules.wins,rules.Winner);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckTerrierRacing/Scripts/TerrierMatch.cs",
+      "sourceSha256": "dd7f193a1e23214b583975d940e0d052fccafee8fc1a2994634fd2b6b99fa7ee",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int slot)=>SportsResultPlacings.FromFinalTotals(slot,setup.count,wins,MatchWinner);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    },
+    {
+      "path": "Assets/TruckWifeCarrying/Scripts/WifeMatch.cs",
+      "sourceSha256": "854afd9d8b742d646543d73d3af02476b8d5b2ba56b020f03b75e41dba72284e",
+      "originalPublicCommit": "29002c5c99381ccabfd1a05f1aa450a0c6f9b26d",
+      "addedReadOnlyQueries": [
+        "public int ResultPlace(int pair)=>SportsResultPlacings.FromFinalTotals(pair,4,series.total,series.winner);"
+      ],
+      "originalGameAndScoreTokensUnchanged": true
+    }
+  ],
+  "scope": "Static lexical equality of all original game/scoring statements after removing only the listed added read-only queries. Whitespace outside literals ignored; no runtime or human acceptance implied."
+}

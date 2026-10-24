@@ -65,6 +65,9 @@ def main():
         # Accept only the explicitly requested existing probe's own terminal
         # signature. Never treat an arbitrary ERRORS=0 line as completion.
         protected_footers = {
+            "-tsBog": r"ERRORS=(\d+)\. Native NWH/PhysX buoyancy/drag/air/dive race series; no hardware/human playtest or frame-rate benchmark\.",
+            "-tsFishing": r"ERRORS=(\d+)\. Native fixed-step generated-fish/swept-net gameplay with autonomous AI; rule fixtures are separate\.",
+            "-tsLogProbe": r"ERRORS=(\d+)\. Actual vendor buoyancy and NWH/PhysX match simulation, no injected results\.",
             "-tsSkeeSoloResults": r"ERRORS=(\d+)\. Actual saved NWH/EasyRoads/PhysX ramp simulation and AI matches; no injected scores\.",
             "-tsSkee": r"ERRORS=(\d+)\. Actual saved NWH/EasyRoads/PhysX ramp simulation and AI matches; no injected scores\.",
             "-tsSwing": r"ERRORS=(\d+)\. Actual PhysX pendulum torque/joints, inherited release and first contact; no human/hardware validation\.",
